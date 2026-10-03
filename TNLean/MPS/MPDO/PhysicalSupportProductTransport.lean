@@ -7,6 +7,7 @@ import QICLean.Algebra.KroneckerFactorPositivity
 import QICLean.Channel.SingleKrausPositivity
 import TNLean.Algebra.FinKronecker
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
+import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 
 /-!
@@ -255,50 +256,50 @@ private theorem list_prod_range_mul
               rw [hQ]
               simp only [List.prod_cons, Matrix.mul_assoc]
 
-namespace PhysicalSupportRestrictionData
+private theorem twoSiteSectorProjection_mul_isometricBond
+    (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
+    (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
+    twoSiteSectorProjection (V * Vᴴ) *
+        singleKrausMap (sitewisePhysicalMatrix V 2) B =
+      singleKrausMap (sitewisePhysicalMatrix V 2) B := by
+  rw [← sitewisePhysicalMatrix_two_mul_conjTranspose V]
+  simp only [singleKrausMap_apply, Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (sitewisePhysicalMatrix V 2)ᴴ
+    (sitewisePhysicalMatrix V 2), sitewisePhysicalMatrix_isometry V hV 2, Matrix.one_mul]
 
-variable {P : Matrix (Fin d) (Fin d) ℂ} {K : MPOTensor d D}
-
-private theorem twoSiteSectorProjection_mul_liftedBond
-    (F : PhysicalSupportRestrictionData P K)
-    (B : Matrix (Fin 2 → Fin F.supportDim)
-      (Fin 2 → Fin F.supportDim) ℂ) :
-    twoSiteSectorProjection P * F.liftedBond B = F.liftedBond B := by
-  rw [F.twoSiteSectorProjection_eq_lifted_range]
-  simp only [liftedBond, singleKrausMap_apply, Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc
-      (sitewisePhysicalMatrix F.inclusion 2)ᴴ
-      (sitewisePhysicalMatrix F.inclusion 2),
-    sitewisePhysicalMatrix_isometry F.inclusion F.inclusion_isometry 2,
-    Matrix.one_mul]
-
-private theorem liftedBondProduct_left_supported
-    (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim)
-    {N : ℕ} (hN : 2 ≤ N) :
-    sitewisePhysicalMatrix P N *
-        (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := d) 2 N hN i
-            (F.liftedBond data.bond)).prod =
-      (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i
-          (F.liftedBond data.bond)).prod := by
+/-- The complete product of commuting lifted bonds is supported on the
+included physical space at every site. No tensor or injectivity hypothesis
+is needed. Source context: arXiv:1606.00608, Appendix C.2, equation
+generateMPDO, lines 1733–1770. -/
+theorem isometricBondProduct_left_supported
+    (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
+    (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ)
+    {N : ℕ} (hN : 2 ≤ N)
+    (hcomm : ∀ i j : Fin N,
+      Commute (embedLocalOperator 2 N hN i
+          (singleKrausMap (sitewisePhysicalMatrix V 2) B))
+        (embedLocalOperator 2 N hN j
+          (singleKrausMap (sitewisePhysicalMatrix V 2) B))) :
+    sitewisePhysicalMatrix (V * Vᴴ) N *
+        (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
+          (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod =
+      (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
+        (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod := by
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ embedLocalOperator (d := d) 2 N hN i
-      (F.liftedBond data.bond)
+      (singleKrausMap (sitewisePhysicalMatrix V 2) B)
   let R : Fin (N - 1) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ embedLocalOperator (d := d) 2 N hN ⟨i.val, by omega⟩
-      (twoSiteSectorProjection P)
+      (twoSiteSectorProjection (V * Vᴴ))
   have hpair : (List.ofFn A).Pairwise Commute := by
     rw [List.pairwise_ofFn]
     intro i j _
-    exact F.liftedTranslationInvariantBondData data |>.bond_comm
-      hN ⟨i.val, by omega⟩ ⟨j.val, by omega⟩
+    exact hcomm i j
   have hRiAi (i : Fin (N - 1)) :
       R i * A ⟨i.val, by omega⟩ = A ⟨i.val, by omega⟩ := by
     simp only [R, A]
     rw [← embedLocalOperator_mul,
-      F.twoSiteSectorProjection_mul_liftedBond]
+      twoSiteSectorProjection_mul_isometricBond V hV B]
   have hRiProduct (i : Fin (N - 1)) : R i * (List.ofFn A).prod =
       (List.ofFn A).prod := by
     let j : Fin N := ⟨i.val, by omega⟩
@@ -319,17 +320,17 @@ private theorem liftedBondProduct_left_supported
       rw [List.mem_ofFn] at hX
       obtain ⟨i, rfl⟩ := hX
       exact hRiProduct i)
-  have hP : P * P = P := by
-    rw [← F.inclusion_range]
+  have hP : (V * Vᴴ) * (V * Vᴴ) = (V * Vᴴ) := by
     simp only [Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc F.inclusionᴴ F.inclusion,
-      F.inclusion_isometry, Matrix.one_mul]
-  have hR : (List.ofFn R).prod = sitewisePhysicalMatrix P N := by
+    rw [← Matrix.mul_assoc Vᴴ V,
+      hV, Matrix.one_mul]
+  have hR : (List.ofFn R).prod = sitewisePhysicalMatrix (V * Vᴴ) N := by
     simpa [R, openBondProjectionProduct] using
-      openBondProjectionProduct_eq_sitewise P hP hN
+      openBondProjectionProduct_eq_sitewise (V * Vᴴ) hP hN
   simpa [A, hR] using hRprod
 
-end PhysicalSupportRestrictionData
+
+
 
 
 /-- The isometric image of one embedded restricted bond is its ambient lift
@@ -417,36 +418,34 @@ theorem singleKrausMap_bondProduct_of_unitary
   rw [sitewisePhysicalMatrix_mul_conjTranspose, hV']
   rw [sitewisePhysicalMatrix_one, Matrix.one_mul]
 
-namespace PhysicalSupportRestrictionData
-
-variable {P : Matrix (Fin d) (Fin d) ℂ} {K : MPOTensor d D}
-
-/-- Isometric conjugation carries the complete restricted periodic bond
-product to the complete product of the lifted ambient bond, for every chain
-length at least two.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 and equation
-`generateMPDO`, lines 1571--1593 and 1733--1770. -/
-theorem singleKrausMap_bondProduct_eq_liftedBondProduct
-    (F : PhysicalSupportRestrictionData P K)
-    (data : TranslationInvariantBondData F.supportDim)
-    {N : ℕ} (hN : 2 ≤ N) :
-    singleKrausMap (sitewisePhysicalMatrix F.inclusion N)
-        (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := F.supportDim) 2 N hN i data.bond).prod =
-      (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i
-          (F.liftedBond data.bond)).prod := by
-  let W := sitewisePhysicalMatrix F.inclusion N
+/-- Isometric inclusion carries a complete periodic product of Hermitian
+bonds to the product of their included bonds, provided the included
+translates commute. The statement involves no tensor or injectivity
+hypothesis. Source context: arXiv:1606.00608, Appendix C.2, equation
+generateMPDO, lines 1733–1770. -/
+theorem singleKrausMap_bondProduct_of_isometry
+    (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
+    (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) (hB : B.IsHermitian)
+    {N : ℕ} (hN : 2 ≤ N)
+    (hcomm : ∀ i j : Fin N,
+      Commute (embedLocalOperator 2 N hN i
+          (singleKrausMap (sitewisePhysicalMatrix V 2) B))
+        (embedLocalOperator 2 N hN j
+          (singleKrausMap (sitewisePhysicalMatrix V 2) B))) :
+    singleKrausMap (sitewisePhysicalMatrix V N)
+        (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i B).prod =
+      (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
+        (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod := by
+  let W := sitewisePhysicalMatrix V N
   let Q := singleKrausMap W 1
-  let X : Fin N → Matrix (Fin N → Fin F.supportDim)
-      (Fin N → Fin F.supportDim) ℂ :=
-    fun i ↦ embedLocalOperator (d := F.supportDim) 2 N hN i data.bond
+  let X : Fin N → Matrix (Fin N → Fin e)
+      (Fin N → Fin e) ℂ :=
+    fun i ↦ embedLocalOperator (d := e) 2 N hN i B
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ embedLocalOperator (d := d) 2 N hN i
-      (F.liftedBond data.bond)
+      (singleKrausMap (sitewisePhysicalMatrix V 2) B)
   have hW : Wᴴ * W = 1 :=
-    sitewisePhysicalMatrix_isometry F.inclusion F.inclusion_isometry N
+    sitewisePhysicalMatrix_isometry V hV N
   have hQ : Q * Q = Q := by
     calc
       Q * Q = singleKrausMap W (1 * 1) :=
@@ -458,7 +457,7 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
     apply congrArg List.ofFn
     funext i
     exact singleKrausMap_embedLocalOperator_eq_range_mul_lift
-      F.inclusion F.inclusion_isometry hN i data.bond
+      V hV hN i B
   have hQherm : Q.IsHermitian :=
     (Matrix.PosSemidef.one.mul_mul_conjTranspose_same W).1
   have hcommQ : ∀ C ∈ List.ofFn A, Q * C = C * Q := by
@@ -466,23 +465,23 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
     rw [List.mem_ofFn] at hC
     obtain ⟨i, rfl⟩ := hC
     have hleft := singleKrausMap_embedLocalOperator_eq_range_mul_lift
-      F.inclusion F.inclusion_isometry hN i data.bond
-    have hXpos : (X i).PosSemidef :=
-      embedLocalOperator_posSemidef 2 hN i data.bond_pos
+      V hV hN i B
+    have hXherm : (X i).IsHermitian :=
+      embedLocalOperator_isHermitian 2 N hN i hB
     have hφherm : (singleKrausMap W (X i)).IsHermitian :=
-      (hXpos.mul_mul_conjTranspose_same W).1
+      Matrix.isHermitian_mul_mul_conjTranspose W hXherm
     have hAherm : (A i).IsHermitian :=
-      (embedLocalOperator_posSemidef 2 hN i
-        (F.liftedBond_pos data.bond_pos)).1
+      embedLocalOperator_isHermitian 2 N hN i
+        (Matrix.isHermitian_mul_mul_conjTranspose (sitewisePhysicalMatrix V 2) hB)
     calc
       Q * A i = singleKrausMap W (X i) := hleft.symm
       _ = (singleKrausMap W (X i))ᴴ := hφherm.eq.symm
       _ = (Q * A i)ᴴ := congrArg Matrix.conjTranspose hleft
       _ = A i * Q := by
         rw [Matrix.conjTranspose_mul, hAherm.eq, hQherm.eq]
-  have hQrange : Q = sitewisePhysicalMatrix P N := by
+  have hQrange : Q = sitewisePhysicalMatrix (V * Vᴴ) N := by
     simp only [Q, singleKrausMap_apply, Matrix.mul_one, W]
-    rw [sitewisePhysicalMatrix_mul_conjTranspose, F.inclusion_range]
+    rw [sitewisePhysicalMatrix_mul_conjTranspose]
   have hne : List.ofFn X ≠ [] := by
     rw [List.ne_nil_iff_length_pos, List.length_ofFn]
     omega
@@ -505,7 +504,32 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
       exact list_prod_range_mul Q hQ _ hAne hcommQ
     _ = (List.ofFn A).prod := by
       rw [hQrange]
-      exact F.liftedBondProduct_left_supported data hN
+      exact isometricBondProduct_left_supported V hV B hN hcomm
+
+
+namespace PhysicalSupportRestrictionData
+
+variable {P : Matrix (Fin d) (Fin d) ℂ} {K : MPOTensor d D}
+
+/-- Isometric conjugation carries the complete restricted periodic bond
+product to the complete product of the lifted ambient bond, for every chain
+length at least two.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 and equation
+`generateMPDO`, lines 1571--1593 and 1733--1770. -/
+theorem singleKrausMap_bondProduct_eq_liftedBondProduct
+    (F : PhysicalSupportRestrictionData P K)
+    (data : TranslationInvariantBondData F.supportDim)
+    {N : ℕ} (hN : 2 ≤ N) :
+    singleKrausMap (sitewisePhysicalMatrix F.inclusion N)
+        (List.ofFn fun i : Fin N ↦
+          embedLocalOperator (d := F.supportDim) 2 N hN i data.bond).prod =
+      (List.ofFn fun i : Fin N ↦
+        embedLocalOperator (d := d) 2 N hN i
+          (F.liftedBond data.bond)).prod := by
+  exact singleKrausMap_bondProduct_of_isometry F.inclusion F.inclusion_isometry
+    data.bond data.bond_pos.isHermitian hN
+    (fun i j => (F.liftedTranslationInvariantBondData data).bond_comm hN i j)
 
 /-- Eta-local structure on the restricted physical space extends through the
 support isometry to eta-local structure on the ambient tensor.  The same

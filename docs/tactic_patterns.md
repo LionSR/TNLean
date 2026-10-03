@@ -254,6 +254,74 @@ abstracted — record why, so it is not re-proposed).
   helper for the first two uses. It is now public and serves the third use.
 - **Notes:** no new cancellation proof or tactic is needed.
 
+### physical-matrix covariance from tensor letters — promoted
+- **Pattern:** rewrite the physical rotation as left multiplication of
+  the physical matrix, then vectorize the two bond factors; for a unitary
+  general linear factor, replace its inverse by its adjoint.
+- **Seen:** seven occurrences across
+  `MPS/Symmetry/PolarDeformation.lean`,
+  `MPS/Symmetry/PolarFrameEmbedding.lean`,
+  `MPS/Symmetry/PolarFixedPointEmbedding.lean`,
+  `MPS/Symmetry/CommonPhysicalEndpointPaths.lean`, and
+  `MPS/Symmetry/CommonPhysicalExactPhase.lean` (2026-10-02).
+- **Abstraction:** `MPSTensor.physicalMatrix_covariance_of_rotatePhysical`
+  in `MPS/Symmetry/PolarDeformation.lean`, with
+  `MPSTensor.physicalMatrix_mul_eq_sptKron_of_unitary_covariance` in
+  `MPS/Symmetry/PhysicalMatrixBondCovariance.lean` for unitary virtual actions.
+- **Notes:** all seven callers use the common lemmas. The general identity
+  allows arbitrary left and right bond matrices; neither requires the
+  physical action matrix to be unitary.
+
+### summing on-site symmetric local interactions — promoted
+- **Pattern:** expand the periodic interaction Hamiltonian, prove that each
+  embedded two-site term commutes with the full on-site tensor power, and
+  sum the commutation identities.
+- **Seen:** four occurrences in `MPS/Symmetry/CanonicalInjectiveGappedPath.lean`,
+  `MPS/Symmetry/WeightedMatrixUnitParentPath.lean`, and
+  `MPS/Symmetry/CommonPhysicalFixedPointPath.lean` (2026-10-02).
+- **Abstraction:** `MPSTensor.interactionHamiltonian_commute_onSiteTensorPow`
+  in `MPS/Symmetry/InteractionHamiltonianSymmetry.lean`.
+- **Notes:** all four callers use the common lemma. The on-site matrix need
+  not be unitary; local commutation alone gives commutation of the sum.
+
+
+### orthogonal matrix projections as symmetric linear projections — promoted
+- **Pattern:** map a star projection through the orthonormal matrix-coordinate
+  equivalence, then apply
+  `LinearMap.isStarProjection_iff_isSymmetricProjection`.
+- **Seen:** three occurrences in
+  `MPS/Symmetry/BondProductParentHamiltonian.lean`,
+  `MPS/Symmetry/PhysicalInteractionGap.lean`, and
+  `MPS/Symmetry/PhysicalInteractionGroundSpace.lean` (2026-10-02).
+- **Abstraction:** `MPSTensor.bondMatrixEquiv_symm_isSymmetricProjection` in
+  `MPS/Symmetry/BondProductParentHamiltonian.lean`.
+- **Notes:** all three callers use the shared conversion. Mathlib supplies
+  the projection equivalence; the helper supplies its matrix-coordinate
+  application. No mathematical assumptions are added.
+
+### reindexing an orthogonal matrix projection — promoted
+- **Pattern:** transport idempotence by the matrix reindexing equivalence
+  and self-adjointness by the conjugate-transpose reindexing identity.
+- **Seen:** three uses in `MPS/Symmetry/TwoSiteBondInteraction.lean`,
+  `MPS/Symmetry/FixedPointGappedPath.lean`, and
+  `MPS/Symmetry/PhysicalInteractionGap.lean` (2026-10-02).
+- **Abstraction:** `Matrix.isStarProjection_reindex` in
+  `Algebra/MatrixProjectionReindex.lean`.
+- **Notes:** all three callers use the shared lemma. It applies to matrices
+  over any additive commutative monoid with multiplication and a star;
+  no decidable-equality hypothesis is needed in its statement.
+
+### inverse of a unitary general linear matrix — promoted
+- **Pattern:** identify the general linear inverse with the matrix inverse,
+  then use the unitary adjoint as a left inverse.
+- **Seen:** three uses in `MPS/Symmetry/SPTFixedPoint.lean`,
+  `MPS/Symmetry/CommonPhysicalEndpoints.lean`, and
+  `MPS/Symmetry/CommonPhysicalEndpointPaths.lean` (2026-10-02).
+- **Abstraction:** `Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup`
+  in `Algebra/UnitaryGeneralLinearInverse.lean`.
+- **Notes:** all callers use the shared matrix identity; the virtual gauge
+  convention is unchanged.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -2854,6 +2922,18 @@ abstracted — record why, so it is not re-proposed).
   repeated Hermitian-factor arguments in a second module.
 - **Notes:** These instances occur in one module and prove distinct polar
   identities. No additional tactic or matrix predicate is introduced.
+
+### quadratic bounds for commuting periodic projections — candidate
+- **Pattern:** convert matrix translates to symmetric linear projections,
+  use nonnegative cross terms, and specialize the common quadratic-form
+  bound with unit gap and zero overlap.
+- **Seen:** `MPS/Symmetry/BondProductParentHamiltonian.lean` and
+  `MPS/Symmetry/PhysicalInteractionGap.lean` (2026-10-02).
+- **Abstraction:** both already use
+  `ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum`;
+  the remaining periodic-translate conversion may be shared if another
+  caller needs it.
+- **Notes:** two occurrences; no additional tactic is needed at present.
 
 ### coordinate restriction at the two bond endpoints — candidate
 

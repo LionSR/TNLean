@@ -215,6 +215,15 @@ theorem physicalMatrix_mul_left_right (A : MPSTensor d D)
   rw [Finset.sum_comm]
   simp only [mul_comm, mul_left_comm]
 
+/-- Physical covariance of the tensor letters gives the
+corresponding physical-matrix intertwiner. Source context: arXiv:1010.3732,
+Section II.F.2, equation eq:1d-sym:jointsym. -/
+theorem physicalMatrix_covariance_of_rotatePhysical (A : MPSTensor d D)
+    (U : Matrix (Fin d) (Fin d) ℂ) (X Y : Matrix (Fin D) (Fin D) ℂ)
+    (hCov : rotatePhysical U A = fun i => X * A i * Y) :
+    U * physicalMatrix A = physicalMatrix A * (Xᵀ ⊗ₖ Y) := by
+  rw [← physicalMatrix_rotatePhysical, hCov, physicalMatrix_mul_left_right]
+
 /-- A unitary physical covariance by unitary bond conjugation is preserved
 throughout the polar deformation. Source: arXiv:1010.3732, Section II.C,
 “Isometric form and symmetries”. -/
@@ -226,8 +235,8 @@ theorem rotatePhysical_polarDeformation_of_unitary_covariance
     (hCov : rotatePhysical U A = fun i => X * A i * Xᴴ) (γ : ℝ) :
     rotatePhysical U (polarDeformation A γ) =
       fun i => X * polarDeformation A γ i * Xᴴ := by
-  have hCovM : U * physicalMatrix A = physicalMatrix A * (Xᵀ ⊗ₖ Xᴴ) := by
-    rw [← physicalMatrix_rotatePhysical, hCov, physicalMatrix_mul_left_right]
+  have hCovM : U * physicalMatrix A = physicalMatrix A * (Xᵀ ⊗ₖ Xᴴ) :=
+    physicalMatrix_covariance_of_rotatePhysical A U X Xᴴ hCov
   have hK : (Xᵀ ⊗ₖ Xᴴ) ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ :=
     Matrix.kronecker_mem_unitary (Matrix.transpose_mem_unitaryGroup_iff.mpr hX)
       (Unitary.star_mem hX)

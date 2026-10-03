@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CommonKernelSpectralGap
-import TNLean.MPS.Symmetry.GappedInteractionPath
+import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
 
@@ -112,8 +112,6 @@ theorem interactionHamiltonian_parent_spectrum_gap
       exact hGap
     simpa only [zero_add] using spectrum_separated_of_orthogonal_norm_gap H hPos hNormGap
 
-set_option maxHeartbeats 400000 in
--- The compactness argument and dependent path conditions together exceed the default limit.
 /-- A continuous one-site injective tensor path with fixed unitary on-site
 symmetry determines a symmetric uniformly gapped path of its canonical
 nearest-neighbor parent interactions. Source: arXiv:1010.3732, Section II.C
@@ -152,12 +150,11 @@ noncomputable def canonicalInjectiveGappedPath
       interactionHamiltonian_parent_spectrum_gap (A γ) (hInj γ hγ) hN
         (hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN)
   symmetric γ hγ g N hN := by
-    rw [interactionHamiltonian, ← onSiteTensorPow_eq_finKronecker]
-    apply Commute.sum_left
-    intro i _
-    exact embedLocalOperator_commute_onSiteTensorPow (U g) 2 hN i
-      (LinearMap.toMatrix' (parentInteraction (A γ) 2))
+    rw [← onSiteTensorPow_eq_finKronecker]
+    have hSym := interactionHamiltonian_commute_onSiteTensorPow (U g)
+      (LinearMap.toMatrix' (parentInteraction (A γ) 2)) hN
       (parentInteraction_matrix_commute_onSiteTensorPow (A γ) (U g)
         (SetLike.coe_mem _) (hCov γ hγ g) 2)
+    exact hSym
 
 end MPSTensor

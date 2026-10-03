@@ -138,7 +138,7 @@ noncomputable def polarFrameGappedInteractionPath
           (Matrix.transpose_mem_unitaryGroup_iff.mpr (SetLike.coe_mem (X g)))
           (Unitary.star_mem (SetLike.coe_mem (X g)))⟩
     apply polarFrameEmbedding_intertwiner hA W (U g) (V g) K _ (hInt g)
-    rw [← physicalMatrix_rotatePhysical, hCov g, physicalMatrix_mul_left_right]
+    exact physicalMatrix_covariance_of_rotatePhysical A (U g) (X g) (X g)ᴴ (hCov g)
   simpa only [polarFrameEmbedding_polar_endpoint hA] using
     embeddedPolarGappedInteractionPath U (Matrix.unitaryDirectSumHom.comp (V.prod U))
       (polarFrameEmbedding A W) (polarFrameEmbedding_isometry hA W hW) hE A hA X hCov

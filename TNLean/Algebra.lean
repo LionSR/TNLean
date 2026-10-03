@@ -84,6 +84,7 @@ import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MatrixSylvesterBound
@@ -151,6 +152,7 @@ import TNLean.Algebra.UnitaryConjugationTransposeSign
 import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
+import TNLean.Algebra.UnitaryGeneralLinearInverse
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.Algebra.UnitaryKroneckerComparison
 import TNLean.Algebra.UnitaryMulVecInner
