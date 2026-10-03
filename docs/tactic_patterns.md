@@ -2495,6 +2495,22 @@ abstracted — record why, so it is not re-proposed).
   Bond dimension may differ from the dimension of the normalized bond.
   No injectivity assumption is used in the comparison itself.
 
+### boundary spaces under rectangular physical maps — promoted
+
+- **Pattern:** expand the rotated letters, collect the product of their
+  physical coefficients, and identify the boundary space as the range
+  of the tensor power composed with the original boundary map.
+- **Seen:** the three square-map boundary identities in
+  `MPS/ParentHamiltonian/PhysicalDeformation.lean` and their rectangular
+  counterparts in `MPS/ParentHamiltonian/PhysicalEmbedding.lean`.
+- **Abstraction:** `groundSpaceMap_rotatePhysical_rectangular`,
+  `groundSpace_rotatePhysical_rectangular`, and
+  `groundSpaceES_rotatePhysical_rectangular`.
+- **Notes:** the square-map statements now use these shared results.
+  Neither invertibility nor injectivity is required for boundary transport.
+  Isometric projection transport additionally uses
+  `LinearIsometry.starProjection_map_eq_comp_adjoint`.
+
 ## Candidates
 
 ### One-site doubled-alphabet transport — candidate
