@@ -20,6 +20,11 @@ This is an auxiliary discrete winding calculation for the exposed contour
 argument in SCP10, arXiv:1001.3807, proof of Theorem 6.9, lines 1935–1990.
 The flow is not asserted to be an actual region contour; that identification
 and the geometric connectivity argument are separate.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators

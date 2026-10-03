@@ -18,6 +18,11 @@ actual torus cell union.
 consequences of a genuine region lift, supporting SCP10, Theorem 6.9, lines
 1935–1990. Path connectedness of the exterior collar is not assumed or proved.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 noncomputable section
@@ -134,7 +139,8 @@ theorem disjoint_torusRegionPlanarRealization_add_collar_periodTranslate
 
 /-- Every point of the radius-three-quarters exterior collar projects outside
 the actual torus cell region. No collar connectivity is assumed.
-Source: SCP10, Theorem 6.9, lines 1935–1990; auxiliary exterior geometry. -/
+Locally proved auxiliary exterior geometry for the block setting of SCP10, Theorem 6.9, lines
+1935–1990; the source states no such lemma. -/
 theorem torusRealProjection_not_mem_of_mem_planarExteriorCollar {x : ℝ × ℝ}
     (hx : x ∈ (torusRegionPlanarRealization R L +
         (Icc (-3 / 4 : ℝ) (3 / 4) ×ˢ Icc (-3 / 4 : ℝ) (3 / 4))) \
@@ -157,8 +163,9 @@ theorem torusRealProjection_not_mem_of_mem_planarExteriorCollar {x : ℝ × ℝ}
 omit F hF L hL in
 /-- Simple connectedness of the actual torus cell region supplies integer
 coordinates whose exterior collar projects wholly outside that region.
-This does not assert that the collar is path connected. Source: SCP10,
-Theorem 6.9, lines 1935–1990; auxiliary geometric consequence. -/
+This does not assert that the collar is path connected. Locally proved auxiliary geometric
+consequence for the block setting of SCP10, Theorem 6.9, lines 1935–1990; the source states no such
+lemma. -/
 theorem exists_integerLift_exteriorCollar_of_isSimplyConnected
     (hR : IsSimplyConnected (torusRegionRealization R)) (o : {v // v ∈ R}) :
     ∃ L : {v // v ∈ R} → ℤ × ℤ, IsTorusRegionIntegerLift R L ∧

@@ -19,6 +19,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Observation `obs:iso
 and its concatenation argument,
 `Papers/1001.3807/paper_v3.tex`, lines 1765–1820. These are identities of the
 actual finite sums; no block Gram identity is assumed.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

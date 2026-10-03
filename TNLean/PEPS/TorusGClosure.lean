@@ -18,6 +18,11 @@ Source: Schuch, Cirac, Pérez-García, arXiv:1001.3807, Definition 5.6,
 equation `eq:2d:peps-with-ug-uh`, and Definition 5.8, `def:2d:pair-cc`,
 lines 1515–1525 and 1560–1580 of `Papers/1001.3807/paper_v3.tex`.
 The horizontal and vertical orientations are those of `TorusOperatorString`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

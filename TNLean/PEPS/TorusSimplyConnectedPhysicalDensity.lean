@@ -26,6 +26,11 @@ see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 Source: SCP10, arXiv:1001.3807, Theorem 6.7, Corollary 6.8, and
 Theorem 6.9, local source lines 1935–2072.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder
