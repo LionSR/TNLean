@@ -29,7 +29,7 @@ The proof combines the overlap `num = b^{-1/2} ∑ⱼ zⱼ` after `V^{⊗M}`
 `1 - s/t ≤ 2 (t² - s²)` for `t² ≥ 1/2`, where `t = ‖φ_N‖` and `s = |num|`. For `M ≥ 2`,
 `t² - s² ≤ |t² - b| + 2 ∑ⱼ |zⱼ - 1|`, with the overlaps `zⱼ` to second order
 (`exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq`) and `|t² - b| = O(e^{-γ N/ξ})`
-(`exists_abs_norm_mpvState_blockSum_sq_sub_le_of_lt_one`), which is `O(e^{-2γ q/ξ})` for
+(`exists_abs_norm_mpvState_blockSum_sq_sub_le`), which is `O(e^{-2γ q/ξ})` for
 `N = qM ≥ 2q`. For `M = 1`, `s = |⟨W|u⟩|/√b` with `u = φ_1(P)`, `t = ‖u‖` and
 `W = ∑ⱼ φ_1(P'_{j,∞})` of squared norm `b`; then `t² - s² ≤ ‖u - W‖²` and `W = φ_1(P_∞)`, so that
 `‖u - W‖ = O(‖P - P_∞‖)`.
@@ -43,8 +43,6 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
 
-* `MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le_of_lt_one` — the norm of the target at
-  the rate `e^{-γ N/ξ}`, `0 < γ < 1`.
 * `MPSTensor.one_sub_norm_nonNormalApproxOverlap_blockSum_le` — the error is at most
   `1 - |∑ⱼ zⱼ| / (√b ‖φ_N‖)`.
 * `MPSTensor.exists_approximationError_le_overlappingBlockSum_sq`,
@@ -88,86 +86,8 @@ theorem one_sub_div_le_two_mul_of_sq_sub_sq_le {s t X : ℝ} (hs : 0 ≤ s) (ht0
       nlinarith
     linarith
 
-/-! ### The norm of the target -/
-
 variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
   {ι : (j : Fin b) → Fin (Dj j) → Fin D}
-
-/-- **The norm of the target at the rate of the mixed transfer maps.** In the setting of
-`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1`, the periodic state of the direct
-sum with unit weights on `N ≥ 1` sites satisfies `|‖φ_N‖² - b| ≤ K e^{-γ N/ξ}`. Its squared norm
-is `∑ⱼ ∑ₖ ⟨φ_N(A_k)|φ_N(A_j)⟩`; the diagonal terms are `1` up to `O(e^{-γ N/ξ})` by the normal case
-at `γ/2` (`exists_abs_norm_mpvState_sq_sub_one_le`), and the others decay at the rate of the mixed
-transfer maps (`exists_norm_mpvOverlap_le_of_mixedMapLM`). This extends
-`exists_abs_norm_mpvState_blockSum_sq_sub_le` from `γ < 1/2` to `γ < 1`.
-
-arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii): the bound on
-`|c_N²/\tilde c_N² - 1|`. -/
-theorem exists_abs_norm_mpvState_blockSum_sq_sub_le_of_lt_one
-    (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
-    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
-    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
-    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
-    {lam₂ : ℂ} (hl : ‖lam₂‖ < 1)
-    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
-    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ N : ℕ, N ≠ 0 →
-      |‖mpvState (blockSum Aj ι fun _ => 1) N‖ ^ 2 - b| ≤
-        K * Real.exp (-γ / correlationLength lam₂) ^ N := by
-  have hD : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
-  set x := Real.exp (-γ / correlationLength lam₂) with hxdef
-  have hx0 : 0 ≤ x := (Real.exp_pos _).le
-  have hx2 : Real.exp (-(γ / 2) / correlationLength lam₂) ^ 2 = x := by
-    rw [← exp_neg_two_mul_div_correlationLength]; congr 2; ring
-  choose K₅ hK₅ hc using fun j => exists_abs_norm_mpvState_sq_sub_one_le (Aj j) (hN j) (hA j)
-    (hσ j) (htr j) (hfix j) (hlam j) (γ := γ / 2) (by positivity) (by linarith)
-  simp only [hx2] at hc
-  have hoff : ∀ j k, ∃ K : ℝ, 0 ≤ K ∧ (j ≠ k → ∀ N : ℕ,
-      ‖mpvOverlap (Aj j) (Aj k) N‖ ≤ K * x ^ N) := fun j k => by
-    by_cases hjk : j = k
-    · exact ⟨0, le_rfl, fun h => absurd hjk h⟩
-    · obtain ⟨K, hK, h⟩ := exists_norm_mpvOverlap_le_of_mixedMapLM (Aj j) (Aj k) hl
-        (hmix j k hjk) hγ0 hγ
-      exact ⟨K, hK, fun _ => h⟩
-  choose Ko hKo hob using hoff
-  refine ⟨∑ j, K₅ j + ∑ j, ∑ k, Ko j k,
-    add_nonneg (Finset.sum_nonneg fun j _ => hK₅ j)
-      (Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => hKo j k),
-    fun N hN0 => ?_⟩
-  have hsum : ((‖mpvState (blockSum Aj ι fun _ => 1) N‖ ^ 2 : ℝ) : ℂ) =
-      ∑ j, ∑ k, mpvOverlap (Aj j) (Aj k) N := by
-    rw [ofReal_norm_mpvState_sq, mpvOverlap]
-    simp_rw [mpv_blockSum hι hdisj _ hN0, one_pow, one_mul, star_sum, Finset.sum_mul_sum,
-      mpvOverlap]
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Finset.sum_comm]
-  have hexp : ((‖mpvState (blockSum Aj ι fun _ => 1) N‖ ^ 2 - b : ℝ) : ℂ) =
-      ∑ j, ((‖mpvState (Aj j) N‖ ^ 2 - 1 : ℝ) : ℂ) +
-        ∑ j, ∑ k ∈ Finset.univ.erase j, mpvOverlap (Aj j) (Aj k) N := by
-    rw [Complex.ofReal_sub, hsum]
-    simp_rw [Complex.ofReal_sub, ofReal_norm_mpvState_sq, Complex.ofReal_one]
-    have hsplit : ∑ j, ∑ k, mpvOverlap (Aj j) (Aj k) N =
-        ∑ j, mpvOverlap (Aj j) (Aj j) N +
-          ∑ j, ∑ k ∈ Finset.univ.erase j, mpvOverlap (Aj j) (Aj k) N := by
-      rw [← Finset.sum_add_distrib]
-      exact Finset.sum_congr rfl fun j _ => (Finset.add_sum_erase _ _ (Finset.mem_univ j)).symm
-    rw [hsplit, Finset.sum_sub_distrib]
-    simp
-  rw [← Real.norm_eq_abs, ← Complex.norm_real, hexp, add_mul, Finset.sum_mul, Finset.sum_mul]
-  refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
-  · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
-    rw [Complex.norm_real, Real.norm_eq_abs]
-    exact hc j N
-  · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
-    rw [Finset.sum_mul]
-    refine (norm_sum_le _ _).trans ((Finset.sum_le_sum fun k hk => ?_).trans
-      (Finset.sum_le_sum_of_subset_of_nonneg (Finset.erase_subset j Finset.univ)
-        fun k _ _ => mul_nonneg (hKo j k) (pow_nonneg hx0 N)))
-    exact hob j k (Ne.symm (Finset.ne_of_mem_erase hk)) N
 
 /-! ### The overlap after the partial isometry -/
 
@@ -320,7 +240,7 @@ theorem exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le [NeZero b]
     exact mul_neg_of_pos_of_neg hγ0 (Real.log_neg (norm_pos_iff.2 h0) hl)
   obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_blockSum_sub_le hι hdisj hN hA hσ
     htr hfix hl hlam hmix hγ0 hγ
-  obtain ⟨Kn, hKn, hnorm⟩ := exists_abs_norm_mpvState_blockSum_sq_sub_le_of_lt_one hι hdisj hN hA
+  obtain ⟨Kn, hKn, hnorm⟩ := exists_abs_norm_mpvState_blockSum_sq_sub_le hι hdisj hN hA
     hσ htr hfix hl hlam hmix hγ0 hγ
   set μL := (mpvStateOneLM (n := D * D) (D := D)) ∘ₗ ofPhysicalMatrixLM
   set Kμ := ‖LinearMap.toContinuousLinearMap μL‖
@@ -459,7 +379,7 @@ theorem exists_approximationError_le_overlappingBlockSum_sq [NeZero b]
   choose Cz hCz hz using fun j =>
     exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq hι hdisj hN hA hσ htr hfix hl
       hlam hmix hγ0 hγ j
-  obtain ⟨Kn, hKn, hnorm⟩ := exists_abs_norm_mpvState_blockSum_sq_sub_le_of_lt_one hι hdisj hN hA
+  obtain ⟨Kn, hKn, hnorm⟩ := exists_abs_norm_mpvState_blockSum_sq_sub_le hι hdisj hN hA
     hσ htr hfix hl hlam hmix hγ0 hγ
   obtain ⟨K₁, hK₁, hone⟩ := exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le hι hdisj hN hA
     hσ htr hfix hl h0 hlam hmix hγ0 hγ
