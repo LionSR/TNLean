@@ -27,6 +27,14 @@ Gates on `k + 1` consecutive sites are the gates of the sequential preparation o
 product state of bond dimension `D ≤ d^k`: the isometries of arXiv:2307.01696, eq. (14)
 (paragraph "The sequential-RG circuit") and of arXiv:quant-ph/0501096, eq. `induction`, each act
 on a bond register of `k` sites and one fresh site.
+
+## References
+
+* Malz, Styliaris, Wei, Cirac, *Preparation of matrix product states with log-depth
+  quantum circuits*, arXiv:2307.01696, main text before Theorem 1, eq. (14) and the paragraph
+  "The sequential-RG circuit".
+* Schön, Solano, Verstraete, Cirac, Wolf, *Sequential generation of entangled
+  multiqubit states*, arXiv:quant-ph/0501096, eq. `induction`.
 -/
 
 open Matrix

@@ -27,6 +27,12 @@ Fig. 1: the bond register moves one site to the left at each step, the unitary e
 on the rightmost of them, and the last `r` isometries act on the final position of the
 register. Each step acts on `r + 1` consecutive sites, so it is a product of a bounded number
 of two-site gates (`QuantumCircuit.IsWindowProduct.exists_isPairProduct`).
+
+## References
+
+* Malz, Styliaris, Wei, Cirac, *Preparation of matrix product states with log-depth
+  quantum circuits*, arXiv:2307.01696, eq. (14), the paragraph "The sequential-RG circuit"
+  and Fig. 1.
 -/
 
 open Matrix MPSTensor

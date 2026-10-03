@@ -21,17 +21,27 @@ are at most `N + 1` gates on neighbouring sites
 
 The successive decompositions of arXiv:quant-ph/0501096, eq. `induction`, which are the repeated
 singular value decompositions of arXiv:2307.01696, eq. (14), write
-`ψ(σ) = (Q₀(σ₀) ⋯ Q_{N-1}(σ_{N-1}) r')₀`, with every site `Q_p` isometric on its right bond and
-the left bond of `Q₀` one-dimensional (`MPSPreparation.exists_isometric_chain`). The bond levels
-`Fin D` are encoded injectively in the configurations of `k` sites, which is possible since
-`D ≤ d^k`. The first gate prepares the boundary vector `r'` on the last `k` sites, and the
-staircase of arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1
+`ψ(σ) = (Q₀(σ₀) ⋯ Q_{N-1}(σ_{N-1}) r')₀`, where every site `Q_p` is isometric on its right
+bond and the left bond of `Q₀` is one-dimensional (`MPSPreparation.exists_isometric_chain`). The
+bond levels `Fin D` are encoded injectively in the configurations of `k` sites, which is
+possible since `D ≤ d^k`. The first gate prepares the boundary vector `r'` on the last `k`
+sites, and the staircase of arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1
 (`MPSPreparation.exists_staircase_isWindowProduct`) then moves the bond register one site to the
 left at each step, leaving one physical site behind; each step embeds one isometry `Q_p` into a
 unitary on `k + 1` consecutive sites. When `N ≤ k` a single unitary on all the sites suffices.
 
 The norm of `ψ` is one because the circuit is unitary; this is the deterministic setting of
 arXiv:quant-ph/0501096 and of arXiv:quant-ph/0608197, lines 1553--1554.
+
+## References
+
+* Malz, Styliaris, Wei, Cirac, *Preparation of matrix product states with log-depth
+  quantum circuits*, arXiv:2307.01696, eq. (14), the paragraph "The sequential-RG circuit"
+  and Fig. 1.
+* Schön, Solano, Verstraete, Cirac, Wolf, *Sequential generation of entangled
+  multiqubit states*, arXiv:quant-ph/0501096, eq. `induction`.
+* Pérez-García, Verstraete, Wolf, Cirac, *Matrix product state representations*,
+  arXiv:quant-ph/0608197, lines 1553--1554 of `Papers/quant-ph_0608197/MPSarchive.tex`.
 -/
 
 open Matrix MPSTensor
