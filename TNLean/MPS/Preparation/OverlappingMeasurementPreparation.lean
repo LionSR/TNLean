@@ -84,6 +84,7 @@ maps of distinct blocks, whose spectral radius is assumed below one. Documented 
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 

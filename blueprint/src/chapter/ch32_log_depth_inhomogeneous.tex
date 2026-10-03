@@ -336,6 +336,39 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     $r=\lvert S\rvert$.
 \end{proof}
 
+\begin{theorem}[Sequential factorization of the partial isometry of any blocked tensor]
+    \label{thm:ldp_sequential_factorization_partial}
+    \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition}
+    Let $A_1,\dots,A_q$, $q\ge1$, be tensors of bond dimension $D$, one on each
+    site, with blocked tensor $B=VP$ and $V^\dagger V=\Pi$; no injectivity is
+    assumed. Let $r\le D^2$ and let $T$ be a unitary on $\C^{D^2}$ with
+    $\Pi T=T\Lambda$, where $\Lambda$ is the diagonal matrix with $\Lambda_{yy}=1$
+    for $y<r$ and $\Lambda_{yy}=0$ otherwise. Then $VT\ket x=0$ for every
+    $x\ge r$, and there are integers $b_0=1$, $b_q=r$ and $b_p\le D^2$, and
+    families of $b_{p-1}\times b_p$ matrices $X_p^i$ with
+    $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$ for every $p$, such that
+    $\bra{i_1\cdots i_q}VT\ket x=(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ for every
+    $x<r$. This is the case $q\ge1$ of the footnote
+    of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}: the
+    derivation of \cite[eqs.~(13)--(15)]{Malz2024Preparation} remains valid for
+    non-injective $B$, with $P^{-1}$ read as a pseudo-inverse. The source states
+    no lower bound on $q$; at $q=0$ the conclusion fails for every $D$,
+    see~\cite{gap:mswc24_sequential_factorization_positive_block_length}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_tensor_injective_on,
+        lem:ldp_sequential_factorization_first_inputs}
+    Since $V^\dagger V=\Pi$ and $T$ is unitary, $(VT)^\dagger VT=T^\dagger\Pi
+        T=\Lambda$. So the first $r$ columns of $VT$ are orthonormal and the
+    others have norm zero. By Theorem~\ref{thm:ldpolar_tensor_injective_on},
+    $V=BG$ for a matrix $G$ on the bond pairs, so $VT=B(GT)$, and
+    Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} factors $VT$ on
+    its first $r$ inputs.
+\end{proof}
+
 \begin{theorem}[Preparation for site-dependent tensors]
     \label{thm:ldp_chain_depth}
     \lean{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn,
@@ -345,7 +378,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSPreparation.exists_pairEquiv_val_lt_card_iff_mem,
         MPSPreparation.isPreparedInDepth_zero_of_le_one}
     \leanok
-    \uses{def:ldp_chain_pos_state, def:ldp_local_circuit, def:ldpolar_injective_on}
+    \uses{def:ldp_chain_pos_state, def:qc_local_circuit, def:ldpolar_injective_on}
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be tensors of bond dimension $D$
@@ -363,7 +396,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \uses{lem:ldp_unitary_implementing_isometry,
         thm:ldp_sequential_factorization_on,
         thm:ldp_block_sum_unitary,
-        thm:ldp_bounded_unitary_two_site_gates}
+        thm:qc_bounded_unitary_two_site_gates}
     For $d\le1$ there is at most one configuration, and a product vector
     carries any amplitude on it. For $D=0$ there is no unit pair. Otherwise
     $d\ge2$, so $D\le d^D$, and each bond index is encoded in $D$ sites. The
@@ -406,7 +439,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSPreparation.extend_inputCfg,
         MPSPreparation.exists_blockUnitary_of_equiv_mul}
     \leanok
-    \uses{thm:ldp_block_sum_unitary, thm:ldp_bounded_unitary_two_site_gates,
+    \uses{thm:ldp_block_sum_unitary, thm:qc_bounded_unitary_two_site_gates,
         lem:ldp_unitary_implementing_isometry}
     Let $D\ge1$, encode the bond indices injectively in $r_1\ge1$ sites, let $\pi$
     enumerate the bond pairs, and let $Q_1,\dots,Q_q$ be an isometric chain
@@ -427,7 +460,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     Theorem~\ref{thm:ldp_block_sum_unitary}, after the SWAP gates have brought
     the two inputs onto the last $2r_1$ sites, apply this unitary for $G$ on
     those sites, a product of a bounded number of gates by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, and then the
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, and then the
     staircase; $Z(\sigma,y)$ is the amplitude of the staircase on the encoded
     input $y$.
 \end{proof}
@@ -437,8 +470,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \lean{MPSPreparation.exists_blockUnitary_isometricExtension}
     \leanok
     \uses{lem:ldp_projector_basis, lem:ldp_block_unitary_gate,
-        lem:ldp_sequential_factorization_first_inputs,
-        thm:ldp_sequential_factorization_on}
+        thm:ldp_sequential_factorization_partial}
     Encode the bond indices injectively in $D\ge1$ sites. There is $C$ such
     that for every $q\ge3D$ and all tensors $A_1,\dots,A_q$ of bond dimension
     $D$, one on each site, with blocked tensor $B=VP$ and $V^\dagger V=\Pi$,
@@ -449,12 +481,9 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
-    Let $\Pi T=T\Lambda$ as in Lemma~\ref{lem:ldp_projector_basis}. Then
-    $(VT)^\dagger VT=T^\dagger\Pi T=\Lambda$, so the first $r$ columns of $VT$
-    are orthonormal, and $VT=BGT$ for a matrix $G$ on the bond pairs, as in
-    Theorem~\ref{thm:ldp_sequential_factorization_on}. By
-    Lemma~\ref{lem:ldp_sequential_factorization_first_inputs}, $VT$ factors
-    into an isometric chain on its first $r$ inputs. Let $U$ be the unitary of
+    Let $\Pi T=T\Lambda$ as in Lemma~\ref{lem:ldp_projector_basis}. By
+    Theorem~\ref{thm:ldp_sequential_factorization_partial}, $VT$ factors into an
+    isometric chain on its first $r$ inputs. Let $U$ be the unitary of
     Lemma~\ref{lem:ldp_block_unitary_gate} for this chain and $G=T^\dagger$,
     and $W\ket{l,r}=U\ket{l,0,r}$. Then $W$ is an isometry, since $U$ is unitary
     and distinct inputs give distinct configurations, and $W=ZT^\dagger$. As
@@ -540,7 +569,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
     \leanok
     \uses{def:ldp_varying_bond_chain, def:ldp_pair_approximable,
-        def:ldp_local_circuit, thm:ldp_isometric_extension_depth}
+        def:qc_local_circuit, thm:ldp_isometric_extension_depth}
     Let $D^2\le d^{3D}$. There is $C$, depending only on $d$ and $D$, such that
     the following holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be a chain with bond dimensions at
