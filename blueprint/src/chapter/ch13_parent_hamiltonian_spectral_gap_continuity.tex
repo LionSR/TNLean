@@ -335,13 +335,7 @@ is recorded in
 \begin{proof}
     \leanok
     \uses{thm:compact_kernel_gap, thm:continuous_injective_range_projector,
-        thm:continuous_finite_window_parent_hamiltonian,
-        lem:compact_uniform_pos_nat_bounds,
-        thm:parent_hamiltonian_fixed_length_gap,
-        thm:parent_ground_space_es_kernel,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        thm:chain_ground_space_eq_mpv_blk,
-        thm:mpv_ne_zero_blk_injective}
+        thm:continuous_finite_window_parent_hamiltonian}
     The kernel of $H_{N,2}(A_x)$ is the line spanned by the nonzero periodic
     matrix product vector of $A_x$, whose projection is continuous in $x$. The
     gap at each point therefore persists in a neighborhood, and a finite
@@ -458,26 +452,31 @@ is recorded in
         MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_fixed_volume_of_wordTupleSpanTop}
     \leanok
     \uses{thm:compact_kernel_gap}
-    Let $x\mapsto(A_x^j)_j$ be a continuous family of blocks whose
-    length-$S$ word tuples span the product of their matrix algebras,
-    with $S>0$. The projection onto the sum of the local block spaces
-    is continuous at every length at least $S$. For the weighted block
-    sum, the periodic kernel projection is continuous whenever
-    $S+1\leq R\leq N$. Nonzero block weights may vary arbitrarily.
-    Thus each such fixed volume has a positive gap uniform on any compact
-    parameter set. The overlaps of two local block spaces are also
+    Let $x\mapsto(A_x^j)_j$ be a continuous family of blocks. At every
+    length $L$ at which the length-$L$ word tuples span the product of the
+    block matrix algebras for every parameter, the projection onto the sum
+    of the local block spaces on $L$ sites, and the projection onto the
+    local space of the weighted block sum, are continuous in the parameter.
+    Suppose moreover that the physical dimension and all bond dimensions
+    are positive, and that the word tuples span at a length $S>0$ for every
+    parameter. For the weighted block sum, the periodic kernel projection
+    is continuous whenever $S+1\leq R\leq N$. Nonzero block weights may
+    vary arbitrarily. Thus each such fixed volume has a positive gap
+    uniform on any compact parameter set. The overlaps of two local block spaces are also
     continuous at any common injectivity length.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:compact_kernel_gap}
+    \uses{thm:compact_kernel_gap, thm:block_word_span_propagation}
     The joint boundary map has fixed domain, is injective, and has range
     equal to the sum of the local block spaces. Its range projection
     therefore depends continuously on the parameter. Restricting the
     boundary matrices to scalar multiples of the identity gives the
     injective map onto the periodic ground space. The kernel identity
-    then gives continuity of the periodic kernel projection. Compactness
+    then gives continuity of the periodic kernel projection, after the
+    span at $S$ is propagated to every length at least $S$ using the
+    positive dimensions. Compactness
     yields a common positive finite-volume gap.
 \end{proof}
 
