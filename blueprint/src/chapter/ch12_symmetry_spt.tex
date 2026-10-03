@@ -4311,7 +4311,9 @@ Hamiltonian gap remains separate
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:spc_aux_periodic_norm_one,
+    \uses{thm:injective_irreducible,
+        thm:spt_unitary_virtual_covariance_unital,
+        thm:spc_aux_periodic_norm_one,
         thm:spc_aux_periodic_line_unit_overlap,
         thm:spc_aux_stationary_support_identification,
         thm:spc_aux_normalized_stationary_unique,
@@ -4319,8 +4321,13 @@ Hamiltonian gap remains separate
         thm:spc_aux_unitary_gauge_virtual_transport,
         thm:spc_aux_adjoint_fixed_dimension,
         thm:spc_aux_topological_stationary_support_class}
+    Injectivity makes $\E_A$ irreducible. Since $\E_A(I)=I$,
+    Perron--Frobenius theory makes its fixed space one-dimensional,
+    and unital normalization supplies a positive definite matrix
+    $\Lambda$ with $\E_A^\dagger(\Lambda)=\Lambda$.
     The two periodic norms tend to one. Equality of their eventual spans
-    therefore gives a unit overlap limit. Stationary-support identification
+    therefore gives a unit overlap limit. Stationary-support identification,
+    applied with the irreducible family $A$ and the fixed point $\Lambda$,
     shows that $E=D$ and that $C$ is gauge equivalent to $A$ up to a nonzero
     scalar. In particular, $C$ is injective. The fixed-space hypothesis gives
     uniqueness of the normalized adjoint stationary matrix, and support
