@@ -44,9 +44,11 @@ import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap
 import TNLean.MPS.Symmetry.PolarGappedInteractionPath
+import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.PreparedPolarGappedPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectiveDirectSumInclusions
+import TNLean.MPS.Symmetry.ProjectiveGaugeTransport
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
 import TNLean.MPS.Symmetry.SPTFixedPoint

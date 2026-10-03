@@ -133,6 +133,15 @@ normalization nor supplied virtual unitary matrices.\footnote{Affected
     declaration:
     \leanid{MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}.}
 
+The prepared path now also retains the virtual cohomology class of the
+original tensor. A bond change of basis conjugates all virtual matrices
+without changing their factor system. Unitary covariance choices for the
+prepared tensor assemble into a single projective representation, which
+implements symmetry at every point of the polar path. Gauge independence
+then identifies the class with any endpoint choice.\footnote{Affected
+    declaration:
+    \leanid{MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class}.}
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

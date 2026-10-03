@@ -248,6 +248,60 @@ of the virtual projective representation.
     final interaction by the equal canonical interaction of $A$.
 \end{proof}
 
+\begin{theorem}[Virtual class under gauge preparation]
+    \label{thm:spt_virtual_class_gauge_preparation}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.conjugate,
+        MPSTensor.twistedTensor_covariance_of_smul_gauge,
+        MPSTensor.cohomologousTo_of_smul_gaugeEquiv}
+    \leanok
+    \uses{def:projective_rep, thm:cocycle_gauge_independence}
+    A virtual change of basis $Y$ replaces a projective representation
+    $\rho(g)$ by $Y\rho(g)Y^{-1}$ and retains its factor system. If
+    $B_i=Y(cA_i)Y^{-1}$, this representation implements the symmetry of
+    $B$ whenever $\rho$ implements the symmetry of $A$. For $D>0$ and
+    injective $B$, every virtual representation chosen for $B$ has factor
+    system cohomologous to that of $\rho$
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Conjugation preserves the projective multiplication law and commutes
+    with physical twisting. Scalar rescaling also commutes with twisting.
+    Apply gauge independence on $B$ to compare the transported
+    representation with any other choice.
+\end{proof}
+
+\begin{theorem}[Virtual class along the prepared polar path]
+    \label{thm:spt_prepared_polar_virtual_class}
+    \lean{MPSTensor.exists_unitary_virtualRep_polarDeformation,
+        MPSTensor.cohomologousTo_polarIsometricTensor_of_isInjective_unital,
+        MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class}
+    \leanok
+    \uses{lem:projective_rep_from_virtual_covariance,
+        thm:spt_virtual_class_gauge_preparation,
+        thm:spt_prepared_polar_gapped_path, thm:cocycle_gauge_independence}
+    Let $A$ be one-site injective with $D>0$, with exact on-site symmetry
+    under a fixed unitary representation $U$. Choose any virtual
+    projective representation for $A$, with factor system $\omega_A$.
+    The unital representative $B$ and symmetric gapped path of the
+    preparation theorem can be chosen together with a unitary projective
+    representation $\rho$ of factor system $\omega\sim\omega_A$ which
+    implements virtual symmetry at every point of the polar deformation.
+    Consequently, any virtual representations chosen at the endpoints
+    of the polar path have cohomologous factor systems
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose unitary virtual covariance for $B$ and assemble these same
+    matrices into a projective representation. Polar covariance preserves
+    the matrices throughout the deformation, hence also their factor
+    system. Gauge preparation identifies this class with $[\omega_A]$;
+    gauge independence compares it with any endpoint choices.
+\end{proof}
+
 \begin{theorem}[Classification along symmetric MPS parent-Hamiltonian paths]
     \label{thm:spt_classification}
     \notready

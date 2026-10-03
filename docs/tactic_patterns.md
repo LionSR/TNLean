@@ -4082,3 +4082,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   trace-duality theorem already contains the matrix expansion.
 - **Notes:** the new unital case takes only four lines after choosing the
   adjoint eigenvector. No new tactic is needed.
+
+### matrix products after a common bond conjugation — candidate
+- **Pattern:** expand the matrix coefficients of general-linear-group products,
+  reassociate, and cancel the adjacent inverse-basis factors.
+- **Seen:** two occurrences in
+  `TNLean/MPS/Symmetry/ProjectiveGaugeTransport.lean`, in the projective
+  multiplication law and transported virtual covariance (2026-10-02).
+- **Abstraction:** use the group conjugation identities before taking matrix
+  coefficients when possible; a matrix conjugation linear equivalence may
+  contain the common cancellation when a scalar action is also present.
+- **Notes:** both occurrences are in one module, below the promotion threshold.
