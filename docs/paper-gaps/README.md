@@ -866,6 +866,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   the remaining repairs to the proof of Theorem 1 (normal versus injective,
   Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
   constant `ξ/4`, which is implicit in the source's final inequality.
+- `mswc24_depth_lower_bound_constant.tex` is the resolved local-correction
+  note for the constants of the closing inequality in the proof of Theorem 1:
+  `(1 - δ)^{k/2} < 1/e` gives a trace distance above `1 - 1/e - o(1)`, not
+  `√(3/4)`, and the factor `γ` of the final chain is undefined. Neither affects the rate
+  `4/ξ`; the formal bound `(ξ/4) log N ≤ T + (ξ/4) log(T+1) + C` and the
+  `Θ(log N)` depth at fixed error carry it.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
   in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
