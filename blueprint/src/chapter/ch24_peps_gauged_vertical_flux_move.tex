@@ -1,0 +1,48 @@
+\begin{theorem}[Vertical movement with a common tree background]
+    \label{thm:peps_torus_gauged_vertical_flux_move}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusGaugedVerticalFluxMove,
+        TNLean.PEPS.torusGaugedVerticalFluxAssignment,
+        TNLean.PEPS.torusGaugedVerticalFluxAssignment_one}
+    \leanok
+    \uses{thm:peps_torus_vertical_flux_move,
+        thm:peps_regular_gauged_cycle_permutation,
+        thm:peps_regular_two_cycle_flux_move}
+    Let the original torus site tensor be $G$-isometric for the regular action
+    of a finite group $G$. Assume width at least three and height at least
+    four. At any position $v$, use the actual two-by-three six-site region
+    $R$ and its derived path tree. Write $u_0(g),u_1(g)$ for the lower-chord
+    and double-chord insertions of the preceding vertical construction.
+    They retain the ordered seam element $g^{-1}$ when the rightward step
+    crosses the horizontal seam. For a vertex gauge $k:R\to G$, reconstruct
+    the internal assignment as
+    \begin{align}
+        s_{k,b,g}(e)
+            =k_{\mathrm{head}(e)}u_b(g)(e)k_{\mathrm{tail}(e)}^{-1},
+            \qquad b\in\{0,1\}.
+    \end{align}
+    There is one six-spin unitary $W$, chosen before every $k$, direction,
+    $g$, boundary configuration $\theta$, and literal exterior and crossing
+    assignment $u$, such that
+    \begin{align}
+        W\Psi_R(s_{k,0,g},u,\theta)&=\Psi_R(s_{k,1,g},u,\theta),\\
+        W^*\Psi_R(s_{k,1,g},u,\theta)&=\Psi_R(s_{k,0,g},u,\theta),\\
+        (W\otimes I)\Psi(s_{k,0,g},u)&=\Psi(s_{k,1,g},u),\\
+        (W^*\otimes I)\Psi(s_{k,1,g},u)&=\Psi(s_{k,0,g},u).
+    \end{align}
+    Both sides retain the same $k$ and the same exterior and crossing $u$.
+    The identity gauge recovers the literal vertical insertions. The
+    assertions include both periodic seams and concern actual original-spin
+    contractions. This is a finite-torus common-background specialization of
+    \cite[accessible systems and Theorem~6.16]{Schuch2010PEPS}; it does not
+    compare distinct crossing presentations or establish a prescribed
+    four-endpoint braid. See \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Recover the literal insertions as the derived cycle assignments and
+    reconstruct them using the common vertex gauge. The same gauge and
+    crossing operators give the same actual boundary transport. Apply the
+    uniform physical cycle permutation to these normalized columns. The
+    actual cut expansion gives the global identity, and unitarity gives
+    both reverse identities by multiplication with the adjoint.
+\end{proof}

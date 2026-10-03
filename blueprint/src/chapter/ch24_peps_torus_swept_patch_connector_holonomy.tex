@@ -1,0 +1,63 @@
+\begin{definition}[The based comparison of the two B partners]
+    \label{def:peps_torus_swept_patch_B_joint_loop}
+    \lean{TNLean.PEPS.torusSweptPatchBJointLoop}
+    \leanok
+    \uses{def:peps_torus_swept_patch_endpoint_walks}
+    Start at $B_1$, follow the actual partner connector to $B_2$, traverse its
+    clockwise endpoint loop, and return along the reversed connector.
+    Then traverse the clockwise endpoint loop at $B_1$.
+    Thus, if $P$ is the connector transport, the reverse-ordered joint
+    holonomy is $f_{B_1}(P^{-1}f_{B_2}P)$.
+\end{definition}
+
+\begin{theorem}[Actual partner transports before and after the gauge sweep]
+    \label{thm:peps_torus_swept_patch_partner_transports}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_connectorA,
+      TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_connectorB,
+      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_connectorA,
+      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_connectorB}
+    \leanok
+    \uses{thm:peps_torus_swept_patch_connector_transport,
+      thm:peps_torus_swept_string_transport,
+      thm:peps_torus_swept_string_endpoint_holonomy}
+    For the literal initial string assignment, the actual A and B connector
+    transports are respectively $g^{-1}$ and $1$.
+    After either of the two swept vertex gauges, they are respectively
+    $g^{-1}$ and $g^{-1}$. These are identities for the same native walks
+    at every translated position, including either seam.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the literal directed bond values into the connector formulas.
+    For either swept gauge, transport along a path changes by the gauge at
+    its final base on the left and the inverse gauge at its initial base on
+    the right. Both A bases remain outside the sweep. The B connector starts
+    at the swept base and ends at its unchanged partner.
+\end{proof}
+
+\begin{theorem}[The same-connector gauge comparison has trivial joint flux]
+    \label{thm:peps_torus_swept_patch_B_joint_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_BJointLoop,
+      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_transportedBPartner,
+      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_BJointLoop}
+    \leanok
+    \uses{def:peps_torus_swept_patch_B_joint_loop,
+      thm:peps_torus_swept_patch_partner_transports,
+      thm:peps_regular_connector_holonomy,
+      thm:peps_torus_swept_string_endpoint_holonomy}
+    Initially the actual based B-partner comparison has joint holonomy $1$.
+    After either gauge sweep, the transported inverse partner is
+    $g h^{-1}g^{-1}$, and the joint holonomy is still
+    \[
+        (g h g^{-1})(g h^{-1}g^{-1})=1.
+    \]
+    This is an auxiliary statement about the literal swept gauge presentation
+    in \cite[fluxon-braiding passage]{Schuch2010PEPS}. It does not identify
+    physical reunion or string rerouting with this same connector, and is
+    neither a counterexample to the source nor a physical braiding theorem.
+\end{theorem}
+\begin{proof}\leanok
+    Transporting a loop with holonomy $f$ along a connector with transport $P$
+    gives $P^{-1}fP$. Initially $P=1$ and the partner fluxes are $h,h^{-1}$.
+    After the sweep $P=g^{-1}$, the first flux is $ghg^{-1}$ and the unchanged
+    distant partner has flux $h^{-1}$. Their based product therefore cancels.
+\end{proof}

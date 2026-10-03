@@ -1,0 +1,123 @@
+\begin{definition}[The translated swept-string patch]%
+    \label{def:peps_torus_swept_string_patch}
+    \lean{TNLean.PEPS.torusSweptStringPatch,
+        TNLean.PEPS.torusSweptStringVertices,
+        TNLean.PEPS.torusSweptStringBottomVertices}
+    \leanok
+    Let the torus periods satisfy $w\geq5$ and $H\geq4$.
+    For $v=(x,y)$, with all coordinates read periodically, define
+    \begin{align}
+        P_v&=\{x,x+1,x+2,x+3\}\times\{y,y+1,y+2\},\\
+        S_1&=\{x+1,x+2\}\times\{y+1\},\\
+        B&=\{x+1,x+2\}\times\{y\},& S_2&=S_1\cup B.
+    \end{align}
+    These finite sets specify the two successive sweeps in the virtual
+    string-deformation figure of \cite[Section~6.6]{Schuch2010PEPS},
+    local source lines 2361--2386.
+    % Source label: eq:anyons:fluxon-braiding-lazy.
+\end{definition}
+
+\begin{definition}[Literal initial and swept string assignments]%
+    \label{def:peps_torus_swept_string_assignment}
+    \lean{TNLean.PEPS.torusSweptStringInitialRight,
+        TNLean.PEPS.torusSweptStringInitialUp,
+        TNLean.PEPS.torusSweptStringInitialOperators,
+        TNLean.PEPS.torusSweptStringOperators}
+    \leanok
+    \uses{def:peps_torus_swept_string_patch,def:peps_regular_swept_patch}
+    For any group $G$ and $g,h\in G$, prescribe the initial rightward
+    and upward transports by
+    \begin{align}
+        D_{\rightarrow}(p)&=
+        \begin{cases}
+            h^{-1},&p_x=x+1, p_y\in\{y-1,y,y+1\},\\
+            1,&\text{otherwise},
+        \end{cases}\\
+        D_{\uparrow}(p)&=
+        \begin{cases}
+            g,&p_x\in\{x,x+1,x+2,x+3\}, p_y=y+1,\\
+            1,&\text{otherwise}.
+        \end{cases}
+        \label{eq:peps_swept_string_initial}
+    \end{align}
+    Assign each native right or up edge the prescribed transport if
+    its forward direction agrees with the ordered orientation, and its
+    inverse otherwise. Denote this ordered assignment by $u^{(0)}$,
+    and put $u^{(j)}=(u^{(0)})^{S_j,g}$ for $j=1,2$.
+    The second string continues below the displayed patch to retain
+    its distant partner. A displayed rightward or downward matrix
+    labelled $s$ has transport $s^{-1}$ in the corresponding direction.
+    This is a finite realization of the virtual figure in
+    \cite[Section~6.6]{Schuch2010PEPS}, lines 2361--2386.
+\end{definition}
+
+\begin{theorem}[Native transport tables, including both seams]%
+    \label{thm:peps_torus_swept_string_transport}
+    \lean{TNLean.PEPS.torusSweptStringInitialOperators_right_transport,
+        TNLean.PEPS.torusSweptStringInitialOperators_up_transport,
+        TNLean.PEPS.torusSweptStringOperators_right_transport,
+        TNLean.PEPS.torusSweptStringOperators_up_transport,
+        TNLean.PEPS.torusSweptStringOperators_right_ordered,
+        TNLean.PEPS.torusSweptStringOperators_up_ordered}
+    \leanok
+    \uses{def:peps_torus_swept_string_assignment,
+        thm:peps_regular_swept_patch_transport}
+    The actual initial rightward and upward transports are exactly
+    (\ref{eq:peps_swept_string_initial}). Each swept directed transport
+    is given by (\ref{eq:peps_swept_directed_cases}), with $R=S_j$ and
+    the corresponding initial transport.
+    Write $\bar z$ for the least nonnegative representative of a cyclic
+    coordinate $z$. If $T$ is this swept rightward transport, its ordered
+    edge coefficient is $T$ when $\overline{p_x}<\overline{p_x+1}$ and
+    $T^{-1}$ otherwise. The analogous upward coefficient uses
+    $\overline{p_y}<\overline{p_y+1}$.
+    These formulas hold on every native edge, including crossing bonds
+    of $P_v$ and edges on either torus seam.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_swept_patch_transport}
+    Every native edge is uniquely a right or up edge. Its ordered
+    orientation agrees with the forward direction precisely when the
+    stated comparison of representatives holds. The two inverse
+    corrections cancel in its initial directed transport.
+    Apply the four directed gauge cases, then invert again when
+    recovering the ordered edge coefficient.
+\end{proof}
+
+\begin{theorem}[The second sweep acts only on the newly added vertices]%
+    \label{thm:peps_torus_swept_string_successive}
+    \lean{TNLean.PEPS.torusSweptStringOperators_second_eq_sweep}
+    \leanok
+    \uses{def:peps_torus_swept_string_assignment}
+    The literal assignments satisfy $u^{(2)}=(u^{(1)})^{B,g}$.
+    Thus no vertex in $S_1$ receives the gauge $g^{-1}$ twice.
+\end{theorem}
+
+\begin{proof}\leanok
+    The sets $S_1$ and $B$ are disjoint and have union $S_2$.
+    At each endpoint, composing the two gauges therefore gives
+    $g^{-1}$ on the union and identity elsewhere. Substitution into
+    the ordered endpoint formula proves the asserted equality.
+\end{proof}
+
+\begin{theorem}[Actual closed coefficient equality of the three presentations]%
+    \label{thm:peps_torus_swept_string_state}
+    \lean{TNLean.PEPS.stateCoeff_torusSweptStringOperators,
+        TNLean.PEPS.stateCoeff_torusSweptStringOperators_first_eq_second}
+    \leanok
+    \uses{def:peps_torus_swept_string_assignment,
+        thm:peps_regular_swept_patch_state}
+    Suppose $G$ is finite and the incident site coefficients are
+    invariant under simultaneous left translation. The actual closed
+    coefficient vectors obey
+    $\Psi_a(u^{(0)})=\Psi_a(u^{(1)})=\Psi_a(u^{(2)})$.
+    The changed crossing bonds are included in each contraction;
+    no equality of fixed boundary columns is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_swept_patch_state}
+    Apply the closed swept-patch identity separately to $S_1$ and $S_2$.
+    Their equalities with the initial vector also equate the two swept vectors.
+\end{proof}

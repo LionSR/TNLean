@@ -134,6 +134,10 @@ import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionTransportData
 import TNLean.PEPS.RegionTransportInsertion
+import TNLean.PEPS.RegularActualCycleBidirectionalPermutation
+import TNLean.PEPS.RegularActualCyclePhysicalPermutation
+import TNLean.PEPS.RegularActualCycleTransport
+import TNLean.PEPS.RegularActualTwoChordTransport
 import TNLean.PEPS.RegularBondCounting
 import TNLean.PEPS.RegularBoundary
 import TNLean.PEPS.RegularBoundaryEntropy
@@ -145,6 +149,7 @@ import TNLean.PEPS.RegularBoundaryUntwisting
 import TNLean.PEPS.RegularClosedGauge
 import TNLean.PEPS.RegularClosureSuperposition
 import TNLean.PEPS.RegularCoherentGlobalTransport
+import TNLean.PEPS.RegularConnectorHolonomy
 import TNLean.PEPS.RegularControlledBoundaryFactor
 import TNLean.PEPS.RegularCycleControlledBoundary
 import TNLean.PEPS.RegularCycleControlledSupport
@@ -160,7 +165,9 @@ import TNLean.PEPS.RegularFourierMatrix
 import TNLean.PEPS.RegularGInjectiveSimplyConnectedEntropy
 import TNLean.PEPS.RegularGInjectiveTorus
 import TNLean.PEPS.RegularGInjectiveTorusRank
+import TNLean.PEPS.RegularGaugedCyclePhysicalPermutation
 import TNLean.PEPS.RegularInsertedWalkHolonomy
+import TNLean.PEPS.RegularInternalGaugeTransport
 import TNLean.PEPS.RegularMatrixCommutativity
 import TNLean.PEPS.RegularMatrixEquiv
 import TNLean.PEPS.RegularMinimalDimension
@@ -192,6 +199,7 @@ import TNLean.PEPS.RegularRegionProjectorCoordinates
 import TNLean.PEPS.RegularRegionTreeGauge
 import TNLean.PEPS.RegularSiteGram
 import TNLean.PEPS.RegularSiteSymmetryRecovery
+import TNLean.PEPS.RegularSweptPatchDeformation
 import TNLean.PEPS.RegularThreePlaquetteDoubleExchange
 import TNLean.PEPS.RegularTorusBondCounting
 import TNLean.PEPS.RegularTorusCompatibility
@@ -201,6 +209,7 @@ import TNLean.PEPS.RegularTorusGram
 import TNLean.PEPS.RegularTorusGramExpansion
 import TNLean.PEPS.RegularTorusSectors
 import TNLean.PEPS.RegularTorusSite
+import TNLean.PEPS.RegularTreeGaugeTransport
 import TNLean.PEPS.RegularTwistedRegion
 import TNLean.PEPS.RegularTwistedRegionConnectivity
 import TNLean.PEPS.RegularTwistedRegionCounting
@@ -230,6 +239,9 @@ import TNLean.PEPS.ThetaBondCoordinates
 import TNLean.PEPS.ThetaBondOrthonormalCoordinates
 import TNLean.PEPS.ThreePlaquetteGeometry
 import TNLean.PEPS.TorusAbsorbedCovariance
+import TNLean.PEPS.TorusActualHorizontalFluxMove
+import TNLean.PEPS.TorusActualPlaquetteVacancy
+import TNLean.PEPS.TorusActualRouteFluxMove
 import TNLean.PEPS.TorusBlockMultiplicityState
 import TNLean.PEPS.TorusBondCoordinateTransport
 import TNLean.PEPS.TorusClosureSeams
@@ -242,6 +254,7 @@ import TNLean.PEPS.TorusControlledBoundaryFactor
 import TNLean.PEPS.TorusCornerRegion
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.TorusDeformedWindow
+import TNLean.PEPS.TorusDirectedBondUpdate
 import TNLean.PEPS.TorusEdgeAbsorbed
 import TNLean.PEPS.TorusEdgeBlockingCrossing
 import TNLean.PEPS.TorusEdgeBlockingRegion
@@ -251,7 +264,12 @@ import TNLean.PEPS.TorusExteriorPathApproximation
 import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.TorusGaugeUniqueness
+import TNLean.PEPS.TorusGaugedHorizontalFluxMove
+import TNLean.PEPS.TorusGaugedRouteStep
+import TNLean.PEPS.TorusGaugedVerticalFluxMove
 import TNLean.PEPS.TorusGaugedWeightCovariance
+import TNLean.PEPS.TorusInitialStringPhysicalCrossing
+import TNLean.PEPS.TorusInitialStringRightPhysicalStep
 import TNLean.PEPS.TorusIntegerStepWinding
 import TNLean.PEPS.TorusJointFluxGeometry
 import TNLean.PEPS.TorusJointFluxMeasurement
@@ -284,6 +302,7 @@ import TNLean.PEPS.TorusRegionPeriodicLift
 import TNLean.PEPS.TorusRegionRealization
 import TNLean.PEPS.TorusRegionWalkWinding
 import TNLean.PEPS.TorusRowColumnReductionObstruction
+import TNLean.PEPS.TorusSecondStringPhysicalCrossing
 import TNLean.PEPS.TorusSemiRegularEquivalence
 import TNLean.PEPS.TorusSemiRegularStateNorm
 import TNLean.PEPS.TorusSimplyConnectedComplement
@@ -292,6 +311,16 @@ import TNLean.PEPS.TorusSimplyConnectedRegionRank
 import TNLean.PEPS.TorusSiteTensor
 import TNLean.PEPS.TorusStateTranslationInvariant
 import TNLean.PEPS.TorusStripeLocalEquivalence
+import TNLean.PEPS.TorusSweptHorizontalStep
+import TNLean.PEPS.TorusSweptPatchConnectorTransport
+import TNLean.PEPS.TorusSweptPatchEndpointGeometry
+import TNLean.PEPS.TorusSweptPhysicalEndpointRoute
+import TNLean.PEPS.TorusSweptPhysicalRouteComposition
+import TNLean.PEPS.TorusSweptPhysicalRouteMeasurement
+import TNLean.PEPS.TorusSweptRouteBondAssignments
+import TNLean.PEPS.TorusSweptRouteJointFluxMeasurement
+import TNLean.PEPS.TorusSweptStringDeformation
+import TNLean.PEPS.TorusSweptStringEndpointHolonomy
 import TNLean.PEPS.TorusThetaBondState
 import TNLean.PEPS.TorusThreePlaquetteDoubleExchange
 import TNLean.PEPS.TorusThreePlaquetteFluxGeometry
@@ -303,7 +332,11 @@ import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusTwoPlaquetteFluxHolonomy
 import TNLean.PEPS.TorusTwoPlaquetteGlobalFluxMove
 import TNLean.PEPS.TorusTwoPlaquettePhysicalFluxMove
+import TNLean.PEPS.TorusTwoStepStringPhysicalRoute
+import TNLean.PEPS.TorusTwoStepStringRouteHolonomy
 import TNLean.PEPS.TorusUnconditionalFundamentalTheorem
+import TNLean.PEPS.TorusVacantPlaquettePhysicalMove
+import TNLean.PEPS.TorusVerticalFluxMove
 import TNLean.PEPS.TorusVirtualString
 import TNLean.PEPS.TorusWalkWinding
 import TNLean.PEPS.TorusWeightedSiteGInjective
@@ -335,5 +368,7 @@ import TNLean.PEPS.TwoInjectiveComparison
 import TNLean.PEPS.TwoInjectiveComparison.Basic
 import TNLean.PEPS.TwoInjectiveComparison.EndOperationComposition
 import TNLean.PEPS.TwoPlaquetteGeometry
+import TNLean.PEPS.TwoPlaquetteTransportTable
 import TNLean.PEPS.VertexComplement
+import TNLean.PEPS.VerticalTwoPlaquetteGeometry
 import TNLean.PEPS.VirtualInsertion
