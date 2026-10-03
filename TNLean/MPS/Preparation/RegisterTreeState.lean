@@ -235,13 +235,11 @@ theorem polarIsoMatrix_blockTensor_blockTensor (A : MPSTensor d D) (m n : ℕ)
     (I : Fin (blockPhysDim (blockPhysDim d m) n)) (x : Fin (D * D)) :
     polarIsoMatrix (blockTensor (blockTensor A m) n) I x =
       polarIsoMatrix (blockTensor A (m * n)) (iteratedBlockIndex d m n I) x := by
-  have h : physicalMatrix (blockTensor (blockTensor A m) n) =
-      (physicalMatrix (blockTensor A (m * n))).submatrix (directIteratedBlockEquiv d m n).symm
-        id := by
-    ext I a
-    simp only [physicalMatrix, submatrix_apply, id, directIteratedBlockEquiv_symm_apply,
-      blockTensor_blockTensor_apply]
-  rw [polarIsoMatrix, polarIsoMatrix, h, Matrix.polarIso_submatrix_equiv]
+  have h : blockTensor (blockTensor A m) n =
+      fun I => blockTensor A (m * n) ((directIteratedBlockEquiv d m n).symm I) := by
+    funext I
+    rw [directIteratedBlockEquiv_symm_apply, blockTensor_blockTensor_apply]
+  rw [h, polarIsoMatrix_comp_equiv]
   rfl
 
 /-- The blocked index of `n` blocks of `m` sites, each carrying the word `σ u`, is the blocked

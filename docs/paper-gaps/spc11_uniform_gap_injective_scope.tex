@@ -3,12 +3,12 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Uniform Parent-Hamiltonian Gaps along Injective Paths Only}
+\title{Uniform Parent-Hamiltonian Gaps for Compact Normal Families}
 \author{}
-\date{2026-10-01}
+\date{2026-10-02}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 Appendix~A of \cite{Schuch2011Phases} proves that the family $H_\gamma$ of
@@ -24,35 +24,104 @@ restricted to $2p$ sites. The last quantity has a uniform lower bound
     traceability: \path{Papers/1010.3732/paper_v3.tex}, lines 2475--2580; the
     continuity step is lines 2575--2578.}
 
-\section{What is formalized}
-Let $x\mapsto A_x$ be a continuous family of one-site injective tensors with
-nonzero bond dimension, indexed by a topological space, and let $S$ be a
-compact set of parameters. For the parent Hamiltonian $H_{N,2}(A_x)$ of the
-canonical two-site interaction on a periodic chain of $N$ sites, there is
-$\delta>0$ such that
-\begin{align}
-    \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert
-    \qquad\text{for all }x\in S,\ N\geq2,\ v\perp\ker H_{N,2}(A_x).
-    \label{eq:spc11_uniform_gap_injective_scope_bound}
-\end{align}
-The proof uses the continuity step of the source for finite windows. In
-place of Nachtergaele's bound it uses Knabe's nearest-neighbor criterion
-together with compactness of $S$. Non-injective normal forms with several
-blocks, where the overlaps between blocks enter, are not covered.
-\footnote{Affected formal declarations:
-    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective} and
-    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}.}
+\section{The earlier restriction}
+The first compact-family result applied only to one-site injective tensors
+and the canonical two-site interaction. It did not cover normal forms with
+several blocks, or the positive non-projector interactions of the source.
+That restriction is removed by the results below. The proof uses finite-range
+Knabe windows in place of the source's Nachtergaele estimate; this changes
+the argument, not the uniform-gap conclusion. Compact families of normal
+forms other than the source path are covered below only under a common
+simultaneous spanning length or at the stated sufficient ranges; this is
+not part of the source's statement.
 
-\section{Elimination plan}
-For a continuous family of tensors in normal form with a fixed number of
-normal blocks, apply the block-diagonal parent-Hamiltonian gap with its
-finite-window input, and show that this input depends continuously on the
-parameter. The ingredients are the second transfer eigenvalues of the blocks
-and the overlaps between the local spaces of different blocks, which stay
-bounded away from one on a compact parameter set. The finite-window
-continuity and compactness steps already formalized then apply without
-change. The injective case
-(\ref{eq:spc11_uniform_gap_injective_scope_bound}) is the case of one block.
+\section{Compact normal-form families}
+Let $x\mapsto(A_x^j)_j$ be continuous, with fixed positive block dimensions
+$D_j$, and suppose the length-$S$ word tuples span the product matrix algebra
+for every parameter, where $S>0$. Let $A_x$ be their block sum with nonzero
+weights. The weights need not be continuous, since they do not affect any
+local ground space. For every fixed $R\geq S+1$ and every compact parameter
+set $K$, there is $\delta>0$ such that
+\[
+    \delta\lVert v\rVert\leq\lVert H_{N,R}(A_x)v\rVert
+    \qquad(x\in K,\ N\geq R,\ v\perp\ker H_{N,R}(A_x)).
+\]
+This includes the minimal ring $N=R$. The joint boundary map identifies the
+local ground space, while its restriction to scalar block boundaries
+identifies the periodic kernel. Both maps are injective and continuous, so
+their range projections are continuous. Compactness supplies uniform gaps
+for finitely many short rings. Strict finite-range Knabe windows and a finite
+subcover supply the common gap for all longer rings.
+
+For pairwise inequivalent normalized normal blocks, a common simultaneous
+spanning length is derived from the dimension bound. Any
+$R\geq3\max(\sum_jD_j,1)^5$ suffices. For a single normal tensor, without a
+normalization hypothesis, quantum Wielandt gives the sharper sufficient
+range $D^4+1$. These bounds are sufficient, not asserted to be optimal.
+\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths},
+    \leanid{MPSTensor.exists_uniform_block_parentHamiltonianES_gap_of_compact_isNormalTensor}, and
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_all_lengths}.}
+
+\section{Positive interactions and the source path}
+For a continuous family of positive local interactions $h_x$ with the same
+local kernels, there is $\kappa>0$, uniform on a compact parameter set, such
+that $h_x\geq\kappa P_{G_R(A_x)^\perp}$. Summing translated copies transfers
+the canonical gap to these interactions. A pointwise upper comparison gives
+equality of the periodic kernels; its constant need not be uniform.
+\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_uniform_pos_parentInteractionES_le_of_compact},
+    \leanid{MPSTensor.exists_uniform_periodicInteractionHamiltonianES_gap_of_compact_canonical_gap}, and
+    \leanid{MPSTensor.exists_uniform_block_parentInteraction_gap_of_compact}.}
+
+The source first blocks the tensor so that the joint one-site boundary map
+is injective. Along its isometric deformation, this map is multiplied on
+the physical space by the invertible map $Q_\gamma$. Simultaneous spanning
+therefore persists with $S=1$. The preceding result applies at $R=2$ to the
+source's continuous positive interactions. Thus the absence of several
+blocks and non-projector interactions in the earlier result is no longer
+a restriction.
+
+The particular isometric deformation is also constructed from the original
+block tensor. Let $P_{i,(j,a,b)}=A_i^j(a,b)$ and let $E$ be the orthogonal
+projection onto $\operatorname{ran}P$. The left polar factors satisfy
+$P=QW$, $Q=(PP^\dagger)^{1/2}+I-E>0$, and $WW^\dagger=E$.
+The identity extension outside the retained physical space leaves the
+factorization unchanged and keeps the original physical dimension.
+Reading $W$ as block matrices gives a continuous path $Q_\gamma W$ whose
+endpoints are $W$ and the original tensor. Its simultaneous word spans
+are those of the original blocks, and both its canonical projections and
+the source's positive interactions have a uniform periodic gap for all
+$N\geq2$. For pairwise inequivalent normal blocks, the required initial
+blocking is derived at a positive length $L$ satisfying
+$L+1\leq3\max(\sum_jD_j,1)^5$.
+\footnote{Formal declarations:
+    \leanid{Matrix.leftPolarPos_mul_leftPolarIso},
+    \leanid{Matrix.range_leftPolarIso_finalProjection},
+    \leanid{MPSTensor.exists_uniform_isometricDeformation_parent_gap},
+    \leanid{MPSTensor.exists_uniform_isometricDeformation_interaction_gap}, and
+    \leanid{MPSTensor.exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor}.}
+
+For a one-site injective tensor, the deformation is also formalized through
+the right polar factors. Writing its physical matrix as $M=VP$, the path
+$M_\gamma=V((1-\gamma)I+\gamma P)$ is continuous and injective in the
+original physical space, even when $M$ is rectangular. The positive factor
+stays invertible throughout the interval. Unitary physical and virtual
+covariance is preserved, and the canonical parent interactions retain the
+on-site symmetry. This covers only the single-block case of
+Section~II.C.\footnote{Formal declaration:
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation}.}
+
+The canonical parent projections along any continuous one-site injective
+path with fixed on-site symmetry now also give a symmetric gapped
+interaction path on the common physical space. The norm-gap estimate
+gives a spectral gap above zero, since the periodic MPS vector is a
+nonzero zero eigenvector. Applied to the polar path in unitary virtual
+gauge, this joins the canonical parents of the original tensor and
+its isometric form. It does not perform the different-dimension
+endpoint embeddings in the classification theorem.\footnote{Affected
+    declarations: \leanid{MPSTensor.canonicalInjectiveGappedPath} and
+    \leanid{MPSTensor.polarGappedInteractionPath}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -29,8 +29,11 @@ corollaries with exact auxiliary erasure, are proved in the companion note
 \emph{Exact polynomial circuits for matrix product unitaries}, Section~5
 (\nolinkurl{docs/audits/2026-10-02_mpu_rank_two_circuits.tex}).
 No claim of priority is intended. The relevant source
-passages are \nolinkurl{references/2508.08160/main.tex}, lines 683--690
-and 1373--1402.
+passages of arXiv:2508.08160v2 are the introductory discussion of
+circuit implementations of MPUs and the main-text paragraph on nonuniform
+MPUs containing the definition of $q_k$ and Theorem~2 (lines 683--690
+and 1373--1402 of \texttt{main.tex} in the version-2 arXiv source,
+\url{https://arxiv.org/e-print/2508.08160v2}).
 
 \section{The rank-two dichotomy}
 
@@ -290,7 +293,8 @@ circuit theorem here is likewise a separate mathematical statement from
 the formalized finite-alphabet row bound. For arbitrary MPUs of fixed bond dimension, the
 companion note's Section~5 proves an exact polynomial circuit bound and
 its operator-norm approximation corollaries, with exactly erased auxiliary
-registers. Those general statements are formalized in Lean. This does not
+registers. A Lean formalization of those general statements is pending in
+TNLean pull request~\#8590. This does not
 assert a formalization of the sharper diagonal circuit bounds or of the
 reversible-arithmetic construction proved in this note.
 \end{document}
