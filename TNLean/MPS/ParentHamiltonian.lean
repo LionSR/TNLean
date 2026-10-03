@@ -19,11 +19,14 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalSourceNormalization
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalTraceDecomposition
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.ParentHamiltonian.BlockBoundaryTraceDuality
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalNormalization
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalOneSiteSpan
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalProjectorDecay
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceAtInjectivityLength
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceContinuity
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceOverlap
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionBoundaryDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
@@ -60,6 +63,7 @@ import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.CoefficientPairing
 import TNLean.MPS.ParentHamiltonian.CoisometricReconstruction
 import TNLean.MPS.ParentHamiltonian.Commuting
+import TNLean.MPS.ParentHamiltonian.CompactBlockBoundaryInjectivity
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
 import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntertwining
 import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
