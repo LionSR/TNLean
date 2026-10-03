@@ -2427,8 +2427,8 @@ operators.
     Extend it to a unitary on the finite-dimensional physical space.
 \end{proof}
 
-\begin{lemma}[Spanning-tree coordinates for regular half-edge labels]%
-    \label{lem:peps_regular_region_coordinates}
+\begin{definition}[Spanning-tree coordinates for regular half-edge labels]%
+    \label{def:peps_regular_region_coordinates}
     \lean{TNLean.PEPS.RootedGroupLabels,
         TNLean.PEPS.rootedGroupLabelsEquiv,
         TNLean.PEPS.rootedTreeGradient,
@@ -2470,7 +2470,7 @@ operators.
     This is a reversible change of regular basis labels associated with
     the accessible virtual systems and blocking operations in
     \cite[\S6.2--6.3]{Schuch2010PEPS}.
-\end{lemma}
+\end{definition}
 \begin{proof}\leanok
     \uses{lem:peps_regular_region_cycle_exponent}
     If two normalized vertex labellings have the same tree gradient,
@@ -2497,7 +2497,7 @@ operators.
         TNLean.PEPS.regularProjectorOpenRegionMatrix_coordinates,
         TNLean.PEPS.regularProjectorOpenRegionMatrix_exists_normalized_ancilla}
     \leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         thm:peps_regular_open_region_projector}
     Let $R$ have a spanning tree $T$ rooted at $o$, and let every local
     tensor be the simultaneous regular averaging projector. Write
@@ -2586,7 +2586,7 @@ operators.
         TNLean.PEPS.regularRegionBoundaryTransport_head,
         TNLean.PEPS.regularTwistedLabels_gauge}
     \leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         def:peps_regular_twisted_region}
     Let $G$ be finite, choose a spanning tree $T$ of the region $R$,
     and fix a root $o$. Assign a group operator $u_e$ to each oriented
@@ -2620,7 +2620,7 @@ operators.
     regular blocking operations in \cite[\S6.2--6.3]{Schuch2010PEPS}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         def:peps_regular_twisted_region}
     Invert the tree-gradient bijection at $(u_e)_{e\in T}$ to obtain
     the normalized $k$. On a tree edge,
@@ -3284,7 +3284,7 @@ operators.
     \label{thm:peps_regular_twisted_projector_coordinates}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}
     \leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         lem:peps_regular_region_tree_gauge,
         def:peps_regular_projector_twisted_region}
     Choose a spanning tree $T$ rooted at $o$ in the finite region $R$,
@@ -3802,7 +3802,7 @@ operators.
         TNLean.PEPS.regularComplementWalkControlMatrix,
         TNLean.PEPS.regularComplementWalkControlMatrix_mem_unitaryGroup}
     \leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         thm:peps_regular_twisted_projector_coordinates}
     Fix spanning-tree physical coordinates $(y,a,r,z)$ of a finite
     region and any function $W:G^C\to G^{\partial R}$ of its cycle
@@ -3942,7 +3942,7 @@ operators.
     \leanok
     \uses{thm:peps_controlled_complement_boundary_factor,
         thm:peps_regular_twisted_projector_coordinates,
-        lem:peps_regular_region_coordinates}
+        def:peps_regular_region_coordinates}
     Retain the same actual complement walk identities, and suppose
     every actual cycle residual in $R$ is the identity. Contract the
     two canonical region matrices, applying the fixed controlled
@@ -4022,6 +4022,7 @@ operators.
          & =\sum_{\theta}
         M_R^{g_i,h_i}(\alpha,\theta)
         (UM_S^{g_i,h_i})(\beta,\theta),
+        \label{eq:peps_torus_canonical_cut_contraction}
     \end{align}
     where the same native crossing edges are reread on the two sides.
     In the fixed spanning-tree and relative boundary coordinates,
@@ -4056,7 +4057,8 @@ operators.
     relative-word identities simultaneously for all commuting pairs.
     Evaluate the fixed walk words to construct $U$, then apply the
     coherent canonical-cut factorization. Reindexing the shared
-    boundary sum gives the original contraction displayed above.
+    boundary sum gives the original contraction
+    (\ref{eq:peps_torus_canonical_cut_contraction}).
 \end{proof}
 
 \begin{definition}[Fixed boundary embedding and density]%
@@ -4115,7 +4117,7 @@ operators.
         TNLean.PEPS.regularRegionReferenceCoordinatesEquiv,
         TNLean.PEPS.regularReferenceBoundaryDensity}
     \leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         thm:peps_controlled_projector_cut_boundary_factor,
         def:peps_fixed_boundary_factor_density}
     Number the $n+1$ actual crossing bonds. The spanning-tree physical
@@ -4361,7 +4363,7 @@ operators.
         TNLean.PEPS.regularCycleControlledBoundaryMatrix_maps_localProjector_range,
         TNLean.PEPS.exists_unitary_regionPhysicalProductMatrix_mul_cycleWords}
     \leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         thm:peps_regular_region_cycle_holonomy,
         thm:peps_cycle_controlled_boundary,
         thm:peps_regular_physical_unitary_transport,
@@ -5895,9 +5897,7 @@ operators.
         TNLean.PEPS.exists_regularProjectorTwistedRegionMatrix_of_isGInjective,
         TNLean.PEPS.exists_regularProjectorTwistedRegionMatrix}
     \leanok
-    \uses{thm:peps_regular_open_region_accessibility,
-        lem:peps_region_physical_maps,
-        def:peps_regular_projector_twisted_region}
+    \uses{def:peps_regular_projector_twisted_region}
     Let the original regular site maps $A_v$ be $G$-injective, and
     choose local matrices $F_v$ satisfying $F_vA_v=P_v$. The same
     matrices work for every region and every assignment of inserted
@@ -6640,6 +6640,8 @@ around the two non-contractible cycles must be trivial.
 
 
 \input{chapter/ch24_peps_semiregular_bond_isometry}
+\input{chapter/ch24_peps_pair_centralizer_count}
+\input{chapter/ch24_peps_regular_site_symmetry_recovery}
 
 \subsection{The AKLT state}
 
