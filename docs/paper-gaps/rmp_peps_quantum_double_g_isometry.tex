@@ -8,7 +8,7 @@
 \date{2026-10-02}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{What the sources print}
 Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
@@ -120,6 +120,7 @@ $A_v^\dagger A_v=c_v\Pi_v$, its genuine open tensor satisfies
     T_R^\dagger T_R
       =\left(\prod_{v\in R}c_v\right)
         \frac{|G|^{I_R+1}}{|G|^{V_R}}\Pi_{\partial R}.
+    \label{eq:rmp_peps_qd_region_gram}
 \end{align}
 The bonds are unnormalized, and no group operators are inserted on
 them. Expanding the local Gram identities yields a group label at
@@ -129,7 +130,7 @@ free, contributing one factor $|G|$; the remaining boundary average
 is $|G|\Pi_{\partial R}$. The boundary may be empty.
 
 The actual block also satisfies the defining invariant-subspace isometry
-relation, with the positive factor displayed above. Its accessible physical
+relation, with the positive factor of~\eqref{eq:rmp_peps_qd_region_gram}. Its accessible physical
 coordinates are obtained explicitly. Applying the local map
 $c_v^{-1}A_v^\dagger$ at every vertex turns the original open contraction
 into the open contraction $B_R$ of the averaging projectors $\Pi_v$.
@@ -148,6 +149,7 @@ the tree. In these coordinates the actual canonical block is
  B_R(y,a,r,z;\theta)
    =|G|^{1-|R|}\Pi_{\partial R}(y,\theta)
      \mathbf 1_{\{z_e=1\text{ for all }e\notin T\}}.
+    \label{eq:rmp_peps_qd_canonical_block}
 \end{align}
 Thus the reference and normalized vertex labels give uniform factors,
 while the residual cycle labels give fixed identity factors. This
@@ -187,6 +189,7 @@ In spanning-tree coordinates, the twisted canonical coefficient is
  = |G|^{-|R|}\sum_{x\in G}
    \mathbf 1_{\{y=x\theta'\}}
    \mathbf 1_{\{z_e=x\omega_e x^{-1}\text{ for all }e\notin T\}}.
+    \label{eq:rmp_peps_qd_twisted_canonical_block}
 \end{align}
 The internal reference and normalized vertex coordinates remain free.
 This identity includes arbitrary crossing operators, and follows from a
@@ -202,6 +205,7 @@ then give
 \begin{align}
  (T_R^u)^\dagger T_R^u
    =c_R F^\dagger\Pi_{\partial R}F,\qquad c_R>0.
+    \label{eq:rmp_peps_qd_transported_gram}
 \end{align}
 The transported projector has rank and trace $|G|^{|\partial R|-1}$
 for a nonempty boundary. The residual-flatness condition here is an
@@ -219,6 +223,7 @@ closure labels, the explicit gauge
 \begin{align}
  k_v=h^{\lfloor L_x(v)/w\rfloor}
       g^{-\lfloor L_y(v)/H\rfloor}
+    \label{eq:rmp_peps_qd_lift_gauge}
 \end{align}
 has the native closure operator as its gradient on every internal edge,
 including seam edges. Thus identity residuals, the positive transported
@@ -280,12 +285,13 @@ allowing site-dependent normalization $c_v>0$, their overlap is
     \langle\psi_{g,h},\psi_{g',h'}\rangle
       =\left(\prod_v c_v\right)|G|^N
         \#\{x\in G:hx=xh',\ gx=xg'\}.
+    \label{eq:rmp_peps_qd_closure_overlap}
 \end{align}
 This identity is derived from the actual tensor contraction. The local
 Gram averages contribute $|G|^{-N}$; the two families of free bond
 labels contribute $|G|^{2N}$. Every vertex translation is constant off
-the seams, and the seam equations are the two displayed intertwining
-conditions. The proof includes tori with a circumference of one.
+the seams, and the seam equations are the two intertwining
+conditions in~\eqref{eq:rmp_peps_qd_closure_overlap}. The proof includes tori with a circumference of one.
 
 For a self-overlap the count is $|Z_G(g)\cap Z_G(h)|>0$, since it
 contains the identity. Different pair-conjugacy classes give orthogonal
@@ -325,10 +331,11 @@ $\Delta$ gives $\delta_{q_v,q_{v'}}$. Thus all vertex labels coincide.
 On each seam retain one operator, and contract the remaining seam
 operators with the sum of the trace-dual functionals, which takes value
 one on every $U_g$. The resulting linear map $E$ satisfies
-\[
+\begin{align}
  E\psi^\Pi_{g,h}=|G|^{-N}
    \sum_{x\in G}U_{xhx^{-1}}\otimes U_{xgx^{-1}}.
-\]
+    \label{eq:rmp_peps_qd_closure_extraction}
+\end{align}
 These operator sums are independent when indexed by pair-conjugacy
 classes: the tensor product of the two trace-dual functionals vanishes
 on different classes and gives $|Z_G(g)\cap Z_G(h)|>0$ on its own class.
@@ -492,9 +499,9 @@ convex planar rectangle, so the common-density theorem gives a physical
 complementary unitary relating any two normalized states. Identification
 with the entire two-dimensional parent-Hamiltonian ground space remains
 separate. This is
-the general-coordinate form of the controlled operation in
-equation~``eq:iso:tweezer-duplicate-operation'', leading to
-equation~``eq:iso:block-disent-decomposition'' and the common reduced
+the general-coordinate form of the controlled operation displayed in
+\cite{Schuch2010PEPS} at source lines 1961--1965, leading to the
+block decomposition displayed at lines 1970--1976 and the common reduced
 state for commuting closure superpositions.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2027--2072.}
 
@@ -504,15 +511,18 @@ bonds. For assignments $u,w$ that are the identity on crossing bonds,
 suppose their common identity bonds contain a connected spanning
 subgraph of the region. The local translations are then constant.
 Let $\kappa_R$ be the untwisted region factor and put
-\[
+\begin{align}
     F_{u,w}=\{x\in G:u_ex=xw_e\text{ for every internal bond }e\}.
-\]
+    \label{eq:rmp_peps_qd_intertwiner_set}
+\end{align}
 Then the actual cross-Gram operator satisfies
 \begin{align}
     (T_R^u)^\dagger T_R^w
-      &=\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},\\
+      &=\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},
+      \label{eq:rmp_peps_qd_cross_gram}\\
     P(T_R^u)^\dagger T_R^wP
       &=\kappa_R\frac{|F_{u,w}|}{|G|}P.
+      \label{eq:rmp_peps_qd_projected_cross_gram}
 \end{align}
 The second identity uses only that every common translation acts as
 the identity on the invariant boundary.
@@ -525,6 +535,7 @@ same normalized reduced density on $D$:
 \begin{align}
     \rho_D=\frac{1}{c_D|G|^{b-1}}T_DPT_D^\dagger,
     \qquad T_D^\dagger T_D=c_DP,\quad c_D>0.
+    \label{eq:rmp_peps_qd_common_density}
 \end{align}
 Its rank is $|G|^{b-1}$ and its nonzero spectrum is flat, so its
 von Neumann entropy is $(b-1)\log|G|$. The region and mixed Gram
@@ -570,10 +581,11 @@ one tensor.
 \begin{enumerate}
     \item The primal tensor's virtual symmetry under every irreducible
     representation $\pi$ is formalized as the single-tensor identity
-    \[
+    \begin{align}
         A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}
           =A_{t,r,b,l}\,\mathbb 1
-    \]
+        \label{eq:rmp_peps_qd_primal_virtual_symmetry}
+    \end{align}
     for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support,
     and for the contracted network on the torus: the virtual string that
     multiplies $\pi(g)$ for each bond with label $g$ it crosses can be
