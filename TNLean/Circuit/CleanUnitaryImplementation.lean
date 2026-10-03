@@ -7,7 +7,6 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 import TNLean.Circuit.QuantitativeUnitaryGates
 import TNLean.Circuit.ZeroRegisterReflection
 import TNLean.Circuit.PairProductPowers
-open QuantumCircuit
 
 /-!
 # Unitary implementations with a reusable initialized workspace
@@ -28,6 +27,8 @@ unitary extension and the quantitative neighboring-pair synthesis. The
 bound `38 * (d ^ n) ^ 6` is exponential in the number of sites `n`; in
 the MPU construction it is used on packets with only `O(log D)` sites.
 -/
+
+open QuantumCircuit
 
 open Matrix
 open scoped Kronecker

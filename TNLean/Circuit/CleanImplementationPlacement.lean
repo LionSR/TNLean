@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.CleanUnitaryImplementation
 import TNLean.Circuit.ArbitrarySiteGateEmbedding
-open QuantumCircuit
 
 /-!
 # Placement of clean circuits in a common workspace
@@ -20,6 +19,8 @@ These are the placement identities used for leaves, inverse child circuits,
 and repeated image reflections in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
+
+open QuantumCircuit
 
 open Matrix
 open scoped BigOperators

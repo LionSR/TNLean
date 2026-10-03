@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.PairProduct
-open QuantumCircuit
 
 /-!
 # Placing a circuit at arbitrary sites
@@ -18,6 +17,8 @@ This is the placement and routing step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`; the underlying swap
 construction is already proved in `PairProduct`.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

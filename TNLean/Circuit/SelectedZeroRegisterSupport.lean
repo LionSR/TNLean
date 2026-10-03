@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SelectedZeroRegisterReflection
-open QuantumCircuit
 
 /-!
 # The selected zero-register reflection acts only on its flags
@@ -18,6 +17,8 @@ an empty selection and its global scalar phase.
 Source: interval input and image reflections in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

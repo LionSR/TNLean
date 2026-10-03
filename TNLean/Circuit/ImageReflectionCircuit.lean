@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Circuit.UniformPostselection
 import TNLean.Circuit.Gates.TwoSiteUniversality
 import TNLean.Circuit.PairProductPowers
-open QuantumCircuit
 
 /-!
 # Circuits for reflections about implemented images
@@ -23,6 +22,8 @@ These are the circuit composition identities in Section 5 of
 initialization reflection and of the recursively implementing circuit is
 established separately.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

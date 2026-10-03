@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.CleanUnitaryImplementation
-open QuantumCircuit
 
 /-!
 # Reflecting selected zero flags with a shared initialized workspace
@@ -22,6 +21,8 @@ conjunction, or cleanup witness is supplied as an assumption. An empty set
 of flags gives the global phase minus one, implemented by one neighboring
 pair gate when the logical chain has at least two sites.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

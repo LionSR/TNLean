@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Circuit.SelectedZeroRegisterReflection
 import TNLean.Circuit.SelectedZeroRegisterReflectionPool
 import TNLean.Circuit.ExactSubspaceAmplification
-open QuantumCircuit
 
 /-!
 # The projection onto initialized physical flags
@@ -19,6 +18,8 @@ selected-zero-register reflection. All unselected sites remain arbitrary.
 Source: the initialized-subspace and image reflections in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

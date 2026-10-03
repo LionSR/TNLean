@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Circuit.PairProduct
 import TNLean.Circuit.CleanImplementationPlacement
 import Mathlib.GroupTheory.Perm.Sign
-open QuantumCircuit
 
 /-!
 # Additive routing cost for site permutations
@@ -21,6 +20,8 @@ Source: register regrouping in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`; the factorization is
 Mathlib's `Equiv.Perm.swapFactors`.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

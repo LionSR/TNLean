@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Circuit.Gates.Permutation
 import TNLean.Circuit.QuantitativeUnitaryGates
 import TNLean.Circuit.ArbitrarySiteGateEmbedding
-open QuantumCircuit
 
 /-!
 # Reversible conjunction of zero-register tests
@@ -18,6 +17,8 @@ permutations on the entire configuration space, so their inverses are
 valid on every logical input. This is the reversible conjunction used
 in Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

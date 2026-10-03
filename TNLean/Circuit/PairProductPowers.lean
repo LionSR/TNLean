@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.PairProduct
-open QuantumCircuit
 
 /-!
 # Gate counts for repeated circuits
@@ -13,6 +12,8 @@ Concatenating a circuit with itself multiplies its gate count by the number
 of repetitions. This is the counting step for exact amplification in
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

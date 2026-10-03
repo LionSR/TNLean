@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SelectedZeroRegisterReflection
-open QuantumCircuit
 
 /-!
 # Selected zero-flags reflections in a larger common scratch pool
@@ -20,6 +19,8 @@ in Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. Both the
 circuit and its clean action are derived; no implementation witness is
 supplied as an assumption.
 -/
+
+open QuantumCircuit
 
 open Matrix
 

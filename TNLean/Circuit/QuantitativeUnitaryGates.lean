@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.Gates.TwoSiteUniversality
 import TNLean.Algebra.IsometryUnitaryExtension
-open QuantumCircuit
 
 /-!
 # Quantitative synthesis by neighboring two-qudit gates
@@ -21,6 +20,8 @@ This is a quantitative refinement of the synthesis used in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`; it is a derived result,
 not a theorem quoted from arXiv:2508.08160.
 -/
+
+open QuantumCircuit
 
 open Matrix
 open scoped BigOperators ComplexConjugate
