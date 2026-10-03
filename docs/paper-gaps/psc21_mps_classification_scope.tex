@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Translation-Invariant MPS and the Trivial Phase under Circuits with
+    Measurements: One Direction}
+\author{}
+\date{2026-10-03}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+The paragraph ``Phases of matter'' of~\cite{Piroli2021LOCC} compares sequences
+of states $\Psi=\{\ket{\psi_M}\}_{M\ge M_0}$ and
+$\Phi=\{\ket{\varphi_M}\}_{M\ge M_0}$ on chains of increasing size. One writes
+$\Psi\mapsto\Phi$ if there are $k\in\mathbb N$ and states $\sigma_M$ such that
+$\ket{\psi_M}$ is mapped to $\sigma_M$ by a composition of $k$ channels, each a
+circuit of depth $f(M)$ assisted by measurements and classical communication,
+and $\lVert\sigma_M-\ket{\varphi_M}\bra{\varphi_M}\rVert_1\to0$, with $f$
+polylogarithmic in $M$. The sequences are equivalent if $\Psi\mapsto\Phi$ and
+$\Phi\mapsto\Psi$. The theorem labelled \texttt{MPS\_classification} reads: ``In
+1D, all translational invariant MPS with fixed bond dimension are in the same
+phase as the trivial state.''
+
+\section{What is formalized}
+The formal statement proves the direction from the trivial sequence to the MPS
+sequence.\footnote{Formal declaration:
+    \leanid{MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState}
+    in \doclink{TNLean/MPS/Preparation/QCccClassification}.}
+Unit vectors $\ket{\psi_N}$ are prepared deterministically from a product state
+by a circuit with measurements followed by a circuit, of total depth at most
+$C\log N$, and
+$\lVert\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}\rVert_1\to0$,
+where $\ket{\varphi_N}$ is the normalized periodic state. This is
+$\Psi\mapsto\Phi$ with $k=2$ and $\sigma_M$ pure. The restrictions are these.
+\begin{enumerate}
+    \item \emph{One direction.} The converse direction, from the MPS sequence
+          to the trivial one, needs channels acting on arbitrary input states,
+          for example exchanging every site with a fresh ancilla in $\ket0$ and
+          discarding the ancillas. The measurement model of the formalization
+          prepares states from product states only, and this direction is not
+          stated.
+    \item \emph{Canonical form.} The tensor is taken in the canonical form
+          $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})\otimes
+              A^i_j$ of~\cite{Malz2024Preparation}, with every block normal in
+          the gauge $\sum_iA_j^{i\dagger}A_j^i=1$, with a positive definite
+          fixed point of trace one, and with the mixed transfer maps of
+          distinct blocks of spectral radius below one. The source assumes
+          the canonical form of normal tensors without loss of generality and
+          writes its proof for one normal block; the formal statement does not
+          derive the canonical form of an arbitrary tensor, nor the spectral
+          condition on mixed transfer maps of blocks that are not related by a
+          gauge and a phase. The same reading is recorded
+          in~\cite{gap:mswc24_block_form_mixed_overlap}.
+    \item \emph{Nonvanishing states.} The periodic states are assumed nonzero
+          for all large $N$, as a sequence of states presupposes; compare
+          \cite{gap:mswc24_depth_upper_bound_nonzero_state}.
+\end{enumerate}
+
+\section{Elimination plan}
+Extend the measurement model to channels acting on an arbitrary input state of
+the chain together with ancillas that are traced out, prove the direction from
+the MPS sequence to the trivial one, and derive the canonical-form hypotheses
+from the canonical form of an arbitrary translation-invariant tensor.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

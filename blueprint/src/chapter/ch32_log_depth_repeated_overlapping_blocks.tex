@@ -208,18 +208,20 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
 \begin{theorem}[Approximation error for repeated overlapping blocks]
     \label{thm:ldp_approximation_error_repeated_overlapping}
     \lean{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum,
-        MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum}
+        MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum,
+        MPSTensor.one_sub_norm_div_le_of_norm_sub_le,
+        MPSTensor.one_sub_le_mul_mul_exp_div_of_one_le,
+        MPSTensor.one_sub_le_mul_mul_exp_div_of_sum_le}
     \leanok
     \uses{lem:ldp_repeated_overlapping_overlaps, lem:ldp_shared_overlap_estimates,
         lem:ldp_relative_positive_part, lem:ldp_relative_overlaps,
-        def:ldp_repeated_block_state, thm:ldp_approximation_error_overlapping_weights,
-        def:correlation_length}
+        def:ldp_repeated_block_state, def:correlation_length}
     With the notation of Theorem~\ref{thm:ldp_repeated_block_polar}, let the blocks $A_j$
     be normal in the gauge (\ref{eq:ldp_normal_gauge}) with positive definite fixed points
     $\rho_j$ of trace one, let $\lambda_2\in\C$ bound the moduli of the eigenvalues other
     than one of every transfer map $\E_{A_j}$ and the moduli of all eigenvalues of the
     mixed transfer maps $\E_{jj'}$, $j\neq j'$, let $\xi$ be its correlation length, and
-    let $0<\gamma<1/2$. There are $C,C'>0$ such that for all nonzero complex weights, every
+    let $0<\gamma<1$. There are $C,C'>0$ such that for all nonzero complex weights, every
     block length $q$ and every $M\geq1$ with $N=qM$ and $(\beta_1,\dots,\beta_b)\neq0$, the
     corrected approximating state of Definition~\ref{def:ldp_repeated_block_state}
     satisfies, with $y=Me^{-\gamma q/\xi}$,
@@ -228,8 +230,8 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
         \varepsilon(\widetilde\phi_N,\phi_N)\leq C'y.
     \end{align*}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the corrected state, with
-    $\xi_{\mathrm{diag}}$ replaced by $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$.
-    The constants do not depend on the weights: the sums $\beta_j$ may cancel and
+    $\xi_{\mathrm{diag}}$ replaced by $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$,
+    and for $0<\gamma<1$ in place of $0<\gamma<1/2$. The constants do not depend on the weights: the sums $\beta_j$ may cancel and
     $\sum_j\lvert\beta_j\rvert^2$ may be arbitrarily small, and the normalization
     $\lvert\mu_{j,k}\rvert\leq1$ of the source is not used
     \cite{gap:mswc24_repeated_overlap_small_weight_sum}. The states of distinct blocks need
@@ -255,8 +257,15 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
         \Bigl\lvert\frac Sb-1\Bigr\rvert\leq\sum_{j,j'}C_{jj'}y\,e^{C_{jj'}y},
     \end{align*}
     since $\lvert\beta_j\beta_{j'}\rvert\leq b$. Lemma~\ref{lem:ldp_shared_overlap_estimates}(6)
-    with $R=\sqrt b$ gives $\lvert t^2/b-1\rvert\leq Ke^{-\gamma N/\xi}\leq Ky$. The
-    inequalities in the proof of Theorem~\ref{thm:ldp_approximation_error_overlapping_weights},
-    applied to $S/b$ and $t/\sqrt b$, give $\varepsilon\leq Cy\,e^{Cy}$, and the second form
-    follows because $\varepsilon\leq1$.
+    with $R=\sqrt b$ gives $\lvert t^2/b-1\rvert\leq Ke^{-\gamma N/\xi}\leq Ky$.
+    Two elementary inequalities finish the proof. First, if $\lvert S'-1\rvert\leq\delta$ and
+    $\lvert t'^2-1\rvert\leq\eta$ with $t'\geq0$, then
+    $1-\lvert S'\rvert/t'\leq\delta+\eta$: this is trivial when $\delta+\eta\geq1$, and
+    otherwise $t'>0$, $\lvert S'\rvert\geq1-\delta$ and $t'\leq(1+t'^2)/2\leq1+\eta/2$.
+    Second, let $0<s\leq1$. If $r\geq0$, $C\geq1$ and $u\geq1$, then
+    $1-r\leq Cu\,e^{Cu}/s$; and if $0\leq x\leq1$, $M\geq1$, $u=Mx^q$, $K'\geq0$,
+    $C_j\geq0$, $e_j\leq C_ju\,e^{C_ju}$ and $1-r\leq s^{-1}\sum_je_j+K'x^{Mq}$, then
+    $1-r\leq Cu\,e^{Cu}/s$ with $C=\sum_jC_j+K'+1$. Applied with $S'=S/b$,
+    $t'=t/\sqrt b$, $s=1$ and $x=e^{-\gamma/\xi}$, they give $\varepsilon\leq Cy\,e^{Cy}$,
+    and the second form follows because $\varepsilon\leq1$.
 \end{proof}

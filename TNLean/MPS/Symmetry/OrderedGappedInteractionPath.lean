@@ -18,6 +18,12 @@ that gap. Endpoint symmetry is also preserved throughout the path.
 This is the comparison needed between independent-bond interactions and
 canonical parent interactions after physical embedding in the fixed-point
 construction of arXiv:1010.3732, Sections II.D.2 and II.F.2.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Sections II.D.2 and II.F.2
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
