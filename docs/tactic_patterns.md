@@ -4212,3 +4212,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   coefficients when possible; a matrix conjugation linear equivalence may
   contain the common cancellation when a scalar action is also present.
 - **Notes:** both occurrences are in one module, below the promotion threshold.
+
+### algebraic simplicity from a positive unital fixed line — promoted
+- **Pattern:** identify the generalized eigenspace at one with the fixed
+  space by excluding peripheral Jordan blocks, then identify the algebraic
+  multiplicity with the dimension of that space.
+- **Seen:** `simple_fixedEigenvalue_of_unital_positive` in
+  `MPS/Symmetry/PeriodicMPSNormLowerBound.lean`, reused by the periodic norm
+  estimate and `MPS/Symmetry/CompactMinimalClassStability.lean` (2026-10-03).
+- **Abstraction:** expose the existing fixed-eigenvalue lemma; the compact
+  sequence proof uses it without repeating the Jordan-block argument.
+- **Notes:** a theorem suffices; no additional tactic is required.

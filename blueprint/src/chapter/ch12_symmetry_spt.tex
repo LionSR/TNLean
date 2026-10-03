@@ -4273,6 +4273,166 @@ $\tau_t(A)=e^{itH}Ae^{-itH}$.
 
 \subsection{Virtual classes at a compact limit}
 
+\begin{theorem}[The virtual class of an exact ground-state path under a transfer bound]
+    \label{thm:spc_aux_exact_ground_uniform_transfer_class}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bound}
+    \leanok
+    Let $P$ be a symmetric gapped interaction path on the unit interval,
+    with an independent continuous exact MPS realization $Q$ of its unique
+    finite-chain ground lines. Suppose $0\le q<1$ has the following property:
+    at every parameter, every positive-dimensional unital injective tensor
+    with the same positive-length periodic rays as $Q$ has all transfer
+    eigenvalues different from $1$ of modulus at most $q$.
+
+    There are a common unit-modulus physical character $\chi$, pointwise
+    unital injective tensors $A_t$ of positive bond dimensions bounded by the
+    ambient dimension of $Q$, and pointwise unitary projective virtual
+    representations with factor systems $\omega_t$, such that $A_t$ has the
+    same positive-length periodic rays as $Q_t$, the physical action
+    $\chi(g)^{-1}U_g$ has exact inverse-index virtual covariance on $A_t$,
+    and $\omega_s$ and $\omega_t$ are cohomologous for all $s,t\in[0,1]$.
+    No continuous choice of the tensors, stationary densities, or virtual
+    matrices is required. The uniform transfer bound is supplied explicitly;
+    this statement does not derive it from the Hamiltonian gap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_varying_bond_physical_character,
+        thm:spc_aux_bounded_minimal_local_class,
+        thm:spt_virtual_class_gauge_preparation}
+    The finite-chain ground lines determine one common physical character.
+    Remove it from the physical action. Normalize each injective periodic-ray
+    representative by a nonzero rescaling and bond similarity. Equality of
+    periodic rays transfers exact on-site symmetry to these representatives,
+    and unitality gives unitary virtual matrices. Injectivity assembles them
+    into projective representations with the inverse group convention.
+    The bounded-dimension compactness theorem makes the corresponding
+    cohomology quotient locally constant. Since the interval is connected,
+    this quotient is constant throughout the path.
+\end{proof}
+
+
+\begin{lemma}[A common injective blocking length]
+    \label{lem:spc_aux_normal_fourth_power_blocking}
+    \lean{MPSTensor.IsNormalTensor.isNBlkInjective_pow_four}\leanok
+    For a normalized normal tensor of bond dimension $D$, products of length
+    $D^4$ span the full matrix algebra. Source context: arXiv:1606.00608,
+    lines 318--344, and the quantum Wielandt bound.
+\end{lemma}
+\begin{proof}\leanok
+    Conjugate to a trace-preserving tensor, apply the quantum Wielandt bound,
+    and transport the spanning statement through the bond conjugation.
+\end{proof}
+
+\begin{lemma}[Bounded bond dimension and common physical blocking]
+    \label{lem:spc_aux_bounded_normal_fourth_power_blocking}
+    \lean{MPSTensor.IsNormalTensor.blockTensor_isInjective_of_bondDim_le}\leanok
+    \uses{lem:spc_aux_normal_fourth_power_blocking}
+    If a normalized normal tensor has bond dimension $D\le M$, its $M^4$-site
+    blocked tensor is injective.
+\end{lemma}
+\begin{proof}\leanok
+    Use injectivity at length $D^4$ and preservation of the spanning property
+    at every larger length.
+\end{proof}
+
+\begin{lemma}[Algebraic simplicity of the fixed eigenvalue]
+    \label{lem:spc_aux_positive_unital_simple_fixed_eigenvalue}
+    \lean{simple_fixedEigenvalue_of_unital_positive}\leanok
+    Let $T$ be a positive unital linear map on $M_D(\mathbb C)$, with $D>0$.
+    If its fixed space is one-dimensional, the eigenvalue $1$ has algebraic
+    multiplicity one. This is the fixed-eigenvalue consequence of Wolf,
+    Proposition 6.2.
+\end{lemma}
+\begin{proof}\leanok
+    A positive unital map has no nontrivial Jordan block on the unit circle.
+    Hence its generalized fixed space is its fixed space, and the algebraic
+    multiplicity equals that space's dimension.
+\end{proof}
+
+\begin{theorem}[Compactness and class stability for periodic-ray sequences]
+    \label{thm:spc_aux_compact_minimal_sequence_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_tendsto_periodic_ray_sequence}
+    \leanok
+    Let $A$ be an injective unital tensor, and let $B_n$ be unital irreducible
+    tensors of one fixed bond dimension. Suppose that their periodic rays are
+    represented by tensors $Q_n$ in one fixed ambient dimension, with
+    $Q_n\to Q_0$, and that $Q_0$ has the same positive-length periodic rays as
+    $A$. Assume $0\le q<1$, and that every transfer eigenvalue different from
+    $1$, for $A$ and all $B_n$, has modulus at most $q$. Suppose that one
+    physical unitary action has exact inverse-index virtual covariance on
+    these tensors, with pointwise unitary projective representatives having
+    factor systems $\omega_0$ and $\omega_n$. Then $\omega_n$ is cohomologous
+    to $\omega_0$ for all sufficiently large $n$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spc_aux_convergent_unital_sequence_class,
+        thm:spc_aux_compact_unital_tensors,thm:spc_aux_fixed_line_limit,
+        thm:spc_aux_periodic_line_limit}
+    If the conclusion fails, choose a subsequence on which every class differs
+    from the reference class. Compactness gives a convergent subsequence of
+    the unital tensors and their normalized stationary densities. The common
+    spectral bound preserves simplicity of the fixed eigenvalue in the limit.
+    Nonvanishing and continuity identify the limiting periodic rays with those
+    of $A$. The stationary-support sequence theorem gives the contradiction.
+\end{proof}
+
+\begin{theorem}[Bounded bond dimensions and local virtual class]
+    \label{thm:spc_aux_bounded_minimal_local_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays}
+    \leanok
+    Let $T$ be first countable. At each $t\in T$, let $A_t$ be an irreducible
+    unital tensor of positive bond dimension $D(t)\le M$. Suppose that fixed
+    ambient tensors $Q_t$ represent their positive-length periodic rays and
+    vary continuously at $t_0$, and that $A_{t_0}$ is injective. Under one
+    exact physical unitary covariance, with pointwise unitary virtual
+    representatives, assume a common bound $0\le q<1$ for every nonunit
+    transfer eigenvalue. Then the virtual factor systems are cohomologous to
+    that at $t_0$ throughout some neighborhood of $t_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spc_aux_compact_minimal_sequence_class}
+    A sequence approaching $t_0$ on which the conclusion fails has a
+    subsequence with constant bond dimension. Transport both tensors and
+    virtual matrices to that fixed dimension and apply the preceding theorem.
+\end{proof}
+
+\begin{lemma}[Positive-length rays under physical blocking]
+    \label{lem:spc_aux_positive_ray_blocking}
+    \lean{MPSTensor.SamePositiveMpvRay.blockTensor}
+    \leanok
+    If two tensors have equal periodic rays at every positive length, then
+    their $L$-site blocked tensors have equal periodic rays at every positive
+    length, for every $L>0$.
+\end{lemma}
+\begin{proof}\leanok
+    Reindex configurations and apply the original ray equality at length $NL$.
+\end{proof}
+
+\begin{theorem}[Normal realizations of bounded dimension]
+    \label{thm:spc_aux_bounded_normal_local_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_bounded_normal_periodic_rays}
+    \leanok
+    Let $T$ be first countable, and let normal unital tensors $A_t$ have
+    bounded bond dimensions $D(t)\le M$. Suppose that fixed ambient tensors
+    $Q_t$ represent their positive-length periodic rays and vary continuously
+    at $t_0$. Assume exact covariance under a common physical unitary action,
+    pointwise unitary virtual representatives, and a common bound
+    $0\le q<1$ on all transfer eigenvalues different from $1$. Then their
+    virtual factor systems are locally cohomologous to that at $t_0$.
+    Neither minimal tensors nor stationary densities need be chosen
+    continuously. The uniform transfer bound is a supplied hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spc_aux_bounded_minimal_local_class,
+        lem:spc_aux_positive_ray_blocking,thm:spc_aux_blocked_unitary_covariance}
+    Block $M^4$ sites. Normality and the quantum Wielandt bound imply
+    injectivity at every parameter. Blocking preserves the virtual factor
+    system and unitality, and changes the spectral bound to $q^{M^4}<1$.
+    Apply the bounded-dimension local theorem.
+\end{proof}
+
+
 % Auxiliary preparation for compact-sequence class stability.
 % The transfer contraction bound is supplied throughout.
 
