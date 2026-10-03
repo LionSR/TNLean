@@ -20,6 +20,11 @@ changes only the scalar multiplying the unnormalized reduced matrix.
 These finite matrix identities are used with the actual common boundary factor
 of SCP10, arXiv:1001.3807, lines 1935–1990 and 2043–2072. They do not supply a
 factorization of any contracted PEPS.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder
