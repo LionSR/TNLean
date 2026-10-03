@@ -1,0 +1,55 @@
+\begin{theorem}[Global contraction of a fixed cycle permutation]%
+    \label{thm:peps_regular_cycle_global_permutation}
+    \lean{TNLean.PEPS.exists_unitary_regularCycleGlobalPermutation}
+    \leanok
+    \uses{thm:peps_regular_cycle_permutation_physical,
+        lem:peps_regular_bond_extension_transport,
+        thm:peps_regular_coherent_global_transport,
+        thm:peps_regular_two_cycle_global_flux_move}
+    Let the original site tensors of a finite graph be locally $G$-isometric
+    for the regular action. Choose a spanning tree and root in a finite region
+    $R$, and let $\phi$ be a permutation of its cycle assignments commuting
+    with simultaneous conjugation. For a cycle assignment $\omega$ and arbitrary
+    common exterior and crossing operators $u$, let $\widetilde u_\omega$ use
+    $\omega$ on internal non-tree bonds, the identity on tree bonds, and $u$
+    on every other bond. There exists one unitary $W_\phi$ on the original
+    spins of $R$, whose complementary identity extension is globally unitary,
+    such that for every $\omega$, boundary configuration $\theta$ and $u$,
+    \begin{align}
+        W_\phi\Psi_R(u_\omega,\theta)
+            &=\Psi_R(u_{\phi\omega},\theta),\\
+        \widehat W_\phi\Psi(\widetilde u_\omega)
+            &=\Psi(\widetilde u_{\phi\omega}).
+    \end{align}
+    Both vectors are actual contractions. The unitary is chosen before all
+    cycle assignments, boundary configurations and common exterior data.
+\end{theorem}
+\begin{proof}\leanok
+    Local $G$-isometry supplies the all-boundary-column unitary. The identity
+    vertex gauge moves common crossing operators into one boundary transport
+    independent of the cycle assignment. Changing only internal operators
+    leaves all exterior site tensors unchanged. The actual cut expansion
+    therefore extends the same regional action to the complete contraction.
+    Extension by the complementary physical identity preserves unitarity.
+\end{proof}
+
+\begin{theorem}[Global controlled conjugation with common exterior data]%
+    \label{thm:peps_regular_two_cycle_global_conjugation}
+    \lean{TNLean.PEPS.exists_unitary_regularTwoCycleGlobalConjugation}
+    \leanok
+    \uses{thm:peps_regular_two_cycle_conjugation,
+        thm:peps_regular_cycle_global_permutation}
+    Choose distinct internal non-tree bonds $e_0,e_1$ in the preceding region.
+    One identity-extended physical unitary sends
+    $\Psi(\widetilde u_\omega)$ to $\Psi(\widetilde u_{\Phi\omega})$ for every
+    $\omega$ and arbitrary common exterior and crossing assignment, where
+    $\Phi$ replaces $\omega_{e_1}$ by
+    $\omega_{e_0}\omega_{e_1}\omega_{e_0}^{-1}$ and retains all other labels.
+    This auxiliary contraction identity implements controlled cycle conjugation.
+    The prescribed lattice string crossing, inverse partner and measurement
+    loop in \cite[Section 6.6, fluxon braiding]{Schuch2010PEPS} are not asserted.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the global permutation theorem to the conjugation-equivariant
+    controlled conjugation $\Phi$.
+\end{proof}

@@ -1,0 +1,20 @@
+\begin{theorem}[Unordered endpoints and supported cycle assignments]
+    \label{thm:peps_cycle_assignment_support}
+    \lean{TNLean.PEPS.Edge.ofAdj_eq_iff_endpoints,
+        TNLean.PEPS.Edge.ofAdj_ne_of_endpoint_coordinates,
+        TNLean.PEPS.regularTreeCycleAssignment_eq_of_support,
+        TNLean.PEPS.regularTreeCycleAssignment_twoSupport}
+    \leanok
+    Two native edges are equal precisely when their unordered endpoint pairs
+    agree. A coordinate constant on the endpoints of one edge separates it
+    from any edge with a different endpoint coordinate. Let $R$ have a chosen tree $T$. Any bond assignment supported on
+    internal non-tree edges is recovered by restricting it to those edges and
+    extending it by the identity. These are auxiliary facts for the accessible
+    systems and local movement of \cite[Theorem~6.16]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compare the two sorted endpoint pairs. For the second assertion, an edge
+    carrying a nonidentity operator is internal and off the tree by hypothesis;
+    all remaining cases carry the identity.
+\end{proof}
