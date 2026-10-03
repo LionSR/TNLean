@@ -19,6 +19,17 @@ boundary fixed point as additional data.
 
 Source: arXiv:1010.3732, Section II.C, “Isometric form and symmetries”;
 arXiv:2011.12127, Section III.A, lines 1084 and 1171.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Section II.C
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- Cirac, Perez-Garcia,
+  Schuch, Verstraete, *Matrix Product States and Projected Entangled Pair
+  States: Concepts, Symmetries, and Theorems*, Section III.A
+- [arXiv:quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197) -- Pérez-García,
+  Verstraete, Wolf, Cirac, *Matrix Product State Representations*
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder

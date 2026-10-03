@@ -91,6 +91,7 @@ Neither the block form of eq. (S5) nor the error estimate is formalized here.
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
+open QuantumCircuit
 
 namespace MPSTensor
 
