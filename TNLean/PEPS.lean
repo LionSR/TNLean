@@ -92,6 +92,8 @@ import TNLean.PEPS.IntegerContourRayPotential
 import TNLean.PEPS.IntegerExteriorConnectivity
 import TNLean.PEPS.IsoTransport
 import TNLean.PEPS.KitaevCheckerboardBlocking
+import TNLean.PEPS.KitaevNativeBoundaryCNOT
+import TNLean.PEPS.KitaevNativeCheckerboardBlocking
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.NormalAbsorbedFamily
 import TNLean.PEPS.NormalBlocking
