@@ -48,10 +48,14 @@ import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
 import TNLean.PEPS.GInjective
 import TNLean.PEPS.GInjectiveConcatenation
+import TNLean.PEPS.GInjectiveCutCompatibility
 import TNLean.PEPS.GInjectiveCutRange
 import TNLean.PEPS.GInjectiveMPS
 import TNLean.PEPS.GInjectiveMPSIntersection
 import TNLean.PEPS.GInjectiveMPSParentHamiltonian
+import TNLean.PEPS.GInjectivePhysicalEquivalence
+import TNLean.PEPS.GInjectivePhysicalMap
+import TNLean.PEPS.GInjectivePhysicalNormalForm
 import TNLean.PEPS.GInjectiveRangeEquivalence
 import TNLean.PEPS.GInjectiveTorusProjector
 import TNLean.PEPS.GInjectiveTorusSectorCount
