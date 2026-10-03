@@ -9,8 +9,19 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPU
 
 import TNLean.MPS.MPU.AdjointSimpleContraction
+import TNLean.MPS.MPU.AffineFactorizationIsometry
+import TNLean.MPS.MPU.AffineFactorizationRank
+import TNLean.MPS.MPU.AffineGramBalancing
+import TNLean.MPS.MPU.AffineGramCompactness
+import TNLean.MPS.MPU.AffineGramHull
+import TNLean.MPS.MPU.AffineGramTransfer
+import TNLean.MPS.MPU.AffineIntervalIsometry
 import TNLean.MPS.MPU.AnchoredResidualCoordinates
 import TNLean.MPS.MPU.AnchoredThreeBlockOperator
+import TNLean.MPS.MPU.BalancedGramContraction
+import TNLean.MPS.MPU.BalancedGramMetrics
+import TNLean.MPS.MPU.BalancedGramOptimality
+import TNLean.MPS.MPU.BalancedIntervalMerging
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
@@ -20,10 +31,13 @@ import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.DaggerInverse
 import TNLean.MPS.MPU.DaggerInverseGauge
+import TNLean.MPS.MPU.DeterminantStationarity
 import TNLean.MPS.MPU.DoubleLayerContraction
+import TNLean.MPS.MPU.EndpointGramNormalization
 import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
+import TNLean.MPS.MPU.FiniteAlphabetRows
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupCocycleMPO
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
@@ -54,9 +68,12 @@ import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedCompression
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
+import TNLean.MPS.MPU.ParityConditioning
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.PositiveCanonicalGauge
+import TNLean.MPS.MPU.PrefixGramNormalizer
+import TNLean.MPS.MPU.ProjectionPhaseIsometries
 import TNLean.MPS.MPU.RectangularSourceRanks
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
@@ -73,6 +90,7 @@ import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleSupportCompression
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SimpleTensorProduct
+import TNLean.MPS.MPU.SimultaneousGramMetrics
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceDecompositionUniqueness
 import TNLean.MPS.MPU.SourceFactorContraction
@@ -103,6 +121,7 @@ import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
 import TNLean.MPS.MPU.TransferStabilizationConverse
+import TNLean.MPS.MPU.TreeDepthBounds
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth
 import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TruncationCommutator

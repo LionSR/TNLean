@@ -24,6 +24,35 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### compact finite-volume kernel gaps — promoted
+- **Pattern:** obtain a positive lower norm bound on a finite-dimensional
+  kernel complement at each parameter, preserve half of it in a neighborhood
+  using continuity of the operator and its kernel projection, and pass to a
+  finite subcover of a compact parameter set.
+- **Seen:** the finite-volume argument in
+  `TNLean/MPS/ParentHamiltonian/PeriodicShortGapContinuity.lean` and the
+  fixed-injectivity-length extension in
+  `TNLean/MPS/ParentHamiltonian/CompactNormalParentGap.lean`, the multiblock
+  fixed-volume theorem in `BlockPeriodicGroundSpaceContinuity.lean`, and the
+  local positive-interaction comparison in `CompactParentInteractionGap.lean`
+  (2026-10-02).
+- **Abstraction:**
+  `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
+  `TNLean/Algebra/CompactKernelGap.lean`.
+- **Notes:** the bound follows from finite dimensionality; positivity,
+  self-adjointness, and a supplied pointwise gap are unnecessary.
+
+### scalar cancellation in the fixed-point physical action — promoted
+- **Pattern:** replace an invertible virtual matrix by a nonzero scalar
+  multiple in `Wᵀ ⊗ W⁻¹`; the scalar and its reciprocal cancel.
+- **Seen:** three uses across two files: the identity and multiplication
+  proofs of `sptFixedPointAction` in `SPTFixedPoint.lean`, and
+  `sptFixedPointAction_eq_of_forall_eq_smul` in
+  `CohomologousFixedPointPath.lean`, under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `MPSTensor.sptKron_eq_of_eq_smul` was already the private
+  helper for the first two uses. It is now public and serves the third use.
+- **Notes:** no new cancellation proof or tactic is needed.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -77,12 +106,12 @@ abstracted — record why, so it is not re-proposed).
   `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
-  and `expect_productVector_mul` in `TNLean/MPS/Preparation/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/MPS/Preparation/LocalChannelCircuit.lean`,
+  and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
+  `trace_finKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
   and `OnsiteChannel.dual_mul` in
-  `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
-- **Abstraction:** `MPSPreparation.eq_of_mem_supportedOperators₂` in
-  `TNLean/MPS/Preparation/LocalCircuit.lean`: two bilinear maps
+  `TNLean/Circuit/Channel/Conversion.lean`.
+- **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
+  `TNLean/Circuit/LocalCircuit.lean`: two bilinear maps
   `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
   generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
   maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
@@ -97,7 +126,8 @@ abstracted — record why, so it is not re-proposed).
   `exists_approximationError_le` in `ApproximationError.lean` (one length),
   `exists_approximationError_le_blockSum` in `OrthogonalBlockError.lean`, and
   `exists_approximationError_le_repeatedBlockSum` in `RepeatedBlockError.lean`,
-  all under `TNLean/MPS/Preparation/`.
+  all under `TNLean/MPS/Preparation/`. The last two are now corollaries of the
+  repeated-overlapping bound in `BlockSumError.lean` and no longer use the cutoff.
 - **Abstraction:** `le_mul_mul_exp_of_forall_le` (the whole case split, built
   on `lt_one_and_forall_le_of_mul_mul_pow_lt_one`) and
   `Real.exp_neg_mul_div_eq_pow` (the rewrite `e^{-γ q/ξ} = (e^{-γ/ξ})^q`), in
@@ -1634,7 +1664,9 @@ abstracted — record why, so it is not re-proposed).
   `∑ⱼ conj(aⱼ) bⱼ cⱼ` from `⟨Fⱼ, Gⱼ'⟩ = δⱼⱼ' cⱼ`) in
   `TNLean/MPS/Preparation/DiagonalPolar.lean`.
 - **Notes:** all eight call sites are refactored; the three sums of
-  `norm_nonNormalApproxOverlap_blockSum` each became two lines.
+  `norm_nonNormalApproxOverlap_blockSum` each became two lines. That lemma and
+  `OrthogonalBlockError.lean` were later deleted, when the orthogonal-block bound
+  became a corollary of the repeated-overlapping bound.
 
 ## Completed refactors
 
@@ -2416,6 +2448,18 @@ abstracted — record why, so it is not re-proposed).
 
 ---
 
+### Orthogonal-resolution multiplication table — promoted
+- **Pattern:** split equality of two indices; use idempotence in the equal
+  case and `orthogonalProjection_mul_eq_zero_of_sum_eq_one` otherwise.
+- **Seen:** three occurrences in `stepOrbitProjection_mul_original`,
+  `hasEigenvalue_adjoint_compressed_stepOrbit`, and the private
+  `exists_root_of_orbit_phase`, in `StepOrbitSectors.lean`,
+  `BlockingEigenvalues.lean`, and `OrbitUnitary.lean` under
+  `TNLean/MPS/Periodic/` (2026-09-30).
+- **Abstraction:** `orthogonalProjection_mul_eq_ite_of_sum_eq_one` in
+  `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
+  table. All three consumers use it; no custom tactic is needed.
+
 ### contracting a two-site bond penalty — promoted
 - **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
   contract the two exterior identity factors, and evaluate the remaining
@@ -2469,6 +2513,61 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### One-site doubled-alphabet transport — candidate
+- **Pattern:** identify the doubled alphabet of one-site MPO blocking with
+  the original ket-bra alphabet, then transport the physical-trace contraction
+  along the one-site equivalence.
+- **Seen:** two occurrences of each identity across two files:
+  `TNLean/MPS/MPDO/Simple.lean:IsSimpleCanonicalForm.isSimple` and
+  `TNLean/MPS/MPDO/TwistedDimerBondSimple.lean` (2026-10-02).
+- **Abstraction:** the bond-factor proof uses private generic identities
+  `blockTensor_one_toMPSTensor` and
+  `doubledPhysTraceTransfer_reindex_singleBlock`. At a third occurrence,
+  move the equivalence and identities to the physical-blocking API and
+  refactor the existing simplicity proof.
+- **Notes:** the generic form also avoids unfolding the concrete four-level
+  matrix-unit tensor during alphabet comparison. The count remains below
+  the rule-of-three threshold.
+
+### positive interaction subfamilies — candidate (2026-10-02)
+
+- **Pattern:** Express an interval interaction sum as a filtered sum, then
+  apply `Finset.sum_le_sum_of_subset_of_nonneg` and
+  `LinearMap.nonneg_iff_isPositive` to bound it by the full interaction sum.
+- **Seen:** two instances in
+  `ParentHamiltonian/Martingale/OverlappingIntervalGap.lean`, for the prefix
+  and terminal interval Hamiltonians.
+- **Abstraction:** Mathlib already supplies the finite-sum comparison. If
+  more interval shapes require this argument, isolate the common positive
+  subfamily comparison rather than repeating the filter conversion.
+- **Notes:** Both occurrences are in one module; no new tactic is needed.
+
+### Gram products of vertically stacked matrices — candidate
+- **Pattern:** reduce the Gram product of a matrix formed by `Matrix.fromRows`
+  to the sum of the two block Gram products, using
+  `Matrix.conjTranspose_fromRows_eq_fromCols_conjTranspose` and
+  `Matrix.fromCols_mul_fromRows`.
+- **Seen:** three proofs in `TNLean/MPS/MPU/ProjectionPhaseIsometries.lean`:
+  `projectionPrefixMap_isIsometry`, `projectionInteriorMap_isIsometry`, and
+  `projectionSuffixMap_isIsometry` (2026-10-02).
+- **Abstraction:** combine the two existing Mathlib identities into a helper
+  lemma if a second file uses the same reduction.
+- **Notes:** three occurrences in one file; below the two-file promotion
+  threshold. The following projection algebra differs between the proofs.
+
+### adjoints of left polar identities — candidate (2026-10-02)
+
+- **Pattern:** Apply `congrArg Matrix.conjTranspose` to a matrix product
+  identity, then simplify `conjTranspose_mul` and the Hermitian factors.
+- **Seen:** four instances in `ParentHamiltonian/LeftPolar.lean`: the
+  support factorization used for positivity, the support action on the
+  partial isometry, and the two identities identifying the physical range.
+- **Abstraction:** The existing `Matrix.conjTranspose_mul` supplies the
+  algebraic operation. A more specific reusable lemma would need to remove
+  repeated Hermitian-factor arguments in a second module.
+- **Notes:** These instances occur in one module and prove distinct polar
+  identities. No additional tactic or matrix predicate is introduced.
+
 ### coordinate restriction at the two bond endpoints — candidate
 
 - **Pattern:** expand a weighted matrix unit, select the occupied summand,
@@ -2479,7 +2578,6 @@ abstracted — record why, so it is not re-proposed).
   third use appears in a second module.
 - **Notes:** currently two occurrences in one module. Isometric inclusions,
   boundary transport, and covariance restriction already use shared lemmas.
-
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
@@ -3747,12 +3845,24 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the periodic application uses the inverse unitary orientation.
   Below the three-occurrence promotion threshold; no custom tactic introduced.
 
+### Selecting and flattening prescribed orbit blocks — candidate
+- **Pattern:** choose the prescribed periodic decomposition separately for each
+  original block, flatten `(original block, orbit)` with `finSigmaFinEquiv`,
+  and transport the weighted MPV identity through that enumeration.
+- **Seen:** two occurrences in `IsIrreducibleForm.block` in
+  `TNLean/MPS/Periodic/IrreducibleFormBlocking.lean` and
+  `weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos` in
+  `TNLean/MPS/Periodic/RefinementNormalization.lean` (2026-09-30).
+- **Abstraction (proposed):** a family-level decomposition lemma returning
+  the chosen blocks and dimension identities if a third consumer appears.
+  The shared weighted-sum refinement is already a separate theorem.
+
 ### measurement-assisted GHZ protocol on two site layouts — candidate
 - **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the
   outcome-consistency lemma, the corrections by outcomes and partial sums, and
   the product-state bookkeeping.
 - **Seen:** two occurrences (2026-10-01):
-  `TNLean/MPS/Preparation/GHZMeasurement.lean` (interleaved single qudits of
+  `TNLean/Circuit/Measurement/GHZ.lean` (interleaved single qudits of
   an open chain, `forall_succ_eq_iff`, `forall_add_ghzCorrection_eq_iff`) and
   `TNLean/MPS/Preparation/WindowGHZ.lean` (registers of `r₁` sites inside
   blocks of a ring, `forall_cyclic_eq_zero_iff`).
@@ -3764,6 +3874,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   shift between a register and its ancilla, which spans a block in
   `WindowGHZ.lean`.
 
+
+### Scalar word-trace identities for Ising compression — candidate
+
+- **Pattern:** introduce a local identity
+  `trace (evalWord (c • A) w) = c ^ w.length * trace (evalWord A w)`
+  by `Kraus.evalWord_smul`, `Matrix.trace_smul`, and `smul_eq_mul`, then
+  use it to simplify the traces of the weighted target family.
+- **Seen:** the local `hs` in `IsingWeightedTwist.lean` and `hscale` in
+  `IsingThreeObjectTwist.lean` (2026-10-02).
+- **Abstraction (proposed):** a word-trace form of the existing scalar word
+  evaluation lemma, in QICLean beside `Kraus.evalWord_smul` if another
+  development needs the same statement.
+- **Notes:** two occurrences in two files, below the promotion threshold.
+  The three-object calculation also needs simplification of the finite
+  dependent dimensions before rewriting the trace expressions.
 
 ## Rejected
 
@@ -3920,3 +4045,44 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+
+### Orthogonal projection in matrix coordinates — candidate (2026-10-02)
+
+- **Pattern:** Transport a finite-dimensional invariant subspace to Euclidean
+  coordinates, represent its orthogonal projection by `Matrix.toEuclideanLin.symm`,
+  and prove matrix Hermiticity, idempotence and invariant-range identities.
+- **Seen:** two constructions: QICLean `Kraus/IrreducibleAction.lean`
+  (`isIrreducibleAction_of_isIrreducibleFamily`) and TNLean
+  `MPS/FundamentalTheorem/Reduction/StationarySplitting.lean`
+  (`isSemisimpleModule_wordModule_of_hasInvariantProjectorClosure`).
+- **Abstraction:** a matrix-coordinate orthogonal-projection helper with
+  invariant-range equivalence, preferably in QICLean's projection algebra.
+- **Notes:** below the three-occurrence promotion threshold. The new construction
+  reuses Mathlib's star-projection facts; no custom tactic is needed.
+
+### nonzero matrix eigenvectors lie orthogonal to the kernel — candidate
+- **Pattern:** use self-adjointness to identify the orthogonal complement
+  of the kernel with the range, then exhibit the inverse eigenvalue times
+  the eigenvector as a preimage.
+- **Seen:** `Matrix.spectrum_separated_of_orthogonal_quadratic_gap` in
+  `Algebra/CommonKernelSpectralGap.lean` and
+  `spectrum_separated_of_orthogonal_norm_gap` in
+  `MPS/Symmetry/CanonicalInjectiveGappedPath.lean` (2026-10-02).
+- **Abstraction:** a nonzero-eigenvalue membership lemma for symmetric
+  linear maps would remove the repeated range argument.
+- **Notes:** two occurrences across two files; below the promotion threshold.
+
+### adjoint Perron eigenvalue from trace duality — candidate
+- **Pattern:** pair a positive definite adjoint eigenvector with a positive
+  definite right eigenvector, apply `Kraus.trace_mul_mapLM_adjoint`, and
+  cancel the nonzero trace pairing to identify the two eigenvalues. For a
+  unital tensor the right eigenvector is the identity and its eigenvalue is one.
+- **Seen:** two occurrences across
+  `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean` and
+  `TNLean/MPS/Symmetry/UnitaryVirtualGauge.lean` (2026-10-02).
+- **Abstraction:** a lemma identifying eigenvalues from a nonzero trace
+  pairing would contain the common algebraic step; the existing promoted
+  trace-duality theorem already contains the matrix expansion.
+- **Notes:** the new unital case takes only four lines after choosing the
+  adjoint eigenvector. No new tactic is needed.

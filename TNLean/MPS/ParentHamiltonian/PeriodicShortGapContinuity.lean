@@ -8,8 +8,7 @@ import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
-import TNLean.Algebra.KernelGapPerturbation
-import TNLean.Algebra.CompactGapBounds
+import TNLean.Algebra.CompactKernelGap
 
 /-!
 # Continuity of short periodic parent-Hamiltonian ground lines
@@ -141,29 +140,8 @@ theorem exists_uniform_parentHamiltonianES_two_gap_fixed_volume
       (by omega : 1 ≤ 2)
   have hH := continuous_parentHamiltonianES_family A hA hN hBlock
   have hK := continuous_parentHamiltonianES_two_kernelProjection_family A hA hInj hN
-  have hcompact : ∃ δ : ℝ, 0 < δ ∧ ∃ M : ℕ, ∀ x ∈ S,
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES (A x) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES (A x) 2 N v‖ := by
-    apply hS.exists_uniform_pos_nat_bounds
-      (fun δ _ x => ∀ v ∈ (LinearMap.ker (parentHamiltonianES (A x) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES (A x) 2 N v‖)
-    · intro δ δ' M x hle hgap v hv
-      exact (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap v hv)
-    · intro δ M M' x hle hgap
-      exact hgap
-    · intro x hx
-      obtain ⟨γ, hγ, hgap⟩ := parentHamiltonianES_exists_gap (A x) 2 N
-      refine ⟨γ / 2, by positivity, 0, ?_⟩
-      apply ContinuousLinearMap.eventually_norm_gap_on_orthogonal
-        (fun y => LinearMap.toContinuousLinearMap (parentHamiltonianES (A y) 2 N))
-        (fun y => LinearMap.ker (parentHamiltonianES (A y) 2 N))
-        hH.continuousAt hK.continuousAt
-      · intro v hv
-        exact hv
-      · exact hγ
-      · linarith
-      · exact hgap
-  obtain ⟨δ, hδ, M, hbound⟩ := hcompact
-  exact ⟨δ, hδ, hbound⟩
+  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
+    (fun x => LinearMap.toContinuousLinearMap (parentHamiltonianES (A x) 2 N))
+    hH hK hS
 
 end MPSTensor
