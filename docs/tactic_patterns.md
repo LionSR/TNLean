@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Regional PEPS subspace inclusion by open contraction columns — promoted (2026-10-02)
+
+- **Pattern:** Rewrite the regional ground space as the span of its actual
+  open contraction columns, apply `Submodule.span_le`, and extract each
+  crossing configuration from the generator range.
+- **Seen:** Twice in `PEPS/ParentHamiltonian/RegularRegionFlatness.lean`
+  (exposure into canonical coordinates and recovery through the inverse),
+  and once in `RegularRegionBondRightInvariance.lean`
+  (exposed shared-bond right invariance).
+- **Abstraction:** `TNLean.PEPS.regionGroundSpace_le_iff` in
+  `TNLean/PEPS/ParentHamiltonian/RegionGroundSpace.lean` gives the universal
+  subspace property of the actual regional contraction.
+- **Notes:** All three consumers use this mathematical equivalence. It
+  composes Mathlib's `Submodule.span_le` and `Set.range_subset_iff`, adds no
+  hypotheses, and leaves the consumer theorem signatures unchanged.
+
 ### Finite linear combinations in a supported subspace — promoted (2026-10-02)
 
 - **Pattern:** prove membership of a sum by `Submodule.sum_mem`, then prove
