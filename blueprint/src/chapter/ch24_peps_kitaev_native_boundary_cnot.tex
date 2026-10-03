@@ -1,0 +1,98 @@
+\begin{definition}[The eight native checkerboard boundary registers]%
+    \label{def:peps_kitaev_native_boundary_registers}
+    \lean{TNLean.PEPS.kitaevNativeBoundaryEdge,
+        TNLean.PEPS.kitaevNativeBoundaryEdgeEquiv,
+        TNLean.PEPS.kitaevNativeBoundaryEquiv}
+    \leanok
+    \uses{def:peps_kitaev_native_checkerboard_block}
+    For the locally oriented plaquette at $v=(x,y)$, enumerate its crossing
+    bonds by a side $i\in\{N,E,S,W\}$ and a place $b\in\{0,1\}$ in that side.
+    The places follow clockwise boundary order. This is a bijective
+    enumeration of the actual crossing edges. It gives an equivalence
+    $\mathcal E_v$ from native boundary configurations to four binary pairs.
+    These are the boundary registers of the blocking construction in
+    \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[The native boundary enumeration and its label reads]%
+    \label{thm:peps_kitaev_native_boundary_registers}
+    \lean{TNLean.PEPS.kitaevNativeBoundaryEdge_val,
+        TNLean.PEPS.kitaevNativeBoundaryEquiv_apply}
+    \leanok
+    \uses{def:peps_kitaev_native_boundary_registers}
+    Write $R_{a,b}$ for the actual right edge from $(a,b)$ and $U_{a,b}$
+    for its up edge; these denote unordered native bonds even at a seam.
+    The enumeration is
+    \begin{align}
+        N&=(U_{x,y+1},U_{x+1,y+1}),&
+        E&=(R_{x+1,y+1},R_{x+1,y}),\\
+        S&=(U_{x+1,y-1},U_{x,y-1}),&
+        W&=(R_{x-1,y},R_{x-1,y+1}).
+    \end{align}
+    The equivalence $\mathcal E_v$ reads precisely the eight labels used
+    in the native coefficient identity. Every native boundary assignment
+    therefore occurs exactly once among these four pairs.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each bond is determined by its label read in the native block.
+    The displayed formulas follow by evaluating these reads on indicator
+    assignments. The right and up edge families are injective and disjoint;
+    the period bounds also keep opposite boundary bonds distinct.
+    Translate the plaquette to the coordinate rectangle of side lengths two.
+    Its native perimeter contains eight crossing bonds. The eight distinct
+    listed bonds consequently exhaust its boundary, and translation carries
+    this enumeration to every position, including both seams.
+\end{proof}
+
+\begin{definition}[The native boundary CNOT and tensor maps]%
+    \label{def:peps_kitaev_native_boundary_cnot}
+    \lean{TNLean.PEPS.kitaevNativeBoundaryCNOT,
+        TNLean.PEPS.kitaevNativeCheckerboardMatrix,
+        TNLean.PEPS.kitaevNativeColorMatrix,
+        TNLean.PEPS.kitaevNativeBoundaryZeroEmbedding}
+    \leanok
+    \uses{def:peps_kitaev_native_boundary_registers,
+        def:peps_kitaev_checkerboard_maps}
+    Let $C$ be the four pair CNOTs. Their native boundary action is
+    $C_v=\mathcal E_v^{-1}C\mathcal E_v$.
+    Let $\mathsf A_v$ be the actual open tensor map, with the four original
+    native spins as its rows and all native crossing assignments as its columns.
+    Let $\mathsf K_v$ be the color-difference tensor with the same physical
+    rows, and let $E_v$ include the four colors into the native boundary
+    registers by setting the four second registers to zero.
+\end{definition}
+
+\begin{theorem}[The exact native tensor-map identity after boundary CNOTs]%
+    \label{thm:peps_kitaev_native_boundary_cnot}
+    \lean{TNLean.PEPS.kitaevNativeBoundaryCNOT_pairs,
+        TNLean.PEPS.kitaevNativeBoundaryCNOT_permMatrix_mem_unitaryGroup,
+        TNLean.PEPS.kitaevNativeBoundaryZeroEmbedding_isIsometry,
+        TNLean.PEPS.kitaevNativeCheckerboardMatrix_mul_boundaryCNOT}
+    \leanok
+    \uses{def:peps_kitaev_native_boundary_cnot,
+        thm:peps_kitaev_native_boundary_registers,
+        thm:peps_kitaev_native_checkerboard_identification,
+        thm:peps_kitaev_checkerboard_map_identity}
+    Reading the output of $C_v$ gives the four pair CNOTs. Its native
+    permutation matrix $\mathsf C_v$ is unitary on the whole boundary space,
+    and $E_v^\dagger E_v=1$. The actual native tensor map obeys
+    \begin{align}
+        \mathsf A_v\mathsf C_v=\mathsf K_v E_v^\dagger.
+    \end{align}
+    This is a local native tensor-map equality for periods at least three,
+    including seam-crossing blocks. It does not assert a physical
+    renormalization operation or a globally tiled checkerboard state.
+\end{theorem}
+
+\begin{proof}\leanok
+    The derived boundary equivalence conjugates the pair CNOTs to a
+    permutation of all native boundary configurations. Permutation matrices
+    are unitary, and fixing four zero registers gives an isometric inclusion.
+    The native coefficient identity identifies $\mathsf A_v$ with the
+    explicit blocked map after reindexing its physical rows and boundary
+    columns. Reindex the already proved identity
+    $\mathsf B\mathsf C=\mathsf K E^\dagger$ by these same equivalences.
+    Finite matrix multiplication is preserved by the bijective change of
+    boundary indices, giving the asserted native equality.
+\end{proof}

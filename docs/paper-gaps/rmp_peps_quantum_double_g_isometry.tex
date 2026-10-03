@@ -863,12 +863,19 @@ is the existing dual toric-code tensor with the explicit cyclic physical
 reordering. The coefficient identity follows the construction in
 \cite{Schuch2010PEPS}, source lines 2755--2827.
 
-This proves the open four-tensor reduction and its virtual boundary
-unitary. Its identification with a prescribed native torus region, the
-physical renormalization operation, and the globally tiled lattice
-blocking identity remain separate. The next step is to construct the
-native site and boundary bijections and derive the actual open-region
-contraction under those bijections.
+For torus periods at least three, the actual open contraction of any
+translated four-site plaquette, with its four corner orientations prescribed
+as in the checkerboard diagram, is identified with this blocked tensor for
+every native boundary assignment and original spin configuration. All eight
+crossing bonds are enumerated bijectively, including blocks crossing either
+seam. Conjugating the pairwise boundary CNOT by this enumeration gives a
+unitary native boundary transformation and the exact identity
+\[
+    \mathsf A_v\mathsf C_v=\mathsf K_v E_v^\dagger,
+\]
+where $E_v$ is an isometric inclusion of the four retained boundary bits.
+These are local tensor-map identities. A globally alternating field on an
+odd torus and a globally tiled physical renormalization remain separate.
 
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
