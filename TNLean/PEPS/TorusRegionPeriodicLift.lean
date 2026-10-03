@@ -97,8 +97,8 @@ theorem continuousLift_torusRegionRealization_periodTranslate_disjoint
   exact hj ((torusPeriodVector_eq_zero_iff j).mp hz)
 
 /-- The exact planar closed-cell realization supplied by the covering lift is
-disjoint from every nonzero period translate. Source: SCP10, block domains,
-§6.3, lines 1935–1990; auxiliary geometric statement. -/
+disjoint from every nonzero period translate. Locally proved auxiliary geometric statement for the
+block setting of SCP10, block domains, §6.3, lines 1935–1990; the source states no such lemma. -/
 theorem torusRegionPlanarRealization_periodTranslate_disjoint
     [NeZero width] [NeZero height] (R : Finset (TorusVertex width height))
     (F : C(torusRegionRealization R, ℝ × ℝ))
@@ -170,8 +170,8 @@ theorem torusRegionPlanarRealization_cell_periodTranslate_disjoint
 
 /-- Simple connectedness of the actual torus cell region supplies an integer
 unit-step lift whose planar closed-cell realization is disjoint from every
-nonzero period translate. Source: SCP10, topologically trivial blocks, §6.3,
-lines 1935–1990; auxiliary geometric statement. -/
+nonzero period translate. Locally proved auxiliary geometric statement for the block setting of
+SCP10, topologically trivial blocks, §6.3, lines 1935–1990; the source states no such lemma. -/
 theorem exists_integerLift_periodTranslate_disjoint_of_isSimplyConnected
     [NeZero width] [NeZero height] (R : Finset (TorusVertex width height))
     (hR : IsSimplyConnected (torusRegionRealization R)) (o : {v // v ∈ R}) :

@@ -47,8 +47,9 @@ private def cellPoint (R : Finset (TorusVertex width height)) (v : {v // v ∈ R
     mem_iUnion_of_mem v.1 (mem_iUnion_of_mem v.2 ⟨d, hd, rfl⟩)⟩
 
 /-- A genuine covering lift translates every native closed cell to the unit
-square centered at the lifted site. Source: SCP10, the realized block domains
-in §6.3, lines 1935–1957; auxiliary geometric statement. -/
+square centered at the lifted site. Locally proved auxiliary geometric statement for the block
+setting of SCP10, the realized block domains in §6.3, lines 1935–1957; the source states no such
+lemma. -/
 theorem continuousLift_torusClosedUnitCell
     (R : Finset (TorusVertex width height)) (F : C(torusRegionRealization R, ℝ × ℝ))
     (hF : ∀ p, torusRealProjection width height (F p) = p.1)
