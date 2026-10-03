@@ -21,10 +21,12 @@ grid. If its coordinate intervals lie strictly inside both coordinate ranges,
 no wrap bond is incident to it. A left boundary edge witnesses that its boundary
 is nonempty.
 
-Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, the rectangular block
-and its surrounding stripes in `eq:iso:L-shape-scenario`, source lines 1935–1957.
-This is an auxiliary rectangular geometry statement; it does not replace the
-source's assertion for every topologically trivial block.
+Motivation: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, the rectangular
+block and its surrounding stripes in `eq:iso:L-shape-scenario`, source lines
+1935–1957. Those lines use this rectangular partition but state neither the
+connectivity of the rectangle and its complement nor the seam exclusion. The
+statements here are auxiliary combinatorial lemmas proved locally; they do not
+replace the source's assertion for every topologically trivial block.
 
 ## References
 
@@ -125,7 +127,8 @@ private theorem reachable_fin_line {α : Type*} (Γ : SimpleGraph α) (n : ℕ) 
 
 /-- The complement of a coordinate rectangle is connected using only
 nonseam edges when both rectangle side lengths are strictly smaller than the
-torus dimensions. Source: SCP10, the rectangular partition in lines 1935–1957. -/
+torus dimensions. Auxiliary lemma proved here, not stated in the source; motivated by
+the rectangular partition of SCP10, lines 1935–1957. -/
 theorem torusNonseamGraph_compl_rectangle_connected
     (xStart yStart xLen yLen : ℕ)
     (hxLen : xLen < width) (hyLen : yLen < height) :
@@ -198,7 +201,8 @@ theorem torusNonseamGraph_compl_rectangle_connected
 
 
 /-- The same rectangle complement is connected in the actual torus graph.
-Source: SCP10, the rectangular partition in lines 1935–1957. -/
+Auxiliary lemma proved here, not stated in the source; motivated by the rectangular
+partition of SCP10, lines 1935–1957. -/
 theorem torusGraph_compl_rectangle_connected [Fact (1 < width)] [Fact (1 < height)]
     (xStart yStart xLen yLen : ℕ) (hxLen : xLen < width) (hyLen : yLen < height) :
     ((torusGraph width height).induce
@@ -209,7 +213,8 @@ theorem torusGraph_compl_rectangle_connected [Fact (1 < width)] [Fact (1 < heigh
 
 
 /-- A positive-length bounded coordinate rectangle is connected without using
-wrap bonds. Source: SCP10, rectangular block in lines 1935–1957. -/
+wrap bonds. Auxiliary lemma proved here, not stated in the source; motivated by the
+rectangular block of SCP10, lines 1935–1957. -/
 theorem torusNonseamGraph_rectangle_connected (xStart yStart xLen yLen : ℕ)
     (hxPos : 0 < xLen) (hyPos : 0 < yLen)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height) :
@@ -265,7 +270,8 @@ theorem torusNonseamGraph_rectangle_connected (xStart yStart xLen yLen : ℕ)
   exact (row ⟨0, hyPos⟩ ⟨0, hxPos⟩ x).trans (col x ⟨0, hyPos⟩ y)
 
 /-- The positive bounded rectangle is connected in the actual torus graph.
-Source: SCP10, rectangular block in lines 1935–1957. -/
+Auxiliary lemma proved here, not stated in the source; motivated by the rectangular
+block of SCP10, lines 1935–1957. -/
 theorem torusGraph_rectangle_connected [Fact (1 < width)] [Fact (1 < height)]
     (xStart yStart xLen yLen : ℕ) (hxPos : 0 < xLen) (hyPos : 0 < yLen)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height) :
@@ -277,7 +283,8 @@ theorem torusGraph_rectangle_connected [Fact (1 < width)] [Fact (1 < height)]
     (fun _ _ h => torusNonseamGraph_le_torusGraph h)
 
 /-- A horizontal wrap bond has no endpoint in a strictly interior coordinate
-rectangle. Source: SCP10, the closure seams surrounding the block, lines 1935–1957. -/
+rectangle. Auxiliary lemma proved here; motivated by the closure seams surrounding
+the block in SCP10, lines 1935–1957. -/
 theorem torusRightEdge_not_incident_rectangle_of_wrap
     [Fact (1 < width)] [Fact (1 < height)]
     (xStart yStart xLen yLen : ℕ) (hxStart : 0 < xStart)
@@ -297,7 +304,8 @@ theorem torusRightEdge_not_incident_rectangle_of_wrap
     simp only [ha, hb, h₁, h₂, or_self, not_false_eq_true]
 
 /-- A vertical wrap bond has no endpoint in a strictly interior coordinate
-rectangle. Source: SCP10, the closure seams surrounding the block, lines 1935–1957. -/
+rectangle. Auxiliary lemma proved here; motivated by the closure seams surrounding
+the block in SCP10, lines 1935–1957. -/
 theorem torusUpEdge_not_incident_rectangle_of_wrap
     [Fact (1 < width)] [Fact (1 < height)]
     (xStart yStart xLen yLen : ℕ) (hyStart : 0 < yStart)
@@ -318,7 +326,8 @@ theorem torusUpEdge_not_incident_rectangle_of_wrap
 
 
 /-- A positive bounded rectangle with a nonzero starting column has an actual
-left boundary edge. Source: SCP10, boundary bonds of the block, lines 1935–1957. -/
+left boundary edge. Auxiliary lemma proved here; motivated by the boundary bonds of
+the block in SCP10, lines 1935–1957. -/
 theorem nonempty_boundaryEdge_torusRectangle
     [Fact (1 < width)] [Fact (1 < height)]
     (xStart yStart xLen yLen : ℕ) (hxStart : 0 < xStart)
