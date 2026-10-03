@@ -19,6 +19,11 @@ G-injectivity in Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
 Definition 5.1, `Papers/1001.3807/paper_v3.tex`, lines 1278–1296.
 They classify simultaneous permutations of the group basis. They do not
 assert a Fundamental Theorem for arbitrary complex virtual changes of basis.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

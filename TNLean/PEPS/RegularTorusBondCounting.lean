@@ -27,6 +27,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, equation
 argument in the proof of Theorem 6.9, lines 1935–1957. This is a counting result
 for the actual torus coordinates, rather than an assertion about the entropy
 of a physical torus state.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators

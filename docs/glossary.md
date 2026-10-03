@@ -571,6 +571,53 @@ normalizations.
   Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+#### `TNLean.PEPS.PairConjugacyClass.IsCommuting`
+
+- **Declaration:**
+  `TNLean.PEPS.PairConjugacyClass.IsCommuting (C : PairConjugacyClass G) : Prop`.
+- **Defined in:** `TNLean/PEPS/PairConjugacy.lean`.
+- **Meaning:** the representatives `(g, h)` of a class of pairs under
+  simultaneous conjugation commute. Commutation is invariant under
+  simultaneous conjugation, so the predicate is well defined on classes.
+- **Source:** arXiv:1001.3807, Theorem 5.9 (`thm:2d:gs-struct`),
+  `Papers/1001.3807/paper_v3.tex:1582-1621`, where the torus closures are
+  indexed by commuting pairs up to simultaneous conjugation.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.PairConjugacyClass.isCommuting_pairConjugacyClass` (the class of
+  `p` is commuting exactly when `Commute p.1 p.2`); the subtype
+  `TNLean.PEPS.CommutingPairConjugacyClass` indexes the sector families such as
+  `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting_of_isSemiRegular`.
+- **Caveat:** the independence theorem
+  `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_of_isSemiRegular`
+  holds for all classes, commuting or not; commutation matters only for
+  ground-space membership, whose identification with the parent-Hamiltonian
+  ground space is not formalized (see
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`).
+
+#### `TNLean.PEPS.IsTorusClosureCompatible` and `TNLean.PEPS.IsTorusNonseamCompatible`
+
+- **Declarations:**
+  `TNLean.PEPS.IsTorusClosureCompatible (g h g' h' : G) (q : TorusVertex width height → G) : Prop`
+  and `TNLean.PEPS.IsTorusNonseamCompatible (q : TorusVertex width height → α) : Prop`.
+- **Defined in:** `TNLean/PEPS/RegularTorusCompatibility.lean`.
+- **Meaning:** `IsTorusClosureCompatible g h g' h' q` says that the site
+  translations `q v` carry the ket closure `(g, h)` to the bra closure
+  `(g', h')` across every horizontal and vertical bond, where the closure
+  element is inserted only on the bonds crossing the two seams.
+  `IsTorusNonseamCompatible q` says that neighbouring labels agree across every
+  bond that does not cross a seam.
+- **Source:** arXiv:1001.3807, `eq:2d:peps-with-ug-uh`,
+  `Papers/1001.3807/paper_v3.tex:1515-1525`, and the local contraction argument
+  of Theorem 5.9, lines 1560-1621.
+- **Sanctioned bridges:** `TNLean.PEPS.IsTorusNonseamCompatible.eq_origin` and
+  `TNLean.PEPS.IsTorusClosureCompatible.eq_origin` (the label is constant);
+  `TNLean.PEPS.isTorusClosureCompatible_iff_exists_intertwiner` (closure
+  compatibility is a constant `x` with `h x = x h'` and `g x = x g'`); and
+  `TNLean.PEPS.sum_torusClosureCompatible_eq_sum_intertwiner`.
+- **Caveat:** these are the local equations of the closure overlap calculation,
+  not a statement about ground spaces. They hold for every circumference,
+  including one.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are

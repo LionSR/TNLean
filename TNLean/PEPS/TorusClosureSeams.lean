@@ -19,6 +19,11 @@ Source: Schuch, Cirac, Pérez-García, arXiv:1001.3807, equation `eq:2d:move-str
 commuting closure sectors used in Theorem 6.9; no entropy assertion is made here.
 The source uses a square lattice; the algebraic identity also holds on rectangular tori,
 including dimensions equal to one.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

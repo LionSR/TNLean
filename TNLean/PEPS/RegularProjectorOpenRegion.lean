@@ -25,6 +25,11 @@ original graph and its actual open-region contraction.
 projector use the positive site factors allowed by `IsGIsometric`. The normalized
 adjoint is divided by that factor. This convention is documented in
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix
