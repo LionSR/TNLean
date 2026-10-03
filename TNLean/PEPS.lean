@@ -126,6 +126,10 @@ import TNLean.PEPS.RegularBoundaryTransporter
 import TNLean.PEPS.RegularBoundaryUntwisting
 import TNLean.PEPS.RegularClosedGauge
 import TNLean.PEPS.RegularClosureSuperposition
+import TNLean.PEPS.RegularControlledBoundaryFactor
+import TNLean.PEPS.RegularCycleControlledBoundary
+import TNLean.PEPS.RegularCycleControlledSupport
+import TNLean.PEPS.RegularGInjectiveSimplyConnectedEntropy
 import TNLean.PEPS.RegularGInjectiveTorus
 import TNLean.PEPS.RegularGInjectiveTorusRank
 import TNLean.PEPS.RegularMatrixEquiv
@@ -135,6 +139,7 @@ import TNLean.PEPS.RegularPhysicalDensity
 import TNLean.PEPS.RegularPhysicalUnitaryTransport
 import TNLean.PEPS.RegularProjectorOpenRegion
 import TNLean.PEPS.RegularProjectorTwistedRegion
+import TNLean.PEPS.RegularReferenceBoundaryDensity
 import TNLean.PEPS.RegularRegionConnectivity
 import TNLean.PEPS.RegularRegionCoordinates
 import TNLean.PEPS.RegularRegionCounting
@@ -177,7 +182,12 @@ import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.TorusAbsorbedCovariance
 import TNLean.PEPS.TorusClosureSeams
+import TNLean.PEPS.TorusComplementCycleWords
+import TNLean.PEPS.TorusComplementDisentangling
+import TNLean.PEPS.TorusComplementPathReplacement
 import TNLean.PEPS.TorusConjCovarianceFamily
+import TNLean.PEPS.TorusControlledBoundaryDensity
+import TNLean.PEPS.TorusControlledBoundaryFactor
 import TNLean.PEPS.TorusCornerRegion
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.TorusDeformedWindow
@@ -195,6 +205,8 @@ import TNLean.PEPS.TorusIntegerStepWinding
 import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusParallelSection
+import TNLean.PEPS.TorusPhysicalCutDensity
+import TNLean.PEPS.TorusPhysicalLocalEquivalence
 import TNLean.PEPS.TorusPhysicalMap
 import TNLean.PEPS.TorusProjectorExpansion
 import TNLean.PEPS.TorusProjectorExtraction
@@ -203,6 +215,7 @@ import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleRealization
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleRegion
+import TNLean.PEPS.TorusRegionBoundaryLift
 import TNLean.PEPS.TorusRegionExteriorCollar
 import TNLean.PEPS.TorusRegionIntegerCellLift
 import TNLean.PEPS.TorusRegionLiftCoordinates
@@ -213,9 +226,12 @@ import TNLean.PEPS.TorusRegionPeriodicLift
 import TNLean.PEPS.TorusRegionRealization
 import TNLean.PEPS.TorusRegionWalkWinding
 import TNLean.PEPS.TorusRowColumnReductionObstruction
+import TNLean.PEPS.TorusSimplyConnectedComplement
+import TNLean.PEPS.TorusSimplyConnectedPhysicalDensity
 import TNLean.PEPS.TorusSimplyConnectedRegionRank
 import TNLean.PEPS.TorusSiteTensor
 import TNLean.PEPS.TorusStateTranslationInvariant
+import TNLean.PEPS.TorusStripeLocalEquivalence
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusUnconditionalFundamentalTheorem
