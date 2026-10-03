@@ -4057,6 +4057,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   linear maps would remove the repeated range argument.
 - **Notes:** two occurrences across two files; below the promotion threshold.
 
+### Orthogonal projections are Hermitian — promoted (2026-10-02)
+
+- **Pattern:** obtain the Hermitian matrix identity from an orthogonal projection.
+- **Seen:** the two projected-Gram arguments in
+  `Circuit/UniformPostselection.lean` and the flag projection in
+  `Circuit/UniformSuccessAttenuation.lean`.
+- **Abstraction:** the existing Mathlib results `IsSelfAdjoint.isHermitian`
+  and `Matrix.IsHermitian.eq` give the identity directly.
+- **Result:** all three arguments use `hP.isSelfAdjoint.isHermitian.eq`;
+  the repeated conversion of the matrix star is removed. No new tactic or
+  additional mathematical hypothesis is needed.
+
 ### adjoint Perron eigenvalue from trace duality — candidate
 - **Pattern:** pair a positive definite adjoint eigenvector with a positive
   definite right eigenvector, apply `Kraus.trace_mul_mapLM_adjoint`, and

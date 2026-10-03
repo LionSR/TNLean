@@ -2314,3 +2314,20 @@ involve no boundary.
   space; arbitrary isometric tensors still require a separate endpoint
   identification. Neither construction assumes continuity of the canonical
   projections as the interpolation parameter varies.
+
+## Exact circuits with initialized auxiliaries
+
+### `QuantumCircuit.IsCleanImplementation`
+
+- **Declaration:** `IsCleanImplementation J C Z`.
+- **Defined in:** `TNLean/Circuit/CleanUnitaryImplementation.lean`.
+- **Meaning:** the matrix identity $CJ=JZ$. When $J$ includes a logical
+  register with its workspace initialized, this identity says that the
+  workspace returns to its initialized state on every logical input.
+- **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
+- **Sanctioned constructions:** `IsCleanImplementation.mul` composes
+  implementations using the same workspace; `IsCleanImplementation.embedOp`
+  places one in a larger register; `exists_isPairProduct_isCleanImplementation`
+  constructs a neighboring-pair circuit for an included logical unitary.
+- **Caveat:** the identity alone does not assert unitarity. It specifies the
+  initialized subspace, rather than the action on arbitrary workspace inputs.
