@@ -46,11 +46,14 @@ import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
+import TNLean.Algebra.FiniteIndicatorSum
 import TNLean.Algebra.FinsetEnumeration
 import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.FlagBlockTriangular
+import TNLean.Algebra.FlatDensityEntropy
+import TNLean.Algebra.FlatDensityRenyiEntropy
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
 import TNLean.Algebra.GeneralizeDecide
@@ -100,6 +103,7 @@ import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RegularRepresentationBlocking
 import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RepresentationTensorProduct
 import TNLean.Algebra.RestrictedScalarGauge
@@ -113,6 +117,9 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.ScalarThreeCocycleTimeReversal
+import TNLean.Algebra.SemiRegularEquiv
+import TNLean.Algebra.SemiRegularGroupAlgebra
+import TNLean.Algebra.SemiRegularTensorFactor
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension
