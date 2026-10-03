@@ -22,6 +22,11 @@ Both directions are specified, since the source uses ket and bra orientations.
 Identification of these accessible labels with an actual torus contraction, and
 the simultaneous removal of its two closures, are separate statements. No full
 physical entropy theorem is asserted here.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix

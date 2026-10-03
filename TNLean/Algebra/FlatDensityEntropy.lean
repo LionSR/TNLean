@@ -14,6 +14,11 @@ A positive semidefinite matrix `ρ` of trace one satisfying `ρ² = r⁻¹ ρ` h
 This elementary spectral calculation is the last step of Schuch, Cirac, and
 Pérez-García, arXiv:1001.3807, Theorem 6.9 (`Papers/1001.3807/paper_v3.tex`,
 lines 2062–2072), for the regular boundary density operator.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder
