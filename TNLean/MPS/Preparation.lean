@@ -27,6 +27,7 @@ import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.DepthLowerBound
+import TNLean.MPS.Preparation.DepthLowerBoundConstant
 import TNLean.MPS.Preparation.DepthLowerBoundCore
 import TNLean.MPS.Preparation.DepthLowerBoundNormal
 import TNLean.MPS.Preparation.DepthUpperBound
@@ -63,6 +64,7 @@ import TNLean.MPS.Preparation.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
+import TNLean.MPS.Preparation.QCccClassification
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
 import TNLean.MPS.Preparation.RelativePositivePart
@@ -82,6 +84,7 @@ import TNLean.MPS.Preparation.SequentialResources
 import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.ShortChainPreparation
 import TNLean.MPS.Preparation.Staircase
+import TNLean.MPS.Preparation.StaircasePreparation
 import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization

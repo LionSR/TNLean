@@ -20,3 +20,4 @@ import TNLean.Circuit.ProductStateCircuit
 import TNLean.Circuit.ProductVector
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.Teleportation
+import TNLean.Circuit.WindowProduct

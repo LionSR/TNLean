@@ -225,6 +225,24 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** No new public graph API or tactic is introduced; the two walk
   inductions were removed.
 
+### compact finite-volume kernel gaps — promoted
+- **Pattern:** obtain a positive lower norm bound on a finite-dimensional
+  kernel complement at each parameter, preserve half of it in a neighborhood
+  using continuity of the operator and its kernel projection, and pass to a
+  finite subcover of a compact parameter set.
+- **Seen:** the finite-volume argument in
+  `TNLean/MPS/ParentHamiltonian/PeriodicShortGapContinuity.lean` and the
+  fixed-injectivity-length extension in
+  `TNLean/MPS/ParentHamiltonian/CompactNormalParentGap.lean`, the multiblock
+  fixed-volume theorem in `BlockPeriodicGroundSpaceContinuity.lean`, and the
+  local positive-interaction comparison in `CompactParentInteractionGap.lean`
+  (2026-10-02).
+- **Abstraction:**
+  `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
+  `TNLean/Algebra/CompactKernelGap.lean`.
+- **Notes:** the bound follows from finite dimensionality; positivity,
+  self-adjointness, and a supplied pointwise gap are unnecessary.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -2724,6 +2742,19 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.star_dotProduct_eq_trace_conjTranspose_mul`; the candidate is
   the subsequent identification with the physical boundary density.
 
+### positive interaction subfamilies — candidate (2026-10-02)
+
+- **Pattern:** Express an interval interaction sum as a filtered sum, then
+  apply `Finset.sum_le_sum_of_subset_of_nonneg` and
+  `LinearMap.nonneg_iff_isPositive` to bound it by the full interaction sum.
+- **Seen:** two instances in
+  `ParentHamiltonian/Martingale/OverlappingIntervalGap.lean`, for the prefix
+  and terminal interval Hamiltonians.
+- **Abstraction:** Mathlib already supplies the finite-sum comparison. If
+  more interval shapes require this argument, isolate the common positive
+  subfamily comparison rather than repeating the filter conversion.
+- **Notes:** Both occurrences are in one module; no new tactic is needed.
+
 ### Gram products of vertically stacked matrices — candidate
 - **Pattern:** reduce the Gram product of a matrix formed by `Matrix.fromRows`
   to the sum of the two block Gram products, using
@@ -2736,6 +2767,20 @@ abstracted — record why, so it is not re-proposed).
   lemma if a second file uses the same reduction.
 - **Notes:** three occurrences in one file; below the two-file promotion
   threshold. The following projection algebra differs between the proofs.
+
+### adjoints of left polar identities — candidate (2026-10-02)
+
+- **Pattern:** Apply `congrArg Matrix.conjTranspose` to a matrix product
+  identity, then simplify `conjTranspose_mul` and the Hermitian factors.
+- **Seen:** four instances in `ParentHamiltonian/LeftPolar.lean`: the
+  support factorization used for positivity, the support action on the
+  partial isometry, and the two identities identifying the physical range.
+- **Abstraction:** The existing `Matrix.conjTranspose_mul` supplies the
+  algebraic operation. A more specific reusable lemma would need to remove
+  repeated Hermitian-factor arguments in a second module.
+- **Notes:** These instances occur in one module and prove distinct polar
+  identities. No additional tactic or matrix predicate is introduced.
+
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
