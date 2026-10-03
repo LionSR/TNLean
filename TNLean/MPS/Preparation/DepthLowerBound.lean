@@ -12,7 +12,7 @@ import TNLean.MPS.Preparation.DepthLowerBoundCore
 
 For a normal tensor `A` in the gauge `eq:ldp_normal_gauge` with correlation length `ξ > 0`, a
 unit vector `ψ` prepared from a product vector by a local circuit of depth `T` has overlap
-`|⟨φ_N|ψ⟩| < 1/2` with the normalized periodic vector `φ_N` unless `N ≤ C (T+1) e^{b(T+1)}`
+`|⟨φ_N|ψ⟩| < 1/2` with the normalized periodic vector `φ_N` unless `N ≤ C (T+1) e^{4T/ξ}`
 (`exists_depth_lower_bound`). Hence for depths `T_N = o(log N)` the error
 `ε(φ_N, ψ_N) = 1 - |⟨φ_N|ψ_N⟩|` exceeds `1/2` for all large `N`
 (`eventually_one_half_lt_infidelity_of_isLittleO_log`); this is arXiv:2307.01696, Theorem 1,
@@ -59,13 +59,16 @@ variable {d D : ℕ}
 /-- **Depth lower bound, quantitative form.** Let `A` be normal in the gauge
 `eq:ldp_normal_gauge` (arXiv:2307.01696, eq. (5)), with the products of `L` matrices spanning
 the matrix algebra, and let `λ₂` be an eigenvalue of `E_A` of largest modulus among those
-different from `1`, with correlation length `ξ = -1/log|λ₂| > 0`. There are constants `B`,
-`C`, `b > 0` such that for every depth `T` and every `N ≥ B (T + 1)`: if a unit vector `ψ`
-prepared in depth `T` satisfies `|⟨φ_N|ψ⟩| ≥ 1/2`, then `N ≤ C (T + 1) e^{b (T + 1)}`.
+different from `1`, with correlation length `ξ = -1/log|λ₂| > 0`. There are constants `B` and
+`C > 0` such that for every depth `T` and every `N ≥ B (T + 1)`: if a unit vector `ψ`
+prepared in depth `T` satisfies `|⟨φ_N|ψ⟩| ≥ 1/2`, then `N ≤ C (T + 1) e^{4T/ξ}`.
 
 This is the quantitative content of the chapter's proof of `thm:ldp_depth_lower_bound`,
 eq. `eq:ldp_depth_contradiction` (the chapter's version of arXiv:2307.01696, Supplemental
-Material, "Proof of Theorem 1"). -/
+Material, "Proof of Theorem 1"). The rate `4/ξ` in the exponent is the source's: its final
+inequality compares `N/log N` with a multiple of `e^{4T/ξ}`. It comes from the square of the
+correlator bound `c e^{-(s'-1)/ξ}` at a separation `s' ≤ 2T + O(1)`; the constant `C` absorbs
+the remaining `O(1)` of `s'`. -/
 theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     (hL : Kraus.IsNBlkInjective A L) (hA : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρfix : Kraus.transferMap A ρ = ρ)
@@ -73,10 +76,10 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     (hlam₂ : Module.End.HasEigenvalue (Kraus.transferMap A) lam₂) (hlam₂1 : lam₂ ≠ 1)
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     (hξ : 0 < correlationLength lam₂) :
-    ∃ B : ℕ, ∃ C b : ℝ, 0 < C ∧ 0 < b ∧ ∀ (T N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
+    ∃ B : ℕ, ∃ C : ℝ, 0 < C ∧ ∀ (T N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
       QuantumCircuit.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → B * (T + 1) ≤ N →
         1 / 2 ≤ ‖⟪normalizedMPVState A N, (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ →
-          (N : ℝ) ≤ C * (T + 1) * Real.exp (b * (T + 1)) := by
+          (N : ℝ) ≤ C * (T + 1) * Real.exp (4 * T / correlationLength lam₂) := by
   classical
   have : NeZero D := ⟨by rintro rfl; simp [Matrix.trace] at hρtr⟩
   obtain ⟨hpos, hlt1⟩ := norm_pos_and_lt_one_of_correlationLength_pos hξ
@@ -86,8 +89,8 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
   obtain ⟨S, hS0, hS⟩ := exists_norm_sub_inner_smul_add_le_div_sqrt hL1 hL hA hρ hρfix hρtr
     hmax hlt1
   set Bn : ℕ := s₀ + 2 * L + 4 with hBn_def
-  set β : ℕ := s₀ + L + 2 with hβ_def
-  refine ⟨3 * Bn, 72 * S ^ 2 * Bn / c ^ 2 + 1, 2 * β / ξ + 1, by positivity, by positivity, ?_⟩
+  set β : ℕ := s₀ + L + 1 with hβ_def
+  refine ⟨3 * Bn, (72 * S ^ 2 * Bn / c ^ 2 + 1) * Real.exp (2 * β / ξ), by positivity, ?_⟩
   intro T N _ ψ hψ hψ1 hN hover
   /- If `φ_N(A) = 0` the overlap vanishes. -/
   by_cases hne : mpvState A N = 0
@@ -109,11 +112,6 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     have h4 : (s₀ + 2 * L + 4) * (T + 1) = (s₀ + 2 * L) * (T + 1) + 4 * T + 4 := by ring
     have h5 : s₀ + 2 * L ≤ (s₀ + 2 * L) * (T + 1) := Nat.le_mul_of_pos_right _ (by omega)
     rw [hBn_def]
-    omega
-  have hs'β : s' ≤ β * (T + 1) := by
-    have h4 : (s₀ + L + 2) * (T + 1) = (s₀ + L) * (T + 1) + 2 * T + 2 := by ring
-    have h5 : s₀ + L ≤ (s₀ + L) * (T + 1) := Nat.le_mul_of_pos_right _ (by omega)
-    rw [hβ_def]
     omega
   have hN3 : 3 * Δ ≤ N := by
     have := Nat.mul_le_mul_left 3 hΔB
@@ -146,27 +144,28 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
           mul_le_mul hN2' hsq (by positivity) (by positivity)
       _ = 72 * S ^ 2 * Δ := by field_simp; ring
   have hΔB' : (Δ : ℝ) ≤ Bn * (T + 1) := by exact_mod_cast hΔB
-  have hs'β' : (s' : ℝ) ≤ β * (T + 1) := by exact_mod_cast hs'β
-  have hEinv : (E ^ 2)⁻¹ ≤ Real.exp ((2 * β / ξ + 1) * (T + 1)) := by
-    rw [hE_def, ← Real.exp_nat_mul, ← Real.exp_neg]
+  have hs'β' : (s' : ℝ) ≤ β + 2 * T + 1 := by
+    have : s' ≤ β + 2 * T + 1 := by rw [hβ_def]; omega
+    exact_mod_cast this
+  have hEinv : (E ^ 2)⁻¹ ≤ Real.exp (2 * β / ξ) * Real.exp (4 * T / ξ) := by
+    rw [hE_def, ← Real.exp_nat_mul, ← Real.exp_neg, ← Real.exp_add]
     refine Real.exp_le_exp.mpr ?_
-    have hT0 : (0 : ℝ) ≤ T + 1 := by positivity
     have h1 : -((2 : ℕ) * (-((s' : ℝ) - 1) / ξ)) = 2 / ξ * ((s' : ℝ) - 1) := by
       push_cast; ring
-    rw [h1]
-    calc 2 / ξ * ((s' : ℝ) - 1) ≤ 2 / ξ * (β * (T + 1)) := by
-          gcongr
-          linarith
-      _ = 2 * β / ξ * (T + 1) := by ring
-      _ ≤ (2 * β / ξ + 1) * (T + 1) := by nlinarith
+    have h2 : 2 * (β : ℝ) / ξ + 4 * T / ξ = 2 / ξ * (β + 2 * T) := by ring
+    rw [h1, h2]
+    gcongr
+    linarith
   have hc2 : 0 < c ^ 2 := by positivity
   calc (N : ℝ) = N * (c * E) ^ 2 * (E ^ 2)⁻¹ / c ^ 2 := by
         field_simp
     _ ≤ 72 * S ^ 2 * Δ * (E ^ 2)⁻¹ / c ^ 2 := by gcongr
-    _ ≤ 72 * S ^ 2 * (Bn * (T + 1)) * Real.exp ((2 * β / ξ + 1) * (T + 1)) / c ^ 2 := by
+    _ ≤ 72 * S ^ 2 * (Bn * (T + 1)) * (Real.exp (2 * β / ξ) * Real.exp (4 * T / ξ)) / c ^ 2 := by
         gcongr
-    _ = 72 * S ^ 2 * Bn / c ^ 2 * (T + 1) * Real.exp ((2 * β / ξ + 1) * (T + 1)) := by ring
-    _ ≤ (72 * S ^ 2 * Bn / c ^ 2 + 1) * (T + 1) * Real.exp ((2 * β / ξ + 1) * (T + 1)) := by
+    _ = 72 * S ^ 2 * Bn / c ^ 2 * Real.exp (2 * β / ξ) * (T + 1) * Real.exp (4 * T / ξ) := by
+        ring
+    _ ≤ (72 * S ^ 2 * Bn / c ^ 2 + 1) * Real.exp (2 * β / ξ) * (T + 1) *
+          Real.exp (4 * T / ξ) := by
         gcongr
         linarith
 
@@ -197,8 +196,20 @@ theorem eventually_one_half_lt_infidelity_of_isLittleO_log {A : MPSTensor d D} {
     (hψ1 : ∀ N, star (ψ N) ⬝ᵥ ψ N = 1) :
     ∀ᶠ N in atTop, 1 / 2 <
       1 - ‖⟪normalizedMPVState A N, (WithLp.toLp 2 (ψ N) : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ := by
-  obtain ⟨B, C, b, hC, hb, hcore⟩ :=
+  obtain ⟨B, C, hC, hcore₀⟩ :=
     exists_depth_lower_bound hL1 hL hA hρ hρfix hρtr hlam₂ hlam₂1 hmax hξ
+  set b : ℝ := 4 / correlationLength lam₂ with hb_def
+  have hb : 0 < b := by positivity
+  have hcore : ∀ (T N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
+      QuantumCircuit.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → B * (T + 1) ≤ N →
+        1 / 2 ≤ ‖⟪normalizedMPVState A N, (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ →
+          (N : ℝ) ≤ C * (T + 1) * Real.exp (b * (T + 1)) := by
+    intro T N _ ψ h1 h2 h3 h4
+    refine (hcore₀ T N ψ h1 h2 h3 h4).trans ?_
+    gcongr
+    rw [hb_def, div_mul_eq_mul_div]
+    gcongr
+    linarith
   set Kc : ℝ := (max C B + 1) * Real.exp (b + 1) with hKc_def
   have hKc : 0 < Kc := by positivity
   have hε : (0 : ℝ) < 1 / (2 * (b + 1)) := by positivity

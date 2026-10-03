@@ -23,8 +23,10 @@ finite dimensionality and the exact open-chain ground-space identity.
 **Scope restriction (single block and sufficient interaction range):** the gap
 results here concern a single normal block and ranges strictly larger than a
 positive injectivity length. The unrestricted assertion in arXiv:2011.12127,
-Section IV.C, lines 2183--2187, also permits shorter ranges, which are not
-treated here. The compact
+Section IV.C, lines 2183--2187, also permits shorter ranges. For a tensor
+with several blocks it fails at such a range (see
+`docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`);
+shorter ranges for a single normal block are not treated here. The compact
 several-block argument is documented in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
