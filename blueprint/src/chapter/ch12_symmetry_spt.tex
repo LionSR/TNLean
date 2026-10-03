@@ -4093,6 +4093,184 @@ Hamiltonian gap remains separate
 \end{proof}
 
 
+\subsection{Propagation on finite periodic chains}
+
+% Auxiliary finite-volume results. These do not assert exponential clustering.
+% Source context: Hastings--Koma, arXiv:math-ph/0507008, Appendix A, Theorem A.2.
+% The unrestricted interaction theorem is not identified with these specializations.
+
+\paragraph{Finite periodic chains.}
+Let $\Lambda=\mathbb Z/N\mathbb Z$, with $N\geq1$, and let
+$\mathcal H=(\mathbb C^d)^{\otimes N}$. For $X\subseteq\Lambda$, write
+$\mathcal A_X$ for the algebra of operators supported on $X$. The oriented
+bond indexed by $j$ has support $e_j=\{j,j+1\}$. Distinct oriented bonds
+are counted separately, even when their supports agree. All operator norms
+below are Hilbert-space operator norms. For an operator $H$, put
+$\tau_t(A)=e^{itH}Ae^{-itH}$.
+
+\begin{definition}[Restricted commutator norm]
+    \label{aux:finite-ring-commutator-norm}
+    \lean{MPSPreparation.chainCommutatorNorm}\leanok
+    For an operator $B$ and a support $X$, define
+    \[
+        C_B(X,t)=\sup\{\|[\tau_t(A),B]\|: A\in\mathcal A_X,\ \|A\|\leq1\}.
+    \]
+\end{definition}
+
+\begin{lemma}[Continuity in time]
+    \label{aux:finite-ring-commutator-continuity}
+    \lean{MPSPreparation.continuous_chainCommutatorNorm}\leanok
+    \uses{aux:finite-ring-commutator-norm}
+    For fixed $H,B,X$, the function $t\mapsto C_B(X,t)$ is continuous.
+\end{lemma}
+\begin{proof}\leanok
+    Matrix exponentiation and multiplication are continuous; the norm of the
+    resulting linear map on $\mathcal A_X$ is continuous.
+\end{proof}
+
+\begin{lemma}[Initial commutator bound]
+    \label{aux:finite-ring-initial-commutator-bound}
+    \lean{MPSPreparation.chainCommutatorNorm_zero_le}\leanok
+    \uses{aux:finite-ring-commutator-norm}
+    For arbitrary $H,B,X$, one has $C_B(X,0)\leq2\|B\|$.
+\end{lemma}
+\begin{proof}\leanok
+    Use $\|AB-BA\|\leq2\|A\|\|B\|$.
+\end{proof}
+
+\begin{lemma}[Vanishing initial commutator]
+    \label{aux:finite-ring-initial-commutator-vanishing}
+    \lean{MPSPreparation.chainCommutatorNorm_zero_of_disjoint}\leanok
+    \uses{aux:finite-ring-commutator-norm}
+    If $B\in\mathcal A_Y$ and $X\cap Y=\varnothing$, then $C_B(X,0)=0$.
+\end{lemma}
+\begin{proof}\leanok
+    Operators on disjoint tensor factors commute.
+\end{proof}
+
+\begin{lemma}[Local commutator recursion]
+    \label{aux:finite-ring-commutator-recursion}
+    \lean{MPSPreparation.chainCommutatorNorm_le_integral}\leanok
+    \uses{aux:finite-ring-commutator-norm}
+    Let $H=\sum_j h_j$, where each $h_j$ is Hermitian and belongs to
+    $\mathcal A_{e_j}$. For arbitrary $B,X$ and $t\geq0$,
+    \[
+        C_B(X,t)\leq C_B(X,0)
+        +2\sum_{j:X\cap e_j\neq\varnothing}\|h_j\|
+        \int_0^t C_B(e_j,s)\,ds.
+    \]
+    No bound on the ground energy or positivity assumption on $h_j$ is required.
+    This is the finite-ring recursion used in Hastings--Koma, Appendix A,
+    (A.12)--(A.14).
+\end{lemma}
+\begin{proof}\leanok
+    Separate the terms disjoint from $X$. Their sum commutes with every operator
+    in $\mathcal A_X$. Differentiate in the corresponding interaction picture,
+    apply the fundamental theorem of calculus and invariance of operator norm
+    under unitary conjugation, and then take the restricted operator norm.
+\end{proof}
+
+\begin{definition}[Ring support distance]
+    \label{aux:ring-support-distance}
+    \lean{MPSPreparation.ringSupportDistance}\leanok
+    For nonempty $X,Y\subseteq\Lambda$, let $d(X,Y)$ be the least integer $r\geq0$
+    for which there exist $x\in X$, $y\in Y$, and $m\in\mathbb Z$ such that
+    $|m|\leq r$ and $y=x+m\pmod N$.
+\end{definition}
+
+\begin{lemma}[Displacement characterization]
+    \label{aux:ring-support-distance-separation}
+    \lean{MPSPreparation.isSeparatedBy_iff_lt_ringSupportDistance}\leanok
+    \uses{aux:ring-support-distance}
+    For nonempty supports and $r\in\mathbb N$, no displacement of absolute value
+    at most $r$ connects $X$ to $Y$ if and only if $r<d(X,Y)$.
+\end{lemma}
+\begin{proof}\leanok
+    Use the defining minimum and its minimizing displacement.
+\end{proof}
+
+\begin{lemma}[Finite-ring Lieb--Robinson estimate]
+    \label{aux:finite-ring-lieb-robinson}
+    \lean{MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint}\leanok
+    \uses{aux:finite-ring-commutator-recursion,aux:finite-ring-commutator-continuity,
+        aux:finite-ring-initial-commutator-bound,aux:finite-ring-initial-commutator-vanishing,
+        aux:ring-support-distance}
+    Let $H=\sum_j h_j$, with Hermitian $h_j\in\mathcal A_{e_j}$ and
+    $\|h_j\|\leq1$. Suppose $A\in\mathcal A_X$ and $B\in\mathcal A_Y$,
+    where $X,Y$ are nonempty and disjoint. For every $a\geq0$ and $t\in\mathbb R$,
+    \[
+        \|[\tau_t(A),B]\|
+        \leq2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
+        \bigl(e^{8e^a|t|}-1\bigr).
+    \]
+    The constants are independent of $N$ and $d$. This is a nearest-neighbor
+    finite-periodic specialization of Hastings--Koma, Appendix A, Theorem A.2;
+    it is not the unrestricted interaction theorem.
+\end{lemma}
+\begin{proof}\leanok
+    Weight each nonempty support $Z$ by $|Z|e^{-a d(Z,Y)}$.
+    If $e_j$ meets $Z$, then $d(Z,Y)\leq d(e_j,Y)+1$.
+    At most $2|Z|$ oriented bonds meet $Z$, and each bond has at most two sites.
+    Thus the weighted row sum in the commutator recursion is at most $8e^a$.
+    A finite-dimensional integral comparison gives the exponential factor.
+    Vanishing of the initial commutator gives the subtraction of one. Apply the
+    same argument to $-H$ for negative times, and multiply by $\|A\|$.
+\end{proof}
+
+\begin{lemma}[Contractivity of cyclic local embedding]
+    \label{aux:cyclic-local-embedding-norm}
+    \lean{MPOTensor.norm_embedLocalOperator_le}\leanok
+    Embedding an operator on $L$ consecutive sites into an $N$-site ring,
+    where $L\leq N$, does not increase its Hilbert-space operator norm.
+\end{lemma}
+\begin{proof}\leanok
+    The embedding is a star algebra homomorphism and is therefore contractive.
+\end{proof}
+
+\begin{lemma}[Support under a site permutation]
+    \label{aux:permuted-operator-support}
+    \lean{MPSPreparation.supportedOperators_submatrix_siteEquiv}\leanok
+    A permutation $p$ of the sites sends an operator supported on $X$ to an
+    operator supported on $p(X)$.
+\end{lemma}
+\begin{proof}\leanok
+    Check the assertion for elementary tensor-product operators, then extend by
+    linearity to their span.
+\end{proof}
+
+\begin{lemma}[Support of a cyclic two-site embedding]
+    \label{aux:cyclic-two-site-embedding-support}
+    \lean{MPSPreparation.embedLocalOperator_twoSite_mem_supportedOperators}\leanok
+    \uses{aux:permuted-operator-support}
+    For $N\geq2$, the cyclic embedding of a two-site operator at $j$ belongs to
+    $\mathcal A_{e_j}$, including the bond crossing from the last site to the first.
+\end{lemma}
+\begin{proof}\leanok
+    The initial two-site window has the stated support. Translate it around the
+    ring and use covariance of support under a permutation of sites.
+\end{proof}
+
+\begin{lemma}[Translation-invariant finite-ring propagation bound]
+    \label{aux:interaction-hamiltonian-lieb-robinson}
+    \lean{MPSTensor.norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint}\leanok
+    \uses{aux:finite-ring-lieb-robinson,aux:cyclic-local-embedding-norm,
+        aux:cyclic-two-site-embedding-support}
+    Let $h$ be a Hermitian two-site interaction with $\|h\|\leq1$, and let
+    $H_N=\sum_j h_{j,j+1}$ on the periodic chain of length $N\geq2$.
+    For nonempty disjoint supports $X,Y$ and $A\in\mathcal A_X$, $B\in\mathcal A_Y$,
+    the estimate
+    \[
+        \|[e^{itH_N}Ae^{-itH_N},B]\|
+        \leq2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
+        \bigl(e^{8e^a|t|}-1\bigr)
+    \]
+    holds for every $a\geq0$ and $t\in\mathbb R$.
+\end{lemma}
+\begin{proof}\leanok
+    Cyclic embedding preserves Hermiticity, has the indicated bond support,
+    and is contractive. Apply the preceding finite-ring estimate.
+\end{proof}
+
 \subsection{Virtual classes at a compact limit}
 
 % Auxiliary preparation for compact-sequence class stability.
