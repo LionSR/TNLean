@@ -589,10 +589,13 @@ normalizations.
   `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting_of_isSemiRegular`.
 - **Caveat:** the independence theorem
   `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_of_isSemiRegular`
-  holds for all classes, commuting or not; commutation matters only for
-  ground-space membership, whose identification with the parent-Hamiltonian
-  ground space is not formalized (see
-  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`).
+  holds for all classes, commuting or not. Commutation is required to move the
+  closure seams without changing the vector
+  (`TNLean.PEPS.torusBondNetwork_closureAt_eq_torusGClosure` assumes
+  `Commute g h`), and hence by every common-density statement built on seam
+  deformation; it is also the source's ground-space condition, whose
+  identification with the parent-Hamiltonian ground space is not formalized
+  (see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`).
 
 #### `TNLean.PEPS.IsTorusClosureCompatible` and `TNLean.PEPS.IsTorusNonseamCompatible`
 
@@ -600,10 +603,12 @@ normalizations.
   `TNLean.PEPS.IsTorusClosureCompatible (g h g' h' : G) (q : TorusVertex width height → G) : Prop`
   and `TNLean.PEPS.IsTorusNonseamCompatible (q : TorusVertex width height → α) : Prop`.
 - **Defined in:** `TNLean/PEPS/RegularTorusCompatibility.lean`.
-- **Meaning:** `IsTorusClosureCompatible g h g' h' q` says that the site
-  translations `q v` carry the ket closure `(g, h)` to the bra closure
-  `(g', h')` across every horizontal and vertical bond, where the closure
-  element is inserted only on the bonds crossing the two seams.
+- **Meaning:** in the overlap of a bra network closed by `(g, h)` with a ket
+  network closed by `(g', h')`, `IsTorusClosureCompatible g h g' h' q` says that
+  the site translations `q v` carry the ket labels to the bra labels across
+  every horizontal and vertical bond, where the closure element is inserted
+  only on the bonds crossing the two seams. For a constant `q = x` this is
+  `h x = x h'` and `g x = x g'`, that is, `x` conjugates `(g', h')` to `(g, h)`.
   `IsTorusNonseamCompatible q` says that neighbouring labels agree across every
   bond that does not cross a seam.
 - **Source:** arXiv:1001.3807, `eq:2d:peps-with-ug-uh`,
