@@ -31,6 +31,7 @@ import TNLean.MPS.Preparation.DepthLowerBoundCore
 import TNLean.MPS.Preparation.DepthLowerBoundNormal
 import TNLean.MPS.Preparation.DepthUpperBound
 import TNLean.MPS.Preparation.DiagonalPolar
+import TNLean.MPS.Preparation.ExactFixedPointPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
@@ -99,3 +100,5 @@ import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Preparation.WindowGHZ
 import TNLean.MPS.Preparation.WindowOperatorSupport
 import TNLean.MPS.Preparation.WindowSeparation
+import TNLean.MPS.Preparation.ZeroSubleadingPreparation
+import TNLean.MPS.Preparation.ZeroSubleadingSpectrum
