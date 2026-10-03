@@ -1,0 +1,69 @@
+\section{Exact transport of the common virtual conditions}%
+\label{sec:peps_vertex_virtual_parent_transport}
+
+\begin{theorem}[Contraction preserves the common regional conditions]%
+    \label{thm:peps_vertex_virtual_parent_forward}
+    \lean{TNLean.PEPS.dependentRegionConfigEquiv,
+        TNLean.PEPS.globalVertexTensorMap_apply,
+        TNLean.PEPS.regionSliceMap_globalVertexTensorMap,
+        TNLean.PEPS.globalVertexTensorMap_mem_regionParentGroundSpace}
+    \leanok
+    \uses{def:peps_vertex_virtual_parent_ground_space,
+        lem:peps_dependent_region_slice_product,
+        def:peps_injective_vertex_coordinates}
+    Let $A$ be a tensor on a finite graph, and let
+    $T_A=\bigotimes_vA_v$ be its product site map.
+    For an arbitrary family of regions $(R_i)_i$, let
+    $\mathcal K_{\mathrm{virt}}$ be the common space of independent
+    virtual vectors whose $R_i$-slices lie in the actual regional
+    virtual bond range, for every $i$ and every outside virtual
+    configuration. Let $\mathcal K_{\mathrm{phys}}$ be the common
+    physical regional PEPS space, defined by all corresponding
+    physical slice conditions. Then
+    \[
+        T_A(\mathcal K_{\mathrm{virt}})
+        \subseteq\mathcal K_{\mathrm{phys}}.
+    \]
+    This implication requires no injectivity of the site maps.
+\end{theorem}
+
+\begin{proof}\leanok
+    Split an independent virtual configuration into its coordinates
+    inside and outside a region. A physical regional slice of
+    $T_Ax$ is a linear combination of the regional product site map
+    applied to virtual regional slices of $x$.
+    The regional product site map sends the actual virtual bond
+    range onto the actual physical regional PEPS space, so each
+    summand satisfies the physical regional condition.
+\end{proof}
+
+\begin{theorem}[Exact physical image of the common virtual conditions]%
+    \label{thm:peps_vertex_virtual_parent_transport}
+    \lean{TNLean.PEPS.vertexVirtualParentGroundSpace_map_globalVertexTensorMap}
+    \leanok
+    \uses{thm:peps_vertex_virtual_parent_forward,
+        thm:peps_vertex_inverse_region_slice,
+        thm:peps_vertex_image_ground_space}
+    If every site map is injective, then
+    \[
+        T_A(\mathcal K_{\mathrm{virt}})
+        =\mathcal K_A\cap\mathcal K_{\mathrm{phys}},
+    \]
+    where $\mathcal K_A$ is the common singleton site-image space.
+    These singleton conditions are explicit, and no reconstruction
+    condition is a hypothesis.
+    This is the physical-to-virtual correspondence in the
+    virtual-pair argument of
+    \cite[Section~IV.C.1]{Cirac2021Matrix}.
+    Identifying $\mathcal K_{\mathrm{virt}}$ with the global paired-bond
+    space remains a separate assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    The forward inclusion follows from the preceding theorem and
+    the singleton-image property of the product site map.
+    Conversely, let $\psi\in\mathcal K_A\cap\mathcal K_{\mathrm{phys}}$.
+    Its product inverse $x=L_A\psi$ belongs to
+    $\mathcal K_{\mathrm{virt}}$ by the regional inverse theorem.
+    The singleton-image theorem gives $T_Ax=\psi$.
+\end{proof}

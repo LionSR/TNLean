@@ -9,8 +9,11 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.ParentHamiltonian
 
 import TNLean.PEPS.ParentHamiltonian.CycleGroundSpace
+import TNLean.PEPS.ParentHamiltonian.InjectiveCoveringParentGroundSpace
+import TNLean.PEPS.ParentHamiltonian.InjectiveNearestNeighborParent
 import TNLean.PEPS.ParentHamiltonian.InjectiveParentReconstructionCounterexample
 import TNLean.PEPS.ParentHamiltonian.InjectiveRegionParentTransport
+import TNLean.PEPS.ParentHamiltonian.InjectiveRegionSupport
 import TNLean.PEPS.ParentHamiltonian.InjectiveVertexCoordinates
 import TNLean.PEPS.ParentHamiltonian.RegionEntanglementBound
 import TNLean.PEPS.ParentHamiltonian.RegionFullGroundSpace
@@ -23,6 +26,7 @@ import TNLean.PEPS.ParentHamiltonian.RegionPhysicalDeformation
 import TNLean.PEPS.ParentHamiltonian.RegionPhysicalGroundSpaceTransport
 import TNLean.PEPS.ParentHamiltonian.RegionPhysicalHamiltonianTransport
 import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
+import TNLean.PEPS.ParentHamiltonian.RegionVertexImageSupport
 import TNLean.PEPS.ParentHamiltonian.RegularRegionEntropyBound
 import TNLean.PEPS.ParentHamiltonian.RegularRegionSupport
 import TNLean.PEPS.ParentHamiltonian.RegularStateParentRigidity
@@ -32,4 +36,10 @@ import TNLean.PEPS.ParentHamiltonian.TorusNativeGInjectiveSupport
 import TNLean.PEPS.ParentHamiltonian.TorusRegularRegionSupport
 import TNLean.PEPS.ParentHamiltonian.TorusSectorLocalGroundSpace
 import TNLean.PEPS.ParentHamiltonian.TorusSectorSupport
+import TNLean.PEPS.ParentHamiltonian.VertexBondCoordinates
+import TNLean.PEPS.ParentHamiltonian.VertexBondRegionConstraint
+import TNLean.PEPS.ParentHamiltonian.VertexBondState
+import TNLean.PEPS.ParentHamiltonian.VertexImageGroundSpace
+import TNLean.PEPS.ParentHamiltonian.VertexInverseRegionSlice
+import TNLean.PEPS.ParentHamiltonian.VertexVirtualParentTransport
 import TNLean.PEPS.ParentHamiltonian.VirtualBondGroundSpace
