@@ -118,14 +118,14 @@ def cutColumnSpace {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
 /-- The rank of the physical coefficient flattening.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-noncomputable def cutRank {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) : ℕ :=
+noncomputable def cutCoefficientRank {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) : ℕ :=
   (cutCoefficientMatrix ψ k).rank
 
 /-- The dimension of the cut column space is the physical cut rank.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem finrank_cutColumnSpace {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
-    Module.finrank ℂ (cutColumnSpace ψ k) = cutRank ψ k :=
+    Module.finrank ℂ (cutColumnSpace ψ k) = cutCoefficientRank ψ k :=
   (Matrix.rank_eq_finrank_span_cols _).symm
 
 /-- Fixing the last physical coordinate of a longer prefix is a linear map.
@@ -172,8 +172,8 @@ theorem cutSlice_apply_restriction {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 /-- Every physical cut of a nonzero coefficient tensor has positive rank.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutRank_pos {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) (k : ℕ) :
-    0 < cutRank ψ k := by
+theorem cutCoefficientRank_pos {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) (k : ℕ) :
+    0 < cutCoefficientRank ψ k := by
   classical
   have hex : ∃ σ, ψ σ ≠ 0 := by
     by_contra h
@@ -214,21 +214,21 @@ theorem card_cutSuffixConfig_last (d N : ℕ) : Fintype.card (CutSuffixConfig d 
 /-- The left endpoint of a nonzero coefficient tensor has cut rank one.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutRank_zero {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) :
-    cutRank ψ 0 = 1 := by
+theorem cutCoefficientRank_zero {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) :
+    cutCoefficientRank ψ 0 = 1 := by
   have hle := Matrix.rank_le_card_height (cutCoefficientMatrix ψ 0)
   rw [card_cutPrefixConfig_zero] at hle
-  have hpos := cutRank_pos ψ hψ 0
+  have hpos := cutCoefficientRank_pos ψ hψ 0
   exact le_antisymm hle hpos
 
 /-- The right endpoint of a nonzero coefficient tensor has cut rank one.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutRank_last {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) :
-    cutRank ψ N = 1 := by
+theorem cutCoefficientRank_last {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) :
+    cutCoefficientRank ψ N = 1 := by
   have hle := Matrix.rank_le_card_width (cutCoefficientMatrix ψ N)
   rw [card_cutSuffixConfig_last] at hle
-  have hpos := cutRank_pos ψ hψ N
+  have hpos := cutCoefficientRank_pos ψ hψ N
   exact le_antisymm hle hpos
 
 /-- The left endpoint column space of a nonzero tensor is the full scalar space.
@@ -237,7 +237,7 @@ Source: the minimal representation step in Section 5 of
 theorem cutColumnSpace_zero_eq_top {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) :
     cutColumnSpace ψ 0 = ⊤ := by
   apply Submodule.eq_top_of_finrank_eq
-  rw [finrank_cutColumnSpace, cutRank_zero ψ hψ, Module.finrank_pi,
+  rw [finrank_cutColumnSpace, cutCoefficientRank_zero ψ hψ, Module.finrank_pi,
     card_cutPrefixConfig_zero]
 
 /-- The complete coefficient tensor viewed as a vector on the final prefix.

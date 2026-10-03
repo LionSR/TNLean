@@ -27,7 +27,7 @@ namespace MPSPreparation
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutColumnBasis {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (k : ℕ) :
-    Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k) :=
+    Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k) :=
   Module.finBasisOfFinrankEq ℂ (cutColumnSpace ψ k) (finrank_cutColumnSpace ψ k)
 
 /-- A nonzero tensor of positive length admits a basis at every cut,
@@ -37,7 +37,7 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem exists_cutBasisFamily_with_endpoints {d N : ℕ}
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0) (hN : 0 < N) :
-    ∃ B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k),
+    ∃ B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k),
       (∀ q, (B 0 q).val = 1) ∧ (∀ q, (B N q).val = fullCutVector ψ) := by
   classical
   let v0 : cutColumnSpace ψ 0 :=
@@ -51,22 +51,22 @@ theorem exists_cutBasisFamily_with_endpoints {d N : ℕ}
     intro hz
     exact fullCutVector_ne_zero ψ hψ (congrArg Subtype.val hz)
   have hd0 : Module.finrank ℂ (cutColumnSpace ψ 0) = 1 :=
-    (finrank_cutColumnSpace ψ 0).trans (cutRank_zero ψ hψ)
+    (finrank_cutColumnSpace ψ 0).trans (cutCoefficientRank_zero ψ hψ)
   have hdN : Module.finrank ℂ (cutColumnSpace ψ N) = 1 :=
-    (finrank_cutColumnSpace ψ N).trans (cutRank_last ψ hψ)
-  let : Unique (Fin (cutRank ψ 0)) := Equiv.unique (finCongr (cutRank_zero ψ hψ))
-  let : Unique (Fin (cutRank ψ N)) := Equiv.unique (finCongr (cutRank_last ψ hψ))
-  let e0 := FiniteDimensional.basisSingleton (Fin (cutRank ψ 0)) hd0 v0 hv0
-  let eN := FiniteDimensional.basisSingleton (Fin (cutRank ψ N)) hdN vN hvN
+    (finrank_cutColumnSpace ψ N).trans (cutCoefficientRank_last ψ hψ)
+  let : Unique (Fin (cutCoefficientRank ψ 0)) := Equiv.unique (finCongr (cutCoefficientRank_zero ψ hψ))
+  let : Unique (Fin (cutCoefficientRank ψ N)) := Equiv.unique (finCongr (cutCoefficientRank_last ψ hψ))
+  let e0 := FiniteDimensional.basisSingleton (Fin (cutCoefficientRank ψ 0)) hd0 v0 hv0
+  let eN := FiniteDimensional.basisSingleton (Fin (cutCoefficientRank ψ N)) hdN vN hvN
   have he0 : ∀ q, (e0 q).val = 1 := by
     intro q
     exact congrArg Subtype.val
-      (FiniteDimensional.basisSingleton_apply (Fin (cutRank ψ 0)) hd0 v0 hv0 q)
+      (FiniteDimensional.basisSingleton_apply (Fin (cutCoefficientRank ψ 0)) hd0 v0 hv0 q)
   have heN : ∀ q, (eN q).val = fullCutVector ψ := by
     intro q
     exact congrArg Subtype.val
-      (FiniteDimensional.basisSingleton_apply (Fin (cutRank ψ N)) hdN vN hvN q)
-  let B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k) := fun k ↦
+      (FiniteDimensional.basisSingleton_apply (Fin (cutCoefficientRank ψ N)) hdN vN hvN q)
+  let B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k) := fun k ↦
     if h0 : k = 0 then by subst k; exact e0
     else if hlast : k = N then by subst k; exact eN
     else cutColumnBasis ψ k

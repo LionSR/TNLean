@@ -33,8 +33,8 @@ on physical prefix configurations.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutPrefixMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
-    Matrix (CutPrefixConfig d N k) (Fin (cutRank ψ k)) ℂ :=
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
+    Matrix (CutPrefixConfig d N k) (Fin (cutCoefficientRank ψ k)) ℂ :=
   fun u q ↦ (B k q).val u
 
 /-- The suffix factor whose columns are the coordinates of the physical
@@ -42,8 +42,8 @@ coefficient columns in the chosen cut basis.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutSuffixMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
-    Matrix (Fin (cutRank ψ k)) (CutSuffixConfig d N k) ℂ :=
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
+    Matrix (Fin (cutCoefficientRank ψ k)) (CutSuffixConfig d N k) ℂ :=
   fun q v ↦ (B k).repr
     ⟨(cutCoefficientMatrix ψ k).col v, Submodule.subset_span ⟨v, rfl⟩⟩ q
 
@@ -53,7 +53,7 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutCoefficientMatrix_eq_prefix_mul_suffix {d N : ℕ}
     (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
     cutCoefficientMatrix ψ k = cutPrefixMatrix ψ B k * cutSuffixMatrix ψ B k := by
   classical
   ext u v
@@ -71,9 +71,9 @@ theorem cutCoefficientMatrix_eq_prefix_mul_suffix {d N : ℕ}
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixMatrix_rank {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
-    (cutPrefixMatrix ψ B k).rank = cutRank ψ k := by
-  have h : cutRank ψ k ≤ (cutPrefixMatrix ψ B k).rank := by
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
+    (cutPrefixMatrix ψ B k).rank = cutCoefficientRank ψ k := by
+  have h : cutCoefficientRank ψ k ≤ (cutPrefixMatrix ψ B k).rank := by
     change (cutCoefficientMatrix ψ k).rank ≤ _
     rw [cutCoefficientMatrix_eq_prefix_mul_suffix ψ B k]
     exact Matrix.rank_mul_le_left _ _
@@ -84,9 +84,9 @@ theorem cutPrefixMatrix_rank {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutSuffixMatrix_rank {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
-    (cutSuffixMatrix ψ B k).rank = cutRank ψ k := by
-  have h : cutRank ψ k ≤ (cutSuffixMatrix ψ B k).rank := by
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
+    (cutSuffixMatrix ψ B k).rank = cutCoefficientRank ψ k := by
+  have h : cutCoefficientRank ψ k ≤ (cutSuffixMatrix ψ B k).rank := by
     change (cutCoefficientMatrix ψ k).rank ≤ _
     rw [cutCoefficientMatrix_eq_prefix_mul_suffix ψ B k]
     exact Matrix.rank_mul_le_right _ _
@@ -99,7 +99,7 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixMatrix_rows_and_cutSuffixMatrix_cols_span {d N : ℕ}
     (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)) (k : ℕ) :
     Submodule.span ℂ (Set.range (cutPrefixMatrix ψ B k).row) = ⊤ ∧
       Submodule.span ℂ (Set.range (cutSuffixMatrix ψ B k).col) = ⊤ := by
   apply MPUCircuit.spans_eq_top_of_rank_mul_eq_card
@@ -112,8 +112,8 @@ that define the minimal open-boundary chain.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixMatrix_step {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
-    (k : ℕ) (i : Fin d) (u : CutPrefixConfig d N k) (q : Fin (cutRank ψ (k + 1))) :
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (k : ℕ) (i : Fin d) (u : CutPrefixConfig d N k) (q : Fin (cutCoefficientRank ψ (k + 1))) :
     cutPrefixMatrix ψ B (k + 1) (extendCutPrefix k u i) q =
       (cutPrefixMatrix ψ B k * cutSiteMatrix ψ B k i) u q := by
   classical
@@ -147,7 +147,7 @@ that define the minimal open-boundary chain.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutSuffixMatrix_step {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (k : ℕ) (i : Fin d) (v : CutSuffixConfig d N (k + 1)) :
     (cutSuffixMatrix ψ B k).col (extendCutSuffix k i v) =
       cutSiteMatrix ψ B k i *ᵥ (cutSuffixMatrix ψ B (k + 1)).col v := by
@@ -162,9 +162,9 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem minimalCutChain_cutCoefficientMatrix_factorization {d N D : ℕ}
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hB0 : ∀ q, (B 0 q).val = 1) (hBN : ∀ q, (B N q).val = fullCutVector ψ)
-    (hbound : ∀ k : Fin (N + 1), cutRank ψ k.val ≤ D) (k : ℕ) :
+    (hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ D) (k : ℕ) :
     cutCoefficientMatrix (minimalCutChain ψ hψ B hbound).coeff k =
       cutPrefixMatrix ψ B k * cutSuffixMatrix ψ B k := by
   have hcoeff : (minimalCutChain ψ hψ B hbound).coeff = ψ :=
@@ -177,9 +177,9 @@ is normalized to one.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixMatrix_zero {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hB0 : ∀ q, (B 0 q).val = 1) (u : CutPrefixConfig d N 0)
-    (q : Fin (cutRank ψ 0)) : cutPrefixMatrix ψ B 0 u q = 1 := by
+    (q : Fin (cutCoefficientRank ψ 0)) : cutPrefixMatrix ψ B 0 u q = 1 := by
   exact congrFun (hB0 q) u
 
 /-- The suffix factor at the right endpoint is one when its basis vector
@@ -187,9 +187,9 @@ is the complete coefficient tensor.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutSuffixMatrix_last {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hBN : ∀ q, (B N q).val = fullCutVector ψ) (v : CutSuffixConfig d N N)
-    (q : Fin (cutRank ψ N)) : cutSuffixMatrix ψ B N q v = 1 := by
+    (q : Fin (cutCoefficientRank ψ N)) : cutSuffixMatrix ψ B N q v = 1 := by
   have hw : (⟨(cutCoefficientMatrix ψ N).col v,
       Submodule.subset_span ⟨v, rfl⟩⟩ : cutColumnSpace ψ N) = B N q := by
     apply Subtype.ext
@@ -207,9 +207,9 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem exists_obcChainTensor_minimal_factorizations {d N D : ℕ} (hN : 0 < N)
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (hbound : ∀ k : Fin (N + 1), cutRank ψ k.val ≤ D) :
+    (hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ D) :
     ∃ A : OBCChainTensor d D N,
-      (∀ k, A.bondDim k = cutRank ψ k.val) ∧ (∀ σ, A.coeff σ = ψ σ) ∧
+      (∀ k, A.bondDim k = cutCoefficientRank ψ k.val) ∧ (∀ σ, A.coeff σ = ψ σ) ∧
       ∀ k : Fin (N + 1),
         ∃ F : Matrix (CutPrefixConfig d N k.val) (Fin (A.bondDim k)) ℂ,
         ∃ G : Matrix (Fin (A.bondDim k)) (CutSuffixConfig d N k.val) ℂ,
@@ -221,10 +221,10 @@ theorem exists_obcChainTensor_minimal_factorizations {d N D : ℕ} (hN : 0 < N)
   refine ⟨minimalCutChain ψ hψ B hbound, (fun _ ↦ rfl),
     minimalCutChain_coeff ψ hψ B hB0 hBN hbound, ?_⟩
   intro k
-  change ∃ F : Matrix (CutPrefixConfig d N k.val) (Fin (cutRank ψ k.val)) ℂ,
-    ∃ G : Matrix (Fin (cutRank ψ k.val)) (CutSuffixConfig d N k.val) ℂ,
+  change ∃ F : Matrix (CutPrefixConfig d N k.val) (Fin (cutCoefficientRank ψ k.val)) ℂ,
+    ∃ G : Matrix (Fin (cutCoefficientRank ψ k.val)) (CutSuffixConfig d N k.val) ℂ,
       cutCoefficientMatrix (minimalCutChain ψ hψ B hbound).coeff k.val = F * G ∧
-      F.rank = cutRank ψ k.val ∧ G.rank = cutRank ψ k.val ∧
+      F.rank = cutCoefficientRank ψ k.val ∧ G.rank = cutCoefficientRank ψ k.val ∧
       Submodule.span ℂ (Set.range F.row) = ⊤ ∧
       Submodule.span ℂ (Set.range G.col) = ⊤
   obtain ⟨hF, hG⟩ := cutPrefixMatrix_rows_and_cutSuffixMatrix_cols_span ψ B k.val
