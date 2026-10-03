@@ -2186,7 +2186,7 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_regular_site_gram, lem:peps_region_physical_maps}
+    \uses{thm:peps_regular_site_gram, lem:peps_region_physical_maps}
     The local identities are
     $c_v^{-1}A_v^\dagger A_v=P_v$ and $A_vP_v=A_v$.
     The first follows from the local regular Gram kernel; the second
@@ -2265,24 +2265,24 @@ operators.
     $\sum_s\overline{a_v(\eta;s)}a_v(\theta;s)$.
 \end{definition}
 
-\begin{lemma}[Gram formula at an isometric regular site]%
-    \label{lem:peps_regular_site_gram}
+\begin{theorem}[Gram formula at an isometric regular site]%
+    \label{thm:peps_regular_site_gram}
     \lean{TNLean.PEPS.IsGIsometric.exists_regularSiteGram,
         TNLean.PEPS.IsGInjective.regularSiteMap_translation}
     \leanok
     \uses{def:peps_regular_site_gram}
     If $A_v$ is $G$-isometric, there is $c_v>0$ such that
-    \[
+    \begin{align}
         \sum_s\overline{a_v(\eta;s)}a_v(\theta;s)
         =\frac{c_v}{|G|}\sum_{g\in G}
         \mathbf 1_{\{\eta=g\theta\}}.
-    \]
+    \end{align}
     Its coefficients are invariant under simultaneous left translation;
     this invariance already follows from $G$-injectivity.
     This is the group-basis form of
     \cite[Definition~6.1]{Schuch2010PEPS}, with the positive scalar
     convention of \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The defining adjoint identity is $A_v^\dagger A_v=c_vP_v$.
     Evaluating both sides in the group basis gives the formula.
@@ -2369,7 +2369,7 @@ operators.
         TNLean.PEPS.regularRegionGramScalar,
         TNLean.PEPS.regularOpenRegionMatrix_gram_of_connected}
     \leanok
-    \uses{lem:peps_regular_site_gram, lem:peps_open_region_gram_expansion,
+    \uses{thm:peps_regular_site_gram, lem:peps_open_region_gram_expansion,
         lem:peps_region_group_synchronization,
         lem:peps_region_internal_bond_count}
     Let $R$ induce a nonempty connected graph, with $V_R$ vertices
@@ -2400,7 +2400,7 @@ operators.
     \lean{TNLean.PEPS.exists_positive_regionPhysicalProductMatrix_gram,
         TNLean.PEPS.exists_unitary_regionPhysicalProductMatrix_mul_of_projector_commute}
     \leanok
-    \uses{lem:peps_region_physical_maps,lem:peps_regular_site_gram}
+    \uses{lem:peps_region_physical_maps,thm:peps_regular_site_gram}
     Let $A_v$ be the physical map of a regular $G$-isometric site,
     with arbitrary finite physical dimension, and let $P_v$ be its
     regular invariant projector. On a finite region $R$, put
@@ -4997,7 +4997,7 @@ operators.
     $\mathbf 1_{\{a=d\}}\mathbf 1_{\{c=tb\}}$. All dependence on $t$
     is then confined to the reference pair on that side. This proves
     the local coordinate operation in
-    \cite[Equation~(iso:tweezer-duplicate-operation)]{Schuch2010PEPS}.
+    \cite{Schuch2010PEPS}, displayed at local source lines 1961--1965.
     Identifying these coordinates with a whole torus contraction is
     a further step.
 \end{lemma}
@@ -5125,7 +5125,8 @@ operators.
     Contracting $A$ with these bond operators gives
     $\ket{\mathcal M(A\mid g,h)}$, independently of $c$ and $r$.
     This is the displacement of commuting loops described after
-    \cite[Equation~(2d:move-strings)]{Schuch2010PEPS}; neither isometry
+    the string-deformation display of \cite{Schuch2010PEPS}, local source
+    lines 1638--1644; neither isometry
     nor semi-regularity is needed. The identity holds on every nonempty
     rectangular torus, including dimensions equal to one.
 \end{theorem}
@@ -5932,7 +5933,7 @@ operators.
         TNLean.PEPS.regularTwistedOpenRegionMatrix_crossGram_eq_sum_compatible}
     \leanok
     \uses{def:peps_regular_twisted_region,
-        lem:peps_regular_site_gram}
+        thm:peps_regular_site_gram}
     Suppose the original site maps satisfy $A_v^\dagger A_v=c_v\Pi_v$.
     The entries of $(T_R^u)^\dagger T_R^w$ are obtained by summing over
     two internal-bond configurations and one translation $q_v$ per vertex.

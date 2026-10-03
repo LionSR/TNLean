@@ -3,10 +3,7 @@
     \lean{TNLean.PEPS.mem_compl_torusStripeInterior_iff_coordinate_zero,
         TNLean.PEPS.IsGIsometric.torusClosureSuperpositionCut_stripe_local_equivalence}
     \leanok
-    \uses{thm:peps_torus_rectangle_realization,
-        lem:peps_torus_rectangle_cut_connectivity,
-        thm:peps_torus_simply_connected_physical_local_equivalence,
-        def:peps_normalized_pure_cut_matrix}
+    \uses{def:peps_normalized_pure_cut_matrix}
     Consider an original regular $G$-isometric tensor on a native
     torus whose two periods are at least three. Let $R$ be the
     nonwrapping rectangle of sites with both coordinates nonzero.
@@ -33,6 +30,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_torus_rectangle_realization,
+        lem:peps_torus_rectangle_cut_connectivity,
+        thm:peps_torus_simply_connected_physical_local_equivalence}
     The coordinate-value bounds identify $R$ with the rectangle
     starting at $(1,1)$ with side lengths one less than the two periods.
     Its induced graph is connected, and
