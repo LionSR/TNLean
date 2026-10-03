@@ -63,9 +63,16 @@ multiplying the first column of $T$ by $-1$ keeps the hypotheses and changes its
 sign, so the conclusion fails for one of the two unitaries.
 For every $q\geq1$ the conclusion is exactly
 (\ref{eq:mswc24_sequential_product}) in matrix product form, with no further
-hypothesis. Elimination: replace $q\geq1$ by a positive bond dimension $D\geq1$,
-which the source takes for granted, and treat the case $q=0$, $D=1$ directly
-as the empty product.
+hypothesis. Elimination for the two injective variants: replace $q\geq1$ by a
+positive bond dimension $D\geq1$, which the source takes for granted, and treat
+the case $q=0$, $D=1$ directly as the empty product. This does not cover the
+variant with no injectivity, whose conclusion fails at $q=0$ for every $D\geq1$.
+Its restriction can be removed only by changing the statement: either let the
+boundary carry a phase, concluding
+$\bra{\sigma}VT\ket x=c\,(Q_0(\sigma_0)\cdots Q_{q-1}(\sigma_{q-1}))_{0x}$
+for a scalar $c$ of modulus one, or keep $q\geq1$ and state the empty block
+separately as the scalar $VT\ket0$ of modulus one. Since the source blocks at
+least one site, the second option is the planned one.
 
 \bibliographystyle{alpha}
 \bibliography{references}
