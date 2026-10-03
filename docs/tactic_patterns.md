@@ -4689,3 +4689,15 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Status:** The coordinate permutation and physical lift reuse the
   general helpers in `PEPS/RegularChargeFluxPhysicalTransport.lean`.
   The remaining column calculation depends on the actual exchanged weight.
+
+### Literal diagonal weights under vertex gauges — candidate
+
+- **Pattern:** Change the actual tail labels by the vertex gauge, retain
+  each scalar diagonal weight in the finite sum, and restrict the bijection
+  to the actual open boundary.
+- **Occurrences:** The closed graph and open-region identities in
+  `PEPS/RegularWeightedGaugeTransport.lean`; the translated torus consumer
+  uses these identities directly.
+- **Status:** Two calculations in one module, below the promotion threshold.
+  Correlated charge-pair weights are handled by specialization of the
+  arbitrary-weight identity.
