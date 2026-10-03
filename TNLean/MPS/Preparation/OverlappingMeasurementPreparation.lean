@@ -189,7 +189,7 @@ private theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_encoding_o
         (hUpp k).mono (Nat.mul_le_mul_left Cb (hL k)))
   refine ⟨CG * L, KW + Cb * L, windowGHZState hN hr α',
     blockLayerOp hN U * pairLayerOp hN hr (fun _ => W),
-    by nlinarith, hφ, hcirc.isLocalCircuitOfDepth, ?_⟩
+    by nlinarith, hφ, hcirc.isBondCircuitOfDepth, ?_⟩
   -- The circuit takes each configuration of the GHZ-type state to the state of its label.
   have hj : ∀ j, (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ
       Pi.single (registerCfg hN hr (dig₀ j)) 1 = fun s => blockIsometryState A (ω j) hN s := by

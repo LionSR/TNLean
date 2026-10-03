@@ -80,7 +80,7 @@ theorem exists_isPreparedInDepth_of_norm_eq_one (hd : 0 < d) (n₀ : ℕ) :
     rw [id, id, Fin.val_add_one_of_lt' (by omega), h]
   rw [embedOp_id] at hc
   refine ⟨U, (hc.mono (Finset.single_le_sum (fun _ _ => Nat.zero_le _)
-    (Finset.mem_univ (⟨N, by omega⟩ : Fin (n₀ + 1))))).isLocalCircuitOfDepth,
+    (Finset.mem_univ (⟨N, by omega⟩ : Fin (n₀ + 1))))).isBondCircuitOfDepth,
     fun _ => Pi.single ⟨0, hd⟩ 1, funext fun s => ?_⟩
   rw [mulVec_productVector_single_zero hd]
   exact (hUV s ()).symm

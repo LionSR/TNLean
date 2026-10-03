@@ -25,8 +25,8 @@ Write `|φ_N(A)⟩` for the periodic state of `A` and `|φ_N(A)⟩/‖φ_N(A)‖
 when it is nonzero. If `U_A |0⋯0⟩` approximates `|φ_N(A)⟩/‖φ_N(A)‖` and `U_B |0⋯0⟩` approximates
 `|φ_N(B)⟩/‖φ_N(B)‖`, up to scalars, then `U_B U_A†` maps the first normalized state close to the
 second. The adjoint of a local circuit is a local
-circuit of the same depth (`QuantumCircuit.IsLocalCircuitOfDepth.star`), depths add in series
-(`QuantumCircuit.IsLocalCircuitOfDepth.mul`), and the two product vectors are replaced by
+circuit of the same depth (`QuantumCircuit.IsBondCircuitOfDepth.star`), depths add in series
+(`QuantumCircuit.IsBondCircuitOfDepth.mul`), and the two product vectors are replaced by
 `|0⋯0⟩` with two more layers each
 (`QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`).
 

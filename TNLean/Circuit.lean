@@ -13,6 +13,7 @@ import TNLean.Circuit.Composition
 import TNLean.Circuit.ConfigurationLayers
 import TNLean.Circuit.EmbeddedProduct
 import TNLean.Circuit.Gates
+import TNLean.Circuit.Geometry
 import TNLean.Circuit.LocalCircuit
 import TNLean.Circuit.Measurement
 import TNLean.Circuit.PairProduct

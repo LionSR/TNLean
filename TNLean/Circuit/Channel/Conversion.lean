@@ -553,7 +553,7 @@ theorem IsChannelPreparedInDepth.exists_isLocalChannelConversion {T : ℕ}
       IsLocalChannelConversion T (finKronecker σ) ρ := by
   obtain ⟨Ls, rfl, σ, hσ, rfl⟩ := h
   refine ⟨σ, hσ, ?_⟩
-  simpa [OnsiteChannel.id_map] using
+  simpa [OnsiteChannel.id_map, rectKronecker_eq_finKronecker] using
     isLocalChannelConversion_circuit (OnsiteChannel.id d (Fin N)) Ls
     le_rfl (OnsiteChannel.id d (Fin N)) (finKronecker σ)
 
@@ -577,8 +577,9 @@ theorem trace_mul_mul_eq_of_isLocalChannelConversion {d' T : ℕ}
   have hsep : IsSeparatedBy X Y (2 * T') := fun x hx y hy m hm ↦
     hXY x hx y hy m (hm.trans (by exact_mod_cast Nat.mul_le_mul_left 2 hT'))
   have hdisj := disjoint_neighbourhood_of_isSeparatedBy hsep
-  have hfac := trace_finKronecker_mul_mul hdisj σ₀ (hcone X A hA) (hcone Y B hB)
-  rw [trace_finKronecker, Finset.prod_eq_one fun i _ ↦ hσ₀ i, mul_one] at hfac
+  have hfac := trace_rectKronecker_mul_mul hdisj σ₀ (hcone X A hA) (hcone Y B hB)
+  rw [trace_rectKronecker, Finset.prod_eq_one fun i _ ↦ hσ₀ i, mul_one,
+    rectKronecker_eq_finKronecker] at hfac
   rw [hdual, hdual, hdual, hmul X Y hdisj A hA B hB, hfac]
 
 end Ring
