@@ -3925,3 +3925,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+
+### Orthogonal projection in matrix coordinates — candidate (2026-10-02)
+
+- **Pattern:** Transport a finite-dimensional invariant subspace to Euclidean
+  coordinates, represent its orthogonal projection by `Matrix.toEuclideanLin.symm`,
+  and prove matrix Hermiticity, idempotence and invariant-range identities.
+- **Seen:** two constructions: QICLean `Kraus/IrreducibleAction.lean`
+  (`isIrreducibleAction_of_isIrreducibleFamily`) and TNLean
+  `MPS/FundamentalTheorem/Reduction/StationarySplitting.lean`
+  (`isSemisimpleModule_wordModule_of_hasInvariantProjectorClosure`).
+- **Abstraction:** a matrix-coordinate orthogonal-projection helper with
+  invariant-range equivalence, preferably in QICLean's projection algebra.
+- **Notes:** below the three-occurrence promotion threshold. The new construction
+  reuses Mathlib's star-projection facts; no custom tactic is needed.
