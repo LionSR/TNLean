@@ -74,7 +74,9 @@ private theorem root_translations (R : Finset V)
   rw [hkroot, mul_one] at h
   exact eq_mul_inv_iff_mul_eq.mpr h
 
-private def reference (R : Finset V) (u : Edge Γ → G) (k : RV R → G)
+/-- Actual incident labels reconstructed from the common root translation.
+Source: SCP10, lines 1765–1920; weighted extension, lines 2569–2581. -/
+def regularRegionTreeReferenceLabels (R : Finset V) (u : Edge Γ → G) (k : RV R → G)
     (y : RB (Γ := Γ) R → G) (a : RI (Γ := Γ) R → G) (x : G) :
     RE (Γ := Γ) R → G := fun e =>
   if ht : e.1.1.1 ∈ R then
@@ -88,24 +90,25 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 private theorem reference_internal (R : Finset V) (u : Edge Γ → G) (k : RV R → G)
     (y : RB (Γ := Γ) R → G) (a : RI (Γ := Γ) R → G) (x : G)
     (e : RI (Γ := Γ) R) :
-    reference R u k y a x ⟨e.1, Or.inl e.2.1⟩ =
+    regularRegionTreeReferenceLabels R u k y a x ⟨e.1, Or.inl e.2.1⟩ =
       k ⟨e.1.1.1, e.2.1⟩ * x⁻¹ * a e := by
-  simp only [reference, dite_eq_left e.2.1, dite_eq_left e.2.2]
+  simp only [regularRegionTreeReferenceLabels, dite_eq_left e.2.1, dite_eq_left e.2.2]
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 private theorem reference_boundary_tail (R : Finset V) (u : Edge Γ → G) (k : RV R → G)
     (y : RB (Γ := Γ) R → G) (a : RI (Γ := Γ) R → G) (x : G)
     (e : Edge Γ) (ht : e.1.1 ∈ R) (hh : e.1.2 ∉ R) :
-    reference R u k y a x ⟨e, Or.inl ht⟩ = k ⟨e.1.1, ht⟩ * x⁻¹ * y ⟨e, Or.inl ⟨ht, hh⟩⟩ := by
-  simp only [reference, dite_eq_left ht, dite_eq_right hh]
+    regularRegionTreeReferenceLabels R u k y a x ⟨e, Or.inl ht⟩ =
+      k ⟨e.1.1, ht⟩ * x⁻¹ * y ⟨e, Or.inl ⟨ht, hh⟩⟩ := by
+  simp only [regularRegionTreeReferenceLabels, dite_eq_left ht, dite_eq_right hh]
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 private theorem reference_boundary_head (R : Finset V) (u : Edge Γ → G) (k : RV R → G)
     (y : RB (Γ := Γ) R → G) (a : RI (Γ := Γ) R → G) (x : G)
     (e : Edge Γ) (ht : e.1.1 ∉ R) (hh : e.1.2 ∈ R) :
-    reference R u k y a x ⟨e, Or.inr hh⟩ =
+    regularRegionTreeReferenceLabels R u k y a x ⟨e, Or.inr hh⟩ =
       (u e)⁻¹ * k ⟨e.1.2, hh⟩ * x⁻¹ * y ⟨e, Or.inr ⟨ht, hh⟩⟩ := by
-  simp only [reference, dite_eq_right ht]
+  simp only [regularRegionTreeReferenceLabels, dite_eq_right ht]
 
 omit [Fintype G] [DecidableEq G] in
 private theorem solve_translation (r x k a η : G)
@@ -124,7 +127,8 @@ private theorem compatible_reference (R : Finset V)
       (regularRegionCoordinatesEquiv R T hT htree o).symm c w f =
         q w * regularTwistedLabels u w.1
           (fun e => η ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) f) :
-    η = reference R u (regularRegionTreeGauge R T hT htree o u).1 c.1 c.2.1 (q o) := by
+    η = regularRegionTreeReferenceLabels R u (regularRegionTreeGauge R T hT htree o u).1
+      c.1 c.2.1 (q o) := by
   let k := (regularRegionTreeGauge R T hT htree o u).1
   have hr := root_translations R T hT htree o u c η q hα
   funext e
@@ -185,7 +189,7 @@ private theorem compatible_cycles (R : Finset V)
 omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 private theorem reference_boundary_iff (R : Finset V) (u : Edge Γ → G) (k : RV R → G)
     (y θ : RB (Γ := Γ) R → G) (a : RI (Γ := Γ) R → G) (x : G) :
-    (fun e : RB (Γ := Γ) R => reference R u k y a x
+    (fun e : RB (Γ := Γ) R => regularRegionTreeReferenceLabels R u k y a x
       ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ↔
         y = x • regularRegionBoundaryTransport R k u θ := by
   constructor
@@ -234,7 +238,8 @@ private theorem reconstruct_compatible (R : Finset V)
     (regularRegionCoordinatesEquiv R T hT htree o).symm c w f =
       (c.2.2.1.1 w * x * ((regularRegionTreeGauge R T hT htree o u).1 w)⁻¹) *
         regularTwistedLabels u w.1
-          (fun e => reference R u (regularRegionTreeGauge R T hT htree o u).1 c.1 c.2.1 x
+          (fun e => regularRegionTreeReferenceLabels R u (regularRegionTreeGauge R T hT htree o u).1
+      c.1 c.2.1 x
             ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) f := by
   let k := (regularRegionTreeGauge R T hT htree o u).1
   rcases w with ⟨v, hv⟩
@@ -277,24 +282,68 @@ private theorem reconstruct_compatible (R : Finset V)
       dsimp only [k]
       group
 
-private theorem matrix_apply_pointwise (R : Finset V) (u : Edge Γ → G)
-    (α : RegionHalfEdgeConfig (Γ := Γ) G R) (θ : RB (Γ := Γ) R → G) :
-    regularProjectorTwistedRegionMatrix R u α θ =
-      (Fintype.card G : ℂ)⁻¹ ^ R.card *
-        ∑ p : (RE (Γ := Γ) R → G) × (RV R → G),
-          if (fun e : RB (Γ := Γ) R => p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
-            (∀ w (f : IncidentEdge Γ w.1), α w f = p.2 w *
-              regularTwistedLabels u w.1
-                (fun e => p.1 ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) f)
-          then 1 else 0 := by
+/-- The literal weighted contraction is a sum over the common root translation.
+Its scalar weight is evaluated at the actual reconstructed incident labels.
+Source: SCP10, lines 1765–1920 and the diagonal insertion of lines 2569–2581. -/
+theorem regularProjectorWeightedTwistedRegionMatrix_coordinates (R : Finset V)
+    (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
+    (u : Edge Γ → G) (F : (RE (Γ := Γ) R → G) → ℂ)
+    (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
+    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    regularProjectorWeightedTwistedRegionMatrix R u F
+        ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
+      (Fintype.card G : ℂ)⁻¹ ^ R.card * ∑ x : G,
+        if c.1 = x • regularRegionBoundaryTransport R
+            (regularRegionTreeGauge R T hT htree o u).1 u θ ∧
+          c.2.2.2 = (fun e => x * regularRegionTreeCycleResidual R T hT htree o u e * x⁻¹)
+        then F (regularRegionTreeReferenceLabels R u
+          (regularRegionTreeGauge R T hT htree o u).1 c.1 c.2.1 x) else 0 := by
   classical
-  rw [regularProjectorTwistedRegionMatrix_apply, Fintype.sum_prod_type]
-  apply congrArg ((Fintype.card G : ℂ)⁻¹ ^ R.card * ·)
-  apply Finset.sum_congr rfl
-  intro η _
-  apply Finset.sum_congr rfl
-  intro q _
-  simp only [funext_iff, Pi.smul_apply, smul_eq_mul]
+  let k := (regularRegionTreeGauge R T hT htree o u).1
+  let P (p : (RE (Γ := Γ) R → G) × (RV R → G)) : Prop :=
+    (fun e : RB (Γ := Γ) R => p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
+      ∀ w (f : IncidentEdge Γ w.1),
+        (regularRegionCoordinatesEquiv R T hT htree o).symm c w f = p.2 w *
+          regularTwistedLabels u w.1
+            (fun e => p.1 ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) f
+  let f : G → (RE (Γ := Γ) R → G) × (RV R → G) := fun x =>
+    (regularRegionTreeReferenceLabels R u k c.1 c.2.1 x, fun w => c.2.2.1.1 w * x * (k w)⁻¹)
+  have hroot (x : G) : (f x).2 o = x := by
+    simp only [f, k, c.2.2.1.2, regularRegionTreeGauge_root, one_mul, inv_one, mul_one]
+  have hf : Function.Injective f := by
+    intro x y h
+    simpa only [hroot] using congrArg (fun p => p.2 o) h
+  have hPx (x : G) : P (f x) ↔
+      c.1 = x • regularRegionBoundaryTransport R k u θ ∧
+        c.2.2.2 = (fun e => x * regularRegionTreeCycleResidual R T hT htree o u e * x⁻¹) := by
+    constructor
+    · intro h
+      refine ⟨(reference_boundary_iff R u k c.1 θ c.2.1 x).mp h.1, ?_⟩
+      simpa only [hroot] using compatible_cycles R T hT htree o u c (f x).1 (f x).2 h.2
+    · rintro ⟨hy, hz⟩
+      exact ⟨(reference_boundary_iff R u k c.1 θ c.2.1 x).mpr hy,
+        reconstruct_compatible R T hT htree o u c x hz⟩
+  have hsum : (∑ p, if P p then F p.1 else 0) = ∑ x : G,
+      if c.1 = x • regularRegionBoundaryTransport R k u θ ∧
+        c.2.2.2 = (fun e => x * regularRegionTreeCycleResidual R T hT htree o u e * x⁻¹)
+      then F (regularRegionTreeReferenceLabels R u k c.1 c.2.1 x) else 0 := by
+    refine (Fintype.sum_of_injective f hf _ _ ?_ ?_).symm
+    · intro p hp
+      by_cases h : P p
+      · have hη := compatible_reference R T hT htree o u c p.1 p.2 h.2
+        have hq := root_translations R T hT htree o u c p.1 p.2 h.2
+        have he : f (p.2 o) = p := Prod.ext hη.symm (funext hq).symm
+        exact (hp ⟨p.2 o, he⟩).elim
+      · simp only [h, ↓reduceIte]
+    · intro x
+      simp only [hPx x]
+      rfl
+  have hmatrix : regularProjectorWeightedTwistedRegionMatrix R u F
+      ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
+        (Fintype.card G : ℂ)⁻¹ ^ R.card * ∑ p, if P p then F p.1 else 0 :=
+    regularProjectorWeightedTwistedRegionMatrix_apply R u F _ θ
+  rw [hmatrix, hsum]
 
 /-- The actual twisted canonical block, in the original spanning-tree physical
 coordinates, is a sum over one common translation. Crossing operators transport
@@ -311,50 +360,9 @@ theorem regularProjectorTwistedRegionMatrix_coordinates (R : Finset V)
         if c.1 = x • regularRegionBoundaryTransport R
             (regularRegionTreeGauge R T hT htree o u).1 u θ ∧
           c.2.2.2 = (fun e => x * regularRegionTreeCycleResidual R T hT htree o u e * x⁻¹)
-        then 1 else 0 := by
-  classical
-  let k := (regularRegionTreeGauge R T hT htree o u).1
-  let P (p : (RE (Γ := Γ) R → G) × (RV R → G)) : Prop :=
-    (fun e : RB (Γ := Γ) R => p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
-      ∀ w (f : IncidentEdge Γ w.1),
-        (regularRegionCoordinatesEquiv R T hT htree o).symm c w f = p.2 w *
-          regularTwistedLabels u w.1
-            (fun e => p.1 ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) f
-  let f : G → (RE (Γ := Γ) R → G) × (RV R → G) := fun x =>
-    (reference R u k c.1 c.2.1 x, fun w => c.2.2.1.1 w * x * (k w)⁻¹)
-  have hroot (x : G) : (f x).2 o = x := by
-    simp only [f, k, c.2.2.1.2, regularRegionTreeGauge_root, one_mul, inv_one, mul_one]
-  have hf : Function.Injective f := by
-    intro x y h
-    simpa only [hroot] using congrArg (fun p => p.2 o) h
-  have hPx (x : G) : P (f x) ↔
-      c.1 = x • regularRegionBoundaryTransport R k u θ ∧
-        c.2.2.2 = (fun e => x * regularRegionTreeCycleResidual R T hT htree o u e * x⁻¹) := by
-    constructor
-    · intro h
-      refine ⟨(reference_boundary_iff R u k c.1 θ c.2.1 x).mp h.1, ?_⟩
-      simpa only [hroot] using compatible_cycles R T hT htree o u c (f x).1 (f x).2 h.2
-    · rintro ⟨hy, hz⟩
-      exact ⟨(reference_boundary_iff R u k c.1 θ c.2.1 x).mpr hy,
-        reconstruct_compatible R T hT htree o u c x hz⟩
-  have hsum : (∑ p, if P p then (1 : ℂ) else 0) = ∑ x : G,
-      if c.1 = x • regularRegionBoundaryTransport R k u θ ∧
-        c.2.2.2 = (fun e => x * regularRegionTreeCycleResidual R T hT htree o u e * x⁻¹)
-      then 1 else 0 := by
-    refine (Fintype.sum_of_injective f hf _ _ ?_ ?_).symm
-    · intro p hp
-      by_cases h : P p
-      · have hη := compatible_reference R T hT htree o u c p.1 p.2 h.2
-        have hq := root_translations R T hT htree o u c p.1 p.2 h.2
-        have he : f (p.2 o) = p := Prod.ext hη.symm (funext hq).symm
-        exact (hp ⟨p.2 o, he⟩).elim
-      · simp only [h, ↓reduceIte]
-    · intro x
-      simp only [hPx x]
-  have hmatrix : regularProjectorTwistedRegionMatrix R u
-      ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
-        (Fintype.card G : ℂ)⁻¹ ^ R.card * ∑ p, if P p then (1 : ℂ) else 0 :=
-    matrix_apply_pointwise R u _ θ
-  rw [hmatrix, hsum]
+        then 1 else 0  := by
+  simpa only [regularProjectorWeightedTwistedRegionMatrix, regularProjectorTwistedRegionMatrix,
+    one_mul] using regularProjectorWeightedTwistedRegionMatrix_coordinates
+      R T hT htree o u (fun _ => 1) c θ
 
 end TNLean.PEPS

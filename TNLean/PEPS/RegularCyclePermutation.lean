@@ -124,21 +124,9 @@ theorem regularRegionCyclePhysicalPermutation_commute_vertexTranslation
     Commute (Matrix.permMatrixHom (R := ℂ)
       (regularRegionCyclePhysicalPermutation R T hT htree o φ))
       (regularRegionVertexTranslationMatrix (Γ := Γ) R ℓ) := by
-  let E := regularRegionCoordinatesEquiv (G := G) R T hT htree o
-  let C := regularRegionCyclePermutation R T o φ
-  let τ := regularRegionGaugePhysicalLabels (Γ := Γ) R (fun v => (ℓ v)⁻¹)
-  have hE (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
-      E (τ α) = regularRegionCoordinateTranslation R T o ℓ (E α) := by
-    have h := congrArg E
-      (regularRegionCoordinatesEquiv_symm_coordinateTranslation R T hT htree o ℓ (E α))
-    simpa only [E, Equiv.symm_apply_apply, Equiv.apply_symm_apply] using h.symm
-  have hperm : Commute (regularRegionCyclePhysicalPermutation R T hT htree o φ) τ := by
-    apply Equiv.ext
-    intro α
-    change E.symm (C (E (τ α))) = τ (E.symm (C (E α)))
-    rw [hE, regularRegionCyclePermutation_coordinateTranslation R T o φ hφ,
-      regularRegionCoordinatesEquiv_symm_coordinateTranslation]
-  exact hperm.map (Matrix.permMatrixHom (R := ℂ))
+  exact regularRegionCoordinatePhysicalPermutation_commute_vertexTranslation R T hT htree o
+    (regularRegionCyclePermutation R T o φ)
+    (fun ℓ c => regularRegionCyclePermutation_coordinateTranslation R T o φ hφ ℓ c) ℓ
 
 /-- The actual regular invariant projector commutes with the transported cycle
 permutation. Source: SCP10, accessible physical systems, lines 1765–1920. -/
