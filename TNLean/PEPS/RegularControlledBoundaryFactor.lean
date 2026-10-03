@@ -26,7 +26,8 @@ These are explicit conditions on the actual bond operators, rather than assumed
 Gram identities or assumed tensor decompositions. The geometric walks are
 constructed in `TNLean.PEPS.TorusComplementPathReplacement`, and the transfer to
 the original physical tensors is `TNLean.PEPS.RegularPhysicalCutTransfer`.
-The complementary-map factorization alone retains a virtual reference label; the contracted-cut statement eliminates it.
+The complementary-map factorization alone retains a virtual reference label;
+the contracted-cut statement eliminates it.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
