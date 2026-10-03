@@ -37,6 +37,8 @@ import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
+import TNLean.MPS.Symmetry.PolarDeformation
+import TNLean.MPS.Symmetry.PolarDeformationGap
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
