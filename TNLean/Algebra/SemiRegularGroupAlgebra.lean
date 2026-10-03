@@ -23,6 +23,11 @@ in lines 983–990; and the link orientation in Definition 5.1 and Lemma 5.2,
 lines 1278–1296 and 1334–1337. These are algebraic reformulations and consequences
 of the source representation hypotheses. No unitarity assumption is needed here.
 Faithfulness refers to the group algebra, not merely to the group homomorphism.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap
