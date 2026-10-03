@@ -25,8 +25,9 @@ assume the sufficient dimension estimate \(R\geq 3D^5\). The sharper
 result uses \(R\geq S+1\) for the actual simultaneous injectivity length
 \(S\); the bound here need not be optimal. These sufficient interaction
 ranges are documented in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
-The unrestricted assertion in arXiv:2011.12127, lines 2183--2187, also
-covers shorter ranges, which are not treated here.
+The unrestricted assertion in arXiv:2011.12127, lines 2183--2187, fails
+at some shorter ranges: a canonical tensor with three blocks has a gapless
+two-site parent; see `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
 -/
 
 namespace MPSTensor

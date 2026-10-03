@@ -7156,7 +7156,9 @@ tensors.
     \cite[lines~317--345]{Cirac2016MPDO_arXiv} with the gap assertion of
     \cite[Section~IV.C]{Cirac2021Matrix}. It need not be optimal; the
     sharper sufficient condition $R\geq S+1$ is recorded in
-    \cite{gap:cpgsv21_block_parent_interaction_range}.
+    \cite{gap:cpgsv21_block_parent_interaction_range}. The unrestricted
+    assertion fails at some shorter ranges; see
+    \cite{gap:cpgsv21_short_range_parent_gap}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -7606,4 +7608,80 @@ shorter interaction range.
     primitive representative. The canonical parent Hamiltonians agree
     exactly at every interaction range and every chain length, so the
     prescribed lower bounds transfer unchanged.
+\end{proof}
+
+
+\begin{lemma}[Three normal blocks with the singlet parent interaction]
+    \label{lem:three_normal_blocks_singlet_parent}
+    \lean{MPSTensor.shortRangeHeisenbergBlock,
+        MPSTensor.shortRangeHeisenbergTensor,
+        MPSTensor.wordTupleSpanTop_shortRangeHeisenbergBlock_two,
+        MPSTensor.not_wordTupleSpanTop_shortRangeHeisenbergBlock_one,
+        MPSTensor.shortRangeHeisenbergBlock_normalization,
+        MPSTensor.shortRangeHeisenbergBlock_isNormalTensor,
+        MPSTensor.shortRangeHeisenbergBlock_isNormal,
+        MPSTensor.shortRangeHeisenbergBlock_blocksNotGaugePhaseEquiv,
+        MPSTensor.isCPSVBasisOfNormalTensors_shortRangeHeisenbergTensor,
+        MPSTensor.mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff,
+        MPSTensor.groundSpaceES_shortRangeHeisenbergTensor_two_starProjection,
+        MPSTensor.parentInteractionES_shortRangeHeisenbergTensor_two_apply}
+    \leanok
+    The direct sum of the three bond-one qubit tensors
+    $(1,0)$, $(0,1)$ and $(1/\sqrt2,1/\sqrt2)$, with weights one,
+    has a basis of three normalized, normal, pairwise inequivalent blocks.
+    Its simultaneous injectivity length is exactly two. Its two-site
+    local ground space is $\operatorname{Sym}^2(\mathbb C^2)$, and its
+    canonical parent interaction is the singlet projection
+    $h_2=(I-F)/2$, where $F$ exchanges the two physical sites.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The word tuples for $00$, $11$ and $01$ are
+    $(1,0,1/2)$, $(0,1,1/2)$ and $(0,0,1/2)$, which span
+    $\mathbb C^3$; two one-site words cannot span this space.
+    Each scalar block has transfer normalization one. Simultaneous
+    spanning separates the blocks and gives eventual independence of
+    their periodic vectors. The two-site boundary vectors span
+    $|00\rangle$, $|11\rangle$ and $|++\rangle$, exactly the symmetric
+    subspace. Its orthogonal complement is the singlet line.
+\end{proof}
+
+\begin{theorem}[Failure of the unrestricted parent-Hamiltonian gap assertion]
+    \label{thm:short_range_parent_gap_counterexample}
+    \lean{SpinChain.oneMagnon_edge_sum,
+        ZMod.cycleLaplacian_stdAddChar,
+        ZMod.cycleFourierGap_pos,
+        ZMod.tendsto_cycleFourierGap_zero,
+        MPSTensor.shortRangeHeisenbergMagnon,
+        MPSTensor.shortRangeHeisenbergMagnon_ne_zero,
+        MPSTensor.parentHamiltonianES_shortRangeHeisenbergMagnon,
+        MPSTensor.not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two}
+    \leanok
+    \uses{lem:three_normal_blocks_singlet_parent, def:parent_hamiltonian_es}
+    For the preceding tensor, the periodic range-two parent Hamiltonian
+    has a nonzero eigenvector of eigenvalue
+    $\varepsilon_N=1-\cos(2\pi/N)>0$ for every $N\geq2$.
+    These eigenvalues tend to zero. Consequently there are no
+    $\delta>0$ and $N_0$ such that
+    \[
+        \delta\lVert v\rVert\leq\lVert H_{N,2}v\rVert
+        \qquad(N\geq N_0,\ v\perp\ker H_{N,2}).
+    \]
+    Thus the unrestricted assertion in
+    \cite[Section~IV.C, lines~2183--2187]{Cirac2021Matrix} is false.
+    The sufficient-range theorems remain valid, since this example
+    has $R=S=2$. See \cite{gap:cpgsv21_short_range_parent_gap}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:three_normal_blocks_singlet_parent}
+    On configurations with one down spin the sum of singlet projections
+    acts as $f(j)-(f(j+1)+f(j-1))/2$. The first Fourier character of
+    $\mathbb Z/N\mathbb Z$ is therefore an eigenvector with the stated
+    eigenvalue. Its coefficient at the zero site is one, so it is nonzero.
+    Self-adjointness makes it orthogonal to the kernel. A uniform positive
+    norm bound would give $\delta\leq\varepsilon_N$ for every sufficiently
+    large $N$, contradicting $\varepsilon_N\to0$.
 \end{proof}

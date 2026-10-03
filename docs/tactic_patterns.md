@@ -2494,6 +2494,20 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** three occurrences in one file; below the two-file promotion
   threshold. The following projection algebra differs between the proofs.
 
+### adjoints of left polar identities — candidate (2026-10-02)
+
+- **Pattern:** Apply `congrArg Matrix.conjTranspose` to a matrix product
+  identity, then simplify `conjTranspose_mul` and the Hermitian factors.
+- **Seen:** four instances in `ParentHamiltonian/LeftPolar.lean`: the
+  support factorization used for positivity, the support action on the
+  partial isometry, and the two identities identifying the physical range.
+- **Abstraction:** The existing `Matrix.conjTranspose_mul` supplies the
+  algebraic operation. A more specific reusable lemma would need to remove
+  repeated Hermitian-factor arguments in a second module.
+- **Notes:** These instances occur in one module and prove distinct polar
+  identities. No additional tactic or matrix predicate is introduced.
+
+
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
   use the supplied gate entry formulas, and rewrite both finite sums along
