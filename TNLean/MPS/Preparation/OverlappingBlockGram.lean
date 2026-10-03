@@ -31,10 +31,10 @@ to both makes the limit strictly positive, and `√(Bᴴ B + Q) = P + Q` because
 Lipschitz bound of the square root at a strictly positive point
 (`CFC.norm_sqrt_sub_sqrt_le_div`) then transfers the rate of the Gram matrices to `P`.
 
-For weights `|μⱼ| ≤ 1` the Gram estimate holds with the limit `∑ⱼ |μⱼ|^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ`,
-which is not bounded below on the blocks of smaller weight. The Hölder bound
-`‖√a - √b‖ ≤ √‖a - b‖` (`CFC.norm_sqrt_sub_sqrt_le`) replaces the Lipschitz step and gives
-`‖P - P_∞‖ ≤ K e^{-γ q/ξ}` for `0 < γ < 1/2`, with `P_∞ = ∑ⱼ |μⱼ|^q K_j ((√σ_j)ᵀ ⊗ 1) K_jᴴ`.
+For weights `|μⱼ| ≤ 1` the Gram estimate holds with the limit
+`∑ⱼ |μⱼ|^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ` (`exists_norm_gram_blockTensor_blockSum_sub_le`), which is
+not bounded below on the blocks of smaller weight; the positive part for weights is estimated
+relative to the weights in `TNLean.MPS.Preparation.RelativePositivePart`.
 
 **Scope restriction (multiplicity one):** every block occurs once. The Lipschitz estimate
 `exists_norm_polarPos_blockTensor_blockSum_sub_le` is stated for unit weights `μⱼ = 1`.
@@ -63,8 +63,6 @@ maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   the Gram matrix of the weighted direct sum and its rate.
 * `MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le` — the rate of `P → P_∞` for unit
   weights, `0 < γ < 1`.
-* `MPSTensor.exists_norm_polarPos_blockTensor_blockSum_weight_sub_le` — the rate for weights
-  `|μⱼ| ≤ 1`, `0 < γ < 1/2`.
 
 ## References
 
@@ -198,8 +196,10 @@ noncomputable def blockSumPosLimit (ι : (j : Fin b) → Fin (Dj j) → Fin D)
   ∑ j, pairEmbedding (ι j) * ((CFC.sqrt (σ j))ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) *
     (pairEmbedding (ι j))ᴴ
 
-/-- The projector `Q = 1 - ∑ⱼ K_j K_jᴴ` onto the bond pairs that do not lie in one block. -/
-private noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
+/-- The matrix `Q = 1 - ∑ⱼ K_j K_jᴴ`. When every `ι_j` is injective and distinct `ι_j` have
+disjoint ranges, it is the orthogonal projector onto the bond pairs that do not lie in one block,
+as proved below under these hypotheses; for arbitrary embeddings it need not be a projector. -/
+noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   1 - ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ
 
@@ -556,9 +556,10 @@ private theorem sum_pairEmbedding_mul_conjTranspose_add_offBlockProj :
     ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ + offBlockProj ι = 1 := by
   rw [offBlockProj, add_sub_cancel]
 
-/-- **Strict positivity of the limit.** If every `σ_j` is positive definite with trace one,
-then `∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ + Q ≥ c` for some `c > 0`. -/
-private theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosDef)
+/-- **Strict positivity of the limit.** If every `ι_j` is injective, distinct `ι_j` have
+disjoint ranges, and every `σ_j` is positive definite with trace one, then
+`∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ + Q ≥ c` for some `c > 0`. -/
+theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosDef)
     (htr : ∀ j, (σ j).trace = 1) :
     ∃ c : ℝ, 0 < c ∧
       algebraMap ℝ (Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) c ≤
@@ -696,55 +697,5 @@ theorem exists_norm_polarPos_blockTensor_blockSum_sub_le (hι : ∀ j, Function.
     _ ≤ K * Real.exp (-γ / correlationLength lam₂) ^ q / Real.sqrt c := by
         gcongr; exact hG q hq
     _ = K / Real.sqrt c * Real.exp (-γ / correlationLength lam₂) ^ q := by ring
-
-open scoped Matrix.Norms.L2Operator in
-/-- **Rate of the positive part for weights of different moduli.** In the setting of
-`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1/2`, there is `K` such that for all
-weights `μⱼ` with `|μⱼ| ≤ 1` the positive part `P` of the `q`-site blocked direct sum
-`⊕ⱼ μⱼ A_j` satisfies `‖P - P_∞‖ ≤ K e^{-γ q/ξ}` for `q ≥ 1`, with
-`P_∞ = ∑ⱼ |μⱼ|^q K_j ((√σ_j)ᵀ ⊗ 1) K_jᴴ`, written as `∑ⱼ K_j ((√(|μⱼ|^{2q} σ_j))ᵀ ⊗ 1) K_jᴴ`.
-
-The limit `P_∞² = ∑ⱼ |μⱼ|^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ` of the Gram matrices is not bounded below on
-the blocks of smaller weight, so the Lipschitz step of
-`exists_norm_polarPos_blockTensor_blockSum_sub_le` does not apply. The Hölder bound
-`‖√a - √b‖ ≤ √‖a - b‖` (`CFC.norm_sqrt_sub_sqrt_le`; arXiv:2103.13367, Supplemental Material,
-eq. (26)) does, and it halves the rate `e^{-2γ q/ξ}` of the Gram matrices, available because
-`2γ < 1`. -/
-theorem exists_norm_polarPos_blockTensor_blockSum_weight_sub_le
-    (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
-    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
-    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
-    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
-    {lam₂ : ℂ} (hl : ‖lam₂‖ < 1)
-    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
-    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ μ : Fin b → ℂ, (∀ j, ‖μ j‖ ≤ 1) → ∀ q : ℕ, q ≠ 0 →
-      ‖Matrix.polarPos (physicalMatrix (blockTensor (blockSum Aj ι μ) q)) -
-        blockSumPosLimit ι (fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j)‖ ≤
-        K * Real.exp (-γ / correlationLength lam₂) ^ q := by
-  obtain ⟨K, hK, hG⟩ := exists_norm_gram_blockTensor_blockSum_sub_le hι hdisj hN hA hσ htr hfix
-    hl hlam hmix (by linarith : 0 < 2 * γ) (by linarith : 2 * γ < 1)
-  refine ⟨Real.sqrt K, Real.sqrt_nonneg _, fun μ hμ q hq => ?_⟩
-  set x := Real.exp (-γ / correlationLength lam₂)
-  set B := physicalMatrix (blockTensor (blockSum Aj ι μ) q)
-  set τ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ :=
-    fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j
-  have hτ : ∀ j, (τ j).PosSemidef := fun j =>
-    (hσ j).posSemidef.smul (Complex.zero_le_real.2 (by positivity))
-  have hhol := Matrix.norm_polarPos_sub_le_sqrt B (posSemidef_blockSumPosLimit (ι := ι) (σ := τ))
-  rw [blockSumPosLimit_mul_self hι hdisj hτ] at hhol
-  have hx2 : Real.exp (-(2 * γ) / correlationLength lam₂) ^ q = (x ^ q) ^ 2 := by
-    rw [exp_neg_two_mul_div_correlationLength, ← pow_mul, ← pow_mul, mul_comm]
-  calc ‖Matrix.polarPos B - blockSumPosLimit ι τ‖ ≤ Real.sqrt ‖Bᴴ * B - blockSumGramLimit ι τ‖ :=
-        hhol
-    _ ≤ Real.sqrt (K * (x ^ q) ^ 2) := by
-        gcongr
-        rw [← hx2]
-        exact hG μ hμ q hq
-    _ = Real.sqrt K * x ^ q := by
-        rw [Real.sqrt_mul hK, Real.sqrt_sq (pow_nonneg (Real.exp_pos _).le q)]
 
 end MPSTensor

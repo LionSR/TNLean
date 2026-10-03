@@ -87,13 +87,14 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 | Layer | Modules | Content |
 |-------|---------|---------|
 | **0** | `Algebra/` | Tensor-network-facing algebra and compatibility results not owned by QICLean |
+| **1** | `Circuit/` | Local quantum circuits on qudit chains: supported operators, layers and light cones, two-site universality, measurement protocols, teleportation and long-range gates, local channel circuits; imports nothing from `MPS/` |
 | **3** | `MPS/Defs`, `MPS/Chain/`, `MPS/Core/`, `MPS/Overlap/` | MPSTensor definition, finite-Kraus compatibility wrappers, word evaluation, blocking, transfer matrices, overlap matrices |
 | **4** | `MPS/FundamentalTheorem/`, `MPS/Symmetry/` | Single-block FT, gauge equivalence, on-site/virtual symmetries, cocycle coboundary |
 | **5** | `MPS/BNT/`, `MPS/CanonicalForm/`, `MPS/Structure/`, `MPS/Irreducible/`, `MPS/Periodic/`, `MPS/FundamentalTheorem/Multi/` | Multi-block assembly, BNT canonical forms, permutation rigidity, periodic tensors |
 | **5b** | `MPS/RFP/` | Renormalization fixed-point scaffolding |
 | **6** | `Wielandt/` | Tensor-typed span-growth, primitivity, and Wielandt consequences built on QICLean |
 
-**Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).
+**Other modules**: `Circuit/` (local quantum circuits on qudit chains, namespace `QuantumCircuit`, used by the log-depth preparation of `MPS/Preparation/`; it imports nothing from `MPS/`), `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).
 
 ### Key Types and Definitions
 

@@ -30,6 +30,7 @@ import TNLean.MPS.Symmetry.GInjective
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import TNLean.MPS.Symmetry.GappedInteractionPathComposition
 import TNLean.MPS.Symmetry.GaugeUniqueness
+import TNLean.MPS.Symmetry.IndependentBondGap
 import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry

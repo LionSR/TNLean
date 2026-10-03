@@ -90,6 +90,19 @@ power of a trace-preserving map is trace preserving, so $\mathcal E_B$ is not
 $p$-divisible. The forward implication of Theorem~4.1 therefore fails on
 nondegenerate data satisfying its printed hypothesis.
 
+The concrete choice $p=2$, $B_0=A_0=(1)$, and $\lambda=4$ is formalized:
+$B=(4)$ is literally the positive-weight block $4(1)$, has the
+two-site refinement $A=(2)$, and has transfer map $x\mapsto16x$.
+The formal theorem proves that $B$ is in irreducible form, is
+$2$-refinable, and is not $2$-divisible as a channel.\footnote{See
+  \leanid{MPSTensor.refinement_normalization_counterexample} and
+  \leanid{MPSTensor.refinementScalarCounterexample} in
+  \path{TNLean/MPS/Periodic/Symmetry/RefinementNormalizationCounterexample.lean}.
+  At $p=1$ every tensor is $1$-refinable, while $1$-divisibility is
+  exactly the channel condition; see \leanid{MPSTensor.isPRefinable_one}
+  and \leanid{MPSTensor.isPDivisibleChannel_one_iff} in
+  \path{TNLean/MPS/Periodic/Symmetry/Theorem41OneSite.lean}.}
+
 The printed argument breaks at its last line,
 \path{Papers/1708.00029/main.tex:806--810}. It constructs $\widetilde A$ with
 $\widetilde A^{(p)}=C$ and concludes
@@ -176,9 +189,19 @@ constructs the prescribed periodic blocks and their cyclic projections;
 \leanid{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action}
 redistributes the orbit phases; and
 \leanid{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_unitary_conj}
-performs the final unitary conjugation. These correspond to
+performs the final unitary conjugation.
+Moreover, \leanid{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
+assembles the orbit isometries into one unitary retaining their original
+inclusions, and transports every admissible orbit phase through those same
+coordinates to a left-canonical blocked root. These correspond to
 \path{Papers/1708.00029/main.tex:432--456} and
 \path{Papers/1708.00029/main.tex:765--810}.
+The arbitrary-input normalization is now supplied by
+\leanid{MPSTensor.exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos}:
+when a positive blocking matches a periodic decomposition with unit-modulus
+multiplicities, the original tensor admits a unit-weight periodic presentation.
+The exact target bond dimension follows from the equal-case theorem, without
+requiring equality at length zero or assuming an initial canonical form.
 The remaining construction must assemble these results over the full
 multiplicity-bearing decomposition, identify the equal-case gauge on the
 original orbit supports, and obtain the corrected forward implication from

@@ -1,0 +1,438 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\title{Conditioning along the merging tree of a matrix product unitary}
+\author{TNLean contributors}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\section{Question and source}
+
+Styliaris, Trivedi, and Cirac construct quantum circuits for matrix product
+unitaries by merging interval isometries along a binary tree
+\cite{STC25}. Their Merging Lemma gives a depth estimate depending on the
+conditioning of the cut used at each merge. Replacing every such cost by its
+maximum gives their general depth estimate. This note retains the individual
+costs and derives a sufficient condition for polynomial depth which allows
+them to grow with the chain length.
+
+The source is the local file
+\texttt{references/2508.08160/main.tex}: the general conditioning parameter
+and theorem appear at lines 1373--1402; the Merging Lemma at lines
+2145--2156; the depth calculation at lines 2380--2422; and the outlook at
+line 1405. The paper's uniform-bulk theorem already proves polynomial depth
+under its full-rank assumption. Its general theorem applies to nonuniform
+MPUs with an exponent depending on conditioning. Neither the estimates
+below nor the source theorem settle polynomial circuit complexity for
+arbitrary nonuniform MPUs of bounded bond dimension.
+
+\section{Conditioning by level}
+
+Fix a chain of length $N=2^L$, a leaf depth bound $a\geq0$, and an overhead
+constant $C\geq0$. Let $q_j\geq1$ bound the cost of each merge at level $j$.
+Suppose the circuit construction supplies depths satisfying
+\begin{align}
+ T_0&\leq a,&
+ T_{j+1}&\leq q_j\bigl(2T_j+C2^{j+1}\bigr).
+ \label{eq:recurrence}
+\end{align}
+For fixed physical and bond dimensions the local overhead in the source
+can be bounded in this form. The constants must be chosen independently of
+$N$ when an asymptotic statement about a family of MPUs is intended.
+The quantities $q_j$ here are actual upper bounds usable in the recurrence;
+an infimum over boundary choices must first be approximated by valid choices.
+
+\begin{theorem}\label{thm:levels}
+Put $Q_0=1$ and $Q_j=\prod_{i=0}^{j-1}q_i$. Then
+\begin{align}
+ T_L
+ &\leq 2^LQ_L\left(a+C\sum_{j=0}^{L-1}Q_j^{-1}\right)
+ \leq 2^LQ_L(a+CL).
+ \label{eq:level-bound}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Divide (\ref{eq:recurrence}) by $2^{j+1}Q_{j+1}$ to obtain
+\begin{align}
+ \frac{T_{j+1}}{2^{j+1}Q_{j+1}}
+ &\leq \frac{T_j}{2^jQ_j}+\frac{C}{Q_j}.
+\end{align}
+Summation gives the first inequality. Since $q_j\geq1$, we have
+$Q_j\geq1$, which gives the second.
+\end{proof}
+
+\begin{corollary}\label{cor:polynomial}
+If $Q_L\leq N^c$ for a constant $c\geq0$, then
+\begin{align}
+ T_L&\leq (a+C\log_2N)N^{c+1}.
+\end{align}
+Thus a polynomial product of conditioning costs suffices for polynomial
+depth, without a constant bound on each cost.
+\end{corollary}
+
+For example, suppose all level costs are one except a single cost $N^c$.
+Then $Q_L=N^c$, so Corollary~\ref{cor:polynomial} applies. Using only
+$\max_jq_j=N^c$ instead would give an exponent growing like $\log N$.
+This is an example of numerical cost data; an MPU realizing these costs is
+not constructed here.
+
+\section{Conditioning along branches}
+
+The level maxima may still overestimate the depth when the most expensive
+merges at different levels lie on different branches. A branch estimate
+retains their positions.
+
+Consider a perfect binary tree of height $L$. For a vertex $v$, let $h_v$
+be its height and $n_v=2^{h_v}$ the number of leaves below it. Assign a
+depth bound $D_v$ and, at each internal vertex, a conditioning cost
+$\kappa_v\geq1$. Suppose each leaf has depth at most $a$ and the two
+children $v_0,v_1$ of each internal vertex obey
+\begin{align}
+ D_v&\leq\kappa_v
+       \bigl(2\max(D_{v_0},D_{v_1})+Cn_v\bigr).
+ \label{eq:branch-recurrence}
+\end{align}
+The maximum reflects parallel implementation of the two child intervals.
+This is an explicit hypothesis on the implementation: one must account
+for its ancillary registers and geometric placement before applying it.
+
+\begin{theorem}\label{thm:branches}
+Let $W_v$ be the largest product of internal costs along a path from $v$
+to a leaf, including the cost at $v$. An empty product is one. Then
+\begin{align}
+ D_v&\leq n_v(a+Ch_v)W_v.
+ \label{eq:branch-bound}
+\end{align}
+If every branch product from the root is at most $N^c$, the root depth is
+at most $(a+C\log_2N)N^{c+1}$.
+\end{theorem}
+
+\begin{proof}
+The leaf case is the initial bound. For an internal vertex of height $h$,
+write $M=\max(W_{v_0},W_{v_1})$. Then $M\geq1$,
+$W_v=\kappa_vM$, and both children have $n_v/2$ leaves and height $h-1$.
+The induction hypothesis and (\ref{eq:branch-recurrence}) give
+\begin{align}
+ D_v
+ &\leq \kappa_v n_v\bigl((a+C(h-1))M+C\bigr)\\
+ &\leq n_v(a+Ch)\kappa_vM.
+\end{align}
+This proves (\ref{eq:branch-bound}).
+\end{proof}
+
+\section{An obstruction to a universal conditioning bound}
+
+There is a simple family for which rearranging the tree cannot give a
+polynomial product of the paper's conditioning parameters.
+
+\begin{theorem}\label{thm:parity}
+Let $N\geq2$, let $Z=\operatorname{diag}(1,-1)$, and let $c,s$ be nonzero real
+numbers with $c^2+s^2=1$. The unitary
+\begin{align}
+ U_N&=cI+i s Z^{\otimes N}
+ \label{eq:parity-unitary}
+\end{align}
+has operator Schmidt rank two at every nontrivial cut, with normalized
+Choi Schmidt coefficients $|c|,|s|$. At each cut, the conditioning parameter
+defined in the source is
+\begin{align}
+ q_k&=\frac{1}{|cs|}.
+ \label{eq:parity-conditioning}
+\end{align}
+If $c=\cos\theta$ and $s=\sin\theta$, this unitary has an exact circuit of
+at most $2N-1$ nearest-neighbour gates, with no ancillary qubits.
+\end{theorem}
+
+\begin{proof}
+The involution $P=Z^{\otimes N}$ is Hermitian, so
+$(cI-isP)(cI+isP)=(c^2+s^2)I=I$. For a cut into two nonempty intervals,
+write $P=P_A\otimes P_B$. Both $P_A$ and $P_B$ are traceless, and
+\begin{align}
+ U_N&=I_A\otimes cI_B+P_A\otimes isP_B.
+\end{align}
+On each interval the identity and parity operators are orthogonal in the
+Hilbert--Schmidt inner product and have equal norms. After normalization
+this is a Schmidt decomposition with coefficients $|c|,|s|$. It proves
+rank two and supplies a minimal bond-two representation.
+
+The source's sets of boundary Gram matrices are obtained by tracing the
+left and right double layers against density operators $\sigma,\tau$
+(\texttt{lem:isometries}, lines 1756--1818). For the displayed factorization,
+put $x=\operatorname{tr}(\sigma P_A)$ and
+$y=\operatorname{tr}(\tau P_B)$. These are real and range over $[-1,1]$.
+Up to the harmless sign convention for the imaginary off-diagonal entries,
+the Gram matrices are
+\begin{align}
+ G_A&=\begin{pmatrix}1&x\\x&1\end{pmatrix},&
+ G_B&=\begin{pmatrix}c^2&icsy\\-icsy&s^2\end{pmatrix}.
+ \label{eq:parity-grams}
+\end{align}
+They are positive definite precisely when $|x|<1$ and $|y|<1$.
+Direct inversion of these two matrices gives
+\begin{align}
+ \operatorname{tr}\bigl[G_B^{-1}(G_A^{-1})^T\bigr]
+ &=\frac{c^2+s^2}{c^2s^2(1-x^2)(1-y^2)}
+ \geq\frac{1}{c^2s^2}.
+ \label{eq:parity-gram-inverse}
+\end{align}
+Equality is attained at $x=y=0$, realized by maximally mixed density
+operators. The infimum over these Gram sets, explicitly specified at line
+2124 of the source, is therefore $q_k=1/|cs|$. The source
+establishes invariance under invertible bond gauges at line 1379,
+so the calculation does not require a prescribed canonical gauge.
+
+Finally let $G_j$ be the controlled-NOT from qubit $j$ to qubit $j+1$ and
+set $V=G_1G_2\cdots G_{N-1}$. Conjugation of the target $Z$ by a
+controlled-NOT gives the product of the control and target $Z$ operators.
+Applying this identity successively gives $VZ_NV^\dagger=Z^{\otimes N}$.
+Consequently
+\begin{align}
+ U_N&=V e^{i\theta Z_N}V^\dagger.
+\end{align}
+There are $N-1$ gates in each sweep and one single-qubit rotation.
+\end{proof}
+
+For $\theta_N=2^{-N}$ we have
+$|\sin\theta_N\cos\theta_N|\leq2^{-N}$, hence $q_k\geq2^N$ at every cut.
+Any binary tree with $N=2^L$ leaves has a branch of length at least $L$,
+so its largest branch product is at least $2^{NL}=N^N$.
+Nevertheless the circuit above has linear depth. Thus bounded bond
+dimension alone does not imply the polynomial branch-product hypothesis.
+This example is not a counterexample to polynomial circuit complexity.
+It shows that the conditioning of this particular construction need not
+reflect the depth of a different implementation. Since $U_N$ approaches
+the identity for these angles, it also gives no approximation lower bound.
+
+The example does not contradict the uniform-bulk theorem: in that theorem
+both the bulk and the boundary are fixed independently of $N$. Here the
+angle, and hence the boundary coefficient, varies with $N$.
+
+\begin{remark}[A larger class of boundary choices]
+The Gram sets in the source are sufficient for interval isometries; they
+need not contain every boundary choice with this property. For the parity
+family, take the first tensor with components $I,Z$, each interior tensor
+diagonal in the bond label with components $I,Z$, and the last tensor with
+components $cI,isZ$. Choose $L_j=I$ at every internal left boundary and
+$R_k=I/\sqrt2$ at every internal right boundary. Writing $P_{jk}$ for the
+parity on $[j,k]$, the corresponding interval maps are
+\begin{align}
+ V_{1k}&=\frac{|0\rangle\otimes I+|1\rangle\otimes P_{1k}}{\sqrt2},
+       &&k<N,\\
+ V_{jk}&=\frac{|00\rangle\otimes I+|11\rangle\otimes P_{jk}}{\sqrt2},
+       &&1<j\leq k<N,\\
+ V_{jN}&=|0\rangle\otimes cI+|1\rangle\otimes isP_{jN},
+       &&j>1.
+\end{align}
+Each is an isometry, by orthogonality of the displayed bond states and
+$c^2+s^2=1$. The full interval is $U_N$. At every merge these choices give
+$\sqrt{\operatorname{tr}[R_k^{-2}(L_{k+1}^{-2})^T]}=2$.
+When $c^2\ne s^2$, $R_k^2=I/2$ lies outside the source's right Gram set:
+its diagonal is not $(c^2,s^2)$. Thus the exponential value of $q_k$ does
+not obstruct a constant merge cost after enlarging the permitted boundary
+class. The displayed choices are simultaneous for all intervals, which is
+necessary for recursively applying the merging construction.
+\end{remark}
+
+For this family $s_{\min}=\min(|c|,|s|)$, and
+\begin{align}
+ \frac{1}{s_{\min}}&\leq q_k\leq\frac{\sqrt2}{s_{\min}}.
+\end{align}
+Thus the source's estimate using the smallest Schmidt coefficient has the
+correct dependence for its conditioning parameter, even in a family with
+an elementary linear-depth implementation.
+
+\section{Product-projection phase gates}
+
+The same enlargement works for a family with projection-valued local
+factors. Let $N\geq2$ and let $P_1,\ldots,P_N$ be orthogonal projections, not necessarily
+identical, and let $z\in\mathbb C$ satisfy $|z|=1$. Put
+$P_{jk}=\bigotimes_{t=j}^k P_t$. The phase gate
+\begin{align}
+ U_N&=I+(z-1)P_{1N}
+\end{align}
+is unitary, since it acts by $z$ on the range of $P_{1N}$ and by one on its
+orthogonal complement. It has an open-boundary representation of bond at
+most two: the first tensor has components $I,P_1$, the interior tensors are
+diagonal in the bond label with components $I,P_j$, and the last tensor
+has components $I,(z-1)P_N$. It is a specialization of the MPO-projector
+unitaries described at line 817 of the source.
+
+\begin{theorem}\label{thm:projection-frames}
+The product-projection phase gate admits simultaneous interval isometries
+with bond contraction norm two, independently of $z$, $N$, and the local
+projections.
+\end{theorem}
+
+\begin{proof}
+Choose the left and right bond vectors, respectively, as the columns of
+\begin{align}
+ C_L&=\begin{pmatrix}1&1/2\\0&1/2\end{pmatrix},&
+ C_R&=\begin{pmatrix}1&-1\\0&1\end{pmatrix}.
+\end{align}
+For a projection $P$ on an interval, the prefix, interior, and suffix maps
+have components
+\begin{align}
+ V_{\mathrm{pre}}(P)&=\begin{pmatrix}I-P\\P\end{pmatrix},\\
+ V_{\mathrm{int}}(P)&=\begin{pmatrix}I-P/2\\P/2\\-P/2\\P/2\end{pmatrix},\\
+ V_{\mathrm{suf}}(P,z)&=\begin{pmatrix}I+(z-1)P/2\\(z-1)P/2\end{pmatrix}.
+ \label{eq:projection-isometries}
+\end{align}
+The order of the four interior components is the lexicographic order of
+the left and right bond labels. Using $P^\dagger=P$ and $P^2=P$, the prefix
+and interior Gram products are $I$. For the suffix, the coefficient of $P$
+in its Gram product is
+\begin{align}
+ \frac{z-1}{2}+\frac{\bar z-1}{2}
+ +\frac{|z-1|^2}{2}&=\frac{|z|^2-1}{2}=0.
+\end{align}
+Its Gram product is therefore also $I$.
+
+Let the contraction of a right and left bond state have coefficient matrix
+\begin{align}
+ K&=\begin{pmatrix}1&-1\\1&1\end{pmatrix}.
+\end{align}
+Direct multiplication gives
+\begin{align}
+ C_R^T K C_L&=I,& \operatorname{tr}(K^\dagger K)&=4.
+ \label{eq:projection-contraction}
+\end{align}
+The first identity contracts the bond columns with the Kronecker delta.
+Thus joining adjacent interval maps multiplies matching physical factors,
+$P_{jk}\otimes P_{k+1,l}=P_{jl}$, and gives exactly the parent interval map,
+including the prefix, suffix, and full-chain cases. The second identity is
+the squared norm of the contraction functional. Both frames are invertible,
+with determinants $1/2$ and one, and their Gram matrices satisfy
+\begin{align}
+ \operatorname{tr}\bigl[(C_R^\dagger C_R)^{-1}
+                ((C_L^\dagger C_L)^{-1})^T\bigr]&=4.
+\end{align}
+The isometry and contraction identities hold simultaneously for all
+intervals, rather than requiring a new boundary choice at each merge.
+\end{proof}
+
+The amplification argument of the source's Merging Lemma uses precisely
+interval isometries and a norm bound for their contraction. The provenance
+of the boundary matrices in exterior density operators is used to obtain
+isometries, and is not needed once these identities are supplied directly.
+The frames in Theorem~\ref{thm:projection-frames} therefore give a
+phase-independent merging recurrence with conditioning cost two. For a
+balanced tree and fixed physical dimensions this yields the polynomial
+bound from Theorem~\ref{thm:levels}. This is an improvement of the
+conditioning certificate for this family, not a claim of a new optimal
+circuit for product-controlled phase gates.
+
+For comparison, suppose each local projection is nonzero and proper and
+$z\ne1$. At a nontrivial cut, the exterior density-operator Gram matrices
+in the source are
+\begin{align}
+ G_A&=\begin{pmatrix}1&x\\x&x\end{pmatrix},&
+ G_B&=\begin{pmatrix}1&(z-1)y\\(\bar z-1)y&|z-1|^2y\end{pmatrix},
+\end{align}
+where $0<x,y<1$. Every such expectation is attained by a suitable density
+operator. The identity $|z-1|^2+(z-1)+(\bar z-1)=0$ gives
+\begin{align}
+ \operatorname{tr}\bigl[G_B^{-1}(G_A^{-1})^T\bigr]
+ &=\frac{1}{|z-1|^2x(1-x)y(1-y)}.
+\end{align}
+Minimization at $x=y=1/2$ gives the source parameter
+$q_k=4/|z-1|$. Its divergence as $z\to1$ is absent from the enlarged-boundary
+certificate, whose cost remains two.
+
+\section{Choosing the interval tree}
+
+For an ordered chain, the same Merging Lemma permits a quantitative search
+over trees. Suppose $\kappa_k$ is a valid cost at cut $k$, and $b_{i,j}$
+is a specified nonnegative overhead for merging the interval $[i,j]$.
+Define recursively
+\begin{align}
+ F(i,i)&=a_i,\\
+ F(i,j)&=\min_{i\leq k<j}\kappa_k
+     \bigl(2\max(F(i,k),F(k+1,j))+b_{i,j}\bigr).
+ \label{eq:interval-minimum}
+\end{align}
+There are finitely many cuts, so each minimum is attained. Induction on
+interval length shows that $F(i,j)$ is the least upper bound obtained by
+this recurrence among all ordered binary merging trees on $[i,j]$.
+It is an attainable bound within the assumed merging construction, not the
+minimum circuit depth among arbitrary implementations. Evaluating all
+intervals and their cuts uses $O(N^3)$ arithmetic operations when the costs
+are already supplied. No claim about computing these costs from a tensor
+is needed for this statement.
+
+Theorem~\ref{thm:parity} shows that a polynomial branch-product bound cannot
+hold for every bounded-bond family. Tree optimization can still improve
+the source construction when the difficult cuts are distributed unevenly.
+A proof of polynomial complexity for all MPUs must also handle families
+for which every tree has large conditioning products.
+
+\section{Two points in the source calculation}
+
+\begin{remark}[Maximum over cuts]
+The main text defines $q=\max_kq_k$ at line 1382. The appendix writes
+$q=\min_kq_k$ at line 2123. A common bound for every merge requires the
+maximum, as in the main text. Retaining the individual costs avoids this
+ambiguity. This observation concerns the displayed definitions, not a
+counterexample to the main theorem.
+\end{remark}
+
+\begin{remark}[The endpoint $q=1$]
+For constant $q>1$, the first estimate in (\ref{eq:level-bound}) yields
+\begin{align}
+ T_L&\leq (2q)^L
+      \left(a+C\frac{q}{q-1}(1-q^{-L})\right).
+\end{align}
+For fixed $q>1$ this recovers the source's exponent. At $q=1$, the
+recurrence permits $T_L=2^L(a+CL)$; with $a=0$, the sequence $CL2^L$
+satisfies it with equality. This numerical observation gives no circuit
+lower bound.
+
+For the source's density-operator Gram sets, the endpoint has a further
+restriction. Put $S=R_k^2$ and $H=(L_{k+1}^2)^T$, of bond dimension $r$.
+Unitarity gives $\operatorname{tr}(SH)=1$. The positive eigenvalues
+$\lambda_i$ of $S^{1/2}HS^{1/2}$ consequently sum to one, and
+\begin{align}
+ \operatorname{tr}(S^{-1}H^{-1})
+ &=\sum_{i=1}^r\lambda_i^{-1}\geq r^2.
+\end{align}
+Cauchy--Schwarz gives $q_k\geq r$. Thus unit conditioning at every cut
+forces a minimal bond-one representation, hence an on-site product unitary.
+The numerical endpoint does not contradict the source's circuit theorem.
+\end{remark}
+
+\section{Formalization and remaining questions}
+
+The module \texttt{TNLean/MPS/MPU/TreeDepthBounds.lean} proves the second
+inequality of (\ref{eq:level-bound}), its polynomial corollary for a natural
+exponent, the constant-cost specialization, and the endpoint identity.
+The module \texttt{TNLean/MPS/MPU/ParityConditioning.lean} proves the
+algebraic identity in (\ref{eq:parity-gram-inverse}). The module
+\texttt{TNLean/MPS/MPU/ProjectionPhaseIsometries.lean} proves the three
+isometry identities in (\ref{eq:projection-isometries}), the identities in
+(\ref{eq:projection-contraction}), invertibility of the frames, and their
+inverse-Gram trace. The sharper summation and branch estimates, density-state
+minimizations, complete tensor representations and circuits, and interval
+optimization remain mathematical proofs rather than Lean theorems.
+
+The source leaves measurement-assisted depth improvements and
+higher-dimensional extensions open. Polynomial depth for all nonuniform
+MPUs of bounded bond dimension also remains unresolved. The examples show
+that an affirmative proof must avoid a universal polynomial bound on the
+source's conditioning products. Enlarging the boundary class is one possible
+approach, but controlled compatible frames for general tensors remain to be
+established.
+
+\begin{thebibliography}{1}
+\bibitem{STC25}
+G.~Styliaris, R.~Trivedi, and J.~I.~Cirac,
+\emph{Quantum Circuits for Matrix-Product Unitaries},
+Physical Review Letters \textbf{135}, 260602 (2025),
+\href{https://arxiv.org/abs/2508.08160}{arXiv:2508.08160v2}.
+\end{thebibliography}
+\end{document}
