@@ -5,7 +5,7 @@
 \input{command}
 \title{Quantum-Double PEPS: Normalization, Representations and Scope}
 \author{}
-\date{2026-09-27}
+\date{2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -80,23 +80,38 @@ of $\mathcal P(A)$ on the invariant subspace, and is stated for the
 representation parameter.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 1729--1761.}
 
-\section{Scope: concatenation in one dimension}
+\section{Concatenation in one and two dimensions}
 Lemma~``lemma:iso:iso-stable-under-concat'' states that $G$-isometry is
 stable under concatenation of PEPS; its proof is written for the
 one-dimensional left inverse of Lemma~4.7.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 1688--1689 and 1704--1716.}
 The formalization proves the one-dimensional case for matrix product
-tensors with the left-regular representation on the bond, and for the
-two-dimensional contraction of one link it proves only that, with the
-left-regular representation on that link, the left inverse of the
-contracted tensor is the plain contraction of the left inverses of the
-two factors. It does not state that this contraction is the adjoint of the
-contracted map, because the virtual spaces of the two-dimensional
-concatenation are abstract tensor products without inner products.
-Elimination: equip the virtual and physical spaces of the two-dimensional
-concatenation with inner products for which the left-regular
-representation is unitary, and show that the contraction of adjoints is
-the adjoint of the contraction.
+tensors with the left-regular representation on the bond, and the
+two-dimensional case for the contraction of one link of two PEPS tensors
+with the left-regular representation on that link. In two dimensions the
+virtual system of the first tensor is $W_A\otimes\mathbb C[G]^*$ and that
+of the second is $\mathbb C[G]\otimes W_B$; in the basis of group elements
+on the link and coordinate bases of the remaining legs, the representations
+are $\sigma_A\otimes L$ and $L\otimes\sigma_B$, the contragredient of the
+permutation representation $L$ having the same matrices in the dual basis.
+For a unitary representation, $G$-isometry with constant $c$ is
+\begin{align}
+    \mathcal P(A)^\dagger\mathcal P(A)=c\,\Pi ,
+    \label{eq:rmp_peps_qd_gram}
+\end{align}
+where $\Pi$ is the projector onto the invariant subspace. The Gram matrix of
+the contracted tensor is the contraction of the two Gram matrices, and on the
+link the group elements $g$, $h$ of the two projectors meet in
+$\sum_{k,k'}(L_g)_{kk'}(L_h)_{kk'}=|G|\,\delta_{g,h}$, which is the step
+$\Delta=|G|^{-1}\mathbb 1$ of the source. Hence
+$\mathcal P(C)^\dagger\mathcal P(C)=c_Ac_B\,\Pi$: the left inverse of the
+contracted tensor is $(c_Ac_B)^{-1}\mathcal P(C)^\dagger$. Entrywise
+$\mathcal P(C)^\dagger_{(a,b),(k,l)}
+    =\sum_g\mathcal P(A)^\dagger_{(a,g),k}\,\mathcal P(B)^\dagger_{(g,b),l}$,
+so this adjoint is the contraction of the adjoints of the two factors. The remaining legs are required to carry
+unitary representations; in the source every leg of a $G$-isometric tensor
+carries the left-regular representation or its contragredient, so this
+follows from the source's hypotheses. This item is resolved.
 
 \section{Scope: statements about the whole network}
 Two statements of the review concern the contracted lattice rather than
@@ -146,6 +161,66 @@ one tensor.
     the whole state of the network.
 \end{enumerate}
 
+\section{Torus cut entropy: interior rectangles and region lifts}
+Theorem~6.9 of \cite{Schuch2010PEPS} computes the reduced density of a
+topologically trivial region for every coherent superposition of the
+commuting $(g,h)$-closure states of a regular $G$-isometric tensor:
+its rank is $|G|^{\partial R-1}$, its nonzero spectrum is flat, and its
+entropy is $(\partial R-1)\log|G|$.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2043--2076.}
+Three restricted statements toward this theorem are now formalized.
+
+\paragraph{Strictly interior rectangles.}
+Let both torus periods be at least three, so that the simple torus graph
+distinguishes the four virtual legs of a site. Let $R$ be a coordinate
+rectangle of positive side lengths lying strictly between the two
+coordinate seams. Then the closure seams have no edge incident to $R$,
+the rectangle is connected, and its complement remains connected after
+the seams are removed. These connectivity facts are elementary lemmas
+proved for this purpose; the source uses the rectangular partition but
+does not state them. Consequently the finite twisted-cut calculation
+applies, and every nonzero superposition of closure states, commuting or
+not, has the same normalized reduced density on $R$, with the rank,
+flat spectrum and entropy above. This is a scope restriction of the
+source theorem to one family of regions, not its formalization.
+
+\paragraph{Supplied integer lifts.}
+For a region $R$ with an integer lift $L:R\to\mathbb Z^2$ that projects to
+each site and preserves each internal unit step, and for commuting
+closure labels $(g,h)$, the gauge
+$k_v=h^{\lfloor L_x(v)/w\rfloor}g^{-\lfloor L_y(v)/H\rfloor}$ has the
+closure operator as its gradient on every internal edge, including seam
+edges. The internal cycle operators therefore become identities, and the
+region block of each single closure state has the transported Gram
+identity and rank $|G|^{\partial R-1}$ when the boundary is nonempty and
+the region is graph connected. The lift is arithmetic data independent
+of the group; annular regions may also admit one.
+
+\paragraph{Lift existence under simple connectedness.}
+Realize $R$ as the union of the closed unit cells centred at its sites on
+the continuous torus. If this union is simply connected, the covering of
+the torus by the plane gives a continuous lift, which takes integer
+values at sites and preserves unit steps. It is a closed embedding onto
+the corresponding union of planar squares, distinct period translates of
+this planar union are disjoint, and an exterior collar of the planar
+union projects outside $R$. Hence the integer lift above is derived, not
+assumed, for simply connected cell realizations. Graph connectivity of
+$R$ remains an explicit hypothesis of the rank statement, since cells
+meeting only at corners can have a simply connected union.
+
+\paragraph{Remaining work.}
+The integer-lift gauge transports the boundary configuration of $R$ by
+an amount that depends on the closure sector. Separate single-sector Gram
+identities therefore do not yet give a common reduced density for
+coherent superpositions. The source removes this dependence by one
+controlled operation on the complement of $R$, chosen independently of
+the sector. Formalizing it requires complementary loops with prescribed
+seam-crossing numbers, constructed from the exterior collar of the
+simply connected realization, together with the corresponding
+sector-independent removal of the boundary transport. Until then,
+Theorem~6.9 is formalized only for the strictly interior rectangles
+above; this item remains open and is tracked in issue~\#8271.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all
@@ -156,17 +231,11 @@ are local corrections within that restriction and are conventions that
 need no further work. The pulling-through identity of the representation
 operators across the contracted primal network is formalized on the torus.
 For these torus statements no elimination is planned: the unrestricted
-reading is false on the torus.
-
-The note also records one open scope restriction. Stability of
-$G$-isometry under concatenation is formalized for matrix product tensors,
-and in two dimensions only the simplification of the left inverse for the
-left-regular representation on the contracted link is formalized. The
-elimination plan is the one given in the section on concatenation: equip
-the two-dimensional virtual and physical spaces with inner products for
-which the left-regular representation is unitary, and show that the
-contraction of the adjoints of the two factors is the adjoint of the
-contracted map.
+reading is false on the torus. Stability of $G$-isometry under
+concatenation is formalized in one dimension and for the contraction of one
+link in two dimensions. The torus cut entropy of Theorem~6.9 is formalized
+only for strictly interior rectangles; its extension to simply connected
+regions awaits the complementary routing described above.
 
 \bibliographystyle{alpha}
 \bibliography{references}

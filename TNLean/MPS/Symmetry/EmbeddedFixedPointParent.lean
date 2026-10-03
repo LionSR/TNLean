@@ -18,6 +18,10 @@ comparisons in arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`.
 **Scope restriction (trivial character):** The three path constructors use
 the on-site action with trivial scalar character; see
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
+
+**Local fix (second-block range):** The right-endpoint comparison uses the
+second block with indices `D₀+1, …, D₀+D₁`, not the printed upper limit
+`D₁`; see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder

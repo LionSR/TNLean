@@ -41,6 +41,7 @@ product of at most `C q` gates on neighbouring sites, with
 open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators
+open QuantumCircuit
 
 namespace MPSPreparation
 
