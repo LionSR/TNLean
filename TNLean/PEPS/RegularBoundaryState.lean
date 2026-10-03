@@ -22,6 +22,11 @@ After normalization, its reduced density operator is that projector divided by i
 
 These statements concern the virtual bipartite state. Identifying it with a physical PEPS
 across a cut requires the separate tensor-contraction and local-isometry arguments.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder
