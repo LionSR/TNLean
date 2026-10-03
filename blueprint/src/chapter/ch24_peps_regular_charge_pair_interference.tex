@@ -1,0 +1,92 @@
+\begin{definition}[The flux-inserted charge pair and return measurement]
+    \label{def:peps_regular_charge_pair_interference}
+    \lean{TNLean.PEPS.regularBraidedChargePairCoefficient,
+      TNLean.PEPS.normalizedRegularBraidedChargePairCoefficient,
+      TNLean.PEPS.regularChargePairReturnProjection,
+      TNLean.PEPS.regularChargePairReturnMeasurement}
+    \leanok
+    \uses{def:peps_regular_charge_pair}
+    Let $G$ be a finite group, let $\chi$ be a unitary irreducible character
+    of dimension $d$, and let $p,k,x\in G$. On two group registers put
+    \[
+        v(g,h)=|G|^{-1}\chi(ph^{-1}g),\qquad
+        v_k^x(g,h)=|G|^{-1}\chi(ph^{-1}xk^{-1}x^{-1}g).
+    \]
+    Here $x$ is the common translation arising in the accessible coordinates.
+    Define $D=|v\rangle\langle v|$, with measurement outcomes $D$ and $1-D$.
+    These are the coefficient vectors and measurement in
+    \cite[interference calculation]{Schuch2010PEPS}, lines 2582--2615.
+    The statements below concern these two registers. Their realization on
+    the six original spins and the geometric braid require the corresponding
+    contraction identities and physical operations; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{theorem}[The normalized interference amplitude]
+    \label{thm:peps_regular_charge_pair_interference_overlap}
+    \lean{TNLean.PEPS.regularChargePairCoefficient_braided_overlap,
+      TNLean.PEPS.normalizedRegularChargePairCoefficient_braided_overlap,
+      TNLean.PEPS.normalizedRegularBraidedChargePairCoefficient_normSq}
+    \leanok
+    \uses{def:peps_regular_charge_pair_interference,
+      thm:peps_translated_character_inner_product}
+    For every $p,k,x\in G$,
+    \[
+        \langle v,v_k^x\rangle=\frac{\chi(k^{-1})}{d},
+        \qquad \|v_k^x\|^2=1.
+    \]
+    Equivalently, the overlap before normalization is
+    $|G|^2\chi(k^{-1})/d$. In particular, the amplitude is independent of
+    the internal parameter $p$ and common translation $x$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Fix $h$ and apply translated character orthogonality with
+    $a=ph^{-1}$ and $b=ph^{-1}xk^{-1}x^{-1}$. The resulting character is
+    evaluated at $ba^{-1}$, a conjugate of $k^{-1}$. Summing over $h$ and
+    dividing by $|G|^2$ gives the overlap. Applying self-orthogonality to
+    each fixed-$h$ translate gives unit norm.
+\end{proof}
+
+\begin{theorem}[Action of the return projector]
+    \label{thm:peps_regular_charge_pair_return_projection}
+    \lean{TNLean.PEPS.regularChargePairReturnProjection_conjTranspose,
+      TNLean.PEPS.regularChargePairReturnProjection_mul_self,
+      TNLean.PEPS.regularChargePairReturnProjection_mulVec_braided}
+    \leanok
+    \uses{def:peps_regular_charge_pair_interference,
+      thm:peps_regular_charge_pair_normalization,
+      thm:peps_regular_charge_pair_interference_overlap}
+    The return operator is an orthogonal projector and satisfies
+    \[
+        D^*=D,\qquad D^2=D,\qquad
+        Dv_k^x=\frac{\chi(k^{-1})}{d}v.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The outer product is Hermitian, and $\|v\|=1$ gives idempotence.
+    Its action on any vector $w$ is $v\langle v,w\rangle$; apply the overlap
+    calculation to $w=v_k^x$.
+\end{proof}
+
+\begin{theorem}[Complete accessible measurement and return probability]
+    \label{thm:peps_regular_charge_pair_return_probability}
+    \lean{TNLean.PEPS.regularChargePairReturnMeasurement_complete,
+      TNLean.PEPS.regularChargePairReturnProjection_probability}
+    \leanok
+    \uses{thm:peps_regular_charge_pair_return_projection}
+    The outcomes $D$ and $1-D$ are positive Hermitian orthogonal projectors
+    and sum to the identity. For the normalized input $v_k^x$, the return
+    probability is
+    \[
+        \|Dv_k^x\|^2=\left|\frac{\chi(k)}{d}\right|^2.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Idempotence gives $D(1-D)=(1-D)D=0$ and $(1-D)^2=1-D$.
+    Each Hermitian projector is positive. The preceding action and
+    $\|v\|=1$ give the squared modulus of the amplitude. Unitarity implies
+    $\chi(k^{-1})=\overline{\chi(k)}$.
+\end{proof}
