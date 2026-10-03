@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Overlap.Basic
 import TNLean.Circuit.EmbeddedProduct
 import TNLean.Circuit.CleanUnitaryImplementation
 import Mathlib.Data.Fin.Tuple.Embedding
@@ -24,7 +25,7 @@ products reduce to Kronecker products.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
-open Matrix MPSTensor MPSPreparation QuantumCircuit
+open Matrix MPSTensor QuantumCircuit
 open scoped Kronecker
 
 namespace MPUCircuit

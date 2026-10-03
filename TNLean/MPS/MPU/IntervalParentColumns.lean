@@ -29,11 +29,11 @@ theorem isMinimalIntervalColumnImplementation_of_joint_initialized_columns
     {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ t, Module.Basis (Fin (cutRank (operatorCoefficientTensor U) t))
+    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
+    (B : ∀ t, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) t))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) t))
-    (P : ∀ t : Fin (N + 1), Matrix (Fin (cutRank (operatorCoefficientTensor U) t.val))
-      (Fin (cutRank (operatorCoefficientTensor U) t.val)) ℂ)
+    (P : ∀ t : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) t.val))
+      (Fin (cutCoefficientRank (operatorCoefficientTensor U) t.val)) ℂ)
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val)
     (Z : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
     (h : Z * initializedBasisMatrix

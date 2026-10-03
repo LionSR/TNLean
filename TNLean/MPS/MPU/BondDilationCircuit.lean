@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.MPU.NormalizedBondDilation
 import TNLean.MPS.MPU.BondRegisterBounds
 import TNLean.Circuit.CleanUnitaryImplementation
@@ -28,7 +29,7 @@ Source: the leaf and merging packet argument in Section 5 of
 local packet result, rather than the complete recursive circuit bound.
 -/
 
-open Matrix MPSTensor MPSPreparation QuantumCircuit
+open Matrix MPSTensor QuantumCircuit
 open scoped Matrix ComplexOrder MatrixOrder
 
 namespace MPUCircuit

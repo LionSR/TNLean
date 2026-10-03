@@ -93,14 +93,14 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
     (hd : 2 ≤ d) (hN : 2 ≤ N)
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D) :
-    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D) :
+    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
         ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k),
       (∀ q, (B 0 q).val = 1) ∧
       (∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) ∧
       ∃ P : ∀ j : Fin (N + 1),
-          Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val))
-            (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val)) ℂ,
+          Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val))
+            (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ,
         (∀ j, P j ∈ prefixGramAffineHull
             (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q) ∧
           (P j).PosDef ∧ (dualGramMetric (P j)).PosDef ∧
@@ -108,15 +108,15 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
               (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q),
             trace (X * dualGramMetric (P j)) = 1) ∧
           trace ((dualGramMetric (P j))⁻¹ * (P j)⁻¹) =
-            (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val : ℂ) ^ 2) ∧
+            (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val : ℂ) ^ 2) ∧
         (∀ (j k : Fin (N + 1)) (hjk : j.val ≤ k.val),
           (vectorizedWeightedInterval (minimalOperatorInterval U B hjk)
               (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))))ᴴ *
             vectorizedWeightedInterval (minimalOperatorInterval U B hjk)
               (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))) = 1) ∧
         P 0 = 1 ∧ P (Fin.last N) = 1 ∧
-        (∀ (α : Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) 0))
-          (β : Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) N)),
+        (∀ (α : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0))
+          (β : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)),
           (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.zero_le N))
             (CFC.sqrt (P 0)) (CFC.sqrt (dualGramMetric (P (Fin.last N))))).submatrix
             (fun x ↦ (fullCutIntervalConfigEquiv d N x, (β, α)))
@@ -137,8 +137,8 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
                 (qρ := cutBondRegisterWidth d D N i.succ)
                 (qσ := cutBondRegisterWidth d D N i.castSucc)) =
               initializedBasisMatrix (leafOutputEmbedding
-                  (ρ := Fin (cutRank (operatorCoefficientTensor U) (i.val + 1)))
-                  (σ := Fin (cutRank (operatorCoefficientTensor U) i.val))
+                  (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
+                  (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val))
                   (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
                   (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc)) *
                 minimalLeafInterval U B P i ∧
@@ -161,7 +161,7 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
   intro i
   obtain ⟨Z, C, hZ, hcolumns, hC, hclean⟩ := hLeaves i
   have hplaced := placed_leaf_circuit_isCleanImplementation (by omega : 0 < d) hN i hC hclean
-  have hD : 0 < D := (cutRank_pos (operatorCoefficientTensor U)
+  have hD : 0 < D := (cutCoefficientRank_pos (operatorCoefficientTensor U)
     (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) 0).trans_le (hbound 0)
   have hdim := leaf_workspace_dimension_le_of_width_le hd hD
     (cutBondRegisterWidth_le d D N i.succ) (cutBondRegisterWidth_le d D N i.castSucc)

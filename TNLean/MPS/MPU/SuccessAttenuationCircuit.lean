@@ -23,7 +23,7 @@ of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. This module proves the
 physical primitive, separately from the complete recursive circuit theorem.
 -/
 
-open Matrix MPSTensor MPSPreparation QuantumCircuit
+open Matrix QuantumCircuit
 open scoped Matrix
 
 namespace MPUCircuit

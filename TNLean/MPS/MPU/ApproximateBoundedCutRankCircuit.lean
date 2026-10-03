@@ -33,11 +33,11 @@ error is zero. The norm here is the Euclidean operator norm on the rectangular
 map from physical inputs to the complete physical and auxiliary register.
 
 See §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem exists_clean_operatorNorm_approximate_circuit_of_bounded_cutRank
+theorem exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientRank
     {d D N : ℕ} (hd : 2 ≤ d) (hN : 0 < N)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
     (ε : ℝ) (hε : 0 ≤ ε) :
     letI : NeZero d := ⟨by omega⟩
     ∃ C : Matrix (Cfg d (completeCircuitSiteCount d D N))
@@ -55,7 +55,7 @@ theorem exists_clean_operatorNorm_approximate_circuit_of_bounded_cutRank
           (completePhysicalConfigEmbedding (d := d) (D := D) (N := N)) * U‖ ≤ ε := by
   let : NeZero d := ⟨by omega⟩
   obtain ⟨C, hC, hcolumns⟩ :=
-    exists_clean_exact_circuit_of_bounded_cutRank hd hN U hU hbound
+    exists_clean_exact_circuit_of_bounded_cutCoefficientRank hd hN U hU hbound
   refine ⟨C, hC, hcolumns, ?_⟩
   rw [hcolumns, sub_self, norm_zero]
   exact hε
@@ -85,7 +85,7 @@ theorem exists_clean_operatorNorm_approximate_circuit_of_periodic_mpo_unitary
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) -
         initializedBasisMatrix
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) * M.mpo N‖ ≤ ε :=
-  exists_clean_operatorNorm_approximate_circuit_of_bounded_cutRank hd hN (M.mpo N) hU
-    (cutRank_operatorCoefficientTensor_mpo_le_all M) ε hε
+  exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientRank hd hN (M.mpo N) hU
+    (cutCoefficientRank_operatorCoefficientTensor_mpo_le_all M) ε hε
 
 end MPUCircuit

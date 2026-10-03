@@ -69,9 +69,9 @@ arbitrary fixed trace boundary is at most the number of pairs of virtual
 indices. No nonzero, normalization, or unitarity hypothesis is required.
 Source: arXiv:2508.08160v2, `eq:U_N_hom`, and the representation step in
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutRank_traceBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
+theorem cutCoefficientRank_traceBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
     (b : Matrix (Fin D) (Fin D) ℂ) (hk : k ≤ N) :
-    cutRank (fun σ : Fin N → Fin p ↦
+    cutCoefficientRank (fun σ : Fin N → Fin p ↦
       Matrix.trace (b * Kraus.evalWord A (List.ofFn σ))) k ≤ D * D := by
   let F : Matrix (CutPrefixConfig p N k) (Fin D × Fin D) ℂ :=
     fun u ij ↦ (b * Kraus.evalWord A (List.ofFn (prefixTuple hk u))) ij.1 ij.2
@@ -96,11 +96,11 @@ theorem cutRank_traceBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
 has consecutive cut rank at most `D * D`, including the endpoint cuts.
 Source: the periodic-to-open-boundary observation in arXiv:2508.08160v2,
 lines 812--816 of `references/2508.08160/main.tex`. -/
-theorem cutRank_mpv_le {p D N k : ℕ} (A : MPSTensor p D) (hk : k ≤ N) :
-    cutRank (A.mpv (N := N)) k ≤ D * D := by
-  change cutRank (fun σ : Fin N → Fin p ↦
+theorem cutCoefficientRank_mpv_le {p D N k : ℕ} (A : MPSTensor p D) (hk : k ≤ N) :
+    cutCoefficientRank (A.mpv (N := N)) k ≤ D * D := by
+  change cutCoefficientRank (fun σ : Fin N → Fin p ↦
     Matrix.trace (Kraus.evalWord A (List.ofFn σ))) k ≤ D * D
-  simpa only [Matrix.one_mul] using cutRank_traceBoundary_le A 1 hk
+  simpa only [Matrix.one_mul] using cutCoefficientRank_traceBoundary_le A 1 hk
 
 /-- Pairing the output and input letters of an ordinary periodic MPO yields
 exactly the periodic coefficient tensor of its doubled-letter MPS view.
@@ -121,20 +121,20 @@ operator and the coefficient flattening used by the finite-unitary circuit
 theorem, without any supplied decomposition witness.
 Source: arXiv:2508.08160v2, lines 812--816 of the local source, and Section 5
 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutRank_operatorCoefficientTensor_mpo_le {d D N k : ℕ}
+theorem cutCoefficientRank_operatorCoefficientTensor_mpo_le {d D N k : ℕ}
     (M : MPOTensor d D) (hk : k ≤ N) :
-    cutRank (operatorCoefficientTensor (M.mpo N)) k ≤ D * D := by
+    cutCoefficientRank (operatorCoefficientTensor (M.mpo N)) k ≤ D * D := by
   rw [operatorCoefficientTensor_mpo_eq_mpv]
-  exact cutRank_mpv_le M.toMPSTensor hk
+  exact cutCoefficientRank_mpv_le M.toMPSTensor hk
 
 /-- A uniform square tensor contracted between fixed scalar left and right
 boundary matrices has consecutive coefficient cut rank at most `D`.
 The factorization crosses only the single virtual bond at the cut.
 Source: the scalar open-boundary representation in arXiv:2508.08160v2,
 `eq:U_N_hom`, and Section 5 of the local circuit audit. -/
-theorem cutRank_openBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
+theorem cutCoefficientRank_openBoundary_le {p D N k : ℕ} (A : MPSTensor p D)
     (l : Matrix Unit (Fin D) ℂ) (r : Matrix (Fin D) Unit ℂ) (hk : k ≤ N) :
-    cutRank (fun σ : Fin N → Fin p ↦
+    cutCoefficientRank (fun σ : Fin N → Fin p ↦
       (l * Kraus.evalWord A (List.ofFn σ) * r) () ()) k ≤ D := by
   let F : Matrix (CutPrefixConfig p N k) (Fin D) ℂ :=
     fun u i ↦ (l * Kraus.evalWord A (List.ofFn (prefixTuple hk u))) () i
@@ -159,9 +159,9 @@ cut rank at most `D * D`. In particular, no invertibility condition on the
 boundary matrix is needed for this algebraic upper bound.
 Source: arXiv:2508.08160v2, `eq:U_N_hom`, and Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutRank_operatorCoefficientTensor_traceBoundary_le {d D N k : ℕ}
+theorem cutCoefficientRank_operatorCoefficientTensor_traceBoundary_le {d D N k : ℕ}
     (M : MPOTensor d D) (b : Matrix (Fin D) (Fin D) ℂ) (hk : k ≤ N) :
-    cutRank (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
+    cutCoefficientRank (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
       Matrix.trace (b * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y)))) k ≤
       D * D := by
   have hcoeff : operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
@@ -172,17 +172,17 @@ theorem cutRank_operatorCoefficientTensor_traceBoundary_le {d D N k : ℕ}
     exact congrArg (fun X ↦ Matrix.trace (b * X))
       (MPOTensor.evalWord_toMPSTensor_ofFn M N σ).symm
   rw [hcoeff]
-  exact cutRank_traceBoundary_le M.toMPSTensor b hk
+  exact cutCoefficientRank_traceBoundary_le M.toMPSTensor b hk
 
 /-- A uniform MPO contracted with fixed scalar left and right boundary
 matrices has consecutive operator cut rank at most its virtual dimension.
 This statement concerns the displayed uniform square-tensor representation;
 it does not assume or conclude unitarity.
 Source: arXiv:2508.08160v2, `eq:U_N_hom`, and Section 5 of the local circuit audit. -/
-theorem cutRank_operatorCoefficientTensor_openBoundary_le {d D N k : ℕ}
+theorem cutCoefficientRank_operatorCoefficientTensor_openBoundary_le {d D N k : ℕ}
     (M : MPOTensor d D) (l : Matrix Unit (Fin D) ℂ)
     (r : Matrix (Fin D) Unit ℂ) (hk : k ≤ N) :
-    cutRank (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
+    cutCoefficientRank (operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
       (l * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y) * r) () ())) k ≤ D := by
   have hcoeff : operatorCoefficientTensor (fun x y : Fin N → Fin d ↦
       (l * MPOTensor.evalWord M (List.ofFn x) (List.ofFn y) * r) () ()) =
@@ -192,16 +192,16 @@ theorem cutRank_operatorCoefficientTensor_openBoundary_le {d D N k : ℕ}
     exact congrArg (fun X ↦ (l * X * r) () ())
       (MPOTensor.evalWord_toMPSTensor_ofFn M N σ).symm
   rw [hcoeff]
-  exact cutRank_openBoundary_le M.toMPSTensor l r hk
+  exact cutCoefficientRank_openBoundary_le M.toMPSTensor l r hk
 
 /-- The bound on all consecutive operator cuts of an ordinary periodic MPO,
 in the exact form consumed by the finite-unitary circuit theorem.
 Source: arXiv:2508.08160v2, lines 812--816 of the local source, and Section 5
 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem cutRank_operatorCoefficientTensor_mpo_le_all {d D N : ℕ}
+theorem cutCoefficientRank_operatorCoefficientTensor_mpo_le_all {d D N : ℕ}
     (M : MPOTensor d D) :
-    ∀ k : Fin (N + 1), cutRank (operatorCoefficientTensor (M.mpo N)) k.val ≤ D * D := by
+    ∀ k : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor (M.mpo N)) k.val ≤ D * D := by
   intro k
-  exact cutRank_operatorCoefficientTensor_mpo_le M (by omega)
+  exact cutCoefficientRank_operatorCoefficientTensor_mpo_le M (by omega)
 
 end MPUCircuit

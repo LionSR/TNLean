@@ -83,13 +83,13 @@ interval with its physical coordinates split at the joining cut.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem weightedMinimalOperatorInterval_comp_eq_reindex {d N : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     {j m k : ℕ} (hjm : j ≤ m) (hmk : m ≤ k)
-    (L : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j)) ℂ)
-    (R : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k)) ℂ) :
+    (L : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j)) ℂ)
+    (R : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k)) ℂ) :
     vectorizedWeightedInterval
       (fun (a : MPSPreparation.CutIntervalConfig d N j m ×
             MPSPreparation.CutIntervalConfig d N m k)
@@ -116,16 +116,16 @@ with split physical coordinates and the joining pair reset to zero.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem normalizedJoiningParent_minimalOperatorIntervals {d N : ℕ}
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     {j m k : ℕ} (hjm : j ≤ m) (hmk : m ≤ k)
-    (hr : 0 < MPSPreparation.cutRank (operatorCoefficientTensor U) m)
-    (L : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j)) ℂ)
-    (R : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k)) ℂ)
-    {P : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) m))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) m)) ℂ}
+    (hr : 0 < MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) m)
+    (L : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j)) ℂ)
+    (R : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k)) ℂ)
+    {P : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) m))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) m)) ℂ}
     (hP : P.PosDef) :
     normalizedJoiningParent hr P
       (balancedIntervalChildren (minimalOperatorInterval U B hjm)
@@ -148,15 +148,15 @@ Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem normalizedJoiningParent_minimalOperatorIntervals_isIsometry {d N : ℕ}
     (hd : 0 < d) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ)
-    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
+    (B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
       ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k))
     {j m k : ℕ} (hjm : j ≤ m) (hmk : m ≤ k)
-    {Pj : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j)) ℂ}
-    {Pm : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) m))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) m)) ℂ}
-    {Pk : Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
-      (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k)) ℂ}
+    {Pj : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j)) ℂ}
+    {Pm : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) m))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) m)) ℂ}
+    {Pk : Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+      (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k)) ℂ}
     (hPj : Pj ∈ prefixGramAffineHull
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j aa bb q))
     (hPjpos : Pj.PosDef) (hPmpos : Pm.PosDef) (hPkpos : Pk.PosDef)
@@ -164,13 +164,13 @@ theorem normalizedJoiningParent_minimalOperatorIntervals_isIsometry {d N : ℕ}
       (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B k aa bb q),
       trace (X * dualGramMetric Pk) = 1) :
     (normalizedJoiningParent
-      (MPSPreparation.cutRank_pos _ (operatorCoefficientTensor_ne_zero hd U hU) m)
+      (MPSPreparation.cutCoefficientRank_pos _ (operatorCoefficientTensor_ne_zero hd U hU) m)
       Pm (balancedIntervalChildren (minimalOperatorInterval U B hjm)
         (minimalOperatorInterval U B hmk) (CFC.sqrt Pj)
         (CFC.sqrt (dualGramMetric Pk)) Pm)).IsIsometry := by
   classical
-  let : Nonempty (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k)) :=
-    ⟨⟨0, MPSPreparation.cutRank_pos _ (operatorCoefficientTensor_ne_zero hd U hU) k⟩⟩
+  let : Nonempty (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k)) :=
+    ⟨⟨0, MPSPreparation.cutCoefficientRank_pos _ (operatorCoefficientTensor_ne_zero hd U hU) k⟩⟩
   have hparent : (vectorizedWeightedInterval (minimalOperatorInterval U B (hjm.trans hmk))
       (CFC.sqrt Pj) (CFC.sqrt (dualGramMetric Pk))).IsIsometry :=
     minimalOperatorInterval_isometry_of_cut_metrics U B (hjm.trans hmk)
@@ -192,13 +192,13 @@ theorem exists_normalized_joining_parent_isometries_of_unitary {d N : ℕ}
     (hd : 0 < d) (hN : 0 < N)
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ) :
-    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) k))
+    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
         ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k),
       (∀ q, (B 0 q).val = 1) ∧
       (∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) ∧
       ∃ P : ∀ j : Fin (N + 1),
-          Matrix (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val))
-            (Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val)) ℂ,
+          Matrix (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val))
+            (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ,
         (∀ j, P j ∈ prefixGramAffineHull
             (fun aa bb (_ : Unit) q ↦ minimalOperatorPrefixFactor U B j.val aa bb q) ∧
           (P j).PosDef ∧
@@ -208,7 +208,7 @@ theorem exists_normalized_joining_parent_isometries_of_unitary {d N : ℕ}
         P 0 = 1 ∧ P (Fin.last N) = 1 ∧
         ∀ (j m k : Fin (N + 1)) (hjm : j.val ≤ m.val) (hmk : m.val ≤ k.val),
           (normalizedJoiningParent
-            (MPSPreparation.cutRank_pos _ (operatorCoefficientTensor_ne_zero hd U hU) m.val)
+            (MPSPreparation.cutCoefficientRank_pos _ (operatorCoefficientTensor_ne_zero hd U hU) m.val)
             (P m) (balancedIntervalChildren (minimalOperatorInterval U B hjm)
               (minimalOperatorInterval U B hmk) (CFC.sqrt (P j))
               (CFC.sqrt (dualGramMetric (P k))) (P m))).IsIsometry := by

@@ -68,13 +68,13 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutRank_eq_one_of_endpoint (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
     (j : Fin (N + 1)) (hend : j.val = 0 ∨ j.val = N) :
-    MPSPreparation.cutRank (operatorCoefficientTensor U) j.val = 1 := by
+    MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val = 1 := by
   have hψ := operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU
   rcases hend with hj | hj
   · rw [hj]
-    exact MPSPreparation.cutRank_zero _ hψ
+    exact MPSPreparation.cutCoefficientRank_zero _ hψ
   · rw [hj]
-    exact MPSPreparation.cutRank_last _ hψ
+    exact MPSPreparation.cutCoefficientRank_last _ hψ
 
 /-- The actual minimal cut label space of a finite unitary embeds in its allocated cut register.
 Endpoint rank one follows from the unitary itself.
@@ -82,12 +82,12 @@ Endpoint rank one follows from the unitary itself.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def minimalCutBondRegisterEncoding (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
     (j : Fin (N + 1)) :
-    Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val) ↪
+    Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val) ↪
       Cfg d (cutBondRegisterWidth d D N j) :=
   cutBondRegisterEncoding hd
-    (MPSPreparation.cutRank_pos _ (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val)
+    (MPSPreparation.cutCoefficientRank_pos _ (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val)
     (hbound j) j (minimalCutRank_eq_one_of_endpoint hd U hU j)
 
 /-- The actual minimal-cut encoding preserves zero at every cut.
@@ -95,10 +95,10 @@ noncomputable def minimalCutBondRegisterEncoding (hd : 2 ≤ d)
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutBondRegisterEncoding_zero (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
     (j : Fin (N + 1)) :
     minimalCutBondRegisterEncoding hd U hU hbound j
-      ⟨0, MPSPreparation.cutRank_pos _
+      ⟨0, MPSPreparation.cutCoefficientRank_pos _
         (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val⟩ = 0 :=
   cutBondRegisterEncoding_zero hd _ (hbound j) j _
 
@@ -110,9 +110,9 @@ endpoint registers.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutBondDim_le_registerCapacity (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
     (j : Fin (N + 1)) :
-    MPSPreparation.cutRank (operatorCoefficientTensor U) j.val ≤
+    MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val ≤
       d ^ cutBondRegisterWidth d D N j :=
   cutBondDim_le_registerCapacity hd (hbound j) j (minimalCutRank_eq_one_of_endpoint hd U hU j)
 
@@ -122,11 +122,11 @@ configuration.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalCutBondRegisterEncoding_endpoint (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutRank (operatorCoefficientTensor U) j.val ≤ D)
+    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
     (j : Fin (N + 1)) (hend : j.val = 0 ∨ j.val = N)
-    (q : Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val)) :
+    (q : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val)) :
     minimalCutBondRegisterEncoding hd U hU hbound j q = 0 := by
-  have hq : q = ⟨0, MPSPreparation.cutRank_pos _
+  have hq : q = ⟨0, MPSPreparation.cutCoefficientRank_pos _
       (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val⟩ := by
     apply Fin.ext
     have h : q.val < 1 := by
@@ -142,11 +142,11 @@ encodings with no endpoint rank witnesses supplied.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem exists_minimalCut_bondEncodings_of_unitary (hd : 2 ≤ d)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ) (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutRank (operatorCoefficientTensor U) j.val ≤ D) :
+    (hbound : ∀ j : Fin (N + 1), MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D) :
     ∃ e : ∀ j : Fin (N + 1),
-        Fin (MPSPreparation.cutRank (operatorCoefficientTensor U) j.val) ↪
+        Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) j.val) ↪
           Cfg d (cutBondRegisterWidth d D N j),
-      ∀ j, e j ⟨0, MPSPreparation.cutRank_pos _
+      ∀ j, e j ⟨0, MPSPreparation.cutCoefficientRank_pos _
         (operatorCoefficientTensor_ne_zero (by omega) U hU) j.val⟩ = 0 :=
   ⟨minimalCutBondRegisterEncoding hd U hU hbound,
     minimalCutBondRegisterEncoding_zero hd U hU hbound⟩

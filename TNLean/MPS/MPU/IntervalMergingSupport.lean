@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.MPU.JoiningPacketSupport
 import TNLean.MPS.MPU.IntervalInitializationBounds
 import TNLean.Circuit.LocalCircuit
@@ -23,7 +24,7 @@ Source: the interval merger and common-register construction in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
-open Matrix MPSTensor MPSPreparation QuantumCircuit
+open Matrix MPSTensor QuantumCircuit
 
 namespace MPUCircuit
 

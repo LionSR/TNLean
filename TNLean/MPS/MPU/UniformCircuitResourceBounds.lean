@@ -22,7 +22,7 @@ Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 
 namespace MPUCircuit
 
-open MPSPreparation QuantumCircuit
+open QuantumCircuit
 
 /-- The ceiling-logarithmic bond width has a polynomial bound in the bond
 dimension. Source: the register allocation in Section 5 of

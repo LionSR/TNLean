@@ -122,17 +122,17 @@ section MinimalIntervals
 variable {d D N : ℕ} [NeZero d]
 variable (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
   (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-  (hbound : ∀ t : Fin (N + 1), cutRank (operatorCoefficientTensor U) t.val ≤ D)
-  (B : ∀ t, Module.Basis (Fin (cutRank (operatorCoefficientTensor U) t))
+  (hbound : ∀ t : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) t.val ≤ D)
+  (B : ∀ t, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) t))
     ℂ (cutColumnSpace (operatorCoefficientTensor U) t))
-  (P : ∀ t : Fin (N + 1), Matrix (Fin (cutRank (operatorCoefficientTensor U) t.val))
-    (Fin (cutRank (operatorCoefficientTensor U) t.val)) ℂ)
+  (P : ∀ t : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) t.val))
+    (Fin (cutCoefficientRank (operatorCoefficientTensor U) t.val)) ℂ)
   (c : Fin (N - 1)) (j k : Fin (N + 1))
   (hjm : j.val < (internalCutEmbedding N c).val)
   (hmk : (internalCutEmbedding N c).val < k.val)
 
 local notation "m" => internalCutEmbedding N c
-local notation "hr" => cutRank_pos (operatorCoefficientTensor U)
+local notation "hr" => cutCoefficientRank_pos (operatorCoefficientTensor U)
   (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) (Fin.val (internalCutEmbedding N c))
 local notation "em" => minimalCutBondRegisterEncoding hd U hU hbound m
 local notation "ej" => minimalCutBondRegisterEncoding hd U hU hbound j
@@ -142,11 +142,11 @@ local notation "RemainingCfg" => ({s // s ∉ intervalJointOutsideFlagSet (d := 
 local notation "ChildPhysical" => (CutIntervalConfig d N j.val
   (Fin.val (internalCutEmbedding N c)) × CutIntervalConfig d N
   (Fin.val (internalCutEmbedding N c)) k.val)
-local notation "OuterLabels" => (Fin (cutRank (operatorCoefficientTensor U) k.val) ×
-  Fin (cutRank (operatorCoefficientTensor U) j.val))
+local notation "OuterLabels" => (Fin (cutCoefficientRank (operatorCoefficientTensor U) k.val) ×
+  Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
 local notation "ChildRows" => (((ChildPhysical × OuterLabels) × RemainingCfg) ×
-  (Fin (cutRank (operatorCoefficientTensor U) (Fin.val (internalCutEmbedding N c))) ×
-    Fin (cutRank (operatorCoefficientTensor U) (Fin.val (internalCutEmbedding N c)))))
+  (Fin (cutCoefficientRank (operatorCoefficientTensor U) (Fin.val (internalCutEmbedding N c))) ×
+    Fin (cutCoefficientRank (operatorCoefficientTensor U) (Fin.val (internalCutEmbedding N c)))))
 local notation "ChildColumns" => (ChildPhysical × RemainingCfg)
 local notation "child" => balancedIntervalChildren
   (minimalOperatorInterval U B (Nat.le_of_lt hjm))
@@ -187,8 +187,8 @@ theorem initializedBasisMatrix_regroupedOutput_mul_normalizedParent
   let eout : ((ChildPhysical × OuterLabels) × RemainingCfg) ≃
       ((CutIntervalConfig d N j.val k.val × OuterLabels) × parentOutside) := Equiv.prodCongr
     (Equiv.prodCongr (cutIntervalSplitEquiv d N j.val (Fin.val m) k.val hjm.le hmk.le).symm
-      (Equiv.refl (Fin (cutRank (operatorCoefficientTensor U) k.val) ×
-        Fin (cutRank (operatorCoefficientTensor U) j.val))))
+      (Equiv.refl (Fin (cutCoefficientRank (operatorCoefficientTensor U) k.val) ×
+        Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))))
     (Equiv.arrowCongr (intervalJointRemainingSiteEquiv (d := d) (D := D) j m k hjm hmk)
       (Equiv.refl (Fin d)))
   have hreset : ((Function.Embedding.sectL _ (⟨0, hr⟩, ⟨0, hr⟩)).trans E) =
@@ -199,9 +199,9 @@ theorem initializedBasisMatrix_regroupedOutput_mul_normalizedParent
       minimalIntervalOutputEmbedding hd U hU hbound j k (eout p)
     exact regroupedIntervalJointOutputEmbedding_reset_apply
       (d := d) (D := D) (N := N)
-      (r := cutRank (operatorCoefficientTensor U) (Fin.val m))
-      (l := cutRank (operatorCoefficientTensor U) j.val)
-      (n := cutRank (operatorCoefficientTensor U) k.val) c j k hjm hmk em ej ek
+      (r := cutCoefficientRank (operatorCoefficientTensor U) (Fin.val m))
+      (l := cutCoefficientRank (operatorCoefficientTensor U) j.val)
+      (n := cutCoefficientRank (operatorCoefficientTensor U) k.val) c j k hjm hmk em ej ek
       ⟨0, hr⟩ (minimalCutBondRegisterEncoding_zero hd U hU hbound m) p
   rw [hreset] at hcolumns
   let Wsplit : Matrix (ChildPhysical × OuterLabels) ChildPhysical ℂ :=
@@ -252,7 +252,7 @@ theorem encodedJoiningParent_minimalIntervalColumns {a : ℕ} {β : Type*}
     (f : ((ChildPhysical × OuterLabels) × RemainingCfg) ↪ Cfg d a)
     (hEncoding : pullbackBasisEmbedding E siteEquiv = appendBasisEmbedding f
       ((joiningChildBasisEmbedding
-        (r := cutRank (operatorCoefficientTensor U) (Fin.val m)) hd).trans
+        (r := cutCoefficientRank (operatorCoefficientTensor U) (Fin.val m)) hd).trans
           (compatibleBondDilationEmbedding hd em)))
     (hP : (P m).PosDef) (u : ChildColumns ≃ β) :
     (encodedJoiningParent hd hr f em (P m)

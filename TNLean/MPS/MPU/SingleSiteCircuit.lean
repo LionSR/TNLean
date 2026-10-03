@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Overlap.Basic
 import TNLean.Circuit.CleanImplementationPlacement
 
 /-!
@@ -18,7 +19,7 @@ Source: the single-site endpoint of Section 5 of
 model is specified in arXiv:2508.08160, local `main.tex`, line 820.
 -/
 
-open Matrix MPSTensor MPSPreparation QuantumCircuit
+open Matrix MPSTensor QuantumCircuit
 
 namespace MPUCircuit
 

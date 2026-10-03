@@ -31,8 +31,8 @@ namespace MPSPreparation
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutSiteMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
-    (k : ℕ) (i : Fin d) : Matrix (Fin (cutRank ψ k)) (Fin (cutRank ψ (k + 1))) ℂ :=
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (k : ℕ) (i : Fin d) : Matrix (Fin (cutCoefficientRank ψ k)) (Fin (cutCoefficientRank ψ (k + 1))) ℂ :=
   LinearMap.toMatrix (B (k + 1)) (B k) (cutSlice ψ k i)
 
 /-- Evaluation of a cut-space vector at the prefix of a global configuration.
@@ -46,8 +46,8 @@ def cutEvaluationMap {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (σ : Fin N �
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutEvaluationMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
-    (σ : Fin N → Fin d) (k : ℕ) : Matrix (Fin 1) (Fin (cutRank ψ k)) ℂ :=
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (σ : Fin N → Fin d) (k : ℕ) : Matrix (Fin 1) (Fin (cutCoefficientRank ψ k)) ℂ :=
   LinearMap.toMatrix (B k) (Module.Basis.singleton (Fin 1) ℂ) (cutEvaluationMap ψ σ k)
 
 /-- A prefix evaluation coefficient is the corresponding cut-basis vector evaluated
@@ -55,8 +55,8 @@ at that prefix.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutEvaluationMatrix_apply {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
-    (σ : Fin N → Fin d) (k : ℕ) (a : Fin 1) (b : Fin (cutRank ψ k)) :
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (σ : Fin N → Fin d) (k : ℕ) (a : Fin 1) (b : Fin (cutCoefficientRank ψ k)) :
     cutEvaluationMatrix ψ B σ k a b = (B k b).val (cutPrefixRestriction σ k) := by
   rw [cutEvaluationMatrix, LinearMap.toMatrix_apply, Module.Basis.singleton_repr]
   rfl
@@ -75,7 +75,7 @@ theorem cutEvaluationMap_step {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutEvaluationMatrix_step {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (σ : Fin N → Fin d) (p : Fin N) :
     cutEvaluationMatrix ψ B σ (p.val + 1) =
       cutEvaluationMatrix ψ B σ p.val * cutSiteMatrix ψ B p.val (σ p) := by
@@ -90,7 +90,7 @@ theorem cutEvaluationMatrix_step {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutPrefixChain {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (D k : ℕ) : MPSChainTensor d D k :=
   fun p i ↦ Matrix.zeroPad D (cutSiteMatrix ψ B p.val i)
 
@@ -101,8 +101,8 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutEvaluationMatrix_eq_initial_mul_eval {d N D : ℕ}
     (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
-    (hbound : ∀ k, k ≤ N → cutRank ψ k ≤ D) (σ : Fin N → Fin d)
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (hbound : ∀ k, k ≤ N → cutCoefficientRank ψ k ≤ D) (σ : Fin N → Fin d)
     (k : ℕ) (hk : k ≤ N) :
     Matrix.zeroPad D (cutEvaluationMatrix ψ B σ k) =
       Matrix.zeroPad D (cutEvaluationMatrix ψ B σ 0) *
@@ -125,7 +125,7 @@ the left endpoint cut basis is normalized to one.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem initialCutEvaluation_row {d N D : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hB0 : ∀ q, (B 0 q).val = 1) (σ : Fin N → Fin d) (hD : 0 < D) :
     (Matrix.zeroPad D (cutEvaluationMatrix ψ B σ 0)) ⟨0, hD⟩ = basisVecZero D := by
   have hentries : ∀ a b, cutEvaluationMatrix ψ B σ 0 a b = 1 := by
@@ -133,7 +133,7 @@ theorem initialCutEvaluation_row {d N D : ℕ} (ψ : (Fin N → Fin d) → ℂ) 
     rw [cutEvaluationMatrix_apply, hB0 b]
     rfl
   ext β
-  simp [Matrix.zeroPad, cutRank_zero ψ hψ, hentries, basisVecZero]
+  simp [Matrix.zeroPad, cutCoefficientRank_zero ψ hψ, hentries, basisVecZero]
 
 /-- The normalized initial evaluation matrix preserves the zero-coordinate
 row of every matrix.
@@ -141,7 +141,7 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem initialCutEvaluation_mul_apply {d N D : ℕ}
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hB0 : ∀ q, (B 0 q).val = 1) (σ : Fin N → Fin d) (hD : 0 < D)
     (M : Matrix (Fin D) (Fin D) ℂ) (β : Fin D) :
     (Matrix.zeroPad D (cutEvaluationMatrix ψ B σ 0) * M) ⟨0, hD⟩ β = M ⟨0, hD⟩ β := by
@@ -156,13 +156,13 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixChain_eval_entry {d N D : ℕ}
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hB0 : ∀ q, (B 0 q).val = 1) (hBN : ∀ q, (B N q).val = fullCutVector ψ)
-    (hbound : ∀ k, k ≤ N → cutRank ψ k ≤ D) (σ : Fin N → Fin d) (hD : 0 < D) :
+    (hbound : ∀ k, k ≤ N → cutCoefficientRank ψ k ≤ D) (σ : Fin N → Fin d) (hD : 0 < D) :
     MPSChainTensor.eval (cutPrefixChain ψ B D N) σ ⟨0, hD⟩ ⟨0, hD⟩ = ψ σ := by
   have hlast : Matrix.zeroPad D (cutEvaluationMatrix ψ B σ N) ⟨0, hD⟩ ⟨0, hD⟩ =
       ψ σ := by
-    rw [Matrix.zeroPad_apply_of_lt _ (by simp) (cutRank_pos ψ hψ N)]
+    rw [Matrix.zeroPad_apply_of_lt _ (by simp) (cutCoefficientRank_pos ψ hψ N)]
     rw [cutEvaluationMatrix_apply, hBN]
     exact fullCutVector_restriction ψ σ
   have h := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ ↦ M ⟨0, hD⟩ ⟨0, hD⟩)
@@ -176,12 +176,12 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def minimalCutChain {d N D : ℕ}
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
-    (hbound : ∀ k : Fin (N + 1), cutRank ψ k.val ≤ D) : OBCChainTensor d D N where
-  bondDim k := cutRank ψ k.val
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ D) : OBCChainTensor d D N where
+  bondDim k := cutCoefficientRank ψ k.val
   bondDim_le := hbound
-  left_dim := cutRank_zero ψ hψ
-  right_dim := cutRank_last ψ hψ
+  left_dim := cutCoefficientRank_zero ψ hψ
+  right_dim := cutCoefficientRank_last ψ hψ
   tensor p i := cutSiteMatrix ψ B p.val i
 
 /-- The chain of slicing matrices represents the full coefficient tensor exactly
@@ -190,9 +190,9 @@ Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem minimalCutChain_coeff {d N D : ℕ}
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hB0 : ∀ q, (B 0 q).val = 1) (hBN : ∀ q, (B N q).val = fullCutVector ψ)
-    (hbound : ∀ k : Fin (N + 1), cutRank ψ k.val ≤ D) (σ : Fin N → Fin d) :
+    (hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ D) (σ : Fin N → Fin d) :
     (minimalCutChain ψ hψ B hbound).coeff σ = ψ σ := by
   rw [OBCChainTensor.coeff_eq_eval_zeroPad]
   change MPSChainTensor.eval (cutPrefixChain ψ B D N) σ
@@ -208,11 +208,11 @@ bond dimension equal to its cut rank. No normalization or phase restriction
 is imposed on the coefficient tensor.
 Source: the minimal representation step in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem exists_obcChainTensor_coeff_eq_bondDim_eq_cutRank {d N D : ℕ} (hN : 0 < N)
+theorem exists_obcChainTensor_coeff_eq_bondDim_eq_cutCoefficientRank {d N D : ℕ} (hN : 0 < N)
     (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
-    (hbound : ∀ k : Fin (N + 1), cutRank ψ k.val ≤ D) :
+    (hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ D) :
     ∃ A : OBCChainTensor d D N,
-      (∀ k, A.bondDim k = cutRank ψ k.val) ∧ ∀ σ, A.coeff σ = ψ σ := by
+      (∀ k, A.bondDim k = cutCoefficientRank ψ k.val) ∧ ∀ σ, A.coeff σ = ψ σ := by
   obtain ⟨B, hB0, hBN⟩ := exists_cutBasisFamily_with_endpoints ψ hψ hN
   exact ⟨minimalCutChain ψ hψ B hbound, (fun _ ↦ rfl),
     minimalCutChain_coeff ψ hψ B hB0 hBN hbound⟩

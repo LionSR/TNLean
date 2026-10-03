@@ -39,11 +39,11 @@ the exact scalar phase. The coefficient is polynomial in the bond bound and
 the length exponent grows logarithmically in that bound.
 
 See §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem exists_clean_exact_circuit_of_bounded_cutRank_of_two_le
+theorem exists_clean_exact_circuit_of_bounded_cutCoefficientRank_of_two_le
     {d D N : ℕ} [NeZero d] (hd : 2 ≤ d) (hN : 2 ≤ N)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D) :
+    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D) :
     ∃ C : Matrix (Cfg d (globalSiteCount d D N))
         (Cfg d (globalSiteCount d D N)) ℂ,
       IsPairProduct d (globalSiteCount d D N)
@@ -54,7 +54,7 @@ theorem exists_clean_exact_circuit_of_bounded_cutRank_of_two_le
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, hP0, hPN, hfull, hLeaves⟩ :=
     exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_unitary
       hd hN U hU hbound
-  have hD : 0 < D := (cutRank_pos (operatorCoefficientTensor U)
+  have hD : 0 < D := (cutCoefficientRank_pos (operatorCoefficientTensor U)
     (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) 0).trans_le (hbound 0)
   let K := uniformNodeGateCount d D N
   let F := uniformReflectionGateCount d D N
@@ -116,11 +116,11 @@ assumed separately. Gate parameters are arbitrary complex numbers.
 
 See §5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`; the gate model
 is arXiv:2508.08160, local `main.tex`, line 820. -/
-theorem exists_clean_exact_circuit_of_bounded_cutRank
+theorem exists_clean_exact_circuit_of_bounded_cutCoefficientRank
     {d D N : ℕ} (hd : 2 ≤ d) (hN : 0 < N)
     (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D) :
+    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D) :
     let : NeZero d := ⟨by omega⟩
     ∃ C : Matrix (Cfg d (completeCircuitSiteCount d D N))
         (Cfg d (completeCircuitSiteCount d D N)) ℂ,
@@ -148,7 +148,7 @@ theorem exists_clean_exact_circuit_of_bounded_cutRank
     simpa only [Nat.one_mul] using
       Nat.mul_le_mul (Nat.mul_le_mul hcoeff hpowerD) hpowerN
   · have hN2 : 2 ≤ N := by omega
-    obtain ⟨C, hC, hcolumns⟩ := exists_clean_exact_circuit_of_bounded_cutRank_of_two_le
+    obtain ⟨C, hC, hcolumns⟩ := exists_clean_exact_circuit_of_bounded_cutCoefficientRank_of_two_le
       hd hN2 U hU hbound
     exact exists_complete_clean_pair_circuit_of_global hN2 U C hC hcolumns
 
@@ -173,7 +173,7 @@ theorem exists_clean_exact_circuit_of_periodic_mpo_unitary
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) =
         initializedBasisMatrix
           (completePhysicalConfigEmbedding (d := d) (D := χ * χ) (N := N)) * M.mpo N :=
-  exists_clean_exact_circuit_of_bounded_cutRank hd hN (M.mpo N) hU
-    (cutRank_operatorCoefficientTensor_mpo_le_all M)
+  exists_clean_exact_circuit_of_bounded_cutCoefficientRank hd hN (M.mpo N) hU
+    (cutCoefficientRank_operatorCoefficientTensor_mpo_le_all M)
 
 end MPUCircuit

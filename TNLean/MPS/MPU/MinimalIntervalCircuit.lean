@@ -31,11 +31,11 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 def IsMinimalIntervalCircuitImplementation {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
+      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
     (j k : Fin (N + 1)) (hjk : j.val ≤ k.val) (K : ℕ)
     (Z : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
     (C : Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ) :
@@ -58,11 +58,11 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem mono {d D N K L : ℕ} [NeZero d]
     {hd : 2 ≤ d} {U : Matrix (Cfg d N) (Cfg d N) ℂ}
     {hU : U ∈ unitaryGroup (Cfg d N) ℂ}
-    {hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D}
-    {B : ∀ k, Module.Basis (Fin (cutRank (operatorCoefficientTensor U) k))
+    {hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D}
+    {B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k)}
-    {P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutRank (operatorCoefficientTensor U) j.val)) ℂ}
+    {P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
+      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ}
     {j k : Fin (N + 1)} {hjk : j.val ≤ k.val}
     {Z : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ}
     {C : Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ}

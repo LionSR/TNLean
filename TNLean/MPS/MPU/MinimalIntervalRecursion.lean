@@ -37,11 +37,11 @@ theorem exists_minimalInterval_circuit_of_partition
     {d D N : ℕ} [NeZero d]
     (hd : 2 ≤ d) (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : U ∈ unitaryGroup (Cfg d N) ℂ)
-    (hbound : ∀ j : Fin (N + 1), cutRank (operatorCoefficientTensor U) j.val ≤ D)
-    (B : ∀ k, Module.Basis (Fin (cutRank (operatorCoefficientTensor U) k))
+    (hbound : ∀ j : Fin (N + 1), cutCoefficientRank (operatorCoefficientTensor U) j.val ≤ D)
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank (operatorCoefficientTensor U) k))
       ℂ (cutColumnSpace (operatorCoefficientTensor U) k))
-    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutRank (operatorCoefficientTensor U) j.val))
-      (Fin (cutRank (operatorCoefficientTensor U) j.val)) ℂ)
+    (P : ∀ j : Fin (N + 1), Matrix (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val))
+      (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
     (K b M : ℕ)
     (hLeaves : ∀ i : Fin N,
       ∃ Z : Matrix (Cfg d (logicalSiteCount d D N))
