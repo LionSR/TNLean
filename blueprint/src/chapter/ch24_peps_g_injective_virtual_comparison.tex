@@ -1,0 +1,50 @@
+\section{Comparison of invariant virtual spaces}%
+\label{sec:peps_g_injective_virtual_comparison}
+
+\begin{definition}[Virtual comparison]%
+    \label{def:peps_g_injective_virtual_comparison}
+    \lean{TNLean.PEPS.IsGInjective.virtualEquiv}
+    \leanok
+    \uses{def:peps_g_injective,thm:peps_g_injective_invariants_range}
+    Let $G$ and $H$ be finite groups acting linearly on complex
+    vector spaces $\mathcal V$ and $\mathcal W$, respectively.
+    Let $T:\mathcal V\to\mathcal P$ be $G$-injective and let
+    $S:\mathcal W\to\mathcal P$ be $H$-injective, with
+    $\operatorname{im}T=\operatorname{im}S$.
+    The virtual comparison is the linear isomorphism
+    \begin{align}
+        \Phi=(S|_{\mathcal W^H})^{-1}\circ T|_{\mathcal V^G}
+        :\mathcal V^G\longrightarrow\mathcal W^H.
+    \end{align}
+    Both restrictions are isomorphisms onto the common physical range.
+\end{definition}
+
+\begin{theorem}[Uniqueness of virtual comparison]%
+    \label{thm:peps_g_injective_virtual_comparison}
+    \lean{TNLean.PEPS.IsGInjective.virtualEquiv_apply,
+        TNLean.PEPS.IsGInjective.virtualEquiv_unique,
+        TNLean.PEPS.IsGInjective.virtualEquiv_symm,
+        TNLean.PEPS.IsGInjective.existsUnique_virtualEquiv,
+        TNLean.PEPS.IsGInjective.finrank_invariants_eq_of_range_eq}
+    \leanok
+    \uses{def:peps_g_injective_virtual_comparison}
+    Under the hypotheses of
+    Definition~\ref{def:peps_g_injective_virtual_comparison},
+    $\Phi$ is the unique linear map
+    $F:\mathcal V^G\to\mathcal W^H$ satisfying $S(Fx)=Tx$
+    for every $x\in\mathcal V^G$.
+    Reversing $T$ and $S$ gives $\Phi^{-1}$.
+    In finite dimension, $\dim\mathcal V^G=\dim\mathcal W^H$.
+    This is a local consequence of the invariant-space injectivity in
+    \cite[Definition~5.1]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_invariants_range}
+    The defining composition gives $S(\Phi x)=Tx$.
+    If $S(Fx)=Tx$, then $S(Fx)=S(\Phi x)$, and injectivity of
+    $S|_{\mathcal W^H}$ gives $Fx=\Phi x$.
+    Applying the same characterization with the two maps reversed
+    identifies the inverse. The dimension equality follows from the
+    linear isomorphism.
+\end{proof}
