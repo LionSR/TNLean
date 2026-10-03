@@ -23,8 +23,8 @@ preparation of arXiv:2307.01696:
   `QuantumCircuit.IsBondCircuitOn.mono`.
 
 On the ring, a product of `K` gates on neighbouring sites of a block of consecutive sites is a
-circuit of depth `K` inside that block (`QuantumCircuit.IsPairProduct.isCircuitOn`), and such products
-placed on pairwise disjoint blocks form a circuit of depth `K`
+circuit of depth `K` inside that block (`QuantumCircuit.IsPairProduct.isCircuitOn`), and such
+products placed on pairwise disjoint blocks form a circuit of depth `K`
 (`QuantumCircuit.isCircuitOn_list_prod_embedOp`). These are the steps
 behind the depth count of arXiv:2307.01696: the unitaries `U_i` of eq. (10) act on disjoint
 blocks, and each "can be implemented in `T=O(q)`" (paragraph before "The sequential-RG
@@ -220,8 +220,6 @@ theorem single {b : β} {Z : Matrix (ι → Fin d) (ι → Fin d) ℂ}
   ⟨[BondLayer.single b Z hZu hZ], rfl, by simpa using BondLayer.single_isIn b Z hZu hZ hR, by
     simp [circuitOp, BondLayer.single_op]⟩
 
-variable [DecidableEq β]
-
 private theorem zip_union (hne : ∀ b, (bond b).Nonempty) :
     ∀ (Ls₁ Ls₂ : List (BondLayer d bond)) {R₁ R₂ : Set ι}, Disjoint R₁ R₂ →
       Ls₁.length = Ls₂.length → (∀ L ∈ Ls₁, L.IsIn R₁) → (∀ L ∈ Ls₂, L.IsIn R₂) →
@@ -230,6 +228,7 @@ private theorem zip_union (hne : ∀ b, (bond b).Nonempty) :
   | [], _ :: _, _, _, _, h, _, _ => by simp at h
   | _ :: _, [], _, _, _, h, _, _ => by simp at h
   | L₁ :: Ls₁, L₂ :: Ls₂, R₁, R₂, hR, hl, h₁, h₂ => by
+    classical
     have h₁' : ∀ L ∈ Ls₁, L.IsIn R₁ := fun L hL => h₁ L (List.mem_cons_of_mem _ hL)
     have h₂' : ∀ L ∈ Ls₂, L.IsIn R₂ := fun L hL => h₂ L (List.mem_cons_of_mem _ hL)
     have hL₁ := h₁ L₁ List.mem_cons_self

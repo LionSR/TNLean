@@ -33,7 +33,8 @@ Three geometries are provided.
   cone of radius `r` lies within distance `r` along the chain
   (`QuantumCircuit.lightCone_openBond_subset`).
 * A simple graph `G`, with one bond `{u, v}` for each edge (`QuantumCircuit.edgeBond`). Its
-  light cone of radius `r` lies within graph distance `r` (`QuantumCircuit.lightCone_edgeBond_subset`).
+  light cone of radius `r` lies within graph distance `r`
+  (`QuantumCircuit.lightCone_edgeBond_subset`).
   This is the model of arXiv:2103.13367: gates "acting on disjoint pairs of nearest-neighbor
   spins" of a lattice, with "the minimal number of edges connecting the vertices `i` and `j` in
   the graph associated with the lattice" as distance.
@@ -129,9 +130,9 @@ theorem lightCone_lightCone (X : Set ι) (r s : ℕ) :
   | zero => rfl
   | succ s ih => rw [lightCone_succ, ih, ← Nat.add_assoc, lightCone_succ]
 
-/-- Sets of sites in the light cone of radius `r` of `X`: every point is joined to `X` by a
-chain of at most `r` sites, consecutive ones on a common bond. A predicate that holds on `X`
-and passes from a site to every site sharing a bond with it holds on the light cone. -/
+/-- Bounding a light cone step by step: if a family of sets `P r` contains `X` at `r = 0`,
+grows with `r`, and contains every site sharing a bond with a site of `P r` at `r + 1`, then
+the light cone of radius `r` of `X` lies in `P r`. -/
 theorem lightCone_subset_of_step {X : Set ι} {P : ℕ → Set ι} (h₀ : X ⊆ P 0)
     (hmono : ∀ r, P r ⊆ P (r + 1))
     (hstep : ∀ r b x y, x ∈ bond b → y ∈ bond b → x ∈ P r → y ∈ P (r + 1)) (r : ℕ) :
@@ -289,7 +290,8 @@ theorem openBond_nonempty (k : Fin n) : (openBond k).Nonempty := ⟨_, Or.inl rf
 lies within distance `r` of `X` along the chain. -/
 theorem lightCone_openBond_subset (X : Set (Fin (n + 1))) (r : ℕ) :
     lightCone openBond X r ⊆ {j | ∃ i ∈ X, (j : ℕ) ≤ i + r ∧ (i : ℕ) ≤ j + r} := by
-  refine lightCone_subset_of_step (P := fun r ↦ {j : Fin (n + 1) | ∃ i ∈ X, (j : ℕ) ≤ i + r ∧ (i : ℕ) ≤ j + r})
+  refine lightCone_subset_of_step
+    (P := fun r ↦ {j : Fin (n + 1) | ∃ i ∈ X, (j : ℕ) ≤ i + r ∧ (i : ℕ) ≤ j + r})
     (fun i hi ↦ ⟨i, hi, by omega, by omega⟩)
     (fun r j ⟨i, hi, h₁, h₂⟩ ↦ ⟨i, hi, by omega, by omega⟩) ?_ r
   rintro r k x y hx hy ⟨i, hi, h₁, h₂⟩

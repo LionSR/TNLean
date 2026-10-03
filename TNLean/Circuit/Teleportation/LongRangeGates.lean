@@ -244,7 +244,8 @@ theorem localGate_mem_unitary :
     g.localGate ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   embedOp_mem_unitary (pair_injective g.near_ne_far) g.u_mem_unitary
 
-theorem localGate_mem_supportedOperators : g.localGate ∈ supportedOperators d (ringBond g.near) := by
+theorem localGate_mem_supportedOperators :
+    g.localGate ∈ supportedOperators d (ringBond g.near) := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.near_ne_far) g.u
   rw [Matrix.range_cons_cons_empty] at this
   rw [ringBond, near, add_natCast_succ]

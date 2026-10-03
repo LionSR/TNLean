@@ -525,12 +525,14 @@ theorem isRoundsImplementationOn_thereRounds : ∀ (t : ℕ) (ht : t ≤ s),
     have h₁ := (isImplementationOn_round [] (valid_thereAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
-        v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t)) (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
+        v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t))
+          (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs (t + 1)) v from hv).mono
         (pairSites_thereAll_subset t)
     have hmap : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
-        (chainPerm (thereAll gs t) * circuitOp ([] : List (Layer d N))) *ᵥ v ∈ {v | IsZeroOn (zoneAll gs t) v} :=
+        (chainPerm (thereAll gs t) * circuitOp ([] : List (Layer d N))) *ᵥ v ∈
+          {v | IsZeroOn (zoneAll gs t) v} :=
       fun v hv => by
         simpa [circuitOp] using isZeroOn_chainPerm_thereAll hgs (by omega) hv
     refine ⟨?_, fun v hv => ?_⟩
@@ -565,7 +567,8 @@ theorem isRoundsImplementationOn_backRounds : ∀ (t : ℕ) (ht : t ≤ s),
     have h₁ := (isImplementationOn_round [] (valid_backAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs t) v},
-        v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t)) (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
+        v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t))
+          (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs t) v from hv).mono
         (pairSites_backAll_subset t)
