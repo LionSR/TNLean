@@ -71,10 +71,10 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     be the zero-record projection. For any square matrices $X_0,X_1$
     on another factor,
     \[
-      \mathcal E(I\otimes P)
-      \begin{pmatrix}X_0\otimes I&0\\0&X_1\otimes I\end{pmatrix}
-      \mathcal E(I\otimes P)Q_0
-      =\begin{pmatrix}X_0\otimes P+X_1\otimes(I-P)&0\\0&0\end{pmatrix}.
+        \mathcal E(I\otimes P)
+        \begin{pmatrix}X_0\otimes I&0\\0&X_1\otimes I\end{pmatrix}
+        \mathcal E(I\otimes P)Q_0
+        =\begin{pmatrix}X_0\otimes P+X_1\otimes(I-P)&0\\0&0\end{pmatrix}.
     \]
     Thus every input with its record qubit zero has its record zero
     at the end.
@@ -90,13 +90,13 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
 
 
     Put $\mathcal H=2^{-1/2}
-      \left(\begin{smallmatrix}I&I\\I&-I\end{smallmatrix}\right)$.
+        \left(\begin{smallmatrix}I&I\\I&-I\end{smallmatrix}\right)$.
     Then $\mathcal H\operatorname{diag}(I,R)\mathcal H
-      =\mathcal E((I+R)/2)$.
+        =\mathcal E((I+R)/2)$.
     If $R$ is a Hermitian involution, $(I+R)/2$ is an orthogonal
     projection. For a unitary $B$ and any square matrix $C$,
     \[
-      \operatorname{diag}(B,B)\mathcal E((I+B^\dagger C)/2)
+        \operatorname{diag}(B,B)\mathcal E((I+B^\dagger C)/2)
         =\mathcal H\operatorname{diag}(B,C)\mathcal H.
     \]
 \end{theorem}
@@ -271,11 +271,11 @@ proof, rather than providing a circuit complexity lower bound.
     and its square is $\|v\|_2^2I$.
     Let the eight vectors $n_j$ be the rows of
     \[
-      \frac1{15}
-      \begin{pmatrix}
-       15&0&0\\0&15&0\\0&0&15\\9&12&0\\
-       5&-10&-10\\-10&5&-10\\-10&-10&5\\-5&-2&-14
-      \end{pmatrix}.
+        \frac1{15}
+        \begin{pmatrix}
+            15 & 0   & 0   \\0&15&0\\0&0&15\\9&12&0\\
+            5  & -10 & -10 \\-10&5&-10\\-10&-10&5\\-5&-2&-14
+        \end{pmatrix}.
     \]
     Each vector has Euclidean norm one. Hence each $n_j\cdot\sigma$
     and the controlled operator
@@ -356,7 +356,7 @@ proof, rather than providing a circuit complexity lower bound.
     $V_i(v\cdot\sigma)V_i^\dagger=(R_iv)\cdot\sigma$.
     Thus, with $W(x)=V_1^{x_1}\cdots V_n^{x_n}$,
     $n(x)\cdot\sigma=(\prod_i s_i^{x_i})
-      W(x)(n_0\cdot\sigma)W(x)^\dagger$.
+        W(x)(n_0\cdot\sigma)W(x)^\dagger$.
     Apply the two controlled products and the central target gate;
     each $s_i=-1$ contributes a $Z$ on its control.
     On a line, move the target past the controls during the first
@@ -390,7 +390,7 @@ proof, rather than providing a circuit complexity lower bound.
     error amplification is at most $(Cq)^{q^2}$.
     Its logarithm requires only polynomially many precision bits:
     \[
-      O\bigl(N+\log(ND+1)+q^2\log(q+1)
+        O\bigl(N+\log(ND+1)+q^2\log(q+1)
         +\log(1/\varepsilon)\bigr).
     \]
     Convert the recorded rotations to binary angles, retaining all
@@ -463,7 +463,7 @@ recursion depth.
     $\|WJ-JU\|\leq\varepsilon$.
     For fixed $D$, both gate and auxiliary-qubit counts are at most
     \[
-      \exp\!\left\{C_D\log(N+1)
+        \exp\!\left\{C_D\log(N+1)
         \log\bigl(\log(N+1)+\log(1/\varepsilon)+2\bigr)\right\}.
     \]
     This bounds the auxiliary output error, without asserting exact
@@ -502,7 +502,7 @@ recursion depth.
     Fix a physical dimension $d\geq2$, a finite-dimensional bond space,
     matrices $A^{ij}$ and boundary vectors $l,r$. Suppose
     \[
-      (U_N)_{\mathbf i,\mathbf j}
+        (U_N)_{\mathbf i,\mathbf j}
         =lA^{i_1j_1}\cdots A^{i_Nj_N}r
     \]
     is unitary for every $N\geq1$. Then $U_N$ has an exact circuit
@@ -526,9 +526,9 @@ recursion depth.
     cap inputs averaged and cap outputs summed. Unitarity at length
     $m+k+n$ gives, for a central interval tensor $T$ of length $k$,
     \[
-      \sum_{\mathbf a}\operatorname{Tr}
+        \sum_{\mathbf a}\operatorname{Tr}
         (T_{\mathbf a,\mathbf b}^\dagger P_m
-         T_{\mathbf a,\mathbf b'}Q_n)
+        T_{\mathbf a,\mathbf b'}Q_n)
         =\delta_{\mathbf b,\mathbf b'}.
     \]
     This identity is separately linear in the two Gram matrices.
@@ -612,7 +612,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     For a nonsingular complex square matrix $P$ and any matrix $H$,
     \[
-      \left.\frac{d}{dz}\det(P+zH)\right|_{z=0}
+        \left.\frac{d}{dz}\det(P+zH)\right|_{z=0}
         =\det(P)\operatorname{Tr}(P^{-1}H).
     \]
     If $P>0$ maximizes the determinant on the positive semidefinite
@@ -638,8 +638,8 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{def:mpu_dual_gram_metric}
     The dual metric is positive definite and satisfies
     \[
-      PQ=QP=I/r,\qquad Q^{-1}=rP,\qquad
-      \operatorname{Tr}(Q^{-1}P^{-1})=r^2.
+        PQ=QP=I/r,\qquad Q^{-1}=rP,\qquad
+        \operatorname{Tr}(Q^{-1}P^{-1})=r^2.
     \]
     If $\operatorname{Tr}(P^{-1}(X-P))=0$, then
     $\operatorname{Tr}(XQ)=1$.
@@ -658,10 +658,10 @@ left multiplication, right vector $b$ and left functional the trace.
     $\operatorname{Tr}(P\overline Q)=1$ for all $P\in\mathcal C$.
     Then there are $P_*,Q_*>0$ such that
     \[
-      P_*\in\mathcal C,\qquad
-      Q_*=P_*^{-1}/r,\qquad
-      \operatorname{Tr}(PQ_*)=1\quad(P\in\mathcal C),\qquad
-      \operatorname{Tr}(Q_*^{-1}P_*^{-1})=r^2.
+        P_*\in\mathcal C,\qquad
+        Q_*=P_*^{-1}/r,\qquad
+        \operatorname{Tr}(PQ_*)=1\quad(P\in\mathcal C),\qquad
+        \operatorname{Tr}(Q_*^{-1}P_*^{-1})=r^2.
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -736,9 +736,9 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     For interval matrices $A_{ab}:\mathbb C^s\to\mathbb C^r$, put
     \[
-      \mathcal T_\rho(P)=\sum_{a,b,c}\rho_{cb}A_{ab}^\dagger PA_{ac},
-      \qquad
-      K(P,Q)_{bc}=\sum_a\operatorname{Tr}(A_{ab}^\dagger PA_{ac}Q).
+        \mathcal T_\rho(P)=\sum_{a,b,c}\rho_{cb}A_{ab}^\dagger PA_{ac},
+        \qquad
+        K(P,Q)_{bc}=\sum_a\operatorname{Tr}(A_{ab}^\dagger PA_{ac}Q).
     \]
     The first map is linear in $P$. For prefix rows $F_{ab}$, their
     density-weighted Gram is $P_F(\rho)=\mathcal T_\rho(I)$, where
@@ -767,7 +767,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     \uses{def:mpu_density_interval_grams}
     One has $\operatorname{Tr}(Q\mathcal T_\rho(P))
-    =\operatorname{Tr}(\rho K(P,Q))$ for every $\rho$.
+        =\operatorname{Tr}(\rho K(P,Q))$ for every $\rho$.
     If this value is one for every density matrix $\rho$, then
     $K(P,Q)=I$. More generally, any complex matrix $K$ satisfying
     $\operatorname{Tr}(\rho K)=1$ for every density matrix is the
@@ -787,7 +787,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     \uses{def:mpu_density_interval_grams}
     Let $\mathcal S_F=\{P_F(\rho):\rho\succeq0,
-    \operatorname{Tr}\rho=1\}$, and let $\mathcal C_F$ be its
+        \operatorname{Tr}\rho=1\}$, and let $\mathcal C_F$ be its
     real affine hull. The interval transfer is also an affine map
     over the real scalars.
 \end{definition}
@@ -908,8 +908,8 @@ left multiplication, right vector $b$ and left functional the trace.
     $G_c:\mathbb C^E\to\mathbb C^r$. Define
     $U_{(a,c),(b,e)}=(F_aG_c)_{be}$ and
     \[
-      P_F(\rho)=\sum_aF_a^\dagger\rho^T F_a,\qquad
-      Q_G(\tau)=\sum_cG_c\tau G_c^\dagger.
+        P_F(\rho)=\sum_aF_a^\dagger\rho^T F_a,\qquad
+        Q_G(\tau)=\sum_cG_c\tau G_c^\dagger.
     \]
 \end{definition}
 
@@ -920,7 +920,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{def:mpu_finite_cut_cap_grams, def:mpu_density_interval_grams}
     For arbitrary matrices $\rho,\tau$, one has
     \[
-      \operatorname{Tr}(P_F(\rho)Q_G(\tau))
+        \operatorname{Tr}(P_F(\rho)Q_G(\tau))
         =\operatorname{Tr}(U^\dagger U(\rho\otimes\tau)).
     \]
     Both cap Grams are positive semidefinite for positive semidefinite
@@ -934,7 +934,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Write $U^\dagger U$ as the sum of the rank-one Grams of its rows.
     The vectorization trace identity turns each product-density
     pairing into $\operatorname{Tr}((F_aG_c)^\dagger\rho^T
-    F_aG_c\tau)$. Trace cyclicity and the finite sums give the
+        F_aG_c\tau)$. Trace cyclicity and the finite sums give the
     displayed identity. Positivity follows from the matrix
     sandwiches. Substitute $U^\dagger U=I$ and take the trace of a
     tensor product to obtain the normalized formula.
@@ -1399,6 +1399,37 @@ left multiplication, right vector $b$ and left functional the trace.
     Each endpoint matrix has one row or one column.
 \end{proof}
 
+\begin{definition}[Numbering the sites at a physical cut]
+    \label{def:mpu_physical_cut_numbering}
+    \lean{MPSPreparation.cutPrefixSiteEquiv, MPSPreparation.cutSuffixSiteEquiv, MPSPreparation.cutPrefixConfigEquiv, MPSPreparation.cutSuffixConfigEquiv}
+    \leanok
+    \uses{def:mpu_minimal_physical_cut_spaces}
+    Let $0\leq k\leq N$. Number the sites before cut $k$ by
+    $0,\ldots,k-1$, and number the sites after the cut by
+    $0,\ldots,N-k-1$. The corresponding bijections to the actual
+    sites are $i\mapsto i$ and $j\mapsto k+j$. They induce
+    bijections between the numbered configurations and the
+    configurations on the two subsets of physical sites.
+\end{definition}
+
+\begin{theorem}[Cut rank is independent of site numbering]
+    \label{thm:mpu_physical_cut_numbering_rank}
+    \lean{MPSPreparation.cutCoefficientMatrix_eq_reindex_cutMatrix, MPSPreparation.cutCoefficientRank_eq_cutRank}
+    \leanok
+    \uses{def:mpu_physical_cut_numbering}
+    For every coefficient tensor $\psi$ and every $k\leq N$, the
+    coefficient matrix indexed by the actual prefix and suffix
+    configurations is the matrix indexed by numbered configurations
+    after the preceding row and column bijections. Thus the two
+    matrices have the same rank. No assumption on the local dimension
+    or on the nonvanishing of $\psi$ is required.
+\end{theorem}
+\begin{proof}\leanok
+    The site bijections reconstruct the same physical configuration,
+    so corresponding entries agree. Reindexing rows and columns by
+    bijections preserves matrix rank.
+\end{proof}
+
 \begin{definition}[The chain of cut-coordinate maps]
     \label{def:mpu_minimal_cut_coordinate_chain}
     \lean{MPSPreparation.cutSiteMatrix, MPSPreparation.cutColumnBasis, MPSPreparation.cutEvaluationMap, MPSPreparation.cutEvaluationMatrix, MPSPreparation.cutPrefixChain, MPSPreparation.minimalCutChain}
@@ -1570,11 +1601,11 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     For a square matrix $A$, define
     \[
-      \mathcal D_A=
-      \begin{pmatrix}
-        A&I-AA^\dagger\\
-        I-A^\dagger A&-A^\dagger
-      \end{pmatrix}.
+        \mathcal D_A=
+        \begin{pmatrix}
+            A             & I-AA^\dagger \\
+            I-A^\dagger A & -A^\dagger
+        \end{pmatrix}.
     \]
 \end{definition}
 
@@ -1586,7 +1617,7 @@ left multiplication, right vector $b$ and left functional the trace.
     If $AA^\dagger A=A$, then $\mathcal D_A$ is unitary. For every
     matrix of input columns $V$,
     \[
-      \mathcal D_A\binom V0=
+        \mathcal D_A\binom V0=
         \binom{AV}{(I-A^\dagger A)V}.
     \]
     The total output Gram is $V^\dagger V$, and projection onto
@@ -1647,7 +1678,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     Set
     \[
-      G(d,n)=2n+3(d^n)^2(2n+1)(4n3^n).
+        G(d,n)=2n+3(d^n)^2(2n+1)(4n3^n).
     \]
 \end{definition}
 
@@ -1705,7 +1736,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Attenuation by $0<t_r\leq1$ and $\ell(r)\leq r$
     reflection rounds give exactly
     \[
-      \binom{rPV}{0}.
+        \binom{rPV}{0}.
     \]
     The equality includes the phase and holds on all coherent inputs.
 \end{theorem}
@@ -1723,7 +1754,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $EE^\dagger$ has an $L$-gate circuit, then reflection about
     $(UE)(UE)^\dagger$ has a $(2K+L)$-gate circuit, since
     \[
-      I-2(UE)(UE)^\dagger=U(I-2EE^\dagger)U^\dagger.
+        I-2(UE)(UE)^\dagger=U(I-2EE^\dagger)U^\dagger.
     \]
     A $K$-gate circuit repeated $k$ times costs at most $kK$.
     On $n\geq2$ sites, an amplification round with reflection
@@ -1742,7 +1773,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Suppose $C,q\geq0$, $r\geq q+1$, $T(0)\leq a$, and
     $T(j+1)\leq rT(j)+Cq^j$. Then
     \[
-      T(L)\leq(a+C)r^L-Cq^L.
+        T(L)\leq(a+C)r^L-Cq^L.
     \]
     If also $a\geq0$ and $r\leq2^k$, this is at most
     $(a+C)(2^L)^k$. In particular, polynomial overhead in the
@@ -1807,10 +1838,10 @@ left multiplication, right vector $b$ and left functional the trace.
     $P_j$ belongs to the actual prefix Gram affine hull,
     $P_j$ and $Q_j=P_j^{-1}/r_j$ are positive definite,
     \[
-      \operatorname{Tr}(XQ_j)=1
+        \operatorname{Tr}(XQ_j)=1
         \quad\text{for every }X\text{ in that affine hull},
-      \qquad
-      \operatorname{Tr}(Q_j^{-1}P_j^{-1})=r_j^2.
+        \qquad
+        \operatorname{Tr}(Q_j^{-1}P_j^{-1})=r_j^2.
     \]
     No factorization, spanning, isometry, or metric witnesses
     need to be supplied.
@@ -2071,7 +2102,7 @@ left multiplication, right vector $b$ and left functional the trace.
     The logical auxiliary register has $A=2(N-1)(q+1)$ sites,
     and the complete register has
     \[
-      N+2A=N+4(N-1)(q+1)\leq5N(q+1).
+        N+2A=N+4(N-1)(q+1)\leq5N(q+1).
     \]
     For $D>0$ one has $D\leq d^q\leq dD$. Every positive bond
     dimension $r\leq D$ admits an injective encoding in its assigned
@@ -2158,9 +2189,9 @@ left multiplication, right vector $b$ and left functional the trace.
     implement $I-2EE^\dagger$ and $I-2P$ cleanly along the same $J$.
     Here $E$ is an isometry and $P$ an orthogonal projection. If
     \[
-      (ZE)^\dagger P(ZE)
-       =\sin^2\!\left(\frac{\pi}{4\ell+2}\right) I,
-      \qquad \ell>0,
+        (ZE)^\dagger P(ZE)
+        =\sin^2\!\left(\frac{\pi}{4\ell+2}\right) I,
+        \qquad \ell>0,
     \]
     the amplified circuit has cost
     $\ell(1+2K+B+L)+K$ and acts exactly as normalized postselection
@@ -2215,13 +2246,13 @@ left multiplication, right vector $b$ and left functional the trace.
     primitive costs at most $M$, and each reflection costs at most $F$,
     exact amplification at a bond of dimension at most $D$ costs at most
     \[
-      (4D+2)T+(2D+1)M+D(1+2F).
+        (4D+2)T+(2D+1)M+D(1+2F).
     \]
     A numerical recurrence $T_{j+1}\leq RT_j+C$ with $R\geq2$
     and $T_0\leq a$ satisfies, at balanced height
     $L=\lceil\log_2N\rceil$,
     \[
-      T_L\leq(a+C)(2N)^{\lceil\log_2R\rceil}.
+        T_L\leq(a+C)(2N)^{\lceil\log_2R\rceil}.
     \]
     For $D>0$, the branching exponent satisfies
     $\lceil\log_2(4D+2)\rceil\leq\lceil\log_2D\rceil+3$.
@@ -2272,10 +2303,10 @@ left multiplication, right vector $b$ and left functional the trace.
     For positive definite $P$ on a bond of dimension $r>0$ and
     $Q=P^{-1}/r$, the source's transpose expression satisfies
     \[
-      \operatorname{Tr}\bigl[(Q^{-1})^T(P^{-1})^T\bigr]=r^2,
-      \qquad
-      \sqrt{\operatorname{Re}\operatorname{Tr}
-        \bigl[(Q^{-1})^T(P^{-1})^T\bigr]}=r.
+        \operatorname{Tr}\bigl[(Q^{-1})^T(P^{-1})^T\bigr]=r^2,
+        \qquad
+        \sqrt{\operatorname{Re}\operatorname{Tr}
+            \bigl[(Q^{-1})^T(P^{-1})^T\bigr]}=r.
     \]
     These metrics give an explicit candidate of joining norm $r$.
     The assertion does not bound the appendix's infimum restricted
@@ -2343,8 +2374,8 @@ left multiplication, right vector $b$ and left functional the trace.
     diagonal indicator of its encoded configurations. Consequently,
     the selected-flag inclusion has
     \[
-      EE^\dagger=\operatorname{diag}
-      \bigl(\mathbf 1_{\text{all selected flags zero}}\bigr).
+        EE^\dagger=\operatorname{diag}
+        \bigl(\mathbf 1_{\text{all selected flags zero}}\bigr).
     \]
     This is an orthogonal projection, and the reversible selected-zero
     circuit reflects it exactly. For $d\geq2$, an $n\geq2$ logical
@@ -2440,11 +2471,11 @@ left multiplication, right vector $b$ and left functional the trace.
     recursively defined count on any binary tree of height $h$
     satisfies
     \[
-      T+C\leq(K+C)(4D+2)^h.
+        T+C\leq(K+C)(4D+2)^h.
     \]
     On the actual midpoint partition of $N>0$ consecutive sites,
     \[
-      T\leq(K+C)(2N)^{\lceil\log_2(4D+2)\rceil}.
+        T\leq(K+C)(2N)^{\lceil\log_2(4D+2)\rceil}.
     \]
     These are bounds on the stated numerical recursion; existence
     of the corresponding recursive circuits is a separate assertion.
@@ -2515,7 +2546,7 @@ left multiplication, right vector $b$ and left functional the trace.
     support. Its complete circuit returns the entire common workspace
     to zero on every logical input, with gate count at most
     \[
-      76(d^4D^2)^6\,n_{\mathrm{tot}},
+        76(d^4D^2)^6\,n_{\mathrm{tot}},
     \]
     where $n_{\mathrm{tot}}$ is the total number of physical, bond,
     flag, and workspace qudits.
@@ -2587,8 +2618,8 @@ left multiplication, right vector $b$ and left functional the trace.
     logical input. If $K_1,K_2$ are the child costs and $M$ is the
     joining cost, its gate count is
     \[
-      \ell\bigl(1+2(K_1+K_2+M)+R_b+R_2\bigr)+K_1+K_2+M,
-      \qquad \ell=\lceil\pi r/4\rceil,
+        \ell\bigl(1+2(K_1+K_2+M)+R_b+R_2\bigr)+K_1+K_2+M,
+        \qquad \ell=\lceil\pi r/4\rceil,
     \]
     where $R_b,R_2$ are the actual common-workspace reflection costs.
     The success probability is derived from the normalized parent
@@ -2684,7 +2715,7 @@ remain separate assertions.
     Put $q=\lceil\log_dD\rceil$, let $g$ be the complete register size,
     and let $A$ be the common workspace size. A common packet budget is
     \[
-      M_0=\bigl(76d^{24}D^{12}+8(D+1)\bigr)g.
+        M_0=\bigl(76d^{24}D^{12}+8(D+1)\bigr)g.
     \]
     Reserve an additional $16g^2$ for coordinate permutations, and use
     $M=M_0+16g^2$ as a common leaf and node overhead. The common
@@ -2693,8 +2724,8 @@ remain separate assertions.
     Define the midpoint-tree count using leaf cost $M$, joining cost
     $M$, and two reflection costs $F$. Finally put
     \[
-    c(d,D)=(2D+2)\bigl(5(76d^{24}D^{12}+8(D+1))+400\bigr)
-          +D(30400d^{18}+803).
+        c(d,D)=(2D+2)\bigl(5(76d^{24}D^{12}+8(D+1))+400\bigr)
+        +D(30400d^{18}+803).
     \]
 \end{definition}
 
@@ -2707,13 +2738,13 @@ remain separate assertions.
     testing at most $A$ flags, including the empty selection, has cost
     at most $F$. For $N>0$, the latter satisfies
     \[
-      F\leq(15200d^{18}+401)\bigl(N(q+1)\bigr)^3.
+        F\leq(15200d^{18}+401)\bigl(N(q+1)\bigr)^3.
     \]
     If every node uses at most $D$ amplification rounds, the stated
     numerical tree count satisfies
     \[
-      T\leq c(d,D)(D+1)^3
-          (2N)^{\lceil\log_2D\rceil+6}.
+        T\leq c(d,D)(D+1)^3
+        (2N)^{\lceil\log_2D\rceil+6}.
     \]
     The coefficient $c(d,D)(D+1)^3$ is polynomial in $D$ for fixed
     $d$, of degree at most sixteen. This theorem bounds the numerical
@@ -2754,7 +2785,7 @@ remain separate assertions.
     projection $P$ are also supported on $S$. Then the full logical
     amplification operator
     \[
-      \bigl[-(I-2ZEE^\dagger Z^\dagger)(I-2P)\bigr]^\ell Z
+        \bigl[-(I-2ZEE^\dagger Z^\dagger)(I-2P)\bigr]^\ell Z
     \]
     is supported on $S$, with its exact scalar phase retained.
     Support of the two projections themselves suffices to derive
@@ -3114,378 +3145,378 @@ remain separate assertions.
     \label{def:mpu_complete_register}
 
 
-Append one padding qudit when $N=1$, and none otherwise, to the physical register,
-logical auxiliaries, and reusable scratch pool. The physical basis inclusion
-initializes all three groups to zero.
+    Append one padding qudit when $N=1$, and none otherwise, to the physical register,
+    logical auxiliaries, and reusable scratch pool. The physical basis inclusion
+    initializes all three groups to zero.
 \end{definition}
 
 \begin{theorem}[Complete circuit registers]
     \label{thm:mpu_complete_register}
 
 
-The complete register has at most $5N(q+1)+1$ sites, where $q$ is the
-bond-register width. Its physical basis inclusion is the physical configuration
-followed by zeros on the logical auxiliaries, scratch pool, and padding.
+    The complete register has at most $5N(q+1)+1$ sites, where $q$ is the
+    bond-register width. Its physical basis inclusion is the physical configuration
+    followed by zeros on the logical auxiliaries, scratch pool, and padding.
 \end{theorem}
 \begin{proof}
-The padding count is at most one. Apply the common register bound and expand
-the three successive initialized inclusions.
+    The padding count is at most one. Apply the common register bound and expand
+    the three successive initialized inclusions.
 \end{proof}
 
 \begin{definition}[Initialized joining flags]
     \label{def:mpu_joint_flags}
 
 
-View the two joining flags as sites outside both child packets. Initialize exactly
-these flags and retain arbitrary configurations on all other outside sites.
+    View the two joining flags as sites outside both child packets. Initialize exactly
+    these flags and retain arbitrary configurations on all other outside sites.
 \end{definition}
 
 \begin{theorem}[Initialized joining flags]
     \label{thm:mpu_joint_flags}
 
 
-The joining flags lie outside both child packets. The joint output inclusion,
-with these outside flags initialized, has both joining flags equal to zero.
+    The joining flags lie outside both child packets. The joint output inclusion,
+    with these outside flags initialized, has both joining flags equal to zero.
 \end{theorem}
 \begin{proof}
-The joining flag sites are disjoint from both interval packets. Their outside
-inclusion sets exactly these two coordinates to zero.
+    The joining flag sites are disjoint from both interval packets. Their outside
+    inclusion sets exactly these two coordinates to zero.
 \end{proof}
 
 \begin{theorem}[The actual active joining packet]
     \label{thm:mpu_actual_packet_encoding}
 
 
-The actual joint child output restricted to the joining packet is precisely
-the active compatible bond code, with the shared right and left labels in
-contraction order and both flags zero.
+    The actual joint child output restricted to the joining packet is precisely
+    the active compatible bond code, with the shared right and left labels in
+    contraction order and both flags zero.
 \end{theorem}
 \begin{proof}
-Evaluate the prescribed boundary configurations on the two shared bond
-registers, then use the initialized joining-flag identities.
+    Evaluate the prescribed boundary configurations on the two shared bond
+    registers, then use the initialized joining-flag identities.
 \end{proof}
 
 \begin{definition}[Derived product coordinates]
     \label{def:mpu_actual_suffix_factorization}
 
 
-Regroup the physical outputs, outer cut labels, and outside configurations
-before the two joining labels. Pull a basis inclusion back along a site
-bijection to place the joining packet at the end.
+    Regroup the physical outputs, outer cut labels, and outside configurations
+    before the two joining labels. Pull a basis inclusion back along a site
+    bijection to place the joining packet at the end.
 \end{definition}
 
 \begin{theorem}[Derived product coordinates]
     \label{thm:mpu_actual_suffix_factorization}
 
 
-The actual joint output admits a derived site bijection and a product code:
-a prefix encoding independent of the joining labels, followed by the compatible
-joining-packet code. The prefix encoding is injective. Neither the site
-bijection nor its factorization is supplied as a hypothesis.
+    The actual joint output admits a derived site bijection and a product code:
+    a prefix encoding independent of the joining labels, followed by the compatible
+    joining-packet code. The prefix encoding is injective. Neither the site
+    bijection nor its factorization is supplied as a hypothesis.
 \end{theorem}
 \begin{proof}
-Use the actual ordered joining packet and its complementary site bijection.
-Every prefix site is independent of the joining labels. Injectivity of the full
-joint output code therefore implies injectivity of its prefix factor.
+    Use the actual ordered joining packet and its complementary site bijection.
+    Every prefix site is independent of the joining labels. Injectivity of the full
+    joint output code therefore implies injectivity of its prefix factor.
 \end{proof}
 
 \begin{theorem}[The encoded merger in original coordinates]
     \label{thm:mpu_permuted_encoded_merger}
 
 
-Suppose two full clean child circuits have the stated encoded joint columns,
-logical support inside a prescribed set, and an isometric normalized parent.
-A site bijection putting the joining packet last yields a merger in the original
-coordinates. Its logical support, initialized columns, and scalar phase are
-preserved. Each child conjugation and the final return costs at most $4g^2$
-neighboring-pair gates, where $g$ is the complete logical and scratch site count.
+    Suppose two full clean child circuits have the stated encoded joint columns,
+    logical support inside a prescribed set, and an isometric normalized parent.
+    A site bijection putting the joining packet last yields a merger in the original
+    coordinates. Its logical support, initialized columns, and scalar phase are
+    preserved. Each child conjugation and the final return costs at most $4g^2$
+    neighboring-pair gates, where $g$ is the complete logical and scratch site count.
 \end{theorem}
 \begin{proof}
-Conjugate both child circuits into the suffix coordinates. Apply the supported
-encoded merger, then conjugate its logical and physical operators back.
-The site permutation fixes the scratch pool. Its basis action transports the
-rectangular initialized columns exactly.
+    Conjugate both child circuits into the suffix coordinates. Apply the supported
+    encoded merger, then conjugate its logical and physical operators back.
+    The site permutation fixes the scratch pool. Its basis action transports the
+    rectangular initialized columns exactly.
 \end{proof}
 
 \begin{theorem}[Complete merger gate bound]
     \label{thm:mpu_actual_merger_resources}
 
 
-For $N\geq2$, $0<r\leq D$, and a selected initial flag count within the allocated
-pool, the encoded merger including both child conjugations and its final return
-has gate count at most
-\[
- (2D+1)(K_1+K_2)+(2D+1)M+D(1+2F),
-\]
-where $M$ is the common node budget and $F$ is the common reflection budget.
-The quadratic routing reserve is included in $M$.
+    For $N\geq2$, $0<r\leq D$, and a selected initial flag count within the allocated
+    pool, the encoded merger including both child conjugations and its final return
+    has gate count at most
+    \[
+        (2D+1)(K_1+K_2)+(2D+1)M+D(1+2F),
+    \]
+    where $M$ is the common node budget and $F$ is the common reflection budget.
+    The quadratic routing reserve is included in $M$.
 \end{theorem}
 \begin{proof}
-Bound the joining preparation by the common packet budget, both reflections
-by $F$, and the prescribed number of amplification rounds by $r\leq D$.
-Expand the gate formula. The node reserve absorbs the three conjugations.
+    Bound the joining preparation by the common packet budget, both reflections
+    by $F$, and the prescribed number of amplification rounds by $r\leq D$.
+    Expand the gate formula. The node reserve absorbs the three conjugations.
 \end{proof}
 
 \begin{definition}[Joining with arbitrary spectator states]
     \label{def:mpu_joining_spectators}
 
 
-Tensor the two weighted interval columns with the identity on the remaining
-outside configurations, and move those configurations before the joining labels.
+    Tensor the two weighted interval columns with the identity on the remaining
+    outside configurations, and move those configurations before the joining labels.
 \end{definition}
 
 \begin{theorem}[Joining with arbitrary spectator states]
     \label{thm:mpu_joining_spectators}
 
 
-The normalized joining contraction commutes with the spectator identity after
-this regrouping. Thus its isometry follows from the actual normalized parent
-isometry. The regrouped child tensor is precisely the actual weighted child
-Kronecker tensor, with every spectator coordinate retained.
+    The normalized joining contraction commutes with the spectator identity after
+    this regrouping. Thus its isometry follows from the actual normalized parent
+    isometry. The regrouped child tensor is precisely the actual weighted child
+    Kronecker tensor, with every spectator coordinate retained.
 \end{theorem}
 \begin{proof}
-Expand the joining contraction entrywise. The spectator Kronecker delta
-passes through its finite sum. Reindex the actual child product and use the
-actual parent isometry.
+    Expand the joining contraction entrywise. The spectator Kronecker delta
+    passes through its finite sum. Reindex the actual child product and use the
+    actual parent isometry.
 \end{proof}
 
 \begin{definition}[Coordinates of basis inclusions]
     \label{def:mpu_basis_encoding_coordinates}
 
 
-Two injective basis encodings with the same image determine a unique bijection
-between their label sets, carrying each encoded configuration to itself.
+    Two injective basis encodings with the same image determine a unique bijection
+    between their label sets, carrying each encoded configuration to itself.
 \end{definition}
 
 \begin{theorem}[Coordinates of basis inclusions]
     \label{thm:mpu_basis_encoding_coordinates}
 
 
-The matrices of initialized basis inclusions respect composition and products.
-The derived label bijection transports equal-range encodings exactly. Appending
-a compatible active joining code is the corresponding product basis inclusion.
+    The matrices of initialized basis inclusions respect composition and products.
+    The derived label bijection transports equal-range encodings exactly. Appending
+    a compatible active joining code is the corresponding product basis inclusion.
 \end{theorem}
 \begin{proof}
-Equal images and injectivity determine the label bijection. Matrix
-multiplication of the basis inclusions reduces to their Kronecker deltas.
+    Equal images and injectivity determine the label bijection. Matrix
+    multiplication of the basis inclusions reduces to their Kronecker deltas.
 \end{proof}
 
 \begin{theorem}[Transport of initialized flag spaces]
     \label{thm:mpu_initialized_encoding_coordinates}
 
 
-Pulling an initialized input encoding back along a site bijection transports
-its image to the zero-flag inclusion on the transported selected sites.
-This gives the complete initialized input subspace, retaining arbitrary
-configurations outside the selected flags.
+    Pulling an initialized input encoding back along a site bijection transports
+    its image to the zero-flag inclusion on the transported selected sites.
+    This gives the complete initialized input subspace, retaining arbitrary
+    configurations outside the selected flags.
 \end{theorem}
 \begin{proof}
-Membership in the pulled-back image is membership in the original image
-after the site bijection. The zero conditions are precisely its transported
-selected sites.
+    Membership in the pulled-back image is membership in the original image
+    after the site bijection. The zero conditions are precisely its transported
+    selected sites.
 \end{proof}
 
 \begin{definition}[Actual child and parent inputs]
     \label{def:mpu_actual_input_regrouping}
 
 
-The remaining sites outside two adjacent child packets and the joining flags
-are identified with the sites outside the parent packet. Join the two physical
-input configurations and transport the arbitrary remaining configuration along
-this site bijection.
+    The remaining sites outside two adjacent child packets and the joining flags
+    are identified with the sites outside the parent packet. Join the two physical
+    input configurations and transport the arbitrary remaining configuration along
+    this site bijection.
 \end{definition}
 
 \begin{theorem}[Actual child and parent inputs]
     \label{thm:mpu_actual_input_regrouping}
 
 
-The joint initialized child input is exactly the parent initialized input under
-the derived configuration bijection. Their images equal the zero-flag subspace
-selected by the parent auxiliary sites. The two actual child column identities,
-together with their support conditions, therefore give the joint initialized
-child columns; no input bijection or joint-column identity is assumed.
+    The joint initialized child input is exactly the parent initialized input under
+    the derived configuration bijection. Their images equal the zero-flag subspace
+    selected by the parent auxiliary sites. The two actual child column identities,
+    together with their support conditions, therefore give the joint initialized
+    child columns; no input bijection or joint-column identity is assumed.
 \end{theorem}
 \begin{proof}
-The parent support is the union of the two child supports and the joining
-flags. Its complement gives the remaining-site bijection. Evaluate the two
-input configurations on these disjoint sets. Compose the supported child
-identities with the resulting initialized inclusion.
+    The parent support is the union of the two child supports and the joining
+    flags. Its complement gives the remaining-site bijection. Evaluate the two
+    input configurations on these disjoint sets. Compose the supported child
+    identities with the resulting initialized inclusion.
 \end{proof}
 
 \begin{theorem}[Actual joining reset gives the parent output]
     \label{thm:mpu_actual_output_reset}
 
 
-Suppose the shared cut code sends its distinguished zero label to the zero
-bond configuration. The actual joint output with both shared labels reset to
-that label is exactly the parent output inclusion, after joining the physical
-outputs and transporting the arbitrary remaining configuration. This equality
-includes both joining flags and every interior auxiliary.
+    Suppose the shared cut code sends its distinguished zero label to the zero
+    bond configuration. The actual joint output with both shared labels reset to
+    that label is exactly the parent output inclusion, after joining the physical
+    outputs and transporting the arbitrary remaining configuration. This equality
+    includes both joining flags and every interior auxiliary.
 \end{theorem}
 \begin{proof}
-Evaluate on the left child, right child, joining flags, and parent complement.
-The reset code makes both shared bond configurations zero, the flags are
-initialized to zero, and the outer labels and arbitrary outside configuration
-agree with the parent boundary configuration.
+    Evaluate on the left child, right child, joining flags, and parent complement.
+    The reset code makes both shared bond configurations zero, the flags are
+    initialized to zero, and the outer labels and arbitrary outside configuration
+    agree with the parent boundary configuration.
 \end{proof}
 
 \begin{theorem}[Operator cut ranks of ordinary MPOs]
     \label{thm:mpu_periodic_operator_cut_rank}
 
 
-For an ordinary periodic MPO of virtual dimension $\chi$, every consecutive
-operator coefficient cut has rank at most $\chi^2$. The same bound holds for an
-arbitrary trace boundary. Scalar left and right open boundaries give the bound
-$\chi$. These statements require no unitarity, normalization, minimality, or
-canonical-form assumption.
+    For an ordinary periodic MPO of virtual dimension $\chi$, every consecutive
+    operator coefficient cut has rank at most $\chi^2$. The same bound holds for an
+    arbitrary trace boundary. Scalar left and right open boundaries give the bound
+    $\chi$. These statements require no unitarity, normalization, minimality, or
+    canonical-form assumption.
 \end{theorem}
 \begin{proof}
-Split the ordered word at the physical cut. A trace contraction factors
-through its two open virtual indices; scalar open boundaries factor through
-one. The cut matrix rank is bounded by the dimension of this intermediate
-space. For an MPO, its paired-letter coefficient tensor is exactly the
-corresponding ordinary matrix-product tensor.
+    Split the ordered word at the physical cut. A trace contraction factors
+    through its two open virtual indices; scalar open boundaries factor through
+    one. The cut matrix rank is bounded by the dimension of this intermediate
+    space. For an MPO, its paired-letter coefficient tensor is exactly the
+    corresponding ordinary matrix-product tensor.
 \end{proof}
 
 \begin{theorem}[Transport and cancellation of exact columns]
     \label{thm:mpu_column_coordinate_transport}
 
 
-Physical and input-output coordinate bijections transport exact initialized
-column identities. Input-column reindexing commutes with the normalized joining
-parent. A full clean implementation through an isometric initialized inclusion
-also determines the exact logical columns from its ambient columns.
+    Physical and input-output coordinate bijections transport exact initialized
+    column identities. Input-column reindexing commutes with the normalized joining
+    parent. A full clean implementation through an isometric initialized inclusion
+    also determines the exact logical columns from its ambient columns.
 \end{theorem}
 \begin{proof}
-Use the matrix reindexing product identity. Reindexing input columns passes
-through the joining finite sum. To recover logical columns, multiply the
-ambient identity by the adjoint of the initialized inclusion.
+    Use the matrix reindexing product identity. Reindexing input columns passes
+    through the joining finite sum. To recover logical columns, multiply the
+    ambient identity by the adjoint of the initialized inclusion.
 \end{proof}
 
 \begin{theorem}[The reset label in the output inclusion]
     \label{thm:mpu_joining_reset_columns}
 
 
-Multiplication of an initialized basis inclusion by the reset columns selects
-its prescribed reset label. The same identity retains every spectator
-configuration in the regrouped joining tensor.
+    Multiplication of an initialized basis inclusion by the reset columns selects
+    its prescribed reset label. The same identity retains every spectator
+    configuration in the regrouped joining tensor.
 \end{theorem}
 \begin{proof}
-Expand the basis inclusion. Its Kronecker delta leaves only the reset label;
-the spectator delta is unchanged.
+    Expand the basis inclusion. Its Kronecker delta leaves only the reset label;
+    the spectator delta is unchanged.
 \end{proof}
 
 \begin{theorem}[The joining packet lies in the parent interval]
     \label{thm:mpu_joining_packet_support}
 
 
-The two shared bond registers and both joining flags lie inside the parent
-interval support. Consequently the range of the actual ordered joining packet
-is contained in that support.
+    The two shared bond registers and both joining flags lie inside the parent
+    interval support. Consequently the range of the actual ordered joining packet
+    is contained in that support.
 \end{theorem}
 \begin{proof}
-The joining cut is strictly between the parent endpoints. Its two bond
-registers belong to the respective interval boundary and interior sets, and
-its flags belong to the parent interior. Apply the site-coordinate bijection.
+    The joining cut is strictly between the parent endpoints. Its two bond
+    registers belong to the respective interval boundary and interior sets, and
+    its flags belong to the parent interior. Apply the site-coordinate bijection.
 \end{proof}
 
 \begin{theorem}[The one-site case and empty padding]
     \label{thm:mpu_single_site_complete}
 
 
-Every one-site unitary has a one-gate neighboring-pair circuit on the physical
-site and one padding qudit, with the padding returned exactly to zero. When
-$N\geq2$, the additional padding is empty: any exact circuit on the physical,
-logical auxiliary, and scratch register transfers to the complete register
-with the same gate count and physical columns.
+    Every one-site unitary has a one-gate neighboring-pair circuit on the physical
+    site and one padding qudit, with the padding returned exactly to zero. When
+    $N\geq2$, the additional padding is empty: any exact circuit on the physical,
+    logical auxiliary, and scratch register transfers to the complete register
+    with the same gate count and physical columns.
 \end{theorem}
 \begin{proof}
-At one site the complete register has two sites. Transport the padded physical
-unitary along this equality of site counts. At longer lengths, append the
-empty padding configuration and transport along the resulting site equality.
+    At one site the complete register has two sites. Transport the padded physical
+    unitary along this equality of site counts. At longer lengths, append the
+    empty padding configuration and transport along the resulting site equality.
 \end{proof}
 
 \begin{theorem}[Derived support conditions for an interval merger]
     \label{thm:mpu_actual_merging_support}
 
 
-Each of two adjacent child supports is contained in their parent support.
-The actual selected initialized sites remain in the parent support after a
-site-coordinate change. If that change puts the actual joining packet last,
-its entire suffix range also lies in the transported parent support.
+    Each of two adjacent child supports is contained in their parent support.
+    The actual selected initialized sites remain in the parent support after a
+    site-coordinate change. If that change puts the actual joining packet last,
+    its entire suffix range also lies in the transported parent support.
 \end{theorem}
 \begin{proof}
-Use the consecutive support decomposition at the joining cut. The selected
-sites are the actual parent auxiliaries, and the suffix range is the image
-of the actual joining packet.
+    Use the consecutive support decomposition at the joining cut. The selected
+    sites are the actual parent auxiliaries, and the suffix range is the image
+    of the actual joining packet.
 \end{proof}
 
 \begin{theorem}[Joint child columns in the derived encoded coordinates]
     \label{thm:mpu_encoded_joint_columns}
 
 
-Given exact input and output coordinate identities, transport the actual
-joint child columns to the compatible encoded joining columns. The
-normalized parent remains an isometry under input reindexing and addition
-of arbitrary spectator identity factors.
+    Given exact input and output coordinate identities, transport the actual
+    joint child columns to the compatible encoded joining columns. The
+    normalized parent remains an isometry under input reindexing and addition
+    of arbitrary spectator identity factors.
 \end{theorem}
 \begin{proof}
-Compose the initialized basis inclusions and reindex matrix products. Apply
-the normalized joining contraction before reindexing the input; its finite
-sum is unchanged. The spectator identity preserves the isometry.
+    Compose the initialized basis inclusions and reindex matrix products. Apply
+    the normalized joining contraction before reindexing the input; its finite
+    sum is unchanged. The spectator identity preserves the isometry.
 \end{proof}
 
 \begin{theorem}[The encoded contraction gives the actual parent columns]
     \label{thm:mpu_encoded_actual_parent_columns}
 
 
-Suppose the actual joint output inclusion has its derived product-coordinate
-description and the joining metric is positive definite. Returning the encoded
-normalized joining contraction to the original physical coordinates gives
-exactly the weighted parent interval columns. Both shared bond labels and
-joining flags are reset to zero. Arbitrary outside configurations are retained.
-The parent-column and reset equalities are consequences, rather than additional
-assumptions.
+    Suppose the actual joint output inclusion has its derived product-coordinate
+    description and the joining metric is positive definite. Returning the encoded
+    normalized joining contraction to the original physical coordinates gives
+    exactly the weighted parent interval columns. Both shared bond labels and
+    joining flags are reset to zero. Arbitrary outside configurations are retained.
+    The parent-column and reset equalities are consequences, rather than additional
+    assumptions.
 \end{theorem}
 \begin{proof}
     \uses{thm:mpu_column_coordinate_transport,
         thm:mpu_joining_reset_columns,
         thm:mpu_actual_parent_isometry}
-Transport the initialized basis inclusion and cancel the input-coordinate
-bijection. The normalized joining identity gives the weighted parent tensor.
-The concrete zero-label identity identifies the reset output inclusion with
-the parent inclusion, including its unchanged outside register.
+    Transport the initialized basis inclusion and cancel the input-coordinate
+    bijection. The normalized joining identity gives the weighted parent tensor.
+    The concrete zero-label identity identifies the reset output inclusion with
+    the parent inclusion, including its unchanged outside register.
 \end{proof}
 
 \begin{theorem}[Joint initialized columns determine the parent invariant]
     \label{thm:mpu_parent_invariant_from_joint_columns}
 
 
-An operator satisfying the actual parent columns on the joint child input
-satisfies every initialized parent column, with the outside configuration
-unrestricted.
+    An operator satisfying the actual parent columns on the joint child input
+    satisfies every initialized parent column, with the outside configuration
+    unrestricted.
 \end{theorem}
 \begin{proof}
-The derived joint input-coordinate bijection covers the parent input inclusion.
-Evaluate the joint column identity at the inverse image of each parent column.
+    The derived joint input-coordinate bijection covers the parent input inclusion.
+    Evaluate the joint column identity at the inverse image of each parent column.
 \end{proof}
 
 \begin{theorem}[The actual minimal-interval circuit merger]
     \label{thm:mpu_actual_minimal_interval_merger}
 
 
-Let the minimal cut metrics be positive definite elements of their prefix Gram
-affine hulls, with their dual metrics normalizing every element of those hulls.
-Two exact supported implementations of adjacent intervals, with gate counts
-$K_L,K_R$ and one common auxiliary workspace returned to zero on every logical
-input, give an exact supported parent implementation. Its initialized columns
-are the actual weighted parent interval, including arbitrary outside states.
-Its gate count is at most
-\[
-  (2D+1)(K_L+K_R)+(2D+1)K+D(1+2F),
-\]
-where $K$ and $F$ are the uniform joining and reflection bounds. The same
-workspace is returned to zero on every logical input.
+    Let the minimal cut metrics be positive definite elements of their prefix Gram
+    affine hulls, with their dual metrics normalizing every element of those hulls.
+    Two exact supported implementations of adjacent intervals, with gate counts
+    $K_L,K_R$ and one common auxiliary workspace returned to zero on every logical
+    input, give an exact supported parent implementation. Its initialized columns
+    are the actual weighted parent interval, including arbitrary outside states.
+    Its gate count is at most
+    \[
+        (2D+1)(K_L+K_R)+(2D+1)K+D(1+2F),
+    \]
+    where $K$ and $F$ are the uniform joining and reflection bounds. The same
+    workspace is returned to zero on every logical input.
 \end{theorem}
 \begin{proof}
     \uses{thm:mpu_permuted_encoded_merger,
@@ -3494,35 +3525,35 @@ workspace is returned to zero on every logical input.
         thm:mpu_encoded_actual_parent_columns,
         thm:mpu_parent_invariant_from_joint_columns,
         thm:mpu_uniform_numeric_resources}
-Derive the shared cut encoding, product coordinates, selected initialized
-sites, and normalized parent isometry from the actual minimal intervals.
-Apply exact clean amplification in these coordinates and return to the original
-site order. The preceding two column results establish the parent invariant.
-The uniform joining estimate gives the displayed recurrence.
+    Derive the shared cut encoding, product coordinates, selected initialized
+    sites, and normalized parent isometry from the actual minimal intervals.
+    Apply exact clean amplification in these coordinates and return to the original
+    site order. The preceding two column results establish the parent invariant.
+    The uniform joining estimate gives the displayed recurrence.
 \end{proof}
 
 \begin{theorem}[An explicit exact circuit bound for lengths at least two]
     \label{thm:mpu_explicit_exact_bounded_cut_circuit}
 
 
-Let $d\geq2$ and $N\geq2$, and let $U$ be a unitary whose consecutive operator
-cut ranks are at most $D$. There is an exact neighboring two-qudit circuit with
-at most
-\[
-  c(d,D)(D+1)^3(2N)^{\lceil\log_2 D\rceil+6}
-\]
-gates, where $c(d,D)$ is the explicit polynomial coefficient in the uniform
-resource estimate. All initialized logical auxiliary and scratch qudits are
-returned to zero, and the physical action has the exact phase of $U$.
+    Let $d\geq2$ and $N\geq2$, and let $U$ be a unitary whose consecutive operator
+    cut ranks are at most $D$. There is an exact neighboring two-qudit circuit with
+    at most
+    \[
+        c(d,D)(D+1)^3(2N)^{\lceil\log_2 D\rceil+6}
+    \]
+    gates, where $c(d,D)$ is the explicit polynomial coefficient in the uniform
+    resource estimate. All initialized logical auxiliary and scratch qudits are
+    returned to zero, and the physical action has the exact phase of $U$.
 \end{theorem}
 \begin{proof}
     \uses{thm:mpu_actual_minimal_interval_merger,
         thm:mpu_actual_interval_recursion,
         thm:mpu_actual_root_columns,
         thm:mpu_uniform_numeric_resources}
-Obtain the minimal representation, normalized metrics, and leaf circuits from
-$U$. Supply the actual merger to the midpoint-tree induction, use the uniform
-resource estimate, and identify the root columns with $U$.
+    Obtain the minimal representation, normalized metrics, and leaf circuits from
+    $U$. Supply the actual merger to the midpoint-tree induction, use the uniform
+    resource estimate, and identify the root columns with $U$.
 \end{proof}
 
 \begin{theorem}[Exact circuits for arbitrary MPUs]
@@ -3534,7 +3565,7 @@ resource estimate, and identify the root columns with $U$.
     It has an exact circuit of arbitrary one- and two-qudit gates,
     with gate count and depth
     \[
-      \operatorname{poly}_d(D)
+        \operatorname{poly}_d(D)
         (N+1)^{O_d(\log(D+1))}
     \]
     and $O_d(N\log(D+1))$ auxiliary qudits which begin and end
@@ -3585,7 +3616,7 @@ resource estimate, and identify the root columns with $U$.
     its prefix rows at cut $j$. For each prefix density matrix $\rho$,
     define
     \[
-      P_j(\rho)=\sum_{\mathbf a,\mathbf b,\mathbf b'}
+        P_j(\rho)=\sum_{\mathbf a,\mathbf b,\mathbf b'}
         \rho_{\mathbf b',\mathbf b}
         f_{\mathbf a,\mathbf b}^\dagger
         f_{\mathbf a,\mathbf b'}.
@@ -3604,11 +3635,11 @@ resource estimate, and identify the root columns with $U$.
     as $T_{\mathbf a,\mathbf b}$. Any interval density matrix $\sigma$
     defines the positive transfer
     \[
-      \mathcal T_\sigma(P)=
+        \mathcal T_\sigma(P)=
         \sum_{\mathbf a,\mathbf b,\mathbf b'}
-          \sigma_{\mathbf b',\mathbf b}
-          T_{\mathbf a,\mathbf b}^\dagger
-          P T_{\mathbf a,\mathbf b'}.
+        \sigma_{\mathbf b',\mathbf b}
+        T_{\mathbf a,\mathbf b}^\dagger
+        P T_{\mathbf a,\mathbf b'}.
     \]
     The identity
     $\mathcal T_\sigma(P_j(\rho))=P_k(\rho\otimes\sigma)$
