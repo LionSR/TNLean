@@ -3926,6 +3926,27 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
 
+
+### Full logical unitary implementation in an initialized packet — promoted (2026-10-02)
+
+- **Pattern:** Include a complete logical unitary in prescribed physical basis
+  coordinates, extend its orthonormal columns to a physical unitary, synthesize
+  that unitary, and retain the equality on every logical input.
+- **Seen:** `MPU/LeafIntervalCircuit.lean`, `MPU/BondDilationCircuit.lean`, and
+  `MPU/CompatibleBondDilationCircuit.lean`.
+- **Abstraction:**
+  `QuantumCircuit.exists_isPairProduct_isCleanImplementation` in
+  `TNLean/Circuit/CleanUnitaryImplementation.lean` derives the actual circuit and
+  its full logical-space clean identity. `IsCleanImplementation.embedOp` in
+  `TNLean/Circuit/CleanImplementationPlacement.lean` places this identity into a
+  larger shared scratch pool.
+- **Notes:** All three local constructions use the common existence theorem.
+  Cleanup on selected physical-input columns alone is insufficient for an
+  inverse call; the full logical identity is retained. The synthesis bound is
+  polynomial in the packet Hilbert dimension and is used only on packets of
+  logarithmic width in the bond bound.
+
+
 ### Orthogonal projections are Hermitian — promoted (2026-10-02)
 
 - **Pattern:** obtain the Hermitian matrix identity from an orthogonal projection.
