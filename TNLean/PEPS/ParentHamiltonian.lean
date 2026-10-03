@@ -9,6 +9,9 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.ParentHamiltonian
 
 import TNLean.PEPS.ParentHamiltonian.CycleGroundSpace
+import TNLean.PEPS.ParentHamiltonian.InjectiveParentReconstructionCounterexample
+import TNLean.PEPS.ParentHamiltonian.InjectiveRegionParentTransport
+import TNLean.PEPS.ParentHamiltonian.InjectiveVertexCoordinates
 import TNLean.PEPS.ParentHamiltonian.RegionEntanglementBound
 import TNLean.PEPS.ParentHamiltonian.RegionFullGroundSpace
 import TNLean.PEPS.ParentHamiltonian.RegionGroundSpace
@@ -29,3 +32,4 @@ import TNLean.PEPS.ParentHamiltonian.TorusNativeGInjectiveSupport
 import TNLean.PEPS.ParentHamiltonian.TorusRegularRegionSupport
 import TNLean.PEPS.ParentHamiltonian.TorusSectorLocalGroundSpace
 import TNLean.PEPS.ParentHamiltonian.TorusSectorSupport
+import TNLean.PEPS.ParentHamiltonian.VirtualBondGroundSpace
