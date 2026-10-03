@@ -21,6 +21,7 @@ import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
 import TNLean.MPS.Symmetry.CocycleCoboundary
+import TNLean.MPS.Symmetry.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.FixedPointGappedPath
