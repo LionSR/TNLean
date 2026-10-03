@@ -72,12 +72,12 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     Let $Q_0=\left(\begin{smallmatrix}I&0\\0&0\end{smallmatrix}\right)$
     be the zero-record projection. For any square matrices $X_0,X_1$
     on another factor,
-    \[
+    \begin{align}
         \mathcal E(I\otimes P)
         \begin{pmatrix}X_0\otimes I&0\\0&X_1\otimes I\end{pmatrix}
         \mathcal E(I\otimes P)Q_0
         =\begin{pmatrix}X_0\otimes P+X_1\otimes(I-P)&0\\0&0\end{pmatrix}.
-    \]
+    \end{align}
     Thus every input with its record qubit zero has its record zero
     at the end.
 \end{theorem}
@@ -97,10 +97,10 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
         =\mathcal E((I+R)/2)$.
     If $R$ is a Hermitian involution, $(I+R)/2$ is an orthogonal
     projection. For a unitary $B$ and any square matrix $C$,
-    \[
+    \begin{align}
         \operatorname{diag}(B,B)\mathcal E((I+B^\dagger C)/2)
         =\mathcal H\operatorname{diag}(B,C)\mathcal H.
-    \]
+    \end{align}
 \end{theorem}
 \begin{proof}
     The first identity follows by multiplying the Hadamard blocks.
@@ -245,16 +245,17 @@ proof, rather than providing a circuit complexity lower bound.
     forces $|a|=3$, a contradiction.
 \end{proof}
 
-% The Schmidt-space identifications in the next proposition are not yet
-% formalized. The matrix identities and obstructions above are formalized.
-\begin{proposition}[A Schmidt-space obstruction at rank four]
-    \label{prop:mpu_spin_one_schmidt_obstruction}
+% The Schmidt-space identifications in the next theorem are not yet
+% formalized. The matrix identities and obstructions above are formalized
+% only in a dependent branch.
+\begin{theorem}[A Schmidt-space obstruction at rank four]
+    \label{thm:mpu_spin_one_schmidt_obstruction}
     The spin-one reflection has operator Schmidt rank four and left
     Schmidt space $W$. Its three-qubit extension has the same rank
     and left Schmidt space $\widehat W$.
     Thus an original Schmidt space of a unitary can fail to have
     even one unitary element.
-\end{proposition}
+\end{theorem}
 \begin{proof}
     \uses{thm:mpu_spin_one_reflection,
         thm:mpu_qubit_unitary_space_obstruction}
@@ -273,13 +274,13 @@ proof, rather than providing a circuit complexity lower bound.
     For a real vector $v$, the matrix $v\cdot\sigma$ is Hermitian
     and its square is $\|v\|_2^2I$.
     Let the eight vectors $n_j$ be the rows of
-    \[
+    \begin{align}
         \frac1{15}
         \begin{pmatrix}
             15 & 0   & 0   \\0&15&0\\0&0&15\\9&12&0\\
             5  & -10 & -10 \\-10&5&-10\\-10&-10&5\\-5&-2&-14
         \end{pmatrix}.
-    \]
+    \end{align}
     Each vector has Euclidean norm one. Hence each $n_j\cdot\sigma$
     and the controlled operator
     $V=\sum_j(n_j\cdot\sigma)\otimes|j\rangle\langle j|$ are unitary.
@@ -313,12 +314,12 @@ proof, rather than providing a circuit complexity lower bound.
     by linearity of the displayed coefficients.
 \end{proof}
 
-\begin{proposition}[A Schmidt-space obstruction at bond dimension three]
-    \label{prop:mpu_pauli_control_schmidt_obstruction}
+\begin{theorem}[A Schmidt-space obstruction at bond dimension three]
+    \label{thm:mpu_pauli_control_schmidt_obstruction}
     There is a four-qubit unitary with an open-boundary matrix product
     representation of bond dimensions $3,3,2$ whose right Schmidt
     space at the first cut contains no unitary matrix.
-\end{proposition}
+\end{theorem}
 \begin{proof}
     \uses{thm:mpu_pauli_control_unitary, thm:mpu_pauli_control_space_obstruction}
     Let $q_0=e_1$, $q_1=e_2$, $q_2=e_3$,
@@ -392,10 +393,10 @@ proof, rather than providing a circuit complexity lower bound.
     choices. Pivots remain at least $1/(4\sqrt q)$; conservative
     error amplification is at most $(Cq)^{q^2}$.
     Its logarithm requires only polynomially many precision bits:
-    \[
+    \begin{align}
         O\bigl(N+\log(ND+1)+q^2\log(q+1)
         +\log(1/\varepsilon)\bigr).
-    \]
+    \end{align}
     Convert the recorded rotations to binary angles, retaining all
     diagonal phases. A Gray path of length at most $t$ implements
     each two-level operation using basis-pattern controls, with
@@ -465,10 +466,10 @@ recursion depth.
     $J\psi=\psi\otimes|0\cdots0\rangle$ with
     $\|WJ-JU\|\leq\varepsilon$.
     For fixed $D$, both gate and auxiliary-qubit counts are at most
-    \[
+    \begin{align}
         \exp\!\left\{C_D\log(N+1)
         \log\bigl(\log(N+1)+\log(1/\varepsilon)+2\bigr)\right\}.
-    \]
+    \end{align}
     This bounds the auxiliary output error, without asserting exact
     auxiliary erasure or a bound on arbitrary auxiliary inputs.
 \end{theorem}
@@ -504,10 +505,10 @@ recursion depth.
     \label{thm:mpu_uniform_averaged_boundary_circuits}
     Fix a physical dimension $d\geq2$, a finite-dimensional bond space,
     matrices $A^{ij}$ and boundary vectors $l,r$. Suppose
-    \[
+    \begin{align}
         (U_N)_{\mathbf i,\mathbf j}
         =lA^{i_1j_1}\cdots A^{i_Nj_N}r
-    \]
+    \end{align}
     is unitary for every $N\geq1$. Then $U_N$ has an exact circuit
     of polynomial size and depth, with $O(N)$ auxiliary qudits which
     begin and end in zero. The gates may be restricted to adjacent
@@ -528,12 +529,12 @@ recursion depth.
     let $P_m$ and $Q_n$ be its left and right Gram matrices, with
     cap inputs averaged and cap outputs summed. Unitarity at length
     $m+k+n$ gives, for a central interval tensor $T$ of length $k$,
-    \[
+    \begin{align}
         \sum_{\mathbf a}\operatorname{Tr}
         (T_{\mathbf a,\mathbf b}^\dagger P_m
         T_{\mathbf a,\mathbf b'}Q_n)
         =\delta_{\mathbf b,\mathbf b'}.
-    \]
+    \end{align}
     This identity is separately linear in the two Gram matrices.
     Thus $P=w^{-1}\sum_{m=1}^wP_m$ and
     $Q=w^{-1}\sum_{n=1}^wQ_n$ satisfy every interval identity and
@@ -614,10 +615,10 @@ left multiplication, right vector $b$ and left functional the trace.
     \lean{Matrix.hasDerivAt_det_one_add_smul, Matrix.hasDerivAt_det_add_smul, Matrix.IsHermitian.star_trace_mul_eq, Matrix.trace_nonsing_inv_mul_eq_zero_of_isLocalMax_det, Matrix.PosDef.eventually_posDef_add_real_smul, Matrix.PosDef.trace_nonsing_inv_mul_sub_eq_zero_of_isMaxOn_det}
     \leanok
     For a nonsingular complex square matrix $P$ and any matrix $H$,
-    \[
+    \begin{align}
         \left.\frac{d}{dz}\det(P+zH)\right|_{z=0}
         =\det(P)\operatorname{Tr}(P^{-1}H).
-    \]
+    \end{align}
     If $P>0$ maximizes the determinant on the positive semidefinite
     part of a real affine space $\mathcal C$ of Hermitian matrices,
     then $\operatorname{Tr}(P^{-1}(X-P))=0$ for every
@@ -640,10 +641,10 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     \uses{def:mpu_dual_gram_metric}
     The dual metric is positive definite and satisfies
-    \[
+    \begin{align}
         PQ=QP=I/r,\qquad Q^{-1}=rP,\qquad
         \operatorname{Tr}(Q^{-1}P^{-1})=r^2.
-    \]
+    \end{align}
     If $\operatorname{Tr}(P^{-1}(X-P))=0$, then
     $\operatorname{Tr}(XQ)=1$.
 \end{theorem}
@@ -660,12 +661,12 @@ left multiplication, right vector $b$ and left functional the trace.
     there is a positive definite $\overline Q$ with
     $\operatorname{Tr}(P\overline Q)=1$ for all $P\in\mathcal C$.
     Then there are $P_*,Q_*>0$ such that
-    \[
+    \begin{align}
         P_*\in\mathcal C,\qquad
         Q_*=P_*^{-1}/r,\qquad
         \operatorname{Tr}(PQ_*)=1\quad(P\in\mathcal C),\qquad
         \operatorname{Tr}(Q_*^{-1}P_*^{-1})=r^2.
-    \]
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpu_compact_affine_gram_slice,
@@ -714,9 +715,9 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{def:mpu_dual_gram_metric}
     Let $P,Q$ be positive definite metrics on a bond of dimension
     $r\geq1$, with $\operatorname{Tr}(PQ)=1$. Then
-    \[
+    \begin{align}
         r^2\leq\operatorname{Re}\operatorname{Tr}(Q^{-1}P^{-1}).
-    \]
+    \end{align}
     For fixed $P$, the dual metric $Q_*=P^{-1}/r$ is positive,
     satisfies the normalization and attains equality. Hence the
     joining contraction norm $r$ is optimal among these normalized
@@ -738,11 +739,11 @@ left multiplication, right vector $b$ and left functional the trace.
     \lean{MPUCircuit.intervalGramTransfer, MPUCircuit.prefixInputGram, MPUCircuit.intervalGramTransferLinearMap, MPUCircuit.intervalInputGram}
     \leanok
     For interval matrices $A_{ab}:\mathbb C^s\to\mathbb C^r$, put
-    \[
+    \begin{align}
         \mathcal T_\rho(P)=\sum_{a,b,c}\rho_{cb}A_{ab}^\dagger PA_{ac},
         \qquad
         K(P,Q)_{bc}=\sum_a\operatorname{Tr}(A_{ab}^\dagger PA_{ac}Q).
-    \]
+    \end{align}
     The first map is linear in $P$. For prefix rows $F_{ab}$, their
     density-weighted Gram is $P_F(\rho)=\mathcal T_\rho(I)$, where
     the left virtual space is one dimensional.
@@ -910,10 +911,10 @@ left multiplication, right vector $b$ and left functional the trace.
     Let $F_a:\mathbb C^r\to\mathbb C^B$ and
     $G_c:\mathbb C^E\to\mathbb C^r$. Define
     $U_{(a,c),(b,e)}=(F_aG_c)_{be}$ and
-    \[
+    \begin{align}
         P_F(\rho)=\sum_aF_a^\dagger\rho^T F_a,\qquad
         Q_G(\tau)=\sum_cG_c\tau G_c^\dagger.
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Global unitarity normalizes the actual cap Grams]
@@ -922,10 +923,10 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     \uses{def:mpu_finite_cut_cap_grams, def:mpu_density_interval_grams}
     For arbitrary matrices $\rho,\tau$, one has
-    \[
+    \begin{align}
         \operatorname{Tr}(P_F(\rho)Q_G(\tau))
         =\operatorname{Tr}(U^\dagger U(\rho\otimes\tau)).
-    \]
+    \end{align}
     Both cap Grams are positive semidefinite for positive semidefinite
     inputs. If $U^\dagger U=I$, their pairing equals
     $\operatorname{Tr}\rho\operatorname{Tr}\tau$.
@@ -1099,11 +1100,11 @@ left multiplication, right vector $b$ and left functional the trace.
     columns. The physical spaces and positive bond dimensions $r_j$
     may depend on $j$. There is one chosen metric $P_j$ at each index
     such that
-    \[
+    \begin{align}
         P_j\in\mathcal C_j,\quad P_j>0,\quad Q_j=P_j^{-1}/r_j>0,
         \qquad \operatorname{Tr}(XQ_j)=1\quad(X\in\mathcal C_j),
         \qquad \operatorname{Tr}(Q_j^{-1}P_j^{-1})=r_j^2.
-    \]
+    \end{align}
     The same conclusion holds when each physical coefficient flattening
     has rank exactly $r_j$, since this implies both spanning conditions.
     All these identities hold for the same chosen family. In
@@ -1169,9 +1170,9 @@ left multiplication, right vector $b$ and left functional the trace.
     The joining contraction $C$ has squared Hilbert--Schmidt norm one.
     For arbitrary outside weights $L,R$ and adjacent coefficients
     $A_{ab},B_{cd}$,
-    \[
+    \begin{align}
         (LA_{ab}T)C(SB_{cd}R)=r^{-1}LA_{ab}B_{cd}R.
-    \]
+    \end{align}
     Thus contraction gives $r^{-1}$ times the parent interval map.
     If that parent map is an isometry, the contracted map has input
     Gram $r^{-2}I$. The success probability is therefore the same
@@ -1190,10 +1191,10 @@ left multiplication, right vector $b$ and left functional the trace.
 
     For a projection $P$, put $R_P=I-2P$. For two maps $G,H$
     with common input and output spaces, put
-    \[
+    \begin{align}
         V_\theta=\sin\theta\,G+\cos\theta\,H,
         \qquad Q_\theta=-R_{V_\theta V_\theta^\dagger}R_P.
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Unitary reflections and isometric planes]
@@ -1222,10 +1223,10 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{def:mpu_exact_subspace_amplification}
     Suppose $G^\dagger G=H^\dagger H=I$, $G^\dagger H=0$,
     $PG=G$ and $PH=0$. For all real $\theta,\phi$ and $k\geq0$,
-    \[
+    \begin{align}
         Q_\theta V_\phi=V_{\phi+2\theta},
         \qquad Q_\theta^k V_\phi=V_{\phi+2k\theta}.
-    \]
+    \end{align}
     In particular, for $\ell\geq0$ and
     $\theta=\pi/(4\ell+2)$,
     $Q_\theta^\ell V_\theta=G$ exactly, with no residual phase.
@@ -1242,11 +1243,11 @@ left multiplication, right vector $b$ and left functional the trace.
 
 
     For a real coefficient $t$, put $s=\sqrt{1-t^2}$ and define
-    \[
+    \begin{align}
         R_t=\begin{pmatrix}t&-s\\s&t\end{pmatrix},
         \qquad V_t=\begin{pmatrix}tV\\sV\end{pmatrix},
         \qquad P_t=\begin{pmatrix}P&0\\0&0\end{pmatrix}.
-    \]
+    \end{align}
     The two row blocks represent the two values of a new binary flag.
 \end{definition}
 
@@ -1260,9 +1261,9 @@ left multiplication, right vector $b$ and left functional the trace.
     An orthogonal projection $P$ gives an orthogonal projection $P_t$.
     Moreover, for any uniform probability identity
     $V^\dagger PV=p^2I$,
-    \[
+    \begin{align}
         V_t^\dagger P_tV_t=(tp)^2I.
-    \]
+    \end{align}
     Thus a nonnegative attenuation coefficient multiplies the
     original nonnegative success amplitude by $t$.
 \end{theorem}
@@ -1279,10 +1280,10 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{def:mpu_exact_subspace_amplification}
     Given an isometry $V$, success projection $P$ and real
     success amplitude $0<p<1$, put
-    \[
+    \begin{align}
         G=p^{-1}PV,\qquad H=(1-p^2)^{-1/2}(I-P)V,
         \qquad Q=-R_{VV^\dagger}R_P.
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Decomposition from uniform success probability]
@@ -1292,11 +1293,11 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{def:mpu_uniform_postselection}
     Suppose $V^\dagger V=I$, $P$ is an orthogonal projection,
     $0<p<1$ and $V^\dagger PV=p^2I$. The maps $G,H$ above satisfy
-    \[
+    \begin{align}
         G^\dagger G=H^\dagger H=I,\qquad G^\dagger H=0,
         \qquad PG=G,\quad PH=0,
         \qquad pG+\sqrt{1-p^2}\,H=V.
-    \]
+    \end{align}
     Thus both isometric subspaces follow from the uniform probability
     identity.
 \end{theorem}
@@ -1316,9 +1317,9 @@ left multiplication, right vector $b$ and left functional the trace.
     The operator $Q$ is unitary on the entire output space.
     If $V^\dagger PV=\sin^2\theta\,I$ with $0<\theta<\pi/2$,
     then the derived success and failure maps give
-    \[
+    \begin{align}
         V=V_\theta,\qquad Q^kV=V_{\theta+2k\theta}.
-    \]
+    \end{align}
     For $\theta=\pi/(4\ell+2)$ and $\ell\geq1$,
     $Q^\ell V=(\sin\theta)^{-1}PV$ exactly.
     If instead $V^\dagger PV=I$, then already $PV=V$.
@@ -1339,10 +1340,10 @@ left multiplication, right vector $b$ and left functional the trace.
 
 
     For $r\geq0$, define
-    \[
+    \begin{align}
         \ell(r)=\lceil\pi r/4\rceil,
         \qquad \theta(r)=\frac{\pi}{4\ell(r)+2}.
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[A dimension bound for exact amplification]
@@ -1351,12 +1352,12 @@ left multiplication, right vector $b$ and left functional the trace.
 
     \uses{def:mpu_exact_amplification_budget}
     For $r\geq1$,
-    \[
+    \begin{align}
         1\leq\ell(r)\leq r,\qquad
         0<\theta(r)<\pi/2,\qquad
         \theta(r)\leq r^{-1},\qquad
         0<\sin\theta(r)\leq r^{-1}.
-    \]
+    \end{align}
     Thus the merger success amplitude $1/r$ can be attenuated to
     the prescribed exact angle, with at most $r$ amplification rounds.
 \end{theorem}
@@ -1603,13 +1604,13 @@ left multiplication, right vector $b$ and left functional the trace.
 
 
     For a square matrix $A$, define
-    \[
+    \begin{align}
         \mathcal D_A=
         \begin{pmatrix}
             A             & I-AA^\dagger \\
             I-A^\dagger A & -A^\dagger
         \end{pmatrix}.
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Dilation of a partial isometry]
@@ -1619,10 +1620,10 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{def:mpu_partial_isometry_dilation}
     If $AA^\dagger A=A$, then $\mathcal D_A$ is unitary. For every
     matrix of input columns $V$,
-    \[
+    \begin{align}
         \mathcal D_A\binom V0=
         \binom{AV}{(I-A^\dagger A)V}.
-    \]
+    \end{align}
     The total output Gram is $V^\dagger V$, and projection onto
     the first output copy has Gram $(AV)^\dagger AV$.
     The first-copy identity holds for arbitrary $A$.
@@ -1680,9 +1681,9 @@ left multiplication, right vector $b$ and left functional the trace.
 
 
     Set
-    \[
+    \begin{align}
         G(d,n)=2n+3(d^n)^2(2n+1)(4n3^n).
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Exact synthesis with a dimension bound]
@@ -1738,9 +1739,9 @@ left multiplication, right vector $b$ and left functional the trace.
     and suppose $V^\dagger PV=r^{-2}I$, with $r\geq1$.
     Attenuation by $0<t_r\leq1$ and $\ell(r)\leq r$
     reflection rounds give exactly
-    \[
+    \begin{align}
         \binom{rPV}{0}.
-    \]
+    \end{align}
     The equality includes the phase and holds on all coherent inputs.
 \end{theorem}
 \begin{proof}
@@ -1756,9 +1757,9 @@ left multiplication, right vector $b$ and left functional the trace.
     If a unitary $U$ has a $K$-gate circuit and reflection about
     $EE^\dagger$ has an $L$-gate circuit, then reflection about
     $(UE)(UE)^\dagger$ has a $(2K+L)$-gate circuit, since
-    \[
+    \begin{align}
         I-2(UE)(UE)^\dagger=U(I-2EE^\dagger)U^\dagger.
-    \]
+    \end{align}
     A $K$-gate circuit repeated $k$ times costs at most $kK$.
     On $n\geq2$ sites, an amplification round with reflection
     costs $K,L$ costs at most $2n+K+L$, including its phase.
@@ -1775,9 +1776,9 @@ left multiplication, right vector $b$ and left functional the trace.
 
     Suppose $C,q\geq0$, $r\geq q+1$, $T(0)\leq a$, and
     $T(j+1)\leq rT(j)+Cq^j$. Then
-    \[
+    \begin{align}
         T(L)\leq(a+C)r^L-Cq^L.
-    \]
+    \end{align}
     If also $a\geq0$ and $r\leq2^k$, this is at most
     $(a+C)(2^L)^k$. In particular, polynomial overhead in the
     interval length is compatible with polynomial total cost
@@ -1840,12 +1841,12 @@ left multiplication, right vector $b$ and left functional the trace.
     family of balanced positive metrics. At cut $j$, the metric
     $P_j$ belongs to the actual prefix Gram affine hull,
     $P_j$ and $Q_j=P_j^{-1}/r_j$ are positive definite,
-    \[
+    \begin{align}
         \operatorname{Tr}(XQ_j)=1
         \quad\text{for every }X\text{ in that affine hull},
         \qquad
         \operatorname{Tr}(Q_j^{-1}P_j^{-1})=r_j^2.
-    \]
+    \end{align}
     No factorization, spanning, isometry, or metric witnesses
     need to be supplied.
 \end{theorem}
@@ -2104,9 +2105,9 @@ left multiplication, right vector $b$ and left functional the trace.
 
     The logical auxiliary register has $A=2(N-1)(q+1)$ sites,
     and the complete register has
-    \[
+    \begin{align}
         N+2A=N+4(N-1)(q+1)\leq5N(q+1).
-    \]
+    \end{align}
     For $D>0$ one has $D\leq d^q\leq dD$. Every positive bond
     dimension $r\leq D$ admits an injective encoding in its assigned
     $q$ qudits, with bond label zero represented by physical zero.
@@ -2191,11 +2192,11 @@ left multiplication, right vector $b$ and left functional the trace.
     cleanly along $J$, and actual reflection circuits of costs $B,L$
     implement $I-2EE^\dagger$ and $I-2P$ cleanly along the same $J$.
     Here $E$ is an isometry and $P$ an orthogonal projection. If
-    \[
+    \begin{align}
         (ZE)^\dagger P(ZE)
         =\sin^2\!\left(\frac{\pi}{4\ell+2}\right) I,
         \qquad \ell>0,
-    \]
+    \end{align}
     the amplified circuit has cost
     $\ell(1+2K+B+L)+K$ and acts exactly as normalized postselection
     on the columns $JE$. It also implements a full logical unitary
@@ -2248,15 +2249,15 @@ left multiplication, right vector $b$ and left functional the trace.
     If the two child circuits each cost at most $T$, the joining
     primitive costs at most $M$, and each reflection costs at most $F$,
     exact amplification at a bond of dimension at most $D$ costs at most
-    \[
+    \begin{align}
         (4D+2)T+(2D+1)M+D(1+2F).
-    \]
+    \end{align}
     A numerical recurrence $T_{j+1}\leq RT_j+C$ with $R\geq2$
     and $T_0\leq a$ satisfies, at balanced height
     $L=\lceil\log_2N\rceil$,
-    \[
+    \begin{align}
         T_L\leq(a+C)(2N)^{\lceil\log_2R\rceil}.
-    \]
+    \end{align}
     For $D>0$, the branching exponent satisfies
     $\lceil\log_2(4D+2)\rceil\leq\lceil\log_2D\rceil+3$.
     These assertions are numerical consequences of the stated recurrence.
@@ -2305,12 +2306,12 @@ left multiplication, right vector $b$ and left functional the trace.
 
     For positive definite $P$ on a bond of dimension $r>0$ and
     $Q=P^{-1}/r$, the source's transpose expression satisfies
-    \[
+    \begin{align}
         \operatorname{Tr}\bigl[(Q^{-1})^T(P^{-1})^T\bigr]=r^2,
         \qquad
         \sqrt{\operatorname{Re}\operatorname{Tr}
             \bigl[(Q^{-1})^T(P^{-1})^T\bigr]}=r.
-    \]
+    \end{align}
     These metrics give an explicit candidate of joining norm $r$.
     The assertion does not bound the appendix's infimum restricted
     to physical cap Grams in \cite{Styliaris2025MPUCircuits}.
@@ -2376,10 +2377,10 @@ left multiplication, right vector $b$ and left functional the trace.
     For any injective basis encoding, its range projection is the
     diagonal indicator of its encoded configurations. Consequently,
     the selected-flag inclusion has
-    \[
+    \begin{align}
         EE^\dagger=\operatorname{diag}
         \bigl(\mathbf 1_{\text{all selected flags zero}}\bigr).
-    \]
+    \end{align}
     This is an orthogonal projection, and the reversible selected-zero
     circuit reflects it exactly. For $d\geq2$, an $n\geq2$ logical
     register and a scratch pool of size $A$ at least the number of
@@ -2473,13 +2474,13 @@ left multiplication, right vector $b$ and left functional the trace.
     If every amplification count satisfies $\ell\leq D$, then the
     recursively defined count on any binary tree of height $h$
     satisfies
-    \[
+    \begin{align}
         T+C\leq(K+C)(4D+2)^h.
-    \]
+    \end{align}
     On the actual midpoint partition of $N>0$ consecutive sites,
-    \[
+    \begin{align}
         T\leq(K+C)(2N)^{\lceil\log_2(4D+2)\rceil}.
-    \]
+    \end{align}
     These are bounds on the stated numerical recursion; existence
     of the corresponding recursive circuits is a separate assertion.
     Setting every round count equal to $D$ gives exactly the recursion
@@ -2548,9 +2549,9 @@ left multiplication, right vector $b$ and left functional the trace.
     register. Every logical leaf unitary acts only on its interval
     support. Its complete circuit returns the entire common workspace
     to zero on every logical input, with gate count at most
-    \[
+    \begin{align}
         76(d^4D^2)^6\,n_{\mathrm{tot}},
-    \]
+    \end{align}
     where $n_{\mathrm{tot}}$ is the total number of physical, bond,
     flag, and workspace qudits.
 \end{theorem}
@@ -2620,10 +2621,10 @@ left multiplication, right vector $b$ and left functional the trace.
     unitary with the same workspace returned exactly to zero on every
     logical input. If $K_1,K_2$ are the child costs and $M$ is the
     joining cost, its gate count is
-    \[
+    \begin{align}
         \ell\bigl(1+2(K_1+K_2+M)+R_b+R_2\bigr)+K_1+K_2+M,
         \qquad \ell=\lceil\pi r/4\rceil,
-    \]
+    \end{align}
     where $R_b,R_2$ are the actual common-workspace reflection costs.
     The success probability is derived from the normalized parent
     isometry; it is not an additional assumption.
@@ -2717,19 +2718,19 @@ remain separate assertions.
 
     Put $q=\lceil\log_dD\rceil$, let $g$ be the complete register size,
     and let $A$ be the common workspace size. A common packet budget is
-    \[
+    \begin{align}
         M_0=\bigl(76d^{24}D^{12}+8(D+1)\bigr)g.
-    \]
+    \end{align}
     Reserve an additional $16g^2$ for coordinate permutations, and use
     $M=M_0+16g^2$ as a common leaf and node overhead. The common
     reflection budget is $F=1+K_d(A)\,2g$, where
     $K_d(a)=8(38d^{18}+1)a^2+4a$.
     Define the midpoint-tree count using leaf cost $M$, joining cost
     $M$, and two reflection costs $F$. Finally put
-    \[
+    \begin{align}
         c(d,D)=(2D+2)\bigl(5(76d^{24}D^{12}+8(D+1))+400\bigr)
         +D(30400d^{18}+803).
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[An explicit uniform numerical resource bound]
@@ -2740,15 +2741,15 @@ remain separate assertions.
     are at most $M_0$ for $d\geq2$ and $D>0$. Every selected reflection
     testing at most $A$ flags, including the empty selection, has cost
     at most $F$. For $N>0$, the latter satisfies
-    \[
+    \begin{align}
         F\leq(15200d^{18}+401)\bigl(N(q+1)\bigr)^3.
-    \]
+    \end{align}
     If every node uses at most $D$ amplification rounds, the stated
     numerical tree count satisfies
-    \[
+    \begin{align}
         T\leq c(d,D)(D+1)^3
         (2N)^{\lceil\log_2D\rceil+6}.
-    \]
+    \end{align}
     The coefficient $c(d,D)(D+1)^3$ is polynomial in $D$ for fixed
     $d$, of degree at most sixteen. This theorem bounds the numerical
     recursion and does not assume complete recursive circuit existence.
@@ -2787,9 +2788,9 @@ remain separate assertions.
     about the initialized image $EE^\dagger$ and the successful
     projection $P$ are also supported on $S$. Then the full logical
     amplification operator
-    \[
+    \begin{align}
         \bigl[-(I-2ZEE^\dagger Z^\dagger)(I-2P)\bigr]^\ell Z
-    \]
+    \end{align}
     is supported on $S$, with its exact scalar phase retained.
     Support of the two projections themselves suffices to derive
     support of their reflections. No initialization of the remaining
@@ -3127,9 +3128,9 @@ remain separate assertions.
     prefix Gram spaces. If a complete circuit $C$ implements that
     logical operator with the common scratch pool returned to zero
     on every logical input, then
-    \[
+    \begin{align}
         CJ=JU,
-    \]
+    \end{align}
     where $J$ initializes every logical auxiliary and scratch qudit.
     The physical output and the scalar phase follow from the given
     unitary; they are not additional assumptions.
@@ -3248,9 +3249,9 @@ remain separate assertions.
     For $N\geq2$, $0<r\leq D$, and a selected initial flag count within the allocated
     pool, the encoded merger including both child conjugations and its final return
     has gate count at most
-    \[
+    \begin{align}
         (2D+1)(K_1+K_2)+(2D+1)M+D(1+2F),
-    \]
+    \end{align}
     where $M$ is the common node budget and $F$ is the common reflection budget.
     The quadratic routing reserve is included in $M$.
 \end{theorem}
@@ -3515,9 +3516,9 @@ remain separate assertions.
     input, give an exact supported parent implementation. Its initialized columns
     are the actual weighted parent interval, including arbitrary outside states.
     Its gate count is at most
-    \[
+    \begin{align}
         (2D+1)(K_L+K_R)+(2D+1)K+D(1+2F),
-    \]
+    \end{align}
     where $K$ and $F$ are the uniform joining and reflection bounds. The same
     workspace is returned to zero on every logical input.
 \end{theorem}
@@ -3542,9 +3543,9 @@ remain separate assertions.
     Let $d\geq2$ and $N\geq2$, and let $U$ be a unitary whose consecutive operator
     cut ranks are at most $D$. There is an exact neighboring two-qudit circuit with
     at most
-    \[
+    \begin{align}
         c(d,D)(D+1)^3(2N)^{\lceil\log_2 D\rceil+6}
-    \]
+    \end{align}
     gates, where $c(d,D)$ is the explicit polynomial coefficient in the uniform
     resource estimate. All initialized logical auxiliary and scratch qudits are
     returned to zero, and the physical action has the exact phase of $U$.
@@ -3567,10 +3568,10 @@ remain separate assertions.
     consecutive operator Schmidt ranks at most $D$.
     It has an exact circuit of arbitrary one- and two-qudit gates,
     with gate count and depth
-    \[
+    \begin{align}
         \operatorname{poly}_d(D)
         (N+1)^{O_d(\log(D+1))}
-    \]
+    \end{align}
     and $O_d(N\log(D+1))$ auxiliary qudits which begin and end
     exactly in zero. The same form of bound holds on a line.
     In particular, both exact and arbitrarily accurate operator-norm
@@ -3618,12 +3619,12 @@ remain separate assertions.
     $r_j\leq D$ and $r_0=r_N=1$. Let $f_{\mathbf a,\mathbf b}$ be
     its prefix rows at cut $j$. For each prefix density matrix $\rho$,
     define
-    \[
+    \begin{align}
         P_j(\rho)=\sum_{\mathbf a,\mathbf b,\mathbf b'}
         \rho_{\mathbf b',\mathbf b}
         f_{\mathbf a,\mathbf b}^\dagger
         f_{\mathbf a,\mathbf b'}.
-    \]
+    \end{align}
     These are positive semidefinite. The maximally mixed prefix Gram
     is positive definite by minimality, as is the maximally mixed
     suffix Gram $\overline Q_j$. Global unitarity gives
@@ -3637,13 +3638,13 @@ remain separate assertions.
     For an interval from cut $j$ to cut $k$, write its tensor product
     as $T_{\mathbf a,\mathbf b}$. Any interval density matrix $\sigma$
     defines the positive transfer
-    \[
+    \begin{align}
         \mathcal T_\sigma(P)=
         \sum_{\mathbf a,\mathbf b,\mathbf b'}
         \sigma_{\mathbf b',\mathbf b}
         T_{\mathbf a,\mathbf b}^\dagger
         P T_{\mathbf a,\mathbf b'}.
-    \]
+    \end{align}
     The identity
     $\mathcal T_\sigma(P_j(\rho))=P_k(\rho\otimes\sigma)$
     gives $\mathcal T_\sigma(\mathcal C_j)\subseteq\mathcal C_k$.
