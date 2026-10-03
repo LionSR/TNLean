@@ -31,18 +31,25 @@ positive boundary metrics by determinant maximization over affine spaces
 of cap Grams. The first three sections give a separate rank-two argument
 with fewer auxiliaries. Section~\ref{sec:uniform-averaged-grams} gives a
 preliminary all-length uniform argument by averaging cap Grams.
-The relevant source statements are in
-\nolinkurl{references/2508.08160/main.tex}, lines 741--777,
-823--868 and 1337--1402. No claim of priority is intended.
+The relevant source statements are Definition~1 (uniform-bulk MPU),
+Assumption~1 and Theorem~1, and the paragraph on nonuniform MPUs ending
+with Theorem~2, all in the main text of arXiv:2508.08160v2.
+No claim of priority is intended.
+Below, ``source lines'' are line numbers of the file \texttt{main.tex} in
+the arXiv source archive of version~2,
+\url{https://arxiv.org/e-print/2508.08160v2}, and names such as
+\nolinkurl{eq:def_q_k} are the equation and lemma labels of that file.
 
 Circuits use arbitrary one- and two-qudit gates. Auxiliary registers begin
 and end in $|0\rangle$. Gate bounds are nonuniform existence statements;
 they do not assert an efficient classical procedure for obtaining exact
-gate parameters from inexact tensor data. The general exact circuit theorem
-of Section~5 and its operator-norm approximation corollaries are formalized
-in Lean, including neighboring-pair circuits, exact auxiliary erasure,
-and the periodic-boundary specialization. The separate rank-two structural
-argument in the first three sections is not yet fully formalized.
+gate parameters from inexact tensor data. A Lean formalization of the
+general exact circuit theorem of Section~5 and its operator-norm
+approximation corollaries, including neighboring-pair circuits, exact
+auxiliary erasure, and the periodic-boundary specialization, is pending
+in TNLean pull request~\#8590; it is not part of the repository state
+accompanying this note. The separate rank-two structural argument in the
+first three sections is not yet fully formalized.
 
 \section{A two-operator simultaneous singular-value decomposition}
 
@@ -83,8 +90,9 @@ singular values.
 \end{proof}
 
 Unitary polar completion, equality of the two conjugations of $H$, and
-the relative-polar commutation conclusion are proved in
-\nolinkurl{TNLean/MPS/MPU/TwoKrausPolar.lean}. Simultaneous
+the relative-polar commutation conclusion are proved in the Lean module
+\nolinkurl{TNLean/MPS/MPU/TwoKrausPolar.lean}, which is pending in
+pull request~\#8590 and not yet in the repository. Simultaneous
 diagonalization and the full conclusion of Lemma~\ref{lem:two-kraus}
 are not yet asserted as Lean theorems.
 
@@ -275,8 +283,9 @@ The control may be entangled with the data or with other registers;
 the identities are operator identities and remain valid in that case.
 
 The clean-record merging identity and the cancellation combining sector
-erasure with the final unitary factor are proved in
-\nolinkurl{TNLean/MPS/MPU/TwoSectorMerging.lean}. Its hypotheses
+erasure with the final unitary factor are proved in the Lean module
+\nolinkurl{TNLean/MPS/MPU/TwoSectorMerging.lean}, pending in pull
+request~\#8590 and not yet in the repository. Its hypotheses
 explicitly supply an orthogonal projection or a Hermitian involution.
 These algebraic identities support the six-call construction; the
 structural decomposition of an arbitrary Schmidt-rank-two unitary and
@@ -318,8 +327,12 @@ the balanced recursion gives
  \quad(n\geq2),
 \]
 with an absolute constant $C$ for the Hadamards and guard computations.
-Its depth is at most $\lceil\log_2 n\rceil$, and its number of nodes is
-$O(6^{\lceil\log_2 n\rceil})=O(n^{\log_2 6})$.
+Its recursion tree has height at most $\lceil\log_2 n\rceil$ and
+$O(6^{\lceil\log_2 n\rceil})=O(n^{\log_2 6})$ nodes. This height is not
+a circuit depth: the six child calls at each node run one after another
+on shared auxiliary workspace, so the circuit depth obeys the same
+recurrence as the gate count and is bounded by it, not by
+$O(\log n)$.
 The three current-level auxiliary qubits are retained during a child
 call, while the child's space is reused for subsequent calls. Thus at
 most $3\lceil\log_2 n\rceil+O(1)$ auxiliary qubits are present.
@@ -333,8 +346,9 @@ of quantum data is used or required.
 \end{proof}
 
 The numerical estimate for a recursion with a fixed number of child
-calls is formalized separately by
-\nolinkurl{MPUCircuit.cost_le_pow_of_constant_branching}. Its hypotheses
+calls is formalized separately by the Lean theorem
+\nolinkurl{MPUCircuit.cost_le_pow_of_constant_branching}, pending in
+pull request~\#8590 and not yet in the repository. Its hypotheses
 concern a numerical recurrence; it does not assert that the controlled
 unitary decomposition above has been formalized. The exact finite-matrix
 identity for the six-call merging is checked in
@@ -383,8 +397,8 @@ is required.
 This is the fixed-presentation, all-length hypothesis of the
 Uniform-bulk MPU definition in Styliaris--Trivedi--Cirac,
 arXiv:2508.08160. The circuit step uses their Local isometries:
-Uniform case lemma and Merging lemma, in the Supplementary Material
-of \nolinkurl{references/2508.08160/main.tex}. The additional step
+Uniform case lemma and Merging lemma, in the Supplemental Material
+of arXiv:2508.08160v2. The additional step
 here is to take convex averages of cap Grams over different lengths
 before taking their square roots.
 
@@ -636,7 +650,8 @@ a stronger result by optimizing over an affine space of positive
 metrics, and covers nonuniform tensors specified at a single length.
 The averaging argument above is a mathematical proof; this separate
 familywise circuit construction is not asserted to have been formalized
-in Lean. The stronger general construction of Section~5 is formalized.
+in Lean. A Lean formalization of the stronger general construction of
+Section~5 is pending in pull request~\#8590.
 
 Fixed trace boundaries are included. If the coefficient is
 $\operatorname{Tr}(bA_{\alpha_1}\cdots A_{\alpha_N})$, take the enlarged
@@ -707,8 +722,9 @@ arbitrary reference system.
 
 The theorem addresses the nonuniform fixed-bond-dimension circuit
 question treated under a spectral or conditioning requirement in
-Styliaris--Trivedi--Cirac, arXiv:2508.08160, in particular
-\nolinkurl{references/2508.08160/main.tex}, lines 1373--1402.
+Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, in particular the
+definition of $q_k$ and Theorem~2 in the main-text paragraph on
+nonuniform MPUs (source lines 1373--1402).
 The proof uses the isometry and merging argument of that paper,
 but obtains the positive metrics from affine Gram spaces rather than
 from physical cap states. The main-text definition of $q_k$ ranges over
@@ -989,13 +1005,13 @@ parameters for the determinant maximizers and unitary extensions
 are allowed as gate parameters; no efficient classical computation
 of those parameters is asserted. The gate set consists of arbitrary
 one- and two-qudit unitaries, as in the source, rather than a fixed
-finite alphabet. The general exact circuit theorem and its
-periodic-boundary specialization are formalized in
-\nolinkurl{TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean}.
-The operator-norm approximation statements, with exact auxiliary erasure,
-are formalized in
+finite alphabet. Lean formalizations are pending in pull
+request~\#8590 and are not yet in the repository: the general exact
+circuit theorem and its periodic-boundary specialization in
+\nolinkurl{TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean}, and the
+operator-norm approximation statements, with exact auxiliary erasure, in
 \nolinkurl{TNLean/MPS/MPU/ApproximateBoundedCutRankCircuit.lean}.
-These statements derive the complete circuit from the given finite
+These pending statements derive the complete circuit from the given finite
 unitary and its consecutive cut-rank bound.
 
 The exact theorem also proves the operator-norm approximation statement:
@@ -1007,8 +1023,8 @@ of the theorem.
 
 Write the virtual matrices with the left bond as the row index and the
 right bond as the column index, as in the tensor labels $m$ (left) and $n$
-(right) of Styliaris--Trivedi--Cirac, arXiv:2508.08160,
-\nolinkurl{references/2508.08160/main.tex}, lines 695--722.
+(right) of Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, main-text
+paragraph on MPUs with uniform bulk (source lines 695--722).
 For an interval from site $j$ through site $k$, put
 $B^{\mathbf a,\mathbf b}=A_j^{a_jb_j}\cdots A_k^{a_kb_k}$.
 The two outward flag legs of the source's
@@ -1038,7 +1054,7 @@ $L_1=R_N=1$, so the full interval is exactly the original unitary.
 
 At cut $k$, the source's joining operator is
 $|00\rangle\langle I|(R_k^{-1}\otimes L_{k+1}^{-1})$; see the proof of
-\nolinkurl{lem:merging}, local source lines 2157--2182. Its coefficient
+\nolinkurl{lem:merging}, source lines 2157--2182. Its coefficient
 on the right flag $\beta$ of the left child and the left flag $\alpha$
 of the right child is
 \[
@@ -1058,14 +1074,14 @@ These equalities identify an explicit full-rank candidate; no
 conditioning or trace identity is supplied as an extra assumption.
 
 The domain of the infimum must be stated separately. The main-text
-\nolinkurl{eq:def_q_k}, local source lines 1375--1379, describes the
+\nolinkurl{eq:def_q_k}, source lines 1375--1379, describes the
 infimum over valid choices producing the displayed interval isometries.
 For the unrestricted domain of all simultaneous valid positive metrics,
 the construction above therefore gives $q_k^{\mathrm{iso}}\leq r_k$.
-The appendix restatement, local source lines 2123--2124, instead writes
+The appendix restatement, source lines 2123--2124, instead writes
 $R_k^2\in\mathcal R_k$ and $L_{k+1}^2\in\mathcal L_{k+1}$ explicitly.
 Those sets are defined from density operators on physical caps in
-\nolinkurl{eq:def_LR}, local source lines 1758--1816.
+\nolinkurl{eq:def_LR}, source lines 1758--1816.
 A positive matrix in the real affine hull of cap Grams need not itself
 be a cap Gram, and the dual metric is not asserted to belong to a
 physical cap set. Hence the argument does not bound that
@@ -1080,10 +1096,10 @@ Consider the two-qubit unitary
  U_\theta=\operatorname{diag}(1,1,1,e^{i\theta}),\qquad 0<\theta<\pi.
 \]
 It is one allowed two-qudit gate in the circuit model of
-Styliaris--Trivedi--Cirac, arXiv:2508.08160,
-\nolinkurl{references/2508.08160/main.tex}, line 820.
+Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, opening of the
+main-text paragraph on the main result (source line 820).
 Nevertheless, the infimum restricted to physical cap density operators
-in the appendix, local source lines 2123--2124, diverges as
+in the appendix, source lines 2123--2124, diverges as
 $\theta\downarrow0$. This is a calculation of an upper-bound parameter
 for a particular construction; it is not a circuit lower bound.
 
@@ -1106,7 +1122,7 @@ has determinant $z-1\ne0$, so the operator Schmidt rank is exactly two
 throughout the stated nondegenerate interval.
 
 The physical cap sets are defined in the source's
-\nolinkurl{eq:def_LR}, local source lines 1758--1816, by tracing the
+\nolinkurl{eq:def_LR}, source lines 1758--1816, by tracing the
 physical outputs against arbitrary density operators on the cap inputs.
 Here the off-diagonal entries of those density operators disappear,
 because both local letters are diagonal on the physical indices.
@@ -1151,14 +1167,14 @@ No limiting rank-deficient cap is needed for this minimum.
 
 The same value can be checked in the canonical normalization of the
 source, \nolinkurl{eq:choice_schmidt} and
-\nolinkurl{eq:app:choice_schmidt}, local source lines 1633--1640 and
+\nolinkurl{eq:app:choice_schmidt}, source lines 1633--1640 and
 1946--1952. The normalized Choi state has Schmidt values
 \[
  c=\cos(\theta/4),\qquad s=\sin(\theta/4),\qquad c^2+s^2=1.
 \]
 Indeed, the two singular values of the coefficient matrix above are
 $2c,2s$, and the normalized Choi state divides this matrix by two;
-compare the normalization in local source line 1393.
+compare the normalization in source line 1393.
 Let
 \[
  H=\frac1{\sqrt2}\begin{pmatrix}
@@ -1195,7 +1211,7 @@ They do not give a physical cap candidate: for $0<\theta<\pi$,
 $t+(1-t)e^{-i\theta}$ cannot vanish, so $Q_*=I$ is outside the family
 $\{Q_t\}$.
 The distinction between the unrestricted valid-isometry domain in
-local source lines 1375--1379 and the physical-cap domain in lines
+source lines 1375--1379 and the physical-cap domain in lines
 2123--2124 therefore has an observable mathematical effect, even for
 this elementary rank-two unitary. A large physical-cap conditioning
 number is compatible with an exact one-gate implementation.
@@ -1271,8 +1287,8 @@ $\mathcal U_d(N,D)$ denote the unitaries on $N$ $d$-dimensional sites
 whose operator Schmidt ranks across all consecutive cuts are at most
 $D$. No unitarity at other lengths and no lower bound on a nonzero
 Schmidt value is imposed. Gates are arbitrary one- and two-qudit
-unitaries, as in Styliaris--Trivedi--Cirac, arXiv:2508.08160,
-\nolinkurl{references/2508.08160/main.tex}, line 820.
+unitaries, as in Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, opening of the
+main-text paragraph on the main result (source line 820).
 
 For $A$ auxiliary qudits, write
 $J_A\psi=\psi\otimes|0\rangle^{\otimes A}$.
