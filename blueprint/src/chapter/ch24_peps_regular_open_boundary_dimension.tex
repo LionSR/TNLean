@@ -1,0 +1,56 @@
+\begin{theorem}[Dimension of a complete regular boundary image]%
+    \label{thm:peps_regular_open_boundary_dimension}
+    \lean{TNLean.PEPS.rank_regularOpenRegionMatrix_of_isGInjective_of_connected}
+    \leanok
+    \uses{thm:peps_connected_regular_region_injectivity,
+        thm:peps_g_injective_invariants_range,thm:peps_regular_boundary_invariants}
+    Let $R$ be a connected finite region with $b>0$ crossing bonds, and suppose
+    its original tensors are $G$-injective for the regular incident-edge action.
+    The actual open contraction $A_R$ has
+    $\dim\operatorname{im}A_R=|G|^{b-1}$.
+\end{theorem}
+\begin{proof}\leanok
+    The contracted block is $G$-injective on its invariant boundary space.
+    Its restriction to that space is an isomorphism onto its physical image.
+    The invariant regular boundary space has dimension $|G|^{b-1}$.
+\end{proof}
+
+\begin{theorem}[Obstruction to containment of all boundary states]%
+    \label{thm:peps_small_open_boundary_obstruction}
+    \lean{TNLean.PEPS.not_range_le_regularOpenRegionMatrix_of_small_boundary}
+    \leanok
+    \uses{thm:peps_regular_open_boundary_dimension}
+    Under the preceding hypotheses, let $M:\mathbb C^B\to\mathcal P$ and
+    $L:\mathcal P\to\mathcal H_R$ be arbitrary linear maps between finite
+    dimensional spaces. If $|B|<|G|^{b-1}$, then
+    $\operatorname{im}A_R\not\subseteq L(\operatorname{im}M)$.
+    In particular, a block with $m$ boundary coordinates per leg cannot
+    cover the complete regular boundary image when $m^b<|G|^{b-1}$.
+    This is a dimension comparison relevant to the closed bondwise equivalence
+    in \cite[Section 7]{Schuch2010PEPS}; the source does not assert such
+    containment for arbitrary open boundary tensors.
+\end{theorem}
+\begin{proof}\leanok
+    Containment would give
+    $|G|^{b-1}\leq\operatorname{rank}(LM)\leq\operatorname{rank}M\leq|B|$,
+    contrary to the strict inequality.
+\end{proof}
+
+\begin{theorem}[A two-site open-boundary obstruction]%
+    \label{thm:peps_two_site_open_boundary_obstruction}
+    \lean{TNLean.PEPS.exists_boundaryNumbering_twoSite_not_range_le}
+    \leanok
+    \uses{thm:peps_small_open_boundary_obstruction,
+        lem:peps_torus_rectangle_boundary_card,lem:peps_torus_rectangle_cut_connectivity}
+    On a native square torus with both periods at least three, take
+    $R=\{0,1\}\times\{0\}$ and a group of order six. Suppose the original
+    incident-edge tensors are locally regular $G$-injective. The six actual
+    crossing bonds admit a numbering for which, for every block
+    $M:(\mathbb C^4)^{\otimes6}\to\mathcal P$ and every linear physical map
+    $L:\mathcal P\to\mathcal H_R$, the image of $LM$ does not contain the
+    complete regular boundary image.
+\end{theorem}
+\begin{proof}\leanok
+    The positive bounded rectangle is connected. Its actual perimeter gives
+    six crossing bonds, and $4^6=4096<7776=6^5$. Apply the dimension obstruction.
+\end{proof}

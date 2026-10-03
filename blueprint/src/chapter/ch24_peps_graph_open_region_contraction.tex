@@ -1,0 +1,44 @@
+\begin{definition}[Actual open graph coefficients]%
+    \label{def:peps_graph_open_region_contraction}
+    \lean{TNLean.PEPS.graphRegionIncidentConfigEquiv,
+        TNLean.PEPS.graphOpenRegionNetwork}
+    \leanok
+    Let $R$ be a region in a finite simple graph. Incident virtual labels
+    split into internal-bond labels and crossing-bond labels. For a finite
+    virtual alphabet $X$, site coefficients $A_v$, prescribed crossing
+    labels $\theta$, and physical configuration $\sigma$, define the actual
+    open coefficient by summing the product of the site coefficients over
+    incident assignments whose crossing restriction equals $\theta$.
+    The physical alphabet may depend on $v$.
+    These are the finite contraction coordinates used in
+    \cite[Sections~6.2--6.3 and~7]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Exact internal summation and numbered open coefficients]%
+    \label{thm:peps_graph_open_region_contraction}
+    \lean{TNLean.PEPS.graphRegionIncidentConfigEquiv_apply_internal,
+        TNLean.PEPS.graphRegionIncidentConfigEquiv_apply_boundary,
+        TNLean.PEPS.graphOpenRegionNetwork_eq_sum_internal,
+        TNLean.PEPS.openRegionWeight_groupBondTensor_eq_graphOpenRegionNetwork}
+    \leanok
+    \uses{def:peps_graph_open_region_contraction,def:peps_open_region_contraction}
+    The two factors of the incident-label bijection read exactly the original
+    internal and crossing labels. Prescribing $\theta$ therefore gives
+    \begin{align}
+        A_R(\theta,\sigma)
+        =\sum_{\xi\text{ internal}}\prod_{v\in R}
+            A_v\bigl((\xi,\theta)|_v,\sigma_v\bigr),
+    \end{align}
+    with each internal assignment counted once. When the physical alphabet
+    is uniformly numbered, enumerating $X$ into finite indices gives exactly
+    the original numbered open-region coefficient of the same site tensors.
+    No boundary-state equality or Gram identity is a hypothesis.
+\end{theorem}
+
+\begin{proof}\leanok
+    Partition incident edges into internal and crossing edges and transport
+    their labels along the resulting bijection. The prescribed crossing
+    condition removes the crossing-label sum. For numbered coefficients,
+    reindex each incident virtual label by the same finite enumeration;
+    the site products and boundary condition are unchanged.
+\end{proof}
