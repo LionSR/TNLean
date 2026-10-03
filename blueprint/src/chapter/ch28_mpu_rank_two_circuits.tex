@@ -1,5 +1,3 @@
-% This branch formalizes affine Gram normalization and minimal cut representations.
-% The circuit results are stated here; their Lean proofs belong to dependent branches.
 \section{Exact circuits for matrix product unitaries}
 
 The constructions of~\cite{RankTwoMPUCircuits2026} give exact circuits
@@ -1185,8 +1183,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Two-reflection subspace amplification]
     \label{def:mpu_exact_subspace_amplification}
-
-
+    \lean{Matrix.subspaceReflection, Matrix.amplificationPlane, Matrix.subspaceAmplificationStep}
+    \leanok
     For a projection $P$, put $R_P=I-2P$. For two maps $G,H$
     with common input and output spaces, put
     \[
@@ -1197,8 +1195,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Unitary reflections and isometric planes]
     \label{thm:mpu_amplification_reflections}
-
-
+    \lean{Matrix.subspaceReflection_mem_unitaryGroup, Matrix.amplificationPlane_conjTranspose_mul_self, Matrix.isStarProjection_mul_conjTranspose_of_isometry, Matrix.subspaceAmplificationStep_mem_unitaryGroup}
+    \leanok
     \uses{def:mpu_exact_subspace_amplification}
     An orthogonal projection gives a unitary reflection.
     If $G^\dagger G=H^\dagger H=I$ and $G^\dagger H=0$, then
@@ -1207,7 +1205,7 @@ left multiplication, right vector $b$ and left functional the trace.
     If $P$ is also an orthogonal projection, $Q_\theta$ is unitary
     on the entire output space.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Square $I-2P$, use the orthogonal Gram identities, and use
     $V_\theta^\dagger V_\theta=I$ to square its image projection.
     A product of the two reflections, with scalar phase minus one,
@@ -1216,8 +1214,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Exact rotation of an isometric subspace]
     \label{thm:mpu_exact_subspace_amplification}
-
-
+    \lean{Matrix.subspaceAmplificationStep_mul_plane, Matrix.subspaceAmplificationStep_pow_mul_plane, Matrix.subspaceAmplificationStep_pow_eq_good}
+    \leanok
     \uses{def:mpu_exact_subspace_amplification}
     Suppose $G^\dagger G=H^\dagger H=I$, $G^\dagger H=0$,
     $PG=G$ and $PH=0$. For all real $\theta,\phi$ and $k\geq0$,
@@ -1229,7 +1227,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $\theta=\pi/(4\ell+2)$,
     $Q_\theta^\ell V_\theta=G$ exactly, with no residual phase.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Expand the two reflections on the orthogonal images of $G,H$.
     The trigonometric addition identities give the one-step rotation.
     Iterate it by induction. The final angle is
@@ -1238,8 +1236,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Attenuation by one binary flag]
     \label{def:mpu_uniform_success_attenuation}
-
-
+    \lean{Matrix.attenuationRotation, Matrix.attenuatedIsometry, Matrix.attenuatedSuccessProjection}
+    \leanok
     For a real coefficient $t$, put $s=\sqrt{1-t^2}$ and define
     \[
         R_t=\begin{pmatrix}t&-s\\s&t\end{pmatrix},
@@ -1251,8 +1249,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Exact attenuation of uniform success]
     \label{thm:mpu_uniform_success_attenuation}
-
-
+    \lean{Matrix.attenuationRotation_mem_unitaryGroup, Matrix.attenuatedIsometry_conjTranspose_mul_self, Matrix.attenuatedSuccessProjection_isStarProjection, Matrix.attenuatedIsometry_success_gram}
+    \leanok
     \uses{def:mpu_uniform_success_attenuation}
     If $t^2\leq1$, then $R_t$ is unitary on both flag values.
     If $V^\dagger V=I$, also $V_t^\dagger V_t=I$.
@@ -1265,7 +1263,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Thus a nonnegative attenuation coefficient multiplies the
     original nonnegative success amplitude by $t$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The two flag coefficients satisfy $t^2+s^2=1$. Multiply the
     two-by-two rotation and the block matrices, using this identity
     for normalization and the first row block for the success Gram.
@@ -1273,8 +1271,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Uniform success and failure maps]
     \label{def:mpu_uniform_postselection}
-
-
+    \lean{Matrix.postselectionSuccess, Matrix.postselectionFailure, Matrix.postselectionAmplificationStep}
+    \leanok
     \uses{def:mpu_exact_subspace_amplification}
     Given an isometry $V$, success projection $P$ and real
     success amplitude $0<p<1$, put
@@ -1286,8 +1284,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Decomposition from uniform success probability]
     \label{thm:mpu_uniform_postselection_decomposition}
-
-
+    \lean{Matrix.uniformPostselection_decomposition}
+    \leanok
     \uses{def:mpu_uniform_postselection}
     Suppose $V^\dagger V=I$, $P$ is an orthogonal projection,
     $0<p<1$ and $V^\dagger PV=p^2I$. The maps $G,H$ above satisfy
@@ -1299,7 +1297,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Thus both isometric subspaces follow from the uniform probability
     identity.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Projection identities give the two projected Grams $p^2I$ and
     $(1-p^2)I$, and their mixed Gram is zero. Divide by their
     positive amplitudes. Adding the projected parts recovers $V$.
@@ -1307,8 +1305,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Exact amplification from the initial isometry]
     \label{thm:mpu_uniform_postselection_amplification}
-
-
+    \lean{Matrix.postselectionAmplificationStep_mem_unitaryGroup, Matrix.amplificationPlane_postselection_eq_self, Matrix.postselectionAmplificationStep_pow_mul, Matrix.postselectionAmplificationStep_pow_eq_success, Matrix.projection_mul_eq_self_of_uniform_probability_one}
+    \leanok
     \uses{def:mpu_uniform_postselection,
         def:mpu_exact_subspace_amplification}
     Suppose $V^\dagger V=I$ and $P$ is an orthogonal projection.
@@ -1322,7 +1320,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $Q^\ell V=(\sin\theta)^{-1}PV$ exactly.
     If instead $V^\dagger PV=I$, then already $PV=V$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpu_amplification_reflections,
         thm:mpu_exact_subspace_amplification,
         thm:mpu_uniform_postselection_decomposition}
@@ -1335,8 +1333,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Amplification rounds from the bond dimension]
     \label{def:mpu_exact_amplification_budget}
-
-
+    \lean{QuantumCircuit.amplificationRounds, QuantumCircuit.amplificationAngle}
+    \leanok
     For $r\geq0$, define
     \[
         \ell(r)=\lceil\pi r/4\rceil,
@@ -1346,8 +1344,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[A dimension bound for exact amplification]
     \label{thm:mpu_exact_amplification_budget}
-
-
+    \lean{QuantumCircuit.amplificationRounds_pos, QuantumCircuit.amplificationRounds_le, QuantumCircuit.amplificationAngle_pos, QuantumCircuit.amplificationAngle_lt_pi_div_two, QuantumCircuit.amplificationAngle_le_inv, QuantumCircuit.amplificationAngle_sin_pos_le_inv}
+    \leanok
     \uses{def:mpu_exact_amplification_budget}
     For $r\geq1$,
     \[
@@ -1359,7 +1357,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Thus the merger success amplitude $1/r$ can be attenuated to
     the prescribed exact angle, with at most $r$ amplification rounds.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Positivity and the ceiling inequalities give the lower bound on
     $\ell(r)$. Since $\pi\leq4$, its ceiling is at most $r$.
     Also $4\ell(r)+2\geq\pi r+2$, which bounds the angle by $1/r$.
@@ -1484,8 +1482,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[A reversible prefix zero test]
     \label{def:mpu_reversible_zero_conjunction}
-
-
+    \lean{QuantumCircuit.zeroPrefixTest, QuantumCircuit.zeroPrefixBit, QuantumCircuit.zeroConjunctionPrev, QuantumCircuit.zeroConjunctionIncrement, QuantumCircuit.zeroConjunctionStep, QuantumCircuit.zeroConjunctionPerm, QuantumCircuit.zeroConjunctionState, QuantumCircuit.zeroConjunctionStepSites, QuantumCircuit.zeroConjunctionStepGateCount}
+    \leanok
     For $a$ data qudits, use $a$ temporary qudits initialized in zero.
     At step $j$, increment temporary coordinate $j$ modulo $d$ when
     data coordinate $j$ is zero and either $j=0$ or the preceding
@@ -1496,8 +1494,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Conjunction on the entire logical space]
     \label{thm:mpu_reversible_zero_conjunction}
-
-
+    \lean{QuantumCircuit.zeroConjunctionPerm_apply_clean, QuantumCircuit.zeroConjunctionIncrement_update, QuantumCircuit.zeroPrefixBit_eq_one, QuantumCircuit.zeroConjunctionStep_state, QuantumCircuit.zeroConjunctionStep_isLocalPerm, QuantumCircuit.isPairProduct_zeroConjunctionStep, QuantumCircuit.isPairProduct_zeroConjunctionPerm}
+    \leanok
     \uses{def:mpu_reversible_zero_conjunction,
         thm:mpu_quantitative_unitary_synthesis,
         thm:mpu_arbitrary_circuit_placement}
@@ -1507,7 +1505,7 @@ left multiplication, right vector $b$ and left functional the trace.
     at most three sites. The full conjunction has an actual
     neighboring-pair circuit of at most $4c_da^2$ gates.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Induct on the completed prefix. At the next step its temporary
     coordinate is still zero, and the previous Boolean value supplies
     the earlier prefix test. The controlled increment is independent
@@ -1517,8 +1515,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Reflection using a temporary zero-test register]
     \label{def:mpu_clean_zero_register_reflection}
-
-
+    \lean{QuantumCircuit.zeroRegisterReflection, QuantumCircuit.zeroScratchPhaseLocal, QuantumCircuit.zeroScratchPhase, QuantumCircuit.zeroRegisterReflectionGateCount}
+    \leanok
     \uses{def:mpu_reversible_zero_conjunction}
     For $a\geq1$, compute the prefix conjunction, change the phase
     by minus one when the final temporary coordinate is one, and
@@ -1528,8 +1526,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Exact initialized-register reflections]
     \label{thm:mpu_clean_zero_register_reflection}
-
-
+    \lean{QuantumCircuit.zeroRegisterReflection_mul_cleanEmbedding, QuantumCircuit.zeroScratchPhaseLocal_mem_unitary, QuantumCircuit.isPairProduct_zeroScratchPhase, QuantumCircuit.isPairProduct_zeroRegisterReflection, QuantumCircuit.zeroRegisterReflection_mem_unitary, QuantumCircuit.zeroRegisterReflection_eq_diagonal, QuantumCircuit.zeroRegisterReflection_apply_clean, QuantumCircuit.zeroRegisterReflectionGateCount_eq, QuantumCircuit.isPairProduct_embedOp_zeroRegisterReflection, QuantumCircuit.embedOp_zeroRegisterReflection_apply_clean, QuantumCircuit.isPairProduct_neg_one}
+    \leanok
     \uses{def:mpu_clean_zero_register_reflection,
         thm:mpu_reversible_zero_conjunction}
     The constructed circuit is unitary on the full register and,
@@ -1542,7 +1540,7 @@ left multiplication, right vector $b$ and left functional the trace.
     register the reflection is the global phase $-I$, implemented
     by one neighboring-pair gate when $n\geq2$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     On a clean temporary register the final Boolean value tests
     exactly whether the entire data register is zero. The diagonal
     phase changes no coordinate, so the inverse permutation erases
@@ -1568,8 +1566,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[A two-copy dilation]
     \label{def:mpu_partial_isometry_dilation}
-
-
+    \lean{Matrix.partialIsometryDilation}
+    \leanok
     For a square matrix $A$, define
     \[
       \mathcal D_A=
@@ -1582,8 +1580,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Dilation of a partial isometry]
     \label{thm:mpu_partial_isometry_dilation}
-
-
+    \lean{Matrix.partialIsometryDilation_mem_unitaryGroup, Matrix.partialIsometryDilation_mul_fromRows, Matrix.partialIsometryDilation_initial_gram, Matrix.partialIsometryDilation_success_gram}
+    \leanok
     \uses{def:mpu_partial_isometry_dilation}
     If $AA^\dagger A=A$, then $\mathcal D_A$ is unitary. For every
     matrix of input columns $V$,
@@ -1595,7 +1593,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the first output copy has Gram $(AV)^\dagger AV$.
     The first-copy identity holds for arbitrary $A$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Both $A^\dagger A$ and $AA^\dagger$ are projections.
     Block multiplication gives $\mathcal D_A^\dagger\mathcal D_A=I$,
     the displayed action, and its projected Gram.
@@ -1645,8 +1643,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Quantitative finite-register synthesis]
     \label{def:mpu_quantitative_unitary_synthesis}
-
-
+    \lean{QuantumCircuit.unitaryGateCount}
+    \leanok
     Set
     \[
       G(d,n)=2n+3(d^n)^2(2n+1)(4n3^n).
@@ -1655,8 +1653,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Exact synthesis with a dimension bound]
     \label{thm:mpu_quantitative_unitary_synthesis}
-
-
+    \lean{QuantumCircuit.isPairProduct_unitaryGateCount, QuantumCircuit.isPairProduct_ctrlOp_le_exponential, QuantumCircuit.isPairProduct_twoLevel_le_exponential, QuantumCircuit.unitaryGateCount_le_hilbertDimension_pow, QuantumCircuit.isPairProduct_le_hilbertDimension_pow, QuantumCircuit.exists_isPairProduct_apply_embedding_eq}
+    \leanok
     \uses{def:mpu_quantitative_unitary_synthesis}
     Every unitary on $n\geq2$ qudits of dimension $d\geq2$
     has an exact neighboring-pair circuit of at most
@@ -1667,7 +1665,7 @@ left multiplication, right vector $b$ and left functional the trace.
     a two-level gate between arbitrary configurations has cost at
     most $(2n+1)(4n3^n)$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Eliminate matrix entries by two-level unitaries, express each
     by controlled one-site gates, and route its two-site factors.
     A separate one-site phase preserves exact matrix equality.
@@ -1676,13 +1674,13 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Arbitrary placement of a circuit]
     \label{thm:mpu_arbitrary_circuit_placement}
-
-
+    \lean{QuantumCircuit.IsPairProduct.embedOp_injective}
+    \leanok
     On a chain of $n$ sites with positive local dimension,
     injectively placing a neighboring-pair circuit of $K$ gates
     requires at most $2nK$ neighboring-pair gates.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Each placed gate acts on two distinct sites. Swaps bring them
     together and restore their positions at cost at most $2n$.
 \end{proof}
@@ -1719,8 +1717,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Circuits for image reflections]
     \label{thm:mpu_image_reflection_circuits}
-
-
+    \lean{Matrix.subspaceReflection_image, QuantumCircuit.IsPairProduct.subspaceReflection_image, QuantumCircuit.IsPairProduct.pow, QuantumCircuit.IsPairProduct.postselectionAmplificationStep}
+    \leanok
     If a unitary $U$ has a $K$-gate circuit and reflection about
     $EE^\dagger$ has an $L$-gate circuit, then reflection about
     $(UE)(UE)^\dagger$ has a $(2K+L)$-gate circuit, since
@@ -1731,7 +1729,7 @@ left multiplication, right vector $b$ and left functional the trace.
     On $n\geq2$ sites, an amplification round with reflection
     costs $K,L$ costs at most $2n+K+L$, including its phase.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Unitary conjugation gives the identity. Concatenate the forward
     circuit, the reflection, and the inverse circuit. Repetition
     concatenates copies; the prescribed global phase costs at most $2n$.
@@ -1848,8 +1846,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Initialized basis inclusion]
     \label{def:mpu_initialized_basis_inclusion}
-
-
+    \lean{QuantumCircuit.initializedBasisMatrix, QuantumCircuit.zeroWorkspaceEmbedding}
+    \leanok
     For an injection of logical basis vectors into a larger basis,
     let $J$ be its inclusion matrix. Appending an all-zero temporary
     register gives the zero-workspace inclusion as a special case.
@@ -1857,8 +1855,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Implementation with a reusable initialized workspace]
     \label{def:mpu_clean_unitary_implementation}
-
-
+    \lean{QuantumCircuit.IsCleanImplementation}
+    \leanok
     The ambient operator $U$ implements the logical operator $Z$
     with reusable initialized workspace when $UJ=JZ$. This identity
     applies to the entire logical space.
@@ -1866,8 +1864,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Composition and inverse calls with one workspace]
     \label{thm:mpu_clean_unitary_composition}
-
-
+    \lean{QuantumCircuit.IsCleanImplementation.mul, QuantumCircuit.IsCleanImplementation.one, QuantumCircuit.IsCleanImplementation.pow, QuantumCircuit.IsCleanImplementation.conjTranspose, QuantumCircuit.IsCleanImplementation.star, QuantumCircuit.IsCleanImplementation.inv, QuantumCircuit.IsCleanImplementation.mulVec, QuantumCircuit.IsCleanImplementation.logical_mem_unitary, QuantumCircuit.IsCleanImplementation.conjTranspose_of_isometry, QuantumCircuit.IsCleanImplementation.kronecker_one}
+    \leanok
     \uses{def:mpu_clean_unitary_implementation}
     Initialized-workspace implementations compose and repeat using
     the same workspace. If $J^\dagger J=I$ and $U$ is unitary,
@@ -1877,7 +1875,7 @@ left multiplication, right vector $b$ and left functional the trace.
     The identities persist after tensoring with an arbitrary
     finite reference identity.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Multiply the two intertwining identities. Taking the Gram
     of $UJ=JZ$ gives $Z^\dagger Z=I$; ambient and logical unitarity
     then give the inverse identity. Tensor multiplication preserves
@@ -1886,8 +1884,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Encoding and implementing isometric columns]
     \label{thm:mpu_initialized_isometry_synthesis}
-
-
+    \lean{QuantumCircuit.exists_isPairProduct_mul_initializedBasisMatrix_eq, QuantumCircuit.initializedBasisMatrix_isIsometry, QuantumCircuit.mul_initializedBasisMatrix, QuantumCircuit.exists_isPairProduct_isCleanImplementation, QuantumCircuit.isCleanImplementation_zeroRegisterReflection}
+    \leanok
     \uses{def:mpu_initialized_basis_inclusion,
         thm:mpu_quantitative_unitary_synthesis,
         thm:mpu_clean_zero_register_reflection}
@@ -1900,7 +1898,7 @@ left multiplication, right vector $b$ and left functional the trace.
     The constructed zero-register reflection also satisfies this
     complete logical-space identity.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Encoded columns remain orthonormal. Extend them to a unitary
     with their prescribed input columns and synthesize that finite
     unitary. The zero-register assertion is its already proved
@@ -2001,8 +1999,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Reflections on selected initialized flags]
     \label{def:mpu_selected_flag_reflection}
-
-
+    \lean{QuantumCircuit.selectedZeroRegisterSites, QuantumCircuit.selectedZeroRegisterLogical, QuantumCircuit.selectedZeroRegisterReflection, QuantumCircuit.selectedZeroRegisterReflectionGateCount, QuantumCircuit.selectedZeroRegisterPoolSites, QuantumCircuit.selectedZeroRegisterReflectionPool, QuantumCircuit.selectedZeroRegisterReflectionPoolGateCount}
+    \leanok
     An injective choice of $a$ sites in an $n$-site logical register
     defines the diagonal reflection with phase $-1$ precisely when
     those sites are all zero. A common pool of $A\geq a$ initialized
@@ -2012,8 +2010,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Selected flags with one common scratch pool]
     \label{thm:mpu_selected_flag_reflection}
-
-
+    \lean{QuantumCircuit.selectedZeroRegisterSites_castAdd, QuantumCircuit.selectedZeroRegisterSites_natAdd, QuantumCircuit.selectedZeroRegisterLogical_mem_unitary, QuantumCircuit.selectedZeroRegisterLogical_eq_one_sub, QuantumCircuit.isPairProduct_selectedZeroRegisterReflection, QuantumCircuit.isCleanImplementation_selectedZeroRegisterReflection, QuantumCircuit.selectedZeroRegisterLogical_empty, QuantumCircuit.exists_isPairProduct_isCleanImplementation_selectedZeroRegister, QuantumCircuit.selectedZeroRegisterPoolSites_castAdd, QuantumCircuit.selectedZeroRegisterPoolSites_natAdd, QuantumCircuit.isPairProduct_selectedZeroRegisterReflectionPool, QuantumCircuit.isCleanImplementation_selectedZeroRegisterReflectionPool, QuantumCircuit.exists_isPairProduct_isCleanImplementation_selectedZeroRegisterPool}
+    \leanok
     For $d\geq2$ and $n\geq2$, the selected-flags reflection has an
     actual circuit on $n+A$ sites. It returns all $A$ scratch sites
     to zero on every logical input and costs at most
@@ -2021,7 +2019,7 @@ left multiplication, right vector $b$ and left functional the trace.
     gate implements the required phase $-1$. Unselected logical
     sites are unrestricted.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Place the reversible zero conjunction on the selected flags and
     the first $a$ scratch sites, apply its phase, and reverse it.
     Its exact clean-input identity gives the logical reflection,
@@ -2183,8 +2181,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Placement of a circuit and its initialized workspace]
     \label{def:mpu_clean_circuit_placement}
-
-
+    \lean{QuantumCircuit.cleanImplementationSites}
+    \leanok
     Choose injective placements of the local logical sites in the
     full logical register and of the local scratch sites in the
     common scratch pool. Their disjoint union places the entire
@@ -2193,8 +2191,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Clean placement into a larger shared pool]
     \label{thm:mpu_clean_circuit_placement}
-
-
+    \lean{QuantumCircuit.cleanImplementationSites_castAdd, QuantumCircuit.cleanImplementationSites_natAdd, QuantumCircuit.initializedBasisMatrix_zeroWorkspace_mul_apply, QuantumCircuit.IsCleanImplementation.embedOp, QuantumCircuit.isPairProduct_isCleanImplementation_embedOp}
+    \leanok
     Suppose a local circuit satisfies its complete clean identity
     on every logical input. Its placed circuit satisfies the same
     identity on the full logical register and restores the entire
@@ -2202,7 +2200,7 @@ left multiplication, right vector $b$ and left functional the trace.
     its routed circuit on $n+A$ sites has at most $2(n+A)K$ gates.
     No additional cleanup hypothesis is required for the placed circuit.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The initialized basis inclusion selects the zero-scratch columns.
     In these columns, the placed matrix identity is precisely the
     local clean identity, with identity factors on every unused site.
@@ -2330,8 +2328,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[The inclusion with selected flags initialized]
     \label{def:mpu_initialized_flag_inclusion}
-
-
+    \lean{QuantumCircuit.zeroFlagEmbedding}
+    \leanok
     Given an injective selection of qudit flags, include arbitrary
     configurations on the remaining sites by assigning zero to each
     selected flag. Denote its basis-inclusion matrix by $E$.
@@ -2339,8 +2337,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[The constructed reflection is the initialized-range reflection]
     \label{thm:mpu_initialized_flag_projection}
-
-
+    \lean{QuantumCircuit.initializedBasisMatrix_mul_conjTranspose, QuantumCircuit.zeroFlagEmbedding_apply_selected, QuantumCircuit.mem_range_zeroFlagEmbedding_iff, QuantumCircuit.zeroFlagEmbedding_range_projection, QuantumCircuit.isStarProjection_zeroFlagEmbedding_range, QuantumCircuit.selectedZeroRegisterLogical_eq_subspaceReflection, QuantumCircuit.exists_isPairProduct_isCleanImplementation_zeroFlagReflection}
+    \leanok
     For any injective basis encoding, its range projection is the
     diagonal indicator of its encoded configurations. Consequently,
     the selected-flag inclusion has
@@ -2356,7 +2354,7 @@ left multiplication, right vector $b$ and left functional the trace.
     pool to zero on every logical input. No reflection identity or
     circuit decomposition is assumed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Multiplying an injective basis inclusion by its adjoint sums
     orthogonal basis projections over its image. The image of the
     selected-flag inclusion is exactly the stated zero-flag set.
@@ -2733,14 +2731,14 @@ remain separate assertions.
 
 \begin{theorem}[Selected-zero reflections act only on their flags]
     \label{thm:mpu_selected_reflection_support}
-
-
+    \lean{QuantumCircuit.embedOp_diagonal, QuantumCircuit.selectedZeroRegisterLogical_eq_embedOp, QuantumCircuit.selectedZeroRegisterLogical_mem_supportedOperators, QuantumCircuit.selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset}
+    \leanok
     The reflection which changes sign precisely when a selected set
     of qudits is zero is supported on those qudits. All states of
     the remaining logical qudits are allowed. This includes the empty
     selection, whose reflection is the scalar minus identity.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     A diagonal operator placed on a selected packet depends only on
     the selected configuration, and has a Kronecker delta on the
     remaining coordinates. Apply this identity to the local diagonal
@@ -2864,8 +2862,8 @@ remain separate assertions.
 
 \begin{definition}[Logical site permutations fixing the workspace]
     \label{def:mpu_workspace_fixed_site_permutation}
-
-
+    \lean{QuantumCircuit.workspaceFixedSitePerm}
+    \leanok
     Extend a permutation of the logical sites by the identity on
     the appended workspace sites, transporting the disjoint sum to
     the consecutive site coordinates.
@@ -2873,8 +2871,8 @@ remain separate assertions.
 
 \begin{theorem}[Coordinate regrouping has additive circuit cost]
     \label{thm:mpu_quantitative_site_permutation}
-
-
+    \lean{Equiv.Perm.swapFactorsAux_length_le, Equiv.Perm.swapFactors_length_le_card, QuantumCircuit.permOp_list_prod, QuantumCircuit.isPairProduct_permOp, QuantumCircuit.IsPairProduct.conjugate_permOp, QuantumCircuit.workspaceFixedSitePerm_castAdd, QuantumCircuit.workspaceFixedSitePerm_natAdd, QuantumCircuit.isCleanImplementation_permOp_workspaceFixedSitePerm, QuantumCircuit.IsCleanImplementation.conjugate_workspaceFixedSitePerm, QuantumCircuit.isPairProduct_isCleanImplementation_conjugate_workspaceFixedSitePerm}
+    \leanok
     Every permutation of $n$ qudit sites has an actual neighboring
     pair-gate circuit of at most $2n^2$ gates. Conjugating a circuit
     of cost $K$ by that permutation gives cost at most $K+4n^2$,
@@ -2883,7 +2881,7 @@ remain separate assertions.
     implementation identity. For a register of total size $n+A$,
     this conjugation costs at most $K+4(n+A)^2$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The finite permutation factors into at most $n$ transpositions,
     each routed with at most $2n$ neighboring swaps. Use the
     permutation circuit and its adjoint on the two sides of the
