@@ -2635,6 +2635,18 @@ abstracted — record why, so it is not re-proposed).
 - **Decision:** expose the existing mathematical identity and remove its
   duplicate proof. No new tactic or additional hypothesis is needed.
 
+### normalized adjoint fixed-matrix uniqueness — promoted
+
+- **Pattern:** trace-adjoint duality identifies a one-dimensional adjoint fixed space;
+  a trace-one fixed matrix spans it, and traces determine the scalar of any other
+  trace-one fixed matrix.
+- **Helper:** `MPSTensor.normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one`
+  in `MPS/Symmetry/StationarySupportLimitIdentification.lean`.
+- **Call sites:** stationary-support identification in that module and the convergent
+  sequence argument in `MPS/Symmetry/CompactSupportedSequenceClass.lean` (2026-10-03).
+- **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
+  comparison matrix is not needed.
+
 ## Candidates
 
 ### quadratic bounds for commuting periodic projections — candidate

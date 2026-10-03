@@ -33,7 +33,11 @@ open Filter
 
 namespace MPSTensor
 
-private theorem normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one
+/-- A one-dimensional transfer fixed space gives uniqueness of any trace-one
+adjoint fixed matrix. No positivity assumption on the comparison matrix is required.
+Source context: arXiv:1010.3732, Appendix C, lines 2653–2717, stationary support
+of a limiting unital tensor; the fixed-space duality is finite-dimensional linear algebra. -/
+theorem normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one
     {d k : ℕ} (B : MPSTensor d k)
     (hDim : Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap B) 1) = 1)
     (σ : Matrix (Fin k) (Fin k) ℂ)
