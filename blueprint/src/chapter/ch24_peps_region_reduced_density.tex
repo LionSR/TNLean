@@ -1,0 +1,80 @@
+\begin{definition}[Physical reduced density of a PEPS region]%
+    \label{def:peps_region_reduced_density}
+    \lean{TNLean.PEPS.regionReducedDensity,
+        TNLean.PEPS.regionReducedDensity_eq_mul_conjTranspose,
+        TNLean.PEPS.SameState.regionReducedDensity_eq}
+    \leanok
+    Let $\psi$ be the closed PEPS vector on a finite graph and let $R$ be
+    a region. Its unnormalized reduced density is
+    $\rho_R=\operatorname{tr}_{R^c}|\psi\rangle\langle\psi|$.
+    If $M_R(\sigma,\tau)=\psi(\sigma,\tau)$ is its coefficient matrix
+    across the cut, then $\rho_R=M_RM_R^\dagger$.
+    This is the physical cut associated with the regional construction
+    of \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines
+    2003--2011.
+\end{definition}
+
+\begin{theorem}[Contraction across a cut with arbitrary bond dimensions]%
+    \label{thm:peps_open_region_cut_unconditional}
+    \lean{TNLean.PEPS.stateCoeff_eq_openRegionComplement_unconditional}
+    \leanok
+    \uses{def:peps_open_region_contraction}
+    For every finite PEPS graph, region $R$, and pair of physical
+    configurations $\sigma,\tau$ on $R,R^c$, respectively,
+    $\psi(\sigma,\tau)=\sum_\mu T_R(\mu;\sigma)T_{R^c}(\mu;\tau)$.
+    This identity includes zero-dimensional virtual spaces.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_open_region_cut}
+    If a global virtual configuration exists, every bond space has
+    positive dimension and the exact contraction across the cut applies.
+    Otherwise, the closed contraction is zero. If incident-edge
+    configurations existed on both $R$ and $R^c$, choosing the label
+    from either incident region at each edge would produce a global
+    virtual configuration. Thus one regional incident configuration
+    space is empty, and its open contraction vanishes. Both sides
+    of the claimed identity are then zero.
+\end{proof}
+
+\begin{theorem}[Support of the physical reduced density]%
+    \label{thm:peps_region_reduced_density_support}
+    \lean{TNLean.PEPS.regionReducedDensity_posSemidef,
+        TNLean.PEPS.range_regionReducedDensity_eq_cutRange,
+        TNLean.PEPS.range_regionReducedDensity_le}
+    \leanok
+    \uses{def:peps_region_reduced_density, def:peps_region_ground_space}
+    The operator $\rho_R$ is positive semidefinite, and
+    $\operatorname{ran}\rho_R=\operatorname{ran}M_R
+        \subseteq\mathcal G_R$.
+    No injectivity of the regional tensor is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_ground_space_slice}
+    The identity $\rho_R=M_RM_R^\dagger$ gives positivity and
+    $\operatorname{ran}\rho_R\subseteq\operatorname{ran}M_R$.
+    The two operators have the same rank, so these ranges are equal.
+    Each column of $M_R$ is a local slice of $\psi$ and lies in
+    $\mathcal G_R$. Their span therefore lies in $\mathcal G_R$.
+\end{proof}
+
+\begin{theorem}[Parent interactions annihilate the local density]%
+    \label{thm:peps_region_reduced_density_parent}
+    \lean{TNLean.PEPS.IsRegionParentInteraction.mul_regionReducedDensity_eq_zero,
+        TNLean.PEPS.IsRegionParentInteraction.regionReducedDensity_mul_eq_zero}
+    \leanok
+    \uses{def:peps_region_parent_interaction, def:peps_region_reduced_density}
+    Every regional parent interaction $h_R$ satisfies
+    $h_R\rho_R=\rho_Rh_R=0$.
+    This is the density-operator form of local frustration freeness
+    in \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines
+    2008--2011.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_reduced_density_support}
+    Since $\operatorname{ran}\rho_R\subseteq\mathcal G_R=\ker h_R$,
+    the product $h_R\rho_R$ vanishes. Taking adjoints gives
+    $\rho_Rh_R=0$.
+\end{proof}

@@ -691,6 +691,27 @@ normalizations.
 - **Caveat:** nearness includes diagonal contact, so it is not the
   four-neighbor adjacency of the square lattice.
 
+#### `TNLean.PEPS.IsRegionParentInteraction`
+
+- **Declaration:**
+  `TNLean.PEPS.IsRegionParentInteraction (A : Tensor Γ d) (R : Finset V) (h : Matrix _ _ ℂ) : Prop`.
+- **Defined in:** `TNLean/PEPS/ParentHamiltonian/RegionParentHamiltonian.lean`.
+- **Meaning:** the operator `h` on the physical space of the region `R` is
+  positive semidefinite and its kernel is exactly the regional PEPS space
+  `TNLean.PEPS.regionGroundSpace A R`, spanned by the contractions of `R` with
+  arbitrary boundary conditions. It need not be a projector.
+- **Source:** arXiv:2011.12127, Section IV.C.1,
+  `Papers/2011.12127/TN-Review-main.tex:2003-2011` (the terms of a parent
+  Hamiltonian are positive semidefinite operators with kernel `𝒢_R`).
+- **Sanctioned bridges:** `TNLean.PEPS.isRegionParentInteraction_canonical`
+  (the orthogonal projector onto the complement of the regional space);
+  `TNLean.PEPS.ker_regionParentHamiltonian` (for any such family of terms the
+  ground space of their sum is the intersection of the regional conditions);
+  `TNLean.PEPS.IsRegionParentInteraction.mul_regionReducedDensity_eq_zero`.
+- **Caveat:** the predicate fixes only the kernel of each term. The resulting
+  ground space is independent of the chosen terms, but spectral gaps and other
+  spectral data are not.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
