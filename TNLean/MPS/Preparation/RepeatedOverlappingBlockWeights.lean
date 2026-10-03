@@ -293,7 +293,7 @@ bond coordinates `ι_{j,k}` with a nonzero complex weight, let every block `A_j`
 gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1` (eq. (5)), let `λ₂` bound
 the moduli of the eigenvalues other than `1` of every transfer map `E_{A_j}` and the moduli of all
 eigenvalues of the mixed transfer maps `E_{jj'}(X) = ∑ᵢ A_jⁱ X (A_{j'}ⁱ)†` of distinct blocks, so
-that `ξ = -1/log|λ₂|` bounds `ξ_diag` and `ξ_off-diag`, and let `0 < γ < 1/2`. There is `C > 0`
+that `ξ = -1/log|λ₂|` bounds `ξ_diag` and `ξ_off-diag`, and let `0 < γ < 1`. There is `C > 0`
 such that for all weights, every block length `q`, and every number of blocks `M ≥ 1` with
 `N = qM` and `βⱼ = ∑ₖ μ_{j,k}^N` not all zero (eq. (S4)), the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the
 corrected approximating state `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` satisfies `ε ≤ C y e^{C y}` with
@@ -301,7 +301,8 @@ corrected approximating state `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` satisf
 
 The `q`-site states of distinct blocks need not be orthogonal, no condition `q = o(N)` is needed,
 and `C` does not depend on the weights: the sums `βⱼ` may cancel and `∑ⱼ |βⱼ|²` may be arbitrarily
-small. The normalization `|μ_{j,k}| ≤ 1` of the source is not needed. -/
+small. The normalization `|μ_{j,k}| ≤ 1` of the source is not needed. The source states the bound
+for `0 < γ < 1/2`; the range `γ < 1` is a project result. -/
 theorem exists_approximationError_le_repeatedOverlappingBlockSum
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
@@ -313,7 +314,7 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ μ : CopyWeights b m, ∀ (q M : ℕ) [NeZero M],
       bntWeight μ (M * q) ≠ 0 →
       1 - ‖copyApproxOverlap (repeatedBlockSum Aj ι μ) q M
@@ -350,7 +351,7 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
     · exact (Real.log_neg_iff hpos).1 hlog
     · rw [← h0, Real.log_zero] at hlog; exact absurd hlog (lt_irrefl 0)
   obtain ⟨K₁, hK₁, q₀, hrow⟩ := exists_norm_relativeRow_sub_le hι hdisj hN hA hσ htr hfix hl hlam
-    hmix hγ0 (by linarith) hx1
+    hmix hγ0 hγ hx1
   have hz : ∀ j j', ∃ C : ℝ, 0 < C ∧ ∀ (μ : CopyWeights b m) (q : ℕ)
       (G : Matrix (Fin (Dj j) × Fin (Dj j)) (Fin (Dj j') × Fin (Dj j')) ℂ) (δ : ℝ) (M : ℕ)
       [NeZero M], ‖G - relativeRowLimit ι μ q σ j j'‖ ≤ δ →
@@ -475,10 +476,11 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
       field_simp
     rw [he, abs_div, abs_of_pos hbb, div_le_iff₀ hbb]
     linarith [h]
-  have hmain := one_sub_norm_div_le_of_norm_sub_le (b := 1) le_rfl
+  have hmain := one_sub_norm_div_le_of_norm_sub_le
     (div_nonneg (norm_nonneg _) hsb.le) (by simpa using hSz) (by simpa using ht2)
-  have hkey : (t / Real.sqrt bb)⁻¹ * (‖Sz / (bb : ℂ)‖ / Real.sqrt 1) = t⁻¹ * ‖num‖ := by
-    rw [hnum, Real.sqrt_one, div_one, norm_mul, norm_div, norm_inv, Complex.norm_real,
+  rw [div_eq_inv_mul] at hmain
+  have hkey : (t / Real.sqrt bb)⁻¹ * ‖Sz / (bb : ℂ)‖ = t⁻¹ * ‖num‖ := by
+    rw [hnum, norm_mul, norm_div, norm_inv, Complex.norm_real,
       Complex.norm_real, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos hsb, abs_of_pos hbb,
       inv_div]
     rcases eq_or_ne t 0 with ht | ht
@@ -514,7 +516,7 @@ theorem exists_approximationError_le_mul_repeatedOverlappingBlockSum
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ μ : CopyWeights b m, ∀ (q M : ℕ) [NeZero M],
       bntWeight μ (M * q) ≠ 0 →
       1 - ‖copyApproxOverlap (repeatedBlockSum Aj ι μ) q M

@@ -69,6 +69,7 @@ and every chain length `N ≥ N₀` by
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 
