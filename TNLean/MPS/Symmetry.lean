@@ -44,6 +44,7 @@ import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap
+import TNLean.MPS.Symmetry.PolarFrameEmbedding
 import TNLean.MPS.Symmetry.PolarGappedInteractionPath
 import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.PreparedPolarGappedPath
