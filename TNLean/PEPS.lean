@@ -249,6 +249,7 @@ import TNLean.PEPS.RegularTwoSitePhysicalChargeMeasurement
 import TNLean.PEPS.RegularWalkHolonomy
 import TNLean.PEPS.RegularWeightedBondContraction
 import TNLean.PEPS.RegularWeightedChargeContraction
+import TNLean.PEPS.RegularWeightedGaugeTransport
 import TNLean.PEPS.RegularWeightedOpenContraction
 import TNLean.PEPS.SemiRegularBondDimension
 import TNLean.PEPS.SemiRegularBondIsometry
@@ -271,6 +272,7 @@ import TNLean.PEPS.TorusActualPlaquetteVacancy
 import TNLean.PEPS.TorusActualRouteFluxMove
 import TNLean.PEPS.TorusBlockMultiplicityState
 import TNLean.PEPS.TorusBondCoordinateTransport
+import TNLean.PEPS.TorusChargeStringDeformation
 import TNLean.PEPS.TorusClosureSeams
 import TNLean.PEPS.TorusComplementCycleWords
 import TNLean.PEPS.TorusComplementDisentangling
