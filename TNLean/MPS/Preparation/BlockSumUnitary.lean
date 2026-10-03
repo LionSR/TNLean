@@ -48,6 +48,7 @@ not assume; without it the isometry of the blocked direct sum is not the sum of 
 
 open Matrix MPSTensor
 open scoped BigOperators
+open QuantumCircuit
 
 namespace MPSPreparation
 

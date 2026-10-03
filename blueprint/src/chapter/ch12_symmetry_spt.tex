@@ -128,8 +128,7 @@ of the virtual projective representation.
         MPSTensor.interactionHamiltonian_parent_spectrum_gap,
         MPSTensor.canonicalInjectiveGappedPath}
     \leanok
-    \uses{def:spt_common_space_gapped_path, thm:compact_parent_gap,
-        thm:spt_parent_hamiltonian_symmetry}
+    \uses{def:spt_common_space_gapped_path}
     Let $\gamma\mapsto A_\gamma$ be a continuous path of one-site injective
     tensors on fixed physical and bond spaces, with $D>0$. Fix a unitary
     on-site representation $U$ such that, for every $\gamma\in[0,1]$ and
@@ -144,12 +143,14 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:compact_parent_gap, thm:spt_parent_hamiltonian_symmetry}
     The injective local ground-space projections vary continuously, so their
     complementary projections do as well. Their norms are at most one.
     Compactness gives a uniform norm gap above the kernel. Positivity of
     the parent Hamiltonian makes all its eigenvalues nonnegative; applying
-    the norm bound to a unit eigenvector orthogonal to the kernel bounds
-    every nonzero eigenvalue below by the same positive constant. The
+    the norm bound to a unit eigenvector orthogonal to the kernel shows
+    that the same positive constant is a lower bound for every nonzero
+    eigenvalue. The
     nonzero periodic MPS vector is a zero eigenvector. Finally, covariance
     makes every local parent projection, and hence its periodic sum,
     commute with the physical symmetry.
@@ -159,7 +160,7 @@ of the virtual projective representation.
     \label{thm:spt_polar_gapped_interaction_path}
     \lean{MPSTensor.polarGappedInteractionPath}
     \leanok
-    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
+    \uses{def:spt_common_space_gapped_path}
     Let $A$ be one-site injective with $D>0$, let $U$ be a unitary on-site
     representation, and suppose the tensor covariance is expressed by
     unitary bond conjugation. The canonical two-site parent interactions
@@ -171,6 +172,7 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
     Apply the preceding construction to the injective polar path. The
     endpoint identities give the canonical parents of $W$ and $A$; unitary
     bond-conjugation covariance is preserved by the entire interpolation.
@@ -182,8 +184,7 @@ of the virtual projective representation.
         MPSTensor.exists_unitary_covariance_of_isInjective_unital,
         MPSTensor.exists_unitary_virtual_covariance_of_isOnSiteSymmetric_unital}
     \leanok
-    \uses{def:injective, def:on_site_symmetric,
-        thm:virtual_gauge_fixes_boundary_state}
+    \uses{def:injective, def:on_site_symmetric}
     Let $A$ be one-site injective with $D>0$ and $\E_A(I)=I$.
     There is a positive definite matrix $\Lambda$ with
     $\E_A^\dagger(\Lambda)=\Lambda$. If a unitary physical rotation of $A$
@@ -195,6 +196,8 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:injective_irreducible, lem:trace_mul_transfer_map_adjoint,
+        thm:virtual_gauge_fixes_boundary_state, lem:gauge_equiv_twisted}
     Perron--Frobenius theory gives $\Lambda>0$ and $r>0$ with
     $\E_A^\dagger(\Lambda)=r\Lambda$. Trace duality and unitality give
     \begin{align}
@@ -214,9 +217,8 @@ of the virtual projective representation.
     \lean{MPSTensor.exists_unital_parent_representative_of_isInjective,
         MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}
     \leanok
-    \uses{thm:spt_unitary_virtual_covariance_unital,
-        thm:spt_polar_gapped_interaction_path, def:injective,
-        lem:on_site_symmetric_smul_gauge}
+    \uses{def:injective, def:on_site_symmetric,
+        def:spt_common_space_gapped_path}
     Let $A$ be one-site injective with $D>0$, and let a fixed unitary
     on-site representation $U$ preserve every periodic MPS vector of $A$.
     There are an injective unital tensor $B$, a nonzero scalar $c$, and
@@ -232,6 +234,12 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:injective_irreducible, thm:unital_data_irreducible,
+        thm:local_ground_space_rescaling,
+        thm:local_ground_space_gauge_invariance,
+        lem:on_site_symmetric_smul_gauge,
+        thm:spt_unitary_virtual_covariance_unital,
+        thm:spt_polar_gapped_interaction_path}
     Perron normalization gives $B$ by nonzero rescaling and virtual gauge.
     Both operations preserve the local MPS spaces, hence all canonical
     parent interactions; they also preserve on-site symmetry and
@@ -343,7 +351,8 @@ of the virtual projective representation.
         +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
         \notag
     \end{align}
-    The commuting parent Hamiltonians along this interpolation remain gapped.
+    The commuting parent Hamiltonians along this interpolation remain gapped,
+    with the uniform spectral estimate of Lemma~\ref{lem:spt_independent_bond_gap}.
     Their symmetry is
     \begin{align}
         (V_g^0\oplus V_g^1)\otimes
@@ -420,7 +429,10 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{TNLean.Algebra.ProjectiveRepresentation.rephase,
         TNLean.Algebra.circleScalar_mem_unitaryGroup,
         TNLean.Algebra.ProjectiveRepresentation.rephase_mem_unitaryGroup,
-        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous}
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous,
+        TNLean.Algebra.ProjectiveRepresentation.norm_factorSystem,
+        TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
     Multiplying each matrix $V_g$ of a projective representation with factor system
@@ -429,7 +441,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $V^0$ be a unitary projective representation whose factor system is the
     pointwise phase $\omega_0/|\omega_0|$.  If $\omega_1$ is cohomologous to
     $\omega_0$, then multiplying each $V_g^0$ by a unit-modulus scalar gives a unitary
-    projective representation with factor system $\omega_1/|\omega_1|$
+    projective representation with factor system $\omega_1/|\omega_1|$.
+    If two unitary virtual actions on spaces of positive dimension have factor
+    systems $\omega_0$ and $\omega_1$, then $|\omega_0(g,h)|=|\omega_1(g,h)|=1$.
+    If these systems are cohomologous, one can rephase the first action
+    to have the factor system of the second
     \cite[Section~II.F.2, lines~886--921]{Schuch2011Phases}.
 \end{theorem}
 
@@ -445,6 +461,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
     Hence $\psi_gV_g^0$ has factor system $\omega_1/|\omega_1|$, and multiplication
     by a unit-modulus scalar preserves unitarity.
+    For a unitary virtual action,
+    $1=\|V_gV_h\|=|\omega(g,h)|\,\|V_{gh}\|=|\omega(g,h)|$.
+    Hence its factor system equals its pointwise unit phase.
 \end{proof}
 
 \begin{definition}[Direct sum with a common factor system]
@@ -763,6 +782,37 @@ and the regrouping of physical registers into bonds.
     their sum.
 \end{proof}
 
+\begin{theorem}[Ordered interactions with common periodic ground spaces]
+    \label{thm:spt_ordered_interaction_path}
+    \lean{MPSTensor.orderedGappedInteractionPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path, thm:spt_periodic_hamiltonian_order,
+        thm:common_kernel_spectral_gap_interpolation}
+    Let $a,b$ be positive two-site interactions on one physical space,
+    of operator norm at most one, with $a\leq b$. Suppose that for every
+    periodic length $N\geq2$ their Hamiltonians $H_N(a)$ and $H_N(b)$
+    have the same nonzero ground space at zero energy, and both commute
+    with the same on-site symmetry. If $H_N(a)$ has a spectral gap
+    at least $\delta>0$ for all $N\geq2$, then
+    \begin{align}
+        h_\gamma & =a+\gamma(b-a), \qquad 0\leq\gamma\leq1,
+        \notag
+    \end{align}
+    is a symmetric gapped interaction path from $a$ to $b$, with gap
+    at least $\delta$. This comparison applies to independent-bond and
+    canonical parent interactions in the fixed-point construction
+    \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The periodic Hamiltonian satisfies
+    $H_N(h_\gamma)=H_N(a)+\gamma(H_N(b)-H_N(a))$. The added term is positive
+    and annihilates the original ground space, so the kernel and the
+    lower quadratic-form bound on its orthogonal complement are retained.
+    Convexity bounds the local norm by one. Hermiticity, continuity and
+    symmetry follow from affine interpolation.
+\end{proof}
+
 \begin{theorem}[A continuous unit bond interpolation]
     \label{thm:spt_normalized_bond_interpolation}
     \lean{MPSTensor.bondInterpolationWeight,
@@ -912,6 +962,370 @@ and the regrouping of physical registers into bonds.
     The matrix entries are products of left-register and right-register
     entries.  Regrouping shifts the latter factors by one cyclic site;
     this permutation does not change their product.
+\end{proof}
+
+\begin{theorem}[Uniform gap for independent interpolating bonds]
+    \label{thm:spt_bond_product_parent_gap}
+    \lean{MPSTensor.bondPenaltyAt_isStarProjection,
+        MPSTensor.bondPenaltyAt_commute,
+        MPSTensor.bondProductParentHamiltonian_gap_one,
+        MPSTensor.bondProductParentHamiltonian_groundSpace_eq_span,
+        MPSTensor.normalizedBondInterpolation_parent_gap_one,
+        MPSTensor.normalizedBondInterpolation_parent_groundSpace_eq_span}
+    \leanok
+    \uses{thm:spt_normalized_bond_interpolation,
+        def:spt_incoming_bond_coordinates}
+    Let $D_0,D_1>0$, $N>0$, and $\widehat\omega(\gamma)$ be the
+    normalized bond vector of
+    Theorem~\ref{thm:spt_normalized_bond_interpolation}. In the Hilbert
+    space of $N$ independent two-leg bonds, let
+    \begin{align}
+        h_i(\gamma)                       & = 1-
+        |\widehat\omega(\gamma)\rangle_i
+        \langle\widehat\omega(\gamma)|_i, &
+        H_N(\gamma)                       & = \sum_{i=1}^{N}h_i(\gamma).
+        \notag
+    \end{align}
+    The terms $h_i(\gamma)$ are commuting orthogonal projections. Their
+    common kernel is precisely the line spanned by the product vector
+    $\widehat\omega(\gamma)^{\otimes N}$, and for every vector $v$,
+    \begin{align}
+        \langle v,H_N(\gamma)^2v\rangle
+         & \geq \langle v,H_N(\gamma)v\rangle.
+        \notag
+    \end{align}
+    Thus every nonzero eigenvalue is at least one, uniformly in $N$ and
+    $\gamma$ \cite[Sections~II.D.2 and~II.F.2]{Schuch2011Phases}. The
+    same holds for every unit bond vector in place of
+    $\widehat\omega(\gamma)$. This statement uses independent-bond
+    coordinates; the passage to the original site coordinates uses the
+    unitary of Theorem~\ref{thm:spt_incoming_bond_unitary}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Unit norm makes each bond-line operator a rank-one orthogonal
+    projection. Operators on distinct bond factors commute. In the square
+    of their sum, each diagonal term is the original projection and each
+    off-diagonal quadratic form is nonnegative. The product of the
+    complementary projections is the rank-one projection onto
+    $\widehat\omega(\gamma)^{\otimes N}$, which identifies the kernel.
+\end{proof}
+
+\begin{theorem}[Continuity of the bond parent Hamiltonian]
+    \label{thm:spt_bond_parent_continuity}
+    \lean{MPSTensor.continuous_bondProductParentHamiltonian,
+        MPSTensor.continuous_normalizedBondInterpolation_parent}
+    \leanok
+    \uses{thm:spt_normalized_bond_interpolation,
+        thm:spt_bond_product_parent_gap}
+    For $D_0,D_1>0$ and each $N>0$, the independent-bond parent
+    Hamiltonian $H_N(\gamma)$ is continuous in $\gamma\in\mathbb R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each matrix entry of a bond-line projection is a product of a bond
+    coefficient and a conjugate coefficient. Both depend continuously
+    on $\gamma$. Embedding in the finite chain and summing preserve
+    continuity.
+\end{proof}
+
+\begin{lemma}[Spectral gap in independent-bond coordinates]
+    \label{lem:spt_independent_bond_gap}
+    \lean{MPSTensor.bondPenalty_norm_le_one,
+        MPSTensor.bondProductParentHamiltonian_posSemidef,
+        MPSTensor.bondProductParentHamiltonian_spectrum_gap_one,
+        MPSTensor.normalizedBondInterpolation_parent_uniform_gap}
+    \leanok
+    \uses{thm:spt_bond_product_parent_gap, thm:spt_bond_parent_continuity}
+    Let $\eta$ be a unit bond vector and $N\geq1$. The local penalty
+    $1-|\eta\rangle\langle\eta|$ has operator norm at most one, and the
+    independent-bond Hamiltonian $H_N(\eta)$ is positive semidefinite with
+    \begin{align}
+        0                              & \in\operatorname{spec}(H_N(\eta)), &
+        \operatorname{spec}(H_N(\eta)) & \subseteq\{0\}\cup[1,\infty).
+        \notag
+    \end{align}
+    For $D_0,D_1>0$ and the normalized interpolating bond
+    $\widehat\omega(\gamma)$, the penalty depends continuously on
+    $\gamma$, and these statements hold for every real $\gamma$ and every
+    $N\geq1$, including both endpoints
+    \cite[Section~II.F.2, lines~899--906]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The penalty is an orthogonal projection, so its norm is at most one,
+    and $H_N(\eta)$ is a sum of orthogonal projections. Its kernel is the
+    nonzero line spanned by $\eta^{\otimes N}$, which gives the spectral
+    value $0$. For a unit eigenvector with eigenvalue $\lambda$, the
+    inequality $H_N(\eta)^2\geq H_N(\eta)$ of
+    Theorem~\ref{thm:spt_bond_product_parent_gap} gives
+    $\lambda\leq\lambda^2$; with $\lambda\geq0$ this forces $\lambda=0$ or
+    $\lambda\geq1$. Continuity along the interpolation is
+    Theorem~\ref{thm:spt_bond_parent_continuity}.
+\end{proof}
+
+\begin{theorem}[Physical parent Hamiltonian of the interpolating bonds]
+    \label{thm:spt_physical_bond_parent_gap}
+    \lean{MPSTensor.normalizedPhysicalBondInterpolation_parent_gap_one,
+        MPSTensor.normalizedPhysicalBondInterpolation_parent_groundSpace,
+        MPSTensor.continuous_normalizedPhysicalBondInterpolation_parent}
+    \leanok
+    \uses{thm:spt_bond_product_parent_gap,
+        thm:spt_bond_parent_continuity,
+        thm:spt_incoming_bond_unitary}
+    Conjugate $H_N(\gamma)$ by the incoming-bond unitary $P_N$. In the
+    original physical-site coordinates, the resulting Hamiltonian
+    $P_NH_N(\gamma)P_N^*$ varies continuously with $\gamma$, has the
+    transported product vector $P_N\widehat\omega(\gamma)^{\otimes N}$
+    as its unique ground line, and satisfies
+    \begin{align}
+        \langle v,(P_NH_N(\gamma)P_N^*)^2v\rangle
+         & \geq \langle v,P_NH_N(\gamma)P_N^*v\rangle
+        \notag
+    \end{align}
+    for every $N>0$ and every physical-chain vector $v$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The incoming-bond change of coordinates is unitary. It carries the
+    product ground line and the quadratic-form inequality to physical
+    coordinates. Continuity follows from the continuity of the
+    finite-chain bond Hamiltonian, since the unitary conjugation is fixed.
+\end{proof}
+
+\begin{theorem}[On-site symmetry of the interpolating-bond parent Hamiltonian]
+    \label{thm:spt_physical_bond_parent_symmetry}
+    \lean{MPSTensor.normalizedBondInterpolationVector_fixed_directSum,
+        MPSTensor.bondProductParentHamiltonian_commute_sitewise_of_unitary_fixed,
+        MPSTensor.normalizedPhysicalBondInterpolation_parent_commute_onSite}
+    \leanok
+    \uses{thm:spt_bond_regrouping_symmetry,
+        thm:spt_physical_bond_parent_gap,
+        thm:spt_bond_interpolation_symmetry}
+    Let $V^{(0)}$ and $V^{(1)}$ be finite-dimensional unitary projective
+    representations with the same factor system, and let $V$ be their
+    direct sum. Let $U$ be the physical action
+    $U(g)=W_g^{\mathsf T}\otimes W_g^{-1}$, $W_g=V_{g^{-1}}$, of the SPT
+    fixed-point tensor of $V$ with trivial character
+    (Definition~\ref{def:spt_fixed_point_tensor}); it does not depend on
+    $\gamma$. For every group element $g$ and every $N>0$,
+    \begin{align}
+        \left[(U_g)^{\otimes N},
+        P_N H_N(\gamma)P_N^*\right] & =0
+        \notag
+    \end{align}
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The block-scalar coefficient matrix of the bond is invariant under
+    conjugation by $V_g$. In bond coordinates this fixes the bond vector,
+    so each rank-one bond projection commutes with the bond action.
+    Regrouping carries that action to $(U_g)^{\otimes N}$ and therefore
+    carries the commutation relation to physical coordinates.
+\end{proof}
+
+\begin{theorem}[Spectral gap of the physical bond parent Hamiltonian]
+    \label{thm:spt_physical_bond_parent_spectrum}
+    \lean{MPSTensor.physicalBondProductParentHamiltonian_posSemidef,
+        MPSTensor.physicalBondProductParentHamiltonian_spectrum_gap_one,
+        MPSTensor.normalizedPhysicalBondInterpolation_parent_spectrum_gap_one}
+    \leanok
+    \uses{thm:spt_physical_bond_parent_gap}
+    For every unit bond vector, and in particular for
+    $\widehat\omega(\gamma)$ with $D_0,D_1>0$, the physical parent
+    Hamiltonian $P_NH_N(\gamma)P_N^*$ is positive semidefinite for every
+    $N>0$. Its spectrum contains $0$, and every spectral value $z$
+    satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Hamiltonian is a unitary conjugate of a sum of orthogonal
+    projections, hence positive semidefinite. Its nonzero kernel gives the
+    spectral value $0$. For a unit eigenvector with eigenvalue $\lambda$,
+    the quadratic-form inequality of
+    Theorem~\ref{thm:spt_physical_bond_parent_gap} reads
+    $\lambda\leq\lambda^2$; with $\lambda\geq0$ this forces $\lambda=0$ or
+    $\lambda\geq1$.
+\end{proof}
+
+\begin{theorem}[Two-site interaction for the bond parent Hamiltonian]
+    \label{thm:spt_two_site_bond_interaction}
+    \lean{MPSTensor.twoSiteBondInteraction_isStarProjection,
+        MPSTensor.twoSiteBondInteraction_norm_le_one,
+        MPSTensor.embed_twoSiteBondInteraction_eq_conj,
+        MPSTensor.interactionHamiltonian_twoSiteBondPenalty}
+    \leanok
+    \uses{thm:spt_incoming_bond_locality, thm:spt_physical_bond_parent_gap}
+    For a bond matrix $K$, let $h(K)$ act as $K$ on the middle
+    registers $(R_0,L_1)$ of two sites, with identity on the exterior
+    registers. If $K$ is an orthogonal projection, so is $h(K)$, and
+    its Hilbert-space operator norm is at most one. For every $N\geq2$,
+    \begin{align}
+        \sum_{i=0}^{N-1}h(I-|\eta\rangle\langle\eta|)_{i,i+1}
+         & =P_N H_N(\eta)P_N^*.
+        \notag
+    \end{align}
+    Here the indices are cyclic and $H_N(\eta)$ is the sum of the
+    independent-bond penalties
+    \cite[Section~II.D.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two-site operator is a reordering of
+    $I\otimes K\otimes I$. Its translate at $i$ is the conjugate
+    under $P_N$ of the independent-bond term at $i+1$. Summing and
+    reindexing by the cyclic successor gives the identity.
+\end{proof}
+
+\begin{theorem}[Symmetric gapped path between the direct-sum fixed points]
+    \label{thm:spt_direct_sum_fixed_point_path}
+    \lean{MPSTensor.sptFixedPointUnitaryAction,
+        MPSTensor.normalizedBondFixedPointGappedPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path,
+        thm:spt_two_site_bond_interaction,
+        thm:spt_physical_bond_parent_spectrum,
+        thm:spt_physical_bond_parent_symmetry}
+    Let $D_0,D_1>0$, and let $V^{(0)}$ and $V^{(1)}$ be unitary
+    projective representations with the same factor system. Set
+    $D=D_0+D_1$ and let $U$ be the unitary physical action of the SPT
+    fixed-point tensor of $V^{(0)}\oplus V^{(1)}$ with trivial
+    character. If $\widehat\omega(\gamma)$ is the normalized
+    interpolating bond, define the two-site interaction to be the
+    identity on the outer registers and
+    $1-|\widehat\omega(\gamma)\rangle
+        \langle\widehat\omega(\gamma)|$
+    on the bond joining the sites. Then these interactions form a
+    symmetric gapped path on the common physical space of dimension
+    $D^2$. Their operator norms are at most one, and the gap above the
+    unique ground line is at least one for every $N\ge2$ and every
+    $\gamma\in[0,1]$ \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each local interaction is an orthogonal projection and depends
+    continuously on the normalized bond vector. The sum of its
+    translates is the physical-coordinate independent-bond parent
+    Hamiltonian. Its spectrum has zero as the ground value and no
+    values strictly between zero and one. The direct-sum action fixes
+    the bond vector, so the full Hamiltonian commutes with
+    $U_g^{\otimes N}$ for every $g$.
+\end{proof}
+
+\begin{theorem}[Fixed-point path for cohomologous virtual actions]
+    \label{thm:spt_cohomologous_fixed_point_path}
+    \lean{MPSTensor.sptKron_eq_of_eq_smul,
+        MPSTensor.sptFixedPointAction_eq_of_forall_eq_smul,
+        MPSTensor.exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint}
+    \leanok
+    \uses{thm:spt_unitary_rephasing, thm:spt_direct_sum_fixed_point_path,
+        def:spt_fixed_point_tensor}
+    Let $D_0,D_1>0$, and let $V^0$ and $V^1$ be unitary projective
+    representations with cohomologous factor systems $\omega_0$ and
+    $\omega_1$. There is a unitary projective representation $V^{0\prime}$
+    with factor system $\omega_1$ whose fixed-point physical action, with
+    trivial character, equals that of $V^0$.
+    Set $D=D_0+D_1$ and $W_g=V^{0\prime}_{g^{-1}}\oplus V^1_{g^{-1}}$.
+    Under the common on-site action $U_g=W_g^T\otimes W_g^{-1}$, the
+    normalized bond interactions of Theorem~\ref{thm:spt_direct_sum_fixed_point_path}
+    give a symmetric gapped path between their two endpoint interactions on
+    the physical space of dimension $D^2$
+    \cite[Section~II.F.2]{Schuch2011Phases}. The normalized bond follows
+    the corrected second-block range of
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose $\lambda$ with
+    $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$.
+    Theorem~\ref{thm:spt_unitary_rephasing} gives
+    $V^{0\prime}_g=(\lambda_g/|\lambda_g|)V^0_g$ with factor system
+    $\omega_1$. Scalars cancel in $W^T\otimes W^{-1}$, so the first
+    fixed-point physical action is unchanged.
+    Theorem~\ref{thm:spt_direct_sum_fixed_point_path} now applies to
+    $V^{0\prime}\oplus V^1$.
+\end{proof}
+
+\begin{theorem}[Weighted matrix-unit MPS as a product of bonds]
+    \label{thm:spt_weighted_matrix_unit_bond_product}
+    \lean{MPSTensor.mpv_weightedMatrixUnitInterpolation_eq_incomingBondProduct,
+        MPSTensor.mpv_weightedMatrixUnitInterpolation_zero,
+        MPSTensor.mpv_weightedMatrixUnitInterpolation_one,
+        MPSTensor.continuous_weightedMatrixUnitInterpolation,
+        MPSTensor.weightedMatrixUnitInterpolation_isOnSiteSymmetric}
+    \leanok
+    \uses{thm:spt_normalized_bond_interpolation,
+        def:spt_incoming_bond_coordinates,
+        thm:spt_bond_interpolation_symmetry}
+    Let $N>0$ and $D=D_0+D_1$. Define an MPS tensor with physical
+    letters $(a,b)$ by
+    $A_\gamma^{(a,b)}=\widehat W(\gamma)_{aa}|a\rangle\langle b|$.
+    For a cyclic physical configuration $s=((L_i,R_i))_i$, its matrix
+    product coefficient equals the product of the incoming-bond
+    amplitudes:
+    \begin{align}
+        \operatorname{tr}\!\left(\prod_{i=1}^N
+        A_\gamma^{(L_i,R_i)}\right)
+         & =\prod_{i=1}^N
+        \widehat W(\gamma)_{R_{i-1},L_i}.
+        \notag
+    \end{align}
+    At $\gamma=0,1$ this identifies the positive-length physical states
+    with the embedded endpoint bond-product states, with every nonzero
+    incoming bond coefficient equal to $D_p^{-1/2}$ in endpoint block $p$.
+    The path of tensors is continuous and symmetric under the physical
+    action of the SPT fixed-point tensor of $V^{(0)}\oplus V^{(1)}$ with
+    trivial character, which does not depend on $\gamma$
+    \cite[Section~II.F.2]{Schuch2011Phases}. The tensor itself
+    may have letters with cross-block indices at an endpoint; the cyclic
+    coefficient identity is the relevant endpoint statement.
+\end{theorem}
+
+\begin{proof}\leanok
+    The trace of a cyclic product of matrix units vanishes unless each
+    column index equals the next row index. On that support, it is the
+    product of the diagonal weights. Regrouping the cyclic indices gives
+    the displayed product of bond coefficients. The diagonal weight
+    matrix commutes with the direct-sum virtual action, so the symmetry
+    relation of the matrix units passes to $A_\gamma$.
+\end{proof}
+
+\begin{theorem}[Canonical parent interaction of the SPT fixed point]
+    \label{thm:spt_fixed_point_two_site_bond_kernel}
+    \lean{MPSTensor.matrixUnitBondVector,
+        MPSTensor.matrixUnitBondVector_sum_normSq,
+        MPSTensor.groundSpaceMap_sptFixedPointTensor_two_apply,
+        MPSTensor.twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor,
+        MPSTensor.one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_eq_parentInteractionES_sptFixedPointTensor}
+    \leanok
+    \uses{thm:spt_two_site_bond_interaction, def:spt_fixed_point_tensor}
+    Let $D>0$, let $A^{(a,b)}=D^{-1/2}|a\rangle\langle b|$ be the SPT
+    fixed-point tensor, and set
+    $\eta=D^{-1/2}\sum_{a=1}^D|a,a\rangle$. Then $\|\eta\|=1$.
+    For every boundary matrix $X$, the two-site open-boundary vector
+    $\Psi_X$ has coefficients
+    $\Psi_X(a,b,c,d)=D^{-1}\delta_{bc}X_{da}$ and is annihilated by
+    the interaction $h=I\otimes(I-|\eta\rangle\langle\eta|)\otimes I$
+    acting on the middle registers. Its kernel is exactly $G_2(A)$, so
+    $h$ equals the canonical two-site parent interaction of $A$
+    \cite[Section~II.D.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Multiplication of two letters gives
+    $A^{(a,b)}A^{(c,d)}=D^{-1}\delta_{bc}|a\rangle\langle d|$.
+    Taking the trace against $X$ gives the coefficient formula.
+    The middle-register vector is $\sum_b|b,b\rangle=\sqrt D\,\eta$,
+    which lies in the kernel of $I-|\eta\rangle\langle\eta|$.
+    Conversely, for an arbitrary two-site vector $f$, set
+    $X_{da}=\sum_x f(a,x,x,d)$. Direct contraction gives
+    $(I-h)f=\Psi_X$. Thus $\ker h=G_2(A)$.
+    Both interactions are orthogonal projections with this kernel,
+    so they coincide.
 \end{proof}
 
 \subsection{Degeneracy of the entanglement spectrum}

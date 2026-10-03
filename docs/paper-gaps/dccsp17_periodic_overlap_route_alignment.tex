@@ -429,7 +429,7 @@ contraction. The formal right-inverse contraction to source equation
 \emph{eq:resultprop} and the global unitary assembly are completed in
 \leanid{MPSTensor.sectorTensor_proportional_of_blockedMatch}.
 
-\section{Scope restriction: independence without spanning}
+\section{Independence and spanning: the earlier restricted statement}
 
 The source proposition and Lemma~\emph{Lem1t}, lines 511--519, imply that for
 $N\geq N_0$ the nonzero vectors in
@@ -441,7 +441,7 @@ are linearly independent and span $\ket{V_N(A)}$; see lines 604--608 of
 Ref.~\cite{DeLasCuevas2017Irreducible}. The spanning assertion justifies the
 source phrase ``basis of periodic vectors'' at line 611.
 
-The formal theorem states only eventual linear independence.\footnote{Formal
+The earlier formal theorem states only eventual linear independence.\footnote{Formal
 declaration:
 \leanid{MPSTensor.periodicBasis_eventuallyLinearlyIndependent} in
 \path{Dichotomy.lean}. The corresponding blueprint entry is in
@@ -452,8 +452,8 @@ hypothesis \path{hNonrep} and the common-period divisibility hypothesis
 uses the almost-orthonormal-implies-independent Lemma~\emph{Lem1t}. Restoring
 the spanning clause and routing the proof through \emph{Lem1t} was classified
 under \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}. The
-independence clause is formalized, but no unrestricted spanning theorem is
-currently attributed to the source consequence.
+independence clause is formalized. The spanning clause is now supplied at every
+length by the multiplicity expansion, as recorded in the final section below.
 
 \section{Multiplicity-bearing overlap theorem and Perron transport}
 
@@ -832,17 +832,31 @@ and
 \leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}.}
 remain as the working forms through which the two are proved.
 
-\section{Independence of the non-zero periodic vectors}
+\section{Independence and spanning by the nonzero periodic vectors}
 
-The scope restriction of the section ``Scope restriction: independence without
-spanning'' above concerned two separate weakenings: independence only along a
-common-multiple subsequence, and the missing spanning clause. The
+The earlier restricted statement discussed above had two separate weakenings:
+independence only along a common-multiple subsequence, and the missing spanning
+clause. The
 first is now removed: independence of the non-zero members of the family at
 every sufficiently large length is
 formalized.\footnote{Formal declaration:
 \leanid{MPSTensor.periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent}
-in \path{NonzeroSubfamily.lean}.} Only the spanning clause remains
-unformalized.
+in \path{NonzeroSubfamily.lean}.}
+
+The spanning clause is also formalized, at every length and without any
+periodicity hypothesis. For a literal multiplicity-bearing decomposition,
+\begin{align}
+    \ket{V_N(A)}
+    &=\sum_j\left(\sum_q\mu_{j,q}^{N}\right)\ket{V_N(A_j)}.
+    \label{eq:dccsp17_nonzero_spanning}
+\end{align}
+Removing the terms with zero state vector leaves an element of the linear
+span of the nonzero members.\footnote{Formal declaration:
+\leanid{MPSTensor.SectorDecomposition.mpvState_mem_span_nonzero}
+in \path{TNLean/MPS/Periodic/Overlap/Spanning.lean}. Blueprint entry:
+\emph{thm:periodic\_basis\_nonzero\_spanning}.} This supplies the spanning
+clause of Proposition~3.3 without replacing multiplicity matrices by single
+scalar weights.
 
 
 \begin{thebibliography}{9}

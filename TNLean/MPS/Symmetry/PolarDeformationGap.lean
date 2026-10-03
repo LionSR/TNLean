@@ -19,6 +19,12 @@ periodic chain of at least two sites.
 one-site injective case of arXiv:1010.3732, Section II.C and Appendix A,
 lines 2475--2580. It uses canonical two-site parent projections.
 Documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Section II.C and Appendix A
 -/
 
 open scoped Matrix

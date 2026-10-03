@@ -17,8 +17,9 @@ Ref~\cite{Piroli2021}). Subsequently, apply in parallel the isometries
 depth." The isometries `V` of the blocked tensor then follow, "following the same steps as in the
 tree-RG circuit". The circuit applied after the measurement does not depend on its outcomes.
 
-This file defines this two-stage preparation
-(`MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth`) and proves it for the state
+This file proves this two-stage preparation
+(`QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`, defined in
+`TNLean.Circuit.Measurement.Protocol`) for the state
 `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩_{R_k L_{k+1}}` of a family of tensors
 `A_j` whose blocked tensors are injective and have orthogonal ranges
 (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`), in
@@ -39,8 +40,6 @@ isometry of the blocked direct sum only under it. Documented in
 
 ## Main declarations
 
-* `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth` — a state prepared with
-  measurements in depth `T₁`, followed by a local circuit of depth `T₂`, with `T₁ + T₂ ≤ T`.
 * `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState` —
   the preparation in depth `O(L)`.
 
@@ -54,32 +53,11 @@ isometry of the blocked direct sum only under it. Documented in
 
 open Matrix MPSTensor
 open scoped BigOperators
+open QuantumCircuit
 
 namespace MPSPreparation
 
 variable {d N : ℕ}
-
-/-! ### Preparation with measurements followed by a circuit -/
-
-section TwoStage
-
-variable [NeZero N]
-
-/-- A vector `ψ` is *prepared with measurements and a circuit in depth `T`* when `ψ = U φ` for a
-vector `φ` prepared with measurements in depth `T₁` and a local circuit `U` of depth `T₂`, with
-`T₁ + T₂ ≤ T`. The circuit `U` is applied after the measurement and its corrections, and does not
-depend on the outcomes.
-
-Source: arXiv:2307.01696, paragraph "Long-range MPS using measurements" ("First create
-`|χ_{N/q}⟩`, which can be done in constant depth with measurements ... Subsequently, apply in
-parallel the isometries `W`"); arXiv:2103.13367, paragraph "State transformations with QC and
-LOCC", where a protocol is followed by further operations in "a more general scheme with
-multiple rounds of LOCC". -/
-def IsPreparedWithMeasurementsAndCircuitInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
-  ∃ (T₁ T₂ : ℕ) (φ : Cfg d N → ℂ) (U : Matrix (Cfg d N) (Cfg d N) ℂ), T₁ + T₂ ≤ T ∧
-    IsPreparedWithMeasurementsInDepth T₁ φ ∧ IsLocalCircuitOfDepth U T₂ ∧ ψ = U *ᵥ φ
-
-end TwoStage
 
 /-! ### The GHZ-type state as a sum of configurations -/
 
