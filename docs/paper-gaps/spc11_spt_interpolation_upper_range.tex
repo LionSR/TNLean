@@ -391,7 +391,27 @@ support frames, and virtual matrices is not assumed. Deriving the required
 limiting-line comparison for the physical path and the transfer bound from
 its Hamiltonian gap remains separate.
 
-\newpage
+The finite-volume dynamical estimate needed for the physical-gap argument
+is now proved directly for the periodic nearest-neighbor Hamiltonian.
+For Hermitian two-site interactions of operator norm at most one,
+observables on nonempty disjoint supports $X,Y$ satisfy
+\[
+ \|[e^{itH_N}Ae^{-itH_N},B]\|
+ \leq 2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
+                  \bigl(e^{8e^a|t|}-1\bigr)
+ \qquad(a\geq0).
+\]
+Here $d(X,Y)$ is cyclic graph distance. The constants are independent of
+chain length and physical dimension. The proof establishes the local
+commutator recursion, bounds its weighted row sum, and treats negative time
+by replacing the Hamiltonian by its negative. It does not require positive
+interaction terms, frustration freedom, or a vanishing ground energy.
+Cyclic embedding of the two-site interaction is proved contractive and
+supported on the corresponding cyclic bond, including the bond crossing
+the end of the chain. This proves the propagation estimate used in the
+Gaussian filtering argument; the ground-state spectral calculation and
+exponential-clustering conclusion remain separate.
+
 The required realization need not be obtainable by gauging the supplied
 ambient tensor. For example, let $a$ be a normalized one-site vector and
 put $B^i=a_iI_2$. At every positive length $N$, the periodic MPS vector is
