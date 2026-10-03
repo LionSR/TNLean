@@ -571,6 +571,84 @@ normalizations.
   Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+#### `TNLean.PEPS.PairConjugacyClass.IsCommuting`
+
+- **Declaration:**
+  `TNLean.PEPS.PairConjugacyClass.IsCommuting (C : PairConjugacyClass G) : Prop`.
+- **Defined in:** `TNLean/PEPS/PairConjugacy.lean`.
+- **Meaning:** the representatives `(g, h)` of a class of pairs under
+  simultaneous conjugation commute. Commutation is invariant under
+  simultaneous conjugation, so the predicate is well defined on classes.
+- **Source:** arXiv:1001.3807, Theorem 5.9 (`thm:2d:gs-struct`),
+  `Papers/1001.3807/paper_v3.tex:1582-1621`, where the torus closures are
+  indexed by commuting pairs up to simultaneous conjugation.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.PairConjugacyClass.isCommuting_pairConjugacyClass` (the class of
+  `p` is commuting exactly when `Commute p.1 p.2`); the subtype
+  `TNLean.PEPS.CommutingPairConjugacyClass` indexes the sector families such as
+  `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting_of_isSemiRegular`.
+- **Caveat:** the independence theorem
+  `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_of_isSemiRegular`
+  holds for all classes, commuting or not. Commutation is required to move the
+  closure seams without changing the vector
+  (`TNLean.PEPS.torusBondNetwork_closureAt_eq_torusGClosure` assumes
+  `Commute g h`), and hence by every common-density statement built on seam
+  deformation; it is also the source's ground-space condition, whose
+  identification with the parent-Hamiltonian ground space is not formalized
+  (see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`).
+
+#### `TNLean.PEPS.IsTorusClosureCompatible` and `TNLean.PEPS.IsTorusNonseamCompatible`
+
+- **Declarations:**
+  `TNLean.PEPS.IsTorusClosureCompatible (g h g' h' : G) (q : TorusVertex width height → G) : Prop`
+  and `TNLean.PEPS.IsTorusNonseamCompatible (q : TorusVertex width height → α) : Prop`.
+- **Defined in:** `TNLean/PEPS/RegularTorusCompatibility.lean`.
+- **Meaning:** in the overlap of a bra network closed by `(g, h)` with a ket
+  network closed by `(g', h')`, `IsTorusClosureCompatible g h g' h' q` says that
+  the site translations `q v` carry the ket labels to the bra labels across
+  every horizontal and vertical bond, where the closure element is inserted
+  only on the bonds crossing the two seams. For a constant `q = x` this is
+  `h x = x h'` and `g x = x g'`, that is, `x` conjugates `(g', h')` to `(g, h)`.
+  `IsTorusNonseamCompatible q` says that neighbouring labels agree across every
+  bond that does not cross a seam.
+- **Source:** arXiv:1001.3807, `eq:2d:peps-with-ug-uh`,
+  `Papers/1001.3807/paper_v3.tex:1515-1525`, and the local contraction argument
+  of Theorem 5.9, lines 1560-1621.
+- **Sanctioned bridges:** `TNLean.PEPS.IsTorusNonseamCompatible.eq_origin` and
+  `TNLean.PEPS.IsTorusClosureCompatible.eq_origin` (the label is constant);
+  `TNLean.PEPS.isTorusClosureCompatible_iff_exists_intertwiner` (closure
+  compatibility is a constant `x` with `h x = x h'` and `g x = x g'`); and
+  `TNLean.PEPS.sum_torusClosureCompatible_eq_sum_intertwiner`.
+- **Caveat:** these are the local equations of the closure overlap calculation,
+  not a statement about ground spaces. They hold for every circumference,
+  including one.
+
+#### `TNLean.PEPS.IsRegionLabelCompatible` and `TNLean.PEPS.IsTwistedRegionLabelCompatible`
+
+- **Declarations:**
+  `TNLean.PEPS.IsRegionLabelCompatible (R : Finset V) (q : {v // v ∈ R} → G) (η θ) : Prop`
+  and
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G) (q) (η θ) : Prop`.
+- **Defined in:** `TNLean/PEPS/RegularRegionConnectivity.lean` and
+  `TNLean/PEPS/RegularTwistedRegion.lean`.
+- **Meaning:** in the regular-basis expansion of the Gram matrix of an open
+  region, `η` (bra) and `θ` (ket) are group labels on the bonds incident to `R`. The
+  untwisted predicate says that at every vertex `v ∈ R` each incident label of
+  `η` is `q v` times the corresponding label of `θ`. The twisted predicate says
+  the same after the bond operators `u` (bra) and `w` (ket) are inserted at the
+  head of each oriented bond.
+- **Source:** arXiv:1001.3807, regular-basis contraction in the proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Sanctioned bridges:** `TNLean.PEPS.IsRegionLabelCompatible.exists_common_label`
+  and `TNLean.PEPS.isRegionLabelCompatible_iff_exists_translation` (on a
+  connected region the labels are one simultaneous translation);
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible.internalEdge_intertwining` and
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible.exists_common_label` (a connected
+  subgraph of untwisted bonds forces one common translation).
+- **Caveat:** both are local equations of a proof calculation and carry no
+  connectivity; every bridge to a common translation assumes a connected
+  induced region or a connected untwisted subgraph.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
