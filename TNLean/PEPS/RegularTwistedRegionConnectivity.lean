@@ -19,6 +19,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, the regular contract
 and boundary separation in the proof of Theorem 6.9, source lines 1935–1990.
 Connectedness of the common untwisted subgraph is stated explicitly. Its
 geometric construction and the physical entropy assertion are separate results.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS
