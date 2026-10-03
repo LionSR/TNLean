@@ -243,6 +243,17 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the bound follows from finite dimensionality; positivity,
   self-adjointness, and a supplied pointwise gap are unnecessary.
 
+### scalar cancellation in the fixed-point physical action — promoted
+- **Pattern:** replace an invertible virtual matrix by a nonzero scalar
+  multiple in `Wᵀ ⊗ W⁻¹`; the scalar and its reciprocal cancel.
+- **Seen:** three uses across two files: the identity and multiplication
+  proofs of `sptFixedPointAction` in `SPTFixedPoint.lean`, and
+  `sptFixedPointAction_eq_of_forall_eq_smul` in
+  `CohomologousFixedPointPath.lean`, under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `MPSTensor.sptKron_eq_of_eq_smul` was already the private
+  helper for the first two uses. It is now public and serves the third use.
+- **Notes:** no new cancellation proof or tactic is needed.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -2767,6 +2778,23 @@ abstracted — record why, so it is not re-proposed).
   lemma if a second file uses the same reduction.
 - **Notes:** three occurrences in one file; below the two-file promotion
   threshold. The following projection algebra differs between the proofs.
+
+### contracting a two-site bond penalty — candidate
+- **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
+  expand the two exterior identity factors, and contract their Kronecker
+  deltas before evaluating the remaining interior sum.
+- **Seen:** two occurrences across two files:
+  `BondProductEndpointGroundSpace.lean` in
+  `twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor`, and
+  `FixedPointParentIdentification.lean` in
+  `one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor`, both under
+  `TNLean/MPS/Symmetry/`.
+- **Abstraction:** if a third calculation needs this reduction, prove the
+  general coefficient formula for `(twoSiteBondInteraction K).mulVec f`, with
+  arbitrary bond matrix `K` and two-site vector `f`.
+- **Notes:** below the rule of three. The present calculation gives the
+  complementary projection explicitly and already identifies its range
+  without further coordinate expansion.
 
 ### adjoints of left polar identities — candidate (2026-10-02)
 

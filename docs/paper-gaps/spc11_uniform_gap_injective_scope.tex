@@ -102,6 +102,16 @@ $L+1\leq3\max(\sum_jD_j,1)^5$.
     \leanid{MPSTensor.exists_uniform_isometricDeformation_interaction_gap}, and
     \leanid{MPSTensor.exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor}.}
 
+For a one-site injective tensor, the deformation is also formalized through
+the right polar factors. Writing its physical matrix as $M=VP$, the path
+$M_\gamma=V((1-\gamma)I+\gamma P)$ is continuous and injective in the
+original physical space, even when $M$ is rectangular. The positive factor
+stays invertible throughout the interval. Unitary physical and virtual
+covariance is preserved, and the canonical parent interactions retain the
+on-site symmetry. This covers only the single-block case of
+Section~II.C.\footnote{Formal declaration:
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation}.}
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
