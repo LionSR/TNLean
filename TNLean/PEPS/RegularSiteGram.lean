@@ -17,6 +17,11 @@ Gram kernel, multiplied by its positive isometry factor.
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 6.1 and the proof of
 Lemma 6.2 (`Papers/1001.3807/paper_v3.tex`, lines 1692–1716). The positive scalar convention
 is that of `IsGIsometric`; see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap Representation Matrix
