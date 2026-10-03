@@ -1,0 +1,40 @@
+\begin{theorem}[G-injectivity of the fourth-root-weighted site]%
+    \label{thm:peps_torus_weighted_site_g_injective}
+    \lean{TNLean.PEPS.IsGInjective.precomp_of_injective_commute,
+        TNLean.PEPS.siteMap_torusDress,
+        TNLean.PEPS.isGInjective_torusDress_averagingSite,
+        TNLean.PEPS.blockFourthRootWeight_isUnit,
+        TNLean.PEPS.isGInjective_blockFourthRootWeight}
+    \leanok
+    \uses{thm:peps_torus_block_multiplicity_state,
+        def:peps_g_injective, def:peps_torus_bond_network,
+        def:peps_regular_averaging_site}
+    Let $U$ be a finite-dimensional matrix representation of a finite group,
+    and let $A$ be an invertible matrix commuting with every $U(g)$.
+    Dressing the normalized averaging site by $A$ on each of its four virtual
+    legs gives a $G$-injective tensor for the original four-leg representation.
+    In particular, for positive dimensions $d_i$ and matrix representations $D_i$,
+    put
+    \begin{align}
+        U(g)&=\bigoplus_iD_i(g),&
+        W&=\bigoplus_i d_i^{1/4}I_{d_i}.
+    \end{align}
+    The actual tensor $H$ obtained by dressing the averaging site of $U$ with
+    $W$ is $G$-injective. This proves the local injectivity property of the
+    reduced-bond construction in \cite[Section~7]{Schuch2010PEPS}.
+    For this local assertion, the blocks need not be irreducible or unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    Absorbing virtual matrices precomposes the site map with the
+    four-leg kernel. For the weight $A$, this kernel is
+    $A\otimes A^{\mathsf T}\otimes A^{\mathsf T}\otimes A$.
+    It is invertible, with inverse obtained by replacing $A$ by $A^{-1}$,
+    and commutes with the four-leg group representation.
+    Hence it preserves the invariant virtual subspace, and its restriction
+    there is injective. Precomposing a $G$-injective map by this kernel
+    preserves both invariance and injectivity on the invariant subspace.
+    The averaging site is $G$-injective, proving the general assertion.
+    Finally, the positive fourth-root block weights have a reciprocal
+    block-diagonal inverse and commute with every block representation matrix.
+\end{proof}

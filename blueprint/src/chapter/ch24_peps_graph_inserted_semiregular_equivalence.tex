@@ -1,0 +1,29 @@
+\begin{theorem}[A fixed isometry for closed states with group insertions]
+    \label{thm:peps_graph_inserted_semiregular_equivalence}
+    \lean{TNLean.PEPS.exists_isometric_graphInsertedSemiRegularBondMap}
+    \leanok
+    \uses{thm:peps_coherent_multiplicity_transport,
+      thm:peps_graph_inserted_averaging_bond_state}
+    Let $\Gamma$ be a finite simple graph, let $D_i$ be matrix
+    representations with positive dimensions $d_i$, and suppose an
+    isometric coordinate change identifies
+    $\bigoplus_i D_i\otimes I_{d_i}$ with the regular representation.
+    Form the weighted averaging sites from
+    $U=\bigoplus_i D_i$ and
+    $W=\bigoplus_i d_i^{1/4}I_{d_i}$.
+    There is one full-domain physical bond isometry, independent of all
+    group insertions, which sends their actual closed contracted state
+    to the actual regular averaging-site state with the same insertions.
+    Its product preserves all inner products. No connectedness or
+    commutativity of the edge labels is required.
+    This is an auxiliary closed-state extension of Section~7 of
+    \cite{Schuch2010PEPS}, with the Fourier coordinate change supplied; it does
+    not assert surjectivity for arbitrary open boundary tensors.
+\end{theorem}
+\begin{proof}\leanok
+    The actual inserted contraction is the coherent sum over vertex labels
+    $q$, with edge matrix $W^2U(q_{\mathrm{head}}u_eq_{\mathrm{tail}}^{-1})$.
+    Its diagonal blocks have weights $\sqrt{d_i}$. Apply coherent
+    multiplicity restoration and the fixed coordinate change; the resulting
+    sum is exactly the regular inserted contraction.
+\end{proof}

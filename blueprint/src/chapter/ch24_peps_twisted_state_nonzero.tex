@@ -1,0 +1,31 @@
+\begin{theorem}[Nonzero regular states with inserted bond operators]
+    \label{thm:peps_regular_twisted_state_nonzero}
+    \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_one_column_ne_zero,
+        TNLean.PEPS.openRegionWeight_regularTwistedSite_ne_zero_of_isGInjective,
+        TNLean.PEPS.stateCoeff_regularTwistedSite_ne_zero_of_isGInjective,
+        TNLean.PEPS.IsGIsometric.stateCoeff_torusRegularTwistedSite_ne_zero}
+    \leanok
+    \uses{thm:peps_regular_twisted_region_accessibility,
+        lem:peps_regular_torus_incident_isometry}
+    Let $G$ be finite, and let the local tensors on a finite graph be
+    regular $G$-injective. Insert arbitrary group-valued operators on
+    the oriented bonds. The resulting closed PEPS vector is nonzero.
+    More generally, each open-region vector with identity boundary
+    labels is nonzero, as is the corresponding canonical projector column.
+    In particular, on a torus with both periods at least three, every
+    actual regular $G$-isometric state with inserted bond operators is nonzero.
+    This is an auxiliary nonvanishing result for the flux measurements
+    of \cite[Theorem~6.15]{Schuch2010PEPS}, without a parent-Hamiltonian claim.
+\end{theorem}
+\begin{proof}\leanok
+    Set all bond labels and vertex translations to the identity, and
+    choose each canonical physical row to be the resulting inserted
+    half-edge labels. This gives a positive term in the actual
+    canonical coefficient sum. All remaining terms are nonnegative.
+    The derived local physical inverse sends the original contraction
+    to this canonical column, so the original vector cannot vanish.
+    For the full region, the exterior multiplicity is one and the
+    open-region contraction is the closed PEPS vector. The native
+    torus assertion follows from the incident-leg expression of local
+    regular isometry.
+\end{proof}
