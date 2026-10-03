@@ -2160,8 +2160,7 @@ operators.
         TNLean.PEPS.regionPhysicalMap_regularProjectorOpenRegionMatrix,
         TNLean.PEPS.exists_regularProjectorOpenRegionMatrix}
     \leanok
-    \uses{def:peps_regular_projector_open_region, lem:peps_region_physical_maps,
-        def:peps_g_injective}
+    \uses{def:peps_regular_projector_open_region, def:peps_g_injective}
     Suppose the local regular site maps $A_v$ are $G$-isometric,
     with positive factors $c_v$. Let $T_R(\theta)$ be the actual
     contracted physical column with crossing labels $\theta$,
@@ -5177,8 +5176,8 @@ operators.
     action in Definition~6.1 of \cite{Schuch2010PEPS}.
 \end{definition}
 
-\begin{lemma}[The local regular Gram identity]%
-    \label{lem:peps_torus_regular_site_gram}
+\begin{theorem}[The local regular Gram identity]%
+    \label{thm:peps_torus_regular_site_gram}
     \lean{TNLean.PEPS.IsGIsometric.torusRegularSite_translation,
         TNLean.PEPS.IsGIsometric.exists_torusRegularSiteGram}
     \leanok
@@ -5190,24 +5189,24 @@ operators.
         =\frac{c}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
     \end{align}
     The factor $c$ records the normalization of the site tensor.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Express $A^\dagger A=c\Pi$ in the orthonormal group basis and use
     the matrix entries of the invariant projector.
 \end{proof}
 
-\begin{lemma}[Access to the virtual invariant space]%
-    \label{lem:peps_torus_accessible_virtual_site}
+\begin{theorem}[Access to the virtual invariant space]%
+    \label{thm:peps_torus_accessible_virtual_site}
     \lean{TNLean.PEPS.IsGIsometric.exists_accessibleVirtualSite}
     \leanok
-    \uses{lem:peps_torus_regular_site_gram}
+    \uses{thm:peps_torus_regular_site_gram}
     If $A^\dagger A=c\Pi$ with $c>0$, then $J=c^{-1/2}A^\dagger$
     satisfies $JA=\sqrt{c}\Pi$ and preserves inner products on
     $\operatorname{ran}A$. It identifies the physical support with
     the invariant virtual space, as in Observation~6.4 of
     \cite{Schuch2010PEPS}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     For $u,v$ in the virtual space, $JA u=\sqrt{c}\Pi u$ and
@@ -5291,6 +5290,7 @@ operators.
     is constant, $q_v=x$, and its value satisfies
     \begin{align}
         hx=xh',\qquad gx=xg'.
+        \label{eq:peps_closure_seam_intertwining}
     \end{align}
     Summing over compatible vertex translations therefore gives exactly
     the number of simultaneous intertwiners. This holds also when a
@@ -5299,8 +5299,8 @@ operators.
 
 \begin{proof}\leanok
     The nonseam horizontal and vertical bonds identify all translations
-    in a rectangular fundamental domain. The two seams give the displayed
-    equations. For a circumference of one the corresponding seam is
+    in a rectangular fundamental domain. The two seams give the equations
+    (\ref{eq:peps_closure_seam_intertwining}). For a circumference of one the corresponding seam is
     already a loop at each site, imposing the same equation.
 \end{proof}
 
@@ -5311,7 +5311,7 @@ operators.
         TNLean.PEPS.sum_star_torusGClosure_regular_mul,
         TNLean.PEPS.IsGIsometric.exists_torusGClosure_overlap}
     \leanok
-    \uses{lem:peps_torus_regular_site_gram, thm:peps_finite_indicator_sum,
+    \uses{thm:peps_torus_regular_site_gram, thm:peps_finite_indicator_sum,
         lem:peps_torus_overlap_expansion,
         lem:peps_torus_closure_compatibility}
     Let $A_v^\dagger A_v=c_v\Pi_v$ be the local regular isometry identities
@@ -5693,7 +5693,7 @@ operators.
 \end{definition}
 
 \begin{theorem}[Isometry of the regular projector site]%
-    \label{lem:peps_regular_averaging_site_isometry}
+    \label{thm:peps_regular_averaging_site_isometry}
     \lean{TNLean.PEPS.isGIsometric_regularAveragingSite}
     \leanok
     \uses{def:peps_regular_averaging_site, def:peps_torus_regular_coordinates}
@@ -5708,7 +5708,7 @@ operators.
 \end{proof}
 
 \begin{theorem}[Actual closure vectors and the local inverse]%
-    \label{lem:peps_regular_g_injective_closure_inverse}
+    \label{thm:peps_regular_g_injective_closure_inverse}
     \lean{TNLean.PEPS.IsGInjective.exists_torusGClosure_averagingSite,
         TNLean.PEPS.torusPhysicalMap_averagingSite}
     \leanok
@@ -5777,7 +5777,7 @@ operators.
     \label{thm:peps_regular_g_injective_closure_rank_transport}
     \lean{TNLean.PEPS.IsGInjective.rank_physicalCutMatrix_torusGClosure_sum}
     \leanok
-    \uses{lem:peps_regular_g_injective_closure_inverse,
+    \uses{thm:peps_regular_g_injective_closure_inverse,
         lem:peps_physical_product_cut_rank}
     Let $A$ be regular $G$-injective. For every finite family of closure
     pairs and every physical partition $R$, the two vectors
@@ -5804,7 +5804,7 @@ operators.
         TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting_of_isSemiRegular}
     \leanok
     \uses{def:peps_semiregular,
-        lem:peps_regular_g_injective_closure_inverse,
+        thm:peps_regular_g_injective_closure_inverse,
         thm:peps_pair_conjugacy_operator_independence,
         thm:peps_torus_projector_extraction}
     Let $U$ be a semi-regular representation of a finite group $G$,
@@ -5824,7 +5824,7 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_regular_g_injective_closure_inverse,
+    \uses{thm:peps_regular_g_injective_closure_inverse,
         thm:peps_torus_projector_extraction,
         thm:peps_pair_conjugacy_operator_independence}
     Choose the same local inverse $L$ for every closure vector.
