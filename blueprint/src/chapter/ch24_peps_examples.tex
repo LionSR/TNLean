@@ -2096,8 +2096,8 @@ operators.
     $C=P/\sqrt r$ yields the remaining formulas.
 \end{proof}
 
-\begin{lemma}[Independent finite choices]%
-    \label{lem:peps_finite_indicator_sum}
+\begin{theorem}[Independent finite choices]%
+    \label{thm:peps_finite_indicator_sum}
     \lean{Fintype.prod_sum_boole}
     \leanok
     Let $I$ be a finite set, let $J_i$ be finite sets indexed by $i\in I$,
@@ -2109,7 +2109,7 @@ operators.
     \end{align}
     Thus multiplying the separate numbers of admissible choices counts
     the admissible simultaneous choices.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Distribute the finite product over the finite sums. A product of
@@ -2126,7 +2126,7 @@ operators.
         TNLean.PEPS.regionIncidentBoundaryLabel_regularGroup_iff}
     \leanok
     \uses{def:peps_open_region_contraction, def:peps_regular_site_gram,
-        lem:peps_finite_indicator_sum}
+        thm:peps_finite_indicator_sum}
     Let $R$ be a finite region of the original graph, $E_R$ its incident
     edges, and $\partial R$ its crossing edges. Write $E_v$ for the
     incident edges at $v$ and put $\kappa=|G|$. The canonical physical
@@ -5311,7 +5311,7 @@ operators.
         TNLean.PEPS.sum_star_torusGClosure_regular_mul,
         TNLean.PEPS.IsGIsometric.exists_torusGClosure_overlap}
     \leanok
-    \uses{lem:peps_torus_regular_site_gram, lem:peps_finite_indicator_sum,
+    \uses{lem:peps_torus_regular_site_gram, thm:peps_finite_indicator_sum,
         lem:peps_torus_overlap_expansion,
         lem:peps_torus_closure_compatibility}
     Let $A_v^\dagger A_v=c_v\Pi_v$ be the local regular isometry identities
@@ -5870,7 +5870,7 @@ operators.
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_apply}
     \leanok
     \uses{def:peps_regular_twisted_region,
-        def:peps_regular_projector_open_region, lem:peps_finite_indicator_sum}
+        def:peps_regular_projector_open_region, thm:peps_finite_indicator_sum}
     For arbitrary inserted group elements $u_e$, including those on
     crossing bonds, define
     \begin{align}
