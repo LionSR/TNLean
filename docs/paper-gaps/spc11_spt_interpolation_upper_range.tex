@@ -110,8 +110,18 @@ The blueprint theorem \path{thm:spt_normalized_bond_interpolation} records
 these results with \path{leanok}; they depend on the corrected second-block
 range. The definition
 \leanid{MPSTensor.SymmetricGappedInteractionPath} states the independent
-Hamiltonian-path conditions, but constructing such a path from this bond
-interpolation and proving its uniform spectral gap remain open.
+Hamiltonian-path conditions. The declaration
+\leanid{MPSTensor.normalizedBondFixedPointGappedPath} constructs such a path
+from the corrected bond interpolation: its two-site interactions are the
+independent-bond penalties of the normalized bond vector, and its uniform gap
+is one. The blueprint theorem \path{thm:spt_direct_sum_fixed_point_path}
+records it with \path{leanok}. Its endpoints are the direct-sum fixed-point
+interactions; connecting arbitrary injective symmetric parent Hamiltonians to
+those endpoints remains open.
+In independent-bond coordinates, before regrouping the physical registers,
+\leanid{MPSTensor.normalizedBondInterpolation_parent_uniform_gap} proves the
+same uniform gap of one for every parameter and every positive chain length
+(blueprint lemma \path{lem:spt_independent_bond_gap}).
 
 \section{Verdict}
 

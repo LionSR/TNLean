@@ -55,6 +55,26 @@ several-block case or the endpoint embeddings in the classification
 theorem.\footnote{Affected declaration:
     \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation}.}
 
+Two partial extensions are formalized. For a continuous compact family of
+normal tensors, a uniform gap holds at sufficiently large interaction ranges
+determined by block injectivity, rather than at the two-site interaction of
+the blocked path.\footnote{\leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_all_lengths}
+    and
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_at_range}.}
+For a continuous compact family of weighted block sums with a fixed number of
+blocks and fixed bond dimensions, a uniform gap holds on every ring of length
+$N\geq R$ when the length-$S$ word tuples of the blocks span the product
+matrix algebra at every parameter, with one $S>0$ for the whole family, and
+$R\geq S+1$. For pairwise inequivalent normal blocks, the range
+$R\geq3\max(\sum_jD_j,1)^5$ suffices without a supplied
+$S$.\footnote{\leanid{MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths}
+    and
+    \leanid{MPSTensor.exists_uniform_block_parentHamiltonianES_gap_of_compact_isNormalTensor}.}
+These results do not reproduce the source's argument through the overlaps of
+the block local spaces, and they impose a common spanning length, or a range
+bound, along the family. Whether they cover every path of the source is not
+established, so the restriction remains open.
+
 \section{Elimination plan}
 For a continuous family of tensors in normal form with a fixed number of
 normal blocks, apply the block-diagonal parent-Hamiltonian gap with its

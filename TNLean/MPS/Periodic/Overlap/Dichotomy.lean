@@ -211,9 +211,12 @@ spanning half is what "justifies the name basis of periodic vectors" (line 611).
 Only the independence half is stated here. In addition the paper derives it from
 Lem1t (the ε-almost-orthonormal ⇒ independent lemma, lines 511--519) applied to
 the self-overlap limit and the cross-overlap decay; here the basis condition is
-encoded directly as the pairwise non-repetition hypothesis `hNonrep`. The dropped
-spanning clause and the Lem1t route are recorded in
-docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
+encoded directly as the pairwise non-repetition hypothesis `hNonrep`.
+The spanning clause is proved separately by
+`SectorDecomposition.mpvState_mem_span_nonzero` in `Overlap/Spanning.lean`.
+The distinction between this common-period statement and the complete
+source consequence is recorded in
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem periodicBasis_eventuallyLinearlyIndependent
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
