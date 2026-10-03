@@ -2735,6 +2735,38 @@ $A$ along $w$.
     with $y=qr^q$ is eventually below $(9/25)^q/16$, because $q(25r/9)^q\to0$.
 \end{proof}
 
+\begin{theorem}[The polar matrix has a first-order perturbation]
+    \label{thm:ldp_overlapping_polar_norm_lower_bound}
+    \lean{MPSTensor.posDef_diagGram_overlappingBlockDiag,
+        MPSTensor.overlappingBlockOverlap_div_two_le_norm_sqrt_diagGram_sub_one,
+        MPSTensor.overlappingBlockOverlap_div_two_le_norm_polarPos_sub_limit,
+        MPSTensor.exists_norm_polarPos_overlappingBlockTensor_sub_limit_gt_sq}
+    \leanok
+    \uses{thm:ldp_approximation_error_overlapping_blocks}
+    For the tensor of Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks},
+    put $s=(3/5)^q$, let $G_q$ be the Gram matrix on its diagonal bond pairs,
+    and let $J\ket j=\ket{j,j}$. For every $q\ge1$, $G_q$ is positive definite
+    and the positive polar matrix is $P_q=J\sqrt{G_q}J^\dagger$. In operator norm,
+    \[
+        \lVert\sqrt{G_q}-I\rVert\ge s/2,
+        \qquad \lVert P_q-JJ^\dagger\rVert\ge s/2.
+    \]
+    For every $C\ge0$ and every threshold $q_0$, there is $q\ge\max(1,q_0)$
+    such that $\lVert P_q-JJ^\dagger\rVert>Cs^2$. Thus this matrix difference
+    is not $O((3/5)^{2q})$. The quadratic normalized-state error of
+    Theorem~\ref{thm:ldp_approximation_error_overlapping_second_order}
+    concerns a different quantity.
+\end{theorem}
+\begin{proof}\leanok
+    Write $\sqrt{G_q}=\bigl(\begin{smallmatrix}u&v\\v&u\end{smallmatrix}\bigr)$
+    as in the preceding theorem. Since $u,v\ge0$, $u^2+v^2=1$ and $2uv=s$,
+    one has $u\le1$ and $v\ge s/2$. Each operator norm is at least the
+    absolute value of this off-diagonal entry. The Gram matrix is positive
+    definite since its positive square root is invertible for $q\ge1$.
+    Finally, $(3/5)^q\to0$, so beyond any threshold one may choose $q$ with
+    $C(3/5)^q<1/2$, giving $Cs^2<s/2$.
+\end{proof}
+
 \begin{lemma}[Polar decomposition of an orthogonal sum]
     \label{lem:ldp_orthogonal_sum_polar}
     \lean{Matrix.polarIso_sum_of_orthogonal, Matrix.exists_polarIso_eq_mul,
