@@ -4121,6 +4121,222 @@ Hamiltonian gap remains separate
 \end{proof}
 
 
+\subsection{Virtual classes at a compact limit}
+
+% Auxiliary preparation for compact-sequence class stability.
+% The transfer contraction bound is supplied throughout.
+
+\begin{theorem}[Uniqueness of a normalized adjoint stationary matrix]
+    \label{thm:spc_aux_normalized_stationary_unique}
+    \lean{MPSTensor.normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one}
+    \leanok
+    \uses{def:transfer_map}
+    Let $B$ have arbitrary finite bond dimension and
+    $\dim_{\C}\ker(\E_B-\Id)=1$.
+    If $\E_B^*(\sigma)=\sigma$, $\E_B^*(Z)=Z$, and
+    $\tr\sigma=\tr Z=1$, then $Z=\sigma$.
+    Positivity and unitality are not required. This is an auxiliary identity
+    for \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spc_aux_adjoint_fixed_dimension}
+    Trace duality makes the adjoint fixed space one-dimensional.
+    Since $\tr\sigma=1$, the matrix $\sigma$ is nonzero and spans that space.
+    Thus $Z=c\sigma$; taking traces gives $c=1$.
+\end{proof}
+
+\begin{theorem}[Virtual class under gauge equivalence up to a scalar]
+    \label{thm:spc_aux_injective_gauge_class}
+    \lean{MPSTensor.cohomologousTo_of_injective_gaugePhaseEquiv}
+    \leanok
+    \uses{def:gauge_phase_equiv, def:projective_rep}
+    Let $A,B$ have the same positive bond dimension, with $A$ injective,
+    and suppose $B^i=cXA^iX^{-1}$ for $c\ne0$ and $X$ invertible.
+    Let a physical group representation $U$ have virtual projective
+    representations $V_A,V_B$ with factors $\omega_A,\omega_B$ satisfying
+    $\sum_jU(g)_{ij}A^j=V_A(g^{-1})A^iV_A(g^{-1})^{-1}$ and the
+    corresponding identity for $B$. Then $\omega_B\sim\omega_A$.
+    Source context: \cite[Section~II.F.2 and Appendix~C]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spt_virtual_class_gauge_preparation}
+    The scalar and gauge preserve injectivity. Conjugating $V_A$ by $X$
+    retains its factor and implements the symmetry of $B$.
+    Gauge independence on the injective tensor $B$ compares that action with
+    $V_B$ and gives the asserted cohomology relation.
+\end{proof}
+
+\begin{theorem}[Unitary virtual transport between unital tensors]
+    \label{thm:spc_aux_unitary_gauge_virtual_transport}
+    \lean{MPSTensor.exists_unitary_virtualRep_of_unital_gaugePhaseEquiv}
+    \leanok
+    \uses{def:gauge_phase_equiv, def:projective_rep}
+    Let $A,B$ have the same positive bond dimension, be unital, and be
+    gauge equivalent up to a nonzero scalar, with $A$ injective.
+    Suppose a unitary physical group representation $U$ has a unitary
+    projective virtual action $V$ on $A$, with factor $\omega$, satisfying
+    $\sum_jU(g)_{ij}A^j=V(g^{-1})A^iV(g^{-1})^\dagger$.
+    Then $B$ admits a unitary projective virtual action with exactly the
+    factor $\omega$ and the same covariance identity.
+    Source context: \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:pgvwc07_intertwiner_unitary, thm:spt_virtual_class_gauge_preparation}
+    The scalar and gauge make $B$ injective. The unital intertwiner theorem
+    replaces the bond gauge by a unitary $W$, giving
+    $B^i=cWA^iW^\dagger$. The representation $WV(g)W^\dagger$ is unitary,
+    retains the factor $\omega$, and satisfies the required covariance
+    by transport through the scalar and bond gauge.
+\end{proof}
+
+\begin{definition}[Unitary on-site action after blocking]
+    \label{def:spc_aux_block_unitary_action}
+    \lean{MPSTensor.blockUnitaryPhysicalAction}
+    \leanok
+    \uses{def:block_kron_action}
+    Let $U$ be a monoid representation by unitary matrices on $\C^d$.
+    For $L\geq0$, its unitary action on the blocked physical space is
+    $U^{[L]}(g)=U(g)^{\otimes L}$, in the coordinates of length-$L$ words.
+\end{definition}
+\begin{proof}\leanok
+    \uses{lem:on_site_tensor_pow_mul}
+    Tensor powers preserve multiplication and identity. They commute with
+    adjoints, so $U^{[L]}(g)U^{[L]}(g)^\dagger=\Id$.
+\end{proof}
+
+\begin{theorem}[Unchanged virtual factor under common blocking]
+    \label{thm:spc_aux_blocked_unitary_covariance}
+    \lean{MPSTensor.rotatePhysical_blockTensor_of_unitary_virtual_covariance}
+    \leanok
+    \uses{def:spc_aux_block_unitary_action, def:blocked_tensor, def:projective_rep}
+    Suppose a unitary physical group representation $U$ and a unitary
+    projective virtual representation $V$, with factor $\omega$, satisfy
+    $\sum_jU(g)_{ij}A^j=V(g^{-1})A^iV(g^{-1})^\dagger$.
+    For every $L\geq0$, the same $V$ implements the covariance of $A^{[L]}$
+    under $U^{[L]}$. In particular, its factor remains exactly $\omega$.
+    Source context: \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:twisted_tensor_block_gauge}
+    Twisting commutes with blocking. Word evaluation of the virtual gauge
+    telescopes, leaving $V(g^{-1})A^wV(g^{-1})^{-1}$.
+    Unitarity replaces the last inverse by the adjoint. The representation
+    itself has not changed, so neither has its factor.
+\end{proof}
+
+\begin{theorem}[Overlap modulus of equal periodic spans]
+    \label{thm:spc_aux_periodic_span_overlap}
+    \lean{MPSTensor.norm_mpvOverlap_eq_mul_norm_of_span_eq}
+    \leanok
+    \uses{def:mpv_state, def:mpv_overlap}
+    Let $A,B$ have the same physical dimension and arbitrary bond dimensions.
+    At any $N\geq0$, equality of the spans of their periodic coefficient
+    vectors implies
+    $|O_{AB}(N)|=\|\ket{V^{(N)}(A)}\|\,\|\ket{V^{(N)}(B)}\|$.
+    Both vectors are allowed to vanish.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:overlap_eq_inner}
+    Equality of spans gives $\ket{V^{(N)}(B)}=c\ket{V^{(N)}(A)}$.
+    Substitution into the inner product gives
+    $|O_{AB}(N)|=|c|\|\ket{V^{(N)}(A)}\|^2$, which is the asserted
+    product by homogeneity of the norm.
+\end{proof}
+
+\begin{theorem}[Unit limiting periodic norm from transfer contraction]
+    \label{thm:spc_aux_periodic_norm_one}
+    \lean{MPSTensor.norm_mpvState_tendsto_one_of_transfer_spectrum}
+    \leanok
+    \uses{def:transfer_map, def:mpv_state}
+    Let $A$ be unital with positive bond dimension $D$ and
+    $\dim_{\C}\ker(\E_A-\Id)=1$.
+    Suppose $0\leq q<1$ and $|z|\leq q$ for every
+    $z\in\operatorname{spec}(\E_A)$ with $z\ne1$.
+    Then $\|\ket{V^{(N)}(A)}\|\to1$.
+    The spectral bound is an explicit auxiliary assumption in the setting
+    of \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spt_compact_periodic_norm_deviation}
+    The periodic norm estimate gives
+    $|\|\ket{V^{(N)}(A)}\|^2-1|\leq(D^2-1)q^N$.
+    Since $q^N\to0$, the squared norms tend to one. Continuity of the square
+    root and nonnegativity of the norms finish the proof.
+\end{proof}
+
+\begin{theorem}[Unit overlap limit from eventual periodic-line equality]
+    \label{thm:spc_aux_periodic_line_unit_overlap}
+    \lean{MPSTensor.norm_mpvOverlap_tendsto_one_of_eventual_span_eq}
+    \leanok
+    \uses{def:mpv_state, def:mpv_overlap}
+    Let $A,B$ have the same physical dimension and arbitrary bond dimensions.
+    Suppose their periodic coefficient spans agree for all sufficiently
+    large $N$, and both periodic state norms tend to one.
+    Then $|O_{AB}(N)|\to1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spc_aux_periodic_span_overlap}
+    Eventually the overlap modulus is the product of the two state norms.
+    That product tends to one. No proportionality scalars are chosen
+    simultaneously across the chain lengths.
+\end{proof}
+
+
+\begin{theorem}[Virtual class along a convergent unital sequence]
+    \label{thm:spc_aux_convergent_unital_sequence_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_tendsto_unital_periodic_lines}
+    \leanok
+    \uses{def:projective_rep, def:transfer_map, def:mpv_state}
+    Let $A$ be a unital injective tensor with positive bond dimension $D$.
+    Let $B_n$ be unital tensors of a fixed bond dimension $k$, converging to
+    a unital tensor $b$ with $\dim_{\C}\ker(\E_b-\Id)=1$.
+    Suppose $B_n$ has a positive-definite adjoint stationary matrix $\sigma_n$
+    of trace one. Let $\tau$ be a positive semidefinite adjoint stationary
+    matrix for $b$, with trace one, and let $K:\C^E\to\C^k$ be an isometry
+    whose range is the support of $\tau$.
+    Write $C^i=K^\dagger b^iK$.
+
+    Suppose $0\leq q<1$ bounds the modulus of every nonunit eigenvalue of
+    both $\E_A$ and $\E_b$. Suppose also that the periodic coefficient spans
+    of $A$ and $b$ agree for all sufficiently large lengths.
+    Let the same unitary physical group representation $U$ act covariantly
+    on $A$ and every $B_n$, through pointwise unitary projective virtual
+    representations with respective factors $\omega_0$ and $\omega_n$:
+    $\sum_j U(g)_{ij}A^j=V_0(g^{-1})A^iV_0(g^{-1})^\dagger$, and likewise
+    for $B_n$ and $V_n$.
+    Then $\omega_n\sim\omega_0$ for all sufficiently large $n$.
+    No continuity of the virtual representations or of $\sigma_n$ is required.
+    The transfer bound and periodic-span equality are supplied hypotheses;
+    this is an auxiliary reduction for
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spc_aux_periodic_norm_one,
+        thm:spc_aux_periodic_line_unit_overlap,
+        thm:spc_aux_stationary_support_identification,
+        thm:spc_aux_normalized_stationary_unique,
+        thm:spc_aux_stationary_support_preparation,
+        thm:spc_aux_unitary_gauge_virtual_transport,
+        thm:spc_aux_adjoint_fixed_dimension,
+        thm:spc_aux_topological_stationary_support_class}
+    The two periodic norms tend to one. Equality of their eventual spans
+    therefore gives a unit overlap limit. Stationary-support identification
+    shows that $E=D$ and that $C$ is gauge equivalent to $A$ up to a nonzero
+    scalar. In particular, $C$ is injective. The fixed-space hypothesis gives
+    uniqueness of the normalized adjoint stationary matrix, and support
+    preparation makes $C$ unital. Unitary gauge transport supplies a virtual
+    action on $C$ with exactly the factor $\omega_0$.
+
+    Adjoin the limiting point to the sequence. The ambient tensors form a
+    continuous family on this one-point compactification. At the finite points,
+    their stationary support is the full bond space; at the limiting point
+    it is the range of $K$. The local stationary-support theorem applies
+    without continuous support frames or continuous virtual representatives.
+    Its conclusion at the limiting point is precisely the asserted eventual
+    cohomology relation.
+\end{proof}
+
+
 \begin{theorem}[Endpoint cohomology for a supplied unital family]
     \label{thm:spt_unital_supported_path_class}
     \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points,

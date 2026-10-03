@@ -13,4 +13,5 @@ import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.NormalTensorDichotomy
+import TNLean.MPS.Overlap.PeriodicRayUnitOverlap
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap

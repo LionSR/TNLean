@@ -355,9 +355,9 @@ topological parameter space, assuming continuity only at the base point.
 The support dimension may vary; stationary densities, support frames, and
 virtual actions remain pointwise choices. Only the base supported tensor
 must be injective, and its ambient adjoint fixed space must be
-one-dimensional. This applies to convergent sequences and their limits;
-identifying the limiting supported tensor with the prescribed base rays
-remains separate.
+one-dimensional. Thus it applies to convergent sequences and their limits.
+The comparison with the prescribed base rays uses the stationary-support
+identification described below.
 
 The compact-limit argument now has the following proved auxiliary steps.
 Unital tensors and normalized stationary densities admit a common convergent
@@ -384,8 +384,16 @@ bond dimension and gauge phase from an overlap of modulus tending to one.
 Trace-adjoint duality also identifies the dimensions of the primal and
 adjoint fixed spaces. Their pointwise synthesis identifies the actual normal
 support compression from a unit limiting overlap, deriving stationary
-uniqueness and transient decay internally. The compact-sequence converse and
-the transfer bound from a physical gap remain separate.
+uniqueness and transient decay internally. The declaration
+\leanid{MPSTensor.eventually_cohomologousTo_of_tendsto_unital_periodic_lines}
+now combines this identification with unitary transport and the supported-family
+class theorem on a convergent sequence and its limit. Eventual equality of the
+limiting periodic lines with those of a unital injective reference, together
+with supplied strict transfer spectral bounds, gives the reference virtual
+class eventually along the sequence. Continuity of the stationary densities,
+support frames, and virtual matrices is not assumed. Deriving the required
+limiting-line comparison for the physical path and the transfer bound from
+its Hamiltonian gap remains separate.
 
 \newpage
 The required realization need not be obtainable by gauging the supplied
