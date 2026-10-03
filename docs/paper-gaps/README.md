@@ -69,7 +69,9 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, is formalized
   for continuous compact families of one-site injective tensors with the
   canonical two-site interaction, while the source's path also covers
-  non-injective normal forms with several blocks.
+  non-injective normal forms with several blocks. Compact normal families and
+  multiblock families with a common simultaneous spanning length are covered
+  only at sufficiently large interaction ranges, so the note stays open.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted

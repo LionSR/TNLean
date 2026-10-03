@@ -181,9 +181,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \lean{MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le}
     \leanok
     \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_block_overlaps_limit,
-        lem:ldp_shared_overlap_estimates, thm:ldp_approximation_error_overlapping_weights,
+        lem:ldp_shared_overlap_estimates, thm:ldp_approximation_error_repeated_overlapping,
         def:correlation_length}
-    Let $0<\gamma<1/2$. There is $C>0$ such that the following holds for all
+    Let $0<\gamma<1$. There is $C>0$ such that the following holds for all
     weights $\beta\in\C^b\setminus\{0\}$ and every cut of a ring of $N$ sites
     into $M\geq1$ blocks of lengths $\ell_k\geq q$ at which every blocked map
     $\mathcal B^{(\ell_k)}$ is injective on the bond pairs of the blocks. With
@@ -210,6 +210,8 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \cite{gap:mswc24_measurement_preparation_scope}. Unlike
     Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping}, it has no
     factor $\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$.
+    The source states the bound for $0<\gamma<1/2$; the range $\gamma<1$ is a
+    project result.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -226,10 +228,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     $y=Me^{-\gamma q/\xi}$.
     Lemma~\ref{lem:ldp_shared_overlap_estimates}(6) with $R=\sqrt w$ gives
     $\lvert\lVert\phi\rVert^2/w-1\rvert\leq Ke^{-\gamma N/\xi}\leq Ky$. The
-    inequality in the proof of
-    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}, applied to
-    $S/w$ and $\lVert\phi\rVert/\sqrt w$, and the two elementary inequalities
-    there with $s=1$ give the bound.
+    elementary inequalities in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping}, applied to
+    $S/w$ and $\lVert\phi\rVert/\sqrt w$ with $s=1$, give the bound.
 \end{proof}
 
 \begin{theorem}[The state of a tensor injective on a set of bond pairs, with

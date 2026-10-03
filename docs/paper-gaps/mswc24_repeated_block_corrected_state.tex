@@ -181,7 +181,7 @@ $\beta\neq0$.\footnote{Formal declarations:
     \doclink{TNLean/MPS/Preparation/RepeatedBlockSum};
     \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum} in
-    \doclink{TNLean/MPS/Preparation/RepeatedBlockError}.} The orthogonality
+    \doclink{TNLean/MPS/Preparation/BlockSumError}.} The orthogonality
 restriction is the one recorded in \cite{gap:mswc24_block_form_mixed_overlap},
 where for two overlapping blocks of multiplicity one the error lies between
 $\tau^{2q}/16$ (for $N/q\geq3$) and $(N/q)\tau^{2q}$, with $\tau$ the eigenvalue of their mixed transfer
@@ -196,7 +196,7 @@ Drop the orthogonality of the $q$-site states of distinct blocks, let the blocks
 the gauge $\sum_i(A_j^i)^\dagger A_j^i=\mathbf 1$ with positive definite fixed points
 $\sigma_j$ of trace one, let $\lambda_2$ bound the moduli of the eigenvalues other than one of
 every $E_{jj}$ and of all eigenvalues of the mixed transfer matrices $E_{jj'}$, $j\neq j'$, let
-$\xi=-1/\ln\lvert\lambda_2\rvert$ and $0<\gamma<1/2$. The corrected state
+$\xi=-1/\ln\lvert\lambda_2\rvert$ and $0<\gamma<1$. The corrected state
 (\ref{eq:mswc24_rc_state}) still converges, at the rate of
 \cite{gap:mswc24_block_form_mixed_overlap}: there are $C,C'$, independent of the weights, with
 \begin{align}
@@ -363,11 +363,12 @@ independent of the weights.\footnote{Formal declarations:
     \leanid{MPSTensor.oneCopyWeight},
     \leanid{MPSTensor.oneCopyWeight_of_subsingleton},
     \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy},
-    \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy},
-    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy},
     \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy}
-    in \doclink{TNLean/MPS/Preparation/OneCopyPairState}.} The failure of the coefficients
+    in \doclink{TNLean/MPS/Preparation/OneCopyPairState};
+    \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy} in
+    \doclink{TNLean/MPS/Preparation/BlockSumError}.} The failure of the coefficients
 $\sum_k\lvert\mu_{j,k}\rvert^N$ and $c_j^M$ is checked numerically and not formalized.
 
 \bibliographystyle{alpha}

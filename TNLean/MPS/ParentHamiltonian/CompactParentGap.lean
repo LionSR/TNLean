@@ -25,7 +25,10 @@ Appendix A, lines 2475--2580, proves the uniform gap along a path of tensors in
 normal form, possibly with several blocks. The two compact-gap theorems here
 treat continuous families of one-site injective tensors with the canonical
 two-site interaction, replacing Nachtergaele's bound by Knabe's criterion.
-Documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
+Documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`,
+which also records the partial normal-family and multiblock coverage of
+`CompactNormalParentGap.lean`, `CompactBlockParentGap.lean`, and
+`CompactParentInteractionGap.lean`; the restriction remains open.
 -/
 
 open scoped Topology
