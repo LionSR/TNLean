@@ -1568,6 +1568,33 @@ in `MPS/Preparation/` uses it.
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
 
+#### `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth (f : ℕ → ℝ) (φ : (N : ℕ) → EuclideanSpace ℂ (Fin N → Fin d)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Asymptotic.lean`.
+- **Meaning:** there are unit vectors `ψ_N`, each prepared for all large `N`
+  with `IsPreparedWithMeasurementsAndCircuitInDepth T (ψ_N)` for some
+  `T ≤ f N`, with `‖|ψ_N⟩⟨ψ_N| - |φ_N⟩⟨φ_N|‖₁ → 0`.
+- **Source:** arXiv:2103.13367, paragraph "Phases of matter": `Ψ ↦ Φ` when
+  compositions of `k` channels of `QCcc` of depth `f(M)` map `|ψ_M⟩` to states
+  `σ_M` with `‖σ_M - |φ_M⟩⟨φ_M|‖₁ → 0`.
+- **Sanctioned bridges:**
+  `QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le`
+  (overlap errors `1 - |⟨ψ_N|φ_N⟩|` tending to zero give trace-norm
+  convergence, via `Matrix.traceNormPureSub_le`) and
+  `MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState`
+  (the normalized periodic states of a translation-invariant MPS in depth
+  `C log N`).
+- **Caveat:** the predicate is the relation `Ψ ↦ Φ` of the source only for
+  `Ψ` the trivial sequence of product states, `k = 2` (a preparation with
+  measurements, then a circuit), and `σ_M = |ψ_M⟩⟨ψ_M|` pure and prepared
+  deterministically. The depth `f` is arbitrary; agreement with the source's
+  relation requires `f` polylogarithmic. It is one direction only: the
+  source's equivalence of phases asks for `Ψ ↦ Φ` and `Φ ↦ Ψ`, and the
+  converse direction, with channels acting on arbitrary input states, is not
+  covered (`docs/paper-gaps/psc21_mps_classification_scope.tex`).
+
 #### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
