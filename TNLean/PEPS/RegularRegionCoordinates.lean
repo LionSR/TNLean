@@ -19,6 +19,11 @@ coordinate on each edge outside the tree.
 
 These are bijections of basis labels. No factorization of a contracted tensor,
 region isometry, or entropy formula is assumed.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

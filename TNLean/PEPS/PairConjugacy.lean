@@ -23,6 +23,11 @@ action. Commutation is constant on each orbit. For an abelian group, every orbit
 is a singleton, so the number of commuting pair-conjugacy classes is `|G|²`.
 These assertions concern the group elements labelling closures; they do not assert
 the ground-space theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

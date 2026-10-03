@@ -30,6 +30,11 @@ space remains separate. See
 Rectangular tori, including size-one dimensions, are algebraic extensions of the overlap
 calculation. These statements do not extend the source's \(2\times2\) parent-Hamiltonian
 construction to such dimensions.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

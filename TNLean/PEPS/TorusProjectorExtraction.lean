@@ -21,6 +21,11 @@ No unitarity of the virtual representation is required.
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, proof of Theorem 5.9,
 `Papers/1001.3807/paper_v3.tex`, lines 1582–1621, and Lemma 4.6,
 lines 1015–1029. The contraction is the actual oriented torus bond network.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Kronecker

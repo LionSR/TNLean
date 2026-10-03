@@ -22,6 +22,11 @@ step for the complement argument of SCP10, Theorem 6.9, lines 1935–1990.
 The existence of the supplied exterior path from a disk hypothesis remains a
 separate theorem; no disk, flatness, or boundary-word relation is assumed here.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 noncomputable section

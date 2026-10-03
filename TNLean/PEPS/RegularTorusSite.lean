@@ -21,6 +21,11 @@ follow in these coordinates. Source: Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, Definition 6.1 (`Papers/1001.3807/paper_v3.tex`, lines 1692–1700)
 and Observation `obs:iso:accessible-virt`, lines 1770–1810. The positive scalar
 convention is recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap Representation Matrix

@@ -17,6 +17,11 @@ Their positive local Gram factors cancel in the normalized reduced density.
 Source: SCP10, arXiv:1001.3807, accessible virtual coordinates and the proof of
 Theorem 6.9, local source lines 1765–1820 and 1935–1990. These are algebraic
 transfer identities; no exterior routing or entropy conclusion is assumed.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix
