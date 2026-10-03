@@ -26,11 +26,16 @@ can also be chosen continuously. Its one-dimensional fixed space follows
 from injectivity and unitality; it is not an additional hypothesis.
 
 The proof uses compactness of the density matrices and uniqueness of the
-normalized positive Perron eigenvector (Wolf, Theorem 6.3). The continuous
-selection and normalization are conditional auxiliary ingredients for SPC11,
-arXiv:1010.3732, Section II.F.2. A continuous fixed-dimensional tensor family is
-supplied; no reconstruction from finite-ring ground states or physical gaps
-is asserted here. Generic positive-map arguments remain private.
+normalized positive Perron eigenvector (Wolf, Theorem 6.3). Generic
+positive-map arguments remain private.
+
+**Scope restriction (supplied continuous tensor family):** SPC11,
+arXiv:1010.3732, Section II.F.2, interpolates along a gapped path of physical
+states. Every declaration here instead takes a continuous fixed-dimensional
+tensor family as a hypothesis and proves only its local continuous Perron and
+canonical normalization; reconstruction of such a family from finite-ring
+ground states or a uniform physical gap is not asserted. Documented in
+`docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
 set_option relaxedAutoImplicit false
