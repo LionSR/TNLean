@@ -121,9 +121,9 @@ def cutIntervalSlice {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def cutIntervalMatrix {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     {j k : ℕ} (hjk : j ≤ k) (w : CutIntervalConfig d N j k) :
-    Matrix (Fin (cutRank ψ j)) (Fin (cutRank ψ k)) ℂ :=
+    Matrix (Fin (cutCoefficientRank ψ j)) (Fin (cutCoefficientRank ψ k)) ℂ :=
   LinearMap.toMatrix (B k) (B j) (cutIntervalSlice ψ hjk w)
 
 /-- The longer prefix factor is the shorter prefix factor multiplied
@@ -131,15 +131,15 @@ by the constructed interval matrix.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutPrefixMatrix_interval {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     {j k : ℕ} (hjk : j ≤ k) (u : CutPrefixConfig d N j)
-    (w : CutIntervalConfig d N j k) (q : Fin (cutRank ψ k)) :
+    (w : CutIntervalConfig d N j k) (q : Fin (cutCoefficientRank ψ k)) :
     cutPrefixMatrix ψ B k (joinCutPrefix j k u w) q =
       (cutPrefixMatrix ψ B j * cutIntervalMatrix ψ B hjk w) u q := by
   classical
   let E : cutColumnSpace ψ j →ₗ[ℂ] ℂ :=
     (LinearMap.proj (R := ℂ) u).comp (cutColumnSpace ψ j).subtype
-  have h := congrArg (fun M : Matrix (Fin 1) (Fin (cutRank ψ k)) ℂ ↦ M 0 q)
+  have h := congrArg (fun M : Matrix (Fin 1) (Fin (cutCoefficientRank ψ k)) ℂ ↦ M 0 q)
     (LinearMap.toMatrix_comp (B k) (B j) (Module.Basis.singleton (Fin 1) ℂ)
       E (cutIntervalSlice ψ hjk w))
   simp only [LinearMap.toMatrix_apply, Module.Basis.singleton_repr, Matrix.mul_apply] at h
@@ -170,7 +170,7 @@ multiplied by the longer-cut suffix factor.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutSuffixMatrix_interval {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     {j k : ℕ} (hjk : j ≤ k) (w : CutIntervalConfig d N j k)
     (v : CutSuffixConfig d N k) :
     (cutSuffixMatrix ψ B j).col (joinCutSuffix j k w v) =
@@ -221,7 +221,7 @@ an intermediate cut.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutIntervalMatrix_comp {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     {j k l : ℕ} (hjk : j ≤ k) (hkl : k ≤ l)
     (w : CutIntervalConfig d N j k) (z : CutIntervalConfig d N k l) :
     cutIntervalMatrix ψ B (hjk.trans hkl) (joinCutInterval j k l w z) =
@@ -235,7 +235,7 @@ the site matrix of the minimal open-boundary chain.
 Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem cutIntervalMatrix_adjacent {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ)
-    (B : ∀ k, Module.Basis (Fin (cutRank ψ k)) ℂ (cutColumnSpace ψ k))
+    (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (j : ℕ) (i : Fin d) :
     cutIntervalMatrix ψ B (Nat.le_succ j) (fun _ ↦ i) = cutSiteMatrix ψ B j i := by
   have h : cutIntervalSlice ψ (Nat.le_succ j) (fun _ ↦ i) = cutSlice ψ j i := by

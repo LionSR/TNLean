@@ -1368,7 +1368,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Physical cut spaces]
     \label{def:mpu_minimal_physical_cut_spaces}
-    \lean{MPSPreparation.cutCoefficientMatrix, MPSPreparation.CutPrefixConfig, MPSPreparation.CutSuffixConfig, MPSPreparation.extendCutPrefix, MPSPreparation.extendCutSuffix, MPSPreparation.cutPrefixRestriction, MPSPreparation.cutSuffixRestriction, MPSPreparation.cutColumnSpace, MPSPreparation.cutSliceLinearMap, MPSPreparation.cutSlice, MPSPreparation.fullCutVector}
+    \lean{MPSPreparation.cutCoefficientMatrix, MPSPreparation.CutPrefixConfig, MPSPreparation.CutSuffixConfig, MPSPreparation.extendCutPrefix, MPSPreparation.extendCutSuffix, MPSPreparation.cutPrefixRestriction, MPSPreparation.cutSuffixRestriction, MPSPreparation.cutColumnSpace, MPSPreparation.cutCoefficientRank, MPSPreparation.cutSliceLinearMap, MPSPreparation.cutSlice, MPSPreparation.fullCutVector}
     \leanok
     For a coefficient tensor $\psi$ on a finite chain, let $C_k$ be
     its coefficient matrix with rows indexed by configurations before
@@ -1382,7 +1382,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Slicing and ranks of physical cuts]
     \label{thm:mpu_minimal_physical_cut_spaces}
-    \lean{MPSPreparation.cutCoefficientMatrix_adjacent, MPSPreparation.cutCoefficientMatrix_restrictions, MPSPreparation.extendCutPrefix_restriction, MPSPreparation.finrank_cutColumnSpace, MPSPreparation.cutSliceLinearMap_maps_columnSpace, MPSPreparation.cutSlice_apply_restriction, MPSPreparation.card_cutPrefixConfig_zero, MPSPreparation.card_cutSuffixConfig_last, MPSPreparation.cutRank_zero, MPSPreparation.cutRank_last, MPSPreparation.cutColumnSpace_zero_eq_top, MPSPreparation.cutCoefficientMatrix_last, MPSPreparation.fullCutVector_mem, MPSPreparation.fullCutVector_restriction, MPSPreparation.fullCutVector_ne_zero}
+    \lean{MPSPreparation.cutCoefficientMatrix_adjacent, MPSPreparation.cutCoefficientMatrix_restrictions, MPSPreparation.extendCutPrefix_restriction, MPSPreparation.finrank_cutColumnSpace, MPSPreparation.cutSliceLinearMap_maps_columnSpace, MPSPreparation.cutSlice_apply_restriction, MPSPreparation.cutCoefficientRank_pos, MPSPreparation.card_cutPrefixConfig_zero, MPSPreparation.card_cutSuffixConfig_last, MPSPreparation.cutCoefficientRank_zero, MPSPreparation.cutCoefficientRank_last, MPSPreparation.cutColumnSpace_zero_eq_top, MPSPreparation.cutCoefficientMatrix_last, MPSPreparation.fullCutVector_mem, MPSPreparation.fullCutVector_restriction, MPSPreparation.fullCutVector_ne_zero}
     \leanok
     \uses{def:mpu_minimal_physical_cut_spaces}
     Adjoining a letter on the prefix or suffix side gives the same
@@ -1437,7 +1437,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{theorem}[Existence of a minimal finite-chain representation]
     \label{thm:mpu_minimal_finite_chain_representation}
-    \lean{MPSPreparation.exists_obcChainTensor_coeff_eq_bondDim_eq_cutRank}
+    \lean{MPSPreparation.exists_obcChainTensor_coeff_eq_bondDim_eq_cutCoefficientRank}
     \leanok
     \uses{thm:mpu_minimal_cut_coordinate_reconstruction}
     Every nonzero coefficient tensor on $N\geq1$ sites whose
@@ -2309,7 +2309,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_interval_register_support}
 
 
-    For adjacent nonempty child intervals $[j,m)$ and $[m,k)$,
+    For adjacent nonempty child intervals $\lbrack j,m)$ and $\lbrack m,k)$,
     their logical supports are disjoint. Their union together with
     the two amplification flags at $m$ is exactly the parent support.
     Operators supported on the two child intervals commute.
@@ -2806,7 +2806,7 @@ remain separate assertions.
 
 
     Split the physical configuration of an interval $[j,k)$ into
-    its two consecutive restrictions to $[j,m)$ and $[m,k)$.
+    its two consecutive restrictions to $\lbrack j,m)$ and $\lbrack m,k)$.
 \end{definition}
 
 \begin{theorem}[The computed joining parent is the actual MPU interval]
