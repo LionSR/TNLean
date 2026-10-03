@@ -2288,8 +2288,8 @@ operators.
     The identity $A_vU_g=A_v$ gives coefficient invariance.
 \end{proof}
 
-\begin{lemma}[Expansion of the Gram matrix of a region]%
-    \label{lem:peps_open_region_gram_expansion}
+\begin{theorem}[Expansion of the Gram matrix of a region]%
+    \label{thm:peps_open_region_gram_expansion}
     \lean{TNLean.PEPS.sum_star_regionIncidentWeight_mul,
         TNLean.PEPS.openRegionCoefficientMatrix_gram_apply,
         TNLean.PEPS.regularOpenRegionMatrix_gram_apply,
@@ -2306,15 +2306,15 @@ operators.
         \overline{a_v(\eta|_{E_v};s)}a_v(\theta|_{E_v};s).
     \end{align}
     This identity requires no isometry assumption.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Expand both copies of the region tensor. Interchange the finite
     sums, and distribute the independent physical sums over the
     vertices. Each factor is the corresponding site Gram kernel.
 \end{proof}
 
-\begin{lemma}[Synchronization of group labels in a connected region]%
-    \label{lem:peps_region_group_synchronization}
+\begin{theorem}[Synchronization of group labels in a connected region]%
+    \label{thm:peps_region_group_synchronization}
     \lean{TNLean.PEPS.regionLabels_eq_of_internalEdge_eq,
         TNLean.PEPS.regionLabels_constant_iff_internalEdge_eq,
         TNLean.PEPS.IsRegionLabelCompatible,
@@ -2330,7 +2330,7 @@ operators.
     $q_v=g$ at every vertex and $\eta=g\theta$, for one $g\in G$.
     Thus the sum over compatible vertex translations reduces to
     the sum over simultaneous translations.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     For an internal edge with endpoints $u,v$, the two equations give
     $q_u\theta_e=q_v\theta_e$, hence $q_u=q_v$.
@@ -2339,8 +2339,8 @@ operators.
     Nonemptiness makes the assignment $g\mapsto(q_v=g)$ injective.
 \end{proof}
 
-\begin{lemma}[Counting free internal regular bonds]%
-    \label{lem:peps_region_internal_bond_count}
+\begin{theorem}[Counting free internal regular bonds]%
+    \label{thm:peps_region_internal_bond_count}
     \lean{TNLean.PEPS.sum_boundaryRestriction_eq_card,
         TNLean.PEPS.sum_translated_boundaryRestriction_eq_card,
         TNLean.PEPS.sum_boundaryRestriction_translations_eq_card,
@@ -2353,7 +2353,7 @@ operators.
     $\eta=g\theta$ and these prescribed boundary values number
     $|G|^{I_R}$ if $\mu=g\nu$, and zero otherwise, where $I_R$ is
     the number of edges with both endpoints in $R$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The second configuration has one free label on each internal
     edge, and fixes the first configuration by translation.
@@ -2368,9 +2368,9 @@ operators.
         TNLean.PEPS.regularRegionGramScalar,
         TNLean.PEPS.regularOpenRegionMatrix_gram_of_connected}
     \leanok
-    \uses{thm:peps_regular_site_gram, lem:peps_open_region_gram_expansion,
-        lem:peps_region_group_synchronization,
-        lem:peps_region_internal_bond_count}
+    \uses{thm:peps_regular_site_gram, thm:peps_open_region_gram_expansion,
+        thm:peps_region_group_synchronization,
+        thm:peps_region_internal_bond_count}
     Let $R$ induce a nonempty connected graph, with $V_R$ vertices
     and $I_R$ internal edges. Suppose the local Gram kernels are
     $A_v^\dagger A_v=c_vP_v$. For unnormalized regular bonds and
@@ -2943,8 +2943,8 @@ operators.
     than its endpoints alone.
 \end{definition}
 
-\begin{lemma}[Integer centers of the actual collar]%
-    \label{lem:peps_integer_exterior_collar_centers}
+\begin{theorem}[Integer centers of the actual collar]%
+    \label{thm:peps_integer_exterior_collar_centers}
     \lean{TNLean.PEPS.mem_integerClosedCell_iff,
         TNLean.PEPS.mem_integerClosedCell_add_of_abs_le_one,
         TNLean.PEPS.integerCellCenter_mem_closedCellUnion_iff,
@@ -2955,7 +2955,7 @@ operators.
     coordinate distances from $a$ are at most $1/2$. An integer center
     belongs to $P_A$ exactly when it belongs to $A$, and belongs to
     $E_A$ exactly when it belongs to the exterior band.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     A distinct integer center cannot be within $1/2$ in both coordinates.
     In the expanded cells the coordinate distances are at most $5/4$;
@@ -2970,7 +2970,7 @@ operators.
         TNLean.PEPS.joinedIn_integerExteriorCollar_of_reachable}
     \leanok
     \uses{def:peps_integer_exterior_collar_graph,
-        lem:peps_integer_exterior_collar_centers}
+        thm:peps_integer_exterior_collar_centers}
     Every edge of the safe exterior graph has its entire straight
     segment inside $E_A$. Hence any graph walk between two band centers
     gives a genuine continuous path between them contained in $E_A$.
@@ -4086,7 +4086,7 @@ operators.
         TNLean.PEPS.fixedBoundaryFactorDensity_submatrix_properties,
         TNLean.PEPS.normalized_reducedMatrix_eq_of_scalar}
     \leanok
-    \uses{def:peps_fixed_boundary_factor_density, lem:peps_flat_density_entropy}
+    \uses{def:peps_fixed_boundary_factor_density, thm:peps_flat_density_entropy}
     If $\|\phi\|=1$, then $J_\phi$ is an isometry and $\rho_\phi$ is
     a positive density of trace one and rank $|D|$, satisfying
     $\rho_\phi^2=|D|^{-1}\rho_\phi$. Moreover,
@@ -4481,7 +4481,7 @@ operators.
         TNLean.PEPS.vonNeumannEntropy_normalizedPhysicalImageDensity}
     \leanok
     \uses{thm:peps_regular_physical_cut_transfer,
-        lem:peps_flat_density_entropy}
+        thm:peps_flat_density_entropy}
     Let $\rho\geq0$ have trace one, and suppose a rectangular physical map
     $T$ and a positive scalar $c$ satisfy $T^\dagger T\rho=c\rho$.
     Define $\widehat\rho=c^{-1}T\rho T^\dagger$. Then
@@ -4766,8 +4766,8 @@ operators.
     from $P^2=P$ and from $P$ being the identity on invariant vectors.
 \end{proof}
 
-\begin{lemma}[Entropy of a flat density operator]%
-    \label{lem:peps_flat_density_entropy}
+\begin{theorem}[Entropy of a flat density operator]%
+    \label{thm:peps_flat_density_entropy}
     \lean{Matrix.IsHermitian.eigenvalues_eq_zero_or_inv_of_mul_self_eq_inv_smul,
         vonNeumannEntropy_of_mul_self_eq_inv_smul}
     \leanok
@@ -4775,7 +4775,7 @@ operators.
     trace one. If $\rho^2=r^{-1}\rho$ for a positive real number $r$, then
     $S(\rho)=\log r$. This is the spectral step used in the proof of
     \cite[Theorem~6.9]{Schuch2010PEPS}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     For each eigenvalue $\lambda$, the identity gives
     $\lambda(\lambda-r^{-1})=0$. In either case
@@ -4802,7 +4802,7 @@ operators.
         renyiEntropy_of_mul_self_eq_inv_smul,
         renyiEntropy_of_mul_self_eq_inv_smul_of_rank}
     \leanok
-    \uses{def:peps_renyi_entropy, lem:peps_flat_density_entropy}
+    \uses{def:peps_renyi_entropy, thm:peps_flat_density_entropy}
     Let $\rho\geq0$ have trace one and satisfy $\rho^2=r^{-1}\rho$, with
     $r>0$. For every $\alpha>0$,
     $\operatorname{tr}(\rho^\alpha)=r^{1-\alpha}$ and
@@ -4822,7 +4822,7 @@ operators.
         TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity_eq_mul_log,
         TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity_eq_boundaryLength}
     \leanok
-    \uses{thm:peps_regular_boundary_density, lem:peps_flat_density_entropy}
+    \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
     For $b=n+1$ regular boundary legs, the normalized virtual reduced
     density operator has von Neumann entropy
     \begin{align}
@@ -4861,7 +4861,7 @@ operators.
         TNLean.PEPS.spectrum_physicalRegularBoundaryDensity_subset,
         TNLean.PEPS.vonNeumannEntropy_physicalRegularBoundaryDensity}
     \leanok
-    \uses{thm:peps_regular_boundary_density, lem:peps_flat_density_entropy}
+    \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
     Let $A:\mathbb C[G^b]\to\mathcal H_A$ and
     $B:\mathbb C[G^b]\to\mathcal H_B$ satisfy $A^\dagger A=B^\dagger B=P$.
     Applying $A\otimes B$ to the normalized virtual boundary vector gives
@@ -4887,7 +4887,7 @@ operators.
     $\operatorname{ran}P$, and is therefore injective there; its image
     is $\operatorname{ran}Q$, of dimension $r$. The trace and spectrum
     follow from the projection property, and
-    Lemma~\ref{lem:peps_flat_density_entropy} gives the entropy.
+    Lemma~\ref{thm:peps_flat_density_entropy} gives the entropy.
 \end{proof}
 
 \begin{theorem}[Normalization of specified physical cut maps]%
@@ -5213,8 +5213,8 @@ operators.
     $\langle Au,Av\rangle=c\langle\Pi u,\Pi v\rangle$.
 \end{proof}
 
-\begin{lemma}[Expansion of a torus overlap]%
-    \label{lem:peps_torus_overlap_expansion}
+\begin{theorem}[Expansion of a torus overlap]%
+    \label{thm:peps_torus_overlap_expansion}
     \lean{TNLean.PEPS.sum_star_weightedSiteProduct_mul,
         TNLean.PEPS.torusBondSiteLabels,
         TNLean.PEPS.torusBondWeight,
@@ -5237,7 +5237,7 @@ operators.
     \end{align}
     For permutation bonds, the head label is the permutation of the
     tail label. Hence one free label per bond suffices in each network.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Expand both contractions, interchange the finite sums, and sum each
@@ -5245,8 +5245,8 @@ operators.
     exactly when its row is the image of its column.
 \end{proof}
 
-\begin{lemma}[Counting compatible regular bonds]%
-    \label{lem:peps_regular_bond_intertwining_count}
+\begin{theorem}[Counting compatible regular bonds]%
+    \label{thm:peps_regular_bond_intertwining_count}
     \lean{TNLean.PEPS.regularBond_labels_iff_intertwining,
         TNLean.PEPS.sum_regularBond_labels_eq_card,
         TNLean.PEPS.sum_two_regularBond_labels_eq_card,
@@ -5255,7 +5255,7 @@ operators.
         TNLean.PEPS.sum_torusRegularSiteLabels_translation_eq_card,
         TNLean.PEPS.sum_torusClosureSiteLabels_translation_eq_card}
     \leanok
-    \uses{lem:peps_torus_overlap_expansion}
+    \uses{thm:peps_torus_overlap_expansion}
     On a bond $e$ oriented from $s(e)$ to $t(e)$, let $u_e,w_e$ be
     the group elements in the two networks. Vertex translations $q_v$
     are compatible with this bond precisely when
@@ -5265,7 +5265,7 @@ operators.
     If the equations hold, each bond has one independent group label;
     otherwise there are no compatible labels. For the two bond families
     on a torus with $N$ sites, the count is $|G|^{2N}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The tail labels satisfy $\eta_e=q_{s(e)}\theta_e$. Substituting this
@@ -5285,7 +5285,7 @@ operators.
         TNLean.PEPS.sum_torusClosureCompatible_eq_sum_intertwiner}
     \leanok
     \uses{def:peps_torus_g_closure,
-        lem:peps_regular_bond_intertwining_count}
+        thm:peps_regular_bond_intertwining_count}
     For closures $(g,h)$ and $(g',h')$, a compatible vertex translation
     is constant, $q_v=x$, and its value satisfies
     \begin{align}
@@ -5312,7 +5312,7 @@ operators.
         TNLean.PEPS.IsGIsometric.exists_torusGClosure_overlap}
     \leanok
     \uses{thm:peps_torus_regular_site_gram, thm:peps_finite_indicator_sum,
-        lem:peps_torus_overlap_expansion,
+        thm:peps_torus_overlap_expansion,
         lem:peps_torus_closure_compatibility}
     Let $A_v^\dagger A_v=c_v\Pi_v$ be the local regular isometry identities
     on a torus with $N$ sites, with $c_v>0$. For the actual closure vectors,
@@ -5462,8 +5462,8 @@ operators.
     Input and output physical dimensions may differ.
 \end{definition}
 
-\begin{lemma}[Physical maps commute with torus contraction]%
-    \label{lem:peps_torus_physical_map_contraction}
+\begin{theorem}[Physical maps commute with torus contraction]%
+    \label{thm:peps_torus_physical_map_contraction}
     \lean{TNLean.PEPS.siteMap_physicalMapSite,
         TNLean.PEPS.torusPhysicalMap_torusBondNetwork,
         TNLean.PEPS.torusPhysicalMap_torusGClosure}
@@ -5478,7 +5478,7 @@ operators.
     The identity holds for arbitrary torus bond operators, with no
     invariance or injectivity hypothesis. It is the physical inverse
     operation used in \cite[Theorem~5.9]{Schuch2010PEPS}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Expand the physical product map and the actual virtual contraction.
@@ -5714,7 +5714,7 @@ operators.
     \leanok
     \uses{def:peps_regular_averaging_site,
         thm:peps_g_injective_left_inverse,
-        lem:peps_torus_physical_map_contraction}
+        thm:peps_torus_physical_map_contraction}
     Let $A$ be $G$-injective for any finite virtual representation $U$
     and write $T=\mathcal P(A)$. There is a local rectangular matrix
     $L$ with $LT=\Pi$ such that, for every closure pair,
@@ -5735,11 +5735,11 @@ operators.
 \begin{proof}\leanok
     \uses{thm:peps_site_coefficients_composition,
         thm:peps_g_injective_left_inverse,
-        lem:peps_torus_physical_map_contraction}
+        thm:peps_torus_physical_map_contraction}
     The local inverse and virtual invariance give $LT=\Pi$ and
     $T\Pi=T$. By Theorem~\ref{thm:peps_site_coefficients_composition},
     these are coefficient identities. Apply
-    Lemma~\ref{lem:peps_torus_physical_map_contraction} at every
+    Lemma~\ref{thm:peps_torus_physical_map_contraction} at every
     physical site in both directions. No inverse on the entire
     physical space is required.
 \end{proof}
@@ -5925,8 +5925,8 @@ operators.
     averages gives the displayed finite-sum formula for $B_R^u$.
 \end{proof}
 
-\begin{lemma}[Expansion of a twisted-region cross Gram matrix]%
-    \label{lem:peps_regular_twisted_gram_expansion}
+\begin{theorem}[Expansion of a twisted-region cross Gram matrix]%
+    \label{thm:peps_regular_twisted_gram_expansion}
     \lean{TNLean.PEPS.regularOpenRegionMatrix_apply_group,
         TNLean.PEPS.regularOpenRegionMatrix_crossGram_apply_group,
         TNLean.PEPS.prod_twistedSiteGram_eq_sum_compatible,
@@ -5943,7 +5943,7 @@ operators.
     \end{align}
     The prescribed crossing configurations are retained, and the scalar
     from the local averages is $(\prod_{v\in R}c_v)|G|^{-|R|}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Expand both genuine open contractions and sum the physical indices
@@ -5962,7 +5962,7 @@ operators.
         TNLean.PEPS.isTwistedRegionLabelCompatible_iff_exists_translation,
         TNLean.PEPS.sum_twistedRegionLabelCompatible_eq_sum_translation}
     \leanok
-    \uses{lem:peps_regular_twisted_gram_expansion}
+    \uses{thm:peps_regular_twisted_gram_expansion}
     Suppose the region has a connected spanning subgraph on whose bonds
     both assignments $u,w$ are the identity. Suppose also that both are
     the identity on crossing bonds. Then compatibility is equivalent to
@@ -5983,8 +5983,8 @@ operators.
     give the common translation of every crossing label.
 \end{proof}
 
-\begin{lemma}[Counting with a restricted common translation]%
-    \label{lem:peps_regular_twisted_boundary_count}
+\begin{theorem}[Counting with a restricted common translation]%
+    \label{thm:peps_regular_twisted_boundary_count}
     \lean{TNLean.PEPS.regionBoundaryLabel_eq_iff,
         TNLean.PEPS.sum_boundaryRestriction_filtered_translations_eq_card,
         TNLean.PEPS.sum_regionBoundary_filtered_translations_eq_card}
@@ -5996,7 +5996,7 @@ operators.
     \begin{align}
         |G|^{I_R}\sum_{x\in F}\mathbf{1}_{\mu=x\nu}.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     For fixed $x$, the second assignment determines the first. Its crossing
@@ -6035,7 +6035,7 @@ operators.
         TNLean.PEPS.regularTwistedOpenRegionMatrix_projected_crossGram_of_connected}
     \leanok
     \uses{lem:peps_regular_twisted_synchronization,
-        lem:peps_regular_twisted_boundary_count,
+        thm:peps_regular_twisted_boundary_count,
         lem:peps_regular_weighted_boundary_translation}
     Under the hypotheses of
     Lemma~\ref{lem:peps_regular_twisted_synchronization}, put
@@ -6169,8 +6169,8 @@ operators.
 
 \input{chapter/ch24_peps_regular_ginjective_simply_connected_entropy}
 
-\begin{lemma}[Connectivity of rectangles and their complements]%
-    \label{lem:peps_torus_rectangle_cut_connectivity}
+\begin{theorem}[Connectivity of rectangles and their complements]%
+    \label{thm:peps_torus_rectangle_cut_connectivity}
     \lean{TNLean.PEPS.torusNonseamGraph_compl_rectangle_connected,
         TNLean.PEPS.torusGraph_compl_rectangle_connected,
         TNLean.PEPS.torusNonseamGraph_rectangle_connected,
@@ -6185,7 +6185,7 @@ operators.
     assertion also holds for coordinate intervals clipped by the bounds
     of the grid. A nonempty bounded rectangle starting at a positive
     horizontal coordinate has a crossing bond on its left side.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Inside the rectangle, change the two coordinates consecutively.
@@ -6199,20 +6199,20 @@ operators.
 
 \input{chapter/ch24_peps_stripe_local_equivalence}
 
-\begin{lemma}[Closure seams avoid a strictly interior rectangle]%
-    \label{lem:peps_torus_interior_rectangle_seam_exclusion}
+\begin{theorem}[Closure seams avoid a strictly interior rectangle]%
+    \label{thm:peps_torus_interior_rectangle_seam_exclusion}
     \lean{TNLean.PEPS.torusNonseamGraph_not_horizontal_wrap,
         TNLean.PEPS.torusNonseamGraph_not_vertical_wrap,
         TNLean.PEPS.torusRightEdge_not_incident_rectangle_of_wrap,
         TNLean.PEPS.torusUpEdge_not_incident_rectangle_of_wrap}
     \leanok
     \uses{def:peps_torus_rectangular_grid,
-        lem:peps_torus_rectangle_cut_connectivity}
+        thm:peps_torus_rectangle_cut_connectivity}
     Suppose both circumferences are at least three. Wrap bonds are absent
     from the ordinary rectangular grid. If a rectangle lies strictly
     between the first and last coordinate values in both directions,
     no wrap bond is incident to it.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     A wrap bond has coordinate values $0$ and $w-1$, or $0$ and $\ell-1$.
@@ -6282,7 +6282,7 @@ operators.
         TNLean.PEPS.torusClosureEdgeAssignment_eq_one_on_rectangle_incident}
     \leanok
     \uses{thm:peps_regular_torus_closure_cut_identification,
-        lem:peps_torus_interior_rectangle_seam_exclusion}
+        thm:peps_torus_interior_rectangle_seam_exclusion}
     Suppose both torus dimensions are at least three. A tensor which is
     $G$-isometric for the four-leg regular action remains $G$-isometric
     when its virtual coordinates are indexed by incident graph edges.
@@ -6304,7 +6304,7 @@ operators.
         TNLean.PEPS.exists_normalization_torusClosureSuperpositionCut_rectangle}
     \leanok
     \uses{thm:peps_regular_twisted_cut_entropy,
-        lem:peps_torus_rectangle_cut_connectivity,
+        thm:peps_torus_rectangle_cut_connectivity,
         lem:peps_regular_torus_incident_isometry}
     Let $A$ be regular $G$-isometric on a torus of width and height at
     least three. Let $R$ be a coordinate rectangle of positive side
