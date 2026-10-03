@@ -22,6 +22,11 @@ Source: Schuch, Cirac, Pérez-García, arXiv:1001.3807, Theorem 5.9,
 These are auxiliary operator statements. No identification with physical torus vectors
 or with a parent-Hamiltonian ground space is asserted. The operator independence also
 holds for noncommuting pairs.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators TensorProduct Kronecker

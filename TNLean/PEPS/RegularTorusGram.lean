@@ -22,6 +22,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, equation
 and the pair-conjugacy argument in lines 1560–1580. These contraction identities
 do not assume that either closure pair commutes. Parent-Hamiltonian membership
 is a separate assertion.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix
