@@ -20,6 +20,11 @@ the proof of Theorem 6.9, local source lines 1935–1990.
 complement. They need not stay within the exterior collar whose projection
 avoids all torus period copies; that contour argument remains separate.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS
@@ -132,8 +137,8 @@ private theorem connected_of_infinite_components
   exact hv'.trans ((outside_integer_box_reachable A N hA v' w' hvout hwout).trans hw'.symm)
 
 /-- The missing-cell four-neighbor graph of a simply connected finite integer
-closed-cell region is connected. Source: SCP10, proof of Theorem 6.9,
-lines 1935–1990; auxiliary plane-complement geometry. -/
+closed-cell region is connected. Locally proved auxiliary plane-complement geometry for the block
+setting of SCP10, proof of Theorem 6.9, lines 1935–1990; the source states no such lemma. -/
 theorem integerCellComplement_connected_of_isSimplyConnected
     (A : Finset (ℤ × ℤ)) (hSC : IsSimplyConnected (integerClosedCellUnion A)) :
     ((SimpleGraph.addCayley {(1, 0), (0, 1)}).induce {a : ℤ × ℤ | a ∉ A}).Connected := by
@@ -142,8 +147,8 @@ theorem integerCellComplement_connected_of_isSimplyConnected
 
 /-- A simply connected actual torus cell region admits integer coordinates
 whose entire plane missing-cell graph is connected. The walks are not yet
-restricted to the exterior collar. Source: SCP10, Theorem 6.9,
-lines 1935–1990; auxiliary exterior geometry. -/
+restricted to the exterior collar. Locally proved auxiliary exterior geometry for the block setting
+of SCP10, Theorem 6.9, lines 1935–1990; the source states no such lemma. -/
 theorem exists_integerLift_integerCellComplement_connected_of_isSimplyConnected
     {width height : ℕ} [NeZero width] [NeZero height]
     (R : Finset (TorusVertex width height))
