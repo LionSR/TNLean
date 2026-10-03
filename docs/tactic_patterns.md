@@ -2494,6 +2494,23 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** three occurrences in one file; below the two-file promotion
   threshold. The following projection algebra differs between the proofs.
 
+### contracting a two-site bond penalty — candidate
+- **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
+  expand the two exterior identity factors, and contract their Kronecker
+  deltas before evaluating the remaining interior sum.
+- **Seen:** two occurrences across two files:
+  `BondProductEndpointGroundSpace.lean` in
+  `twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor`, and
+  `FixedPointParentIdentification.lean` in
+  `one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor`, both under
+  `TNLean/MPS/Symmetry/`.
+- **Abstraction:** if a third calculation needs this reduction, prove the
+  general coefficient formula for `(twoSiteBondInteraction K).mulVec f`, with
+  arbitrary bond matrix `K` and two-site vector `f`.
+- **Notes:** below the rule of three. The present calculation gives the
+  complementary projection explicitly and already identifies its range
+  without further coordinate expansion.
+
 ### adjoints of left polar identities — candidate (2026-10-02)
 
 - **Pattern:** Apply `congrArg Matrix.conjTranspose` to a matrix product
