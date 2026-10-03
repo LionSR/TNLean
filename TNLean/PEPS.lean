@@ -125,8 +125,10 @@ import TNLean.PEPS.RegularBondCounting
 import TNLean.PEPS.RegularBoundary
 import TNLean.PEPS.RegularBoundaryEntropy
 import TNLean.PEPS.RegularBoundaryGibbsSupport
+import TNLean.PEPS.RegularBoundaryLocalAlgebra
 import TNLean.PEPS.RegularBoundaryRoute
 import TNLean.PEPS.RegularBoundaryState
+import TNLean.PEPS.RegularBoundarySupportedGram
 import TNLean.PEPS.RegularBoundaryTransporter
 import TNLean.PEPS.RegularBoundaryUntwisting
 import TNLean.PEPS.RegularClosedGauge
@@ -145,6 +147,7 @@ import TNLean.PEPS.RegularPhysicalUnitaryTransport
 import TNLean.PEPS.RegularProjectorOpenRegion
 import TNLean.PEPS.RegularProjectorTwistedRegion
 import TNLean.PEPS.RegularReferenceBoundaryDensity
+import TNLean.PEPS.RegularRegionBoundaryHamiltonian
 import TNLean.PEPS.RegularRegionConnectivity
 import TNLean.PEPS.RegularRegionCoordinates
 import TNLean.PEPS.RegularRegionCounting
