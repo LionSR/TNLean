@@ -30,8 +30,8 @@ as `(ξ/4) log(T + 1)`, and combines it with the upper bound of the source's eq.
 
 **Local fix (constants of the closing inequality):** the source's closing chain contains two
 slips in its constants, neither of which affects the rate `4/ξ`: `(1 - δ)^{k/2} < 1/e` gives a
-trace distance above `1 - 1/e`, not above `√(3/4)`, and an undefined factor `γ` appears in
-`N/(5q) > Nγ/(10 ξ log N)`. The bound proved here is derived from the chapter's averaging
+trace distance above `1 - 1/e - o(1)`, not above `√(3/4)`, and an undefined factor `γ`
+appears in `N/(5q) > Nγ/(10 ξ log N)`. The bound proved here is derived from the chapter's averaging
 argument (`MPSTensor.exists_depth_lower_bound`), not from the source's chain, and carries the
 source's rate. Documented in `docs/paper-gaps/mswc24_depth_lower_bound_constant.tex`.
 -/

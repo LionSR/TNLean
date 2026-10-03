@@ -868,8 +868,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   constant `ξ/4`, which is implicit in the source's final inequality.
 - `mswc24_depth_lower_bound_constant.tex` is the resolved local-correction
   note for the constants of the closing inequality in the proof of Theorem 1:
-  `(1 - δ)^{k/2} < 1/e` gives a trace distance above `1 - 1/e`, not `√(3/4)`,
-  and the factor `γ` of the final chain is undefined. Neither affects the rate
+  `(1 - δ)^{k/2} < 1/e` gives a trace distance above `1 - 1/e - o(1)`, not
+  `√(3/4)`, and the factor `γ` of the final chain is undefined. Neither affects the rate
   `4/ξ`; the formal bound `(ξ/4) log N ≤ T + (ξ/4) log(T+1) + C` and the
   `Θ(log N)` depth at fixed error carry it.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation

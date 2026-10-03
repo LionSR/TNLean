@@ -2309,8 +2309,8 @@ $A$ along $w$.
 %% The source's proof of Theorem 1 (arXiv:2307.01696, Supplemental Material)
 %% ends with the chain k > N/(5q) > N gamma/(10 xi log N) > (18/c_1^2)
 %% e^{4T/xi} > 2/delta. Two of its constants slip: (1 - delta)^{k/2} < 1/e
-%% gives a trace distance above 1 - 1/e, not above sqrt(3/4), and gamma is
-%% undefined. Neither changes the rate 4/xi. The source's chain gives
+%% gives a trace distance above 1 - 1/e - o(1), not above sqrt(3/4), and
+%% gamma is undefined. Neither changes the rate 4/xi. The source's chain gives
 %% T >= (xi/4)(ln N - ln ln N) - C; the factor ln N comes from its block
 %% length q ~ ln N, as the factor T + 1 below comes from the window spacing.
 %% See docs/paper-gaps/mswc24_depth_lower_bound_constant.tex.
@@ -2364,7 +2364,8 @@ $A$ along $w$.
     \label{cor:ldp_depth_theta_log}
     \lean{MPSTensor.exists_depth_isTheta_log}
     \leanok
-    \uses{def:qc_local_circuit, def:correlation_length}
+    \uses{def:qc_local_circuit, def:correlation_length,
+        thm:ldp_depth_lower_bound}
     Let $A$ and $\xi$ be as in Theorem~\ref{thm:ldp_depth_lower_bound}, and
     fix $0<\varepsilon\le1/2$. There are $a>0$, $c$, $C$ and $N_0$ such that
     for every $N\ge N_0$:
