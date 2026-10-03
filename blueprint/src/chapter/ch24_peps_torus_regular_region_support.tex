@@ -1,0 +1,118 @@
+\begin{lemma}[Single-site geometry of the native torus]%
+    \label{lem:peps_torus_singleton_geometry}
+    \lean{TNLean.PEPS.torusIncidentLeg,
+        TNLean.PEPS.torusContiguousRectangle_one_eq_singleton,
+        TNLean.PEPS.torusGraph_compl_singleton_connected,
+        TNLean.PEPS.torusGraph_singleton_connected,
+        TNLean.PEPS.torusIncidentLeg_surjective,
+        TNLean.PEPS.torusIncidentLeg_injective,
+        TNLean.PEPS.torusIncidentLegEquiv,
+        TNLean.PEPS.card_regionBoundaryEdge_torus_singleton,
+        TNLean.PEPS.torusGraph_connected}
+    \leanok
+    \uses{def:peps_torus_geometry_translation,
+        lem:peps_torus_rectangle_cut_connectivity}
+    Suppose both periods of the native square torus are at least three.
+    The graph is connected. For every vertex $v$, the subgraphs
+    induced by $\{v\}$ and its complement are connected, and the
+    boundary of $\{v\}$ has exactly four bonds. The native top, right,
+    down, and left legs enumerate these incident bonds bijectively.
+    The regular virtual-space and period restrictions are recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    A singleton is the coordinate rectangle of side lengths one.
+    Its complement is connected by the unused row and column
+    construction. The same rectangular connectivity argument applied
+    to both full coordinate intervals gives connectivity of the torus.
+    The four native legs exhaust the incident bonds and are distinct:
+    horizontal and vertical bonds cannot agree, and opposite bonds
+    have different origins when the corresponding period exceeds two.
+    Every incident bond has just one endpoint at $v$, so these are
+    precisely the crossing bonds of the singleton.
+\end{proof}
+
+\begin{theorem}[Single-site physical support of a regular torus PEPS]%
+    \label{thm:peps_regular_torus_singleton_support}
+    \lean{TNLean.PEPS.torusSingletonBoundaryEquiv,
+        TNLean.PEPS.range_regionReducedDensity_torus_singleton_of_regular,
+        TNLean.PEPS.rank_regionReducedDensity_torus_singleton_of_regular,
+        TNLean.PEPS.stateCoeff_groupBondTensor_torus_ne_zero_of_regular,
+        TNLean.PEPS.card_group_cube_le_physicalDimension_regular_torus,
+        TNLean.PEPS.entropy_normalizedRegionReducedDensity_torus_singleton_of_regular}
+    \leanok
+    \uses{lem:peps_torus_singleton_geometry, def:peps_g_injective,
+        def:peps_normalized_region_reduced_density}
+    Let regular $G$-injective tensors of physical dimension $d$ be
+    placed at the vertices of the native square torus, with both
+    periods at least three. The tensors may vary with the vertex.
+    Their closed vector is nonzero. For every vertex $v$,
+    \[
+        \operatorname{ran}\rho_{\{v\}}=\mathcal G_{\{v\}},
+        \qquad
+        \operatorname{rank}\rho_{\{v\}}=|G|^3\leq d.
+    \]
+    The normalized density satisfies
+    \[
+        0\leq S(\widehat\rho_{\{v\}})\leq3\log|G|,
+        \qquad S_0(\widehat\rho_{\{v\}})=3\log|G|.
+    \]
+    No isometry or flat spectrum is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_support,
+        thm:peps_regular_region_dimension,
+        thm:peps_regular_region_entropy_bound,
+        lem:peps_torus_singleton_geometry}
+    Apply the connected regular-cut statements to the singleton and
+    its connected complement. Its four crossing bonds give three
+    relative boundary labels. The density acts on a $d$-dimensional
+    physical space, so its rank $|G|^3$ is at most $d$.
+\end{proof}
+
+\begin{theorem}[Local rigidity for equal regular torus states]%
+    \label{thm:peps_regular_torus_local_rigidity}
+    \lean{TNLean.PEPS.regionGroundSpace_torus_singleton_eq_of_sameState_regular,
+        TNLean.PEPS.card_group_eq_of_sameState_regular_torus}
+    \leanok
+    \uses{lem:peps_torus_singleton_geometry, def:peps_g_injective,
+        def:peps_region_ground_space}
+    On a native square torus with both periods at least three, two
+    regular $G$-injective descriptions of the same closed physical
+    vector have the same single-site ground spaces at every vertex.
+    If the two descriptions use regular representations of different
+    finite groups $G$ and $H$, the equality of their closed vectors
+    implies $|G|=|H|$. No assertion about the multiplication laws or
+    individual bond gauges follows from this rank argument.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_same_state_regular_region_spaces,
+        thm:peps_regular_group_order_rigidity,
+        lem:peps_torus_singleton_geometry}
+    Equal closed vectors give equal reduced densities. Their ranges
+    recover the local ground spaces. The common single-site density
+    has rank both $|G|^3$ and $|H|^3$, so the group orders agree.
+\end{proof}
+
+\begin{theorem}[Physical support of a bounded regular torus rectangle]%
+    \label{thm:peps_regular_torus_rectangle_support}
+    \lean{TNLean.PEPS.range_regionReducedDensity_torus_rectangle_of_regular}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_region_ground_space,
+        def:peps_region_reduced_density}
+    Consider regular $G$-injective tensors on a native square torus
+    with periods at least three. Let $R$ be a coordinate rectangle
+    of positive side lengths, bounded by the coordinate intervals,
+    with each side length strictly smaller than the corresponding
+    torus period. Then $\operatorname{ran}\rho_R=\mathcal G_R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_support}
+    The rectangle is connected, and its complement is connected by
+    paths along an unused row and an unused column. The torus is
+    connected, so the exact support theorem applies.
+\end{proof}
