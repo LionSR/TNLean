@@ -1,0 +1,362 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Joint polynomial approximation of MPUs with support at most two}
+\author{TNLean contributors}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+A fixed physical-entry alphabet gives exact joint polynomial
+circuits by recovering discrete coefficient labels
+\cite{fixed-alphabet}. For support
+at most two per row and column, one can remove that alphabet
+assumption and obtain arbitrary operator-norm accuracy with
+exact auxiliary erasure. Orthogonality restricts the support to
+singleton and two-dimensional unitary blocks. A common rounded
+edge predicate gives consistent component addresses; exact
+unitary approximations inside those components preserve the
+address subspace and permit complete auxiliary erasure.
+The finite-precision Choi contractions used below follow
+\nolinkurl{docs/audits/2026-10-03_mpu_joint_polynomial_permutations.tex}.
+These new results are mathematical proofs and are not asserted
+to be formalized in Lean.
+
+\section{Joint polynomial approximation with exact erasure at support two}
+
+Fix the local dimension $d\ge2$.
+The sparsity assumption below is on the rows and columns of the
+full physical unitary in the computational basis, not on its
+local MPO tensors.
+Gates are arbitrary one- and two-qudit unitaries.
+
+\begin{theorem}
+Let $U$ be a unitary on $N\ge1$ $d$-dimensional sites, with at
+most two nonzero entries in every row and every column, and with
+operator Schmidt ranks at most $D\ge1$ across consecutive cuts.
+For every $0<\varepsilon<1$ there is a circuit $C$ and a unitary
+$\widetilde U$ such that
+\[
+ CJ=J\widetilde U,\qquad
+ \|\widetilde U-U\|_{\rm op}\le\varepsilon,
+\]
+where $J$ initializes every auxiliary register at zero.
+The gate count and auxiliary space are polynomial jointly in
+$N,D,\log(1/\varepsilon)$, including after routing to adjacent
+two-qudit gates on a line. Auxiliary erasure is exact.
+There is no lower bound on nonzero entries or nonzero Schmidt
+values.
+
+This is a nonuniform arbitrary-gate existence statement.
+The proof is mathematical and not Lean formalized.
+The auxiliary bound is polynomial, rather than the sharper
+$O_d(N\log(D+1))$ bound of the general fixed-bond theorem.
+\end{theorem}
+
+\begin{proof}
+\subsection*{The exact support components}
+
+View the support of $U$ as a bipartite graph, with row words
+on one side and column words on the other.
+If a row meets two columns, their inner product cannot vanish
+through that one row alone. Since both columns have degree
+at most two, they must share a second row.
+Both rows and columns are now saturated. This is an isolated
+complete $2\times2$ component. All remaining components are
+singleton edges: a column incident to two rows would similarly
+force a second column. Thus $U$ is a direct sum of unitary
+$1\times1$ and $2\times2$ blocks after separate row and column
+permutations.
+
+In a $2\times2$ unitary block, the two diagonal moduli agree,
+the two off-diagonal moduli agree, and the sum of their
+squares is one. At least one of its two perfect matchings
+therefore consists of entries of modulus at least $1/\sqrt2$.
+Every row and column has such a dominant entry.
+
+\subsection*{One common numerical graph}
+
+Choose a positive dyadic $\tau$ with
+$\varepsilon/200\le\tau\le\varepsilon/100$;
+it requires $O(\log(1/\varepsilon)+1)$ bits.
+Using a right-canonical MPS for the normalized Choi vector,
+choose one deterministic fixed-point scalar calculation
+$v(x,y)$ satisfying
+\[
+ |v(x,y)-U_{x,y}|\le\tau/10
+       \qquad\text{for every }x,y.
+\]
+The canonical matrix norms are at most one. Their scalar
+contraction estimate, together with the rescaling by
+$d^{N/2}$, gives this accuracy using
+\[
+ B=O_d\bigl(N+\log(N+1)+\log(D+1)
+                       +\log(1/\varepsilon)+1\bigr)
+\]
+bits and polynomially many Boolean operations.
+Use this same calculation in all row and column queries.
+Define a single exact Boolean edge predicate
+\[
+ (x,y)\in\widehat E\quad\Longleftrightarrow\quad
+                   |v(x,y)|>2\tau.
+\]
+The comparison is made by squaring the real and imaginary
+dyadic values and comparing integers. Thus it is an exact
+predicate even when a value lies close to the threshold.
+A true zero is never an edge of $\widehat E$.
+Every retained edge has true modulus greater than $1.9\tau$,
+and every dominant edge belongs to $\widehat E$.
+
+The neighbor lists of this graph are computable with the
+same polynomial precision.
+For a fixed column, the normalized Choi mass of an output
+prefix is
+$d^{-N}\sum|U_{x,y}|^2$ over its extensions.
+Conditioned right-canonical transfers are subunital and
+contract the operator norm on Hermitian matrices.
+Hermitian fixed-point rounding therefore computes these
+masses with uniform error at most $\tau^2d^{-N}/100$,
+using the stated $B$-bit precision.
+Retain a prefix when its numerical mass exceeds
+$\tau^2d^{-N}$. A retained prefix has positive true mass,
+so there are at most two retained prefixes at each level.
+Every edge of $\widehat E$ has modulus greater than
+$1.9\tau$, hence all its prefixes have mass greater than
+$3.61\tau^2d^{-N}$ and are retained.
+At the final level, filter the candidate leaves by the
+common predicate $\widehat E$.
+
+For row queries use the corresponding canonical tensors
+of $U^\dagger$ only for prefix-mass calculations.
+Filter their candidate column words using the original
+$v(x,y)$, not a separately rounded conjugate calculation.
+Completeness of the searches then proves that both
+orientations list exactly the same edges of $\widehat E$.
+The number of prefix tests is $O_d(N)$ per query.
+Each transfer and scalar calculation has polynomial
+cost in $N,D,B$.
+
+The graph $\widehat E$ is consequently an actual subgraph
+of the exact support, containing a dominant perfect matching
+in every genuine $2\times2$ block.
+If no minor edge is retained, that block gives two singleton
+components. If at least one minor edge is retained, its two
+dominant matching edges connect all four vertices.
+Thus every component of $\widehat E$ has equally many row
+and column vertices, either one of each or two of each.
+These are genuine components of one fixed graph; no
+agreement between separately rounded reciprocal moduli
+is assumed.
+
+\subsection*{Two compatible address maps}
+
+For a component, sort its column words as
+$c_0$ or $(c_0,c_1)$, and its row words as
+$r_0$ or $(r_0,r_1)$.
+Its owner is the column word $c_0$.
+Bounded-depth traversal of the graph computes these lists
+from any of its row or column vertices.
+Since a component has at most four vertices, this uses
+only constantly many neighbor queries.
+Define
+\[
+ g_{\rm in}(c_i)=(c_0,i),\qquad
+ g_{\rm out}(r_i)=(c_0,i).
+\]
+They are bijections from the input and output basis word
+sets, respectively, onto the same valid address set
+\[
+ \mathcal M=\{(c_0,i):
+       c_0\text{ is a component owner and }
+       0\le i<\text{its component size}\}.
+\]
+Their inverse functions on $\mathcal M$ are
+$h_{\rm in}(c_0,i)=c_i$ and
+$h_{\rm out}(c_0,i)=r_i$.
+On invalid addresses extend these functions arbitrarily,
+for instance with output zero. All four functions have
+polynomial-size Boolean circuits.
+
+Let $Y$ be the physical word register, let $O$ be an
+additional $N$-qudit owner register, and let $I$ be one
+qudit whose levels $0,1$ hold the component index.
+A reversible encoder $E_{\rm in}$ computes
+$g_{\rm in}(Y)$ into initialized $O,I$, reverses its
+Boolean work, and subtracts $h_{\rm in}(O,I)$
+componentwise modulo $d$ from $Y$.
+It has the exact initialized action
+\[
+ E_{\rm in}|c_i,0,0\rangle=|0,c_0,i\rangle.
+\]
+Define $E_{\rm out}$ with $g_{\rm out},h_{\rm out}$:
+\[
+ E_{\rm out}|r_i,0,0\rangle=|0,c_0,i\rangle.
+\]
+Each subtraction is a reversible controlled addition,
+even on invalid addresses. The encoders are therefore
+full logical unitaries, not partial inverses supplied
+as hypotheses. Their arithmetic work erases for all
+logical inputs, since the inputs controlling each
+Boolean computation are preserved while its result
+is added to or subtracted from another register.
+
+\subsection*{Exactly unitary approximations on each component}
+
+For a two-row, two-column component, the actual matrix
+\[
+ B_{c_0}=(U_{r_i,c_j})_{0\le i,j<2}
+\]
+is an entire genuine $2\times2$ unitary block.
+Compute its four entries to sufficient accuracy and
+choose an exactly unitary approximation
+$\widetilde B_{c_0}$ with
+$\|\widetilde B_{c_0}-B_{c_0}\|\le\tau$.
+Here is an explicit uniformly robust construction.
+Write its first column as $(a,c)^T$, and put
+$\zeta=\det B_{c_0}$. Since the matrix is unitary,
+its second column is $\zeta(-\overline c,\overline a)^T$.
+Choose phases $\alpha,\gamma,\beta$ and an angle $\theta$
+such that
+$a=e^{i\alpha}\cos\theta$,
+$c=e^{i\gamma}\sin\theta$,
+$\zeta=e^{i\beta}$, and $0\le\theta\le\pi/2$.
+Then
+\[
+ B_{c_0}=
+ \operatorname{diag}(e^{i\alpha},e^{i\gamma})
+ \begin{pmatrix}\cos\theta&-\sin\theta\\
+                 \sin\theta& \cos\theta\end{pmatrix}
+ \operatorname{diag}(1,e^{i(\beta-\alpha-\gamma)}).
+\]
+This also specifies a unitary for arbitrary approximate
+values of its four angles.
+
+Compute the matrix entries more finely, with error
+$c\tau^2$ for a sufficiently small fixed constant $c$.
+Find $\theta$ from the ratio of the smaller and larger
+first-column moduli: use its arctangent when $|a|\ge|c|$,
+and $\pi/2$ minus its arctangent otherwise.
+The larger approximate modulus is at least
+$1/(2\sqrt2)$ in the approximate data.
+Its arctangent is therefore uniformly conditioned.
+For a component whose modulus estimate is at most
+$\tau/100$, set its phase to zero: the corresponding
+true modulus is $O(\tau)$, so this changes the
+first column and its conjugate second column by
+only $O(\tau)$. Otherwise compute its phase to
+$c\tau$ accuracy. The largest Cartesian component
+used for its phase division is at least a fixed
+multiple of $\tau$, and the finer entry precision
+makes this calculation stable.
+The determinant has modulus one, so its phase
+calculation has a denominator bounded away from zero.
+Choose the clipping and angle constants small enough
+that the total matrix error is at most $\tau$.
+Square roots, division, and argument evaluation have
+polynomial bit complexity by bisection and the
+geometrically convergent half-angle arctangent series.
+
+Store the four approximate angles as
+$O(\log(1/\tau))$-bit strings. The last diagonal angle
+is their exact fixed-point difference
+$\widehat\beta-\widehat\alpha-\widehat\gamma$;
+constant integer guard bits suffice.
+Implement each phase and plane rotation by the
+product of fixed-angle gates controlled by its
+binary bits. Thus the implemented matrix is exactly
+unitary, with the prescribed approximate scalar phase;
+no table indexed by exponentially many component
+owners is required.
+
+For a singleton component use the phase of its retained
+entry, approximated by an exactly unitary scalar.
+The retained entry is dominant, so its modulus is
+at least $1/\sqrt2$. Its phase evaluation is uniformly
+conditioned.
+An original singleton block then has phase error
+at most $\tau$.
+If an original $2\times2$ block was split into two
+singletons, both omitted minor entries have modulus
+at most $2.1\tau$. Write their common modulus as $s$.
+Each retained entry has modulus $\sqrt{1-s^2}$.
+Replacing it by its unit-modulus phase changes it by
+$1-\sqrt{1-s^2}\le s^2$.
+Including phase approximation, the resulting block
+error is at most
+$s+s^2+\tau\le4\tau$.
+
+Compute the entries, component size, and angle bits
+from the owner $c_0$, apply the resulting exactly
+unitary operation to the component-index qudit, and
+reverse this calculation. The owner register is
+unchanged, so all arithmetic work erases exactly.
+For a two-dimensional component the operation preserves
+the levels $0,1$, acting as identity on other levels.
+For a singleton it multiplies level zero by the
+computed phase and leaves other levels arbitrary
+unitarily, for example unchanged.
+On invalid owner words choose identity.
+Thus this controlled operation $R$ is a full logical
+unitary and preserves the address subspace
+$\mathcal M$ exactly.
+
+The complete physical implementation is
+\[
+ C=E_{\rm out}^\dagger R E_{\rm in}.
+\]
+It has, on initialized auxiliary registers, the
+exact action
+\[
+ |c_j,0,0\rangle
+      \longmapsto
+ \sum_i(\widetilde B_{c_0})_{ij}|r_i,0,0\rangle.
+\]
+The same holds for singleton components.
+Consequently $CJ=J\widetilde U$ for an exactly unitary
+$\widetilde U$. All owner, index, and arithmetic
+registers return to zero.
+The comparison with $U$ is blockwise on its genuine
+support components. The global operator error is
+the maximum block error, at most $4\tau<\varepsilon$;
+there is no factor from the exponentially many
+basis words.
+
+All searches, address calculations, and angle
+calculations have polynomial bit complexity in
+$N,D,\log(1/\varepsilon)$. Retaining and reversing
+their Boolean intermediate results gives polynomial
+gate count and clean workspace. Routing through this
+polynomial-size register adds only a polynomial factor.
+\end{proof}
+
+The support-two argument avoids polar synthesis of a
+large rounded physical matrix by reducing it to
+constant-dimensional blocks and preserving their
+address subspace exactly. Such a reduction has not
+been proved here for higher fixed sparsity. In
+particular, the theorem does not resolve the joint
+polynomial circuit question for general dense MPUs.
+
+\begin{thebibliography}{3}
+\bibitem{fixed-alphabet}
+TNLean contributors,
+\emph{Exact circuits for MPUs with a fixed physical-entry alphabet},
+3 October 2026.
+Local source:
+\nolinkurl{docs/audits/2026-10-03_mpu_fixed_physical_alphabet.tex}.
+\bibitem{permutation-circuits}
+TNLean contributors,
+\emph{Joint polynomial circuits for permutation and monomial unitaries},
+3 October 2026.
+Local source:
+\nolinkurl{docs/audits/2026-10-03_mpu_joint_polynomial_permutations.tex}.
+\bibitem{exact-mpu-circuits}
+TNLean contributors,
+\emph{Exact polynomial circuits for matrix product unitaries},
+2 October 2026, Section~5.
+Local source:
+\nolinkurl{docs/audits/2026-10-02_mpu_rank_two_circuits.tex}.
+\end{thebibliography}
+\end{document}
