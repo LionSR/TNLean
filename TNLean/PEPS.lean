@@ -34,6 +34,7 @@ import TNLean.PEPS.CycleShiftBondUniformity
 import TNLean.PEPS.Defs
 import TNLean.PEPS.EdgeGaugeExtraction
 import TNLean.PEPS.EdgeGaugeFamily
+import TNLean.PEPS.EdgeMapSubgraph
 import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.EdgeScalarSolve
 import TNLean.PEPS.Examples
@@ -136,11 +137,13 @@ import TNLean.PEPS.RegularClosureSuperposition
 import TNLean.PEPS.RegularControlledBoundaryFactor
 import TNLean.PEPS.RegularCycleControlledBoundary
 import TNLean.PEPS.RegularCycleControlledSupport
+import TNLean.PEPS.RegularCycleFluxMeasurement
 import TNLean.PEPS.RegularGInjectiveSimplyConnectedEntropy
 import TNLean.PEPS.RegularGInjectiveTorus
 import TNLean.PEPS.RegularGInjectiveTorusRank
 import TNLean.PEPS.RegularMatrixEquiv
 import TNLean.PEPS.RegularOpenRegion
+import TNLean.PEPS.RegularPhysicalCutColumnAction
 import TNLean.PEPS.RegularPhysicalCutTransfer
 import TNLean.PEPS.RegularPhysicalDensity
 import TNLean.PEPS.RegularPhysicalUnitaryTransport
@@ -217,6 +220,7 @@ import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusPhysicalCutDensity
 import TNLean.PEPS.TorusPhysicalLocalEquivalence
 import TNLean.PEPS.TorusPhysicalMap
+import TNLean.PEPS.TorusPlaquetteFluxMeasurement
 import TNLean.PEPS.TorusProjectorExpansion
 import TNLean.PEPS.TorusProjectorExtraction
 import TNLean.PEPS.TorusRectangleBoundaryCard

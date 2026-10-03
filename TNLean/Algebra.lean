@@ -31,6 +31,7 @@ import TNLean.Algebra.CompactGapBounds
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
+import TNLean.Algebra.ConjClassesConjugation
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
