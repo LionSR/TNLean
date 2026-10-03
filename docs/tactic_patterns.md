@@ -4667,3 +4667,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+### Normalization of finite character coefficient vectors — candidate
+
+- **Pattern:** Write the finite squared norm as a dot product, move the
+  scalar normalization outside using `star_smul`, `dotProduct_smul`, and
+  `smul_dotProduct`, then apply translated character orthogonality.
+- **Occurrences:** The initial and flux-inserted pair norms and their
+  mixed overlap in `PEPS/RegularChargePair.lean`.
+- **Status:** Three occurrences in one module. A common normalization
+  lemma is appropriate if a second module repeats the calculation.
