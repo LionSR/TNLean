@@ -649,6 +649,31 @@ normalizations.
   connectivity; every bridge to a common translation assumes a connected
   induced region or a connected untwisted subgraph.
 
+#### `TNLean.PEPS.IsTorusRegionIntegerLift`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusRegionIntegerLift (R : Finset (TorusVertex width height)) (L : {v // v ∈ R} → ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/TorusRegionLiftGauge.lean`.
+- **Meaning:** `L` assigns to every site of the torus region `R` a point of the
+  square lattice `ℤ × ℤ` projecting to that site, such that every rightward and
+  upward native bond inside `R` is a unit step of the lift. It is a supplied
+  combinatorial lift, independent of any group or closure operator.
+- **Source:** no source predicate. It is a locally introduced device for the
+  contiguous-block arguments of arXiv:1001.3807, Theorems 6.7-6.9,
+  `Papers/1001.3807/paper_v3.tex:1931-2072`, used to gauge the native closure
+  operators away inside the region.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_isSimplyConnected` (a lift
+  exists when the closed-cell realization of `R` is simply connected),
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_continuousLift`,
+  `TNLean.PEPS.IsTorusRegionIntegerLift.injective`, and the gauge and
+  coordinate theorems `TNLean.PEPS.torusRegionLiftGauge_gradient` and
+  `TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates_of_torusRegionIntegerLift`.
+- **Caveat:** the predicate does not assert that `R` is a disk or simply
+  connected; it is weaker, and only the first bridge derives it from simple
+  connectedness. The lift statements are stated on tori with both periods at
+  least three.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
