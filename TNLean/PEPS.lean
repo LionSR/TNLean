@@ -90,6 +90,7 @@ import TNLean.PEPS.IntegerCellNoHoles
 import TNLean.PEPS.IntegerContourRayPotential
 import TNLean.PEPS.IntegerExteriorConnectivity
 import TNLean.PEPS.IsoTransport
+import TNLean.PEPS.KitaevCheckerboardBlocking
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.NormalAbsorbedFamily
 import TNLean.PEPS.NormalBlocking

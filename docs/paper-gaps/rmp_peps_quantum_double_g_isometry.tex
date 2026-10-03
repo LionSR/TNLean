@@ -830,6 +830,27 @@ input from the complete geometric charge--flux braid require further
 contraction and physical-operation identities. They are not inferred
 from a prescribed decomposition of the global state.
 
+\section{The unblocked toric-code tensor}
+The four elementary binary tensors of
+\path{eq:ex:kitaev-tens} are contracted around the actual checkerboard
+square, retaining all eight boundary legs and all four original physical
+spins. After a CNOT on each doubled boundary pair, the tensor map factors as
+\[
+    \mathsf B\mathsf C=\mathsf K E^\dagger.
+\]
+Here $\mathsf C$ is the unitary boundary permutation, $E$ includes four
+color registers with four auxiliary bits fixed at zero, and $\mathsf K$
+is the existing dual toric-code tensor with the explicit cyclic physical
+reordering. The coefficient identity follows the construction in
+\cite{Schuch2010PEPS}, source lines 2755--2827.
+
+This proves the open four-tensor reduction and its virtual boundary
+unitary. Its identification with a prescribed native torus region, the
+physical renormalization operation, and the globally tiled lattice
+blocking identity remain separate. The next step is to construct the
+native site and boundary bijections and derive the actual open-region
+contraction under those bijections.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all

@@ -1,0 +1,147 @@
+\begin{definition}[The elementary binary tensor and its color differences]%
+    \label{def:peps_kitaev_checkerboard_tensor}
+    \lean{TNLean.PEPS.KitaevBit, TNLean.PEPS.KitaevBlockBoundary,
+        TNLean.PEPS.KitaevBlockSpins, TNLean.PEPS.kitaevElementaryTensor,
+        TNLean.PEPS.kitaevBlockColorSpins}
+    \leanok
+    All indices take values in $\mathbb Z_2$. Write the virtual legs in the
+    order top, right, bottom, left. The two checkerboard orientations of the
+    elementary tensor are
+    \begin{align}
+        T_0(t,r,d,l;k)&=\delta_{t,r}\delta_{d,l}\delta_{k,t+d},&
+        T_1(t,r,d,l;k)&=\delta_{t,l}\delta_{d,r}\delta_{k,t+d}.
+    \end{align}
+    These are the tensor of
+    \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}
+    and its rotated orientation. For four colors define
+    \begin{align}
+        F(p,q,r,s)=(p+q,q+r,r+s,s+p).
+    \end{align}
+    An open block has one pair of boundary labels on each side, ordered
+    north, east, south, west. Each pair is read clockwise along its side.
+    Its four physical spins are ordered clockwise from the upper-right site.
+\end{definition}
+
+\begin{definition}[The actual four-site checkerboard contraction]%
+    \label{def:peps_kitaev_checkerboard_block}
+    \lean{TNLean.PEPS.kitaevCheckerboardBlock, TNLean.PEPS.kitaevBoundaryCNOT}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_tensor}
+    Let the boundary pairs be $N=(N_0,N_1)$, $E=(E_0,E_1)$,
+    $S=(S_0,S_1)$ and $W=(W_0,W_1)$. Contract the four internal bonds of
+    the $2\times2$ block around an A plaquette:
+    \begin{align}
+        B(N,E,S,W;\sigma)
+        =\sum_{x_0,x_1,x_2,x_3}
+        &T_0(N_0,x_0,x_3,W_1;\sigma_3)
+          T_1(N_1,E_0,x_1,x_0;\sigma_0)\notag\\
+        &\qquad\cdot T_0(x_1,E_1,S_0,x_2;\sigma_1)
+          T_1(x_3,x_2,S_1,W_0;\sigma_2).
+    \end{align}
+    The boundary transformation $C$ applies $(a,b)\mapsto(a,a+b)$ on
+    each of the four pairs. This is the CNOT transformation in the
+    blocking construction of \cite[Section~7]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[Boundary CNOTs]%
+    \label{lem:peps_kitaev_checkerboard_cnot}
+    \lean{TNLean.PEPS.kitaevBoundaryCNOT_apply,
+        TNLean.PEPS.kitaevBoundaryCNOT_involutive}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_block}
+    The boundary transformation acts on each pair by $(a,b)\mapsto(a,a+b)$
+    and satisfies $C^2=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Addition is modulo two, so $a+(a+b)=b$.
+\end{proof}
+
+\begin{theorem}[Four-site blocking of Kitaev's elementary tensor]%
+    \label{thm:peps_kitaev_checkerboard_blocking}
+    \lean{TNLean.PEPS.kitaevCheckerboardBlock_apply,
+        TNLean.PEPS.kitaevCheckerboardBlock_boundaryCNOT}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_block, lem:peps_kitaev_checkerboard_cnot}
+    For every boundary labeling and every physical configuration,
+    \begin{align}
+        B(N,E,S,W;\sigma)
+        &=\delta_{N_1,N_0}\delta_{E_1,E_0}
+          \delta_{S_1,S_0}\delta_{W_1,W_0}
+          \delta_{\sigma,F(N_0,E_0,S_0,W_0)}.
+    \end{align}
+    Consequently, if the four transformed boundary pairs are
+    $(p,a_N),(q,a_E),(r,a_S),(s,a_W)$, then
+    \begin{align}
+        B\bigl(C((p,a_N),(q,a_E),(r,a_S),(s,a_W));\sigma\bigr)
+        &=\delta_{a_N,0}\delta_{a_E,0}\delta_{a_S,0}\delta_{a_W,0}
+          \delta_{\sigma,F(p,q,r,s)}.
+    \end{align}
+    Thus the actual contraction gives the color-difference tensor
+    $K$ of \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}
+    and four boundary registers fixed at zero. This is a coefficient
+    identity for the open block; it does not assert a physical
+    renormalization operation or a globally blocked lattice identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    A nonzero summand forces
+    $x_0=N_0=N_1$, $x_1=E_0=E_1$, $x_2=S_0=S_1$ and $x_3=W_0=W_1$.
+    There is therefore exactly one surviving internal labeling, and its
+    four physical spins are $F(N_0,E_0,S_0,W_0)$. Substituting the boundary
+    CNOTs gives the second identity, since $a+b=a$ exactly when $b=0$.
+\end{proof}
+
+\begin{definition}[Matrices of the blocked tensor and the retained colors]%
+    \label{def:peps_kitaev_checkerboard_maps}
+    \lean{TNLean.PEPS.kitaevCheckerboardBlockMatrix,
+        TNLean.PEPS.kitaevBlockColorMatrix, TNLean.PEPS.kitaevBoundaryZeroEmbedding}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_block}
+    Let $\mathsf B$ be the matrix of the actual four-site contraction, with
+    physical rows and eight-bit boundary columns. Let $\mathsf K$ have
+    entries $\mathsf K_{\sigma,p}=\delta_{\sigma,F(p)}$.
+    Define the inclusion $E$ by fixing the four second boundary registers
+    at zero:
+    \begin{align}
+        E\ket{p,q,r,s}=\ket{(p,0),(q,0),(r,0),(s,0)}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The actual tensor-map identity after the boundary unitary]%
+    \label{thm:peps_kitaev_checkerboard_map_identity}
+    \lean{TNLean.PEPS.kitaevBoundaryZeroEmbedding_apply,
+        TNLean.PEPS.kitaevBoundaryCNOT_permMatrix_mem_unitaryGroup,
+        TNLean.PEPS.kitaevBoundaryZeroEmbedding_isIsometry,
+        TNLean.PEPS.kitaevCheckerboardBlockMatrix_mul_boundaryCNOT,
+        TNLean.PEPS.kitaevBlockColorMatrix_eq_quantumDoubleDualTensor}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_maps,
+        thm:peps_kitaev_checkerboard_blocking, def:peps_quantum_double_dual}
+    The boundary CNOT matrix $\mathsf C$ is unitary, the inclusion satisfies
+    $E^\dagger E=1$, and the actual blocked tensor map obeys
+    \begin{align}
+        \mathsf B\mathsf C=\mathsf K E^\dagger.
+    \end{align}
+    The color-difference tensor $\mathsf K$ is the dual toric-code tensor of
+    Definition~\ref{def:peps_quantum_double_dual}: colors are read north,
+    east, south, west. Its physical order is obtained by the cyclic reordering
+    \[
+        (\sigma_0,\sigma_1,\sigma_2,\sigma_3)
+        \longmapsto(\sigma_3,\sigma_0,\sigma_1,\sigma_2).
+    \]
+    Thus this identity connects the original checkerboard tensor to the
+    existing color-difference construction, with its coefficient normalization
+    unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    A permutation of an orthonormal basis is unitary, and fixing four
+    registers at zero takes distinct color basis vectors to distinct boundary
+    basis vectors. The coefficient formula of
+    Theorem~\ref{thm:peps_kitaev_checkerboard_blocking} gives the matrix
+    identity: $E^\dagger$ kills every boundary configuration with a nonzero
+    second register and retains the first registers otherwise. The cyclic
+    reordering follows from the four differences
+    $(p+s,q+p,q+r,r+s)$ of the dual binary tensor.
+\end{proof}
