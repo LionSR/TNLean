@@ -71,7 +71,7 @@ of the virtual projective representation.
         MPSTensor.rotatePhysical_polarDeformation_of_unitary_covariance,
         MPSTensor.gaugeEquiv_polarDeformation_of_unitary_covariance}
     \leanok
-    \uses{def:spt_polar_deformation, def:injective}
+    \uses{def:spt_polar_deformation, def:injective, def:gauge_equiv}
     Suppose $A$ is one-site injective. Then $P_\gamma=(1-\gamma)I+\gamma P$
     is positive definite, $A_\gamma$ is injective, and the path is continuous,
     with $A_0=W$ and $A_1=A$. If unitaries $U$ and $K$ satisfy $UM=MK$,
@@ -209,8 +209,8 @@ of the virtual projective representation.
     \lean{MPSTensor.embeddedCanonicalInjectiveGappedPath,
         MPSTensor.embeddedPolarGappedInteractionPath}
     \leanok
-    \uses{thm:spt_embedding_covariance,
-        thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
+    \uses{def:injective, def:spt_polar_deformation,
+        def:spt_common_space_gapped_path}
     Let $A_\gamma$ be a continuous family of one-site injective tensors
     with bond dimension $D>0$, and let $U$ and $V$ be unitary on-site
     representations on $\C^d$ and $\C^m$.
