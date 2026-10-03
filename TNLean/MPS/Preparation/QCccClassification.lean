@@ -72,10 +72,8 @@ with measurements and a circuit in depth at most `C log N`, satisfy
 The depth `C log N` is polylogarithmic in `N`, as the paragraph "Phases of matter" of
 arXiv:2103.13367 requires of `f(M)`. The proof takes the error `ε = 1/N` in
 `exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`, whose depth
-is then `c log(N²) = 2c log N`.
-
-**Scope restriction (one direction, canonical form):** documented in
-`docs/paper-gaps/psc21_mps_classification_scope.tex`. -/
+is then `c log(N²) = 2c log N`. The hypotheses beyond the source are those of the module's
+scope restriction. -/
 theorem isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState
     {D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}

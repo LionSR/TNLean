@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.TraceNormContractionCoefficient
 import QICLean.Analysis.TraceNormVariational
+import TNLean.Algebra.UnitaryMulVecInner
 
 /-!
 # Trace norm of a difference of pure states
@@ -45,19 +46,6 @@ namespace Matrix
 
 variable {D : ℕ}
 
-/-- A unitary matrix preserves the Euclidean norm. -/
-theorem norm_toLp_mulVec_of_mem_unitaryGroup {U : Matrix (Fin D) (Fin D) ℂ}
-    (hU : U ∈ unitaryGroup (Fin D) ℂ) (v : Fin D → ℂ) :
-    ‖WithLp.toLp 2 (U *ᵥ v)‖ = ‖WithLp.toLp 2 v‖ := by
-  have hinner : ⟪WithLp.toLp 2 (U *ᵥ v), WithLp.toLp 2 (U *ᵥ v)⟫_ℂ =
-      ⟪WithLp.toLp 2 v, WithLp.toLp 2 v⟫_ℂ := by
-    rw [EuclideanSpace.inner_toLp_toLp, EuclideanSpace.inner_toLp_toLp, dotProduct_comm,
-      star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, ← star_eq_conjTranspose,
-      (mem_unitaryGroup_iff').mp hU, one_mulVec, dotProduct_comm]
-  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at hinner
-  have h2 : ‖WithLp.toLp 2 (U *ᵥ v)‖ ^ 2 = ‖WithLp.toLp 2 v‖ ^ 2 := by exact_mod_cast hinner
-  exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp h2
-
 /-- **Trace norm of a rank-one matrix.** `‖|u⟩⟨v|‖₁ ≤ ‖u‖ ‖v‖`: for the unitary `U` attaining
 the trace norm in its variational form, `‖|u⟩⟨v|‖₁ = |⟨u|Uv⟩| ≤ ‖u‖ ‖Uv‖ = ‖u‖ ‖v‖`. -/
 theorem traceNorm_vecMulVec_le (u v : Fin D → ℂ) :
@@ -69,7 +57,7 @@ theorem traceNorm_vecMulVec_le (u v : Fin D → ℂ) :
       EuclideanSpace.inner_toLp_toLp, dotProduct_comm, ← dotProduct_mulVec, dotProduct_comm]
   have h := norm_inner_le_norm (𝕜 := ℂ) (WithLp.toLp 2 u) (WithLp.toLp 2 (U *ᵥ v))
   rw [← htrace, htr, Complex.norm_real, Real.norm_of_nonneg (traceNorm_nonneg _),
-    norm_toLp_mulVec_of_mem_unitaryGroup hU] at h
+    norm_eq_of_mulVec_eq hU (x := WithLp.toLp 2 v) (x' := WithLp.toLp 2 (U *ᵥ v)) rfl] at h
   exact h
 
 /-- **Trace norm of a difference of pure states.** For unit vectors `ψ` and `φ`,
