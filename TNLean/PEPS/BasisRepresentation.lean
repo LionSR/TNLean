@@ -19,6 +19,11 @@ unitary in its group basis.
 
 These elementary facts supply the orthonormal product bases used in Schuch, Cirac,
 and Pérez-García, arXiv:1001.3807, Section 6, particularly Lemma 6.2.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap Representation TensorProduct
