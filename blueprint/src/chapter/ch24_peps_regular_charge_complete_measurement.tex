@@ -1,0 +1,73 @@
+% Auxiliary finite-leg charge readout; SCP10, lines 2464--2486.
+\begin{definition}[Actual regular charge labels]
+\label{def:peps_regular_charge_complete_labels}
+Let $G$ be a finite group. Let $\mathcal C$ be the finite set of irreducible
+characters occurring in its left-regular representation on $\mathbb C^G$.
+Every irreducible complex character occurs in this set, and each label has a
+unitary irreducible representative.
+\lean{TNLean.PEPS.regularChargeLabels}
+\uses{thm:peps_regular_charge_labels}
+\leanok
+\end{definition}
+
+\begin{theorem}[Complete shared-register charge measurement]
+\label{thm:peps_regular_charge_complete_measurement}
+For the literal charge matrices $A_\chi(p;x,y)$ and their orthogonal projections
+$D_\chi$, one has
+\[
+ \sum_{\chi\in\mathcal C}\chi(1)A_\chi(r^{-1};1,sr^{-1})
+   =|G|\,|r\rangle\langle s|.
+\]
+Consequently these projections form a complete measurement:
+\[
+ D_\chi D_\psi=\delta_{\chi,\psi}D_\chi,
+ \qquad \sum_{\chi\in\mathcal C}D_\chi=I,
+ \qquad D_\chi A_\psi(p;x,y)=\delta_{\chi,\psi}A_\psi(p;x,y).
+\]
+\lean{TNLean.PEPS.sum_regularChargeMatrix_eq_single,TNLean.PEPS.regularChargeDetectorMatrix_label_vector,TNLean.PEPS.regularChargeDetectorMatrix_complete}
+\uses{def:peps_regular_charge_complete_labels,def:peps_regular_charge_coordinates,thm:peps_regular_charge_detector_matrix}
+\leanok
+\end{theorem}
+\begin{proof}
+\leanok
+The regular character identity gives the matrix-unit resolution entry by entry.
+The selected and inequivalent charge actions therefore determine each product
+of projections and their sum on a spanning family.
+\end{proof}
+
+\begin{theorem}[Complete original-spin two-site charge measurement]
+\label{thm:peps_regular_two_site_all_charge_measurement}
+Let two regular $G$-isometric site maps have arbitrary finite incident-leg sets,
+with one chosen shared leg at each site. For their literal character-weighted
+shared-bond columns $C_\chi(p;\theta)$, there is a complete physical measurement
+\[
+ \{Q_\chi:\chi\in\mathcal C\}\cup\{Q_\varnothing\},
+ \qquad Q_r\geq0,\quad Q_r^*=Q_r,\quad
+ Q_rQ_s=\delta_{r,s}Q_r,\quad \sum_rQ_r=I,
+\]
+chosen before every internal parameter $p$ and remaining boundary configuration
+$\theta$, such that
+\[
+ Q_\chi C_\psi(p;\theta)=\delta_{\chi,\psi}C_\psi(p;\theta),
+ \qquad Q_\varnothing C_\psi(p;\theta)=0.
+\]
+Writing $T$ for the actual product of the two site maps and $D_\chi$ for the
+shared-leg projection, the same family satisfies
+\[ Q_\chi T=T D_\chi,\qquad Q_\varnothing T=0. \]
+The additional outcome is the complement of the physical image. No independent
+unitary irreducible witness or global Gram identity is assumed.
+This is an auxiliary finite-leg specialization of the charge-detection argument
+in SCP10, lines 2464--2486; it makes no prescribed lattice, six-spin creation,
+or parent-Hamiltonian assertion.
+\lean{TNLean.PEPS.regularTwoSiteChargeDetector_complete,TNLean.PEPS.exists_regularTwoSitePhysicalAllChargeIntertwiner,TNLean.PEPS.exists_regularTwoSitePhysicalAllChargeMeasurement}
+\uses{thm:peps_regular_charge_complete_measurement,thm:peps_regular_two_site_physical_charge_measurement}
+\leanok
+\end{theorem}
+\begin{proof}
+\leanok
+Extend each shared-register projection by the identity on the remaining labels.
+The resulting complete family commutes with both actual local averages. The
+local $G$-isometry assumptions derive the product Gram matrix and its positive
+scale, so supported isometry transport gives the physical family. Its complement
+annihilates every literal column.
+\end{proof}

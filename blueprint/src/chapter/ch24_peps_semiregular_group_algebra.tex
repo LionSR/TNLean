@@ -77,3 +77,20 @@
     semi-regularity. Interchanging the tensor factors gives the
     other order.
 \end{proof}
+
+\begin{theorem}[Irreducibility of the contragredient]
+    \label{thm:peps_irreducible_dual}
+    \lean{Representation.isIrreducible_dual}
+    \leanok
+    The contragredient of a finite-dimensional irreducible complex
+    representation of a group is irreducible. No unitarity or finite-group
+    hypothesis is needed. This is an algebraic ingredient for the
+    conjugate charge in \cite{Schuch2010PEPS}, lines 2514--2518.
+\end{theorem}
+\begin{proof}\leanok
+    The annihilator of an invariant dual subspace is invariant in the
+    original representation, since the group action on the dual uses
+    the inverse element. Irreducibility makes this annihilator zero or
+    the whole space. Finite-dimensional annihilator duality then makes
+    the original dual subspace the whole space or zero, respectively.
+\end{proof}
