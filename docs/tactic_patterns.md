@@ -4701,3 +4701,13 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Status:** Two calculations in one module, below the promotion threshold.
   Correlated charge-pair weights are handled by specialization of the
   arbitrary-weight identity.
+
+### A unique surviving labeling in a finite tensor contraction — candidate
+
+- **Pattern:** Rewrite each local coefficient as its indicator, identify
+  the joint support with one explicit internal labeling and a condition
+  on the retained indices, and collapse the finite sum.
+- **Occurrence:** `PEPS/KitaevCheckerboardBlocking.lean`, for the four
+  elementary checkerboard tensors and their eight exterior binary legs.
+- **Status:** One contraction. Mathlib's finite-sum and equivalence
+  lemmas handle the reduction directly.
