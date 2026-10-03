@@ -932,6 +932,17 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
 
+For the classification of translation-invariant MPS under circuits assisted by
+measurements and classical communication (arXiv:2103.13367, Theorem
+`MPS_classification`):
+
+- `psc21_mps_classification_scope.tex` (scope restriction) records that only
+  the direction from the trivial sequence to the MPS sequence is formalized,
+  for the canonical form with normal blocks and mixed transfer maps of
+  spectral radius below one, and for periodic states that are nonzero for all
+  large chain lengths; open: the converse direction needs channels acting on
+  arbitrary input states.
+
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
 - `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
