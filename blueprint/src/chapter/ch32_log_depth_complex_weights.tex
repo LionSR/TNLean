@@ -33,8 +33,7 @@ $V^{\otimes M}$ in \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} they count the
 phase $u_j^N$ twice, and already for orthogonal blocks the approximating state
 does not converge (Theorem~\ref{thm:ldp_approximation_error_phase_weights}). With
 $\beta_j=\lvert\mu_j\rvert^N$ it converges at the rate of
-Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
-(Theorem~\ref{thm:ldp_approximation_error_complex_weights})
+Theorem~\ref{thm:ldp_approximation_error_complex_weights}
 \cite{gap:mswc24_block_form_mixed_overlap}.
 
 % **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for two
@@ -137,20 +136,26 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
     \label{thm:ldp_approximation_error_complex_weights}
     \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum_complexWeight,
         MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight,
-        MPSTensor.blockSum_eq_blockSum_phase}
+        MPSTensor.CopyWeights.single, MPSTensor.repeatedBlockSum_single,
+        MPSTensor.nonNormalApproxOverlap_blockSum_eq_copyApproxOverlap,
+        MPSTensor.blockSum_comp_of_eq_zero,
+        MPSTensor.nonNormalApproxOverlap_comp_of_eq_zero,
+        MPSTensor.ghzAmplitude_comp_of_eq_zero}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:correlation_length}
-    Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with complex weights
-    $\lvert\mu_j\rvert\leq1$, at least one of modulus one, of normal blocks $A_j$ in the
-    gauge (\ref{eq:ldp_normal_gauge}), with positive definite fixed points $\rho_j$ of
-    trace one, each placed on its own bond coordinates. Let $\lambda_2\in\C$ bound the
-    moduli of the eigenvalues other than one of every transfer map $\E_{A_j}$ and the
-    moduli of all eigenvalues of the mixed transfer maps $\E_{jj'}$, $j\neq j'$, let
-    $\xi$ be its correlation length, and let $0<\gamma<1/2$. Form the approximating
-    state $\widetilde\phi_N$ of Definition~\ref{def:ldp_non_normal_fixed_point} with
-    the pairs of the $\rho_j$ on the bond coordinates of their blocks and
-    $\beta_j=\lvert\mu_j\rvert^N$. There are constants $C,C'>0$ such that for every
-    block length $q$ and every $M\geq1$, with $N=qM$ and $y=Me^{-\gamma q/\xi}$,
+    \uses{def:ldp_non_normal_fixed_point, def:correlation_length,
+        def:ldp_repeated_block_sum, def:ldp_one_copy_weight, lem:ldp_one_copy_state,
+        thm:ldp_approximation_error_repeated_overlapping}
+    Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with complex weights $\mu_j$
+    of normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}), with positive
+    definite fixed points $\rho_j$ of trace one, each placed on its own bond coordinates.
+    Let $\lambda_2\in\C$ bound the moduli of the eigenvalues other than one of every
+    transfer map $\E_{A_j}$ and the moduli of all eigenvalues of the mixed transfer maps
+    $\E_{jj'}$, $j\neq j'$, let $\xi$ be its correlation length, and let $0<\gamma<1$.
+    Form the approximating state $\widetilde\phi_N$ of
+    Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of the $\rho_j$ on the
+    bond coordinates of their blocks and $\beta_j=\lvert\mu_j\rvert^N$. There are
+    constants $C,C'>0$ such that for all weights $\mu$ not all zero, every block length
+    $q$ and every $M\geq1$, with $N=qM$ and $y=Me^{-\gamma q/\xi}$,
     \begin{align*}
         \varepsilon(\widetilde\phi_N,\phi_N)\leq C'y
         \qquad\text{and}\qquad
@@ -159,25 +164,31 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one,
     with $\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\beta_j=\mu_j^N$
     that \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} take from
-    \cite[eq.~(S4)]{Malz2024Preparation}, and with $\xi_{\mathrm{diag}}$ replaced by
-    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$. With $\beta_j=\mu_j^N$
-    the bound is false (Theorem~\ref{thm:ldp_approximation_error_phase_weights})
+    \cite[eq.~(S4)]{Malz2024Preparation}, with $\xi_{\mathrm{diag}}$ replaced by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, and for $0<\gamma<1$ in
+    place of $0<\gamma<1/2$. The constants do not depend on the weights, and the
+    normalization $\lvert\mu_j\rvert\leq1$ with one weight of modulus one is not needed.
+    With $\beta_j=\mu_j^N$ the bound is false
+    (Theorem~\ref{thm:ldp_approximation_error_phase_weights})
     \cite{gap:mswc24_block_form_mixed_overlap}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:ldp_approximation_error_overlapping_weights}
-    Let $u_j=e^{i\arg\mu_j}$, so that $\mu_j=\lvert\mu_j\rvert u_j$ and
-    $\lvert u_j\rvert=1$. Then
-    $\bigoplus_j\mu_jA_j=\bigoplus_j\lvert\mu_j\rvert(u_jA_j)$. The blocks $u_jA_j$ are
-    normal, satisfy the gauge (\ref{eq:ldp_normal_gauge}), and have the transfer maps
-    $\E_{u_jA_j}=\lvert u_j\rvert^2\E_{A_j}=\E_{A_j}$, hence the same fixed points and
-    eigenvalues. Their mixed transfer maps are $u_j\overline{u_{j'}}\,\E_{jj'}$, whose
-    eigenvalues are those of $\E_{jj'}$ multiplied by a number of modulus one.
-    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}, applied to the blocks
-    $u_jA_j$ with the real weights $w_j=\lvert\mu_j\rvert$, gives the bounds with
-    $\beta_j=w_j^N=\lvert\mu_j\rvert^N$.
+    If $q=0$ then $y=M\geq1$ and the bound holds with $C\geq1$, since
+    $\varepsilon\leq1$; let $q\geq1$. A block of weight zero contributes nothing to $A$,
+    and its coefficient $\beta_j=0$ removes its pairs from the approximating state; the
+    normalization $\sum_l\lvert\beta_l\rvert^2$ is unchanged. So the blocks of weight zero
+    may be dropped, and for each of the finitely many sets of remaining blocks it
+    suffices to prove the bound for nonzero weights, with a constant that does not
+    depend on them; the largest of these constants serves for all weights. For nonzero
+    weights, $A$ is the direct sum of Definition~\ref{def:ldp_repeated_block_sum} with
+    one copy of each block. By Definition~\ref{def:ldp_one_copy_weight} the coefficients
+    for the pairs on the one copy are $\beta'_j=\lvert\mu_j\rvert^N$, and by
+    Lemma~\ref{lem:ldp_one_copy_state}(6) the overlap of $\widetilde\phi_N$ with
+    $\ket{\phi_N}$ is that of the corrected state with the coefficients $\mu_j^N$, not all
+    zero. Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping} bounds it, with a
+    constant independent of the weights.
 \end{proof}
 
 %% ==================================================
@@ -306,7 +317,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     Let $A$ be the direct sum with multiplicities of
     Definition~\ref{def:ldp_repeated_block_sum}, with normal blocks $A_j$ in the gauge
     (\ref{eq:ldp_normal_gauge}) and positive definite fixed points $\rho_j$ of trace one,
-    let $0<\gamma<1/2$, and let $\widetilde\phi_N$ be the approximating state of
+    let $0<\gamma<1$, and let $\widetilde\phi_N$ be the approximating state of
     Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of $\rho_j$ on the
     copies $k_j$ and the coefficients $\beta'_j$ of
     Definition~\ref{def:ldp_one_copy_weight} in place of $\beta_j$. Put
@@ -314,7 +325,8 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     \begin{enumerate}
         \item Let $\lambda_2$ bound the moduli of the eigenvalues other than one of every
               transfer map $\E_{A_j}$, with correlation length $\xi$. There are
-              $C,C'>0$ such that for every block length $q\geq1$ at which the $q$-site
+              $C,C'>0$ such that for all nonzero complex weights, every choice of the
+              copies $k_j$, every block length $q\geq1$ at which the $q$-site
               states of distinct blocks are orthogonal and every $M\geq1$ with
               $\beta\neq0$, $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$ and
               $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$.
