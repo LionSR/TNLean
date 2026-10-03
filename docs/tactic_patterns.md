@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Pointwise comparison of finite-chain symmetries — promoted
+- **Pattern:** compare invariance at every applicable chain length by proving
+  equivalent operator equations pointwise, for symmetries with the same
+  applicable lengths.
+- **Seen:** six uses across
+  `TNLean/MPS/MPU/Examples/SwapSymmetryTransport.lean` and
+  `TNLean/MPS/MPU/Examples/SwapBlockedSymmetryTransport.lean`, in the adjunction,
+  transposition and conjugation comparisons (2026-10-03).
+- **Abstraction:** `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` in
+  `SwapSymmetryTransport.lean` performs the common quantifier reduction once.
+- **Notes:** the original four-line `forall_congr'`/`imp_congr_right` block is
+  removed from all six sites. The helper requires equality of the applicable
+  lengths and pointwise equivalence of the actual operator fixed equations;
+  it assumes no path or canonical-form certificate.
+
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -2429,6 +2445,7 @@ abstracted — record why, so it is not re-proposed).
   table. All three consumers use it; no custom tactic is needed.
 
 ## Candidates
+
 
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
