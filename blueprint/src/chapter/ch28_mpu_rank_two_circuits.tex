@@ -1563,6 +1563,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     \uses{def:mpu_clean_zero_register_reflection,
         thm:mpu_reversible_zero_conjunction}
+    Let the local dimension satisfy $d\geq2$.
     The constructed circuit is unitary on the full register and,
     for every logical input, returns the temporary register to zero
     while applying $I-2|0\rangle\langle0|$ to the tested register.
@@ -1762,7 +1763,8 @@ left multiplication, right vector $b$ and left functional the trace.
         I-2(UE)(UE)^\dagger=U(I-2EE^\dagger)U^\dagger.
     \end{align}
     A $K$-gate circuit repeated $k$ times costs at most $kK$.
-    On $n\geq2$ sites, an amplification round with reflection
+    On $n\geq2$ sites of positive local dimension $d$, an
+    amplification round with reflection
     costs $K,L$ costs at most $2n+K+L$, including its phase.
 \end{theorem}
 \begin{proof}\leanok
@@ -2233,8 +2235,8 @@ left multiplication, right vector $b$ and left functional the trace.
     Suppose a local circuit satisfies its complete clean identity
     on every logical input. Its placed circuit satisfies the same
     identity on the full logical register and restores the entire
-    larger scratch pool to zero. If the local circuit has $K$ gates,
-    its routed circuit on $n+A$ sites has at most $2(n+A)K$ gates.
+    larger scratch pool to zero. If the local dimension $d$ is
+    positive and the local circuit has $K$ gates, its routed circuit on $n+A$ sites has at most $2(n+A)K$ gates.
     No additional cleanup hypothesis is required for the placed circuit.
 \end{theorem}
 \begin{proof}\leanok
@@ -2913,9 +2915,9 @@ remain separate assertions.
     Every permutation of $n$ qudit sites has an actual neighboring
     pair-gate circuit of at most $2n^2$ gates. Conjugating a circuit
     of cost $K$ by that permutation gives cost at most $K+4n^2$,
-    including its exact scalar phase. A logical site permutation
-    fixing the appended workspace preserves every all-input clean
-    implementation identity. For a register of total size $n+A$,
+    including its exact scalar phase. For positive local dimension $d$,
+    a logical site permutation fixing the appended workspace preserves
+    every all-input clean implementation identity. For a register of total size $n+A$,
     this conjugation costs at most $K+4(n+A)^2$.
 \end{theorem}
 \begin{proof}\leanok
