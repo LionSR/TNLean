@@ -105,30 +105,45 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
     from multiplicativity applied to $\Lambda^{-1}\Lambda=\Lambda\Lambda^{-1}=\Id$.
 \end{proof}
 
-\begin{lemma}[State and boundary map of the rotated tensor]\label{lem:physical_rotation_state}
+\begin{theorem}[Word evaluation under a physical map]\label{thm:physical_rotation_word}
     \lean{MPSTensor.evalWord_rotatePhysical_ofFn}
-    \lean{MPSTensor.mpv_rotatePhysical_eq_toLin'}
-    \lean{MPSTensor.groundSpaceMap_rotatePhysical}
     \leanok
-    \uses{def:physical_rotation, def:on_site_tensor_pow, def:ground_space_map}
-    For every word $\sigma$ of length $N$,
+    \uses{def:physical_rotation}
+    Let $\Lambda:\mathbb C^d\to\mathbb C^m$ be a linear map.
+    For every word $\sigma$ of length $N$ in the $m$-letter alphabet,
     \begin{align}
         (\Lambda A)^{\sigma}
          & =\sum_{\tau}\Big(\prod_{n=0}^{N-1}\Lambda_{\sigma_n\tau_n}\Big)A^{\tau},
         \label{eq:physical_rotation_word}
     \end{align}
-    so that $\ket{V^{(N)}(\Lambda A)}=\Lambda^{\otimes N}\ket{V^{(N)}(A)}$ and
+    where $\tau$ ranges over words in the $d$-letter alphabet.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:physical_rotation}
+    Expand each factor of $(\Lambda A)^{\sigma_1}\cdots(\Lambda A)^{\sigma_N}$ by
+    (\ref{eq:physical_rotation}) and collect the coefficient of $A^{\tau}$, by
+    induction on $N$.
+\end{proof}
+
+\begin{lemma}[State and boundary map of the rotated tensor]\label{lem:physical_rotation_state}
+    \lean{MPSTensor.mpv_rotatePhysical_eq_toLin'}
+    \lean{MPSTensor.groundSpaceMap_rotatePhysical}
+    \leanok
+    \uses{def:physical_rotation, def:on_site_tensor_pow, def:ground_space_map}
+    For $\Lambda\in\MN{d}$,
+    $\ket{V^{(N)}(\Lambda A)}=\Lambda^{\otimes N}\ket{V^{(N)}(A)}$ and
     $\Gamma_L^{\Lambda A}(X)=\Lambda^{\otimes L}\,\Gamma_L^{A}(X)$ for every
     boundary matrix $X\in\MN{D}$.
 \end{lemma}
 
-\begin{proof}
-    \leanok
-    \uses{lem:mpv_rotate_physical}
-    Expand each factor of $(\Lambda A)^{\sigma_1}\cdots(\Lambda A)^{\sigma_N}$ by
-    (\ref{eq:physical_rotation}) and collect the coefficient of $A^{\tau}$, by
-    induction on $N$. Taking the trace against $X$ gives the boundary-map
-    identity, and $X=\Id$ gives the state identity.
+\begin{proof}\leanok
+    \uses{lem:mpv_rotate_physical, thm:spt_physical_embedding_boundary}
+    The state identity is Lemma~\ref{lem:mpv_rotate_physical}, written using
+    the on-site tensor power.
+    The boundary-map identity is the square-map instance of
+    Theorem~\ref{thm:spt_physical_embedding_boundary}.
 \end{proof}
 
 \begin{theorem}[Local ground space of the rotated tensor]\label{thm:ground_space_physical_rotation}
@@ -147,10 +162,10 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{proof}
     \leanok
-    \uses{lem:physical_rotation_state}
-    By Lemma~\ref{lem:physical_rotation_state}, the boundary map of $\Lambda A$ is
-    the composition of $\Lambda^{\otimes L}$ with the boundary map of $A$, so its
-    range is the image of $G_L(A)$ under $\Lambda^{\otimes L}$.
+    \uses{thm:spt_physical_embedding_boundary}
+    Apply Theorem~\ref{thm:spt_physical_embedding_boundary} to the square map
+    $\Lambda$. Its tensor power agrees with the on-site tensor power in the
+    configuration basis.
 \end{proof}
 
 \begin{definition}[Parent interaction]\label{def:is_parent_interaction}
