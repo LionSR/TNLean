@@ -1,0 +1,21 @@
+\begin{theorem}[Character multiplicities of orthonormal rows]
+    \label{thm:peps_unitary_character_blocks}
+    \lean{Representation.exists_unitary_character_matrix_blocks}
+    \leanok
+    \uses{thm:peps_unitary_irreducible_blocks, thm:peps_isotypic_projectors}
+    In the decomposition (\ref{eq:peps_unitary_irreducible_rows}), each
+    row has dimension $d_i$, and the character of a row occurs in the
+    full representation with multiplicity exactly $m_i$.
+    Thus the orthonormal decomposition gives the dimensions and
+    multiplicities appearing in \cite[Lemma~4.4]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Transport the basis of one row to another row of the same component.
+    The common matrix action makes this a group intertwiner, so those
+    rows have the same character. Rows of different components have
+    distinct characters. The character projector onto component $i$
+    therefore fixes exactly its $m_id_i$ orthonormal basis vectors.
+    Its trace is $m_id_i$. The character trace identity gives the same
+    trace as $m_{\chi_i}d_i$. Since $d_i>0$, cancellation gives
+    $m_{\chi_i}=m_i$.
+\end{proof}

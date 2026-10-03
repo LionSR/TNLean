@@ -1,0 +1,140 @@
+\begin{definition}[The composed physical bond transformation]%
+    \label{def:peps_torus_semiregular_bond_map}
+    \lean{TNLean.PEPS.torusSemiRegularBondMap}
+    \leanok
+    \uses{thm:peps_full_multiplicity_bond_map,
+        lem:peps_bond_coordinate_transport}
+    Choose positive dimensions $d_i$ and put
+    $V=\bigoplus_i\mathbb C^{d_i}$ and
+    $V'=\bigoplus_i(\mathbb C^{d_i}\otimes\mathbb C^{d_i})$.
+    Let $F:V\otimes V\to V'\otimes V'$ be the full endpoint
+    multiplicity-restoring map. For $Q:V'\to\mathbb C^G$, put
+    $C_Q=Q\otimes\overline Q$. On the physical bond spaces of a torus
+    with positive periods, define
+    \begin{align}
+        \mathcal T_Q=
+            \left(\bigotimes_{e\in\mathcal B}C_Q\right)
+            \left(\bigotimes_{e\in\mathcal B}F\right).
+        \label{eq:peps_torus_semiregular_map}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Supported overlaps under the composed bond transformation]%
+    \label{thm:peps_torus_semiregular_supported_overlap}
+    \lean{TNLean.PEPS.torusSemiRegularBondMap_dotProduct}
+    \leanok
+    \uses{def:peps_torus_semiregular_bond_map,
+        thm:peps_multiplicity_bond_product_overlap,
+        thm:peps_physical_product_supported_isometry,
+        lem:peps_bond_coordinate_transport}
+    Suppose $Q^\dagger Q=I$. For every physical vector $\psi$ and every
+    $\phi\in\operatorname{ran}\bigotimes_{e\in\mathcal B}E_V$,
+    \begin{align}
+        \langle\mathcal T_Q\psi,\mathcal T_Q\phi\rangle
+            =\langle\psi,\phi\rangle.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The product of $C_Q$ is an isometry. Remove it from the overlap,
+    then apply preservation of overlaps by the product of $F$ on the
+    matching-sector support.
+\end{proof}
+
+\begin{theorem}[The actual weighted torus state under a chosen Fourier intertwiner]%
+    \label{thm:peps_torus_semiregular_chosen_fourier_state}
+    \lean{TNLean.PEPS.torusSemiRegularBondMap_blockFourthRootWeight}
+    \leanok
+    \uses{def:peps_torus_semiregular_bond_map,
+        thm:peps_torus_block_multiplicity_state,
+        thm:peps_torus_bond_coordinate_transport}
+    Let $D_i$ be matrix representations of a finite group $G$ of
+    positive dimensions $d_i$. Set
+    $U=\bigoplus_iD_i$, $W=\bigoplus_i d_i^{1/4}I$, and
+    $L=\bigoplus_i D_i\otimes I_{d_i}$.
+    Suppose the chosen matrix $Q:V'\to\mathbb C^G$ satisfies
+    $U_{\mathrm{reg}}(g)=QL(g)Q^\dagger$ for every $g\in G$.
+    Let $\Psi_{U,W}$ be the actual torus state of the normalized
+    averaging site dressed by $W$ on its four virtual legs, and let
+    $\Psi_{\mathrm{reg}}$ be the actual regular averaging-site torus state.
+    After the original physical coordinates are regrouped by bonds,
+    \begin{align}
+        \mathcal R\Psi_{U,W}
+            &\in\operatorname{ran}\bigotimes_{e\in\mathcal B}E_V,\\
+        \mathcal T_Q\mathcal R\Psi_{U,W}
+            &=\mathcal R\Psi_{\mathrm{reg}}.
+    \end{align}
+    The representation matrices and Fourier intertwiner are explicit
+    hypotheses of this auxiliary statement of the physical transformation
+    in \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    The actual weighted contraction has matching-sector support, and
+    the product of $F$ sends it to the actual averaging-site state of $L$.
+    The product of $C_Q$ sends that state to the actual regular state
+    by the matrix intertwining identity. Compose the two equalities.
+\end{proof}
+
+\begin{theorem}[An ambient physical isometry for the chosen block construction]%
+    \label{thm:peps_torus_semiregular_isometric_extension}
+    \lean{TNLean.PEPS.exists_isometric_torusSemiRegularBondMap}
+    \leanok
+    \uses{thm:peps_torus_semiregular_chosen_fourier_state,
+        thm:peps_physical_product_supported_isometry,
+        thm:peps_full_multiplicity_bond_isometry_extension,
+        lem:peps_bond_coordinate_transport}
+    Under the representation hypotheses of the chosen Fourier transformation,
+    suppose also $Q^\dagger Q=I$. There is an isometry
+    $T:V\otimes V\to V'\otimes V'$ such that, with
+    $\mathcal U=(\bigotimes_{e\in\mathcal B}C_Q)
+        (\bigotimes_{e\in\mathcal B}T)$,
+    \begin{align}
+        \mathcal U\mathcal R\Psi_{U,W}&=\mathcal R\Psi_{\mathrm{reg}},\\
+        \langle\mathcal U\psi,\mathcal U\phi\rangle
+            &=\langle\psi,\phi\rangle.
+    \end{align}
+    The overlap identity holds for all vectors in the original physical space.
+\end{theorem}
+\begin{proof}\leanok
+    Extend $F$ to an isometry $T$ satisfying $TE_V=FE_V$.
+    Product matrices respect multiplication, so their products agree on
+    $\operatorname{ran}\bigotimes_e E_V$. The actual weighted state lies
+    in this range, and hence retains the chosen Fourier state equality.
+    Both physical product maps in $\mathcal U$ are isometries.
+\end{proof}
+
+\begin{theorem}[Finite-torus equivalence from a multiplicity-one semi-regular representation]%
+    \label{thm:peps_torus_multiplicity_one_semiregular_equivalence}
+    \lean{TNLean.PEPS.exists_isometric_multiplicityOneSemiRegular_torusState}
+    \leanok
+    \uses{thm:peps_regular_minimal_representation,
+        thm:peps_torus_semiregular_isometric_extension}
+    Let $G$ be a finite group and let the torus have positive periods.
+    There are positive dimensions $d_i$ and pairwise inequivalent unitary
+    irreducible representations $D_i$ such that $U=\bigoplus_iD_i$ is
+    semi-regular and each irreducible sector has multiplicity one.
+    Put $W=\bigoplus_i d_i^{1/4}I$ and
+    $L=\bigoplus_i D_i\otimes I_{d_i}$.
+    There are isometries $Q:V'\to\mathbb C^G$ and
+    $T:V\otimes V\to V'\otimes V'$ satisfying
+    $U_{\mathrm{reg}}(g)=QL(g)Q^\dagger$ for every $g$.
+    For $\mathcal U=(\bigotimes_{e\in\mathcal B}(Q\otimes\overline Q))
+        (\bigotimes_{e\in\mathcal B}T)$,
+    \begin{align}
+        \mathcal U\mathcal R\Psi_{U,W}&=\mathcal R\Psi_{\mathrm{reg}},\\
+        \langle\mathcal U\psi,\mathcal U\phi\rangle
+            &=\langle\psi,\phi\rangle.
+    \end{align}
+    The latter identity holds for all vectors in the original physical space.
+    This is the finite-torus realization of the local physical equivalence
+    in \cite[Section~7]{Schuch2010PEPS}; the representation and Fourier data
+    are conclusions rather than additional hypotheses.
+\end{theorem}
+\begin{proof}\leanok
+    Construct the orthonormal Fourier basis of the actual regular
+    representation, with each irreducible repeated by its dimension.
+    The associated single-copy block representation is unitary and
+    semi-regular, with character multiplicity one in every sector.
+    Its change to the original group basis gives $Q$ and the matrix
+    intertwining relation. Apply the ambient physical isometry theorem
+    to these derived data.
+\end{proof}

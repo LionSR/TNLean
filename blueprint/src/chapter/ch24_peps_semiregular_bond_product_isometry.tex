@@ -1,0 +1,66 @@
+\begin{theorem}[Physical product isometries and supported overlaps]%
+    \label{thm:peps_physical_product_supported_isometry}
+    \lean{TNLean.PEPS.physicalProductMatrix_mul,
+        TNLean.PEPS.physicalProductMatrix_isIsometry,
+        TNLean.PEPS.physicalProductMap_dotProduct_of_isIsometry,
+        TNLean.PEPS.physicalProductMap_dotProduct_of_initialProjection}
+    \leanok
+    \uses{lem:peps_region_physical_maps}
+    Let $\mathcal B$ be a finite set, and let $F:H\to H'$ and
+    $E:K\to H$ be linear maps between finite-dimensional complex
+    Hilbert spaces. Suppose $E^\dagger E=I$ and
+    $F^\dagger F=EE^\dagger$. Write
+    $\mathcal F=\bigotimes_{e\in\mathcal B}F$ and
+    $\mathcal E=\bigotimes_{e\in\mathcal B}E$.
+    For every $\psi$ and every $\phi\in\operatorname{ran}\mathcal E$,
+    \begin{align}
+        \langle\mathcal F\psi,\mathcal F\phi\rangle
+            =\langle\psi,\phi\rangle.
+        \label{eq:peps_product_supported_overlap}
+    \end{align}
+    Products compose bond by bond: $(\bigotimes_e A)(\bigotimes_e B)
+    =\bigotimes_e(AB)$. In particular, the product of any physical isometry is an isometry
+    and preserves all physical overlaps.
+\end{theorem}
+\begin{proof}\leanok
+    The product of $E$ is an isometry, by applying the region product
+    isometry to the full finite set and identifying its configurations
+    with those on $\mathcal B$. Product matrices respect multiplication
+    and adjoints, so
+    $\mathcal F^\dagger\mathcal F=\mathcal E\mathcal E^\dagger$.
+    Write $\phi=\mathcal E\chi$. Then
+    $\mathcal E\mathcal E^\dagger\phi=\phi$, and moving
+    $\mathcal F$ across the inner product gives
+    (\ref{eq:peps_product_supported_overlap}).
+\end{proof}
+
+\begin{theorem}[Overlaps under the product multiplicity-restoring map]%
+    \label{thm:peps_multiplicity_bond_product_overlap}
+    \lean{TNLean.PEPS.physicalProductMap_fullMultiplicityBondMap_dotProduct}
+    \leanok
+    \uses{thm:peps_physical_product_supported_isometry,
+        lem:peps_matching_sector_bond_inclusion,
+        thm:peps_full_multiplicity_bond_map}
+    Let $V=\bigoplus_i V_i$ and
+    $V'=\bigoplus_i(V_i\otimes\mathbb C^{M_i})$, where every $M_i$
+    is finite and nonempty. Let $E_V$ be the matching-sector inclusion
+    and $F=E_{V'}JE_V^\dagger$ the full endpoint bond map.
+    For a finite set of bonds $\mathcal B$, every physical vector
+    $\psi$, and every
+    $\phi\in\operatorname{ran}\bigotimes_{e\in\mathcal B}E_V$,
+    \begin{align}
+        \left\langle
+            \left(\bigotimes_{e\in\mathcal B}F\right)\psi,
+            \left(\bigotimes_{e\in\mathcal B}F\right)\phi
+        \right\rangle=\langle\psi,\phi\rangle.
+    \end{align}
+    Consequently all overlaps of arbitrary coherent superpositions
+    supported on the product matching-sector subspace are preserved.
+    This is the supported product isometry used in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    The matching-sector inclusion is an isometry and
+    $F^\dagger F=E_VE_V^\dagger$. Apply the physical product overlap
+    theorem.
+\end{proof}

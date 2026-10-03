@@ -1,0 +1,16 @@
+\begin{lemma}[Commutation from simultaneous permutation invariance]
+    \label{lem:peps_permutation_matrix_commutation}
+    \lean{Matrix.commute_permMatrix_of_entry_invariant}
+    \leanok
+    Let $I$ be a finite set, $R$ a semiring, $A$ an $I\times I$ matrix
+    over $R$, and $\pi$ a permutation of $I$. If
+    $A_{\pi i,\pi j}=A_{i,j}$ for every $i,j$, then
+    $AP_\pi=P_\pi A$, where $P_\pi$ is the permutation matrix.
+    This elementary identity supplies the permutation commutation in the
+    coordinate symmetry arguments of
+    \cite[charge-pair creation, lines 2505--2558]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    Multiply by the permutation matrix entry by entry and apply the
+    assumed identity at $i,\pi^{-1}j$.
+\end{proof}

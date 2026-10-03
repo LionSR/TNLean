@@ -1,0 +1,115 @@
+\begin{definition}[Restoring the dimension multiplicities]%
+    \label{def:peps_multiplicity_restored_representation}
+    \lean{TNLean.PEPS.multiplicityRestoredRepresentation}
+    \leanok
+    Given matrix representations $D_i:G\to M_{d_i}(\mathbb C)$, define
+    \begin{align}
+        L(g)=\bigoplus_iD_i(g)\otimes I_{d_i}.
+    \end{align}
+    This is a representation. If the $D_i$ are precisely the inequivalent
+    irreducible representations, these are the dimension multiplicities
+    in the regular representation used in \cite[Section~7]{Schuch2010PEPS}.
+    The definition itself does not assert that every irreducible occurs.
+\end{definition}
+
+\begin{theorem}[Weighted block identities and the actual torus state]%
+    \label{thm:peps_torus_weighted_blocks_state}
+    \lean{TNLean.PEPS.torusBondRegrouping_dressedAveragingSite_of_weightedBlocks}
+    \leanok
+    \uses{thm:peps_coherent_multiplicity_transport,
+        def:peps_multiplicity_restored_representation,
+        thm:peps_torus_regrouped_averaging_bonds,
+        lem:peps_matching_sector_bond_inclusion,
+        thm:peps_full_multiplicity_bond_map}
+    Let $d_i>0$, let $U$ and $D_i$ be matrix representations of a finite group,
+    and let $W$ commute with every $U(g)$. Suppose that the single-bond matrices satisfy
+    \begin{align}
+        W^2U(g)=\bigoplus_i\sqrt{d_i}D_i(g) \qquad(g\in G).
+    \end{align}
+    The actual dressed averaging-site torus state $H$ then satisfies
+    \begin{align}
+        \mathcal B H&\in\operatorname{range}(E^{\otimes 2N}),&
+        F^{\otimes 2N}\mathcal B H&=\mathcal B K_L.
+    \end{align}
+    Here $\mathcal B$ regroups physical legs into bonds, $E$ includes matching sectors,
+    $F$ restores the dimension multiplicities, and $K_L$ is the actual averaging-site
+    state of $L(g)=\bigoplus_iD_i(g)\otimes I_{d_i}$.
+    This auxiliary assertion assumes a matrix identity, rather than an equality
+    of tensor-network states; it applies to both constructions below.
+\end{theorem}
+
+\begin{proof}\leanok
+    Its coherent expansion has bond factors $W^2U(r_e(q))$.
+    Matching-sector inclusion reconstructs each weighted block
+    matrix, and multiplicity restoration sends it to $L(r_e(q))$.
+    Apply these identities to every term of the finite vertex-label sum.
+    Both contractions have the same normalization $|G|^{-N}$.
+\end{proof}
+
+\begin{theorem}[Multiplicity restoration of the actual torus state]%
+    \label{thm:peps_torus_multiplicity_bond_state}
+    \lean{TNLean.PEPS.physicalProductMap_sum_prod,
+        TNLean.PEPS.torusBondRelativeElement,
+        TNLean.PEPS.torusBondRegrouping_averagingSite_coherent,
+        TNLean.PEPS.torusBondRegrouping_dressedAveragingSite_coherent,
+        TNLean.PEPS.exists_torusMultiplicityBondState_of_orthogonalSectors}
+    \leanok
+    \uses{def:peps_multiplicity_restored_representation,
+        thm:peps_theta_bond_orthonormal_coordinates,
+        thm:peps_torus_weighted_blocks_state,
+        thm:peps_torus_regrouped_averaging_bonds,
+        lem:peps_matching_sector_bond_inclusion,
+        thm:peps_full_multiplicity_bond_map}
+    Let $\rho$ act on a finite-dimensional complex Hilbert space with a
+    supplied orthogonal internal decomposition into irreducible sectors
+    $S_i$, each of character multiplicity one. Choose an orthonormal basis
+    of each $S_i$, of size $d_i$, and let $D_i(g)$ be its representation matrix.
+    There is a global orthonormal basis $c$ collecting these sector coordinates.
+    Put $U(g)=[\rho(g)]_c$ and $W=[\Theta]_c$.
+
+    Let $H_c$ be the actual torus state obtained by dressing the normalized
+    averaging site of $U$ with $W$ on every virtual leg. Let $K_L$ be the
+    actual normalized averaging-site torus state of the repeated representation
+    $L$. Write $\mathcal B$ for physical bond regrouping, $E$ for matching-sector
+    inclusion, and $T$ for the full endpoint multiplicity-restoring map.
+    On a torus with positive circumferences and $N$ vertices,
+    \begin{align}
+        \mathcal B H_c&\in\operatorname{range}(E^{\otimes 2N}),&
+        T^{\otimes 2N}\mathcal B H_c&=\mathcal B K_L.
+    \end{align}
+    The support and equality are conclusions about the actual contractions.
+    This auxiliary assertion uses a supplied decomposition; it does not
+    establish the existence of the smallest semi-regular representation or
+    its Fourier identification with the regular representation. These steps
+    are separate; see \cite{gap:rmp_peps_quantum_double_g_isometry}.
+
+    For the oriented torus bond set $B=V_{\rm tor}\times\{0,1\}$, write
+    \begin{align}
+        r_{(v,0)}(q)&=q_{v+\mathrm{east}}q_v^{-1},&
+        r_{(v,1)}(q)&=q_vq_{v+\mathrm{north}}^{-1}.
+    \end{align}
+    The regrouped averaging-site state has the actual coherent expression
+    $|G|^{-N}\sum_q\bigotimes_{e\in B}U(r_e(q))$.
+    A commuting dressing $W$ replaces each bond factor by $W^2U(r_e(q))$.
+
+    More generally, for a finite bond set $B$, any rectangular physical matrix
+    $F$ acts on arbitrary coherent sums by
+    \begin{align}
+        F^{\otimes B}\left(\sum_q w_q\bigotimes_{e\in B}x_{e,q}\right)
+        =\sum_q w_q\bigotimes_{e\in B}Fx_{e,q}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the actual dressed site contraction after physical bond regrouping.
+    Each relative group element contributes a matrix
+    $W^2U(g)=\bigoplus_i\sqrt{d_i}D_i(g)$.
+    Matching-sector inclusion reconstructs this matrix from its diagonal
+    blocks, proving the product support assertion. On every such bond vector,
+    multiplicity restoration gives $\bigoplus_iD_i(g)\otimes I_{d_i}=L(g)$.
+    The coherent-sum identity follows by interchanging the finite sums and
+    factoring the independent sums over bond labels. Apply it to the vertex
+    group-label expansion of the actual torus state. The result is precisely
+    the regrouped averaging-site contraction of $L$, with the same normalization
+    $|G|^{-N}$ on both sides.
+\end{proof}
