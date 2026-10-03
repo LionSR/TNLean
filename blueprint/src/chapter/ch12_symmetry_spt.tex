@@ -182,8 +182,7 @@ of the virtual projective representation.
         MPSTensor.exists_unitary_covariance_of_isInjective_unital,
         MPSTensor.exists_unitary_virtual_covariance_of_isOnSiteSymmetric_unital}
     \leanok
-    \uses{def:injective, def:on_site_symmetric,
-        thm:virtual_gauge_fixes_boundary_state}
+    \uses{def:injective, def:on_site_symmetric}
     Let $A$ be one-site injective with $D>0$ and $\E_A(I)=I$.
     There is a positive definite matrix $\Lambda$ with
     $\E_A^\dagger(\Lambda)=\Lambda$. If a unitary physical rotation of $A$
@@ -195,6 +194,8 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:injective_irreducible, lem:trace_mul_transfer_map_adjoint,
+        thm:virtual_gauge_fixes_boundary_state, lem:gauge_equiv_twisted}
     Perron--Frobenius theory gives $\Lambda>0$ and $r>0$ with
     $\E_A^\dagger(\Lambda)=r\Lambda$. Trace duality and unitality give
     \begin{align}
@@ -214,9 +215,8 @@ of the virtual projective representation.
     \lean{MPSTensor.exists_unital_parent_representative_of_isInjective,
         MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}
     \leanok
-    \uses{thm:spt_unitary_virtual_covariance_unital,
-        thm:spt_polar_gapped_interaction_path, def:injective,
-        lem:on_site_symmetric_smul_gauge}
+    \uses{def:injective, def:on_site_symmetric,
+        def:spt_common_space_gapped_path}
     Let $A$ be one-site injective with $D>0$, and let a fixed unitary
     on-site representation $U$ preserve every periodic MPS vector of $A$.
     There are an injective unital tensor $B$, a nonzero scalar $c$, and
@@ -232,6 +232,12 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:injective_irreducible, thm:unital_data_irreducible,
+        thm:local_ground_space_rescaling,
+        thm:local_ground_space_gauge_invariance,
+        lem:on_site_symmetric_smul_gauge,
+        thm:spt_unitary_virtual_covariance_unital,
+        thm:spt_polar_gapped_interaction_path}
     Perron normalization gives $B$ by nonzero rescaling and virtual gauge.
     Both operations preserve the local MPS spaces, hence all canonical
     parent interactions; they also preserve on-site symmetry and
