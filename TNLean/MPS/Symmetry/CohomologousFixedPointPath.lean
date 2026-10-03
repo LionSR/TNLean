@@ -20,6 +20,12 @@ Schuch--Pérez-García--Cirac, arXiv:1010.3732, Section II.F.2,
 **Local fix (second-block range):** The normalized bond interpolation uses
 `D₀ + D₁` as the upper limit of the second block, correcting the printed
 limit `D₁`. See `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Section II.F.2
 -/
 
 open scoped Matrix Matrix.Norms.L2Operator
