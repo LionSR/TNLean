@@ -34,7 +34,6 @@ import TNLean.MPS.Symmetry.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
 import TNLean.MPS.Symmetry.ContinuousCanonicalNormalization
 import TNLean.MPS.Symmetry.ContinuousInvariantCompression
-import TNLean.MPS.Symmetry.ContinuousMinimalCanonicalRealization
 import TNLean.MPS.Symmetry.ContinuousProjectionFrame
 import TNLean.MPS.Symmetry.ContinuousSpectralCorner
 import TNLean.MPS.Symmetry.ContinuousStationaryDensity

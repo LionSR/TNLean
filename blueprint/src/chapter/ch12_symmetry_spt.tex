@@ -2897,7 +2897,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \leanok
     \uses{thm:spt_trace_quotient_continuous_unit,
         thm:spt_continuous_nearby_idempotent,
-        lem:spt_primitive_left_ideal_dimension}
+        lem:spt_primitive_left_ideal_dimension, lem:spt_idempotent_rank}
     Suppose a continuous raw tensor family has two-site and three-site
     traces proportional, with nonzero factors, to those of pointwise
     injective tensors of constant positive bond dimension $D$.
@@ -2966,7 +2966,8 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         Matrix.traceQuotientLetters_of_normalized_linearEquiv}
     \leanok
     \uses{def:spt_trace_quotient_letter_coordinates,
-        lem:spt_gram_left_inverse, thm:spt_left_ideal_frame_realization}
+        lem:spt_gram_left_inverse, thm:spt_left_ideal_frame_realization,
+        thm:spt_trace_quotient_contraction, thm:trace_pairing_injective}
     If $G_{ji}=\alpha_2\operatorname{tr}(A^iA^j)$ and the normalized
     quotient identification satisfies
     $E(x)=\kappa\sum_i(Fx)_i A^i$, with $\alpha_2\kappa\ne0$,
@@ -3006,6 +3007,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     nonzero scalars $\alpha_2$ and $\alpha_3$.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{thm:mpoalg_length_dependent_phase_power}
     Specialize the ray equality to lengths two and three and evaluate
     each vector in the physical coordinate basis.
 \end{proof}
@@ -3050,7 +3052,8 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{MPSTensor.exists_local_continuous_minimalTensor_of_samePositiveMpvRay}
     \leanok
     \uses{lem:spt_positive_ray_finite_traces,
-        thm:spt_continuous_minimal_finite_trace_realization}
+        thm:spt_continuous_minimal_finite_trace_realization,
+        thm:spt_exact_phase_gauge_invariance}
     Suppose the continuous raw family $B(t)$ has, at every parameter,
     the same positive-length periodic rays as a pointwise one-site
     injective tensor $A(t)$ of a fixed positive bond dimension.
@@ -3070,7 +3073,8 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{MPSTensor.exists_local_continuous_unitalTensor_of_samePositiveMpvRay}
     \leanok
     \uses{thm:spt_continuous_minimal_ray_realization,
-        thm:spt_continuous_canonical_normalization}
+        thm:spt_continuous_canonical_normalization,
+        thm:spt_exact_phase_gauge_invariance}
     Under the preceding hypotheses, the local representatives can
     be chosen continuous, one-site injective, and unital, with a
     continuous normalized adjoint stationary density $\sigma(t)$.
