@@ -4041,3 +4041,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Result:** all three arguments use `hP.isSelfAdjoint.isHermitian.eq`;
   the repeated conversion of the matrix star is removed. No new tactic or
   additional mathematical hypothesis is needed.
+
+### adjoint Perron eigenvalue from trace duality — candidate
+- **Pattern:** pair a positive definite adjoint eigenvector with a positive
+  definite right eigenvector, apply `Kraus.trace_mul_mapLM_adjoint`, and
+  cancel the nonzero trace pairing to identify the two eigenvalues. For a
+  unital tensor the right eigenvector is the identity and its eigenvalue is one.
+- **Seen:** two occurrences across
+  `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean` and
+  `TNLean/MPS/Symmetry/UnitaryVirtualGauge.lean` (2026-10-02).
+- **Abstraction:** a lemma identifying eigenvalues from a nonzero trace
+  pairing would contain the common algebraic step; the existing promoted
+  trace-duality theorem already contains the matrix expansion.
+- **Notes:** the new unital case takes only four lines after choosing the
+  adjoint eigenvector. No new tactic is needed.

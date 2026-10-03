@@ -42,6 +42,7 @@ import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap
 import TNLean.MPS.Symmetry.PolarGappedInteractionPath
+import TNLean.MPS.Symmetry.PreparedPolarGappedPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
@@ -54,6 +55,7 @@ import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.TimeReversalIndex
 import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
+import TNLean.MPS.Symmetry.UnitaryVirtualGauge
 import TNLean.MPS.Symmetry.VirtualRepresentation
 import TNLean.MPS.Symmetry.WeightedMatrixUnitInterpolation
 import TNLean.MPS.Symmetry.WeightedMatrixUnitParent
