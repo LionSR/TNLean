@@ -8,7 +8,7 @@
 \date{2026-10-02}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{What the sources print}
 Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
@@ -161,6 +161,66 @@ one tensor.
     the whole state of the network.
 \end{enumerate}
 
+\section{Torus cut entropy: interior rectangles and region lifts}
+Theorem~6.9 of \cite{Schuch2010PEPS} computes the reduced density of a
+topologically trivial region for every coherent superposition of the
+commuting $(g,h)$-closure states of a regular $G$-isometric tensor:
+its rank is $|G|^{\partial R-1}$, its nonzero spectrum is flat, and its
+entropy is $(\partial R-1)\log|G|$.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2043--2076.}
+Three restricted statements toward this theorem are now formalized.
+
+\paragraph{Strictly interior rectangles.}
+Let both torus periods be at least three, so that the simple torus graph
+distinguishes the four virtual legs of a site. Let $R$ be a coordinate
+rectangle of positive side lengths lying strictly between the two
+coordinate seams. Then the closure seams have no edge incident to $R$,
+the rectangle is connected, and its complement remains connected after
+the seams are removed. These connectivity facts are elementary lemmas
+proved for this purpose; the source uses the rectangular partition but
+does not state them. Consequently the finite twisted-cut calculation
+applies, and every nonzero superposition of closure states, commuting or
+not, has the same normalized reduced density on $R$, with the rank,
+flat spectrum and entropy above. This is a scope restriction of the
+source theorem to one family of regions, not its formalization.
+
+\paragraph{Supplied integer lifts.}
+For a region $R$ with an integer lift $L:R\to\mathbb Z^2$ that projects to
+each site and preserves each internal unit step, and for commuting
+closure labels $(g,h)$, the gauge
+$k_v=h^{\lfloor L_x(v)/w\rfloor}g^{-\lfloor L_y(v)/H\rfloor}$ has the
+closure operator as its gradient on every internal edge, including seam
+edges. The internal cycle operators therefore become identities, and the
+region block of each single closure state has the transported Gram
+identity and rank $|G|^{\partial R-1}$ when the boundary is nonempty and
+the region is graph connected. The lift is arithmetic data independent
+of the group; annular regions may also admit one.
+
+\paragraph{Lift existence under simple connectedness.}
+Realize $R$ as the union of the closed unit cells centred at its sites on
+the continuous torus. If this union is simply connected, the covering of
+the torus by the plane gives a continuous lift, which takes integer
+values at sites and preserves unit steps. It is a closed embedding onto
+the corresponding union of planar squares, distinct period translates of
+this planar union are disjoint, and an exterior collar of the planar
+union projects outside $R$. Hence the integer lift above is derived, not
+assumed, for simply connected cell realizations. Graph connectivity of
+$R$ remains an explicit hypothesis of the rank statement, since cells
+meeting only at corners can have a simply connected union.
+
+\paragraph{Remaining work.}
+The integer-lift gauge transports the boundary configuration of $R$ by
+an amount that depends on the closure sector. Separate single-sector Gram
+identities therefore do not yet give a common reduced density for
+coherent superpositions. The source removes this dependence by one
+controlled operation on the complement of $R$, chosen independently of
+the sector. Formalizing it requires complementary loops with prescribed
+seam-crossing numbers, constructed from the exterior collar of the
+simply connected realization, together with the corresponding
+sector-independent removal of the boundary transport. Until then,
+Theorem~6.9 is formalized only for the strictly interior rectangles
+above; this item remains open and is tracked in issue~\#8271.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all
@@ -173,7 +233,9 @@ operators across the contracted primal network is formalized on the torus.
 For these torus statements no elimination is planned: the unrestricted
 reading is false on the torus. Stability of $G$-isometry under
 concatenation is formalized in one dimension and for the contraction of one
-link in two dimensions, so no item of the note remains open.
+link in two dimensions. The torus cut entropy of Theorem~6.9 is formalized
+only for strictly interior rectangles; its extension to simply connected
+regions awaits the complementary routing described above.
 
 \bibliographystyle{alpha}
 \bibliography{references}

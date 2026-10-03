@@ -571,6 +571,126 @@ normalizations.
   Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+#### `TNLean.PEPS.PairConjugacyClass.IsCommuting`
+
+- **Declaration:**
+  `TNLean.PEPS.PairConjugacyClass.IsCommuting (C : PairConjugacyClass G) : Prop`.
+- **Defined in:** `TNLean/PEPS/PairConjugacy.lean`.
+- **Meaning:** the representatives `(g, h)` of a class of pairs under
+  simultaneous conjugation commute. Commutation is invariant under
+  simultaneous conjugation, so the predicate is well defined on classes.
+- **Source:** arXiv:1001.3807, Theorem 5.9 (`thm:2d:gs-struct`),
+  `Papers/1001.3807/paper_v3.tex:1582-1621`, where the torus closures are
+  indexed by commuting pairs up to simultaneous conjugation.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.PairConjugacyClass.isCommuting_pairConjugacyClass` (the class of
+  `p` is commuting exactly when `Commute p.1 p.2`); the subtype
+  `TNLean.PEPS.CommutingPairConjugacyClass` indexes the sector families such as
+  `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting_of_isSemiRegular`.
+- **Caveat:** the independence theorem
+  `TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_of_isSemiRegular`
+  holds for all classes, commuting or not. Commutation is required to move the
+  closure seams without changing the vector
+  (`TNLean.PEPS.torusBondNetwork_closureAt_eq_torusGClosure` assumes
+  `Commute g h`), and hence by every common-density statement built on seam
+  deformation; it is also the source's ground-space condition, whose
+  identification with the parent-Hamiltonian ground space is not formalized
+  (see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`).
+
+#### `TNLean.PEPS.IsTorusClosureCompatible` and `TNLean.PEPS.IsTorusNonseamCompatible`
+
+- **Declarations:**
+  `TNLean.PEPS.IsTorusClosureCompatible (g h g' h' : G) (q : TorusVertex width height → G) : Prop`
+  and `TNLean.PEPS.IsTorusNonseamCompatible (q : TorusVertex width height → α) : Prop`.
+- **Defined in:** `TNLean/PEPS/RegularTorusCompatibility.lean`.
+- **Meaning:** in the overlap of a bra network closed by `(g, h)` with a ket
+  network closed by `(g', h')`, `IsTorusClosureCompatible g h g' h' q` says that
+  the site translations `q v` carry the ket labels to the bra labels across
+  every horizontal and vertical bond, where the closure element is inserted
+  only on the bonds crossing the two seams. For a constant `q = x` this is
+  `h x = x h'` and `g x = x g'`, that is, `x` conjugates `(g', h')` to `(g, h)`.
+  `IsTorusNonseamCompatible q` says that neighbouring labels agree across every
+  bond that does not cross a seam.
+- **Source:** arXiv:1001.3807, `eq:2d:peps-with-ug-uh`,
+  `Papers/1001.3807/paper_v3.tex:1515-1525`, and the local contraction argument
+  of Theorem 5.9, lines 1560-1621.
+- **Sanctioned bridges:** `TNLean.PEPS.IsTorusNonseamCompatible.eq_origin` and
+  `TNLean.PEPS.IsTorusClosureCompatible.eq_origin` (the label is constant);
+  `TNLean.PEPS.isTorusClosureCompatible_iff_exists_intertwiner` (closure
+  compatibility is a constant `x` with `h x = x h'` and `g x = x g'`); and
+  `TNLean.PEPS.sum_torusClosureCompatible_eq_sum_intertwiner`.
+- **Caveat:** these are the local equations of the closure overlap calculation,
+  not a statement about ground spaces. They hold for every circumference,
+  including one.
+
+#### `TNLean.PEPS.IsRegionLabelCompatible` and `TNLean.PEPS.IsTwistedRegionLabelCompatible`
+
+- **Declarations:**
+  `TNLean.PEPS.IsRegionLabelCompatible (R : Finset V) (q : {v // v ∈ R} → G) (η θ) : Prop`
+  and
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G) (q) (η θ) : Prop`.
+- **Defined in:** `TNLean/PEPS/RegularRegionConnectivity.lean` and
+  `TNLean/PEPS/RegularTwistedRegion.lean`.
+- **Meaning:** in the regular-basis expansion of the Gram matrix of an open
+  region, `η` (bra) and `θ` (ket) are group labels on the bonds incident to `R`. The
+  untwisted predicate says that at every vertex `v ∈ R` each incident label of
+  `η` is `q v` times the corresponding label of `θ`. The twisted predicate says
+  the same after the bond operators `u` (bra) and `w` (ket) are inserted at the
+  head of each oriented bond.
+- **Source:** arXiv:1001.3807, regular-basis contraction in the proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Sanctioned bridges:** `TNLean.PEPS.IsRegionLabelCompatible.exists_common_label`
+  and `TNLean.PEPS.isRegionLabelCompatible_iff_exists_translation` (on a
+  connected region the labels are one simultaneous translation);
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible.internalEdge_intertwining` and
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible.exists_common_label` (a connected
+  subgraph of untwisted bonds forces one common translation).
+- **Caveat:** both are local equations of a proof calculation and carry no
+  connectivity; every bridge to a common translation assumes a connected
+  induced region or a connected untwisted subgraph.
+
+#### `TNLean.PEPS.IsTorusRegionIntegerLift`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusRegionIntegerLift (R : Finset (TorusVertex width height)) (L : {v // v ∈ R} → ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/TorusRegionLiftGauge.lean`.
+- **Meaning:** `L` assigns to every site of the torus region `R` a point of the
+  square lattice `ℤ × ℤ` projecting to that site, such that every rightward and
+  upward native bond inside `R` is a unit step of the lift. It is a supplied
+  combinatorial lift, independent of any group or closure operator.
+- **Source:** no source predicate. It is a locally introduced device for the
+  contiguous-block arguments of arXiv:1001.3807, Theorems 6.7-6.9,
+  `Papers/1001.3807/paper_v3.tex:1931-2072`, used to gauge the native closure
+  operators away inside the region.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_isSimplyConnected` (a lift
+  exists when the closed-cell realization of `R` is simply connected),
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_continuousLift`,
+  `TNLean.PEPS.IsTorusRegionIntegerLift.injective`, and the gauge and
+  coordinate theorems `TNLean.PEPS.torusRegionLiftGauge_gradient` and
+  `TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates_of_torusRegionIntegerLift`.
+- **Caveat:** the predicate does not assert that `R` is a disk or simply
+  connected; it is weaker, and only the first bridge derives it from simple
+  connectedness. The lift statements are stated on tori with both periods at
+  least three.
+
+#### `TNLean.PEPS.IsIntegerCellNear`
+
+- **Declaration:** `TNLean.PEPS.IsIntegerCellNear (q a : ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/IntegerCellExteriorCollar.lean`.
+- **Meaning:** the two integer centers differ by at most one in each
+  coordinate, so their closed unit cells meet, possibly only at a corner.
+- **Source:** no source predicate. It is locally introduced plane geometry for
+  the exterior collar of a contiguous block in arXiv:1001.3807, proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.isIntegerCellNear_of_integerClosedCell_inter_nonempty`
+  (intersecting closed cells have near centers); the predicate defines the
+  exterior band and collar graph used by
+  `TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected`.
+- **Caveat:** nearness includes diagonal contact, so it is not the
+  four-neighbor adjacency of the square lattice.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
@@ -1490,6 +1610,33 @@ in `MPS/Preparation/` uses it.
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
 
+#### `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth (f : ℕ → ℝ) (φ : (N : ℕ) → EuclideanSpace ℂ (Fin N → Fin d)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Asymptotic.lean`.
+- **Meaning:** there are unit vectors `ψ_N`, each prepared for all large `N`
+  with `IsPreparedWithMeasurementsAndCircuitInDepth T (ψ_N)` for some
+  `T ≤ f N`, with `‖|ψ_N⟩⟨ψ_N| - |φ_N⟩⟨φ_N|‖₁ → 0`.
+- **Source:** arXiv:2103.13367, paragraph "Phases of matter": `Ψ ↦ Φ` when
+  compositions of `k` channels of `QCcc` of depth `f(M)` map `|ψ_M⟩` to states
+  `σ_M` with `‖σ_M - |φ_M⟩⟨φ_M|‖₁ → 0`.
+- **Sanctioned bridges:**
+  `QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le`
+  (overlap errors `1 - |⟨ψ_N|φ_N⟩|` tending to zero give trace-norm
+  convergence, via `Matrix.traceNormPureSub_le`) and
+  `MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState`
+  (the normalized periodic states of a translation-invariant MPS in depth
+  `C log N`).
+- **Caveat:** the predicate is the relation `Ψ ↦ Φ` of the source only for
+  `Ψ` the trivial sequence of product states, `k = 2` (a preparation with
+  measurements, then a circuit), and `σ_M = |ψ_M⟩⟨ψ_M|` pure and prepared
+  deterministically. The depth `f` is arbitrary; agreement with the source's
+  relation requires `f` polylogarithmic. It is one direction only: the
+  source's equivalence of phases asks for `Ψ ↦ Φ` and `Φ ↦ Ψ`, and the
+  converse direction, with channels acting on arbitrary input states, is not
+  covered (`docs/paper-gaps/psc21_mps_classification_scope.tex`).
+
 #### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
@@ -2128,13 +2275,40 @@ involve no boundary.
   least two. The ground energy may vary, and ground-state degeneracy is allowed.
 - **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
 - **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse`,
-  `SymmetricGappedInteractionPath.trans`, and
+  `SymmetricGappedInteractionPath.trans`,
   `normalizedBondFixedPointGappedPath` (the path between the direct-sum
-  fixed points built from the normalized interpolating bond).
+  fixed points built from the normalized interpolating bond),
+  `MPSTensor.canonicalInjectiveGappedPath`, and
+  `MPSTensor.polarGappedInteractionPath`.
+  `exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint`
+  supplies a path on a common physical space after rephasing unitary
+  virtual actions with cohomologous factor systems. The first fixed-point
+  physical action is preserved. The canonical construction uses a
+  continuous one-site injective tensor path with fixed unitary symmetry up to
+  virtual gauge. The polar construction starts from an injective tensor whose
+  covariance is expressed by unitary bond conjugation; it joins its canonical
+  parent to the parent of its isometric form on the original physical space.
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
   spaces, which is required for the source's converse classification argument.
+
+- **Ordered comparison:** `MPSTensor.orderedGappedInteractionPath` constructs
+  affine interpolation of positive interactions of norm at most one when
+  the smaller interaction has a uniform gap and the periodic zero modes
+  are common. Endpoint commutation with the fixed on-site representation
+  suffices for symmetry of the entire path.
+
+- **Weighted canonical endpoints:** `weightedMatrixUnitParentComparisonPath`
+  compares each fixed normalized-bond interaction with the canonical parent
+  of its weighted matrix-unit tensor. The local operator inequality and the
+  shared nonzero periodic ground line hold even when coefficients vanish.
+  `weightedCanonicalFixedPointGappedPath` concatenates the two endpoint
+  comparisons with the continuous bond path. It concerns unitary virtual
+  summands with a common factor system on the common direct-sum physical
+  space; arbitrary isometric tensors still require a separate endpoint
+  identification. Neither construction assumes continuity of the canonical
+  projections as the interpolation parameter varies.
 
 ## Exact circuits with initialized auxiliaries
 

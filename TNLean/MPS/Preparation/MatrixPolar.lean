@@ -28,6 +28,10 @@ nonzero reals, and `V = M Q` where `Q` applies the reciprocal of the square root
 * `Matrix.polarSupport` — the projector `Π` onto the range of the positive part.
 * `Matrix.polarIso` — the partial isometry `V`.
 * `Matrix.polarIso_mul_polarPos` — `V * P = M`.
+* `Matrix.polarIso_mul_of_gram_eq`, `Matrix.polarPos_mul_of_gram_eq`,
+  `Matrix.polarSupport_mul_of_gram_eq` — if `(K M)ᴴ (K M) = Mᴴ M`, for instance when `Kᴴ K`
+  fixes `M` (`Matrix.gram_mul_eq_of_conjTranspose_mul_self_mul_eq`), then `K M = (K V) P` is the
+  polar decomposition of `K M`.
 * `Matrix.conjTranspose_polarIso_mul_polarIso` — `Vᴴ * V = Π`.
 * `Matrix.range_polarSupport` — `Π` has the same range as `P`.
 * `Matrix.isIsometry_polarIso_of_injective` — for injective `M`, `V` is an isometry
@@ -189,6 +193,46 @@ theorem polarIso_submatrix_equiv {ι' : Type*} [Fintype ι'] (M : Matrix ι κ �
     rw [conjTranspose_submatrix, submatrix_mul_equiv _ _ id e id, submatrix_id_id]
   ext i j
   simp only [polarIso, polarPosInv, h, mul_apply, submatrix_apply, id]
+
+section LeftFactor
+
+variable {ι' : Type*} [Fintype ι']
+
+omit [Fintype κ] [DecidableEq κ] in
+/-- If `Kᴴ K` fixes `M`, then `K M` and `M` have the same Gram matrix: `(K M)ᴴ (K M) = Mᴴ M`.
+This holds when `K` is an isometry, and when `K` is a partial isometry whose initial projector
+fixes the range of `M`. -/
+theorem gram_mul_eq_of_conjTranspose_mul_self_mul_eq {K : Matrix ι' ι ℂ} {M : Matrix ι κ ℂ}
+    (h : Kᴴ * K * M = M) : (K * M)ᴴ * (K * M) = Mᴴ * M := by
+  rw [conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Kᴴ, h]
+
+/-- **Polar factors of a left product**: if `(K M)ᴴ (K M) = Mᴴ M`, then `K M` has the positive
+part of `M`. The positive part, its pseudo-inverse and the support projector are functions of
+the Gram matrix `Mᴴ M`; the partial isometry is `M` times a function of it.
+
+Supplied step for arXiv:2307.01696, eq. (16) and the sentence before it: a layer `K` of the
+tree, acting inside its initial space, does not change the positive part ("to the same
+effect"). -/
+theorem polarPos_mul_of_gram_eq {K : Matrix ι' ι ℂ} {M : Matrix ι κ ℂ}
+    (h : (K * M)ᴴ * (K * M) = Mᴴ * M) : polarPos (K * M) = polarPos M := by
+  rw [polarPos, polarPos, h]
+
+/-- **Polar factors of a left product**: if `(K M)ᴴ (K M) = Mᴴ M`, then `K M` has the support
+projector of `M`. -/
+theorem polarSupport_mul_of_gram_eq {K : Matrix ι' ι ℂ} {M : Matrix ι κ ℂ}
+    (h : (K * M)ᴴ * (K * M) = Mᴴ * M) : polarSupport (K * M) = polarSupport M := by
+  rw [polarSupport, polarSupport, h]
+
+/-- **Polar factors of a left product**: if `(K M)ᴴ (K M) = Mᴴ M`, then the partial isometry of
+`K M` is `K` times the partial isometry of `M`.
+
+Supplied step for arXiv:2307.01696, eq. (16) and the sentence before it: the tree layers
+compose to the isometry of the blocked tensor ("to the same effect"). -/
+theorem polarIso_mul_of_gram_eq {K : Matrix ι' ι ℂ} {M : Matrix ι κ ℂ}
+    (h : (K * M)ᴴ * (K * M) = Mᴴ * M) : polarIso (K * M) = K * polarIso M := by
+  rw [polarIso, polarIso, polarPosInv, polarPosInv, h, Matrix.mul_assoc]
+
+end LeftFactor
 
 /-- **Polar decomposition**, partial-isometry relation: `Vᴴ * V = Π`.
 

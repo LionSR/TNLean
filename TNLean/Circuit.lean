@@ -36,5 +36,6 @@ import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.Teleportation
 import TNLean.Circuit.UniformPostselection
 import TNLean.Circuit.UniformSuccessAttenuation
+import TNLean.Circuit.WindowProduct
 import TNLean.Circuit.ZeroRegisterConjunction
 import TNLean.Circuit.ZeroRegisterReflection

@@ -20,11 +20,14 @@ import TNLean.MPS.Symmetry.BondProductSpectralGap
 import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
+import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CocycleCoboundary
+import TNLean.MPS.Symmetry.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.FixedPointGappedPath
 import TNLean.MPS.Symmetry.FixedPointGappedPathWitness
+import TNLean.MPS.Symmetry.FixedPointParentIdentification
 import TNLean.MPS.Symmetry.GInjective
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import TNLean.MPS.Symmetry.GappedInteractionPathComposition
@@ -34,7 +37,11 @@ import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
+import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
+import TNLean.MPS.Symmetry.PolarDeformation
+import TNLean.MPS.Symmetry.PolarDeformationGap
+import TNLean.MPS.Symmetry.PolarGappedInteractionPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
@@ -45,6 +52,9 @@ import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Symmetry.StringOrderDefs
 import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.TimeReversalIndex
+import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
 import TNLean.MPS.Symmetry.VirtualRepresentation
 import TNLean.MPS.Symmetry.WeightedMatrixUnitInterpolation
+import TNLean.MPS.Symmetry.WeightedMatrixUnitParent
+import TNLean.MPS.Symmetry.WeightedMatrixUnitParentPath
