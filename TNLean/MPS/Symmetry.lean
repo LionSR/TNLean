@@ -20,6 +20,7 @@ import TNLean.MPS.Symmetry.BondProductSpectralGap
 import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
+import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.Defs
@@ -40,6 +41,7 @@ import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap
+import TNLean.MPS.Symmetry.PolarGappedInteractionPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing

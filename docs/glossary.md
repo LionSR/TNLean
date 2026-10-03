@@ -2275,13 +2275,19 @@ involve no boundary.
   least two. The ground energy may vary, and ground-state degeneracy is allowed.
 - **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
 - **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse`,
-  `SymmetricGappedInteractionPath.trans`, and
+  `SymmetricGappedInteractionPath.trans`,
   `normalizedBondFixedPointGappedPath` (the path between the direct-sum
-  fixed points built from the normalized interpolating bond).
+  fixed points built from the normalized interpolating bond),
+  `MPSTensor.canonicalInjectiveGappedPath`, and
+  `MPSTensor.polarGappedInteractionPath`.
   `exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint`
   supplies a path on a common physical space after rephasing unitary
   virtual actions with cohomologous factor systems. The first fixed-point
-  physical action is preserved.
+  physical action is preserved. The canonical construction uses a
+  continuous one-site injective tensor path with fixed unitary symmetry up to
+  virtual gauge. The polar construction starts from an injective tensor whose
+  covariance is expressed by unitary bond conjugation; it joins its canonical
+  parent to the parent of its isometric form on the original physical space.
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground

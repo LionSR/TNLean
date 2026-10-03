@@ -4016,3 +4016,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   invariant-range equivalence, preferably in QICLean's projection algebra.
 - **Notes:** below the three-occurrence promotion threshold. The new construction
   reuses Mathlib's star-projection facts; no custom tactic is needed.
+
+### nonzero matrix eigenvectors lie orthogonal to the kernel — candidate
+- **Pattern:** use self-adjointness to identify the orthogonal complement
+  of the kernel with the range, then exhibit the inverse eigenvalue times
+  the eigenvector as a preimage.
+- **Seen:** `Matrix.spectrum_separated_of_orthogonal_quadratic_gap` in
+  `Algebra/CommonKernelSpectralGap.lean` and
+  `spectrum_separated_of_orthogonal_norm_gap` in
+  `MPS/Symmetry/CanonicalInjectiveGappedPath.lean` (2026-10-02).
+- **Abstraction:** a nonzero-eigenvalue membership lemma for symmetric
+  linear maps would remove the repeated range argument.
+- **Notes:** two occurrences across two files; below the promotion threshold.
