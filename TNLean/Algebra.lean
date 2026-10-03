@@ -80,6 +80,7 @@ import TNLean.Algebra.MatrixBilinearCoordinates
 import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixScalarIdentity
