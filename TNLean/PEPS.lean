@@ -209,6 +209,7 @@ import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.TorusGaugeUniqueness
 import TNLean.PEPS.TorusGaugedWeightCovariance
+import TNLean.PEPS.TorusIncidentGInjectivity
 import TNLean.PEPS.TorusIntegerStepWinding
 import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.TorusOperatorString
@@ -218,6 +219,7 @@ import TNLean.PEPS.TorusPhysicalLocalEquivalence
 import TNLean.PEPS.TorusPhysicalMap
 import TNLean.PEPS.TorusProjectorExpansion
 import TNLean.PEPS.TorusProjectorExtraction
+import TNLean.PEPS.TorusRectangleBoundaryCard
 import TNLean.PEPS.TorusRectangleConnectivity
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleRealization
@@ -237,6 +239,7 @@ import TNLean.PEPS.TorusRowColumnReductionObstruction
 import TNLean.PEPS.TorusSimplyConnectedComplement
 import TNLean.PEPS.TorusSimplyConnectedPhysicalDensity
 import TNLean.PEPS.TorusSimplyConnectedRegionRank
+import TNLean.PEPS.TorusSingletonRegion
 import TNLean.PEPS.TorusSiteTensor
 import TNLean.PEPS.TorusStateTranslationInvariant
 import TNLean.PEPS.TorusStripeLocalEquivalence
