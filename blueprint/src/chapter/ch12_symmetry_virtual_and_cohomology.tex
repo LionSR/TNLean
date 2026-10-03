@@ -363,6 +363,25 @@ gauge transformations form a projective representation on the bond space.
     (\ref{eq:symmetry_cocycle_identity}).
 \end{proof}
 
+\begin{lemma}[Projective representation from chosen virtual covariance]
+    \label{lem:projective_rep_from_virtual_covariance}
+    \lean{MPSTensor.exists_projectiveRepresentation_of_virtual_covariance}
+    \leanok
+    \uses{def:injective, def:projective_rep, lem:gauge_unique_up_to_scalar,
+        lem:twisted_tensor_mul}
+    Let $A$ be injective and let invertible matrices $X_g$ implement the
+    physical twists, $U_g(A)=X_g A X_g^{-1}$. Then $\rho(g)=X_{g^{-1}}$
+    is a projective representation for some scalar factor system $\omega$.
+    Thus chosen unitary matrices give a unitary projective representation
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The twist composition law makes $X_hX_g$ and $X_{gh}$ implement the same
+    twist. Gauge uniqueness gives a nonzero scalar relating them. Reindex
+    by inversion to obtain the projective multiplication law.
+\end{proof}
+
 \begin{theorem}[Virtual representation theorem for injective MPS]%
     \label{thm:virtual_rep_injective}
     \lean{MPSTensor.virtual_rep_of_symmetric_injective}

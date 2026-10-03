@@ -1631,6 +1631,33 @@ in `MPS/Preparation/` uses it.
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
 
+#### `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth (f : ℕ → ℝ) (φ : (N : ℕ) → EuclideanSpace ℂ (Fin N → Fin d)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Asymptotic.lean`.
+- **Meaning:** there are unit vectors `ψ_N`, each prepared for all large `N`
+  with `IsPreparedWithMeasurementsAndCircuitInDepth T (ψ_N)` for some
+  `T ≤ f N`, with `‖|ψ_N⟩⟨ψ_N| - |φ_N⟩⟨φ_N|‖₁ → 0`.
+- **Source:** arXiv:2103.13367, paragraph "Phases of matter": `Ψ ↦ Φ` when
+  compositions of `k` channels of `QCcc` of depth `f(M)` map `|ψ_M⟩` to states
+  `σ_M` with `‖σ_M - |φ_M⟩⟨φ_M|‖₁ → 0`.
+- **Sanctioned bridges:**
+  `QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le`
+  (overlap errors `1 - |⟨ψ_N|φ_N⟩|` tending to zero give trace-norm
+  convergence, via `Matrix.traceNormPureSub_le`) and
+  `MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState`
+  (the normalized periodic states of a translation-invariant MPS in depth
+  `C log N`).
+- **Caveat:** the predicate is the relation `Ψ ↦ Φ` of the source only for
+  `Ψ` the trivial sequence of product states, `k = 2` (a preparation with
+  measurements, then a circuit), and `σ_M = |ψ_M⟩⟨ψ_M|` pure and prepared
+  deterministically. The depth `f` is arbitrary; agreement with the source's
+  relation requires `f` polylogarithmic. It is one direction only: the
+  source's equivalence of phases asks for `Ψ ↦ Φ` and `Φ ↦ Ψ`, and the
+  converse direction, with channels acting on arbitrary input states, is not
+  covered (`docs/paper-gaps/psc21_mps_classification_scope.tex`).
+
 #### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
@@ -2269,10 +2296,114 @@ involve no boundary.
   least two. The ground energy may vary, and ground-state degeneracy is allowed.
 - **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
 - **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse`,
-  `SymmetricGappedInteractionPath.trans`, and
+  `SymmetricGappedInteractionPath.trans`,
   `normalizedBondFixedPointGappedPath` (the path between the direct-sum
-  fixed points built from the normalized interpolating bond).
+  fixed points built from the normalized interpolating bond),
+  `MPSTensor.canonicalInjectiveGappedPath`, and
+  `MPSTensor.polarGappedInteractionPath`.
+  `exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint`
+  supplies a path on a common physical space after rephasing unitary
+  virtual actions with cohomologous factor systems. The first fixed-point
+  physical action is preserved. The canonical construction uses a
+  continuous one-site injective tensor path with fixed unitary symmetry up to
+  virtual gauge. The polar construction starts from an injective tensor whose
+  covariance is expressed by unitary bond conjugation; it joins its canonical
+  parent to the parent of its isometric form on the original physical space.
+  `MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric`
+  derives these data from an on-site symmetric injective tensor: nonzero
+  rescaling and gauge give a unital representative with identical canonical
+  parent interactions, and the unitary virtual covariance is then obtained
+  from the symmetry.
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
   spaces, which is required for the source's converse classification argument.
+
+- **Virtual class of the prepared path:**
+  `MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class`
+  retains the original cohomology class and supplies one unitary projective
+  representation implementing symmetry throughout the polar deformation.
+- **Ordered comparison:** `MPSTensor.orderedGappedInteractionPath` constructs
+  affine interpolation of positive interactions of norm at most one when
+  the smaller interaction has a uniform gap and the periodic zero modes
+  are common. Endpoint commutation with the fixed on-site representation
+  suffices for symmetry of the entire path.
+
+- **Weighted canonical endpoints:** `weightedMatrixUnitParentComparisonPath`
+  compares each fixed normalized-bond interaction with the canonical parent
+  of its weighted matrix-unit tensor. The local operator inequality and the
+  shared nonzero periodic ground line hold even when coefficients vanish.
+  `weightedCanonicalFixedPointGappedPath` concatenates the two endpoint
+  comparisons with the continuous bond path. It concerns unitary virtual
+  summands with a common factor system on the common direct-sum physical
+  space; arbitrary isometric tensors still require a separate endpoint
+  identification. Neither construction assumes continuity of the canonical
+  projections as the interpolation parameter varies.
+
+## Exact circuits with initialized auxiliaries
+
+### `QuantumCircuit.IsCleanImplementation`
+
+- **Declaration:** `IsCleanImplementation J C Z`.
+- **Defined in:** `TNLean/Circuit/CleanUnitaryImplementation.lean`.
+- **Meaning:** the matrix identity $CJ=JZ$. When $J$ includes a logical
+  register with its workspace initialized, this identity says that the
+  workspace returns to its initialized state on every logical input.
+- **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
+- **Sanctioned constructions:** `IsCleanImplementation.mul` composes
+  implementations using the same workspace; `IsCleanImplementation.embedOp`
+  places one in a larger register; `exists_isPairProduct_isCleanImplementation`
+  constructs a neighboring-pair circuit for an included logical unitary.
+- **Caveat:** the identity alone does not assert unitarity. It specifies the
+  initialized subspace, rather than the action on arbitrary workspace inputs.
+
+### `MPUCircuit.IsIntervalInteriorInitialized`
+
+- **Declaration:** `IsIntervalInteriorInitialized j k x z`.
+- **Defined in:** `TNLean/MPS/MPU/IntervalRegisterLayout.lean`.
+- **Meaning:** each auxiliary site strictly inside the interval from cut $j$
+  to cut $k$ has computational label $z$. Physical and outside sites remain
+  unrestricted.
+- **Source:** the interval registers in Section 5 of the same circuit note.
+- **Sanctioned bridge:** `isIntervalInteriorInitialized_split` separates the
+  two child conditions and the initialization of the joining auxiliaries.
+
+### `MPUCircuit.IsIntervalPartition`
+
+- **Declaration:** `IsIntervalPartition start length tree`.
+- **Defined in:** `TNLean/MPS/MPU/BalancedIntervalTree.lean`.
+- **Meaning:** an ordered binary subdivision of a positive-length interval
+  into single-site leaves, with each internal node labelled by its actual
+  joining cut.
+- **Source:** the balanced interval recursion in Section 5 of the circuit note.
+- **Sanctioned construction:** the midpoint tree provides this partition
+  without a supplied tree or joining-cut witness.
+
+### `MPUCircuit.IsMinimalIntervalColumnImplementation`
+
+- **Declaration:** `IsMinimalIntervalColumnImplementation ... j k ... Z`.
+- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalColumns.lean`.
+- **Meaning:** on the prescribed initialized interval input, $Z$ gives the
+  weighted minimal interval isometry, with its two outer bond encodings,
+  and the identity on every outside logical configuration.
+- **Source:** the weighted interval columns in Section 5 of the circuit note.
+- **Sanctioned bridges:** exact supported child columns determine the joint
+  columns; the actual joining contraction determines the parent columns.
+- **Caveat:** this is an initialized-column identity, not a circuit-existence
+  or resource assertion by itself.
+
+### `MPUCircuit.IsMinimalIntervalCircuitImplementation`
+
+- **Declaration:** `IsMinimalIntervalCircuitImplementation ... j k ... K Z C`.
+- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalCircuit.lean`.
+- **Meaning:** $Z$ is a logical unitary supported on the interval and has the
+  preceding initialized-column identity. A neighboring-pair circuit $C$ has
+  at most $K$ gates and implements $Z$ with the shared workspace returned to
+  zero on every logical input.
+- **Source:** the full interval circuit conditions in Section 5 of the note.
+- **Sanctioned constructions:** the actual leaf construction and
+  `exists_minimalInterval_merging_circuit` supply this predicate. The final
+  bounded-cut-rank theorem constructs every intermediate datum from $U$.
+- **Caveat:** minimal bases, metrics, and child implementations occur only
+  in intermediate statements; the final existence theorem does not assume
+  them as additional witnesses.

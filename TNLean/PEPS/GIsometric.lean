@@ -192,8 +192,12 @@ The projected mixed Gram operators of actual complementary twists are computed i
 a common reduced density for their nonzero superpositions.
 `TNLean.PEPS.RegularTorusEntropy` derives the same density and entropy for actual torus
 closure superpositions on strictly interior rectangles, from local isometry and coordinate
-bounds alone. Arbitrary disk cuts meeting
-the torus closure seams still require the source's disentangling argument; see
+bounds alone. Through the complementary disentangling above,
+`TNLean.PEPS.TorusSimplyConnectedPhysicalDensity` extends the common density, local
+equivalence and entropy to every graph-connected region with simply connected closed-cell
+realization, including cuts meeting the closure seams, for the regular representation on
+tori with both periods at least three; `TNLean.PEPS.TorusStripeLocalEquivalence` applies it
+to the two width-one stripes. Tori with a period below three remain outside this scope; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 **Local fix (normalization):** as for `TNLean.PEPS.IsGIsometric`, `𝒫(A†) 𝒫(A)` is required to

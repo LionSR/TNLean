@@ -225,6 +225,35 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** No new public graph API or tactic is introduced; the two walk
   inductions were removed.
 
+### compact finite-volume kernel gaps — promoted
+- **Pattern:** obtain a positive lower norm bound on a finite-dimensional
+  kernel complement at each parameter, preserve half of it in a neighborhood
+  using continuity of the operator and its kernel projection, and pass to a
+  finite subcover of a compact parameter set.
+- **Seen:** the finite-volume argument in
+  `TNLean/MPS/ParentHamiltonian/PeriodicShortGapContinuity.lean` and the
+  fixed-injectivity-length extension in
+  `TNLean/MPS/ParentHamiltonian/CompactNormalParentGap.lean`, the multiblock
+  fixed-volume theorem in `BlockPeriodicGroundSpaceContinuity.lean`, and the
+  local positive-interaction comparison in `CompactParentInteractionGap.lean`
+  (2026-10-02).
+- **Abstraction:**
+  `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
+  `TNLean/Algebra/CompactKernelGap.lean`.
+- **Notes:** the bound follows from finite dimensionality; positivity,
+  self-adjointness, and a supplied pointwise gap are unnecessary.
+
+### scalar cancellation in the fixed-point physical action — promoted
+- **Pattern:** replace an invertible virtual matrix by a nonzero scalar
+  multiple in `Wᵀ ⊗ W⁻¹`; the scalar and its reciprocal cancel.
+- **Seen:** three uses across two files: the identity and multiplication
+  proofs of `sptFixedPointAction` in `SPTFixedPoint.lean`, and
+  `sptFixedPointAction_eq_of_forall_eq_smul` in
+  `CohomologousFixedPointPath.lean`, under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `MPSTensor.sptKron_eq_of_eq_smul` was already the private
+  helper for the first two uses. It is now public and serves the third use.
+- **Notes:** no new cancellation proof or tactic is needed.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -2632,6 +2661,69 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
   table. All three consumers use it; no custom tactic is needed.
 
+### contracting a two-site bond penalty — promoted
+- **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
+  contract the two exterior identity factors, and evaluate the remaining
+  middle-register sum.
+- **Seen:** three contractions across `BondProductEndpointGroundSpace.lean`,
+  `FixedPointParentIdentification.lean`, and `WeightedMatrixUnitParent.lean`,
+  under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `twoSiteBondInteraction_mulVec_apply` gives the coefficient
+  formula for an arbitrary two-site vector. Its separable specialization
+  `twoSiteBondInteraction_mulVec_separable` and the unit-vector consequence
+  `twoSiteBondPenalty_mulVec_separable` are in `TwoSiteBondContraction.lean`.
+- **Refactoring:** both earlier contractions and the weighted contraction
+  use these lemmas. The two earlier files lose 33 lines in total, while the
+  shared module contributes 87 lines, including documentation and four
+  declarations: net +54 lines. The exterior-index reduction now occurs once.
+- **Notes:** the existing boundary-coefficient formulas remain local; the
+  arbitrary-vector formula also handles the complementary projection without
+  assuming separable coefficients.
+
+### canonical-parent comparison with a normalized bond interaction — promoted
+
+- **Pattern:** compare positive two-site projections, identify the bond
+  Hamiltonian's periodic ground line with the tensor's periodic vector,
+  and apply affine interpolation with common zero modes and endpoint symmetry.
+- **Seen:** the weighted comparison in `MPS/Symmetry/WeightedMatrixUnitParentPath.lean`
+  and the two embedded endpoint comparisons in `MPS/Symmetry/EmbeddedFixedPointParent.lean`.
+- **Abstraction:** `normalizedBondCanonicalParentComparisonPath`, with the
+  periodic-vector comparison in
+  `ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq`
+  and the local comparison in
+  `twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap`.
+- **Notes:** the three constructors share the spectral and symmetry proof.
+  Bond dimension may differ from the dimension of the normalized bond.
+  No injectivity assumption is used in the comparison itself.
+
+### gauge covariance along the polar deformation — promoted
+
+- **Pattern:** regard a unitary bond matrix as an invertible matrix and
+  apply the preserved polar covariance letter by letter.
+- **Seen:** the parent-symmetry proof in `MPS/Symmetry/PolarDeformationGap.lean`
+  and the path constructors in `MPS/Symmetry/PolarGappedInteractionPath.lean`
+  and `MPS/Symmetry/EmbeddedInjectiveGappedPath.lean`.
+- **Abstraction:** `gaugeEquiv_polarDeformation_of_unitary_covariance`
+  in `MPS/Symmetry/PolarDeformation.lean`.
+- **Notes:** the same virtual matrix implements the covariance at every
+  parameter. All three uses now share the conversion to gauge equivalence.
+
+### boundary spaces under rectangular physical maps — promoted
+
+- **Pattern:** expand the rotated letters, collect the product of their
+  physical coefficients, and identify the boundary space as the range
+  of the tensor power composed with the original boundary map.
+- **Seen:** the three square-map boundary identities in
+  `MPS/ParentHamiltonian/PhysicalDeformation.lean` and their rectangular
+  counterparts in `MPS/ParentHamiltonian/PhysicalEmbedding.lean`.
+- **Abstraction:** `groundSpaceMap_rotatePhysical_rectangular`,
+  `groundSpace_rotatePhysical_rectangular`, and
+  `groundSpaceES_rotatePhysical_rectangular`.
+- **Notes:** the square-map statements now use these shared results.
+  Neither invertibility nor injectivity is required for boundary transport.
+  Isometric projection transport additionally uses
+  `LinearIsometry.starProjection_map_eq_comp_adjoint`.
+
 ## Candidates
 
 ### One-site doubled-alphabet transport — candidate
@@ -2724,6 +2816,19 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.star_dotProduct_eq_trace_conjTranspose_mul`; the candidate is
   the subsequent identification with the physical boundary density.
 
+### positive interaction subfamilies — candidate (2026-10-02)
+
+- **Pattern:** Express an interval interaction sum as a filtered sum, then
+  apply `Finset.sum_le_sum_of_subset_of_nonneg` and
+  `LinearMap.nonneg_iff_isPositive` to bound it by the full interaction sum.
+- **Seen:** two instances in
+  `ParentHamiltonian/Martingale/OverlappingIntervalGap.lean`, for the prefix
+  and terminal interval Hamiltonians.
+- **Abstraction:** Mathlib already supplies the finite-sum comparison. If
+  more interval shapes require this argument, isolate the common positive
+  subfamily comparison rather than repeating the filter conversion.
+- **Notes:** Both occurrences are in one module; no new tactic is needed.
+
 ### Gram products of vertically stacked matrices — candidate
 - **Pattern:** reduce the Gram product of a matrix formed by `Matrix.fromRows`
   to the sum of the two block Gram products, using
@@ -2736,6 +2841,30 @@ abstracted — record why, so it is not re-proposed).
   lemma if a second file uses the same reduction.
 - **Notes:** three occurrences in one file; below the two-file promotion
   threshold. The following projection algebra differs between the proofs.
+
+### adjoints of left polar identities — candidate (2026-10-02)
+
+- **Pattern:** Apply `congrArg Matrix.conjTranspose` to a matrix product
+  identity, then simplify `conjTranspose_mul` and the Hermitian factors.
+- **Seen:** four instances in `ParentHamiltonian/LeftPolar.lean`: the
+  support factorization used for positivity, the support action on the
+  partial isometry, and the two identities identifying the physical range.
+- **Abstraction:** The existing `Matrix.conjTranspose_mul` supplies the
+  algebraic operation. A more specific reusable lemma would need to remove
+  repeated Hermitian-factor arguments in a second module.
+- **Notes:** These instances occur in one module and prove distinct polar
+  identities. No additional tactic or matrix predicate is introduced.
+
+### coordinate restriction at the two bond endpoints — candidate
+
+- **Pattern:** expand a weighted matrix unit, select the occupied summand,
+  and reduce its endpoint weight to the corresponding inverse square root.
+- **Seen:** the two physical embedding identities in
+  `MPS/Symmetry/EmbeddedFixedPointTensor.lean`.
+- **Abstraction:** a general weighted matrix-unit compression lemma if a
+  third use appears in a second module.
+- **Notes:** currently two occurrences in one module. Isometric inclusions,
+  boundary transport, and covariance restriction already use shared lemmas.
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
@@ -4231,6 +4360,24 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
 
+### Full logical unitary implementation in an initialized packet — promoted (2026-10-02)
+
+- **Pattern:** Include a complete logical unitary in prescribed physical basis
+  coordinates, extend its orthonormal columns to a physical unitary, synthesize
+  that unitary, and retain the equality on every logical input.
+- **Seen:** `MPU/LeafIntervalCircuit.lean`, `MPU/BondDilationCircuit.lean`, and
+  `MPU/CompatibleBondDilationCircuit.lean`.
+- **Abstraction:**
+  `QuantumCircuit.exists_isPairProduct_isCleanImplementation` in
+  `TNLean/Circuit/CleanUnitaryImplementation.lean` derives the actual circuit and
+  its full logical-space clean identity. `IsCleanImplementation.embedOp` in
+  `TNLean/Circuit/CleanImplementationPlacement.lean` places this identity into a
+  larger shared scratch pool.
+- **Notes:** All three local constructions use the common existence theorem.
+  Cleanup on selected physical-input columns alone is insufficient for an
+  inverse call; the full logical identity is retained. The synthesis bound is
+  polynomial in the packet Hilbert dimension and is used only on packets of
+  logarithmic width in the bond bound.
 
 ### Orthogonal projection in matrix coordinates — candidate (2026-10-02)
 
@@ -4245,3 +4392,52 @@ spectral split → block extraction → MPV calculation → strict bounds
   invariant-range equivalence, preferably in QICLean's projection algebra.
 - **Notes:** below the three-occurrence promotion threshold. The new construction
   reuses Mathlib's star-projection facts; no custom tactic is needed.
+
+### nonzero matrix eigenvectors lie orthogonal to the kernel — candidate
+- **Pattern:** use self-adjointness to identify the orthogonal complement
+  of the kernel with the range, then exhibit the inverse eigenvalue times
+  the eigenvector as a preimage.
+- **Seen:** `Matrix.spectrum_separated_of_orthogonal_quadratic_gap` in
+  `Algebra/CommonKernelSpectralGap.lean` and
+  `spectrum_separated_of_orthogonal_norm_gap` in
+  `MPS/Symmetry/CanonicalInjectiveGappedPath.lean` (2026-10-02).
+- **Abstraction:** a nonzero-eigenvalue membership lemma for symmetric
+  linear maps would remove the repeated range argument.
+- **Notes:** two occurrences across two files; below the promotion threshold.
+
+### Orthogonal projections are Hermitian — promoted (2026-10-02)
+
+- **Pattern:** obtain the Hermitian matrix identity from an orthogonal projection.
+- **Seen:** the two projected-Gram arguments in
+  `Circuit/UniformPostselection.lean` and the flag projection in
+  `Circuit/UniformSuccessAttenuation.lean`.
+- **Abstraction:** the existing Mathlib results `IsSelfAdjoint.isHermitian`
+  and `Matrix.IsHermitian.eq` give the identity directly.
+- **Result:** all three arguments use `hP.isSelfAdjoint.isHermitian.eq`;
+  the repeated conversion of the matrix star is removed. No new tactic or
+  additional mathematical hypothesis is needed.
+
+### adjoint Perron eigenvalue from trace duality — candidate
+- **Pattern:** pair a positive definite adjoint eigenvector with a positive
+  definite right eigenvector, apply `Kraus.trace_mul_mapLM_adjoint`, and
+  cancel the nonzero trace pairing to identify the two eigenvalues. For a
+  unital tensor the right eigenvector is the identity and its eigenvalue is one.
+- **Seen:** two occurrences across
+  `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean` and
+  `TNLean/MPS/Symmetry/UnitaryVirtualGauge.lean` (2026-10-02).
+- **Abstraction:** a lemma identifying eigenvalues from a nonzero trace
+  pairing would contain the common algebraic step; the existing promoted
+  trace-duality theorem already contains the matrix expansion.
+- **Notes:** the new unital case takes only four lines after choosing the
+  adjoint eigenvector. No new tactic is needed.
+
+### matrix products after a common bond conjugation — candidate
+- **Pattern:** expand the matrix coefficients of general-linear-group products,
+  reassociate, and cancel the adjacent inverse-basis factors.
+- **Seen:** two occurrences in
+  `TNLean/MPS/Symmetry/ProjectiveGaugeTransport.lean`, in the projective
+  multiplication law and transported virtual covariance (2026-10-02).
+- **Abstraction:** use the group conjugation identities before taking matrix
+  coefficients when possible; a matrix conjugation linear equivalence may
+  contain the common cancellation when a scalar action is also present.
+- **Notes:** both occurrences are in one module, below the promotion threshold.

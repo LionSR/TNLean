@@ -37,6 +37,335 @@ of the virtual projective representation.
     (Theorem~\ref{thm:mpug_circle_complex_units_h2}).
 \end{remark}
 
+\begin{definition}[Polar deformation in the original physical space]
+    \label{def:spt_polar_deformation}
+    \lean{MPSTensor.polarIsometricTensor, MPSTensor.polarDeformationPos,
+        MPSTensor.polarDeformation}
+    \leanok
+    \uses{def:ldpolar_physical_matrix, thm:ldpolar_decomposition}
+    Let $M:\C^{D^2}\to\C^d$ be the physical map of a tensor $A$, and
+    write $M=VP$ for its right polar decomposition. Define $W$ by its
+    physical map $V$, and define $A_\gamma$ by
+    \begin{align}
+        M_\gamma & =V\bigl((1-\gamma)I+\gamma P\bigr),
+        \qquad 0\leq\gamma\leq1.
+        \notag
+    \end{align}
+    This is the polar interpolation of
+    \cite[Section~II.C]{Schuch2011Phases},
+    expressed in right polar factors. It stays in the original physical
+    space; the map $M$ may be rectangular.
+\end{definition}
+
+\begin{theorem}[Injectivity and symmetry along the polar deformation]
+    \label{thm:spt_polar_deformation}
+    \lean{MPSTensor.isInjective_of_leftInverse_physicalMatrix,
+        MPSTensor.posDef_polarDeformationPos,
+        MPSTensor.isInjective_polarDeformation,
+        MPSTensor.polarDeformation_zero, MPSTensor.polarDeformation_one,
+        MPSTensor.continuous_polarDeformation,
+        MPSTensor.polarPos_commute_of_unitary_covariance,
+        MPSTensor.polarIso_covariance_of_isInjective,
+        MPSTensor.polarDeformation_covariance,
+        MPSTensor.physicalMatrix_mul_left_right,
+        MPSTensor.rotatePhysical_polarDeformation_of_unitary_covariance,
+        MPSTensor.gaugeEquiv_polarDeformation_of_unitary_covariance}
+    \leanok
+    \uses{def:spt_polar_deformation, def:injective, def:gauge_equiv}
+    Suppose $A$ is one-site injective. Then $P_\gamma=(1-\gamma)I+\gamma P$
+    is positive definite, $A_\gamma$ is injective, and the path is continuous,
+    with $A_0=W$ and $A_1=A$. If unitaries $U$ and $K$ satisfy $UM=MK$,
+    then $P$ commutes with $K$, $UV=VK$, and $UM_\gamma=M_\gamma K$.
+    In particular, if $U$ acts on $A$ by conjugation with a unitary bond
+    matrix $X$, it acts on every $A_\gamma$ by the same conjugation
+    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Injectivity gives $V^*V=I$ and $P>0$. Every $P_\gamma$ is positive
+    definite, so $P_\gamma^{-1}V^*$ is a left inverse of $M_\gamma$.
+    Its rows express every matrix unit as a linear combination of the
+    tensor letters, proving injectivity. Continuity and the endpoint
+    identities follow from the affine formula. Unitary covariance gives
+    $[M^*M,K]=0$; functional calculus gives $[P,K]=0$. Cancellation of
+    the invertible factor $P$ gives $UV=VK$, and hence the covariance
+    of the entire path. For bond conjugation, $K=X^T\otimes X^*$.
+    Since $X^{-1}=X^*$, this is also covariance by a virtual gauge change.
+\end{proof}
+
+\begin{theorem}[Uniform parent gap along an injective polar deformation]
+    \label{thm:spt_polar_deformation_gap}
+    \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation,
+        MPSTensor.parentInteractionES_polarDeformation_commute_onSiteTensorPow}
+    \leanok
+    \uses{thm:spt_polar_deformation, thm:compact_parent_gap,
+        thm:spt_parent_hamiltonian_symmetry}
+    Let $A$ be one-site injective with $D>0$, and let $H_{N,2}(A_\gamma)$
+    be its canonical two-site periodic parent Hamiltonian. There is
+    $\delta>0$ such that, for every $\gamma\in[0,1]$, every $N\geq2$, and
+    every $v\perp\ker H_{N,2}(A_\gamma)$,
+    \begin{align}
+        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_\gamma)v\rVert.
+        \notag
+    \end{align}
+    Under the unitary bond-conjugation covariance of the preceding theorem,
+    each canonical range-$L$ parent interaction commutes with $U^{\otimes L}$.
+    This is the one-site injective case of the polar-deformation argument
+    in \cite[Section~II.C and Appendix~A]{Schuch2011Phases}; the source
+    also treats normal forms with several blocks
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding theorem gives a continuous injective family on the compact
+    interval $[0,1]$. The compact-family parent-gap theorem applies to this
+    family. Covariance by bond conjugation gives gauge equivalence under
+    physical rotation, so the canonical parent interactions commute with
+    the physical tensor powers.
+\end{proof}
+
+\begin{theorem}[Canonical interactions along a symmetric injective path]
+    \label{thm:spt_canonical_injective_gapped_path}
+    \lean{MPSTensor.continuous_parentInteraction_matrix_family,
+        MPSTensor.interactionHamiltonian_parent_spectrum_gap,
+        MPSTensor.canonicalInjectiveGappedPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path}
+    Let $\gamma\mapsto A_\gamma$ be a continuous path of one-site injective
+    tensors on fixed physical and bond spaces, with $D>0$. Fix a unitary
+    on-site representation $U$ such that, for every $\gamma\in[0,1]$ and
+    every $g\in G$, physical rotation of $A_\gamma$ by $U_g$ is a virtual
+    gauge change. Then the canonical two-site parent interactions give a
+    symmetric gapped interaction path between the endpoint interactions.
+    Their norms are at most one, their ground energy is zero, and one
+    positive spectral gap works for every parameter and every ring length
+    $N\geq2$ \cite[Section~II.C and Appendix~A]{Schuch2011Phases}.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compact_parent_gap, thm:spt_parent_hamiltonian_symmetry}
+    The injective local ground-space projections vary continuously, so their
+    complementary projections do as well. Their norms are at most one.
+    Compactness gives a uniform norm gap above the kernel. Positivity of
+    the parent Hamiltonian makes all its eigenvalues nonnegative; applying
+    the norm bound to a unit eigenvector orthogonal to the kernel shows
+    that the same positive constant is a lower bound for every nonzero
+    eigenvalue. The
+    nonzero periodic MPS vector is a zero eigenvector. Finally, covariance
+    makes every local parent projection, and hence its periodic sum,
+    commute with the physical symmetry.
+\end{proof}
+
+\begin{theorem}[Symmetric gapped path to the isometric parent]
+    \label{thm:spt_polar_gapped_interaction_path}
+    \lean{MPSTensor.polarGappedInteractionPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path}
+    Let $A$ be one-site injective with $D>0$, let $U$ be a unitary on-site
+    representation, and suppose the tensor covariance is expressed by
+    unitary bond conjugation. The canonical two-site parent interactions
+    of $A$ and of its isometric form $W$ are joined by a symmetric gapped
+    interaction path on the original physical space, with the same
+    representation $U$ throughout
+    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
+    No equality between the physical dimension and $D^2$ is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
+    Apply the preceding construction to the injective polar path. The
+    endpoint identities give the canonical parents of $W$ and $A$; unitary
+    bond-conjugation covariance is preserved by the entire interpolation.
+\end{proof}
+
+\begin{theorem}[Physical transport of virtual covariance]
+    \label{thm:spt_embedding_covariance}
+    \lean{MPSTensor.continuous_rotatePhysical,
+        MPSTensor.gaugeEquiv_rotatePhysical_of_intertwiner}
+    \leanok
+    \uses{def:rotate_physical, def:gauge_equiv}
+    Fix a linear physical map $E:\C^d\to\C^m$.
+    The map $A\mapsto EA$ on tensors is continuous.
+    Suppose physical operators $U$ and $V$ obey $VE=EU$, and an
+    invertible bond matrix $X$ satisfies $(UA)^i=XA^iX^{-1}$.
+    Then $(V(EA))^i=X(EA)^iX^{-1}$.
+    This transports the covariance into the common physical space of
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical, lem:physical_rotation_mul,
+        thm:mpdo_isometric_physical_embedding}
+    Physical rotation is a finite sum of fixed scalar multiples of the
+    tensor letters, hence is continuous. Composition of physical rotations
+    and $VE=EU$ give $V(EA)=E(UA)$. Summing the covariance of $A$
+    gives $E(UA)^i=\sum_jE_{ij}XA^jX^{-1}=X(EA)^iX^{-1}$.
+\end{proof}
+
+\begin{definition}[Canonical injective paths in a common physical representation]
+    \label{def:spt_embedded_injective_path}
+    \lean{MPSTensor.embeddedCanonicalInjectiveGappedPath,
+        MPSTensor.embeddedPolarGappedInteractionPath}
+    \leanok
+    \uses{def:injective, def:spt_polar_deformation,
+        def:spt_common_space_gapped_path}
+    Let $A_\gamma$ be a continuous family of one-site injective tensors
+    with bond dimension $D>0$, and let $U$ and $V$ be unitary on-site
+    representations on $\C^d$ and $\C^m$.
+    Suppose $E^\dagger E=I$, $V_gE=EU_g$ for every $g$, and each
+    $U_gA_\gamma$ is a virtual gauge change of $A_\gamma$.
+    Applying the canonical injective-path construction to $EA_\gamma$
+    gives a symmetric gapped interaction path from $h_2(EA_0)$ to
+    $h_2(EA_1)$ under the prescribed action $V$.
+    In particular, when the covariance of $A$ is implemented by unitary
+    bond matrices, its polar deformation gives a path from $h_2(EW)$
+    to $h_2(EA)$, where $W$ is the polar isometric form of $A$.
+    These are the physically embedded endpoint deformations used in
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_embedding_covariance,
+        thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation,
+        thm:mpdo_isometric_physical_embedding}
+    Continuity is preserved by physical rotation. Because $E^\dagger E=I$,
+    every original letter is a linear combination of the embedded letters,
+    so the embedded family is injective. The intertwining identity
+    transports virtual covariance. The canonical injective-path theorem
+    then supplies continuity of the parent projections, norm at most one,
+    and a positive gap uniform in the parameter and every ring length
+    $N\ge2$. Apply this construction to the polar family and use its
+    endpoint identities to obtain the second path.
+\end{proof}
+
+\begin{theorem}[Unitary virtual covariance from unital normalization]
+    \label{thm:spt_unitary_virtual_covariance_unital}
+    \lean{MPSTensor.exists_posDef_adjoint_fixedPoint_of_isInjective_unital,
+        MPSTensor.exists_unitary_covariance_of_isInjective_unital,
+        MPSTensor.exists_unitary_virtual_covariance_of_isOnSiteSymmetric_unital}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric}
+    Let $A$ be one-site injective with $D>0$ and $\E_A(I)=I$.
+    There is a positive definite matrix $\Lambda$ with
+    $\E_A^\dagger(\Lambda)=\Lambda$. If a unitary physical rotation of $A$
+    is a virtual gauge change, the same rotation is implemented by a
+    unitary bond matrix. In particular, for a fixed unitary on-site
+    representation preserving every periodic MPS vector, unitary virtual
+    covariance can be chosen for every group element
+    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:injective_irreducible, lem:trace_mul_transfer_map_adjoint,
+        thm:virtual_gauge_fixes_boundary_state, lem:gauge_equiv_twisted}
+    Perron--Frobenius theory gives $\Lambda>0$ and $r>0$ with
+    $\E_A^\dagger(\Lambda)=r\Lambda$. Trace duality and unitality give
+    \begin{align}
+        \tr\Lambda & =\tr\bigl(\Lambda\E_A(I)\bigr)
+        =\tr\bigl(\E_A^\dagger(\Lambda)\bigr)=r\tr\Lambda.
+        \notag
+    \end{align}
+    Since $\tr\Lambda>0$, $r=1$. The boundary-state theorem makes any
+    virtual gauge $X$ a nonzero scalar multiple $cW$ of a unitary $W$.
+    The scalar cancels in conjugation. On-site symmetry supplies a gauge
+    for each group element by the injective fundamental theorem, and the
+    preceding argument supplies the unitary choices.
+\end{proof}
+
+\begin{theorem}[Prepared polar path from an on-site symmetric injective tensor]
+    \label{thm:spt_prepared_polar_gapped_path}
+    \lean{MPSTensor.exists_unital_parent_representative_of_isInjective,
+        MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric,
+        def:spt_common_space_gapped_path}
+    Let $A$ be one-site injective with $D>0$, and let a fixed unitary
+    on-site representation $U$ preserve every periodic MPS vector of $A$.
+    There are an injective unital tensor $B$, a nonzero scalar $c$, and
+    a virtual gauge relating $B$ to $cA$, such that every canonical
+    parent interaction of $B$ equals the corresponding interaction of $A$.
+    The canonical two-site parent of the isometric form of $B$ and the
+    canonical two-site parent of $A$ are joined by a symmetric gapped
+    interaction path on the original physical space, with representation
+    $U$ throughout \cite[Section~II.C]{Schuch2011Phases}.
+    Neither normalization of $A$ nor unitary virtual matrices are assumed.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:injective_irreducible, thm:unital_data_irreducible,
+        thm:local_ground_space_rescaling,
+        thm:local_ground_space_gauge_invariance,
+        lem:on_site_symmetric_smul_gauge,
+        thm:spt_unitary_virtual_covariance_unital,
+        thm:spt_polar_gapped_interaction_path}
+    Perron normalization gives $B$ by nonzero rescaling and virtual gauge.
+    Both operations preserve the local MPS spaces, hence all canonical
+    parent interactions; they also preserve on-site symmetry and
+    injectivity. The preceding theorem supplies unitary virtual covariance
+    for $B$. Apply the symmetric polar-path construction and replace its
+    final interaction by the equal canonical interaction of $A$.
+\end{proof}
+
+\begin{theorem}[Virtual class under gauge preparation]
+    \label{thm:spt_virtual_class_gauge_preparation}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.conjugate,
+        MPSTensor.twistedTensor_covariance_of_smul_gauge,
+        MPSTensor.cohomologousTo_of_smul_gaugeEquiv}
+    \leanok
+    \uses{def:projective_rep, thm:cocycle_gauge_independence}
+    A virtual change of basis $Y$ replaces a projective representation
+    $\rho(g)$ by $Y\rho(g)Y^{-1}$ and retains its factor system. If
+    $B_i=Y(cA_i)Y^{-1}$, this representation implements the symmetry of
+    $B$ whenever $\rho$ implements the symmetry of $A$. For $D>0$ and
+    injective $B$, every virtual representation chosen for $B$ has factor
+    system cohomologous to that of $\rho$
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Conjugation preserves the projective multiplication law and commutes
+    with physical twisting. Scalar rescaling also commutes with twisting.
+    Apply gauge independence on $B$ to compare the transported
+    representation with any other choice.
+\end{proof}
+
+\begin{theorem}[Virtual class along the prepared polar path]
+    \label{thm:spt_prepared_polar_virtual_class}
+    \lean{MPSTensor.exists_unitary_virtualRep_polarDeformation,
+        MPSTensor.cohomologousTo_polarIsometricTensor_of_isInjective_unital,
+        MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class}
+    \leanok
+    \uses{lem:projective_rep_from_virtual_covariance,
+        thm:spt_virtual_class_gauge_preparation,
+        thm:spt_prepared_polar_gapped_path, thm:cocycle_gauge_independence}
+    Let $A$ be one-site injective with $D>0$, with exact on-site symmetry
+    under a fixed unitary representation $U$. Choose any virtual
+    projective representation for $A$, with factor system $\omega_A$.
+    The unital representative $B$ and symmetric gapped path of the
+    preparation theorem can be chosen together with a unitary projective
+    representation $\rho$ of factor system $\omega\sim\omega_A$ which
+    implements virtual symmetry at every point of the polar deformation.
+    Consequently, any virtual representations chosen at the endpoints
+    of the polar path have cohomologous factor systems
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose unitary virtual covariance for $B$ and assemble these same
+    matrices into a projective representation. Polar covariance preserves
+    the matrices throughout the deformation, hence also their factor
+    system. Gauge preparation identifies this class with $[\omega_A]$;
+    gauge independence compares it with any endpoint choices.
+\end{proof}
+
 \begin{theorem}[Classification along symmetric MPS parent-Hamiltonian paths]
     \label{thm:spt_classification}
     \notready
@@ -103,8 +432,8 @@ of the virtual projective representation.
     action $\widehat U^{\mathrm{path}}$ a linear representation.  Conjugating
     back by the endpoint isometries gives the common direct-sum physical
     representation and the required symmetric gapped path.
-    % The Hamiltonian-path and isometric-form bridges are not yet represented
-    % by Lean declarations; the \notready marker records that status.
+    % General endpoint embeddings and the converse classification remain open.
+    % The injective polar deformation is proved separately above.
 \end{proof}
 
 \begin{theorem}[Virtual-boundary nondecay for injective MPV-symmetric tensors]%
@@ -164,7 +493,10 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{TNLean.Algebra.ProjectiveRepresentation.rephase,
         TNLean.Algebra.circleScalar_mem_unitaryGroup,
         TNLean.Algebra.ProjectiveRepresentation.rephase_mem_unitaryGroup,
-        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous}
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous,
+        TNLean.Algebra.ProjectiveRepresentation.norm_factorSystem,
+        TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
     Multiplying each matrix $V_g$ of a projective representation with factor system
@@ -173,7 +505,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $V^0$ be a unitary projective representation whose factor system is the
     pointwise phase $\omega_0/|\omega_0|$.  If $\omega_1$ is cohomologous to
     $\omega_0$, then multiplying each $V_g^0$ by a unit-modulus scalar gives a unitary
-    projective representation with factor system $\omega_1/|\omega_1|$
+    projective representation with factor system $\omega_1/|\omega_1|$.
+    If two unitary virtual actions on spaces of positive dimension have factor
+    systems $\omega_0$ and $\omega_1$, then $|\omega_0(g,h)|=|\omega_1(g,h)|=1$.
+    If these systems are cohomologous, one can rephase the first action
+    to have the factor system of the second
     \cite[Section~II.F.2, lines~886--921]{Schuch2011Phases}.
 \end{theorem}
 
@@ -189,6 +525,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
     Hence $\psi_gV_g^0$ has factor system $\omega_1/|\omega_1|$, and multiplication
     by a unit-modulus scalar preserves unitarity.
+    For a unitary virtual action,
+    $1=\|V_gV_h\|=|\omega(g,h)|\,\|V_{gh}\|=|\omega(g,h)|$.
+    Hence its factor system equals its pointwise unit phase.
 \end{proof}
 
 \begin{definition}[Direct sum with a common factor system]
@@ -505,6 +844,37 @@ and the regrouping of physical registers into bonds.
     commutes with that unitary.  Each cyclic translate of its complementary
     projection therefore commutes with the global tensor power, as does
     their sum.
+\end{proof}
+
+\begin{theorem}[Ordered interactions with common periodic ground spaces]
+    \label{thm:spt_ordered_interaction_path}
+    \lean{MPSTensor.orderedGappedInteractionPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path, thm:spt_periodic_hamiltonian_order,
+        thm:common_kernel_spectral_gap_interpolation}
+    Let $a,b$ be positive two-site interactions on one physical space,
+    of operator norm at most one, with $a\leq b$. Suppose that for every
+    periodic length $N\geq2$ their Hamiltonians $H_N(a)$ and $H_N(b)$
+    have the same nonzero ground space at zero energy, and both commute
+    with the same on-site symmetry. If $H_N(a)$ has a spectral gap
+    at least $\delta>0$ for all $N\geq2$, then
+    \begin{align}
+        h_\gamma & =a+\gamma(b-a), \qquad 0\leq\gamma\leq1,
+        \notag
+    \end{align}
+    is a symmetric gapped interaction path from $a$ to $b$, with gap
+    at least $\delta$. This comparison applies to independent-bond and
+    canonical parent interactions in the fixed-point construction
+    \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The periodic Hamiltonian satisfies
+    $H_N(h_\gamma)=H_N(a)+\gamma(H_N(b)-H_N(a))$. The added term is positive
+    and annihilates the original ground space, so the kernel and the
+    lower quadratic-form bound on its orthogonal complement are retained.
+    Convexity bounds the local norm by one. Hermiticity, continuity and
+    symmetry follow from affine interpolation.
 \end{proof}
 
 \begin{theorem}[A continuous unit bond interpolation]
@@ -907,6 +1277,40 @@ and the regrouping of physical registers into bonds.
     $U_g^{\otimes N}$ for every $g$.
 \end{proof}
 
+\begin{theorem}[Fixed-point path for cohomologous virtual actions]
+    \label{thm:spt_cohomologous_fixed_point_path}
+    \lean{MPSTensor.sptKron_eq_of_eq_smul,
+        MPSTensor.sptFixedPointAction_eq_of_forall_eq_smul,
+        MPSTensor.exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint}
+    \leanok
+    \uses{thm:spt_unitary_rephasing, thm:spt_direct_sum_fixed_point_path,
+        def:spt_fixed_point_tensor}
+    Let $D_0,D_1>0$, and let $V^0$ and $V^1$ be unitary projective
+    representations with cohomologous factor systems $\omega_0$ and
+    $\omega_1$. There is a unitary projective representation $V^{0\prime}$
+    with factor system $\omega_1$ whose fixed-point physical action, with
+    trivial character, equals that of $V^0$.
+    Set $D=D_0+D_1$ and $W_g=V^{0\prime}_{g^{-1}}\oplus V^1_{g^{-1}}$.
+    Under the common on-site action $U_g=W_g^T\otimes W_g^{-1}$, the
+    normalized bond interactions of Theorem~\ref{thm:spt_direct_sum_fixed_point_path}
+    give a symmetric gapped path between their two endpoint interactions on
+    the physical space of dimension $D^2$
+    \cite[Section~II.F.2]{Schuch2011Phases}. The normalized bond follows
+    the corrected second-block range of
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose $\lambda$ with
+    $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$.
+    Theorem~\ref{thm:spt_unitary_rephasing} gives
+    $V^{0\prime}_g=(\lambda_g/|\lambda_g|)V^0_g$ with factor system
+    $\omega_1$. Scalars cancel in $W^T\otimes W^{-1}$, so the first
+    fixed-point physical action is unchanged.
+    Theorem~\ref{thm:spt_direct_sum_fixed_point_path} now applies to
+    $V^{0\prime}\oplus V^1$.
+\end{proof}
+
 \begin{theorem}[Weighted matrix-unit MPS as a product of bonds]
     \label{thm:spt_weighted_matrix_unit_bond_product}
     \lean{MPSTensor.mpv_weightedMatrixUnitInterpolation_eq_incomingBondProduct,
@@ -951,13 +1355,16 @@ and the regrouping of physical registers into bonds.
     relation of the matrix units passes to $A_\gamma$.
 \end{proof}
 
-\begin{theorem}[Two-site fixed-point vectors lie in the bond kernel]
+\begin{theorem}[Canonical parent interaction of the SPT fixed point]
     \label{thm:spt_fixed_point_two_site_bond_kernel}
     \lean{MPSTensor.matrixUnitBondVector,
         MPSTensor.matrixUnitBondVector_sum_normSq,
         MPSTensor.groundSpaceMap_sptFixedPointTensor_two_apply,
         MPSTensor.twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor,
-        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor}
+        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor,
+        MPSTensor.one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_eq_parentInteractionES_sptFixedPointTensor}
     \leanok
     \uses{thm:spt_two_site_bond_interaction, def:spt_fixed_point_tensor}
     Let $D>0$, let $A^{(a,b)}=D^{-1/2}|a\rangle\langle b|$ be the SPT
@@ -966,9 +1373,9 @@ and the regrouping of physical registers into bonds.
     For every boundary matrix $X$, the two-site open-boundary vector
     $\Psi_X$ has coefficients
     $\Psi_X(a,b,c,d)=D^{-1}\delta_{bc}X_{da}$ and is annihilated by
-    the interaction $h(I-|\eta\rangle\langle\eta|)$ acting on
-    the middle registers. This bond interaction is bounded above by
-    the canonical two-site parent interaction of $A$
+    the interaction $h=I\otimes(I-|\eta\rangle\langle\eta|)\otimes I$
+    acting on the middle registers. Its kernel is exactly $G_2(A)$, so
+    $h$ equals the canonical two-site parent interaction of $A$
     \cite[Section~II.D.2]{Schuch2011Phases}.
 \end{theorem}
 
@@ -978,8 +1385,368 @@ and the regrouping of physical registers into bonds.
     Taking the trace against $X$ gives the coefficient formula.
     The middle-register vector is $\sum_b|b,b\rangle=\sqrt D\,\eta$,
     which lies in the kernel of $I-|\eta\rangle\langle\eta|$.
-    Both interactions are orthogonal projections. The inclusion of
-    their kernels therefore gives the asserted operator inequality.
+    Conversely, for an arbitrary two-site vector $f$, set
+    $X_{da}=\sum_x f(a,x,x,d)$. Direct contraction gives
+    $(I-h)f=\Psi_X$. Thus $\ker h=G_2(A)$.
+    Both interactions are orthogonal projections with this kernel,
+    so they coincide.
+\end{proof}
+
+\begin{theorem}[Contraction of a middle-bond operator]
+    \label{thm:spt_middle_bond_contraction}
+    \lean{MPSTensor.twoSiteBondInteraction_mulVec_apply,
+        MPSTensor.twoSiteBondInteraction_mulVec_separable,
+        MPSTensor.bondPenalty_mulVec_self,
+        MPSTensor.twoSiteBondPenalty_mulVec_separable}
+    \leanok
+    \uses{thm:spt_two_site_bond_interaction}
+    For a matrix $K$ acting on the middle registers, a two-site vector
+    $f$, and exterior indices $a,d$, one has
+    \begin{align}
+        [(I\otimes K\otimes I)f]_{abcd}
+         & =\sum_{x,y}K_{bc,xy}f_{axyd}.\notag
+    \end{align}
+    In particular, if $f_{abcd}=\eta_{bc}F_{ad}$, then its image has
+    coefficients $(K\eta)_{bc}F_{ad}$. For a unit vector $\eta$,
+    $K=I-|\eta\rangle\langle\eta|$ annihilates every such $f$
+    \cite[Section~II.D.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity factors constrain the exterior summation indices to
+    $a,d$, leaving the middle-index sum. For separable coefficients,
+    factor out $F_{ad}$. Finally,
+    $(I-|\eta\rangle\langle\eta|)\eta=(1-\|\eta\|^2)\eta=0$.
+\end{proof}
+
+\begin{theorem}[Canonical-parent comparison for weighted matrix units]
+    \label{thm:spt_weighted_matrix_unit_parent_comparison}
+    \lean{MPSTensor.groundSpaceMap_weightedMatrixUnitInterpolation_two_apply,
+        MPSTensor.twoSiteBondInteraction_groundSpaceMap_weightedMatrixUnitInterpolation,
+        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_weightedMatrixUnitInterpolation,
+        MPSTensor.twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation,
+        MPSTensor.incomingBondUnitaryLin_normalizedBondInterpolation_state,
+        MPSTensor.interactionHamiltonian_normalizedBondInteraction_groundSpace,
+        MPSTensor.ker_interactionHamiltonian_normalizedBondInteraction_le_parent,
+        MPSTensor.interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction}
+    \leanok
+    \uses{thm:spt_direct_sum_fixed_point_path,
+        thm:spt_weighted_matrix_unit_bond_product, def:parent_interaction,
+        thm:spt_middle_bond_contraction}
+    Let $D_0,D_1>0$, let $W_t$ be the normalized diagonal coefficient
+    matrix of the interpolating bond $\eta_t$, and put
+    $A_t^{(a,b)}=(W_t)_{aa}|a\rangle\langle b|$.
+    For every real $t$, its canonical two-site parent projection $p_t$
+    satisfies
+    \begin{align}
+        I\otimes(I-|\eta_t\rangle\langle\eta_t|)\otimes I & \leq p_t.
+        \notag
+    \end{align}
+    On every periodic chain of length at least two, the smaller interaction
+    has precisely the line spanned by the nonzero periodic MPS of $A_t$
+    as its zero eigenspace. This line is also annihilated by the canonical
+    parent Hamiltonian. These statements include the two endpoints, where
+    some diagonal coefficients vanish
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two-site boundary coefficient is
+    $(W_t)_{aa}(W_t)_{bc}X_{da}$. Thus every boundary vector has $\eta_t$
+    on the middle registers, and the independent-bond penalty annihilates
+    it. Comparing orthogonal projections gives the local inequality.
+    Regrouping the physical registers carries $\eta_t^{\otimes N}$ to
+    the periodic MPS. The independent-bond Hamiltonian has this unique
+    ground line, and every canonical parent Hamiltonian annihilates its
+    own periodic MPS.
+\end{proof}
+
+\begin{definition}[Symmetric paths between weighted canonical parents]
+    \label{def:spt_weighted_canonical_parent_path}
+    \lean{MPSTensor.interactionHamiltonian_normalizedBondInteraction_spectrum_gap_one,
+        MPSTensor.weightedMatrixUnitParentComparisonPath,
+        MPSTensor.weightedCanonicalFixedPointGappedPath}
+    \leanok
+    \uses{thm:spt_weighted_matrix_unit_parent_comparison,
+        thm:spt_ordered_interaction_path, thm:spt_direct_sum_fixed_point_path,
+        thm:spt_parent_hamiltonian_symmetry, thm:spt_common_space_path_concatenation}
+    Suppose the two virtual summands carry unitary projective
+    representations with the same factor system. Let $h_t$ be the bond
+    interaction and $p_t$ the canonical parent projection of the weighted
+    tensor. For each fixed real $t$, the affine path
+    $s\mapsto h_t+s(p_t-h_t)$ is a symmetric gapped path from $h_t$ to $p_t$.
+    Concatenating its reverse at $t=0$, the bond path from $h_0$ to $h_1$,
+    and the comparison at $t=1$ gives a symmetric gapped path from $p_0$
+    to $p_1$ on the common direct-sum physical space
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The bond Hamiltonian has gap at least one. The local inequality and
+    the shared nonzero periodic ground line imply that each affine
+    comparison retains this gap. The tensor covariance gives symmetry of
+    the canonical parent, and both local terms are orthogonal projections
+    of norm at most one. Concatenation preserves a positive uniform gap.
+    This uses the canonical projections only at fixed values of $t$;
+    their continuity as the bond coefficients vanish is unnecessary.
+\end{proof}
+
+\begin{theorem}[Boundary spaces under physical embeddings]
+    \label{thm:spt_physical_embedding_boundary}
+    \lean{Matrix.rectKronecker_conjTranspose,
+        Matrix.rectKronecker_conjTranspose_mul_self,
+        MPSTensor.groundSpaceMap_rotatePhysical_rectangular,
+        MPSTensor.groundSpace_rotatePhysical_rectangular,
+        MPSTensor.groundSpaceES_rotatePhysical_rectangular}
+    \leanok
+    \uses{def:physical_rotation, def:ground_space_map, def:ground_space_es}
+    Let $E:\mathbb C^d\to\mathbb C^m$ be a linear map and let
+    $(EA)^i=\sum_jE_{ij}A^j$. Write $T_L=E^{\otimes L}$. Then
+    $\Gamma_L^{EA}(X)=T_L\Gamma_L^A(X)$ and
+    $G_L(EA)=T_LG_L(A)$ for every boundary matrix $X$ and every $L\ge0$.
+    If $E^\dagger E=I$, then $T_L^\dagger T_L=I$.
+    More generally, adjoints distribute over finite tensor products:
+    $(\bigotimes_j E_j)^\dagger=\bigotimes_j E_j^\dagger$.
+    These identities apply to the physical inclusions in
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:physical_rotation_word, def:ground_space_map}
+    Expand each rotated letter in the ordered product. Taking the trace
+    against $X$ gives the boundary-map identity. Taking its range gives
+    the boundary-space identity, including its Hilbert-space realization.
+    Multiplication and adjoints commute with tensor powers, so
+    $T_L^\dagger T_L=(E^\dagger E)^{\otimes L}=I$.
+\end{proof}
+
+\begin{theorem}[Projection onto an isometric image]
+    \label{thm:spt_isometric_image_projection}
+    \lean{LinearIsometry.starProjection_map_eq_comp_adjoint}
+    \leanok
+    Let $T:H\to K$ be an isometry between finite-dimensional Hilbert
+    spaces, let $G\subseteq H$ be a subspace, and denote its orthogonal
+    projection by $P_G$. Then $P_{TG}=TP_GT^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $y\in K$, the vector $TP_GT^\dagger y$ lies in $TG$.
+    For every $x\in G$, the adjoint identity and isometry give
+    $\langle y-TP_GT^\dagger y,Tx\rangle
+        =\langle T^\dagger y-P_GT^\dagger y,x\rangle=0$.
+    These two properties characterize the orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Canonical parents under physical isometries]
+    \label{thm:spt_physical_embedding_parent}
+    \lean{MPSTensor.parentInteractionES_rotatePhysical_isometry,
+        MPSTensor.parentInteractionES_rotatePhysical_isometry_decomposition,
+        MPSTensor.parentInteraction_matrix_rotatePhysical_isometry,
+        MPSTensor.parentInteractionES_rotatePhysical_isometry_apply_of_adjoint_eq_zero}
+    \leanok
+    \uses{thm:spt_physical_embedding_boundary,
+        thm:spt_isometric_image_projection, def:parent_interaction}
+    Suppose $E^\dagger E=I$ and set $T_L=E^{\otimes L}$.
+    The canonical parent projection satisfies
+    \begin{align}
+        h_L(EA)
+         & =I-T_LP_{G_L(A)}T_L^\dagger
+        =T_Lh_L(A)T_L^\dagger+I-T_LT_L^\dagger.
+        \label{eq:spt_physical_embedding_parent}
+    \end{align}
+    The identity holds both as an operator and in the configuration basis.
+    In particular, $T_L^\dagger v=0$ implies $h_L(EA)v=v$.
+    No injectivity assumption on $A$ is needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_physical_embedding_boundary,
+        thm:spt_isometric_image_projection, def:parent_interaction}
+    The embedded boundary space is $T_LG_L(A)$, whose projection is
+    $T_LP_{G_L(A)}T_L^\dagger$. Taking the complementary projection
+    and substituting $h_L(A)=I-P_{G_L(A)}$ proves
+    (\ref{eq:spt_physical_embedding_parent}). Applying its first expression
+    to $v$ with $T_L^\dagger v=0$ gives the last assertion.
+\end{proof}
+
+\begin{definition}[Coordinate inclusions of fixed-point tensors]
+    \label{def:spt_coordinate_inclusions}
+    \lean{Matrix.coordinateInclusion,
+        Matrix.coordinateInclusion_isometry,
+        Matrix.conjTranspose_coordinateInclusion_mul,
+        Matrix.mul_coordinateInclusion,
+        Matrix.coordinateInclusion_compression,
+        Matrix.coordinateInclusion_projection_mul_of_rowSupport,
+        Matrix.coordinateInclusion_intertwine_of_rowSupport,
+        MPSTensor.sptPhysicalEmbedding,
+        MPSTensor.rotatePhysical_coordinateInclusion_sptFixedPointTensor_apply,
+        MPSTensor.isInjective_rotatePhysical_coordinateInclusion_sptFixedPointTensor}
+    \leanok
+    \uses{def:spt_fixed_point_tensor, thm:spt_fixed_point_transfer}
+    An injection $e:\{1,\ldots,D\}\to\{1,\ldots,K\}$ defines an
+    isometry $J_e$ by $J_e\ket a=\ket{e(a)}$. Its adjoint selects the
+    included coordinates, so $J_e^\dagger M J_e$ is the corresponding
+    submatrix. If the rows of $M$ are supported on these coordinates,
+    then $J_eJ_e^\dagger M=M$ and $MJ_e=J_e(J_e^\dagger M J_e)$.
+    The physical inclusion $E_e$ sends $\ket{a,b}$ to
+    $\ket{e(a),e(b)}$. It has orthonormal columns, and the embedded
+    fixed-point tensor has entries
+    \begin{align}
+        (E_e A)^p_{ab}
+         & =D^{-1/2}\delta_{p,(e(a),e(b))}.\notag
+    \end{align}
+    For $D>0$ this tensor is injective
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The columns of $J_e$ are distinct coordinate vectors. Multiplication
+    by $J_e$ and $J_e^\dagger$ selects columns and rows. The fixed-point
+    entry formula follows by summing its matrix units. Since
+    $E_e^\dagger E_e=I$, every original letter is a linear combination
+    of the embedded letters, which therefore span the full matrix algebra.
+\end{proof}
+
+\begin{theorem}[Isometric restriction of boundary vectors and covariance]
+    \label{thm:spt_isometric_bond_restriction}
+    \lean{MPSTensor.groundSpaceMap_eq_of_isometric_bond_intertwiner,
+        MPSTensor.groundSpace_le_of_isometric_bond_intertwiner,
+        MPSTensor.trace_evalWord_eq_of_supported_isometric_bond_intertwiner,
+        MPSTensor.mpv_eq_of_supported_isometric_bond_intertwiner,
+        MPSTensor.rotatePhysical_gauge_covariance_of_isometric_bond_intertwiner}
+    \leanok
+    Let $A,B$ have the same physical alphabet and suppose
+    $V^\dagger V=I$ and $A^iV=VB^i$ for every letter. Then
+    $\Gamma_L^A(VXV^\dagger)=\Gamma_L^B(X)$ for every $L$, and
+    $G_L(B)\subseteq G_L(A)$.
+    If also $VV^\dagger A^i=A^i$, their periodic vectors agree at every
+    positive length. Finally, if invertible matrices $X,Y$ satisfy
+    $XV=VY$ and $\sum_jU_{ij}A^j=XA^iX^{-1}$, then
+    $\sum_jU_{ij}B^j=YB^iY^{-1}$
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Word evaluation preserves the intertwining relation. Cyclicity of
+    the trace and $V^\dagger V=I$ give the boundary identity. For a
+    nonempty word $w$, row support gives $VV^\dagger A^w=A^w$, hence
+    $\tr(A^w)=\tr(V^\dagger A^wV)=\tr(B^w)$.
+    The empty word is excluded because its trace is the bond dimension.
+    For covariance, use $X^{-1}V=VY^{-1}$, multiply the large-tensor
+    identity by $V$ on the right, and cancel the inclusion using
+    $V^\dagger$ on the left.
+\end{proof}
+
+\begin{definition}[Smaller fixed points in the common physical space]
+    \label{def:spt_embedded_fixed_points}
+    \lean{MPSTensor.embeddedSptFixedPointLeft,
+        MPSTensor.embeddedSptFixedPointRight,
+        MPSTensor.embeddedSptFixedPointLeft_eq_rotatePhysical,
+        MPSTensor.embeddedSptFixedPointRight_eq_rotatePhysical,
+        MPSTensor.embeddedSptFixedPointLeft_isInjective,
+        MPSTensor.embeddedSptFixedPointRight_isInjective,
+        MPSTensor.weightedMatrixUnitInterpolation_zero_rowSupport,
+        MPSTensor.weightedMatrixUnitInterpolation_one_rowSupport,
+        MPSTensor.weightedMatrixUnitInterpolation_zero_intertwine,
+        MPSTensor.weightedMatrixUnitInterpolation_one_intertwine,
+        MPSTensor.groundSpace_embeddedSptFixedPointLeft_le,
+        MPSTensor.groundSpace_embeddedSptFixedPointRight_le,
+        MPSTensor.mpv_embeddedSptFixedPointLeft,
+        MPSTensor.mpv_embeddedSptFixedPointRight,
+        TNLean.Algebra.ProjectiveRepresentation.directSum_coordinateInclusion_left,
+        TNLean.Algebra.ProjectiveRepresentation.directSum_coordinateInclusion_right,
+        MPSTensor.twistedTensor_embeddedSptFixedPointLeft,
+        MPSTensor.twistedTensor_embeddedSptFixedPointRight}
+    \leanok
+    \uses{def:spt_coordinate_inclusions, thm:spt_isometric_bond_restriction,
+        thm:spt_weighted_matrix_unit_bond_product, def:spt_fixed_point_tensor}
+    Let $D_0,D_1>0$ and $K=D_0+D_1$. Let $e_0,e_1$ be the two
+    coordinate inclusions into $\C^K$, and let $A_t$ be the weighted
+    matrix-unit tensor. Define
+    \begin{align}
+        B_0^p & =J_{e_0}^\dagger A_0^pJ_{e_0},       &
+        B_1^p & =J_{e_1}^\dagger A_1^pJ_{e_1}.\notag
+    \end{align}
+    These are the physical embeddings $E_{e_0}A^{(D_0)}$ and
+    $E_{e_1}A^{(D_1)}$ of the standard fixed points; their bond
+    dimensions remain $D_0,D_1$. Both are injective,
+    $G_L(B_j)\subseteq G_L(A_j)$, and their periodic vectors equal
+    those of $A_j$ at every positive length.
+    For projective representations $\rho_0,\rho_1$ with the same factor
+    system, the common physical action of $\rho_0\oplus\rho_1$ with
+    trivial character acts on $B_j$ by conjugation with
+    $\rho_j(g^{-1})$ \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The endpoint weight is $D_j^{-1/2}$ on the occupied summand and
+    zero elsewhere. Compression therefore gives the physical embedding
+    formula. The weighted endpoint has no rows outside that summand.
+    Apply Theorem~\ref{thm:spt_isometric_bond_restriction} to obtain the
+    boundary inclusion and periodic-vector equality. The block-diagonal
+    virtual action satisfies
+    $(\rho_0\oplus\rho_1)(g)J_{e_j}=J_{e_j}\rho_j(g)$; the same theorem
+    then gives the endpoint covariance.
+\end{proof}
+
+\begin{theorem}[Bond comparison with another canonical parent]
+    \label{thm:spt_embedded_parent_comparison}
+    \lean{MPSTensor.twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap,
+        MPSTensor.normalizedBondInteraction_le_parent_of_isometric_bond_intertwiner,
+        MPSTensor.ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq,
+        MPSTensor.interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq,
+        MPSTensor.normalizedBondCanonicalParentComparisonPath}
+    \leanok
+    \uses{thm:spt_weighted_matrix_unit_parent_comparison,
+        thm:spt_isometric_bond_restriction, thm:spt_ordered_interaction_path,
+        thm:spt_parent_hamiltonian_symmetry}
+    Let $h_t$ be the normalized independent-bond interaction and let
+    $B$ have its physical alphabet. If $h_t$ annihilates $G_2(B)$,
+    then $h_t\leq p_B$, where $p_B$ is the canonical two-site parent
+    projection. In particular, this holds when an isometric bond
+    inclusion intertwines $A_t$ with $B$.
+    If the periodic vectors of $B$ and $A_t$ agree at every length
+    $N\geq2$, every periodic zero mode of $h_t$ is annihilated by the
+    canonical parent of $B$. Under the common unitary physical symmetry
+    of two unitary projective representations with the same factor system
+    and trivial character, covariance of $B$ therefore makes
+    $s\mapsto h_t+s(p_B-h_t)$ a symmetric gapped path with gap at
+    least one \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Comparing orthogonal projections gives $h_t\leq p_B$.
+    In the isometric restriction case, transport a boundary matrix
+    $X$ to $VXV^\dagger$ and use the weighted-tensor annihilation.
+    The bond Hamiltonian's kernel is the line spanned by the periodic
+    vector of $A_t$, hence also by that of $B$. The canonical parent
+    annihilates its own periodic vector. Apply the ordered-interaction
+    comparison, using the bond gap of one and covariance for symmetry.
+\end{proof}
+
+\begin{definition}[Gapped paths between embedded canonical fixed-point parents]
+    \label{def:spt_embedded_canonical_parent_path}
+    \lean{MPSTensor.embeddedSptFixedPointLeftParentComparisonPath,
+        MPSTensor.embeddedSptFixedPointRightParentComparisonPath,
+        MPSTensor.embeddedCanonicalFixedPointGappedPath}
+    \leanok
+    \uses{def:spt_embedded_fixed_points, thm:spt_embedded_parent_comparison,
+        thm:spt_direct_sum_fixed_point_path, thm:spt_common_space_path_concatenation}
+    Suppose $D_0,D_1>0$ and the virtual representations are unitary
+    with the same factor system. Use the common physical action with
+    trivial character. The canonical two-site parents of $B_0$ and
+    $B_1$ are connected on $\C^{D_0+D_1}\otimes\C^{D_0+D_1}$ by a
+    continuous symmetric path of interactions of norm at most one.
+    Their periodic Hamiltonians have a positive uniform gap for all
+    chain lengths $N\geq2$ \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The two endpoint comparisons retain the gap of one. Concatenate
+    the reverse comparison from $p_{B_0}$ to $h_0$, the normalized
+    bond interpolation from $h_0$ to $h_1$, and the comparison from
+    $h_1$ to $p_{B_1}$. Each part is continuous and symmetric with
+    the same prescribed action, and concatenation preserves the gap.
 \end{proof}
 
 \subsection{Degeneracy of the entanglement spectrum}

@@ -15,7 +15,7 @@
     On each matrix unit this reads
     \begin{align}
         \ket{k}\bra{\ell}\longmapsto
-        \frac{1}{\sqrt{m_i}}\sum_{a=1}^{m_i}
+        \frac{1}{\sqrt{m_i}}\sum_{a=0}^{m_i-1}
         \ket{k,a}\bra{\ell,a}.
     \end{align}
     For an irreducible representation of dimension $d_i$, the regular
@@ -42,12 +42,12 @@
 
 \begin{proof}\leanok
     For each block,
-    \begin{align*}
+    \begin{align}
         \tr\bigl[(m_i^{-1/2}X_i\otimes I)^\dagger
             (m_i^{-1/2}Y_i\otimes I)\bigr]
          & =m_i^{-1}\tr[X_i^\dagger Y_i]\tr[I_{M_i}] \\
          & =\tr[X_i^\dagger Y_i].
-    \end{align*}
+    \end{align}
     Summing gives the assertion. The Hilbert--Schmidt norm vanishes
     only on the zero matrix, which proves injectivity.
 \end{proof}
@@ -57,7 +57,7 @@
     \lean{TNLean.PEPS.multiplicityBondMap_sqrt_smul,
         TNLean.PEPS.multiplicityBondFamilyMap_sqrt_smul}
     \leanok
-    \uses{thm:peps_multiplicity_bond_isometry}
+    \uses{def:peps_multiplicity_bond_map}
     For any matrices $D_i$, one has
     \begin{align}
         J\bigl((\sqrt{m_i}D_i)_i\bigr)

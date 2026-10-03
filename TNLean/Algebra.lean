@@ -28,10 +28,12 @@ import TNLean.Algebra.CommonKernelSpectralGap
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.CompactGapBounds
+import TNLean.Algebra.CompactKernelGap
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
+import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
@@ -65,6 +67,7 @@ import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
+import TNLean.Algebra.IsometricProjection
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.KernelGapPerturbation
 import TNLean.Algebra.KleinCocycleCompleteness
@@ -77,6 +80,7 @@ import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
+import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixScalarIdentity
@@ -91,6 +95,7 @@ import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
+import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
@@ -102,6 +107,7 @@ import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
+import TNLean.Algebra.PureStateTraceNorm
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RegularRepresentationBlocking
 import TNLean.Algebra.RepresentationDelta
