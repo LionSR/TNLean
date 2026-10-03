@@ -77,12 +77,12 @@ abstracted — record why, so it is not re-proposed).
   `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
-  and `expect_productVector_mul` in `TNLean/MPS/Preparation/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/MPS/Preparation/LocalChannelCircuit.lean`,
+  and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
+  `trace_finKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
   and `OnsiteChannel.dual_mul` in
-  `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
-- **Abstraction:** `MPSPreparation.eq_of_mem_supportedOperators₂` in
-  `TNLean/MPS/Preparation/LocalCircuit.lean`: two bilinear maps
+  `TNLean/Circuit/Channel/Conversion.lean`.
+- **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
+  `TNLean/Circuit/LocalCircuit.lean`: two bilinear maps
   `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
   generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
   maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
@@ -2446,6 +2446,19 @@ abstracted — record why, so it is not re-proposed).
   matrix-unit tensor during alphabet comparison. The count remains below
   the rule-of-three threshold.
 
+### Gram products of vertically stacked matrices — candidate
+- **Pattern:** reduce the Gram product of a matrix formed by `Matrix.fromRows`
+  to the sum of the two block Gram products, using
+  `Matrix.conjTranspose_fromRows_eq_fromCols_conjTranspose` and
+  `Matrix.fromCols_mul_fromRows`.
+- **Seen:** three proofs in `TNLean/MPS/MPU/ProjectionPhaseIsometries.lean`:
+  `projectionPrefixMap_isIsometry`, `projectionInteriorMap_isIsometry`, and
+  `projectionSuffixMap_isIsometry` (2026-10-02).
+- **Abstraction:** combine the two existing Mathlib identities into a helper
+  lemma if a second file uses the same reduction.
+- **Notes:** three occurrences in one file; below the two-file promotion
+  threshold. The following projection algebra differs between the proofs.
+
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
   use the supplied gate entry formulas, and rewrite both finite sums along
@@ -3729,7 +3742,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   outcome-consistency lemma, the corrections by outcomes and partial sums, and
   the product-state bookkeeping.
 - **Seen:** two occurrences (2026-10-01):
-  `TNLean/MPS/Preparation/GHZMeasurement.lean` (interleaved single qudits of
+  `TNLean/Circuit/Measurement/GHZ.lean` (interleaved single qudits of
   an open chain, `forall_succ_eq_iff`, `forall_add_ghzCorrection_eq_iff`) and
   `TNLean/MPS/Preparation/WindowGHZ.lean` (registers of `r₁` sites inside
   blocks of a ring, `forall_cyclic_eq_zero_iff`).
@@ -3912,3 +3925,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+
+### Orthogonal projection in matrix coordinates — candidate (2026-10-02)
+
+- **Pattern:** Transport a finite-dimensional invariant subspace to Euclidean
+  coordinates, represent its orthogonal projection by `Matrix.toEuclideanLin.symm`,
+  and prove matrix Hermiticity, idempotence and invariant-range identities.
+- **Seen:** two constructions: QICLean `Kraus/IrreducibleAction.lean`
+  (`isIrreducibleAction_of_isIrreducibleFamily`) and TNLean
+  `MPS/FundamentalTheorem/Reduction/StationarySplitting.lean`
+  (`isSemisimpleModule_wordModule_of_hasInvariantProjectorClosure`).
+- **Abstraction:** a matrix-coordinate orthogonal-projection helper with
+  invariant-range equivalence, preferably in QICLean's projection algebra.
+- **Notes:** below the three-occurrence promotion threshold. The new construction
+  reuses Mathlib's star-projection facts; no custom tactic is needed.
