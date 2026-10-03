@@ -1427,6 +1427,186 @@ and the regrouping of physical registers into bonds.
     their continuity as the bond coefficients vanish is unnecessary.
 \end{proof}
 
+\begin{definition}[Coordinate inclusions of fixed-point tensors]
+    \label{def:spt_coordinate_inclusions}
+    \lean{Matrix.coordinateInclusion,
+        Matrix.coordinateInclusion_isometry,
+        Matrix.conjTranspose_coordinateInclusion_mul,
+        Matrix.mul_coordinateInclusion,
+        Matrix.coordinateInclusion_compression,
+        Matrix.coordinateInclusion_projection_mul_of_rowSupport,
+        Matrix.coordinateInclusion_intertwine_of_rowSupport,
+        MPSTensor.sptPhysicalEmbedding,
+        MPSTensor.rotatePhysical_coordinateInclusion_sptFixedPointTensor_apply,
+        MPSTensor.isInjective_rotatePhysical_coordinateInclusion_sptFixedPointTensor}
+    \leanok
+    \uses{def:spt_fixed_point_tensor, thm:spt_fixed_point_transfer}
+    An injection $e:\{1,\ldots,D\}\to\{1,\ldots,K\}$ defines an
+    isometry $J_e$ by $J_e\ket a=\ket{e(a)}$. Its adjoint selects the
+    included coordinates, so $J_e^\dagger M J_e$ is the corresponding
+    submatrix. If the rows of $M$ are supported on these coordinates,
+    then $J_eJ_e^\dagger M=M$ and $MJ_e=J_e(J_e^\dagger M J_e)$.
+    The physical inclusion $E_e$ sends $\ket{a,b}$ to
+    $\ket{e(a),e(b)}$. It has orthonormal columns, and the embedded
+    fixed-point tensor has entries
+    \begin{align}
+        (E_e A)^p_{ab}
+         & =D^{-1/2}\delta_{p,(e(a),e(b))}.\notag
+    \end{align}
+    For $D>0$ this tensor is injective
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The columns of $J_e$ are distinct coordinate vectors. Multiplication
+    by $J_e$ and $J_e^\dagger$ selects columns and rows. The fixed-point
+    entry formula follows by summing its matrix units. Since
+    $E_e^\dagger E_e=I$, every original letter is a linear combination
+    of the embedded letters, which therefore span the full matrix algebra.
+\end{proof}
+
+\begin{theorem}[Isometric restriction of boundary vectors and covariance]
+    \label{thm:spt_isometric_bond_restriction}
+    \lean{MPSTensor.groundSpaceMap_eq_of_isometric_bond_intertwiner,
+        MPSTensor.groundSpace_le_of_isometric_bond_intertwiner,
+        MPSTensor.trace_evalWord_eq_of_supported_isometric_bond_intertwiner,
+        MPSTensor.mpv_eq_of_supported_isometric_bond_intertwiner,
+        MPSTensor.rotatePhysical_gauge_covariance_of_isometric_bond_intertwiner}
+    \leanok
+    Let $A,B$ have the same physical alphabet and suppose
+    $V^\dagger V=I$ and $A^iV=VB^i$ for every letter. Then
+    $\Gamma_L^A(VXV^\dagger)=\Gamma_L^B(X)$ for every $L$, and
+    $G_L(B)\subseteq G_L(A)$.
+    If also $VV^\dagger A^i=A^i$, their periodic vectors agree at every
+    positive length. Finally, if invertible matrices $X,Y$ satisfy
+    $XV=VY$ and $\sum_jU_{ij}A^j=XA^iX^{-1}$, then
+    $\sum_jU_{ij}B^j=YB^iY^{-1}$
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Word evaluation preserves the intertwining relation. Cyclicity of
+    the trace and $V^\dagger V=I$ give the boundary identity. For a
+    nonempty word $w$, row support gives $VV^\dagger A^w=A^w$, hence
+    $\tr(A^w)=\tr(V^\dagger A^wV)=\tr(B^w)$.
+    The empty word is excluded because its trace is the bond dimension.
+    For covariance, use $X^{-1}V=VY^{-1}$, multiply the large-tensor
+    identity by $V$ on the right, and cancel the inclusion using
+    $V^\dagger$ on the left.
+\end{proof}
+
+\begin{definition}[Smaller fixed points in the common physical space]
+    \label{def:spt_embedded_fixed_points}
+    \lean{MPSTensor.embeddedSptFixedPointLeft,
+        MPSTensor.embeddedSptFixedPointRight,
+        MPSTensor.embeddedSptFixedPointLeft_eq_rotatePhysical,
+        MPSTensor.embeddedSptFixedPointRight_eq_rotatePhysical,
+        MPSTensor.embeddedSptFixedPointLeft_isInjective,
+        MPSTensor.embeddedSptFixedPointRight_isInjective,
+        MPSTensor.weightedMatrixUnitInterpolation_zero_rowSupport,
+        MPSTensor.weightedMatrixUnitInterpolation_one_rowSupport,
+        MPSTensor.weightedMatrixUnitInterpolation_zero_intertwine,
+        MPSTensor.weightedMatrixUnitInterpolation_one_intertwine,
+        MPSTensor.groundSpace_embeddedSptFixedPointLeft_le,
+        MPSTensor.groundSpace_embeddedSptFixedPointRight_le,
+        MPSTensor.mpv_embeddedSptFixedPointLeft,
+        MPSTensor.mpv_embeddedSptFixedPointRight,
+        TNLean.Algebra.ProjectiveRepresentation.directSum_coordinateInclusion_left,
+        TNLean.Algebra.ProjectiveRepresentation.directSum_coordinateInclusion_right,
+        MPSTensor.twistedTensor_embeddedSptFixedPointLeft,
+        MPSTensor.twistedTensor_embeddedSptFixedPointRight}
+    \leanok
+    \uses{def:spt_coordinate_inclusions, thm:spt_isometric_bond_restriction,
+        thm:spt_weighted_matrix_unit_bond_product, def:spt_fixed_point_tensor}
+    Let $D_0,D_1>0$ and $K=D_0+D_1$. Let $e_0,e_1$ be the two
+    coordinate inclusions into $\C^K$, and let $A_t$ be the weighted
+    matrix-unit tensor. Define
+    \begin{align}
+        B_0^p & =J_{e_0}^\dagger A_0^pJ_{e_0},       &
+        B_1^p & =J_{e_1}^\dagger A_1^pJ_{e_1}.\notag
+    \end{align}
+    These are the physical embeddings $E_{e_0}A^{(D_0)}$ and
+    $E_{e_1}A^{(D_1)}$ of the standard fixed points; their bond
+    dimensions remain $D_0,D_1$. Both are injective,
+    $G_L(B_j)\subseteq G_L(A_j)$, and their periodic vectors equal
+    those of $A_j$ at every positive length.
+    For projective representations $\rho_0,\rho_1$ with the same factor
+    system, the common physical action of $\rho_0\oplus\rho_1$ with
+    trivial character acts on $B_j$ by conjugation with
+    $\rho_j(g^{-1})$ \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The endpoint weight is $D_j^{-1/2}$ on the occupied summand and
+    zero elsewhere. Compression therefore gives the physical embedding
+    formula. The weighted endpoint has no rows outside that summand.
+    Apply Theorem~\ref{thm:spt_isometric_bond_restriction} to obtain the
+    boundary inclusion and periodic-vector equality. The block-diagonal
+    virtual action satisfies
+    $(\rho_0\oplus\rho_1)(g)J_{e_j}=J_{e_j}\rho_j(g)$; the same theorem
+    then gives the endpoint covariance.
+\end{proof}
+
+\begin{theorem}[Bond comparison with another canonical parent]
+    \label{thm:spt_embedded_parent_comparison}
+    \lean{MPSTensor.twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap,
+        MPSTensor.normalizedBondInteraction_le_parent_of_isometric_bond_intertwiner,
+        MPSTensor.ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq,
+        MPSTensor.interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq,
+        MPSTensor.normalizedBondCanonicalParentComparisonPath}
+    \leanok
+    \uses{thm:spt_weighted_matrix_unit_parent_comparison,
+        thm:spt_isometric_bond_restriction, thm:spt_ordered_interaction_path,
+        thm:spt_parent_hamiltonian_symmetry}
+    Let $h_t$ be the normalized independent-bond interaction and let
+    $B$ have its physical alphabet. If $h_t$ annihilates $G_2(B)$,
+    then $h_t\leq p_B$, where $p_B$ is the canonical two-site parent
+    projection. In particular, this holds when an isometric bond
+    inclusion intertwines $A_t$ with $B$.
+    If the periodic vectors of $B$ and $A_t$ agree at every length
+    $N\geq2$, every periodic zero mode of $h_t$ is annihilated by the
+    canonical parent of $B$. Under the common unitary physical symmetry
+    of two unitary projective representations with the same factor system
+    and trivial character, covariance of $B$ therefore makes
+    $s\mapsto h_t+s(p_B-h_t)$ a symmetric gapped path with gap at
+    least one \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Comparing orthogonal projections gives $h_t\leq p_B$.
+    In the isometric restriction case, transport a boundary matrix
+    $X$ to $VXV^\dagger$ and use the weighted-tensor annihilation.
+    The bond Hamiltonian's kernel is the line spanned by the periodic
+    vector of $A_t$, hence also by that of $B$. The canonical parent
+    annihilates its own periodic vector. Apply the ordered-interaction
+    comparison, using the bond gap of one and covariance for symmetry.
+\end{proof}
+
+\begin{definition}[Gapped paths between embedded canonical fixed-point parents]
+    \label{def:spt_embedded_canonical_parent_path}
+    \lean{MPSTensor.embeddedSptFixedPointLeftParentComparisonPath,
+        MPSTensor.embeddedSptFixedPointRightParentComparisonPath,
+        MPSTensor.embeddedCanonicalFixedPointGappedPath}
+    \leanok
+    \uses{def:spt_embedded_fixed_points, thm:spt_embedded_parent_comparison,
+        thm:spt_direct_sum_fixed_point_path, thm:spt_common_space_path_concatenation}
+    Suppose $D_0,D_1>0$ and the virtual representations are unitary
+    with the same factor system. Use the common physical action with
+    trivial character. The canonical two-site parents of $B_0$ and
+    $B_1$ are connected on $\C^{D_0+D_1}\otimes\C^{D_0+D_1}$ by a
+    continuous symmetric path of interactions of norm at most one.
+    Their periodic Hamiltonians have a positive uniform gap for all
+    chain lengths $N\geq2$ \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The two endpoint comparisons retain the gap of one. Concatenate
+    the reverse comparison from $p_{B_0}$ to $h_0$, the normalized
+    bond interpolation from $h_0$ to $h_1$, and the comparison from
+    $h_1$ to $p_{B_1}$. Each part is continuous and symmetric with
+    the same prescribed action, and concatenation preserves the gap.
+\end{proof}
+
 \subsection{Degeneracy of the entanglement spectrum}
 \label{sec:spt_entanglement_spectrum}
 

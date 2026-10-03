@@ -21,6 +21,10 @@ bond path connects the two canonical endpoint parents.
 Source: arXiv:1010.3732, Section II.F.2, equation `eq:sym:omega-gamma`.
 This construction concerns the common direct-sum physical space. It does
 not identify arbitrary isometric tensors with the weighted endpoints.
+
+**Scope restriction (trivial character):** The path constructors use the
+on-site action with trivial scalar character; see
+`docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
@@ -41,12 +45,13 @@ theorem interactionHamiltonian_normalizedBondInteraction_spectrum_gap_one
   simpa only [normalizedBondInteraction, interactionHamiltonian_twoSiteBondPenalty] using
     normalizedPhysicalBondInterpolation_parent_spectrum_gap_one h₀ h₁ γ (by omega : 1 ≤ N)
 
-/-- For a fixed bond parameter, affine interpolation from its bond
-interaction to its canonical parent is symmetric and uniformly gapped.
+/-- For a fixed bond parameter, affine interpolation to a covariant
+canonical parent retains the uniform gap when the parent dominates the
+bond interaction and annihilates its periodic zero modes.
 Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`,
 comparison of the fixed-point parent interactions. -/
-noncomputable def weightedMatrixUnitParentComparisonPath
-    {G : Type} [Group G] {D₀ D₁ : ℕ}
+noncomputable def normalizedBondCanonicalParentComparisonPath
+    {G : Type} [Group G] {D₀ D₁ E : ℕ}
     {ω : TNLean.Algebra.ScalarCocycle G}
     (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
     (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
@@ -54,24 +59,28 @@ noncomputable def weightedMatrixUnitParentComparisonPath
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈
-      Matrix.unitaryGroup (Fin D₁) ℂ) (γ : ℝ) :
+      Matrix.unitaryGroup (Fin D₁) ℂ) (γ : ℝ)
+    (B : MPSTensor ((D₀ + D₁) * (D₀ + D₁)) E)
+    (horder : normalizedBondInteraction D₀ D₁ γ ≤
+      LinearMap.toMatrix' (parentInteraction B 2))
+    (hker : ∀ (N : ℕ) (hN : 2 ≤ N) (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ),
+      (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN).mulVec x = 0 →
+        (interactionHamiltonian (LinearMap.toMatrix' (parentInteraction B 2)) hN).mulVec x = 0)
+    (hCov : ∀ g, GaugeEquiv B (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B)) :
     SymmetricGappedInteractionPath
       (sptFixedPointUnitaryAction (ρ₀.directSum ρ₁)
         (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g)))
       (normalizedBondInteraction D₀ D₁ γ)
-      (LinearMap.toMatrix' (parentInteraction
-        (weightedMatrixUnitInterpolation D₀ D₁ γ) 2)) := by
+      (LinearMap.toMatrix' (parentInteraction B 2)) := by
   refine orderedGappedInteractionPath _ _ _
     (Matrix.nonneg_iff_posSemidef.mp
       (normalizedBondInteraction_isStarProjection hD₀ hD₁ γ).nonneg)
     (Matrix.nonneg_iff_posSemidef.mp
       (parentInteraction_toMatrix'_isStarProjection _ 2).nonneg)
-    (twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation hD₀ hD₁ γ)
+    horder
     ((normalizedBondInteraction_isStarProjection hD₀ hD₁ γ).norm_le _)
     (parentInteraction_toMatrix'_norm_le_one _ 2)
-    (fun N hN x hx =>
-      interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction
-        hD₀ hD₁ γ hN x hx) ?_ ?_ ?_ ?_
+    hker ?_ ?_ ?_ ?_
   case refine_4 =>
     intro N hN g
     refine Commute.sum_left _ _ _ fun i _ =>
@@ -79,9 +88,7 @@ noncomputable def weightedMatrixUnitParentComparisonPath
         (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) 2 hN i _
         (parentInteraction_matrix_commute_onSiteTensorPow _ _
           (sptFixedPointAction_mem_unitaryGroup _
-            (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g)) g) ?_ 2)
-    exact ⟨sptGauge (ρ₀.directSum ρ₁) g,
-      twistedTensor_weightedMatrixUnitInterpolation ρ₀ ρ₁ g γ⟩
+            (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g)) g) (hCov g) 2)
   case refine_3 =>
     intro N hN g
     have : NeZero N := ⟨by omega⟩
@@ -103,6 +110,35 @@ noncomputable def weightedMatrixUnitParentComparisonPath
     obtain ⟨x, hx⟩ :=
       (Module.End.HasEigenvalue.of_mem_spectrum hspec).exists_hasEigenvector
     exact ⟨x, hx.2, by simpa only [zero_smul] using hx.apply_eq_smul⟩
+
+/-- For a fixed bond parameter, affine interpolation from its bond
+interaction to its canonical parent is symmetric and uniformly gapped.
+Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`,
+comparison of the fixed-point parent interactions. -/
+noncomputable def weightedMatrixUnitParentComparisonPath
+    {G : Type} [Group G] {D₀ D₁ : ℕ}
+    {ω : TNLean.Algebra.ScalarCocycle G}
+    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
+    (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
+      Matrix.unitaryGroup (Fin D₀) ℂ)
+    (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈
+      Matrix.unitaryGroup (Fin D₁) ℂ) (γ : ℝ) :
+    SymmetricGappedInteractionPath
+      (sptFixedPointUnitaryAction (ρ₀.directSum ρ₁)
+        (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g)))
+      (normalizedBondInteraction D₀ D₁ γ)
+      (LinearMap.toMatrix' (parentInteraction
+        (weightedMatrixUnitInterpolation D₀ D₁ γ) 2)) :=
+  normalizedBondCanonicalParentComparisonPath ρ₀ ρ₁ hD₀ hD₁ h₀ h₁ γ
+    (weightedMatrixUnitInterpolation D₀ D₁ γ)
+    (twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation hD₀ hD₁ γ)
+    (fun _ hN x hx =>
+      interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction
+        hD₀ hD₁ γ hN x hx)
+    (fun g => ⟨sptGauge (ρ₀.directSum ρ₁) g,
+      twistedTensor_weightedMatrixUnitInterpolation ρ₀ ρ₁ g γ⟩)
 
 /-- The canonical parents of the two weighted fixed-point endpoints are
 connected on their common physical space by a symmetric gapped path.
