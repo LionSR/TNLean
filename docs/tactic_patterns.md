@@ -2495,6 +2495,18 @@ abstracted — record why, so it is not re-proposed).
   Bond dimension may differ from the dimension of the normalized bond.
   No injectivity assumption is used in the comparison itself.
 
+### gauge covariance along the polar deformation — promoted
+
+- **Pattern:** regard a unitary bond matrix as an invertible matrix and
+  apply the preserved polar covariance letter by letter.
+- **Seen:** the parent-symmetry proof in `MPS/Symmetry/PolarDeformationGap.lean`
+  and the path constructors in `MPS/Symmetry/PolarGappedInteractionPath.lean`
+  and `MPS/Symmetry/EmbeddedInjectiveGappedPath.lean`.
+- **Abstraction:** `gaugeEquiv_polarDeformation_of_unitary_covariance`
+  in `MPS/Symmetry/PolarDeformation.lean`.
+- **Notes:** the same virtual matrix implements the covariance at every
+  parameter. All three uses now share the conversion to gauge equivalence.
+
 ### boundary spaces under rectangular physical maps — promoted
 
 - **Pattern:** expand the rotated letters, collect the product of their

@@ -68,9 +68,10 @@ of the virtual projective representation.
         MPSTensor.polarIso_covariance_of_isInjective,
         MPSTensor.polarDeformation_covariance,
         MPSTensor.physicalMatrix_mul_left_right,
-        MPSTensor.rotatePhysical_polarDeformation_of_unitary_covariance}
+        MPSTensor.rotatePhysical_polarDeformation_of_unitary_covariance,
+        MPSTensor.gaugeEquiv_polarDeformation_of_unitary_covariance}
     \leanok
-    \uses{def:spt_polar_deformation, def:injective}
+    \uses{def:spt_polar_deformation, def:injective, def:gauge_equiv}
     Suppose $A$ is one-site injective. Then $P_\gamma=(1-\gamma)I+\gamma P$
     is positive definite, $A_\gamma$ is injective, and the path is continuous,
     with $A_0=W$ and $A_1=A$. If unitaries $U$ and $K$ satisfy $UM=MK$,
@@ -89,6 +90,7 @@ of the virtual projective representation.
     $[M^*M,K]=0$; functional calculus gives $[P,K]=0$. Cancellation of
     the invertible factor $P$ gives $UV=VK$, and hence the covariance
     of the entire path. For bond conjugation, $K=X^T\otimes X^*$.
+    Since $X^{-1}=X^*$, this is also covariance by a virtual gauge change.
 \end{proof}
 
 \begin{theorem}[Uniform parent gap along an injective polar deformation]
@@ -176,6 +178,68 @@ of the virtual projective representation.
     Apply the preceding construction to the injective polar path. The
     endpoint identities give the canonical parents of $W$ and $A$; unitary
     bond-conjugation covariance is preserved by the entire interpolation.
+\end{proof}
+
+\begin{theorem}[Physical transport of virtual covariance]
+    \label{thm:spt_embedding_covariance}
+    \lean{MPSTensor.continuous_rotatePhysical,
+        MPSTensor.gaugeEquiv_rotatePhysical_of_intertwiner}
+    \leanok
+    \uses{def:rotate_physical, def:gauge_equiv}
+    Fix a linear physical map $E:\C^d\to\C^m$.
+    The map $A\mapsto EA$ on tensors is continuous.
+    Suppose physical operators $U$ and $V$ obey $VE=EU$, and an
+    invertible bond matrix $X$ satisfies $(UA)^i=XA^iX^{-1}$.
+    Then $(V(EA))^i=X(EA)^iX^{-1}$.
+    This transports the covariance into the common physical space of
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical, lem:physical_rotation_mul,
+        thm:mpdo_isometric_physical_embedding}
+    Physical rotation is a finite sum of fixed scalar multiples of the
+    tensor letters, hence is continuous. Composition of physical rotations
+    and $VE=EU$ give $V(EA)=E(UA)$. Summing the covariance of $A$
+    gives $E(UA)^i=\sum_jE_{ij}XA^jX^{-1}=X(EA)^iX^{-1}$.
+\end{proof}
+
+\begin{definition}[Canonical injective paths in a common physical representation]
+    \label{def:spt_embedded_injective_path}
+    \lean{MPSTensor.embeddedCanonicalInjectiveGappedPath,
+        MPSTensor.embeddedPolarGappedInteractionPath}
+    \leanok
+    \uses{def:injective, def:spt_polar_deformation,
+        def:spt_common_space_gapped_path}
+    Let $A_\gamma$ be a continuous family of one-site injective tensors
+    with bond dimension $D>0$, and let $U$ and $V$ be unitary on-site
+    representations on $\C^d$ and $\C^m$.
+    Suppose $E^\dagger E=I$, $V_gE=EU_g$ for every $g$, and each
+    $U_gA_\gamma$ is a virtual gauge change of $A_\gamma$.
+    Applying the canonical injective-path construction to $EA_\gamma$
+    gives a symmetric gapped interaction path from $h_2(EA_0)$ to
+    $h_2(EA_1)$ under the prescribed action $V$.
+    In particular, when the covariance of $A$ is implemented by unitary
+    bond matrices, its polar deformation gives a path from $h_2(EW)$
+    to $h_2(EA)$, where $W$ is the polar isometric form of $A$.
+    These are the physically embedded endpoint deformations used in
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_embedding_covariance,
+        thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation,
+        thm:mpdo_isometric_physical_embedding}
+    Continuity is preserved by physical rotation. Because $E^\dagger E=I$,
+    every original letter is a linear combination of the embedded letters,
+    so the embedded family is injective. The intertwining identity
+    transports virtual covariance. The canonical injective-path theorem
+    then supplies continuity of the parent projections, norm at most one,
+    and a positive gap uniform in the parameter and every ring length
+    $N\ge2$. Apply this construction to the polar family and use its
+    endpoint identities to obtain the second path.
 \end{proof}
 
 \begin{theorem}[Unitary virtual covariance from unital normalization]

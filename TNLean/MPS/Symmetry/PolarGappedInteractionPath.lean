@@ -38,15 +38,11 @@ noncomputable def polarGappedInteractionPath
     SymmetricGappedInteractionPath U
       (LinearMap.toMatrix' (parentInteraction (polarIsometricTensor A) 2))
       (LinearMap.toMatrix' (parentInteraction A 2)) := by
-  have hGauge (γ : ℝ) (g : G) :
-      GaugeEquiv (polarDeformation A γ) (rotatePhysical (U g) (polarDeformation A γ)) := by
-    refine ⟨Unitary.toUnits (X g), fun i => ?_⟩
-    exact congrFun (rotatePhysical_polarDeformation_of_unitary_covariance hA
-      (U g) (X g) (SetLike.coe_mem _) (SetLike.coe_mem _) (hCov g) γ) i
   simpa only [polarDeformation_zero, polarDeformation_one] using
     canonicalInjectiveGappedPath U (polarDeformation A)
       (continuous_polarDeformation A).continuousOn
       (fun _ hγ => isInjective_polarDeformation hA hγ)
-      (fun γ _ g => hGauge γ g)
+      (fun γ _ g => gaugeEquiv_polarDeformation_of_unitary_covariance hA
+        (U g) (X g) (SetLike.coe_mem _) (SetLike.coe_mem _) (hCov g) γ)
 
 end MPSTensor
