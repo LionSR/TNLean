@@ -56,11 +56,9 @@ at most two points. Thus each row is a scalar multiple of either $1$ or
 $t$, giving at most two row types.
 \end{proof}
 
-The circle--line argument, including the dichotomy for a supplied
-factorization $a_x+b_xt_y$, is proved in
-\nolinkurl{TNLean/MPS/MPU/UnitCircleRankTwo.lean}. The matrix-basis step and
-the circuit construction below are mathematical proofs, not claimed as
-completed Lean formalizations.
+The circle--line argument, its matrix-basis step, and the circuit
+construction below are mathematical proofs; their Lean formalizations
+are not claimed in this note.
 
 \begin{lemma}\label{lem:selector}
 Suppose all consecutive cut ranks of a unit-modulus function $f(xy)$ are
@@ -105,11 +103,10 @@ and the depth remains logarithmic.
 \end{proof}
 
 The finite-alphabet row bound is proved in
-\nolinkurl{TNLean/MPS/MPU/FiniteAlphabetRows.lean}; the affine-product
-factorization and Boolean residual bound are proved in
-\nolinkurl{TNLean/MPS/MPU/PhaseSelectorRows.lean}. The denominator in the
-selector formula is used to identify a Boolean function classically;
-it is not implemented by a quantum amplitude amplification step.
+\nolinkurl{TNLean/MPS/MPU/FiniteAlphabetRows.lean}. The affine-product
+factorization and Boolean residual bound are established in the preceding
+mathematical proof. The denominator in the selector formula identifies a
+Boolean function classically; no quantum amplitude amplification is used.
 
 \section{An exact circuit}
 
@@ -289,8 +286,8 @@ identities, not a proof of the asymptotic circuit bound.
 
 The approximation theorem here is a mathematical argument, not a completed
 Lean proof or an implemented reversible arithmetic circuit. The exact
-circuit theorem here is likewise separate from the formalized circle and
-finite-alphabet lemmas. For arbitrary MPUs of fixed bond dimension, the
+circuit theorem here is likewise a separate mathematical statement from
+the formalized finite-alphabet row bound. For arbitrary MPUs of fixed bond dimension, the
 companion note's Section~5 proves an exact polynomial circuit bound and
 its operator-norm approximation corollaries, with exactly erased auxiliary
 registers. Those general statements are formalized in Lean. This does not
