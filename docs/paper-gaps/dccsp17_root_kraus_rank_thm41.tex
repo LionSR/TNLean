@@ -9,7 +9,7 @@
 
 \title{The Root-Channel Kraus-Rank Step in Theorem 4.1}
 \author{}
-\date{2026-04-30}
+\date{2026-04-30; revised 2026-09-26}
 
 \begin{document}
 \maketitle
@@ -124,52 +124,348 @@ argument that avoids a $d$-letter tensor root.
 The formal definition follows the channel-level notion of $p$-divisibility
 from Ref.~\cite{DeLasCuevas2017Irreducible}: it asserts the existence of a
 trace-preserving completely positive root channel and imposes no Kraus-rank
-bound. The conditional reverse theorem separates the missing step from the
-rest of the argument.\footnote{The definition is
+bound.\footnote{The definition is
 \leanid{MPSTensor.IsPDivisibleChannel} in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41Defs.lean:24--32}. The conditional
-reverse theorem is
-\leanid{MPSTensor.thm_4_1_p_refinement_reverse} in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean:120--142}.}
+\path{TNLean/MPS/Periodic/Symmetry/Theorem41Defs.lean}.}
 
-The additional formal hypothesis is an inverse canonicalization statement. In
-ordinary mathematical terms, it says that if $B$ is in irreducible form~II and
-$\mathcal E_B$ is $p$-divisible, then there is a $d$-letter tensor $A$ such
-that
+The proved reverse step takes a selected bounded-rank root explicitly. The
+theorem \leanid{MPSTensor.isPRefinable_of_channel_root_hasKrausRankLE} in
+\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean}
+assumes $\mathcal E_B=\mathcal F^p$ and a Kraus representation of
+$\mathcal F$ with at most $d$ operators. Padding that representation with
+zeros gives a $d$-letter tensor $A$ satisfying
 \begin{align}
-    \mathcal E_B
-    &=\mathcal E_{A^{[p]}}.
+    \mathcal E_B&=\mathcal E_{A^{[p]}}.
     \label{eq:dccsp17_root_kraus_rank_thm41_inverse_canonicalization}
 \end{align}
-Given this tensor-level root, the remaining argument follows the source proof.
 The blocked tensor $A^{[p]}$ and the original tensor $B$ provide two finite
-Kraus representations of the same completely positive map. Isometric freedom
-of Kraus representations then gives the isometry
+Kraus representations of the same completely positive map, and isometric
+freedom of Kraus representations gives the isometry
 (\ref{eq:dccsp17_root_kraus_rank_thm41_refinement_isometry}) needed for
-refinement.\footnote{The inverse canonicalization hypothesis is
-\leanid{MPSTensor.PRefinementInverseCanonicalization} in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean:26--42}. The blueprint
-records the bundled conditional equivalence and the conditional reverse
-implication in
-\path{blueprint/src/chapter/ch22_periodic_ft.tex:2012--2042} and
-\path{blueprint/src/chapter/ch22_periodic_ft.tex:2096--2122}.}
+refinement. This step is
+\leanid{MPSTensor.isPRefinable_of_transferMap_eq_blockTensor}. Neither
+irreducible form nor a global reconstruction predicate is needed for it.
 
-The formal development also isolates a sufficient channel-theoretic
-hypothesis. If every trace-preserving completely positive root $\mathcal E'$
-of $\mathcal E_B$ satisfies
-(\ref{eq:dccsp17_root_kraus_rank_thm41_required_rank_bound}), then one may
-choose a Kraus representation with at most $d$ terms and pad it with zero
-Kraus operators to obtain a $d$-letter tensor $A$. This is a substantive
-hypothesis about the root channel. The theorem identifying the least number of
-Kraus operators with the Choi rank explains how to express the condition, but
-does not prove
-(\ref{eq:dccsp17_root_kraus_rank_thm41_required_rank_bound}) for a root of
-$\mathcal E_B$.\footnote{The bounded-root formulation is
-\leanid{MPSTensor.PRefinementInverseRootKrausRankBound}. Its implication to
-inverse canonicalization is
-\leanid{MPSTensor.pRefinementInverseCanonicalization_of_rootKrausRankBound},
-recorded in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean:98--118}.}
+The conditional reverse theorem
+\leanid{MPSTensor.thm_4_1_p_refinement_reverse} assumes the inverse
+canonicalization statement \leanid{MPSTensor.PRefinementInverseCanonicalization}:
+if $B$ is in irreducible form~II and $\mathcal E_B$ is $p$-divisible, then a
+$d$-letter tensor $A$ satisfying
+(\ref{eq:dccsp17_root_kraus_rank_thm41_inverse_canonicalization}) exists. Its
+proof is the preceding isometric-freedom step. The stronger hypothesis
+\leanid{MPSTensor.PRefinementInverseRootKrausRankBound}, which bounds the Kraus
+rank of every trace-preserving root of $\mathcal E_B$, implies inverse
+canonicalization by
+\leanid{MPSTensor.pRefinementInverseCanonicalization_of_rootKrausRankBound}.
+
+The remaining source assertion is that unbounded channel divisibility yields
+a root of Kraus rank at most $d$. Selection remains unproved. Identifying
+Kraus rank with Choi rank does not by itself establish the required bound.
+
+\section{Why the bound cannot quantify over every root}
+
+The sufficient hypothesis that every channel root has Kraus rank at most $d$
+is strictly stronger than existential selection. The following
+finite-dimensional calculation shows that it fails for some targets. The calculation below uses sector dimensions $(1,3,3,1,1)$. A smaller
+variant with dimensions $(1,2,2,1,1)$ gives the same obstruction.
+
+Let $\mathcal H=\bigoplus_{i\in\mathbb Z/5\mathbb Z}\mathcal H_i$, with
+sector dimensions $(n_0,n_1,n_2,n_3,n_4)=(1,3,3,1,1)$. Write $X_{ii}$ for the
+diagonal compression of $X$ to $\mathcal H_i$. Define a channel by
+\begin{align}
+  \mathcal E(X)|_{\mathcal H_{i+1}}
+    &=\operatorname{tr}(X_{ii})\frac{I_{\mathcal H_{i+1}}}{n_{i+1}},
+  \label{eq:dccsp17_cyclic_root_channel}
+\end{align}
+with all off-diagonal output blocks zero. A Kraus family consists of the
+matrix units from $\mathcal H_i$ to $\mathcal H_{i+1}$, each divided by
+$\sqrt{n_{i+1}}$. These Kraus matrices are linearly independent, so
+\begin{align}
+  \operatorname{rank}_{\mathrm{Kraus}}(\mathcal E)
+    &=\sum_i n_i n_{i+1}=17, &
+  \operatorname{rank}_{\mathrm{Kraus}}(\mathcal E^2)
+    &=\sum_i n_i n_{i+2}=13.
+  \label{eq:dccsp17_cyclic_root_ranks}
+\end{align}
+Both maps preserve trace and are irreducible: a nonzero invariant subspace
+contains one full sector after applying the matrix-unit Kraus operators,
+and then contains every sector by cyclicity. On the span of the normalized
+sector identities, $\mathcal E$ acts by the five-cycle; it annihilates the
+complement consisting of off-diagonal blocks and traceless diagonal blocks.
+Thus its peripheral spectrum is precisely the fifth roots of unity. The
+same is true of $\mathcal E^2$, since multiplication by two permutes the
+five-cycle. A minimal Kraus tensor for $\mathcal E^2$ is therefore a
+13-letter, trace-preserving irreducible tensor of period five, and can be
+regarded as a one-block irreducible form with weight one. Its square root
+$\mathcal E$ violates the universal bound.
+
+This example does \emph{not} refute bounded-root selection. Identify
+$\mathcal H_1$ and $\mathcal H_2$ unitarily, and replace just the completely
+depolarizing branch from $\mathcal H_1$ to $\mathcal H_2$ by that unitary
+channel. Call the resulting channel $\mathcal F$. Its preceding branch
+prepares $I_{\mathcal H_1}/3$, and its following branch takes the trace into
+the one-dimensional space $\mathcal H_3$. Consequently
+$\mathcal F^2=\mathcal E^2$, while its Kraus rank is
+$17-9+1=9$. A proof of the source converse must be free to select this
+alternative root rather than bound an arbitrarily supplied root.
+
+The alternative-root construction persists when the two three-dimensional
+reset states are different. Write their positive eigenvalue distributions as
+$(a_i)_{i=1}^3$ and $(b_j)_{j=1}^3$. There is a nonnegative coupling
+$(t_{ji})$ with column sums $a_i$, row sums $b_j$, and at most five nonzero
+entries: successively match a remaining row mass and column mass, exhausting
+at least one at each step. If $(e_i)$ and $(f_j)$ are the respective
+eigenbases, the Kraus operators
+\begin{align}
+  K_{ji}&=\sqrt{t_{ji}/a_i}\,|f_j\rangle\langle e_i|
+  \label{eq:dccsp17_reset_state_coupling}
+\end{align}
+define a trace-preserving channel carrying the first state to the second.
+Replacing the middle reset branch by this channel leaves the square
+unchanged and gives a root of rank at most $17-9+5=13$.
+
+Adding a self-loop of positive weight at the last one-dimensional sector,
+with the remaining positive weight on its original outgoing edge, makes
+both the root and its square primitive. Their ranks are respectively
+$18$ and $16$: the two-step sector pairs are
+$(0,2),(1,3),(2,4),(3,0),(3,4),(4,0),(4,1),(4,4)$.
+Every sufficiently long path connects every pair of sectors, and the reset
+states are positive definite, which proves primitivity. The same branch
+replacement leaves the square unchanged and produces a root of rank at
+most $14$. Thus neither primitivity nor unequal reset states turns these
+rank-decrease examples into counterexamples to existential selection.
+These calculations have not been formalized in Lean.
+
+The seven-dimensional variant with sector dimensions $(1,2,2,1,1)$ is
+formalized by
+\leanid{MPSTensor.supplied_root_rank_counterexample} in
+\path{TNLean/MPS/Periodic/RefinementSuppliedRootObstruction.lean}.
+Its root has Choi rank $10$, while its square has Choi rank $9$.
+The theorem records that the nine-letter target is periodic and has a
+one-block irreducible form, that the supplied root is a channel, and that
+this root has no Kraus representation with at most nine operators.
+The rank calculation uses linear independence of the scaled matrix units;
+irreducibility follows by propagating an invariant subspace through the
+five sectors. Replacing the middle two-dimensional reset by a unitary
+again preserves the square and gives a root of rank $10-4+1=7$.
+This last alternative-root calculation is not part of the formal theorem.
+Thus the formal obstruction concerns compression of a supplied root,
+while the general existential selection problem remains open.
+
+\section{A sufficient condition on the Kraus span}
+
+Let $S$ be the linear span of a Kraus family of a channel root $\mathcal F$.
+Write $S^q$ for the span of products of $q$ elements of $S$.
+The Kraus ranks of $\mathcal F$ and $\mathcal F^p$ are respectively
+$\dim S$ and $\dim S^p$. If $S^{p-1}$ contains an invertible matrix $K$,
+then multiplication by $K$ is an injective linear map from $S$ into $S^p$.
+Consequently
+\[
+  \operatorname{rank}_{\mathrm{Kraus}}(\mathcal F)
+  \leq \operatorname{rank}_{\mathrm{Kraus}}(\mathcal F^p)
+  \leq d.
+\]
+In particular, an invertible element of $S$ suffices, by taking its
+$(p-1)$st power. This proves bounded-root selection whenever some root has
+that property. It does not settle the general case: the unequal sector
+dimensions of the cyclic example above force every element of its original
+Kraus span to be singular. The rank identity and multiplication argument are formalized in
+\path{TNLean/Algebra/KrausSpanRank.lean} and
+\path{TNLean/MPS/Periodic/RootWordSpan.lean}. The theorem
+\leanid{MPSTensor.isPRefinable_of_root_isUnit_mem_wordSpan_pred}
+in \path{TNLean/MPS/Periodic/Symmetry/RefinementFromInvertibleWordSpan.lean}
+proves refinement from such a tensor root, allowing its initial Kraus
+alphabet to have any finite size. This is a sufficient condition and does
+not assert that an arbitrary divisible channel has such a root.
+
+For a single irreducible target block, every channel root is irreducible.
+Indeed, a subspace invariant under the root's Kraus operators is invariant
+under all their $p$-fold products. If the root has period $m$, the arbitrary
+blocking theorem then gives $\gcd(m,p)=1$, since its $p$th power remains
+irreducible. These two necessary conditions are formalized in
+\path{TNLean/MPS/Periodic/RefinementRootIrreducibility.lean} and
+\path{TNLean/MPS/Periodic/RefinementRootPeriod.lean}. The declarations
+\leanid{MPSTensor.isIrreducibleFamily_of_transferMap_eq_blockTensor} and
+\leanid{MPSTensor.IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor}
+allow different Kraus alphabet sizes for the target and root; neither
+assumes the required rank bound. Thus an irreducible counterexample to bounded-root selection
+would require singular Kraus spans for every possible root, despite this
+coprimality constraint. No such counterexample or general selection argument
+has been established here.
+
+\section{Invertible targets admit the required rank bound}
+
+The following reduction is formalized in
+\path{TNLean/Algebra/InjectivePositiveMapRank.lean}.
+Here invertibility means invertibility as a linear endomorphism of
+$M_D(\C)$, not invertibility of the Choi matrix. If
+$\mathcal E=\mathcal F^p$ is invertible and $p>0$, then every completely
+positive root $\mathcal F$ has Choi rank at most that of $\mathcal E$.
+Neither irreducibility nor trace preservation is needed for this assertion.
+
+First, let $\Phi$ be an injective positive complex-linear map between
+matrix algebras, and let $A\ge0$. Write $P$ and $Q$ for the support
+projections of $A$ and $\Phi(A)$, respectively. Every positive matrix $X$
+supported on $P$ satisfies $X\le cA$ for some $c\ge0$, because $A$ is
+positive definite on its support. Hence
+$0\le\Phi(X)\le c\Phi(A)$, and $\Phi(X)$ is supported on $Q$.
+Every matrix in the corner determined by $P$ is a complex linear
+combination of positive matrices in that corner. Thus $\Phi$ restricts
+to an injective complex-linear map between the two corners. Comparing
+their dimensions gives
+\begin{align}
+  (\operatorname{rank} A)^2
+  &\le (\operatorname{rank}\Phi(A))^2,
+  \qquad
+  \operatorname{rank} A\le\operatorname{rank}\Phi(A).
+  \label{eq:dccsp17_injective_positive_rank}
+\end{align}
+
+If $\mathcal F$ is an invertible completely positive map, its amplification
+$\mathcal F\otimes\mathrm{id}$ is both injective and positive. Apply
+(\ref{eq:dccsp17_injective_positive_rank}) to the Choi matrix of a
+completely positive map $\mathcal G$. The Choi identity for composition
+then yields
+\begin{align}
+  \operatorname{rank} C_{\mathcal G}
+  &\le \operatorname{rank} C_{\mathcal F\circ\mathcal G}.
+  \label{eq:dccsp17_injective_composition_choi_rank}
+\end{align}
+Since invertibility of $\mathcal F^p$ implies invertibility of
+$\mathcal F$, iteration proves the asserted bound. In particular, if
+$\mathcal E$ has a Kraus representation with $d$ operators, every channel
+root of an invertible $\mathcal E$ has a representation with at most $d$
+operators. No assumption on eigenvalue multiplicities is required.
+The declarations
+\leanid{Channel.choiRank_le_comp_of_injective} and
+\leanid{Channel.choiRank_le_pow_of_injective} prove the composition and
+power inequalities. The resulting refinement theorem is
+\leanid{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_injective} in
+\path{TNLean/MPS/Periodic/Symmetry/RefinementFromInjectiveTransfer.lean}.
+It requires no canonical-form assumption.
+
+Consequently any obstruction to bounded-root selection must have a
+singular target channel. For this remaining case, a first-order argument
+alone is insufficient. If the root has Kraus span $S$ of dimension $r$
+and the target has Kraus span $S^p$ of dimension $s$, the differential
+of the power map is
+\begin{align}
+  H&\longmapsto
+     \sum_{k=0}^{p-1}\mathcal F^k H\mathcal F^{p-1-k}.
+  \label{eq:dccsp17_power_differential}
+\end{align}
+It maps the $r^2$-dimensional real space of Hermitian Choi perturbations
+supported on the vectorization of $S$ into the corresponding
+$s^2$-dimensional space for $S^p$. When $r>s$ it therefore has a nonzero
+kernel. For an irreducible target, every direction in this kernel preserves
+trace to first order, as shown below. Extending such a direction to an
+exact family of roots and reaching a smaller Choi support remain unproved.
+
+\section{Trace preservation at an irreducible target}
+
+The following reductions are mathematical arguments; they are not yet
+asserted as Lean theorems. Let $\mathcal E$ be an irreducible CPTP map on
+$M_D(\mathbb C)$, where $D>0$, and let $p>0$. Its adjoint fixed space is
+$\operatorname{Fix}(\mathcal E^*)=\mathbb C I$.
+
+First, every completely positive root $\mathcal F^p=\mathcal E$ is
+trace preserving. Indeed, $\mathcal F$ commutes with $\mathcal E$, so
+$\mathcal F^*(I)$ is fixed by $\mathcal E^*$. Thus
+$\mathcal F^*(I)=cI$ for some $c\ge0$. Taking the $p$th power gives
+$c^p=1$, hence $c=1$.
+
+Second, suppose that a Hermiticity-preserving perturbation $H$ belongs to
+the kernel of the differential in
+(\ref{eq:dccsp17_power_differential}). Put $T=\mathcal F^*$ and
+$h=H^*(I)$. Since $T(I)=I$, the adjoint differential equation evaluated
+at $I$ gives
+\begin{align}
+  \sum_{k=0}^{p-1}T^k h&=0.
+  \label{eq:dccsp17_root_tangent_trace}
+\end{align}
+Multiplying by $T-I$ yields $(\mathcal E^*-I)h=0$. Consequently $h=cI$,
+and (\ref{eq:dccsp17_root_tangent_trace}) gives $pcI=0$. Hence $h=0$:
+every such perturbation preserves trace to first order. This argument
+requires neither diagonalizability nor a nonzero spectrum.
+
+In particular, if the root and target have Choi ranks $r>s$, the dimension
+count above supplies a nonzero Hermitian Choi perturbation in the kernel
+of the differential. It automatically preserves trace, and the perturbed
+map is CPTP for sufficiently small real parameters. This is only a
+first-order statement about the root equation. For $p=2$ one has
+\begin{align}
+  (\mathcal F+tH)^2&=\mathcal E+t^2H^2
+  \qquad\text{if }\mathcal F H+H\mathcal F=0.
+  \label{eq:dccsp17_root_tangent_second_order}
+\end{align}
+The differential equation does not itself eliminate the quadratic term.
+An exact deformation therefore requires a further argument; rank
+minimization and compactness alone do not supply one. These reductions
+apply to a single irreducible target. A target with several irreducible
+blocks can have a larger adjoint fixed space, so the same proof does not
+establish trace preservation in that setting.
+
+\section{The zero eigenspace cannot simply be discarded}
+
+A root commutes with its power and therefore preserves the decomposition
+into the generalized zero eigenspace and the sum of the nonzero generalized
+eigenspaces. This is a decomposition of the vector space of matrices; it
+need not be a decomposition into matrix algebras or positive subspaces.
+Consequently changing the root on one summand need not preserve complete
+positivity.
+
+There are two concrete difficulties with deleting the zero-eigenspace
+action. First, the seven-dimensional cyclic-reset example above already
+annihilates the zero eigenspace of its square. Its rank-seven alternative
+root instead adds a square-zero action: traceless matrices in the first
+two-dimensional sector are carried unitarily to the second, and the next
+reset annihilates them. Thus decreasing the Kraus rank can require adding
+nilpotent action, rather than removing it.
+
+Second, deletion can destroy even positivity. Consider the matrices
+\begin{align}
+ P&=\frac1{60}
+ \begin{pmatrix}
+ 21&1&21&17\\15&29&3&13\\18&22&6&14\\6&8&30&16
+ \end{pmatrix}, &
+ Q&=\frac1{40}
+ \begin{pmatrix}
+ 12&-4&20&12\\9&17&5&9\\10&10&10&10\\9&17&5&9
+ \end{pmatrix}.
+ \label{eq:dccsp17_nilpotent_deletion_matrices}
+\end{align}
+Both matrices have all column sums equal to one. The entries of $P$
+are strictly positive, whereas $Q_{12}=-1/10$.
+Put $u=(2,1,2,-5)^{\mathsf T}$, $v=(3,7,-9,-1)^{\mathsf T}$, and
+$N=uv^{\mathsf T}/120$. Direct multiplication gives
+\begin{align}
+ P&=Q+N, & N^2&=QN=NQ=0, & Q(Q-I)(5Q-I)&=0.
+ \label{eq:dccsp17_nilpotent_deletion_identities}
+\end{align}
+In particular $P^2=Q^2$. The square-free polynomial in
+(\ref{eq:dccsp17_nilpotent_deletion_identities}) shows that $Q$ is
+semisimple. Its eigenvalues are $1,1/5,0,0$, while $P$ has the same
+nonzero part and a nonzero nilpotent part on the zero eigenspace.
+
+For a real matrix $R$, define a linear map on $M_4(\C)$ by
+$\mathcal F_R(X)=\operatorname{diag}(R\operatorname{diag}(X))$, where the
+inner diagonal denotes the vector of diagonal entries. Since every entry
+of $P$ is positive and its columns sum to one, $\mathcal F_P$ is a CPTP
+map. It is primitive: it sends every nonzero positive matrix to a positive
+definite diagonal matrix. Its square $\mathcal E=\mathcal F_P^2$ has a
+semisimple zero eigenspace. Removing the action of $\mathcal F_P$ on that
+eigenspace gives exactly $\mathcal F_Q$, which still satisfies
+$\mathcal F_Q^2=\mathcal E$. Nevertheless $\mathcal F_Q$ is not positive,
+as its value on the second diagonal matrix unit has first diagonal entry
+$-1/10$.
+
+These exact rational calculations have not been formalized in Lean.
+They disprove the proposed deletion procedure, not bounded-root selection:
+$P$ and $P^2$ have strictly positive entries, so both channels have Choi
+rank $16$ and the original root already satisfies the required rank bound.
+The singular-target problem must therefore control complete positivity
+while choosing the zero-eigenspace action; algebraic spectral truncation
+alone does not do so.
 
 \section{Conclusion}
 
@@ -182,12 +478,13 @@ requires the Kraus-rank bound
 absent from the source definition of $p$-divisibility and is not proved in the
 cited converse paragraph.
 
-It remains open whether, under the irreducible-form hypotheses, a channel root
-can always be chosen with Kraus rank at most $d$. The formal development
-therefore proves the reverse implication under the explicit inverse
-canonicalization hypothesis
-(\ref{eq:dccsp17_root_kraus_rank_thm41_inverse_canonicalization}), or under the
-stronger root-Kraus-rank assumption that implies it. Until a paper-level
+For invertible target channels, the preceding rank argument supplies the
+required bound for every root. For singular target channels it remains open
+whether, under the irreducible-form hypotheses, a channel root can always
+be chosen with Kraus rank at most $d$. The formal development
+therefore proves the reverse implication from a selected bounded-rank
+root, and under the inverse canonicalization hypothesis
+(\ref{eq:dccsp17_root_kraus_rank_thm41_inverse_canonicalization}). Until a paper-level
 argument establishes the required rank bound, the reverse implication must
 remain conditional on this additional mathematical input.
 
