@@ -1328,6 +1328,105 @@ and the regrouping of physical registers into bonds.
     so they coincide.
 \end{proof}
 
+\begin{theorem}[Contraction of a middle-bond operator]
+    \label{thm:spt_middle_bond_contraction}
+    \lean{MPSTensor.twoSiteBondInteraction_mulVec_apply,
+        MPSTensor.twoSiteBondInteraction_mulVec_separable,
+        MPSTensor.bondPenalty_mulVec_self,
+        MPSTensor.twoSiteBondPenalty_mulVec_separable}
+    \leanok
+    \uses{thm:spt_two_site_bond_interaction}
+    For a matrix $K$ acting on the middle registers, a two-site vector
+    $f$, and exterior indices $a,d$, one has
+    \begin{align}
+        [(I\otimes K\otimes I)f]_{abcd}
+         & =\sum_{x,y}K_{bc,xy}f_{axyd}.\notag
+    \end{align}
+    In particular, if $f_{abcd}=\eta_{bc}F_{ad}$, then its image has
+    coefficients $(K\eta)_{bc}F_{ad}$. For a unit vector $\eta$,
+    $K=I-|\eta\rangle\langle\eta|$ annihilates every such $f$
+    \cite[Section~II.D.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity factors constrain the exterior summation indices to
+    $a,d$, leaving the middle-index sum. For separable coefficients,
+    factor out $F_{ad}$. Finally,
+    $(I-|\eta\rangle\langle\eta|)\eta=(1-\|\eta\|^2)\eta=0$.
+\end{proof}
+
+\begin{theorem}[Canonical-parent comparison for weighted matrix units]
+    \label{thm:spt_weighted_matrix_unit_parent_comparison}
+    \lean{MPSTensor.groundSpaceMap_weightedMatrixUnitInterpolation_two_apply,
+        MPSTensor.twoSiteBondInteraction_groundSpaceMap_weightedMatrixUnitInterpolation,
+        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_weightedMatrixUnitInterpolation,
+        MPSTensor.twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation,
+        MPSTensor.incomingBondUnitaryLin_normalizedBondInterpolation_state,
+        MPSTensor.interactionHamiltonian_normalizedBondInteraction_groundSpace,
+        MPSTensor.ker_interactionHamiltonian_normalizedBondInteraction_le_parent,
+        MPSTensor.interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction}
+    \leanok
+    \uses{thm:spt_direct_sum_fixed_point_path,
+        thm:spt_weighted_matrix_unit_bond_product, def:parent_interaction,
+        thm:spt_middle_bond_contraction}
+    Let $D_0,D_1>0$, let $W_t$ be the normalized diagonal coefficient
+    matrix of the interpolating bond $\eta_t$, and put
+    $A_t^{(a,b)}=(W_t)_{aa}|a\rangle\langle b|$.
+    For every real $t$, its canonical two-site parent projection $p_t$
+    satisfies
+    \begin{align}
+        I\otimes(I-|\eta_t\rangle\langle\eta_t|)\otimes I & \leq p_t.
+        \notag
+    \end{align}
+    On every periodic chain of length at least two, the smaller interaction
+    has precisely the line spanned by the nonzero periodic MPS of $A_t$
+    as its zero eigenspace. This line is also annihilated by the canonical
+    parent Hamiltonian. These statements include the two endpoints, where
+    some diagonal coefficients vanish
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two-site boundary coefficient is
+    $(W_t)_{aa}(W_t)_{bc}X_{da}$. Thus every boundary vector has $\eta_t$
+    on the middle registers, and the independent-bond penalty annihilates
+    it. Comparing orthogonal projections gives the local inequality.
+    Regrouping the physical registers carries $\eta_t^{\otimes N}$ to
+    the periodic MPS. The independent-bond Hamiltonian has this unique
+    ground line, and every canonical parent Hamiltonian annihilates its
+    own periodic MPS.
+\end{proof}
+
+\begin{definition}[Symmetric paths between weighted canonical parents]
+    \label{def:spt_weighted_canonical_parent_path}
+    \lean{MPSTensor.interactionHamiltonian_normalizedBondInteraction_spectrum_gap_one,
+        MPSTensor.weightedMatrixUnitParentComparisonPath,
+        MPSTensor.weightedCanonicalFixedPointGappedPath}
+    \leanok
+    \uses{thm:spt_weighted_matrix_unit_parent_comparison,
+        thm:spt_ordered_interaction_path, thm:spt_direct_sum_fixed_point_path,
+        thm:spt_parent_hamiltonian_symmetry, thm:spt_common_space_path_concatenation}
+    Suppose the two virtual summands carry unitary projective
+    representations with the same factor system. Let $h_t$ be the bond
+    interaction and $p_t$ the canonical parent projection of the weighted
+    tensor. For each fixed real $t$, the affine path
+    $s\mapsto h_t+s(p_t-h_t)$ is a symmetric gapped path from $h_t$ to $p_t$.
+    Concatenating its reverse at $t=0$, the bond path from $h_0$ to $h_1$,
+    and the comparison at $t=1$ gives a symmetric gapped path from $p_0$
+    to $p_1$ on the common direct-sum physical space
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{proof}\leanok
+    The bond Hamiltonian has gap at least one. The local inequality and
+    the shared nonzero periodic ground line imply that each affine
+    comparison retains this gap. The tensor covariance gives symmetry of
+    the canonical parent, and both local terms are orthogonal projections
+    of norm at most one. Concatenation preserves a positive uniform gap.
+    This uses the canonical projections only at fixed values of $t$;
+    their continuity as the bond coefficients vanish is unnecessary.
+\end{proof}
+
 \subsection{Degeneracy of the entanglement spectrum}
 \label{sec:spt_entanglement_spectrum}
 
