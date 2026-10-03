@@ -2742,7 +2742,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_unital_normalization}
     \lean{MPSTensor.exists_local_continuous_unitalNormalization_of_isInjective}
     \leanok
-    \uses{thm:spt_continuous_right_perron_data, def:gauge_equiv}
+    \uses{def:gauge_equiv}
     Let $A(t)$ be continuous in a fixed positive bond dimension and
     one-site injective at $t_0$. On an open neighborhood of $t_0$,
     there are continuous Perron data as above and a continuous tensor
@@ -2756,6 +2756,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:spt_local_invariant_compression,
+        thm:spt_continuous_right_perron_data,
+        thm:unital_gauge_of_pd_fixed_point}
     Injectivity persists locally. Choose the normalized Perron data
     there. Positive square roots and their inverses are continuous on
     the positive definite matrices, so~(\ref{eq:spt_continuous_unital_tensor})
@@ -2768,8 +2771,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_canonical_normalization}
     \lean{MPSTensor.exists_local_continuous_canonicalNormalization_of_isInjective}
     \leanok
-    \uses{thm:spt_continuous_unital_normalization,
-        thm:spt_local_stationary_density}
     Under the preceding hypotheses, the neighborhood may be chosen
     so that the unital tensor $B(t)$ also has a continuous normalized
     adjoint stationary density $\sigma(t)$ satisfying
@@ -2786,6 +2787,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:spt_continuous_unital_normalization,
+        thm:injective_irreducible,
+        thm:spt_local_stationary_density}
     Gauge equivalence and nonzero scalar normalization preserve
     injectivity. For the unital base tensor, the adjoint channel is
     trace preserving and irreducible. Its normalized stationary density
