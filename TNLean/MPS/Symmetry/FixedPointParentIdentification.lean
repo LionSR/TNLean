@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondProductEndpointGroundSpace
+import TNLean.MPS.Symmetry.TwoSiteBondContraction
 
 /-!
 # The canonical parent interaction of the matrix-unit fixed point
@@ -40,18 +41,10 @@ theorem one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor
           f ![finProdFinEquiv (a, x), finProdFinEquiv (x, d)]) := by
   classical
   funext s
-  rw [Matrix.sub_mulVec, Matrix.one_mulVec]
+  simp only [Matrix.sub_mulVec, Matrix.one_mulVec, Pi.sub_apply,
+    twoSiteBondInteraction_mulVec_apply]
   erw [groundSpaceMap_sptFixedPointTensor_two_apply]
-  simp only [Pi.sub_apply, Matrix.mulVec, dotProduct]
-  rw [← Equiv.sum_comp (twoSiteBondEquiv D).symm]
-  simp only [Fintype.sum_prod_type, twoSiteBondInteraction_apply,
-    Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm]
-  simp only [twoSiteBondEquiv, Equiv.coe_fn_symm_mk, Fin.isValue,
-    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
-    Equiv.symm_apply_apply]
-  simp only [ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_irrel, Finset.sum_ite_eq, Finset.mem_univ,
-    ↓reduceIte, Finset.sum_const_zero]
+  simp only [sptPair, Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm]
   simp only [bondPenalty, Matrix.sub_apply, Matrix.one_apply,
     bondVectorProjection, Matrix.vecMulVec_apply, sub_mul,
     Finset.sum_sub_distrib]

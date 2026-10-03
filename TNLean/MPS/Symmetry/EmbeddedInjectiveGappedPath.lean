@@ -20,6 +20,12 @@ here are the single-block, one-site injective case of arXiv:1010.3732,
 Sections II.C and II.F.2, equation eq:1d-sym:jointsym. The source also treats
 several-block normal forms. Documented in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Sections II.C and II.F.2
 -/
 
 open scoped Matrix

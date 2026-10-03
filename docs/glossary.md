@@ -2307,3 +2307,82 @@ involve no boundary.
   the smaller interaction has a uniform gap and the periodic zero modes
   are common. Endpoint commutation with the fixed on-site representation
   suffices for symmetry of the entire path.
+
+- **Weighted canonical endpoints:** `weightedMatrixUnitParentComparisonPath`
+  compares each fixed normalized-bond interaction with the canonical parent
+  of its weighted matrix-unit tensor. The local operator inequality and the
+  shared nonzero periodic ground line hold even when coefficients vanish.
+  `weightedCanonicalFixedPointGappedPath` concatenates the two endpoint
+  comparisons with the continuous bond path. It concerns unitary virtual
+  summands with a common factor system on the common direct-sum physical
+  space; arbitrary isometric tensors still require a separate endpoint
+  identification. Neither construction assumes continuity of the canonical
+  projections as the interpolation parameter varies.
+
+## Exact circuits with initialized auxiliaries
+
+### `QuantumCircuit.IsCleanImplementation`
+
+- **Declaration:** `IsCleanImplementation J C Z`.
+- **Defined in:** `TNLean/Circuit/CleanUnitaryImplementation.lean`.
+- **Meaning:** the matrix identity $CJ=JZ$. When $J$ includes a logical
+  register with its workspace initialized, this identity says that the
+  workspace returns to its initialized state on every logical input.
+- **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
+- **Sanctioned constructions:** `IsCleanImplementation.mul` composes
+  implementations using the same workspace; `IsCleanImplementation.embedOp`
+  places one in a larger register; `exists_isPairProduct_isCleanImplementation`
+  constructs a neighboring-pair circuit for an included logical unitary.
+- **Caveat:** the identity alone does not assert unitarity. It specifies the
+  initialized subspace, rather than the action on arbitrary workspace inputs.
+
+### `MPUCircuit.IsIntervalInteriorInitialized`
+
+- **Declaration:** `IsIntervalInteriorInitialized j k x z`.
+- **Defined in:** `TNLean/MPS/MPU/IntervalRegisterLayout.lean`.
+- **Meaning:** each auxiliary site strictly inside the interval from cut $j$
+  to cut $k$ has computational label $z$. Physical and outside sites remain
+  unrestricted.
+- **Source:** the interval registers in Section 5 of the same circuit note.
+- **Sanctioned bridge:** `isIntervalInteriorInitialized_split` separates the
+  two child conditions and the initialization of the joining auxiliaries.
+
+### `MPUCircuit.IsIntervalPartition`
+
+- **Declaration:** `IsIntervalPartition start length tree`.
+- **Defined in:** `TNLean/MPS/MPU/BalancedIntervalTree.lean`.
+- **Meaning:** an ordered binary subdivision of a positive-length interval
+  into single-site leaves, with each internal node labelled by its actual
+  joining cut.
+- **Source:** the balanced interval recursion in Section 5 of the circuit note.
+- **Sanctioned construction:** the midpoint tree provides this partition
+  without a supplied tree or joining-cut witness.
+
+### `MPUCircuit.IsMinimalIntervalColumnImplementation`
+
+- **Declaration:** `IsMinimalIntervalColumnImplementation ... j k ... Z`.
+- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalColumns.lean`.
+- **Meaning:** on the prescribed initialized interval input, $Z$ gives the
+  weighted minimal interval isometry, with its two outer bond encodings,
+  and the identity on every outside logical configuration.
+- **Source:** the weighted interval columns in Section 5 of the circuit note.
+- **Sanctioned bridges:** exact supported child columns determine the joint
+  columns; the actual joining contraction determines the parent columns.
+- **Caveat:** this is an initialized-column identity, not a circuit-existence
+  or resource assertion by itself.
+
+### `MPUCircuit.IsMinimalIntervalCircuitImplementation`
+
+- **Declaration:** `IsMinimalIntervalCircuitImplementation ... j k ... K Z C`.
+- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalCircuit.lean`.
+- **Meaning:** $Z$ is a logical unitary supported on the interval and has the
+  preceding initialized-column identity. A neighboring-pair circuit $C$ has
+  at most $K$ gates and implements $Z$ with the shared workspace returned to
+  zero on every logical input.
+- **Source:** the full interval circuit conditions in Section 5 of the note.
+- **Sanctioned constructions:** the actual leaf construction and
+  `exists_minimalInterval_merging_circuit` supply this predicate. The final
+  bounded-cut-rank theorem constructs every intermediate datum from $U$.
+- **Caveat:** minimal bases, metrics, and child implementations occur only
+  in intermediate statements; the final existence theorem does not assume
+  them as additional witnesses.

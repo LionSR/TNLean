@@ -68,6 +68,7 @@ import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
+import TNLean.Algebra.IsometricProjection
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.KernelGapPerturbation
 import TNLean.Algebra.KleinCocycleCompleteness
@@ -80,6 +81,7 @@ import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
+import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixScalarIdentity
