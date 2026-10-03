@@ -54,8 +54,10 @@ theorem exists_cutBasisFamily_with_endpoints {d N : ℕ}
     (finrank_cutColumnSpace ψ 0).trans (cutCoefficientRank_zero ψ hψ)
   have hdN : Module.finrank ℂ (cutColumnSpace ψ N) = 1 :=
     (finrank_cutColumnSpace ψ N).trans (cutCoefficientRank_last ψ hψ)
-  let : Unique (Fin (cutCoefficientRank ψ 0)) := Equiv.unique (finCongr (cutCoefficientRank_zero ψ hψ))
-  let : Unique (Fin (cutCoefficientRank ψ N)) := Equiv.unique (finCongr (cutCoefficientRank_last ψ hψ))
+  let : Unique (Fin (cutCoefficientRank ψ 0)) := Equiv.unique (finCongr
+      (cutCoefficientRank_zero ψ hψ))
+  let : Unique (Fin (cutCoefficientRank ψ N)) := Equiv.unique (finCongr
+      (cutCoefficientRank_last ψ hψ))
   let e0 := FiniteDimensional.basisSingleton (Fin (cutCoefficientRank ψ 0)) hd0 v0 hv0
   let eN := FiniteDimensional.basisSingleton (Fin (cutCoefficientRank ψ N)) hdN vN hvN
   have he0 : ∀ q, (e0 q).val = 1 := by
