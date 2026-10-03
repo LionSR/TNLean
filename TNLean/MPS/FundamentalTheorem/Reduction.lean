@@ -12,6 +12,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.AbsorbingCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.CompressionPeriodic
 import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
+import TNLean.MPS.FundamentalTheorem.Reduction.FiniteWordCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
