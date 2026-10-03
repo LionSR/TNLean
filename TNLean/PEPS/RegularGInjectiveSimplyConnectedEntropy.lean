@@ -28,6 +28,11 @@ ground space remains separate; see
 
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
 Corollary 6.10, local source lines 2074–2090.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

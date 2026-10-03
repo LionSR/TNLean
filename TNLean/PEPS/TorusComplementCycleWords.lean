@@ -21,8 +21,14 @@ local source lines 1935–1990. No group-valued relative holonomy identity is
 assumed, and no existence theorem for the complementary loops is asserted.
 
 **Scope restriction (simple torus graph):** The torus statements use width and
-height at least three; the existence of complementary replacement loops remains
-separate, as recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+height at least three. The complementary replacement loops are constructed
+separately, in `TNLean.PEPS.TorusComplementPathReplacement`; see
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS
