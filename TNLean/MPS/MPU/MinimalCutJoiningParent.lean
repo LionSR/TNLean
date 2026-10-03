@@ -192,7 +192,8 @@ theorem exists_normalized_joining_parent_isometries_of_unitary {d N : ℕ}
     (hd : 0 < d) (hN : 0 < N)
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ) :
-    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank
+        (operatorCoefficientTensor U) k))
         ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k),
       (∀ q, (B 0 q).val = 1) ∧
       (∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) ∧
@@ -208,7 +209,8 @@ theorem exists_normalized_joining_parent_isometries_of_unitary {d N : ℕ}
         P 0 = 1 ∧ P (Fin.last N) = 1 ∧
         ∀ (j m k : Fin (N + 1)) (hjm : j.val ≤ m.val) (hmk : m.val ≤ k.val),
           (normalizedJoiningParent
-            (MPSPreparation.cutCoefficientRank_pos _ (operatorCoefficientTensor_ne_zero hd U hU) m.val)
+            (MPSPreparation.cutCoefficientRank_pos _ (operatorCoefficientTensor_ne_zero hd U
+                hU) m.val)
             (P m) (balancedIntervalChildren (minimalOperatorInterval U B hjm)
               (minimalOperatorInterval U B hmk) (CFC.sqrt (P j))
               (CFC.sqrt (dualGramMetric (P k))) (P m))).IsIsometry := by

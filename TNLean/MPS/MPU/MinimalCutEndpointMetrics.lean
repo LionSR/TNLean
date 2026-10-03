@@ -104,7 +104,8 @@ theorem prefixInputGram_minimalOperatorPrefix_zero {d N : ℕ}
   let : Unique (MPSPreparation.CutPrefixConfig d N 0) := Classical.choice
     (Fintype.card_eq_one_iff_nonempty_unique.mp (MPSPreparation.card_cutPrefixConfig_zero d N))
   let : Unique (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) :=
-    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_zero (operatorCoefficientTensor U) hψ))
+    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_zero
+        (operatorCoefficientTensor U) hψ))
   apply prefixInputGram_eq_trace_smul_one_of_empty_cap
   intro aa bb q
   change (B 0 q).val (pairPhysicalConfig aa bb) = 1
@@ -130,7 +131,8 @@ theorem prefixInputGram_minimalOperatorPrefix_last {d N : ℕ}
   let : Unique (MPSPreparation.CutSuffixConfig d N N) := Classical.choice
     (Fintype.card_eq_one_iff_nonempty_unique.mp (MPSPreparation.card_cutSuffixConfig_last d N))
   let : Unique (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) :=
-    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_last (operatorCoefficientTensor U) hψ))
+    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_last
+        (operatorCoefficientTensor U) hψ))
   apply prefixInputGram_eq_trace_smul_one_of_suffix_cap
     (minimalOperatorPrefixFactor U B N) (minimalOperatorSuffixFactor U B N)
     (minimalOperatorFactors_isIsometry U hU B N)
@@ -233,7 +235,8 @@ theorem minimalOperatorInterval_full_apply {d N : ℕ}
   classical
   have hψ := operatorCoefficientTensor_ne_zero hd U hU
   let : Unique (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) :=
-    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_zero (operatorCoefficientTensor U) hψ))
+    Equiv.unique (finCongr (MPSPreparation.cutCoefficientRank_zero
+        (operatorCoefficientTensor U) hψ))
   let u : MPSPreparation.CutPrefixConfig (d * d) N 0 :=
     fun s ↦ False.elim (Nat.not_lt_zero _ s.2)
   let w := pairPhysicalConfig (fullCutIntervalConfigEquiv d N x)
@@ -253,7 +256,8 @@ theorem minimalOperatorInterval_full_apply {d N : ℕ}
   rw [operatorCoefficientTensor_apply] at h
   change U x y = MPSPreparation.cutIntervalMatrix (operatorCoefficientTensor U) B
     (Nat.zero_le N) w default β at h
-  rw [Subsingleton.elim (default : Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) 0)) α]
+  rw [Subsingleton.elim (default : Fin (MPSPreparation.cutCoefficientRank
+      (operatorCoefficientTensor U) 0)) α]
     at h
   exact h.symm
 
@@ -284,7 +288,8 @@ theorem weightedMinimalOperatorInterval_full_apply {d N : ℕ}
       (fullCutIntervalConfigEquiv d N x, (β, α)) (fullCutIntervalConfigEquiv d N y) = U x y := by
   rw [eq_one_of_mem_minimalOperatorPrefixHull_zero hd U hU B hB0 hP,
     eq_one_of_mem_minimalOperatorPrefixHull_last hd U hU B hBN hS]
-  have hc : Fintype.card (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) N)) = 1 := by
+  have hc : Fintype.card (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor
+      U) N)) = 1 := by
     simp only [Fintype.card_fin]
     exact MPSPreparation.cutCoefficientRank_last (operatorCoefficientTensor U)
       (operatorCoefficientTensor_ne_zero hd U hU)
@@ -329,7 +334,8 @@ theorem exists_normalized_minimalInterval_family_of_unitary {d N : ℕ}
     (hd : 0 < d) (hN : 0 < N)
     (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : U ∈ unitaryGroup (Fin N → Fin d) ℂ) :
-    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank (operatorCoefficientTensor U) k))
+    ∃ B : ∀ k, Module.Basis (Fin (MPSPreparation.cutCoefficientRank
+        (operatorCoefficientTensor U) k))
         ℂ (MPSPreparation.cutColumnSpace (operatorCoefficientTensor U) k),
       (∀ q, (B 0 q).val = 1) ∧
       (∀ q, (B N q).val = MPSPreparation.fullCutVector (operatorCoefficientTensor U)) ∧

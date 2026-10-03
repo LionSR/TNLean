@@ -17,7 +17,7 @@ formula. All configurations on the remaining registers are retained.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
-open Matrix MPSTensor MPSPreparation QuantumCircuit
+open Matrix MPSTensor QuantumCircuit
 open scoped Kronecker
 
 namespace MPUCircuit
