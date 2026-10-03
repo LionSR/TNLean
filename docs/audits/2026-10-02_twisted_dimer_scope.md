@@ -1,0 +1,123 @@
+# The twisted dimer: length dependence and factorization
+
+The construction in [issue #7611](https://github.com/LionSR/TNLean/issues/7611)
+is motivated by the question following Theorem 4.14 of arXiv:1606.00608:
+can structure coefficients of a renormalization fixed point depend on
+circumference? The tensor is a construction of this project, rather than an
+example printed in that paper. It satisfies the channel fixed-point equations
+and has an attached coefficient family that depends on circumference.
+This note distinguishes these established properties from the
+additional non-factorization assertion investigated in
+[issue #7751](https://github.com/LionSR/TNLean/issues/7751).
+
+The channel equations are the predicate `IsRFPViaTS`; they do not assert the
+source's separate global unit-weight canonical convention. No such canonical
+classification of the twisted dimer is established here. The normalization
+issue is recorded in the companion library's
+[canonical-weight note](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf).
+
+Let \(\Pi_\pm\) be the projectors onto the Bell vectors
+\((|00\rangle\pm|11\rangle)/\sqrt2\), and put
+\(\sigma=(7/8)\Pi_++(1/8)\Pi_-\) and
+\(\sigma'=(7/8)\Pi_+-(1/8)\Pi_-\). At every positive length the density
+operator, written in bond and flag coordinates, is
+\[
+\rho_N=2^{-N}\bigl(\sigma^{\otimes N}\otimes I^{\otimes N}
+                 +\sigma'^{\otimes N}\otimes Z^{\otimes N}\bigr).
+\]
+The developed results establish positivity, trace one, explicit refinement
+and coarse-graining channels, failure of simplicity in the sense of
+Definition 4.7, vertical canonical form, and fusion with the normalized
+coefficients \(7/10\) and \(1/10\). No pair of positive rescalings of the
+two normal representatives makes their displayed coefficient family
+independent of circumference. These are assertions at the specified physical
+cut and for the stated representatives.
+
+## What the factorization calculation establishes
+
+Group the incoming bond \((R_{m-1},L_m)\) with the flag at site \(m\).
+On one such cell define
+\[
+V=(I-\Pi_-)\otimes I+\Pi_-\otimes X.
+\]
+This is a self-adjoint unitary on the complete eight-dimensional cell,
+including the complement of the two Bell vectors. It satisfies
+\[
+V(\sigma\otimes I)V^*=\sigma\otimes I,
+\qquad
+V(\sigma\otimes Z)V^*=\sigma'\otimes Z.
+\]
+Consequently the product of these gates, transported back to the site
+coordinates, conjugates \(\rho_N\) to
+\[
+\sigma^{\otimes N}\otimes\tau_N,
+\qquad
+\tau_N=2^{-N}(I^{\otimes N}+Z^{\otimes N}).
+\]
+Both factors have trace one. The first is the mixed-Bell bond product;
+the second is the even-parity flag state, identified with normalized
+Example 4.12 of the source. Both factors have explicit renormalization
+channels in the existing development.
+
+The identity is proved by
+`MPOTensor.TwistedDimer.mpo_eq_unitary_factorization` in
+`TNLean/MPS/MPDO/TwistedDimerUnitaryFactorization.lean`. The exact factor
+identifications and their channels are in `TwistedDimerFactorStates.lean`
+and `TwistedDimerBondRFP.lean`. The construction provenance is preserved in
+[the September 5 calculation](2026-09-05_twisted_dimer_unitary_factorization.md).
+The more general finite-group separation is treated in
+`rfp_intrinsic/sections/02_groups.tex`.
+
+The exact mixed-Bell bond factor is simple in the sense of Definition 4.7.
+The theorem `MPOTensor.TwistedDimer.sigmaDimer_isSimple`, in
+`TwistedDimerBondSimple.lean`, supplies one normal representative, obtained
+by multiplying its matrix-unit tensor by \(4\sqrt2/5\). The representative's
+physical-trace transfer has trace \(4\sqrt2/5\ne0\), which excludes
+nilpotency. This establishes simplicity of the bond factor without asserting
+an on-site tensor factorization of the original twisted dimer.
+
+## Disposition of the original tensor-product assertion
+
+Condition N3 in the original construction asserted that the tensor is not a
+tensor product of a length-independent fixed point and a simple
+length-dependent fixed point. That assertion is withdrawn as a property of
+this example. The retained claims are the channel equations, non-simplicity
+of the coupled tensor, its displayed canonical decomposition and fusion law,
+and the obstruction to positive rescaling of its two specified normal
+representatives.
+
+The [preserved construction excerpts](2026-09-05_twisted_dimer_unitary_factorization.md)
+identify the reason: the proposed N3 argument compares only a particular
+one-generator factorization with two coefficients in a specified basis.
+It supplies neither a general exclusion of simple factors with several
+blocks nor an equivalence between tensor factorization and that coefficient
+comparison. The permitted changes of coordinates and blocking operations
+were not specified. Thus the original tensor-product sentence has no
+established interpretation under which it can be retained as a theorem of
+the construction.
+
+The assertion that these weights cannot be separated into an independent
+bond factor is withdrawn when neighboring-register regrouping and these
+specified unitary gates are allowed. The displayed identity is a direct
+factorization of the actual density operators, at every positive length.
+Thus failure of simplicity and the obstruction to rescaling normal
+representatives do not establish non-factorization under those operations.
+
+A separate question may restrict the permitted changes to on-site physical
+unitaries and virtual similarities. The existing operator identity neither
+proves nor disproves that tensor statement. Such a question must first
+specify the permitted factors and whether blocking is allowed; it is not
+retained as an unproved property of this example. In particular, the
+coefficient-rescaling obstruction supplies no general non-factorization
+conclusion.
+
+## One tensor-power construction
+
+For the consolidation requested in
+[issue #7786](https://github.com/LionSR/TNLean/issues/7786), `powN` denotes
+the constant-family instance of `Matrix.finKronecker`, and
+`gPow k N = powN (gLoc k) N`. Multiplication, conjugate transpose, and
+identity are handled by the existing `Matrix.finKronecker_mul`,
+`Matrix.finKronecker_conjTranspose`, and `Matrix.finKronecker_one`.
+The former private proofs `powN_mul`, `powN_conjTranspose`, and `powN_one`
+are removed. The mathematical statements of the dimer results are unchanged.

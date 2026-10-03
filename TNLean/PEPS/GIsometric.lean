@@ -40,7 +40,9 @@ the proof of Lemma 6.2 is `concatLeftInverse_leftRegular` in one dimension and
 with the regular representation on the contracted link, the left inverse of the concatenation is
 the plain composition (contraction) of the left inverses. The identity `(B^j)†(A^i)† = (A^i B^j)†`
 is `concatLeftInverse_mpsAdjointSiteMap`, and Lemma 6.2 is `IsGIsometricMPS.concatTensor`, with
-the factors multiplying.
+the factors multiplying. The two-dimensional case of Lemma 6.2, the contraction of one link of
+two `G`-isometric PEPS tensors, is `TNLean.PEPS.IsGIsometric.linkContraction` in
+`TNLean.PEPS.GIsometricLinkContraction`.
 
 Lemma 6.3 is stated for the general predicate `TNLean.PEPS.IsGIsometric` on coordinate spaces.
 Its proof uses the isometry of `𝒫(A)` on the invariant subspace and no property of the
@@ -53,13 +55,6 @@ operation `𝒫(A) V 𝒫(A)⁻¹` is unitary only under it. The two directions 
 `IsGIsometric.exists_unitary_comp_eq` and `IsGIsometric.exists_comp_eq_of_unitary`; the virtual
 operation `V = 𝒫(A)⁻¹ U 𝒫(A)` of the second is `G`-invariant on both sides and unitary on the
 invariant subspace, which is where the source says it acts (lines 1722–1728).
-
-**Scope restriction (one dimension):** Lemma 6.2 is stated for the concatenation of `G`-isometric
-PEPS in general; `IsGIsometricMPS.concatTensor` proves the one-dimensional case, the case in which
-the source writes its proof, and `linkContractionLeftInverse_leftRegular` proves the step
-`Δ = |G|⁻¹ 𝟙` for the two-dimensional link contraction. The two-dimensional statement, that the
-contracted left inverse is the adjoint of the contracted map, is not formalized. Documented in
-`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 **Local fix (normalization):** as for `TNLean.PEPS.IsGIsometric`, `𝒫(A†) 𝒫(A)` is required to
 be a positive multiple `c Π` of the projector onto the invariant subspace rather than `Π`
@@ -77,7 +72,7 @@ itself; the concatenation has factor `c_A c_B`. Documented in
 * `TNLean.PEPS.concatLeftInverse_leftRegular`,
   `TNLean.PEPS.linkContractionLeftInverse_leftRegular`: the step `Δ = |G|⁻¹ 𝟙`.
 * `TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap`: `(B^j)†(A^i)† = (A^i B^j)†`.
-* `TNLean.PEPS.IsGIsometricMPS.concatTensor`: Lemma 6.2.
+* `TNLean.PEPS.IsGIsometricMPS.concatTensor`: Lemma 6.2 in one dimension.
 * `TNLean.PEPS.IsGIsometric.exists_unitary_comp_eq`,
   `TNLean.PEPS.IsGIsometric.exists_comp_eq_of_unitary`: Lemma 6.3.
 

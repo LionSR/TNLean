@@ -23,5 +23,6 @@ import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaSigma
 import TNLean.MPS.Examples.Ising.IsingSectorAction
 import TNLean.MPS.Examples.Ising.IsingSigmaProduct
 import TNLean.MPS.Examples.Ising.IsingTensors
+import TNLean.MPS.Examples.Ising.IsingThreeObjectTwist
 import TNLean.MPS.Examples.Ising.IsingWeightedTwist
 import TNLean.MPS.Examples.Ising.Zsqrt2OperatorFusion
