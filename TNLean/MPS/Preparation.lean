@@ -41,6 +41,12 @@ import TNLean.MPS.Preparation.LogLogDepthEveryLength
 import TNLean.MPS.Preparation.LogLogDepthPreparation
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.MeasurementPreparation
+import TNLean.MPS.Preparation.MinimalCutRepresentation
+import TNLean.MPS.Preparation.MinimalCutRepresentationBases
+import TNLean.MPS.Preparation.MinimalCutRepresentationCuts
+import TNLean.MPS.Preparation.MinimalCutRepresentationFactorization
+import TNLean.MPS.Preparation.MinimalCutRepresentationIntervals
+import TNLean.MPS.Preparation.MinimalCutRepresentationPadding
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.NonNormalMeasurementPreparation
