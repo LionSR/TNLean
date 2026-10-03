@@ -3,12 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixGramLeftInverse
+import TNLean.Algebra.MatrixBilinearCoordinates
 import TNLean.MPS.Structure.ContinuousTraceQuotientMultiplication
 import TNLean.MPS.Core.TracePairing
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.SesquilinearForm
 import Mathlib.Algebra.Algebra.Bilinear
-import Mathlib.Algebra.Group.InjSurj
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
 /-!
@@ -87,15 +88,6 @@ theorem traceQuotientSection_triple {d D E : ℕ}
     Matrix.smul_mul, Matrix.mul_smul, Matrix.trace_sum, Matrix.trace_smul,
     smul_eq_mul, hTriple', Finset.mul_sum, mul_assoc, mul_left_comm]
 
-private theorem mulVec_pairProduct_eq_toLinearMap₂ {d r : ℕ}
-    (R : Matrix (Fin d) (Fin r × Fin r) ℂ) (x y : Fin r → ℂ) :
-    R *ᵥ (fun ij => x ij.1 * y ij.2) =
-      Matrix.toLinearMap₂' ℂ (Matrix.of fun a b => fun j => R j (a, b)) x y := by
-  rw [Matrix.toLinearMap₂'_apply (R := ℂ)]
-  ext j
-  simp only [Matrix.mulVec, dotProduct, Fintype.sum_prod_type, Finset.sum_apply,
-    Pi.smul_apply, smul_eq_mul,
-    Matrix.of_apply, mul_assoc, mul_comm]
 
 /-- Contracted three-site columns determine the full bilinear product data.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
@@ -116,16 +108,10 @@ theorem traceQuotientProductColumns_triple {d r D : ℕ}
       LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply',
       MPSTensor.traceMulRightPi_apply, Pi.smul_apply, smul_eq_mul] using hR a b j
   exact fun x y => by
-    simpa only [← mulVec_pairProduct_eq_toLinearMap₂, LinearMap.smul_apply,
+    simpa only [toLinearMap₂'_apply_mulVec_prod, LinearMap.smul_apply,
       LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply']
       using congrArg (fun f => f x y) hMaps
 
-private theorem gram_leftInverse {d r : ℕ} (C : Matrix (Fin d) (Fin r) ℂ)
-    (hC : Function.Injective C.mulVec) :
-    ((Cᴴ * C)⁻¹ * Cᴴ) * C = 1 := by
-  simpa only [Matrix.mul_assoc] using Matrix.nonsing_inv_mul (Cᴴ * C)
-    ((Matrix.isUnit_iff_isUnit_det _).mp
-      (Matrix.PosDef.conjTranspose_mul_self C hC).isUnit)
 
 /-- Exact trace data recover the quotient product, including the ratio of
 its two-site and three-site normalizations.
@@ -146,7 +132,7 @@ theorem traceQuotientProductCoordinates_recover {d r D : ℕ}
     simp only [hTriple, hPair, Q.apply_symm_apply, map_smul, smul_smul,
       mul_div_cancel₀ _ hα₂]
   rw [traceQuotientProductCoordinates, ← Matrix.mulVec_mulVec, hR,
-    Matrix.mulVec_mulVec, gram_leftInverse (G * F) hInj,
+    Matrix.mulVec_mulVec, Matrix.gramLeftInverse_mul (G * F) hInj,
     Matrix.one_mulVec, Q.apply_symm_apply]
 
 /-- A full-rank section identifies the coefficient quotient with the bond
@@ -201,10 +187,8 @@ theorem traceQuotientProductCoordinates_algebraRecovery {d r D : ℕ}
       (fun ij => x ij.1 * y ij.2)) = E x * E y := by
     intro x y
     simp only [hE, ← hE₀, LinearEquiv.coe_coe, hRec, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-  let : Mul (Fin r → ℂ) := ⟨fun x y =>
-    traceQuotientProductCoordinates G F R *ᵥ (fun ij => x ij.1 * y ij.2)⟩
-  let : Semigroup (Fin r → ℂ) := E.injective.semigroup E hMul
-  exact ⟨E, hE, hMul, mul_assoc⟩
+  refine ⟨E, hE, hMul, fun x y z => E.injective ?_⟩
+  rw [hMul, hMul, hMul, hMul, Matrix.mul_assoc]
 
 /-- A section of the raw two-site trace form reconstructs an associative
 matrix algebra from the raw three-site vector. The minimal tensor is used

@@ -309,7 +309,7 @@ and a unique normalized adjoint stationary density for any supplied continuous
 tensor family in a fixed positive bond dimension, with injectivity only at the
 base point. No stationary-space hypothesis is added. This completes the
 normalization once a continuous realization is available; choosing that
-realization from the physical ground-state path remains separate.
+realization through a change of minimal bond dimension remains separate.
 
 Finite-ring reconstruction is now proved for already injective realizations.
 The declaration
@@ -329,8 +329,12 @@ $(C^\dagger C)^{-1}C^\dagger R$, where $C=GF$ is a fixed section of the
 two-site trace form and $R$ contains contracted three-site traces. Minimal
 injective tensors and their scalar normalizations are required only
 pointwise. The trace form is complex bilinear; only $C^\dagger C$ is positive
-Hermitian. Continuous matrix realization, including changes of rank,
-remains open.
+Hermitian. The local continuous realization is now supplied by
+\leanid{MPSTensor.exists_local_continuous_unitalTensor_of_samePositiveMpvRay}:
+it constructs an injective unital tensor for the same full periodic-ray family,
+and a continuous unique normalized adjoint stationary density, without a
+continuous choice of the pointwise minimal representatives. Changes of minimal
+bond dimension remain open.
 
 The required realization need not be obtainable by gauging the supplied
 ambient tensor. For example, let $a$ be a normalized one-site vector and

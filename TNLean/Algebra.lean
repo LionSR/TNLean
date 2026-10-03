@@ -33,6 +33,8 @@ import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
+import TNLean.Algebra.ContinuousIdempotentFrames
+import TNLean.Algebra.ContinuousNearbyIdempotent
 import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
@@ -62,6 +64,7 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
+import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
@@ -81,9 +84,12 @@ import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
+import TNLean.Algebra.MatrixBilinearCoordinates
 import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixFixedSection
+import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
@@ -95,6 +101,7 @@ import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
+import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OneMagnon
@@ -107,6 +114,7 @@ import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.PositivePowerSumMoments
+import TNLean.Algebra.PrimitiveMatrixIdealDimension
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.PureStateTraceNorm

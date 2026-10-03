@@ -254,6 +254,45 @@ abstracted — record why, so it is not re-proposed).
   helper for the first two uses. It is now public and serves the third use.
 - **Notes:** no new cancellation proof or tactic is needed.
 
+### Gram left inverses of injective matrix sections — promoted
+- **Pattern:** cancel the product of an injective section with its Hermitian
+  Gram left inverse.
+- **Seen:** quotient algebra recovery, letter-coordinate recovery, and
+  continuous range frames.
+- **Abstraction:** `Matrix.gramLeftInverse_mul` in
+  `TNLean/Algebra/MatrixGramLeftInverse.lean`.
+- **Notes:** all three proofs use the common lemma.
+
+### Continuity of Gram left inverses — promoted
+- **Pattern:** prove continuity of `(Cᴴ * C)⁻¹ * Cᴴ` for a continuous injective
+  rectangular matrix family.
+- **Seen:** trace-quotient multiplication coordinates, reconstructed letter
+  coordinates, and continuous range frames.
+- **Abstraction:** `Matrix.continuous_gramLeftInverse` in
+  `TNLean/Algebra/MatrixGramLeftInverse.lean`.
+- **Notes:** all three proofs use the common lemma. Inversion is handled by
+  `Matrix.nonsing_inv_eq_ringInverse` and `NormedRing.inverse_continuousAt`.
+  The local-unit argument uses those Mathlib results directly as well.
+
+### Bilinear maps in pair-indexed coordinates — promoted
+- **Pattern:** expand a bundled bilinear map into the matrix acting on
+  coordinates `(a,b) ↦ x a * y b`.
+- **Seen:** quotient algebra recovery, continuous quotient units, and
+  continuous primitive elements.
+- **Abstraction:** `Matrix.toLinearMap₂'_apply_mulVec_prod` in
+  `TNLean/Algebra/MatrixBilinearCoordinates.lean`.
+- **Notes:** the three private coordinate-expansion proofs are removed.
+
+### Restricting continuous data to an open subtype neighborhood — promoted
+- **Pattern:** transfer an open neighborhood in an open subtype to its image
+  in the ambient space, then restrict the chosen continuous data.
+- **Seen:** continuous quotient units, continuous canonical normalization,
+  continuous range frames, and minimal tensor reconstruction.
+- **Abstraction:** Mathlib's `IsOpen.isOpenMap_subtype_val` and
+  `Topology.IsInducing.subtypeVal.continuousOn_image_iff`.
+- **Notes:** the repeated ambient-intersection constructions are removed;
+  no additional theorem or tactic is required.
+
 ### Associativity and units from an injective multiplicative map — promoted
 - **Pattern:** transfer associativity and the two unit identities through a
   bijective coordinate identification with a matrix algebra.
@@ -4546,28 +4585,3 @@ spectral split → block extraction → MPV calculation → strict bounds
   coefficients when possible; a matrix conjugation linear equivalence may
   contain the common cancellation when a scalar action is also present.
 - **Notes:** both occurrences are in one module, below the promotion threshold.
-
-### Inversion of continuous matrix families on their unit locus — candidate
-- **Pattern:** turn an invertible matrix into a unit, apply continuity of scalar
-  inverse to its determinant, and compose `continuousAt_matrix_inv` with the
-  continuous matrix family.
-- **Seen:** `continuous_traceQuotientProductCoordinates` in
-  `TNLean/MPS/Structure/ContinuousTraceQuotientMultiplication.lean` and the
-  private local-unit argument in
-  `TNLean/MPS/Structure/ContinuousTraceQuotientUnit.lean`.
-- **Possible simplification:** use `nonsing_inv_eq_ringInverse` and Mathlib's
-  `NormedRing.inverse_continuousAt` directly on the matrix unit, as in
-  `continuous_polarIso_family_of_injective`. These two determinant-based
-  occurrences are below the promotion threshold.
-
-### Restricting continuous data to an open subtype neighborhood — candidate
-- **Pattern:** recover an ambient open set from an open neighborhood inside an
-  open subtype, intersect the two ambient sets, and restrict the previously
-  chosen continuous data through the two subtype inclusions.
-- **Seen:** `exists_local_continuous_traceQuotientUnit` in
-  `TNLean/MPS/Structure/ContinuousTraceQuotientUnit.lean` and
-  `exists_local_continuous_canonicalNormalization_of_isInjective` in
-  `TNLean/MPS/Symmetry/ContinuousCanonicalNormalization.lean`.
-- **Possible simplification:** use the open image of the subtype inclusion
-  where Mathlib's `IsOpen.isOpenMap_subtype_val` removes the repeated ambient
-  intersection construction. These two occurrences are below the threshold.

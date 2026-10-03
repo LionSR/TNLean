@@ -88,6 +88,7 @@ import TNLean.MPS.Symmetry.PolarFrameEmbedding
 import TNLean.MPS.Symmetry.PolarGappedInteractionPath
 import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.PositiveLengthSymmetryCharacter
+import TNLean.MPS.Symmetry.PositiveRayFiniteTraceData
 import TNLean.MPS.Symmetry.PreparedPolarGappedPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectiveDirectSumInclusions
