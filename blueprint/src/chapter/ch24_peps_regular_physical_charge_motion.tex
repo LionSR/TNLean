@@ -1,0 +1,87 @@
+\begin{definition}[Exchanging actual internal reference registers]
+    \label{def:peps_regular_charge_move_coordinates}
+    \lean{TNLean.PEPS.regularChargeMoveCoordinatePermutation,
+      TNLean.PEPS.regularChargeMoveParameter}
+    \leanok
+    \uses{def:peps_regular_coordinate_physical_permutation}
+    Let $R$ be a connected finite block, with a spanning tree and root.
+    For two internal bonds $e,f$, exchange $a_e$ and $a_f$ in its actual
+    accessible coordinates $(y,a,r,z)$, retaining all other registers.
+    For actual group operators $u$, let $k$ be the derived rooted tree gauge.
+    The corresponding transported parameter is
+    $p'=p k_{\mathrm{tail}(e)}k_{\mathrm{tail}(f)}^{-1}$.
+    This is the register exchange used for charge motion in
+    \cite{Schuch2010PEPS}, lines 2489--2507.
+\end{definition}
+
+\begin{theorem}[One original-spin unitary moves a literal charge]
+    \label{thm:peps_regular_physical_charge_motion}
+    \lean{TNLean.PEPS.regularChargeMoveCoordinatePermutation_coordinateTranslation,
+      TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion}
+    \leanok
+    \uses{def:peps_regular_charge_move_coordinates,
+      thm:peps_regular_coordinate_permutation_support,
+      thm:peps_regular_weighted_open_recovery,
+      thm:peps_regular_physical_unitary_transport}
+    Suppose the original sites are locally $G$-isometric for the regular
+    incident-edge action. One unitary $W_{e,f}$ on the original spins of $R$
+    is chosen before every actual group-valued background $u$, coefficient
+    function $\chi$, parameter $p$ and boundary configuration $\theta$.
+    It satisfies
+    \[
+      W_{e,f}\Psi_R(u;\chi,p,e,\theta)
+        =\Psi_R(u;\chi,p',f,\theta),
+    \]
+    where $\Psi_R$ is the literal weighted open contraction with weight
+    $\chi(p\eta_e)$, and $p'$ is the derived tree transport above.
+    The character is retained when $\chi$ is an irreducible character.
+    No coefficient identity or Gram matrix is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    On surviving canonical terms the charge label is
+    $k_{\mathrm{tail}(e)}x^{-1}a_e$. After the swap its target value is
+    $k_{\mathrm{tail}(f)}x^{-1}a_e$; the parameter $p'$ cancels the
+    intervening tree gauge. The swap commutes with all independent vertex
+    translations and their average. Local isometry therefore lifts it to
+    a unitary on the original spins, and the actual weighted recovery
+    identity gives the stated contraction action.
+\end{proof}
+
+\begin{theorem}[The weighted charge is the literal tensor insertion]
+    \label{thm:peps_regular_weighted_charge_contraction}
+    \lean{TNLean.PEPS.regularWeightedOpenRegionWeight_eq_openRegionWeight_regularEdgeCharacterSite}
+    \leanok
+    \uses{thm:peps_regular_weighted_open_recovery}
+    For an internal bond $e$ and identity group operators, the weighted open
+    contraction with weight $\chi(p\eta_e)$ equals the ordinary open tensor
+    contraction with the diagonal insertion $\operatorname{diag}\chi(p\cdot)$
+    on the ordered tail of $e$. Every boundary label is retained.
+    This is the charge insertion of \cite{Schuch2010PEPS},
+    \texttt{eq:anyons:chargeon-def}, lines 2432--2453.
+\end{theorem}
+\begin{proof}\leanok
+    The identity bond shares one group label at both endpoints. The product
+    of the site factors differs from the original product by precisely the
+    one factor $\chi(p\eta_e)$ at its tail. Summing over the actual incident
+    edge labels gives the claimed identity, with the same boundary constraint.
+\end{proof}
+
+\begin{theorem}[Untwisted motion without supplied tree choices]
+    \label{thm:peps_regular_untwisted_physical_charge_motion}
+    \lean{TNLean.PEPS.regularRegionTreeGauge_one,
+      TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion_of_connected}
+    \leanok
+    \uses{thm:peps_regular_physical_charge_motion,
+      thm:peps_regular_weighted_charge_contraction}
+    If the group operators are the identity, the actual rooted gauge is
+    the identity. For any connected finite block and two internal bonds,
+    one original-spin unitary therefore moves the literal diagonal insertion
+    from $e$ to $f$ in the ordinary open tensor contraction, retaining $\chi,p$ and every boundary configuration. The tree and root
+    are chosen in the proof. This is a finite-block charge-motion consequence
+    of \cite{Schuch2010PEPS}, lines 2489--2507.
+\end{theorem}
+\begin{proof}\leanok
+    Choose a spanning tree from the actual induced connectivity. Its identity
+    gradient has the identity normalized vertex labels. Thus $p'=p$ in the
+    preceding physical theorem.
+\end{proof}

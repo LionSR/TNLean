@@ -1,0 +1,46 @@
+\begin{definition}[The two native bonds in the charge-motion square]
+    \label{def:peps_torus_charge_motion_bonds}
+    \lean{TNLean.PEPS.torusChargeMotionWidthOne,
+      TNLean.PEPS.torusChargeMotionHeightOne,
+      TNLean.PEPS.torusPlaquetteChargeMotionBond,
+      TNLean.PEPS.torusPlaquetteChargeMotionBond_val,
+      TNLean.PEPS.torusPlaquetteChargeMotionBond_ne}
+    \leanok
+    \uses{def:peps_torus_plaquette_flux_geometry}
+    On a finite torus with both periods at least three, the motion square
+    based at $v=(x,y)$ has the four sites $(x,y),(x+1,y),(x+1,y+1),(x,y+1)$.
+    Its distinct upper and lower charge bonds are the native right edges based at
+    $(x,y+1)$ and $(x,y)$, respectively. Both ordered endpoints lie in
+    the actual four-site region, including at either periodic seam.
+    This is the diagram of \cite{Schuch2010PEPS},
+    \texttt{eq:anyons:chargeon-move-setting}, lines 2489--2507.
+\end{definition}
+
+\begin{theorem}[Charge motion on the actual four original spins]
+    \label{thm:peps_torus_physical_charge_motion}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusPhysicalChargeMotion}
+    \leanok
+    \uses{def:peps_torus_charge_motion_bonds,
+      thm:peps_regular_untwisted_physical_charge_motion}
+    Let the original four-leg tensor be $G$-isometric for the regular action.
+    At every translated position, one unitary on the four original spins
+    moves the literal diagonal charge from the upper horizontal bond to
+    the lower horizontal bond, retaining its character, internal parameter
+    and all actual boundary labels. It is chosen before these data.
+    All spanning-tree and root choices are derived internally.
+
+    This is the finite-torus specialization of the charge-motion diagram in
+    \cite{Schuch2010PEPS}, lines 2489--2507, with both periods at least three.
+    The source proof further factors the operation into independent unitaries
+    on the two columns; that factorization is not asserted here. No statement
+    about energies or the parent Hamiltonian is made. The broader geometric
+    scope remains separate in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+    The actual plaquette walk supplies connectivity of its induced four-site
+    graph. The selected upper and lower edges belong to this region.
+    Transport the given four-leg local isometry to its actual incident
+    coordinates and apply the preceding original-spin motion theorem.
+    At a seam the two endpoints are merely sorted differently: the identity
+    bond retains the same shared charge label at both ends.
+\end{proof}
