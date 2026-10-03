@@ -128,8 +128,7 @@ of the virtual projective representation.
         MPSTensor.interactionHamiltonian_parent_spectrum_gap,
         MPSTensor.canonicalInjectiveGappedPath}
     \leanok
-    \uses{def:spt_common_space_gapped_path, thm:compact_parent_gap,
-        thm:spt_parent_hamiltonian_symmetry}
+    \uses{def:spt_common_space_gapped_path}
     Let $\gamma\mapsto A_\gamma$ be a continuous path of one-site injective
     tensors on fixed physical and bond spaces, with $D>0$. Fix a unitary
     on-site representation $U$ such that, for every $\gamma\in[0,1]$ and
@@ -144,12 +143,14 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:compact_parent_gap, thm:spt_parent_hamiltonian_symmetry}
     The injective local ground-space projections vary continuously, so their
     complementary projections do as well. Their norms are at most one.
     Compactness gives a uniform norm gap above the kernel. Positivity of
     the parent Hamiltonian makes all its eigenvalues nonnegative; applying
-    the norm bound to a unit eigenvector orthogonal to the kernel bounds
-    every nonzero eigenvalue below by the same positive constant. The
+    the norm bound to a unit eigenvector orthogonal to the kernel shows
+    that the same positive constant is a lower bound for every nonzero
+    eigenvalue. The
     nonzero periodic MPS vector is a zero eigenvector. Finally, covariance
     makes every local parent projection, and hence its periodic sum,
     commute with the physical symmetry.
@@ -159,7 +160,7 @@ of the virtual projective representation.
     \label{thm:spt_polar_gapped_interaction_path}
     \lean{MPSTensor.polarGappedInteractionPath}
     \leanok
-    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
+    \uses{def:spt_common_space_gapped_path}
     Let $A$ be one-site injective with $D>0$, let $U$ be a unitary on-site
     representation, and suppose the tensor covariance is expressed by
     unitary bond conjugation. The canonical two-site parent interactions
@@ -171,6 +172,7 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
     Apply the preceding construction to the injective polar path. The
     endpoint identities give the canonical parents of $W$ and $A$; unitary
     bond-conjugation covariance is preserved by the entire interpolation.
@@ -724,6 +726,37 @@ and the regrouping of physical registers into bonds.
     commutes with that unitary.  Each cyclic translate of its complementary
     projection therefore commutes with the global tensor power, as does
     their sum.
+\end{proof}
+
+\begin{theorem}[Ordered interactions with common periodic ground spaces]
+    \label{thm:spt_ordered_interaction_path}
+    \lean{MPSTensor.orderedGappedInteractionPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path, thm:spt_periodic_hamiltonian_order,
+        thm:common_kernel_spectral_gap_interpolation}
+    Let $a,b$ be positive two-site interactions on one physical space,
+    of operator norm at most one, with $a\leq b$. Suppose that for every
+    periodic length $N\geq2$ their Hamiltonians $H_N(a)$ and $H_N(b)$
+    have the same nonzero ground space at zero energy, and both commute
+    with the same on-site symmetry. If $H_N(a)$ has a spectral gap
+    at least $\delta>0$ for all $N\geq2$, then
+    \begin{align}
+        h_\gamma & =a+\gamma(b-a), \qquad 0\leq\gamma\leq1,
+        \notag
+    \end{align}
+    is a symmetric gapped interaction path from $a$ to $b$, with gap
+    at least $\delta$. This comparison applies to independent-bond and
+    canonical parent interactions in the fixed-point construction
+    \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The periodic Hamiltonian satisfies
+    $H_N(h_\gamma)=H_N(a)+\gamma(H_N(b)-H_N(a))$. The added term is positive
+    and annihilates the original ground space, so the kernel and the
+    lower quadratic-form bound on its orthogonal complement are retained.
+    Convexity bounds the local norm by one. Hermiticity, continuity and
+    symmetry follow from affine interpolation.
 \end{proof}
 
 \begin{theorem}[A continuous unit bond interpolation]

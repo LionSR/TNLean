@@ -37,6 +37,7 @@ import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
+import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap
