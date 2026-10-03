@@ -48,7 +48,8 @@ section RegionPhysicalOperation
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-private noncomputable def regionBoundaryConfigSplitAt
+/-- Separate one boundary bond coordinate from the remaining boundary coordinates. -/
+noncomputable def regionBoundaryConfigSplitAt
     (A : Tensor G d) (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
     RegionBoundaryConfig (G := G) A R ≃
@@ -72,7 +73,10 @@ private theorem sameAwayFromBond_iff_splitAt_snd_eq
   · intro h g hg
     exact congrFun h ⟨g, hg⟩
 
-private theorem bondInsertedRegionInsert_splitAt
+/-- Inserting a bond matrix acts on its separated boundary coordinate by matrix multiplication.
+
+Source: arXiv:1804.04964, the virtual insertion equations at lines 563--582. -/
+theorem bondInsertedRegionInsert_splitAt
     (A : Tensor G d) (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -181,7 +185,8 @@ variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (1 < width)] [Fact (1 < height)]
 variable {d L K : ℕ}
 
-private noncomputable def regionPhysicalOperationCongr
+/-- Transport a physical operation along an equality of vertex regions. -/
+noncomputable def regionPhysicalOperationCongr
     {R S : Finset (TorusVertex width height)} (h : R = S)
     (O : Module.End ℂ
       (RegionPhysicalConfig (V := TorusVertex width height) (d := d) R → ℂ)) :
@@ -200,7 +205,8 @@ private theorem regionPhysicalOperationCongr_mul
   subst S
   rfl
 
-private noncomputable def regionInsertCongr
+/-- Transport a boundary-indexed physical tensor along an equality of vertex regions. -/
+noncomputable def regionInsertCongr
     (B : Tensor (torusGraph width height) d)
     {R S : Finset (TorusVertex width height)} (h : R = S)
     (C : RegionInsert (G := torusGraph width height) (d := d) B R) :
@@ -208,7 +214,8 @@ private noncomputable def regionInsertCongr
   subst S
   exact C
 
-private theorem regionInsertOfPhysicalOp_congr
+/-- Physical realization commutes with transport along an equality of vertex regions. -/
+theorem regionInsertOfPhysicalOp_congr
     (B : Tensor (torusGraph width height) d)
     {R S : Finset (TorusVertex width height)} (h : R = S)
     (O : Module.End ℂ
@@ -599,7 +606,8 @@ multiplication in the `O₃ᵀ` orientation.  The globally unique `B`-bond matri
 displayed equality.
 
 This theorem records the multiplicative part of the source's algebra-homomorphism assertion.
-Additivity, scalar compatibility, and the unit law are not packaged here.
+The remaining algebraic laws and the inverse assignment are established in
+`TorusWindowCrossTensorAlgebra`.
 
 Source: arXiv:1804.04964, the cross-tensor algebra-homomorphism statement `X \mapsto Y` at
 line 582, the end-operation statements in Lemma 5 at lines 2129 and 2252, and the
