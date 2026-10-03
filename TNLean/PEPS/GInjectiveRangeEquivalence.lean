@@ -19,6 +19,11 @@ These are local consequences of Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, Definition 5.1, `Papers/1001.3807/paper_v3.tex`, lines 1278–1296.
 They do not infer a relation between virtual representations from equality of
 closed PEPS states; that is a separate Fundamental Theorem question.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS
