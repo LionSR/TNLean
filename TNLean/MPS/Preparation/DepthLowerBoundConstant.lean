@@ -36,7 +36,7 @@ argument (`MPSTensor.exists_depth_lower_bound`), not from the source's chain, an
 source's rate. Documented in `docs/paper-gaps/mswc24_depth_lower_bound_constant.tex`.
 -/
 
-open scoped Matrix BigOperators InnerProductSpace
+open scoped Matrix BigOperators InnerProductSpace ComplexOrder
 open QuantumCircuit
 
 namespace MPSTensor
