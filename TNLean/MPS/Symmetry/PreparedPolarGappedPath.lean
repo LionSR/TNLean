@@ -22,6 +22,14 @@ one-site injective case of arXiv:1010.3732, Section II.C and Appendix A.
 The original tensor is not assumed normalized, and unitary virtual covariance
 is derived rather than assumed. The several-block case is documented in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Section II.C
+- [arXiv:quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197) -- Pérez-García,
+  Verstraete, Wolf, Cirac, *Matrix Product State Representations*
 -/
 
 open scoped Matrix BigOperators ComplexOrder

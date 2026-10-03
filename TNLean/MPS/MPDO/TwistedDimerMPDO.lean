@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinCyclicInduction
+import TNLean.Algebra.FinKronecker
 import TNLean.MPS.MPDO.TwistedDimer
 import Mathlib.Analysis.Matrix.Order
 
@@ -258,6 +259,11 @@ Project example; not from CPSV16. -/
 def gLoc (k : Fin 2) : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) ℂ :=
   Matrix.of fun a b => if a.1 = b.1 then ((Cmat k a.2 b.2 * tau k a.1 : ℝ) : ℂ) else 0
 
+/-- The constant-family finite Kronecker product, indexed by configurations. -/
+def powN {α : Type*} [Fintype α] (A : Matrix α α ℂ) (N : ℕ) :
+    Matrix (Fin N → α) (Fin N → α) ℂ :=
+  Matrix.finKronecker fun _ : Fin N => A
+
 /-- The `N`-fold Kronecker power of the local factor `gLoc k`, written
 entrywise: the entry at a pair of strings of (flag bit, left bit) pairs is the
 product of the local entries along the string.
@@ -265,7 +271,7 @@ product of the local entries along the string.
 Project example; not from CPSV16. -/
 def gPow (k : Fin 2) (N : ℕ) :
     Matrix (Fin N → Fin 2 × Fin 2) (Fin N → Fin 2 × Fin 2) ℂ :=
-  Matrix.of fun a b => ∏ i : Fin N, gLoc k (a i) (b i)
+  powN (gLoc k) N
 
 /-- Reading a physical string through its flag and left bits.  It pulls the
 Kronecker powers back to the physical configuration space of the closed
@@ -340,7 +346,7 @@ lemma gPow_add_sub_posSemidef (N : ℕ) :
         ext a b
         have hab : a = b := Subsingleton.elim _ _
         subst hab
-        simp [gPow]
+        simp [gPow, powN, Matrix.finKronecker]
       rw [h 0, h 1]
       exact ⟨Matrix.PosSemidef.one.add Matrix.PosSemidef.one,
         by simpa using Matrix.PosSemidef.zero⟩
@@ -358,8 +364,8 @@ lemma gPow_add_sub_posSemidef (N : ℕ) :
                 (gLoc 0 - gLoc 1))).submatrix e e := by
         ext a b
         simp only [Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply, Matrix.submatrix_apply,
-          Matrix.kroneckerMap_apply, gPow, Matrix.of_apply, Fin.prod_univ_castSucc, smul_eq_mul,
-          h_fst, h_snd, Function.comp_apply]
+          Matrix.kroneckerMap_apply, gPow, powN, Matrix.finKronecker_apply,
+          Fin.prod_univ_castSucc, smul_eq_mul, h_fst, h_snd, Function.comp_apply]
         ring
       have hsub : gPow 0 (N + 1) - gPow 1 (N + 1) =
           ((1 / 2 : ℂ) •
@@ -368,8 +374,8 @@ lemma gPow_add_sub_posSemidef (N : ℕ) :
                 (gLoc 0 + gLoc 1))).submatrix e e := by
         ext a b
         simp only [Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply, Matrix.submatrix_apply,
-          Matrix.kroneckerMap_apply, gPow, Matrix.of_apply, Fin.prod_univ_castSucc, smul_eq_mul,
-          h_fst, h_snd, Function.comp_apply]
+          Matrix.kroneckerMap_apply, gPow, powN, Matrix.finKronecker_apply,
+          Fin.prod_univ_castSucc, smul_eq_mul, h_fst, h_snd, Function.comp_apply]
         ring
       refine ⟨hadd ▸ ?_, hsub ▸ ?_⟩
       · exact (((ih.1.kronecker gLoc_add_posSemidef).add
@@ -385,7 +391,7 @@ scaled by the site normalization $2^{-N}$. -/
 lemma prod_coef_eq_gPow (k : Fin 2) {N : ℕ} (σ τ : Fin N → Fin 8) :
     (∏ n : Fin N, coef k (σ n) (τ n)) =
       (1 / 2 : ℂ) ^ N * gPow k N (flagLeft N σ) (flagLeft N τ) := by
-  simp only [coef_eq_gLoc, gPow, flagLeft, Matrix.of_apply, Finset.prod_mul_distrib,
+  simp only [coef_eq_gLoc, gPow, powN, flagLeft, Matrix.finKronecker_apply, Finset.prod_mul_distrib,
     Finset.prod_const, Finset.card_univ, Fintype.card_fin]
 
 /-- **The closed operator as a Schur product.**  For a positive chain length,
