@@ -2343,7 +2343,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:spt_supported_frame_comparison}
     Stationarity makes the support of $\sigma$ invariant under each
     adjoint letter of $B$. The adjoint transfer map therefore intertwines
     expansion $Z\mapsto KZK^\dagger$ with the compressed transfer map.
@@ -2376,7 +2375,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \uses{thm:spt_stationary_density_compression,
         thm:spt_unique_stationary_symmetry,
         thm:spt_local_stationary_density,
-        thm:spt_supported_density_class_invariance}
+        thm:spt_local_spectral_support,
+        thm:spt_supported_frame_comparison,
+        thm:spt_local_invariant_compression}
     Compression preserves stationary uniqueness. Exact physical covariance
     then forces each actual virtual action to commute with the compressed
     density. Apply the spectral-corner argument on the open neighborhood.
