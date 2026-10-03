@@ -4149,7 +4149,8 @@ Hamiltonian gap remains separate
     \label{thm:spc_aux_injective_gauge_class}
     \lean{MPSTensor.cohomologousTo_of_injective_gaugePhaseEquiv}
     \leanok
-    \uses{def:gauge_phase_equiv, def:projective_rep}
+    \uses{def:gauge_phase_equiv, def:projective_rep,
+        def:cohomologous_to}
     Let $A,B$ have the same positive bond dimension, with $A$ injective,
     and suppose $B^i=cXA^iX^{-1}$ for $c\ne0$ and $X$ invertible.
     Let a physical group representation $U$ have virtual projective
@@ -4286,7 +4287,8 @@ Hamiltonian gap remains separate
     \label{thm:spc_aux_convergent_unital_sequence_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_tendsto_unital_periodic_lines}
     \leanok
-    \uses{def:projective_rep, def:transfer_map, def:mpv_state}
+    \uses{def:projective_rep, def:transfer_map, def:mpv_state,
+        def:cohomologous_to}
     Let $A$ be a unital injective tensor with positive bond dimension $D$.
     Let $B_n$ be unital tensors of a fixed bond dimension $k$, converging to
     a unital tensor $b$ with $\dim_{\C}\ker(\E_b-\Id)=1$.
