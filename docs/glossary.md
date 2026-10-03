@@ -674,6 +674,23 @@ normalizations.
   connectedness. The lift statements are stated on tori with both periods at
   least three.
 
+#### `TNLean.PEPS.IsIntegerCellNear`
+
+- **Declaration:** `TNLean.PEPS.IsIntegerCellNear (q a : ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/IntegerCellExteriorCollar.lean`.
+- **Meaning:** the two integer centers differ by at most one in each
+  coordinate, so their closed unit cells meet, possibly only at a corner.
+- **Source:** no source predicate. It is locally introduced plane geometry for
+  the exterior collar of a contiguous block in arXiv:1001.3807, proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.isIntegerCellNear_of_integerClosedCell_inter_nonempty`
+  (intersecting closed cells have near centers); the predicate defines the
+  exterior band and collar graph used by
+  `TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected`.
+- **Caveat:** nearness includes diagonal contact, so it is not the
+  four-neighbor adjacency of the square lattice.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
