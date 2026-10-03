@@ -3885,6 +3885,242 @@ Hamiltonian gap remains separate
     $\mathcal E_A$ is irreducible as well.
 \end{proof}
 
+\subsection{Reduction to the stationary support}
+
+\begin{lemma}[Adjoint transfer along a stationary support]
+    \label{thm:spc_aux_adjoint_support_intertwining}
+    \lean{MPSTensor.adjointMap_compression_lift}
+    \leanok
+    \uses{def:transfer_map}
+    Let $B$ be a tensor and let $\sigma\geq0$ satisfy
+    $\mathcal E_B^*(\sigma)=\sigma$. Let $K:\C^D\to\C^k$ be an isometry
+    onto the support of $\sigma$, and put $A^i=K^\dagger B^iK$.
+    Then, for every $D\times D$ matrix $Z$,
+    \begin{align}
+        \mathcal E_B^*(KZK^\dagger)
+         & =K\mathcal E_A^*(Z)K^\dagger.\notag
+    \end{align}
+    Neither unitality nor normalization of $\sigma$ is required.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:transfer_map}
+    Stationarity makes the support invariant under every adjoint letter.
+    Thus the adjoint transfer of $KZK^\dagger$ remains supported there.
+    Compression gives $\mathcal E_A^*(Z)$, and expansion along the
+    isometry recovers the original supported matrix.
+\end{proof}
+
+
+\begin{theorem}[Preparation on the full stationary support]
+    \label{thm:spc_aux_stationary_support_preparation}
+    \lean{MPSTensor.prepare_stationary_support_compression}
+    \leanok
+    Let $B$ be a unital tensor with bond dimension $k$.
+    Suppose $\sigma\geq0$, $\tr\sigma=1$, and
+    $\mathcal E_B^*(\sigma)=\sigma$, and suppose $\sigma$ is the unique
+    trace-one complex matrix fixed by $\mathcal E_B^*$.
+    Let $K:\C^D\to\C^k$ be an isometry satisfying
+    $KK^\dagger=\operatorname{supp}\sigma$, and put
+    $A^i=K^\dagger B^iK$ and $\rho=K^\dagger\sigma K$.
+    Then $A$ is unital, $\mathcal E_A$ is irreducible, and
+    $\rho>0$, $\tr\rho=1$, and $\mathcal E_A^*(\rho)=\rho$.
+    In particular, $D>0$ follows from these hypotheses.
+    This is an auxiliary preparation result for
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, using
+    \cite[Lemma~6.4 and Theorem~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_stationary_density_compression,
+        thm:spc_aux_supported_compression_irreducible}
+    Write $P=KK^\dagger$. Stationarity gives
+    $(I-P)(B^i)^\dagger P=0$, hence $PB^i(I-P)=0$.
+    Thus $K^\dagger B^iP=K^\dagger B^i$, and
+    \begin{align}
+        \sum_i A^i(A^i)^\dagger
+         & =K^\dagger\Bigl(\sum_i B^iP(B^i)^\dagger\Bigr)K
+        =K^\dagger\Bigl(\sum_i B^i(B^i)^\dagger\Bigr)K=I.\notag
+    \end{align}
+    Compression to the full support makes $\rho$ positive definite;
+    stationary support compression gives its trace and fixed-point equation.
+    The irreducibility criterion for a uniquely stationary support compression
+    now applies. The trace-one condition excludes an empty support.
+\end{proof}
+
+\begin{theorem}[Normality from an ambient transfer bound]
+    \label{thm:spc_aux_stationary_support_normality}
+    \lean{MPSTensor.isNormalTensor_of_unital_stationary_support_compression}
+    \leanok
+    \uses{def:nt_cpsv}
+    Let $B$ be unital, and let $\sigma\geq0$ be its unique trace-one complex
+    adjoint stationary matrix. Let $K:\C^D\to\C^k$ be an isometry onto
+    the entire support of $\sigma$, and put $A^i=K^\dagger B^iK$.
+    Suppose $q<1$ and every $\lambda\in\sigma(\mathcal E_B)$ with
+    $\lambda\neq1$ satisfies $|\lambda|\leq q$.
+    Then $A$ is a normal tensor: its Kraus family is irreducible,
+    $r(\mathcal E_A)=1$, and its unit-modulus spectrum is $\{1\}$.
+    The transfer bound is an explicit hypothesis.
+    This auxiliary consequence uses the normal-tensor definition of
+    \cite[lines~231--235]{Cirac2016MPDO_arXiv} in the support setting of
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_stationary_support_preparation}
+    Preparation gives unitality and irreducibility. Positivity and
+    $\mathcal E_A(I)=I$ give spectral radius one by
+    \cite[Proposition~6.1]{Wolf2012Quantum}.
+    Stationary support invariance gives
+    \begin{align}
+        \mathcal E_B^*(KZK^\dagger)
+         & =K\mathcal E_A^*(Z)K^\dagger.\notag
+    \end{align}
+    The expansion $Z\mapsto KZK^\dagger$ is injective, since compression
+    recovers $Z$. Therefore every eigenvalue of $\mathcal E_A^*$ is an
+    eigenvalue of $\mathcal E_B^*$. The bilinear trace adjoint has the
+    same characteristic polynomial as the original endomorphism, so
+    $\sigma(\mathcal E_A)\subseteq\sigma(\mathcal E_B)$.
+    The bound $q<1$ excludes every peripheral eigenvalue other than one,
+    while the identity supplies the eigenvalue one.
+\end{proof}
+
+
+% Finite-dimensional auxiliaries for the stationary-support reduction.
+% These entries do not identify a physical Hamiltonian gap with transfer contraction.
+
+\begin{theorem}[Equality of transfer and adjoint fixed-space dimensions]
+    \label{thm:spc_aux_adjoint_fixed_dimension}
+    \lean{MPSTensor.finrank_adjointFixedSpace_eq_transferFixedSpace}
+    \leanok
+    \uses{def:transfer_map}
+    For any finite-dimensional tensor $B$, the complex dimensions of the
+    fixed spaces of $\E_B$ and its trace adjoint $\E_B^*$ agree:
+    $\dim_{\C}\ker(\Id-\E_B^*)=\dim_{\C}\ker(\E_B-\Id)$.
+    Positivity, normalization, irreducibility and positive bond dimension
+    are not required. This is a finite-dimensional auxiliary identity for
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the matrix-unit basis and the corresponding transposed basis,
+    the matrix of the trace adjoint of $\Id-\E_B$ is the transpose of
+    the matrix of $\Id-\E_B$. Transposition preserves rank.
+    The rank--nullity identity therefore gives equal kernel dimensions;
+    replacing $\Id-\E_B$ by its negative does not change its kernel.
+\end{proof}
+
+\begin{theorem}[Positive-length decomposition along a triangular support]
+    \label{thm:spc_aux_supported_periodic_split}
+    \lean{MPSTensor.mpv_eq_compression_add_transient_of_upperZero}
+    \leanok
+    \uses{def:mpv_state}
+    Let $K:\C^D\to\C^k$ be an isometry, put $P=KK^\dagger$ and
+    $Q=\Id-P$, and let $C^i=K^\dagger B^iK$.
+    Suppose $PB^iQ=0$ for every physical letter $i$.
+    With $R^i=QB^iQ$, every $N>0$ satisfies
+    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(C)}+\ket{V^{(N)}(R)}$.
+    No normalization or nonzero bond dimension is required.
+    This is the triangular trace decomposition used in
+    \cite[proof of Theorem~TIcanonical, lines~785--815]{PerezGarcia2007Matrix},
+    and in \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_isometric_bond_restriction}
+    Put $L^i=PB^iP$. Then $L^iK=KC^i$ and $PL^i=L^i$,
+    so the supported isometric restriction gives
+    $\tr(L^w)=\tr(C^w)$ for every nonempty word $w$.
+    The triangular condition shows that removing the off-diagonal block
+    does not change word traces. Since $L^iR^j=R^iL^j=0$, induction on
+    the nonempty word gives $(L+R)^w=L^w+R^w$.
+    Taking the trace proves the asserted decomposition.
+    Length zero is excluded because its coefficient is the bond dimension.
+\end{proof}
+
+\begin{theorem}[Identification after removal of a vanishing periodic remainder]
+    \label{thm:spc_aux_retained_dimension_gauge}
+    \lean{MPSTensor.exists_dim_eq_gaugePhase_of_vanishing_periodic_remainder}
+    \leanok
+    \uses{def:irreducible_tensor, def:gauge_phase_equiv, def:mpv_overlap}
+    Let $A,B,C,R$ have the same physical dimension, with arbitrary finite
+    bond dimensions for $B,R$ and positive bond dimensions $D,E$ for $A,C$.
+    Suppose $A,C$ are irreducible and admit positive definite adjoint
+    stationary matrices $\sigma,\tau$.
+    Suppose $\|\ket{V^{(N)}(A)}\|\leq M$ eventually for some $M\in\R$,
+    and $\ket{V^{(N)}(B)}=\ket{V^{(N)}(C)}+\ket{V^{(N)}(R)}$ eventually.
+    If $\|\ket{V^{(N)}(R)}\|\to0$ and $|O_{AB}(N)|\to1$, then $D=E$.
+    After this identification there exist $X\in\GL_D(\C)$ and
+    $\zeta\in\C\setminus\{0\}$ such that
+    $C^i=\zeta XA^iX^{-1}$ for every $i$.
+    This is a conditional auxiliary reduction for
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, using
+    \cite[Lemma~equalMPS]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_retained_overlap_one, thm:tp_gauge_from_adjoint_fixed,
+        lem:tp_gauge_preserves_irreducibility, thm:rect_overlap_norm_one_dim_eq,
+        thm:nt_overlap_norm_one_gauge}
+    Removing the vanishing remainder gives $|O_{AC}(N)|\to1$.
+    The pure bond gauges defined by $\sigma^{1/2}$ and $\tau^{1/2}$
+    make $A,C$ trace-preserving, preserve irreducibility, and leave
+    all periodic coefficients unchanged.
+    The rectangular overlap theorem first gives $D=E$.
+    Its equal-dimension counterpart then gives gauge equivalence up to a
+    nonzero scalar. Composing with the inverse normalization gauges
+    proves the statement for the original tensors.
+\end{proof}
+
+
+
+
+\begin{theorem}[Identification of a stationary support by its limiting overlap]
+    \label{thm:spc_aux_stationary_support_identification}
+    \lean{MPSTensor.exists_dim_eq_gaugePhase_of_unital_stationary_support_overlap}
+    \leanok
+    \uses{def:nt_cpsv, def:gauge_phase_equiv, def:mpv_overlap}
+    Let $A,B$ have positive bond dimension $D$ and finite bond dimension $k$,
+    respectively, with the same physical dimension. Suppose $A$ is irreducible
+    and has a positive definite adjoint stationary matrix $\tau$.
+    Suppose $B$ is unital and $\dim_{\C}\ker(\E_B-\Id)=1$.
+    Let $\sigma\geq0$ satisfy $\tr\sigma=1$ and $\E_B^*(\sigma)=\sigma$.
+    Let $K:\C^E\to\C^k$ be an isometry with
+    $KK^\dagger=\operatorname{supp}\sigma$, and put $C^i=K^\dagger B^iK$.
+    Suppose $0\leq q<1$ and every $z\in\operatorname{spec}(\E_B)$ with
+    $z\ne1$ satisfies $|z|\leq q$.
+    If $\|\ket{V^{(N)}(A)}\|\leq M$ eventually for some $M\in\R$ and
+    $|O_{AB}(N)|\to1$, then $C$ is normal and $D=E$.
+    After identifying the bond dimensions, there exist $X\in\GL_D(\C)$ and
+    $\zeta\in\C\setminus\{0\}$ with $C^i=\zeta XA^iX^{-1}$ for every $i$.
+    The spectral bound and overlap limit are explicit assumptions in this
+    auxiliary reduction for
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_adjoint_fixed_dimension,
+        thm:spc_aux_stationary_support_preparation,
+        thm:spc_aux_stationary_support_normality,
+        thm:spc_aux_supported_periodic_split,
+        thm:spt_compact_transient_mpv_decay,
+        thm:spc_aux_retained_dimension_gauge}
+    Trace duality makes the adjoint fixed space one-dimensional.
+    Since $\tr\sigma=1$, that space is $\C\sigma$.
+    Every trace-one adjoint fixed matrix is therefore $\sigma$.
+    Preparation on the full stationary support yields an irreducible unital
+    tensor $C$ with faithful adjoint stationary matrix $K^\dagger\sigma K$;
+    the strict spectral bound makes $C$ normal.
+    Put $P=KK^\dagger$ and $R^i=(\Id-P)B^i(\Id-P)$.
+    Stationarity gives $PB^i(\Id-P)=0$, hence
+    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(C)}+\ket{V^{(N)}(R)}$ for every $N>0$.
+    The complementary-corner spectral estimate gives
+    $\|\ket{V^{(N)}(R)}\|\to0$.
+    Identification after removal of this vanishing remainder gives
+    $D=E$ and the asserted bond gauge and scalar.
+\end{proof}
+
+
 \begin{theorem}[Endpoint cohomology for a supplied unital family]
     \label{thm:spt_unital_supported_path_class}
     \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points,
