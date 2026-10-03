@@ -632,10 +632,10 @@ normalizations.
 - **Defined in:** `TNLean/PEPS/RegularRegionConnectivity.lean` and
   `TNLean/PEPS/RegularTwistedRegion.lean`.
 - **Meaning:** in the regular-basis expansion of the Gram matrix of an open
-  region, `η` and `θ` are group labels on the bonds incident to `R`. The
+  region, `η` (bra) and `θ` (ket) are group labels on the bonds incident to `R`. The
   untwisted predicate says that at every vertex `v ∈ R` each incident label of
   `η` is `q v` times the corresponding label of `θ`. The twisted predicate says
-  the same after the bond operators `u` (ket) and `w` (bra) are inserted at the
+  the same after the bond operators `u` (bra) and `w` (ket) are inserted at the
   head of each oriented bond.
 - **Source:** arXiv:1001.3807, the region contraction set up before
   Theorems 6.7-6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
