@@ -25,6 +25,10 @@ and `eq:1d-sym:jointsym`.
 **Scope restriction (trivial character):** The two endpoint covariance
 statements use the on-site action with trivial scalar character; see
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
+
+**Local fix (second-block range):** The right endpoint restricts to the
+second block with indices `D₀+1, …, D₀+D₁`, not the printed upper limit
+`D₁`; see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
 open scoped Matrix

@@ -1,0 +1,70 @@
+\begin{theorem}[Equality of virtual images under a $G$-injective map]%
+    \label{thm:peps_g_injective_image_equality}
+    \lean{TNLean.PEPS.IsGInjective.averageMap_eq_iff_apply_eq}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $G$ be finite, let $\rho$ be a complex representation of $G$,
+    and let $T$ be $G$-injective. Write
+    $\Pi=|G|^{-1}\sum_{g\in G}\rho(g)$ for the invariant projector.
+    For virtual vectors $x,y$, one has $Tx=Ty$ if and only if
+    $\Pi x=\Pi y$. This is a consequence of
+    \cite[Definition~5.1]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_invariants_range}
+    The equality $Tx=Ty$ is equivalent to
+    $x-y\in\ker T=\ker\Pi$, hence to $\Pi x=\Pi y$.
+\end{proof}
+
+\begin{theorem}[A regular $G$-injective site distinguishes translation orbits]%
+    \label{thm:peps_regular_site_orbit_detection}
+    \lean{TNLean.PEPS.IsGInjective.regularSite_coeff_eq_iff_common_translation}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_regular_site_gram}
+    Let $I$ be a nonempty finite set of incident legs. Let
+    $a(\eta)\in\mathcal H$ be the physical vector associated with a
+    configuration $\eta\in G^I$, and suppose that the corresponding
+    site map is $G$-injective for simultaneous left translation.
+    Then $a(\eta)=a(\theta)$ if and only if
+    $\eta=g\theta$ for some $g\in G$. This is an auxiliary
+    reconstruction consequence of
+    \cite[Definition~5.1]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_image_equality,
+        def:peps_regular_site_gram, thm:peps_regular_site_gram}
+    Write $\delta_\eta$ for the coordinate vector at $\eta$.
+    Equality of the physical vectors gives
+    $\Pi\delta_\eta=\Pi\delta_\theta$. The matrix entry
+    $\Pi_{\eta,\eta}=|G|^{-1}$ is nonzero, whereas
+    $\Pi_{\eta,\theta}=0$ if $\eta$ and $\theta$ lie in distinct
+    translation orbits. Thus the configurations lie in the same
+    orbit. The converse is the virtual invariance of the site map.
+\end{proof}
+
+\begin{theorem}[Recovering the group of simultaneous virtual relabellings]%
+    \label{thm:peps_regular_site_permutation_recovery}
+    \lean{TNLean.PEPS.IsGInjective.regularSite_relabelling_invariant_iff}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_regular_site_gram}
+    In the setting of Theorem~\ref{thm:peps_regular_site_orbit_detection},
+    suppose that $I$ has at least two elements. A map $e:G\to G$
+    satisfies $a(e\circ\eta)=a(\eta)$ for every configuration $\eta$
+    if and only if there exists $g\in G$ with $e(h)=gh$ for every
+    $h\in G$. In particular, the simultaneous permutations of
+    group labels that preserve the site tensor are exactly the
+    left translations.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_site_orbit_detection, thm:peps_regular_site_gram}
+    Choose distinct $i,j\in I$ and fix $h\in G$. Let $\eta_j=h$
+    and $\eta_k=1$ for $k\ne j$. By
+    Theorem~\ref{thm:peps_regular_site_orbit_detection}, there exists
+    $g_h\in G$ with $e\circ\eta=g_h\eta$. Evaluation at $i$ gives
+    $g_h=e(1)$, and evaluation at $j$ gives $e(h)=e(1)h$.
+    Conversely, each left translation preserves the site tensor by
+    its virtual invariance.
+\end{proof}

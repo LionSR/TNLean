@@ -23,6 +23,7 @@ import TNLean.MPS.Symmetry.BondRegroupingSymmetry
 import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CanonicalInjectiveGroundPath
 import TNLean.MPS.Symmetry.CocycleCoboundary
+import TNLean.MPS.Symmetry.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalCanonicalGroundPath
 import TNLean.MPS.Symmetry.CommonPhysicalEndpointOrthogonality
 import TNLean.MPS.Symmetry.CommonPhysicalEndpointPaths
@@ -34,7 +35,6 @@ import TNLean.MPS.Symmetry.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
 import TNLean.MPS.Symmetry.ContinuousCanonicalNormalization
 import TNLean.MPS.Symmetry.ContinuousInvariantCompression
-import TNLean.MPS.Symmetry.ContinuousMinimalCanonicalRealization
 import TNLean.MPS.Symmetry.ContinuousProjectionFrame
 import TNLean.MPS.Symmetry.ContinuousSpectralCorner
 import TNLean.MPS.Symmetry.ContinuousStationaryDensity
@@ -57,6 +57,7 @@ import TNLean.MPS.Symmetry.GappedInteractionPathComposition
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.GlobalVirtualGauge
 import TNLean.MPS.Symmetry.GroundLineSymmetryCharacter
+import TNLean.MPS.Symmetry.IndependentBondGap
 import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.InvertibleProjectivePathInvariance

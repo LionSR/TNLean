@@ -21,7 +21,8 @@ point, left multiplication by its unit stays invertible; applying its inverse
 to the base unit recovers the nearby units continuously. No continuous choice
 of a minimal tensor, normalization scalar, or algebra identification is used.
 
-This is an auxiliary finite-dimensional construction for arXiv:1010.3732,
+**Scope restriction (constant minimal dimension):** This is an auxiliary
+finite-dimensional construction for arXiv:1010.3732,
 Section II.F.2, lines 953–993. It does not infer constant minimal dimension from
 a physical gap or construct a continuous realization at a change of dimension;
 see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
@@ -81,7 +82,6 @@ end LinearMap
 
 
 namespace Matrix
-
 
 private theorem exists_local_continuous_unit_of_matrixAlgebra
     {T : Type*} [TopologicalSpace T] {r : ℕ}
