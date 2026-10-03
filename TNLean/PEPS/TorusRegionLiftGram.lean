@@ -26,6 +26,11 @@ see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, seam deformation in
 `eq:2d:move-strings` and the proof of Theorem 6.9, local source lines 1622–1647
 and 1935–2072.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix
