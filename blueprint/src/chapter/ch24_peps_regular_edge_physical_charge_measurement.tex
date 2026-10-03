@@ -1,0 +1,28 @@
+\begin{theorem}[Complete charge measurement on an actual adjacent pair]
+\label{thm:peps_regular_edge_physical_charge_measurement}
+\lean{TNLean.PEPS.exists_regularEdgePhysicalAllChargeMeasurement}
+\leanok
+\uses{thm:peps_regular_edge_charge_contraction,
+thm:peps_regular_two_site_all_charge_measurement}
+Assume the two original site maps at the endpoints of $e$ are regular
+$G$-isometric. Let $\mathcal C$ be the actual irreducible characters of the
+regular representation. There is a complete physical projective measurement
+$(Q_r)_{r\in\mathcal C\cup\{\varnothing\}}$ on these two sites, with
+$Q_r^*=Q_r\geq0$, $Q_rQ_s=\delta_{r,s}Q_r$, and $\sum_rQ_r=I$, such that
+\begin{align}
+ Q_r\Psi^{\chi,p}_{R_e,\theta}
+ =\mathbf1_{r=\chi}\Psi^{\chi,p}_{R_e,\theta}.
+\end{align}
+The same family is chosen before every $\chi\in\mathcal C$, $p$, $\theta$,
+and every exterior site family whose tensors agree with the original ones at
+both measured endpoints. The outcome $\varnothing$ annihilates every charged
+column. This is a finite-graph form of
+\cite[Detection of chargeons]{Schuch2010PEPS}, lines 2464--2486.
+\end{theorem}
+\begin{proof}\leanok
+Transport the complete two-site physical measurement along the actual
+endpoint-coordinate bijection. The literal charged coefficient identity
+identifies all native columns with the two-site charged columns. The
+bijection preserves adjoints, positivity, products, and the sum of projections.
+Only the two endpoint tensors enter this calculation.
+\end{proof}

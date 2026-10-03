@@ -30,6 +30,45 @@ open scoped BigOperators
 
 namespace Representation
 
+section IrreducibleDual
+
+variable {G : Type*} [Group G]
+variable {E : Type*} [AddCommGroup E] [Module ℂ E] [FiniteDimensional ℂ E]
+
+/-- The dual of a finite-dimensional irreducible complex representation is
+irreducible. Source: the conjugate charge in SCP10, lines 2514–2518. -/
+theorem isIrreducible_dual (σ : Representation ℂ G E) [σ.IsIrreducible] :
+    σ.dual.IsIrreducible := by
+  let := nontrivial_of_isIrreducible σ
+  let := (Module.nontrivial_dual_iff ℂ).mpr (inferInstance : Nontrivial E)
+  have : Nontrivial (Subrepresentation σ.dual) := ⟨⊥, ⊤, fun h =>
+    (bot_ne_top : (⊥ : Submodule ℂ (Module.Dual ℂ E)) ≠ ⊤)
+      (congrArg Subrepresentation.toSubmodule h)⟩
+  refine ⟨fun S => ?_⟩
+  let A : Subrepresentation σ :=
+    { toSubmodule := S.toSubmodule.dualCoannihilator
+      apply_mem_toSubmodule := by
+        intro g v hv
+        rw [Submodule.mem_dualCoannihilator] at hv ⊢
+        intro φ hφ
+        have h := hv (σ.dual g⁻¹ φ) (S.apply_mem_toSubmodule g⁻¹ hφ)
+        simpa only [dual_apply, inv_inv, Module.Dual.transpose_apply,
+          LinearMap.comp_apply] using h }
+  have hd := Subspace.dualCoannihilator_dualAnnihilator_eq (W := S.toSubmodule)
+  rcases eq_bot_or_eq_top A with h | h
+  · right
+    have ha : S.toSubmodule.dualCoannihilator = ⊥ :=
+      congrArg Subrepresentation.toSubmodule h
+    rw [ha, Submodule.dualAnnihilator_bot] at hd
+    exact Subrepresentation.toSubmodule_injective hd.symm
+  · left
+    have ha : S.toSubmodule.dualCoannihilator = ⊤ :=
+      congrArg Subrepresentation.toSubmodule h
+    rw [ha, Submodule.dualAnnihilator_top] at hd
+    exact Subrepresentation.toSubmodule_injective hd.symm
+
+end IrreducibleDual
+
 section GroupAlgebra
 
 variable {k M W : Type*} [CommSemiring k] [Monoid M] [AddCommMonoid W] [Module k W]

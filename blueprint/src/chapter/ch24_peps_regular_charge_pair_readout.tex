@@ -1,0 +1,73 @@
+\begin{definition}[Two-spin action at an internal charge bond]
+\label{def:peps_regular_charge_pair_endpoint_action}
+Let $e$ be an internal bond of a finite region $R$. For an operator $Q$ on
+its two endpoint spins, define its regional action by summing over only those
+two physical inputs and retaining all other spins. Thus this action is
+$Q\otimes I$ under the endpoint-and-complement ordering of the regional spins.
+\lean{TNLean.PEPS.regularChargePairEndpointAction}
+\leanok
+\end{definition}
+
+\begin{theorem}[Two-spin readout of the actual correlated regional pair]
+\label{thm:peps_regular_charge_pair_endpoint_readout}
+Let all sites of a finite simple graph be regular $G$-isometric, and let
+$e_0\ne e_1$ be internal bonds of a region $R$. Write $C_\chi(p;\theta)$
+for the actual open contraction with the single correlated weight
+$\chi(p\eta_{e_1}^{-1}\eta_{e_0})$ inside its bond sum. There are two complete
+positive orthogonal projective measurements, each acting on the two endpoint
+spins of its bond, such that
+\[
+ (Q_{0,r}\otimes I)C_\chi(p;\theta)
+   =\mathbf1_{r=\chi}C_\chi(p;\theta),\qquad
+ (Q_{1,r}\otimes I)C_\chi(p;\theta)
+   =\mathbf1_{r=\chi^\vee}C_\chi(p;\theta).
+\]
+Both families are chosen before every charge, internal parameter and crossing
+configuration. Their extra physical-image-complement outcomes annihilate the
+columns. No tree, Gram identity, factorization or nonzero state is assumed.
+This is an auxiliary finite-region form of the charge-pair outcomes in
+\cite{Schuch2010PEPS}, lines 2505--2558; it makes no parent-Hamiltonian claim.
+\lean{TNLean.PEPS.exists_regularChargePairEndpointMeasurements}
+\uses{def:peps_regular_charge_pair_endpoint_action,
+ thm:peps_regular_physical_charge_pair_slices,
+ thm:peps_regular_two_site_all_charge_measurement}
+\leanok
+\end{theorem}
+\begin{proof}\leanok
+Split the actual bond configuration at the measured internal bond. Its two
+endpoint factors form a literal shared-bond charge column; all remaining bond
+labels and physical factors stay fixed. The first character slice is translated
+$\chi$, while the second is translated $\chi^\vee$. Apply the complete two-spin
+measurement to each summand, then sum over the remaining native bond labels.
+\end{proof}
+
+\begin{theorem}[Two-spin outcomes of the prepared six-spin torus pair]
+\label{thm:peps_torus_physical_charge_pair_readout}
+Let a native four-leg tensor be regular $G$-isometric on a finite torus with
+horizontal period at least three and vertical period at least four. At every
+translated two-column, three-row block, including blocks crossing a periodic
+seam, there are two complete two-spin measurements chosen before all regular
+charge labels $\chi$ and parameters $p$. For each $\chi,p$, one unitary on the
+six original spins prepares the actual correlated pair, uniformly on all
+crossing columns. The same prepared columns have the outcomes $\chi$ and
+$\chi^\vee$ under these two measurements; all other outcomes annihilate them.
+
+The five-edge tree and its two horizontal internal chords are derived from the
+native block. The weight is diagonal bond-reference data
+$\chi(p\eta_1^{-1}\eta_0)$, with native ordered-edge sorting retained. Reversing
+the drawing's vertical axis identifies these chords with its top and middle
+references. This is the regular finite-torus specialization of the local
+construction in \cite{Schuch2010PEPS}, lines 2505--2558. It asserts no
+parent-Hamiltonian or global excitation membership.
+\lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalChargePairReadout}
+\uses{thm:peps_regular_charge_pair_endpoint_readout,
+ thm:peps_torus_physical_charge_pair_creation}
+\leanok
+\end{theorem}
+\begin{proof}\leanok
+Use the actual translated block and its two distinct derived chords. Local
+four-leg isometry supplies the incident-coordinate site isometries. Apply the
+regional two-spin readout and the already derived six-spin preparation. Their
+actual column identities give the two outcomes for the very same preparation
+unitary, before every crossing label.
+\end{proof}
