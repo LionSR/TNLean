@@ -29,6 +29,15 @@ This gives the compactness step of arXiv:1010.3732, Appendix A, through
 finite-range Knabe windows. It applies to the source's two-site interaction
 when the simultaneous injectivity length is one, as after the initial
 blocking of the isometric deformation path.
+
+**Scope restriction (common spanning length or sufficient range):**
+arXiv:1010.3732, Appendix A, lines 2475--2580, treats a path of normal forms
+with several blocks through Nachtergaele's estimate. The results here assume
+one simultaneous spanning length \(S>0\) for the whole family and range
+\(R\geq S+1\), or pairwise inequivalent normal blocks and range
+\(R\geq3\max(\sum_jD_j,1)^5\). It is not established that these hypotheses
+cover every source path; documented in
+`docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
 open scoped Topology

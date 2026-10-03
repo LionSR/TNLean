@@ -22,8 +22,9 @@ Knabe window and compactness. The quantum Wielandt bound supplies
 **Scope restriction (single normal block):** arXiv:1010.3732, Appendix A,
 lines 2475--2580, allows several normal blocks. This module treats one
 normal block; the common injectivity length is proved rather than assumed.
-The several-block result is proved separately in `CompactBlockParentGap`.
-The distinction and its resolution are recorded in
+The several-block result in `CompactBlockParentGap` is partial coverage:
+it needs a common simultaneous spanning length or a sufficient range.
+The broader restriction remains open; documented in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
