@@ -689,18 +689,23 @@ one tensor.
 \end{enumerate}
 
 \section{Flux detection on a connected block}
-Fix a spanning tree of a connected regular block and one non-tree
+This section records a planned argument; it is not yet part of the
+formal development. Fix a spanning tree of a connected regular block and one non-tree
 internal edge. Its exposed cycle coordinate is conjugate to the residual
-of the actual inserted group operators. The diagonal projections onto
+of the actual inserted group operators.\footnote{Result:
+    \leanid{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}.}
+The diagonal projections onto
 its conjugacy classes commute with the product local averaging
 projector. Through the original local $G$-isometric maps $A$, they give
 physical projections $Q_C=c^{-1}AD_CA^\dagger$.
 An additional projection $I-\sum_C Q_C$ completes the measurement on
 the whole physical Hilbert space and annihilates every actual twisted
 block column. The outcome on a nonzero column is exactly the conjugacy
-class of the derived residual. Thus the conjugacy calculation in the
-proof of Theorem~6.15 is established for a chosen cycle in an actual
-connected block. The four-site plaquette geometry and its explicit
+class of the derived residual. This would establish the conjugacy
+calculation in the proof of Theorem~6.15 for a chosen cycle in an actual
+connected block; only the cycle-coordinate identity above is currently
+formalized, and the measurement projections and their outcome statement
+remain open. The four-site plaquette geometry and its explicit
 holonomy remain separate; no parent-Hamiltonian assertion is used.
 
 \section{The semi-regular bond isometry}

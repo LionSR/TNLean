@@ -6294,7 +6294,6 @@ operators.
         TNLean.PEPS.torusClosureSuperpositionCut,
         TNLean.PEPS.exists_normalization_torusClosureSuperpositionCut_rectangle}
     \leanok
-    \uses{thm:peps_regular_twisted_cut_entropy, thm:peps_regular_torus_incident_isometry}
     Let $A$ be regular $G$-isometric on a torus of width and height at
     least three. Let $R$ be a coordinate rectangle of positive side
     lengths satisfying
@@ -6322,7 +6321,9 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_torus_rectangle_cut_connectivity}
+    \uses{thm:peps_torus_rectangle_cut_connectivity,
+        thm:peps_regular_twisted_cut_entropy,
+        thm:peps_regular_torus_incident_isometry}
     The coordinate bounds give connected $R$, a nonempty boundary, and
     connected $R^c$ after removing all wrap bonds. The closure assignments
     are the identity on this complementary grid and on all edges incident
