@@ -83,6 +83,7 @@ import TNLean.MPS.Preparation.SequentialResources
 import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.ShortChainPreparation
 import TNLean.MPS.Preparation.Staircase
+import TNLean.MPS.Preparation.StaircasePreparation
 import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization
