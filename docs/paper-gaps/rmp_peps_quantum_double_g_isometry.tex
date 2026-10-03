@@ -747,6 +747,35 @@ sector action is assumed. The finite-geometry statement is explicit;
 its extension to unrestricted lattice geometries and charge motion
 remains separate work.
 
+\section{A selected-block charge parameter operation}
+Let $R$ be a finite block with a chosen spanning tree and root, and choose
+an internal charge bond $e$ and a non-tree flux bond $b$. Suppose the
+original sites are locally $G$-isometric for the regular incident-edge
+action. Retain the literal diagonal weight $\chi(p\eta_e)$ in the actual
+open contraction, where $\eta_e$ is the tail bond label. Denote this vector
+by $\Psi_R(u;\chi,p,\theta)$, with actual group operators $u$ and boundary
+configuration $\theta$.
+
+There is one unitary $W_{e,b}$ on the original spins of $R$, chosen before
+$u$, the coefficient function $\chi$, $p\in G$ and $\theta$, such that
+\[
+ W_{e,b}\Psi_R(u;\chi,p,\theta)
+   =\Psi_R(u;\chi,pK_{u,e,b}^{-1},\theta),\qquad
+ K_{u,e,b}=k_{\mathrm{tail}(e)}\rho_bk_{\mathrm{tail}(e)}^{-1}.
+\]
+Here $k$ is the actual rooted tree gauge and $\rho_b$ its cycle residual;
+both are derived from $u$. The character label is retained when $\chi$ is
+an irreducible character. The weighted contraction is computed directly:
+diagonal character insertions are not inferred from linear combinations
+of group-representation matrices.
+
+This is an original-spin realization of the charge-parameter identity
+in \cite{Schuch2010PEPS}, lines 2569--2581, using the accessible coordinates
+of lines 1765--1920. It is auxiliary to a chosen finite block. The prescribed
+geometric charge--flux braid, including identification of its endpoint
+motion with this selected-coordinate operation, remains separate. No
+parent-Hamiltonian or energy assertion is made.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all

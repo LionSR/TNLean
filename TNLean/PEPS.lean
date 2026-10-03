@@ -150,6 +150,8 @@ import TNLean.PEPS.RegularChargeBondContraction
 import TNLean.PEPS.RegularChargeCompleteMeasurement
 import TNLean.PEPS.RegularChargeCoordinates
 import TNLean.PEPS.RegularChargeDetectorMatrix
+import TNLean.PEPS.RegularChargeFluxCoordinateTransport
+import TNLean.PEPS.RegularChargeFluxPhysicalTransport
 import TNLean.PEPS.RegularChargeLabels
 import TNLean.PEPS.RegularChargePair
 import TNLean.PEPS.RegularChargePairPreparation
@@ -244,6 +246,8 @@ import TNLean.PEPS.RegularTwoSiteChargeDetector
 import TNLean.PEPS.RegularTwoSiteChargeNonzero
 import TNLean.PEPS.RegularTwoSitePhysicalChargeMeasurement
 import TNLean.PEPS.RegularWalkHolonomy
+import TNLean.PEPS.RegularWeightedBondContraction
+import TNLean.PEPS.RegularWeightedOpenContraction
 import TNLean.PEPS.SemiRegularBondDimension
 import TNLean.PEPS.SemiRegularBondIsometry
 import TNLean.PEPS.SemiRegularBondIsometryExtension

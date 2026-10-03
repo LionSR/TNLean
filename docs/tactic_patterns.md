@@ -335,6 +335,26 @@ three-plaquette output measurement, and the routed reunion measurement.
   package Lean options at the default heartbeat limit. Their theorem
   audits use only the ordinary logical axioms.
 
+### Physical coordinate permutations from translation equivariance — promoted (2026-10-03)
+
+- **Pattern:** Conjugate a coordinate permutation by the actual spanning-tree
+  equivalence, transport its vertex-translation commutation, and apply the
+  permutation-matrix homomorphism. Average the translations to obtain
+  commutation with the product local invariant projector.
+- **Seen:** The controlled-boundary argument in
+  `PEPS/RegularCycleControlledSupport.lean`, the cycle argument in
+  `PEPS/RegularCyclePermutation.lean`, and the charge-reference operation in
+  `PEPS/RegularChargeFluxCoordinateTransport.lean`.
+- **Abstraction:** `regularRegionCoordinatePhysicalPermutation` and its
+  `_commute_vertexTranslation` and `_commute_localProjector` theorems in
+  `PEPS/RegularCycleControlledSupport.lean`. All three consumers supply only
+  their derived coordinate equivariance.
+- **Notes:** This is the rule-of-three promotion. The two existing proof bodies
+  decrease from 33 to 7 nonblank lines, excluding the shared theorem and the
+  newly added charge consumer. Their public signatures remain unchanged.
+  The criterion supplies no Gram or contraction assumption and introduces no
+  import cycle.
+
 ### Integer-cell collar offset decomposition (promoted, 2026-10-02)
 
 - **Pattern:** Split the displacement from an occupied integer center into
@@ -2168,6 +2188,24 @@ three-plaquette output measurement, and the routed reunion measurement.
   the entire dependent contraction exceeds the default heartbeat allowance.
   A new helper wrapping Boolean simplification would not add a mathematical
   assertion. The repeated two-step normalization block is removed.
+
+### Weighted projector calculations with constant-weight recovery — resolved (2026-10-03)
+
+- **Pattern:** Expand the actual regional projector into independent vertex
+  translations and solve the compatibility equations in spanning-tree
+  coordinates, retaining a scalar weight on the incident labels.
+- **Seen:** The original and weighted formulas in
+  `PEPS/RegularProjectorTwistedRegion.lean` and
+  `PEPS/RegularTwistedRegionProjectorCoordinates.lean`.
+- **Reuse:** `regularProjectorWeightedTwistedRegionMatrix_apply` and
+  `_coordinates` prove the general weighted identities once. Both former
+  unweighted formulas follow by setting the weight to one. The reconstructed
+  incident labels are the public `regularRegionTreeReferenceLabels`.
+- **Notes:** The generalized calculation replaces the existing calculation;
+  its long proof is not copied. There is no remaining repeated weighted
+  compatibility argument requiring a candidate or a tactic. Literal scalar
+  weights are retained; diagonal insertions are not inferred from a span of
+  group-representation matrices.
 
 ### Appending a tuple endpoint under `List.ofFn`
 - **Pattern:** four proofs expanded `List.ofFn (Fin.snoc f x)` by repeating the
