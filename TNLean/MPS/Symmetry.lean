@@ -45,6 +45,7 @@ import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
+import TNLean.MPS.Symmetry.FiniteRingReconstruction
 import TNLean.MPS.Symmetry.FixedBondPhysicalPathInvariance
 import TNLean.MPS.Symmetry.FixedPointGappedPath
 import TNLean.MPS.Symmetry.FixedPointGappedPathWitness
@@ -94,6 +95,7 @@ import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
 import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
+import TNLean.MPS.Symmetry.ScalarIdentityAmbientObstruction
 import TNLean.MPS.Symmetry.SpinHalfObstruction
 import TNLean.MPS.Symmetry.StationaryDensitySymmetry
 import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance

@@ -302,6 +302,17 @@ available. They do not construct that
 family from the independent physical exact MPS path and its uniform gap;
 this remains the analytic question required for the general converse.
 
+Finite-ring reconstruction is now proved for already injective realizations.
+The declaration
+\leanid{MPSTensor.samePositiveMpvRay_of_mpv_two_three_eq_smul}
+shows that nonzero proportionality at ring lengths two and three determines
+the whole positive-length ray family. Two-site traces identify the physical
+coefficient quotient, and three-site traces recover multiplication on it;
+Skolem--Noether then gives the scalar and bond conjugation. The trace form
+is complex bilinear, so its inverse is not a positive spectral-support
+construction. Continuous canonical coordinates through a change of quotient
+dimension still require a separate theorem.
+
 The required realization need not be obtainable by gauging the supplied
 ambient tensor. For example, let $a$ be a normalized one-site vector and
 put $B^i=a_iI_2$. At every positive length $N$, the periodic MPS vector is
@@ -311,7 +322,11 @@ a four-dimensional fixed space. Every invertible bond conjugation leaves
 these scalar letters unchanged. This redundant realization can accompany
 a constant, uniformly gapped product-state parent Hamiltonian. Thus the
 physical gap cannot force a simple adjoint fixed space for the particular
-ambient realization recorded in the path. The missing theorem must choose
+ambient realization recorded in the path. The checked declarations
+\leanid{MPSTensor.repeatedProductTensor_fixedSpace_finrank} and
+\leanid{MPSTensor.repeatedProductTensor_samePositiveMpvRay} record the
+stationary-space dimension and periodic-ray comparison for the product
+vector $a=\ket{0}$. The missing theorem must choose
 a new continuous unital realization of the same ground-state rays, rather
 than assert that every supplied realization admits such a gauge.
 

@@ -1921,6 +1921,109 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     representative dimensions satisfy $D^2\ge D_0^2$, or $D\ge D_0$.
 \end{proof}
 
+\begin{theorem}[Two-site trace data determine the physical quotient]
+    \label{thm:spt_finite_two_site_trace_quotient}
+    \lean{MPSTensor.traceGram_eq_smul_of_twoSite_trace_eq,
+        MPSTensor.ker_linearCombination_eq_of_twoSite_trace_eq,
+        MPSTensor.bondDimension_eq_of_twoSite_trace_eq}
+    \leanok
+    Let $A^i\in M_D(\C)$ and $B^i\in M_E(\C)$ be one-site injective.
+    Suppose $c_2\ne0$ and
+    $\tr(B^iB^j)=c_2\tr(A^iA^j)$ for all physical indices $i,j$.
+    Then the coefficient maps $x\mapsto\sum_i x_iA^i$ and
+    $x\mapsto\sum_i x_iB^i$ have the same kernel, and $D=E$.
+    Their trace forms are the compositions of these coefficient maps
+    with the corresponding nondegenerate trace pairings.
+\end{theorem}
+
+\begin{proof}\leanok
+    Injectivity makes $M\mapsto(\tr(MA^i))_i$ and its analogue for $B$
+    injective. The proportionality of the two-site trace forms therefore
+    identifies the coefficient kernels. Both coefficient maps are
+    surjective, so rank--nullity gives $D^2=E^2$ and hence $D=E$.
+    The trace forms here are complex bilinear, rather than positive
+    Hermitian forms.
+\end{proof}
+
+\begin{theorem}[Three-site trace data determine multiplication]
+    \label{thm:spt_finite_three_site_trace_algebra}
+    \lean{MPSTensor.linearExtension_exists_unique_of_twoSite_trace_eq,
+        MPSTensor.linearExtension_mul_of_two_three_trace_eq}
+    \leanok
+    Let $A,B$ be one-site injective and suppose their two-site traces
+    satisfy the preceding proportionality, allowing $c_2=0$ for the
+    purely linear assertion. There is a unique linear map
+    $T:M_D(\C)\to M_E(\C)$ with $T(A^i)=B^i$.
+    If $c_3\ne0$ and
+    $\tr(B^iB^jB^k)=c_3\tr(A^iA^jA^k)$ for all $i,j,k$, then
+    $T(MN)=(c_2/c_3)T(M)T(N)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use a left inverse of the trace-pairing map for $B$ to extend the
+    letter assignment. The letters of $A$ span the full matrix algebra,
+    giving uniqueness. Three-site traces prove the multiplication identity
+    on pairs of letters. Bilinearity extends it to arbitrary matrices.
+\end{proof}
+
+\begin{theorem}[Reconstruction from two finite rings]
+    \label{thm:spt_finite_ring_reconstruction}
+    \lean{MPSTensor.gaugeEquiv_smul_of_two_three_trace_eq,
+        MPSTensor.samePositiveMpvRay_of_two_three_trace_eq,
+        MPSTensor.samePositiveMpvRay_of_mpv_two_three_eq_smul}
+    \leanok
+    \uses{def:gauge_equiv}
+    Suppose two one-site injective tensors have proportional periodic
+    vectors at lengths two and three, with nonzero constants $c_2,c_3$.
+    They have the same minimal bond dimension, and $B$ is related by
+    a bond conjugation to $(c_3/c_2)A$. Consequently their periodic
+    vector rays agree at every positive length.
+    This finite-data assertion does not construct continuous canonical
+    coordinates through a changing bond dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_finite_two_site_trace_quotient,
+        thm:spt_finite_three_site_trace_algebra}
+    The dimension equality identifies the matrix spaces.
+    At positive bond dimension, the normalized map $(c_2/c_3)T$ is
+    a nonzero multiplicative linear endomorphism. Skolem--Noether represents it by conjugation with an
+    invertible matrix. Traces of words are invariant under conjugation;
+    multiplying every letter by $c_3/c_2$ rescales the length-$N$ vector
+    by its nonzero $N$th power. The zero-dimensional case is immediate.
+\end{proof}
+
+\begin{definition}[Repeated bond copies of a product tensor]
+    \label{def:spt_repeated_product_tensor}
+    \lean{MPSTensor.repeatedProductTensor}
+    \leanok
+    Set $R_D^0=I_D$ and $R_D^1=0$.
+\end{definition}
+
+\begin{theorem}[Physical rays do not fix an ambient stationary space]
+    \label{thm:spt_redundant_bond_stationary_space}
+    \lean{MPSTensor.repeatedProductTensor_adjointMapLM,
+        MPSTensor.repeatedProductTensor_isUnital,
+        MPSTensor.repeatedProductTensor_fixedSpace_finrank,
+        MPSTensor.repeatedProductTensor_mpv,
+        MPSTensor.repeatedProductTensor_samePositiveMpvRay}
+    \leanok
+    \uses{def:spt_repeated_product_tensor}
+    The tensor $R_D$ is unital and its adjoint transfer map is the
+    identity on $M_D(\C)$. Its stationary space therefore has complex
+    dimension four when $D=2$. Yet the periodic vectors of $R_2$ are
+    twice those of $R_1$, so their positive-length rays agree.
+    In particular, the physical rays alone do not determine the
+    stationary-space dimension of an arbitrary ambient realization.
+\end{theorem}
+
+\begin{proof}\leanok
+    Only the zero physical letter contributes to either the transfer map
+    or a nonvanishing periodic word. The transfer map fixes every matrix,
+    while a nonvanishing periodic coefficient is the trace of $I_D$, namely
+    $D$. Thus the two realizations differ by the constant factor two.
+\end{proof}
+
 \begin{theorem}[Local continuous coordinates for a fixed-rank support]
     \label{thm:spt_continuous_projection_frame}
     \lean{Matrix.continuous_polarPos_family,

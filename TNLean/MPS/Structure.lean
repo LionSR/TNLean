@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Structure
 
 import TNLean.MPS.Structure.BlockPermutation
+import TNLean.MPS.Structure.FiniteRingTraceAlgebra
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.Structure.InvariantSubspaceDecomp.Basic
 import TNLean.MPS.Structure.LinearExtension
