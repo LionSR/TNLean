@@ -3967,7 +3967,8 @@ Hamiltonian gap remains separate
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:spc_aux_stationary_support_preparation}
+    \uses{thm:spc_aux_stationary_support_preparation,
+        thm:spc_aux_adjoint_support_intertwining}
     Preparation gives unitality and irreducibility. Positivity and
     $\mathcal E_A(I)=I$ give spectral radius one by
     \cite[Proposition~6.1]{Wolf2012Quantum}.
@@ -4060,8 +4061,7 @@ Hamiltonian gap remains separate
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_retained_overlap_one, thm:tp_gauge_from_adjoint_fixed,
-        lem:tp_gauge_preserves_irreducibility, thm:rect_overlap_norm_one_dim_eq,
-        thm:nt_overlap_norm_one_gauge}
+        thm:rect_overlap_norm_one_dim_eq, thm:nt_overlap_norm_one_gauge}
     Removing the vanishing remainder gives $|O_{AC}(N)|\to1$.
     The pure bond gauges defined by $\sigma^{1/2}$ and $\tau^{1/2}$
     make $A,C$ trace-preserving, preserve irreducibility, and leave
