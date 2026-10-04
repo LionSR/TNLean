@@ -793,6 +793,14 @@ For the group matrix product operators of arXiv:2203.12563:
   formalized, so the anomaly class is the type-II class; the comparison with
   the original odd-ring or two-site-blocked family remains open.
 
+For the PVBS spectral formulas of Bachmann--Nachtergaele, arXiv:1112.4097:
+
+- `bn12_pvbs_periodic_gap.tex` records the exact finite periodic one-species,
+  zero-phase gap and its local-projector normalization, including the
+  two-oriented-window convention at length two. It distinguishes this
+  result from the broader multi-species thermodynamic conjecture and
+  explains why the critical finite-volume gap is not asserted to vanish.
+
 For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
 
 - `cpgsv21_pvbs_threshold.tex` corrects the right-boundary threshold under

@@ -49,7 +49,11 @@ import TNLean.MPS.Examples.MajumdarGhoshLowerBound
 import TNLean.MPS.Examples.MajumdarGhoshTotalSpin
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.PVBS
+import TNLean.MPS.Examples.PVBSEnergyGap
+import TNLean.MPS.Examples.PVBSGapAttainment
 import TNLean.MPS.Examples.PVBSGroundSpace
+import TNLean.MPS.Examples.PVBSHamiltonian
+import TNLean.MPS.Examples.PVBSLocalInteraction
 import TNLean.MPS.Examples.PVBSLocalization
 import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 import TNLean.MPS.Examples.ProductState
