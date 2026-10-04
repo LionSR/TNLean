@@ -793,6 +793,14 @@ For the group matrix product operators of arXiv:2203.12563:
   formalized, so the anomaly class is the type-II class; the comparison with
   the original odd-ring or two-site-blocked family remains open.
 
+For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
+
+- `cpgsv21_pvbs_threshold.tex` corrects the right-boundary threshold under
+  `q = 1 + λ`, records the finite-ring condition `q^N ≠ 1` for periodic
+  vacuum uniqueness, and gives the critical W-state counterexample. The
+  open-chain ground space and both geometric localization regimes are
+  formalized; no uniform spectral-gap theorem is claimed.
+
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
 - `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis
