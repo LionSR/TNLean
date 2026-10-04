@@ -874,6 +874,36 @@ yields Definition~\ref{def:cpsv_canonical_form}.
 \end{definition}
 
 
+\begin{theorem}[Projector closure from a faithful stationary weight]
+    \label{thm:faithful_stationary_projector_closure}
+    \lean{MPSTensor.commutes_of_leftCanonical_of_posDef_fixedPoint_of_lowerZero}
+    \lean{MPSTensor.hasInvariantProjectorClosure_of_leftCanonical_of_posDef_fixedPoint}
+    \leanok
+    \uses{def:left_canonical_tensor, def:invariant_projector_closure}
+    Let $A$ be left-canonical, and suppose its transfer map has a
+    positive-definite fixed point $\rho$. Every orthogonal projection $P$
+    satisfying $(\Id-P)A^iP=0$ for all $i$ commutes with every $A^i$.
+    Consequently $A$ has invariant-projector closure.
+    This is a sufficient stationary-weight criterion, obtained from
+    \cite[Proposition~6.11 and Theorem~6.13]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $E$ for the transfer map and $E^*$ for its trace adjoint.
+    Invariance and normalization give $PE^*(P)=P=E^*(P)P$, whence
+    \[
+        E^*(P)-P=(\Id-P)E^*(P)(\Id-P)\geq0.
+    \]
+    Stationarity gives
+    $\tr(\rho(E^*(P)-P))=\tr((E(\rho)-\rho)P)=0$.
+    Faithfulness of the positive weight implies $E^*(P)=P$.
+    Since $P^\dagger P=P$, the fixed-point commutant criterion gives
+    $PA^i=A^iP$. Applying this conclusion to $\Id-P$ gives the
+    stated projector closure in the opposite orientation.
+\end{proof}
+
+
 \begin{theorem}[Decomposition into irreducible corners under projector closure]
     \label{thm:projector_closure_irreducible_corners}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}

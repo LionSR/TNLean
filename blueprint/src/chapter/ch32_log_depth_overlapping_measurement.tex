@@ -181,9 +181,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \lean{MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le}
     \leanok
     \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_block_overlaps_limit,
-        lem:ldp_shared_overlap_estimates, thm:ldp_approximation_error_overlapping_weights,
+        lem:ldp_shared_overlap_estimates, thm:ldp_approximation_error_repeated_overlapping,
         def:correlation_length}
-    Let $0<\gamma<1/2$. There is $C>0$ such that the following holds for all
+    Let $0<\gamma<1$. There is $C>0$ such that the following holds for all
     weights $\beta\in\C^b\setminus\{0\}$ and every cut of a ring of $N$ sites
     into $M\geq1$ blocks of lengths $\ell_k\geq q$ at which every blocked map
     $\mathcal B^{(\ell_k)}$ is injective on the bond pairs of the blocks. With
@@ -210,6 +210,8 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \cite{gap:mswc24_measurement_preparation_scope}. Unlike
     Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping}, it has no
     factor $\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$.
+    The source states the bound for $0<\gamma<1/2$; the range $\gamma<1$ is a
+    project result.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -226,10 +228,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     $y=Me^{-\gamma q/\xi}$.
     Lemma~\ref{lem:ldp_shared_overlap_estimates}(6) with $R=\sqrt w$ gives
     $\lvert\lVert\phi\rVert^2/w-1\rvert\leq Ke^{-\gamma N/\xi}\leq Ky$. The
-    inequality in the proof of
-    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}, applied to
-    $S/w$ and $\lVert\phi\rVert/\sqrt w$, and the two elementary inequalities
-    there with $s=1$ give the bound.
+    elementary inequalities in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping}, applied to
+    $S/w$ and $\lVert\phi\rVert/\sqrt w$ with $s=1$, give the bound.
 \end{proof}
 
 \begin{theorem}[The state of a tensor injective on a set of bond pairs, with
@@ -238,9 +239,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn,
         MPSPreparation.isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth}
     \leanok
-    \uses{def:ldp_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
+    \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
         thm:ldp_block_sum_unitary, thm:ldp_sequential_factorization_on,
-        def:ldp_block_isometry_state, lem:ldp_measurement_unitary_case}
+        def:ldp_block_isometry_state, lem:qc_measurement_unitary_case}
     For $d\geq2$, every bond dimension $D$ and every number $b$ of labels, there
     are $C$ and $L_0$ such that the following holds. Let $A$ be a tensor of bond
     dimension $D$, $S$ a set of bond pairs, $\omega_1,\dots,\omega_b$
@@ -266,7 +267,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     isometric factor $V^{(\ell_k)}$ on the pairs of $S$, which suffices because
     the products of the pairs are supported there. For the second statement, the
     measurement stage measures no site and the circuit after it is empty, by
-    Lemma~\ref{lem:ldp_measurement_unitary_case}.
+    Lemma~\ref{lem:qc_measurement_unitary_case}.
 \end{proof}
 
 \begin{lemma}[A chain of one block]
@@ -366,4 +367,39 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     $w=\sum_j\lvert\beta_j\rvert^2$ by
     Lemma~\ref{lem:ldp_shared_overlap_estimates}(6), which is below one for
     large $N$.
+\end{proof}
+
+\begin{theorem}[Translation-invariant MPS from product states with
+        measurements, one direction]
+    \label{thm:ldp_qccc_classification_forward}
+    \lean{MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState}
+    \leanok
+    \uses{thm:ldp_overlapping_measurement_depth,
+        lem:qc_asymptotic_preparation_of_overlap,
+        def:qc_asymptotic_measurement_preparation}
+    Let $A$ be as in Theorem~\ref{thm:ldp_overlapping_measurement_depth}, and
+    let $\ket{\phi_N(A)}\neq0$ for all large $N$. There is $C$ such that the
+    sequence of normalized states $\ket{\phi_N}$ is asymptotically prepared
+    with measurements in depth $C\log N$: unit vectors $\ket{\psi_N}$,
+    prepared with measurements and a circuit in depth at most $C\log N$,
+    satisfy
+    $\lVert\ket{\psi_N}\bra{\psi_N}-\ket{\phi_N}\bra{\phi_N}\rVert_1\to0$.
+
+    This is the direction from the trivial sequence to the sequence of MPS of
+    the theorem of \cite{Piroli2021LOCC} stating that in one dimension every
+    translation-invariant MPS of fixed bond dimension is in the same phase as
+    the trivial state, for the equivalence of sequences of states of its
+    paragraph ``Phases of matter''; the depth $C\log N$ is polylogarithmic.
+    The converse direction, and the reduction of an arbitrary
+    translation-invariant tensor to the canonical form assumed here, are not
+    formalized \cite{gap:psc21_mps_classification_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $c$ be the constant of
+    Theorem~\ref{thm:ldp_overlapping_measurement_depth}. For $N\geq2$ with
+    $\ket{\phi_N(A)}\neq0$ and $\varepsilon=1/N$, a unit vector of error at
+    most $1/N$ is prepared with measurements and a circuit in depth at most
+    $c\log(N^2)=2c\log N$. Lemma~\ref{lem:qc_asymptotic_preparation_of_overlap}
+    with $C=2c$ and $\varepsilon_N=1/N$ concludes.
 \end{proof}

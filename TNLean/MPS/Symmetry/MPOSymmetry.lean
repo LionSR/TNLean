@@ -19,6 +19,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ClosedFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
+import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallDetector
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallExchange
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallFamily
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallString

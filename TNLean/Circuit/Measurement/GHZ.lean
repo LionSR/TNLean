@@ -224,11 +224,13 @@ private def secondShift (k : Fin (M * 2)) : Equiv.Perm (Fin (M * 2) → Fin b) :
 
 private theorem isLocalPerm_firstShift (k : Fin (M * 2)) :
     IsLocalPerm (bond k) (firstShift (b := b) k) :=
-  isLocalPerm_shiftPerm (Or.inr rfl) _ _ fun x y h => by rw [h k (Or.inl rfl)]
+  isLocalPerm_shiftPerm (S := bond k) (Or.inr rfl) _ _ fun x y h => by
+    rw [h k (Or.inl rfl)]
 
 private theorem isLocalPerm_secondShift (k : Fin (M * 2)) :
     IsLocalPerm (bond k) (secondShift (b := b) k) :=
-  isLocalPerm_shiftPerm (Or.inl rfl) _ _ fun x y h => by rw [h (k + 1) (Or.inr rfl)]
+  isLocalPerm_shiftPerm (S := bond k) (Or.inl rfl) _ _ fun x y h => by
+    rw [h (k + 1) (Or.inr rfl)]
 
 /-- The first layer of controlled shifts. -/
 private noncomputable def firstLayer : Layer b (M * 2) :=
