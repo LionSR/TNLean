@@ -1,68 +1,68 @@
 \begin{definition}[Conjugacy-class amplitudes]
-\label{def:peps_regular_flux_creation_vectors}
-\lean{TNLean.PEPS.regularFluxClassVector,TNLean.PEPS.normalizedRegularFluxClassVector,TNLean.PEPS.regularFluxPairVector}
-\leanok
-Let $G$ be a finite group and $C_G(g)$ the centralizer of $g$.
-Write $\kappa=|G|$ and $c_g=|C_G(g)|$. Define
-\begin{align}
-  \alpha_g(t)&=\sum_{z\in G}\mathbf 1_{t=zgz^{-1}},
-  &\widehat\alpha_g&=(\kappa c_g)^{-1/2}\alpha_g,\\
-  \beta_g(a,b)&=\alpha_g(ab^{-1}).
-\end{align}
-These amplitudes retain the multiplicities in the accessible-register sum
-of \cite[Theorem 6.17]{Schuch2010PEPS}.
+    \label{def:peps_regular_flux_creation_vectors}
+    \lean{TNLean.PEPS.regularFluxClassVector,TNLean.PEPS.normalizedRegularFluxClassVector,TNLean.PEPS.regularFluxPairVector}
+    \leanok
+    Let $G$ be a finite group and $C_G(g)$ the centralizer of $g$.
+    Write $\kappa=|G|$ and $c_g=|C_G(g)|$. Define
+    \begin{align}
+        \alpha_g(t)  & =\sum_{z\in G}\mathbf 1_{t=zgz^{-1}},
+                     & \widehat\alpha_g                      & =(\kappa c_g)^{-1/2}\alpha_g, \\
+        \beta_g(a,b) & =\alpha_g(ab^{-1}).
+    \end{align}
+    These amplitudes retain the multiplicities in the accessible-register sum
+    of \cite[Theorem 6.17]{Schuch2010PEPS}.
 \end{definition}
 
 \begin{theorem}[Exact conjugacy-sum normalization]
-\label{thm:peps_regular_flux_creation_norm}
-\lean{TNLean.PEPS.regularFluxClassVector_dotProduct,TNLean.PEPS.regularFluxClassVector_conjugation,TNLean.PEPS.regularFluxClassVector_one_eq_zero,TNLean.PEPS.normalizedRegularFluxClassVector_dotProduct,TNLean.PEPS.normalizedRegularFluxClassVector_orthogonal,TNLean.PEPS.normalizedRegularFluxClassVector_conjugation,TNLean.PEPS.normalizedRegularFluxClassVector_one,TNLean.PEPS.regularFluxPairVector_eq_sum,TNLean.PEPS.regularFluxPairVector_dotProduct}
-\leanok
-\uses{def:peps_regular_flux_creation_vectors}
-The squared norms are $\|\alpha_g\|^2=\kappa c_g$ and
-$\|\beta_g\|^2=\kappa^2c_g$. The normalized vector $\widehat\alpha_g$
-has norm one and is invariant under conjugation. For $g\ne1$ it is
-orthogonal to $\delta_1$, while $\widehat\alpha_1=\delta_1$.
-Moreover $\beta_g(a,b)=\sum_z\mathbf 1_{a=zgz^{-1}b}$.
+    \label{thm:peps_regular_flux_creation_norm}
+    \lean{TNLean.PEPS.regularFluxClassVector_dotProduct,TNLean.PEPS.regularFluxClassVector_conjugation,TNLean.PEPS.regularFluxClassVector_one_eq_zero,TNLean.PEPS.normalizedRegularFluxClassVector_dotProduct,TNLean.PEPS.normalizedRegularFluxClassVector_orthogonal,TNLean.PEPS.normalizedRegularFluxClassVector_conjugation,TNLean.PEPS.normalizedRegularFluxClassVector_one,TNLean.PEPS.regularFluxPairVector_eq_sum,TNLean.PEPS.regularFluxPairVector_dotProduct}
+    \leanok
+    \uses{def:peps_regular_flux_creation_vectors}
+    The squared norms are $\|\alpha_g\|^2=\kappa c_g$ and
+    $\|\beta_g\|^2=\kappa^2c_g$. The normalized vector $\widehat\alpha_g$
+    has norm one and is invariant under conjugation. For $g\ne1$ it is
+    orthogonal to $\delta_1$, while $\widehat\alpha_1=\delta_1$.
+    Moreover $\beta_g(a,b)=\sum_z\mathbf 1_{a=zgz^{-1}b}$.
 \end{theorem}
 \begin{proof}\leanok
-For every conjugate $zgz^{-1}$, precisely $c_g$ conjugating elements
-produce that conjugate. Expanding the squared norm therefore gives
-$\kappa c_g$. The reference coordinate $b$ contributes another factor
-$\kappa$ to the pair norm. Left multiplication of the conjugating variable
-proves conjugation invariance. A nontrivial class excludes the identity;
-the trivial class contains the identity with multiplicity $\kappa$.
+    For every conjugate $zgz^{-1}$, precisely $c_g$ conjugating elements
+    produce that conjugate. Expanding the squared norm therefore gives
+    $\kappa c_g$. The reference coordinate $b$ contributes another factor
+    $\kappa$ to the pair norm. Left multiplication of the conjugating variable
+    proves conjugation invariance. A nontrivial class excludes the identity;
+    the trivial class contains the identity with multiplicity $\kappa$.
 \end{proof}
 
 \begin{definition}[Creation on accessible registers]
-\label{def:peps_regular_flux_creation_matrix}
-\lean{TNLean.PEPS.regularFluxCreationMatrix,TNLean.PEPS.regularFluxPairCreationMatrix}
-\leanok
-\uses{def:peps_regular_flux_creation_vectors}
-Set $U_g=I-(\delta_1-\widehat\alpha_g)(\delta_1-\widehat\alpha_g)^\dagger$.
-On the pair $(a,b)$, let $V_g$ act as $U_g\otimes I$ in the coordinates
-$(ab^{-1},b)$.
+    \label{def:peps_regular_flux_creation_matrix}
+    \lean{TNLean.PEPS.regularFluxCreationMatrix,TNLean.PEPS.regularFluxPairCreationMatrix}
+    \leanok
+    \uses{def:peps_regular_flux_creation_vectors}
+    Set $U_g=I-(\delta_1-\widehat\alpha_g)(\delta_1-\widehat\alpha_g)^\dagger$.
+    On the pair $(a,b)$, let $V_g$ act as $U_g\otimes I$ in the coordinates
+    $(ab^{-1},b)$.
 \end{definition}
 
 \begin{theorem}[Equivariant accessible-register creation]
-\label{thm:peps_regular_flux_creation_matrix}
-\lean{TNLean.PEPS.regularFluxCreationMatrix_mem_unitaryGroup,TNLean.PEPS.regularFluxCreationMatrix_mulVec_single,TNLean.PEPS.regularFluxCreationMatrix_commute_conjugation,TNLean.PEPS.regularFluxPairCreationMatrix_mem_unitaryGroup,TNLean.PEPS.regularFluxPairCreationMatrix_mulVec_diagonal}
-\leanok
-\uses{def:peps_regular_flux_creation_matrix,thm:peps_regular_flux_creation_norm,lem:peps_unitary_vector_swap}
-Both $U_g$ and $V_g$ are unitary. The operator $U_g$ commutes with every
-conjugation permutation and sends $\delta_1$ to $\widehat\alpha_g$.
-Consequently
-\begin{align}
- V_g\Bigl(\sum_r|r,r\rangle\Bigr)
-   =(\kappa c_g)^{-1/2}\sum_{s,z}|zgz^{-1}s,s\rangle.
-\end{align}
-This is the normalized accessible-register operation in
-\cite[Theorem 6.17]{Schuch2010PEPS}; its action on a contracted PEPS
-region is a separate assertion.
+    \label{thm:peps_regular_flux_creation_matrix}
+    \lean{TNLean.PEPS.regularFluxCreationMatrix_mem_unitaryGroup,TNLean.PEPS.regularFluxCreationMatrix_mulVec_single,TNLean.PEPS.regularFluxCreationMatrix_commute_conjugation,TNLean.PEPS.regularFluxPairCreationMatrix_mem_unitaryGroup,TNLean.PEPS.regularFluxPairCreationMatrix_mulVec_diagonal}
+    \leanok
+    \uses{def:peps_regular_flux_creation_matrix,thm:peps_regular_flux_creation_norm,lem:peps_unitary_vector_swap}
+    Both $U_g$ and $V_g$ are unitary. The operator $U_g$ commutes with every
+    conjugation permutation and sends $\delta_1$ to $\widehat\alpha_g$.
+    Consequently
+    \begin{align}
+        V_g\Bigl(\sum_r|r,r\rangle\Bigr)
+        =(\kappa c_g)^{-1/2}\sum_{s,z}|zgz^{-1}s,s\rangle.
+    \end{align}
+    This is the normalized accessible-register operation in
+    \cite[Theorem 6.17]{Schuch2010PEPS}; its action on a contracted PEPS
+    region is a separate assertion.
 \end{theorem}
 \begin{proof}\leanok
-For $g\ne1$, reflect in the difference of the two orthogonal unit vectors.
-Every conjugation fixes both vectors and hence commutes with the reflection.
-For $g=1$ the reflection is the identity. Tensoring with the identity and
-reindexing preserves unitarity; summing the untouched reference coordinate
-reduces the pair action to $U_g\delta_1=\widehat\alpha_g$.
+    For $g\ne1$, reflect in the difference of the two orthogonal unit vectors.
+    Every conjugation fixes both vectors and hence commutes with the reflection.
+    For $g=1$ the reflection is the identity. Tensoring with the identity and
+    reindexing preserves unitarity; summing the untouched reference coordinate
+    reduces the pair action to $U_g\delta_1=\widehat\alpha_g$.
 \end{proof}
