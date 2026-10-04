@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.MeasurementPreparation
-import TNLean.MPS.Preparation.RepeatedBlockError
+import TNLean.MPS.Preparation.BlockSumError
 
 /-!
 # Tensors that are not normal, prepared with measurements in depth `O(log(N/ε))`
@@ -67,6 +67,7 @@ multiplicity `m_j ≥ 2`. Documented in `docs/paper-gaps/mswc24_repeated_block_c
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -243,7 +244,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
   have hDj : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
   obtain ⟨t, ht0, ht1, hlam⟩ := exists_forall_eigenvalue_norm_le hN hA hDj
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
-  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul_repeatedBlockSum (μ := μ) hι hdisj hN
+  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul_repeatedBlockSum hι hdisj hN
     hA hσ htr hfix (lam₂ := (t : ℂ)) hlam (γ := 1 / 4) (by norm_num) (by norm_num)
   obtain ⟨Cp, L₀, hCp⟩ := exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector d b Dj
   choose Linj hLpos hLinj using hN
@@ -328,7 +329,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
   refine ⟨ψ, Cp * q, hψn, ?_, by rw [hψ]; exact hprep, ?_⟩
   · exact natCast_mul_le_mul_log_of_le_two_mul hN2 hε hε1 hb1 hq2
   · rw [hinner]
-    refine (herr q M horth hβ).trans ?_
+    refine (herr μ q M horth hβ).trans ?_
     rw [hexp]
     have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
     rw [show r * (q : ℝ) = q / a by rw [ha, div_div_eq_mul_div, div_one, mul_comm]]

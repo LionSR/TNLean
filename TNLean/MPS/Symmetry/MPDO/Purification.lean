@@ -8,7 +8,7 @@ import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.Symmetry.MPDO.Defs
 
 /-!
-# Strong and weak symmetries through local purifications
+# Strong and weak symmetries through purifications
 
 **Source.** Sun 2025 (arXiv:2504.16985), Lemma `prop:purification`,
 `References/2504.16985/main.tex` lines 183–187: if `O ρ = λ ρ`, every state in the support of
@@ -31,9 +31,14 @@ local gauge-phase covariance of `A` under `U` on the spin leg gives strong on-si
 with eigenvalue `ζ^L`; under `U ⊗ V` with unitary `V` on the ancilla leg it gives weak on-site
 symmetry.
 
-**Scope restriction (boundary `X = 1`):** as in `TNLean/MPS/Symmetry/MPDO/Defs.lean`, the
-density operators are the periodic operators `mpo M L`; documented in
-`docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+The general family purification theorem uses a supplied factorization of
+`mpoWithBoundary M X L`, for any boundary `X`.
+
+**Scope restriction (local tensor results):** The local-purification equivalence
+`isStrongMPOSymmetry_one_iff_localPurification` and the two local gauge-phase sufficient
+conditions use identity boundary. An arbitrary commuting matrix on the doubled bond space
+need not be a tensor product of purification boundaries. The general family purification
+theorem has no such restriction. See `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
 
 ## Main definitions
 
@@ -158,18 +163,36 @@ Source: arXiv:2504.16985, Lemma `prop:purification`, lines 184–187, at every p
 the matrix product density operator is strongly symmetric under the family `O_a` with
 eigenvalues `λ_a^{(L)}` exactly when the purifying state satisfies
 `(O_a^{(L)} ⊗ 1_anc) Ψ_A = λ_a^{(L)} Ψ_A`. -/
-theorem isStrongMPOSymmetry_iff_purification {ι : Type*} {χ : ι → ℕ}
+theorem isStrongMPOSymmetry_one_iff_localPurification {ι : Type*} {χ : ι → ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
     (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (O : ∀ a, MPOTensor d (χ a)) (c : ι → ℕ → ℂ) :
-    IsStrongMPOSymmetry O M c ↔
+    IsStrongMPOSymmetry O M 1 c ↔
       ∀ a L, 0 < L → ∀ κ : Fin L → Fin dK,
         mpo (O a) L *ᵥ (fun σ => purificationAmplitude A L σ κ) =
           c a L • fun σ => purificationAmplitude A L σ κ := by
+  simp only [IsStrongMPOSymmetry, mpoWithBoundary_one]
   refine forall_congr' fun a => forall_congr' fun L => forall_congr' fun _ => ?_
   exact mpo_mul_eq_smul_iff_purification A e hM _ _
+
+/-- Strong symmetry for any purification of the boundary-weighted density family.
+
+Source: arXiv:2504.16985, Lemma `prop:purification`, lines 183–187.
+The purification is supplied globally; no factorization of the virtual boundary
+or local purifying tensor is assumed. -/
+theorem isStrongMPOSymmetry_iff_purification {ι : Type*} {χ : ι → ℕ}
+    {κ : ℕ → Type*} [∀ L, Fintype (κ L)]
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (Φ : ∀ L, Matrix (Fin L → Fin d) (κ L) ℂ)
+    (hΦ : ∀ L, 0 < L → mpoWithBoundary M X L = Φ L * (Φ L)ᴴ)
+    (O : ∀ a, MPOTensor d (χ a)) (c : ι → ℕ → ℂ) :
+    IsStrongMPOSymmetry O M X c ↔
+      ∀ a L, 0 < L → mpo (O a) L * Φ L = c a L • Φ L := by
+  unfold IsStrongMPOSymmetry
+  refine forall_congr' fun a => forall_congr' fun L => forall_congr' fun hL => ?_
+  rw [hΦ L hL, Matrix.mul_mul_conjTranspose_eq_smul_iff]
 
 /-! ### Local sufficient conditions -/
 
@@ -226,9 +249,9 @@ theorem isStrongOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
     (X : G → GL (Fin D') ℂ) (ζ : G → ℂ)
     (hA : ∀ g i k, ∑ j, U g i j • A j k = ζ g • ((X g : Matrix (Fin D') (Fin D') ℂ) * A i k *
       (((X g)⁻¹ : GL (Fin D') ℂ) : Matrix (Fin D') (Fin D') ℂ))) :
-    IsStrongOnSiteSymmetry M U fun g L => ζ g ^ L := by
+    IsStrongOnSiteSymmetry M 1 U fun g L => ζ g ^ L := by
   intro g L _
-  change mpo (onSite (U g)) L * mpo M L = ζ g ^ L • mpo M L
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite, mpo_eq_purificationDensity A e hM, purificationDensity_eq_mul_conjTranspose,
     Matrix.mul_mul_conjTranspose_eq_smul_iff, finKronecker_mul_purificationAmplitude]
   exact purificationAmplitude_of_gaugePhase (X g) (ζ g) (hA g) L
@@ -261,9 +284,9 @@ theorem isWeakOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
     (hA : ∀ g i k, ∑ l, V g k l • ∑ j, U g i j • A j l =
       ζ g • ((X g : Matrix (Fin D') (Fin D') ℂ) * A i k *
         (((X g)⁻¹ : GL (Fin D') ℂ) : Matrix (Fin D') (Fin D') ℂ))) :
-    IsWeakOnSiteSymmetry M U := by
+    IsWeakOnSiteSymmetry M 1 U := by
   intro g L _
-  change Commute (mpo (onSite (U g)) L) (mpo M L)
+  simp only [mpoWithBoundary_one]
   set Φ := purificationAmplitude A L
   set u := Matrix.finKronecker fun _ : Fin L => U g
   set W := (Matrix.finKronecker fun _ : Fin L => V g)ᵀ
