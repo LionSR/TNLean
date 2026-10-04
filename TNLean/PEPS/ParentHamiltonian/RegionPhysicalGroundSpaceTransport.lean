@@ -18,6 +18,14 @@ Source: the physical changes of coordinates and concatenation in SCP10,
 arXiv:1001.3807, Observation `obs:iso:accessible-virt`, lines 1765–1820,
 and the general regional parent construction in arXiv:2011.12127,
 Section IV.C.1, lines 2003–2011.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators Matrix

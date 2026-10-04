@@ -14,6 +14,11 @@ Boundary reference coordinates separate the relative boundary label from the
 fixed region ancillary vector. This produces a density on the actual physical
 half-edge labels, before any closure sector or coherent coefficient is chosen.
 Source: SCP10, arXiv:1001.3807, lines 1840–1920 and 2043–2072.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

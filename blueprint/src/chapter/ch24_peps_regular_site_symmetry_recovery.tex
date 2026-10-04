@@ -34,7 +34,7 @@
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_image_equality,
-        def:peps_regular_site_gram, lem:peps_regular_site_gram}
+        def:peps_regular_site_gram, thm:peps_regular_site_gram}
     Write $\delta_\eta$ for the coordinate vector at $\eta$.
     Equality of the physical vectors gives
     $\Pi\delta_\eta=\Pi\delta_\theta$. The matrix entry
@@ -59,7 +59,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_site_orbit_detection, lem:peps_regular_site_gram}
+    \uses{thm:peps_regular_site_orbit_detection, thm:peps_regular_site_gram}
     Choose distinct $i,j\in I$ and fix $h\in G$. Let $\eta_j=h$
     and $\eta_k=1$ for $k\ne j$. By
     Theorem~\ref{thm:peps_regular_site_orbit_detection}, there exists

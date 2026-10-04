@@ -19,6 +19,14 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Observation
 `obs:iso:accessible-virt` and its concatenation argument,
 `Papers/1001.3807/paper_v3.tex`, lines 1765–1820. The covariance statements below
 hold for arbitrary finite graphs and do not require group injectivity.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -146,7 +154,8 @@ theorem finrank_regionGroundSpace_physicalDeform (A : Tensor Γ d) (R : Finset V
 
 /-- Transport a local interaction by the inverse physical change of coordinates.
 Source: inverse-adjoint congruence of the parent interactions in
-arXiv:2011.12127, Section IV.C.1, lines 2003–2011. -/
+arXiv:2011.12127, Section IV.C.1, equation `eq:4:deformed-parent-1`,
+lines 2031–2038. -/
 noncomputable def deformedRegionInteraction (R : Finset V)
     (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     (h : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ) :
@@ -157,7 +166,8 @@ noncomputable def deformedRegionInteraction (R : Finset V)
 omit [Fintype V] in
 /-- Positive interactions remain positive under arbitrary invertible physical deformation.
 Source: inverse-adjoint congruence of the parent interactions in
-arXiv:2011.12127, Section IV.C.1, lines 2003–2011. -/
+arXiv:2011.12127, Section IV.C.1, equation `eq:4:deformed-parent-1`,
+lines 2031–2038. -/
 theorem deformedRegionInteraction_posSemidef (R : Finset V)
     (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     {h : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ}
@@ -167,7 +177,8 @@ theorem deformedRegionInteraction_posSemidef (R : Finset V)
 omit [Fintype V] in
 /-- The transported interaction annihilates exactly the transformed vectors from its kernel.
 Source: inverse-adjoint congruence of the parent interactions in
-arXiv:2011.12127, Section IV.C.1, lines 2003–2011. -/
+arXiv:2011.12127, Section IV.C.1, equation `eq:4:deformed-parent-1`,
+lines 2031–2038. -/
 theorem deformedRegionInteraction_mulVec_eq_zero_iff (R : Finset V)
     (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     (h : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
@@ -195,7 +206,8 @@ theorem deformedRegionInteraction_mulVec_eq_zero_iff (R : Finset V)
 
 /-- An arbitrary positive parent interaction transports to a parent interaction
 for the deformed tensor. Source: regional-kernel construction in
-arXiv:2011.12127, Section IV.C.1, lines 2003–2011. -/
+arXiv:2011.12127, Section IV.C.1, equation `eq:4:deformed-parent-1`,
+lines 2031–2038. -/
 theorem IsRegionParentInteraction.physicalDeform (A : Tensor Γ d) (R : Finset V)
     (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     {h : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ}

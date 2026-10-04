@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,xurl}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{CZY fusion: associativity on the physical image}
+\author{TNLean contributors}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The printed assertion}
+
+Section II of arXiv:2509.03600v1 introduces tensors $A_0,A_1$ of bond
+ dimensions three and two and fusion maps $Y_{a,b}$, with $a,b\in\mathbb Z_2$.
+The maps are specified in Appendix B as the first rows of the printed
+changes of basis. The source then asserts
+\begin{align}
+ Y_{a+b,c}(Y_{a,b}\otimes I_c)
+ &=\omega(a,b,c)Y_{a,b+c}(I_a\otimes Y_{b,c}),
+ \label{eq:printed}
+\end{align}
+where $\omega(1,1,1)=-1$ and $\omega=1$ otherwise.
+The local source is \nolinkurl{references/2509.03600/main.tex},
+lines 283--294 and 664--716. Product coordinates are ordered lexicographically.
+
+The tensors and fusion maps satisfy the printed intertwining identities.
+Moreover, (\ref{eq:printed}) is valid at $(1,1,1)$, with the printed
+normalization $Y_{1,1}=X_{1,1}[1{:}3,:]$ and its factor $1/\sqrt2$.
+These facts are proved independently of the unrestricted associativity assertion.
+
+\section{An obstruction on the full virtual space}
+
+At the neutral triple the relevant map is
+\begin{align}
+ Y_{0,0}&=\begin{pmatrix}
+ 0&1&0&1&0&0&0&0&0\\
+ 0&0&0&0&2&0&0&0&2\\
+ 0&0&0&0&0&2&0&2&0
+ \end{pmatrix}.
+ \label{eq:neutral}
+\end{align}
+Let $L=Y_{0,0}(Y_{0,0}\otimes I_3)$ and
+$R=Y_{0,0}(I_3\otimes Y_{0,0})$, both acting on $(\mathbb C^3)^{\otimes3}$.
+Using indices $1,2,3$, the column $(3,3,1)$ is the twenty-fifth column.
+Direct multiplication gives $L_{1,(3,3,1)}=2$ and $R_{1,(3,3,1)}=0$.
+Consequently $L\ne zR$ for every $z\in\mathbb C$.
+This is an obstruction to (\ref{eq:printed}) for the full virtual maps,
+not merely a normalization of its sign.
+The kernel proof is \leanid{CZYCompression.czyFusion_printed_neutral_no_scalar}.
+
+\section{The corrected statement}
+
+Two changes suffice. First, choose the normalization
+\begin{align}
+ F_{0,0}&=Y_{0,0},&F_{0,1}&=2Y_{0,1},&
+ F_{1,0}&=2Y_{1,0},&F_{1,1}&=2\sqrt2Y_{1,1}.
+ \label{eq:normalization}
+\end{align}
+Equivalently, after removing a common factor two, these maps are
+$Y_{0,0}/2$, $Y_{0,1}$, $Y_{1,0}$ and $\sqrt2Y_{1,1}$.
+The extra normalization of $Y_{1,1}$ cancels from every triple comparison.
+It makes the chosen maps integral. All one-sided intertwining identities
+remain valid under these scalar changes.
+
+Second, restrict the equality to the physical images. Define
+\begin{align}
+ T_{a,b,c}^{ik}
+ &=\sum_{j,l=0}^1 A_a^{ij}\otimes A_b^{jl}\otimes A_c^{lk},&
+ L_{a,b,c}&=F_{a+b,c}(F_{a,b}\otimes I_c),&
+ R_{a,b,c}&=F_{a,b+c}(I_a\otimes F_{b,c}).
+ \label{eq:three-layer}
+\end{align}
+Both bond orders are identified with the ordered triple $(a,b,c)$.
+The corrected identity is
+\begin{align}
+ L_{a,b,c}T_{a,b,c}^{ik}
+ &=(-1)^{abc}R_{a,b,c}T_{a,b,c}^{ik}.
+ \label{eq:supported}
+\end{align}
+It holds at all eight group triples and all physical index pairs.
+The formal statements are
+\leanid{CZYCompression.czyFusion_supported_associativity_int} and
+\leanid{CZYCompression.czyFusion_supported_associativity}.
+
+For a nonempty physical word $w=(p_1,\ldots,p_n)$, multiplication of
+(\ref{eq:supported}) on the right gives
+$L_{a,b,c}T^{p_1}\cdots T^{p_n}
+=(-1)^{abc}R_{a,b,c}T^{p_1}\cdots T^{p_n}$.
+This is \leanid{CZYCompression.czyFusion_supported_associativity_word}.
+Thus the phase relation holds on
+$\mathcal S_{a,b,c}=\sum_{i,k}\operatorname{ran}T_{a,b,c}^{ik}$,
+and on the images of all nonempty word products.
+
+The correction keeps the redundant virtual directions that make $A_0$
+nonsemisimple, while specifying the subspace on which a scalar associator
+is meaningful. It does not identify the raw fusion maps on the entire
+virtual space. Nor does it, by itself, provide a general definition of
+fusion associators for nonsemisimple tensor families. Those require a
+specified quotient of morphisms or invariant physical subspaces.
+
+\section{Status}
+
+The printed full-space assertion is false. Its nontrivial-triple identity
+and the corrected physical-image relation are proved, without assuming
+an associator relation. The blueprint treats them as separate statements.
+The mathematical follow-up is tracked in \ghissue{8425}.
+\end{document}

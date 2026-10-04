@@ -18,6 +18,12 @@ when the PEPS vector vanishes. The canonical projector has unit excitation gap.
 These are consequences of the finite regional parent construction in CPGSV21,
 arXiv:2011.12127, Section IV.C.1, lines 2003–2011. The full-region interaction
 is a term on the entire graph; no nearest-neighbour uniqueness theorem is asserted.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators ComplexOrder Matrix MatrixOrder

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Algebra.Algebra.Bilinear
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.TracePairing
 
@@ -100,18 +101,15 @@ theorem linearExtension_mul {A B : MPSTensor d D}
       simpa using congrArg (· k) (congrArg (· (A i * A j)) hΦComp)
     simp only [h1]; change traceMulRightPi A _ k = traceMulRightPi B _ k
     simp only [traceMulRightPi_apply]; exact htr3 i j k
-  have hMul_right_gen : ∀ j : Fin d, ∀ M, T (M * A j) = T M * B j := by
-    intro j
-    have hfg := LinearMap.ext_on_range (hv := hA.span_eq_top)
-      (f := T.comp (LinearMap.mulRight ℂ (A j)))
-      (g := (LinearMap.mulRight ℂ (B j)).comp T) fun i => by
-        simpa [LinearMap.comp_apply, hT i] using hMul_gen i j
-    intro M; simpa [LinearMap.comp_apply] using congrArg (· M) hfg
+  have hfg :
+      (LinearMap.mul ℂ (Matrix (Fin D) (Fin D) ℂ)).compr₂ T =
+        (LinearMap.mul ℂ (Matrix (Fin D) (Fin D) ℂ)).compl₁₂ T T :=
+    LinearMap.ext_on_range (hv := hA.span_eq_top) fun i =>
+      LinearMap.ext_on_range (hv := hA.span_eq_top) fun j => by
+        simpa only [LinearMap.compr₂_apply, LinearMap.compl₁₂_apply,
+          LinearMap.mul_apply', hT i, hT j] using hMul_gen i j
   intro M N
-  have hfg := LinearMap.ext_on_range (hv := hA.span_eq_top)
-    (f := T.comp (LinearMap.mulLeft ℂ M))
-    (g := (LinearMap.mulLeft ℂ (T M)).comp T) fun j => by
-      simpa [LinearMap.comp_apply, hT j] using hMul_right_gen j M
-  simpa [LinearMap.comp_apply] using congrArg (· N) hfg
+  simpa only [LinearMap.compr₂_apply, LinearMap.compl₁₂_apply,
+    LinearMap.mul_apply'] using congrArg (fun f => f M N) hfg
 
 end MPSTensor

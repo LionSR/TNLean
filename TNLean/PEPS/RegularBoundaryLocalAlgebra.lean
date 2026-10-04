@@ -18,6 +18,13 @@ Source: auxiliary algebraic consequence of the regular invariant boundary in
 SCP10, arXiv:1001.3807, Theorem 6.9, lines 2043–2076. This describes the
 local algebras compatible with that support. It makes no decay estimate for
 the logarithm in arXiv:1903.09439, Conjecture `gap2Dboundary1dlocal`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+- [arXiv:1903.09439](https://arxiv.org/abs/1903.09439) -- *Mathematical open problems
+  in Projected Entangled Pair States*
 -/
 
 open scoped BigOperators Matrix

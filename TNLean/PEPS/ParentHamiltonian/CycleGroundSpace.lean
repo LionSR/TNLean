@@ -19,6 +19,12 @@ the local matrix product ground space, after enumerating the arc sites.
 Source: Cirac, Pérez-García, Schuch, and Verstraete, arXiv:2011.12127,
 Section IV.C.1, the one-dimensional definition at lines 1987–2000 and
 the corresponding graph construction at lines 2003–2011.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators Matrix

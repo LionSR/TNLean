@@ -27,6 +27,12 @@ region; locality of a sum of edge interactions is a separate assertion.
 rectangular injective site maps. The reconstruction penalty corrects this
 source error, as documented in
 `docs/paper-gaps/cpgsv21_injective_parent_reconstruction.tex`.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped Matrix ComplexOrder
