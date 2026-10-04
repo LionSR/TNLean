@@ -20,7 +20,9 @@ This finite adaptive model is motivated by Piroli, Styliaris and Cirac
 dimensions are unrestricted and gates on enlarged sites still cost one layer. The source
 instead counts gates on fixed-dimensional physical qudits with separate onsite ancillas;
 no uniform-depth simulation or inclusion in the source model is proved here. Furthermore,
-there is no system-size-independent bound on the number of measurement rounds. See
+no fixed-number decomposition into source `QCcc` blocks is recorded, with their internal
+measurement/control restrictions. Individual instrument steps are not that block count:
+one source block may already contain sequential measurements at many sites. See
 `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
 
 ## Main results
@@ -50,7 +52,8 @@ the full outcome history. Depth counts only nearest-neighbor layers, along the l
 
 Motivated by arXiv:2103.13367, paragraph "State transformations with QC and LOCC". This model
 allows unrestricted intermediate onsite dimensions at unit intersite gate cost. It supplies
-neither a source-depth simulation nor the fixed-round bound of the source phase relation. -/
+neither a source-depth simulation nor a decomposition into a system-size-independent number
+of source `QCcc` blocks. -/
 inductive IsAdaptiveChannelProtocol : {d e : ℕ} → ℕ →
     (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop

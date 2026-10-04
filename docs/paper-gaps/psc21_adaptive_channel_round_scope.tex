@@ -3,7 +3,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Finite Adaptive Local Channels and the Number of Measurement Rounds}
+\title{Finite Adaptive Local Channels and Source Protocol Blocks}
 \author{}
 \date{2026-10-04}
 \begin{document}
@@ -85,15 +85,21 @@ then derives an explicit simulation overhead depending on that constant
 and the physical dimension. No such simulation is established here.
 
 \section{Asymptotic boundary}
-The finite adaptive relation does not bound the number of measurement rounds
-independently of system size. Its depth bound counts quantum layers only,
-so a family may have arbitrarily many free instrument steps as the chain
-length grows. It must therefore not be substituted for the source's
-fixed-number-of-rounds asymptotic phase relation.
-In addition to the physical gate-cost comparison, retain a separate bound on the number of composed
-single-round channels and quantify that bound before the chain length.
-The finite adaptive conversion results address the finite-round task; the
-fixed-round asymptotic relation and MPS classification remain separate.
+The source's asymptotic relation fixes the number of composed
+\textit{QCcc} protocols independently of system size. This is not a bound
+on individual local measurement/correction steps: one source protocol can
+already contain sequential steps at many sites. Each block must also obey
+its internal measurement/control order and one-measurement-per-site rule.
+
+The finite adaptive tree does not record a decomposition into a fixed
+number of such source blocks. Its bound counts quantum layers, while
+instrument steps are free and may be interleaved with later quantum
+operations. A comparison therefore needs an actual source-block
+decomposition, with its block bound quantified before chain length,
+in addition to the physical gate-cost comparison. Merely counting
+instrument nodes would not express the source condition.
+The finite-tree channel results, the source-block asymptotic relation,
+and the MPS classification are separate statements.
 \footnote{Finite adaptive conversions are tracked by \ghissue{8382}; the
 asymptotic relation and classification are tracked under \ghissue{8622}.}
 

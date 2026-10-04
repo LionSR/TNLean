@@ -1781,9 +1781,11 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
   gate on the enlarged spaces still costs one layer. No uniform-depth
   simulation into the source physical-qudit model is established. Also,
-  this is an upper bound on quantum depth, not a bound on instrument steps. It permits arbitrary finite measurement
-  rounds and does not supply the system-size-independent round bound of
-  the source's asymptotic `QCcc` phase relation. See
+  this is an upper bound on quantum depth. The source fixes the number of
+  composed `QCcc` blocks independently of system size; a block can already
+  contain sequential measurements/corrections at many sites. The tree does
+  not record a fixed-number source-block decomposition with the required
+  internal measurement/control order and one-measurement-per-site rule. See
   `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
 
 #### `QuantumCircuit.IsAdaptiveChannelConversion`
