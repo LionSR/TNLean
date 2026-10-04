@@ -15,7 +15,8 @@ depth bound holds on every branch; histories can affect all subsequent instrumen
 Averaging over all outcomes gives a trace-preserving completely positive map on arbitrary
 input operators.
 
-This finite adaptive model is motivated by Piroli, Styliaris and Cirac
+**Scope restriction (enlarged-site finite adaptive model):** this model is motivated by
+Piroli, Styliaris and Cirac
 (arXiv:2103.13367, paragraph "State transformations with QC and LOCC"). Intermediate onsite
 dimensions are unrestricted and gates on enlarged sites still cost one layer. The source
 instead counts gates on fixed-dimensional physical qudits with separate onsite ancillas;
