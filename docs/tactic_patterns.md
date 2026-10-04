@@ -2882,6 +2882,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### boundary-weighted physical twists — candidate
+- **Pattern:** expand the trace of an ordered product of linear combinations, then match
+  each coefficient with the corresponding Kronecker-power matrix entry.
+- **Seen:** the ket and bra twists, with and without a boundary, in
+  `TNLean/MPS/Symmetry/MPDO/Vectorized.lean` (four occurrences in one file, 2026-10-02).
+- **Existing abstraction:** `Matrix.trace_prod_ofFn_sum_smul` and
+  `Matrix.trace_mul_prod_ofFn_sum_smul` perform the trace expansion. The remaining entry
+  arguments are short and distinguish left multiplication from right multiplication.
+- **Decision:** retain these proofs; no further abstraction is warranted before this
+  pattern occurs in another file.
+
 ### Physical insertion congruence and identity insertions — candidate
 - **Pattern:** a finite physical insertion transforms by congruence under a
   bond similarity; insertion of the identity on `n` sites gives the same
@@ -2896,7 +2907,6 @@ abstracted — record why, so it is not re-proposed).
   trace-preserving contraction instead of repeating complementary powers and
   fixed-point projection calculations. No custom tactic is needed.
 
-
 ### centering physical insertions carried by transfer eigenvectors — candidate
 - **Pattern:** trace preservation and a transfer eigenvalue different from one
   imply that the eigenvector is traceless; the fixed-state projection then
@@ -2910,7 +2920,6 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the physical two-point identity and positive-separation reduction
   are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
   arguments use the reduction lemma instead of repeating the projection algebra.
-
 
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
@@ -4679,3 +4688,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   coefficients when possible; a matrix conjugation linear equivalence may
   contain the common cancellation when a scalar action is also present.
 - **Notes:** both occurrences are in one module, below the promotion threshold.
+
+### positivity and unit bounds for the two-block square root — candidate
+- **Pattern:** use `u² + v² = 1` and the nonnegativity of the two square-root
+  coefficients to obtain `u ≤ 1` and `v ≤ 1`, then use `2uv = s`.
+- **Seen:** three occurrences in
+  `MPS/Preparation/OverlappingBlockCounterexample.lean`: the two normalized
+  state-error bounds and the polar matrix lower bound (2026-10-03).
+- **Abstraction:** a small conjunction lemma for these scalar inequalities
+  could replace the repeated derivations if a second file uses the pattern.
+- **Notes:** the occurrences currently lie in one file; the promotion
+  criterion of at least two files is not met.
