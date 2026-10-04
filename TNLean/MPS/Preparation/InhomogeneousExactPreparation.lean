@@ -63,7 +63,7 @@ theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
     let Y : MPVSpace (D * D) 1 := (‖chainState A‖ : ℂ)⁻¹ • chainPosState A hsum
     have hY : ‖Y‖ = 1 := by
       dsimp only [Y]
-      rw [norm_smul, norm_inv, RCLike.norm_coe_norm,
+      rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
         ← norm_chainState_eq A hsum, inv_mul_cancel₀ (norm_ne_zero_iff.mpr hA)]
     let e : Fin D × Fin D ≃ Cfg (D * D) 1 :=
       (Equiv.prodComm _ _).trans (finProdFinEquiv.trans (Equiv.funUnique (Fin 1) _).symm)
