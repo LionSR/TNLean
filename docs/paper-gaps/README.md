@@ -956,3 +956,8 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
   holds, and the rate correction for the decay bound.
+
+- `pgvwc07_half_chain_spectrum_conventions.tex` records the boundary-index
+  convention in the half-chain calculation, normalization by the actual
+  finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
+  transfer-error estimate used for ordered physical eigenvalue convergence.
