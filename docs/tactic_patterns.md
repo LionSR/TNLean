@@ -2297,14 +2297,19 @@ abstracted — record why, so it is not re-proposed).
   criteria now reduce to generator membership facts. Public theorem statements and
   trace-pairing order are unchanged.
 - **Update (2026-09-19):** the representation step is no longer proved from matrix
-  units. `exists_trace_repr` is now the inverse of the linear equivalence with the
+  units. `Matrix.exists_trace_representation` is now the inverse of the linear equivalence with the
   dual space induced by the nondegenerate trace form
   (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
   `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
   three-line consequences of it. The separation step itself still runs by hand,
   because no nondegeneracy statement exists yet for the pi-indexed or product trace
-  form; once one does, `matrix_pi_span_top_of_trace_separating` and
+  form; once one does, `Matrix.family_submodule_eq_top_of_trace_separating` and
   `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
+- **Update (2026-10-02):** the ordinary representation, finite-family
+  representation, and family span criterion are public in
+  `MPS/SharedInfra/MatrixFamilyTracePairing.lean`. The MPDO criteria and
+  the prescribed-length converse for the joint parent boundary map reuse
+  these proofs. No parallel product bilinear form is needed.
 - **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
   vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
   the trace functional: `pair_trace_zero_on_span` in
@@ -2852,6 +2857,22 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
   table. All three consumers use it; no custom tactic is needed.
 
+### finite-volume continuity from the local interaction — promoted
+- **Pattern:** express a translated parent term as the finite average of
+  restriction–interaction–adjoint products, prove each product continuous,
+  and sum the terms over the chain.
+- **Seen:** the injective-family and direct-sum-family continuity theorems in
+  `MPS/ParentHamiltonian/GroundSpaceMapContinuity.lean` and
+  `MPS/ParentHamiltonian/BlockGroundSpaceMapContinuity.lean` (2026-10-02).
+- **Abstraction:** `continuous_parentInteractionES_family_of_groundProjection`,
+  `continuous_localTermES_family_of_groundProjection`,
+  `continuous_openParentHamiltonianES_family_of_groundProjection`, and
+  `continuous_parentHamiltonianES_family_of_groundProjection` take
+  continuity of the local ground-space projection as their analytic input.
+- **Notes:** both tensor-family arguments use the same finite-volume proof;
+  the injectivity and simultaneous-word-span conditions are confined to
+  the construction of the local projector.
+
 ### contracting a two-site bond penalty — promoted
 - **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
   contract the two exterior identity factors, and evaluate the remaining
@@ -2951,6 +2972,46 @@ abstracted — record why, so it is not re-proposed).
   arguments are short and distinguish left multiplication from right multiplication.
 - **Decision:** retain these proofs; no further abstraction is warranted before this
   pattern occurs in another file.
+
+### Physical insertion congruence and identity insertions — candidate
+- **Pattern:** a finite physical insertion transforms by congruence under a
+  bond similarity; insertion of the identity on `n` sites gives the same
+  covariance for the `n`th transfer power.
+- **Seen:** the insertion and connected-contraction proofs in
+  `TNLean/MPS/SharedInfra/PhysicalObservableGauge.lean` (2026-10-02).
+- **Reuse:** `MPSTensor.physicalObservableTransfer_congruence_of_gauge`
+  proves the word-sum calculation once. The transfer-power identity follows
+  from the existing `MPSTensor.physicalObservableTransfer_one`, and the
+  connected contraction uses these equations with trace cyclicity.
+- **Notes:** the arbitrary-gauge decay proof transports the already proved
+  trace-preserving contraction instead of repeating complementary powers and
+  fixed-point projection calculations. No custom tactic is needed.
+
+### centering physical insertions carried by transfer eigenvectors — candidate
+- **Pattern:** trace preservation and a transfer eigenvalue different from one
+  imply that the eigenvector is traceless; the fixed-state projection then
+  vanishes on the inner physical insertion, including the zeroth transfer power.
+- **Seen:** two occurrences across two files (2026-10-02):
+  `DecayingCorrelations.lean` and `DecayingCorrelationBound.lean`, under
+  `TNLean/MPS/Preparation/`.
+- **Abstraction:** the existing
+  `MPSTensor.trace_eq_zero_of_transferMap_eq_smul` supplies tracelessness;
+  a Hermitian-vector realization now records this property in its conclusion.
+- **Notes:** the physical two-point identity and positive-separation reduction
+  are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
+  arguments use the reduction lemma instead of repeating the projection algebra.
+
+### Finite group fibers in local tensor isometries — candidate
+- **Pattern:** parameterize all preimages of a virtual label by one group
+  coordinate, use that coordinate as the inverse in a finite-sum bijection,
+  and evaluate the resulting weighted sum or fiber cardinality.
+- **Seen:** the dual tensor's `siteMap_quantumDoubleDualTensor_apply_spins`
+  argument in `TNLean/PEPS/Examples/QuantumDouble.lean` and the private
+  `primalLabels_fiber_sum` argument in
+  `TNLean/PEPS/Examples/ToricCodePrimal.lean` (2026-10-03).
+- **Notes:** these two occurrences have different label maps. The primal
+  parameterization is already shared by its weighted sum and fiber count;
+  no further abstraction is needed before a third distinct occurrence.
 
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
@@ -3878,10 +3939,9 @@ spectral split → block extraction → MPV calculation → strict bounds
     rw [Finset.mem_filter] at hη
     rw [if_neg hη.2, smul_zero]
   ```
-- **Seen:** 4 occurrences in `TNLean/PEPS/`
-  (`RegionBlock/ThreeBlockResonate.lean:670`,
-  `RegionBlock/UnionInjectivityGeneral.lean:492`,
-  `TorusWindowChain4.lean:242`, +1).
+- **Seen:** 2 verified occurrences in `TNLean/PEPS/`
+  (`RegionBlock/UnionInjectivityGeneral.lean:492`,
+  `TorusWindowChain4.lean:242`).
 - **Abstraction (proposed):** a lemma of the shape
   `∑ η in s.filter p, (if p η then f η else 0) • g η = ...` — scout
   Mathlib's `Finset.sum_filter` / `Finset.sum_ite_of_true` family first.
@@ -3907,10 +3967,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   · rcases Finset.mem_union.mp hrb with hr | hbl
   · exact absurd hr hwnotred
   ```
-- **Seen:** 8 occurrences in `TNLean/PEPS/RegionBlock/`
+- **Seen:** surviving examples in `TNLean/PEPS/RegionBlock/`
   (`CoarseThreeSiteCoherentFrame.lean:381`,
-  `ThreeBlockResonate.lean:97`,
-  `UnionInjectivityGeneral.lean:95`, +5).
+  `UnionInjectivityGeneral.lean:95`, `UnionInjectivityGeneral.lean:121`).
 - **Abstraction (proposed):** a case-elimination lemma on the three-region
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.

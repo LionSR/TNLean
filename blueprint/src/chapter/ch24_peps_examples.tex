@@ -965,64 +965,6 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     vectors, on which $\Pi_\rho$ is the identity.
 \end{proof}
 
-\begin{theorem}[Isometry under contraction of one regular bond]%
-    \label{thm:peps_g_isometric_concatenation}
-    \lean{TNLean.PEPS.linkVector_eq_sum, TNLean.PEPS.toMatrix_linkContraction,
-        TNLean.PEPS.toMatrix_innerContraction_map,
-        TNLean.PEPS.basisAdjoint_linkContraction,
-        TNLean.PEPS.basisAdjoint_linkContraction_comp,
-        TNLean.PEPS.IsGIsometric.linkContraction_basis,
-        TNLean.PEPS.IsGIsometric.linkContraction_fourLeg}
-    \leanok
-    \uses{def:peps_g_injective, thm:peps_g_injective_concatenation, thm:peps_isometric_adjoint}
-    Let $A$ and $B$ be $G$-isometric four-leg PEPS tensors with regular
-    virtual legs. Contract the right leg of $A$ with the left leg of $B$,
-    leaving the other six virtual legs open. The resulting tensor $C$ is
-    $G$-isometric and satisfies
-    $\mathcal P(C)^\dagger\mathcal P(C)=c_Ac_B\Pi$.
-    This is the elementary concatenation step in
-    \cite[Lemma~6.2]{Schuch2010PEPS}; the factors $c_A,c_B$
-    record the tensor normalization convention
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
-    More generally, the same conclusion holds for unitary representations
-    on the remaining virtual spaces and a regular representation on the
-    contracted link.
-
-    \begin{center}
-        % Source: SCP10 Lemma 6.2; coefficient C_(i,j),(a,b)=sum_k A_i,(a,k)B_j,(k,b).
-        % Right virtual leg of A pairs with the left virtual leg of B.
-        % Six virtual legs remain open; physical labels i,j are fixed.
-        % Boundary signature: (V,P)=(6,0).
-        \tenkzkernel
-        \begin{tenkz}[rows={wire},cols=2,bonds=none]
-            \tn[at=(1,1),skin=box,name=A,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{A^i}
-            \tn[at=(1,2),skin=box,name=B,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{B^j}
-            \tnwire{open w}{A.180}
-            \tnwire{A.0}{B.180}
-            \tnwire{B.0}{open e}
-            \tnwire{open n}{A.90}
-            \tnwire{open n}{B.90}
-            \tnwire{A.270}{open s}
-            \tnwire{B.270}{open s}
-        \end{tenkz}
-    \end{center}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_regular_left_inverse}
-    In the product bases,
-    $C_{(i,j),(a,b)}=\sum_k A_{i,(a,k)}B_{j,(k,b)}$.
-    Complex conjugation proves that $\mathcal P(C)^\dagger$ applies
-    $\mathcal P(A)^\dagger\otimes\mathcal P(B)^\dagger$ and pairs the inner
-    legs. By Theorem~\ref{thm:peps_isometric_adjoint} the two left inverses
-    are $c_A^{-1}\mathcal P(A)^\dagger$ and
-    $c_B^{-1}\mathcal P(B)^\dagger$. Lemma~\ref{lem:peps_regular_left_inverse}
-    therefore identifies the contracted left inverse with
-    $(c_Ac_B)^{-1}\mathcal P(C)^\dagger$.
-    Theorem~\ref{thm:peps_g_injective_concatenation} proves both invariance
-    and the left-inverse equation, giving the assertion.
-\end{proof}
-
 \begin{theorem}[Regular representations in relative coordinates]%
     \label{thm:peps_regular_blocking_coordinates}
     \lean{Matrix.permMatrixHom_prodCongr,
@@ -1096,9 +1038,15 @@ dual basis.
         TNLean.PEPS.linkLeftCoord_comp_kroneckerRep,
         TNLean.PEPS.linkRightCoord_comp_kroneckerRep,
         TNLean.PEPS.pairCoord_comp_kroneckerRep,
-        TNLean.PEPS.IsGIsometric.linkContraction}
+        TNLean.PEPS.IsGIsometric.linkContraction,
+        TNLean.PEPS.linkVector_eq_sum, TNLean.PEPS.toMatrix_linkContraction,
+        TNLean.PEPS.toMatrix_innerContraction_map,
+        TNLean.PEPS.basisAdjoint_linkContraction,
+        TNLean.PEPS.basisAdjoint_linkContraction_comp,
+        TNLean.PEPS.IsGIsometric.linkContraction_basis,
+        TNLean.PEPS.IsGIsometric.linkContraction_fourLeg}
     \leanok
-    \uses{def:peps_g_injective, thm:peps_g_injective_concatenation}
+    \uses{def:peps_g_injective}
     Let $\sigma_{A}$ and $\sigma_{B}$ be unitary representations on the remaining
     legs of $A$ and $B$, and let the contracted link carry the left-regular
     representation. If $A$ is $G$-isometric for $\sigma_{A}\otimes L$ with
@@ -1111,9 +1059,33 @@ dual basis.
     $\sigma_{A}$ and $\sigma_{B}$ follows from its hypotheses
     \cite[Lemma~6.2]{Schuch2010PEPS},
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    In particular, contracting the right leg of one four-leg regular PEPS
+    tensor with the left leg of another preserves $G$-isometry with
+    constant $c_Ac_B$, leaving the other six virtual legs open.
+
+    \begin{center}
+        % Source: SCP10 Lemma 6.2; coefficient C_(i,j),(a,b)=sum_k A_i,(a,k)B_j,(k,b).
+        % Right virtual leg of A pairs with the left virtual leg of B.
+        % Six virtual legs remain open; physical labels i,j are fixed.
+        % Boundary signature: (V,P)=(6,0).
+        \tenkzkernel
+        \begin{tenkz}[rows={wire},cols=2,bonds=none]
+            \tn[at=(1,1),skin=box,name=A,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{A^i}
+            \tn[at=(1,2),skin=box,name=B,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{B^j}
+            \tnwire{open w}{A.180}
+            \tnwire{A.0}{B.180}
+            \tnwire{B.0}{open e}
+            \tnwire{open n}{A.90}
+            \tnwire{open n}{B.90}
+            \tnwire{A.270}{open s}
+            \tnwire{B.270}{open s}
+        \end{tenkz}
+    \end{center}
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_g_injective_concatenation, thm:peps_isometric_adjoint,
+        lem:peps_regular_left_inverse}
     For a unitary representation, $G$-isometry with constant $c$ means
     $\mathcal{P}(A)^{\dagger}\mathcal{P}(A)=c\,\Pi$, since $\mathcal{P}(A)$ is
     invariant and $\Pi$ is self-adjoint. The Gram matrix of $C$ is
@@ -1135,6 +1107,13 @@ dual basis.
         =\sum_{g}\mathcal{P}(A)^{\dagger}_{(a,g),k}\mathcal{P}(B)^{\dagger}_{(g,b),l}$,
     so $\mathcal{P}(C)^{\dagger}$ is the contraction of the adjoints. Invariance of $C$ holds because the actions on the contracted
     link cancel, as in Theorem~\ref{thm:peps_g_injective_concatenation}.
+    Equivalently, Theorem~\ref{thm:peps_isometric_adjoint} gives the
+    left inverses $c_A^{-1}\mathcal P(A)^\dagger$ and
+    $c_B^{-1}\mathcal P(B)^\dagger$.
+    Lemma~\ref{lem:peps_regular_left_inverse} identifies their
+    contraction with $(c_Ac_B)^{-1}\mathcal P(C)^\dagger$, and
+    Theorem~\ref{thm:peps_g_injective_concatenation} supplies its
+    left-inverse equation.
 \end{proof}
 
 The source shows next that for a $G$-isometric tensor the virtual level,
@@ -4987,7 +4966,8 @@ operators.
     $\sum_sF_{q,s}A^s_{t,r,b,l}$.
 \end{proof}
 
-\begin{theorem}\label{thm:peps_torus_nonseam_connectivity}
+\begin{theorem}[Constancy of labels away from the torus seams]%
+    \label{thm:peps_torus_nonseam_connectivity}
     \lean{TNLean.PEPS.IsTorusNonseamCompatible.eq_origin,
         TNLean.PEPS.IsTorusNonseamCompatible}
     \leanok
@@ -5004,7 +4984,8 @@ operators.
     a closure seam. The same argument includes a circumference of one.
 \end{proof}
 
-\begin{theorem}\label{thm:peps_torus_projector_expansion}
+\begin{theorem}[Group-average expansion of the torus projector contraction]%
+    \label{thm:peps_torus_projector_expansion}
     \lean{TNLean.PEPS.torusBondNetwork_single,
         TNLean.PEPS.torusBondSiteLabelsEquiv,
         TNLean.PEPS.torusBondNetwork_sum,
@@ -6082,6 +6063,7 @@ around the two non-contractible cycles must be trivial.
     Lemma~\ref{lem:peps_torus_string_pull_through} for $X_g=\pi(g)$.
 \end{proof}
 
+\input{chapter/ch24_peps_toric_code_primal}
 
 \input{chapter/ch24_peps_semiregular_bond_isometry}
 \input{chapter/ch24_peps_pair_centralizer_count}
