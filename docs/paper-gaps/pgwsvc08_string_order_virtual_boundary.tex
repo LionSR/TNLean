@@ -130,12 +130,13 @@ but it changes the complex asymptotic formula.
 The blueprint restores the phase in the proof of
 \path{thm:pgwsvc08_physical_string_order} in
 \path{blueprint/src/chapter/ch12_symmetry_string_order.tex}. The correlator is
-formalized as \leanid{MPSTensor.physicalStringOrderParam}. The source theorem
-and asymptotic argument remain marked \path{notready}; no \Lean{} theorem is
-claimed for
-(\ref{eq:pgwsvc08_string_order_virtual_boundary_corrected_asymptotic}). The
-inline \path{Local fix} comment at the corrected display records this local
-source correction.
+formalized as \leanid{MPSTensor.physicalStringOrderParam}. The full existential source theorem remains marked \path{notready}.
+The fixed-correlator asymptotic formula is now supplied by
+\leanid{MPSTensor.physicalStringOrderParam_phase_adjusted_tendsto}:
+$\mu^{-N}S_N\to\alpha_y\beta_x$. The magnitude limit is proved by
+\leanid{MPSTensor.physicalStringOrderParam_norm_tendsto}.
+The inline \path{Local fix} comment at the corrected display records the
+source phase correction.
 
 \section{Formalized physical and virtual-boundary forms}
 
@@ -334,6 +335,43 @@ This resolves the spectral lemma's one-site-injectivity restriction;
 it does not establish the physical endpoint theorem or the reduced-state
 symmetry theorem.
 
+\section{The physical selection rule for a fixed twist}
+
+For a fixed physical unitary $u$ with virtual unitary intertwiner $V$ and
+peripheral phase $\mu$, define the actual physical endpoint coefficients
+\begin{align}
+    \alpha_y&=\tr[\Lambda V^\dagger\mathcal E_y(\Id)], &
+    \beta_x&=\tr[\Lambda\mathcal E_x(V)].
+\end{align}
+The canonical spectral-purity hypotheses imply the ordinary transfer limit
+$\mathcal E_A^N(X)\to\tr(\Lambda X)\Id$. The proof reuses the existing
+FNW remainder machinery on the conjugate-transposed family and does not
+assume diagonalizability. The exact phase-retaining identity
+$\mathcal E_u^N(X)=\mu^N V\mathcal E_A^N(V^\dagger X)$ then gives
+$|S_N|\to|\alpha_y|\,|\beta_x|$.
+
+\leanid{MPSTensor.hasPhysicalStringOrderWith_iff_endpoint_coefficients}
+proves the positive-limit criterion for these fixed physical data.
+Writing $u_0=\mu^{-1}u$, the actual endpoint choice
+$y=x^\dagger u_0$ satisfies $\alpha_y=\overline{\beta_x}$.
+Matrix-unit realization and this pairing give
+\leanid{MPSTensor.exists_hasPhysicalStringOrderWith_iff_letter_coefficient}:
+for the fixed twist and intertwiner, physical one-site endpoints exist
+exactly when $\tr(V\Lambda A_nA_m^\dagger)\ne0$ for some $n,m$.
+\leanid{MPSTensor.pureCanonical_physicalString_selection_rule} uses the
+explicit source canonical spectral-purity condition, deriving irreducibility
+rather than assuming one-site injectivity.
+
+This fixed-twist result does not redefine the global source predicate.
+The current \leanid{MPSTensor.HasPhysicalStringOrder} excludes the literal
+matrix $u=\Id$. Nontrivial physical action modulo a scalar phase is a
+separate interface question for the full existential equivalence in
+\ghissue{4872}. In particular, removing a peripheral phase does not itself
+prove $u_0\ne\Id$. The present results neither assert that conclusion nor
+interpret a conventional global phase as a new physical symmetry.
+The full existential Theorem~1, finite-support endpoint realization and
+physical reduced-state Theorem~2 remain open.
+
 \section{Verdict}
 
 Virtual-boundary nondecay is mathematically sound. For the injective tensors
@@ -343,8 +381,9 @@ span argument
 (\ref{eq:pgwsvc08_string_order_virtual_boundary_endpoint_span}). The physical
 correlator and the source's positive-limit predicate are now formal
 definitions, but the equivalence between physical and virtual endpoints has no
-formal counterpart. Current general equivalence theorems therefore establish only the
-virtual-boundary formulation; the explicit physical examples above are
+formal counterpart. The fixed-data physical selection rule above is now proved directly.
+The existing existential symmetry/order equivalences still concern the
+virtual-boundary formulation; the explicit physical examples are also
 proved independently.
 
 The general physical equivalence results remain open. The spectral lemma

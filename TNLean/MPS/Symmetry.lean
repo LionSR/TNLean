@@ -91,6 +91,9 @@ import TNLean.MPS.Symmetry.PhysicalSchmidtSupport
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondExtension
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondTransport
 import TNLean.MPS.Symmetry.PhysicalSpectatorCoordinates
+import TNLean.MPS.Symmetry.PhysicalStringAsymptotics
+import TNLean.MPS.Symmetry.PhysicalStringEndpoints
+import TNLean.MPS.Symmetry.PhysicalStringSelectionRule
 import TNLean.MPS.Symmetry.PointwiseInvariantCompression
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap

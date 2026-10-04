@@ -1,0 +1,118 @@
+\subsection{The physical endpoint selection rule at a fixed twist}
+
+Throughout this subsection, $A$ is canonical with faithful normalized
+stationary dual density $\Lambda$, and its ordinary transfer map is
+irreducible and peripheral-primitive.  Fix a physical twist $u$, a unitary
+$V$, and $|\mu|=1$ satisfying
+$\sum_j u_{ij}A_j=\mu V A_iV^\dagger$.
+The final source-facing theorem derives irreducibility from the explicit
+canonical spectral-purity hypothesis of
+Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius}.
+
+\begin{lemma}[Canonical stationary trace limit]
+    \label{lem:canonical_transfer_stationary_trace_limit}
+    \lean{MPSTensor.canonical_transfer_pow_tendsto_stationary_trace}
+    \notready
+    \uses{lem:canonical_fixed_space_irreducible}
+    For every virtual matrix $X$,
+    \begin{align}
+        \E_A^N(X) & \longrightarrow\tr(\Lambda X)\Id.
+        \notag
+    \end{align}
+    Apply the existing FNW complementary-remainder argument to the
+    conjugate-transposed Kraus family.  No diagonalizability or explicit
+    eigenbasis of the transfer map is assumed.
+\end{lemma}
+
+\begin{theorem}[Phase-retaining physical correlator asymptotics]
+    \label{thm:physical_string_phase_retaining_asymptotics}
+    \lean{MPSTensor.twistedTransferIter_eq_phase_mul_transfer_pow,
+        MPSTensor.physicalStringOrderParam_phase_adjusted_tendsto,
+        MPSTensor.physicalStringOrderParam_norm_tendsto}
+    \notready
+    \uses{lem:canonical_transfer_stationary_trace_limit,
+        lem:twisted_transfer_phase_conjugation, def:physical_string_order_param}
+    For fixed physical endpoint matrices $x,y$, set
+    \begin{align}
+        \alpha_y & :=\tr\!\left[\Lambda V^\dagger\E_y(\Id)\right], &
+        \beta_x  & :=\tr\!\left[\Lambda\E_x(V)\right].
+        \notag
+    \end{align}
+    The exact identity
+    $\E_u^N(X)=\mu^N V\E_A^N(V^\dagger X)$ gives
+    \begin{align}
+        \mu^{-N}S_N(x,y,u) & \longrightarrow\alpha_y\beta_x,       &
+        |S_N(x,y,u)|       & \longrightarrow|\alpha_y|\,|\beta_x|.
+        \notag
+    \end{align}
+    Thus $S_N=\mu^N\alpha_y\beta_x+o(1)$.
+    The complex sequence $S_N$ itself need not converge.  These are the
+    actual physical endpoints in the existing transfer-form correlator.
+\end{theorem}
+
+\begin{theorem}[Selection rule for fixed physical endpoints]
+    \label{thm:physical_string_fixed_endpoint_selection}
+    \lean{MPSTensor.hasPhysicalStringOrderWith_iff_endpoint_coefficients}
+    \notready
+    \uses{thm:physical_string_phase_retaining_asymptotics,
+        def:has_physical_string_order_with}
+    For the fixed data above,
+    \begin{align}
+        \lim_{N\to\infty}|S_N(x,y,u)|>0
+         & \quad\Longleftrightarrow\quad
+        \alpha_y\ne0\ \text{and}\ \beta_x\ne0.
+        \notag
+    \end{align}
+    This is a criterion for the fixed physical correlator, not a replacement
+    by arbitrary virtual boundary matrices.
+\end{theorem}
+
+\begin{lemma}[Physical endpoint pairing and phase removal]
+    \label{lem:physical_string_endpoint_pairing}
+    \lean{MPSTensor.phaseShiftedPhysicalUnitary_mul_conjTranspose,
+        MPSTensor.rotatePhysical_phaseShift,
+        MPSTensor.twistedTransferMap_eq_sum_rotatePhysical,
+        MPSTensor.twistedTransferMap_conjTranspose,
+        MPSTensor.twistedTransferMap_mul_intertwiner,
+        MPSTensor.physicalStringEndpoint_pairing}
+    \notready
+    \uses{def:twisted_transfer_map}
+    For unitary $u$, the shifted twist $u_0=\mu^{-1}u$ is unitary and
+    has the unphased virtual intertwiner $V$.  Taking
+    $y=x^\dagger u_0$ gives
+    \begin{align}
+        \alpha_{x^\dagger u_0} & =\overline{\beta_x}.
+        \notag
+    \end{align}
+    The proof uses the actual physical matrix product in the endpoint:
+    $\E_{x^\dagger u_0}(\Id)=V\E_{x^\dagger}(V^\dagger)$.
+    It requires only Hermiticity of $\Lambda$ for the trace conjugation.
+\end{lemma}
+
+\begin{theorem}[Physical-letter criterion at a fixed twist]
+    \label{thm:physical_string_fixed_twist_letter_criterion}
+    \lean{MPSTensor.physicalStringEndpoint_coefficient,
+        MPSTensor.exists_physicalStringEndpoint_left_iff,
+        MPSTensor.exists_physicalStringEndpoints_iff,
+        MPSTensor.exists_hasPhysicalStringOrderWith_iff_letter_coefficient,
+        MPSTensor.pureCanonical_physicalString_selection_rule}
+    \notready
+    \uses{thm:physical_string_fixed_endpoint_selection,
+        lem:physical_string_endpoint_pairing}
+    For the same fixed unitary twist and its peripheral intertwiner,
+    physical one-site endpoints with positive limiting magnitude exist
+    exactly when
+    \begin{align}
+        \tr\!\left(V\Lambda A_nA_m^\dagger\right) & \ne0
+        \quad\text{for some }n,m.
+        \notag
+    \end{align}
+    Matrix units realize the left coefficient; the pairing identity
+    supplies the other endpoint.  The source-facing version assumes the
+    canonical spectral-purity criterion, deriving irreducibility rather
+    than imposing one-site injectivity.
+
+    This does not assert that $u_0\ne\Id$, or classify scalar phases as
+    nontrivial physical actions.  The existential Theorem~1 over twists
+    and the physical reduced-state symmetry Theorem~2 remain separate.
+\end{theorem}
