@@ -47,8 +47,8 @@ private theorem transfer_eigenvalue_of_complement_ne_zero {d D : ℕ}
     Matrix.trace_smul, smul_eq_mul] at ht
   have hvtr : Matrix.trace v = 0 := (mul_eq_zero.mp ht.symm).resolve_left hμ
   have hAev : Kraus.transferMap A v = μ • v := by
-    simpa only [LinearMap.sub_apply, fixedPointProj, hvtr, zero_div, zero_smul, sub_zero]
-      using hEv
+    change Kraus.transferMap A v - (Matrix.trace v / Matrix.trace ρ) • ρ = μ • v at hEv
+    simpa only [hvtr, zero_div, zero_smul, sub_zero] using hEv
   exact hasEigenvalue_of_eigenvector_eq _ μ v hAev hv.2
 
 /-- In trace-preserving gauge, a normal tensor has an all-separation physical
