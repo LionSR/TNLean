@@ -179,8 +179,8 @@ theorem exists_single_leaf (hN : 0 < N) (hR : N ≤ R) (ψ : MPVSpace d N)
     obtain rfl : a = b := Subsingleton.elim a b
     rw [Matrix.mul_apply, Matrix.one_apply_eq]
     simp only [Matrix.conjTranspose_apply, V, Matrix.of_apply]
-    simpa only [PiLp.inner_apply, RCLike.inner_apply', hψ, Complex.ofReal_one, one_pow]
-      using inner_self_eq_norm_sq_to_K (𝕜 := ℂ) ψ
+    simpa only [PiLp.inner_apply, RCLike.inner_apply', hψ, RCLike.ofReal_one,
+      one_pow, starRingEnd_apply] using inner_self_eq_norm_sq_to_K (𝕜 := ℂ) ψ
   have hsum : ∑ _ : Fin 1, N = N := by simp
   let T : ∀ _ : Fin 1, IsometryTree d (1 * 1) R 0 N :=
     fun _ => IsometryTree.leaf V hV hN hR
