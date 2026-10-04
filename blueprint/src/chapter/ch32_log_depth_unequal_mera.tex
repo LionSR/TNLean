@@ -11,7 +11,7 @@ independent of the chain length and the requested accuracy.
     \lean{MPSPreparation.IsometryTree, MPSPreparation.IsometryTree.matrix,
         MPSPreparation.IsometryTree.matrix_fork_apply,
         MPSPreparation.IsometryTree.cast, MPSPreparation.IsometryTree.matrix_cast}
-    \notready
+    \leanok
     Fix a physical dimension $d$, a virtual dimension $\chi$ and a leaf
     bound $R$. A depth-zero tree on $n$ sites, with $1\le n\le R$, is
     an isometry $V\colon\C^\chi\to(\C^d)^{\otimes n}$.
@@ -32,11 +32,12 @@ independent of the chain length and the requested accuracy.
 \begin{theorem}[Isometric contraction of a tree]
     \label{thm:ldp_bounded_tree_isometry}
     \lean{MPSPreparation.IsometryTree.isIsometry_matrix}
-    \notready
+    \leanok
     \uses{def:ldp_bounded_isometry_tree}
     Every tree contraction $T$ satisfies $T^\dagger T=\Id$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Induct on the tree. At a binary vertex,
     $T^\dagger T=W^\dagger(T_1^\dagger T_1\otimes T_2^\dagger T_2)W
         =W^\dagger W=\Id$.
@@ -45,7 +46,7 @@ independent of the chain length and the requested accuracy.
 \begin{theorem}[Polar trees for unequal block lengths]
     \label{thm:ldp_unequal_polar_tree}
     \lean{MPSPreparation.exists_isometryTree_matrix_eq_cfgPolarIso}
-    \notready
+    \leanok
     \uses{def:ldp_bounded_isometry_tree, thm:ldp_bounded_tree_isometry,
         lem:ldp_polar_merge}
     Let $s\ge1$, and assume that $A$ blocked over every $m\ge s$ sites
@@ -54,6 +55,7 @@ independent of the chain length and the requested accuracy.
     leaves contain at most $c$ sites.
 \end{theorem}
 \begin{proof}
+    \leanok
     Split $n$ into $n_1=\lfloor n/2\rfloor$ and $n_2=n-n_1$.
     At a successor depth both satisfy
     $2^h s\le n_i\le2^h c$; no rounding error is added to the upper
@@ -71,7 +73,7 @@ independent of the chain length and the requested accuracy.
         MPSPreparation.UnequalMERA.treeMatrix_apply,
         MPSPreparation.UnequalMERA.state, MPSPreparation.UnequalMERA.state_apply,
         MPSPreparation.UnequalMERA.ofTrees}
-    \notready
+    \leanok
     \uses{def:ldp_bounded_isometry_tree}
     Let $D,M\ge1$, let $\ell_0+\cdots+\ell_{M-1}=N$, and let $T_k$
     be trees of common coarse depth $h$, virtual dimension $D^2$ and
@@ -97,7 +99,7 @@ independent of the chain length and the requested accuracy.
         MPSPreparation.UnequalMERA.norm_state,
         MPSPreparation.UnequalMERA.exists_disentangler_pair,
         MPSPreparation.UnequalMERA.exists_of_trees}
-    \notready
+    \leanok
     \uses{thm:ldp_bounded_tree_isometry, def:ldp_unequal_mera,
         thm:ldp_chain_block_iso_inner, thm:ldp_isometric_extension_overlap,
         lem:ldp_unitary_implementing_isometry}
@@ -106,6 +108,7 @@ independent of the chain length and the requested accuracy.
     a top unitary realizes that pair and hence the forest contraction.
 \end{theorem}
 \begin{proof}
+    \leanok
     Complete the unit column $\ket\omega$ to a unitary taking
     $\ket{0,0}$ to it. Tensor products of the normalized pairs have
     norm one, and the isometric forest preserves their norm.
@@ -115,7 +118,7 @@ independent of the chain length and the requested accuracy.
     \label{thm:ldp_unequal_mera_polar_state}
     \lean{MPSPreparation.UnequalMERA.state_eq_blockIsometryState,
         MPSPreparation.UnequalMERA.exists_of_trees_eq_blockIsometryState}
-    \notready
+    \leanok
     \uses{thm:ldp_unequal_polar_tree, thm:ldp_unequal_mera_norm}
     If $T_k=V_{\ell_k}$ and the top unitary prepares $\ket\omega$,
     the network state equals
@@ -124,6 +127,7 @@ independent of the chain length and the requested accuracy.
     these polar trees give a network representing this block-isometry state.
 \end{theorem}
 \begin{proof}
+    \leanok
     Substitute the tree contractions into
     (\ref{eq:ldp_unequal_mera_state}); the regrouping of physical
     configurations is precisely the prescribed block partition.
@@ -133,7 +137,7 @@ independent of the chain length and the requested accuracy.
     \label{thm:ldp_unequal_mera_caps}
     \lean{MPSPreparation.UnequalMERA.exists_single_leaf,
         MPSPreparation.UnequalMERA.nonempty_bond_one}
-    \notready
+    \leanok
     \uses{def:ldp_unequal_mera, thm:ldp_unequal_mera_norm}
     Every unit state on $1\le N\le R$ sites is represented exactly
     by a single leaf with virtual dimension one and coarse depth zero.
@@ -142,6 +146,7 @@ independent of the chain length and the requested accuracy.
     dimension one.
 \end{theorem}
 \begin{proof}
+    \leanok
     For the first assertion use the unit column $1\mapsto\ket\psi$
     and the scalar top unitary. For the second use the column
     $1\mapsto\ket0$ separately at every site.
@@ -150,7 +155,7 @@ independent of the chain length and the requested accuracy.
 \begin{theorem}[Uniform finite-range networks at every positive length]
     \label{thm:ldp_every_length_mera}
     \lean{MPSPreparation.exists_unequalMERA_every_length}
-    \notready
+    \leanok
     \uses{thm:ldp_unequal_polar_tree, thm:ldp_unequal_mera_polar_state,
         thm:ldp_unequal_mera_caps, thm:ldp_block_approximation_error,
         thm:ldp_short_chain_preparation, lem:ldp_normalized_state_rescaling,
@@ -176,6 +181,7 @@ independent of the chain length and the requested accuracy.
     with no divisibility restriction on $N$.
 \end{theorem}
 \begin{proof}
+    \leanok
     For $\varepsilon>1$, a product state suffices. Hence assume
     $0<\varepsilon\le1$. Pass to a normal left-canonical representative $B$, changing
     normalized states only by a phase. Choose $s\ge1$ from its
@@ -210,13 +216,14 @@ independent of the chain length and the requested accuracy.
 \begin{theorem}[Normal states at every sufficiently large length]
     \label{thm:ldp_eventual_every_length_mera}
     \lean{MPSPreparation.exists_unequalMERA_of_normal}
-    \notready
+    \leanok
     \uses{thm:ldp_every_length_mera, lem:ldp_periodic_state_nonzero}
     For a normal tensor with $D\ge1$, the same fixed dimension and
     layer bounds hold for all $N\ge N_0$, for some fixed $N_0$,
     without a separate nonvanishing hypothesis.
 \end{theorem}
 \begin{proof}
+    \leanok
     Normality implies eventual nonvanishing of the periodic state.
     Apply Theorem~\ref{thm:ldp_every_length_mera} beyond that threshold.
 \end{proof}
