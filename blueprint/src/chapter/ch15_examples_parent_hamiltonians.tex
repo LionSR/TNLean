@@ -900,7 +900,8 @@ eigenspace.
     the consequence of the polynomial normalization used here.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:aklt_open_ground_space, thm:aklt_spin_two_projector}
+    \uses{thm:aklt_open_ground_space, thm:aklt_spin_two_projector,
+        lem:open_parent_hamiltonian_es_positive}
     Sum the local identity $h+\frac23I=2P^{(2)}$ over the $N-1$
     nonwrapping bonds. The sum of projectors is positive and its kernel
     is the four-dimensional open matrix-product space, so the lower
@@ -938,7 +939,8 @@ eigenspace.
     the triplet description follows from the displayed action.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:aklt_open_polynomial_ground_space, thm:aklt_normal}
+    \uses{thm:aklt_open_polynomial_ground_space, thm:aklt_normal,
+        thm:ground_space_map_injective_blk, lem:isNBlkInjective_of_le}
     In the chosen bond basis let
     $J^x=\sigma^x/2$, $J^y=-\sigma^y/2$ and $J^z=-\sigma^z/2$.
     The local identity

@@ -17,6 +17,10 @@ Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex`,
 lines 1171--1174, the fourfold open-boundary ground space with exactly one
 spin-zero state. All chain-length statements use \(N\ge2\), the injectivity
 length of the AKLT tensor.
+
+**Scope restriction (chain length):** The spin-sector classification assumes
+`2 ≤ N`; the four-dimensional edge-space statement does not cover one site.
+See `docs/paper-gaps/rmp_example_parent_hamiltonian_scope.tex`.
 -/
 
 open scoped Matrix BigOperators

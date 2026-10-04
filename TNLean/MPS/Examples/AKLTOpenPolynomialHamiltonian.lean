@@ -15,6 +15,10 @@ shifted by \(-2(N-1)/3\). This provides the physical-Hamiltonian interpretation
 of the four-dimensional edge space in arXiv:2011.12127, lines 1171--1174.
 The Hamiltonian polynomial is printed in arXiv:quant-ph/0608197,
 `Papers/quant-ph_0608197/MPSarchive.tex`, lines 340--349, equation `HAKLT`.
+
+**Scope restriction (chain length):** The ground-energy and four-dimensional
+ground-space theorems assume `2 ≤ N`; the one-site chain is outside these
+classification results. See `docs/paper-gaps/rmp_example_parent_hamiltonian_scope.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
