@@ -28,6 +28,8 @@ open Matrix MPSTensor
 
 namespace MPSPreparation
 
+open QuantumCircuit
+
 variable {d N : ℕ}
 
 /-- Permuting the sites permutes the support of an operator. Source context:

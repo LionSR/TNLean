@@ -15,9 +15,20 @@ If their periodic Hamiltonians have the same zero modes and the smaller
 Hamiltonian has a uniform gap above zero, affine interpolation preserves
 that gap. Endpoint symmetry is also preserved throughout the path.
 
-This is the comparison needed between independent-bond interactions and
-canonical parent interactions after physical embedding in the fixed-point
-construction of arXiv:1010.3732, Sections II.D.2 and II.F.2.
+The ordered affine comparison is a lemma proved here; it is not stated in
+the cited source. It is applied to compare independent-bond interactions
+with canonical parent interactions after physical embedding, in the
+fixed-point construction of arXiv:1010.3732, Section II.F.2. That section
+interpolates by parent Hamiltonians of interpolated bond states and assumes
+no operator order between interactions; the conjugated path
+`Λ_γ h₀ Λ_γ` of Section II.D.2 is a different construction.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Section II.F.2 (application
+  context)
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
@@ -26,9 +37,9 @@ namespace MPSTensor
 
 /-- Ordered positive interactions with common periodic zero modes are
 connected by affine interpolation with the original uniform spectral gap.
-The zero modes and gap are hypotheses of this comparison theorem. Source:
-arXiv:1010.3732, Sections II.D.2 and II.F.2, comparison of parent interactions
-in the isometric fixed-point construction. -/
+The zero modes and gap are hypotheses of this comparison. The comparison is
+proved here and is not stated in the source; it is applied in the isometric
+fixed-point construction of arXiv:1010.3732, Section II.F.2. -/
 noncomputable def orderedGappedInteractionPath
     {G : Type} [Group G] {d : ℕ}
     (U : G →* Matrix.unitaryGroup (Fin d) ℂ)

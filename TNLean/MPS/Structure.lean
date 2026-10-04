@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Structure.BlockPermutation
 import TNLean.MPS.Structure.ContinuousFramedLeftIdealAction
+import TNLean.MPS.Structure.ContinuousMinimalCanonicalRealization
 import TNLean.MPS.Structure.ContinuousMinimalRealization
 import TNLean.MPS.Structure.ContinuousTraceQuotientLetters
 import TNLean.MPS.Structure.ContinuousTraceQuotientMultiplication

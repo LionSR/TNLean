@@ -1,0 +1,1005 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}[proposition]{Theorem}
+\newcommand{\id}{\mathbf 1}
+\title{Operator Schmidt spaces and circuits for matrix product unitaries}
+\author{TNLean contributors}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+A possible route to a circuit decomposition of a matrix product unitary is
+to express its operator Schmidt factors as unitary operators and then
+apply the same construction recursively. This note gives an obstruction
+to that requirement. A spin-one reflection gives an obstruction at Schmidt
+rank four, and a controlled Pauli construction gives one at Schmidt rank three.
+These obstructions concern the proposed decomposition; they do not give
+circuit lower bounds. The controlled Pauli example belongs to an explicit
+family with linear exact circuits. More generally, classical controls
+and a logarithmic quantum target admit polynomial approximate circuits.
+The final sections compare positive square-root completions with signed
+and square-root-free completions. A final construction establishes a
+general quasipolynomial approximation bound, with an error estimate
+including the auxiliary output. A stronger exact polynomial theorem,
+with exactly erased auxiliaries, is proved in the companion note
+\emph{Exact polynomial circuits for matrix product unitaries}, Section~5
+(\nolinkurl{docs/audits/2026-10-02_mpu_rank_two_circuits.tex}).
+The approximation proof here is independent of that determinant argument.
+All circuit statements use arbitrary one- and two-qubit gates.
+No claim of priority is intended.
+
+\section{The spin-one reflection}
+
+Let $J_1,J_2,J_3$ be the Cartesian spin-one matrices
+\[
+ J_1=\begin{pmatrix}0&0&0\\0&0&-i\\0&i&0\end{pmatrix},\quad
+ J_2=\begin{pmatrix}0&0&i\\0&0&0\\-i&0&0\end{pmatrix},\quad
+ J_3=\begin{pmatrix}0&-i&0\\i&0&0\\0&0&0\end{pmatrix}.
+\]
+They satisfy $[J_a,J_b]=i\sum_c\varepsilon_{abc}J_c$ and
+$\sum_aJ_a^2=2\id$. Write $\sigma_a$ for the Pauli matrices and put
+\[
+ H=\sum_{a=1}^3J_a\otimes\sigma_a,
+ \qquad U=\frac{\id+2H}{3}.
+\]
+
+\begin{proposition}\label{prop:reflection}
+The operator $U$ is a Hermitian unitary of operator Schmidt rank four.
+Its left operator Schmidt space is
+\[
+ W=\operatorname{span}_{\mathbb C}\{\id,J_1,J_2,J_3\}.
+\]
+The only unitary matrices in $W$ are $a\id$ with $|a|=1$.
+\end{proposition}
+\begin{proof}
+The Pauli multiplication rule and the spin commutation relations give
+\[
+ H^2=2\id-H.
+\]
+For completeness, the off-diagonal part of the Pauli product contributes
+\[
+ i\sum_{a,b,c}\varepsilon_{abc}J_aJ_b\otimes\sigma_c
+ =\frac{i}{2}\sum_{a,b,c}\varepsilon_{abc}[J_a,J_b]\otimes\sigma_c
+ =-H.
+\]
+Thus $H=H^\dagger$ and
+$U^2=(\id+4H+4(2\id-H))/9=\id$.
+
+The four left factors $\id,J_1,J_2,J_3$ are linearly independent:
+the trace detects the coefficient of $\id$, and the three
+independent off-diagonal entries detect the remaining coefficients.
+The four right factors $\id,\sigma_1,\sigma_2,\sigma_3$ are also
+linearly independent. Their tensor coefficient matrix is diagonal with
+four nonzero diagonal entries. This proves the asserted Schmidt rank
+and identifies $W$.
+
+Every $X\in W$ has the form $X=a\id+K$, where $K^T=-K$.
+An odd-dimensional skew-symmetric matrix has zero determinant:
+\[
+ \det K=\det K^T=\det(-K)=-\det K.
+\]
+Choose a nonzero $v\in\ker K$. If $X$ is unitary, then
+$Xv=av$ implies $|a|=1$. Since $\operatorname{tr}K=0$,
+\[
+ 3=\operatorname{tr}(X^\dagger X)
+   =3|a|^2+\operatorname{tr}(K^\dagger K).
+\]
+It follows that $K=0$. Conversely, every $a\id$ with $|a|=1$ is unitary.
+\end{proof}
+
+\begin{proposition}\label{prop:no-basis}
+There is no operator Schmidt decomposition of $U$ with four unitary
+left factors. More generally, $W$ is not spanned by its unitary elements.
+The same conclusion holds after multiplying $W$ on either side by
+fixed unitary matrices.
+\end{proposition}
+\begin{proof}
+The span of the unitary elements of $W$ is exactly
+$\mathbb C\id$, whereas $\dim W=4$. In any decomposition
+$U=\sum_{a=1}^4A_a\otimes B_a$ with independent right factors,
+the left factors span $W$. Multiplication on either side by a unitary
+preserves membership in the unitary group and is an invertible linear
+map on the matrix space.
+\end{proof}
+
+Consequently, a general recursive circuit theorem needs a mechanism
+which handles nonunitary factors, or an enlargement of the local
+operator spaces. The present example does not exclude a larger linear
+combination of unitary product operators: a sufficiently large matrix
+algebra is spanned by unitaries. It excludes the more restrictive
+proposal that the original Schmidt space always has a unitary basis.
+An enlargement must also control the circuit complexity of its new
+factors; the mere existence of a unitary dilation of a contraction
+does not provide that control.
+
+\begin{proposition}\label{prop:qubit}
+There is a three-qubit unitary of Schmidt rank four across the
+two-qubit/one-qubit cut whose left Schmidt space contains no unitary
+matrix.
+\end{proposition}
+\begin{proof}
+Enlarge the left space from $\mathbb C^3$ to $\mathbb C^4$ and put
+$\widehat U=U\oplus\id_2$, where the direct sum refers to the left
+space. In tensor notation,
+\[
+ \widehat U=D\otimes\id_2+
+    \frac23\sum_{a=1}^3(J_a\oplus0)\otimes\sigma_a,
+ \qquad D=\operatorname{diag}(1/3,1/3,1/3,1).
+\]
+Its four left and four right factors remain independent. Hence its
+left Schmidt space is
+\[
+ \widehat W=\{aD+(K\oplus0):a\in\mathbb C,\ K^T=-K\}.
+\]
+If such a matrix were unitary, its last coordinate would give $|a|=1$.
+The active three-dimensional block is $a\id_3/3+K$.
+As above, $K$ has a nonzero kernel vector, and norm preservation on
+that vector gives $|a|/3=1$, a contradiction.
+\end{proof}
+
+This enlargement strengthens the obstruction: even a single unitary
+Schmidt factor is absent from the left Schmidt space. It also places
+the example entirely within qubit systems.
+
+\section{A controlled Pauli unitary of Schmidt rank three}
+
+Let $q_0=e_1$, $q_1=e_2$, $q_2=e_3$, and
+$q_3=(3/5)e_1+(4/5)e_2$. The real orthogonal matrix
+\[
+ O=\id_3-\frac23\mathbf 1\mathbf 1^T,
+ \qquad \mathbf 1=(1,1,1)^T,
+\]
+is a Householder reflection. Put $n_j=q_j$ for $0\leq j<4$ and
+$n_{j+4}=Oq_j$. Each $n_j\cdot\sigma$ is a Hermitian unitary. Hence
+\[
+ V=\sum_{j=0}^7(n_j\cdot\sigma)\otimes|j\rangle\langle j|
+\]
+is a four-qubit unitary, ordered as one target followed by three controls.
+All consecutive cut ranks are at most three. At the first cut, the
+three Pauli coefficients are independent, as detected by $q_0,q_1,q_2$.
+At the second cut, grouping the first control bit gives coefficient
+vectors $(q_j,Oq_j)$, which lie in a three-dimensional subspace.
+At the last cut, the right operators lie in the two-dimensional
+space of diagonal one-qubit matrices.
+Equivalently, an explicit open-boundary MPO has bond dimensions
+$3,3,2$. Its target letter is the row of the three Pauli entries;
+its first control letter is $\delta_{\mathrm{out},\mathrm{in}}O^a$;
+its second is
+$\delta_{\mathrm{out},\mathrm{in}}[q_{2b},q_{2b+1}]$;
+and its last is $\delta_{\mathrm{out},\mathrm{in}}e_c$, where
+$a,b,c\in\{0,1\}$. Their product has target matrix coefficient
+$O^a q_{2b+c}\cdot\sigma$.
+
+Its right Schmidt space at the first cut consists of
+$\operatorname{diag}(v\cdot n_j)_{j=0}^7$ with $v\in\mathbb C^3$.
+If such a matrix were unitary, the first three entries would give
+$|v_1|=|v_2|=|v_3|=1$. Write
+$s_{ab}=\operatorname{Re}(v_a\overline{v_b})$.
+The entry corresponding to $q_3$ gives $s_{12}=0$.
+Those corresponding to $Oe_1$ and $Oe_2$ then give
+\[
+ s_{13}=2s_{23},\qquad 2s_{13}=s_{23}.
+\]
+Thus all three $s_{ab}$ vanish. These would be three nonzero pairwise
+orthogonal vectors in the two-dimensional real plane $\mathbb C$,
+which is impossible. The right Schmidt space therefore contains
+no unitary matrix. The construction has rational coefficients;
+its eight vectors, multiplied by $15$, are
+\[
+\begin{gathered}
+ (15,0,0),\ (0,15,0),\ (0,0,15),\ (9,12,0),\\
+ (5,-10,-10),\ (-10,5,-10),\ (-10,-10,5),\ (-5,-2,-14).
+\end{gathered}
+\]
+
+This example is itself a controlled unitary. It shows that the
+requirements of a controlled decomposition and of a unitary basis
+in each original Schmidt space are different: the eight orthogonal
+control projectors need not lie in the three-dimensional Schmidt space.
+
+\begin{proposition}\label{prop:orthogonal-walk}
+Let $n_0\in\mathbb R^3$ be a unit vector and
+$O_1,\ldots,O_n\in O(3)$. Put
+\[
+ n(x)=O_1^{x_1}\cdots O_n^{x_n}n_0,
+ \qquad
+ U=\sum_{x\in\{0,1\}^n}
+   (n(x)\cdot\sigma)\otimes|x\rangle\langle x|.
+\]
+This unitary has an open-boundary MPO of maximal bond dimension at
+most three. It has an exact circuit with $2n$ two-qubit gates,
+at most $n+1$ one-qubit gates, and no auxiliary qubits.
+With the target at one end of a line, it also has an exact circuit
+of size and depth $O(n)$ using adjacent two-qubit gates.
+\end{proposition}
+\begin{proof}
+The MPO is the row of Pauli entries at the target, followed by
+control letters $\delta_{\mathrm{out},\mathrm{in}}O_i^{x_i}$,
+and the right boundary vector $n_0$.
+For each $i$, put $s_i=\det O_i\in\{1,-1\}$ and $R_i=s_iO_i$.
+Then $R_i\in SO(3)$ and $O_i=s_iR_i$.
+Choose a one-qubit unitary $V_i$ satisfying
+\[
+ V_i(v\cdot\sigma)V_i^\dagger=(R_iv)\cdot\sigma
+ \qquad(v\in\mathbb R^3).
+\]
+For completeness, if $R_i$ is rotation through angle $\theta$ about
+the unit axis $u$, such a lift is
+\[
+ V_i=\cos(\theta/2)\id-i\sin(\theta/2)(u\cdot\sigma).
+\]
+The Pauli rule
+$(u\cdot\sigma)(v\cdot\sigma)=(u\cdot v)\id+
+i(u\times v)\cdot\sigma$ verifies both unitarity and the displayed
+conjugation relation, by Rodrigues' rotation formula.
+
+Writing $W(x)=V_1^{x_1}\cdots V_n^{x_n}$ gives
+\[
+ n(x)\cdot\sigma
+   =\left(\prod_i s_i^{x_i}\right)
+       W(x)(n_0\cdot\sigma)W(x)^\dagger.
+\]
+Apply the $n$ controlled gates forming $W(x)^\dagger$, then the
+single target gate $n_0\cdot\sigma$, then the $n$ controlled gates
+forming $W(x)$. Every $s_i=-1$ contributes an additional $Z$ gate
+on its control qubit. These phases are retained, since they vary
+with the control word. All gates preserve the control values, and
+the construction uses no auxiliary register.
+
+For the line construction, initially place the target to the left of
+controls $1,\ldots,n$. Visit the controls in this order, applying
+controlled $V_i^\dagger$ and then swapping the target with control $i$.
+At the far end apply $n_0\cdot\sigma$. Return in the reverse order,
+applying controlled $V_i$ and undoing each swap. The forward sequence
+acts on the target as
+$(V_n^\dagger)^{x_n}\cdots(V_1^\dagger)^{x_1}=W(x)^\dagger$,
+and the return sequence acts as $W(x)$. Every logical qubit returns
+to its original position. Apply the determinant phases when their
+controls are visited. There are $2n$ additional adjacent swaps,
+so both gate count and depth remain linear.
+\end{proof}
+
+The preceding rank-three obstruction is in this class. Its first
+orthogonal matrix is the Householder matrix $O$ above, its second
+has columns
+\[
+ O_2=[e_3,\ (3/5,4/5,0)^T,\ (-4/5,3/5,0)^T],
+\]
+and $O_3$ is the rotation sending $e_1$ to $e_2$, $e_2$ to $-e_1$,
+and fixing $e_3$. Then
+$q_{2b+c}=O_2^bO_3^ce_1$ and
+$n_{4a+2b+c}=O^aO_2^bO_3^ce_1$.
+It therefore has a linear exact circuit despite the absence of any
+unitary in its control-side Schmidt space. The determinant phase of
+$O$ gives a $Z$ gate on the first control.
+Proposition~\ref{prop:orthogonal-walk} is a mathematical circuit
+construction, not a claimed Lean formalization.
+
+\section{A sufficient premise for recursion}
+
+A sufficient premise for the proposed recursion would be the following:
+at every balanced cut, both Schmidt spaces have bases of unitary matrices
+whose coordinate functionals have operator-norm dual norm at most
+$\kappa$, with dimension at most $D$; the same property must hold for
+every unitary factor which occurs subsequently. The bound on the
+coordinate functionals is essential, since a nearly dependent unitary
+basis could otherwise introduce arbitrarily large coefficients.
+If $A_i,B_j$ are such bases, their coordinate functionals give
+\[
+ U=\sum_{i,j}c_{ij}A_i\otimes B_j,
+ \qquad |c_{ij}|\leq\kappa^2,
+ \qquad \sum_{i,j}|c_{ij}|\leq D^2\kappa^2.
+\]
+Indeed, each coordinate functional extends to the full matrix algebra
+with the same norm and is represented there by a trace-class matrix.
+Their tensor product consequently has norm at most $\kappa^2$.
+An exact linear-combination construction and amplitude amplification
+then use a bounded number of the child circuits, depending only on
+$D,\kappa$. Each factor remains in its original Schmidt space and
+therefore retains the original internal matrix product ranks.
+A balanced recursion with this premise throughout has polynomial
+circuit size. This is a conditional criterion: Proposition~\ref{prop:qubit}
+shows that its unitary-basis premise fails for general MPUs.
+
+\section{Approximation for a small target register}
+
+The controlled examples suggest a positive statement which does not
+require unitary bases in their Schmidt spaces.
+
+\begin{proposition}\label{prop:controlled-approx}
+Let $n,t$ be positive integers. Suppose an $(n+t)$-qubit unitary
+\[
+ U=\sum_{y\in\{0,1\}^n}|y\rangle\langle y|\otimes V(y)
+\]
+has an open-boundary matrix product representation of maximal bond
+dimension $D$, where $V(y)$ acts on $t$ target qubits.
+For $0<\varepsilon<1$, there is a circuit using arbitrary one- and
+two-qubit gates, with gate and auxiliary-qubit counts polynomial in
+$n+t,D,2^t,\log(1/\varepsilon)$, which implements
+\[
+ \widetilde U=\sum_y|y\rangle\langle y|\otimes\widetilde V(y),
+ \qquad \|\widetilde U-U\|\leq\varepsilon.
+\]
+Every $\widetilde V(y)$ is unitary, and all auxiliary qubits return
+exactly to $|0\rangle$.
+This is a nonuniform circuit-existence statement.
+\end{proposition}
+\begin{proof}
+Put $N=n+t$ and $q=2^t$. The normalized Choi vector of $U$ has a
+right-canonical matrix product representation of bond dimension at
+most $D$, obtained by successive singular-value decompositions.
+Each letter matrix has operator norm at most one. For fixed
+$y$ and fixed target indices $a,b$, its contraction gives
+$2^{-N/2}V(y)_{ab}$. Repeated matrix--vector multiplication evaluates
+this contraction using $O(ND^2)$ scalar arithmetic operations.
+
+Quantize the canonical tensors and the intermediate arithmetic with
+$B$ fractional binary digits. The exact partial contractions have
+Euclidean norm at most one. Entrywise tensor errors and arithmetic
+rounding therefore give a contraction error at most
+$CND^2 2^{-B}$, provided $ND2^{-B}$ is small; the slightly enlarged
+matrix norms contribute a factor bounded by a constant.
+Allowing $O(\log D)$ additional integer digits also bounds all partial
+arithmetic sums. After rescaling by $2^{N/2}$, a choice
+\[
+ B\geq \left\lceil\frac N2\right\rceil+
+       \left\lceil\log_2\frac{CND^2q}{\delta}\right\rceil
+\]
+gives a computed $q\times q$ matrix $W(y)$ with
+$\|W(y)-V(y)\|\leq\delta$, uniformly in $y$.
+The bounded canonical tensor entries, to this finite precision, are
+constants of the circuit. No lower bound on a nonzero Choi Schmidt
+value is used.
+
+We describe finite-precision synthesis on the $q$-dimensional target
+space, retaining its dependence on $q$. All constants denoted by $C$
+below are numerical constants which can be enlarged finitely many
+times. Assume $\delta<1/2$, so $\sigma_{\min}(W)\geq1/2$.
+Apply QR elimination, numerically choosing a largest remaining
+column entry as a row pivot. Compare the numerical computation with
+exact QR using precisely the same row permutations. The residual
+column of the exact computation has norm at least $1/2$: its
+distance from the preceding column span is bounded below by the
+smallest singular value. Thus some entry has magnitude at least
+$1/(2\sqrt q)$. If the numerical matrix error is at most
+$1/(8\sqrt q)$, the numerically chosen largest entry has exact
+magnitude at least $1/(4\sqrt q)$. Subsequent elimination steps
+only increase the running pivot magnitude. This comparison does
+not require different pivot choices to depend continuously on $W$.
+
+To eliminate an entry $b$ below a pivot $a$, use the two-level unitary
+\[
+ G(a,b)=\frac1r
+   \begin{pmatrix}\overline a&\overline b\\-b&a\end{pmatrix},
+ \qquad r=\sqrt{|a|^2+|b|^2}.
+\]
+It maps $(a,b)^T$ to $(r,0)^T$. The pivot lower bound controls the
+division and makes this matrix an $O(\sqrt q)$-Lipschitz function
+of its input entries. A bound $Cq$ suffices for a full matrix update.
+There are at most $q^2$ elimination steps. If each arithmetic update
+and each synthesized rotation has error at most $u$, the numerical
+matrix errors obey a bound
+\[
+ E_{k+1}\leq Cq E_k+Cq u,
+ \qquad E_k\leq (Cq)^{q^2+1}u.
+\]
+Choosing $u$ sufficiently small ensures the pivot lower bound
+throughout, by induction. The last pivot is made positive by a
+one-basis-state diagonal phase; its magnitude is at least $1/2$.
+
+Here is an explicit finite-precision implementation of the rotations.
+Write $\alpha=\arg a$, $\beta=\arg b$, and
+$\theta=\arctan(|b|/|a|)$. With the usual qubit rotation convention,
+\[
+ G(a,b)=R_z(\alpha+\beta)R_y(-2\theta)R_z(\alpha-\beta).
+\]
+If $|b|$ is below a precision threshold $\tau$, replace it by zero;
+this changes $G$ by $O(\sqrt q\,\tau)$ and retains
+$G(a,0)=\operatorname{diag}(e^{-i\alpha},e^{i\alpha})$.
+Set $\beta=0$ in this branch. Perform the elimination gate even
+when $b=0$, so each nonfinal pivot is made positive rather than
+leaving a diagonal phase unrecorded.
+Otherwise $|b|\geq\tau$, so its phase can be computed with angular
+error $\rho$ using
+$O(\log(q+1)+\log(1/\tau)+\log(1/\rho))$ digits.
+For argument extraction, divide the smaller real component by the
+larger and record the quadrant. The denominator is then at least
+$|b|/\sqrt2$. Square roots and divisions use fixed-point integer
+arithmetic: binary bisection gives a square root to $B$ digits in
+$O(B)$ comparisons and multiplications, and long division gives the
+quotients. For arctangents on $[-1,1]$, the identity
+\[
+ \arctan x=2\arctan\frac{x}{1+\sqrt{1+x^2}}
+\]
+reduces the Taylor-series argument to modulus at most
+$\sqrt2-1$, so $O(\log(1/\rho))$ terms suffice. Reciprocal range
+reduction handles a larger initial argument. All these operations
+take polynomially many Boolean gates in the number of digits.
+The same computed $\alpha,\beta$ are reused in their sum and
+difference. Accuracy modulo $2\pi$ suffices: a branch change gives
+two cancelling signs in the two $R_z$ factors. Error estimates follow
+from the displayed matrix entries, including at an argument branch cut.
+
+Exact QR elimination gives $W=QR$ with positive diagonal in the
+upper triangular matrix $R$. Put
+$\gamma=\|R^\dagger R-\id\|\leq3\delta$.
+The diagonal entries of $R$ are at least $1/2$: the diagonal entries
+of $R^{-1}$ have modulus at most $\|R^{-1}\|\leq2$.
+Also $|R_{ij}|\leq2$. Let $h_k$ bound $|R_{kk}-1|$ and all
+$|R_{kj}|$ with $j>k$. The Gram identities give
+\[
+ |R_{kj}|\leq2\gamma+4q\max_{i<k}h_i,
+ \qquad
+ |R_{kk}-1|\leq\gamma+2q\max_{i<k}h_i.
+\]
+For the second inequality use
+$|R_{ik}|^2\leq2|R_{ik}|$ and the positive diagonal.
+Consequently
+\[
+ h_k\leq(Cq)^k\gamma,
+ \qquad \|R-\id\|\leq q(Cq)^q\gamma,
+ \qquad
+ \|Q-V(y)\|\leq \delta+3q(Cq)^q\delta.
+\]
+Choose $\delta\leq\varepsilon/[Cq(Cq)^q]$.
+Choose $u\leq\varepsilon/(Cq)^{q^2+C}$ and take
+$\tau,\rho\leq u/(Cq)$. Enlarging $C$ also covers the comparison
+of the finite-precision rotations with the exact same-pivot QR
+factors and their product. If the elimination factors form $L$,
+then $Q=L^\dagger$; take the adjoints of the synthesized factors
+in reverse order. Each finite-angle factor is exactly unitary,
+so this product $\widetilde V(y)$ satisfies
+$\|\widetilde V(y)-V(y)\|\leq\varepsilon$.
+These estimates are deliberately crude. Their small error tolerances
+require only
+\[
+ B_{\mathrm{tot}}=
+ O\!\left(N+\log(ND+1)+q^2\log(q+1)+\log(1/\varepsilon)\right)
+\]
+binary digits, after increasing the constant to account for phase
+extraction and division by quantities as small as $\tau$.
+Exponential error constants thus give polynomial precision costs.
+
+For completeness, two-level gates can be compiled with costs
+polynomial in $t$ and the number of angle bits. A path between two
+target basis words which changes one bit at a time has length at
+most $t$. Specified-basis transpositions along this path conjugate
+the selected pair to two words differing in one bit; undo the
+transpositions after the central gate. There are at most
+$2(t-1)$ such transpositions, each a pattern-controlled $X$ gate.
+Compute a conjunction of its controls with a chain of Toffoli
+gates on clean auxiliary bits, use the conjunction as a single
+control, and reverse the chain. This costs $O(t)$ two-qubit gates
+and $O(t)$ reusable clean bits. The same construction implements
+each binary-angle gate, with one extra angle-bit control. A
+conservative bound is $O(t^2B_{\mathrm{tot}})$ gates per two-level
+factor. A computed row-pivot label can be implemented by testing
+each of its $q$ possible values and applying the corresponding
+transposition; this adds at most a polynomial factor in $q$.
+
+To see directly that Toffoli needs only a constant number of
+two-qubit gates, choose a unitary $A$ with $A^2=X$. Apply controlled
+$A$ from the second control, a CNOT from the first to the second,
+controlled $A^\dagger$ from the second, the same CNOT, and controlled
+$A$ from the first. On control bits $a,b$, the target exponent is
+$b-(a\mathbin{\oplus}b)+a=2ab$. Thus this five-gate sequence is
+exactly Toffoli, by linearity. One may take
+$A=P_++iP_-$ for the spectral projections of $X$.
+
+The last diagonal phase in QR is implemented as a phase on its
+target basis state, using the same conjunction construction.
+The phase of a two-level $U(2)$ gate can likewise be applied to
+the conjunction bit. All these phases are retained;
+in particular, a $y$-dependent overall phase of $V(y)$ is preserved.
+There are $O(q^2)$ factors. Evaluating all $q^2$ target matrix
+entries uses $O(q^2ND^2)$ scalar operations, and QR uses
+$O(q^3)$ scalar updates. Binary arithmetic, the rotation
+construction, and reversible storage therefore all have polynomial
+cost in $N,D,q,\log(1/\varepsilon)$.
+
+All tensor evaluations, pivot choices, and angle calculations depend
+only on $y$. Implement their Boolean circuits reversibly, retain their
+intermediate bits, apply the controlled target gates, and reverse the
+arithmetic circuit. The target gates leave $y$ and the arithmetic
+bits unchanged. Thus every auxiliary bit is erased exactly, even on
+a superposition of controls. Finally,
+\[
+ \|\widetilde U-U\|
+   =\max_y\|\widetilde V(y)-V(y)\|\leq\varepsilon.
+\]
+There is no factor proportional to the number of control words.
+\end{proof}
+
+In particular, for any fixed $c>0$, the same conclusion has
+polynomial cost in $N,D,\log(1/\varepsilon)$ whenever
+$t\leq c\log_2 N$. The degree of this polynomial may depend on $c$.
+
+Proposition~\ref{prop:controlled-approx} is a mathematical circuit
+construction; it is not asserted to have been formalized in Lean.
+It does not supply a polynomial-time numerical conversion of an
+arbitrary supplied tensor presentation to its canonical form.
+
+\section{Positive defects and signed completions}
+
+A positive square root need not preserve the matrix-product structure
+of an operator Schmidt factor. The following example occurs within
+bond-two MPUs and also supplies a completion for which the bond remains
+two.
+
+Fix $m\geq1$, put $q=2^m$ and $h=\pi/(2q)$, and consider two consecutive
+blocks of $m$ control qubits followed by one target qubit. Write their
+computational basis labels as
+\[
+ i=\sum_{k=0}^{m-1}2^k y_k,\qquad
+ j=\sum_{k=0}^{m-1}2^k z_k,\qquad 0\leq i,j<q.
+\]
+Define a diagonal self-adjoint operator on the controls by
+$\Theta|i,j\rangle=h(i-j)|i,j\rangle$, and put
+\[
+ E=\cos\Theta,\qquad F=\sin\Theta,\qquad
+ U=e^{i\Theta\otimes X}=E\otimes\id+iF\otimes X,
+\]
+where $X$ is Pauli $X$. This unitary is implemented exactly by $2m$
+two-qubit gates: conditional rotations $e^{ih2^kX}$ for $y_k=1$ and
+$e^{-ih2^kX}$ for $z_k=1$. If $P_\pm$ are the spectral projections of
+$X$, then
+\[
+ U=e^{i\Theta}\otimes P_+ + e^{-i\Theta}\otimes P_-.
+\]
+The two exponentials are products of one-qubit diagonal unitaries.
+Hence $U$ has an open-boundary MPO representation of bond dimension
+two in the stated site order. The angles may depend on the site and
+on $m$; this is a fixed-bond example in the nonuniform class.
+
+The factors $\id,X$ are Hilbert--Schmidt orthogonal, as are $E,F$:
+the identity $\operatorname{Tr}(EF)=0$ follows by exchanging $i$ and
+$j$. Both $E$ and $F$ are nonzero. Thus the displayed expansion is an
+operator Schmidt decomposition across the controls/target cut after
+positive norm rescaling. Moreover,
+\[
+ E^\dagger E+F^\dagger F
+ =EE^\dagger+FF^\dagger=\id.
+\]
+In particular, $E$ is an actual contraction factor of this MPU.
+
+Its positive defect is
+\[
+ D_+=\sqrt{\id-E^\dagger E}=|\sin\Theta|.
+\]
+Across the cut between the two control blocks, its operator Schmidt
+rank is the rank of
+\[
+ K_{ij}=\sin\bigl(h|i-j|\bigr),\qquad 0\leq i,j<q.
+\]
+This matrix is invertible. Indeed, if $Kv=0$, then for every interior
+index $1\leq a\leq q-2$ the sine recurrence gives
+\[
+ (Kv)_{a+1}-2\cos(h)(Kv)_a+(Kv)_{a-1}
+       =2\sin(h)v_a.
+\]
+Thus all interior components vanish. The first and last rows then give
+$\sin((q-1)h)v_{q-1}=\sin((q-1)h)v_0=0$, so $v=0$.
+For $q=2$ these endpoint equations already suffice. Consequently
+$D_+$ has operator Schmidt rank $q=2^m$ at this cut. By contrast,
+\[
+ E_{ij}=\cos(hi)\cos(hj)+\sin(hi)\sin(hj),\qquad
+ F_{ij}=\sin(hi)\cos(hj)-\cos(hi)\sin(hj)
+\]
+have rank two.
+
+The positive-defect completion
+\[
+ H_+=\begin{pmatrix}E&D_+\\D_+&-E\end{pmatrix}
+\]
+is unitary. Place its one-qubit flag after the controls. Taking the
+flag matrix entry with output $0$ and input $1$ extracts $D_+$; this
+operation acts on one side of the central physical cut and cannot
+increase operator Schmidt rank. Thus $H_+$ has bond dimension at least
+$2^m$.
+
+Nevertheless the signed completion
+\[
+ H_s=\begin{pmatrix}E&-F\\F&E\end{pmatrix}
+       =e^{-i\Theta\otimes Y}
+\]
+is unitary and has bond dimension two. Here $Y$ is Pauli $Y$ on the
+flag. It has the same $2m$-gate construction, with the target generator
+replaced by $-Y$, and implements
+\[
+ \psi\otimes|0\rangle\longmapsto
+ E\psi\otimes|0\rangle+F\psi\otimes|1\rangle.
+\]
+The positive square root discarded a sign which was compatible with
+the original matrix-product representation. The example therefore
+rules out a general bounded-bond assertion for positive-defect
+completions; it does not rule out other completions or efficient
+circuits.
+
+\section{A square-root-free completion of a Kraus isometry}
+
+Let $A_1,\ldots,A_r$ act on a finite-dimensional Hilbert space
+$\mathcal H$ and satisfy
+\[
+ \sum_{a=1}^r A_a^\dagger A_a=\id.
+\]
+In $\mathcal H\otimes\mathbb C^{r+1}$ define orthogonal isometries
+\[
+ J\psi=\psi\otimes|0\rangle,\qquad
+ V\psi=\sum_{a=1}^r A_a\psi\otimes|a\rangle.
+\]
+Then
+\[
+ S=\id-(V-J)(V-J)^\dagger
+   =JV^\dagger+VJ^\dagger+\id-JJ^\dagger-VV^\dagger
+\]
+is a Hermitian unitary, with $SJ=V$ and $SV=J$. Indeed, if $W=V-J$,
+then $W^\dagger W=2\id$, so $(WW^\dagger)^2=2WW^\dagger$ and
+$S^2=\id$. The same identities give its action on $J$ and $V$.
+On the orthogonal complement of their ranges, $S$ acts as the identity.
+
+Its blocks in the flag basis are particularly simple:
+\[
+ S_{00}=0,\qquad S_{0a}=A_a^\dagger,\qquad S_{a0}=A_a,
+ \qquad S_{ab}=\delta_{ab}\id-A_aA_b^\dagger
+ \quad(1\leq a,b\leq r).
+\]
+Thus no positive square root occurs. If each $A_a$ has operator Schmidt
+rank at most $D$ at every internal cut of $\mathcal H$, and the flag
+is placed at an endpoint, subadditivity and multiplicativity of these
+ranks give the conservative bound
+\[
+ 1+2rD+r^2D^2
+\]
+for $S$ at every such cut. The flag may be encoded in
+$\lceil\log_2(r+1)\rceil$ qubits, extending $S$ by the identity on
+unused flag states. This concerns a unitary completion of an isometry;
+the output flag of $V$ is part of that isometry.
+
+For an operator Schmidt expansion
+$U=\sum_a A_a\otimes B_a$ of a unitary, normalized by
+$\operatorname{Tr}(B_a^\dagger B_b)=\dim(\mathcal H_R)\delta_{ab}$,
+the normalized partial traces of $U^\dagger U$ and $UU^\dagger$ give
+\[
+ \sum_a A_a^\dagger A_a=\sum_a A_aA_a^\dagger=\id.
+\]
+The resulting $V$ preserves the original internal bond bound $D$:
+it is obtained by applying a linear map $B_a\mapsto|a\rangle$ on
+the opposite side of every internal cut. Consequently its completion
+$S$ has the sharper bound $1+2D+D^2=(D+1)^2$ at those cuts.
+
+This construction supplies a controlled bond bound for one completion,
+but does not establish a polynomial circuit bound under repetition.
+The displayed bound is quadratic in the current bond dimension;
+repeating it over a logarithmic number of subdivisions can produce
+exponential growth. The Kraus identities alone do not supply a
+bounded-dimensional algebra of physical Schmidt factors. In the
+preceding example, $E+iF=e^{i\Theta}$ has $2q-1$ distinct eigenvalues,
+so the commutative $C^*$-algebra generated by $E,F$ has dimension
+$2q-1$, although $r=D=2$. Its spectral projections are polynomials
+in $e^{i\Theta}$. A general recursive argument therefore still needs
+an additional invariant or a construction which preserves the
+appropriate cancellations.
+
+
+\section{A general quasipolynomial approximation}
+
+The following statement applies to arbitrary fixed-bond MPUs. Its error
+includes the auxiliary output: the circuit is close to the desired
+isometry on clean auxiliary inputs. It does not assert exact erasure of
+those outputs or polynomial circuit size. The construction is nonuniform
+and uses elementary amplitude amplification and Fourier series.
+
+\begin{theorem}\label{thm:mpu_general_quasipolynomial_approximation}
+Let $N\geq1$, and let $U$ be an $N$-qubit unitary whose operator Schmidt rank across every
+consecutive cut is at most $D$. For $0<\varepsilon<1$, there are auxiliary
+qubits, an isometry $J\psi=\psi\otimes|0\cdots0\rangle$, and a circuit
+unitary $W$ such that
+\[
+ \|WJ-JU\|\leq\varepsilon.
+\]
+For fixed $D$, the gate and auxiliary-qubit counts are at most
+\[
+ \exp\!\left\{C_D\log(N+1)
+      \log\bigl(\log(N+1)+\log(1/\varepsilon)+2\bigr)\right\}.
+\]
+The constant $C_D$ depends only on $D$. The theorem does not assert an
+$N$-qubit circuit approximating $U$ with exactly erased auxiliary outputs,
+or a bound on $\|W-U\otimes\id\|$ on arbitrary auxiliary inputs.
+\end{theorem}
+
+\begin{proof}
+
+\subsection{Contractions at a cut}
+
+Let $A$ be a contraction on a finite tensor product, of operator Schmidt
+rank $r$ at a chosen cut. Its left Schmidt space $E$, with the operator
+norm, has an Auerbach basis $A_1,\ldots,A_r$: each $\|A_i\|=1$ and its
+coordinate functional $\phi_i$ has norm one. One elementary construction
+maximizes the absolute determinant of a basis among tuples in the unit
+ball. Replacing one basis vector by any vector in that ball proves the
+coordinate-functional bound.
+
+Extend $\phi_i$ to the full left matrix algebra without increasing its
+norm. Represent it by a trace-class matrix of trace norm one. A singular
+value decomposition expresses the resulting slice as a sum of left
+matrix-element compressions with total absolute weight one. Consequently
+\[
+ A=\sum_{i=1}^r A_i\otimes B_i,
+ \qquad B_i=(\phi_i\otimes\id)(A),
+ \qquad \|A_i\|,\|B_i\|\leq1.
+\]
+All consecutive internal operator Schmidt ranks of $A_i$ and $B_i$ are
+no larger than those of $A$. Indeed, each is a linear slice of $A$ on
+the complementary factor. Thus this decomposition may be repeated
+on a balanced tree without increasing $D$.
+
+\subsection{An elementary linear amplification polynomial}
+
+Fix once and for all $s=2^{20}$. For $r\geq1$, put
+\[
+ h=\frac8{rs^2},\qquad K=rs,\qquad H=Kh=\frac8s.
+\]
+Define an odd, $2\pi$-periodic function
+\[
+ f_0(\theta)=
+ \begin{cases}
+ K\sin\theta,&\operatorname{dist}(\theta,\pi\mathbb Z)\leq h,\\
+ 0,&\text{otherwise}.
+ \end{cases}
+\]
+It is also $\pi$-antiperiodic. It has modulus at most $H$ and support
+of total length $4h$ on a period.
+
+For each $j\geq1$, convolve with the uniform probability measure on
+$[-a_j,a_j]$, where
+\[
+ a_j=\frac{h}{20j^2}.
+\]
+The limiting probability measure $\mu$ is supported on
+$[-\sum_j a_j,\sum_j a_j]\subset[-h/10,h/10]$, and its Fourier
+coefficients are
+\[
+ \widehat\mu(n)=\prod_{j\geq1}\operatorname{sinc}(na_j),
+ \qquad \operatorname{sinc}(x)=\frac{\sin x}{x}.
+\]
+The convolution limit can equivalently be taken uniformly after the
+first convolution: that first convolution is Lipschitz, and the sum
+of all remaining shift widths converges. No distributional limit
+is needed for the resulting function. Moreover
+\[
+ \nu_1:=\widehat\mu(1)\geq
+ 1-\frac16\sum_j a_j^2\geq\frac12.
+\]
+Here $\operatorname{sinc}(a_j)\geq1-a_j^2/6$, and the product of
+numbers $1-u_j$ with $0\leq u_j\leq1$ is at least $1-\sum_j u_j$.
+Define $f=(f_0*\mu)/\nu_1$. Whenever $|\theta|\leq h/4$, all shifts
+remain in the central sine interval, and evenness of $\mu$ gives
+\[
+ f(\theta)=K\sin\theta.
+\]
+
+If $j\leq\lfloor\sqrt{nh/40}\rfloor$, then $na_j\geq2$, and
+$|\operatorname{sinc}(na_j)|\leq1/2$. The other factors have modulus
+at most one. Hence, for $n\geq1$,
+\[
+ |\widehat\mu(n)|\leq
+ 2\exp\!\left(-\frac{\sqrt{nh}}{16}\right).
+\]
+Oddness and antiperiodicity imply that $f$ has only odd sine coefficients:
+\[
+ f(\theta)=\sum_{\substack{n\geq1\\n\text{ odd}}}b_n\sin(n\theta).
+\]
+The support and size estimates for $f_0$, followed by convolution and
+division by $\nu_1$, give
+\[
+ |b_n|\leq6Hh\exp\!\left(-\frac{\sqrt{nh}}{16}\right).
+\]
+These coefficients are absolutely summable. Using
+$\int_0^\infty e^{-\sqrt{xh}/16}\,dx=512/h$ yields
+\[
+ \sum_n|b_n|\leq6H(h+512)\leq3078H<\frac14.
+\]
+The same integral estimate for the tail gives
+\[
+ \sum_{n>M}|b_n|
+ \leq6144H\exp\!\left(-\frac{\sqrt{Mh}}{32}\right).
+\]
+In particular, truncation at
+$M=O(r(1+\log(1/\delta))^2)$ gives uniform error at most $\delta$
+for every $0<\delta<1$.
+All constants here are numerical, since $s$ is fixed.
+
+Set
+\[
+ p_M(x)=\sum_{\substack{1\leq n\leq M\\n\text{ odd}}}
+             b_n\sin(n\arcsin x).
+\]
+For odd $n=2k+1$, $\sin(n\arcsin x)=(-1)^kT_n(x)$ is a polynomial.
+The coefficient bound gives $|p_M(x)|\leq1/4$ on $[-1,1]$.
+For $|x|\leq1/(rs^2)$, we have
+$|\arcsin x|\leq2/(rs^2)=h/4$, and therefore
+\[
+ |p_M(x)-rsx|\leq\delta.
+\]
+
+\subsection{Implementation and perturbation bounds}
+
+Let $P$ be the projection onto zero auxiliary input and output, and let
+$Q$ be a circuit unitary with compressed block $Z=PQP$, identified with
+a matrix on the data space. Put $R=2P-\id$ and
+$G=-QRQ^\dagger R$. A two-dimensional calculation for each singular
+value $x$ of $Z$ gives the compressed block of $G^kQ$ as the
+singular-value polynomial
+\[
+ \sin((2k+1)\arcsin x).
+\]
+For example, the first step gives $3Z-4ZZ^\dagger Z$; the full identity
+follows by the plane rotation on the input and output singular vectors.
+Thus a linear-combination circuit with weights $b_{2k+1}$ implements
+the compressed block $p_M^{\rm sv}(Z)$.
+
+There is no additional normalization: prepare the label register with
+amplitudes $\sqrt{|b_n|}$, apply the corresponding controlled $G^kQ$
+and its coefficient sign, and undo the preparation. Fill the remaining
+probability weight with a branch that flips one additional auxiliary
+qubit and hence has zero compressed block. Since $\sum|b_n|\leq1$,
+the label preparation is normalized. All real coefficients and label
+preparations are nonuniform constants of the circuit.
+
+Here is a useful perturbation estimate that does not require closeness
+between unitary dilations. For Hermitian contractions $X,Y$, the
+Chebyshev recurrence gives
+\[
+ \|T_n(X)-T_n(Y)\|\leq n^2\|X-Y\|.
+\]
+Indeed, writing $E_n=T_n(X)-T_n(Y)$ gives
+$E_n=2XE_{n-1}-E_{n-2}+2(X-Y)T_{n-1}(Y)$.
+Solving this recurrence using the second-kind polynomials $U_j$,
+and using $\|U_j(X)\|\leq j+1$, proves the stated bound.
+Apply it to the Hermitian dilation
+\[
+ \mathcal H(Z)=\begin{pmatrix}0&Z\\Z^\dagger&0\end{pmatrix}.
+\]
+The off-diagonal block of an odd polynomial in $\mathcal H(Z)$ is
+its singular-value polynomial on $Z$. As
+$\|\mathcal H(Z)-\mathcal H(Z')\|=\|Z-Z'\|$, it follows that
+\[
+ \|p_M^{\rm sv}(Z)-p_M^{\rm sv}(Z')\|
+ \leq M^2\|Z-Z'\|.
+\]
+
+For the gate counts, the controlled powers can share a single loop.
+Apply $Q$ once, and for $j=1,\ldots,\lfloor(M-1)/2\rfloor$ apply
+$G$ conditioned on the label value $k\geq j$. Each branch then
+receives precisely $G^kQ$. Compute and erase each comparison
+reversibly using $O(\log M)$ Boolean operations. Give the dummy
+branch $k=0$ and flip its separate auxiliary marker; this still has
+zero compressed block. Thus there are $O(M)$ calls to
+$Q,Q^\dagger$ and the clean projection reflection. The minus sign
+in $G$ is a phase on the comparison bit and is retained.
+Arbitrary label preparation has polynomial cost in $M$.
+A reflection about zero on $a$ auxiliary bits uses
+$O(a)$ clean auxiliary bits and $O(a)$ two-qubit gates: compute the
+conjunction by a Toffoli chain, apply its phase, and reverse the chain.
+Specified label controls are implemented by the same construction.
+Controlled versions of one- and two-qubit gates have bounded two-qubit
+cost. This last claim also follows directly from QR in dimension eight
+and the basis-word path construction for two-level gates. A Toffoli
+has a five-two-qubit-gate decomposition using controlled $\sqrt X$
+and two CNOT gates. Thus all gate and auxiliary costs here are
+polynomial in $M$ and in those of $Q$.
+
+In a recursively controlled circuit there is only one master control
+at each invocation. Combine that control with the current label
+condition in a fresh guard bit, invoke the child with this one guard
+as its master control, and erase the guard. The child does not change
+the ancestor control or the current label. This prevents the number
+of accumulated controls from growing with the recursion depth.
+All conjunction, comparison, and gate-decomposition scratch bits
+return exactly to zero for arbitrary states of the data and logical
+auxiliary registers. Thus each described $Q$ is a genuine unitary
+on those logical registers; its implementation scratch may be
+omitted from the mathematical reflection $P$. During repetitions
+it remains exactly clean. Reflections inspect logical flags, using
+their own clean scratch to compute and erase the conjunction.
+
+\subsection{Balanced recursion}
+
+We recursively approximate the compressed block $A/s$ for every
+contraction $A$ of internal cut ranks at most $D$. At a one-qubit leaf,
+the standard $4\times4$ unitary dilation of $A/s$ is one arbitrary
+two-qubit gate; no recursive square-root construction is used.
+
+At an internal node, use the Auerbach decomposition above and child
+circuits whose compressed blocks approximate $A_i/s,B_i/s$ to error
+$\eta'$. A uniform linear combination of their products has a
+compressed block $Z$ satisfying
+\[
+ \left\|Z-\frac{A}{rs^2}\right\|\leq2\eta'.
+\]
+Indeed, actual child blocks are contractions, and the two tensor-product
+error terms have norms at most $\eta'$ and $\eta'/s$, respectively.
+Choose the Fourier truncation with error $\eta/2$ and
+$M\leq C_D(1+\log(1/\eta))^2$. Its singular-value polynomial applied
+to the ideal block approximates $A/s$ to error $\eta/2$.
+The perturbation estimate shows that taking
+\[
+ \eta'=\frac{\eta}{12M^2}
+\]
+keeps the actual compressed-block error below $\eta$.
+
+Let $L=1+\log(1/\eta)$. Along a path down the tree the precision
+requirements obey
+\[
+ L_{j+1}\leq L_j+C_D+4\log(L_j+1).
+\]
+Consequently $L_j\leq C_D(L_0+j+1)^2$, by induction after enlarging
+the constant. More precisely, let $F$ be the sum of the gate and
+auxiliary-qubit counts. The controlled constructions above give
+\[
+ F_{\rm node}\leq C_D M^c\sum_{\rm children}F_{\rm child}
+                  +C_D M^c
+\]
+for a fixed numerical exponent $c$. The logical-flag reflection cost
+is included, since its number of flags is bounded by the sum of
+child auxiliary counts and the polynomial label-register overhead.
+There is no additional factor $N$ at each recursion level.
+Controlled sums over the $r\leq D$ choices change only $C_D$.
+With $k=\lceil\log_2N\rceil$, this gives
+\[
+ T(N,\eta),\ a(N,\eta)
+ \leq \exp\!\left\{C_D (k+1)\log(L_0+k+2)\right\}.
+\]
+Zero Schmidt rank means the zero operator and is handled by an auxiliary
+flip. Unequal child sizes are split as evenly as possible.
+
+\subsection{The final unitary and the auxiliary output}
+
+For unitary $U$, the construction gives a unitary circuit with
+compressed block $Z$ satisfying $\|Z-U/s\|\leq\eta$.
+Choose $\ell=\lceil\pi s/4\rceil$, put
+$\theta=\pi/(4\ell+2)$, and scale this block by
+$\kappa=s\sin\theta\leq1$ using one more auxiliary rotation.
+The ideal scaled block is $\sin\theta\,U$. Apply $\ell$ Grover
+steps. Its ideal compressed block is exactly $U$, since
+$\sin((2\ell+1)\theta)=1$.
+The Chebyshev perturbation bound gives an actual block $B$ with
+\[
+ \|B-U\|\leq(2\ell+1)^2\eta.
+\]
+All constants in this final step are numerical, independent of $N,D$
+and $\varepsilon$.
+
+For the full final circuit $W$ and its clean-input embedding $J$,
+unitarity gives
+\[
+ (WJ-JU)^\dagger(WJ-JU)
+   =2\id-B^\dagger U-U^\dagger B.
+\]
+It follows that
+\[
+ \|WJ-JU\|\leq\sqrt{2\|B-U\|}.
+\]
+Take $\eta=\varepsilon^2/[2(2\ell+1)^2]$ to conclude
+Theorem~\ref{thm:mpu_general_quasipolynomial_approximation}. The same estimate bounds the nonzero-auxiliary
+component of the output. That component need not vanish exactly.
+
+\end{proof}
+
+The following results are formalized in Lean: the identities and
+the scalar-plus-skew-symmetric unitarity obstruction, in
+\nolinkurl{TNLean/MPS/MPU/SpinOneSchmidtObstruction.lean};
+the Pauli witness, its three-term tensor expansion, and the dimension-three
+coefficient space containing no unitary, in
+\nolinkurl{TNLean/MPS/MPU/PauliControlObstruction.lean}; and
+the orthogonal-isometry exchange and its two actions, in
+\nolinkurl{TNLean/MPS/MPU/OrthogonalIsometrySwap.lean}.
+The physical cut-rank profile and its orthogonal-walk realization are also
+checked with exact arithmetic in
+\nolinkurl{scripts/check_mpu_pauli_control.py}.
+The operator Schmidt rank calculations and the circuit constructions remain
+mathematical proofs rather than claimed Lean formalizations.
+\end{document}
