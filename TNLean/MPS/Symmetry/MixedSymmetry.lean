@@ -28,13 +28,17 @@ variable {d D : ℕ}
 
 /-- Apply an on-site physical matrix together with time reversal and reflection.
 The associated ordered contraction reverses sites when the reflection parity
-is odd, by `TNLean.Algebra.symmetryLetter_list_prod`. -/
+is odd, by `TNLean.Algebra.symmetryLetter_list_prod`.
+Algebraic form of the physical tensor action in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1088–1090 and 1116–1120. -/
 noncomputable def mixedTensorAction (A : MPSTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) (t r : SymmetryParity) : MPSTensor d D :=
   fun i => ∑ j, U i j • symmetryLetter t r (A j)
 
 /-- Physical coefficients compose with the time-reversal conjugation, while
-both parities compose on the tensor letters. -/
+both parities compose on the tensor letters.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1119–1122. -/
 theorem mixedTensorAction_comp (A : MPSTensor d D)
     (U V : Matrix (Fin d) (Fin d) ℂ) (t r u s : SymmetryParity) :
     mixedTensorAction (mixedTensorAction A V u s) U t r =
@@ -46,7 +50,9 @@ theorem mixedTensorAction_comp (A : MPSTensor d D)
   exact Finset.sum_comm
 
 /-- Transporting a virtual gauge through a mixed action conjugates it according
-to the combined time-reversal/reflection parity. -/
+to the combined time-reversal/reflection parity.
+Algebraic form of the virtual gauge transformation in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1119–1120. -/
 theorem mixedTensorAction_conjugation (A : MPSTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) (t r : SymmetryParity)
     (X : Matrix (Fin D) (Fin D) ℂ) (z : ℂ) (i : Fin d) :
@@ -60,7 +66,9 @@ theorem mixedTensorAction_conjugation (A : MPSTensor d D)
   intro j _
   rw [mul_comm]
 
-/-- Trace sees the time-reversal conjugation but is invariant under transpose. -/
+/-- Trace sees the time-reversal conjugation but is invariant under transpose.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1116–1120. -/
 theorem trace_symmetryLetter (t r : SymmetryParity)
     (M : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (symmetryLetter t r M) = parityConj t (Matrix.trace M) := by
@@ -68,7 +76,9 @@ theorem trace_symmetryLetter (t r : SymmetryParity)
   split <;> simp [Matrix.trace, Matrix.diag, parityConjMatrix_apply, map_sum]
 
 /-- Conjugating tensor letters conjugates the MPV, and transposing tensor letters
-reverses the physical site order. This is the actual finite-chain contraction. -/
+reverses the physical site order. This is the actual finite-chain contraction.
+Finite-chain consequence of the tensor transformations in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1116–1120. -/
 theorem mpv_symmetryLetter (A : MPSTensor d D) (t r : SymmetryParity)
     {N : ℕ} (σ : Fin N → Fin d) :
     mpv (fun i => symmetryLetter t r (A i)) σ =
@@ -87,7 +97,9 @@ theorem mpv_symmetryLetter (A : MPSTensor d D) (t r : SymmetryParity)
   split_ifs <;> simp [L, List.ofFn_reverse, Function.comp_def]
 
 /-- The mixed tensor action is the physical on-site matrix action, together with
-complex conjugation for time reversal and reversal of sites for reflection. -/
+complex conjugation for time reversal and reversal of sites for reflection.
+Finite-chain consequence of the physical and tensor actions in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1088–1090 and 1116–1120. -/
 theorem mpv_mixedTensorAction (A : MPSTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) (t r : SymmetryParity)
     {N : ℕ} (σ : Fin N → Fin d) :
@@ -103,8 +115,11 @@ theorem mpv_mixedTensorAction (A : MPSTensor d D)
     congrArg (fun z : ℂ => (∏ n, U (σ n) (τ n)) * z)
       (mpv_symmetryLetter A t r τ)
 
-/-- Mixed symmetry of the actual letters, with prescribed phase and virtual
-unitary gauge. -/
+/-- Mixed symmetry of the actual letters, with prescribed phase and virtual gauge.
+This predicate asserts only the displayed equality; it does not require the
+supplied matrices to be unitary.
+Algebraic symmetry relation from arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1119–1120 and 1145. -/
 def IsMixedSymmetric {G : Type*} (A : MPSTensor d D)
     (t r : G → SymmetryParity) (U : G → Matrix (Fin d) (Fin d) ℂ)
     (φ : G → ℂ) (X : G → Matrix (Fin D) (Fin D) ℂ) : Prop :=

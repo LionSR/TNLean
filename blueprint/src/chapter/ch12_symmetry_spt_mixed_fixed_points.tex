@@ -12,15 +12,31 @@ virtual matrices transform with $\alpha=t+r$
     \label{def:spt_mixed_tensor_symmetry}
     \lean{TNLean.Algebra.SymmetryParity,
         TNLean.Algebra.oddParity,
-        TNLean.Algebra.symmetryParity_cases,
+        TNLean.Algebra.parityConj,
+        TNLean.Algebra.parityConjMatrix,
+        TNLean.Algebra.symmetryLetter,
+        MPSTensor.mixedTensorAction,
+        MPSTensor.IsMixedSymmetric}
+    \leanok
+    Define $T_{t,r}(M)=C_t(M)$ for $r=0$, and
+    $T_{t,r}(M)=C_t(M)^{\mathsf T}$ for $r=1$. The mixed physical action is
+    \begin{align}
+        S_g(A)^i & =\sum_j U(g)_{ij}T_{t(g),r(g)}(A^j).
+        \label{eq:spt_mixed_tensor_action}
+    \end{align}
+    A tensor has mixed symmetry with phase $\phi(g)$ and virtual gauge $X_g$
+    when $S_g(A)^i=\phi(g)X_g^\dagger A^iX_g$.
+\end{definition}
+
+\begin{lemma}[The two symmetry parities]
+    \label{lem:spt_mixed_parity_composition}
+    \lean{TNLean.Algebra.symmetryParity_cases,
         TNLean.Algebra.oddParity_mul_self,
         TNLean.Algebra.oddParity_ne_one,
-        TNLean.Algebra.parityConj,
         TNLean.Algebra.parityConj_one,
         TNLean.Algebra.parityConj_odd,
         TNLean.Algebra.parityConj_mul,
         TNLean.Algebra.parityConj_self,
-        TNLean.Algebra.parityConjMatrix,
         TNLean.Algebra.parityConjMatrix_apply,
         TNLean.Algebra.parityConjMatrix_one,
         TNLean.Algebra.parityConjMatrix_self,
@@ -30,7 +46,6 @@ virtual matrices transform with $\alpha=t+r$
         TNLean.Algebra.parityConjMatrix_sum,
         TNLean.Algebra.parityConjMatrix_comp,
         TNLean.Algebra.parityConjMatrix_transpose,
-        TNLean.Algebra.symmetryLetter,
         TNLean.Algebra.symmetryLetter_trivial,
         TNLean.Algebra.symmetryLetter_timeReversal,
         TNLean.Algebra.symmetryLetter_reflection,
@@ -42,30 +57,12 @@ virtual matrices transform with $\alpha=t+r$
         TNLean.Algebra.symmetryLetter_mul,
         TNLean.Algebra.symmetryLetter_one,
         TNLean.Algebra.symmetryLetter_list_prod,
-        TNLean.Algebra.symmetryLetter_conjugation}
-    \lean{MPSTensor.mixedTensorAction,
+        TNLean.Algebra.symmetryLetter_conjugation,
         MPSTensor.mixedTensorAction_comp,
         MPSTensor.mixedTensorAction_conjugation,
         MPSTensor.trace_symmetryLetter,
         MPSTensor.mpv_symmetryLetter,
-        MPSTensor.mpv_mixedTensorAction,
-        MPSTensor.IsMixedSymmetric}
-    \leanok
-    Define $T_{t,r}(M)=C_t(M)$ for $r=0$, and
-    $T_{t,r}(M)=C_t(M)^{\mathsf T}$ for $r=1$. The mixed physical action is
-    \begin{align}
-        S_g(A)^i & =\sum_j U(g)_{ij}T_{t(g),r(g)}(A^j).
-        \label{eq:spt_mixed_tensor_action}
-    \end{align}
-    A tensor has mixed symmetry with phase $\phi(g)$ and virtual gauge $X_g$
-    when $S_g(A)^i=\phi(g)X_g^\dagger A^iX_g$.
-    Reflection reverses the order in a product of letters. Thus on a chain
-    the action is the on-site matrix action together with complex conjugation
-    when $t(g)=1$ and reversal of the physical site order when $r(g)=1$.
-\end{definition}
-
-\begin{lemma}[The two symmetry parities]
-    \label{lem:spt_mixed_parity_composition}
+        MPSTensor.mpv_mixedTensorAction}
     \leanok
     \uses{def:spt_mixed_tensor_symmetry}
     The letter actions compose by addition of both parities, but
@@ -77,6 +74,9 @@ virtual matrices transform with $\alpha=t+r$
     Consequently physical matrices compose as
     $U_gC_{t(g)}(U_h)$, whereas virtual gauges compose as
     $X_gC_{t(g)+r(g)}(X_h)$.
+    Reflection reverses the order in a product of letters. Thus on a chain
+    the action is the on-site matrix action together with complex conjugation
+    when $t(g)=1$ and reversal of the physical site order when $r(g)=1$.
 \end{lemma}
 \begin{proof}\leanok
     Conjugation commutes with transpose. Transpose reverses the two outer

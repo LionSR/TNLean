@@ -51,6 +51,15 @@ theorem regionGroundSpace_eq_span (A : Tensor Γ d) (R : Finset V) :
     regionGroundSpace A R = Submodule.span ℂ (Set.range (openRegionWeight A R)) := by
   exact Fintype.range_linearCombination ℂ (openRegionWeight A R)
 
+/-- A subspace contains the regional ground space exactly when it contains
+every actual open-region tensor. Source: arXiv:2011.12127, the boundary
+condition construction in Section IV.C.1, lines 2003–2008. -/
+theorem regionGroundSpace_le_iff (A : Tensor Γ d) (R : Finset V)
+    (S : Submodule ℂ (RegionPhysicalConfig (d := d) R → ℂ)) :
+    regionGroundSpace A R ≤ S ↔ ∀ μ, openRegionWeight A R μ ∈ S := by
+  rw [regionGroundSpace_eq_span, Submodule.span_le, Set.range_subset_iff]
+  rfl
+
 /-- Membership means that a virtual boundary condition produces the physical
 vector. Source: arXiv:2011.12127, lines 2003–2008. -/
 theorem mem_regionGroundSpace_iff (A : Tensor Γ d) (R : Finset V)

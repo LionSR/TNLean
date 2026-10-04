@@ -31,7 +31,8 @@ variable {G : Type} [Group G]
 
 set_option warn.classDefReducibility false in
 /-- The scalar action by identity or conjugation specified by a symmetry parity.
-This is the coefficient action in arXiv:2011.12127, lines 1120–1130. -/
+Extension to nonzero complex scalars of the U(1) action in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1122 and 1129. -/
 noncomputable def parityUnitsAction (α : G →* SymmetryParity) :
     MulDistribMulAction G (Units ℂ) where
   smul g z := Units.map (parityConj (α g)).toMonoidHom z
@@ -50,21 +51,30 @@ noncomputable def parityUnitsAction (α : G →* SymmetryParity) :
       parityConj (α g) (z : ℂ) * parityConj (α g) (w : ℂ)
     exact _root_.map_mul _ _ _)
 
-/-- Scalar multiplication in the coefficient module is the chosen conjugation. -/
+/-- Scalar multiplication in the coefficient module is the chosen conjugation.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1122 and 1129. -/
 @[simp] theorem parityUnitsAction_coe_smul (α : G →* SymmetryParity) (g : G)
     (z : Units ℂ) :
     letI := parityUnitsAction α
     ((g • z : Units ℂ) : ℂ) = parityConj (α g) (z : ℂ) := rfl
 
 /-- A unitary virtual action with conjugate-projective multiplication law.
-Source: arXiv:2011.12127, lines 1123–1130. -/
+Multiplicative form of the virtual law in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1120 and 1124–1129. -/
 structure ConjugateProjectiveRepresentation (α : G →* SymmetryParity)
     (ω : ScalarCocycle G) {D : ℕ} where
-  /-- Invertible virtual symmetry matrices. -/
+  /-- Invertible virtual symmetry matrices.
+  Source: arXiv:2011.12127,
+  `Papers/2011.12127/TN-Review-main.tex`, lines 1084–1090 and 1120. -/
   X : G → GL (Fin D) ℂ
-  /-- The virtual symmetry matrices are unitary. -/
+  /-- The virtual symmetry matrices are unitary.
+  Source: arXiv:2011.12127,
+  `Papers/2011.12127/TN-Review-main.tex`, lines 1084–1090. -/
   unitary : ∀ g, (X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup (Fin D) ℂ
-  /-- Composition of virtual symmetries, with conjugation on the second matrix. -/
+  /-- Composition of virtual symmetries, with conjugation on the second matrix.
+  Multiplicative form of the virtual law in arXiv:2011.12127,
+  `Papers/2011.12127/TN-Review-main.tex`, lines 1120 and 1124–1129. -/
   map_mul' : ∀ g h,
     (X g : Matrix (Fin D) (Fin D) ℂ) *
         parityConjMatrix (α g) (X h : Matrix (Fin D) (Fin D) ℂ) =
@@ -77,7 +87,9 @@ variable (ρ : ConjugateProjectiveRepresentation α ω (D := D))
 
 include ρ
 
-/-- The conjugate-projective multiplication law. -/
+/-- The conjugate-projective multiplication law.
+Multiplicative form of the virtual law in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1120 and 1124–1129. -/
 theorem map_mul (g h : G) :
     (ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
         parityConjMatrix (α g) (ρ.X h : Matrix (Fin D) (Fin D) ℂ) =
@@ -86,7 +98,9 @@ theorem map_mul (g h : G) :
 
 omit ρ in
 /-- A scalar multiple of a nonempty unitary matrix is unitary only if the
-scalar lies on the unit circle. -/
+scalar lies on the unit circle.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1084–1086 and 1129. -/
 private theorem scalar_unitary_of_smul (hD : 0 < D) (c : ℂ)
     (M : Matrix (Fin D) (Fin D) ℂ)
     (hM : M ∈ Matrix.unitaryGroup (Fin D) ℂ)
@@ -99,7 +113,9 @@ private theorem scalar_unitary_of_smul (hD : 0 < D) (c : ℂ)
 
 /-- Unitarity of the virtual matrices forces their factor system to be
 U(1)-valued. This supplies the source's coefficient group rather than adding
-unit modulus as a separate representation hypothesis. -/
+unit modulus as a separate representation hypothesis.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
 theorem factor_unitary (hD : 0 < D) (g h : G) :
     star (ω g h : ℂ) * (ω g h : ℂ) = 1 := by
   have hconj : parityConjMatrix (α g) (ρ.X h : Matrix (Fin D) (Fin D) ℂ) ∈
@@ -111,7 +127,9 @@ theorem factor_unitary (hD : 0 < D) (g h : G) :
   rw [ρ.map_mul] at hprod
   exact scalar_unitary_of_smul hD (ω g h : ℂ) (ρ.X (g * h)) (ρ.unitary _) hprod
 
-/-- A scalar relating two unitary choices of a virtual gauge lies in U(1). -/
+/-- A scalar relating two unitary choices of a virtual gauge lies in U(1).
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1084–1086 and 1129. -/
 theorem rephase_unitary {ω' : ScalarCocycle G}
     (ρ' : ConjugateProjectiveRepresentation α ω' (D := D)) (hD : 0 < D)
     (ξ : G → Units ℂ)
@@ -123,7 +141,9 @@ theorem rephase_unitary {ω' : ScalarCocycle G}
   exact ρ'.unitary g
 
 /-- Associativity derives the twisted scalar cocycle equation, without any
-normalization assumption. Source: arXiv:2011.12127, lines 1123–1129. -/
+normalization assumption.
+Multiplicative form of the associativity equation in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
 theorem cocycle_of_assoc (hD : 0 < D) (g h k : G) :
     (ω (g * h) k : ℂ) * (ω g h : ℂ) =
       parityConj (α g) (ω h k : ℂ) * (ω g (h * k) : ℂ) := by
@@ -144,7 +164,9 @@ theorem cocycle_of_assoc (hD : 0 < D) (g h k : G) :
   simpa only [mul_comm] using hscalar
 
 /-- The factor system is a Mathlib multiplicative two-cocycle for the
-conjugation action. -/
+conjugation action.
+Multiplicative form of the two-cocycle equation in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
 theorem isMulCocycle₂ (hD : 0 < D) :
     letI := parityUnitsAction α
     groupCohomology.IsMulCocycle₂ (Function.uncurry ω) := by
@@ -153,7 +175,9 @@ theorem isMulCocycle₂ (hD : 0 < D) :
   exact ρ.cocycle_of_assoc hD g h k
 
 /-- Rephasing the virtual matrices changes the factor system by precisely
-the twisted coboundary from arXiv:2011.12127, line 1129. -/
+the twisted coboundary.
+Multiplicative form of the coboundary formula in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 theorem factorSystem_rephase {ω' : ScalarCocycle G}
     (ρ' : ConjugateProjectiveRepresentation α ω' (D := D)) (hD : 0 < D)
     (ξ : G → Units ℂ)
@@ -187,16 +211,23 @@ directly below; the larger coefficient group of all complex units is not
 identified with the circle.
 -/
 
-/-- Identity or conjugation on the unit circle, regarded as `unitary ℂ`. -/
+/-- Identity or conjugation on the unit circle, regarded as `unitary ℂ`.
+Source: arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1122 and 1129. -/
 noncomputable def parityUnitary (p : SymmetryParity) (z : unitary ℂ) : unitary ℂ :=
   if p = 1 then z else star z
 
+/-- The unit-circle action is the restriction of scalar parity conjugation.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1122 and 1129. -/
 @[simp] theorem parityUnitary_coe (p : SymmetryParity) (z : unitary ℂ) :
     (parityUnitary p z : ℂ) = parityConj p (z : ℂ) := by
   rcases symmetryParity_cases p with rfl | rfl <;> simp [parityUnitary]
 
 set_option warn.classDefReducibility false in
-/-- The source's conjugation action on U(1), rather than on all complex units. -/
+/-- The source's conjugation action on U(1), rather than on all complex units.
+Source: arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1122 and 1129. -/
 noncomputable def parityUnitaryAction (α : G →* SymmetryParity) :
     MulDistribMulAction G (unitary ℂ) where
   smul g z := parityUnitary (α g) z
@@ -217,19 +248,25 @@ noncomputable def parityUnitaryAction (α : G →* SymmetryParity) :
     ext
     simp
 
-/-- The U(1) coefficient representation used in the SPT classification. -/
+/-- The U(1) coefficient representation used in the SPT classification.
+Coefficient representation for the cohomology groups in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1122 and 1129. -/
 noncomputable abbrev parityUnitaryCoefficientRepresentation
     (α : G →* SymmetryParity) : Rep ℤ G :=
   @Rep.ofMulDistribMulAction G (unitary ℂ) _ _ (parityUnitaryAction α)
 
-/-- A U(1)-valued one-cocycle determines its actual circle-coefficient class. -/
+/-- A U(1)-valued one-cocycle determines its actual circle-coefficient class.
+Source: arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1122. -/
 noncomputable def parityUnitaryH1Class (β : G →* SymmetryParity) (φ : G → unitary ℂ)
     (hφ : letI := parityUnitaryAction β; groupCohomology.IsMulCocycle₁ φ) :
     groupCohomology.H1 (parityUnitaryCoefficientRepresentation β) :=
   letI := parityUnitaryAction β
   groupCohomology.H1π _ (groupCohomology.cocyclesOfIsMulCocycle₁ hφ)
 
-/-- A U(1)-valued two-cocycle determines its actual circle-coefficient class. -/
+/-- A U(1)-valued two-cocycle determines its actual circle-coefficient class.
+Source: arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 noncomputable def parityUnitaryH2Class (α : G →* SymmetryParity)
     (ω : G → G → unitary ℂ)
     (hω : letI := parityUnitaryAction α;
@@ -238,13 +275,17 @@ noncomputable def parityUnitaryH2Class (α : G →* SymmetryParity)
   letI := parityUnitaryAction α
   groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω)
 
-/-- The inclusion of U(1) into complex units commutes with parity conjugation. -/
+/-- The inclusion of U(1) into complex units commutes with parity conjugation.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1122 and 1129. -/
 @[simp] theorem parityUnitary_toUnits (p : SymmetryParity) (z : unitary ℂ) :
     Unitary.toUnits (parityUnitary p z) =
       Units.map (parityConj p).toMonoidHom (Unitary.toUnits z) :=
   Units.ext (parityUnitary_coe p z)
 
-/-- The inclusion of U(1) into complex units preserves twisted cocycles. -/
+/-- The inclusion of U(1) into complex units preserves twisted cocycles.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
 theorem isMulCocycle₂_toUnits (α : G →* SymmetryParity) (ω : G → G → unitary ℂ)
     (hω : letI := parityUnitaryAction α;
       groupCohomology.IsMulCocycle₂ (Function.uncurry ω)) :
@@ -259,14 +300,21 @@ theorem isMulCocycle₂_toUnits (α : G →* SymmetryParity) (ω : G → G → u
     Unitary.toUnits (parityUnitary (α g) (ω h k) * ω g (h * k)) at heq
   simpa only [map_mul, parityUnitary_toUnits] using heq
 
-/-- A unit-modulus complex unit, regarded as an element of U(1). -/
+/-- A unit-modulus complex unit, regarded as an element of U(1).
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 def unitaryScalar (z : Units ℂ) (hz : star (z : ℂ) * (z : ℂ) = 1) : unitary ℂ :=
   ⟨z, z.isUnit.mem_unitary_of_star_mul_self hz⟩
 
+/-- The corresponding unit-circle element has the same complex value.
+Supporting algebra for arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 @[simp] theorem unitaryScalar_coe (z : Units ℂ) (hz : star (z : ℂ) * (z : ℂ) = 1) :
     (unitaryScalar z hz : ℂ) = z := rfl
 
-/-- Circle-valued twisted coboundaries identify the same U(1) cohomology class. -/
+/-- Circle-valued twisted coboundaries identify the same U(1) cohomology class.
+Source: arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 theorem parityUnitaryH2Class_eq_of_isMulCoboundary₂ (α : G →* SymmetryParity)
     (ω ω' : G → G → unitary ℂ)
     (hω : letI := parityUnitaryAction α;
@@ -280,7 +328,9 @@ theorem parityUnitaryH2Class_eq_of_isMulCoboundary₂ (α : G →* SymmetryParit
   apply (groupCohomology.H2π_eq_iff _ _).2
   exact (groupCohomology.coboundariesOfIsMulCoboundary₂ h).property
 
-/-- Circle-valued one-coboundaries identify the same U(1) cohomology class. -/
+/-- Circle-valued one-coboundaries identify the same U(1) cohomology class.
+Source: arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1122. -/
 theorem parityUnitaryH1Class_eq_of_isMulCoboundary₁ (β : G →* SymmetryParity)
     (φ φ' : G → unitary ℂ)
     (hφ : letI := parityUnitaryAction β; groupCohomology.IsMulCocycle₁ φ)
@@ -296,7 +346,9 @@ namespace ConjugateProjectiveRepresentation
 variable {α : G →* SymmetryParity} {D : ℕ}
 
 /-- A scalar rephasing of unitary virtual matrices gives a coboundary in
-U(1). The scalar's unit modulus is derived from the matrix relation. -/
+U(1). The scalar's unit modulus is derived from the matrix relation.
+Multiplicative form of the rephasing relation in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G → G → _root_.unitary ℂ}
     (ρ : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω g h))
       (D := D))
@@ -317,7 +369,9 @@ theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G → G → _root_.unita
 
 /-- Pointwise scalar gauge equivalence preserves the actual U(1)-valued
 second cohomology class. No unit-modulus assumption on the supplied scalars
-is needed, since both virtual representations are unitary. -/
+is needed, since both virtual representations are unitary.
+Source: arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 theorem parityUnitaryH2Class_eq_of_rephase {ω ω' : G → G → _root_.unitary ℂ}
     (ρ : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω g h))
       (D := D))

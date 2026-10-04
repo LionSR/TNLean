@@ -17,8 +17,14 @@ reflection swaps the two physical dimer factors and reverses site order.
 The virtual factor system cancels from the physical action.
 
 Source: arXiv:2011.12127, Section III.A, `Papers/2011.12127/TN-Review-main.tex`
-lines 1120–1130 and 1147–1157. We retain the corrected dimer tensor of
-`SPTFixedPoint`, not the erroneous displayed source tensor discussed in
+lines 1120–1130 and 1147–1157.
+
+**Local fix (fixed-point tensor):** The dimer constructions and their symmetry
+results below use `A^{(a,b)} = D^{-1/2} |a⟩⟨b|`. Already for a nontrivial on-site
+group, the printed tensor at source line 1150 has letters proportional to
+regular matrices commuting with the printed gauges; it is not normal and its
+transfer map is not rank one. The corrected dimer tensor has the properties
+claimed at source line 1157. The deviation is documented in
 `docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`.
 -/
 
@@ -29,19 +35,26 @@ namespace MPSTensor
 
 variable {D : ℕ}
 
-/-- Identify the physical dimer factors, swapping them for reflection. -/
+/-- Identify the physical dimer factors, swapping them for reflection.
+Supporting dimer coordinates for reflection in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1120 and the fixed-point claim
+at lines 1147–1157. -/
 def sptPairingEquiv (r : SymmetryParity) : Fin D × Fin D ≃ Fin (D * D) :=
   (if r = 1 then Equiv.refl _ else Equiv.prodComm _ _).trans finProdFinEquiv
 
 /-- The physical symmetry matrix of a dimer: `φ (conj(X) ⊗ X)`, followed by the
-swap of physical factors when the symmetry reflects the chain. -/
+swap of physical factors when the symmetry reflects the chain.
+Supporting dimer construction for the fixed-point claim in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157. -/
 noncomputable def mixedSptMatrix (X : Matrix (Fin D) (Fin D) ℂ)
     (φ : ℂ) (r : SymmetryParity) : Matrix (Fin (D * D)) (Fin (D * D)) ℂ :=
   φ • Matrix.reindex finProdFinEquiv (sptPairingEquiv r) (X.map star ⊗ₖ X)
 
 /-- The mixed action on the dimer letters has precisely the prescribed virtual
 gauge and phase. This coefficient identity holds even before imposing the
-unitarity and group laws on the virtual matrices. -/
+unitarity and group laws on the virtual matrices.
+Supporting dimer construction for the fixed-point claim in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157. -/
 theorem mixedTensorAction_sptFixedPointTensor
     (X : Matrix (Fin D) (Fin D) ℂ) (φ : ℂ) (t r : SymmetryParity)
     (i : Fin (D * D)) :
@@ -62,7 +75,9 @@ theorem mixedTensorAction_sptFixedPointTensor
       simp [sptPair, sptScale, Matrix.kroneckerMap_apply, Fintype.sum_prod_type,
         ite_and, apply_ite, mul_comm, mul_left_comm]
 
-/-- The dimer letters determine every coefficient of a mixed physical action. -/
+/-- The dimer letters determine every coefficient of a mixed physical action.
+Supporting dimer construction for the fixed-point claim in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157. -/
 theorem eq_of_mixedTensorAction_sptFixedPointTensor_eq [NeZero D]
     {U V : Matrix (Fin (D * D)) (Fin (D * D)) ℂ} (t r : SymmetryParity)
     (h : mixedTensorAction (sptFixedPointTensor D) U t r =
@@ -75,7 +90,9 @@ theorem eq_of_mixedTensorAction_sptFixedPointTensor_eq [NeZero D]
   exact (parityConj t).injective hc
 
 /-- The virtual projective phase cancels between the two dimer factors. Thus
-the physical multiplication is twisted only by time reversal, not reflection. -/
+the physical multiplication is twisted only by time reversal, not reflection.
+Supporting dimer calculation for the two symmetry laws in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1120–1129. -/
 theorem mixedSptMatrix_mul [NeZero D]
     (X Y Z : Matrix (Fin D) (Fin D) ℂ) (z w c : ℂ)
     (t r s : SymmetryParity)
@@ -109,7 +126,9 @@ theorem mixedSptMatrix_mul [NeZero D]
         smul_smul, mul_assoc, hc', mul_one]
 
 /-- Unitary virtual matrices and a unitary phase give a unitary physical action,
-including the reflection swap. -/
+including the reflection swap.
+Supporting dimer construction for the fixed-point claim in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157. -/
 theorem mixedSptMatrix_mem_unitaryGroup
     (X : Matrix (Fin D) (Fin D) ℂ) (φ : ℂ) (r : SymmetryParity)
     (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ) (hφ : φ ∈ unitary ℂ) :
@@ -128,25 +147,33 @@ variable (ρ : ConjugateProjectiveRepresentation (t * r) ω (D := D))
 variable (φ : G → unitary ℂ)
 
 /-- The physical action realizing a virtual conjugate-projective representation
-and a prescribed time-reversal-twisted character. -/
+and a prescribed time-reversal-twisted character.
+Supporting dimer construction for the fixed-point claim in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157. -/
 noncomputable def mixedSptAction (g : G) :
     Matrix (Fin (D * D)) (Fin (D * D)) ℂ :=
   mixedSptMatrix (ρ.X g) (φ g) (r g)
 
 /-- Every physical symmetry matrix is unitary, even for an antiunitary symmetry
-whose complex conjugation is implemented separately. -/
+whose complex conjugation is implemented separately.
+Supporting dimer construction for the fixed-point claim in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157. -/
 theorem mixedSptAction_unitary (g : G) :
     mixedSptAction t r ρ φ g ∈ Matrix.unitaryGroup (Fin (D * D)) ℂ :=
   mixedSptMatrix_mem_unitaryGroup _ _ _ (ρ.unitary g) (φ g).property
 
-/-- The dimer tensor has the prescribed time-reversal/reflection symmetry. -/
+/-- The dimer tensor has the prescribed time-reversal/reflection symmetry.
+Supporting dimer construction for the fixed-point claim in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157. -/
 theorem sptFixedPointTensor_isMixedSymmetric :
     IsMixedSymmetric (sptFixedPointTensor D) t r (mixedSptAction t r ρ φ)
       (fun g => (φ g : ℂ)) (fun g => (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) :=
   fun _g i => mixedTensorAction_sptFixedPointTensor _ _ _ _ i
 
 /-- The physical action is a genuine time-reversal-semilinear representation:
-the virtual two-cocycle disappears from its multiplication law. -/
+the virtual two-cocycle disappears from its multiplication law.
+Supporting dimer calculation for the two symmetry laws in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1120–1129. -/
 theorem mixedSptAction_mul [NeZero D]
     (hφ : letI := parityUnitaryAction t; groupCohomology.IsMulCocycle₁ φ)
     (g h : G) :
@@ -160,7 +187,9 @@ theorem mixedSptAction_mul [NeZero D]
   exact (mixedSptMatrix_mul _ _ _ _ _ (ω g h : ℂ) _ _ _
     (ρ.map_mul g h) (ρ.factor_unitary (Nat.pos_of_ne_zero (NeZero.ne D)) g h)).symm
 
-/-- The identity symmetry acts identically on the physical dimer. -/
+/-- The identity symmetry acts identically on the physical dimer.
+Supporting dimer calculation for the two symmetry laws in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1120–1129. -/
 theorem mixedSptAction_one [NeZero D]
     (hφ : letI := parityUnitaryAction t; groupCohomology.IsMulCocycle₁ φ) :
     mixedSptAction t r ρ φ 1 = 1 := by
@@ -171,7 +200,10 @@ theorem mixedSptAction_one [NeZero D]
   simpa only [Matrix.mul_assoc, hu, Matrix.mul_one] using heq.symm
 
 /-- The physical action on an N-site periodic wavefunction has the prescribed
-phase to the Nth power, with actual conjugation and site-order reversal. -/
+phase to the Nth power, with actual conjugation and site-order reversal.
+Finite-chain consequence of the fixed-point symmetry in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, line 1157,
+with the mixed tensor action of lines 1116–1120. -/
 theorem mixedSptAction_mpv (g : G) {N : ℕ}
     (σ : Fin N → Fin (D * D)) :
     (∑ τ : Fin N → Fin (D * D),
@@ -201,7 +233,10 @@ theorem mixedSptAction_mpv (g : G) {N : ℕ}
     _ = _ := by rw [← hgauge.sameMPV N σ]
 
 /-- Any other virtual action implementing the same symmetry of the dimer differs
-pointwise only by scalar phases. This uses the actual injectivity of its letters. -/
+pointwise only by scalar phases. This uses the actual injectivity of its letters.
+Dimer specialization of gauge uniqueness in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, eq:XAX=B (lines 1084–1086),
+with the mixed symmetry of line 1145. -/
 theorem exists_rephase_of_mixedSptSymmetry [NeZero D]
     {ω' : ScalarCocycle G}
     (ρ' : ConjugateProjectiveRepresentation (t * r) ω' (D := D))
@@ -249,7 +284,9 @@ theorem exists_rephase_of_mixedSptSymmetry [NeZero D]
 end Group
 
 /-- The virtual U(1) cohomology class of the mixed dimer symmetry is independent
-of the unitary gauge implementing it. -/
+of the unitary gauge implementing it.
+Dimer consequence of gauge uniqueness and the coboundary relation in arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, eq:XAX=B (lines 1084–1086) and line 1129. -/
 theorem parityUnitaryH2Class_eq_of_mixedSptSymmetry
     {G : Type} [Group G] [NeZero D] (t r : G →* SymmetryParity)
     {ω ω' : G → G → unitary ℂ}
@@ -272,7 +309,9 @@ theorem parityUnitaryH2Class_eq_of_mixedSptSymmetry
 /-- Every pair of genuine twisted U(1) cocycles of a finite symmetry group has
 an injective dimer fixed point with a rank-one idempotent transfer map. The
 physical action is unitary and time-reversal-semilinear; its tensor symmetry
-has exactly the prescribed character and virtual factor system. -/
+has exactly the prescribed character and virtual factor system.
+Fixed-point existence claim of arXiv:2011.12127,
+`Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157, using the corrected dimer tensor. -/
 theorem exists_mixed_spt_fixedPoint {G : Type} [Group G] [Fintype G]
     (t r : G →* SymmetryParity) (ω : G → G → unitary ℂ) (φ : G → unitary ℂ)
     (hω : letI := parityUnitaryAction (t * r);
