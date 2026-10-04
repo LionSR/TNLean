@@ -1,0 +1,64 @@
+\section{The virtual Bell-bond ground space}%
+\label{sec:peps_virtual_bond_ground_space}
+
+The virtual part of the injective-parent uniqueness argument in
+\cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines 2017--2044,
+concerns a product of independent maximally entangled bonds.
+We first establish this part without physical maps.
+
+\begin{definition}[Bell-bond slice conditions]%
+    \label{def:peps_virtual_bond_ground_space}
+    \lean{TNLean.PEPS.VirtualBondConfig,
+        TNLean.PEPS.virtualBondBell,
+        TNLean.PEPS.virtualBondProduct,
+        TNLean.PEPS.virtualBondSlice,
+        TNLean.PEPS.virtualBondGroundSpace,
+        TNLean.PEPS.mem_virtualBondGroundSpace_iff,
+        TNLean.PEPS.virtualBondDiagonalConfig}
+    \leanok
+    Let $E$ be a finite set of bonds with dimensions $D_e\ge0$.
+    Write $\zeta_e=(a_e,b_e)$ for their endpoint labels and put
+    \[
+        \omega_e(a_e,b_e)=\delta_{a_e,b_e},\qquad
+        \Omega(\zeta)=\prod_{e\in E}\omega_e(\zeta_e).
+    \]
+    The common virtual ground space consists of the vectors whose
+    slice on each bond, for every fixed configuration of all
+    other bonds, belongs to $\operatorname{span}\{\omega_e\}$.
+\end{definition}
+
+\begin{theorem}[Independent virtual-bond uniqueness]%
+    \label{thm:peps_virtual_bond_ground_space}
+    \lean{TNLean.PEPS.virtualBondProduct_update,
+        TNLean.PEPS.virtualBondProduct_mem_virtualBondGroundSpace,
+        TNLean.PEPS.eq_zero_of_mem_virtualBondGroundSpace_off_diagonal,
+        TNLean.PEPS.virtualBondGroundSpace_diagonal_update_eq,
+        TNLean.PEPS.virtualBondGroundSpace_diagonal_eq,
+        TNLean.PEPS.virtualBondGroundSpace_eq_span,
+        TNLean.PEPS.virtualBondProduct_ne_zero_iff,
+        TNLean.PEPS.finrank_virtualBondGroundSpace_eq_one}
+    \leanok
+    \uses{def:peps_virtual_bond_ground_space}
+    The common virtual ground space is
+    $\operatorname{span}\{\Omega\}$.
+    The vector $\Omega$ is nonzero exactly when every $D_e$ is
+    positive; in this case the common ground space is one-dimensional.
+    If a bond dimension vanishes, the entire virtual configuration
+    space is empty and the vector space is zero.
+    The assertion also includes an empty bond collection, whose
+    product vector is the scalar vacuum.
+\end{theorem}
+
+\begin{proof}\leanok
+    The product vector satisfies each slice condition by separating
+    its corresponding Bell factor. Conversely, the slice condition
+    forces a coefficient to vanish whenever the two labels of some
+    bond differ. On diagonal configurations, replacing one common
+    endpoint label by another leaves the coefficient unchanged.
+    Finitely many such replacements join any two diagonal configurations.
+    Thus every common ground vector is a scalar multiple of $\Omega$.
+    Its coefficient at any diagonal configuration is one, proving
+    nonvanishing when all dimensions are positive. A zero-dimensional
+    bond makes the configuration space empty, giving the stated
+    degenerate case.
+\end{proof}

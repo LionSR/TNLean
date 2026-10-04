@@ -17,12 +17,13 @@ memory digits to zero.
 The exact channel identity holds for all logical input operators, not only product
 states; it can also be tensored with any external reference.
 
-This supplies product ancillary initialization and physical-port input/output for the
+**Scope restriction (bounded reduced-channel port I/O):** this supplies product ancillary
+initialization and physical-port input/output for the
 finite reduced-channel resource comparison. The depth counts only physical-port intersite
 layers; the free onsite-unitary convention is arXiv:2103.13367, main text p. 1.
 An explicit local unitary-dilation/source
 QCcc protocol-block witness is a separate representation layer, not an assumption or
-consequence of this theorem.
+consequence of this theorem. See `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
 -/
 
 open Matrix

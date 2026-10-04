@@ -1,0 +1,125 @@
+\section{G-injectivity under physical maps}%
+\label{sec:peps_g_injective_physical_map}
+
+\begin{theorem}[Physical maps preserving G-injectivity]%
+    \label{thm:peps_g_injective_physical_map}
+    \lean{TNLean.PEPS.comp_invariant_of_invariant,
+        TNLean.PEPS.IsGInjective.comp_of_injOn_range,
+        TNLean.PEPS.IsGInjective.comp_of_injective,
+        TNLean.PEPS.IsGInjective.comp_equiv,
+        TNLean.PEPS.isGInjective_comp_equiv_iff,
+        TNLean.PEPS.IsGInjective.comp_iff_injOn_range,
+        TNLean.PEPS.IsGInjective.comp_iff_range_inf_ker_eq_bot,
+        TNLean.PEPS.IsGInjective.comp_iff_injective_rangeSubtype}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $T:\mathcal V\to\mathcal P$ be $G$-injective and let
+    $F:\mathcal P\to\mathcal Q$ be linear.
+    The composite $FT$ is invariant under the original virtual
+    representation. If $F|_{\operatorname{im}T}$ is injective, then
+    $FT$ is $G$-injective. For a finite group $G$, the converse holds:
+    $FT$ is $G$-injective if and only if
+    $\operatorname{im}T\cap\ker F=\{0\}$.
+    In particular an invertible physical change of coordinates
+    preserves $G$-injectivity in both directions.
+    These are local consequences of
+    \cite[Definition~5.1]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_invariants_range}
+    Invariance follows from $FTU_g=FT$.
+    If $x\in\mathcal V^G$ and $FTx=0$, injectivity of $F$ on
+    $\operatorname{im}T$ gives $Tx=0$, and $G$-injectivity gives
+    $x=0$. Conversely, for finite $G$, every
+    $y\in\operatorname{im}T$ is $Tx$ for an invariant vector $x$.
+    If $Fy=0$ and $FT$ is $G$-injective, then $x=0$, hence $y=0$.
+    For an invertible physical map, apply the same implication to its
+    inverse to obtain the reverse direction.
+\end{proof}
+
+\begin{theorem}[Physical isometries preserving G-isometry]%
+    \label{thm:peps_g_isometric_physical_map}
+    \lean{TNLean.PEPS.IsGIsometric.comp_of_inner_eq,
+        TNLean.PEPS.IsGIsometric.comp_isometry,
+        TNLean.PEPS.isGIsometric_comp_equiv_iff}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $T$ be $G$-isometric with normalization factor $c>0$.
+    A physical linear isometry $F$ makes $FT$ $G$-isometric with the
+    same factor $c$. This includes rectangular isometries.
+    An invertible physical isometry preserves $G$-isometry in both
+    directions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_physical_map}
+    An isometry is injective, so $FT$ is $G$-injective.
+    For invariant $x,y$,
+    $\langle FTx,FTy\rangle=\langle Tx,Ty\rangle
+        =c\langle x,y\rangle$.
+    For a matrix isometry, the first equality follows from
+    $F^\dagger F=\Id$. The inverse of an invertible isometry is an
+    isometry, giving the converse.
+\end{proof}
+
+\begin{theorem}[Compatibility with virtual comparison]%
+    \label{thm:peps_g_injective_physical_virtual_comparison}
+    \lean{TNLean.PEPS.IsGInjective.virtualEquiv_comp_of_injective}
+    \leanok
+    \uses{def:peps_g_injective_virtual_comparison}
+    Let $T:\mathcal V\to\mathcal P$ and
+    $S:\mathcal W\to\mathcal P$ be injective on the invariant
+    spaces of possibly different finite groups, and suppose their
+    physical ranges agree. Applying the same injective physical map
+    $F:\mathcal P\to\mathcal Q$ to both tensors leaves their
+    virtual comparison unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_virtual_comparison}
+    The comparison for $FT$ and $FS$ satisfies $FS\Phi x=FTx$.
+    Injectivity of $F$ gives $S\Phi x=Tx$, which uniquely
+    characterizes the original comparison.
+\end{proof}
+
+\begin{definition}[Physical deformation of a regular site]%
+    \label{def:peps_regular_physical_site}
+    \lean{TNLean.PEPS.regularPhysicalMapSite,
+        TNLean.PEPS.regularSiteMap_regularPhysicalMapSite}
+    \leanok
+    \uses{def:peps_regular_site_gram}
+    For a site tensor $a(\eta,s)$ whose virtual labels are group
+    elements on an arbitrary incident-leg set, define
+    $a^F(\eta,t)=\sum_sF_{ts}a(\eta,s)$.
+    Its physical coefficient map is $T_{a^F}=FT_a$.
+\end{definition}
+
+\begin{theorem}[Physical deformation of G-injective site families]%
+    \label{thm:peps_g_injective_physical_site_family}
+    \lean{TNLean.PEPS.IsGInjective.physicalMapSite,
+        TNLean.PEPS.IsGIsometric.physicalMapSite,
+        TNLean.PEPS.IsGInjective.regularPhysicalMapSite,
+        TNLean.PEPS.IsGIsometric.regularPhysicalMapSite,
+        TNLean.PEPS.physicalDeform_groupBondTensor,
+        TNLean.PEPS.isGInjective_regularPhysicalMapSite_family,
+        TNLean.PEPS.isGIsometric_regularPhysicalMapSite_family}
+    \leanok
+    \uses{def:peps_regular_physical_site,def:peps_physical_deformation}
+    An injective physical map preserves $G$-injectivity of a site
+    tensor, and an isometry preserves its $G$-isometry.
+    Both statements hold for four virtual legs and for arbitrary
+    incident-leg sets.
+    Consequently invertible physical maps at every vertex preserve
+    regular $G$-injectivity of a complete finite-graph site family;
+    physical isometries preserve regular $G$-isometry.
+    In finite bond coordinates the resulting tensor family is exactly
+    the physical deformation of the original group-labelled family.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_physical_map,thm:peps_g_isometric_physical_map}
+    Apply the preceding composition results to each site's coefficient
+    map. The group-labelled coordinates identify the deformed
+    coefficients with the same physical sums in finite bond coordinates.
+\end{proof}
