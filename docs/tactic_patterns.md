@@ -2975,6 +2975,34 @@ abstracted — record why, so it is not re-proposed).
 - **Decision:** retain these proofs; no further abstraction is warranted before this
   pattern occurs in another file.
 
+### Physical insertion congruence and identity insertions — candidate
+- **Pattern:** a finite physical insertion transforms by congruence under a
+  bond similarity; insertion of the identity on `n` sites gives the same
+  covariance for the `n`th transfer power.
+- **Seen:** the insertion and connected-contraction proofs in
+  `TNLean/MPS/SharedInfra/PhysicalObservableGauge.lean` (2026-10-02).
+- **Reuse:** `MPSTensor.physicalObservableTransfer_congruence_of_gauge`
+  proves the word-sum calculation once. The transfer-power identity follows
+  from the existing `MPSTensor.physicalObservableTransfer_one`, and the
+  connected contraction uses these equations with trace cyclicity.
+- **Notes:** the arbitrary-gauge decay proof transports the already proved
+  trace-preserving contraction instead of repeating complementary powers and
+  fixed-point projection calculations. No custom tactic is needed.
+
+### centering physical insertions carried by transfer eigenvectors — candidate
+- **Pattern:** trace preservation and a transfer eigenvalue different from one
+  imply that the eigenvector is traceless; the fixed-state projection then
+  vanishes on the inner physical insertion, including the zeroth transfer power.
+- **Seen:** two occurrences across two files (2026-10-02):
+  `DecayingCorrelations.lean` and `DecayingCorrelationBound.lean`, under
+  `TNLean/MPS/Preparation/`.
+- **Abstraction:** the existing
+  `MPSTensor.trace_eq_zero_of_transferMap_eq_smul` supplies tracelessness;
+  a Hermitian-vector realization now records this property in its conclusion.
+- **Notes:** the physical two-point identity and positive-separation reduction
+  are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
+  arguments use the reduction lemma instead of repeating the projection algebra.
+
 ### linearity of a recovered bond operation — candidate
 - **Pattern:** apply injectivity of the boundary-insertion map, rewrite the
   virtual operations by their physical realizations, and use linearity of the
