@@ -9,7 +9,7 @@
     closed contraction with bond matrices $U_{u_e}\operatorname{diag}(f_e)$ is
     \[
         \sum_{\eta:E\to G}\left(\prod_e f_e(\eta_e)\right)
-          \prod_v A_v\bigl((u\eta)_v,\sigma_v\bigr).
+        \prod_v A_v\bigl((u\eta)_v,\sigma_v\bigr).
     \]
     Here the incident label is $\eta_e$ at the tail and $u_e\eta_e$ at
     the head. This is an auxiliary coefficient identity for the diagonal
@@ -25,7 +25,7 @@
 \begin{definition}[Weighted canonical contraction and reconstructed labels]
     \label{def:peps_regular_weighted_projector_contraction}
     \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix,
-      TNLean.PEPS.regularRegionTreeReferenceLabels}
+        TNLean.PEPS.regularRegionTreeReferenceLabels}
     \leanok
     \uses{lem:peps_regular_region_coordinates}
     Let $R$ be a finite region with a chosen spanning tree $T$ and root $o$.
@@ -34,8 +34,8 @@
     label configurations, define
     \[
         M_R(u,F)_{\alpha,\theta}
-          =\sum_\eta\mathbf1_{\eta|_{\partial R}=\theta}F(\eta)
-              \prod_{v\in R}P_v[\alpha_v,(u\eta)_v],
+        =\sum_\eta\mathbf1_{\eta|_{\partial R}=\theta}F(\eta)
+        \prod_{v\in R}P_v[\alpha_v,(u\eta)_v],
     \]
     where $P_v$ is the actual regular invariant projector.
     The reconstructed label $\eta_x$ is $k_t x^{-1}a_e$ on an internal edge,
@@ -49,18 +49,18 @@
 \begin{theorem}[The actual weighted common-translation formula]
     \label{thm:peps_regular_weighted_projector_coordinates}
     \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_apply,
-      TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_coordinates}
+        TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_coordinates}
     \leanok
     \uses{def:peps_regular_weighted_projector_contraction}
     Expanding each local projector first gives
     $|G|^{-|R|}\sum_{\eta,q}\mathbf1_{\eta|_{\partial R}=\theta,\,
-      \alpha_v=q_v(u\eta)_v}F(\eta)$.
+            \alpha_v=q_v(u\eta)_v}F(\eta)$.
     If $\rho$ is the actual cycle residual and $B(k,u)\theta$ the transported
     boundary configuration, then
     \[
         M_R(u,F)_{E^{-1}(y,a,r,z),\theta}
-          =|G|^{-|R|}\sum_{x\in G}
-            \mathbf1_{y=xB(k,u)\theta,\ z=x\rho x^{-1}}F(\eta_x).
+        =|G|^{-|R|}\sum_{x\in G}
+        \mathbf1_{y=xB(k,u)\theta,\ z=x\rho x^{-1}}F(\eta_x).
     \]
     This is an auxiliary weighted extension of the actual finite-block
     calculation, without a supplied coefficient or Gram identity.
@@ -86,10 +86,10 @@
 \begin{theorem}[Recovery of the original weighted physical coefficients]
     \label{thm:peps_regular_weighted_open_recovery}
     \lean{TNLean.PEPS.regularWeightedOpenRegionWeight_one,
-      TNLean.PEPS.regionPhysicalMap_regularProjectorWeightedTwistedRegionMatrix}
+        TNLean.PEPS.regionPhysicalMap_regularProjectorWeightedTwistedRegionMatrix}
     \leanok
     \uses{def:peps_regular_weighted_open_contraction,
-      thm:peps_regular_twisted_region_accessibility}
+        thm:peps_regular_twisted_region_accessibility}
     Constant weight one gives the existing numbered open contraction.
     If the original sites are $G$-injective, their product physical map $A_R$
     satisfies
@@ -116,10 +116,10 @@
 \begin{theorem}[Translation-equivariant permutations preserve local support]
     \label{thm:peps_regular_coordinate_permutation_support}
     \lean{TNLean.PEPS.regularRegionCoordinatePhysicalPermutation_commute_vertexTranslation,
-      TNLean.PEPS.regularRegionCoordinatePhysicalPermutation_commute_localProjector}
+        TNLean.PEPS.regularRegionCoordinatePhysicalPermutation_commute_localProjector}
     \leanok
     \uses{def:peps_regular_coordinate_physical_permutation,
-      thm:peps_cycle_controlled_local_support}
+        thm:peps_cycle_controlled_local_support}
     If $C$ commutes with the actual independent vertex translations in the
     accessible coordinates, its permutation matrix commutes with every
     original half-edge translation and with the product
@@ -133,8 +133,8 @@
 \begin{definition}[Reference-cycle multiplication and the charge parameter]
     \label{def:peps_regular_charge_flux_coordinate_permutation}
     \lean{TNLean.PEPS.regularChargeFluxCoordinatePermutation,
-      TNLean.PEPS.regularChargeFluxPhysicalPermutation,
-      TNLean.PEPS.regularChargeFluxParameter}
+        TNLean.PEPS.regularChargeFluxPhysicalPermutation,
+        TNLean.PEPS.regularChargeFluxParameter}
     \leanok
     \uses{def:peps_regular_coordinate_physical_permutation}
     Choose an internal charge edge $e$ and a non-tree flux edge $b$.
@@ -149,14 +149,14 @@
 \begin{theorem}[Actual weighted columns under reference-cycle multiplication]
     \label{thm:peps_regular_charge_flux_weighted_columns}
     \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_internalCharge_coordinates,
-      TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_chargeFlux_coordinates,
-      TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_chargeFlux_mulVec,
-      TNLean.PEPS.regularChargeFluxCoordinatePermutation_coordinateTranslation,
-      TNLean.PEPS.regularChargeFluxPhysicalPermutation_commute_localProjector}
+        TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_chargeFlux_coordinates,
+        TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_chargeFlux_mulVec,
+        TNLean.PEPS.regularChargeFluxCoordinatePermutation_coordinateTranslation,
+        TNLean.PEPS.regularChargeFluxPhysicalPermutation_commute_localProjector}
     \leanok
     \uses{thm:peps_regular_weighted_projector_coordinates,
-      def:peps_regular_charge_flux_coordinate_permutation,
-      thm:peps_regular_coordinate_permutation_support}
+        def:peps_regular_charge_flux_coordinate_permutation,
+        thm:peps_regular_coordinate_permutation_support}
     For $F_p(\eta)=\chi(p\eta_e)$ the surviving scalar weight is
     $\chi(pk_{\mathrm{tail}(e)}x^{-1}a_e)$. The permutation $C_{e,b}$
     commutes with independent vertex translations. Its permutation matrix
@@ -176,15 +176,15 @@
     \lean{TNLean.PEPS.exists_unitary_regularChargeFluxPhysicalTransport}
     \leanok
     \uses{thm:peps_regular_charge_flux_weighted_columns,
-      thm:peps_regular_weighted_open_recovery,
-      thm:peps_regular_physical_unitary_transport}
+        thm:peps_regular_weighted_open_recovery,
+        thm:peps_regular_physical_unitary_transport}
     Suppose the original sites are locally $G$-isometric for the regular
     incident-edge action. There exists one unitary $W_{e,b}$ on the original
     spins of $R$, chosen before every actual bond assignment $u$, coefficient
     function $\chi$, parameter $p$ and boundary configuration $\theta$, such that
     \[
         W_{e,b}\Psi_R(u,F_p;\theta)
-          =\Psi_R(u,F_{pK_{u,e,b}^{-1}};\theta).
+        =\Psi_R(u,F_{pK_{u,e,b}^{-1}};\theta).
     \]
     In particular an irreducible character is retained unchanged.
     This is a chosen finite-block physical realization of the parameter

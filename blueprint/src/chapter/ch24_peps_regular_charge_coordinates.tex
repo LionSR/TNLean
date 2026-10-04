@@ -6,10 +6,10 @@
     Define the matrix $A_\chi(p;x,y)$ by
     \[
         A_\chi(p;x,y)_{r,s}
-          =\begin{cases}
-             \chi(px^{-1}r),&s=yx^{-1}r,\\
-             0,&s\ne yx^{-1}r.
-           \end{cases}
+        =\begin{cases}
+            \chi(px^{-1}r), & s=yx^{-1}r,    \\
+            0,              & s\ne yx^{-1}r.
+        \end{cases}
     \]
     This is the accessible-coordinate matrix in
     \cite[charge-detection proof]{Schuch2010PEPS}, lines 2470--2486.
@@ -20,19 +20,19 @@
 \begin{theorem}[Matrix units and the exact support-overlap pairing]
     \label{thm:peps_regular_charge_coordinates_pairing}
     \lean{TNLean.PEPS.regularChargeMatrix_eq_sum_single,
-      TNLean.PEPS.regularChargeMatrix_inner}
+        TNLean.PEPS.regularChargeMatrix_inner}
     \leanok
     \uses{def:peps_regular_charge_coordinates}
     The accessible matrix is the literal matrix-unit sum
     \[
         A_\chi(p;x,y)
-          =\sum_{g\in G}\chi(pg)|xg\rangle\langle yg|.
+        =\sum_{g\in G}\chi(pg)|xg\rangle\langle yg|.
     \]
     For another function $\psi$ and translations $q,x',y'$, its exact
     Hilbert--Schmidt pairing is
     \begin{align}
-      &\langle A_\chi(p;x,y),A_\psi(q;x',y')\rangle\\
-      &\quad=\mathbf1_{yx^{-1}=y'(x')^{-1}}
+         & \langle A_\chi(p;x,y),A_\psi(q;x',y')\rangle \\
+         & \quad=\mathbf1_{yx^{-1}=y'(x')^{-1}}
         \sum_{r\in G}\overline{\chi(px^{-1}r)}\psi(q(x')^{-1}r).
     \end{align}
     Thus different relative translations have disjoint matrix support.
@@ -47,16 +47,16 @@
 \begin{theorem}[Orthogonality and norm of the actual accessible charge matrices]
     \label{thm:peps_regular_charge_coordinates_orthogonality}
     \lean{TNLean.PEPS.regularChargeMatrix_orthogonal,
-      TNLean.PEPS.regularChargeMatrix_normSq}
+        TNLean.PEPS.regularChargeMatrix_normSq}
     \leanok
     \uses{thm:peps_regular_charge_coordinates_pairing,
-      thm:peps_translated_character_inner_product}
+        thm:peps_translated_character_inner_product}
     Let $\sigma,\tau$ be finite-dimensional irreducible complex representations,
     with $\sigma$ unitary. If $\chi_\sigma\ne\chi_\tau$, then for all
     $p,x,y,q,x',y'\in G$,
     \[
         \langle A_{\chi_\sigma}(p;x,y),
-          A_{\chi_\tau}(q;x',y')\rangle=0.
+        A_{\chi_\tau}(q;x',y')\rangle=0.
     \]
     Every matrix of a unitary irreducible character has squared norm $|G|$,
     for every $p,x,y$. These are auxiliary accessible-coordinate identities
@@ -94,14 +94,14 @@
 \begin{theorem}[Independent translation covariance and nonvanishing]
     \label{thm:peps_regular_charge_coordinates_covariance}
     \lean{TNLean.PEPS.regularChargeMatrix_translate_apply,
-      TNLean.PEPS.regularChargeMatrix_ne_zero}
+        TNLean.PEPS.regularChargeMatrix_ne_zero}
     \leanok
     \uses{thm:peps_regular_charge_coordinates_orthogonality,
-      def:peps_regular_charge_coordinates}
+        def:peps_regular_charge_coordinates}
     For every coefficient function $\chi$ and every $p,x,y,z,w,r,s\in G$,
     \[
         A_\chi(p;zx,wy)_{r,s}
-          =A_\chi(p;x,y)_{z^{-1}r,w^{-1}s}.
+        =A_\chi(p;x,y)_{z^{-1}r,w^{-1}s}.
     \]
     Thus the two unknown translations act by their actual row and column
     permutations. If $\chi$ is a unitary irreducible character, then every
