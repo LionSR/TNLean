@@ -18,17 +18,16 @@ conditions are read on the vectorized state `|ρ⟩⟩`, an MPS, where `U ρ U^�
 `(U ⊗ \bar U) |ρ⟩⟩` and `U ρ` becomes `(U ⊗ 1) |ρ⟩⟩`. The strong and weak symmetries of a
 family are those of Sun 2025 (arXiv:2504.16985), `References/2504.16985/main.tex` line 182.
 
-**Formalized here.** Bridge: the vectorized state of `ρ^{(L)}(M)` is the matrix product vector
-of the doubled-index tensor `toMPSTensor M` (ket index `divNat`, bra index `modNat`). Acting
-with `u ⊗ v` on each doubled physical index sends `ρ` to `u^{⊗L} ρ (v^{⊗L})^T`. Consequently,
-for a unitary on-site representation, weak on-site symmetry of `M` is on-site symmetry of the
-doubled tensor under `g ↦ U_g ⊗ \bar U_g`, and strong on-site symmetry with eigenvalues
-`c_g^{(L)}` is proportionality of the matrix product vectors of the doubled tensor and its
-twist by `U_g ⊗ 1`.
+**Formalized here.** The vectorized coefficient of `ρ^{(L)}(X,M)` is the trace of
+`X` times the corresponding word in the doubled-index tensor `toMPSTensor M`
+(ket index `divNat`, bra index `modNat`). Acting with `u ⊗ v` on every doubled
+physical index sends `ρ` to `u^{⊗L} ρ (v^{⊗L})^T`, preserving the boundary `X`.
+For a unitary on-site representation, weak symmetry is therefore invariance
+of these boundary-weighted coefficients under `g ↦ U_g ⊗ \bar U_g`;
+strong symmetry is their proportionality under `g ↦ U_g ⊗ 1`.
 
-**Scope restriction (boundary `X = 1`):** as in `TNLean/MPS/Symmetry/MPDO/Defs.lean`, the
-density operators are the periodic operators `mpo M L`; documented in
-`docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+At identity boundary the coefficients are ordinary periodic matrix product
+vectors, and weak symmetry becomes on-site symmetry of the doubled tensor.
 
 ## Main definitions
 
@@ -39,15 +38,21 @@ density operators are the periodic operators `mpo M L`; documented in
 
 ## Main results
 
-* `MPOTensor.mpo_pairTwist`: `ρ^{(L)}(pairTwist u v M) = u^{⊗L} ρ^{(L)}(M) (v^{⊗L})^T`.
+* `MPOTensor.mpoWithBoundary_pairTwist`: physical twists preserve the virtual boundary.
+* `MPOTensor.mpvWithBoundary_toMPSTensor`: the vectorized entries are boundary-weighted
+  coefficients of the doubled tensor.
+* `MPOTensor.mpo_pairTwist`: the identity-boundary specialization.
 * `MPOTensor.pairTwist_map_star`, `MPOTensor.pairOperator_map_star`: for `v = \bar u` the twist
   and the doubled operator are the existing `changePhysicalBasis u` and
   `doubledPhysicalMatrix u`.
 * `MPOTensor.twistedTensor_toMPSTensor_pairRep`: twisting the doubled tensor is `pairTwist`.
 * `MPOTensor.sameMPV_toMPSTensor_iff`: equal matrix product vectors of doubled tensors are
   equal density operators at every positive length.
+* `MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor`,
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor`: the general
+  vectorized forms.
 * `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor`,
-  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor`: the vectorized forms.
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor`: the identity-boundary forms.
 
 ## References
 - [arXiv:2603.28349](https://arxiv.org/abs/2603.28349) -- J. Garre Rubio, A. Molnár,
@@ -99,6 +104,42 @@ theorem mpo_pairTwist (u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) (L 
       (Matrix.finKronecker fun _ : Fin L => u) * mpo M L *
         (Matrix.finKronecker fun _ : Fin L => v)ᵀ := by
   rw [Matrix.mul_assoc, ← mpo_braTwist, ← mpo_ketTwist]
+  rfl
+
+/-- A ket twist acts on every boundary-weighted operator by left multiplication.
+Source: arXiv:2603.28349, lines 364–368, with the boundary of
+arXiv:2504.16985, lines 175–182. -/
+theorem mpoWithBoundary_ketTwist (u : Matrix (Fin d) (Fin d) ℂ)
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
+    mpoWithBoundary (fun i j => ∑ k, u i k • M k j) X L =
+      (Matrix.finKronecker fun _ : Fin L => u) * mpoWithBoundary M X L := by
+  ext σ τ
+  rw [mpoWithBoundary, evalWord_ofFn, Matrix.trace_mul_prod_ofFn_sum_smul,
+    Matrix.mul_apply]
+  refine Finset.sum_congr rfl fun κ _ => ?_
+  rw [Matrix.finKronecker_apply, mpoWithBoundary, evalWord_ofFn]
+
+/-- A bra twist acts on every boundary-weighted operator by right multiplication.
+Source: arXiv:2603.28349, lines 364–368. -/
+theorem mpoWithBoundary_braTwist (v : Matrix (Fin d) (Fin d) ℂ)
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
+    mpoWithBoundary (fun i j => ∑ l, v j l • M i l) X L =
+      mpoWithBoundary M X L * (Matrix.finKronecker fun _ : Fin L => v)ᵀ := by
+  ext σ τ
+  rw [mpoWithBoundary, evalWord_ofFn, Matrix.trace_mul_prod_ofFn_sum_smul,
+    Matrix.mul_apply]
+  refine Finset.sum_congr rfl fun κ _ => ?_
+  rw [Matrix.transpose_apply, Matrix.finKronecker_apply, mpoWithBoundary,
+    evalWord_ofFn, mul_comm]
+
+/-- Acting on both physical legs retains the virtual boundary.
+Source: arXiv:2603.28349, lines 364–368. -/
+theorem mpoWithBoundary_pairTwist (u v : Matrix (Fin d) (Fin d) ℂ)
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
+    mpoWithBoundary (pairTwist u v M) X L =
+      (Matrix.finKronecker fun _ : Fin L => u) * mpoWithBoundary M X L *
+        (Matrix.finKronecker fun _ : Fin L => v)ᵀ := by
+  rw [Matrix.mul_assoc, ← mpoWithBoundary_braTwist, ← mpoWithBoundary_ketTwist]
   rfl
 
 /-- **The ket-bra twist by `u ⊗ \bar u` is a change of physical coordinates.**
@@ -220,6 +261,31 @@ theorem sameMPV_toMPSTensor_iff (X Y : MPOTensor d D) :
     · have h1 := (mpv_toMPSTensor_eq_mul_iff X Y N 1).mpr (by rw [one_smul]; exact h N hN) w
       rwa [one_mul] at h1
 
+/-- Boundary-weighted doubled coefficients are matrix entries of the density operator.
+Source: arXiv:2504.16985, lines 175–181. -/
+theorem mpvWithBoundary_toMPSTensor (M : MPOTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) {L : ℕ} (w : Fin L → Fin (d * d)) :
+    MPSTensor.mpvWithBoundary (toMPSTensor M) X w =
+      mpoWithBoundary M X L (fun n => (w n).divNat) (fun n => (w n).modNat) := by
+  rw [MPSTensor.mpvWithBoundary, evalWord_toMPSTensor_ofFn, mpoWithBoundary]
+
+/-- Proportional boundary-weighted vectorized states are proportional operators. -/
+theorem mpvWithBoundary_toMPSTensor_eq_mul_iff (M N : MPOTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) (c : ℂ) :
+    (∀ w : Fin L → Fin (d * d),
+      MPSTensor.mpvWithBoundary (toMPSTensor M) X w =
+        c * MPSTensor.mpvWithBoundary (toMPSTensor N) X w) ↔
+      mpoWithBoundary M X L = c • mpoWithBoundary N X L := by
+  constructor
+  · intro h
+    ext σ τ
+    have h1 := h fun n => finProdFinEquiv (σ n, τ n)
+    simpa only [mpvWithBoundary_toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+      MPSTensor.finProdFinEquiv_modNat, Matrix.smul_apply, smul_eq_mul] using h1
+  · intro h w
+    rw [mpvWithBoundary_toMPSTensor, mpvWithBoundary_toMPSTensor, h,
+      Matrix.smul_apply, smul_eq_mul]
+
 /-! ### Strong and weak symmetry on the vectorized state -/
 
 /-- The transpose of the Kronecker power of the entrywise conjugate is the adjoint of the
@@ -254,8 +320,9 @@ and only if the doubled tensor `toMPSTensor M` is on-site symmetric under
 lines 362–368). -/
 theorem isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor (M : MPOTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) (hU : ∀ g, (U g)ᴴ * U g = 1) :
-    IsWeakOnSiteSymmetry M U ↔ MPSTensor.IsOnSiteSymmetric (toMPSTensor M) (doubledRep U) := by
+    IsWeakOnSiteSymmetry M 1 U ↔ MPSTensor.IsOnSiteSymmetric (toMPSTensor M) (doubledRep U) := by
   unfold IsWeakOnSiteSymmetry IsWeakMPOSymmetry MPSTensor.IsOnSiteSymmetric doubledRep
+  simp only [mpoWithBoundary_one]
   refine forall_congr' fun g => ?_
   rw [twistedTensor_toMPSTensor_pairRep, sameMPV_toMPSTensor_iff]
   refine forall_congr' fun L => forall_congr' fun _ => ?_
@@ -273,15 +340,59 @@ vector of the doubled tensor, i.e. `(U_g ⊗ 1)^{⊗L} |ρ⟩⟩ = c_g^{(L)} |ρ
 lines 362–368, where `c = 1`). -/
 theorem isStrongOnSiteSymmetry_iff_mpv_toMPSTensor (M : MPOTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) (c : G → ℕ → ℂ) :
-    IsStrongOnSiteSymmetry M U c ↔
+    IsStrongOnSiteSymmetry M 1 U c ↔
       ∀ g L, 0 < L → ∀ w : Fin L → Fin (d * d),
         MPSTensor.mpv (MPSTensor.twistedTensor (toMPSTensor M) (pairRep U 1) g) w =
           c g L * MPSTensor.mpv (toMPSTensor M) w := by
   unfold IsStrongOnSiteSymmetry IsStrongMPOSymmetry
+  simp only [mpoWithBoundary_one]
   refine forall_congr' fun g => forall_congr' fun L => forall_congr' fun _ => ?_
   rw [twistedTensor_toMPSTensor_pairRep, mpv_toMPSTensor_eq_mul_iff, mpo_pairTwist,
     mpo_onSite, MonoidHom.one_apply, Matrix.finKronecker_one, Matrix.transpose_one,
     Matrix.mul_one]
+
+/-- Weak on-site symmetry of the boundary-weighted vectorized state.
+Source: arXiv:2504.16985, lines 175–182, and arXiv:2603.28349, lines 362–368. -/
+theorem isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) (hU : ∀ g, (U g)ᴴ * U g = 1) :
+    IsWeakOnSiteSymmetry M X U ↔
+      ∀ g L, 0 < L → ∀ w : Fin L → Fin (d * d),
+        MPSTensor.mpvWithBoundary
+          (MPSTensor.twistedTensor (toMPSTensor M) (doubledRep U) g) X w =
+            MPSTensor.mpvWithBoundary (toMPSTensor M) X w := by
+  unfold IsWeakOnSiteSymmetry IsWeakMPOSymmetry
+  refine forall_congr' fun g => forall_congr' fun L => forall_congr' fun _ => ?_
+  rw [show doubledRep U = pairRep U
+      ((RingHom.mapMatrix (starRingEnd ℂ)).toMonoidHom.comp U) from rfl,
+    twistedTensor_toMPSTensor_pairRep]
+  change Commute (mpo (onSite (U g)) L) (mpoWithBoundary M X L) ↔
+    ∀ w : Fin L → Fin (d * d),
+      MPSTensor.mpvWithBoundary
+        (toMPSTensor (pairTwist (U g) ((U g).map (starRingEnd ℂ)) M)) X w =
+          MPSTensor.mpvWithBoundary (toMPSTensor M) X w
+  have hvec := mpvWithBoundary_toMPSTensor_eq_mul_iff
+    (pairTwist (U g) ((U g).map (starRingEnd ℂ)) M) M X L 1
+  simp only [one_mul, one_smul] at hvec
+  rw [hvec, mpo_onSite, mpoWithBoundary_pairTwist, finKronecker_map_star_transpose,
+    commute_iff_mul_mul_conjTranspose (Matrix.finKronecker_conjTranspose_mul_self (hU g)),
+    eq_comm]
+
+/-- Strong on-site symmetry of the boundary-weighted vectorized state.
+Source: arXiv:2504.16985, lines 175–182, and arXiv:2603.28349, lines 362–368. -/
+theorem isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) (c : G → ℕ → ℂ) :
+    IsStrongOnSiteSymmetry M X U c ↔
+      ∀ g L, 0 < L → ∀ w : Fin L → Fin (d * d),
+        MPSTensor.mpvWithBoundary
+          (MPSTensor.twistedTensor (toMPSTensor M) (pairRep U 1) g) X w =
+            c g L * MPSTensor.mpvWithBoundary (toMPSTensor M) X w := by
+  unfold IsStrongOnSiteSymmetry IsStrongMPOSymmetry
+  refine forall_congr' fun g => forall_congr' fun L => forall_congr' fun _ => ?_
+  rw [twistedTensor_toMPSTensor_pairRep, mpvWithBoundary_toMPSTensor_eq_mul_iff,
+    mpoWithBoundary_pairTwist, mpo_onSite, MonoidHom.one_apply,
+    Matrix.finKronecker_one, Matrix.transpose_one, Matrix.mul_one]
 
 end Symmetry
 

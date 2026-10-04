@@ -2858,6 +2858,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### boundary-weighted physical twists — candidate
+- **Pattern:** expand the trace of an ordered product of linear combinations, then match
+  each coefficient with the corresponding Kronecker-power matrix entry.
+- **Seen:** the ket and bra twists, with and without a boundary, in
+  `TNLean/MPS/Symmetry/MPDO/Vectorized.lean` (four occurrences in one file, 2026-10-02).
+- **Existing abstraction:** `Matrix.trace_prod_ofFn_sum_smul` and
+  `Matrix.trace_mul_prod_ofFn_sum_smul` perform the trace expansion. The remaining entry
+  arguments are short and distinguish left multiplication from right multiplication.
+- **Decision:** retain these proofs; no further abstraction is warranted before this
+  pattern occurs in another file.
+
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
   the original ket-bra alphabet, then transport the physical-trace contraction
