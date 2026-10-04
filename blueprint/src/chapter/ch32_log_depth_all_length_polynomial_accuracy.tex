@@ -67,15 +67,20 @@
         \label{eq:ldp_all_length_polynomial_depth}
     \end{align}
     The constants and threshold are chosen before $\eta$ and $N$.
-    This gives the polynomial accuracy asserted after Lemma~1 of
-    \cite{Malz2024Preparation}, without a divisibility restriction.
+    This is the case $\xi>0$ of the polynomial accuracy asserted after
+    Lemma~1 of \cite{Malz2024Preparation}, without a divisibility
+    restriction; zero correlation length remains outside this construction
+    \cite{gap:mswc24_polynomial_accuracy_uniform_blocks}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:ldp_all_length_polynomial_state,
         lem:ldp_remainder_blocks_partition, thm:ldp_block_approximation_error,
         thm:ldp_approximating_state_depth, thm:ldp_short_chain_preparation,
-        lem:ldp_periodic_state_nonzero}
+        lem:ldp_periodic_state_nonzero,
+        lem:ldp_block_isometry_state_overlap, thm:prep_pair_norm,
+        thm:wordspan_blk_inj_succ,
+        lem:isNBlkInjective_iff_blockTensor_isInjective}
     Normality gives a length $L$ beyond which all blocks are injective.
     Put $R=L+3D$. Choose $N_0$ beyond the nonvanishing threshold and
     at least $R$, $2$, and $\lceil e^{R/(2\xi)}\rceil$.
