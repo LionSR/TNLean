@@ -122,7 +122,9 @@ theorem exists_chainPairMatrix_factorization (hD : 0 < D) (A : MPSChainTensor d 
   · simp [hR β x (not_lt.mp hβ)]
 
 /-- The central site with the virtual-pair input attached. The right virtual pair
-is ordered from the right boundary toward the centre. -/
+is ordered from the right boundary toward the centre.
+
+Source: arXiv:2307.01696, equations (13)–(15), footnotes 3–4. -/
 def centralInputMatrix {s : ℕ} (A : MPSTensor d D)
     (G : Matrix (Fin (D * D)) (Fin s) ℂ) :
     Matrix (Fin (D * D) × Fin d × Fin (D * D)) (Fin s) ℂ :=
@@ -131,14 +133,18 @@ def centralInputMatrix {s : ℕ} (A : MPSTensor d D)
       ((virtualPairEquiv D z.1).1, (virtualPairEquiv D z.2.2).1)) x
 
 /-- A matrix product with a distinguished central physical site. Both side chains
-are indexed from their outer boundary inward, so the right product is transposed. -/
+are indexed from their outer boundary inward, so the right product is transposed.
+
+Source: arXiv:2307.01696, equations (13)–(15), footnotes 3–4. -/
 def mixedProductMap {l r s : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d D)
     (R : MPSChainTensor d D r) (G : Matrix (Fin (D * D)) (Fin s) ℂ) :
     Matrix ((Fin l → Fin d) × Fin d × (Fin r → Fin d)) (Fin s) ℂ :=
   (chainPairMatrix L ⊗ₖ ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ chainPairMatrix R)) *
     centralInputMatrix A G
 
-/-- The central placement leaves the original matrix product coefficients unchanged. -/
+/-- The central placement leaves the original matrix product coefficients unchanged.
+
+Source: arXiv:2307.01696, equations (13)–(15), footnotes 3–4. -/
 theorem mixedProductMap_apply {l r s : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d D)
     (R : MPSChainTensor d D r) (G : Matrix (Fin (D * D)) (Fin s) ℂ)
     (σ : (Fin l → Fin d) × Fin d × (Fin r → Fin d)) (x : Fin s) :
@@ -163,7 +169,9 @@ theorem mixedProductMap_apply {l r s : ℕ} (L : MPSChainTensor d D l) (A : MPST
 /-- A local isometry at the centre, followed by isometric site maps extending
 to the left and right boundaries. Both outer bonds are one-dimensional and all
 bonds are bounded by `D²`. The finite-dimensional input belongs to the central map;
-it may be the full virtual-pair space or the polar support. -/
+it may be the full virtual-pair space or the polar support.
+
+Source: arXiv:2307.01696, equations (13)–(15), footnotes 3–4. -/
 def HasMixedSequentialFactorization {l r s : ℕ} (hD : 0 < D)
     (V : Matrix ((Fin l → Fin d) × Fin d × (Fin r → Fin d)) (Fin s) ℂ) : Prop :=
     ∃ (bL : Fin (l + 1) → ℕ) (QL : MPSChainTensor d (D * D) l)
