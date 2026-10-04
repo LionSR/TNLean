@@ -19,6 +19,11 @@ successive bond dimensions is asserted. The physical sites of the right chain
 are listed from the right boundary toward the centre.
 
 Source: arXiv:2307.01696, equations (13)–(15), especially footnote 4.
+
+**Scope restriction (injective polar input):** the polar-factorization theorems below
+assume the blocked tensor is injective. Footnote 3 also allows non-injective tensors
+using the pseudoinverse; their mixed factorization on the polar support is not proved here.
+Documented in `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
 -/
 
 open scoped BigOperators Matrix Kronecker
@@ -267,7 +272,11 @@ noncomputable def mixedPolarIsoMatrix {l r : ℕ} (L : MPSChainTensor d D l)
       (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor (mixedChain L A R)))
 
 /-- Moving the inverse polar factor to the central site does not change the polar isometry.
-The two outer chains remain independent of that inverse. -/
+The two outer chains remain independent of that inverse.
+
+**Scope restriction (injective polar input):** this uses the ordinary inverse, not the
+pseudoinverse allowed by arXiv:2307.01696, footnote 3 to equations (13)–(15).
+See `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
 theorem mixedPolarIsoMatrix_eq_mixedProductMap {l r : ℕ} (L : MPSChainTensor d D l)
     (A : MPSTensor d D) (R : MPSChainTensor d D r)
     (hB : Kraus.IsInjective (MPSChainTensor.blockTensor (mixedChain L A R))) :
@@ -290,7 +299,10 @@ isometry too. Contracting these maps is exactly the original polar isometry.
 
 Source: arXiv:2307.01696, footnote 4 to equations (13)–(15). Unlike the
 one-sided factorization, both external bonds are one-dimensional: the
-`D²`-dimensional input is at the central site. -/
+`D²`-dimensional input is at the central site.
+
+**Scope restriction (injective polar input):** the non-injective extension of source
+footnote 3 is not included; see `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
 theorem exists_mixed_sequential_polarIsoMatrix_of_split {l r : ℕ} (hD : 0 < D)
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r)
     (hB : Kraus.IsInjective (MPSChainTensor.blockTensor (mixedChain L A R))) :
@@ -302,11 +314,14 @@ theorem exists_mixed_sequential_polarIsoMatrix_of_split {l r : ℕ} (hD : 0 < D)
   rw [mixedPolarIsoMatrix_eq_mixedProductMap L A R hB] at hV ⊢
   exact exists_mixed_isometric_factorization hD L A R _ hV
 
-/-- The polar isometry of an arbitrary site-dependent chain has a mixed sequential
-factorization with its input at the site after the first `l` physical sites.
+/-- The polar isometry of a site-dependent chain with injective blocked tensor has a mixed
+sequential factorization with its input at the site after the first `l` physical sites.
 This includes both endpoint choices.
 
-Source: arXiv:2307.01696, footnote 4 to equations (13)–(15). -/
+Source: arXiv:2307.01696, footnote 4 to equations (13)–(15).
+
+**Scope restriction (injective polar input):** the non-injective extension of source
+footnote 3 is not included; see `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
 theorem exists_mixed_sequential_polarIsoMatrix {l r : ℕ} (hD : 0 < D)
     (A : MPSChainTensor d D (l + (r + 1)))
     (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) :

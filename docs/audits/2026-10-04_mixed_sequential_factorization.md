@@ -26,3 +26,14 @@ The final theorem specializes the construction to the polar isometry of
 an injective blocked site-dependent chain at an arbitrary chosen site,
 including either endpoint. Positive bond dimension is explicit. No
 translation-invariance, normalization, or additional rank condition is used.
+
+The source is broader in one respect: footnote 3 on page 3 permits non-injective
+blocked tensors and interprets the inverse as a pseudoinverse. The mixed polar
+result here is the injective specialization, with C†C = I on all D² input
+coordinates. For a non-injective blocked map, V†V is its support projector;
+a mixed extension must either allow that projector as C†C or restrict the
+central input to the support. This extension is not claimed. Its scope and
+elimination plan are recorded in
+[`mswc24_mixed_polar_injectivity_scope`](../paper-gaps/mswc24_mixed_polar_injectivity_scope.tex).
+The one-sided support-restricted factorization already exists as
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary`.
