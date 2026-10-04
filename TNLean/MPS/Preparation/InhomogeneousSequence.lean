@@ -15,10 +15,14 @@ unitary synthesis of `exists_isPreparedInDepth_of_norm_eq_one`; its depth is abs
 one constant independent of the ring and its tensors. A one-site state is already a product.
 
 The approximation hypotheses are those of `VaryingBondChain.IsPairApproximable`, with no
-injectivity assumption. The positive logarithmic lower bound is an explicit extra hypothesis:
-an upper bound `q = O(log N)` alone does not imply growth. The conclusion is depth `O(L_N)`
-and error at most `δ_N`. It does not assert an accuracy-dependent depth `O(log(N/ε))` from
-`δ_N → 0` without a uniform error rate.
+injectivity assumption.
+
+**Scope restriction (positive block growth):** the positive logarithmic lower bound is an
+explicit extra hypothesis: an upper bound `q = O(log N)` alone does not imply growth.
+The conclusion is depth `O(L_N)` and error at most `δ_N`. It does not assert an
+accuracy-dependent depth `O(log(N/ε))` from
+`δ_N → 0` without a uniform error rate. See
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 ## Main results
 
