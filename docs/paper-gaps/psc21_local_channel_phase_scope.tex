@@ -17,29 +17,32 @@ fixed number $k$ of compositions of channels assisted by measurements and
 classical communication, each of depth $f(N)$, whose outputs $\sigma_N$
 satisfy
 \begin{align}
-  \lVert\sigma_N-\ket{\varphi_N}\bra{\varphi_N}\rVert_1 &\longrightarrow 0.
+    \lVert\sigma_N-\ket{\varphi_N}\bra{\varphi_N}\rVert_1 & \longrightarrow 0.
 \end{align}
 Here $f$ is polylogarithmic. Mutual convertibility defines the source's
 phase equivalence. The fixed number of compositions and the polylogarithmic
 depth bound are allowed to depend on the pair of sequences, but not on $N$.
 
-\section{The local-channel specialization}
+\section{The enlarged-site local-channel model}
 The available local protocols alternate onsite channels with layers of
 channels on disjoint nearest-neighbor pairs. They act on arbitrary input
-operators and allow changes of local dimension. They do not include classical
-communication between separated sites. For this class, approximate conversion
+operators and allow changes of local dimension. A layer of two-site channels
+on the resulting enlarged sites costs one depth unit, regardless of that
+dimension. Intermediate dimensions may depend on the system size without a
+uniform bound. The model has no classical feedforward between separated
+sites. For this class, approximate conversion
 means $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$, with protocol depth at
 most $T$.\footnote{Formal declaration:
-\leanid{QuantumCircuit.IsApproxLocalChannelConversion} in
-\doclink{TNLean/Circuit/Channel/ApproximateConversion}.}
+    \leanid{QuantumCircuit.IsApproxLocalChannelConversion} in
+    \doclink{TNLean/Circuit/Channel/ApproximateConversion}.}
 For Hermitian input operators, composition adds the depths and errors:
 \begin{align}
-\lVert\Psi_2(\Psi_1(\rho))-\tau\rVert_1
-&\le \lVert\Psi_2(\Psi_1(\rho)-\sigma)\rVert_1
-    +\lVert\Psi_2(\sigma)-\tau\rVert_1\\
-&\le \lVert\Psi_1(\rho)-\sigma\rVert_1
+    \lVert\Psi_2(\Psi_1(\rho))-\tau\rVert_1
+     & \le \lVert\Psi_2(\Psi_1(\rho)-\sigma)\rVert_1
+    +\lVert\Psi_2(\sigma)-\tau\rVert_1               \\
+     & \le \lVert\Psi_1(\rho)-\sigma\rVert_1
     +\lVert\Psi_2(\sigma)-\tau\rVert_1
-\le\varepsilon_1+\varepsilon_2.
+    \le\varepsilon_1+\varepsilon_2.
 \end{align}
 The middle inequality is trace-norm contractivity for trace-preserving
 positive maps on Hermitian operators.
@@ -48,27 +51,41 @@ For families, the error tends to zero and the depth is eventually bounded
 by $C(1+\log(N+1))^p$, for a nonnegative constant $C$ and integer $p\ge0$.
 Mutual conversion is an equivalence relation on eventually Hermitian
 families, and in particular on families of density matrices.\footnote{Formal
-declarations: \leanid{QuantumCircuit.IsAsymptoticLocalChannelConversion} and
-\leanid{QuantumCircuit.IsLocalChannelPhaseEquivalent.equivalence} in
-\doclink{TNLean/Circuit/Channel/AsymptoticConversion}.}
+    declarations: \leanid{QuantumCircuit.IsAsymptoticLocalChannelConversion} and
+    \leanid{QuantumCircuit.IsLocalChannelPhaseEquivalent.equivalence} in
+    \doclink{TNLean/Circuit/Channel/AsymptoticConversion}.}
 The shift in the logarithm only affects the bound at small system sizes.
 Finite compositions are already included: their depths add, and a finite sum
 of polylogarithmic bounds is polylogarithmic. No bound on the dimension of
 onsite ancillas is imposed.
 
+This gate convention differs from the source. In the Supplement's proof of
+Proposition~2 (p.~8), the intersite gates act only on the physical qudits;
+the entanglement bound across a cut depends on their fixed dimension $d$,
+not on the number of onsite ancillas. Allowing one intersite layer to act
+on an arbitrarily enlarged local space does not by itself give a
+uniform-depth simulation in that convention. No such simulation or
+inclusion between the two asymptotic conversion relations is proved here.
+
 \section{Remaining scope}
-This equivalence is restricted to local channels without classical
-feedforward. It does not formalize the full source equivalence, nor the
-classification asserting that every translation-invariant matrix product
-state belongs to the trivial phase. The existing deterministic measurement
+The equivalence proved here belongs to the enlarged-site local-channel model.
+It is not identified with the source's phase equivalence or asserted to be
+a subclass at the same asymptotic depth. The classification asserting that
+every translation-invariant matrix product state belongs to the trivial
+source phase is not obtained. The existing deterministic measurement
 preparations start from product states, so they cannot supply channels on
 arbitrary input states for the source relation.
 
-The remaining step is to define the channels induced by measurement
-protocols on arbitrary inputs, including dependence of later operations on
-classically communicated outcomes, and their finite compositions.\footnote{Tracked by \ghissue{8382}, under \ghissue{8622}.} The same
-trace-norm estimate then proves transitivity for that enlarged class. The
-separate restrictions of the matrix-product-state classification are recorded
+A source-faithful relation must distinguish the fixed-dimensional physical
+qudits from onsite ancillas, count intersite gates according to the source
+convention, and include the channels induced by adaptive measurements on
+arbitrary inputs and their finite compositions.\footnote{The adaptive-input
+    extension is tracked by \ghissue{8382}, under \ghissue{8622}.}
+Alternatively, comparison with the present relation would require a proved
+uniform simulation bound or explicit restrictions on intermediate dimensions.
+Trace-norm contractivity supplies the same error estimate once those channels
+and depth bounds are established. The separate restrictions of the
+matrix-product-state classification are recorded
 in~\cite{gap:psc21_mps_classification_scope}.
 
 \bibliographystyle{alpha}

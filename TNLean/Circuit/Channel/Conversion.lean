@@ -14,10 +14,15 @@ Attaching an ancilla in a fixed state at every site and discarding the ancilla o
 are onsite channels. A *local channel conversion* of depth `T` alternates onsite channels with
 `T` layers of local channels on pairs of neighbouring sites,
 `Φ_T ∘ L_T ∘ Φ_{T-1} ∘ ⋯ ∘ L_1 ∘ Φ_0`, where the local dimension may change at each onsite
-channel. This is the channel form of the circuits `V' = U_ℓ V_ℓ ⋯ U_1 V_1 U_0` of
+channel. This is motivated by the circuits `V' = U_ℓ V_ℓ ⋯ U_1 V_1 U_0` of
 arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC", with ancillas attached to
-each site, local operations between the layers, and "ancillas traced out at the end", but
-without measurements or classical communication.
+each site, local operations between the layers, and ancillas traced out at the end.
+
+**Scope restriction (enlarged sites, no classical feedforward):** the local dimension may
+be enlarged without a uniform bound, and each two-site layer on those enlarged sites costs
+one depth unit. The source's intersite gates act only on the physical qudits, and its
+protocols allow classical feedforward. No uniform source-depth simulation or inclusion in
+the source relation is established; see `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 Local channel conversion is a directed relation: it is reflexive at depth `0` and transitive
 with additive depth, but it is not symmetric, since a channel need not be undone by another

@@ -15,11 +15,13 @@ conversion errors tend to zero and their circuit depths are eventually bounded b
 fixes the values at small sizes; this is a polylogarithmic bound. Mutual convertibility is
 an equivalence relation on Hermitian families, and hence on density-matrix families.
 
-**Scope restriction (no classical feedforward):** these are the local-channel protocols of
-`QuantumCircuit.IsLocalChannelProtocol`, not the larger `QCcc` class in arXiv:2103.13367.
-The paper allows a fixed number of compositions of channels with measurements and classical
-communication. Here the allowed protocols are already closed under composition with additive
-depth. This gives the no-feedforward specialization of the source's asymptotic relation.
+**Scope restriction (enlarged sites, no classical feedforward):** these are the protocols of
+`QuantumCircuit.IsLocalChannelProtocol`, with unit-cost two-site layers even after onsite
+channels enlarge the local dimension. Intermediate dimensions have no uniform bound across
+system sizes. The source's intersite gates act on fixed-dimensional physical qudits, and
+its `QCcc` protocols also allow classical feedforward. This is a local-channel model variant
+inspired by the source's asymptotic criterion; no uniform depth simulation or inclusion in
+the source relation is established. Finite compositions in this model have additive depth.
 Documented in `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 ## Main definitions
@@ -48,8 +50,8 @@ variable {d e f : ℕ}
 /-- Asymptotic local conversion with polylogarithmic depth and trace-norm error tending to
 zero. Only the tail of the families matters.
 
-Source: arXiv:2103.13367, paragraph "Phases of matter", restricted to channels without
-classical feedforward; see `docs/paper-gaps/psc21_local_channel_phase_scope.tex`. -/
+Motivated by arXiv:2103.13367, paragraph "Phases of matter", in the enlarged-site
+local-channel model; see `docs/paper-gaps/psc21_local_channel_phase_scope.tex`. -/
 def IsAsymptoticLocalChannelConversion
     (ρ : (N : ℕ) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (σ : (N : ℕ) → Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) : Prop :=
@@ -71,8 +73,9 @@ theorem refl (ρ : (N : ℕ) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
 families of density matrices. The new error is `ε₁ + ε₂`; the sum of two polylogarithmic
 depth bounds is again polylogarithmic.
 
-Source: arXiv:2103.13367, paragraph "Phases of matter", restricted to local channels
-without classical feedforward. -/
+The transitivity argument is that of arXiv:2103.13367, paragraph "Phases of matter",
+for the enlarged-site local-channel model of
+`docs/paper-gaps/psc21_local_channel_phase_scope.tex`. -/
 theorem trans
     {ρ : (N : ℕ) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     {σ : (N : ℕ) → Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
@@ -110,8 +113,9 @@ end IsAsymptoticLocalChannelConversion
 
 /-- Mutual asymptotic conversion by polylogarithmic-depth local channels.
 
-**Scope restriction (no classical feedforward):** this is the local-channel specialization,
-not the full `QCcc` phase equivalence of arXiv:2103.13367, paragraph "Phases of matter".
+**Scope restriction (enlarged sites, no classical feedforward):** this relation uses
+unit-cost gates on enlarged sites, with no uniform intermediate-dimension bound. No
+uniform-depth inclusion in the `QCcc` phase relation of arXiv:2103.13367 is established.
 See `docs/paper-gaps/psc21_local_channel_phase_scope.tex`. -/
 def IsLocalChannelPhaseEquivalent
     (ρ : (N : ℕ) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)

@@ -1,10 +1,13 @@
 \section{Approximate local channel conversions}
 
-The trace-norm approximation of~\cite[paragraph ``Phases of matter'']{Piroli2021LOCC}
-can be applied to the local channels of
-Definition~\ref{def:qc_local_channel_conversion}. This restricts the allowed
-operations: the source additionally permits measurements and classical
-feedforward, whereas the channels in this section do not; see
+The trace-norm criterion of~\cite[paragraph ``Phases of matter'']{Piroli2021LOCC}
+motivates the following relation for the local channels of
+Definition~\ref{def:qc_local_channel_conversion}. Onsite channels may enlarge
+the local dimension, and each two-site layer on the enlarged sites costs one
+unit of depth. No uniform bound on intermediate dimensions is imposed.
+The source instead lets intersite gates act only on the physical qudits and
+also permits classical feedforward. No uniform depth simulation or inclusion
+in the source relation is asserted; see
 \cite{gap:psc21_local_channel_phase_scope}.
 
 \begin{definition}[Approximate local channel conversion]

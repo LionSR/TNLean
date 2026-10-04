@@ -1754,8 +1754,12 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
   Heisenberg dual).
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
-  are free. There are no measurements or classical communication, so this is
-  not the LOCC class of the source.
+  are free. Onsite channels may enlarge the dimension, and a layer on the
+  enlarged sites still costs one depth unit. No uniform intermediate-dimension
+  bound is imposed. There is no classical feedforward. The source's intersite
+  gates act only on fixed-dimensional physical qudits; no uniform-depth
+  simulation or inclusion in its LOCC relation is proved. See
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 #### `QuantumCircuit.IsLocalChannelConversion`
 
@@ -1796,7 +1800,8 @@ in `MPS/Preparation/` uses it.
   The trace norm is `QuantumCircuit.chainTraceNorm`, the sum of singular
   values after enumerating the chain configurations.
 - **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
-  "Phases of matter", restricted to local channels without classical feedforward.
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
 - **Sanctioned bridges:** `IsApproxLocalChannelConversion.refl`,
   `IsApproxLocalChannelConversion.mono` (both bounds may increase),
   `IsApproxLocalChannelConversion.trans` (depths and errors add for Hermitian
@@ -1805,7 +1810,9 @@ in `MPS/Preparation/` uses it.
   local channel conversion).
 - **Caveat:** the definition does not require density matrices or Hermiticity;
   the composition theorem requires the stated Hermiticity hypotheses.
-  Measurements with classical feedforward are excluded; see
+  Intermediate dimensions are unrestricted and two-site layers on enlarged
+  sites have unit depth. Classical feedforward is excluded, but no uniform
+  simulation or inclusion in the source relation is established; see
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 #### `QuantumCircuit.IsAsymptoticLocalChannelConversion`
@@ -1819,13 +1826,16 @@ in `MPS/Preparation/` uses it.
   approximate local channel conversion from $\rho_N$ to $\sigma_N$ has depth
   $T_N\le C(1+\log(N+1))^k$ and trace-norm error at most $\varepsilon_N$.
 - **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
-  "Phases of matter", restricted to local channels without classical feedforward.
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
 - **Sanctioned bridges:** `IsAsymptoticLocalChannelConversion.refl` and
   `IsAsymptoticLocalChannelConversion.trans`, the latter for eventually
   Hermitian source and intermediate families.
 - **Caveat:** only the tails of the families matter; the logarithmic shift
   fixes small sizes. The relation is directed, and its definition does not
-  assume density matrices. It is not the full source `QCcc` relation; see
+  assume density matrices. Intermediate local dimensions may grow with `N`
+  without changing the unit cost per two-site layer. No uniform-depth
+  inclusion in the source `QCcc` relation is established; see
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 #### `QuantumCircuit.IsLocalChannelPhaseEquivalent`
@@ -1836,7 +1846,8 @@ in `MPS/Preparation/` uses it.
 - **Defined in:** `TNLean/Circuit/Channel/AsymptoticConversion.lean`.
 - **Meaning:** asymptotic local channel conversion holds in both directions.
 - **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
-  "Phases of matter", restricted to local channels without classical feedforward.
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
 - **Sanctioned bridges:** `IsLocalChannelPhaseEquivalent.refl`,
   `IsLocalChannelPhaseEquivalent.symm`, and
   `IsLocalChannelPhaseEquivalent.trans` (for three eventually Hermitian
@@ -1844,7 +1855,9 @@ in `MPS/Preparation/` uses it.
   relation on eventually Hermitian families of one fixed local dimension.
 - **Caveat:** density-matrix families satisfy the Hermiticity condition, but
   arbitrary operator families are not asserted to form an equivalence
-  relation. This is not the full source `QCcc` phase classification; see
+  relation. The enlarged-site gate convention and absence of classical
+  feedforward differ from the source model; no inclusion in its phase
+  relation or source `QCcc` classification is asserted. See
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 ## Inhomogeneous short-range correlated chains

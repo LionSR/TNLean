@@ -15,10 +15,13 @@ norm `ε` of `σ`. For Hermitian inputs, composing two conversions adds their de
 errors: the second channel contracts the first error, and the triangle inequality adds
 the second error. In particular this applies to density matrices.
 
-**Scope restriction (no classical feedforward):** the protocols are the local channels of
-`QuantumCircuit.IsLocalChannelProtocol`. They do not include the measurements and classical
-communication in the `QCcc` equivalence of arXiv:2103.13367, paragraph "Phases of matter".
-The trace-norm approximation is that of the source, restricted to this class of channels.
+**Scope restriction (enlarged sites, no classical feedforward):** the protocols are those
+of `QuantumCircuit.IsLocalChannelProtocol`. Onsite channels may enlarge the local dimension,
+and a two-site layer on the enlarged sites still costs one depth unit. No uniform bound on
+intermediate dimensions is imposed. The source's intersite gates act on fixed-dimensional
+physical qudits, and its `QCcc` protocols additionally permit classical feedforward. No
+uniform depth simulation or inclusion in that source relation is established here.
+This local-channel model uses the source's trace-norm approximation criterion.
 Documented in `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 ## Main definitions
@@ -99,8 +102,8 @@ theorem IsLocalChannelProtocol.chainTraceNorm_map_le {T : ℕ}
 error at most `ε` if a local channel protocol `Ψ` of depth at most `T` satisfies
 `‖Ψ(ρ) - σ‖₁ ≤ ε`.
 
-Source: arXiv:2103.13367, paragraph "Phases of matter", restricted to local channels
-without classical feedforward. -/
+Motivated by arXiv:2103.13367, paragraph "Phases of matter", using the enlarged-site
+local-channel model of `docs/paper-gaps/psc21_local_channel_phase_scope.tex`. -/
 def IsApproxLocalChannelConversion (T : ℕ) (ε : ℝ)
     (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (σ : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) : Prop :=
@@ -134,8 +137,9 @@ theorem mono {T T' : ℕ} {ε ε' : ℝ}
 /-- Composition adds depth and error. The Hermiticity hypotheses hold for density matrices;
 contractivity controls the first error and the triangle inequality adds the second.
 
-Source: arXiv:2103.13367, paragraph "Phases of matter", the transitivity argument,
-restricted to local channels without classical feedforward. -/
+The transitivity argument is that of arXiv:2103.13367, paragraph "Phases of matter",
+for the enlarged-site local-channel model described in
+`docs/paper-gaps/psc21_local_channel_phase_scope.tex`. -/
 theorem trans {T₁ T₂ : ℕ} {ε₁ ε₂ : ℝ}
     {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     {σ : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
