@@ -1370,6 +1370,28 @@ The following notions use different transfer objects and are not interchangeable
   predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
   `OBCChainTensor.ofSupported`.
 
+### `MPSPreparation.HasMixedSequentialFactorization`
+
+- **Declaration:** `MPSPreparation.HasMixedSequentialFactorization hD V : Prop`,
+  for `hD : 0 < D` and a matrix from `D²` input coordinates to the physical
+  configurations of a left chain, a central site, and a right chain.
+- **Defined in:** `TNLean/MPS/Preparation/MixedSequentialFactorization.lean`.
+- **Meaning:** $V=(E_L\otimes I_d\otimes E_R)C$, where each side is evaluated
+  from its outer boundary inward using isometric site maps, both outer bonds
+  have dimension one, every bond has dimension at most $D^2$, and $C$ is an
+  isometry from the full $D^2$-dimensional input to the two inward bonds and
+  the central physical site.
+- **Source:** arXiv:2307.01696, p. 3, footnote 4 to equations (13)--(15).
+- **Sanctioned bridges:** `MPSPreparation.exists_mixed_isometric_factorization`
+  for an isometric matrix product map, and
+  `MPSPreparation.exists_mixed_sequential_polarIsoMatrix_of_split` and
+  `MPSPreparation.exists_mixed_sequential_polarIsoMatrix` for the polar
+  isometry of an injective blocked chain, with any chosen central site.
+- **Caveat:** no monotonicity of bond dimensions is asserted. The polar
+  specialization assumes injectivity; the non-injective pseudoinverse case
+  of source footnote 3 needs a support-restricted or partial-isometric
+  central map. See `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
+
 ## Quantum circuits
 
 The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
@@ -1756,6 +1778,55 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. There are no measurements or classical communication, so this is
   not the LOCC class of the source.
+
+#### `QuantumCircuit.IsAdaptiveChannelProtocol`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelProtocol T Ψ : Prop`,
+  for `[NeZero N]`, a depth bound `T : ℕ`, and a linear map between chain
+  operators with possibly different local dimensions.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** a finite tree of onsite channels, nearest-neighbor channel
+  layers, and onsite instruments with outcome-dependent continuations.
+  Each branch has at most `T` nearest-neighbor layers; onsite operations
+  and communication of the complete outcome tuple cost zero depth.
+  `OnsiteChannel.feedforwardMap` sums unnormalized outcome operations,
+  including zero-probability outcomes, and never divides by probabilities.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", motivates finite adaptive operations. The formal predicate uses
+  enlarged-site gate costs rather than the source's fixed physical-qudit costs.
+- **Sanctioned bridges:** `IsAdaptiveChannelProtocol.isKrausCPTP`,
+  `IsAdaptiveChannelProtocol.comp` (additive depth bounds),
+  `IsAdaptiveChannelProtocol.onsite_comp`, and
+  `IsLocalChannelProtocol.adaptive` (deterministic local protocols are included),
+  and `MeasurementRound.adaptive` (the existing measurement round's average
+  channel has the same quantum-depth bound).
+- **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
+  gate on the enlarged spaces still costs one layer. No uniform-depth
+  simulation into the source physical-qudit model is established. Also,
+  this is an upper bound on quantum depth. The source fixes the number of
+  composed `QCcc` blocks independently of system size; a block can already
+  contain sequential measurements/corrections at many sites. The tree does
+  not record a fixed-number source-block decomposition with the required
+  internal measurement/control order and one-measurement-per-site rule. See
+  `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
+
+#### `QuantumCircuit.IsAdaptiveChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelConversion T ρ σ : Prop`,
+  for `[NeZero N]` and operators on `N`-site chains.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** there is a map `Ψ` with `IsAdaptiveChannelProtocol T Ψ`
+  and `Ψ ρ = σ`.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", with the enlarged-site and finite-round scope of
+  `IsAdaptiveChannelProtocol`.
+- **Sanctioned bridges:** `IsAdaptiveChannelConversion.refl`,
+  `IsAdaptiveChannelConversion.mono`, `IsAdaptiveChannelConversion.trans`,
+  `IsAdaptiveChannelConversion.density`, and
+  `IsLocalChannelConversion.adaptive`.
+- **Caveat:** exact, directed conversion on arbitrary input operators;
+  positivity and unit trace of the output follow from those of the input.
+  No symmetry or asymptotic phase classification is asserted.
 
 #### `QuantumCircuit.IsLocalChannelConversion`
 

@@ -61,13 +61,11 @@ and the virtual cocycle class are proved for every character. Unitarity of the p
 for a general group requires a unit-modulus character; for a finite group this follows from
 finite order and is derived inside the realization theorem.
 
-**Scope restriction (on-site symmetries):** the source's group may combine on-site,
-time-reversal and reflection symmetries, with cocycles in the twisted groups
-`H^2_α(G, U(1))` and `H^1_β(G, U(1))`, while `sptFixedPointAction`,
-`twistedTensor_sptFixedPointTensor`, `sptFixedPointTensor_isOnSiteSymmetricUpToCharacter`,
-`cohomologousTo_of_sptFixedPointTensor` and `exists_virtualRep_sptFixedPointTensor`
-treat a linear on-site action with an untwisted factor system and character; time
-reversal and reflection are not represented. Documented in
+**Mixed symmetries.** This module is the linear on-site specialization. The
+extension in `TNLean.MPS.Symmetry.MixedSPTFixedPoint` treats time reversal and
+reflection, the distinct phase and virtual conjugation parities, and actual
+`U(1)`-valued Mathlib cohomology classes. It reuses this module's corrected
+injective dimer tensor and rank-one transfer map. See
 `docs/paper-gaps/rmp_spt_fixed_point_onsite_scope.tex`.
 
 ## Main definitions

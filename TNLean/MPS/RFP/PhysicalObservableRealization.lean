@@ -73,35 +73,6 @@ private theorem evalWord_directSumTensor
   rw [hDirect, evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
   simp
 
-/-- The inserted transfer map of a direct sum is the reindexing of the
-corresponding block-diagonal word sum. -/
-private theorem physicalObservableTransfer_directSum_reindex
-    (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ)
-    (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
-    (Y : Matrix ((k : Fin r) × Fin (dim k))
-      ((k : Fin r) × Fin (dim k)) ℂ) :
-    physicalObservableTransfer (directSumTensor A) L O
-        (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv Y) =
-      Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
-        (∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
-          O τ σ •
-            (Matrix.blockDiagonal' (fun k ↦ Kraus.evalWord (A k) (List.ofFn σ)) * Y *
-              (Matrix.blockDiagonal' (fun k ↦
-                Kraus.evalWord (A k) (List.ofFn τ)))ᴴ)) := by
-  classical
-  rw [physicalObservableTransfer_apply]
-  simp only [evalWord_directSumTensor, Matrix.reindex_apply]
-  rw [Matrix.submatrix_sum]
-  apply Finset.sum_congr rfl
-  intro σ _
-  rw [Matrix.submatrix_sum]
-  apply Finset.sum_congr rfl
-  intro τ _
-  rw [Matrix.conjTranspose_submatrix,
-    Matrix.submatrix_mul_equiv _ _ _ finSigmaFinEquiv.symm _,
-    Matrix.submatrix_mul_equiv _ _ _ finSigmaFinEquiv.symm _]
-  rfl
-
 /-- A simultaneous length-`L` word span realizes a sector-supported virtual
 matrix-unit map by a physical observable on `L` sites.
 
@@ -126,13 +97,13 @@ theorem WordTupleSpanTop.exists_physicalObservableTransfer_directSum_matrixUnit
   let W : (Fin L → Fin d) →
       Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ :=
     fun σ ↦ Matrix.blockDiagonal' (fun k ↦ Kraus.evalWord (A k) (List.ofFn σ))
-  let M₁ := ∑ σ : Fin L → Fin d, C ⟨j, a, b⟩ σ • W σ
-  let M₂ := ∑ τ : Fin L → Fin d, C ⟨j, c, e⟩ τ • W τ
-  have hM₁ : M₁ = Matrix.single ⟨j, a⟩ ⟨j, b⟩ 1 := by
+  have hM (a b : Fin (dim j)) :
+      (∑ σ : Fin L → Fin d, C ⟨j, a, b⟩ σ • W σ) =
+        Matrix.single ⟨j, a⟩ ⟨j, b⟩ 1 := by
     ext ⟨k, x⟩ ⟨l, y⟩
     by_cases hkl : k = l
     · subst l
-      simp only [M₁, Matrix.sum_apply, Matrix.smul_apply, W,
+      simp only [Matrix.sum_apply, Matrix.smul_apply, W,
         Matrix.blockDiagonal'_apply_eq, smul_eq_mul]
       rw [hC]
       by_cases hjk : j = k
@@ -143,54 +114,27 @@ theorem WordTupleSpanTop.exists_physicalObservableTransfer_directSum_matrixUnit
     · have hnot : ¬ ((j = k ∧ HEq a x) ∧ j = l ∧ HEq b y) := by
         rintro ⟨⟨hjk, _⟩, hjl, _⟩
         exact hkl (hjk.symm.trans hjl)
-      simp only [M₁, Matrix.sum_apply, Matrix.smul_apply, W]
+      simp only [Matrix.sum_apply, Matrix.smul_apply, W]
       rw [Finset.sum_eq_zero]
       · simp [hnot]
       · intro σ _
         simp [Matrix.blockDiagonal'_apply_ne _ _ _ hkl]
-  have hM₂ : M₂ = Matrix.single ⟨j, c⟩ ⟨j, e⟩ 1 := by
-    ext ⟨k, x⟩ ⟨l, y⟩
-    by_cases hkl : k = l
-    · subst l
-      simp only [M₂, Matrix.sum_apply, Matrix.smul_apply, W,
-        Matrix.blockDiagonal'_apply_eq, smul_eq_mul]
-      rw [hC]
-      by_cases hjk : j = k
-      · subst k
-        by_cases hx : c = x <;> by_cases hy : e = y <;>
-          simp [hx, hy]
-      · simp [hjk]
-    · have hnot : ¬ ((j = k ∧ HEq c x) ∧ j = l ∧ HEq e y) := by
-        rintro ⟨⟨hjk, _⟩, hjl, _⟩
-        exact hkl (hjk.symm.trans hjl)
-      simp only [M₂, Matrix.sum_apply, Matrix.smul_apply, W]
-      rw [Finset.sum_eq_zero]
-      · simp [hnot]
-      · intro τ _
-        simp [Matrix.blockDiagonal'_apply_ne _ _ _ hkl]
-  let O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ := fun τ σ ↦
-    C ⟨j, a, b⟩ σ * starRingEnd ℂ (C ⟨j, c, e⟩ τ)
-  refine ⟨O, ?_⟩
-  intro X
-  let Y := Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm X
-  have hX : X = Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv Y := by
+  have hspan (a b : Fin (dim j)) :
+      Matrix.single (finSigmaFinEquiv ⟨j, a⟩) (finSigmaFinEquiv ⟨j, b⟩) (1 : ℂ) ∈
+        Submodule.span ℂ (Set.range fun σ : Fin L → Fin d ↦
+          Kraus.evalWord (directSumTensor A) (List.ofFn σ)) := by
+    apply (Submodule.mem_span_range_iff_exists_fun ℂ).mpr
+    refine ⟨C ⟨j, a, b⟩, ?_⟩
     ext u v
-    simp [Y, Matrix.reindex_apply]
-  have hSum :
-      (∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
-        O τ σ • (W σ * Y * (W τ)ᴴ)) = M₁ * Y * M₂ᴴ := by
-    simp only [mul_assoc, Matrix.sum_mul, Algebra.smul_mul_assoc,
-      Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, RCLike.star_def,
-      Matrix.mul_sum, Algebra.mul_smul_comm, Finset.smul_sum, smul_smul,
-      mul_comm, O, M₁, M₂]
-    rw [Finset.sum_comm]
-  rw [hX, physicalObservableTransfer_directSum_reindex]
-  change Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
-      (∑ σ, ∑ τ, O τ σ • (W σ * Y * (W τ)ᴴ)) = _
-  rw [hSum, hM₁, hM₂]
-  ext u v
-  simp only [Matrix.reindex_apply]
-  simp [Matrix.single_apply, Equiv.eq_symm_apply]
+    have h := congrArg
+      (fun M ↦ M (finSigmaFinEquiv.symm u) (finSigmaFinEquiv.symm v)) (hM a b)
+    simpa [Matrix.sum_apply, Matrix.smul_apply, evalWord_directSumTensor,
+      Matrix.reindex_apply, W, Matrix.single_apply, Equiv.eq_symm_apply] using h
+  obtain ⟨O, hO⟩ := exists_physicalObservableTransfer_mul_of_mem_span
+    (directSumTensor A) L _ _ (hspan a b) (hspan c e)
+  refine ⟨O, fun X ↦ ?_⟩
+  rw [hO, Matrix.conjTranspose_single, star_one, Matrix.single_mul_mul_single]
+  simp
 
 /-- A physical observable can realize an arbitrary linear combination of
 virtual matrix-unit maps supported on one BNT sector.

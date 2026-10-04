@@ -9,6 +9,24 @@ weekly audits update evidence and status rather than renumbering.
 Tracking issue: [#4529](https://github.com/LionSR/TNLean/issues/4529), with
 each open debt attached as a native sub-issue.
 
+## Preparation algebra dependency separation (#8637)
+
+- **Status**: partial core extraction; the remaining consumer migration and
+  controlled capstone benchmarks stay open in [#8637](https://github.com/LionSR/TNLean/issues/8637).
+- **Evidence**: `BlockIsometryState` imported normal-gauge convergence for its
+  finite-configuration Gram identities and cyclic pair states. Its non-Mathlib
+  closure drops from 319 to 90 modules; the new `BlockStatePreparation` boundary
+  has 113, with no Gametheory or whole-Mathlib import path.
+- **Preserved**: 52 public declarations and two private helpers move with unchanged
+  statements/proofs and namespaces. Original owner imports retain the public API.
+  No new generic `Algebra` interface is introduced.
+- **Remaining**: `InhomogeneousPreparation` is unchanged, so
+  `PartialIsometryPreparation` retains the broad route. Post-change compile times
+  are observations, not a controlled speedup claim.
+- **Verification**: both core modules and the nine-module block-circuit closure
+  pass full-option isolated compilation; published full-root checks remain the
+  integration gate. See the [audit](audits/2026-10-04_preparation_algebra_dependency_extraction.md).
+
 ## Appendix B physical-pair extraction retirement (#7774)
 
 - **Change**: retire the rejected disjoint physical-pair coefficient extraction,

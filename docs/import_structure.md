@@ -46,6 +46,21 @@ transfer-operator gap and overlap-decay results built on QICLean's spectral
 theory. Public chapter-index modules are part of the production tree and
 therefore enter the generated import surface automatically.
 
+## Preparation algebra and convergence
+
+`MPS.Preparation.FixedPointPairState` contains the concrete fixed-point tensor,
+cyclic pair states and their algebraic identities. `BlockIsometryState` owns the
+existing finite-configuration contraction identities used by its block-state
+maps. `BlockStatePreparation` assembles the pair and block-unitary layers.
+These interfaces do not import the normal-gauge construction.
+
+The original `FixedPointPairs`, `ApproximatingState`, and `DepthUpperBound`
+modules retain their public declarations and import the lower interfaces.
+They add the spectral convergence, normal-state approximation, or uniform-state
+identification that needs the higher theory. See the
+[dependency audit](audits/2026-10-04_preparation_algebra_dependency_extraction.md)
+for the preserved API and the consumer migration that remains open.
+
 ## Archive exclusion
 
 `TNLean/Archive/` is intentionally outside the production manifest and is not
