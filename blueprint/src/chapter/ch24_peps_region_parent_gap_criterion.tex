@@ -1,0 +1,110 @@
+\section{Finite-overlap gap criteria}%
+\label{sec:peps_region_parent_gap_criterion}
+
+We apply the projector expansion of
+\cite[Section~IV.C.3]{Cirac2021Matrix}, local source lines 2170--2179,
+to the canonical regional parent interactions on a finite graph.
+The anticommutator estimate below is an explicit hypothesis.
+Deriving it from properties of a boundary state is a separate question.
+
+\begin{theorem}[Disjoint regional interactions commute]%
+    \label{thm:peps_disjoint_region_interactions_commute}
+    \lean{TNLean.PEPS.regionReplaceConfig,
+        TNLean.PEPS.regionLocalTerm_mulVec_apply,
+        TNLean.PEPS.regionReplaceConfig_apply_of_disjoint,
+        TNLean.PEPS.regionReplaceConfig_comm_of_disjoint,
+        TNLean.PEPS.regionLocalTerm_commute_of_disjoint,
+        TNLean.PEPS.regionLocalTermES,
+        TNLean.PEPS.regionLocalTermES_commute_of_disjoint,
+        TNLean.PEPS.regionParentHamiltonianES,
+        TNLean.PEPS.regionParentHamiltonianES_eq_sum}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    Let $R,S$ be disjoint vertex regions and let $h_R,h_S$
+    be arbitrary linear operators on their respective physical spaces.
+    Their extensions to the full physical space commute.
+\end{theorem}
+
+\begin{proof}\leanok
+    The extension of $h_R$ sums only the physical indices in $R$
+    and retains all complementary labels. Replacements on disjoint
+    regions commute. Interchanging the two finite sums therefore
+    identifies the two compositions.
+\end{proof}
+
+\begin{theorem}[Gap from overlapping-pair estimates]%
+    \label{thm:peps_finite_overlap_gap}
+    \lean{TNLean.PEPS.regionParentHamiltonianES_norm_gap_of_quadraticForm,
+        TNLean.PEPS.regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator,
+        TNLean.PEPS.regionParentHamiltonianES_norm_gap_of_overlap_anticommutator,
+        TNLean.PEPS.regionParentHamiltonianES_norm_gap_of_overlap_of_comparison}
+    \leanok
+    \uses{thm:peps_region_projector_unit_gap,
+        thm:peps_disjoint_region_interactions_commute}
+    Let $P_i$ be the extended canonical parent projector for
+    a region $R_i$, and let $H=\sum_i P_i$.
+    Suppose that each region overlaps at most $m$ other regions,
+    where $m\ge1$, and that $\varepsilon\ge0$ satisfies
+    \[
+        P_iP_j+P_jP_i\ge-\varepsilon(P_i+P_j)
+    \]
+    for every distinct overlapping pair. Then
+    \[
+        H^2\ge(1-m\varepsilon)H.
+    \]
+    If $m\varepsilon<1$, then every $\xi\perp\ker H$ satisfies
+    \[
+        \|H\xi\|\ge(1-m\varepsilon)\|\xi\|.
+    \]
+    If another positive parent with the same regional kernels satisfies
+    $H'\ge\kappa H$ for some $\kappa>0$, its norm gap is at least
+    $\kappa(1-m\varepsilon)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand $H^2$. The diagonal terms sum to $H$ since $P_i^2=P_i$.
+    A disjoint pair consists of commuting orthogonal projections,
+    so its anticommutator is positive. Sum the assumed lower bounds
+    over the remaining unordered pairs. Each projector occurs
+    at most $m$ times, giving the quadratic-form inequality.
+    The spectral theorem for a positive finite-dimensional operator
+    then gives the asserted norm bound on the complement of its kernel.
+    The comparison assertion follows from the common kernel and
+    the corresponding lower bound between positive operators.
+\end{proof}
+
+\begin{corollary}[A gap independent of the volume]%
+    \label{cor:peps_uniform_finite_overlap_gap}
+    \lean{TNLean.PEPS.regionParentHamiltonianES_uniform_norm_gap_of_overlap_anticommutator}
+    \leanok
+    \uses{thm:peps_finite_overlap_gap}
+    Consider an arbitrary family of finite graphs, regional canonical
+    PEPS parents, and physical and bond dimensions.
+    If the overlap bound $m$ and anticommutator bound $\varepsilon$
+    hold throughout the family and satisfy $m\varepsilon<1$,
+    then every parent in the family has norm gap at least the same
+    positive number $1-m\varepsilon$.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply the preceding estimate to each member of the family.
+    The resulting constant does not depend on the graph or its volume.
+\end{proof}
+
+\begin{theorem}[Unit gap for commuting canonical parents]%
+    \label{thm:peps_commuting_region_parent_unit_gap}
+    \lean{TNLean.PEPS.regionParentHamiltonianES_unit_norm_gap_of_commute,
+        TNLean.PEPS.regionParentHamiltonianES_unit_norm_gap_of_pairwise_disjoint}
+    \leanok
+    \uses{thm:peps_region_projector_unit_gap,
+        thm:peps_disjoint_region_interactions_commute}
+    If the extended canonical parent projectors commute pairwise,
+    their sum satisfies $H^2\ge H$ and has norm gap at least one
+    on $(\ker H)^\perp$. In particular, this holds for
+    pairwise disjoint regions.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every cross term in the projector expansion is nonnegative.
+    Thus $H^2\ge H$, and the preceding spectral argument applies.
+\end{proof}

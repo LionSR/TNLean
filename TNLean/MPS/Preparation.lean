@@ -24,6 +24,7 @@ import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
 import TNLean.MPS.Preparation.CutCoefficientRank
 import TNLean.MPS.Preparation.CutRank
+import TNLean.MPS.Preparation.CyclicOperatorSupport
 import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.DepthLogBound
@@ -33,6 +34,9 @@ import TNLean.MPS.Preparation.DepthLowerBoundCore
 import TNLean.MPS.Preparation.DepthLowerBoundNormal
 import TNLean.MPS.Preparation.DepthUpperBound
 import TNLean.MPS.Preparation.DiagonalPolar
+import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
+import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
+import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
@@ -56,6 +60,7 @@ import TNLean.MPS.Preparation.NormalGauge
 import TNLean.MPS.Preparation.ObservableTransferBound
 import TNLean.MPS.Preparation.OneCopyPairState
 import TNLean.MPS.Preparation.OneDimensionalBlocks
+import TNLean.MPS.Preparation.OrderedBlockOverlap
 import TNLean.MPS.Preparation.OrthogonalBlockSum
 import TNLean.MPS.Preparation.OrthogonalSumPolar
 import TNLean.MPS.Preparation.OverlappingBlockCounterexample
@@ -68,6 +73,7 @@ import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
+import TNLean.MPS.Preparation.PolarCompression
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PolynomialAccuracy

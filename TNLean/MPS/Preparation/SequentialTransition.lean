@@ -269,7 +269,7 @@ theorem isDeterministicallyGenerated_of_isTransitionGenerated [NeZero d]
     have hψ : star (ψ Fin.elim0) * ψ Fin.elim0 = 1 := by
       rw [← hI, hφ, star_smul, smul_dotProduct, dotProduct_smul, hF]
       simp [mul_comm]
-    refine ⟨fun k => Fin.elim0 k, ψ Fin.elim0 • basisVecZero D, basisVecZero D,
+    refine ⟨fun k => Fin.elim0 k, ψ Fin.elim0 • basisVecZero hD, basisVecZero hD,
       fun k => Fin.elim0 k, ?_, star_basisVecZero_dotProduct_self hD, fun τ => ?_⟩
     · rw [star_smul_basisVecZero_dotProduct_self hD, hψ]
     · rw [show τ = Fin.elim0 from Subsingleton.elim _ _]
@@ -281,11 +281,11 @@ theorem isDeterministicallyGenerated_of_isTransitionGenerated [NeZero d]
       rw [← hI, ← Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary (hW 0) φI φI, dotProduct,
         Fintype.sum_prod_type, Finset.sum_comm]
       rfl
-    have hiso : IsIsometryOn 1 (fun i => colMat (v i)) := by
+    have hiso : IsIsometryOn 1 (fun i => colMat hD (v i)) := by
       intro β β' hβ hβ'
       obtain rfl : β = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ)
       obtain rfl : β' = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ')
-      simpa [colMat, dotProduct] using hv
+      simpa [colMat, basisVecZero, Matrix.vecMulVec_apply, dotProduct] using hv
     obtain ⟨U₀, hU₀, hU₀v⟩ := exists_unitary_extension hiso
     let U : Fin (n + 1) → Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ :=
       fun k => if k = 0 then U₀ else W k
@@ -293,13 +293,14 @@ theorem isDeterministicallyGenerated_of_isTransitionGenerated [NeZero d]
       simp only [U]; split_ifs
       · exact hU₀
       · exact hW k
-    have hfirst : ∀ i, stepMatrix U₀ i *ᵥ basisVecZero D = v i := fun i => by
+    have hfirst : ∀ i, stepMatrix U₀ i *ᵥ basisVecZero hD = v i := fun i => by
       funext α
       rw [mulVec_basisVecZero_apply hD]
-      simpa [colMat, stepMatrix] using hU₀v i α ⟨0, hD⟩ (by simp)
+      simpa [colMat, basisVecZero, Matrix.vecMulVec_apply, stepMatrix] using
+        hU₀v i α ⟨0, hD⟩ (by simp)
     -- The transition joint state is the embedding of the `D`-dimensional one.
     have hemb : ∀ τ, transitionJointState W φI τ =
-        tagZeroEmbed (d := d) D *ᵥ jointState U (basisVecZero D) τ := fun τ => by
+        tagZeroEmbed (d := d) D *ᵥ jointState U (basisVecZero hD) τ := fun τ => by
       have hrest : (fun p : Fin n => stepMatrix (U (Fin.rev p.castSucc))) =
           fun p => stepMatrix (W (Fin.rev p.castSucc)) := by
         funext p
@@ -314,13 +315,13 @@ theorem isDeterministicallyGenerated_of_isTransitionGenerated [NeZero d]
       rfl
     -- The `D`-dimensional joint state decouples onto the tag-zero part of `φ_F`.
     let φF' : Fin D → ℂ := fun α => φF (α, 0)
-    have hJ' : ∀ τ, jointState U (basisVecZero D) τ = ψ τ • φF' := fun τ => by
+    have hJ' : ∀ τ, jointState U (basisVecZero hD) τ = ψ τ • φF' := fun τ => by
       funext α
       have := congrFun (hJ τ) (α, 0)
       rw [hemb, tagZeroEmbed_mulVec_apply] at this
       simpa [φF'] using this
-    have hnorm : ∑ τ, star (jointState U (basisVecZero D) τ) ⬝ᵥ
-        jointState U (basisVecZero D) τ = 1 := by
+    have hnorm : ∑ τ, star (jointState U (basisVecZero hD) τ) ⬝ᵥ
+        jointState U (basisVecZero hD) τ = 1 := by
       rw [← star_basisVecZero_dotProduct_self hD]
       exact sum_normSq_eval_mulVec (fun _ => D) (fun p => stepMatrix (U (Fin.rev p)))
         (fun _ _ α _ hα => absurd α.isLt (by omega))
@@ -339,7 +340,7 @@ theorem isDeterministicallyGenerated_of_isTransitionGenerated [NeZero d]
       refine Finset.sum_congr rfl fun α _ => ?_
       rw [Finset.sum_eq_single (0 : Fin d) (fun t _ ht => by simp [hF1 t ht]) (by simp)]
       rfl
-    exact ⟨U, basisVecZero D, φF', hU, star_basisVecZero_dotProduct_self hD, hF', hJ'⟩
+    exact ⟨U, basisVecZero hD, φF', hU, star_basisVecZero_dotProduct_self hD, hF', hJ'⟩
 
 /-! ### From the deterministic scheme to the transition scheme -/
 
