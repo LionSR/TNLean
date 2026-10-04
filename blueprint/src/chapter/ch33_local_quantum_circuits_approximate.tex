@@ -20,9 +20,29 @@ feedforward, whereas the channels in this section do not; see
     Here $\lVert A\rVert_1$ is the sum of the singular values of $A$.
 \end{definition}
 
+\begin{theorem}[Trace norm of chain operators]
+    \label{thm:qc_chain_trace_norm}
+    \uses{def:qc_approx_local_channel_conversion}
+    \lean{QuantumCircuit.chainTraceNorm_nonneg,
+        QuantumCircuit.chainTraceNorm_zero,
+        QuantumCircuit.chainTraceNorm_eq_zero_iff,
+        QuantumCircuit.chainTraceNorm_add_le}
+    \leanok
+    For chain operators $A,B$, the trace norm satisfies
+    $\lVert A\rVert_1\ge0$, $\lVert0\rVert_1=0$,
+    $\lVert A\rVert_1=0$ if and only if $A=0$, and
+    $\lVert A+B\rVert_1\le\lVert A\rVert_1+\lVert B\rVert_1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Enumerate the configurations and apply the corresponding properties of
+    the matrix trace norm. Reindexing is a linear equivalence and preserves
+    zero and addition.
+\end{proof}
+
 \begin{theorem}[Zero error and monotonicity]
     \label{thm:qc_approx_conversion_properties}
-    \uses{def:qc_approx_local_channel_conversion}
+    \uses{def:qc_approx_local_channel_conversion, thm:qc_chain_trace_norm}
     \lean{QuantumCircuit.IsLocalChannelConversion.approx,
         QuantumCircuit.IsApproxLocalChannelConversion.refl,
         QuantumCircuit.IsApproxLocalChannelConversion.mono,
@@ -42,7 +62,7 @@ feedforward, whereas the channels in this section do not; see
 \begin{theorem}[Composition of approximate conversions]
     \label{thm:qc_approx_conversion_trans}
     \uses{def:qc_approx_local_channel_conversion,
-        lem:qc_local_channel_conversion_trans}
+        lem:qc_local_channel_conversion_trans, thm:qc_chain_trace_norm}
     \lean{QuantumCircuit.IsLocalChannelProtocol.chainTraceNorm_map_le,
         QuantumCircuit.IsApproxLocalChannelConversion.trans}
     \leanok
