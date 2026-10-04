@@ -59,9 +59,7 @@ private theorem thetaThreeZ_eq_fromBlocks (h h' : Fin 10) : thetaThreeZ h h' =
       (finSumFinEquiv (m := 6) (n := 4)).symm (finSumFinEquiv (m := 6) (n := 4)).symm := by
   apply Matrix.ext
   intro i j
-  fin_cases i <;> fin_cases j <;>
-    simp [thetaThreeZ, thetaTwoZ, Matrix.fromBlocks, finSumFinEquiv, Fin.addCases,
-      Fin.castLT, Fin.subNat, Fin.castAdd ]
+  fin_cases i <;> fin_cases j <;> rfl
 
 private theorem mulTensorR_smul_left {R : Type*} [CommRing R] {d m n : ℕ} (c : R)
     (M : Fin d → Fin d → Matrix (Fin m) (Fin m) R)
@@ -210,18 +208,19 @@ private theorem threeBlockIdentity (h h' : Fin 10) :
     all_goals have hq6 : q.val < 6 := by omega
     all_goals try have hp36 : 3 + p.val < 6 := by omega
     all_goals try have hq36 : 3 + q.val < 6 := by omega
-    all_goals simp (disch := omega) [threeBlockCoord, threeBlockZ, isingTau, isingBlockZ,
-      padZsqrt2, isingOnePsiZ, Matrix.blockDiagonal', isingWeightsZ, Matrix.smul_apply, slotSize,
-      isingThreeBlockDim,
-      smul_eq_mul, finSumFinEquiv, Fin.addCases, hp4, hp8, hp6, hq4, hq8, hq6]
+    all_goals simp only [
+      Matrix.blockDiagonal', isingBlockZ, slotSize, isingWeightsZ, isingTau, Fin.isValue,
+      Fin.zero_eta, Equiv.symm_mk, Equiv.coe_fn_mk, padZsqrt2, Nat.reduceAdd, isingOnePsiZ,
+      finSumFinEquiv, Fin.addCases, Fin.cast_eq_self, eq_rec_constant, threeBlockCoord,
+      isingThreeBlockDim, Matrix.cons_val_zero, Matrix.fromBlocks_apply₁₁, Matrix.submatrix_apply,
+      hp4, ↓reduceDIte, Fin.eta, hq4, Matrix.of_apply, cast_eq, Matrix.smul_apply, smul_eq_mul,
+      threeBlockZ, Matrix.cons_val_one, add_lt_iff_neg_left, not_lt_zero, hq8,
+      add_tsub_cancel_left, Sum.inl.injEq, Subtype.mk.injEq, zero_ne_one, Matrix.cons_val,
+      Matrix.fromBlocks_apply₁₂, Matrix.zero_apply, Fin.reduceEq, hp8, one_ne_zero,
+      Matrix.cons_val_fin_one, Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂, hp6,
+      Fin.castLT_mk, hq6, Fin.is_lt, Fin.subNat_mk]
     all_goals simp_all [smul_eq_mul]
-    all_goals ring_nf
-    all_goals first
-      | change isingSigmaZ h h' p q * 5 = isingSigmaZ h h' p q * 5
-      | change isingSigmaZ h h' p q * 3 = isingSigmaZ h h' p q * 3
-      | change sqrtd * isingOneZ h h' p q * 2 = sqrtd * isingOneZ h h' p q * 2
-      | change sqrtd * isingPsiZ h h' p q * 2 = sqrtd * isingPsiZ h h' p q * 2
-    all_goals rfl
+    all_goals ac_rfl
   · obtain ⟨s, hs⟩ := s
     fin_cases s
     all_goals by_cases ht : t'.val < 16
@@ -234,9 +233,15 @@ private theorem threeBlockIdentity (h h' : Fin 10) :
     all_goals have ht4 : ¬ 8 + t'.val < 4 := by omega
     all_goals have ht8 : ¬ 8 + t'.val < 8 := by omega
     all_goals have ht6 : ¬ 6 + (t'.val - 16) < 6 := by omega
-    all_goals simp (disch := omega) [threeBlockCoord, threeBlockZ, isingTau, isingBlockZ,
-      padZsqrt2, isingOnePsiZ, Matrix.blockDiagonal', isingWeightsZ, Matrix.smul_apply,
-      smul_eq_mul, finSumFinEquiv, Fin.addCases, hp4, hp8, hp6, ht, ht4, ht8, ht6]
+    all_goals simp only [
+      Matrix.blockDiagonal', isingBlockZ, isingWeightsZ, isingTau, Fin.isValue, Fin.zero_eta,
+      Equiv.symm_mk, Equiv.coe_fn_mk, padZsqrt2, Nat.reduceAdd, isingOnePsiZ, finSumFinEquiv,
+      Fin.addCases, Fin.cast_eq_self, eq_rec_constant, threeBlockCoord, ht, ↓reduceDIte,
+      Matrix.fromBlocks_apply₁₁, Matrix.submatrix_apply, hp4, Fin.eta, ht4, ht8, Matrix.of_apply,
+      add_tsub_cancel_left, reduceCtorEq, threeBlockZ, Matrix.fromBlocks_apply₁₂,
+      Matrix.zero_apply, add_lt_iff_neg_left, not_lt_zero, hp8, Matrix.fromBlocks_apply₂₁,
+      Matrix.fromBlocks_apply₂₂, Matrix.smul_apply, hp6, Fin.castLT_mk, ht6, Fin.subNat_mk,
+      smul_eq_mul, mul_zero]
     all_goals simp_all
   · obtain ⟨s', hs'⟩ := s'
     fin_cases s'
@@ -249,9 +254,15 @@ private theorem threeBlockIdentity (h h' : Fin 10) :
     all_goals have ht4 : ¬ 8 + t.val < 4 := by omega
     all_goals have ht8 : ¬ 8 + t.val < 8 := by omega
     all_goals have ht6 : ¬ 6 + (t.val - 16) < 6 := by omega
-    all_goals simp (disch := omega) [threeBlockCoord, threeBlockZ, isingTau, isingBlockZ,
-      padZsqrt2, isingOnePsiZ, Matrix.blockDiagonal', isingWeightsZ, Matrix.smul_apply,
-      smul_eq_mul, finSumFinEquiv, Fin.addCases, hq4, hq8, hq6, ht, ht4, ht8, ht6]
+    all_goals simp only [
+      Matrix.blockDiagonal', isingBlockZ, isingWeightsZ, isingTau, Fin.isValue, Fin.zero_eta,
+      Equiv.symm_mk, Equiv.coe_fn_mk, padZsqrt2, Nat.reduceAdd, isingOnePsiZ, finSumFinEquiv,
+      Fin.addCases, Fin.cast_eq_self, eq_rec_constant, threeBlockCoord, ht, ↓reduceDIte,
+      Matrix.fromBlocks_apply₁₁, Matrix.submatrix_apply, ht4, ht8, hq4, Fin.eta, Matrix.of_apply,
+      add_tsub_cancel_left, reduceCtorEq, threeBlockZ, Matrix.fromBlocks_apply₂₁,
+      Matrix.zero_apply, add_lt_iff_neg_left, not_lt_zero, hq8, Matrix.fromBlocks_apply₁₂,
+      Matrix.fromBlocks_apply₂₂, Matrix.smul_apply, ht6, Fin.subNat_mk, hq6, Fin.castLT_mk,
+      smul_eq_mul, mul_zero]
     all_goals simp_all
   · by_cases ht : t.val < 16 <;> by_cases ht' : t'.val < 16
     all_goals have ht4 : ¬ 8 + t.val < 4 := by omega
@@ -260,9 +271,15 @@ private theorem threeBlockIdentity (h h' : Fin 10) :
     all_goals have ht'4 : ¬ 8 + t'.val < 4 := by omega
     all_goals have ht'8 : ¬ 8 + t'.val < 8 := by omega
     all_goals have ht'6 : ¬ 6 + (t'.val - 16) < 6 := by omega
-    all_goals simp (disch := omega) [threeBlockCoord, threeBlockZ, isingTau, isingBlockZ,
-      padZsqrt2, isingOnePsiZ, Matrix.blockDiagonal', isingWeightsZ, Matrix.smul_apply,
-      smul_eq_mul, finSumFinEquiv, Fin.addCases, ht, ht', ht4, ht8, ht6, ht'4, ht'8, ht'6]
+    all_goals simp only [
+      Nat.reduceAdd, Matrix.blockDiagonal', isingBlockZ, isingWeightsZ, isingTau, Fin.isValue,
+      Fin.zero_eta, Equiv.symm_mk, Equiv.coe_fn_mk, padZsqrt2, isingOnePsiZ, finSumFinEquiv,
+      Fin.addCases, Fin.cast_eq_self, eq_rec_constant, threeBlockCoord, ht, ↓reduceDIte, ht',
+      Matrix.fromBlocks_apply₁₁, Matrix.submatrix_apply, ht4, ht8, ht'4, ht'8, Matrix.of_apply,
+      add_tsub_cancel_left, Sum.inr.injEq, Fin.mk.injEq, Matrix.zero_apply, dite_eq_ite, ite_self,
+      threeBlockZ, Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₁,
+      Matrix.fromBlocks_apply₂₂, Matrix.smul_apply, ht6, Fin.subNat_mk, ht'6, smul_eq_mul,
+      mul_zero]
 
 private def threeOrd : BlockIndex (Finset.univ : Finset (Fin 4)) 26 ≃ Fin 30 where
   toFun := Sum.elim (fun s => Fin.castLE (by norm_num) s.1) fun t => ⟨t.val + 4, by omega⟩

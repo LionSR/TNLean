@@ -1,0 +1,115 @@
+\begin{definition}[The accessible two-site charge matrix]
+    \label{def:peps_regular_charge_coordinates}
+    \lean{TNLean.PEPS.regularChargeMatrix}
+    \leanok
+    Let $G$ be a finite group, $\chi:G\to\mathbb C$, and $p,x,y\in G$.
+    Define the matrix $A_\chi(p;x,y)$ by
+    \[
+        A_\chi(p;x,y)_{r,s}
+        =\begin{cases}
+            \chi(px^{-1}r), & s=yx^{-1}r,    \\
+            0,              & s\ne yx^{-1}r.
+        \end{cases}
+    \]
+    This is the accessible-coordinate matrix in
+    \cite[charge-detection proof]{Schuch2010PEPS}, lines 2470--2486.
+    Here $p$ is the internal translation, and $x,y$ are the unknown vertex
+    translations. No original-spin measurement is asserted.
+\end{definition}
+
+\begin{theorem}[Matrix units and the exact support-overlap pairing]
+    \label{thm:peps_regular_charge_coordinates_pairing}
+    \lean{TNLean.PEPS.regularChargeMatrix_eq_sum_single,
+        TNLean.PEPS.regularChargeMatrix_inner}
+    \leanok
+    \uses{def:peps_regular_charge_coordinates}
+    The accessible matrix is the literal matrix-unit sum
+    \[
+        A_\chi(p;x,y)
+        =\sum_{g\in G}\chi(pg)|xg\rangle\langle yg|.
+    \]
+    For another function $\psi$ and translations $q,x',y'$, its exact
+    Hilbert--Schmidt pairing is
+    \begin{align}
+         & \langle A_\chi(p;x,y),A_\psi(q;x',y')\rangle \\
+         & \quad=\mathbf1_{yx^{-1}=y'(x')^{-1}}
+        \sum_{r\in G}\overline{\chi(px^{-1}r)}\psi(q(x')^{-1}r).
+    \end{align}
+    Thus different relative translations have disjoint matrix support.
+\end{theorem}
+\begin{proof}\leanok
+    At a row $r$, only $g=x^{-1}r$ contributes to the matrix-unit sum.
+    The surviving column is $yx^{-1}r$. Different relative translations
+    give distinct surviving columns at every row, so their support pairing
+    vanishes. When they agree, sum the surviving entries.
+\end{proof}
+
+\begin{theorem}[Orthogonality and norm of the actual accessible charge matrices]
+    \label{thm:peps_regular_charge_coordinates_orthogonality}
+    \lean{TNLean.PEPS.regularChargeMatrix_orthogonal,
+        TNLean.PEPS.regularChargeMatrix_normSq}
+    \leanok
+    \uses{thm:peps_regular_charge_coordinates_pairing,
+        thm:peps_translated_character_inner_product}
+    Let $\sigma,\tau$ be finite-dimensional irreducible complex representations,
+    with $\sigma$ unitary. If $\chi_\sigma\ne\chi_\tau$, then for all
+    $p,x,y,q,x',y'\in G$,
+    \[
+        \langle A_{\chi_\sigma}(p;x,y),
+        A_{\chi_\tau}(q;x',y')\rangle=0.
+    \]
+    Every matrix of a unitary irreducible character has squared norm $|G|$,
+    for every $p,x,y$. These are auxiliary accessible-coordinate identities
+    in \cite[charge-detection proof]{Schuch2010PEPS}, lines 2470--2486;
+    constructing the complete original-spin detector remains separate.
+\end{theorem}
+\begin{proof}\leanok
+    For equal relative translations, apply translated character orthogonality
+    with parameters $px^{-1}$ and $q(x')^{-1}$. For the norm,
+    the same character appears on both sides and its translated squared norm
+    is $|G|$.
+\end{proof}
+
+\begin{theorem}[The internal label is absorbed by unknown vertex translations]
+    \label{thm:peps_regular_charge_coordinates_internal_label}
+    \lean{TNLean.PEPS.regularChargeMatrix_internalLabel}
+    \leanok
+    \uses{def:peps_regular_charge_coordinates}
+    For every function $\chi:G\to\mathbb C$ and every $p,q,x,y\in G$,
+    \[
+        A_\chi(q;xp^{-1}q,yp^{-1}q)=A_\chi(p;x,y).
+    \]
+    Thus changing the internal label can be absorbed by changing the two
+    unknown vertex translations. This is the exact family-level identity
+    underlying the final sentence of
+    \cite[charge-detection proof]{Schuch2010PEPS}, lines 2483--2486.
+    It is not a probabilistic or original-spin information-theoretic assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Cancel $q q^{-1}$ and $p^{-1}p$ in the relative column coordinate and
+    character argument of every matrix entry.
+\end{proof}
+
+\begin{theorem}[Independent translation covariance and nonvanishing]
+    \label{thm:peps_regular_charge_coordinates_covariance}
+    \lean{TNLean.PEPS.regularChargeMatrix_translate_apply,
+        TNLean.PEPS.regularChargeMatrix_ne_zero}
+    \leanok
+    \uses{thm:peps_regular_charge_coordinates_orthogonality,
+        def:peps_regular_charge_coordinates}
+    For every coefficient function $\chi$ and every $p,x,y,z,w,r,s\in G$,
+    \[
+        A_\chi(p;zx,wy)_{r,s}
+        =A_\chi(p;x,y)_{z^{-1}r,w^{-1}s}.
+    \]
+    Thus the two unknown translations act by their actual row and column
+    permutations. If $\chi$ is a unitary irreducible character, then every
+    matrix $A_\chi(p;x,y)$ is nonzero. These are auxiliary identities from
+    the accessible charge coordinates of
+    \cite[charge detection]{Schuch2010PEPS}, lines 2470--2486.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the translated row and column coordinates and cancel the
+    inverse translations. For nonvanishing, the squared norm is $|G|>0$.
+\end{proof}

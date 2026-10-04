@@ -1,0 +1,55 @@
+\begin{definition}[An actual strip beside a flux endpoint]
+    \label{def:peps_torus_charge_flux_crossing_strip}
+    \lean{TNLean.PEPS.torusChargeFluxCrossingRegion,
+        TNLean.PEPS.torusChargeFluxCrossingChargeBond}
+    \leanok
+    \uses{def:peps_three_plaquette_geometry,
+        def:peps_torus_charge_string_edge}
+    For $v=(x,y)$, take the translated four-column, two-row strip with
+    lower-left vertex $(x-1,y+1)$. Its charge bond joins
+    $(x+1,y+1)$ to $(x+2,y+1)$ on the lower row.
+    Its leftmost plaquette contains the endpoint of the literal flux string.
+    The tree consists of all horizontal bonds and the rightmost vertical bond.
+    This is auxiliary geometry for the charge--flux figure of
+    \cite{Schuch2010PEPS}, lines 2560--2581.
+\end{definition}
+
+\begin{theorem}[A physical charge crossing beside the literal flux endpoint]
+    \label{thm:peps_torus_charge_flux_crossing}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusChargeFluxCrossing,
+        TNLean.PEPS.IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing}
+    \leanok
+    \uses{def:peps_torus_charge_flux_crossing_strip,
+        thm:peps_regular_charge_flux_physical_transport,
+        thm:peps_torus_swept_string_transport}
+    Let $G$ be finite, let the periods satisfy $w\geq5$ and $H\geq4$, and
+    let the native four-leg tensor be regular $G$-isometric. For each
+    translated strip there is an original-spin unitary, chosen before the
+    flux $k$, the scalar function $\chi$, the parameter $p$, and every
+    crossing configuration. On the actual open contraction with the literal
+    initial flux string, it changes the charge weight by
+    \[
+        \chi(p\eta_c)\longmapsto\chi(pk^{-1}\eta_c).
+    \]
+    The same construction is uniform in an unsummed partner reference $q$:
+    \[
+        \chi(pq^{-1}\eta_c)\longmapsto\chi(pq^{-1}k^{-1}\eta_c).
+    \]
+    Thus correlation is retained in its literal order. These statements
+    include strips crossing either periodic seam and require no supplied
+    tree gauge, Gram identity, or state hypothesis.
+
+    This is an auxiliary physical operation beside an actual flux endpoint.
+    It is not the identification of the complete prescribed braid or the
+    reunion experiment of \cite{Schuch2010PEPS}, lines 2560--2615.
+\end{theorem}
+\begin{proof}\leanok
+    The actual seven tree transports are the identity except for the
+    rightmost upward transport $k$. The normalized tree gauge is therefore
+    the identity on the lower row and $k$ on the upper row. The charge tail
+    has trivial gauge. The leftmost cycle residual is $k^{-1}$ in the usual
+    native order and $k$ when the upward bond reverses at the seam.
+    Apply the original-spin reference-cycle unitary, using its adjoint
+    in the first orientation. Uniformity in the coefficient function gives
+    the correlated formula by substituting $t\mapsto\chi(pq^{-1}t)$.
+\end{proof}

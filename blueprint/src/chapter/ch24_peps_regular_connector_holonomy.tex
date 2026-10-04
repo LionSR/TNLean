@@ -1,0 +1,32 @@
+\begin{theorem}[Flux loops transported to a common base vertex]%
+    \label{thm:peps_regular_connector_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_transportLoop,
+        TNLean.PEPS.regularWalkHolonomy_transportLoop_conjClass,
+        TNLean.PEPS.regularWalkHolonomy_twoTransportedLoops}
+    \leanok
+    \uses{thm:peps_regular_walk_holonomy,thm:peps_conjugacy_class_invariance}
+    Let a graph have ordered vertices and group-valued edge transports.
+    Let $p:o\to v$ and $q:o\to w$ be actual walks, and let $a:v\to v$
+    and $b:w\to w$ be closed walks. Write $H(c)$ for the transport of
+    a walk $c$, with the first traversed edge acting first. Then
+    \begin{align}
+        H(pap^{-1})    & = H(p)^{-1}H(a)H(p),            \\
+        C[H(pap^{-1})] & = C[H(a)],                      \\
+        H\bigl((qbq^{-1})(pap^{-1})\bigr)
+                       & = \bigl(H(p)^{-1}H(a)H(p)\bigr)
+        \bigl(H(q)^{-1}H(b)H(q)\bigr).
+    \end{align}
+    Here concatenation records traversal order, so the second factor
+    traversed acts on the left. These auxiliary walk identities specify
+    the comparison of fluxes along connecting paths used in the joint-flux
+    and alignment discussion of \cite[\S6.6]{Schuch2010PEPS}. They do not
+    identify a particular torus path with the prescribed braiding motion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Transport along a concatenation is the reverse-ordered product of the
+    transports, and transport along a reversed walk is the inverse.
+    Applying these two identities to the displayed walks gives both
+    product formulas. The conjugacy-class identity follows from invariance
+    of the class under conjugation.
+\end{proof}

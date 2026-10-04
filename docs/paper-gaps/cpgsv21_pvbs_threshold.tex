@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\input{command}
+\title{Critical Parameters and Boundary Localization in the One-Species PVBS Chain}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The assertion}
+The review arXiv:2011.12127, Section IV.C.4 (HTML Section IV.3.4), gives the
+matrices $A^0=\operatorname{diag}(1+\lambda,1)$ and
+$A^1=|0\rangle\langle1|$, with $\lambda\in[-1,1]$.
+It describes a two-dimensional open-chain ground space, a boundary-localized
+particle, and a unique product vacuum on the periodic chain. The printed right-edge
+condition is $\lambda>1$.
+
+\section{The point at issue}
+Write $q=1+\lambda$. A particle at the zero-indexed site $k$ has amplitude
+$q^k$. Thus left localization occurs for $0\le q<1$ and right localization
+for $q>1$: in the review's parameter these are $\lambda<0$ and $\lambda>0$.
+The printed right-edge condition is outside its stated parameter interval.
+At $q=1$, the particle is the delocalized W vector. On a two-site ring,
+$|10\rangle+|01\rangle$ satisfies both local constraints and is independent
+of the vacuum. Therefore unconditional periodic vacuum uniqueness is false.
+
+\section{The corrected statement}
+For any complex $q$, the open parent Hamiltonian with two-site interactions
+has ground space
+\begin{align}
+    \operatorname{span}\left\{|0\cdots0\rangle,
+    \sum_{k=0}^{N-1}q^k|0\cdots1_k\cdots0\rangle\right\},\qquad N\ge2.
+    \label{eq:pvbs_gap_open_space}
+\end{align}
+Its dimension is two, including $q=0$ and $q=1$.
+On a periodic chain, the vacuum is the unique ground state whenever $q^N\ne1$.
+In particular, this holds at every length $N\ge2$ if $|q|\ne1$.
+The latter condition is sufficient, not necessary at any fixed length.
+To prove uniqueness, write any periodic ground vector as vacuum plus $b$ times
+the open-chain particle. A one-site translation remains a ground vector.
+Comparing the first two particle amplitudes forces $b=bq^N$, hence $b=0$.
+The vacuum satisfies every local constraint.
+
+For $|q|<1$, the left-edge amplitudes decay as $|q|^k$. For $|q|>1$, the
+amplitude $k$ sites from the right edge, divided by the rightmost amplitude,
+is $q^{-k}$. These describe localization without asserting a uniform spectral gap.
+
+\section{Source conventions and conclusion}
+Bachmann and Nachtergaele, arXiv:1112.4097, Section II, equations (1)--(8),
+use positive hopping parameters and phases, and explicitly exclude unit hopping
+in their boundary-localization discussion. Their matrix-product ordering differs
+from the left-to-right ordering above; the displayed one-particle amplitudes
+fix the convention. More explicitly, $q=\mu e^{i\theta}$ and the forbidden
+local ket is $|01\rangle-\overline q|10\rangle$, whose orthogonal
+constraint is $a_{01}=q a_{10}$. The primary source assumes $\mu>0$;
+$q=0$ is an algebraic endpoint extension. The formalization permits complex $q$, while the review's
+real family is recovered by $q=1+\lambda$.
+The corrected finite-chain ground spaces and the critical two-site counterexample
+resolve the discrepancy. No spectral-gap theorem is claimed here.\footnote{Formal declarations:
+    \leanid{MPSTensor.ker_openParentHamiltonianES_pvbs},
+    \leanid{MPSTensor.ker_parentHamiltonian_pvbs},
+    \leanid{MPSTensor.pvbs_critical_periodic_counterexample}, and
+    \leanid{MPSTensor.pvbsEdge_right_decay}.}
+\end{document}
