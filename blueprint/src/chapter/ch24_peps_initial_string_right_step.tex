@@ -1,60 +1,60 @@
 \begin{theorem}[Literal first rightward endpoint step]
-\label{thm:peps_initial_string_right_step}
-\lean{
-TNLean.PEPS.regularWalkHolonomy_torusSweptStringRightStep,
-TNLean.PEPS.torusSweptStringRightStepOperators,
-TNLean.PEPS.torusSweptStringRightStepOperators_right_transport,
-TNLean.PEPS.torusSweptStringRightStepOperators_up_transport
-}
-\leanok
-On a torus with horizontal period at least eight and vertical period at least
-seven, retain the two-string presentation with upward transport $g$ at four
-consecutive columns and rightward transport $h^{-1}$ along its three-bond
-partner string. Change only the middle upward transport at relative position
-$(2,1)$ from $g$ to $gh$, with the inverse ordered coefficient at a periodic
-seam. All rightward transports and all other upward transports stay literal.
-The clockwise holonomies at relative bases $(1,1)$ and $(2,1)$ change from
-$(h,1)$ to $(1,h)$.
+    \label{thm:peps_initial_string_right_step}
+    \lean{
+        TNLean.PEPS.regularWalkHolonomy_torusSweptStringRightStep,
+        TNLean.PEPS.torusSweptStringRightStepOperators,
+        TNLean.PEPS.torusSweptStringRightStepOperators_right_transport,
+        TNLean.PEPS.torusSweptStringRightStepOperators_up_transport
+    }
+    \leanok
+    On a torus with horizontal period at least eight and vertical period at least
+    seven, retain the two-string presentation with upward transport $g$ at four
+    consecutive columns and rightward transport $h^{-1}$ along its three-bond
+    partner string. Change only the middle upward transport at relative position
+    $(2,1)$ from $g$ to $gh$, with the inverse ordered coefficient at a periodic
+    seam. All rightward transports and all other upward transports stay literal.
+    The clockwise holonomies at relative bases $(1,1)$ and $(2,1)$ change from
+    $(h,1)$ to $(1,h)$.
 
-This is the first elementary step of the prescribed four-endpoint route in
-SCP10, Section~6.6 (local lines 2340--2423), within the stated finite-torus
-scope. It does not establish the complete braid or reunion procedure;
-see \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\uses{thm:peps_torus_swept_string_endpoint_holonomy,thm:peps_torus_plaquette_holonomy}
+    This is the first elementary step of the prescribed four-endpoint route in
+    SCP10, Section~6.6 (local lines 2340--2423), within the stated finite-torus
+    scope. It does not establish the complete braid or reunion procedure;
+    see \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    \uses{thm:peps_torus_swept_string_endpoint_holonomy,thm:peps_torus_plaquette_holonomy}
 \end{theorem}
 \begin{proof}\leanok
-The native edge orientation gives the stated directed coefficients on either
-seam. In the reverse plaquette product, the first changed holonomy is
-$h(gh)^{-1}g=1$, whereas the second is $g^{-1}gh=h$.
+    The native edge orientation gives the stated directed coefficients on either
+    seam. In the reverse plaquette product, the first changed holonomy is
+    $h(gh)^{-1}g=1$, whereas the second is $g^{-1}gh=h$.
 \end{proof}
 
 \begin{theorem}[Original-spin realization of the first rightward step]
-\label{thm:peps_initial_string_right_physical_step}
-\lean{
-TNLean.PEPS.IsGIsometric.exists_unitary_torusInitialStringRightPhysicalStep,
-TNLean.PEPS.torusFirstRightStepGauge
-}
-\leanok
-Under the preceding period bounds, suppose the original site tensor is
-$G$-isometric for the regular virtual action. One unitary on the six actual
-spins in the horizontal two-plaquette block sends the initial internal
-presentation to the preceding rightward-step presentation, for every $g,h$,
-every virtual boundary configuration, and every common literal exterior and
-crossing assignment. The unitary is chosen before all these parameters.
-Its identity extension gives the corresponding equality of actual closed
-contractions.
+    \label{thm:peps_initial_string_right_physical_step}
+    \lean{
+        TNLean.PEPS.IsGIsometric.exists_unitary_torusInitialStringRightPhysicalStep,
+        TNLean.PEPS.torusFirstRightStepGauge
+    }
+    \leanok
+    Under the preceding period bounds, suppose the original site tensor is
+    $G$-isometric for the regular virtual action. One unitary on the six actual
+    spins in the horizontal two-plaquette block sends the initial internal
+    presentation to the preceding rightward-step presentation, for every $g,h$,
+    every virtual boundary configuration, and every common literal exterior and
+    crossing assignment. The unitary is chosen before all these parameters.
+    Its identity extension gives the corresponding equality of actual closed
+    contractions.
 
-The continuing partner string is retained. This is a finite-torus elementary
-physical movement from SCP10, Theorem~6.16 and the Section~6.6 route
-(local lines 2271--2305 and 2340--2423), rather than a proof of the full braid.
-\uses{thm:peps_initial_string_right_step,thm:peps_gauged_horizontal_flux_move}
+    The continuing partner string is retained. This is a finite-torus elementary
+    physical movement from SCP10, Theorem~6.16 and the Section~6.6 route
+    (local lines 2271--2305 and 2340--2423), rather than a proof of the full braid.
+    \uses{thm:peps_initial_string_right_step,thm:peps_gauged_horizontal_flux_move}
 \end{theorem}
 \begin{proof}\leanok
-On the lower row, assign vertex labels $h$ at the left vertex and the identity
-at the other two vertices; assign $g$ throughout the upper row. The seven
-actual internal bonds then reconstruct the initial presentation from a
-single canonical $h$ insertion. Extending that insertion to the middle chord
-changes precisely $g$ to $gh$ there. The common-background unitary acts on
-all original-spin boundary columns. The shared exterior operators and the
-actual cut expansion give the closed-contraction identity.
+    On the lower row, assign vertex labels $h$ at the left vertex and the identity
+    at the other two vertices; assign $g$ throughout the upper row. The seven
+    actual internal bonds then reconstruct the initial presentation from a
+    single canonical $h$ insertion. Extending that insertion to the middle chord
+    changes precisely $g$ to $gh$ there. The common-background unitary acts on
+    all original-spin boundary columns. The shared exterior operators and the
+    actual cut expansion give the closed-contraction identity.
 \end{proof}
