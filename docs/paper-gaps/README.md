@@ -704,10 +704,11 @@ For the matrix product operator symmetries of arXiv:2203.12563:
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
 
-- `sun25_mpdo_symmetry_boundary_scope.tex` records that the family predicates
-  are stated for the periodic operators, the identity boundary of the source's
-  boundary-weighted density operators, while the single-length results hold
-  for arbitrary matrices.
+- `sun25_mpdo_symmetry_boundary_scope.tex` (resolved) records that the family
+  predicates and the purification lemma now retain an arbitrary virtual
+  boundary of the source's boundary-weighted density operators; only the
+  local-purifying-tensor and normal-purification gauge characterizations
+  remain identity-boundary results.
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 

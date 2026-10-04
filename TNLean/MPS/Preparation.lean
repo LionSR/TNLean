@@ -71,6 +71,7 @@ import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
+import TNLean.MPS.Preparation.PolynomialAccuracy
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.QCccClassification
 import TNLean.MPS.Preparation.RegisterTree
