@@ -1,0 +1,141 @@
+\section{Two-block uncle Hamiltonians as actual parent limits}
+\label{sec:two_block_uncle}
+
+The uncle construction takes a punctured perturbation limit of the canonical
+parent Hamiltonian. The binding source is
+\cite[continuity-of-projector lemma, span-invariance lemma, and form theorem]{FernandezGonzalez2015Uncle};
+these are in \texttt{Papers/1210.6613/UncleHMPS.tex}, lines 314--340,
+890--902, and 912--953.
+The word ``gauge'' in the span lemma allows an invertible linear map on
+virtual matrices. In particular, multiplying both off-diagonal blocks by
+one scalar need not be a similarity transformation.
+
+\begin{lemma}[Local continuity at an injective boundary map]
+    \label{lem:uncle_local_projector_continuity}
+    \lean{ContinuousLinearMap.continuousAt_range_starProjection_of_injective}
+    \lean{MPSTensor.continuousAt_groundSpaceES_starProjection_of_isNBlkInjective}
+    \lean{MPSTensor.continuousAt_parentInteractionES_of_isNBlkInjective}
+    \leanok
+    \uses{def:ground_space_map_es,def:parent_interaction}
+    Let $T_x$ be a family of finite-dimensional boundary maps continuous at
+    $x_0$. If $T_{x_0}$ is injective, its range projector is continuous at
+    $x_0$. Consequently, for a tensor family continuous at $x_0$, block
+    injectivity at $x_0$ alone implies continuity of the canonical parent
+    interaction at that point.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Injectivity is open. In a neighborhood of $x_0$, write the projector as
+    $T_x(T_x^\dagger T_x)^{-1}T_x^\dagger$ using the existing inverse-Gram
+    formula. Inversion is continuous at the invertible base-point Gram
+    operator. This is the continuous-basis argument of the source, with
+    inverse Gram matrices in place of explicit Gram--Schmidt coordinates.
+\end{proof}
+
+\begin{lemma}[Invertible off-diagonal virtual rescaling]
+    \label{lem:uncle_virtual_rescaling}
+    \lean{MPSTensor.twoBlockVirtualScale}
+    \lean{MPSTensor.trace_twoBlockVirtualScale_mul}
+    \lean{MPSTensor.twoBlockVirtualScale_inv}
+    \lean{MPSTensor.groundSpaceMap_twoBlockVirtualScale_one}
+    \lean{MPSTensor.groundSpace_twoBlockVirtualScale_one}
+    \leanok
+    \uses{def:ground_space_map,def:ground_space_parent}
+    For $z\ne0$, the linear map
+    $\mathcal L_z\bigl(\begin{smallmatrix}X&Y\\Z&W\end{smallmatrix}\bigr)
+        =\bigl(\begin{smallmatrix}X&zY\\zZ&W\end{smallmatrix}\bigr)$
+    is invertible and preserves the one-site physical span of a tensor.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Its inverse is $\mathcal L_{z^{-1}}$. The bilinear trace identity
+    $\tr(\mathcal L_z(M)X)=\tr(M\mathcal L_z(X))$ transfers the rescaling to
+    the arbitrary boundary matrix. Surjectivity of this boundary change
+    gives equality of the physical ranges. No conjugation or similarity
+    assumption is used.
+\end{proof}
+
+\begin{definition}[Perturbed blocks and the regular uncle tensor]
+    \label{def:two_block_uncle_tensor}
+    \lean{MPSTensor.uncleBlockMatrix}
+    \lean{MPSTensor.twoBlockPerturbation}
+    \lean{MPSTensor.uncleTensorInterpolant}
+    \lean{MPSTensor.uncleTensor}
+    \lean{MPSTensor.uncleTensorInterpolant_zero}
+    \leanok
+    Let $A_i,B_i$ be square virtual blocks, and let $P_i,Q_i,R_i,L_i$ be
+    arbitrary perturbation blocks of the matching sizes. Define
+    \begin{align}
+        C_i(\varepsilon) & =
+        \begin{pmatrix}A_i+\varepsilon P_i & \varepsilon R_i     \\
+               \varepsilon L_i     & B_i+\varepsilon Q_i\end{pmatrix},
+        \label{eq:uncle_perturbation} \\
+        U_{ij}           & =
+        \begin{pmatrix}A_iA_j        & A_iR_j+R_iB_j \\
+               L_iA_j+B_iL_j & B_iB_j\end{pmatrix}.
+        \label{eq:uncle_explicit_tensor}
+    \end{align}
+    The regular interpolant $U(\varepsilon)$ has diagonal blocks
+    $(A_i+\varepsilon P_i)(A_j+\varepsilon P_j)+\varepsilon^2R_iL_j$
+    and $(B_i+\varepsilon Q_i)(B_j+\varepsilon Q_j)+\varepsilon^2L_iR_j$;
+    its off-diagonal blocks are those of $U$ plus respectively
+    $\varepsilon(P_iR_j+R_iQ_j)$ and
+    $\varepsilon(L_iP_j+Q_iL_j)$. In particular $U(0)=U$.
+\end{definition}
+
+\begin{lemma}[Regularization of the blocked perturbation]
+    \label{lem:uncle_regularization}
+    \lean{MPSTensor.twoBlockVirtualScale_blockTensor}
+    \lean{MPSTensor.continuous_uncleTensorInterpolant}
+    \leanok
+    \uses{def:two_block_uncle_tensor,lem:uncle_virtual_rescaling}
+    The interpolant is continuous, and for every $\varepsilon\ne0$,
+    $U(\varepsilon)=\mathcal L_{\varepsilon^{-1}}
+        (C(\varepsilon)\mathbin{\circ}C(\varepsilon))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Multiply the four matrix blocks and cancel the nonzero factor
+    $\varepsilon$ in each off-diagonal block. All remaining entries are
+    polynomials in $\varepsilon$.
+\end{proof}
+
+\begin{theorem}[Canonical two-block uncle interaction and Hamiltonian]
+    \label{thm:two_block_uncle_parent_limit}
+    \lean{MPSTensor.uncleInteractionES}
+    \lean{MPSTensor.uncleHamiltonianES}
+    \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation}
+    \lean{MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation}
+    \lean{MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation_real}
+    \leanok
+    \uses{lem:uncle_local_projector_continuity,lem:uncle_regularization,
+        def:blocked_configuration_isometry,def:parent_hamiltonian}
+    Suppose the explicit uncle tensor $U$ is injective. The actual canonical
+    two-site parent interactions of $C(\varepsilon)$ converge, in operator
+    norm as $\varepsilon\to0$ through nonzero complex parameters, to
+    $h'_P=\Pi[U]$ on the original two physical sites. At every fixed periodic
+    length $N\ge2$, the actual parent Hamiltonians converge in operator norm
+    to $H'_P=\sum_{i=1}^N(h'_P)_{i,i+1}$. The Hamiltonian limit also holds along real
+    perturbation parameters.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:uncle_local_projector_continuity,lem:uncle_virtual_rescaling,
+        lem:uncle_regularization}
+    For nonzero parameters, virtual rescaling preserves the physical range
+    and hence the canonical projector. The regular interpolant has injective
+    value $U$ at zero, so its projector converges to $\Pi[U]$. The existing
+    physical-blocking isometry returns this projector to the original
+    two-site Hilbert space. Each translated interaction is expressed through
+    the existing cyclic restriction and its adjoint. Finite sums and these
+    fixed operator compositions preserve operator-norm convergence.
+\end{proof}
+
+The source assumes $C=A\oplus B$ is block-injective. The local limit proof
+needs only the stated injectivity of $U$, so the formal result also covers
+other block data satisfying that condition as an algebraic operator-limit
+statement, without additional claims about their standard-form physical
+interpretation. Arbitrary diagonal perturbations
+$P,Q$ have the same limit for fixed $A,B,R,L$. No assertion about generic
+perturbations, an algebraic exceptional set, gaplessness, or an
+infinite-volume Hamiltonian is included here.

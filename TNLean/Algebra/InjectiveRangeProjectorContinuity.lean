@@ -37,6 +37,35 @@ theorem continuous_of_euclideanSingle
   rw [hy]
   exact continuous_finsetSum _ fun i _ => (h i).const_smul _
 
+/-- At an injective finite-dimensional map, the orthogonal range projector is
+continuous even if nearby maps have not been supplied with injectivity proofs.
+Injectivity persists in a neighborhood by openness. -/
+theorem continuousAt_range_starProjection_of_injective
+    {X 𝕜 E F : Type*} [TopologicalSpace X] [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [FiniteDimensional 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (T : X → E →L[𝕜] F) {x₀ : X} (hT : ContinuousAt T x₀)
+    (hInj : Function.Injective (T x₀)) :
+    ContinuousAt (fun x => (T x).range.starProjection) x₀ := by
+  have hAdj : ContinuousAt (fun x => (T x).adjoint) x₀ :=
+    ContinuousLinearMap.adjoint.continuous.continuousAt.comp hT
+  have hGram := hAdj.clm_comp hT
+  let u : (E →L[𝕜] E)ˣ :=
+    ⟨(T x₀).adjoint.comp (T x₀), inverseGram (T x₀) hInj,
+      adjoint_comp_self_comp_inverseGram (T x₀) hInj,
+      inverseGram_comp_adjoint_comp_self (T x₀) hInj⟩
+  have hInv : ContinuousAt (fun x => Ring.inverse ((T x).adjoint.comp (T x))) x₀ :=
+    (NormedRing.inverse_continuousAt u).comp'
+      (f := fun x => (T x).adjoint.comp (T x)) hGram
+  have hProj := hT.clm_comp (hInv.clm_comp hAdj)
+  have hEv : ∀ᶠ x in nhds x₀, Function.Injective (T x) :=
+    hT.eventually (ContinuousLinearMap.isOpen_injective.mem_nhds hInj)
+  apply hProj.congr_of_eventuallyEq
+  filter_upwards [hEv] with x hx
+  rw [← injectiveRangeProjector_eq_starProjection (T x) hx]
+  simp only [injectiveRangeProjector, inverseGram_eq_ringInverse]
+
 /-- The orthogonal range projector of a continuous family of injective
 finite-dimensional maps depends continuously on the parameter. -/
 theorem continuous_injectiveRangeProjector
@@ -47,28 +76,11 @@ theorem continuous_injectiveRangeProjector
     (T : X → E →L[𝕜] F) (hT : Continuous T)
     (hInj : ∀ x, Function.Injective (T x)) :
     Continuous fun x => injectiveRangeProjector (T x) (hInj x) := by
-  have hAdj : Continuous fun x => (T x).adjoint :=
-    ContinuousLinearMap.adjoint.continuous.comp hT
-  have hGram : Continuous fun x => (T x).adjoint.comp (T x) :=
-    hAdj.clm_comp hT
-  let hGramUnit (x : X) : (E →L[𝕜] E)ˣ :=
-    ⟨(T x).adjoint.comp (T x), inverseGram (T x) (hInj x),
-      adjoint_comp_self_comp_inverseGram (T x) (hInj x),
-      inverseGram_comp_adjoint_comp_self (T x) (hInj x)⟩
-  have hInv : Continuous fun x => Ring.inverse ((T x).adjoint.comp (T x)) := by
-    apply continuous_iff_continuousAt.mpr
-    intro x
-    have hInvAt : ContinuousAt
-        (Ring.inverse : (E →L[𝕜] E) → E →L[𝕜] E)
-        ((T x).adjoint.comp (T x)) := by
-      exact NormedRing.inverse_continuousAt (hGramUnit x)
-    exact hInvAt.comp' (f := fun y : X => (T y).adjoint.comp (T y))
-      hGram.continuousAt
-  have hProj : Continuous fun x =>
-      (T x).comp ((Ring.inverse ((T x).adjoint.comp (T x))).comp (T x).adjoint) :=
-    hT.clm_comp (hInv.clm_comp hAdj)
-  convert hProj using 1
-  ext x
-  simp only [injectiveRangeProjector, inverseGram_eq_ringInverse]
+  have hRange : Continuous fun x => (T x).range.starProjection :=
+    continuous_iff_continuousAt.mpr fun x =>
+      continuousAt_range_starProjection_of_injective T hT.continuousAt (hInj x)
+  convert hRange using 1
+  funext x
+  exact injectiveRangeProjector_eq_starProjection (T x) (hInj x)
 
 end ContinuousLinearMap
