@@ -960,3 +960,11 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
   holds, and the rate correction for the decay bound.
+
+For the finite-round extension of arXiv:2103.13367:
+
+- `psc21_adaptive_channel_round_scope.tex` records arbitrary-input adaptive
+  local channels and separates their quantum-layer depth from the fixed
+  number of composed `QCcc` blocks required by the asymptotic source relation.
+  One source block may already contain sequential measurements at many sites;
+  the adaptive tree does not record the required source-block decomposition.
