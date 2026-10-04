@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
+import TNLean.MPS.SharedInfra.MatrixFamilyTracePairing
 import TNLean.MPS.SharedInfra.WordTupleGauge
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Prod
@@ -390,68 +391,18 @@ theorem pairTraceSeparatingUpTo_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
   exact hSep ΔA ΔB (fun w => by
     simpa using hΔ (List.ofFn w) (by simp))
 
-/-- Every linear functional on a finite matrix algebra is the trace pairing against a
-matrix: the inverse of the linear equivalence with the dual induced by the nondegenerate
-trace form. -/
-private theorem exists_trace_repr {n : Type*} [Fintype n]
-    (f : Matrix n n ℂ →ₗ[ℂ] ℂ) :
-    ∃ Δ : Matrix n n ℂ, ∀ M : Matrix n n ℂ, f M = Matrix.trace (Δ * M) := by
-  refine ⟨((Matrix.traceBilinForm n).toDual Matrix.traceBilinForm_nondegenerate).symm f,
-    fun M ↦ ?_⟩
-  rw [← Matrix.traceBilinForm_apply, LinearMap.BilinForm.apply_toDual_symm_apply]
-
-private theorem exists_pi_trace_repr
-    (f : ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ] ℂ) :
-    ∃ Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-      ∀ M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-        f M = ∑ k : Fin r, Matrix.trace (Δ k * M k) := by
-  classical
-  choose Δ hΔ using fun k : Fin r ↦ exists_trace_repr
-    (f.comp (LinearMap.single ℂ
-      (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k))
-  refine ⟨Δ, fun M ↦ ?_⟩
-  conv_lhs => rw [← Finset.univ_sum_single M]
-  rw [map_sum]
-  exact Finset.sum_congr rfl fun k _ ↦ by simpa using hΔ k (M k)
-
 private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
     (f : (Matrix m m ℂ × Matrix n n ℂ) →ₗ[ℂ] ℂ) :
     ∃ ΔA : Matrix m m ℂ, ∃ ΔB : Matrix n n ℂ,
       ∀ M : Matrix m m ℂ × Matrix n n ℂ,
         f M = Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) := by
   classical
-  obtain ⟨ΔA, hA⟩ := exists_trace_repr
+  obtain ⟨ΔA, hA⟩ := Matrix.exists_trace_representation
     (f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
-  obtain ⟨ΔB, hB⟩ := exists_trace_repr
+  obtain ⟨ΔB, hB⟩ := Matrix.exists_trace_representation
     (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
   refine ⟨ΔA, ΔB, fun M ↦ ?_⟩
   rw [← LinearMap.coprod_comp_inl_inr f, LinearMap.coprod_apply, hA M.1, hB M.2]
-
-private theorem matrix_pi_span_top_of_trace_separating
-    (W : Submodule ℂ
-      ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
-    (hSep : ∀ Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-      (∀ M ∈ W, (∑ k : Fin r, Matrix.trace (Δ k * M k)) = 0) →
-        ∀ k, Δ k = 0) :
-    W = ⊤ := by
-  classical
-  by_contra hnot
-  have hlt : W < ⊤ := lt_of_le_of_ne le_top hnot
-  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
-  obtain ⟨Δ, hf_repr⟩ := exists_pi_trace_repr f
-  have hΔ : ∀ k, Δ k = 0 := by
-    refine hSep Δ ?_
-    intro M hM
-    have hf0 : f M = 0 := hfker hM
-    simpa [hf_repr] using hf0
-  have hfzero : f = 0 := by
-    apply LinearMap.ext
-    intro M
-    have hM := hf_repr M
-    have hΔzero : Δ = 0 := funext hΔ
-    rw [hΔzero] at hM
-    simpa using hM
-  exact hfne hfzero
 
 private theorem pair_matrix_span_top_of_pair_trace_separating {D₁ D₂ : ℕ}
     (W : Submodule ℂ
@@ -489,7 +440,7 @@ theorem exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation
   rcases hSep with ⟨L, hL⟩
   refine ⟨L, ?_⟩
   unfold WordTupleSpanTop
-  exact matrix_pi_span_top_of_trace_separating
+  exact Matrix.family_submodule_eq_top_of_trace_separating
     (Submodule.span ℂ (Set.range (wordTuple A L))) (by
       intro Δ hZero
       refine hL Δ ?_
