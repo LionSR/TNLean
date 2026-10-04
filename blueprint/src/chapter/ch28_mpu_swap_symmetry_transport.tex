@@ -110,7 +110,7 @@
     \lean{MPOTensor.continuous_ketLeftMul,
         MPOTensor.ketLeftMul_involutive}
     \leanok
-    \uses{threeMPU2}
+    \uses{def:mpdo_vertical_one_site_actions}
     Fix physical and virtual dimensions $d,D$, and a matrix $Q\in\MN{d}$.
     The map $\mathcal U\mapsto Q\mathcal U$, acting on the output physical
     leg, is continuous on the space of local tensors. If $Q^2=I$, this map
@@ -127,7 +127,7 @@
     \label{thm:mpu_canonical_form_physical_left_action}
     \lean{MPOTensor.isMPUCanonicalForm_ketLeftMul}
     \leanok
-    \uses{def:mpu_canonical_form}
+    \uses{def:mpu_canonical_form, def:mpdo_vertical_one_site_actions}
     Let $\mathcal U$ be a canonical-form MPO tensor, and let
     $Q\in\MN{d}$ be unitary. Then $Q\mathcal U$, with $Q$ acting on the
     physical output, is again in canonical form. Its canonical blocks
@@ -150,8 +150,8 @@
     \lean{MPOTensor.joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul,
         MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul}
     \leanok
-    \uses{def:mpu_finite_chain_operator_symmetry,
-        thm:mpu_continuous_involutive_left_action}
+    \uses{def:strictly-equivalent-symmetry,
+        def:mpdo_vertical_one_site_actions}
     Fix $d,D$, two finite-chain operator symmetries $\mathcal S,\mathcal T$,
     and a unitary $Q\in\MN{d}$ with $Q^2=I$. Suppose that, for every local tensor $\mathcal W$ of these dimensions,
     $\mathcal W$ is $\mathcal S$-invariant if and only if
@@ -215,7 +215,7 @@
     \label{thm:mpu_physical_left_action_blocking}
     \lean{MPOTensor.blockTensor_ketLeftMul}
     \leanok
-    \uses{def:blocked_tensor, threeMPU2}
+    \uses{def:blocked_tensor, def:mpdo_vertical_one_site_actions}
     For every local MPO tensor $\mathcal U$, one-site matrix $Q$, and
     $k\geq0$, output-leg multiplication commutes with blocking:
     \begin{align}
@@ -240,8 +240,8 @@
     \lean{MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul}
     \leanok
     \uses{def:mpu_blocked_finite_chain_symmetry,
-        thm:mpu_fixed_bond_symmetry_path_transport,
-        thm:mpu_physical_left_action_blocking}
+        def:strictly-equivalent-symmetry,
+        def:mpdo_vertical_one_site_actions}
     Fix $d,D$, finite-chain operator symmetries $\mathcal S,\mathcal T$,
     and a unitary involution $Q\in\MN{d}$. For every $k>0$, suppose that
     every local tensor $\mathcal W$ of physical dimension $d^k$ and
