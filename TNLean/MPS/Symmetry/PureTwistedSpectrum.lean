@@ -123,8 +123,8 @@ theorem twistedTransfer_spectralRadius_eq_one_iff_intertwiner
   · rintro ⟨V, μ, hV, hμ, hInter⟩
     have hVne : V ≠ 0 := by
       intro hV0
-      have h : (0 : Matrix (Fin D) (Fin D) ℂ) = 1 := by simpa [hV0] using hV
-      exact zero_ne_one h
+      rw [hV0, zero_mul] at hV
+      exact zero_ne_one hV
     have hEig : Module.End.HasEigenvalue (twistedTransferMap A u) μ :=
       Module.End.hasEigenvalue_of_hasEigenvector
         ⟨Module.End.mem_eigenspace_iff.mpr

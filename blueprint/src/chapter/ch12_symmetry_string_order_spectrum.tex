@@ -11,7 +11,7 @@ channel has that set and a multidimensional fixed space.
 \begin{lemma}[Canonical fixed-space simplicity implies irreducibility]
     \label{lem:canonical_fixed_space_irreducible}
     \lean{MPSTensor.isIrreducibleMap_of_canonical_fixedSpace}
-    \notready
+    \leanok
     \uses{def:twisted_transfer_map}
     Suppose $\E_A(\Id)=\Id$, $\Lambda>0$, and
     $\E_A^*(\Lambda)=\Lambda$.  If every fixed matrix of $\E_A$ is a
@@ -32,7 +32,7 @@ channel has that set and a multidimensional fixed space.
         MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible,
         MPSTensor.virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible,
         MPSTensor.boundaryState_invariant_of_virtualUnitary_of_irreducible}
-    \notready
+    \leanok
     \uses{def:twisted_transfer_map, def:local_symmetry}
     Let $A$ be unital and irreducible, and let $u$ be a physical unitary.
     A common positive gauge puts $A$ and its unitary-mixed companion in
@@ -48,7 +48,7 @@ channel has that set and a multidimensional fixed space.
     \lean{MPSTensor.twistedTransfer_spectralRadius_le_one_of_irreducible,
         MPSTensor.twistedTransfer_spectralRadius_eq_one_iff_intertwiner,
         MPSTensor.pureCanonical_spectralRadius_eq_one_iff_localSymmetry}
-    \notready
+    \leanok
     \uses{lem:irreducible_twisted_transfer_reduction, def:local_symmetry}
     Under the preceding irreducible unital hypotheses,
     $\rho(\E_u)\leq1$.  Equality holds exactly when there are a unitary
@@ -65,7 +65,7 @@ channel has that set and a multidimensional fixed space.
 \begin{lemma}[Phase-retaining transfer conjugation]
     \label{lem:twisted_transfer_phase_conjugation}
     \lean{MPSTensor.twistedTransfer_eq_phase_mul_transfer}
-    \notready
+    \leanok
     \uses{def:twisted_transfer_map}
     The local intertwining equation gives, for every matrix $X$,
     \begin{align}
@@ -79,7 +79,7 @@ channel has that set and a multidimensional fixed space.
     \label{thm:twisted_peripheral_eigendirection_unique}
     \lean{MPSTensor.twistedTransfer_peripheral_eq_of_primitive,
         MPSTensor.twistedTransfer_peripheral_unique}
-    \notready
+    \leanok
     \uses{lem:twisted_transfer_phase_conjugation,
         thm:irreducible_twisted_spectral_radius}
     Assume additionally that $1$ is the only peripheral eigenvalue of
@@ -102,7 +102,7 @@ channel has that set and a multidimensional fixed space.
     \lean{MPSTensor.physicalEigenbasis_intertwining_iff,
         MPSTensor.physicalEigenbasis_exp_intertwining_iff,
         MPSTensor.twistedTransfer_spectralRadius_eq_one_iff_eigenbasis}
-    \notready
+    \leanok
     \uses{thm:irreducible_twisted_spectral_radius}
     Let $W$ contain physical eigenbasis bras, so
     $Wu=\operatorname{diag}(\zeta_j)W$, and set
