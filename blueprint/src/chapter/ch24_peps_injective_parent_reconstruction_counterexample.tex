@@ -1,0 +1,78 @@
+\section{A counterexample to bare inverse-adjoint parent transport}%
+\label{sec:peps_injective_parent_reconstruction_counterexample}
+
+The exact-kernel assertion following the displayed parent-transport formula in
+\cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines 2031--2037,
+fails for rectangular injective site maps. The correction and its
+relation to genuine parent uniqueness are recorded in
+\cite{gap:cpgsv21_injective_parent_reconstruction}.
+
+\begin{theorem}[A positive-dimensional bond with injective site maps]%
+    \label{thm:peps_injective_parent_counterexample_maps}
+    \lean{TNLean.PEPS.InjectiveParentReconstructionCounterexample.bondDimension,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.siteEmbedding,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.siteLeftInverse,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.twoSiteEmbedding,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.twoSiteLeftInverse,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.bellVector,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.virtualInteraction,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.bondDimension_pos,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.siteLeftInverse_mul_siteEmbedding,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.twoSiteLeftInverse_mul_twoSiteEmbedding,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.siteEmbedding_injective,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.twoSiteEmbedding_injective,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.bellVector_eq_one,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.virtualInteraction_posSemidef,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.ker_virtualInteraction_eq_bellSpan}
+    \leanok
+    Consider two vertices joined by a bond of dimension $D=1$.
+    At either endpoint place the site map
+    $A:\mathbb C\longrightarrow\mathbb C^2$, $A(z)=(z,0)$,
+    and choose the left inverse $\ell(z_0,z_1)=z_0$.
+    The product maps $F=A\otimes A$ and $L=\ell\otimes\ell$
+    satisfy $LF=I$, so both the site and product maps are injective.
+    The virtual Bell vector is the scalar $1$. Its complement
+    interaction is $H=0$, which is positive and has exactly the
+    Bell line as its kernel.
+\end{theorem}
+
+\begin{proof}\leanok
+    Direct multiplication gives $\ell A=1$ and
+    $(\ell\otimes\ell)(A\otimes A)=1$.
+    The two-endpoint virtual space is one-dimensional, and the Bell
+    vector is nonzero, so its span is the whole virtual space.
+\end{proof}
+
+\begin{theorem}[The bare transport has additional physical zero modes]%
+    \label{thm:peps_injective_parent_counterexample_kernel}
+    \lean{TNLean.PEPS.InjectiveParentReconstructionCounterexample.barePhysicalInteraction,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.unusedPhysicalVector,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.barePhysicalInteraction_eq_zero,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.barePhysicalInteraction_posSemidef,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.twoSiteEmbedding_mulVec_unused,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.unusedPhysicalVector_not_mem_range,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.unusedPhysicalVector_mem_bareKernel,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.bareKernel_ne_productSiteRange,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.finrank_productSiteRange,
+        TNLean.PEPS.InjectiveParentReconstructionCounterexample.finrank_bareKernel}
+    \leanok
+    \uses{thm:peps_injective_parent_counterexample_maps}
+    Bare inverse-adjoint transport gives $L^\dagger HL=0$ on
+    $\mathbb C^2\otimes\mathbb C^2$.
+    The vector $e_1\otimes e_0$ belongs to its kernel, but lies
+    outside $\operatorname{ran}F$. The bare kernel has dimension four,
+    whereas the intended product-site range has dimension one. Hence
+    \begin{align*}
+        \ker(L^\dagger HL)\ne F(\ker H).
+    \end{align*}
+    The example uses a positive bond dimension and genuinely injective
+    tensors. The corrected interaction with its physical reconstruction
+    summand is treated separately.
+\end{theorem}
+
+\begin{proof}\leanok
+    The transported interaction is zero because $H=0$.
+    Every vector in $\operatorname{ran}(A\otimes A)$ has zero
+    coefficient at $(1,0)$, whereas $e_1\otimes e_0$ has coefficient
+    one there. Thus it is an additional physical kernel vector.
+\end{proof}

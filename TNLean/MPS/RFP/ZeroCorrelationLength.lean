@@ -104,6 +104,23 @@ theorem physicalObservableTransfer_coeff_mul (A : MPSTensor d D) (L : ℕ)
     Matrix.mul_sum, Algebra.mul_smul_comm, Finset.smul_sum, smul_smul, mul_comm]
   rw [Finset.sum_comm]
 
+/-- Matrices in the span of length-`L` words give a physical observable whose
+inserted transfer map is their two-sided multiplication. This is the common
+observable-realization step in arXiv:1606.00608, lines 1250--1258, and
+arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
+theorem exists_physicalObservableTransfer_mul_of_mem_span (A : MPSTensor d D) (L : ℕ)
+    (M N : Matrix (Fin D) (Fin D) ℂ)
+    (hM : M ∈ Submodule.span ℂ
+      (Set.range fun σ : Fin L → Fin d ↦ Kraus.evalWord A (List.ofFn σ)))
+    (hN : N ∈ Submodule.span ℂ
+      (Set.range fun σ : Fin L → Fin d ↦ Kraus.evalWord A (List.ofFn σ))) :
+    ∃ O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
+      ∀ X : Matrix (Fin D) (Fin D) ℂ, physicalObservableTransfer A L O X = M * X * Nᴴ := by
+  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hM
+  obtain ⟨e, he⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hN
+  refine ⟨fun τ σ ↦ c σ * starRingEnd ℂ (e τ), fun X ↦ ?_⟩
+  rw [physicalObservableTransfer_coeff_mul, hc, he]
+
 /-- The periodic-chain two-region expectation obtained by placing observables
 $O_1$ and $O_2$ on physical blocks, with $n_1$ and $n_2$ unobserved sites in
 the two complementary arcs. This is the trace formula at arXiv:1606.00608,

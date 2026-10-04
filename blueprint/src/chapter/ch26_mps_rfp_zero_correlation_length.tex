@@ -492,6 +492,28 @@
     identity.
 \end{proof}
 
+\begin{theorem}[Two-sided virtual multiplication by physical observables]%
+    \label{thm:physical_observable_word_span_mul}
+    \lean{MPSTensor.physicalObservableTransfer_coeff_mul,
+        MPSTensor.exists_physicalObservableTransfer_mul_of_mem_span}
+    \leanok
+    \uses{def:physical_observable_transfer}
+    Let $M,N$ belong to the span of the length-$L$ words of a tensor $A$.
+    There is an operator $O$ on $L$ physical sites whose inserted transfer
+    map satisfies $\E_O(X)=MXN^\dagger$ for every virtual matrix $X$.
+    This is the two-sided multiplication used in the observable choices of
+    \cite[Appendix~C]{Cirac2017MPDO_AnnPhys} and
+    \cite[Lemma~2]{Malz2024Preparation}.
+\end{theorem}
+\begin{proof}\leanok
+    Write $M=\sum_\sigma c_\sigma A^\sigma$ and
+    $N=\sum_\tau e_\tau A^\tau$. Set
+    $O_{\tau,\sigma}=c_\sigma\overline{e_\tau}$. Expanding the inserted
+    transfer map gives
+    $\E_O(X)=\sum_{\sigma,\tau}c_\sigma\overline{e_\tau}
+        A^\sigma X(A^\tau)^\dagger=MXN^\dagger$.
+\end{proof}
+
 \begin{theorem}[Sector-supported physical observable realization]%
     \label{thm:bnt_sector_supported_physical_observable}
     \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_matrixUnit}
@@ -512,7 +534,7 @@
     are realized by physical observables.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:bnt_word_tuple_simultaneous_inverse}
+    \uses{thm:bnt_word_tuple_simultaneous_inverse, thm:physical_observable_word_span_mul}
     Apply Theorem~\ref{thm:bnt_word_tuple_simultaneous_inverse} independently
     to the left and right word evaluations. The observable with coefficients
     \begin{align}

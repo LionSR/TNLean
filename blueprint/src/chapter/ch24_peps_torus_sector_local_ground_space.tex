@@ -1,0 +1,58 @@
+\begin{lemma}[Complementary bond insertions preserve a regional ground space]%
+    \label{lem:peps_regular_complementary_twists_region_space}
+    \lean{TNLean.PEPS.regionGroundSpace_regularTwistedSite_eq_of_trivial_on_incident}
+    \leanok
+    \uses{def:peps_region_ground_space, def:peps_open_region_contraction}
+    Consider a finite graph tensor with regular group labels and bond
+    insertions equal to the identity on every edge incident to $R$.
+    The inserted tensor has the same regional ground space
+    $\mathcal G_R$ as the original tensor.
+    The strict interior restriction and the remaining global closure problem are recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_range}
+    All tensor coefficients in the open contraction of $R$ are
+    unchanged. Thus the open-region matrices, and hence their
+    physical ranges, agree.
+\end{proof}
+
+\begin{theorem}[Torus closures satisfy interior regional parent constraints]%
+    \label{thm:peps_torus_closure_interior_parent_constraints}
+    \lean{TNLean.PEPS.torusGClosure_slice_mem_regionGroundSpace_interior_rectangle,
+        TNLean.PEPS.torusGClosure_sum_slice_mem_regionGroundSpace_interior_rectangle,
+        TNLean.PEPS.regionLocalTerm_torusGClosure_sum_eq_zero_interior_rectangle}
+    \leanok
+    \uses{def:peps_region_ground_space, def:peps_region_parent_interaction}
+    Let a four-leg tensor with regular group labels be placed on a
+    native square torus with both periods at least three. Let $R$ be
+    a coordinate rectangle whose starting coordinates are positive
+    and whose ending coordinates are strictly below the torus
+    periods. For every pair of closure elements $g,h$, every physical
+    slice of the native closure vector $\Psi_{g,h}$ across $R$ lies
+    in the original regional ground space $\mathcal G_R$.
+    Consequently this holds for every coherent sum
+    $\Psi=\sum_i\mu_i\Psi_{g_i,h_i}$, and every regional parent
+    interaction $h_R$ for the original tensor satisfies
+    \[
+        h_R^{\mathrm{global}}\Psi=0.
+    \]
+    No isometry, $G$-injectivity, or commutativity of $g_i,h_i$ is
+    assumed. This is an interior local constraint; it does not assert
+    the full torus ground-space classification of
+    \cite[Theorem~5.5]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_regular_complementary_twists_region_space,
+        thm:peps_region_ground_space_slice}
+    The native closure is the graph contraction with its holonomy
+    operators inserted at ordered seam endpoints. No seam bond is
+    incident to the strict interior rectangle. Its open contraction
+    therefore has the original regional ground space. Every slice
+    of the closed inserted tensor belongs to that space. A subspace
+    contains coherent sums of its vectors, so the assertion extends
+    to $\Psi$. The globally extended interaction vanishes precisely
+    when its regional kernel contains every such slice.
+\end{proof}

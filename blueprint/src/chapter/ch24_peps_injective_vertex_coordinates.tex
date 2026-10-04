@@ -1,0 +1,51 @@
+\begin{definition}[Independent virtual coordinates of a region]%
+    \label{def:peps_injective_vertex_coordinates}
+    \lean{TNLean.PEPS.RegionVertexVirtualConfig,
+        TNLean.PEPS.regionVertexTensorMap,
+        TNLean.PEPS.regionVertexLeftInverse,
+        TNLean.PEPS.regionIncidentVertexConfig,
+        TNLean.PEPS.regionVirtualBondWeight,
+        TNLean.PEPS.regionVirtualBondMap}
+    \leanok
+    Give each vertex of $R$ an independent configuration of its incident
+    virtual labels. Thus each internal edge has two labels, one at each
+    endpoint. Let $F_R=\bigotimes_{v\in R}A_v$ be the product site map.
+    For injective sites let $L_R$ be the product of their left inverses.
+    Let $B_R$ denote the virtual region map that pairs the two endpoint
+    labels of every internal edge and leaves the crossing labels open.
+    Its coefficients are sums of basis vectors indexed by the actual
+    incident-edge assignments, with the boundary labels fixed.
+\end{definition}
+
+\begin{theorem}[Exact virtual reconstruction of a region]%
+    \label{thm:peps_injective_vertex_reconstruction}
+    \lean{TNLean.PEPS.regionVertexLeftInverse_comp_regionVertexTensorMap,
+        TNLean.PEPS.regionVertexTensorMap_injective,
+        TNLean.PEPS.regionVertexTensorMap_single,
+        TNLean.PEPS.regionVertexTensorMap_regionVirtualBondWeight,
+        TNLean.PEPS.openRegionMap_eq_regionVertexTensorMap_comp_regionVirtualBondMap,
+        TNLean.PEPS.regionVertexLeftInverse_comp_openRegionMap,
+        TNLean.PEPS.regionGroundSpace_eq_map_regionVirtualBondMap_range,
+        TNLean.PEPS.comap_regionGroundSpace_regionVertexTensorMap}
+    \leanok
+    \uses{def:peps_injective_vertex_coordinates,def:peps_region_ground_space}
+    For arbitrary site tensors the actual open-region map satisfies
+    $T_R=F_RB_R$, and $\mathcal G_R=F_R(\operatorname{ran}B_R)$.
+    If all site maps are injective, then
+    \[
+        L_RF_R=I,\qquad L_RT_R=B_R,\qquad
+        F_R^{-1}(\mathcal G_R)=\operatorname{ran}B_R.
+    \]
+    No nonzero-bond hypothesis is needed for these identities.
+    These are the finite-graph virtual-coordinate identities underlying
+    the parent argument in \cite[Section IV.C.1]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The product site map takes a virtual basis vector to the product of
+    its site tensor coefficients. Summing over compatible internal edge
+    labels with the crossing labels fixed gives the actual open-region
+    contraction, so $T_R=F_RB_R$. Tensoring the site left inverses gives
+    $L_RF_R=I$, hence injectivity of $F_R$ and $L_RT_R=B_R$.
+    The range and inverse-image formulas follow.
+\end{proof}
