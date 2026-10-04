@@ -111,7 +111,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_of_log_lower (d D : ℕ) (hd : 0 
       rw [inner_self_eq_norm_sq_to_K, hunit]
       simpa using hδ0
     by_cases hN1 : N = 1
-    · subst N
+    · subst hN1
       refine ⟨_, 0, hunit, Nat.zero_le _, ?_, herr, fun _ => rfl⟩
       exact isPreparedInDepth_zero_one_site (d := d)
         (fun s => ((‖state A‖ : ℂ)⁻¹ • state A) s)

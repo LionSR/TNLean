@@ -89,7 +89,7 @@ theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
     rw [hpair, Y, blockMatVector_smul, ← chainState_eq_blockMatVector hsum hW] at hprep
     exact ⟨C * N, Nat.mul_le_mul_right N (le_max_left C K), hprep⟩
   · by_cases hN1 : N = 1
-    · subst N
+    · subst hN1
       refine ⟨0, Nat.zero_le _, ?_⟩
       exact isPreparedInDepth_zero_one_site (d := d)
         (fun s => ((‖chainState A‖ : ℂ)⁻¹ • chainState A) s)
