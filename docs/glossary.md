@@ -1757,6 +1757,47 @@ in `MPS/Preparation/` uses it.
   are free. There are no measurements or classical communication, so this is
   not the LOCC class of the source.
 
+#### `QuantumCircuit.IsAdaptiveChannelProtocol`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelProtocol T Ψ : Prop`,
+  for `[NeZero N]`, a depth bound `T : ℕ`, and a linear map between chain
+  operators with possibly different local dimensions.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** a finite tree of onsite channels, nearest-neighbor channel
+  layers, and onsite instruments with outcome-dependent continuations.
+  Each branch has at most `T` nearest-neighbor layers; onsite operations
+  and communication of the complete outcome tuple cost zero depth.
+  `OnsiteChannel.feedforwardMap` sums unnormalized outcome operations,
+  including zero-probability outcomes, and never divides by probabilities.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", the finite-round extension mentioned after the one-round protocol.
+- **Sanctioned bridges:** `IsAdaptiveChannelProtocol.isKrausCPTP`,
+  `IsAdaptiveChannelProtocol.comp` (additive depth bounds),
+  `IsAdaptiveChannelProtocol.onsite_comp`, and
+  `IsLocalChannelProtocol.adaptive` (deterministic local protocols are included).
+- **Caveat:** this is an upper bound on quantum depth, not a bound on the
+  number of instrument steps. It permits arbitrary finite measurement
+  rounds and does not supply the system-size-independent round bound of
+  the source's asymptotic `QCcc` phase relation. See
+  `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
+
+#### `QuantumCircuit.IsAdaptiveChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelConversion T ρ σ : Prop`,
+  for `[NeZero N]` and operators on `N`-site chains.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** there is a map `Ψ` with `IsAdaptiveChannelProtocol T Ψ`
+  and `Ψ ρ = σ`.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", with the finite-round scope of `IsAdaptiveChannelProtocol`.
+- **Sanctioned bridges:** `IsAdaptiveChannelConversion.refl`,
+  `IsAdaptiveChannelConversion.mono`, `IsAdaptiveChannelConversion.trans`,
+  `IsAdaptiveChannelConversion.density`, and
+  `IsLocalChannelConversion.adaptive`.
+- **Caveat:** exact, directed conversion on arbitrary input operators;
+  positivity and unit trace of the output follow from those of the input.
+  No symmetry or asymptotic phase classification is asserted.
+
 #### `QuantumCircuit.IsLocalChannelConversion`
 
 - **Declaration:**

@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Finite Adaptive Local Channels and the Number of Measurement Rounds}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source operations}
+Piroli, Styliaris and Cirac~\cite{Piroli2021LOCC}, paragraph ``State
+transformations with QC and LOCC'', define one circuit followed by sequential
+local measurements and local unitaries conditioned on earlier outcomes.
+The same paragraph mentions the possible extension to several rounds of
+local operations and classical communication. The later paragraph ``Phases
+of matter'' allows a number of composed channels that is fixed independently
+of the system size.
+
+\section{Finite adaptive channels}
+An onsite quantum instrument has local Kraus operators $K_{i,j}$ satisfying
+$\sum_jK_{i,j}^{\dagger}K_{i,j}=I$. For an outcome tuple $J$, write
+$K_J=\bigotimes_iK_{i,J(i)}$. If $\Psi_J$ is the subsequent channel selected
+by that tuple, the channel after averaging the outcomes is
+\begin{align}
+ \rho&\longmapsto\sum_J\Psi_J(K_J\rho K_J^{\dagger}).
+\end{align}
+These are unnormalized operations. Their traces already contain the outcome
+probabilities, so no division by probabilities is needed, even on branches
+whose probability is zero. Complete positivity follows from the Kraus
+operators of the continuations, composed with $K_J$. Trace preservation
+follows from $\sum_JK_J^{\dagger}K_J=I$ and trace preservation of each
+$\Psi_J$.\footnote{Formal declarations:
+\leanid{QuantumCircuit.OnsiteChannel.feedforwardMap} and
+\leanid{QuantumCircuit.OnsiteChannel.feedforwardMap_isKrausCPTP} in
+\doclink{TNLean/Circuit/Channel/Feedforward}.}
+
+A finite adaptive protocol is built from onsite channels, layers of
+nearest-neighbor channels, and onsite instruments followed by
+outcome-dependent continuations. Its depth bounds the number of
+nearest-neighbor layers on every branch; onsite operations and classical
+communication cost zero depth. Repeated instrument steps allow later
+measurements and gates to depend on the complete history. Such protocols
+are channels on arbitrary input operators. Composing protocols of depth at
+most $T_1$ and $T_2$ has depth at most $T_1+T_2$.\footnote{Formal declarations:
+\leanid{QuantumCircuit.IsAdaptiveChannelProtocol},
+\leanid{QuantumCircuit.IsAdaptiveChannelProtocol.isKrausCPTP}, and
+\leanid{QuantumCircuit.IsAdaptiveChannelProtocol.comp} in
+\doclink{TNLean/Circuit/Measurement/AdaptiveConversion}.}
+
+The existing fixed-basis measurement round has Kraus operators
+$V_mP_mU$, where $U$ is its circuit, the orthogonal projections $P_m$ sum to
+$I$, and $V_m$ is the product of conditional local corrections.
+The identity
+$\sum_m(V_mP_mU)^{\dagger}(V_mP_mU)=I$ gives its average channel on mixed
+inputs as well as pure inputs.\footnote{Formal declarations:
+\leanid{QuantumCircuit.MeasurementRound.map} and
+\leanid{QuantumCircuit.MeasurementRound.map_isKrausCPTP} in
+\doclink{TNLean/Circuit/Measurement/Channel}.}
+
+\section{Asymptotic boundary}
+The finite adaptive relation does not bound the number of measurement rounds
+independently of system size. Its depth bound counts quantum layers only,
+so a family may have arbitrarily many free instrument steps as the chain
+length grows. It must therefore not be substituted for the source's
+fixed-number-of-rounds asymptotic phase relation.
+To obtain that relation, retain a separate bound on the number of composed
+single-round channels and quantify that bound before the chain length.
+The finite adaptive conversion results address the finite-round task; the
+fixed-round asymptotic relation and MPS classification remain separate.
+\footnote{Finite adaptive conversions are tracked by \ghissue{8382}; the
+asymptotic relation and classification are tracked under \ghissue{8622}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -9,4 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Circuit.Channel
 
 import TNLean.Circuit.Channel.Conversion
+import TNLean.Circuit.Channel.Feedforward
 import TNLean.Circuit.Channel.Layer
