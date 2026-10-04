@@ -12,6 +12,7 @@ import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.AKLTCorrelation
 import TNLean.MPS.Examples.AKLTOpenBoundary
 import TNLean.MPS.Examples.AKLTParentHamiltonian
+import TNLean.MPS.Examples.AKLTPhysicalStringOrder
 import TNLean.MPS.Examples.AKLTPolynomialHamiltonian
 import TNLean.MPS.Examples.AKLTReview
 import TNLean.MPS.Examples.AKLTRotation
@@ -22,6 +23,7 @@ import TNLean.MPS.Examples.CZX
 import TNLean.MPS.Examples.CZY
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.ClusterParentHamiltonian
+import TNLean.MPS.Examples.ClusterPhysicalStringOrder
 import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState

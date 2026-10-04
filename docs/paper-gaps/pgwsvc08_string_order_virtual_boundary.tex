@@ -8,7 +8,7 @@
 
 \title{PGWSVC08 Physical String Order versus Virtual-Boundary Nondecay}
 \author{}
-\date{2026-06-11}
+\date{2026-10-04}
 
 \begin{document}
 \maketitle
@@ -238,6 +238,65 @@ The physical and virtual-boundary notions differ in four respects.
           finer, and existential quantification can be recovered from it.
 \end{enumerate}
 
+\section{Explicit physical-endpoint examples}
+
+The two printed one-dimensional examples are now proved directly with
+physical endpoint operators. These calculations use the stationary
+infinite-chain transfer expression above; they do not identify it with an
+arbitrary finite periodic-ring expectation. They also do not invoke the
+one-site injectivity hypothesis of the general virtual-boundary criteria.
+
+\paragraph{AKLT.}
+In the physical order $(m=0,+1,-1)$, the printed tensor has letters
+$(\sigma_z,\sqrt2\sigma_+,\sqrt2\sigma_-)/\sqrt3$. It is a diagonal unitary
+physical rephasing of the existing AKLT tensor, which has a negative last
+letter. The rephasing commutes with the chosen endpoints
+$x=y=S_z=\operatorname{diag}(0,1,-1)$ and twist
+$u=e^{i\pi S_z}=\operatorname{diag}(1,-1,-1)$.
+\leanid{MPSTensor.akltPGWSVC08_sigmaZ_intertwine} exhibits the printed virtual
+gauge $V=\sigma_z$, and \leanid{MPSTensor.akltSpinRotationZ_eq_exp} identifies
+the actual matrix exponential.
+
+The canonical density is $\Lambda=\Id/2$. It is positive, normalized and
+stationary, as proved by \leanid{MPSTensor.akltPGWSVC08_canonical}.
+The source's display \texttt{fixed} requires $\tr\Lambda=1$, whereas
+Example~1 prints $\Lambda=\Id$. The latter is a normalization error:
+\leanid{MPSTensor.physicalStringOrderParam_akltPGWSVC08} proves the printed
+value $-4/9$ for every middle length $N\geq0$ with $\Id/2$, and
+\leanid{MPSTensor.physicalStringOrderParam_akltPGWSVC08_identity_boundary}
+proves that the literal identity boundary would give $-8/9$.
+The concrete endpoints satisfy the physical positive-limit predicate,
+\leanid{MPSTensor.akltPGWSVC08_hasPhysicalStringOrder}.
+
+\paragraph{Cluster state.}
+The source matrices are exactly the existing review tensor
+\leanid{MPSTensor.clusterTensorRMP}, rather than its transposed representative.
+With $u=-\sigma_x$, $V=\sigma_y$ and $\Lambda=\Id/2$, every endpoint trace
+$\tr(V\Lambda A_nA_j^\dagger)$ vanishes. Moreover,
+\leanid{MPSTensor.clusterTensorRMP_physicalStringOrderParam_eq_zero} proves
+$S_N(x,y,-\sigma_x)=0$ for arbitrary one-site endpoints whenever $N\geq2$.
+The absence assertion fixes this twist; it does not quantify over other
+possible physical unitaries.
+
+For the printed two-site endpoints $x=\sigma_z\otimes\sigma_y$ and
+$y=\sigma_y\otimes\sigma_z$,
+\leanid{MPSTensor.clusterTensorRMP_twoSite_physicalStringOrderParam} gives
+\begin{align}
+    \tr\!\left[\frac{\Id}{2}\,
+        \mathcal E_x^{(2)}\mathcal E_{-\sigma_x}^{N}
+    \mathcal E_y^{(2)}(\Id)\right] & =1
+\end{align}
+for every \emph{single-site} middle length, including odd lengths.
+The actual blocked-index decoding fixes the endpoint order. The corresponding
+physical string-order predicate is also proved on the two-site blocked tensor
+by \leanid{MPSTensor.clusterBlockedRMP_hasPhysicalStringOrder}, where the
+middle length counts blocks and the twist is $u\otimes u$.
+
+These results supply the printed data in Examples~1--2 of
+\cite[lines~392--411]{PerezGarcia2008StringOrder}, tracked by \ghissue{8268}.
+They do not close the general physical-endpoint realization or physical
+reduced-density-operator symmetry theorems in \ghissue{4872}.
+
 \section{Verdict}
 
 Virtual-boundary nondecay is mathematically sound. For the injective tensors
@@ -247,8 +306,15 @@ span argument
 (\ref{eq:pgwsvc08_string_order_virtual_boundary_endpoint_span}). The physical
 correlator and the source's positive-limit predicate are now formal
 definitions, but the equivalence between physical and virtual endpoints has no
-formal counterpart. Current nondecay theorems therefore establish only the
-virtual-boundary formulation.
+formal counterpart. Current general equivalence theorems therefore establish only the
+virtual-boundary formulation; the explicit physical examples above are
+proved independently.
+
+There is a further hypothesis restriction in the general equivalence
+results: their one-site injectivity assumption is stronger than the source's
+purity condition (a positive stationary density and a unique peripheral
+transfer eigenvalue). The explicit AKLT and cluster computations above do
+not remove that restriction from Lemma~1 or Theorems~1--2.
 
 Eliminating this restriction requires a theorem that realizes arbitrary
 virtual boundary matrices by physical endpoint operators for injective
@@ -256,7 +322,7 @@ tensors, followed by a source-faithful proof of Theorem~1 in
 Ref.~\cite{PerezGarcia2008StringOrder}. The existing single-site construction
 \leanid{MPSTensor.physRealize} is a starting point.\footnote{Source path:
 \path{TNLean/MPS/Chain/VirtualInsertion.lean}. This file is not currently
-imported by the string-order files.} This work is tracked in \ghissue{2660}.
+imported by the string-order files.} This work is tracked in \ghissue{4872}; \ghissue{2660} was absorbed into that issue.
 
 \bibliographystyle{alpha}
 \bibliography{references}
