@@ -66,7 +66,9 @@ theorem conjTranspose_mixedPolarIsoMatrix_mul {l r : ℕ}
   rfl
 
 /-- Restricting the polar input to any orthonormal support coordinates gives a genuine
-central isometry and isometric inward chains, with every bond bounded by `D²`. -/
+central isometry and isometric inward chains, with every bond bounded by `D²`.
+
+Source: arXiv:2307.01696, footnotes 3–4 to equations (13)–(15). -/
 theorem exists_mixed_sequential_polarIsoMatrix_on_support {l r s : ℕ} (hD : 0 < D)
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r)
     (J : Matrix (Fin (D * D)) (Fin s) ℂ) (hJ : J.IsIsometry)
@@ -85,7 +87,9 @@ theorem exists_mixed_sequential_polarIsoMatrix_on_support {l r s : ℕ} (hD : 0 
 
 /-- Every blocked tensor, including a non-injective one, has a mixed sequential
 factorization on its actual polar support. The input has exactly that support,
-and multiplication by its adjoint reconstructs the full polar partial isometry. -/
+and multiplication by its adjoint reconstructs the full polar partial isometry.
+
+Source: arXiv:2307.01696, footnotes 3–4 to equations (13)–(15). -/
 theorem exists_mixed_sequential_polar_support_of_split {l r : ℕ} (hD : 0 < D)
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r) :
     ∃ (s : ℕ) (J : Matrix (Fin (D * D)) (Fin s) ℂ),
@@ -113,7 +117,9 @@ theorem exists_mixed_sequential_polar_support_of_split {l r : ℕ} (hD : 0 < D)
 
 /-- The polar partial isometry of any site-dependent chain can be prepared on its
 actual support by inward isometric sweeps meeting at any chosen physical site.
-Both endpoint choices are included; no injectivity or nonzero-rank hypothesis is needed. -/
+Both endpoint choices are included; no injectivity or nonzero-rank hypothesis is needed.
+
+Source: arXiv:2307.01696, footnotes 3–4 to equations (13)–(15). -/
 theorem exists_mixed_sequential_polar_support {l r : ℕ} (hD : 0 < D)
     (A : MPSChainTensor d D (l + (r + 1))) :
     ∃ (s : ℕ) (J : Matrix (Fin (D * D)) (Fin s) ℂ),

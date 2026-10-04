@@ -5,7 +5,7 @@
         MPSPreparation.exists_mixedPolarIsoMatrix_eq_mixedProductMap,
         MPSPreparation.conjTranspose_mixedPolarIsoMatrix_mul}
     \leanok
-    \uses{def:ldp_central_input}
+    \uses{def:ldp_central_input, def:ldpolar_tensor}
     Right multiplication by an input coordinate map $J$ commutes with
     attaching the input to the central tensor. For any blocked map $B$,
     including a non-injective one, its polar partial isometry $V$ has such
@@ -15,6 +15,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:ldpolar_left_product, thm:ldp_central_coefficients, thm:ldpolar_support}
     Interchange finite sums to commute the input change with the central
     contraction. The existing polar factorization gives $V=BG$ for a
     virtual-pair matrix $G$, and splitting the chain at the chosen site
@@ -28,7 +29,7 @@
         MPSPreparation.exists_mixed_sequential_polar_support_of_split,
         MPSPreparation.exists_mixed_sequential_polar_support}
     \leanok
-    \uses{lem:ldp_mixed_support_coordinates,thm:ldp_mixed_sequential_general}
+    \uses{def:ldp_mixed_sequential, def:ldpolar_tensor}
     For every site-dependent chain of positive bond dimension $D$ with
     at least one physical site, choose any central site. Let $B=VP$ be
     its blocked polar decomposition, without an injectivity assumption.
@@ -50,6 +51,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:ldp_mixed_support_coordinates, thm:ldp_mixed_sequential_general}
     Parametrize the range of the Hermitian idempotent $\Pi$ by orthonormal
     coordinates $J$, so $J^\dagger J=\Id_s$ and $JJ^\dagger=\Pi$.
     Then $(VJ)^\dagger(VJ)=J^\dagger\Pi J=\Id_s$.
