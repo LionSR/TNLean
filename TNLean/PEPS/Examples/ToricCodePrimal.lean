@@ -30,9 +30,21 @@ restriction to the invariant subspace has inner-product factor \(2\). The predic
 `IsGIsometric` retains this factor rather than silently normalizing the tensor.
 Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
-Source: arXiv:2011.12127, Appendix A, equation `eq:app:tcode-rep-primal`,
-`Papers/2011.12127/TN-Review-main.tex` lines 2451–2465. The assertion there about the dual
-color-shift tensor is distinct from the primal isometry proved here.
+## Implementation notes
+
+The fiber-counting lemmas are proved for arbitrary finite groups and then specialized to
+`ToricCodeGroup`. The virtual representation acts on coordinate functions; its generator
+is identified with `toricCodePrimalParityMatrix.mulVecLin`.
+
+## References
+
+* arXiv:2011.12127, Appendix A, equation `eq:app:tcode-rep-primal`,
+  `Papers/2011.12127/TN-Review-main.tex` lines 2451–2465. The assertion there about the dual
+  color-shift tensor is distinct from the primal isometry proved here.
+
+## Tags
+
+toric code, PEPS, quantum double, virtual symmetry, isometry
 -/
 
 open scoped BigOperators Kronecker Matrix ComplexOrder
