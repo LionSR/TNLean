@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Examples.CZY
 
+import TNLean.MPS.Examples.CZY.CZYFusion
 import TNLean.MPS.Examples.CZY.CZYReduced
 import TNLean.MPS.Examples.CZY.CZYSquare
 import TNLean.MPS.Examples.CZY.CZYTensor

@@ -1,0 +1,310 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{Exact circuits for MPUs with a fixed physical-entry alphabet}
+\author{TNLean contributors}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+An exact circuit bound polynomial jointly in chain length and
+operator Schmidt rank is available when the entries of the full
+physical matrix belong to a fixed finite alphabet. The alphabet
+provides two gaps: a nonzero probability gap for recovering support,
+and a separation gap for recovering exact coefficient labels.
+Two coherently prepared isometries then have overlap equal to a
+constant multiple of the target unitary. Exact uniform-amplitude
+amplification removes that constant. This result allows coherent
+mixing of a bounded number of basis outputs and extends the
+permutation case. It is a mathematical proof and is not asserted
+to be formalized in Lean.
+
+\section{Exact joint polynomial synthesis for a fixed physical-entry alphabet}
+
+Fix $d\ge2$ and a finite nonempty set
+$\Xi\subset\mathbb C\setminus\{0\}$. Define
+\[
+ \eta=\min_{\alpha\in\Xi}|\alpha|>0,\qquad
+ \delta=\min_{\substack{\alpha,\beta\in\Xi\cup\{0\}\\
+                              \alpha\ne\beta}}|\alpha-\beta|>0,
+ \qquad K=\lceil\eta^{-2}\rceil.
+\]
+If a unitary with this alphabet exists, then $\eta\le1$ and
+$K\ge1$. The constants below may depend on $d,\Xi$.
+The alphabet condition concerns the entries of the full physical
+matrix in the computational basis. It does not concern the entries
+of its local MPO tensors. A fixed local tensor alphabet alone
+does not give the required positive lower bound for nonzero
+physical entries; tensor contractions can produce arbitrarily
+small nonzero entries.
+
+\begin{theorem}
+Let $U$ be a unitary on $N\ge1$ $d$-dimensional sites whose
+consecutive operator Schmidt ranks are at most $D\ge1$.
+Suppose $U_{x,y}\in\Xi\cup\{0\}$ for all computational basis
+words $x,y$.
+Then $U$ has an exact circuit with gate count and clean auxiliary
+space polynomial jointly in $N,D$, including on a line with
+only adjacent two-qudit gates. All auxiliaries are initialized
+and returned to $|0\rangle$, and $CJ=JU$ retains the exact
+scalar phase.
+
+This is a nonuniform existence statement in the arbitrary-gate
+model. It does not assert efficient computation of the required
+canonical tensors from an arbitrary supplied MPO. It does not
+assert the smaller $O_d(N\log(D+1))$ auxiliary bound.
+The proof below is mathematical and is not Lean formalized.
+\end{theorem}
+
+\begin{proof}
+Every row and column has at most $K$ nonzero entries, since
+its squared norm is one and each nonzero entry has squared
+absolute value at least $\eta^2$.
+
+\subsection*{Exact row and column oracles}
+
+Use right-canonical tensors for the normalized Choi coefficient
+vector $\psi(x,y)=d^{-N/2}U_{x,y}$, with bond dimensions at most
+$D$:
+\[
+ \psi(x,y)=A_1(x_1,y_1)\cdots A_N(x_N,y_N),\qquad
+ \sum_{a,b}A_j(a,b)A_j(a,b)^\dagger=I.
+\]
+For a fixed column $y$ and an output prefix $z$, its prefix
+mass is
+\[
+ p(z\mid y)=d^{-N}\sum_{x:\,x\text{ extends }z}|U_{x,y}|^2.
+\]
+It is either zero or at least $\eta^2d^{-N}$.
+The conditioned transfer contraction and Hermitian rounding
+estimate in
+\nolinkurl{docs/audits/2026-10-03_mpu_joint_polynomial_permutations.tex}
+give, with $L=c_d(D+1)^3$ and mesh $u=2^{-b}$,
+\[
+ e_{j-1}\le(1+Lu)e_j+Lu,\qquad
+ e_0\le2NLu.
+\]
+Choosing $u\le\eta^2d^{-N}/(16NL)$ makes the numerical
+prefix-mass error at most $\eta^2d^{-N}/8$.
+A fixed rational threshold in
+$[\eta^2d^{-N}/3,2\eta^2d^{-N}/3]$ therefore detects exactly
+whether a prefix contains a nonzero entry. Such a threshold
+can be represented with $O_{d,\Xi}(N)$ bits.
+The comparison is an exact integer operation.
+
+Explore the output-prefix tree in lexicographic order, retaining
+only the positive prefixes. At any level there are at most $K$
+such prefixes, since each contains a distinct nonzero leaf.
+There are at most $dKN$ candidate prefix tests. A fixed
+Boolean circuit realizes this search by using $K$ occupied
+prefix slots at each level, testing their $d$ extensions and
+compacting the positive results in order. Unoccupied slots
+are explicitly marked and discarded. This yields the sorted
+column support list, padded to $K$ slots with occupancy bits.
+
+The exact alphabet labels are also recoverable. Scalar
+contraction of the canonical matrices has a uniform error
+$c_dN(D+1)^2u$. Approximate the fixed rescaling
+$d^{N/2}$ with $O_{d,\Xi}(N)$ bits and rescale that scalar.
+Increasing $b$ by $O_{d,\Xi}(\log(ND+1)+1)$ gives a value
+within $\delta/8$ of the physical entry.
+Approximate each member of $\Xi\cup\{0\}$ to the same
+accuracy and compute the nearest label. The separation
+$\delta$ makes that label unique and correct.
+All comparisons, including squared complex distances, may
+be made on finite integers with
+\[
+ B=O_{d,\Xi}(N+\log(N+1)+\log(D+1)+1)
+\]
+bits; a sufficiently accurate rational approximation to the
+fixed alphabet is used in the circuit description.
+Thus both the support and the alphabet label are exact
+outputs of a Boolean calculation, although numerical
+intermediates are rounded.
+
+The same construction on $U^\dagger$ recovers sorted row
+support and labels. Its canonical tensors are
+$\overline{A_j(b,a)}$ and satisfy the same norm identities.
+The recovered labels are conjugated back to obtain the
+entries of the row of $U$; its support is unchanged.
+No reversal of the virtual tensor order is needed.
+One oracle evaluation has Boolean size at most
+\[
+ \operatorname{poly}_{d,\Xi}(N,D).
+\]
+For example, the direct double-sum transfer evaluation gives
+$O_{d,\Xi}(KN^2(D+1)^4B^2)$ operations, with an increased
+constant covering the list compaction and scalar label tests.
+Retaining Boolean intermediate values, adding the result
+to an output register, and reversing the calculation gives
+exact reversible oracles with polynomial gate count and
+clean polynomial workspace.
+
+\subsection*{Two explicitly prepared isometries}
+
+Let $X,Y$ be two $N$-qudit word registers and let a constant-size
+tag register contain the three orthogonal states $0,1,2$.
+Use an additional constant-size index register, initialized
+at zero, whose dimension is at least $K+1$.
+Its dimension and the tag dimension are fixed by $d,\Xi$,
+independent of $N,D$.
+
+Define two maps into the common output space by
+\[
+ S|y\rangle=
+ \frac1{\sqrt K}\sum_x U_{x,y}|x,y,0,0\rangle
+       +\sqrt{1-\frac1K}\,|0,y,1,0\rangle,
+\]
+\[
+ T|x\rangle=
+ \frac1{\sqrt K}\sum_{y:\,U_{x,y}\ne0}|x,y,0,0\rangle
+       +\sqrt{1-\frac{k_x}{K}}\,|x,0,2,0\rangle,
+\]
+where $k_x$ is the row support size.
+The fourth register is the index, reset to zero in these
+specified output columns. Distinct domain words are
+distinguished by the preserved word register. Column
+normalization of $U$ and the definition of $k_x$ give
+$S^\dagger S=T^\dagger T=I$. The different failure tags
+give no cross terms. Hence
+\[
+ T^\dagger S=\frac1K U
+\]
+with the original complex phases.
+
+These maps have polynomial clean unitary preparations from
+the same initialized input inclusion
+$J|y\rangle=|y,0,0,0\rangle$.
+For $S$, first swap the two word registers, leaving the
+column word $y$ in the second register. Reversibly compute
+its sorted support and labels. If the nonzero labels are
+$\alpha_0,\ldots,\alpha_{k_y-1}$, prepare the index state
+\[
+ \frac1{\sqrt K}\sum_{i<k_y}\alpha_i|i\rangle
+       +\sqrt{1-\frac1K}|K\rangle.
+\]
+The squared norm is one because the column of $U$ has
+norm one. There are only finitely many possible label
+tuples, since $K,\Xi$ are fixed. Choose a full unitary
+preparation for each valid tuple, and identity for invalid
+tuples. The corresponding controlled operation acts on
+only constantly many qudits and has constant gate cost.
+It includes the exact phases of the $\alpha_i$.
+
+On index $i<k_y$, write the $i$th support word into $X$
+and retain tag zero. On index $K$, leave $X$ at zero
+and write tag one. These are reversible controlled
+additions. Erase the index by subtracting its address,
+which is determined by the preserved column word, the
+output word, and the tag: a successful output has a
+unique sorted support address, and the failure tag has
+address $K$. Address lookup is an exact Boolean
+calculation with polynomial cost. Define it arbitrarily,
+for example as zero, on unsupported word--tag pairs.
+Reverse the support and label oracle using the preserved
+column word. All its arithmetic work returns to zero.
+On the initialized columns this gives exactly $S$.
+
+For $T$, preserve the row word $x$ in $X$. Compute its
+row support and prepare
+\[
+ \frac1{\sqrt K}\sum_{i<k_x}|i\rangle
+       +\sqrt{1-\frac{k_x}{K}}|K\rangle.
+\]
+Write its support words into $Y$, use tag two for failure,
+erase the index by the corresponding unique address,
+and reverse the row oracle. The preparations depend on
+only finitely many support counts and therefore have
+constant cost apart from the polynomial oracles.
+
+There is an important distinction between logical indices
+and arithmetic work. Index erasure has been proved on
+the specified initialized columns. It is not asserted
+for arbitrary nonzero logical word, tag, or index inputs.
+The index is therefore part of the logical register of
+each full unitary preparation. Every core operation just
+described is nevertheless a unitary on that whole register.
+The separate arithmetic work returns to zero for every
+logical input: the row or column word controlling its
+oracle is preserved, and the support and label lists are
+used only as controls. This remains true for arbitrary
+coherent inputs and reference entanglement.
+
+Thus there exist full logical unitaries $Z_S,Z_T$,
+implemented with polynomial clean arithmetic workspace,
+such that
+\[
+ Z_SJ=S,\qquad Z_TJ=T.
+\]
+Their inverses have the same clean workspace property.
+
+\subsection*{Exact amplification}
+
+Set $W=Z_T^\dagger Z_S$, $V=WJ$, and $P=JJ^\dagger$.
+Then $V$ is an isometry, $P$ is an orthogonal projection,
+and the preceding overlap gives
+\[
+ J^\dagger WJ=U/K,\qquad
+ V^\dagger PV=K^{-2}I,\qquad
+ KPV=JU.
+\]
+Apply the exact uniform-amplitude construction of Section~5 of
+\nolinkurl{docs/audits/2026-10-02_mpu_rank_two_circuits.tex}, with
+\[
+ \ell=\lceil\pi K/4\rceil\le K,\qquad
+ \theta=\frac{\pi}{4\ell+2},\qquad t=K\sin\theta\le1.
+\]
+One additional initialized attenuation flag gives success
+amplitude $\sin\theta$. After $\ell$ reflection rounds,
+the output is exactly the first-flag branch $JU$.
+The exact two-plane identity retains the scalar phase;
+it gives coefficient $1$, rather than an unspecified
+unit complex scalar.
+
+The successful projection $P$ tests all logical auxiliary
+registers for zero. The prepared-image reflection is
+implemented by $W$, the same initialized-register
+reflection, and $W^\dagger$, together with the constant-size
+attenuation operation. Such zero-register reflections
+have polynomial gate count and polynomial clean
+workspace by reversible conjunction. The arithmetic
+workspace may be shared, since it erases for every
+logical input after each invocation.
+Since $K$ depends only on the fixed alphabet, the total
+number of preparations and inverses is constant.
+Their gate and workspace costs are polynomial in $N,D$.
+At the end every logical auxiliary, index, tag, attenuation
+flag, and arithmetic work register is zero.
+
+Routing all two-qudit gates through the polynomial-size
+register multiplies the gate count by at most another
+polynomial factor. This proves the line version as well.
+\end{proof}
+
+The construction applies to a proper subclass of general
+MPUs: a fixed physical-entry alphabet implies uniformly
+bounded row and column support. It includes permutation
+unitaries and monomial unitaries with a fixed phase
+alphabet, and it can include coherent mixing among a
+fixed number of basis outputs. It does not settle joint
+polynomial synthesis for arbitrary dense MPUs, nor for
+arbitrary sparse MPUs whose nonzero entries have no
+fixed positive lower bound and no discrete label gap.
+
+\begin{thebibliography}{2}
+\bibitem{permutation-circuits}
+TNLean contributors,
+\emph{Joint polynomial circuits for permutation and monomial unitaries},
+3 October 2026.
+Local source:
+\nolinkurl{docs/audits/2026-10-03_mpu_joint_polynomial_permutations.tex}.
+\bibitem{exact-mpu-circuits}
+TNLean contributors,
+\emph{Exact polynomial circuits for matrix product unitaries},
+2 October 2026, Section~5.
+Local source:
+\nolinkurl{docs/audits/2026-10-02_mpu_rank_two_circuits.tex}.
+\end{thebibliography}
+\end{document}

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondRegroupingLocality
+import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.MPS.Symmetry.BondProductPhysicalParentHamiltonian
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
@@ -77,17 +78,11 @@ theorem twoSiteBondInteraction_isStarProjection {D : ℕ}
     rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
       hK.isIdempotentElem.eq]
     simp
-  rw [isStarProjection_iff']
-  constructor
-  · change (Matrix.reindexAlgEquiv ℂ ℂ (twoSiteBondEquiv D).symm B) *
-        (Matrix.reindexAlgEquiv ℂ ℂ (twoSiteBondEquiv D).symm B) = _
-    rw [← map_mul, hBB]
-    rfl
-  · have hKH : Kᴴ = K := by
-      simpa only [Matrix.star_eq_conjTranspose] using hK.isSelfAdjoint.star_eq
-    simp only [Matrix.star_eq_conjTranspose, twoSiteBondInteraction,
-      Matrix.conjTranspose_reindex, Matrix.conjTranspose_kronecker,
-      Matrix.conjTranspose_one, hKH]
+  apply Matrix.isStarProjection_reindex
+  refine ⟨hBB, ?_⟩
+  simp only [IsSelfAdjoint, Matrix.star_eq_conjTranspose,
+    Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
+    hK.isSelfAdjoint.isHermitian.eq]
 
 /-- A projection-valued bond interaction has operator norm at most one,
 as required in arXiv:1010.3732, `sec:phases-definition-no-sym`, line 422. -/

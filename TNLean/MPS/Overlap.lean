@@ -8,8 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Overlap
 
+import TNLean.MPS.Overlap.AsymptoticDecomposition
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.NormalTensorDichotomy
+import TNLean.MPS.Overlap.PeriodicRayUnitOverlap
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
