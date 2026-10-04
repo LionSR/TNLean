@@ -1,0 +1,50 @@
+\begin{definition}[A diagonal charge on an actual shared bond]
+    \label{def:peps_regular_edge_charge_contraction}
+    \lean{TNLean.PEPS.regularEdgeRegion,TNLean.PEPS.regularEdgeTailLeg,
+        TNLean.PEPS.regularEdgeHeadLeg,TNLean.PEPS.regularEdgeCharacterSite,
+        TNLean.PEPS.regularEdgeChargeBoundaryLabels,TNLean.PEPS.regularEdgePhysicalPairEquiv}
+    \leanok
+    Let $e=(v_-,v_+)$ be an ordered edge of a finite simple graph, and put
+    $R_e=\{v_-,v_+\}$. The distinguished incident leg at either endpoint is $e$.
+    All other incident edges are boundary edges of $R_e$, so a native boundary
+    configuration $\theta$ supplies the remaining labels $\theta_-,\theta_+$.
+    The physical coordinate map is
+    $\sigma\mapsto(\sigma(v_-),\sigma(v_+))$.
+    For a site family $a$, a function $\chi:G\to\mathbb C$, and $p\in G$, insert
+    $\chi(pk)$ on the shared group label by replacing only the tail tensor:
+    \begin{align}
+        a^{\chi,p}_v(\alpha,s)
+        =\begin{cases}
+             \chi(p\alpha_e)a_v(\alpha,s), & v=v_-,    \\
+             a_v(\alpha,s),                & v\ne v_-.
+         \end{cases}
+    \end{align}
+    This is the diagonal insertion in
+    \cite[Definition of chargeons]{Schuch2010PEPS}, local source lines 2432--2453.
+\end{definition}
+
+\begin{theorem}[Literal charged contraction of two adjacent sites]
+    \label{thm:peps_regular_edge_charge_contraction}
+    \lean{TNLean.PEPS.openRegionWeight_regularEdgeCharacterSite}
+    \leanok
+    \uses{def:peps_regular_edge_charge_contraction,
+        thm:peps_graph_open_region_contraction,def:peps_regular_two_site_physical_charge_column}
+    For every original physical configuration $\sigma$ and native boundary label
+    $\theta$, the actual open-region coefficient is
+    \begin{align}
+        \Psi^{\chi,p}_{R_e,\theta}(\sigma)
+        =\sum_{k\in G}\chi(pk)
+        a_{v_-}(\iota_-(k,\theta_-),\sigma(v_-))
+        a_{v_+}(\iota_+(k,\theta_+),\sigma(v_+)).
+    \end{align}
+    Here $\iota_\pm$ inserts $k$ at the shared incident leg. No contraction
+    comparison is supplied as a hypothesis. This is the actual two-site reduction
+    in \cite[Detection of chargeons]{Schuch2010PEPS}, lines 2464--2486.
+\end{theorem}
+\begin{proof}\leanok
+    The simple graph on the two endpoints has exactly one internal edge, namely
+    $e$. The internal label configuration is therefore determined by its value
+    $k$ on $e$. Splitting each endpoint's incident labels at the shared leg gives
+    $\iota_-(k,\theta_-)$ and $\iota_+(k,\theta_+)$. The native open contraction
+    then gives the stated sum.
+\end{proof}

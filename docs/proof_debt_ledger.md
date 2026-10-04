@@ -9,6 +9,24 @@ weekly audits update evidence and status rather than renumbering.
 Tracking issue: [#4529](https://github.com/LionSR/TNLean/issues/4529), with
 each open debt attached as a native sub-issue.
 
+## Preparation algebra dependency separation (#8637)
+
+- **Status**: partial core extraction; the remaining consumer migration and
+  controlled capstone benchmarks stay open in [#8637](https://github.com/LionSR/TNLean/issues/8637).
+- **Evidence**: `BlockIsometryState` imported normal-gauge convergence for its
+  finite-configuration Gram identities and cyclic pair states. Its non-Mathlib
+  closure drops from 319 to 90 modules; the new `BlockStatePreparation` boundary
+  has 113, with no Gametheory or whole-Mathlib import path.
+- **Preserved**: 52 public declarations and two private helpers move with unchanged
+  statements/proofs and namespaces. Original owner imports retain the public API.
+  No new generic `Algebra` interface is introduced.
+- **Remaining**: `InhomogeneousPreparation` is unchanged, so
+  `PartialIsometryPreparation` retains the broad route. Post-change compile times
+  are observations, not a controlled speedup claim.
+- **Verification**: both core modules and the nine-module block-circuit closure
+  pass full-option isolated compilation; published full-root checks remain the
+  integration gate. See the [audit](audits/2026-10-04_preparation_algebra_dependency_extraction.md).
+
 ## Appendix B physical-pair extraction retirement (#7774)
 
 - **Change**: retire the rejected disjoint physical-pair coefficient extraction,
@@ -125,10 +143,9 @@ verification (23-58%), and two required real re-scoping to avoid deleting
 live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/4529).
 
 ### S3. Delete the superseded edge-centred three-block union-injectivity route — net 3,180 lines, risk 3/10
-- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted. Third slice (#7875) done: `ThreeBlockResonate2.lean` (709 lines, fifteen declarations) is deleted whole, its last import edge retargeted at `ThreeBlockResonate`; see `docs/audits/2026-09-21_peps_three_block_resonate2.md`. Remaining: `ThreeBlockResonate.lean`, `UnionInjectivity.lean` and `ThreeBlockTransfer.lean`, all with live consumers.
-- **What**: the three surviving modules
-  `PEPS/RegionBlock/{ThreeBlockResonate,UnionInjectivity,ThreeBlockTransfer}.lean`
-  (1,377 gross lines). The route originally also covered
+- **Status**: in-progress ([#4581](https://github.com/LionSR/TNLean/pull/4581), net -200 lines; sub-issue #4563 closed). Second slice (2026-09-19 survey, #7849) done: `ThreeBlockReconcile.lean` was a fully dead nine-declaration closure (371 lines, aggregator-only importer, no tag) and is deleted. Third slice (#7875) done: `ThreeBlockResonate2.lean` (709 lines, fifteen declarations) is deleted whole, its last import edge retargeted at `ThreeBlockResonate`; see `docs/audits/2026-09-21_peps_three_block_resonate2.md`. Fourth slice (#7902): `ThreeBlockResonate.lean` is removed after moving its three live injectivity facts unchanged to `UnionInjectivity.lean`. Remaining: `UnionInjectivity.lean` and `ThreeBlockTransfer.lean`, both with live consumers.
+- **What**: the two surviving modules
+  `PEPS/RegionBlock/{UnionInjectivity,ThreeBlockTransfer}.lean`. The route originally also covered
   `BondLocalFromReconcile.lean` (176 ln, zero importers anywhere),
   `ThreeBlockReconcile.lean` (371 ln) and `ThreeBlockResonate2.lean` (709 ln);
   all three are deleted, in the first PR, the second slice and the third slice
@@ -163,6 +180,15 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   smul-factorization, not the middle-strip step an earlier note recorded; both are
   repointed at the geometry-native form the cited step actually calls. See
   `docs/audits/2026-09-21_peps_three_block_resonate2.md`.
+
+- **Fourth slice (2026-10-04, #7902; net -840 Lean lines)**: delete the 874-line
+  `ThreeBlockResonate.lean`, retaining `regionBlockedTensorInjective_red`,
+  `regionBlockedTensorInjective_blue` and `regionBlockedTensorInjective_complement`
+  unchanged in `UnionInjectivity.lean`. The other twenty declarations have no
+  surviving code consumer or exact blueprint tag. General partition declarations
+  replace their explanatory references; no compatibility declarations are kept.
+  See `docs/audits/2026-10-04_peps_three_block_resonate.md` for the name census
+  and validation.
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)

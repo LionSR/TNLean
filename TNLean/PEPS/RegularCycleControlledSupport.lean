@@ -133,6 +133,42 @@ noncomputable def regularRegionVertexTranslationMatrix (R : Finset V)
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ :=
   Matrix.permMatrixHom (R := ℂ) (regularRegionGaugePhysicalLabels R (fun v => (ℓ v)⁻¹))
 
+/-- Conjugate an accessible-coordinate permutation by the actual coordinate
+identification. Source: SCP10, lines 1765–1920. -/
+noncomputable def regularRegionCoordinatePhysicalPermutation (R : Finset V)
+    (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
+    (C : Equiv.Perm (RegularRegionCoordinates (Γ := Γ) (G := G) R T o)) :
+    Equiv.Perm (RegionHalfEdgeConfig (Γ := Γ) G R) :=
+  (regularRegionCoordinatesEquiv R T hT htree o).trans
+    (C.trans (regularRegionCoordinatesEquiv R T hT htree o).symm)
+
+/-- Translation-equivariant coordinate permutations preserve the genuine local
+invariant projector. Source: SCP10, accessible systems, lines 1765–1920. -/
+theorem regularRegionCoordinatePhysicalPermutation_commute_vertexTranslation
+    (R : Finset V) (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
+    (C : Equiv.Perm (RegularRegionCoordinates (Γ := Γ) (G := G) R T o))
+    (hC : ∀ ℓ c, C (regularRegionCoordinateTranslation R T o ℓ c) =
+      regularRegionCoordinateTranslation R T o ℓ (C c))
+    (ℓ : {v : V // v ∈ R} → G) :
+    Commute (Matrix.permMatrixHom (R := ℂ)
+      (regularRegionCoordinatePhysicalPermutation R T hT htree o C))
+      (regularRegionVertexTranslationMatrix (Γ := Γ) R ℓ) := by
+  let E := regularRegionCoordinatesEquiv (G := G) R T hT htree o
+  let τ := regularRegionGaugePhysicalLabels (Γ := Γ) R (fun v => (ℓ v)⁻¹)
+  have hE (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
+      E (τ α) = regularRegionCoordinateTranslation R T o ℓ (E α) := by
+    have h := congrArg E
+      (regularRegionCoordinatesEquiv_symm_coordinateTranslation R T hT htree o ℓ (E α))
+    simpa only [E, Equiv.symm_apply_apply, Equiv.apply_symm_apply] using h.symm
+  have hperm : Commute (regularRegionCoordinatePhysicalPermutation R T hT htree o C) τ := by
+    apply Equiv.ext
+    intro α
+    change E.symm (C (E (τ α))) = τ (E.symm (C (E α)))
+    rw [hE, hC, regularRegionCoordinatesEquiv_symm_coordinateTranslation]
+  exact hperm.map (Matrix.permMatrixHom (R := ℂ))
+
 /-- The actual free-word controlled physical matrix commutes with every
 independent vertex translation, without an equivariance hypothesis on the
 control function. Source: SCP10, lines 1935–1990. -/
@@ -145,24 +181,10 @@ theorem regularCycleControlledBoundaryMatrix_commute_vertexTranslation (R : Fins
     Commute (regularCycleControlledBoundaryMatrix R T hT htree o
         (fun z f => FreeGroup.lift z (regularRegionCycleWord R T (p f))))
       (regularRegionVertexTranslationMatrix R ℓ) := by
-  let E := regularRegionCoordinatesEquiv (G := G) R T hT htree o
-  let W := fun (z : RegionCycleEdge (Γ := Γ) R T → G) f =>
-    FreeGroup.lift z (regularRegionCycleWord R T (p f))
-  let σ := E.trans ((regularCycleControlledBoundary R T o W).trans E.symm)
-  let τ := regularRegionGaugePhysicalLabels (Γ := Γ) R (fun v => (ℓ v)⁻¹)
-  have hE (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
-      E (τ α) = regularRegionCoordinateTranslation R T o ℓ (E α) := by
-    apply E.symm.injective
-    rw [E.symm_apply_apply, regularRegionCoordinatesEquiv_symm_coordinateTranslation,
-      E.symm_apply_apply]
-  have hperm : Commute σ τ := by
-    apply Equiv.ext
-    intro α
-    change E.symm (regularCycleControlledBoundary R T o W (E (τ α))) =
-      τ (E.symm (regularCycleControlledBoundary R T o W (E α)))
-    rw [hE, regularCycleControlledBoundary_coordinateTranslation,
-      regularRegionCoordinatesEquiv_symm_coordinateTranslation]
-  exact hperm.map (Matrix.permMatrixHom (R := ℂ))
+  exact regularRegionCoordinatePhysicalPermutation_commute_vertexTranslation R T hT htree o
+    (regularCycleControlledBoundary R T o
+      (fun z f => FreeGroup.lift z (regularRegionCycleWord R T (p f))))
+    (fun ℓ c => regularCycleControlledBoundary_coordinateTranslation R T o v w p ℓ c) ℓ
 
 /-- The native translation matrix has the delta kernel of independent vertex
 left translations on the actual half-edge labels. -/
@@ -197,6 +219,36 @@ theorem regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation
   rw [regularRegionVertexTranslationMatrix_apply]
   simp only [funext_iff, Pi.smul_apply, smul_eq_mul]
 
+/-- Commutation with every independent vertex translation implies commutation
+with the actual product of local regular averaging projectors.
+Source: SCP10, accessible invariant physical systems, lines 1765–1820. -/
+theorem commute_regionLocalProjector_of_vertexTranslation (R : Finset V)
+    (U : Matrix (RegionHalfEdgeConfig (Γ := Γ) G R)
+      (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ)
+    (hcomm : ∀ ℓ : {v : V // v ∈ R} → G,
+      Commute U (regularRegionVertexTranslationMatrix (Γ := Γ) R ℓ)) :
+    Commute U (regionPhysicalProductMatrix R
+      (fun v => regularLegProjector (G := G) (IncidentEdge Γ v))) := by
+  rw [regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation]
+  apply Commute.smul_right
+  exact Commute.sum_right Finset.univ _ _ (fun ℓ _ => hcomm ℓ)
+
+/-- Translation-equivariant coordinate permutations preserve the genuine local
+invariant projector. Source: SCP10, accessible systems, lines 1765–1920. -/
+theorem regularRegionCoordinatePhysicalPermutation_commute_localProjector
+    (R : Finset V) (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
+    (C : Equiv.Perm (RegularRegionCoordinates (Γ := Γ) (G := G) R T o))
+    (hC : ∀ ℓ c, C (regularRegionCoordinateTranslation R T o ℓ c) =
+      regularRegionCoordinateTranslation R T o ℓ (C c)) :
+    Commute (Matrix.permMatrixHom (R := ℂ)
+      (regularRegionCoordinatePhysicalPermutation R T hT htree o C))
+      (regionPhysicalProductMatrix R
+        (fun v => regularLegProjector (G := G) (IncidentEdge Γ v))) := by
+  exact commute_regionLocalProjector_of_vertexTranslation R _ (fun ℓ =>
+    regularRegionCoordinatePhysicalPermutation_commute_vertexTranslation
+      R T hT htree o C hC ℓ)
+
 /-- The actual free-word controlled matrix commutes with the genuine product
 of local invariant projectors. Source: SCP10, lines 1765–1820 and 1935–1990.
 No group-valued equivariance or physical surjectivity hypothesis is required. -/
@@ -210,14 +262,8 @@ theorem regularCycleControlledBoundaryMatrix_commute_localProjector (R : Finset 
         (fun z f => FreeGroup.lift z (regularRegionCycleWord R T (p f))))
       (regionPhysicalProductMatrix R
         (fun v => regularLegProjector (G := G) (IncidentEdge Γ v))) := by
-  change _ * _ = _ * _
-  rw [regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation]
-  simp only [Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul]
-  congr 1
-  apply Finset.sum_congr rfl
-  intro ℓ _
-  exact (regularCycleControlledBoundaryMatrix_commute_vertexTranslation R T hT htree o
-    v w p ℓ).eq
+  exact commute_regionLocalProjector_of_vertexTranslation R _ (fun ℓ =>
+    regularCycleControlledBoundaryMatrix_commute_vertexTranslation R T hT htree o v w p ℓ)
 
 /-- The actual free-word controlled operation preserves the range of the
 product local averaging projector, the genuine locally invariant physical

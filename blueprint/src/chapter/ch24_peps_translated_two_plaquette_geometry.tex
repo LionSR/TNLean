@@ -1,0 +1,60 @@
+\begin{definition}[The two-plaquette block at an arbitrary torus position]%
+    \label{def:peps_translated_two_plaquette_geometry}
+    \lean{TNLean.PEPS.translatedTwoPlaquetteVertex,
+        TNLean.PEPS.translatedTwoPlaquetteRegion,
+        TNLean.PEPS.translatedTwoPlaquetteVertexEquiv,
+        TNLean.PEPS.translatedTwoPlaquetteIso,
+        TNLean.PEPS.translatedTwoPlaquetteTree,
+        TNLean.PEPS.translatedTwoPlaquetteCycleBond}
+    \leanok
+    \uses{def:peps_two_plaquette_graph,def:peps_two_plaquette_torus_geometry,
+        thm:peps_edge_map_subgraph}
+    On a finite torus of horizontal period at least four and vertical period
+    at least three, fix any position $v$. Translate the six-site numbering
+    of the two-plaquette block by $v$, with both coordinates taken modulo
+    their periods. Let $R_v$ be the resulting set of sites. Its induced graph
+    is identified with the fixed two-plaquette graph. Transport the fixed
+    spanning path and its two remaining bonds through that identification.
+    These constructions permit either periodic seam to pass through the block.
+    They describe the local geometry in
+    \cite[Theorem~6.16]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Actual translated two-plaquette geometry]%
+    \label{thm:peps_translated_two_plaquette_geometry}
+    \lean{TNLean.PEPS.translatedTwoPlaquetteTree_isTree,
+        TNLean.PEPS.translatedTwoPlaquetteTree_le,
+        TNLean.PEPS.translatedTwoPlaquetteRegion_card,
+        TNLean.PEPS.translatedTwoPlaquetteRegion_eq_map,
+        TNLean.PEPS.translatedTwoPlaquetteRegion_eq_arcRectangle,
+        TNLean.PEPS.translatedTwoPlaquetteRegion_connected,
+        TNLean.PEPS.translatedTwoPlaquetteRegion_card_internalEdges,
+        TNLean.PEPS.translatedTwoPlaquetteCycleBond_injective,
+        TNLean.PEPS.translatedTwoPlaquetteCycleBond_eq_up}
+    \leanok
+    \uses{def:peps_translated_two_plaquette_geometry,
+        thm:peps_two_plaquette_graph,thm:peps_two_plaquette_torus_geometry}
+    The actual region $R_v$ is the cyclic rectangle
+    $v+\bigl(\{0,1,2\}\times\{0,1\}\bigr)$, with six sites and seven internal bonds.
+    Its induced graph is connected and the transported path is a spanning tree.
+    The two distinct selected non-tree bonds are the native upward steps
+    \begin{align}
+        v\longrightarrow v+(0,1),\qquad
+        v+(1,0)\longrightarrow v+(1,1).
+    \end{align}
+    Their endpoint pairs retain the actual ordered-edge convention, which may
+    reverse the displayed direction at the vertical seam.
+    This is the arbitrary-position finite-torus geometry for
+    \cite[Theorem~6.16]{Schuch2010PEPS}; the remaining unrestricted lattice
+    scope is recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Torus translation is a graph automorphism. Restricting it to the six-site
+    set gives the actual induced graph identification, so it preserves
+    the spanning tree, connectedness, and both cardinalities.
+    Applying it to the original site coordinates yields the cyclic rectangle.
+    The two remaining edges are the translated vertical steps. Sorting their
+    endpoint pairs gives exactly the native upward bonds, even at a seam;
+    the edge bijection preserves their distinctness.
+\end{proof}

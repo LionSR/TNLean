@@ -1,0 +1,72 @@
+\begin{theorem}[Ordered edges and transported subgraphs]%
+    \label{thm:peps_edge_map_subgraph}
+    \lean{TNLean.PEPS.Edge.comap_adj_map_iff}
+    \leanok
+    Let $\varphi:\Gamma\simeq\Gamma'$ be a graph isomorphism between
+    linearly ordered vertex sets, and let $T$ be a graph on the vertices
+    of $\Gamma$. For an ordered edge $e=(v,w)$ of $\Gamma$, sort the
+    mapped endpoints to obtain $\varphi e$. Its endpoints are adjacent
+    in the transported graph $T\circ\varphi^{-1}$ if and only if $v,w$
+    are adjacent in $T$. In particular, a non-tree bond remains outside
+    the transported tree. This elementary assertion is used in the finite
+    blocking and flux geometries of \cite{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The mapped endpoints occur in their original order or in the reverse
+    order. Pullback cancels the isomorphism in the first case; symmetry
+    of graph adjacency gives the same equivalence in the second case.
+\end{proof}
+
+\begin{definition}[The actual translated three-plaquette strip]%
+    \label{def:peps_three_plaquette_geometry}
+    \lean{TNLean.PEPS.translatedThreePlaquetteVertex,
+        TNLean.PEPS.translatedThreePlaquetteRegion,
+        TNLean.PEPS.translatedThreePlaquetteVertexEquiv,
+        TNLean.PEPS.translatedThreePlaquetteTree,
+        TNLean.PEPS.threePlaquetteTreeDecidableAdj,
+        TNLean.PEPS.translatedThreePlaquetteCycleBond}
+    \leanok
+    \uses{def:peps_torus_geometry_translation,thm:peps_edge_map_subgraph}
+    On a torus of horizontal period at least five and vertical period at
+    least three, fix any position $v=(x,y)$. The strip $R_v$ consists of the
+    four columns $x,x+1,x+2,x+3$ in the two rows $y,y+1$.
+    Number its sites along the lower row from left to right, then along the
+    upper row from right to left. The corresponding path $T_v$ contains
+    the six horizontal bonds and the rightmost vertical bond.
+    Let $e_0,e_1,e_2$ be the remaining ordered vertical bonds from left to
+    right. These are actual non-tree internal bonds of $R_v$.
+    This eight-site geometry is auxiliary to the adjacent-flux construction
+    in \cite[braiding passage]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[The induced strip and its explicit spanning tree]%
+    \label{thm:peps_three_plaquette_geometry}
+    \lean{TNLean.PEPS.translatedThreePlaquetteTree_isTree,
+        TNLean.PEPS.translatedThreePlaquetteTree_le,
+        TNLean.PEPS.translatedThreePlaquetteRegion_connected,
+        TNLean.PEPS.translatedThreePlaquetteRegion_card,
+        TNLean.PEPS.translatedThreePlaquetteCycleBond_injective,
+        TNLean.PEPS.translatedThreePlaquetteCycleBond_eq_up,
+        TNLean.PEPS.translatedThreePlaquetteRegion_card_internalEdges,
+        TNLean.PEPS.translatedThreePlaquetteRegion_eq_arcRectangle}
+    \leanok
+    \uses{def:peps_three_plaquette_geometry}
+    The set $R_v$ is the actual cyclic $4\times2$ rectangle. Its induced
+    graph has eight vertices and ten internal bonds, and $T_v$ is a spanning
+    tree. The three selected non-tree bonds are distinct and are exactly
+    the native ordered upward steps at $x$, $x+1$, and $x+2$ in row $y$.
+    These assertions hold at every position, including both periodic seams.
+\end{theorem}
+
+\begin{proof}\leanok
+    On eight labels, take the path graph and add the three chords
+    $(0,7)$, $(1,6)$, and $(2,5)$. The finite adjacency calculation identifies
+    this graph with the induced torus strip. The path graph is a tree,
+    and its three chords are distinct and absent from the path.
+    Translation preserves the torus graph and carries these data to $R_v$.
+    Sorting the translated chord endpoints gives the native upward steps.
+    The period bounds exclude additional wraparound edges in the original
+    coordinate placement. The same numbering yields the vertex and bond
+    counts and the stated cyclic rectangle.
+\end{proof}

@@ -140,7 +140,8 @@ theorem exists_isPreparedInDepth_allLengthPolynomialState {d D : ℕ} (A : MPSTe
   have : NeZero D := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨_, hlam1⟩ := norm_pos_and_lt_one_of_correlationLength_pos hξ
   obtain ⟨C, hC, herr⟩ := exists_blockApproximationError_le_mul A hNormal hA hσ htr hfix
-    hlam hlam1.le (γ := 1 / 2) (by norm_num) (by norm_num)
+    hlam hlam1.le (γ := 1 / 4) (by norm_num) (by norm_num)
+  rw [show (2 : ℝ) * (1 / 4) = 1 / 2 by norm_num] at herr
   obtain ⟨Cb, hCb⟩ := exists_isPreparedInDepth_blockIsometryState d D
   obtain ⟨Ce, hCe⟩ := exists_isPreparedInDepth_normalizedMPVState d D
   obtain ⟨Nz, hNz⟩ := exists_mpvState_ne_zero_of_le A hNormal

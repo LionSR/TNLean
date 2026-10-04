@@ -1,0 +1,158 @@
+\section{Product Vacua with Boundary States}
+\label{sec:examples_pvbs}
+
+The one-species PVBS chain has a product vacuum and a geometric boundary
+particle~\cite[Section~II, equations~(1)--(8)]{BachmannNachtergaele2012PVBS}.
+We use left-to-right matrix products and write $q=\mu e^{i\theta}$ for the
+hopping parameter and phase. The review's real parameter is $q=1+\lambda$
+\cite[Section~IV.C.4]{Cirac2021Matrix}. Its printed right-localization threshold
+and unconditional periodic-uniqueness claim require the corrections explained
+in~\cite{gap:cpgsv21_pvbs_threshold}. The following finite-chain results allow
+all complex $q$; $q=0$ is an algebraic extension of the original positive-hopping
+family. No spectral-gap assertion is included.
+
+\begin{definition}[One-species PVBS tensor and boundary vectors]
+    \label{def:pvbs_tensor}
+    \lean{MPSTensor.pvbsTensor}
+    \lean{MPSTensor.pvbsVacuum}
+    \lean{MPSTensor.pvbsEdge}
+    \leanok
+    Set $A^0=\operatorname{diag}(q,1)$ and $A^1=|0\rangle\langle1|$.
+    Write $\Omega_N=|0\cdots0\rangle$ and
+    $\Psi_N(q)=\sum_{k=0}^{N-1}q^k|0\cdots1_k\cdots0\rangle$.
+\end{definition}
+
+\begin{lemma}[PVBS amplitudes and boundary contraction]
+    \label{lem:pvbs_amplitudes}
+    \lean{MPSTensor.pvbsVacuum_zero}
+    \lean{MPSTensor.pvbsVacuum_nil}
+    \lean{MPSTensor.pvbsVacuum_cons}
+    \lean{MPSTensor.pvbsEdge_cons_zero}
+    \lean{MPSTensor.pvbsEdge_cons_one}
+    \lean{MPSTensor.pvbsEdge_zero}
+    \lean{MPSTensor.pvbsEdge_first}
+    \lean{MPSTensor.pvbsVacuum_first}
+    \lean{MPSTensor.evalWord_pvbsTensor}
+    \lean{MPSTensor.pvbsTensor_openState}
+    \lean{MPSTensor.pvbsEdge_excitedAt}
+    \lean{MPSTensor.pvbsVacuum_excitedAt}
+    \leanok
+    \uses{def:pvbs_tensor}
+    For every physical word $\sigma$,
+    \begin{align}
+        A^{\sigma_1}\cdots A^{\sigma_N}
+         & =\begin{pmatrix}
+                q^N\Omega_N(\sigma) & \Psi_N(q)(\sigma) \\
+                0                   & \Omega_N(\sigma)
+            \end{pmatrix}.
+        \label{eq:pvbs_word}
+    \end{align}
+    The standard boundary contraction $\langle0|A^{\sigma_1}\cdots
+        A^{\sigma_N}|1\rangle$ is $\Psi_N(q)(\sigma)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Multiplication by $A^0$ contributes $q$ before the unique particle;
+    multiplication by $A^1$ creates it. Two particles give the zero matrix.
+    Induction on the word length gives (\ref{eq:pvbs_word}).
+\end{proof}
+
+\begin{theorem}[Open PVBS matrix-product space]
+    \label{thm:pvbs_open_space}
+    \lean{MPSTensor.groundSpaceMap_pvbsTensor}
+    \lean{MPSTensor.mem_groundSpace_pvbsTensor_iff}
+    \lean{MPSTensor.groundSpace_pvbsTensor}
+    \lean{MPSTensor.linearIndependent_pvbs_states}
+    \lean{MPSTensor.finrank_groundSpace_pvbsTensor}
+    \leanok
+    \uses{lem:pvbs_amplitudes}
+    The full boundary matrix-product space is
+    $\mathcal G_N=\operatorname{span}\{\Omega_N,\Psi_N(q)\}$.
+    It has dimension two for every $N\ge1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Taking the trace against a boundary matrix $X$ gives
+    $(q^NX_{00}+X_{11})\Omega_N+X_{10}\Psi_N(q)$.
+    The entries $X_{11}$ and $X_{10}$ realize arbitrary coefficients.
+    Evaluation on the vacuum and on a particle at the first site proves
+    linear independence.
+\end{proof}
+
+\begin{theorem}[Open PVBS parent-Hamiltonian ground space]
+    \label{thm:pvbs_open_parent}
+    \lean{MPSTensor.pvbs_pair_constraints}
+    \lean{MPSTensor.mem_groundSpace_pvbs_two_iff}
+    \lean{MPSTensor.groundSpace_pvbs_intersection}
+    \lean{MPSTensor.contiguous_mem_groundSpace_pvbs}
+    \lean{MPSTensor.ker_openParentHamiltonianES_pvbs}
+    \lean{MPSTensor.finrank_ker_openParentHamiltonianES_pvbs}
+    \leanok
+    \uses{thm:pvbs_open_space}
+    The open nearest-neighbour parent Hamiltonian has kernel $\mathcal G_N$
+    and ground-state dimension two for every $N\ge2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A two-site vector satisfies the local constraint precisely when
+    $a_{11}=0$ and $a_{01}=q a_{10}$.
+    The left and right restrictions of a putative longer ground vector
+    lie in the shorter vacuum-particle spaces. Their common two-site
+    constraints eliminate the two-particle coefficient and relate the
+    remaining particle coefficients by $q$. This proves the intersection
+    property from length two onward. Iterating it identifies all nonwrapping
+    local constraints with $\mathcal G_N$. The existing positive-parent
+    kernel theorem then identifies the actual Hamiltonian kernel.
+\end{proof}
+
+\begin{theorem}[Periodic PVBS vacuum uniqueness]
+    \label{thm:pvbs_periodic_parent}
+    \lean{MPSTensor.chainGroundSpace_pvbs_le_groundSpace}
+    \lean{MPSTensor.pvbsVacuum_mem_chainGroundSpace}
+    \lean{MPSTensor.cyclicTranslateCfg_excitedAt}
+    \lean{MPSTensor.pvbs_periodic_particle_coefficient}
+    \lean{MPSTensor.chainGroundSpace_pvbs_eq_vacuum}
+    \lean{MPSTensor.ker_parentHamiltonian_pvbs}
+    \lean{MPSTensor.finrank_ker_parentHamiltonian_pvbs}
+    \lean{MPSTensor.pvbs_pow_ne_one_of_norm_ne_one}
+    \lean{MPSTensor.ker_parentHamiltonian_pvbs_of_norm_ne_one}
+    \leanok
+    \uses{thm:pvbs_open_parent}
+    If $N\ge2$ and $q^N\ne1$, the periodic parent Hamiltonian has kernel
+    $\operatorname{span}\{\Omega_N\}$ and ground-state dimension one.
+    In particular, this conclusion holds at every such length if $|q|\ne1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Every periodic ground vector satisfies the nonwrapping constraints,
+    hence is $a\Omega_N+b\Psi_N(q)$. A cyclic translate is also a ground
+    vector. Comparing its particle amplitudes at the first two sites yields
+    $b=bq^N$, forcing $b=0$. The vacuum satisfies every cyclic constraint.
+\end{proof}
+
+\begin{theorem}[Critical W state and geometric localization]
+    \label{thm:pvbs_boundary_regimes}
+    \lean{MPSTensor.pvbsTensor_one}
+    \lean{MPSTensor.pvbsEdge_one}
+    \lean{MPSTensor.pvbsEdge_one_two_mem_chainGroundSpace}
+    \lean{MPSTensor.pvbs_critical_periodic_counterexample}
+    \lean{MPSTensor.norm_pvbsEdge_excitedAt}
+    \lean{MPSTensor.pvbsEdge_left_decay}
+    \lean{MPSTensor.pvbsEdge_right_relative}
+    \lean{MPSTensor.pvbsEdge_right_decay}
+    \leanok
+    \uses{lem:pvbs_amplitudes,thm:pvbs_periodic_parent}
+    At $q=1$, the tensor and boundary vector are the W-state tensor and
+    unnormalized W vector. Already on the two-site ring, the W vector is a
+    nonvacuum zero-energy state. For $|q|<1$, amplitudes decay as $|q|^k$
+    from the left edge. For $|q|>1$, the amplitude $k$ sites from the right
+    edge relative to the last-site amplitude equals $q^{-k}$ and tends to zero.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Substitution gives the W tensor at $q=1$ and verifies the two periodic
+    constraints. Evaluation on a one-particle configuration separates the
+    W vector from the vacuum span. The localization statements follow from
+    the exact geometric coefficients and convergence of powers of a scalar
+    of modulus less than one.
+\end{proof}

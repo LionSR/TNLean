@@ -100,15 +100,14 @@ This implements the larger-final-block prescription in
 isometry to the fixed-point pairs. The resulting vector is exactly
 $\psi_{N,\eta}$, rather than an unspecified approximant.
 
-The improved positive-part estimate permits the first-order rate
-$0<\gamma<1$, also for unequal blocks. Its tensor-network consequence is
-proved in \doclink{TNLean/MPS/Preparation/BlockApproximationError}:
-\begin{equation}
+The second-order unequal-block estimate is proved in
+\doclink{TNLean/MPS/Preparation/BlockApproximationError} for $0<\gamma<1$:
+\begin{align}
     \varepsilon(\psi_{N,\eta},\phi_N)
-       \leq C_\gamma M e^{-\gamma q/\xi}.
+     & \leq C_\gamma M e^{-2\gamma q/\xi}.
     \label{eq:mswc24_polynomial_variable_error}
-\end{equation}
-Choosing $\gamma=1/2$ gives the same comparison
+\end{align}
+Choosing $\gamma=1/4$ gives the same comparison
 $M e^{-q/(2\xi)}\leq N^{-\eta}$ as above, with one constant independent
 of $\eta$ and $N$. The preparation depth is $O(q)$ because every block
 has length at most $2q$.

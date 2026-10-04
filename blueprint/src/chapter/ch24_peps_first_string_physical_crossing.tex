@@ -1,0 +1,27 @@
+\begin{theorem}[A direct upward crossing in the four-endpoint presentation]
+    \label{thm:peps_first_string_physical_crossing}
+    \lean{TNLean.PEPS.torusFirstStringCrossingBase,TNLean.PEPS.torusFirstStringCrossingGauge,TNLean.PEPS.torusFirstStringCrossingOutput,TNLean.PEPS.torusFirstStringCrossing_initial_extension,TNLean.PEPS.torusFirstStringCrossingOutput_eq_of_ne,TNLean.PEPS.torusFirstStringCrossingOutput_middle_transport,TNLean.PEPS.IsGIsometric.exists_unitary_torusFirstStringCrossing}
+    \leanok
+    Consider the native four-endpoint string assignment on a torus with
+    $w\ge7$ and $H\ge6$. The upward movement tile based at $v+(1,1)$ has a
+    common reconstruction gauge equal to $1$ on its lower row and $g$ on its
+    other two rows. Its lower canonical insertion is $h^{-1}$. Extending this
+    insertion to the middle chord changes only the bond based at $v+(1,2)$,
+    whose rightward transport becomes $gh^{-1}g^{-1}$. The lower bond retains
+    the continuing partner string, and all other ordered operators are retained.
+    For an original regular $G$-isometric site tensor there exists one unitary
+    on these six original spins, chosen before $g,h$ and every boundary label,
+    which maps all actual input columns to the output columns. Its extension
+    by the identity maps the actual closed input state to the output state.
+    This is a direct elementary crossing auxiliary to
+    \cite[Theorem~6.16 and Section~6.6]{Schuch2010PEPS}; it is not identified
+    with the entire prescribed braid.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_two_plaquette_transport_table,thm:peps_torus_gauged_vertical_flux_move,thm:peps_internal_gauge_transport}
+    The seven literal native transports determine the common gauge
+    reconstruction. The canonical single-to-double chord movement then applies
+    with the same gauge and exterior operators on both sides. Its physical
+    unitary acts on every boundary column, hence on the closed contraction.
+\end{proof}

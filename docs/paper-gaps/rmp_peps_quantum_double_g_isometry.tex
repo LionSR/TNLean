@@ -5,7 +5,7 @@
 \input{command}
 \title{Quantum-Double PEPS: Normalization, Representations and Scope}
 \author{}
-\date{2026-10-02}
+\date{2026-10-03}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -62,6 +62,43 @@ $C^{ij}=A^iB^j$ the constants multiply, $c_C=c_Ac_B$, and for $c_A=c_B=1$
 this is the source's Lemma~``lemma:iso:iso-stable-under-concat''.\footnote{Source
     traceability: \path{Papers/1001.3807/paper_v3.tex}, lines
     1704--1716.}
+
+\subsection{The primal toric-code tensor}
+For the primal tensor in Appendix~A of \cite{Cirac2021Matrix}, specialize to
+$G=\mathbb Z_2$ and write the group operation additively. Its map $P$ from
+the four virtual legs to the four physical edge spins is
+\begin{align}
+    (Px)(g_1,g_2,g_3,g_4)
+    &=x(g_1+g_2,\ g_2+g_3,\ g_4+g_3,\ g_1+g_4).
+    \label{eq:rmp_peps_toric_primal_map}
+\end{align}
+Let $Z\ket a=(-1)^a\ket a$ and $S=Z^{\otimes4}$ on the virtual legs.
+The invariant subspace of the representation of $\mathbb Z_2$ generated
+by $S$ consists of vectors supported on even virtual configurations
+$t+r+b+l=0$. Each such configuration has exactly two physical preimages
+under the label map in~(\ref{eq:rmp_peps_toric_primal_map}), whereas odd
+configurations have none.
+Consequently,
+\begin{align}
+    PS&=P,
+    \label{eq:rmp_peps_toric_primal_invariance}\\
+    P^\dagger P&=2\Pi_{\mathrm{even}},
+    \label{eq:rmp_peps_toric_primal_gram}\\
+    \Pi_{\mathrm{even}}&=\frac{I+S}{2}.
+    \label{eq:rmp_peps_toric_primal_projection}
+\end{align}
+Thus $P$ is injective on the invariant subspace and satisfies
+$\langle Px,Py\rangle=2\langle x,y\rangle$ there; $P/\sqrt2$ is
+an isometry onto its range. This is a local $\mathbb Z_2$ consequence
+of the primal tensor~(\ref{eq:rmp_peps_toric_primal_map}), with its character
+representation on the virtual legs. The general-group primal symmetry is discussed
+below.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2451--2465,
+    equation \texttt{eq:app:tcode-rep-primal}. Formal declarations in
+    \path{TNLean/PEPS/Examples/ToricCodePrimal.lean}:
+    \leanid{TNLean.PEPS.toricCodePrimalVirtualRep_generator},
+    \leanid{TNLean.PEPS.toricCodePrimalMatrix_conjTranspose_mul_self},
+    and \leanid{TNLean.PEPS.isGIsometric_toricCodePrimalTensor}.}
 
 \section{Representations}
 The formal notions of $G$-injectivity and $G$-isometry take the
@@ -131,12 +168,17 @@ is $|G|\Pi_{\partial R}$. The boundary may be empty.\footnote{Result:
     \leanid{TNLean.PEPS.regularOpenRegionMatrix_gram_of_connected}.}
 
 The actual block also satisfies the defining invariant-subspace isometry
-relation, with the positive factor of~(\ref{eq:rmp_peps_qd_region_gram}). Its accessible physical
+relation, with the positive factor of~(\ref{eq:rmp_peps_qd_region_gram}).\footnote{Result:
+    \leanid{TNLean.PEPS.isGIsometric_regularOpenRegionMatrix_of_connected}.}
+Its accessible physical
 coordinates are obtained explicitly. Applying the local map
 $c_v^{-1}A_v^\dagger$ at every vertex turns the original open contraction
-into the open contraction $B_R$ of the averaging projectors $\Pi_v$.
+into the open contraction $B_R$ of the averaging projectors $\Pi_v$.\footnote{Result:
+    \leanid{TNLean.PEPS.regionPhysicalProductMatrix_mul_regularOpenRegionMatrix}.}
 Applying the original $A_v$ to these projector coordinates recovers the
-original contraction, since $A_v\Pi_v=A_v$. These are identities of
+original contraction, since $A_v\Pi_v=A_v$.\footnote{Result:
+    \leanid{TNLean.PEPS.regionPhysicalMap_regularProjectorOpenRegionMatrix}.}
+These are identities of
 the original finite sums, for arbitrary finite regions. They do not
 assert that the two rectangular maps are inverse on unused physical
 subspaces.
@@ -689,8 +731,7 @@ one tensor.
 \end{enumerate}
 
 \section{Flux detection on a connected block}
-This section records a planned argument; it is not yet part of the
-formal development. Fix a spanning tree of a connected regular block and one non-tree
+Fix a spanning tree of a connected regular block and one non-tree
 internal edge. Its exposed cycle coordinate is conjugate to the residual
 of the actual inserted group operators.\footnote{Result:
     \leanid{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}.}
@@ -701,12 +742,18 @@ physical projections $Q_C=c^{-1}AD_CA^\dagger$.
 An additional projection $I-\sum_C Q_C$ completes the measurement on
 the whole physical Hilbert space and annihilates every actual twisted
 block column. The outcome on a nonzero column is exactly the conjugacy
-class of the derived residual. This would establish the conjugacy
+class of the derived residual. This establishes the conjugacy
 calculation in the proof of Theorem~6.15 for a chosen cycle in an actual
-connected block; only the cycle-coordinate identity above is currently
-formalized, and the measurement projections and their outcome statement
-remain open. The four-site plaquette geometry and its explicit
-holonomy remain separate; no parent-Hamiltonian assertion is used.
+connected block. The same construction detects the conjugacy class of
+any specified closed-walk holonomy.\footnote{Results:
+    \leanid{TNLean.PEPS.exists_regularCycleClass_physicalMeasurement},
+    \leanid{TNLean.PEPS.exists_regularClosedWalkClass_physicalMeasurement}.}
+On native tori of periods at least three, the four-site plaquette
+walk and its inserted-bond holonomy give the corresponding physical
+plaquette measurement.\footnote{Results:
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_physicalMeasurement},
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_fluxClass_measurement}.}
+No parent-Hamiltonian assertion is used in these measurement results.
 
 \section{The semi-regular bond isometry}
 For each irreducible block, the map
@@ -723,6 +770,240 @@ repeated-multiplicity counterparts.\footnote{Results:
 The identification of the
 fourth-root-weighted site tensor with those bond sums is a further
 statement; it is not assumed in this isometry calculation.
+
+\section{Local regular parent constraints and the remaining closure step}
+For connected regions of regular $G$-injective tensors, local inverses expose the actual
+canonical regional coefficients. The original regional ground space
+has only identity cycle coordinates. A nonzero vector lying both in
+this space and in an inserted regional space therefore forces every
+internal closed-walk holonomy to be the identity. Simultaneous right
+multiplication of the two exposed half-edge labels of an internal
+bond also preserves these coefficients, including in the presence of
+arbitrary inserted left group multiplications. These are local
+coefficient consequences; no global representation is assumed.
+
+On native tori with both periods at least three, the parent condition
+at the intersection of the two closure seams forces commuting closure
+labels. Conversely, commuting closures satisfy the original regional
+parents when the induced regions are connected and their actual
+closed-cell realizations are simply connected, including across either
+seam. A physical linear holonomy filter fixes the parent-supported
+space and discards every noncommuting closure. Thus, for a finite
+parent family containing the seam-intersection plaquette, let
+$\mathcal C_{\mathrm{all}}$ be the span of all native closures and
+$\mathcal C_{\mathrm{com}}$ the span of commuting closures. Under
+these regional hypotheses,
+\begin{align}
+    \ker H\cap\mathcal C_{\mathrm{all}}
+        =\mathcal C_{\mathrm{com}}.
+\end{align}
+The dimension of this intersection is the number of commuting
+pair-conjugacy classes. No $G$-isometry is required, and the linear
+filter is not asserted to be Hermitian.
+
+This establishes the final commuting-label constraint within the
+closure span in \cite[Theorems~5.5 and~5.9]{Schuch2010PEPS}.
+The remaining step is to prove that every vector in the original
+parent kernel belongs to $\mathcal C_{\mathrm{all}}$. Neither
+plaquette flatness for inserted states nor the local bond invariance
+identity supplies that spanning theorem. The complete source
+identification of the torus parent kernel remains unformalized.
+
+\section{Finite torus flux operations}
+The flux detection, motion and creation results of
+\cite[Theorems~6.15--6.17]{Schuch2010PEPS} are formulated in the bulk,
+with remote boundaries; source lines 2174--2342. The formalized
+regional identities retain every actual crossing label and are uniform
+in those labels. Their original-spin operators are obtained from the
+local regular $G$-isometries, rather than supplied as hypotheses.
+
+The finite simple-graph torus requires both periods to be at least
+three for the single-plaquette detector. The translated two-plaquette
+construction uses horizontal period at least four and vertical period
+at least three. The three-plaquette strip uses horizontal period at
+least five and vertical period at least three. All positions, including
+both periodic seams, are allowed. These period bounds exclude extra
+induced bonds in the selected blocks. Thus the corresponding statements
+are finite-geometry specializations, rather than formalizations of an
+unrestricted lattice statement. Extending the lattice model to smaller
+periods is separate work. The stated contraction identities make no
+assertion about excitation energies or the entire parent kernel.
+
+\section{The selected chronological physical braid}
+The braiding passage of \cite[\S6.6]{Schuch2010PEPS}, source lines
+2343--2411 and equation ``eq:anyons:fluxon-braiding-lazy'', conjugates
+one flux and detects the commutator class after reunion. The finite
+realization uses a specified twelve-step route on a native torus with
+horizontal period at least eight and vertical period at least seven.
+Each step is a unitary on the original spins; the gauges, residuals
+and empty neighboring plaquettes are derived from the actual inserted
+bond assignment. Their chronological product acts on the genuine
+closed contraction. A complete six-spin projection-valued measurement,
+chosen before the two flux labels, detects the commutator class on
+the resulting physical cut. The based transport at reunion is conjugate
+to the commutator, which leaves this measured class unchanged.
+
+The result covers this route at every translated position, including
+both seams. Other braid representatives, smaller periods and the
+irreversible merging operation require further arguments.
+
+\section{Native charge detection and correlated pair readout}
+Electric charges in \cite[\S6.6]{Schuch2010PEPS}, source lines
+2432--2558, are diagonal character insertions. The two-site detector
+is a complete projection-valued measurement on the original spins,
+chosen before the irreducible character, internal parameter and
+boundary labels. The formalization derives its action from the actual
+open contraction on every native horizontal or vertical edge of tori
+with both periods at least three, including both seams. Local regular
+$G$-isometry also gives a nonzero local boundary column. This does not
+assert that a lone charge has nonzero contraction on a fully periodic
+vacuum: total-charge constraints and the source's remote boundaries
+must be distinguished from a local-column statement.
+
+The correlated pair has coefficient $\chi(p h^{-1}g)$, as in
+\path{eq:anyons:chargeon-pair-state}.
+On the translated six-site native block, horizontal period at least
+three and vertical period at least four suffice for one physical
+unitary to create this insertion before every boundary configuration.
+Two complete two-spin measurements, fixed before $\chi$ and $p$,
+then identify $\chi$ and its contragredient at the two endpoints of
+the same prepared state. The action is computed inside the actual
+retained-label sum. Neither a column factorization nor a prescribed
+sector action is assumed. The finite-geometry statement is explicit;
+its extension to unrestricted lattice geometries remains separate work.
+The finite-torus charge-motion result below also factors into independent
+unitaries on the two actual two-spin columns.
+
+\section{A selected-block charge parameter operation}
+Let $R$ be a finite block with a chosen spanning tree and root, and choose
+an internal charge bond $e$ and a non-tree flux bond $b$. Suppose the
+original sites are locally $G$-isometric for the regular incident-edge
+action. Retain the literal diagonal weight $\chi(p\eta_e)$ in the actual
+open contraction, where $\eta_e$ is the tail bond label. Denote this vector
+by $\Psi_R(u;\chi,p,\theta)$, with actual group operators $u$ and boundary
+configuration $\theta$.
+
+There is one unitary $W_{e,b}$ on the original spins of $R$, chosen before
+$u$, the coefficient function $\chi$, $p\in G$ and $\theta$, such that
+\[
+ W_{e,b}\Psi_R(u;\chi,p,\theta)
+   =\Psi_R(u;\chi,pK_{u,e,b}^{-1},\theta),\qquad
+ K_{u,e,b}=k_{\mathrm{tail}(e)}\rho_bk_{\mathrm{tail}(e)}^{-1}.
+\]
+Here $k$ is the actual rooted tree gauge and $\rho_b$ its cycle residual;
+both are derived from $u$. The character label is retained when $\chi$ is
+an irreducible character. The weighted contraction is computed directly:
+diagonal character insertions are not inferred from linear combinations
+of group-representation matrices.
+
+The construction realizes the charge parameter change of
+\cite[\S6.6]{Schuch2010PEPS}, source lines 2569--2581, on this selected
+finite block. Its accessible coordinates come from source lines
+1765--1920. Relating this operation to the complete geometric
+charge--flux braid, with moving endpoints, requires further arguments.
+These identities concern contracted vectors and local unitaries.
+
+\paragraph{Original-spin charge motion.}
+For the regular action, the diagonal charge insertion on the upper horizontal
+bond of an actual four-site plaquette can be moved to its lower horizontal
+bond by one unitary on the original four spins. The unitary is selected before
+the character, internal parameter and every actual boundary configuration;
+these data are retained. The proof derives the tensor contraction identity
+from the internal-reference exchange, and chooses all tree data from the
+actual induced connectivity. Translated plaquettes crossing either periodic
+seam are included, with both torus periods at least three. This proves the
+finite-torus movement diagram of \cite{Schuch2010PEPS},
+\path{eq:anyons:chargeon-move-setting}, lines 2489--2507. The source proof
+factors its operation into independent unitaries on the two columns. This
+factorization is now derived on the actual torus plaquette: each connected
+two-spin column admits its own boundary-register exchange, and the original
+open contractions join by summing each common bond label exactly once.
+The literal Kronecker product of the two physical unitaries moves the
+diagonal insertion before every character, parameter and exterior label.
+No joining formula or local Gram identity is supplied as a hypothesis.
+Extension to unrestricted lattice geometry remains separate.
+
+\paragraph{Weighted charge--flux string deformation.}
+Vertex gauge changes preserve the actual bond contraction with arbitrary
+scalar diagonal weights. The open-region identity retains correlated weights
+and explicitly transports the actual boundary labels. On the native translated
+string figure, the central charge diagonal $\chi(pt)$ becomes
+$\chi(pk^{-1}t)$ in either displayed swept presentation, including both
+periodic seams, with torus periods at least five and four respectively.
+For a correlated pair, the transformed coefficient is
+$\chi(p\eta_1^{-1}k^{-1}\eta_0)$ when only the first selected tail is swept.
+The flux factor is retained at its literal position between the pair labels.
+
+This proves an equality of actual original-spin contractions in different
+gauge presentations, following \cite{Schuch2010PEPS}, lines 2560--2581.
+The literal flux string now determines an original-spin operation on an actual
+translated eight-site strip, with periods at least five and four. Its
+spanning-tree gauge is derived from the seven native transports: it is trivial
+on the lower row and equal to the flux on the upper row. The endpoint cycle
+residual determines whether the physical unitary or its adjoint is used at a
+seam. One unitary precedes every flux, coefficient function, charge parameter
+and boundary configuration. It implements
+$\chi(p\eta_0)\mapsto\chi(pk^{-1}\eta_0)$ and, uniformly in an unsummed
+partner label,
+$\chi(p\eta_1^{-1}\eta_0)\mapsto\chi(p\eta_1^{-1}k^{-1}\eta_0)$. The partner
+bond below the strip is derived to lie outside. Resolving its actual label and
+summing the native cut identity gives the same operation on the genuinely
+contracted correlated closed state. No factorization or global state action is
+supplied. The remaining step is to identify the complete prescribed geometric
+charge--flux route and the normalized prepared-pair reunion with these actual
+coefficients; neither a gauge-presentation equality nor this auxiliary local
+crossing alone establishes the full braid of lines 2560--2615.
+
+\section{Accessible-register interference}
+For a unitary irreducible character $\chi$ of dimension $d$, the normalized
+initial pair and its literal flux-inserted coefficient vector are
+\[
+ v(g,h)=|G|^{-1}\chi(ph^{-1}g),\qquad
+ v_k^x(g,h)=|G|^{-1}\chi(ph^{-1}xk^{-1}x^{-1}g).
+\]
+Translated character orthogonality gives
+\[
+ \|v_k^x\|=\|v\|=1,\qquad
+ \langle v,v_k^x\rangle=\chi(k^{-1})/d,
+\]
+independently of $p$ and $x$.
+The complete binary measurement $D=|v\rangle\langle v|$, $1-D$ therefore
+returns the initial pair with probability $|\chi(k)/d|^2$, as in
+\cite{Schuch2010PEPS}, source lines 2582--2615.
+
+These are exact statements about the two accessible group registers.
+The measurement on the six original physical sites and its normalized
+input from the complete geometric charge--flux braid require further
+contraction and physical-operation identities. They are not inferred
+from a prescribed decomposition of the global state.
+
+\section{The unblocked toric-code tensor}
+The four elementary binary tensors of
+\path{eq:ex:kitaev-tens} are contracted around the actual checkerboard
+square, retaining all eight boundary legs and all four original physical
+spins. After a CNOT on each doubled boundary pair, the tensor map factors as
+\[
+    \mathsf B\mathsf C=\mathsf K E^\dagger.
+\]
+Here $\mathsf C$ is the unitary boundary permutation, $E$ includes four
+color registers with four auxiliary bits fixed at zero, and $\mathsf K$
+is the existing dual toric-code tensor with the explicit cyclic physical
+reordering. The coefficient identity follows the construction in
+\cite{Schuch2010PEPS}, source lines 2755--2827.
+
+For torus periods at least three, the actual open contraction of any
+translated four-site plaquette, with its four corner orientations prescribed
+as in the checkerboard diagram, is identified with this blocked tensor for
+every native boundary assignment and original spin configuration. All eight
+crossing bonds are enumerated bijectively, including blocks crossing either
+seam. Conjugating the pairwise boundary CNOT by this enumeration gives a
+unitary native boundary transformation and the exact identity
+\[
+    \mathsf A_v\mathsf C_v=\mathsf K_v E_v^\dagger,
+\]
+where $E_v$ is an isometric inclusion of the four retained boundary bits.
+These are local tensor-map identities. A globally alternating field on an
+odd torus and a globally tiled physical renormalization remain separate.
 
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the

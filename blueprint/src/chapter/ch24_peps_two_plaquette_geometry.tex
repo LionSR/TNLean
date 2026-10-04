@@ -1,0 +1,91 @@
+\begin{definition}[Fixed two-plaquette graph and tree]
+    \label{def:peps_two_plaquette_graph}
+    \lean{TNLean.PEPS.twoPlaquetteGraph,
+        TNLean.PEPS.twoPlaquetteTree,
+        TNLean.PEPS.twoPlaquetteCycleBond}
+    \leanok
+    Number the six sites in the order
+    $(0,0),(1,0),(2,0),(2,1),(1,1),(0,1)$.
+    Let $T$ be the path joining consecutive numbered sites, and let
+    $\Gamma$ add to $T$ the bonds $e_0=\{0,5\}$ and $e_1=\{1,4\}$.
+    These are respectively the leftmost and middle vertical bonds.
+    This is the six-site geometry used in the construction of
+    \cite[proof of moving fluxons]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[The five-edge tree and two remaining bonds]
+    \label{thm:peps_two_plaquette_graph}
+    \lean{TNLean.PEPS.twoPlaquetteTree_le,
+        TNLean.PEPS.twoPlaquetteTree_isTree,
+        TNLean.PEPS.twoPlaquetteGraph_connected,
+        TNLean.PEPS.twoPlaquetteGraph_card_edges,
+        TNLean.PEPS.twoPlaquetteTree_card_edges,
+        TNLean.PEPS.twoPlaquetteCycleBond_not_tree,
+        TNLean.PEPS.twoPlaquetteCycleBond_injective,
+        TNLean.PEPS.twoPlaquetteCycleBond_surjective_non_tree}
+    \leanok
+    \uses{def:peps_two_plaquette_graph}
+    The graph $\Gamma$ is connected and has seven bonds.
+    The subgraph $T$ is a spanning tree with five bonds.
+    The bonds $e_0,e_1$ are distinct, and they are exactly the
+    bonds of $\Gamma$ outside $T$.
+\end{theorem}
+\begin{proof}\leanok
+    The path has six vertices and five consecutive bonds, hence is a tree.
+    Adding the two stated chords gives the two-plaquette graph.
+    The endpoint pairs enumerate all seven bonds; exactly the two chords
+    lie outside the path.
+\end{proof}
+
+\begin{definition}[Placement of the two-plaquette block]
+    \label{def:peps_two_plaquette_torus_geometry}
+    \lean{TNLean.PEPS.twoPlaquetteTorusVertex,
+        TNLean.PEPS.twoPlaquetteTorusRegion,
+        TNLean.PEPS.twoPlaquetteTorusVertexEquiv,
+        TNLean.PEPS.twoPlaquetteTorusIso,
+        TNLean.PEPS.twoPlaquetteTorusTree,
+        TNLean.PEPS.twoPlaquetteTorusCycleBond,
+        TNLean.PEPS.twoPlaquetteTorusVertex_injective,
+        TNLean.PEPS.twoPlaquetteTorusVertex_adj_iff}
+    \leanok
+    \uses{def:peps_two_plaquette_graph,
+        thm:peps_two_plaquette_graph,thm:peps_edge_map_subgraph}
+    On a torus of horizontal period at least four and vertical period
+    at least three, place the six sites at the displayed coordinates.
+    Their numbering identifies $\Gamma$ with the actual induced torus
+    graph on the resulting region $R$. Transport $T,e_0,e_1$ by this
+    identification, retaining the ordered bond endpoints.
+\end{definition}
+
+\begin{theorem}[Actual six-site torus geometry]
+    \label{thm:peps_two_plaquette_torus_geometry}
+    \lean{TNLean.PEPS.twoPlaquetteTorusTree_isTree,
+        TNLean.PEPS.twoPlaquetteTorusTree_le,
+        TNLean.PEPS.twoPlaquetteTorusRegion_card,
+        TNLean.PEPS.twoPlaquetteTorusRegion_eq_rectangle,
+        TNLean.PEPS.twoPlaquetteTorusCycleBond_injective,
+        TNLean.PEPS.twoPlaquetteTorusRegion_card_internalEdges,
+        TNLean.PEPS.twoPlaquetteTorusTree_card_edges,
+        TNLean.PEPS.twoPlaquetteTorusRegion_connected,
+        TNLean.PEPS.twoPlaquetteTorusCycleBond_endpoints}
+    \leanok
+    \uses{def:peps_two_plaquette_torus_geometry,
+        thm:peps_two_plaquette_graph}
+    The actual region $R$ is the coordinate rectangle
+    $\{0,1,2\}\times\{0,1\}$. It has six physical sites,
+    seven internal bonds, and a connected induced graph.
+    The transported $T$ is a spanning tree with five bonds.
+    Its two selected non-tree bonds are distinct and have ordered endpoints
+    $(0,0)\to(0,1)$ and $(1,0)\to(1,1)$.
+    These statements concern the ambient torus region, including its exterior
+    boundary.
+\end{theorem}
+\begin{proof}\leanok
+    All horizontal coordinates lie between zero and two; all vertical
+    coordinates lie between zero and one. The period bounds exclude
+    additional wraparound adjacency inside the region. Thus coordinate
+    comparison preserves and reflects each bond of $\Gamma$.
+    The resulting graph isomorphism transports the spanning tree,
+    connectivity, and both edge counts. The lexicographic order
+    orients each selected vertical bond upward.
+\end{proof}

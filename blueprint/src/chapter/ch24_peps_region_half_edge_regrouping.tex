@@ -1,0 +1,32 @@
+\begin{definition}[Physical incidence coordinates of an open region]%
+    \label{def:peps_region_half_edge_label_equiv}
+    \lean{TNLean.PEPS.regionHalfEdgeLabelEquiv}
+    \leanok
+    For a region $R$ in a finite simple graph and an arbitrary alphabet $X$,
+    regroup the physical incidence labels as one label on each crossing bond,
+    one tail label on each internal bond, and one head label on each internal
+    bond. This is a genuine coordinate bijection. The construction uses the
+    native ordered endpoints and retains every incidence at the boundary.
+    It is the incidence part of the regional coordinates in
+    \cite[Section~6.2]{Schuch2010PEPS} and of the bond-endpoint argument in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[Actual endpoint coordinates in the region bijection]%
+    \label{lem:peps_region_half_edge_label_endpoints}
+    \lean{TNLean.PEPS.regionHalfEdgeLabelEquiv_apply_internal_tail,
+        TNLean.PEPS.regionHalfEdgeLabelEquiv_apply_internal_head,
+        TNLean.PEPS.regionHalfEdgeLabelEquiv_apply_boundary_tail,
+        TNLean.PEPS.regionHalfEdgeLabelEquiv_apply_boundary_head}
+    \leanok
+    \uses{def:peps_region_half_edge_label_equiv}
+    The two internal labels are precisely the physical labels at the ordered
+    tail and head. On a crossing bond, the single retained physical label is
+    the tail label when the tail lies in $R$, and the head label when the
+    head lies in $R$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each internal edge has exactly two incidences in $R$, whereas each crossing
+    edge has exactly one. Read these incidences in the coordinate bijection.
+\end{proof}

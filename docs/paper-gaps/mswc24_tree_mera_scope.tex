@@ -5,10 +5,10 @@
 \input{command}
 \title{The Tree Circuit as a Multiscale Network: Two-Site Injectivity and Chain Length}
 \author{}
-\date{2026-09-30; two-site injectivity resolved 2026-10-02}
+\date{2026-09-30; chain-length restriction resolved 2026-10-04}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 Let $A$ be a normal tensor of physical dimension $d$ and bond dimension $D$, and
@@ -88,7 +88,7 @@ $k\le\log_2\max(1,\xi\log(CN/\varepsilon))$, has error at most
 $\varepsilon$ against $\ket{\phi_N}$, $N=Ms2^{k+1}$. Every normal tensor is
 covered.
 
-\section{The remaining restriction: the chain length}
+\section{The former chain-length restriction}
 The chain length is $N=Ms2^{k+1}$ with $k$ given by the threshold: the network
 consists of $M$ complete binary trees on equal registers. The layer count holds
 along the chain lengths so obtained, not for every fixed $N$ and $\varepsilon$
@@ -96,16 +96,66 @@ with registers of bounded length: for $N=2p$ with $p$ odd only $k=0$ is
 available, so the threshold forces $s\ge\xi\log(CN/\varepsilon)/2$, and the
 dimension $d^s$ of the sites of the network grows with $N/\varepsilon$.
 
-\section{Elimination plan}
-The unequal blocks of the depth bound for every chain length (the note on
-divisible lengths) let the last block have length $q'$ with $q\le q'<2q$, and
-the trees on leaves of unequal widths of the preparation with measurements (the
-note on the tree circuit with measurements) cut, for every $h\ge0$, a block of
-$\ell\ge2^{h+2}s$ sites into $2^{h+1}$ leaves of at least $2s$ sites. A network
-whose trees have leaves of unequal widths, with finest isometries from
-$\mathbb{C}^{D^2}$ to the sites of a leaf, would cover every $N$; it is not
-translation invariant at the finest level, and it extends the definition of the
-network. This is left open.
+\section{Resolution for every positive chain length}
+A sibling construction uses unequal positive blocks and distinct isometries
+at each vertex. Its tensors are actual binary trees:
+a leaf is an isometry from $\mathbb{C}^{D'^2}$ to a physical interval of at most
+$R$ sites, and a binary vertex is an isometry from $\mathbb{C}^{D'^2}$ to two
+copies of that space. A top unitary prepares the pair joining neighboring roots;
+all lower disentanglers are identities. Thus the state is an explicit tensor
+contraction, with internal dimensions at most $D^2$ and physical leaf dimensions
+at most $d^R$.\footnote{Formal declarations:
+    \leanid{MPSPreparation.IsometryTree},
+    \leanid{MPSPreparation.IsometryTree.matrix}, and
+    \leanid{MPSPreparation.IsometryTree.isIsometry_matrix}
+    in \doclink{TNLean/MPS/Preparation/IsometryTree};
+    \leanid{MPSPreparation.UnequalMERA},
+    \leanid{MPSPreparation.UnequalMERA.state}, and
+    \leanid{MPSPreparation.UnequalMERA.norm_state}
+    in \doclink{TNLean/MPS/Preparation/UnequalMERA}.}
+
+For every normal $A$ there are constants $R\ge1$ and $C\ge2$, chosen before
+$N$ and $\varepsilon$, such that, for every $\varepsilon>0$ and every positive
+$N$ with nonzero unnormalized periodic vector, there is a unit network with
+some $1\le D'\le D$,
+error at most $\varepsilon$, and total layer count bounded by
+\[
+    h+2\le C\bigl(1+\log(1+\max\{0,\log(N/\varepsilon)\})\bigr).
+\]
+The regularization makes the bound meaningful also for $N=1$ or
+$\varepsilon\ge1$; it is $O(\log\log(N/\varepsilon))$ in the large-size,
+small-error regime. For $D\ge1$, normality gives nonvanishing for all sufficiently large
+$N$, yielding an eventual statement without a separate nonzero-state
+hypothesis.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_unequalMERA_every_length} and
+    \leanid{MPSPreparation.exists_unequalMERA_of_normal}
+    in \doclink{TNLean/MPS/Preparation/UnequalTreeMERA}.}
+The nonzero-state qualification is intrinsic to normalization, as recorded
+in the note on the nonzero-state condition.
+
+Choose a left-canonical representative and an injectivity length $s$, and set
+$R=4s$. Repeated floor/ceiling halving constructs a polar tree of coarse depth
+$h$ on every block of length $n$ satisfying $2^h s\le n\le2^h R$.
+The polar-merge identity proves that its contraction is exactly the polar
+isometry of that block.\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isometryTree_matrix_eq_cfgPolarIso}
+    in \doclink{TNLean/MPS/Preparation/PolarIsometryTree}.}
+For the accuracy-selected logarithmic scale $q\le N$, take all but the last
+block of length $q$, with the last of length $q+N\bmod q<2q$.
+One common $h$ gives the fixed leaf bound $R$ for every tree.
+The contraction is the existing unequal-block approximating state, so its
+second-order error estimate applies. That estimate has rate
+$\exp(-2\gamma q/\xi)$ for every fixed $0<\gamma<1$; the proof uses
+$\gamma=1/2$.
+For $s\le N<q$, use one polar tree over $N$ and the normalized trace pair
+at its root. Its contraction is exactly the target normalized state, while
+its physical leaves still have at most $R$ sites. The root pair may depend
+on $N$; it is not required to be the fixed-point pair in this exact branch.
+For $N<s$, a single bounded leaf with $D'=1$ represents the state exactly.
+This finite set of short lengths does not enlarge $R$ with either $N$ or
+$\varepsilon$. For $\varepsilon>1$, a normalized product-state network suffices.
+These branches remove the restriction for every positive admissible length,
+including lengths below the accuracy-selected scale.
 
 \bibliographystyle{alpha}
 \bibliography{references}
