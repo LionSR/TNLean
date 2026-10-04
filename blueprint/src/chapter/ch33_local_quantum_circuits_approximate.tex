@@ -1,0 +1,111 @@
+\section{Approximate local channel conversions}
+
+The trace-norm approximation of~\cite[paragraph ``Phases of matter'']{Piroli2021LOCC}
+can be applied to the local channels of
+Definition~\ref{def:qc_local_channel_conversion}. This restricts the allowed
+operations: the source additionally permits measurements and classical
+feedforward, whereas the channels in this section do not; see
+\cite{gap:psc21_local_channel_phase_scope}.
+
+\begin{definition}[Approximate local channel conversion]
+    \label{def:qc_approx_local_channel_conversion}
+    \uses{def:qc_local_channel_conversion}
+    \lean{QuantumCircuit.chainTraceNorm,
+        QuantumCircuit.IsApproxLocalChannelConversion}
+    \leanok
+    A chain operator $\rho$ is approximately converted into $\sigma$ in
+    depth $T$ with error $\varepsilon$ if there is a local channel protocol
+    $\Psi$ of depth at most $T$ with
+    $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$.
+    Here $\lVert A\rVert_1$ is the sum of the singular values of $A$.
+\end{definition}
+
+\begin{theorem}[Zero error and monotonicity]
+    \label{thm:qc_approx_conversion_properties}
+    \uses{def:qc_approx_local_channel_conversion}
+    \lean{QuantumCircuit.IsLocalChannelConversion.approx,
+        QuantumCircuit.IsApproxLocalChannelConversion.refl,
+        QuantumCircuit.IsApproxLocalChannelConversion.mono,
+        QuantumCircuit.isApproxLocalChannelConversion_zero_iff}
+    \leanok
+    Every operator is converted into itself with depth and error zero.
+    Increasing the depth or error bound preserves approximate conversion.
+    Approximate conversion with error zero is equivalent to exact conversion
+    with the same depth bound.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use the identity channel, enlarge the bounds, and use
+    $\lVert A\rVert_1=0$ if and only if $A=0$, respectively.
+\end{proof}
+
+\begin{theorem}[Composition of approximate conversions]
+    \label{thm:qc_approx_conversion_trans}
+    \uses{def:qc_approx_local_channel_conversion,
+        lem:qc_local_channel_conversion_trans}
+    \lean{QuantumCircuit.IsLocalChannelProtocol.chainTraceNorm_map_le,
+        QuantumCircuit.IsApproxLocalChannelConversion.trans}
+    \leanok
+    Let $\rho$ and $\sigma$ be Hermitian. If $\rho$ is approximately converted
+    into $\sigma$ with depth $T_1$ and error $\varepsilon_1$, and $\sigma$ into
+    $\tau$ with depth $T_2$ and error $\varepsilon_2$, then $\rho$ is
+    approximately converted into $\tau$ with depth $T_1+T_2$ and error
+    $\varepsilon_1+\varepsilon_2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The composition $\Psi_2\circ\Psi_1$ has the sum of the two depths.
+    The error $\Psi_1(\rho)-\sigma$ is Hermitian. Trace-norm contractivity of
+    trace-preserving positive maps and the triangle inequality give
+    \begin{align}
+      \lVert\Psi_2(\Psi_1(\rho))-\tau\rVert_1
+      &\le \lVert\Psi_2(\Psi_1(\rho)-\sigma)\rVert_1
+          +\lVert\Psi_2(\sigma)-\tau\rVert_1 \notag\\
+      &\le \lVert\Psi_1(\rho)-\sigma\rVert_1
+          +\lVert\Psi_2(\sigma)-\tau\rVert_1
+      \le\varepsilon_1+\varepsilon_2. \notag
+    \end{align}
+\end{proof}
+
+\begin{definition}[Asymptotic local channel conversion]
+    \label{def:qc_asymptotic_local_channel_conversion}
+    \uses{def:qc_approx_local_channel_conversion}
+    \lean{QuantumCircuit.IsAsymptoticLocalChannelConversion,
+        QuantumCircuit.IsLocalChannelPhaseEquivalent}
+    \leanok
+    Let $\rho_N$ and $\sigma_N$ be families of operators on chains of $N$
+    sites, with fixed local dimensions that may differ between the families.
+    The family $\rho_N$ is asymptotically locally convertible into $\sigma_N$
+    if there are an integer $p\ge0$, a constant $C\ge0$, and errors
+    $\varepsilon_N\to0$ such that, for all sufficiently large $N$, there
+    is an approximate conversion with error $\varepsilon_N$ and depth
+    $T_N\le C(1+\log(N+1))^p$. Two families are locally phase equivalent
+    if they are asymptotically locally convertible in both directions.
+\end{definition}
+
+\begin{theorem}[Local channel phase equivalence]
+    \label{thm:qc_local_channel_phase_equivalence}
+    \uses{def:qc_asymptotic_local_channel_conversion,
+        thm:qc_approx_conversion_trans}
+    \lean{QuantumCircuit.IsAsymptoticLocalChannelConversion.refl,
+        QuantumCircuit.IsAsymptoticLocalChannelConversion.trans,
+        QuantumCircuit.IsLocalChannelPhaseEquivalent.refl,
+        QuantumCircuit.IsLocalChannelPhaseEquivalent.symm,
+        QuantumCircuit.IsLocalChannelPhaseEquivalent.trans,
+        QuantumCircuit.IsLocalChannelPhaseEquivalent.equivalence}
+    \leanok
+    Local channel phase equivalence is an equivalence relation on eventually
+    Hermitian families, and in particular on density-matrix families.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Identity channels give reflexivity; the definition gives symmetry.
+    For transitivity, compose the approximate conversions in each direction.
+    The sum of the errors tends to zero. For $b_N=1+\log(N+1)\ge1$, the
+    depth satisfies
+    \begin{align}
+      C_1b_N^{p_1}+C_2b_N^{p_2}
+      &\le(C_1+C_2)b_N^{\max(p_1,p_2)}. \notag
+    \end{align}
+    Thus the depth remains polylogarithmic.
+\end{proof}

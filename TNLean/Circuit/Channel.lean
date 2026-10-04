@@ -8,5 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit.Channel
 
+import TNLean.Circuit.Channel.ApproximateConversion
+import TNLean.Circuit.Channel.AsymptoticConversion
 import TNLean.Circuit.Channel.Conversion
 import TNLean.Circuit.Channel.Layer

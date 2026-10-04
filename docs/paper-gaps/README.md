@@ -956,3 +956,10 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
   holds, and the rate correction for the decay bound.
+
+For the phase relation of arXiv:2103.13367:
+
+- `psc21_local_channel_phase_scope.tex` records approximate and asymptotic
+  conversion by local channels without classical feedforward, including
+  additive-error composition and mutual-conversion equivalence, and the
+  remaining extension to channels with measurements and classical communication.

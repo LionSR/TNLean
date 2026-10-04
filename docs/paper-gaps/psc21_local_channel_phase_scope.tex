@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Asymptotic Local Channel Conversion without Classical Feedforward}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source relation}
+In the paragraph ``Phases of matter'' of~\cite{Piroli2021LOCC}, a sequence
+$\{\ket{\psi_N}\}$ is convertible into $\{\ket{\varphi_N}\}$ if there is a
+fixed number $k$ of compositions of channels assisted by measurements and
+classical communication, each of depth $f(N)$, whose outputs $\sigma_N$
+satisfy
+\begin{align}
+  \lVert\sigma_N-\ket{\varphi_N}\bra{\varphi_N}\rVert_1 &\longrightarrow 0.
+\end{align}
+Here $f$ is polylogarithmic. Mutual convertibility defines the source's
+phase equivalence. The fixed number of compositions and the polylogarithmic
+depth bound are allowed to depend on the pair of sequences, but not on $N$.
+
+\section{The local-channel specialization}
+The available local protocols alternate onsite channels with layers of
+channels on disjoint nearest-neighbor pairs. They act on arbitrary input
+operators and allow changes of local dimension. They do not include classical
+communication between separated sites. For this class, approximate conversion
+means $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$, with protocol depth at
+most $T$.\footnote{Formal declaration:
+\leanid{QuantumCircuit.IsApproxLocalChannelConversion} in
+\doclink{TNLean/Circuit/Channel/ApproximateConversion}.}
+For Hermitian input operators, composition adds the depths and errors:
+\begin{align}
+\lVert\Psi_2(\Psi_1(\rho))-\tau\rVert_1
+&\le \lVert\Psi_2(\Psi_1(\rho)-\sigma)\rVert_1
+    +\lVert\Psi_2(\sigma)-\tau\rVert_1\\
+&\le \lVert\Psi_1(\rho)-\sigma\rVert_1
+    +\lVert\Psi_2(\sigma)-\tau\rVert_1
+\le\varepsilon_1+\varepsilon_2.
+\end{align}
+The middle inequality is trace-norm contractivity for trace-preserving
+positive maps on Hermitian operators.
+
+For families, the error tends to zero and the depth is eventually bounded
+by $C(1+\log(N+1))^p$, for a nonnegative constant $C$ and integer $p\ge0$.
+Mutual conversion is an equivalence relation on eventually Hermitian
+families, and in particular on families of density matrices.\footnote{Formal
+declarations: \leanid{QuantumCircuit.IsAsymptoticLocalChannelConversion} and
+\leanid{QuantumCircuit.IsLocalChannelPhaseEquivalent.equivalence} in
+\doclink{TNLean/Circuit/Channel/AsymptoticConversion}.}
+The shift in the logarithm only affects the bound at small system sizes.
+Finite compositions are already included: their depths add, and a finite sum
+of polylogarithmic bounds is polylogarithmic. No bound on the dimension of
+onsite ancillas is imposed.
+
+\section{Remaining scope}
+This equivalence is restricted to local channels without classical
+feedforward. It does not formalize the full source equivalence, nor the
+classification asserting that every translation-invariant matrix product
+state belongs to the trivial phase. The existing deterministic measurement
+preparations start from product states, so they cannot supply channels on
+arbitrary input states for the source relation.
+
+The remaining step is to define the channels induced by measurement
+protocols on arbitrary inputs, including dependence of later operations on
+classically communicated outcomes, and their finite compositions.\footnote{Tracked by \ghissue{8382}, under \ghissue{8622}.} The same
+trace-norm estimate then proves transitivity for that enlarged class. The
+separate restrictions of the matrix-product-state classification are recorded
+in~\cite{gap:psc21_mps_classification_scope}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

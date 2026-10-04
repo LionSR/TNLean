@@ -70,9 +70,11 @@ choice functions `J`.
 
 ## Follow-ups
 
-Approximate conversions in trace norm with polylogarithmic depth, as in the phase equivalence
-of arXiv:2103.13367, are not treated here. Blocking a fixed number of sites into one, which
-changes the number of sites, is not treated here. Measurements with classical feedforward,
+Approximate conversions in trace norm and mutual asymptotic conversion in polylogarithmic
+depth are treated in `TNLean.Circuit.Channel.ApproximateConversion` and
+`TNLean.Circuit.Channel.AsymptoticConversion`, for the same class of local channels. Blocking
+a fixed number of sites into one, which changes the number of sites, is not treated here.
+Measurements with classical feedforward,
 the LOCC part of arXiv:2103.13367, are not treated here.
 
 ## References
