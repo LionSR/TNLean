@@ -1,7 +1,7 @@
 \section{The physical boundary symmetry of a CZX rectangle}%
 \label{sec:peps_czx_rectangle_boundary}
 
-Let $R=[x_0,x_0+w)\times[y_0,y_0+h)$ be a coordinate rectangle in a
+Let $R=\lbrack x_0,x_0+w)\times\lbrack y_0,y_0+h)$ be a coordinate rectangle in a
 $W\times H$ torus. Assume $W,H\geq3$, $w,h>0$, $w<W$, $h<H$, and
 $x_0+w\leq W$, $y_0+h\leq H$. Write $P=2w+2h$.
 The following construction uses the actual open-region map $A_R$, summing
@@ -199,7 +199,8 @@ source lines 330--345, with the image of this physical region map.
 
 \begin{theorem}[Physical action on the effective plaquette spins]%
     \label{thm:czx_rectangle_effective_symmetry}
-    \lean{TNLean.PEPS.regionPhysicalMap_czxRectangleBoundaryMatrix_column}
+    \lean{TNLean.PEPS.regionPhysicalMap_czxRectangleBoundaryMatrix_column,
+        TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_monomial}
     \leanok
     \uses{def:czx_rectangle_boundary_labels}
     On the faithful physical boundary coordinates,

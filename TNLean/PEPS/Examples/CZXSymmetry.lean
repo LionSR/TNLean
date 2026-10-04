@@ -167,18 +167,16 @@ private theorem regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_czxTensor
       czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp =
     czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp *
       MPOTensor.mpo CZXCompression.czxTensor (2 * w + 2 * h) := by
-  classical
-  rw [CZXCompression.mpo_czxTensor]
-  ext σ c
-  have hphys := congrFun (regionPhysicalMap_czxRectangleBoundaryMatrix_column
-    xStart yStart w h hw hh hx hy hwp hhp c) σ
-  have hphase : (∏ i, czxLegPhase (czxBoundaryLegs (2 * w + 2 * h) c i)) =
-      (-1 : ℂ) ^ CZXCompression.czExponent c := by
-    simp [czxBoundaryLegs, CZXCompression.czExponent, Finset.prod_pow_eq_pow_sum]
-  rw [hphase] at hphys
-  have hflip : CZXCompression.spinFlip (2 * w + 2 * h) c = (fun i => (c i).rev) := rfl
-  simpa [regionPhysicalMap_apply, regionPhysicalProductMatrix, Matrix.mul_apply,
-    Matrix.monomial_apply, mul_ite, hflip, mul_comm] using hphys
+  rw [regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_monomial,
+    CZXCompression.mpo_czxTensor]
+  apply congrArg (fun M =>
+    czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp * M)
+  change Matrix.monomial (CZXCompression.spinFlip (2 * w + 2 * h)) _ =
+    Matrix.monomial (CZXCompression.spinFlip (2 * w + 2 * h)) _
+  apply congrArg (Matrix.monomial (CZXCompression.spinFlip (2 * w + 2 * h)))
+  funext c
+  simp only [czxBoundaryLegs, czxLegPhase_czxBond, CZXCompression.czExponent,
+    Finset.prod_pow_eq_pow_sum]
 
 /-- The printed CZX matrix product unitary is the physical symmetry on the
 actual rectangle image, in its faithful effective plaquette-spin coordinates.

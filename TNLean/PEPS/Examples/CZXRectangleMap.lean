@@ -287,4 +287,22 @@ theorem regionPhysicalMap_czxRectangleBoundaryMatrix_column
   simpa only [czxRectangleBoundaryMatrix, czxRectangleEffectiveBoundaryConfig,
     Equiv.apply_symm_apply] using hphys
 
+/-- Basis-free physical symmetry on the actual effective boundary image.
+The right operator is exactly the cyclic spin flip with its controlled phases. -/
+theorem regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_monomial :
+    regionPhysicalProductMatrix (torusContiguousRectangle xStart yStart w h)
+        (fun _ => czxOnSite) *
+      czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp =
+    czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp *
+      Matrix.monomial (Equiv.piCongrRight fun _ : Fin (2 * w + 2 * h) => Fin.revPerm)
+        (fun c => ∏ i, czxLegPhase (czxBoundaryLegs (2 * w + 2 * h) c i)) := by
+  classical
+  ext σ c
+  have hphys := congrFun (regionPhysicalMap_czxRectangleBoundaryMatrix_column
+    xStart yStart w h hw hh hx hy hwp hhp c) σ
+  have hflip : (Equiv.piCongrRight fun _ : Fin (2 * w + 2 * h) => Fin.revPerm) c =
+      (fun i => (c i).rev) := rfl
+  simpa [regionPhysicalMap_apply, regionPhysicalProductMatrix, Matrix.mul_apply,
+    Matrix.monomial_apply, mul_ite, hflip, mul_comm] using hphys
+
 end TNLean.PEPS
