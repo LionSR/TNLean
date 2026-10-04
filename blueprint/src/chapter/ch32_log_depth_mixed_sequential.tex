@@ -12,11 +12,11 @@
     matrix $G$ on the virtual pairs, define
     \begin{align}
         F_{((\alpha,\beta),i,(\delta,\gamma)),x}
-          &=A^i_{\beta\gamma}G_{(\alpha,\delta),x},
-        &V_{(\sigma_L,i,\sigma_R),x}
-          &=\sum_{\alpha,\beta,\gamma,\delta}
-            L(\sigma_L)_{\alpha\beta}R(\sigma_R)_{\delta\gamma}
-            F_{((\alpha,\beta),i,(\delta,\gamma)),x}.
+         & =A^i_{\beta\gamma}G_{(\alpha,\delta),x},
+         & V_{(\sigma_L,i,\sigma_R),x}
+         & =\sum_{\alpha,\beta,\gamma,\delta}
+        L(\sigma_L)_{\alpha\beta}R(\sigma_R)_{\delta\gamma}
+        F_{((\alpha,\beta),i,(\delta,\gamma)),x}.
         \label{eq:ldp_central_input}
     \end{align}
 \end{definition}
@@ -30,9 +30,9 @@
     The coefficients in (\ref{eq:ldp_central_input}) satisfy
     \begin{align}
         V_{(\sigma_L,i,\sigma_R),x}
-          &=\sum_{\alpha,\delta}
-            \bigl(L(\sigma_L)A^iR(\sigma_R)^{\mathsf T}\bigr)_{\alpha\delta}
-            G_{(\alpha,\delta),x}.
+         & =\sum_{\alpha,\delta}
+        \bigl(L(\sigma_L)A^iR(\sigma_R)^{\mathsf T}\bigr)_{\alpha\delta}
+        G_{(\alpha,\delta),x}.
         \label{eq:ldp_central_coefficients}
     \end{align}
     Reversing the right site order and transposing each matrix gives
@@ -54,7 +54,7 @@
     \uses{thm:seqanc_sweep_matrix_remainder}
     For any subchain with positive bond dimension $D$, its coefficient
     matrix $T_{\sigma,(\alpha,\beta)}=(A_1^{\sigma_1}\cdots
-    A_n^{\sigma_n})_{\alpha\beta}$ factors as $T=ES$.
+        A_n^{\sigma_n})_{\alpha\beta}$ factors as $T=ES$.
     Here $E_{\sigma,a}=(Q_1^{\sigma_1}\cdots Q_n^{\sigma_n})_{1a}$,
     the outer bond has dimension one, every bond has dimension at most
     $D^2$, and each site map $Q_p$ is an isometry from its inward bond
@@ -79,12 +79,12 @@
     $b^L_0=b^R_0=1$ and every bond dimension at most $D^2$, and an isometry
     $C\colon\C^{D^2}\to\C^{b^L_\ell}\otimes\C^d\otimes\C^{b^R_r}$.
     Define $(E_L)_{\sigma_L,a}=(Q^L_1(\sigma_{L,1})\cdots
-    Q^L_\ell(\sigma_{L,\ell}))_{1a}$ and define $E_R$ in the same manner
+        Q^L_\ell(\sigma_{L,\ell}))_{1a}$ and define $E_R$ in the same manner
     from the right boundary. The required contraction is
     \begin{align}
-        V&=(E_L\otimes\Id_d\otimes E_R)C,
-        &\sum_i(Q^L_p(i))^\dagger Q^L_p(i)&=\Id_{b^L_p},
-        &\sum_i(Q^R_p(i))^\dagger Q^R_p(i)&=\Id_{b^R_p}.
+        V & =(E_L\otimes\Id_d\otimes E_R)C,
+          & \sum_i(Q^L_p(i))^\dagger Q^L_p(i) & =\Id_{b^L_p},
+          & \sum_i(Q^R_p(i))^\dagger Q^R_p(i) & =\Id_{b^R_p}.
         \label{eq:ldp_mixed_factorization}
     \end{align}
     The input of dimension $D^2$ is attached to the centre, rather than to
