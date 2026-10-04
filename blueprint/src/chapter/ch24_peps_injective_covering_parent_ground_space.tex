@@ -1,0 +1,41 @@
+\begin{theorem}[Injective parent uniqueness from vertex and edge coverage]%
+    \label{thm:peps_injective_covering_parent_ground_space}
+    \lean{TNLean.PEPS.globalVertexTensorMap_virtualBondProduct,
+        TNLean.PEPS.regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover,
+        TNLean.PEPS.ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover,
+        TNLean.PEPS.finrank_regionParentGroundSpace_eq_one_of_isVertexInjective_of_cover}
+    \leanok
+    \uses{thm:peps_covering_parent_virtual_image,
+        thm:peps_regional_virtual_conditions_bell,
+        thm:peps_bell_product_physical_image}
+    Let the site tensors on a finite graph be injective. Suppose a
+    collection of regions contains every vertex in some region and
+    contains the two endpoints of every edge together in some region.
+    Then its common parent space is
+    \[
+        \mathcal G=\operatorname{span}\{\Psi(A)\}.
+    \]
+    Every finite positive interaction family with the genuine regional
+    kernels has this same zero-energy space. If all bond dimensions
+    are positive, the closed vector is nonzero and the ground space
+    is one-dimensional. The span formula also holds when a bond
+    dimension vanishes, in which case the span can be zero.
+
+    This is the covering-region form of the virtual-pair argument in
+    \cite[Section IV.C.1]{Cirac2021Matrix}. Vertex coverage is explicit,
+    including for isolated vertices. The physical reconstruction
+    correction is recorded in
+    \cite{gap:cpgsv21_injective_parent_reconstruction}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Vertex coverage supplies the genuine site-image conditions, so
+    every physical parent vector is the product-site image of a
+    vector satisfying all actual virtual regional conditions.
+    Edge coverage imposes the Bell condition on each separate virtual
+    bond. Their common space is precisely the line spanned by the
+    product Bell vector. Its image is the actual closed PEPS vector.
+    Conversely the closed vector satisfies every regional condition.
+    Positivity gives the Hamiltonian-kernel statement, and positive
+    bond dimensions give nonvanishing and dimension one.
+\end{proof}
