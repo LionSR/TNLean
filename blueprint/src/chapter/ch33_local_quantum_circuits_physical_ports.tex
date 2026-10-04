@@ -334,3 +334,310 @@ local-channel model with the source's phase relation; see
     tensor intertwining on matrix units, then use linear extensionality and
     the representation-independent placement identity.
 \end{proof}
+
+
+
+\subsection{Compiling bounded native protocols}
+
+The intermediate local dimensions of a native channel protocol need a common
+bound before a family-level physical-depth comparison is available. The next
+construction records that budget explicitly, compiles into one fixed register
+alphabet, and then realizes those operations on the fixed physical ports.
+
+\begin{definition}[Dimension-bounded native protocols]
+    \label{def:qc_dimension_bounded_protocol}
+    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol,
+        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.toIsLocalChannelProtocol,
+        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.dimension_bounds,
+        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.mono_bound,
+        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.comp,
+        QuantumCircuit.OnsiteChannel.output_dimension_pos,
+        QuantumCircuit.IsLocalChannelProtocol.exists_dimension_bound}
+    \leanok
+    Every input, output, and intermediate local dimension is positive and at most
+    $B$. The constructors are the existing onsite channel and native pair-channel
+    layer operations. Forgetting the certificates gives an ordinary native protocol;
+    increasing $B$ preserves them, and composition adds depths at a common budget.
+    Every finite native protocol with positive input dimension admits some finite
+    budget. This last assertion does not give a budget uniform in system size.
+\end{definition}
+
+\begin{theorem}[Encoding a native channel layer]
+    \label{thm:qc_encode_native_channel_layer}
+    \uses{thm:qc_encoded_channel_placement}
+    \lean{QuantumCircuit.ChannelLayer.exists_pairKraus,
+        QuantumCircuit.ChannelLayer.exists_encodedRegisters}
+    \leanok
+    On a ring with $N\geq2$ and positive input dimension, extract actual two-site
+    Kraus matrices from every supported native gate. Injectivity of placement
+    recovers their local completeness relations. Independent basis codes and
+    completed product decoders produce a native channel layer on the new alphabet,
+    with the same matching and an exact global code-intertwining identity.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use local CPTP completions, then the placed-channel intertwining theorem.
+    Induction over the commuting gate product proves the whole-layer identity.
+\end{proof}
+
+\begin{theorem}[A fixed-register word for a bounded native protocol]
+    \label{thm:qc_fixed_register_word}
+    \uses{def:qc_dimension_bounded_protocol, thm:qc_encode_native_channel_layer,
+        lem:qc_product_register_encoding}
+    \lean{QuantumCircuit.FixedRegisterOperation,
+        QuantumCircuit.FixedRegisterOperation.map,
+        QuantumCircuit.FixedRegisterOperation.depth,
+        QuantumCircuit.FixedRegisterOperation.wordMap,
+        QuantumCircuit.FixedRegisterOperation.wordDepth,
+        QuantumCircuit.FixedRegisterOperation.wordMap_isLocalChannelProtocol,
+        QuantumCircuit.registerFallbackDensity,
+        QuantumCircuit.registerFallbackDensity_posSemidef,
+        QuantumCircuit.trace_registerFallbackDensity,
+        QuantumCircuit.boundedAlphabetCode,
+        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_fixedRegisterWord}
+    \leanok
+    For any common alphabet size $q\geq B$, a dimension-bounded native protocol
+    of depth $T$ compiles into an explicit word of onsite channels and native
+    pair-channel layers, all on $q$ levels. Exactly $T$ entries are pair layers.
+    The word map intertwines with independent input and output codes on every
+    chain operator. The completed decoders use definite local density matrices;
+    no simulator identity is an input assumption.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Induct on the bounded protocol. Encode each onsite operation site by site,
+    and use the encoded-layer theorem for a pair layer. Compose the exact
+    intertwiners in the actual execution order.
+\end{proof}
+
+\begin{lemma}[Onsite channels factor into one-site channel lifts]
+    \label{lem:qc_onsite_channel_product}
+    \uses{lem:qc_register_channel_lift, lem:qc_product_register_encoding}
+    \lean{QuantumCircuit.singletonSite,
+        QuantumCircuit.singletonSite_apply,
+        QuantumCircuit.range_singletonSite,
+        QuantumCircuit.registerMatrixSplit_rectKronecker,
+        QuantumCircuit.OnsiteChannel.map_congr,
+        QuantumCircuit.OnsiteChannel.onSites,
+        QuantumCircuit.OnsiteChannel.onSites_siteMap,
+        QuantumCircuit.OnsiteChannel.onSites_univ_map,
+        QuantumCircuit.OnsiteChannel.onSites_empty_map,
+        QuantumCircuit.OnsiteChannel.onSites_insert_map,
+        QuantumCircuit.OnsiteChannel.prod_onSites_singleton,
+        QuantumCircuit.OnsiteChannel.map_eq_prod_onSites_singleton,
+        QuantumCircuit.OnsiteChannel.oneSite,
+        QuantumCircuit.OnsiteChannel.oneSite_siteMap,
+        QuantumCircuit.OnsiteChannel.onSites_singleton_map_eq_lift}
+    \leanok
+    An onsite channel is the concrete ordered product of its single-site factors.
+    Each factor is the representation-independent lift of an actual one-site CPTP
+    map, with identity on the complementary sites. The equality holds on arbitrary
+    correlated chain inputs.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Restrict the site maps to a finite set and compose one new site at a time.
+    Check the selected/complementary factorization on product matrices, which
+    span the complete chain matrix algebra.
+\end{proof}
+
+\begin{lemma}[Native register maps on physical data wires]
+    \label{lem:qc_native_register_wires}
+    \uses{lem:qc_register_channel_lift}
+    \lean{QuantumCircuit.PortRegisters.selectedData,
+        QuantumCircuit.PortRegisters.selectedData_apply,
+        QuantumCircuit.PortRegisters.allData,
+        QuantumCircuit.PortRegisters.allData_apply,
+        QuantumCircuit.PortRegisters.groupedConfigurations,
+        QuantumCircuit.PortRegisters.dataConfiguration,
+        QuantumCircuit.PortRegisters.selectedData_configuration,
+        QuantumCircuit.PortRegisters.allData_configuration,
+        QuantumCircuit.PortRegisters.nativeMatrixEquiv,
+        QuantumCircuit.PortRegisters.nativeMatrixEquiv_apply,
+        QuantumCircuit.PortRegisters.nativeMatrixEquiv_conjTranspose,
+        QuantumCircuit.PortRegisters.dataOperator,
+        QuantumCircuit.PortRegisters.dataOperator_apply,
+        QuantumCircuit.PortRegisters.dataOperator_embedOp,
+        QuantumCircuit.PortRegisters.nativeChannelReindex,
+        QuantumCircuit.PortRegisters.nativeChannelReindex_kraus,
+        QuantumCircuit.PortRegisters.dataChannelLift,
+        QuantumCircuit.PortRegisters.dataChannelLift_kraus}
+    \leanok
+    Identify each $d^k$-level native site with its $k$ local qudit digits.
+    The induced placement of channels on all data wires preserves identity and
+    composition, with every port and scratch register retained as an explicit
+    identity reference. A native operator on selected spatial sites becomes
+    exactly the corresponding operator on those sites' physical data digits.
+    The basis regrouping is a coordinate equality, not an extra free gate.
+\end{lemma}
+
+\begin{theorem}[Physical costs of native register operations]
+    \label{thm:qc_native_port_layer}
+    \uses{lem:qc_native_register_wires, lem:qc_onsite_channel_product,
+        thm:qc_port_shared_channel_routing}
+    \lean{QuantumCircuit.PortRegisters.nativeMatrixEquiv_complete,
+        QuantumCircuit.PortRegisters.dataChannelLift_register_kraus,
+        QuantumCircuit.PortRegisters.dataChannelLift_local,
+        QuantumCircuit.PortRegisters.dataChannelLift_onsiteChannel,
+        QuantumCircuit.PortRegisters.dataChannelLift_channelLayer}
+    \leanok
+    Native onsite channels on $d^k$ levels have physical-port depth zero.
+    For $d>0$ and $N\geq2$, a complete native matching layer has depth at most
+    $2k$. Every pair shares the same forward and backward routing; the cost
+    has no multiplier equal to the number of gates. All unused wires are restored
+    exactly, including their correlations with the data.
+\end{theorem}
+
+\begin{lemma}[Physical encodings retain the complementary reference]
+    \label{lem:qc_physical_register_encoding}
+    \uses{lem:qc_native_register_wires}
+    \lean{QuantumCircuit.PortRegisters.DataReference,
+        QuantumCircuit.PortRegisters.physicalEncoding,
+        QuantumCircuit.PortRegisters.physicalDecoding,
+        QuantumCircuit.PortRegisters.physicalEncoding_isKrausCPTP,
+        QuantumCircuit.PortRegisters.physicalDecoding_isKrausCPTP,
+        QuantumCircuit.PortRegisters.physicalDecoding_encoding,
+        QuantumCircuit.PortRegisters.dataChannelLift_physicalEncoding}
+    \leanok
+    Transport a native encoding or completed decoder through the sitewise digit
+    identification and the data/complement split. CPTP is preserved, decoding after
+    encoding remains the identity, and an exact native code intertwiner becomes
+    an exact physical-channel intertwiner. The complementary port/scratch system
+    is arbitrary and may be correlated with the logical input.
+\end{lemma}
+
+\begin{theorem}[Encoded physical-port simulation of bounded native protocols]
+    \label{thm:qc_bounded_physical_protocol_compilation}
+    \uses{thm:qc_fixed_register_word, thm:qc_native_port_layer,
+        lem:qc_physical_register_encoding}
+    \lean{QuantumCircuit.PortRegisters.dataChannelLift_word,
+        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation}
+    \leanok
+    Fix $d\geq2$, $N\geq2$, and one positive intermediate-dimension bound $B$.
+    Set $k=\lceil\log_d B\rceil$. Every bounded native protocol $\Psi$ of depth
+    $T$ has an actual physical-port realization $\Gamma$ of depth at most
+    $2kT$, with
+    \begin{align}
+        \Gamma\,\mathcal E_{\mathrm{in}}
+         & =\mathcal E_{\mathrm{out}}(\Psi\otimes\operatorname{id}_{R}),
+    \end{align}
+    where $R$ is the complete port/scratch reference and the physical encodings
+    are constructed from independent site codes. This equality holds on all
+    input-reference operators. A uniform family overhead requires fixing $d,B$
+    before $N$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Compile to the fixed alphabet $d^k$, apply the zero-cost onsite and $2k$-cost
+    layer implementations along the explicit word, then transport the native
+    intertwiner through the physical encoding. No physical simulation equation
+    is assumed. This encoded statement does not itself supply the source's
+    original physical-port input/output initialization convention or a complete
+    QCcc dilation and protocol-block witness.
+\end{proof}
+
+\subsection{Original physical-port input and output}
+
+The source treats onsite local unitaries and ancillas as free
+resources~\cite[main text, p.~1]{Piroli2021LOCC}. The following bound counts
+only intersite layers through the fixed physical ports; it is not a count
+that also charges every onsite operation. The local CPTP primitives retain
+a separate unitary-dilation representation obligation.
+
+\begin{lemma}[Channels on complete spatial-site wire blocks]
+    \label{lem:qc_whole_site_channels}
+    \uses{lem:qc_native_register_wires, lem:qc_onsite_channel_product}
+    \lean{QuantumCircuit.PortRegisters.blockDigits,
+        QuantumCircuit.PortRegisters.blockDigits_apply,
+        QuantumCircuit.PortRegisters.nativeMatrixEquiv_embedOp,
+        QuantumCircuit.PortRegisters.nativeChannelReindex_register_kraus,
+        QuantumCircuit.PortRegisters.wholeSite_local,
+        QuantumCircuit.PortRegisters.wholeSite_onsiteChannel}
+    \leanok
+    Grouping all digits of one spatial site preserves placement of native
+    operators on selected sites. Independent channels on the complete physical
+    site blocks therefore have actual zero-depth physical-port implementations.
+    Their Kraus operators are supported within the named spatial sites; no
+    free global regrouping operation is assumed.
+\end{lemma}
+
+\begin{theorem}[Product-zero port and data codes]
+    \label{thm:qc_physical_port_codes}
+    \uses{lem:qc_whole_site_channels, lem:qc_product_register_encoding}
+    \lean{QuantumCircuit.PortRegisters.nativeWordCode,
+        QuantumCircuit.PortRegisters.wordCodeConfiguration,
+        QuantumCircuit.PortRegisters.wordCodeConfiguration_apply,
+        QuantumCircuit.PortRegisters.wordInitialization,
+        QuantumCircuit.PortRegisters.wordInitialization_isKrausCPTP,
+        QuantumCircuit.PortRegisters.wordInitialization_eq,
+        QuantumCircuit.PortRegisters.wordCodeChange,
+        QuantumCircuit.PortRegisters.wordCodeChangeMap,
+        QuantumCircuit.PortRegisters.wordCodeChangeMap_initialization,
+        QuantumCircuit.PortRegisters.wordCodeChangeMap_isPhysicalPortProtocol,
+        QuantumCircuit.PortRegisters.portWordCode,
+        QuantumCircuit.PortRegisters.dataWordCode,
+        QuantumCircuit.PortRegisters.portWordCode_apply,
+        QuantumCircuit.PortRegisters.dataWordCode_apply,
+        QuantumCircuit.PortRegisters.portWordCode_port,
+        QuantumCircuit.PortRegisters.portWordCode_data,
+        QuantumCircuit.PortRegisters.portWordCode_scratch,
+        QuantumCircuit.PortRegisters.dataWordCode_port,
+        QuantumCircuit.PortRegisters.dataWordCode_data,
+        QuantumCircuit.PortRegisters.dataWordCode_scratch,
+        QuantumCircuit.PortRegisters.exists_portDataTransfers}
+    \leanok
+    The port code stores the input on its original physical port and sets both
+    local memory registers to zero. The data code stores its local register
+    encoding on data digits, with zero port and scratch digits. Products of
+    completed onsite channels convert these explicit pure codes in both
+    directions at zero intersite depth. The channels are CPTP even outside
+    the code, and the exact code identities hold on all logical operators.
+\end{theorem}
+
+\begin{lemma}[Concrete data initialization and the zero reference]
+    \label{lem:qc_data_initialization}
+    \uses{thm:qc_physical_port_codes, lem:qc_physical_register_encoding}
+    \lean{QuantumCircuit.PortRegisters.bareDataCode,
+        QuantumCircuit.PortRegisters.nativeWordCode_bareDataCode,
+        QuantumCircuit.PortRegisters.zeroDataReferencePrep,
+        QuantumCircuit.PortRegisters.wordInitialization_data_eq_physicalEncoding,
+        QuantumCircuit.PortRegisters.tensorMapId_comp_zeroDataReferencePrep}
+    \leanok
+    The product data initializer equals the physical encoder composed with
+    preparation of the zero state on its complete complementary port/scratch
+    reference. Preparing that reference commutes with an arbitrary logical
+    channel. The coordinate identity includes every off-diagonal matrix unit,
+    not only classical configurations or product states.
+\end{lemma}
+
+\begin{theorem}[Bounded simulation on the original physical ports]
+    \label{thm:qc_bounded_physical_port_io}
+    \uses{thm:qc_bounded_physical_protocol_compilation,
+        thm:qc_physical_port_codes, lem:qc_data_initialization}
+    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortIO}
+    \leanok
+    Let the native input and output dimensions both equal the physical
+    qudit dimension $d\geq2$, let $N\geq2$, and suppose every intermediate
+    local dimension is positive and at most one bound $B$. For
+    $k=\lceil\log_d B\rceil$, an actual physical-port protocol satisfies
+    \begin{align}
+        \Gamma_{\mathrm{port}} J_{\mathrm{port}}
+         & = J_{\mathrm{port}}\Psi,
+         & \operatorname{depth}_{\mathrm{intersite}}(\Gamma_{\mathrm{port}})
+         & \leq 2kT.
+    \end{align}
+    Here $J_{\mathrm{port}}$ places the input on its original physical ports
+    and initializes all designated data/scratch memory in a product zero state.
+    The output occupies the same ports, and that designated memory is reset
+    to zero and uncorrelated with it. The identity holds on arbitrary operators
+    and remains exact with an external reference.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Preprocess locally into the data code, use the bounded encoded compiler,
+    and postprocess locally back into the port code. The explicit initialization
+    identity identifies the compiler's reference with the product-zero memory
+    state. Both extra channel maps have physical depth zero. This theorem does
+    not assert reset of unmodeled dilation environments or construct a full
+    source QCcc protocol-block witness.
+\end{proof}

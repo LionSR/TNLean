@@ -2532,7 +2532,8 @@ involve no boundary.
 - **Sanctioned bridges:** `.isKrausCPTP`, `.of_register_routing`,
   `.of_routed_family`, `.list_prod_uniform`,
   `PortRegisters.matchingChannel_isPhysicalPortProtocol`, and
-  `exists_bounded_matching_simulation`.
+  `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
+  and `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`.
 - **Caveat:** a local channel is a reduced CPTP operation. A complete source
   protocol witness must also record local dilation environments and their
   initialization/disposal; source pure-state conditions and the fixed number of
@@ -2541,3 +2542,31 @@ involve no boundary.
   fixed `d ≥ 2` and one dimension bound `B` chosen independently of chain
   length. It does not apply with the same constant to unrestricted
   intermediate dimensions depending on `N`.
+
+
+#### `QuantumCircuit.IsDimensionBoundedLocalChannelProtocol`
+
+- **Declaration:** `IsDimensionBoundedLocalChannelProtocol B T Ψ : Prop`,
+  for a native chain channel between possibly different local dimensions.
+- **Defined in:** `TNLean/Circuit/Channel/DimensionBoundedConversion.lean`.
+- **Meaning:** the native onsite/layer protocol constructors carry explicit
+  positivity and upper bounds by the same `B` for every intermediate local
+  dimension. Depth counts native pair-channel layers.
+- **Source:** a resource-refined abstraction for comparing the enlarged-site
+  channel model with the physical-qudit convention in arXiv:2103.13367,
+  Supplement pp. 7–8. The paper does not state this predicate.
+- **Sanctioned bridges:** `.toIsLocalChannelProtocol`, `.dimension_bounds`,
+  `.mono_bound`, `.comp`, `.exists_fixedRegisterWord`, and
+  `.exists_physicalPortSimulation`, and `.exists_physicalPortIO`. A finite
+  positive-input native protocol
+  admits some finite bound via `IsLocalChannelProtocol.exists_dimension_bound`.
+- **Caveat:** an existential bound separately for each chain length is not a
+  uniform family bound. For fixed physical `d ≥ 2` and `N ≥ 2`, the encoded
+  simulation has physical depth at most `2 * Nat.clog d B * T`; a uniform
+  constant requires `B` and `d` chosen independently of `N`. The exact channel
+  identity retains arbitrary port/scratch-reference correlations. When the
+  native input/output dimension is exactly the physical `d`, the port-I/O
+  theorem supplies product-zero designated memory, output on the original
+  ports, and exact data/scratch reset at the same intersite depth. Local
+  CPTP dilation environments and a full source QCcc witness remain separate;
+  the bound does not count onsite operations as extra layers.

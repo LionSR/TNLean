@@ -950,9 +950,10 @@ measurements and classical communication (arXiv:2103.13367, Theorem
   arbitrary input states.
 
 - `psc21_physical_port_simulation_scope.tex` records the derived
-  `2 * ceil(log_d B)` physical-port simulation of encoded matching channels
-  at fixed local dimension bound `B`, including exact reference preservation
-  and the remaining bounded native-protocol and source-ancilla conditions.
+  `2 * ceil(log_d B)` intersite-depth overhead for bounded native channel
+  protocols, including exact reference preservation, original physical-port
+  input/output and product-zero designated memory reset. It separates the
+  remaining local dilation and source QCcc protocol-block witness conditions.
 
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
