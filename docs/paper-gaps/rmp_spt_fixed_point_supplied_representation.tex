@@ -5,7 +5,7 @@
 \input{command}
 \title{SPT Fixed Points from a Supplied Projective Representation}
 \author{}
-\date{2026-09-27}
+\date{2026-10-03}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{resolved}
@@ -26,10 +26,10 @@ printed tensor is recorded in \cite{gap:rmp_spt_fixed_point_tensor}. The
 symmetry results take as input a projective representation $\rho$ of $G$ on
 $\mathbb C^D$ whose factor system is $\omega$, together with a character $\phi$:
 the physical action $\phi(g)\,W_g^{T}\otimes W_g^{-1}$, $W_g=\rho(g^{-1})$, its
-twist identity, the on-site symmetry, and the realization of the class of
+twist identity, the on-site symmetry up to the character, and the realization of the class of
 $\omega$ (\leanid{MPSTensor.sptFixedPointAction},
 \leanid{MPSTensor.twistedTensor_sptFixedPointTensor},
-\leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetric},
+\leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetricUpToCharacter},
 \leanid{MPSTensor.cohomologousTo_of_sptFixedPointTensor},
 \leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}). These results
 hold for any group. For a finite group, the next section supplies such a
@@ -40,29 +40,31 @@ gives the source's construction from the cocycle alone.
 \section{Resolution for finite groups}
 For finite $G$ every 2-cocycle class arises. The twisted left regular matrices
 \begin{align}
-    L^{\phi}_g\ket{h} & =\phi(g,h)^{-1}\ket{gh}
+    L^{\tau}_g\ket{h} & =\tau(g,h)^{-1}\ket{gh}
     \label{eq:rmp_spt_supplied_twisted_regular}
 \end{align}
-on $\mathbb C^G$, built from a circle-valued 2-cocycle $\phi$, are unitary and
-satisfy $L^{\phi}_gL^{\phi}_h=\phi(g,h)^{-1}L^{\phi}_{gh}$. Apply this to
-$\phi=\bar\omega^{-1}$, where $\bar\omega=\omega/|\omega|$ is the pointwise phase of $\omega$; for
+on $\mathbb C^G$, built from a circle-valued 2-cocycle $\tau$, are unitary and
+satisfy $L^{\tau}_gL^{\tau}_h=\tau(g,h)^{-1}L^{\tau}_{gh}$. Apply this to
+$\tau=\bar\omega^{-1}$, where $\bar\omega=\omega/|\omega|$ is the pointwise phase of $\omega$; for
 finite $G$ it is cohomologous to $\omega$. The result is a unitary projective representation with factor
 system $\bar\omega$, which is cohomologous to $\omega$
 (\leanid{TNLean.Algebra.ScalarCocycle.regularProjectiveForClass},
 \leanid{TNLean.Algebra.ScalarCocycle.regularProjectiveForClass_mem_unitaryGroup}).
 Feeding it to the construction gives
-\leanid{MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle}: from $\omega$ alone,
-the fixed point of bond dimension $|G|$ is symmetric under a unitary physical
-action, \leanid{MPSTensor.sptFixedPointAction_mem_unitaryGroup}, and every virtual
-projective representation of that symmetry has a factor system cohomologous to
-$\omega$.
+\leanid{MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle}: from $\omega$
+and an arbitrary character $\phi$, the fixed point of bond dimension $|G|$
+is symmetric up to $\phi$ under a unitary physical action,
+\leanid{MPSTensor.sptFixedPointAction_mem_unitaryGroup}. Unit modulus of
+$\phi(g)$ is derived from finite order. Every virtual projective
+representation realizing this symmetry with the same character has a
+factor system cohomologous to $\omega$.
 
 The factor system of the supplied representation is $\bar\omega$, not $\omega$
 itself. The source's claim concerns the class of $\omega$, so the class-level
 statement is the faithful one. The results that take a representation $\rho$ as
-input remain available for arbitrary groups. The trivial-character and on-site
-restrictions are recorded separately in
-\cite{gap:rmp_spt_fixed_point_trivial_character} and
+input remain available for arbitrary groups. The former trivial-character
+restriction is now resolved \cite{gap:rmp_spt_fixed_point_trivial_character};
+the separate on-site restriction remains open
 \cite{gap:rmp_spt_fixed_point_onsite_scope}.
 
 \bibliographystyle{alpha}
