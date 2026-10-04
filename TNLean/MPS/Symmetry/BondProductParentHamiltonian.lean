@@ -163,6 +163,14 @@ theorem bondMatrixEquiv_symm_eq_toEuclideanLin
     (bondMatrixEquiv q N).symm A = Matrix.toEuclideanLin A := by
   rfl
 
+/-- An orthogonal matrix projection acts as a symmetric projection on the
+finite-chain Hilbert space under the matrix-coordinate equivalence. -/
+theorem bondMatrixEquiv_symm_isSymmetricProjection
+    (P : MPOTensor.ChainOperator q N) (hP : IsStarProjection P) :
+    ((bondMatrixEquiv q N).symm P).IsSymmetricProjection :=
+  LinearMap.isStarProjection_iff_isSymmetricProjection.mp
+    (hP.map (bondMatrixEquiv q N).symm)
+
 /-- The local bond penalty acting on the Hilbert space of all bond
 configurations. Source: arXiv:1010.3732, Section II.D.2. -/
 noncomputable def bondPenaltyAtLin (η : Fin q → ℂ) (hN : 1 ≤ N)
@@ -182,10 +190,8 @@ noncomputable def bondProductParentHamiltonianLin
 private theorem bondPenaltyAtLin_isSymmetricProjection
     (η : Fin q → ℂ) (hη : ∑ x, Complex.normSq (η x) = 1)
     (hN : 1 ≤ N) (i : Fin N) :
-    (bondPenaltyAtLin η hN i).IsSymmetricProjection := by
-  exact LinearMap.isStarProjection_iff_isSymmetricProjection.mp
-    ((bondPenaltyAt_isStarProjection η hη hN i).map
-      (bondMatrixEquiv q N).symm)
+    (bondPenaltyAtLin η hN i).IsSymmetricProjection :=
+  bondMatrixEquiv_symm_isSymmetricProjection _ (bondPenaltyAt_isStarProjection η hη hN i)
 
 private theorem bondPenaltyAtLin_commute (η : Fin q → ℂ)
     (hN : 1 ≤ N) (i j : Fin N) :

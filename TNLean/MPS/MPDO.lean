@@ -207,6 +207,7 @@ import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.LocalPurificationAreaLaw
 import TNLean.MPS.MPDO.LocalPurificationRFP
+import TNLean.MPS.MPDO.MatrixUnitRegister
 import TNLean.MPS.MPDO.MutualInfoAreaLaw
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.MutualInfoMonotone

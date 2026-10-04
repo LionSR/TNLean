@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.SPTFixedPoint
-import TNLean.MPS.Symmetry.TwoSiteBondInteraction
+import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.Algebra.ComplexSqrt
 
@@ -67,11 +67,6 @@ theorem groundSpaceMap_sptFixedPointTensor_two_apply (D : ℕ)
   · simp [h, Matrix.single_mul_single_same, Matrix.trace_single_mul, ← hc]
   · simp [h, Matrix.single_mul_single_of_ne]
 
-private theorem twoSiteBondEquiv_symm_apply (D : ℕ)
-    (a b c d : Fin D) :
-    (twoSiteBondEquiv D).symm ((a, (b, c)), d) =
-      ![finProdFinEquiv (a, b), finProdFinEquiv (c, d)] := rfl
-
 /-- The independent-bond interaction annihilates every two-site open-boundary
 vector of the fixed-point tensor. Source: arXiv:1010.3732,
 Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
@@ -81,39 +76,18 @@ theorem twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor
       (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (bondPenalty (matrixUnitBondVector D)))).mulVec
       (groundSpaceMap (sptFixedPointTensor D) 2 X) = 0 := by
-  classical
-  funext s
-  simp only [Matrix.mulVec, dotProduct, Pi.zero_apply]
-  rw [← Equiv.sum_comp (twoSiteBondEquiv D).symm]
-  simp only [Fintype.sum_prod_type, twoSiteBondInteraction_apply,
-    groundSpaceMap_sptFixedPointTensor_two_apply,
-    Matrix.reindex_apply]
-  simp only [twoSiteBondEquiv_symm_apply, Matrix.submatrix_apply,
-    Equiv.symm_symm]
-  simp only [Fin.isValue, finProdFinEquiv_symm_apply, Nat.succ_eq_add_one,
-    Nat.reduceAdd, Matrix.cons_val_zero, Equiv.symm_apply_apply,
-    Matrix.cons_val_one, Matrix.cons_val_fin_one, ite_mul, one_mul,
-    zero_mul, mul_ite, mul_one, mul_zero, Finset.sum_ite_irrel,
-    Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, Finset.sum_const_zero]
-  rw [← Finset.sum_mul]
-  suffices hK : (∑ x : Fin D,
-      bondPenalty (matrixUnitBondVector D)
-        (finProdFinEquiv ((s 0).modNat, (s 1).divNat))
-        (finProdFinEquiv (x, x))) = 0 by rw [hK, zero_mul]
-  simp only [bondPenalty, Matrix.sub_apply, Matrix.one_apply,
-    bondVectorProjection, Matrix.vecMulVec_apply]
-  by_cases hbc : (s 0).modNat = (s 1).divNat
-  · simp only [hbc, ↓reduceIte, matrixUnitBondVector_apply]
-    simp only [Fin.isValue, EmbeddingLike.apply_eq_iff_eq, Prod.mk.injEq,
-      and_self, Pi.star_apply, matrixUnitBondVector_apply, ↓reduceIte,
-      star_inv₀, RCLike.star_def, Complex.conj_ofReal, Finset.sum_sub_distrib,
-      Finset.sum_ite_eq, Finset.mem_univ, Finset.sum_const,
-      Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-    rw [Complex.ofReal_sqrt_inv_mul_self (D : ℝ) (Nat.cast_nonneg D)]
-    exact sub_eq_zero.mpr
-      (mul_inv_cancel₀ (show (D : ℂ) ≠ 0 by exact_mod_cast Nat.ne_of_gt hD)).symm
-  · have hcb : (s 1).divNat ≠ (s 0).modNat := Ne.symm hbc
-    simp [hbc, hcb, matrixUnitBondVector_apply]
+  have hform : groundSpaceMap (sptFixedPointTensor D) 2 X =
+      fun s => matrixUnitBondVector D
+        (finProdFinEquiv ((sptPair (s 0)).2, (sptPair (s 1)).1)) *
+        (sptScale D * X (sptPair (s 1)).2 (sptPair (s 0)).1) := by
+    funext s
+    rw [groundSpaceMap_sptFixedPointTensor_two_apply]
+    simp [matrixUnitBondVector_apply, sptPair, sptScale, ← mul_assoc,
+      Complex.ofReal_sqrt_inv_mul_self (D : ℝ) (Nat.cast_nonneg D),
+      Complex.ofReal_natCast]
+  simpa only [hform] using twoSiteBondPenalty_mulVec_separable
+    (matrixUnitBondVector D) (matrixUnitBondVector_sum_normSq D hD)
+    (fun a d => sptScale D * X d a)
 
 /-- Reindexing the two virtual legs preserves the independent-bond
 projection. -/
