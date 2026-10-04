@@ -172,14 +172,15 @@ of a bond-one, single-leaf MERA. The leaf range `R` is fixed independently of th
 and the chain length. The two layers are the leaf isometry and the top disentangler. -/
 theorem exists_single_leaf (hN : 0 < N) (hR : N ≤ R) (ψ : MPVSpace d N)
     (hψ : ‖ψ‖ = 1) : ∃ 𝓜 : UnequalMERA d 1 R 0 N, 𝓜.state = ψ := by
-  let V : Matrix (Cfg d N) (Fin (1 * 1)) ℂ := fun s _ => ψ s
+  letI : Unique (Fin (1 * 1)) := inferInstanceAs (Unique (Fin 1))
+  let V : Matrix (Cfg d N) (Fin (1 * 1)) ℂ := Matrix.of fun s _ => ψ s
   have hV : V.IsIsometry := by
     ext a b
     obtain rfl : a = b := Subsingleton.elim a b
     rw [Matrix.mul_apply, Matrix.one_apply_eq]
-    simp only [Matrix.conjTranspose_apply, V]
-    have h := inner_self_eq_norm_sq_to_K (𝕜 := ℂ) ψ
-    simpa [PiLp.inner_apply, RCLike.inner_apply, hψ, mul_comm] using h
+    simp only [Matrix.conjTranspose_apply, V, Matrix.of_apply]
+    rw [sum_star_mul_self_eq_norm_sq, hψ]
+    norm_num
   have hsum : ∑ _ : Fin 1, N = N := by simp
   let T : ∀ _ : Fin 1, IsometryTree d (1 * 1) R 0 N :=
     fun _ => IsometryTree.leaf V hV hN hR
@@ -189,9 +190,9 @@ theorem exists_single_leaf (hN : 0 < N) (hR : N ≤ R) (ψ : MPVSpace d N)
   ext s
   rw [blockMatVector_apply]
   simp only [Fintype.sum_unique, Fin.prod_univ_one, pairFamilyVector_apply,
-    pairFamilyState, Fin.prod_univ_one, mul_one, Matrix.reindex_apply,
-    Matrix.submatrix_apply, Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
-    T, IsometryTree.matrix, V, blockIndexEquiv_apply, Equiv.apply_symm_apply]
+    pairFamilyState, Fin.prod_univ_one, mul_one]
+  change ψ (decodeBlockEquiv d N (blockIndexEquiv d hsum s 0)) = ψ s
+  rw [blockIndexEquiv_apply, Equiv.apply_symm_apply]
   congr 1
   funext i
   congr 1
@@ -203,13 +204,15 @@ with one physical site per leaf and no coarse layers. -/
 theorem nonempty_bond_one (hd : 0 < d) (hN : 0 < N) (hR : 1 ≤ R) :
     Nonempty (UnequalMERA d 1 R 0 N) := by
   classical
+  letI : Unique (Fin (1 * 1)) := inferInstanceAs (Unique (Fin 1))
   let z : Fin 1 → Fin d := fun _ => ⟨0, hd⟩
   let V : Matrix (Fin 1 → Fin d) (Fin (1 * 1)) ℂ :=
-    fun s _ => if s = z then 1 else 0
+    Matrix.of fun s _ => if s = z then 1 else 0
   have hV : V.IsIsometry := by
     ext a b
     obtain rfl : a = b := Subsingleton.elim a b
-    simp [Matrix.mul_apply, Matrix.conjTranspose_apply, V]
+    rw [Matrix.mul_apply, Matrix.one_apply_eq]
+    simp [Matrix.conjTranspose_apply, V]
   have hsum : ∑ _ : Fin N, 1 = N := by simp
   let T : ∀ _ : Fin N, IsometryTree d (1 * 1) R 0 1 :=
     fun _ => .leaf V hV (by decide) hR
