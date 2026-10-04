@@ -1,0 +1,50 @@
+\begin{definition}[Averaging sites with fourth-root weights]%
+    \label{def:peps_theta_weighted_averaging_site}
+    \lean{TNLean.PEPS.thetaMatrix, TNLean.PEPS.thetaWeightedAveragingSite}
+    \leanok
+    \uses{def:peps_representation_theta, thm:peps_torus_projector_expansion}
+    Let $U$ be a representation of a finite group on a finite virtual space,
+    and let $\Theta$ be its fourth-root isotypic weight operator.
+    Obtain the weighted site from the canonical averaging site by placing
+    $\Theta$ on each of its four virtual legs.
+    For the multiplicity-one representation, this is the tensor displayed
+    in \cite[Section~7]{Schuch2010PEPS}, divided by $|G|$.
+\end{definition}
+
+\begin{theorem}[Fourth-root site weights combine on the bonds]%
+    \label{thm:peps_theta_weighted_torus_bonds}
+    \lean{TNLean.PEPS.torusBondNetwork_dressedAveragingSite,
+        TNLean.PEPS.torusBondNetwork_thetaWeightedAveragingSite}
+    \leanok
+    \uses{def:peps_theta_weighted_averaging_site,
+        thm:peps_representation_theta_power,
+        thm:peps_torus_projector_expansion, lem:peps_torus_bond_network_gauge}
+    On a torus with positive circumferences, let $N$ be the number of vertices,
+    and write $s_v=(t_v,r_v,b_v,l_v)$ for the physical labels of the
+    weighted averaging sites. Their actual contraction has coefficient
+    \begin{align}
+        |G|^{-N}\sum_{q:V_{\rm tor}\to G}\prod_v
+        \bigl[\Theta^2U(q_{v+\mathrm{east}}q_v^{-1})\bigr]_
+        {l_{v+\mathrm{east}},r_v}
+        \bigl[\Theta^2U(q_vq_{v+\mathrm{north}}^{-1})\bigr]_
+        {t_v,b_{v+\mathrm{north}}}.
+    \end{align}
+    Thus the two fourth-root weights on each bond combine to the square-root
+    weight appearing in \cite[Section~7]{Schuch2010PEPS}.
+    The factor $|G|^{-N}$ records the normalized site averages; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    More generally, any matrix $W$ commuting with every $U(g)$ may replace
+    $\Theta$ in the dressing; the displayed bond factors then contain $W^2$.
+    The coefficient identity itself assumes neither unitarity nor semi-regularity.
+\end{theorem}
+
+\begin{proof}\leanok
+    Move the virtual-leg matrices into the incident bonds. Each bond acquires
+    two factors $\Theta$, hence $\Theta^2$.
+    Expand the average independently at each site to obtain a vertex label $q_v$.
+    The horizontal bond has matrix
+    $U(q_{v+\mathrm{east}})\Theta^2U(q_v^{-1})$, and the vertical bond has
+    $U(q_v)\Theta^2U(q_{v+\mathrm{north}}^{-1})$.
+    Since $\Theta$ commutes with $U$, these become the displayed relative matrices.
+    Reading their actual endpoint labels gives the stated product.
+\end{proof}

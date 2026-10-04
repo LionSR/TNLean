@@ -1,0 +1,66 @@
+\begin{theorem}[Fourier coordinate transport of graph contractions]%
+    \label{thm:peps_graph_bond_coordinate_transport}
+    \lean{TNLean.PEPS.physicalProductMap_bondCoordinateMatrix_graphAveragingSite}
+    \leanok
+    \uses{thm:peps_graph_weighted_averaging_coherent,
+        lem:peps_physical_coherent_transport}
+    Let $U$ and $L$ be matrix representations of a finite group and suppose
+    $L(g)=QU(g)Q^\dagger$ for every $g$. On any finite simple graph, the
+    product of the physical bond operations $Q\otimes\overline Q$ carries
+    the actual averaging contraction for $U$ to the actual averaging
+    contraction for $L$, after regrouping physical coordinates by edges.
+\end{theorem}
+\begin{proof}\leanok
+    Each bond coefficient is the vectorization of
+    $U(q_hq_t^{-1})$. The two-endpoint operation sends it to the
+    vectorization of $QU(q_hq_t^{-1})Q^\dagger=L(q_hq_t^{-1})$.
+    Apply the coherent-product transport lemma.
+\end{proof}
+
+\begin{theorem}[Smallest semi-regular states on finite simple graphs]%
+    \label{thm:peps_graph_minimal_semiregular_equivalence}
+    \lean{TNLean.PEPS.exists_isometric_graphSemiRegularBondMap,
+        TNLean.PEPS.exists_isometric_minimalSemiRegular_graphState}
+    \leanok
+    \uses{thm:peps_graph_multiplicity_bond_state,
+        thm:peps_graph_bond_coordinate_transport,
+        thm:peps_regular_fourier_matrix,
+        thm:peps_regular_matrix_commutativity,
+        thm:peps_graph_regular_averaging_nonzero,
+        lem:peps_physical_coherent_transport}
+    Let $G$ be a finite group and $\Gamma$ a finite simple graph. There are
+    positive dimensions $d_i$, unitary irreducible representations $D_i$
+    with distinct characters, Fourier coordinates $Q$, and a full-domain
+    physical bond isometry $T$, all chosen from $G$, with the following
+    properties. The single-copy representation $U=\bigoplus_iD_i$ is
+    semi-regular with character multiplicity one. Its fourth-root-weighted
+    averaging contraction $\Psi$ is nonzero. The product of
+    $(Q\otimes\overline Q)T$ over the disjoint physical bond pairs sends
+    $\Psi$ to the actual regular averaging contraction and preserves every
+    physical inner product. Moreover,
+    \begin{align}
+        |G|=\sum_i d_i^2,\qquad \dim U=\sum_i d_i\leq |G|,
+    \end{align}
+    with strict inequality exactly when some $d_i>1$, equivalently when $G$
+    is noncommutative. For every
+    finite-dimensional complex semi-regular representation $\sigma$,
+    $\sum_i d_i\leq\dim\sigma$; $\sigma$ need not be unitary.
+
+    Every virtual leg is contracted along an edge, and the site has one
+    virtual and one physical coordinate for each incident edge. In degree
+    four this is the construction of \cite[Section~7]{Schuch2010PEPS}.
+    Disconnected graphs, isolated vertices, and the empty graph are allowed.
+    Open virtual boundary legs, parallel bonds, self-loops, and infinite
+    contractions are outside this statement.
+\end{theorem}
+\begin{proof}\leanok
+    Derive the representations and Fourier coordinates from the regular
+    representation. The actual weighted contraction has matching-sector
+    bond support. Extend the multiplicity map isometrically to the full
+    physical bond space; on the derived support its action is unchanged.
+    The coordinate-transport theorem gives the actual regular contraction.
+    Both product operations are isometries on their full domains.
+    Maschke's theorem gives the universal dimension comparison. The regular
+    contraction has a positive all-identity coefficient, and hence is
+    nonzero; its isometric preimage is therefore nonzero as well.
+\end{proof}

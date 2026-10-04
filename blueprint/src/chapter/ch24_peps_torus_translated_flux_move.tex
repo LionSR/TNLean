@@ -1,0 +1,114 @@
+\begin{definition}[Directed insertion at an arbitrary torus position]%
+    \label{def:peps_torus_translated_flux_assignment}
+    \lean{TNLean.PEPS.torusTranslatedFluxAssignment,
+        TNLean.PEPS.torusTranslatedFluxAssignment_eq_treeCycleAssignment,
+        TNLean.PEPS.torusTranslatedFluxAssignment_up_transport}
+    \leanok
+    \uses{thm:peps_translated_two_plaquette_geometry,
+        thm:peps_regular_two_cycle_flux_move}
+    On a finite torus of horizontal period at least four and vertical period
+    at least three, fix any position $v=(x,y)$. Let $u_g^0$ give upward
+    transport $g$ on the vertical bond at $v$, and let $u_g^1$ give upward
+    transport $g$ on both vertical bonds at $v$ and $v+(1,0)$.
+    Every other bond carries the identity. In the ordered-edge convention,
+    both selected bonds receive the same element
+    \begin{align}
+        k_y(g)=
+        \begin{cases}
+            g,      & \operatorname{val}(y)<\operatorname{val}(y+1), \\
+            g^{-1}, & \text{otherwise}.
+        \end{cases}
+    \end{align}
+    The literal assignments are precisely the tree-cycle assignments of the
+    translated six-site block. This specifies the insertion in
+    \cite[Theorem~6.16]{Schuch2010PEPS} at either periodic seam as well.
+\end{definition}
+
+\begin{theorem}[The actual flux endpoint moves at every position]%
+    \label{thm:peps_torus_translated_flux_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusTranslatedFluxAssignment}
+    \leanok
+    \uses{def:peps_torus_translated_flux_assignment,
+        def:peps_torus_plaquette_flux_geometry}
+    For the counterclockwise native plaquette walks based at $v$ and $v+(1,0)$,
+    the actual holonomies satisfy
+    \begin{align}
+        (H_L(u_g^0),H_R(u_g^0)) & =(g^{-1},1), &
+        (H_L(u_g^1),H_R(u_g^1)) & =(1,g^{-1}).
+    \end{align}
+    These formulas hold at every position, including both periodic seams.
+    Thus the insertion removes the flux at the left plaquette and places the
+    same flux at the right plaquette, as in
+    \cite[Theorem~6.16]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The directed upward transports are $g$ on the selected bonds, regardless
+    of their native endpoint sorting. The left plaquette traverses the left
+    insertion downward and the middle insertion upward, so its extended
+    holonomy is $g^{-1}g=1$. The right plaquette traverses the middle insertion
+    downward, giving $g^{-1}$. Its other vertical bond is distinct from both
+    selected bonds under the period bounds. Every horizontal transport is
+    the identity. Retaining only the left insertion gives the initial values.
+\end{proof}
+
+\begin{theorem}[An actual six-spin flux operation at every position]%
+    \label{thm:peps_torus_translated_physical_flux_move}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedPhysicalFluxMove}
+    \leanok
+    \uses{thm:peps_translated_two_plaquette_geometry,
+        def:peps_torus_translated_flux_assignment,
+        thm:peps_regular_two_cycle_physical_flux_move}
+    Let the original four-leg tensor be $G$-isometric for the regular virtual
+    action. For every position $v$, there exists a unitary $W_v$ on the six
+    original spins of the cyclic rectangle $R_v$ such that
+    \begin{align}
+        W_v\Psi_{R_v}(u_g^0,\theta)=\Psi_{R_v}(u_g^1,\theta)
+    \end{align}
+    for every $g\in G$ and every crossing configuration $\theta$.
+    Both vectors are the actual open-region contractions of the original
+    tensor. The unitary is chosen before $g$ and $\theta$; no spanning tree,
+    Gram identity, state equality, or state translation invariance is supplied.
+\end{theorem}
+
+\begin{proof}\leanok
+    Derive the actual spanning path, root, and distinct non-tree chords from
+    the translated numbering. Native four-leg $G$-isometry gives the required
+    incident-edge isometry at every site. Apply the fixed physical two-cycle
+    operation to these derived data, with its common insertion element
+    $k_y(g)$. The literal assignment identities give the desired actual columns.
+\end{proof}
+
+\begin{theorem}[A global torus flux movement at every position]%
+    \label{thm:peps_torus_translated_global_flux_move}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedGlobalFluxMove}
+    \leanok
+    \uses{thm:peps_translated_two_plaquette_geometry,
+        def:peps_torus_translated_flux_assignment,
+        thm:peps_torus_translated_flux_holonomy,
+        thm:peps_regular_two_cycle_global_flux_move}
+    Under the same period and local $G$-isometry hypotheses, for every
+    position $v$ there is one unitary $W_v$ on the six original spins such
+    that its complementary identity extension $\widehat W_v$ is a global
+    unitary and
+    \begin{align}
+        \widehat W_v\Psi(u_g^0;u)=\Psi(u_g^1;u)
+    \end{align}
+    for every $g\in G$ and every common assignment $u$ on exterior and
+    crossing bonds. The internal bonds have the specified literal insertions;
+    the other internal bonds carry the identity. Both states are actual
+    globally contracted torus states. The unitary precedes $g$ and $u$.
+    This is the arbitrary-position regular finite-torus realization of the
+    local flux movement in \cite[Theorem~6.16]{Schuch2010PEPS}, including either
+    periodic seam. The remaining unrestricted lattice scope is recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the global physical two-cycle operation with the derived translated
+    tree, root, and pair of chords. Both native ordered insertion operators
+    equal $k_y(g)$, so the literal assignments give its single- and double-bond
+    inputs. The global contraction identity preserves every common exterior
+    and crossing operator. The complementary identity extension preserves
+    unitarity. The proved plaquette holonomies give the stated flux movement.
+\end{proof}

@@ -1,0 +1,29 @@
+\begin{lemma}[Exchanging two invariant orthogonal unit vectors]%
+    \label{lem:peps_unitary_vector_swap}
+    \lean{Matrix.unitaryVectorSwap,
+        Matrix.unitaryVectorSwap_mem_unitaryGroup,
+        Matrix.unitaryVectorSwap_mulVec_left,
+        Matrix.unitaryVectorSwap_mulVec_right,
+        Matrix.unitaryVectorSwap_commute,
+        Matrix.unitaryVectorSwap_mulVec_of_orthogonal}
+    \leanok
+    Let $x,y$ be orthogonal unit vectors in a finite-dimensional complex
+    Hilbert space. The matrix
+    \begin{align}
+        S=I-(x-y)(x-y)^\dagger
+    \end{align}
+    is unitary and satisfies $Sx=y$ and $Sy=x$. It fixes every vector
+    orthogonal to both $x$ and $y$. If a unitary $U$ fixes $x$ and $y$, then
+    $SU=US$.
+    This is an auxiliary Hilbert-space construction for the coherent
+    flux-pair creation in \cite[Theorem~6.17]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Put $v=x-y$ and $P=vv^\dagger$. Orthogonality and normalization give
+    $v^\dagger v=2$, hence $P^2=2P$ and $S^\dagger S=(I-P)^2=I$.
+    Since $v^\dagger x=1$ and $v^\dagger y=-1$, the claimed actions on
+    $x$ and $y$ follow. Orthogonal vectors are annihilated by $P$.
+    Finally, $Uv=v$ and unitarity give $v^\dagger U=v^\dagger$.
+    Consequently $UP=PU=P$, which proves commutation with $S$.
+\end{proof}

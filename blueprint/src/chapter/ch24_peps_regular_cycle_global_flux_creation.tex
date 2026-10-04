@@ -1,0 +1,46 @@
+\begin{theorem}[A global coherent class-creation operation]%
+    \label{thm:peps_regular_cycle_global_flux_creation}
+    \lean{TNLean.PEPS.exists_unitary_regularCycleGlobalFluxCreation_bondOperators}
+    \leanok
+    \uses{thm:peps_regular_physical_flux_creation,
+        thm:peps_regular_coherent_global_transport,
+        lem:peps_regular_bond_extension_transport,
+        thm:peps_regular_two_cycle_global_flux_move}
+    Let $\Gamma$ be a finite simple graph and $G$ a finite group. Let the original
+    site tensors be $G$-isometric for their regular virtual actions. Choose a
+    region $R$, a spanning tree of its induced graph, a root, and an internal
+    bond $e$ outside the tree. For $g\in G$, put
+    \begin{align}
+        \gamma_g=\frac{1}{\sqrt{|G|\,|C_G(g)|}}.
+    \end{align}
+    There is a unitary $W_g$ on the original spins in $R$ whose complementary
+    identity extension $\widehat W_g$ is globally unitary and satisfies
+    \begin{align}
+        \widehat W_g\Psi_1(u)
+        =\gamma_g\sum_{z\in G}\Psi_{zgz^{-1}}(u)
+    \end{align}
+    for every common assignment $u$ of exterior and crossing bond operators.
+    Here $\Psi_h(u)$ is the actual global contraction with operator $h$ on
+    the chosen ordered bond $e$, identity operators on all other internal
+    bonds, and assignment $u$ on all remaining bonds. The unitary depends on
+    the requested class but is chosen before $u$.
+
+    This is the global contraction consequence of the coherent local
+    operation in \cite[Theorem~6.17]{Schuch2010PEPS} for the stated chosen
+    finite cycle block. The concrete flux-pair geometry and unrestricted
+    lattice scope remain separate; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry}. No energy or
+    parent-Hamiltonian membership assertion is made.
+\end{theorem}
+
+\begin{proof}\leanok
+    Obtain the original-spin unitary and its normalized action on every
+    boundary column from the local creation theorem. An identity vertex
+    gauge transfers the exterior crossing operators to one common boundary
+    configuration, independently of the internal insertion. The complementary
+    site tensors also agree in every summand. The coherent cut-contraction
+    identity therefore gives the displayed equality of actual global vectors.
+    The physical identity extension preserves unitarity. Summing over all
+    conjugating elements retains their centralizer multiplicities, so the
+    normalization is exactly $\gamma_g$.
+\end{proof}

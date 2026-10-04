@@ -1,0 +1,39 @@
+\begin{theorem}[Full physical isometry extending multiplicity restoration]%
+    \label{thm:peps_full_multiplicity_bond_isometry_extension}
+    \lean{TNLean.PEPS.exists_isIsometry_fullMultiplicityBondMap_extension}
+    \leanok
+    \uses{lem:peps_matching_sector_bond_inclusion,
+        thm:peps_full_multiplicity_bond_map}
+    Let $\nu_i$ and $\mu_i$ be finite label spaces, with every $\mu_i$ nonempty.
+    Write $E$ for matching-sector inclusion and $F$ for the full endpoint
+    multiplicity-restoring map. There exists an isometry $T$ from the entire
+    physical input endpoint-pair space to the entire output endpoint-pair space
+    such that
+    \begin{align}
+        T^\dagger T & =I, & TE & =FE.
+    \end{align}
+    Hence $T\psi=F\psi$ for every $\psi\in\operatorname{range}E$, and in particular
+    \begin{align}
+        T\,\operatorname{vec}\left(
+        \bigoplus_i\sqrt{|\mu_i|}\,X_i\right)
+        =\operatorname{vec}\left(\bigoplus_iX_i\otimes I_{\mu_i}\right)
+    \end{align}
+    for every family of block matrices $X_i$.
+    Thus the supported transformation in \cite[Section~7]{Schuch2010PEPS}
+    may be realized by an isometry on the full physical bond space.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose one label in every multiplicity space, and let $R$ embed each input
+    endpoint into that copy. The induced full endpoint-pair inclusion is an
+    isometry. Since $E^\dagger E=I$ and $F^\dagger F=EE^\dagger$,
+    \begin{align}
+        (FE)^\dagger FE=I=(RE)^\dagger RE.
+    \end{align}
+    The finite-dimensional Gram extension theorem gives a unitary $U$ on the
+    output space with $FE=URE$. Set $T=UR$. Then $T^\dagger T=I$ and $TE=FE$.
+    The supported-vector identity follows by writing $\psi=E\chi$.
+    Matching-sector inclusion reconstructs every displayed weighted block
+    vector, and the known multiplicity-restoring coefficient identity gives
+    its stated image.
+\end{proof}
