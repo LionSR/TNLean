@@ -7,6 +7,15 @@ import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.Spectrum
 
+/-!
+# Contractivity of local operator embeddings
+
+Embedding a local matrix into a periodic chain is a star algebra homomorphism,
+so it does not increase the Hilbert-space operator norm. This supplies the
+volume-independent local interaction bound used in the finite-ring
+Lieb–Robinson estimate of Hastings–Koma, arXiv:math-ph/0507008, Appendix A.
+-/
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

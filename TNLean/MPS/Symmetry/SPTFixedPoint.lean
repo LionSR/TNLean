@@ -260,8 +260,9 @@ module docstring. -/
 def sptKron (W : GL (Fin D) ℂ) : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   (W : Matrix (Fin D) (Fin D) ℂ)ᵀ ⊗ₖ ((W⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
 
-/-- Scalars cancel in `W ↦ Wᵀ ⊗ W⁻¹`. -/
-private lemma sptKron_eq_of_eq_smul {W V : GL (Fin D) ℂ} {c : ℂ}
+/-- Scalars cancel in `W ↦ Wᵀ ⊗ W⁻¹`. Source: arXiv:1010.3732,
+Section II.F.2, lines 880--896, the virtual expression for the physical symmetry. -/
+lemma sptKron_eq_of_eq_smul {W V : GL (Fin D) ℂ} {c : ℂ}
     (h : (W : Matrix (Fin D) (Fin D) ℂ) = c • (V : Matrix (Fin D) (Fin D) ℂ)) :
     sptKron W = sptKron V := by
   classical

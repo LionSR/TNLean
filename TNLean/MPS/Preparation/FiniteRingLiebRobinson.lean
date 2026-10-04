@@ -14,7 +14,7 @@ import Mathlib.Analysis.Normed.Group.Constructions
 import Mathlib.Tactic.FunProp
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.FieldSimp
-import TNLean.MPS.Preparation.LocalCircuit
+import TNLean.Circuit.LocalCircuit
 import Mathlib.Data.Fin.Basic
 import Mathlib.Tactic.NormNum
 import Mathlib.Data.Finset.Card
@@ -255,6 +255,8 @@ set_option linter.mathlibStandardSet true
 
 namespace MPSPreparation
 
+open QuantumCircuit
+
 open Fin.CommRing
 
 variable {N : ℕ} [NeZero N]
@@ -365,6 +367,8 @@ private theorem ringSupportDistance_le_bond_add_one
 end MPSPreparation
 
 namespace MPSPreparation
+
+open QuantumCircuit
 open Fin.CommRing
 
 open Classical in
@@ -395,6 +399,8 @@ private theorem card_bonds_meeting_le {N : ℕ} [NeZero N] (X : Finset (Fin N)) 
 end MPSPreparation
 
 namespace MPSPreparation
+
+open QuantumCircuit
 open Fin.CommRing
 
 open Classical in
@@ -444,6 +450,8 @@ private theorem sum_bond_distance_exp_le {N : ℕ} [NeZero N]
 end MPSPreparation
 
 namespace MPSPreparation
+
+open QuantumCircuit
 open Fin.CommRing
 
 open Classical in
@@ -496,6 +504,8 @@ private theorem ring_weighted_row_le {N : ℕ} [NeZero N]
 end MPSPreparation
 
 namespace MPSPreparation
+
+open QuantumCircuit
 open Fin.CommRing
 open scoped Matrix.Norms.L2Operator
 
@@ -601,15 +611,10 @@ private theorem chainCommutatorNorm_le_exp_of_disjoint
 end MPSPreparation
 
 namespace MPSPreparation
+
+open QuantumCircuit
 open Fin.CommRing
 open scoped Matrix.Norms.L2Operator
-
-private theorem chainCommutatorNorm_neg_time {d N : ℕ}
-    (H B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
-    (X : Set (Fin N)) (t : ℝ) :
-    chainCommutatorNorm H B X (-t) = chainCommutatorNorm (-H) B X t := by
-  simp only [chainCommutatorNorm, supportedCommutatorNorm, supportedCommutatorMap,
-    smul_neg, neg_smul, neg_neg]
 
 /-- The finite-ring propagation estimate holds for either sign of time.
 Its constants depend only on the nearest-neighbor interaction bound. -/
@@ -662,9 +667,8 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
       2 * ‖A‖ * ‖B‖ * X.card *
         Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
         (Real.exp ((8 * Real.exp a) * |t|) - 1) := by
-  have hMap := (supportedCommutatorMap (Complex.I • ∑ j, h j) B
-    (supportedOperators d X) t).le_opNorm ⟨A, hA⟩
-  rw [supportedCommutatorMap_apply] at hMap
+  have hMap := norm_heisenberg_commutator_le_chainCommutatorNorm
+    (∑ j, h j) B X t hA
   have hBound := chainCommutatorNorm_le_exp_abs_of_disjoint h hHerm hSupport hNorm
     B X Y hX hY hB hXY a ha t
   calc
@@ -678,7 +682,7 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
 end MPSPreparation
 
 namespace MPSTensor
-open MPSPreparation NormedSpace
+open MPSPreparation NormedSpace QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 
 /-- A bounded Hermitian two-site interaction satisfies the finite-ring

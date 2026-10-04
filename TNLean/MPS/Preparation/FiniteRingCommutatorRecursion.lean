@@ -16,7 +16,8 @@ import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum
 import Mathlib.Analysis.Normed.Operator.Mul
 import Mathlib.Analysis.Normed.Module.FiniteDimension
-import TNLean.MPS.Preparation.LocalCircuit
+import TNLean.Circuit.LocalCircuit
+import TNLean.MPS.Overlap.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
@@ -350,6 +351,8 @@ open scoped Matrix.Norms.L2Operator
 
 namespace MPSPreparation
 
+open QuantumCircuit
+
 /-- The norm of the Heisenberg commutator map restricted to operators supported
 on a finite set of sites. This is the finite-chain version of Hastings–Koma,
 arXiv:math-ph/0507008, Appendix A, (A.13). -/
@@ -357,6 +360,30 @@ noncomputable def chainCommutatorNorm {d N : ℕ}
     (H B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (X : Set (Fin N)) (t : ℝ) : ℝ :=
   supportedCommutatorNorm (Complex.I • H) B (supportedOperators d X) t
+
+/-- Reversing time is the same as negating the Hamiltonian in the restricted
+commutator norm. This permits the propagation estimate to cover both signs
+of time without a positivity hypothesis on the interaction. -/
+theorem chainCommutatorNorm_neg_time {d N : ℕ}
+    (H B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
+    (X : Set (Fin N)) (t : ℝ) :
+    chainCommutatorNorm H B X (-t) = chainCommutatorNorm (-H) B X t := by
+  simp only [chainCommutatorNorm, supportedCommutatorNorm, supportedCommutatorMap,
+    smul_neg, neg_smul, neg_neg]
+
+/-- The restricted commutator norm bounds each supported observable, with
+its operator norm as a factor. This is the operator-norm characterization
+of Hastings–Koma, Appendix A, (A.13). -/
+theorem norm_heisenberg_commutator_le_chainCommutatorNorm {d N : ℕ}
+    (H B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
+    (X : Set (Fin N)) (t : ℝ)
+    {A : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ}
+    (hA : A ∈ supportedOperators d X) :
+    ‖(exp (t • (Complex.I • H)) * A * exp ((-t) • (Complex.I • H))) * B -
+      B * (exp (t • (Complex.I • H)) * A * exp ((-t) • (Complex.I • H)))‖ ≤
+      chainCommutatorNorm H B X t * ‖A‖ :=
+  norm_commutator_le_supportedCommutatorNorm (Complex.I • H) B
+    (supportedOperators d X) t hA
 
 open Classical in
 /-- The dimension-free local commutator recursion for a finite periodic
