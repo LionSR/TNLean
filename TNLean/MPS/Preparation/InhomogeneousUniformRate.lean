@@ -78,8 +78,8 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
     rw [state_eq_chainState, norm_chainState_eq _ hsum]
     exact norm_ne_zero_iff.mpr hA.1
   have hu : ‖(‖state (A N)‖ : ℂ)⁻¹ • state (A N)‖ = 1 := by
-    simpa only [Complex.ofReal_inv] using
-      (norm_smul_inv_norm (𝕜 := ℂ) (norm_ne_zero_iff.mp hn))
+    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+      inv_mul_cancel₀ hn]
   have hself : 1 - ‖⟪(‖state (A N)‖ : ℂ)⁻¹ • state (A N),
       (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
     rw [inner_self_eq_norm_sq_to_K, hu]
