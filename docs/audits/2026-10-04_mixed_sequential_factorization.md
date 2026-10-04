@@ -27,13 +27,15 @@ an injective blocked site-dependent chain at an arbitrary chosen site,
 including either endpoint. Positive bond dimension is explicit. No
 translation-invariance, normalization, or additional rank condition is used.
 
-The source is broader in one respect: footnote 3 on page 3 permits non-injective
-blocked tensors and interprets the inverse as a pseudoinverse. The mixed polar
-result here is the injective specialization, with C†C = I on all D² input
-coordinates. For a non-injective blocked map, V†V is its support projector;
-a mixed extension must either allow that projector as C†C or restrict the
-central input to the support. This extension is not claimed. Its scope and
-elimination plan are recorded in
+The non-injective case permitted by source footnote 3 is now handled in
+`MixedSequentialSupport`. QICLean's existing orthogonal-projection range
+isometry supplies J with J†J = I and JJ† equal to the actual polar support.
+The same inward sweeps factor VJ on this finite input, and multiplication
+by J† reconstructs V. No full-dimensional isometry is asserted for V itself.
+The resolved source note is
 [`mswc24_mixed_polar_injectivity_scope`](../paper-gaps/mswc24_mixed_polar_injectivity_scope.tex).
-The one-sided support-restricted factorization already exists as
-`MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary`.
+
+The mixed factorization predicate and central-input constructions now allow
+arbitrary finite input dimension. Their original full-input specializations
+are unchanged. The existing chain splitting argument is shared rather than
+duplicated, and no new support predicate or spectral-basis proof is introduced.

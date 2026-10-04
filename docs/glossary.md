@@ -1373,24 +1373,25 @@ The following notions use different transfer objects and are not interchangeable
 ### `MPSPreparation.HasMixedSequentialFactorization`
 
 - **Declaration:** `MPSPreparation.HasMixedSequentialFactorization hD V : Prop`,
-  for `hD : 0 < D` and a matrix from `D²` input coordinates to the physical
-  configurations of a left chain, a central site, and a right chain.
+  for a positive bond dimension and a matrix from a finite input space to
+  the physical configurations of a left chain, a central site, and a right chain.
 - **Defined in:** `TNLean/MPS/Preparation/MixedSequentialFactorization.lean`.
 - **Meaning:** $V=(E_L\otimes I_d\otimes E_R)C$, where each side is evaluated
   from its outer boundary inward using isometric site maps, both outer bonds
   have dimension one, every bond has dimension at most $D^2$, and $C$ is an
-  isometry from the full $D^2$-dimensional input to the two inward bonds and
-  the central physical site.
-- **Source:** arXiv:2307.01696, p. 3, footnote 4 to equations (13)--(15).
+  isometry from the input to the two inward bonds and the central physical site.
+- **Source:** arXiv:2307.01696, page 3, footnotes 3 and 4 to equations (13)--(15).
 - **Sanctioned bridges:** `MPSPreparation.exists_mixed_isometric_factorization`
-  for an isometric matrix product map, and
-  `MPSPreparation.exists_mixed_sequential_polarIsoMatrix_of_split` and
-  `MPSPreparation.exists_mixed_sequential_polarIsoMatrix` for the polar
-  isometry of an injective blocked chain, with any chosen central site.
-- **Caveat:** no monotonicity of bond dimensions is asserted. The polar
-  specialization assumes injectivity; the non-injective pseudoinverse case
-  of source footnote 3 needs a support-restricted or partial-isometric
-  central map. See `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
+  for an isometric matrix product map;
+  `MPSPreparation.exists_mixed_sequential_polarIsoMatrix` for an injective
+  blocked chain on its full virtual-pair input; and
+  `MPSPreparation.exists_mixed_sequential_polar_support` for every blocked
+  chain on its actual polar support, with any chosen central site.
+- **Caveat:** no monotonicity of bond dimensions is asserted. For a non-injective
+  block, only the support-restricted polar map is an isometry; its extension
+  to the full virtual-pair space remains a partial isometry. The original
+  map is recovered by the adjoint of the support embedding. See
+  `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
 
 ## Quantum circuits
 

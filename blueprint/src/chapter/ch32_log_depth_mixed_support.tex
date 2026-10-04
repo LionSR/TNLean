@@ -1,0 +1,60 @@
+\begin{lemma}[Central input coordinates and polar support]
+    \label{lem:ldp_mixed_support_coordinates}
+    \lean{MPSPreparation.centralInputMatrix_mul,
+        MPSPreparation.mixedProductMap_mul,
+        MPSPreparation.exists_mixedPolarIsoMatrix_eq_mixedProductMap,
+        MPSPreparation.conjTranspose_mixedPolarIsoMatrix_mul}
+    \leanok
+    \uses{def:ldp_central_input}
+    Right multiplication by an input coordinate map $J$ commutes with
+    attaching the input to the central tensor. For any blocked map $B$,
+    including a non-injective one, its polar partial isometry $V$ has such
+    a central input factor and satisfies $V^\dagger V=\Pi$, where $\Pi$
+    is the polar support projector. Splitting the physical configurations
+    into left, central, and reversed-right parts preserves this identity.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Interchange finite sums to commute the input change with the central
+    contraction. The existing polar factorization gives $V=BG$ for a
+    virtual-pair matrix $G$, and splitting the chain at the chosen site
+    gives exactly the central product. Reindexing physical configurations
+    preserves column inner products.
+\end{proof}
+
+\begin{theorem}[Mixed sequential preparation on the actual polar support]
+    \label{thm:ldp_mixed_polar_support}
+    \lean{MPSPreparation.exists_mixed_sequential_polarIsoMatrix_on_support,
+        MPSPreparation.exists_mixed_sequential_polar_support_of_split,
+        MPSPreparation.exists_mixed_sequential_polar_support}
+    \leanok
+    \uses{lem:ldp_mixed_support_coordinates,thm:ldp_mixed_sequential_general}
+    For every site-dependent chain of positive bond dimension $D$ with
+    at least one physical site, choose any central site. Let $B=VP$ be
+    its blocked polar decomposition, without an injectivity assumption.
+    There exist $s\le D^2$ and an isometry
+    $J\colon\C^s\to\C^{D^2}$ with $JJ^\dagger=\Pi$ such that $VJ$ has
+    a mixed sequential factorization. In particular,
+    \begin{align}
+        VJ & =(E_L\otimes\Id_d\otimes E_R)C,
+           & C^\dagger C                     & =\Id_s,
+           & (VJ)J^\dagger                   & =V.
+        \label{eq:ldp_mixed_support_factorization}
+    \end{align}
+    Both outer bonds have dimension one, every side bond is at most
+    $D^2$, and every inward site map is isometric on its bond space.
+    Either endpoint may be the centre, and zero support is allowed.
+    This combines footnotes~3 and~4 to equations~(13)--(15)
+    of~\cite{Malz2024Preparation}, resolving the support restriction
+    recorded in~\cite{gap:mswc24_mixed_polar_injectivity_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Parametrize the range of the Hermitian idempotent $\Pi$ by orthonormal
+    coordinates $J$, so $J^\dagger J=\Id_s$ and $JJ^\dagger=\Pi$.
+    Then $(VJ)^\dagger(VJ)=J^\dagger\Pi J=\Id_s$.
+    Apply the existing two inward sweeps to the central factor $GJ$.
+    Their isometric evaluations force the central map to be an isometry
+    on the support input. Finally $V\Pi=V$ gives the reconstruction
+    identity in (\ref{eq:ldp_mixed_support_factorization}).
+\end{proof}

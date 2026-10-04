@@ -20,10 +20,10 @@ are listed from the right boundary toward the centre.
 
 Source: arXiv:2307.01696, equations (13)–(15), especially footnote 4.
 
-**Scope restriction (injective polar input):** the polar-factorization theorems below
-assume the blocked tensor is injective. Footnote 3 also allows non-injective tensors
-using the pseudoinverse; their mixed factorization on the polar support is not proved here.
-Documented in `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
+The full-input polar specializations below assume the blocked tensor is injective.
+The non-injective pseudoinverse case of footnote 3 is proved on the actual polar support
+in `TNLean.MPS.Preparation.MixedSequentialSupport`; see
+`docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
 -/
 
 open scoped BigOperators Matrix Kronecker
@@ -121,25 +121,25 @@ theorem exists_chainPairMatrix_factorization (hD : 0 < D) (A : MPSChainTensor d 
 
 /-- The central site with the virtual-pair input attached. The right virtual pair
 is ordered from the right boundary toward the centre. -/
-def centralInputMatrix (A : MPSTensor d D)
-    (G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ) :
-    Matrix (Fin (D * D) × Fin d × Fin (D * D)) (Fin (D * D)) ℂ :=
+def centralInputMatrix {s : ℕ} (A : MPSTensor d D)
+    (G : Matrix (Fin (D * D)) (Fin s) ℂ) :
+    Matrix (Fin (D * D) × Fin d × Fin (D * D)) (Fin s) ℂ :=
   Matrix.of fun z x => A z.2.1 (virtualPairEquiv D z.1).2 (virtualPairEquiv D z.2.2).2 *
     G ((virtualPairEquiv D).symm
       ((virtualPairEquiv D z.1).1, (virtualPairEquiv D z.2.2).1)) x
 
 /-- A matrix product with a distinguished central physical site. Both side chains
 are indexed from their outer boundary inward, so the right product is transposed. -/
-def mixedProductMap {l r : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d D)
-    (R : MPSChainTensor d D r) (G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ) :
-    Matrix ((Fin l → Fin d) × Fin d × (Fin r → Fin d)) (Fin (D * D)) ℂ :=
+def mixedProductMap {l r s : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d D)
+    (R : MPSChainTensor d D r) (G : Matrix (Fin (D * D)) (Fin s) ℂ) :
+    Matrix ((Fin l → Fin d) × Fin d × (Fin r → Fin d)) (Fin s) ℂ :=
   (chainPairMatrix L ⊗ₖ ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ chainPairMatrix R)) *
     centralInputMatrix A G
 
 /-- The central placement leaves the original matrix product coefficients unchanged. -/
-theorem mixedProductMap_apply {l r : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d D)
-    (R : MPSChainTensor d D r) (G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ)
-    (σ : (Fin l → Fin d) × Fin d × (Fin r → Fin d)) (x : Fin (D * D)) :
+theorem mixedProductMap_apply {l r s : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d D)
+    (R : MPSChainTensor d D r) (G : Matrix (Fin (D * D)) (Fin s) ℂ)
+    (σ : (Fin l → Fin d) × Fin d × (Fin r → Fin d)) (x : Fin s) :
     mixedProductMap L A R G σ x =
       ∑ a, (eval L σ.1 * A σ.2.1 * (eval R σ.2.2)ᵀ)
         (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 * G a x := by
@@ -160,15 +160,16 @@ theorem mixedProductMap_apply {l r : ℕ} (L : MPSChainTensor d D l) (A : MPSTen
 
 /-- A local isometry at the centre, followed by isometric site maps extending
 to the left and right boundaries. Both outer bonds are one-dimensional and all
-bonds are bounded by `D²`. The input virtual pair belongs to the central map. -/
-def HasMixedSequentialFactorization {l r : ℕ} (hD : 0 < D)
-    (V : Matrix ((Fin l → Fin d) × Fin d × (Fin r → Fin d)) (Fin (D * D)) ℂ) : Prop :=
+bonds are bounded by `D²`. The finite-dimensional input belongs to the central map;
+it may be the full virtual-pair space or the polar support. -/
+def HasMixedSequentialFactorization {l r s : ℕ} (hD : 0 < D)
+    (V : Matrix ((Fin l → Fin d) × Fin d × (Fin r → Fin d)) (Fin s) ℂ) : Prop :=
     ∃ (bL : Fin (l + 1) → ℕ) (QL : MPSChainTensor d (D * D) l)
       (hbL : ∀ k, bL k ≤ D * D)
       (bR : Fin (r + 1) → ℕ) (QR : MPSChainTensor d (D * D) r)
       (hbR : ∀ k, bR k ≤ D * D)
       (C : Matrix (Fin (bL (Fin.last l)) × Fin d × Fin (bR (Fin.last r)))
-        (Fin (D * D)) ℂ),
+        (Fin s) ℂ),
       bL 0 = 1 ∧ bR 0 = 1 ∧
       (∀ p i, IsRowSupportedBelow (bL p.castSucc) (QL p i)) ∧
       (∀ p i α β, bL p.succ ≤ β.val → QL p i α β = 0) ∧
@@ -186,9 +187,9 @@ all input indices and is an isometry whenever the full matrix product map is one
 The local isometries on both sides have bond dimensions at most `D²`.
 
 Source: arXiv:2307.01696, footnote 4 to equations (13)–(15). -/
-theorem exists_mixed_isometric_factorization {l r : ℕ} (hD : 0 < D)
+theorem exists_mixed_isometric_factorization {l r s : ℕ} (hD : 0 < D)
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r)
-    (G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ)
+    (G : Matrix (Fin (D * D)) (Fin s) ℂ)
     (hV : (mixedProductMap L A R G).IsIsometry) :
     HasMixedSequentialFactorization hD (mixedProductMap L A R G) := by
   classical
@@ -274,9 +275,9 @@ noncomputable def mixedPolarIsoMatrix {l r : ℕ} (L : MPSChainTensor d D l)
 /-- Moving the inverse polar factor to the central site does not change the polar isometry.
 The two outer chains remain independent of that inverse.
 
-**Scope restriction (injective polar input):** this uses the ordinary inverse, not the
-pseudoinverse allowed by arXiv:2307.01696, footnote 3 to equations (13)–(15).
-See `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
+This is the ordinary-inverse specialization. The non-injective right-factor identity is
+`MPSPreparation.exists_mixedPolarIsoMatrix_eq_mixedProductMap`; see
+`docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
 theorem mixedPolarIsoMatrix_eq_mixedProductMap {l r : ℕ} (L : MPSChainTensor d D l)
     (A : MPSTensor d D) (R : MPSChainTensor d D r)
     (hB : Kraus.IsInjective (MPSChainTensor.blockTensor (mixedChain L A R))) :
@@ -301,8 +302,9 @@ Source: arXiv:2307.01696, footnote 4 to equations (13)–(15). Unlike the
 one-sided factorization, both external bonds are one-dimensional: the
 `D²`-dimensional input is at the central site.
 
-**Scope restriction (injective polar input):** the non-injective extension of source
-footnote 3 is not included; see `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
+The support-restricted version without injectivity is
+`MPSPreparation.exists_mixed_sequential_polar_support`; see
+`docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
 theorem exists_mixed_sequential_polarIsoMatrix_of_split {l r : ℕ} (hD : 0 < D)
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r)
     (hB : Kraus.IsInjective (MPSChainTensor.blockTensor (mixedChain L A R))) :
@@ -314,21 +316,11 @@ theorem exists_mixed_sequential_polarIsoMatrix_of_split {l r : ℕ} (hD : 0 < D)
   rw [mixedPolarIsoMatrix_eq_mixedProductMap L A R hB] at hV ⊢
   exact exists_mixed_isometric_factorization hD L A R _ hV
 
-/-- The polar isometry of a site-dependent chain with injective blocked tensor has a mixed
-sequential factorization with its input at the site after the first `l` physical sites.
-This includes both endpoint choices.
-
-Source: arXiv:2307.01696, footnote 4 to equations (13)–(15).
-
-**Scope restriction (injective polar input):** the non-injective extension of source
-footnote 3 is not included; see `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
-theorem exists_mixed_sequential_polarIsoMatrix {l r : ℕ} (hD : 0 < D)
-    (A : MPSChainTensor d D (l + (r + 1)))
-    (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) :
-    HasMixedSequentialFactorization hD
-      (Matrix.reindex ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).trans
-        (mixedConfigurationEquiv d l r).symm) (Equiv.refl _)
-          (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A))) := by
+/-- Any site-dependent chain splits at a chosen physical site into two chains
+indexed from the outer boundaries inward and one central tensor. -/
+theorem exists_eq_mixedChain {l r : ℕ} (A : MPSChainTensor d D (l + (r + 1))) :
+    ∃ (L : MPSChainTensor d D l) (M : MPSTensor d D) (R : MPSChainTensor d D r),
+      mixedChain L M R = A := by
   let L : MPSChainTensor d D l := fun p => A (Fin.castAdd (r + 1) p)
   let M : MPSTensor d D := A (Fin.natAdd l 0)
   let R : MPSChainTensor d D r := fun p i => (A (Fin.natAdd l (Fin.rev p).succ) i)ᵀ
@@ -339,6 +331,25 @@ theorem exists_mixed_sequential_polarIsoMatrix {l r : ℕ} (hD : 0 < D)
     · refine Fin.cases ?_ (fun k => ?_) k
       · simp [mixedChain, M]
       · simp [mixedChain, reverseTransposeChain, R]
+  exact ⟨L, M, R, hA⟩
+
+/-- The polar isometry of a site-dependent chain with injective blocked tensor has a mixed
+sequential factorization with its input at the site after the first `l` physical sites.
+This includes both endpoint choices.
+
+Source: arXiv:2307.01696, footnote 4 to equations (13)–(15).
+
+The support-restricted version without injectivity is
+`MPSPreparation.exists_mixed_sequential_polar_support`; see
+`docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
+theorem exists_mixed_sequential_polarIsoMatrix {l r : ℕ} (hD : 0 < D)
+    (A : MPSChainTensor d D (l + (r + 1)))
+    (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) :
+    HasMixedSequentialFactorization hD
+      (Matrix.reindex ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).trans
+        (mixedConfigurationEquiv d l r).symm) (Equiv.refl _)
+          (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A))) := by
+  obtain ⟨L, M, R, hA⟩ := exists_eq_mixedChain A
   have h := exists_mixed_sequential_polarIsoMatrix_of_split hD L M R
     (by simpa only [hA] using hB)
   simpa only [mixedPolarIsoMatrix, hA] using h

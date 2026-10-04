@@ -3,55 +3,66 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Mixed Sequential Polar Factorization: Injective Input Scope}
+\title{Mixed Sequential Polar Factorization on the Actual Support}
 \author{}
 \date{2026-10-04}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
-\section{Source and restricted statement}
+\section{Source and the full-input obstruction}
 For a blocked matrix product map $B=VP$,
-\cite[p.~3, footnotes~3--4 to eqs.~(13)--(15)]{Malz2024Preparation}
+arXiv:2307.01696, page~3, footnotes~3 and~4 to equations~(13)--(15),
 allows $B$ to be non-injective, interprets the inverse of $P$ as its
 pseudoinverse, and permits the input to be placed at any chosen tensor,
 with sequential decompositions from both boundaries toward that site.
 
-The mixed polar factorization presently assumes that $B$ is injective.
-Its positive polar factor is then invertible and $V^\dagger V=\Id_{D^2}$.
-The two inward sweeps give isometric evaluations $E_L,E_R$ and a central
-map $C$ with
+If $B$ is injective, then $V^\dagger V=\Id_{D^2}$ and the inward sweeps
+produce a central isometry on the full virtual-pair input.
+For non-injective $B$, its polar support $\Pi$ instead satisfies
+$V^\dagger V=\Pi$. Thus a central map on all $D^2$ input coordinates
+cannot remain an isometry when $\Pi\ne\Id_{D^2}$.
+This is a genuine distinction between the full-input and support-input
+statements, rather than an alternative meaning of isometry.
+
+\section{The support construction}
+Choose orthonormal coordinates for the range of $\Pi$: an isometry
+$J\colon\C^s\to\C^{D^2}$ with $JJ^\dagger=\Pi$.
+The bound $s\le D^2$ follows from injectivity of $J$. Then
 \begin{align}
-    V & =(E_L\otimes\Id_d\otimes E_R)C, & C^\dagger C & =\Id_{D^2}.
-    \label{eq:mswc24_mixed_injective}
+    (VJ)^\dagger(VJ) & =J^\dagger\Pi J=\Id_s.
+    \label{eq:mswc24_support_isometry}
 \end{align}
-Both outer bonds have dimension one, and every bond has dimension at most
-$D^2$. The input may be attached at either endpoint as well as at an
-interior site.\footnote{Formal declarations:
-    \leanid{MPSPreparation.exists_mixed_sequential_polarIsoMatrix_of_split} and
-    \leanid{MPSPreparation.exists_mixed_sequential_polarIsoMatrix} in
-    \doclink{TNLean/MPS/Preparation/MixedSequentialFactorization}.}
+The existing polar right-factor theorem gives $V=BG$ for a virtual-pair
+matrix $G$. Attach $GJ$ at the chosen central site and run the two
+independent inward sweeps. Their outer evaluations are isometries
+$E_L,E_R$, and their remainders give a central map $C$ such that
+\begin{align}
+    VJ & =(E_L\otimes\Id_d\otimes E_R)C, & C^\dagger C & =\Id_s.
+    \label{eq:mswc24_mixed_support}
+\end{align}
+Both outer bonds have dimension one, and every side bond has dimension
+at most $D^2$. The input may be attached at either endpoint or any
+interior site; the argument also allows zero-dimensional support.
 
-\section{Missing extension and elimination}
-For non-injective $B$, let $\Pi$ be the orthogonal projector onto the
-support of $P$ and let $P^+$ be its pseudoinverse. Then $V=BP^+$ satisfies
-$V^\dagger V=\Pi$. If $V=EC$ with
-$E=E_L\otimes\Id_d\otimes E_R$ isometric, then
-$C^\dagger C=V^\dagger V=\Pi$, so $C$ need not be an isometry on all
-$D^2$ input coordinates. Thus (\ref{eq:mswc24_mixed_injective}) cannot
-simply be retained after dropping injectivity.
+The original polar partial isometry is recovered exactly:
+\begin{align}
+    (VJ)J^\dagger & =V\Pi=V.
+    \label{eq:mswc24_support_reconstruction}
+\end{align}
+Consequently the blocked tensor is $B=(VJ)(J^\dagger P)$. The central
+operation is an actual isometry on the compressed input, and no physical
+amplitude is discarded by choosing those input coordinates.
 
-To remove this restriction, factor the pseudoinverse polar map by the same
-inward sweeps and allow the central map to be a partial isometry with
-initial projector $\Pi$. Equivalently, choose an isometry
-$J\colon\C^r\to\C^{D^2}$ onto the support, where $r=\operatorname{rank}B$,
-and state the mixed factorization for $VJ$, with a central isometry on
-$\C^r$. No mixed theorem of either form is asserted here. The one-sided
-factorization already treats the polar support after a unitary change of
-input coordinates.\footnote{Formal declaration:
-    \leanid{MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary}
-    in \doclink{TNLean/MPS/Preparation/SequentialFactorization}.}
-
-\bibliographystyle{alpha}
-\bibliography{references}
+\section{Conclusion}
+The mixed factorization now covers every blocked tensor on its actual
+polar support, with no injectivity assumption. The full-input theorems
+remain useful specializations for injective blocks. The same mixed
+factorization predicate handles arbitrary finite input dimension, so
+no second isometry notion or support representation is introduced.
+This resolves the former scope restriction while preserving the fact
+that the unreduced polar map is only a partial isometry.\footnote{Formal
+    declarations: \leanid{MPSPreparation.exists_mixed_sequential_polar_support_of_split}
+    and \leanid{MPSPreparation.exists_mixed_sequential_polar_support} in
+    \doclink{TNLean/MPS/Preparation/MixedSequentialSupport}.}
 \end{document}
