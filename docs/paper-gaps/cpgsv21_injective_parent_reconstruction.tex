@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage{needspace}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Injective PEPS Parent Interactions: the Physical Reconstruction Condition}
+\author{}
+\date{2026-10-02}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed construction}
+Section~IV.C.1 of \cite{Cirac2021Matrix} constructs an injective PEPS
+from virtual entangled pairs by a product of site maps $A$.
+The equation labelled \path{eq:4:deformed-parent-1} transports a virtual
+parent interaction $h$ by a chosen site left inverse:
+\begin{align}
+    h'=(A^{-1}\otimes A^{-1})^\dagger
+             h(A^{-1}\otimes A^{-1}).
+    \label{eq:injective_parent_bare}
+\end{align}
+The following sentence asserts that its kernel is the regional PEPS
+space.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2031--2037.}
+This kernel assertion needs a physical reconstruction condition when
+the injective site maps are rectangular.
+
+\section{A nondegenerate example}
+Consider two vertices joined by a bond of dimension $D=1$ and take
+$A:\mathbb C\longrightarrow\mathbb C^2$, $A(z)=(z,0)$, at each vertex.
+The bond space is nonzero and both site maps are injective.
+The normalized virtual Bell vector is the scalar $1$, so its complement
+projector is $h=0$. Consequently (\ref{eq:injective_parent_bare}) gives
+$h'=0$ on $\mathbb C^2\otimes\mathbb C^2$. Its kernel is four-dimensional,
+whereas the actual two-site PEPS space is
+$\operatorname{span}\{e_0\otimes e_0\}$.
+Thus the failure is present for positive bond dimension and an injective,
+nonzero tensor; it is not a zero-dimensional convention.\footnote{Results:
+    \leanid{TNLean.PEPS.InjectiveParentReconstructionCounterexample.bareKernel_ne_productSiteRange},
+    \leanid{TNLean.PEPS.InjectiveParentReconstructionCounterexample.finrank_productSiteRange}, and
+    \leanid{TNLean.PEPS.InjectiveParentReconstructionCounterexample.finrank_bareKernel}.}
+
+\Needspace{10\baselineskip}
+\section{The corrected interaction}
+Let $F:\mathcal V\longrightarrow\mathcal H$ be the product site map
+on a finite region, and let $L:\mathcal H\longrightarrow\mathcal V$
+be a left inverse, so $LF=I_{\mathcal V}$. For any positive semidefinite
+virtual interaction $H$, put
+\begin{align}
+    K=L^\dagger H L+(I_{\mathcal H}-FL)^\dagger(I_{\mathcal H}-FL).
+    \label{eq:injective_parent_reconstruction}
+\end{align}
+Both summands are positive semidefinite. Their sum annihilates $\psi$
+precisely when $HL\psi=0$ and $FL\psi=\psi$. Indeed,
+\begin{align*}
+    \langle\psi,K\psi\rangle
+      =\|H^{1/2}L\psi\|^2+\|(I_{\mathcal H}-FL)\psi\|^2.
+\end{align*}
+It follows that $\ker K=F(\ker H)$.
+In contrast, the bare interaction satisfies
+$\ker(L^\dagger HL)=F(\ker H)\oplus\ker L$.
+The additional summand in (\ref{eq:injective_parent_reconstruction})
+removes exactly the unused physical directions. It vanishes if $F$ is
+bijective, and does not alter the quadratic form on $F(\mathcal V)$.
+If $\ker H$ is the actual regional virtual bond space, the corrected
+kernel is exactly the regional physical PEPS space.\footnote{Results:
+    \leanid{TNLean.PEPS.injectiveRegionParentTransport_posSemidef},
+    \leanid{TNLean.PEPS.injectiveRegionParentTransport_mulVec_eq_zero_iff},
+    \leanid{TNLean.PEPS.ker_injectiveRegionParentTransport}, and
+    \leanid{TNLean.PEPS.isRegionParentInteraction_injectiveRegionParentTransport}.}
+
+\section{Scope of the correction}
+This corrects the displayed interaction, not the uniqueness conclusion
+for genuine parent interactions with the prescribed exact local kernels.
+For injective tensors, uniqueness of the ground state of genuine
+nearest-neighbour parent interactions follows from those kernels and the
+virtual Bell constraints. Unused physical directions must first be excluded. Every vertex must be covered by a parent region;
+isolated vertices require their own single-site conditions.
+The reconstruction summand acts on the chosen region. Its existence does
+not by itself establish a decomposition into smaller local terms, nor
+any infinite-volume spectral-gap statement.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

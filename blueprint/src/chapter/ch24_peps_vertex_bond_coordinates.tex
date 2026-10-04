@@ -1,0 +1,66 @@
+\section{Vertex and bond coordinates}%
+\label{sec:peps_vertex_bond_coordinates}
+
+The virtual construction in \cite[Section~IV.C.1]{Cirac2021Matrix},
+local source lines 2017--2044, can be described either by
+independent labels at the vertices or by the two endpoint labels
+of each edge. These descriptions are equivalent on the original
+finite graph, including vertices incident to no edge.
+
+\begin{theorem}[Endpoint-pair coordinates]%
+    \label{thm:peps_vertex_bond_coordinates}
+    \lean{TNLean.PEPS.VertexVirtualConfig,
+        TNLean.PEPS.EdgePairVirtualConfig,
+        TNLean.PEPS.vertexVirtualConfigEquivEdgePair,
+        TNLean.PEPS.fullRegionVertexConfigEquiv,
+        TNLean.PEPS.fullRegionVertexConfigEquivEdgePair,
+        TNLean.PEPS.IsVertexVirtualConsistent,
+        TNLean.PEPS.isVertexVirtualConsistent_iff_edgePair_diagonal,
+        TNLean.PEPS.vertexVirtualConfigOfBonds,
+        TNLean.PEPS.vertexVirtualConfigEquivEdgePair_ofBonds,
+        TNLean.PEPS.isVertexVirtualConsistent_iff_exists_bonds}
+    \leanok
+    \uses{def:peps_virtual_bond_ground_space}
+    Let every edge $e$ of a finite graph have a dimension $D_e\ge0$.
+    Independent virtual configurations at all vertices are
+    in bijection with configurations
+    $\zeta_e=(a_e,b_e)$ of the two endpoints of each edge.
+    Equality of an edge's two incident vertex labels is precisely
+    the condition $a_e=b_e$.
+    Such consistent configurations are exactly those obtained
+    by assigning one common label to each bond.
+\end{theorem}
+
+\begin{proof}\leanok
+    Read the two endpoint labels of each edge. Conversely, recover
+    each vertex's incident label from its corresponding endpoint.
+    An edge has distinct endpoints, so these operations are inverse.
+    The consistency assertion then follows coordinate by coordinate.
+\end{proof}
+
+\begin{theorem}[The actual virtual contraction in bond coordinates]%
+    \label{thm:peps_full_virtual_bond_product}
+    \lean{TNLean.PEPS.fullRegionIncidentConfigEquivBonds,
+        TNLean.PEPS.fullRegionVertexConfigEquiv_incident,
+        TNLean.PEPS.regionVirtualBondWeight_univ_apply,
+        TNLean.PEPS.fullRegionVertexVectorEquivEdgePair,
+        TNLean.PEPS.fullRegionVertexVectorEquivEdgePair_virtualBondWeight}
+    \leanok
+    \uses{thm:peps_vertex_bond_coordinates,
+        def:peps_injective_vertex_coordinates}
+    In the full vertex region, sum the consistent virtual bond
+    assignments in the original contraction. Under the endpoint-pair
+    coordinate equivalence, the resulting coefficient vector is exactly
+    \[
+        \Omega(\zeta)=\prod_{e}\delta_{a_e,b_e}.
+    \]
+    No injectivity, connectedness, or positivity of the bond dimensions
+    is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    The full region has no crossing edges, and its incident labels
+    are exactly its global bond labels. An endpoint configuration
+    therefore contributes once if it is consistent and zero times
+    otherwise. This is the displayed product of diagonal indicators.
+\end{proof}

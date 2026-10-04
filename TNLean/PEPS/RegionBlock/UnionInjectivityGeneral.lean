@@ -582,7 +582,7 @@ bond multiple of the fused host weight, at a fixed complement physical leg `σco
 is the sum over complement boundary configurations of the blue coupling coefficient
 times the complement blocked-region weight. Combines the merge collapse and the
 decoupling, after splitting the fused host weight along `univ \ red = blue ⊔
-complement` (`regionBlockedWeight_threeBlockComplPhysical_eq`).
+complement` (`ThreeBlockGeometry.regionBlockedWeight_complPhysical_eq`).
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
 `Papers/1804.04964/paper_normal.tex`. -/

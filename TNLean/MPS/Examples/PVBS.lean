@@ -15,7 +15,9 @@ and a one-particle state with amplitude `qᵏ` at site `k`. Their full open
 matrix-product space is exactly the span of these two vectors at every positive
 length. The complex parameter allows the phase in the original PVBS model.
 
-Source: Bachmann and Nachtergaele, arXiv:1112.4097, Section II,
+## References
+
+- Bachmann and Nachtergaele, arXiv:1112.4097, Section II,
 equations (1)–(8), with one particle species and the physical sites in
 left-to-right order. The review arXiv:2011.12127 uses the parameter `q = 1 + λ`.
 The critical value is `q = 1`, where the boundary excitation is the W state.

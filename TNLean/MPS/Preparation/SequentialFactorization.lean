@@ -125,12 +125,8 @@ theorem sum_pairJoin_mul_pairEmbed (X : Matrix (Fin D) (Fin D) ℂ) (b : Fin (D 
 private theorem star_dotProduct_of_isSupportedBelow_one {D' : ℕ} (hD : 0 < D')
     {u v : Fin D' → ℂ} (hu : IsSupportedBelow 1 u) :
     star u ⬝ᵥ v = star (u ⟨0, hD⟩) * v ⟨0, hD⟩ := by
-  rw [dotProduct, Finset.sum_eq_single ⟨0, hD⟩]
-  · rfl
-  · intro α _ hα
-    have : 1 ≤ α.val := Nat.one_le_iff_ne_zero.mpr fun h => hα (Fin.ext h)
-    simp [hu α this]
-  · simp
+  conv_lhs => rw [eq_smul_basisVecZero_of_isSupportedBelow_one hD hu]
+  simp [star_smul, basisVecZero_dotProduct]
 
 /-- **Sequential factorization of a matrix product map isometric on its first inputs.** Let
 `V : ℂ^{D²} → (ℂ^d)^{⊗(n+1)}` have matrix elements
@@ -170,18 +166,19 @@ theorem exists_isometric_chain_of_eq_mul_of_le {n : ℕ} (A : MPSChainTensor d D
     if x.val < r then G a x else 0 with hG'
   -- The open-boundary product of eq. (13), swept from the left (eq. (14)).
   obtain ⟨b, Q, R, hb0, hbD, -, hrow, hcol, hisoQ, hR, hprod⟩ :=
-    exists_isometric_chain_mul (n + 1) 1 hDD (rowMat (pairJoin D))
-      (isRowSupportedBelow_rowMat _) fun p i => pairEmbed D (A p i)
+    exists_isometric_chain_mul (n + 1) 1 hDD (rowMat hDD (pairJoin D))
+      (isRowSupportedBelow_rowMat hDD _) fun p i => pairEmbed D (A p i)
   set C := R * G' with hCdef
   have hC : IsRowSupportedBelow (b (Fin.last (n + 1))) C := hR.mul G'
   have hCr : ∀ γ x, r ≤ x.val → C γ x = 0 := fun γ x hx => by
     simp [hCdef, hG', Matrix.mul_apply, show ¬x.val < r by omega]
   have hjoin : ∀ (σ : Fin (n + 1) → Fin d) a,
-      (rowMat (pairJoin D) * eval (fun p i => pairEmbed D (A p i)) σ) ⟨0, hDD⟩ a =
+      (rowMat hDD (pairJoin D) * eval (fun p i => pairEmbed D (A p i)) σ) ⟨0, hDD⟩ a =
       eval A σ (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 :=
     fun σ a => by
       rw [eval_pairEmbed, Matrix.mul_apply]
-      exact (Finset.sum_congr rfl fun j _ => by simp [rowMat]).trans
+      exact (Finset.sum_congr rfl fun j _ => by
+        simp [rowMat, basisVecZero, Matrix.vecMulVec_apply]).trans
         (sum_pairJoin_mul_pairEmbed _ a)
   have hVC : ∀ σ x, x.val < r → V σ x = (eval Q σ * C) ⟨0, hDD⟩ x := fun σ x hx => by
     rw [hCdef, ← Matrix.mul_assoc, ← hprod σ, hV σ x hx, Matrix.mul_apply]

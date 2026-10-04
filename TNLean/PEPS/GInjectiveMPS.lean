@@ -173,6 +173,24 @@ theorem IsGInjective.mpsSiteMap_reindex {ρ : Representation ℂ G V} {A : ι �
   · refine hA.injOn_invariants X hX (funext fun i => ?_)
     simpa [hA'] using congr_fun h0 (e.symm i)
 
+section LeftInverse
+
+attribute [local instance] Representation.invertibleFintypeCardComplex
+
+/-- A G-injective MPS tensor is invariant and has an averaged left inverse.
+Source: SCP10, Definition 4.2, lines 893–910, and the left inverses used in
+Lemma 4.7, lines 1038–1044, and Theorem 4.8, lines 1112–1123. -/
+theorem IsGInjective.exists_mpsLeftInverse [Fintype G] [FiniteDimensional ℂ V]
+    {ρ : Representation ℂ G V} {A : ι → Module.End ℂ V}
+    (hA : IsGInjective (linHom ρ ρ) (mpsSiteMap A)) :
+    (∀ g i, ρ g * A i * ρ g⁻¹ = A i) ∧
+      ∃ L : (ι → ℂ) →ₗ[ℂ] Module.End ℂ V,
+        L ∘ₗ mpsSiteMap A = (linHom ρ ρ).averageMap := by
+  obtain ⟨hAi, L, hL⟩ := (isGInjective_iff_exists_leftInverse _ _).mp hA
+  exact ⟨(mpsSiteMap_comp_linHom_eq_iff ρ A).mp hAi, L, hL⟩
+
+end LeftInverse
+
 /-- Source: arXiv:1001.3807, Lemma 4.7, `Papers/1001.3807/paper_v3.tex` lines 1036–1038.
 The tensor `C^{ij} = A^i B^j` obtained by concatenating two MPS tensors. -/
 def concatTensor (A : ι → Module.End ℂ V) (B : κ → Module.End ℂ V) :
@@ -345,9 +363,8 @@ theorem IsGInjective.mpsSiteMap_concatTensor {ρ : Representation ℂ G V}
   have := Fintype.ofFinite G
   have := Fintype.ofFinite ι
   have := Fintype.ofFinite κ
-  obtain ⟨hAi, LA, hLA⟩ := (isGInjective_iff_exists_leftInverse _ _).1 hA
-  obtain ⟨hBi, LB, hLB⟩ := (isGInjective_iff_exists_leftInverse _ _).1 hB
-  rw [mpsSiteMap_comp_linHom_eq_iff] at hAi hBi
+  obtain ⟨hAi, LA, hLA⟩ := hA.exists_mpsLeftInverse
+  obtain ⟨hBi, LB, hLB⟩ := hB.exists_mpsLeftInverse
   refine (isGInjective_iff_exists_leftInverse _ _).2
     ⟨?_, _, concatLeftInverse_comp_mpsSiteMap ρ hLA hLB⟩
   rw [mpsSiteMap_comp_linHom_eq_iff]
