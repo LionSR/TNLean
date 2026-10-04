@@ -689,8 +689,7 @@ one tensor.
 \end{enumerate}
 
 \section{Flux detection on a connected block}
-This section records a planned argument; it is not yet part of the
-formal development. Fix a spanning tree of a connected regular block and one non-tree
+Fix a spanning tree of a connected regular block and one non-tree
 internal edge. Its exposed cycle coordinate is conjugate to the residual
 of the actual inserted group operators.\footnote{Result:
     \leanid{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}.}
@@ -701,12 +700,18 @@ physical projections $Q_C=c^{-1}AD_CA^\dagger$.
 An additional projection $I-\sum_C Q_C$ completes the measurement on
 the whole physical Hilbert space and annihilates every actual twisted
 block column. The outcome on a nonzero column is exactly the conjugacy
-class of the derived residual. This would establish the conjugacy
+class of the derived residual. This establishes the conjugacy
 calculation in the proof of Theorem~6.15 for a chosen cycle in an actual
-connected block; only the cycle-coordinate identity above is currently
-formalized, and the measurement projections and their outcome statement
-remain open. The four-site plaquette geometry and its explicit
-holonomy remain separate; no parent-Hamiltonian assertion is used.
+connected block. The same construction detects the conjugacy class of
+any specified closed-walk holonomy.\footnote{Results:
+    \leanid{TNLean.PEPS.exists_regularCycleClass_physicalMeasurement},
+    \leanid{TNLean.PEPS.exists_regularClosedWalkClass_physicalMeasurement}.}
+On native tori of periods at least three, the four-site plaquette
+walk and its inserted-bond holonomy give the corresponding physical
+plaquette measurement.\footnote{Results:
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_physicalMeasurement},
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_fluxClass_measurement}.}
+No parent-Hamiltonian assertion is used in these measurement results.
 
 \section{The semi-regular bond isometry}
 For each irreducible block, the map
@@ -723,6 +728,44 @@ repeated-multiplicity counterparts.\footnote{Results:
 The identification of the
 fourth-root-weighted site tensor with those bond sums is a further
 statement; it is not assumed in this isometry calculation.
+
+\section{Local regular parent constraints and the remaining closure step}
+For connected regions of regular $G$-injective tensors, local inverses expose the actual
+canonical regional coefficients. The original regional ground space
+has only identity cycle coordinates. A nonzero vector lying both in
+this space and in an inserted regional space therefore forces every
+internal closed-walk holonomy to be the identity. Simultaneous right
+multiplication of the two exposed half-edge labels of an internal
+bond also preserves these coefficients, including in the presence of
+arbitrary inserted left group multiplications. These are local
+coefficient consequences; no global representation is assumed.
+
+On native tori with both periods at least three, the parent condition
+at the intersection of the two closure seams forces commuting closure
+labels. Conversely, commuting closures satisfy the original regional
+parents when the induced regions are connected and their actual
+closed-cell realizations are simply connected, including across either
+seam. A physical linear holonomy filter fixes the parent-supported
+space and discards every noncommuting closure. Thus, for a finite
+parent family containing the seam-intersection plaquette, let
+$\mathcal C_{\mathrm{all}}$ be the span of all native closures and
+$\mathcal C_{\mathrm{com}}$ the span of commuting closures. Under
+these regional hypotheses,
+\begin{align}
+    \ker H\cap\mathcal C_{\mathrm{all}}
+        =\mathcal C_{\mathrm{com}}.
+\end{align}
+The dimension of this intersection is the number of commuting
+pair-conjugacy classes. No $G$-isometry is required, and the linear
+filter is not asserted to be Hermitian.
+
+This establishes the final commuting-label constraint within the
+closure span in \cite[Theorems~5.5 and~5.9]{Schuch2010PEPS}.
+The remaining step is to prove that every vector in the original
+parent kernel belongs to $\mathcal C_{\mathrm{all}}$. Neither
+plaquette flatness for inserted states nor the local bond invariance
+identity supplies that spanning theorem. The complete source
+identification of the torus parent kernel remains unformalized.
 
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the

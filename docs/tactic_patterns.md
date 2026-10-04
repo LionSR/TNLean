@@ -24,6 +24,51 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Averaged left inverse of a G-injective MPS tensor (promoted, 2026-10-02)
+
+- **Pattern:** Extract the invariant tensor and its averaged left inverse from
+  general G-injectivity, then rewrite map invariance as conjugation invariance
+  of every physical tensor coefficient.
+- **Seen:** The concatenation proof in `PEPS/GInjectiveMPS.lean`, both original
+  intersection and closure proofs in `PEPS/GInjectiveMPSIntersection.lean`,
+  and the inhomogeneous intersection proof in
+  `PEPS/GInjectiveStripIntersection.lean`.
+- **Abstraction:** `IsGInjective.exists_mpsLeftInverse` in
+  `TNLean/PEPS/GInjectiveMPS.lean` combines the existing general left-inverse
+  theorem with the conjugation-invariance characterization.
+- **Notes:** All four consumers use this mathematical helper. The repeated
+  conjugation rewrite is removed; the helper adds no mathematical hypothesis
+  and does not require a finite physical alphabet.
+
+### Regional PEPS subspace inclusion by open contraction columns — promoted (2026-10-02)
+
+- **Pattern:** Rewrite the regional ground space as the span of its actual
+  open contraction columns, apply `Submodule.span_le`, and extract each
+  crossing configuration from the generator range.
+- **Seen:** Twice in `PEPS/ParentHamiltonian/RegularRegionFlatness.lean`
+  (exposure into canonical coordinates and recovery through the inverse),
+  and once in `RegularRegionBondRightInvariance.lean`
+  (exposed shared-bond right invariance).
+- **Abstraction:** `TNLean.PEPS.regionGroundSpace_le_iff` in
+  `TNLean/PEPS/ParentHamiltonian/RegionGroundSpace.lean` gives the universal
+  subspace property of the actual regional contraction.
+- **Notes:** All three consumers use this mathematical equivalence. It
+  composes Mathlib's `Submodule.span_le` and `Set.range_subset_iff`, adds no
+  hypotheses, and leaves the consumer theorem signatures unchanged.
+
+### Finite linear combinations in a supported subspace — promoted (2026-10-02)
+
+- **Pattern:** prove membership of a sum by `Submodule.sum_mem`, then prove
+  each scalar multiple belongs by `Submodule.smul_mem`.
+- **Seen:** regional support transport in
+  `PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean`,
+  `VertexInverseRegionSlice.lean`, and `VertexVirtualParentTransport.lean`.
+- **Abstraction:** existing Mathlib `Submodule.sum_smul_mem`; all three
+  consumers now apply it directly. No new lemma or tactic is needed.
+- **Notes:** the summands are actual regional slices, transformed by regional
+  site maps or site inverses. The scalar coefficients come from the
+  complementary region; no positivity assumption is involved.
+
 ### Integer-cell collar offset decomposition (promoted, 2026-10-02)
 
 - **Pattern:** Split the displacement from an occupied integer center into
