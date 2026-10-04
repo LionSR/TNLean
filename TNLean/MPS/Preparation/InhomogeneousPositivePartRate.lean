@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.InhomogeneousDoeblin
 import TNLean.MPS.Preparation.BlockIsometryState
+import TNLean.MPS.Preparation.SecondOrderOverlap
 import QICLean.Channel.Semigroup.CPClosure
 
 /-!
@@ -52,7 +53,7 @@ theorem gram_eq_smul_choi_transpose {d D : ℕ} [NeZero D] (A : MPSTensor d D) :
       (1 / (D : ℂ)) • Matrix.single b.2 a.2 1 by simp,
     map_smul, Matrix.smul_apply]
   simp only [smul_eq_mul]
-  field_simp
+  field_simp [NeZero.ne D]
 
 /-- **Uniform Gram and positive-part rates for an inhomogeneous chain.** Fix a faithful
 state `σ` of trace one. There is `K`, depending only on `D` and `σ`, such that for any chain
@@ -172,7 +173,7 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
     have ht := Matrix.trace_traceAdjointMap_mul T 1 1
     simp only [Matrix.mul_one, Matrix.one_mul] at ht
     rw [ht, hT, Matrix.trace_one, Fintype.card_fin]
-    field_simp
+    field_simp [NeZero.ne D]
   have hQtr : (ChoiRectangular.choiMatrix Q).trace = (r : ℂ) ^ M :=
     htc Q _ (hRprodtr M E hA)
   have hPctr : (ChoiRectangular.choiMatrix P).trace = 1 :=
