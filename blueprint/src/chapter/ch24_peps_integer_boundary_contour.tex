@@ -1,0 +1,45 @@
+\begin{theorem}[Connected exterior cell contour]%
+    \label{thm:peps_integer_boundary_contour_connected}
+    \lean{TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected}
+    \leanok
+    \uses{def:peps_integer_exterior_collar_graph}
+    Let $A\subset\mathbb Z^2$ be finite and suppose that the actual union
+    $P_A=\bigcup_{a\in A}(a+[-1/2,1/2]^2)$ is simply connected.
+    Let $B_A$ consist of the unoccupied centers whose coordinate distances
+    from some occupied center are at most one. Join four-neighbor centers
+    in $B_A$ whenever one occupied center is within coordinate distance
+    one of both. Then this graph is connected.
+    This is auxiliary exterior-collar geometry for
+    \cite[proof of Theorem~6.9]{Schuch2010PEPS}, local source lines
+    1935--2076. Shared corners of occupied cells are allowed; simple
+    connectedness refers to the genuine closed-cell union.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_integer_cell_exterior_connected,
+        thm:peps_integer_cell_contact_connectivity,
+        thm:peps_integer_contour_ray_potential}
+    Orient each exposed cell edge with its occupied cell on the left.
+    At an edge endpoint, continue with a right turn when the diagonal
+    cell is occupied, straight ahead when only the forward cell is
+    occupied, and a left turn otherwise. The reverse rule makes this
+    successor a permutation of the finite exposed-edge set.
+
+    Fix one successor orbit and assign weight one to its edges and zero
+    to the remaining edges. The resulting finite flow is conserved.
+    Its horizontal-ray winding potential is constant on missing cells,
+    since their four-neighbor graph is connected, and vanishes far from
+    the occupied cells. It is also constant on occupied cells: the edge
+    identities give equality across shared sides, and the right-turn
+    rule gives equality across shared corners. The occupied contact
+    graph is connected. Across any exposed edge the winding difference
+    is its weight. Thus every exposed edge has the same weight, and all
+    belong to the chosen successor orbit.
+
+    Consecutive contour edges have exterior centers that are equal or
+    joined by one or two four-neighbor steps with a common occupied-cell
+    support. Every missing center in $B_A$ can reach one of these
+    exterior centers using the same local support. These walks prove
+    graph connectivity. Nonemptiness follows by taking an occupied
+    center with maximal first coordinate and the missing center to its east.
+\end{proof}

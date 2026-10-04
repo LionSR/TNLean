@@ -1,0 +1,129 @@
+\begin{theorem}[Numbering preserves a regular region's physical range]%
+    \label{thm:peps_regular_region_range}
+    \lean{TNLean.PEPS.range_regularOpenRegionMatrix_eq_regionGroundSpace}
+    \leanok
+    \uses{def:peps_region_ground_space, def:peps_open_region_contraction}
+    For a finite PEPS region with regular group labels, numbering its
+    crossing bonds identifies the columns of its open-region matrix
+    $T_R$ with the open tensors defining $\mathcal G_R$.
+    Thus $\operatorname{ran}T_R=\mathcal G_R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Numbering and converting between group labels and the chosen
+    finite basis are bijections of boundary configurations. They
+    preserve the span of the open-region tensors.
+\end{proof}
+
+\begin{theorem}[The closed state determines a regular regional ground space]%
+    \label{thm:peps_regular_region_support}
+    \lean{TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_regular_connected_cut,
+        TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_regular_connected}
+    \leanok
+    \uses{def:peps_region_reduced_density, def:peps_region_ground_space,
+        def:peps_g_injective}
+    Let $G$ be a finite group, and put regular $G$-injective tensors at
+    the vertices of a finite connected graph. Suppose the subgraphs
+    induced by $R$ and $R^c$ are connected. Then the reduced density of
+    the closed PEPS vector satisfies
+    $\operatorname{ran}\rho_R=\mathcal G_R$.
+    The same conclusion holds without connectedness of the ambient
+    graph whenever the cut has a crossing edge.
+    This is an auxiliary consequence of the connected-region
+    construction in \cite[Lemma~5.2]{Schuch2010PEPS} and the regular
+    boundary cut in its Theorem~6.9.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_ginjective_cut_range,
+        thm:peps_connected_regular_region_injectivity,
+        thm:peps_regular_region_range,
+        thm:peps_region_reduced_density_support,
+        thm:peps_open_region_cut}
+    Choose one numbering for the crossing bonds on both sides. Let
+    $T_R,T_{R^c}$ denote the resulting open-region matrices. Both maps
+    are injective on the invariant boundary space, and the coefficient
+    matrix is $M_R=T_RT_{R^c}^{\mathsf T}$. A left inverse $L$ of
+    $T_{R^c}$ on that invariant space satisfies
+    $LT_{R^c}=P$, where $P$ is its averaging projector.
+    Since $P^{\mathsf T}=P$ and $T_RP=T_R$, one has
+    $M_RL^{\mathsf T}=T_R$.
+    Hence $\operatorname{ran}M_R=\operatorname{ran}T_R=\mathcal G_R$;
+    the reduced density has this same range. In a connected ambient
+    graph, the two nonempty induced regions have a crossing edge, so
+    the required numbering exists.
+\end{proof}
+
+\begin{theorem}[Equal closed states have equal regular region spaces]%
+    \label{thm:peps_same_state_regular_region_spaces}
+    \lean{TNLean.PEPS.regionGroundSpace_eq_of_sameState_regular_connected}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_region_ground_space}
+    Consider two regular $G$-injective PEPS tensor families on the same
+    finite connected graph, with the same physical spaces. If their
+    closed coefficient vectors agree, then
+    $\mathcal G_R(A)=\mathcal G_R(B)$ for every cut whose two induced
+    subgraphs are connected.
+    This is a necessary local relation toward a Fundamental Theorem
+    for regular $G$-injective PEPS.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_support}
+    Equality of the closed coefficient vectors gives equality of their
+    reduced densities. Each of the two regional ground spaces is the
+    range of that common density.
+\end{proof}
+
+\begin{theorem}[Dimension and Schmidt rank of a regular connected cut]%
+    \label{thm:peps_regular_region_dimension}
+    \lean{TNLean.PEPS.finrank_regionGroundSpace_of_regular_connected,
+        TNLean.PEPS.rank_regionReducedDensity_of_regular_connected_cut,
+        TNLean.PEPS.stateCoeff_groupBondTensor_ne_zero_of_regular_connected_cut}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_region_ground_space,
+        def:peps_region_reduced_density}
+    Consider regular $G$-injective tensors on a finite graph and a
+    connected region $R$ with $n+1$ crossing bonds. Then
+    $\dim\mathcal G_R=|G|^n$. If the complementary induced region is
+    also connected, the physical reduced density has rank $|G|^n$,
+    and the closed PEPS vector is nonzero.
+    These are auxiliary untwisted-cut consequences of the invariant
+    boundary calculation in \cite[Corollary~6.10]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_connected_regular_region_injectivity,
+        thm:peps_g_injective_invariants_range,
+        thm:peps_regular_boundary_invariants,
+        thm:peps_regular_region_range,
+        thm:peps_regular_region_support}
+    The open-region map is injective on the invariant boundary space
+    and has range $\mathcal G_R$. The simultaneous regular action on
+    $n+1$ boundary labels has invariant dimension $|G|^n$. If the
+    complement is connected, $\rho_R$ has range $\mathcal G_R$ and
+    therefore this same rank. The rank is positive; hence the closed
+    vector cannot vanish.
+\end{proof}
+
+\begin{theorem}[The physical state determines the virtual group order]%
+    \label{thm:peps_regular_group_order_rigidity}
+    \lean{TNLean.PEPS.card_group_eq_of_sameState_regular_connected_cut}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_region_reduced_density}
+    Let two tensor families be $G$-injective and $H$-injective for
+    the regular representations of finite groups $G$ and $H$,
+    respectively, and represent the same closed PEPS vector on
+    a finite graph. Suppose a cut has connected induced regions on
+    both sides and at least two crossing bonds. Then $|G|=|H|$.
+    Equality of the group orders is asserted; the multiplication
+    laws are not determined by this rank argument.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_dimension}
+    Write the number of crossing bonds as $n+1$, with $n>0$.
+    The common physical reduced density has rank both $|G|^n$ and
+    $|H|^n$. The map $k\mapsto k^n$ is injective on the natural
+    numbers, so $|G|=|H|$.
+\end{proof}

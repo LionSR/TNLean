@@ -33,18 +33,18 @@ private theorem inner_eq_inner_orthogonal_ker_projection
 
 namespace LinearMap.IsPositive
 
-/-- A positive operator on a finite-dimensional Hilbert space dominates a
-positive multiple of the orthogonal projection onto its kernel complement. -/
-theorem exists_pos_smul_orthogonal_ker_projection_le
+/-- A norm gap of a positive operator gives a lower order bound by the
+orthogonal projection onto its kernel complement. -/
+theorem smul_orthogonal_ker_projection_le_of_norm_gap
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [FiniteDimensional ℂ E] {H : E →ₗ[ℂ] E} (hH : H.IsPositive) :
-    ∃ γ : ℝ, 0 < γ ∧
-      (γ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap ≤ H := by
-  obtain ⟨γ, hγ, hGap⟩ := H.exists_pos_mul_norm_le_of_mem_orthogonal_ker
-  refine ⟨γ, hγ, hH.isSymmetric.sub
+    [FiniteDimensional ℂ E] {H : E →ₗ[ℂ] E} (hH : H.IsPositive)
+    {γ : ℝ} (hγ : 0 ≤ γ)
+    (hGap : ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖) :
+    (γ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap ≤ H := by
+  refine ⟨hH.isSymmetric.sub
     ((LinearMap.ker H)ᗮ.starProjection_isSymmetric.smul (by simp)), ?_⟩
   intro v
-  have h := hH.re_inner_ge_of_norm_gap hγ.le hGap
+  have h := hH.re_inner_ge_of_norm_gap hγ hGap
     ((LinearMap.ker H)ᗮ.starProjection v) (Submodule.starProjection_apply_mem _ _)
   have hnorm : (⟪(LinearMap.ker H)ᗮ.starProjection v, v⟫_ℂ).re =
       ‖(LinearMap.ker H)ᗮ.starProjection v‖ ^ 2 :=
@@ -55,6 +55,16 @@ theorem exists_pos_smul_orthogonal_ker_projection_le
     Complex.ofReal_im, zero_mul, sub_zero,
     hnorm,
     inner_eq_inner_orthogonal_ker_projection hH v, sub_nonneg] using h
+
+/-- A positive operator on a finite-dimensional Hilbert space dominates a
+positive multiple of the orthogonal projection onto its kernel complement. -/
+theorem exists_pos_smul_orthogonal_ker_projection_le
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [FiniteDimensional ℂ E] {H : E →ₗ[ℂ] E} (hH : H.IsPositive) :
+    ∃ γ : ℝ, 0 < γ ∧
+      (γ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap ≤ H := by
+  obtain ⟨γ, hγ, hGap⟩ := H.exists_pos_mul_norm_le_of_mem_orthogonal_ker
+  exact ⟨γ, hγ, hH.smul_orthogonal_ker_projection_le_of_norm_gap hγ.le hGap⟩
 
 /-- A positive operator is bounded above by a positive multiple of the
 orthogonal projection onto its kernel complement. -/

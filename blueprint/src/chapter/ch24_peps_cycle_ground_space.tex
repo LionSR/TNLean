@@ -1,0 +1,84 @@
+\subsection{The one-dimensional specialization}%
+\label{sec:peps_cycle_ground_space}
+
+\begin{definition}[Physical and boundary coordinates of an arc]%
+    \label{def:peps_cycle_arc_coordinates}
+    \lean{TNLean.PEPS.cycleArcConfigEquiv,
+        TNLean.PEPS.arcWord_cycleArcConfigEquiv,
+        TNLean.PEPS.cycleArcBoundaryEquiv,
+        TNLean.PEPS.cycleArcBoundaryMatrixEquiv,
+        TNLean.PEPS.cycleArcPhysicalEquiv}
+    \leanok
+    \uses{def:cycleTensorOfMPS}
+    Let $n\geq3$ and $0<L<n$. Enumerate an arc $R$ of $L$ sites in
+    cyclic order. A physical configuration on $R$ is then a word
+    $\sigma=(i_1,\ldots,i_L)$. There are exactly two crossing bonds,
+    entering and leaving the arc. If a boundary coefficient is
+    $x(a,b)$ on their ordered bond values, its boundary matrix is
+    $X_{ba}=x(a,b)$. Write $E_R$ for the corresponding ordering of
+    physical coefficients.
+\end{definition}
+
+\begin{lemma}[Arc contraction and the boundary matrix]%
+    \label{lem:peps_cycle_arc_boundary_matrix}
+    \lean{TNLean.PEPS.exterior_mul_openRegionMap_cycleTensorOfMPS,
+        TNLean.PEPS.cycleArcPhysical_openRegionMap_eq_groundSpaceMap}
+    \leanok
+    \uses{def:peps_cycle_arc_coordinates,
+        def:peps_open_region_contraction, def:ground_space_map}
+    Let $A$ be a matrix product tensor of bond dimension $D$, and
+    let $\Gamma_R$ be its open contraction on $R$. Let $m$ be the
+    number of assignments to the cycle bonds wholly outside $R$.
+    Then
+    \begin{align}
+        m\,E_R\Gamma_R(x)(\sigma)
+         & =D^{n-L-1}\operatorname{tr}
+        (A^{i_1}\cdots A^{i_L}X).
+        \label{eq:peps_cycle_arc_boundary_matrix}
+    \end{align}
+    If $D>0$, both scalar factors are nonzero, so the regional
+    boundary map differs from the MPS boundary map only by an
+    invertible scalar change of boundary coordinates.
+\end{lemma}
+
+\begin{proof}\leanok
+    Summing a regional contraction over all cycle bonds counts it
+    once for each exterior assignment. At fixed incoming and
+    outgoing bond values $(a,b)$, the same contraction equals
+    $D^{n-L-1}(A^{i_1}\cdots A^{i_L})_{ab}$.
+    Sum against $x(a,b)$ and use
+    $\sum_{a,b}x(a,b)M_{ab}=\operatorname{tr}(MX)$.
+    Positive bond dimension permits cancellation of the exterior
+    assignment count.
+\end{proof}
+
+\begin{theorem}[The regional ground space on a cycle arc]%
+    \label{thm:peps_cycle_region_ground_space}
+    \lean{TNLean.PEPS.map_regionGroundSpace_cycleTensorOfMPS}
+    \leanok
+    \uses{def:peps_region_ground_space, def:ground_space_parent,
+        def:peps_cycle_arc_coordinates}
+    For a matrix product tensor $A$ on a cycle of $n\geq3$ sites,
+    and every arc $R$ of length $0<L<n$,
+    \begin{align}
+        E_R\mathcal G_R
+         & =\{\sigma\mapsto
+        \operatorname{tr}(A^{i_1}\cdots A^{i_L}X):X\}
+        =\mathcal G_L(A).
+        \label{eq:peps_cycle_ground_space}
+    \end{align}
+    No injectivity assumption is needed. This identifies the
+    one-dimensional and graph definitions in
+    \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines
+    1987--2011.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_cycle_arc_boundary_matrix}
+    For $D>0$, the two-bond boundary coefficients range over all
+    matrices, and the nonzero scalar changes of boundary coordinates
+    in (\ref{eq:peps_cycle_arc_boundary_matrix}) preserve the range.
+    For $D=0$, the nonempty arc has an empty boundary-configuration
+    space, while the matrix boundary space has only the zero matrix.
+    Both ground spaces are therefore zero.
+\end{proof}
