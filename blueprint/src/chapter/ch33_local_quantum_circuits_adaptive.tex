@@ -72,7 +72,7 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
 
 \begin{theorem}[Channels, composition, and deterministic inclusion]
     \label{thm:qc_adaptive_protocol_properties}
-    \uses{def:qc_adaptive_protocol, thm:qc_onsite_feedforward_cptp}
+    \uses{def:qc_adaptive_protocol}
     \lean{QuantumCircuit.IsAdaptiveChannelProtocol.isKrausCPTP,
         QuantumCircuit.IsAdaptiveChannelProtocol.onsite_comp,
         QuantumCircuit.IsAdaptiveChannelProtocol.comp,
@@ -92,6 +92,7 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
     depth, and preserves density matrices.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_onsite_feedforward_cptp}
     \leanok
     Induct on the protocol tree. The onsite and layer cases use their
     channel properties, and the instrument case uses
@@ -144,8 +145,7 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
 
 \begin{theorem}[Measurement rounds are adaptive protocols]
     \label{thm:qc_measurement_round_adaptive}
-    \uses{def:qc_measurement_round_channel, def:qc_adaptive_protocol,
-        thm:qc_adaptive_protocol_properties}
+    \uses{def:qc_measurement_round_channel, def:qc_adaptive_protocol}
     \lean{QuantumCircuit.MeasurementRound.adaptive}
     \leanok
     The average channel of a computational-basis measurement round is a
@@ -153,6 +153,7 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
     the round's circuit.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_adaptive_protocol_properties}
     \leanok
     Use the round's circuit as a deterministic local channel protocol.
     The following onsite instrument has the computational-basis projectors
