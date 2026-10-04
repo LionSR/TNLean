@@ -20,6 +20,11 @@ The tensor is the existing `clusterTensorRMP`, with stationary density matrix
 expressions of display `SOPMP`, rather than finite periodic expectations.
 The blocked physical alphabet is little-endian: `i = s₀ + 2s₁` represents
 `Aˢ⁰ Aˢ¹`.
+
+**Scope restriction (specified twist):** The one-site absence result fixes
+`u = -σx`; it does not exclude string order for arbitrary other physical twists.
+This restriction is recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
