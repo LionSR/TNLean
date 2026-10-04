@@ -17,6 +17,10 @@ formulation on the orthogonal complement of the actual Hamiltonian kernel.
 multi-species thermodynamic gap conjecture is not asserted. See
 `docs/paper-gaps/bn12_pvbs_periodic_gap.tex`.
 
+## References
+
+Bachmann–Nachtergaele, arXiv:1112.4097, Section II, equations (4)–(8),
+restricted here to one species with zero phase.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace ComplexConjugate

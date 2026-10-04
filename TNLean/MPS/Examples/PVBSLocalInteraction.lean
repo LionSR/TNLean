@@ -14,7 +14,9 @@ For real hopping μ, the forbidden two-site vectors are `|11⟩` and
 `|01⟩ - μ |10⟩`. The actual parent interaction is the sum of their
 orthogonal projections, with the second divided by `1 + μ²`.
 
-Source: Bachmann–Nachtergaele, arXiv:1112.4097, Section II, equations (4)–(7),
+## References
+
+ Bachmann–Nachtergaele, arXiv:1112.4097, Section II, equations (4)–(7),
 with one species, zero phase, and left-to-right matrix products.
 -/
 

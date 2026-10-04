@@ -12,7 +12,11 @@ import Mathlib.Analysis.SpecificLimits.Normed
 The exact amplitudes give exponential decay from the left boundary for `‖q‖ < 1`.
 For `1 < ‖q‖`, amplitudes relative to the rightmost particle decay exponentially
 with distance from the right boundary. These are the two boundary regimes of
-Bachmann and Nachtergaele, arXiv:1112.4097, Section II, equation (8).
+the one-species PVBS model.
+
+## References
+
+- Bachmann and Nachtergaele, arXiv:1112.4097, Section II, equation (8).
 -/
 
 open Filter Topology

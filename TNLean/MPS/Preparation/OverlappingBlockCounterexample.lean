@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.JordanBlockPower
 import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.Preparation.OneDimensionalBlocks
@@ -30,6 +31,12 @@ state with the target is `(u^M + v^M) / (1 + s^M)^{1/2}` for all `q, M ≥ 1`
 for every `M ≥ 1` it is at most `M s²`
 (`one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le`): the construction converges,
 at the rate `M s²` set by the square of the overlap of the blocks.
+
+The positive polar matrix itself converges only to first order: both the square root of the
+active Gram matrix and the full supported positive polar matrix differ from their limits by
+at least `s/2`. Thus no eventual bound by a fixed multiple of `s²` holds for this matrix norm,
+even though the normalized-state error is quadratic. The active Gram matrix is positive
+definite at every positive block length.
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
 canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with both weights
@@ -605,5 +612,116 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
     norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis, fun hr C => ?_⟩
   simp only [embeddedFixedPointPair_overlappingBlockSector, coeff_overlappingBlockSector]
   exact not_approximationError_le_overlappingBlockTensor hr C
+
+section PolarNormObstruction
+
+open scoped MatrixOrder Matrix.Norms.L2Operator
+
+private theorem overlap_div_two_le_v (q : ℕ) :
+    overlappingBlockOverlap q / 2 ≤ overlappingBlockV q := by
+  have hv0 : 0 ≤ overlappingBlockV q := by
+    have h : Real.sqrt (1 - overlappingBlockOverlap q) ≤
+        Real.sqrt (1 + overlappingBlockOverlap q) :=
+      Real.sqrt_le_sqrt (by
+        have hs : 0 ≤ overlappingBlockOverlap q := by unfold overlappingBlockOverlap; positivity
+        linarith)
+    unfold overlappingBlockV
+    linarith
+  have hu0 : 0 ≤ overlappingBlockU q := by unfold overlappingBlockU; positivity
+  have hu1 : overlappingBlockU q ≤ 1 := by
+    nlinarith [overlappingBlockU_sq_add_overlappingBlockV_sq q,
+      sq_nonneg (overlappingBlockV q)]
+  nlinarith [two_mul_overlappingBlockU_mul_overlappingBlockV q]
+
+/-- The square root of the active Gram matrix differs from the identity by at least
+`(3/5)^q / 2` in operator norm. This is a project auxiliary obstruction to quadratic
+convergence of the polar matrix. The example comes from the normalized-state setting of
+arXiv:2307.01696, Lemma 1'(ii), whose state error has the quadratic rate recorded in
+`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`. -/
+theorem overlappingBlockOverlap_div_two_le_norm_sqrt_diagGram_sub_one (q : ℕ) :
+    overlappingBlockOverlap q / 2 ≤
+      ‖CFC.sqrt (diagGram overlappingBlockDiag q) - 1‖ := by
+  have hS : CFC.sqrt (diagGram overlappingBlockDiag q) = overlappingBlockSqrt q :=
+    CFC.sqrt_unique (overlappingBlockSqrt_mul_self q) (posSemidef_overlappingBlockSqrt q).nonneg
+  rw [hS]
+  calc overlappingBlockOverlap q / 2 ≤ overlappingBlockV q := overlap_div_two_le_v q
+    _ ≤ |overlappingBlockV q| := le_abs_self _
+    _ = ‖(overlappingBlockSqrt q - 1) 0 1‖ := by
+      simp [overlappingBlockSqrt]
+    _ ≤ ‖overlappingBlockSqrt q - 1‖ := Matrix.norm_apply_le_l2_opNorm _ _ _
+
+/-- The full positive polar matrix of the blocked example differs from its supported
+block-diagonal limit `J Jᴴ` by at least `(3/5)^q / 2` in operator norm, where `J` embeds the
+diagonal bond pairs. This is a project auxiliary matrix-norm obstruction; arXiv:2307.01696,
+Lemma 1'(ii), supplies the normalized-state setting of the example, rather than a quadratic
+matrix-norm claim. See `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`. -/
+theorem overlappingBlockOverlap_div_two_le_norm_polarPos_sub_limit (q : ℕ) :
+    overlappingBlockOverlap q / 2 ≤
+      ‖Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+        diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
+          (diagPairEmbedding (Fin 2))ᴴ‖ := by
+  have he : (Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+      diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
+          (diagPairEmbedding (Fin 2))ᴴ)
+        (0, 0) (1, 1) = (overlappingBlockV q : ℂ) := by
+    rw [Matrix.sub_apply,
+      polarPos_physicalMatrix_blockTensor_diagonal overlappingBlockDiag q
+        (posSemidef_overlappingBlockSqrt q) (overlappingBlockSqrt_mul_self q),
+      diagPairEmbedding_mul_mul_conjTranspose_apply,
+      diagPairEmbedding_mul_mul_conjTranspose_apply]
+    simp [overlappingBlockSqrt]
+  calc overlappingBlockOverlap q / 2 ≤ overlappingBlockV q := overlap_div_two_le_v q
+    _ ≤ |overlappingBlockV q| := le_abs_self _
+    _ = ‖(Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+        diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
+          (diagPairEmbedding (Fin 2))ᴴ)
+          (0, 0) (1, 1)‖ := by rw [he]; simp
+    _ ≤ _ := Matrix.norm_apply_le_l2_opNorm _ _ _
+
+/-- At every positive block length, the active Gram matrix of the example is positive
+definite. Thus its linear square-root perturbation occurs on a nondegenerate active space.
+The example belongs to the setting of arXiv:2307.01696, eq. (S2) and Lemma 1'(ii). -/
+theorem posDef_diagGram_overlappingBlockDiag {q : ℕ} (hq : q ≠ 0) :
+    (diagGram overlappingBlockDiag q).PosDef := by
+  have hG : (diagGram overlappingBlockDiag q).PosSemidef := by
+    rw [← overlappingBlockSqrt_mul_self q]
+    simpa only [(posSemidef_overlappingBlockSqrt q).isHermitian.eq] using
+      Matrix.posSemidef_conjTranspose_mul_self (overlappingBlockSqrt q)
+  have hQ : IsUnit (overlappingBlockSqrt q) :=
+    (Matrix.isUnit_iff_isUnit_det _).mpr (isUnit_det_overlappingBlockSqrt hq)
+  rw [hG.posDef_iff_isUnit, ← overlappingBlockSqrt_mul_self q]
+  exact hQ.mul hQ
+
+/-- No eventual quadratic bound holds for the polar matrix of the example. For every constant
+`C ≥ 0` and threshold, there is a larger positive block length at which the norm exceeds
+`C (3/5)^(2q)`. This concerns the matrix norm; the normalized-state error is quadratic.
+This project auxiliary obstruction concerns the example in the normalized-state setting of
+arXiv:2307.01696, Lemma 1'(ii), rather than a matrix-norm claim made in that paper.
+See `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`. -/
+theorem exists_norm_polarPos_overlappingBlockTensor_sub_limit_gt_sq (C : ℝ) (hC : 0 ≤ C) (q₀ : ℕ) :
+    ∃ q : ℕ, q₀ ≤ q ∧ q ≠ 0 ∧
+      C * overlappingBlockOverlap q ^ 2 <
+        ‖Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+          diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
+            (diagPairEmbedding (Fin 2))ᴴ‖ := by
+  obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one
+    (show (0 : ℝ) < 1 / (2 * (C + 1)) by positivity)
+    (by norm_num : (3 / 5 : ℝ) < 1)
+  let q := max q₀ (n + 1)
+  have hnq : n ≤ q := (Nat.le_succ n).trans (le_max_right _ _)
+  have hs : overlappingBlockOverlap q < 1 / (2 * (C + 1)) := by
+    exact (pow_le_pow_of_le_one (by norm_num) (by norm_num) hnq).trans_lt hn
+  have hspos : 0 < overlappingBlockOverlap q := by unfold overlappingBlockOverlap; positivity
+  have hCs : C * overlappingBlockOverlap q < 1 / 2 := by
+    have h := (lt_div_iff₀ (by positivity : (0 : ℝ) < 2 * (C + 1))).mp hs
+    nlinarith only [h, hspos]
+  refine ⟨q, le_max_left _ _, by dsimp [q]; omega, ?_⟩
+  calc C * overlappingBlockOverlap q ^ 2 =
+        (C * overlappingBlockOverlap q) * overlappingBlockOverlap q := by ring
+    _ < (1 / 2) * overlappingBlockOverlap q := mul_lt_mul_of_pos_right hCs hspos
+    _ = overlappingBlockOverlap q / 2 := by ring
+    _ ≤ _ := overlappingBlockOverlap_div_two_le_norm_polarPos_sub_limit q
+
+end PolarNormObstruction
 
 end MPSTensor

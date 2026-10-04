@@ -14,7 +14,9 @@ translation of any periodic ground vector must lie in that same open space.
 Comparing its first two particle amplitudes forces `b = qᴺ b`. Thus the
 periodic ground space is precisely the vacuum span when `qᴺ ≠ 1`.
 
-Source: Bachmann and Nachtergaele, arXiv:1112.4097, Section II,
+## References
+
+- Bachmann and Nachtergaele, arXiv:1112.4097, Section II,
 equations (4), (6)–(8); the periodic closure is an elementary consequence
 of the printed local constraints.
 -/

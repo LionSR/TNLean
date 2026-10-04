@@ -1,0 +1,95 @@
+\section{Regional supports of ordinary injective tensors}%
+\label{sec:peps_injective_region_support}
+
+\begin{lemma}[Exterior multiplicities and the actual region map]%
+    \label{lem:peps_injective_region_actual_map}
+    \lean{TNLean.PEPS.regionBlockedTensorMap_eq_exterior_smul_openRegionMap,
+        TNLean.PEPS.openRegionMap_injective_of_regionBlockedTensorInjective,
+        TNLean.PEPS.range_regionBlockedTensorMap_eq_regionGroundSpace}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    The region map obtained by summing all graph-edge labels is the
+    actual open-region map multiplied by the number of assignments to
+    edges wholly outside the region. Injectivity of the former implies
+    injectivity of the latter. If every virtual bond is nonzero
+    dimensional, the two maps have the same range.
+\end{lemma}
+
+\begin{proof}\leanok
+    Split the edge labels into those incident to the region and those
+    wholly outside it. The exterior labels do not enter any site tensor,
+    so they contribute their cardinality. An equality of actual images
+    implies an equality of globally summed images. A nonzero scalar
+    factor preserves a linear range.
+\end{proof}
+
+\begin{theorem}[Support from an injective complementary region]%
+    \label{thm:peps_injective_complement_region_support}
+    \lean{TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement}
+    \leanok
+    \uses{def:peps_region_ground_space,thm:peps_region_reduced_density_support}
+    If the actual open-region map of $R^c$ is injective, then the
+    unnormalized reduced density of the closed PEPS has support
+    exactly equal to $\mathcal G_R$. Neither injectivity of $R$
+    nor connectedness of either side is needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the physical coefficient matrix as $M=T_RS^\mathsf T$,
+    where $S$ is the complementary open map after matching the crossing
+    labels. A left inverse of $S$ gives a right inverse of its transpose.
+    Consequently $\operatorname{ran}M=\operatorname{ran}T_R$.
+    The reduced density $MM^\dagger$ has the same range as $M$.
+\end{proof}
+
+\begin{theorem}[An injective open cut determines its physical support]%
+    \label{thm:peps_injective_open_cut_rank}
+    \lean{TNLean.PEPS.rank_regionReducedDensity_of_injective_open_cut,
+        TNLean.PEPS.SameState.regionGroundSpace_eq_of_injective_complements}
+    \leanok
+    \uses{thm:peps_injective_complement_region_support}
+    If the actual open maps of $R$ and $R^c$ are injective, then
+    $\operatorname{rank}\rho_R=\prod_{e\in\partial R}D_e$.
+    If two coefficient vectors coincide and their complementary open maps
+    are injective, their regional ground spaces on $R$ coincide.
+    These assertions need neither site injectivity nor connectedness.
+\end{theorem}
+
+\begin{proof}\leanok
+    The complementary map identifies the reduced support with
+    $\mathcal G_R$, and injectivity of the regional map gives its exact
+    boundary dimension. Equal coefficient vectors have equal reduced
+    densities, so the corresponding support spaces agree.
+\end{proof}
+
+\begin{theorem}[Exact boundary rank for ordinary injective PEPS]%
+    \label{thm:peps_injective_region_boundary_rank}
+    \lean{TNLean.PEPS.openRegionMap_injective_of_isVertexInjective,
+        TNLean.PEPS.finrank_regionGroundSpace_of_injective_openRegionMap,
+        TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_isVertexInjective,
+        TNLean.PEPS.rank_regionReducedDensity_of_isVertexInjective}
+    \leanok
+    \uses{lem:peps_injective_region_actual_map,
+        thm:peps_injective_complement_region_support}
+    Suppose every site tensor is injective and every virtual bond has
+    positive dimension. For every finite region $R$,
+    \[
+        \operatorname{ran}\rho_R=\mathcal G_R,
+        \qquad
+        \operatorname{rank}\rho_R=\dim\mathcal G_R
+        =\prod_{e\in\partial R}D_e.
+    \]
+    The region and its complement may be disconnected. The positive-bond
+    convention is recorded in \cite{gap:peps_injective_ft_section3_route}.
+    This is the injective Schmidt-span consequence used in
+    \cite[Section 3]{Molnar2018NormalPEPS} and the virtual-pair
+    argument of \cite[Section IV.C.1]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A contraction of injective sites with nonzero virtual bonds is
+    injective. This applies both to $R$ and to its complement.
+    The complementary support theorem identifies the reduced support
+    with $\mathcal G_R$. Injectivity of the region map identifies
+    its range dimension with the crossing-bond configuration dimension.
+\end{proof}

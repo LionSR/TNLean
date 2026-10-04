@@ -1,0 +1,39 @@
+\begin{lemma}[Linear identity-holonomy filter]%
+    \label{lem:peps_regular_region_holonomy_filter}
+    \lean{TNLean.PEPS.exists_regularClosedWalkIdentityFilter,
+        TNLean.PEPS.exists_regularClosedWalkGlobalIdentityFilter}
+    \leanok
+    \uses{thm:peps_regular_region_parent_flatness,
+        def:peps_region_parent_interaction}
+    Consider a finite graph with regular $G$-injective tensors, a
+    connected region $R$, and a closed walk $p$ within $R$. There
+    is a physical linear operator $Q$ on $R$ which fixes the
+    original regional ground space. On a regional ground vector
+    with inserted bonds $u$, it acts as the identity if the
+    holonomy around $p$ is the identity, and as zero otherwise.
+
+    Extended by the identity outside $R$, the same operator fixes
+    every global vector satisfying the original regional parent
+    condition and has the corresponding scalar action on every
+    actual inserted closed PEPS. No $G$-isometry is assumed.
+    This is a linear operator; Hermiticity and positivity are
+    not asserted. It is an auxiliary consequence of the closure
+    and accessible-coordinate calculations in
+    \cite[Theorem~5.5]{Schuch2010PEPS}.
+    These auxiliary regular filters do not establish global closure spanning; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose a spanning tree of $R$. The exposed cycle labels of an
+    inserted block are simultaneous conjugates of its cycle
+    residuals. Evaluation of the closed-walk word commutes with
+    simultaneous conjugation. Thus the diagonal detector of
+    identity word value acts on each inserted block column by the
+    stated scalar. Transport this detector through a local
+    $G$-injective inverse and the original physical maps. These
+    maps recover every regional ground vector, so the scalar
+    action is preserved. An uninserted closed walk has identity
+    holonomy. Apply the regional statements to each complementary
+    physical slice to obtain the global statements.
+\end{proof}
