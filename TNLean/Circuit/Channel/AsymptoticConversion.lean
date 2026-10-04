@@ -111,12 +111,7 @@ theorem trans
 
 end IsAsymptoticLocalChannelConversion
 
-/-- Mutual asymptotic conversion by polylogarithmic-depth local channels.
-
-**Scope restriction (enlarged sites, no classical feedforward):** this relation uses
-unit-cost gates on enlarged sites, with no uniform intermediate-dimension bound. No
-uniform-depth inclusion in the `QCcc` phase relation of arXiv:2103.13367 is established.
-See `docs/paper-gaps/psc21_local_channel_phase_scope.tex`. -/
+/-- Mutual asymptotic conversion by polylogarithmic-depth local channels. -/
 def IsLocalChannelPhaseEquivalent
     (ρ : (N : ℕ) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (σ : (N : ℕ) → Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) : Prop :=
