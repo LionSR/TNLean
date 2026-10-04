@@ -252,7 +252,7 @@ spectral decomposition, and quantitative decay bounds.
     \lean{MPSTensor.exists_physicalConnectedCorrelator_le_geometric,
         MPSTensor.exists_rate_physicalConnectedCorrelator_le_geometric}
     \leanok
-    \uses{def:physical_connected_correlator, lem:normal_tensor_complement_gap}
+    \uses{def:physical_connected_correlator, def:nt_cpsv}
     For any tensor $A$ and matrix $\rho$ of nonzero trace, every rate
     $r>\rho_{\spec}(\E_A-P)$ and every pair of physical operators on independent
     finite supports admit a constant $C_{XY}>0$ such that, for all $n\geq0$,
@@ -271,6 +271,7 @@ spectral decomposition, and quantitative decay bounds.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:normal_tensor_complement_gap}
     Put $T=\E_A-P$ and $Z=\E_Y(\rho)-P(\E_Y(\rho))$.
     The Gelfand formula gives a constant $C>0$ such that
     $\|T^nZ\|\leq Cr^n\|Z\|$ at every $n\geq0$.
