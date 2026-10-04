@@ -37,7 +37,7 @@ noncomputable def sptFixedPointUnitaryAction
       Matrix.unitaryGroup (Fin D) ℂ) :
     G →* Matrix.unitaryGroup (Fin (D * D)) ℂ :=
   (sptFixedPointAction ρ 1).codRestrict (Matrix.unitaryGroup (Fin (D * D)) ℂ)
-    (sptFixedPointAction_mem_unitaryGroup ρ hρ)
+    (sptFixedPointAction_mem_unitaryGroup ρ 1 hρ (fun _ => by simp))
 
 /-- The normalized interpolation is a symmetric gapped interaction path
 between its endpoint fixed-point interactions. Its local term has norm at

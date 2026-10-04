@@ -4661,6 +4661,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   contain the common cancellation when a scalar action is also present.
 - **Notes:** both occurrences are in one module, below the promotion threshold.
 
+### positivity and unit bounds for the two-block square root — candidate
+- **Pattern:** use `u² + v² = 1` and the nonnegativity of the two square-root
+  coefficients to obtain `u ≤ 1` and `v ≤ 1`, then use `2uv = s`.
+- **Seen:** three occurrences in
+  `MPS/Preparation/OverlappingBlockCounterexample.lean`: the two normalized
+  state-error bounds and the polar matrix lower bound (2026-10-03).
+- **Abstraction:** a small conjunction lemma for these scalar inequalities
+  could replace the repeated derivations if a second file uses the pattern.
+- **Notes:** the occurrences currently lie in one file; the promotion
+  criterion of at least two files is not met.
+
 ### algebraic simplicity from a positive unital fixed line — promoted
 - **Pattern:** identify the generalized eigenspace at one with the fixed
   space by excluding peripheral Jordan blocks, then identify the algebraic

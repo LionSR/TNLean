@@ -154,6 +154,7 @@ theorem isNontrivialClass_of_clusterSPTFixedPoint
     ScalarCocycle.IsNontrivialClass ω' := by
   intro h
   exact cluster_isNontrivialSPT
-    (((cohomologousTo_of_sptFixedPointTensor clusterProjRep ρ' hρ').symm).trans h)
+    (((cohomologousTo_of_sptFixedPointTensor clusterProjRep 1 ρ'
+      (fun g i => by rw [MonoidHom.one_apply, one_smul]; exact hρ' g i)).symm).trans h)
 
 end MPSTensor
