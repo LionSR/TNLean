@@ -18,6 +18,11 @@ are one simultaneous translation of the incident-edge configuration.
 This is an auxiliary step in the finite-region contraction of Schuch, Cirac, and
 Pérez-García, arXiv:1001.3807, lines 1935–1957. The connectedness hypothesis is
 explicit. No region isometry or entropy assertion is made here.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

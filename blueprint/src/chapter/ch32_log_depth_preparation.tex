@@ -567,10 +567,7 @@ remaining eigenvalues have modulus strictly less than $1$.
     support projector of $M$, and $W$ is the partial isometry of the polar
     decomposition of $M$. In particular, every positive semidefinite $Q$ with
     $Q^2=M^\dagger M$ is the positive part of $M$, and every orthogonal projector
-    with the range of that positive part is the support projector. This is the
-    step needed to identify the layers of
-    \cite[eq.~(16)]{Malz2024Preparation} with the isometry of the blocked
-    tensor, which the source asserts (``to the same effect'') without proof.
+    with the range of that positive part is the support projector.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -592,9 +589,10 @@ remaining eigenvalues have modulus strictly less than $1$.
         MPSTensor.conjTranspose_blockKron_polarIsoMatrix_mul_self,
         MPSTensor.conjTranspose_treeIsoMatrix_mul_self,
         MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
-        MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor}
+        MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor,
+        MPSTensor.polarSupportMatrix_blockTensor_eq_treeSupportMatrix}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_polar_uniqueness}
+    \uses{thm:ldpolar_tensor_decomposition}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
     decomposition of the two-site blocked map of $T_{j-1}$, with
     $V^{(j)\dagger}V^{(j)}=\Pi_j$ the support projector of $P_j$, and let $T_j$
@@ -611,9 +609,10 @@ remaining eigenvalues have modulus strictly less than $1$.
     act on the regrouping of the $q$ sites into $2^{k-1}$ neighbouring pairs,
     then pairs of pairs, and so on. Each layer
     $\bigl(V^{(j)}\bigr)^{\otimes m}$ is a partial isometry with initial
-    projector $\Pi_j^{\otimes m}$. The product of the
-    layers is a partial isometry with initial space the range of $P_k$, so by
-    uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. The
+    projector $\Pi_j^{\otimes m}$. The product of the layers equals $V$, the
+    positive part $P_k$ equals $P_q$, and the support projector of $P_k$ is the
+    support projector of $\mathcal B_q$, so the product of the layers is a
+    partial isometry with initial space the range of $P_k$. The
     factorization (\ref{eq:ldp_tree_factorization}) is
     \cite[eq.~(16)]{Malz2024Preparation}, where the tree is said to act ``to the
     same effect'' as blocking directly; the identification with the polar
@@ -666,7 +665,8 @@ remaining eigenvalues have modulus strictly less than $1$.
 \begin{proof}
     \leanok
     \uses{lem:physical_rotation_mul, lem:ldpolar_physical_matrix_rotate,
-        lem:physical_rotation_state, thm:block_tensor_rotate_physical}
+        lem:physical_rotation_state, thm:block_tensor_rotate_physical,
+        thm:ldpolar_tensor_rotate}
     Blocking commutes with maps on the physical leg: blocking $C_W$ over $m$
     sites gives the tensor $C$ blocked over $m$ sites, rotated by
     $W^{\otimes m}$ (Theorem~\ref{thm:block_tensor_rotate_physical}). Blocking
@@ -675,13 +675,17 @@ remaining eigenvalues have modulus strictly less than $1$.
     $(A_{W'})_W=A_{WW'}$
     (Lemma~\ref{lem:physical_rotation_mul}), so induction on $k$ gives
     (\ref{eq:ldp_tree_factorization}).
-    The range of the two-site blocked map of $T_{j}$ lies in
-    $\operatorname{ran}P_{j}\otimes\operatorname{ran}P_{j}$, because
-    $\Pi_j$ fixes the tensor of $P_j$; so $\Pi_j^{\otimes2^{k-j}}$ fixes the
-    product of the later layers, and the product of all layers is a partial
-    isometry with initial projector the support projector of $P_k$.
-    Theorem~\ref{thm:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
-    with $P_q$.
+    For the polar factors, write the block of $2^{k}$ sites as the first layer
+    $K=\bigl(V^{(1)}\bigr)^{\otimes2^{k-1}}$ applied to the tensor $T_1$ blocked
+    over $2^{k-1}$ sites, regrouped along neighbouring pairs. The range of that
+    blocked tensor lies in $(\operatorname{ran}P_1)^{\otimes2^{k-1}}$, because
+    $\Pi_1$ fixes the tensor of $P_1$, so $K^\dagger K=\Pi_1^{\otimes2^{k-1}}$
+    fixes it. By Theorem~\ref{thm:ldpolar_tensor_rotate}, the isometric factor of
+    the block is $K$ times the isometric factor of $T_1$ blocked over $2^{k-1}$
+    sites, and the positive parts and the support projectors agree, also after
+    the regrouping. Induction on $k$ gives the identification with $V$, $P_q$
+    and the support projector of $\mathcal B_q$, and $V^\dagger V=\Pi$ gives
+    the initial projector of the product of the layers.
 \end{proof}
 
 \section{Approximation error}
@@ -704,12 +708,14 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     \label{lem:ldp_positive_part_overlap}
     \lean{MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul,
         MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le,
-        MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
+        MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le,
+        MPSTensor.exists_norm_trace_prod_range_transferMatrix_sub_one_le,
+        MPSTensor.exists_norm_mpvState_sq_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
         def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
-    length $\xi$, and let $0<\gamma<1/2$.
+    length $\xi$, and let $0<\gamma<1$.
     Then, for $N=qM$,
     \begin{align}
         \Bigl\lvert1-\bigl\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\bigr\rvert\Bigr\rvert
@@ -717,7 +723,9 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         \label{eq:ldp_positive_part_overlap}
     \end{align}
     for $q\ge1$ \cite[Supplemental Material, eq.~(S29)]{Piroli2021LOCC}, quoted as
-    \cite[eq.~(S9)]{Malz2024Preparation}. Explicitly, there is a constant $C>0$
+    \cite[eq.~(S9)]{Malz2024Preparation}. The sources state this for
+    $0<\gamma<1/2$; the range $0<\gamma<1$ follows from the Lipschitz bound of
+    Theorem~\ref{thm:ldp_positive_part_rate}. Explicitly, there is a constant $C>0$
     depending only on $A$, $\rho$, and $\gamma$ such that
     $\bigl\lvert1-\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\rvert\bigr\rvert
         \le Cy\,e^{Cy}$ for all $q\ge0$ and $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$.
@@ -889,6 +897,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_approximationError_le, MPSTensor.normalizedMPVState,
         MPSTensor.approximatingMPVState,
         MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le,
+        MPSTensor.exists_norm_transferMatrix_pow_sub_le,
         MPSTensor.one_sub_norm_inner_smul_inv_norm_le_two_mul}
     \leanok
     \uses{thm:ldp_positive_part_overlap_second_order, def:ldp_approximating_state,
@@ -947,12 +956,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 %% and N >= 2q for M >= 2, so the statement carries no condition relating q
 %% and N, as in the source's statement.
 
-In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/(2\gamma)\rceil$
-gives $e^{-2\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
-for every $\eta>0$. The choice $q=\lceil2\xi(1+\eta)\ln N\rceil$ of
-\cite[paragraph after Lemma~1]{Malz2024Preparation} corresponds to
-$\gamma=1/4$. Since every $\gamma<1$ is admissible here, the block length can
-be taken shorter by any factor less than four.
+\input{chapter/ch32_log_depth_polynomial_accuracy}
 
 The proof of the lower bound in the Supplemental Material of
 \cite{Malz2024Preparation} cuts the chain into blocks ``all of the same size,
@@ -1049,7 +1053,7 @@ and its error extend to blocks of any lengths.
         def:ldp_block_isometry_state, lem:ldp_block_isometry_state_overlap,
         def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
-    length $\xi$, and let $0<\gamma<1/2$. There is a constant $C>0$ depending
+    length $\xi$, and let $0<\gamma<1$. There is a constant $C>0$ depending
     only on $A$, $\rho$, and $\gamma$ such that for every cutting of the ring of
     $N$ sites into $M\ge1$ blocks of lengths $\ell_k\ge q$ with injective
     blocked tensors, the state $\ket{\psi_{\ell,\omega}}$ of
@@ -1078,140 +1082,26 @@ and its error extend to blocks of any lengths.
     $\lvert\braket{\psi_{\ell,\omega}}{\phi_N(A)}-1\rvert\le Cy\,e^{Cy}$ with
     $y=Me^{-\gamma q/\xi}$. The triangle inequality of
     Theorem~\ref{thm:ldp_approximation_error_normal} and
-    $\lvert c_N^2-1\rvert\le Ke^{-2\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
+    $\lvert c_N^2-1\rvert\le Ke^{-\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
     $N\ge\ell_1\ge q$, bound $\varepsilon$ by $Cy\,e^{Cy}+Ky$, and
     $\varepsilon\le1$ covers $y>1$.
 \end{proof}
 
 \section{Depth of the preparation}
 
-\begin{definition}[Local circuit of depth $T$]
-    \label{def:ldp_local_circuit}
-    \lean{MPSPreparation.IsLocalCircuitOfDepth, MPSPreparation.IsPreparedInDepth,
-        MPSPreparation.Layer, MPSPreparation.circuitOp,
-        MPSPreparation.supportedOperators}
-    \leanok
-    A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
-    $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
-    neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
-    local circuit of depth $T$ applied to a product state.
-
-    The chain is a ring with sites $1,\dots,N$: the neighbouring pairs are
-    $\{k,k+1\}$ with indices modulo $N$, and a circuit whose gates avoid the
-    wrap-around pair $\{N,1\}$ is a circuit on the open chain. An operator
-    \emph{acts on} a set of sites $X$ if it
-    lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
-    $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
-    are at distance larger than $s$ if no site of one is within ring distance
-    $s$ of a site of the other.
-\end{definition}
-
-\begin{lemma}[Light cone of a local circuit]
-    \label{lem:ldp_light_cone}
-    \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.conj_circuitOp_mem_supportedOperators}
-    \leanok
-    Let $U$ be a local circuit of depth $T$ and let $Z$ act on a set of sites
-    $X$. Then $U^\dagger ZU$ acts on the sites within ring distance $T$ of $X$.
-    This is the finite light cone of \cite[Theorem~1]{Malz2024Preparation}.
-\end{lemma}
-\begin{proof}
-    \leanok
-    By induction on the layers it suffices to treat one layer $W$. Split its
-    gates into those whose pair meets $X$, with product $G$, and the others,
-    with product $H$. The gates commute, so $W=HG$. The operator $H$ is unitary
-    and acts on the complement of $X$, so it commutes with $Z$ and
-    $W^\dagger ZW=G^\dagger ZG$. The pairs of $G$ lie within distance $1$ of
-    $X$, and products and adjoints of operators acting on a set act on it.
-\end{proof}
-
-\begin{lemma}[No connected correlations beyond the light cone]
-    \label{lem:ldp_light_cone_correlations}
-    \uses{lem:ldp_light_cone}
-    \lean{MPSPreparation.expect_mul_eq_of_isPreparedInDepth,
-        MPSPreparation.expect_mul_mul_expect_one_of_isPreparedInDepth}
-    \leanok
-    Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
-    act on sets of sites at distance larger than $2T$. Then
-    $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
-    This is the statement in the proof of
-    \cite[Theorem~1]{Malz2024Preparation} that every connected correlation of
-    such operators vanishes.
-\end{lemma}
-\begin{proof}
-    \leanok
-    Write $\ket{\psi}=U\ket{\pi}$ with $\ket{\pi}=\bigotimes_i\ket{v_i}$. Since
-    $UU^\dagger=\mathbb 1$,
-    $\bra{\psi}ZZ'\ket{\psi}=\bra{\pi}(U^\dagger ZU)(U^\dagger Z'U)\ket{\pi}$,
-    and by Lemma~\ref{lem:ldp_light_cone} the two factors act on disjoint sets
-    of sites. For products $\bigotimes_i m_i$ and $\bigotimes_i m'_i$ with
-    disjoint supports the expectation in $\ket{\pi}$ is
-    $\prod_i\bra{v_i}m_im'_i\ket{v_i}$, and at each site one of $m_i$, $m'_i$
-    is the identity; bilinearity then gives
-    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
-        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
-    disjoint sets.
-\end{proof}
-
-\begin{theorem}[Unitaries on a bounded number of sites]
-    \label{thm:ldp_bounded_unitary_two_site_gates}
-    \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.exists_isPairProduct,
-        MPSPreparation.isTwoLevelWord_of_det_eq_one,
-        MPSPreparation.exists_isPairProduct_ctrlOp,
-        MPSPreparation.isPairProduct_embedOp_pairSites}
-    \leanok
-    For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
-    $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
-    two neighbouring sites of the open chain of $n$ sites. This is the step
-    that the unitaries with constant support ``can be further expressed with
-    a low-depth circuit of local gates''
-    \cite[caption of Fig.~1]{Malz2024Preparation}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Dividing by a root of the determinant of order $d^n$, a global phase and
-    hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
-    a unitary as a product of two-level operators, each a real rotation or a
-    diagonal phase on the span of two basis vectors. Write $G_{ab}(g)$ for the
-    operator acting as the $2\times2$ matrix $g$ on the span of the basis vectors
-    $\ket a,\ket b$ and as the identity on their complement, and
-    $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ for the
-    quarter turn. For pairwise distinct $a,b,c$,
-    \begin{align}
-        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q),
-        \label{eq:ldp_two_level_quarter_turn}
-    \end{align}
-    and choosing $c$ to differ from $a$ at one site fewer than $b$ does reduces
-    a two-level operator between configurations differing at several sites to
-    one between configurations differing at one site fewer. Between configurations
-    differing at one site $t$ it is a single-site operation at $t$ controlled by
-    the other sites. Every rotation and every phase of determinant one is a group
-    commutator $g_1g_2g_1^\dagger g_2^\dagger$. Write $C_S(u)$ for the single-site
-    operation $u$ at $t$ controlled by the sites of $S$, with $t\notin S$; for
-    unitaries $v,w$ and a site $s\neq t$,
-    \begin{align}
-        C_{S\cup\{s\}}(vwv^\dagger w^\dagger)
-         & =C_S(v)\,C_{\{s\}}(w)\,C_S(v^\dagger)\,C_{\{s\}}(w^\dagger),
-        \label{eq:ldp_controlled_commutator}
-    \end{align}
-    so a controlled commutator is a product of two operations with one control
-    fewer and two operations on two sites; induction removes the controls. An
-    operation on two distant sites is conjugated to neighbouring sites by SWAP
-    gates.
-\end{proof}
+Local circuits, their light cones, and the decomposition of unitaries on a
+bounded number of sites into gates on neighbouring pairs are the subject of
+Chapter~\ref{ch:local_quantum_circuits}.
 
 \begin{theorem}[The approximating state in depth $O(q)$]
     \label{thm:ldp_approximating_state_depth}
-    \uses{def:ldp_local_circuit, def:ldp_approximating_state,
+    \uses{def:qc_local_circuit, def:ldp_approximating_state,
         def:ldp_block_isometry_state}
     \lean{MPSPreparation.exists_isPreparedInDepth_blockIsometryState,
         MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
         MPSPreparation.blockIsometryState_eq_mulVec,
         MPSPreparation.approximatingMPVState_eq_blockIsometryState,
-        MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
-        MPSPreparation.IsCircuitOn.finset_noncommProd,
-        MPSPreparation.noncommProd_embedOp_apply}
+        MPSPreparation.exists_blockUnitary}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Let $A$ be a tensor, let $\omega$ be a unit vector on
@@ -1230,8 +1120,9 @@ and its error extend to blocks of any lengths.
 \begin{proof}
     \leanok
     \uses{lem:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization,
-        thm:ldp_bounded_unitary_two_site_gates}
+        thm:ldp_sequential_factorization, lem:seqanc_staircase,
+        thm:qc_bounded_unitary_two_site_gates, lem:qc_parallel_circuits,
+        lem:qc_placed_operators}
     The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
     $D\ge1$, injectivity of the blocked tensor gives $D^2\le d^q$, which
     forces $d=D=1$. In either case $D\le d^D$, so each bond index can be
@@ -1242,7 +1133,7 @@ and its error extend to blocks of any lengths.
     next, sends $\ket{0\cdots0}$ to
     $\bigotimes_k\ket\omega_{R_kL_{k+1}}\ket0_{C_k}$
     \cite[eq.~(12)]{Malz2024Preparation}; by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} it has constant depth.
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} it has constant depth.
     On each block $k$, in parallel, a unitary $U_k$ with
     $U_k\ket{l,0,r}=V_{\ell_k}\ket{l,r}$ is applied, as in
     Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
@@ -1255,7 +1146,7 @@ and its error extend to blocks of any lengths.
     followed by one unitary on the first $2D$ sites
     \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
     of them has bounded depth by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, so $U_k$ has depth
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, so $U_k$ has depth
     $O(\ell_k)\le O(L)$, and circuits on disjoint blocks run in the same layers.
     A configuration contributes to the pair layer applied to $\ket{0\cdots0}$
     only if it carries a pair on every window and $\ket0$ elsewhere, which
@@ -1271,7 +1162,7 @@ and its error extend to blocks of any lengths.
     \leanok
     \uses{thm:ldp_approximating_state_depth, def:ldp_block_isometry_state,
         lem:ldp_block_isometry_state_overlap,
-        thm:ldp_bounded_unitary_two_site_gates, def:ldp_local_circuit}
+        thm:qc_bounded_unitary_two_site_gates, def:qc_local_circuit}
     There is $C$, depending only on $d$ and $D$, such that for every tensor $A$
     and every $N\ge3D$ for which the $N$-site blocked tensor is injective and
     $\ket{\phi_N(A)}\neq0$, the normalized state $\ket{\phi_N}$ is prepared
@@ -1291,336 +1182,13 @@ and its error extend to blocks of any lengths.
     Theorem~\ref{thm:ldp_approximating_state_depth} with $M=1$ and $L=N$ gives
     the first statement. For the second, a unit vector $\ket\psi$ is the first
     column of a unitary, which by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} is a product of at
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} is a product of at
     most $K_N$ gates on neighbouring sites; take $K=\sum_{N\le n_0}K_N$.
-\end{proof}
-
-Lemmas~\ref{lem:ldp_light_cone} and~\ref{lem:ldp_light_cone_correlations}
-extend from unitary gates to channels, the operations
-of a local circuit that may add product ancillas and discard them
-\cite{Piroli2021LOCC}.
-
-\begin{definition}[Local channel circuit of depth $T$]
-    \label{def:ldp_local_channel_circuit}
-    \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.ChannelLayer, MPSPreparation.ChannelLayer.map,
-        MPSPreparation.ChannelLayer.dual, MPSPreparation.channelCircuitMap,
-        MPSPreparation.channelCircuitDual,
-        MPSPreparation.IsChannelPreparedInDepth}
-    \leanok
-    A \emph{channel on the pair} $\{k,k+1\}$ is a map
-    $\rho\mapsto\sum_jK_j\rho K_j^\dagger$ on density matrices of the ring,
-    where each $K_j$ is an operator on the whole ring acting trivially off
-    $\{k,k+1\}$ and
-    $\sum_jK_j^\dagger K_j=\mathbb 1$. A \emph{channel layer} is a composition
-    of channels on disjoint pairs, and a
-    \emph{local channel circuit of depth $T$} is a composition
-    $\Phi=\Phi_T\circ\dots\circ\Phi_1$ of $T$ channel layers.
-    Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$
-    replaces each channel on a pair by $A\mapsto\sum_jK_j^\dagger AK_j$. A
-    density matrix is \emph{prepared in depth $T$ by local channels} if it
-    equals $\Phi(\bigotimes_i\sigma_i)$ for a local channel circuit $\Phi$ of
-    depth $T$ and density matrices $\sigma_i$ on single sites.
-\end{definition}
-
-\begin{lemma}[Duality and complete positivity of local channel circuits]
-    \label{lem:ldp_local_channel_circuit_properties}
-    \uses{def:ldp_local_channel_circuit, def:ldp_local_circuit}
-    \lean{MPSPreparation.channelCircuitMap_isKrausCPTP,
-        MPSPreparation.trace_channelCircuitMap_mul,
-        MPSPreparation.channelCircuitMap_map_toChannelLayer}
-    \leanok
-    Let $\Phi$ be a local channel circuit. Then
-    \begin{align}
-        \Tr(\Phi(\rho)A) & =\Tr(\rho\,\Phi^\dagger(A))
-        \label{eq:ldp_channel_circuit_duality}
-    \end{align}
-    for all operators $\rho$ and $A$ on the ring, and $\Phi$ is trace
-    preserving and completely positive. A local circuit $U$ of depth $T$ is
-    the local channel circuit $\rho\mapsto U\rho U^\dagger$ of depth $T$ with
-    one operator per channel.
-\end{lemma}
-\begin{proof}
-    \leanok
-    For one channel on a pair,
-    $\Tr\bigl(\sum_jK_j\rho K_j^\dagger A\bigr)
-        =\Tr\bigl(\rho\sum_jK_j^\dagger AK_j\bigr)$ by cyclicity of the
-    trace, and $\sum_jK_j^\dagger K_j=\mathbb 1$ makes it trace preserving
-    and completely positive. Both properties pass to compositions, hence to
-    layers and circuits. A gate $G$ on a pair is the channel with the single
-    operator $G$.
-\end{proof}
-
-\begin{lemma}[Light cone of a local channel circuit]
-    \label{lem:ldp_channel_light_cone}
-    \uses{def:ldp_local_channel_circuit}
-    \lean{MPSPreparation.channelCircuitDual_mem_supportedOperators,
-        MPSPreparation.ChannelLayer.dual_mem_supportedOperators}
-    \leanok
-    Let $\Phi$ be a local channel circuit of depth $T$ and let $Z$ act on a
-    set of sites $X$. Then $\Phi^\dagger(Z)$ acts on the sites within ring
-    distance $T$ of $X$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    By induction on the layers it suffices to treat one layer. The dual of a
-    channel on a pair disjoint from $X$ fixes $Z$: its operators commute with
-    $Z$, so $\sum_jK_j^\dagger ZK_j=\sum_jK_j^\dagger K_jZ=Z$. The dual of a
-    channel on a pair meeting $X$ maps operators acting on the sites within
-    distance $1$ of $X$ to such operators, since that set contains the pair.
-    The channels of a layer commute, so the dual of the layer is the dual of
-    the channels meeting $X$ applied after the dual of the others.
-\end{proof}
-
-\begin{lemma}[No connected correlations beyond the light cone of channels]
-    \label{lem:ldp_channel_light_cone_correlations}
-    \uses{lem:ldp_channel_light_cone, lem:ldp_local_channel_circuit_properties}
-    \lean{MPSPreparation.trace_mul_mul_eq_of_isChannelPreparedInDepth,
-        MPSPreparation.channelCircuitDual_mul,
-        MPSPreparation.ChannelLayer.dual_mul,
-        MPSPreparation.trace_finKronecker_mul_mul}
-    \leanok
-    Let $\rho$ be prepared in depth $T$ by local channels, and let $Z$, $Z'$
-    act on sets of sites at distance larger than $2T$. Then
-    $\Tr(\rho ZZ')
-        =\Tr(\rho Z)\Tr(\rho Z')$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    The dual of a channel is not multiplicative, but the dual of one layer is
-    multiplicative on operators $Z$, $Z'$ acting on sets $X$, $Y$ whose
-    neighbourhoods of radius $1$ are disjoint. Indeed, no pair of the layer
-    meets both $X$ and $Y$. If a channel acts off a set on which an operator
-    $B$ acts, then its dual $\Psi$ satisfies $\Psi(AB)=\Psi(A)B$ and
-    $\Psi(BA)=B\Psi(A)$. Writing the dual of the layer as the dual of the
-    channels meeting $X$ after the dual of the others, and using
-    Lemma~\ref{lem:ldp_channel_light_cone} for the latter applied to $Z'$,
-    one obtains the dual of $ZZ'$ as the product of the duals. By induction
-    on the layers, $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$, and
-    the two factors act on disjoint sets. For a product density
-    $\sigma=\bigotimes_i\sigma_i$ of trace one and products
-    $\bigotimes_im_i$, $\bigotimes_im'_i$ with disjoint supports,
-    $\Tr(\sigma\bigotimes_im_im'_i)
-        =\prod_i\Tr(\sigma_im_im'_i)$, and at each site one of
-    $m_i$, $m'_i$ is the identity; bilinearity and the duality
-    $\Tr(\Phi(\sigma)A)=\Tr(\sigma\Phi^\dagger(A))$
-    conclude.
-\end{proof}
-
-Ancillas are attached and discarded site by site, so the operations that
-change the local dimension act on single sites.
-
-\begin{definition}[Onsite channel]
-    \label{def:ldp_onsite_channel}
-    \uses{def:ldp_local_channel_circuit}
-    \lean{Matrix.rectKronecker, MPSPreparation.OnsiteChannel,
-        MPSPreparation.OnsiteChannel.map, MPSPreparation.OnsiteChannel.dual,
-        MPSPreparation.OnsiteChannel.id, MPSPreparation.OnsiteChannel.attach,
-        MPSPreparation.OnsiteChannel.attachZero,
-        MPSPreparation.OnsiteChannel.attach_siteMap_apply,
-        MPSPreparation.OnsiteChannel.discard,
-        MPSPreparation.OnsiteChannel.discard_siteMap_apply}
-    \leanok
-    An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
-    $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
-    $\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. It is the channel
-    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on the ring, with
-    $K_J=\bigotimes_iK_{iJ(i)}$ for every choice $J$ of one index per site;
-    its dual is $A\mapsto\sum_JK_J^\dagger AK_J$. Write
-    $\Phi_i(\sigma)=\sum_jK_{ij}\sigma K_{ij}^\dagger$ for its action at site
-    $i$. Attaching an ancilla of dimension $a$ in the state
-    $\tau=\sum_kw_kw_k^\dagger$ with $\sum_k\|w_k\|^2=1$ is the onsite channel
-    $X\mapsto X\otimes\tau$ from dimension $d$ to dimension $da$, and
-    discarding it is the onsite channel given by the partial trace over the
-    second factor of $\C^d\otimes\C^a$. Ancillas attached to each site and
-    local operations on a site and its ancillas are the free operations of
-    \cite{Piroli2021LOCC}.
-\end{definition}
-
-\begin{lemma}[Onsite channels are product channels]
-    \label{lem:ldp_onsite_channel_properties}
-    \uses{def:ldp_onsite_channel}
-    \lean{MPSPreparation.OnsiteChannel.map_isKrausCPTP,
-        MPSPreparation.OnsiteChannel.map_finKronecker,
-        MPSPreparation.OnsiteChannel.trace_map_mul,
-        MPSPreparation.OnsiteChannel.discard_siteMap_attach_siteMap}
-    \leanok
-    An onsite channel $\Phi$ is trace preserving and completely positive, it
-    maps $\bigotimes_i\sigma_i$ to $\bigotimes_i\Phi_i(\sigma_i)$, it satisfies
-    $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$, and discarding an attached
-    ancilla gives back the original operator.
-\end{lemma}
-\begin{proof}
-    \leanok
-    The operators $K_J$ satisfy
-    $\sum_JK_J^\dagger K_J=\bigotimes_i\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$,
-    so the Kraus form gives complete positivity and trace preservation. Since
-    $K_J$ is a tensor product, $K_J(\bigotimes_i\sigma_i)K_J^\dagger
-        =\bigotimes_iK_{iJ(i)}\sigma_iK_{iJ(i)}^\dagger$, and summing over $J$
-    factorizes site by site. The duality is cyclicity of the trace. Finally,
-    the partial trace of $X\otimes\tau$ is $\Tr(\tau)X=X$.
-\end{proof}
-
-\begin{lemma}[Onsite channels do not spread supports]
-    \label{lem:ldp_onsite_channel_locality}
-    \uses{def:ldp_onsite_channel}
-    \lean{MPSPreparation.OnsiteChannel.dual_mem_supportedOperators,
-        MPSPreparation.OnsiteChannel.dual_mul,
-        MPSPreparation.OnsiteChannel.dual_finKronecker}
-    \leanok
-    Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
-    $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
-    disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$, and
-    $\Phi_i^\dagger(\mathbb 1)=\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. Hence
-    the identity factors off $X$ are kept. For products with disjoint
-    supports, one of $m_i$, $m'_i$ is the identity at each site, so
-    $\Phi_i^\dagger(m_im'_i)=\Phi_i^\dagger(m_i)\Phi_i^\dagger(m'_i)$.
-    Linearity concludes.
-\end{proof}
-
-\begin{definition}[Local channel conversion]
-    \label{def:ldp_local_channel_conversion}
-    \uses{def:ldp_local_channel_circuit, def:ldp_onsite_channel}
-    \lean{MPSPreparation.IsLocalChannelProtocol,
-        MPSPreparation.IsLocalChannelConversion}
-    \leanok
-    A \emph{local channel protocol of depth $T$} is a composition
-    $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
-    channel layers $L_t$ and maps $\Phi_t$, each a composition of finitely
-    many onsite channels, which may change the local dimension; $\Phi_0$
-    contains at least one onsite channel, and $\Phi_t$ for $t\ge1$ may be
-    the identity. A matrix $\rho$ on the chain is
-    \emph{converted in depth $T$} into a matrix $\sigma$, possibly of
-    another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
-    protocol $\Psi$ of depth at most $T$. This is the channel form of the circuits
-    $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC}, with
-    ancillas attached to each site, local operations between the layers and
-    the ancillas traced out at the end, without measurements.
-\end{definition}
-
-\begin{lemma}[Basic properties of local channel conversions]
-    \label{lem:ldp_local_channel_conversion_properties}
-    \uses{def:ldp_local_channel_conversion, def:ldp_local_channel_circuit,
-        lem:ldp_onsite_channel_properties}
-    \lean{MPSPreparation.IsLocalChannelProtocol.isKrausCPTP,
-        MPSPreparation.IsLocalChannelProtocol.channelCircuitMap_comp,
-        MPSPreparation.isLocalChannelConversion_circuit,
-        MPSPreparation.IsChannelPreparedInDepth.exists_isLocalChannelConversion,
-        MPSPreparation.IsLocalChannelConversion.refl,
-        MPSPreparation.IsLocalChannelConversion.mono,
-        MPSPreparation.IsLocalChannelConversion.exists_isKrausCPTP,
-        MPSPreparation.IsLocalChannelConversion.density}
-    \leanok
-    A local channel protocol is trace preserving and completely positive.
-    Attaching ancillas, running a local channel circuit of depth $T$ and
-    discarding is a local channel protocol of depth $T$. Every density matrix
-    is converted into itself in depth $0$, a conversion in depth $T$ is a
-    conversion in every larger depth, a conversion of a density matrix is a
-    density matrix, and a density matrix prepared in depth $T$ by local
-    channels is converted in depth $T$ from a product density.
-\end{lemma}
-\begin{proof}
-    \leanok
-    By induction on the protocol: onsite channels are trace preserving and
-    completely positive by Lemma~\ref{lem:ldp_onsite_channel_properties},
-    channel layers are by construction, and both properties are stable under
-    composition. Appending the layers of a circuit of depth $T$ one at a time,
-    each onsite channel keeps the depth and each layer raises it by one; the
-    attaching and discarding channels are onsite. The identity onsite channel
-    gives depth $0$, depth bounds are monotone, and a conversion is realized by
-    a channel, which maps a positive semidefinite matrix of trace one to a
-    positive semidefinite matrix of trace one. A preparation in depth $T$ by
-    local channels starts from a product density and is itself such a
-    protocol.
-\end{proof}
-
-\begin{lemma}[Composition of conversions]
-    \label{lem:ldp_local_channel_conversion_trans}
-    \uses{def:ldp_local_channel_conversion}
-    \lean{MPSPreparation.IsLocalChannelConversion.trans,
-        MPSPreparation.IsLocalChannelProtocol.comp}
-    \leanok
-    If $\rho$ is converted in depth $T_1$ into $\sigma$ and $\sigma$ is
-    converted in depth $T_2$ into $\tau$, then $\rho$ is converted in depth
-    $T_1+T_2$ into $\tau$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    The composition $\Psi_2\circ\Psi_1$ of local channel protocols of depths
-    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$. Write
-    $\Psi_2$ as the sequence of its onsite channels and channel layers, and
-    apply them after $\Psi_1$ one at a time: the first onsite channel of
-    $\Psi_2$ becomes a further onsite channel in the last group $\Phi_{T_1}$
-    of $\Psi_1$, each onsite channel keeps the depth, and each of the $T_2$
-    channel layers raises it by one.
-\end{proof}
-
-\begin{lemma}[Light cone of a local channel protocol]
-    \label{lem:ldp_protocol_light_cone}
-    \uses{def:ldp_local_channel_conversion, lem:ldp_onsite_channel_locality,
-        lem:ldp_channel_light_cone, lem:ldp_channel_light_cone_correlations}
-    \lean{MPSPreparation.IsLocalChannelProtocol.exists_dual}
-    \leanok
-    A local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
-    $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
-    on a set of sites $X$ to operators acting on the sites within distance
-    $T$ of $X$, and that satisfies
-    \begin{align}
-        \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
-        \label{eq:ldp_conversion_dual_mul}
-    \end{align}
-    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
-    disjoint. This is the light cone of a depth-$T$ circuit in the proof of
-    \cite[Theorem~1]{Malz2024Preparation}, here with channels and onsite
-    operations.
-\end{lemma}
-\begin{proof}
-    \leanok
-    By induction on the protocol. For an onsite channel this is
-    Lemma~\ref{lem:ldp_onsite_channel_locality} with radius $0$; a channel
-    layer adds one to the radius, by Lemma~\ref{lem:ldp_channel_light_cone}
-    for the support and as in the proof of
-    Lemma~\ref{lem:ldp_channel_light_cone_correlations} for
-    (\ref{eq:ldp_conversion_dual_mul}), and an onsite channel keeps it.
-\end{proof}
-
-\begin{lemma}[No connected correlations after a conversion]
-    \label{lem:ldp_local_channel_conversion_correlations}
-    \uses{def:ldp_local_channel_conversion, lem:ldp_protocol_light_cone}
-    \lean{MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion}
-    \leanok
-    Let $\sigma$ be converted in depth $T$ from a product
-    $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
-    $Z'$ act on sets of sites at distance larger than $2T$. Then
-    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$. For pure states prepared
-    from a product state by local unitary circuits this is the necessary
-    condition for preparation by quantum circuits of \cite{Piroli2021LOCC}.
-\end{lemma}
-\begin{proof}
-    \leanok
-    Write $\rho=\bigotimes_i\sigma_i$ and $\sigma=\Psi(\rho)$ for a local
-    channel protocol $\Psi$ of depth $T'\le T$, and let $\Psi^\dagger$ be its
-    dual from Lemma~\ref{lem:ldp_protocol_light_cone}, of radius $T'$.
-    If $Z$ and $Z'$ act on sets at distance larger than $2T\ge2T'$, then
-    $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and
-    (\ref{eq:ldp_conversion_dual_mul}) together with the factorization of the
-    product density $\rho$ gives
-    \begin{align}
-        \Tr(\sigma ZZ') & =\Tr\bigl(\rho\,\Psi^\dagger(ZZ')\bigr)
-        =\Tr\bigl(\rho\,\Psi^\dagger(Z)\Psi^\dagger(Z')\bigr) \notag \\
-                        & =\Tr\bigl(\rho\,\Psi^\dagger(Z)\bigr)
-        \Tr\bigl(\rho\,\Psi^\dagger(Z')\bigr)
-        =\Tr(\sigma Z)\Tr(\sigma Z'). \notag
-    \end{align}
 \end{proof}
 
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
-    \uses{def:ldp_local_circuit}
+    \uses{def:qc_local_circuit}
     \lean{MPSPreparation.exists_isPreparedInDepth_le_log_of_mpvState_ne_zero,
         MPSPreparation.exists_isPreparedInDepth_le_log}
     \leanok
@@ -1687,72 +1255,9 @@ change the local dimension act on single sites.
     \leanok
     In the gauge~(\ref{eq:ldp_normal_gauge}), which multiplies $\ket{\phi_N(A)}$
     by a nonzero scalar, $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ differs from $1$
-    by at most $Ke^{-2\gamma N/\xi}$, as in the proof of
+    by at most $Ke^{-\gamma N/\xi}$ for $0<\gamma<1$, as in the proof of
     Theorem~\ref{thm:ldp_approximation_error_normal}, which is less than $1$ for
     large $N$.
-\end{proof}
-\begin{lemma}[Inverses and series composition of local circuits]
-    \label{lem:ldp_circuit_inverse_composition}
-    \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.Layer.adjoint, MPSPreparation.Layer.adjoint_partialOp,
-        MPSPreparation.Layer.adjoint_op, MPSPreparation.circuitOp_append,
-        MPSPreparation.circuitOp_map_adjoint_reverse,
-        MPSPreparation.IsLocalCircuitOfDepth.mem_unitary,
-        MPSPreparation.IsLocalCircuitOfDepth.star,
-        MPSPreparation.IsLocalCircuitOfDepth.mul}
-    \leanok
-    For a layer $W$ with gates $g_k$, the layer with the gates $g_k^\dagger$
-    on the same pairs implements $W^\dagger$, and the same holds for the
-    product of the gates of $W$ over any subset of its pairs. If a circuit
-    has the layers $W_1,\dots,W_T$, applied in this order, and implements $U$,
-    then the circuit with the layers $W_T^\dagger,\dots,W_1^\dagger$
-    implements $U^\dagger$; the layers of a circuit implementing $U$ followed
-    by those of a circuit implementing $U'$ implement $U'U$. Consequently, a
-    local circuit of depth $T$ is unitary, and its adjoint is a local circuit
-    of depth $T$. If $U$ and $U'$ are local circuits of depths $T$ and $T'$,
-    then $U'U$ is a local circuit of depth $T+T'$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    If $U=W_T\cdots W_1$ with layers $W_k$, then
-    $U^\dagger=W_1^\dagger\cdots W_T^\dagger$, and $W_k^\dagger$ is the layer
-    whose gates are the adjoints of the gates of $W_k$, on the same pairs. The
-    layers of $U'U$ are those of $U$ followed by those of $U'$.
-\end{proof}
-
-\begin{lemma}[Preparation from the all-zero state]
-    \label{lem:ldp_preparation_from_zero}
-    \uses{def:ldp_local_circuit}
-    \lean{MPSTensor.finKronecker_mulVec_productVector,
-        MPSPreparation.exists_mem_unitary_eq_smul_mulVec_single_zero,
-        MPSTensor.productVector_pi_smul,
-        MPSPreparation.exists_productVector_eq_smul_finKronecker_mulVec,
-        MPSPreparation.isLocalCircuitOfDepth_finKronecker,
-        MPSPreparation.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
-    \leanok
-    Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
-    $\mathbb{C}^d$,
-    $(\bigotimes_im_i)(\bigotimes_i\ket{v_i})=\bigotimes_im_i\ket{v_i}$, and
-    $\bigotimes_ic_i\ket{v_i}=(\prod_ic_i)\bigotimes_i\ket{v_i}$ for scalars
-    $c_i$. Every nonzero $x\in\mathbb{C}^d$ equals $c\,u\ket0$ for a unitary
-    $u$ and a scalar $c\neq0$, and every nonzero product vector is a scalar
-    multiple of $(\bigotimes_iu_i)\ket{0\cdots0}$ for one-site unitaries
-    $u_i$. A tensor product $\bigotimes_iu_i$ of one-site unitaries is a
-    local circuit of depth $2$. Every nonzero vector prepared in depth $T$ is a
-    scalar multiple of $U\ket{0\cdots0}$ for a local circuit $U$ of depth
-    $T+2$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{lem:ldp_circuit_inverse_composition}
-    The first layer applies $u_k\otimes u_{k+1}$ on the pairs $\{k,k+1\}$ with
-    $k$ odd and $k<N$, and the second applies $u_N$ when $N$ is odd. A nonzero
-    product vector $\bigotimes_i\ket{v_i}$ has $v_i\neq0$ for every $i$, and
-    $\ket{v_i}=c_iu_i\ket0$ for a unitary $u_i$ whose first column is
-    $\ket{v_i}/\lVert v_i\rVert$ and $c_i=\lVert v_i\rVert$. Hence
-    $\bigotimes_i\ket{v_i}=(\prod_ic_i)(\bigotimes_iu_i)\ket{0\cdots0}$, and
-    Lemma~\ref{lem:ldp_circuit_inverse_composition} composes the two
-    circuits.
 \end{proof}
 
 \begin{lemma}[Triangle step for the error]
@@ -1788,7 +1293,7 @@ change the local dimension act on single sites.
 
 \begin{corollary}[Normal states are transformed into each other in depth $O(\log(N/\varepsilon))$]
     \label{cor:ldp_normal_states_circuit}
-    \uses{def:ldp_local_circuit}
+    \uses{def:qc_local_circuit}
     \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero,
         MPSPreparation.exists_isLocalCircuitOfDepth_le_log}
     \leanok
@@ -1815,17 +1320,17 @@ change the local dimension act on single sites.
 \begin{proof}
     \leanok
     \uses{thm:ldp_depth_upper_bound, lem:ldp_periodic_state_nonzero,
-        lem:ldp_circuit_inverse_composition, lem:ldp_preparation_from_zero,
+        lem:qc_circuit_inverse_composition, lem:qc_preparation_from_zero,
         lem:ldp_error_triangle}
     By Theorem~\ref{thm:ldp_depth_upper_bound} with error $\varepsilon/4$ and
-    Lemma~\ref{lem:ldp_preparation_from_zero}, there are local circuits $U_A$,
+    Lemma~\ref{lem:qc_preparation_from_zero}, there are local circuits $U_A$,
     $U_B$ and unit vectors $\psi_A=aU_A\ket{0\cdots0}$,
     $\psi_B=bU_B\ket{0\cdots0}$ with $\varepsilon(\psi_A,\hat\phi_N(A))$ and
     $\varepsilon(\psi_B,\hat\phi_N(B))$ at most $\varepsilon/4$, of depths
     $T_A+2$ and $T_B+2$ with $T_A,T_B$ at most a constant times
     $\log(4N/\varepsilon)\le3\log(N/\varepsilon)$. Put $U=U_BU_A^\dagger$, a
     local circuit of depth $T_A+T_B+4$ by
-    Lemma~\ref{lem:ldp_circuit_inverse_composition}; the term $4$ is at most
+    Lemma~\ref{lem:qc_circuit_inverse_composition}; the term $4$ is at most
     $(4/\log2)\log(N/\varepsilon)$. Then $U\psi_A=(a/b)\psi_B$ is a unit
     vector, and since $U$ is unitary,
     $\varepsilon(U\hat\phi_N(A),(a/b)\psi_B)=\varepsilon(\hat\phi_N(A),\psi_A)$.
@@ -1913,7 +1418,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 
 \begin{theorem}[Block length $a\log(N/\varepsilon)+b$ for every slope $a>\xi/2$]
     \label{thm:ldp_depth_upper_bound_slope}
-    \uses{def:ldp_local_circuit}
+    \uses{def:qc_local_circuit}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le_of_slope}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following holds.
@@ -1989,7 +1494,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
     \label{thm:ldp_depth_upper_bound_divisible}
-    \uses{def:ldp_local_circuit}
+    \uses{def:qc_local_circuit}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le,
         MPSPreparation.exists_isPreparedInDepth_le_log_of_dvd,
         MPSPreparation.exists_normalGaugeData}
@@ -2481,7 +1986,7 @@ $A$ along $w$.
     \lean{MPSTensor.eventually_one_half_lt_infidelity_of_isNormal,
         MPSTensor.eventually_one_half_lt_infidelity_of_isNormalTensor}
     \leanok
-    \uses{def:ldp_local_circuit, def:correlation_length}
+    \uses{def:qc_local_circuit, def:correlation_length}
     Let $A$ be normal with correlation length $\xi>0$. Here
     $\xi=-1/\log\lvert\lambda_2/\lambda_1\rvert$, where $\lambda_1$ is an
     eigenvalue of $\E_A$ of largest modulus and $\lambda_2$ is an eigenvalue of
@@ -2597,7 +2102,10 @@ $A$ along $w$.
          & \ge\frac\xi4\bigl(\ln N-\ln\ln N\bigr)-\xi\ln\frac1\eta-C_A,
         \label{eq:ldp_depth_constant}
     \end{align}
-    with $C_A$ depending only on $A$. The same constant $\xi/4$ in front of
+    with $C_A$ depending only on $A$; for $\eta=1/2$ it follows from the form
+    (\ref{eq:ldp_depth_lower_bound_constant}) of
+    Theorem~\ref{thm:ldp_depth_lower_bound_constant}. The same constant
+    $\xi/4$ in front of
     $\ln N$ is implicit in the final inequality of the proof in
     \cite{Malz2024Preparation}, which compares $N/\ln N$ with a multiple of
     $e^{4T/\xi}$.
@@ -2648,7 +2156,7 @@ $A$ along $w$.
         MPSPreparation.isSeparatedBy_window}
     \leanok
     \uses{lem:ldp_two_window_trace, lem:ldp_finite_size_correction,
-        lem:ldp_light_cone_correlations}
+        lem:qc_light_cone_correlations}
     Let $A$ be in the gauge (\ref{eq:ldp_normal_gauge}), with the products of
     $L$ matrices spanning $\MN{D}$, and let $\lvert\lambda_2\rvert<r<1$ and
     $M\ge0$. For an operator $X$ on $(\C^d)^{\otimes w}$ let $X^{(k)}$ act on
@@ -2691,7 +2199,7 @@ $A$ along $w$.
     of $c_kc_l$ times the connected correlations of $X^{(k)}$ and $X^{(l)}$;
     in $\ket{\phi_N}$ these are bounded by (3) with $g\ge l-k$ and
     $g'\ge n-l+k$, and in $\ket{\psi}$ they vanish for $k\ne l$ by
-    Lemma~\ref{lem:ldp_light_cone_correlations}, since the windows are at
+    Lemma~\ref{lem:qc_light_cone_correlations}, since the windows are at
     least $2T$ sites apart on both sides.
 \end{proof}
 
@@ -2699,23 +2207,28 @@ $A$ along $w$.
     \label{thm:ldp_depth_lower_bound_gauge}
     \lean{MPSTensor.eventually_one_half_lt_infidelity_of_isLittleO_log,
         MPSTensor.exists_depth_lower_bound,
+        MPSTensor.exists_log_le_of_infidelity_le_one_half,
         MPSTensor.norm_mpvConnectedCorrelator_le_of_overlap,
         MPSTensor.mpvExpectation_centred_pair,
         MPSPreparation.sum_norm_inner_div_le_of_overlap}
     \leanok
-    \uses{def:ldp_local_circuit, def:correlation_length}
+    \uses{def:qc_local_circuit, def:correlation_length}
     Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), let $L\ge1$
     be a length such that the products of $L$ matrices of $A$ span $\MN{D}$,
     and let $\lambda_2\neq1$ be an eigenvalue of $\E_A$ of largest modulus
     among those different from $1$, with $\xi=-1/\log\lvert\lambda_2\rvert>0$.
     \begin{enumerate}
-        \item There are $B\ge0$ and $C,b>0$ such that for every $T\ge0$ and
+        \item There are $B\ge0$ and $C>0$ such that for every $T\ge0$ and
               $N\ge B(T+1)$, if a unit vector $\ket{\psi}$ prepared in depth $T$
               satisfies $\lvert\braket{\phi_N}{\psi}\rvert\ge1/2$, then
-              $N\le C(T+1)\,e^{b(T+1)}$.
+              $N\le C(T+1)\,e^{4T/\xi}$.
         \item If $\ket{\psi_N}$ are unit vectors prepared in depth $T_N$ with
               $T_N=o(\log N)$, then $\varepsilon(\phi_N,\psi_N)>1/2$ for all
               sufficiently large $N$.
+        \item There is $C'$ such that for all $N\ge1$ and $T\ge0$, if a unit
+              vector $\ket{\psi}$ prepared in depth $T$ satisfies
+              $\varepsilon(\phi_N,\psi)\le1/2$, then
+              $\frac\xi4\ln N\le T+\frac\xi4\ln(T+1)+C'$.
     \end{enumerate}
     Part (2) is Theorem~\ref{thm:ldp_depth_lower_bound} for a tensor in the
     gauge (\ref{eq:ldp_normal_gauge}); Lemma~\ref{lem:ldp_normal_gauge_reduction}
@@ -2724,14 +2237,20 @@ $A$ along $w$.
 \begin{proof}
     \leanok
     \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
-        lem:ldp_window_averages, lem:ldp_light_cone_correlations}
+        lem:ldp_window_averages, lem:qc_light_cone_correlations}
     Part (1) is the argument of the proof of
     Theorem~\ref{thm:ldp_depth_lower_bound} from its second paragraph on, with $s'\le s_0+2T+L+2$,
-    $\Delta\le(s_0+2L+4)(T+1)$ and $n\ge N/(2\Delta)$, which turn
-    (\ref{eq:ldp_depth_contradiction}) into $N\le C(T+1)e^{b(T+1)}$. For (2),
-    $T_N\le\log N/(2(b+1))$ for large $N$ gives
+    $\Delta\le(s_0+2L+4)(T+1)$ and $n\ge N/(2\Delta)$. Squaring
+    (\ref{eq:ldp_depth_contradiction}) gives
+    $N\le C_1\Delta\,e^{2(s'-1)/\xi}$, and
+    $e^{2(s'-1)/\xi}\le e^{2(s_0+L+1)/\xi}e^{4T/\xi}$, which is (1). For (2),
+    put $b=4/\xi$; $T_N\le\log N/(2(b+1))$ for large $N$ gives
     $C(T_N+1)e^{b(T_N+1)}\le Ce^{b+1}\sqrt N<N$ and $B(T_N+1)\le N$, so
-    $\lvert\braket{\phi_N}{\psi_N}\rvert<1/2$ by (1).
+    $\lvert\braket{\phi_N}{\psi_N}\rvert<1/2$ by (1). For (3), if
+    $N\ge B(T+1)$ take logarithms in (1); otherwise
+    $\ln N\le\ln(B+1)+\ln(T+1)$. In both cases
+    $\ln N\le\lvert\ln C\rvert+\ln(B+1)+\ln(T+1)+4T/\xi$; multiply by
+    $\xi/4$.
 \end{proof}
 
 \begin{lemma}[Reduction to the gauge]
@@ -2780,6 +2299,90 @@ $A$ along $w$.
     $\zeta=1$; primitivity of $\E_A$ passes to $\E_B$, and some blocking of $B$
     is injective by Theorems~\ref{thm:cpsv_normal_eventually_injective}
     and~\ref{thm:gauge_invariance_normal}.
+\end{proof}
+
+%% The source's proof of Theorem 1 (arXiv:2307.01696, Supplemental Material)
+%% ends with the chain k > N/(5q) > N gamma/(10 xi log N) > (18/c_1^2)
+%% e^{4T/xi} > 2/delta. Two of its constants slip: (1 - delta)^{k/2} < 1/e
+%% gives a trace distance above 1 - 1/e - o(1), not above sqrt(3/4), and
+%% gamma is undefined. Neither changes the rate 4/xi. The source's chain gives
+%% T >= (xi/4)(ln N - ln ln N) - C; the factor ln N comes from its block
+%% length q ~ ln N, as the factor T + 1 below comes from the window spacing.
+%% See docs/paper-gaps/mswc24_depth_lower_bound_constant.tex.
+
+\begin{theorem}[The depth lower bound with the constant $\xi/4$]
+    \label{thm:ldp_depth_lower_bound_constant}
+    \lean{MPSTensor.exists_log_le_of_infidelity_le_one_half_of_isNormal,
+        MPSTensor.exists_mul_log_le_of_infidelity_le_one_half_of_isNormal,
+        Real.log_le_mul_sub_one_sub_log}
+    \leanok
+    \uses{def:qc_local_circuit, def:correlation_length,
+        thm:ldp_depth_lower_bound}
+    Let $A$ and $\xi=-1/\log\lvert\lambda_2/\lambda_1\rvert>0$ be as in
+    Theorem~\ref{thm:ldp_depth_lower_bound}.
+    \begin{enumerate}
+        \item There is $C$ such that for all $N\ge1$ and $T\ge0$, if a unit
+              vector $\ket{\psi}$ prepared in depth $T$ satisfies
+              $\varepsilon(\phi_N,\psi)\le1/2$, then
+              \begin{align}
+                  \frac\xi4\ln N
+                   & \le T+\frac\xi4\ln(T+1)+C.
+                  \label{eq:ldp_depth_lower_bound_constant}
+              \end{align}
+        \item For every $0<a<\xi/4$ there is $C_a$ such that under the same
+              conditions $a\ln N\le T+C_a$.
+    \end{enumerate}
+    This is the explicit form of \cite[Theorem~1]{Malz2024Preparation} that
+    its proof gives: its final inequality compares $N/\ln N$ with a multiple
+    of $e^{4T/\xi}$. Two constants of that inequality need
+    repair~\cite{gap:mswc24_depth_lower_bound_constant}; the rate $4/\xi$
+    does not change.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_depth_lower_bound_gauge, lem:ldp_normal_gauge_reduction}
+    By Lemma~\ref{lem:ldp_normal_gauge_reduction}, $A$ may be replaced by a
+    tensor in the gauge (\ref{eq:ldp_normal_gauge}); this changes
+    $\ket{\phi_N}$ by a phase and divides the eigenvalues of $\E_A$ by
+    $\lambda_1$, so $\xi$ and $\lvert\braket{\phi_N}{\psi}\rvert$ are
+    unchanged. Part (1) is then part (3) of
+    Theorem~\ref{thm:ldp_depth_lower_bound_gauge}. For (2) put
+    $\theta=4a/\xi<1$ and $l=(1-\theta)/a$. Multiplying
+    (\ref{eq:ldp_depth_lower_bound_constant}) by $\theta$ gives
+    $a\ln N\le\theta T+a\ln(T+1)+\theta C$, and
+    $\ln x=\ln(lx)-\ln l\le lx-1-\ln l$ gives
+    $a\ln(T+1)\le(1-\theta)(T+1)-a(1+\ln l)$. Adding,
+    $a\ln N\le T+C_a$ with $C_a=1-\theta-a(1+\ln l)+\theta C$.
+\end{proof}
+
+\begin{corollary}[Depth $\Theta(\log N)$ at fixed error]
+    \label{cor:ldp_depth_theta_log}
+    \lean{MPSTensor.exists_depth_isTheta_log}
+    \leanok
+    \uses{def:qc_local_circuit, def:correlation_length,
+        thm:ldp_depth_lower_bound}
+    Let $A$ and $\xi$ be as in Theorem~\ref{thm:ldp_depth_lower_bound}, and
+    fix $0<\varepsilon\le1/2$. There are $a>0$, $c$, $C$ and $N_0$ such that
+    for every $N\ge N_0$:
+    \begin{enumerate}
+        \item some state $\ket{\psi}$ with
+              $\varepsilon(\psi,\phi_N)\le\varepsilon$ is prepared in depth
+              at most $c\ln N$;
+        \item every state $\ket{\psi}$ prepared in depth $T$ with
+              $\varepsilon(\phi_N,\psi)\le\varepsilon$ has $T\ge a\ln N-C$.
+    \end{enumerate}
+    Any $a<\xi/4$ is admissible. Thus the optimal depth is $\Theta(\log N)$,
+    as stated in the introduction of~\cite{Malz2024Preparation}.
+\end{corollary}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_depth_upper_bound, thm:ldp_depth_lower_bound_constant}
+    For (1), Theorem~\ref{thm:ldp_depth_upper_bound} gives depth at most
+    $c_0\ln(N/\varepsilon)$ for $N\ge N_0$, and for $N\ge2$,
+    $\ln(N/\varepsilon)=\ln N+\ln(1/\varepsilon)
+        \le\bigl(1+\ln(1/\varepsilon)/\ln2\bigr)\ln N$. Part (2) is part
+    (2) of Theorem~\ref{thm:ldp_depth_lower_bound_constant}, since
+    $\varepsilon\le1/2$.
 \end{proof}
 
 \input{chapter/ch32_log_depth_mera}
@@ -2872,9 +2475,10 @@ $A$ along $w$.
     \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
         MPSTensor.sum_norm_sq_pos_of_ne_zero, MPSTensor.ghzAmplitude_norm_sq,
         MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
-        MPSTensor.pairIsometry, MPSTensor.ghzState, Matrix.tensorPower}
+        MPSTensor.pairIsometry, Matrix.tensorPower}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition}
+    \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition,
+        def:qc_ghz_state}
     Let $\omega_1,\dots,\omega_b\in\mathbb C^D\otimes\mathbb C^D$ be any vectors,
     $\alpha\in\mathbb C^b$ any coefficients, and $M\ge0$. The state
     $\ket{\Omega'}=\sum_j\alpha_j\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$ is
@@ -3264,24 +2868,24 @@ $A$ along $w$.
     \lean{MPSTensor.exists_approximationError_le_mul_blockSum,
         MPSTensor.exists_approximationError_le_blockSum, MPSTensor.blockSum,
         MPSTensor.nonNormalApproxVector_blockSum,
-        MPSTensor.norm_nonNormalApproxOverlap_blockSum,
         MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum,
-        MPSTensor.one_sub_norm_sum_div_le}
+        MPSTensor.mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero,
+        MPSTensor.mpvOverlap_eq_zero,
+        MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
-        lem:ldp_orthogonal_sum_polar, lem:ldp_positive_part_overlap,
-        thm:ldp_approximation_error_normal, thm:ldp_injectivity_cutoff,
-        def:correlation_length}
+        lem:ldp_orthogonal_sum_polar, lem:ldp_mixed_transfer_decay,
+        thm:ldp_approximation_error_overlapping_weights, def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ with $b\geq1$, weights $\mu_j>0$, and
     normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, each placed on its own bond coordinates. Let $\lambda_2$
     bound the moduli of the eigenvalues other than one of every transfer map
     $\E_{A_j}$, so that its correlation length $\xi$ bounds every $\xi_j$, and
-    let $0<\gamma<1/2$. Form the approximating state $\widetilde\phi_N$ of
+    let $0<\gamma<1$. Form the approximating state $\widetilde\phi_N$ of
     Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of the
     $\rho_j$ on the bond coordinates of their blocks and $\beta_j=\mu_j^N$.
-    There is $C>0$ such that for every block length $q$ at which the $q$-site
-    states of distinct blocks are orthogonal,
+    There is $C>0$ such that for all weights $\mu_j>0$, every block length $q$
+    at which the $q$-site states of distinct blocks are orthogonal,
     $\sum_{i_1,\dots,i_q}\overline{(A_j^{i_1}\cdots A_j^{i_q})_{ab}}\,
         (A_{j'}^{i_1}\cdots A_{j'}^{i_q})_{a'b'}=0$ for $j\neq j'$ and all
     $a,b,a',b'$, and every $M\geq1$, with $N=qM$ and
@@ -3293,7 +2897,8 @@ $A$ along $w$.
         \label{eq:ldp_approximation_error_orthogonal_blocks}
     \end{align}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} restricted to
-    multiplicity one and to blocks whose $q$-site states are orthogonal. For
+    multiplicity one and to blocks whose $q$-site states are orthogonal, for
+    $0<\gamma<1$ in place of $0<\gamma<1/2$. For
     multiplicity one the phase of $\mu_j$ can be absorbed into $A_j$, which
     stays normal with the same transfer map, so the condition $\mu_j>0$ only
     fixes this presentation. The orthogonality is an added hypothesis: without
@@ -3304,46 +2909,17 @@ $A$ along $w$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Let $B_j$ be the $q$-site blocked map of $A_j$, with polar decomposition
-    $B_j=V_jP_j$, and $K_j$ the isometry placing the bond pairs of block $j$.
-    For $q\geq1$ every word of $A$ of length $q$ is the direct sum of the
-    words of the blocks, so the blocked map of $A$ is
-    $B=\sum_j\mu_j^qB_jK_j^\dagger$, and
-    Lemma~\ref{lem:ldp_orthogonal_sum_polar} gives $V=\sum_jV_jK_j^\dagger$.
-    The pair of block $j$ is $K_j^{\otimes M}$ applied to the product of the
-    pairs of $\rho_j$, and $VK_j=V_j$, so
-    $V^{\otimes M}\ket{\Omega'}=\sum_j\alpha_j\ket{s_j}$ with
-    $\ket{s_j}=\ket{\phi_M(V_jP_{j,\infty})}$, while
-    $\ket{\phi_N(A)}=\sum_j\mu_j^N\ket{t_j}$ with
-    $\ket{t_j}=\ket{\phi_N(A_j)}$. The tensors generating $s_j$, $t_j$, $s_{j'}$
-    and $t_{j'}$ have mixed transfer maps equal to zero for $j\neq j'$, because
-    $B_j^\dagger B_{j'}=0$ and hence $V_j^\dagger B_{j'}=V_j^\dagger V_{j'}=0$;
-    so all cross overlaps vanish.
-
-    Let $q$ be at least the injectivity lengths of all blocks; the smaller $q$
-    are covered by $\varepsilon\leq1$ once $C$ is large. Then
-    $\braket{s_j}{s_j}=1$, $\braket{s_j}{t_j}=z_j$ with
-    $z_j=\bra{\phi_M(P_{j,\infty})}\phi_M(P_{j,q})\rangle$, and
-    $\braket{t_j}{t_j}=c_j=\Tr\E_{A_j}^{\,N}$. With $p_j=\mu_j^{2N}$ this gives
-    \begin{align*}
-        \lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
-        =\frac{\bigl\lvert\sum_jp_jz_j\bigr\rvert}
-        {\bigl(\sum_jp_j\bigr)^{1/2}\bigl(\sum_jp_jc_j\bigr)^{1/2}}.
-    \end{align*}
-    For weights $w_j=p_j/\sum_lp_l$ put $a=\sum_jw_jz_j$ and
-    $s^2=\sum_jw_jc_j$. Then $\lvert a-1\rvert\leq\sum_j\lvert z_j-1\rvert$ and
-    $\lvert s^2-1\rvert\leq\sum_j\lvert c_j-1\rvert=:\eta$. If $\eta>1/2$ then
-    $\varepsilon\leq1<2\eta$. Otherwise $s\geq1/2$ and
-    $\varepsilon=(s-\lvert a\rvert)/s\leq2\bigl(\lvert s-1\rvert+\lvert a-1\rvert\bigr)$,
-    so in both cases
-    $\varepsilon\leq2\sum_j\bigl(\lvert z_j-1\rvert+\lvert c_j-1\rvert\bigr)$.
-    The proof of Lemma~\ref{lem:ldp_positive_part_overlap} bounds
-    $\lvert z_j-1\rvert$ itself, not only $\bigl\lvert1-\lvert z_j\rvert\bigr\rvert$,
-    by $C_jy\,e^{C_jy}$, and the proof of
-    Theorem~\ref{thm:ldp_approximation_error_normal} gives
-    $\lvert c_j-1\rvert\leq K_je^{-2\gamma N/\xi}\leq K_jy$. Summing over the
-    blocks gives the second bound, and the first follows as in
-    Theorem~\ref{thm:ldp_approximation_error_normal}, because $\varepsilon\leq1$.
+    If the $q$-site states of distinct blocks are orthogonal for no $q$, there is
+    nothing to prove. Otherwise let them be orthogonal at $q_0$, and let $B_j$ be
+    the $q_0$-site blocked map of $A_j$. The entries of the mixed transfer map
+    $Z\mapsto\sum_iB_j^iZ(B_{j'}^i)^\dagger$ are sums
+    $\sum_iB_j^{i}{}_{ab}\overline{B_{j'}^{i}{}_{a'b'}}$, the complex conjugates of
+    the entries of $B_{j'}^\dagger B_j=0$, so this map vanishes. It is
+    $\E_{jj'}^{\,q_0}$, so $\E_{jj'}$ is nilpotent and all its eigenvalues are
+    zero. Hence $\lambda_2$ also bounds the moduli of the eigenvalues of the mixed
+    transfer maps, and Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
+    with $w_j=\mu_j$ gives both bounds, with a constant that does not depend on the
+    weights.
 \end{proof}
 
 \input{chapter/ch32_log_depth_repeated_blocks}

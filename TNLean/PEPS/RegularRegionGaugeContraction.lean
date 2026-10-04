@@ -20,6 +20,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, accessible virtual
 systems and controlled coordinate changes, local source lines 1765–1920.
 These are contraction identities with arbitrary crossing operators; no
 connectedness, flatness, or Gram identity is assumed in the gauge identity.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators

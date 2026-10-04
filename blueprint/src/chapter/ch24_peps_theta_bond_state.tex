@@ -2,7 +2,7 @@
     \label{def:peps_theta_weighted_averaging_site}
     \lean{TNLean.PEPS.thetaMatrix, TNLean.PEPS.thetaWeightedAveragingSite}
     \leanok
-    \uses{def:peps_representation_theta, lem:peps_torus_projector_expansion}
+    \uses{def:peps_representation_theta, thm:peps_torus_projector_expansion}
     Let $U$ be a representation of a finite group on a finite virtual space,
     and let $\Theta$ be its fourth-root isotypic weight operator.
     Obtain the weighted site from the canonical averaging site by placing
@@ -18,7 +18,7 @@
     \leanok
     \uses{def:peps_theta_weighted_averaging_site,
         thm:peps_representation_theta_power,
-        lem:peps_torus_projector_expansion, lem:peps_torus_bond_network_gauge}
+        thm:peps_torus_projector_expansion, lem:peps_torus_bond_network_gauge}
     On a torus with positive circumferences, let $N$ be the number of vertices,
     and write $s_v=(t_v,r_v,b_v,l_v)$ for the physical labels of the
     weighted averaging sites. Their actual contraction has coefficient

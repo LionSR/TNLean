@@ -10,7 +10,7 @@ import TNLean.Algebra.RepresentationDeltaPositive
 /-!
 # Orthonormal Fourier rows of the finite regular representation
 
-The actual regular permutation matrices admit an orthonormal decomposition into
+The actual regular permutation matrices have an orthonormal decomposition into
 irreducible rows. The multiplicity of each irreducible row equals its dimension.
 The proof transports the regular character identity from Mathlib’s group algebra
 representation and applies the unitary matrix-block decomposition.

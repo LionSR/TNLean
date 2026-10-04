@@ -13,8 +13,14 @@ One covering lift supplies both the genuine simply connected planar square
 union and exclusion of the torus region along its exterior collar. The two
 properties hold for the same integer coordinates.
 
-Source: SCP10, arXiv:1001.3807, proof of Theorem 6.9, lines 1935–1990;
-auxiliary geometric consequence. No exterior connectivity is assumed here.
+Locally proved auxiliary geometric consequence for the block setting of SCP10, arXiv:1001.3807,
+proof of Theorem 6.9, lines 1935–1990; the source states no such lemma. No exterior connectivity is
+assumed here.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Set
@@ -23,8 +29,8 @@ namespace TNLean.PEPS
 
 /-- The actual simply connected torus region has integer coordinates whose
 closed-cell union is simply connected and whose exterior collar projects
-outside the torus region. Source: SCP10, proof of Theorem 6.9,
-lines 1935–1990; auxiliary geometry. -/
+outside the torus region. Locally proved auxiliary geometry for the block setting of SCP10, proof of
+Theorem 6.9, lines 1935–1990; the source states no such lemma. -/
 theorem exists_integerLift_simplyConnected_exteriorCollar_of_isSimplyConnected
     {width height : ℕ} [NeZero width] [NeZero height]
     (R : Finset (TorusVertex width height))

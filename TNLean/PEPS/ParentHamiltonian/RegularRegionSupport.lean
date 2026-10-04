@@ -33,6 +33,11 @@ Lemma 5.2, and the regular boundary cut in Theorem 6.9, local source lines
 1278–1358 and 2043–2076. The statements below are consequences of those
 constructions, rather than a formalization of a general G-injective
 Fundamental Theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix
