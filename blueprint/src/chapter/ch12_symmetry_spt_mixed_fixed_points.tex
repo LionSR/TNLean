@@ -1,0 +1,212 @@
+\subsection{Fixed points with time reversal and reflection}
+\label{sec:spt_mixed_fixed_points}
+
+The two conjugation actions in the classification have different origins.
+Write $t,r:G\to\mathbb Z_2$ for the time-reversal and reflection parities,
+respectively, and let $C_p$ mean complex conjugation at odd parity and the
+identity at even parity. Scalar phases transform with $\beta=t$, while
+virtual matrices transform with $\alpha=t+r$
+\cite[Section~III.A, local TeX lines~1120--1130]{Cirac2021Matrix}.
+
+\begin{definition}[Mixed symmetry of tensor letters]
+    \label{def:spt_mixed_tensor_symmetry}
+    \lean{TNLean.Algebra.SymmetryParity,
+        TNLean.Algebra.oddParity,
+        TNLean.Algebra.symmetryParity_cases,
+        TNLean.Algebra.oddParity_mul_self,
+        TNLean.Algebra.oddParity_ne_one,
+        TNLean.Algebra.parityConj,
+        TNLean.Algebra.parityConj_one,
+        TNLean.Algebra.parityConj_odd,
+        TNLean.Algebra.parityConj_mul,
+        TNLean.Algebra.parityConj_self,
+        TNLean.Algebra.parityConjMatrix,
+        TNLean.Algebra.parityConjMatrix_apply,
+        TNLean.Algebra.parityConjMatrix_one,
+        TNLean.Algebra.parityConjMatrix_self,
+        TNLean.Algebra.parityConjMatrix_odd,
+        TNLean.Algebra.parityConjMatrix_mul,
+        TNLean.Algebra.parityConjMatrix_smul,
+        TNLean.Algebra.parityConjMatrix_sum,
+        TNLean.Algebra.parityConjMatrix_comp,
+        TNLean.Algebra.parityConjMatrix_transpose,
+        TNLean.Algebra.symmetryLetter,
+        TNLean.Algebra.symmetryLetter_trivial,
+        TNLean.Algebra.symmetryLetter_timeReversal,
+        TNLean.Algebra.symmetryLetter_reflection,
+        TNLean.Algebra.symmetryLetter_both,
+        TNLean.Algebra.symmetryLetter_comp,
+        TNLean.Algebra.symmetryLetter_self,
+        TNLean.Algebra.symmetryLetter_smul,
+        TNLean.Algebra.symmetryLetter_sum,
+        TNLean.Algebra.symmetryLetter_mul,
+        TNLean.Algebra.symmetryLetter_one,
+        TNLean.Algebra.symmetryLetter_list_prod,
+        TNLean.Algebra.symmetryLetter_conjugation}
+    \lean{MPSTensor.mixedTensorAction,
+        MPSTensor.mixedTensorAction_comp,
+        MPSTensor.mixedTensorAction_conjugation,
+        MPSTensor.trace_symmetryLetter,
+        MPSTensor.mpv_symmetryLetter,
+        MPSTensor.mpv_mixedTensorAction,
+        MPSTensor.IsMixedSymmetric}
+    \leanok
+    Define $T_{t,r}(M)=C_t(M)$ for $r=0$, and
+    $T_{t,r}(M)=C_t(M)^{\mathsf T}$ for $r=1$. The mixed physical action is
+    \begin{align}
+        S_g(A)^i & =\sum_j U(g)_{ij}T_{t(g),r(g)}(A^j).
+        \label{eq:spt_mixed_tensor_action}
+    \end{align}
+    A tensor has mixed symmetry with phase $\phi(g)$ and virtual gauge $X_g$
+    when $S_g(A)^i=\phi(g)X_g^\dagger A^iX_g$.
+    Reflection reverses the order in a product of letters. Thus on a chain
+    the action is the on-site matrix action together with complex conjugation
+    when $t(g)=1$ and reversal of the physical site order when $r(g)=1$.
+\end{definition}
+
+\begin{lemma}[The two symmetry parities]
+    \label{lem:spt_mixed_parity_composition}
+    \leanok
+    \uses{def:spt_mixed_tensor_symmetry}
+    The letter actions compose by addition of both parities, but
+    $T_{t,r}(zM)=C_t(z)T_{t,r}(M)$. For every matrix $X$,
+    \begin{align}
+        T_{t,r}(X^\dagger M X)
+         & =C_{t+r}(X)^\dagger T_{t,r}(M)C_{t+r}(X).
+    \end{align}
+    Consequently physical matrices compose as
+    $U_gC_{t(g)}(U_h)$, whereas virtual gauges compose as
+    $X_gC_{t(g)+r(g)}(X_h)$.
+\end{lemma}
+\begin{proof}\leanok
+    Conjugation commutes with transpose. Transpose reverses the two outer
+    factors of $X^\dagger M X$, giving the additional virtual conjugation.
+    Expanding the finite physical sums proves the composition law. Applying
+    the ordered-product identity and taking the trace gives the chain action.
+\end{proof}
+
+\begin{definition}[Twisted circle cocycles and virtual representations]
+    \label{def:spt_mixed_circle_cocycles}
+    \lean{TNLean.Algebra.parityUnitsAction,
+        TNLean.Algebra.parityUnitsAction_coe_smul,
+        TNLean.Algebra.ConjugateProjectiveRepresentation,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.map_mul,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.factor_unitary,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.rephase_unitary,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.cocycle_of_assoc,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.isMulCocycle₂,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.factorSystem_rephase,
+        TNLean.Algebra.parityUnitary,
+        TNLean.Algebra.parityUnitary_coe,
+        TNLean.Algebra.parityUnitaryAction,
+        TNLean.Algebra.parityUnitaryCoefficientRepresentation,
+        TNLean.Algebra.parityUnitaryH1Class,
+        TNLean.Algebra.parityUnitaryH2Class,
+        TNLean.Algebra.parityUnitary_toUnits,
+        TNLean.Algebra.isMulCocycle₂_toUnits,
+        TNLean.Algebra.unitaryScalar,
+        TNLean.Algebra.unitaryScalar_coe,
+        TNLean.Algebra.parityUnitaryH2Class_eq_of_isMulCoboundary₂,
+        TNLean.Algebra.parityUnitaryH1Class_eq_of_isMulCoboundary₁,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.isMulCoboundary₂_unitary_of_rephase,
+        TNLean.Algebra.ConjugateProjectiveRepresentation.parityUnitaryH2Class_eq_of_rephase}
+    \leanok
+    \uses{lem:spt_mixed_parity_composition}
+    The coefficients are the unit circle $\mathrm U(1)$, with action $C_p$.
+    A twisted character and factor system satisfy
+    \begin{align}
+        \phi(gh) & =\phi(g)C_{t(g)}(\phi(h)),               \\
+        \omega(gh,k)\omega(g,h)
+                 & =C_{t(g)+r(g)}(\omega(h,k))\omega(g,hk).
+    \end{align}
+    A unitary conjugate-projective representation has
+    \begin{align}
+        X_gC_{t(g)+r(g)}(X_h) & =\omega(g,h)X_{gh}.
+        \label{eq:spt_mixed_virtual_law}
+    \end{align}
+    Associativity forces the displayed two-cocycle equation. Rephasing
+    $X_g$ by $\xi(g)\in\mathrm U(1)$ changes the factor system by
+    \begin{align}
+        \omega'(g,h) & =
+        \frac{\xi(g)C_{t(g)+r(g)}(\xi(h))}{\xi(gh)}\omega(g,h).
+    \end{align}
+    These are Mathlib's multiplicative cocycles and coboundaries for the
+    specified coefficient action. Their classes belong to
+    $H^1_t(G,\mathrm U(1))$ and $H^2_{t+r}(G,\mathrm U(1))$.
+\end{definition}
+
+\begin{theorem}[Regular realization of a twisted circle cocycle]
+    \label{thm:spt_mixed_regular_realization}
+    \lean{TNLean.Algebra.conjugateLeftRegular,
+        TNLean.Algebra.conjugateLeftRegular_apply,
+        TNLean.Algebra.conjugateLeftRegular_mul,
+        TNLean.Algebra.conjugateLeftRegular_mem_unitaryGroup,
+        TNLean.Algebra.conjugateLeftRegularGL,
+        TNLean.Algebra.conjugateLeftRegularGL_coe,
+        TNLean.Algebra.conjugateRegularRepresentation,
+        TNLean.Algebra.conjugateRegularUnitaryRepresentation}
+    \leanok
+    \uses{def:spt_mixed_circle_cocycles}
+    For every finite group $G$ and genuine circle-valued two-cocycle $\omega$,
+    there is a unitary conjugate-projective representation on $\mathbb C^G$
+    with factor system exactly $\omega$. No normalization of the chosen
+    representative is required.
+\end{theorem}
+\begin{proof}\leanok
+    Set $L_g(x,y)=\omega(g,y)$ when $x=gy$, and zero otherwise. These are
+    permutation matrices with unit-modulus weights, hence unitary. The
+    two-cocycle equation at $(g,h,y)$ gives
+    $L_gC_{t(g)+r(g)}(L_h)=\omega(g,h)L_{gh}$ entrywise.
+\end{proof}
+
+\begin{theorem}[Mixed-symmetry dimer fixed points]
+    \label{thm:spt_mixed_fixed_point}
+    \lean{MPSTensor.sptPairingEquiv,
+        MPSTensor.mixedSptMatrix,
+        MPSTensor.mixedTensorAction_sptFixedPointTensor,
+        MPSTensor.eq_of_mixedTensorAction_sptFixedPointTensor_eq,
+        MPSTensor.mixedSptMatrix_mul,
+        MPSTensor.mixedSptMatrix_mem_unitaryGroup,
+        MPSTensor.mixedSptAction,
+        MPSTensor.mixedSptAction_unitary,
+        MPSTensor.sptFixedPointTensor_isMixedSymmetric,
+        MPSTensor.mixedSptAction_mul,
+        MPSTensor.mixedSptAction_one,
+        MPSTensor.mixedSptAction_mpv,
+        MPSTensor.exists_rephase_of_mixedSptSymmetry,
+        MPSTensor.parityUnitaryH2Class_eq_of_mixedSptSymmetry,
+        MPSTensor.exists_mixed_spt_fixedPoint}
+    \leanok
+    \uses{def:spt_fixed_point_tensor, thm:spt_fixed_point_transfer,
+        thm:spt_mixed_regular_realization, def:spt_mixed_tensor_symmetry}
+    Let $G$ be finite and let $\phi,\omega$ be any pair of genuine twisted
+    circle cocycles as above. With $D=|G|$, the corrected dimer tensor
+    $A^{(a,b)}=D^{-1/2}\ket a\bra b$ is injective and has a rank-one
+    idempotent transfer map. Let $P$ swap the two physical dimer factors and
+    define
+    \begin{align}
+        U(g) & =\phi(g)(\overline{X_g}\otimes X_g)P^{r(g)}.
+        \label{eq:spt_mixed_fixed_point_action}
+    \end{align}
+    Then every $U(g)$ is unitary, $U(1)=\Id$, and
+    $U(gh)=U(g)C_{t(g)}(U(h))$. The tensor has the mixed symmetry
+    $S_g(A)^i=\phi(g)X_g^\dagger A^iX_g$. Its periodic $N$-site vector
+    transforms by $\phi(g)^N$, with the actual conjugation and site reversal
+    of (\ref{eq:spt_mixed_tensor_action}). Every other unitary virtual action
+    implementing this same symmetry and character has the same class
+    $[\omega]\in H^2_{t+r}(G,\mathrm U(1))$
+    \cite[Section~III.A, local TeX lines~1147--1157]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient of $E_{xy}$ in $X_g^\dagger E_{ab}X_g$ is
+    $\overline{(X_g)_{ax}}(X_g)_{by}$. Swapping the two column indices of
+    $U(g)$ compensates for transposition of the tensor letter. This proves
+    the local symmetry directly. The matrix-unit letters are linearly
+    independent, so composing local symmetries proves the physical group law:
+    the virtual factor $\omega(g,h)$ cancels with its conjugate.
+    Unitarity follows from the tensor product and permutation factors.
+    The gauges cancel around a periodic chain, leaving $\phi(g)^N$.
+    Finally injectivity makes two implementing gauges scalar multiples of
+    each other. Unitarity makes those scalars phases, and their twisted
+    coboundary identifies the actual circle-coefficient cohomology classes.
+\end{proof}

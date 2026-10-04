@@ -75,6 +75,8 @@ import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.LocalVirtualGauge
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
+import TNLean.MPS.Symmetry.MixedSPTFixedPoint
+import TNLean.MPS.Symmetry.MixedSymmetry
 import TNLean.MPS.Symmetry.MpvRayLimit
 import TNLean.MPS.Symmetry.NearbyInjectiveAdjointActions
 import TNLean.MPS.Symmetry.NormalizedBondLocalSymmetry
