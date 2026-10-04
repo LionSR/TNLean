@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Exact Preparation at a Zero Subleading Transfer Spectrum}
+\author{}
+\date{2026-10-03}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source prescription}
+
+For a normal tensor in trace-preserving gauge, the source writes
+$\mathcal E=P+R$, where $P(X)=\tr(X)\sigma$, $\sigma>0$,
+$\tr\sigma=1$, and $R$ has spectral radius less than one
+\cite[paragraph ``Preliminaries'']{Malz2024Preparation}.
+Its logarithmic block prescription uses the correlation length
+$\xi=-1/\log|\lambda_2|$ and chooses
+$q=\lceil2\xi(1+\eta)\log N\rceil$ after Lemma 1.
+When all subleading eigenvalues vanish, $\log|\lambda_2|$ is not finite.
+The prescription must therefore be replaced by a positive finite block
+length at this endpoint. In particular, a value assigned to the symbol
+$\xi$ alone is not the spectral hypothesis used below.
+
+\section{Nilpotent transients and a finite block length}
+
+Assume explicitly that every eigenvalue of $\mathcal E$ distinct from
+$1$ is zero. Normality makes the leading fixed projection simple, and
+trace preservation and stationarity give $P^2=P$ and $PR=RP=0$.
+Every eigenvalue of $R$ is zero. On the $D^2$-dimensional matrix space,
+the generalized eigenspace decomposition gives $R^{D^2}=0$, including
+nondiagonalizable maps. Consequently, for every $n\geq D^2$,
+\begin{align}
+    \mathcal E^n(X)&=\tr(X)\sigma.
+    \label{eq:mswc24_zero_spectrum_transfer}
+\end{align}
+The subleading part need not vanish before that finite blocking length.
+
+For a block $B$ of at least $D^2$ sites, the transfer/polar relation of
+the source gives $\widehat B^\dagger\widehat B=\sigma^{\mathsf T}\otimes I$.
+Thus its positive polar factor is exactly
+$(\sqrt\sigma)^{\mathsf T}\otimes I$, and it is injective because
+$\sigma>0$. Replacing the polar factors by the fixed-point factors in
+the source construction therefore changes no state.
+
+Choose $q_0=D^2+3D+1$. For every $N\geq q_0$, write
+$N=Mq_0+r$ with $M\geq1$ and $0\leq r<q_0$.
+Use $M-1$ blocks of length $q_0$ and one of length $q_0+r$.
+All lengths lie between $q_0$ and $2q_0$, so the local-isometry
+preparation applies in depth at most $2C(d,D)q_0$.
+The raw periodic vector already has norm one, and the circuit prepares
+its normalized vector exactly. This bound is independent of $N$ and
+requires no divisibility condition.
+
+\section{Formal scope}
+
+The construction is the exact-factor endpoint of the source equations
+\texttt{eq:B\_TM}, \texttt{eq:phi\_tilde}, and
+\texttt{eq:app\_tidle\_phi\_1}; it is not an evaluation of the printed
+logarithmic prescription at zero correlation length. Its spectral
+assumption allows nilpotent Jordan blocks and supplies no separate
+injectivity or diagonalizability certificate.
+The preparation theorem is
+\leanid{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState_of_subleading_eigenvalues_eq_zero}.
+It fixes $d,D$ before choosing the depth and applies to every normal
+left-canonical tensor and normalized positive definite fixed state
+satisfying the stated zero-subleading-spectrum condition.
+
+This endpoint consequence does not settle the polynomial-accuracy
+construction at positive correlation length or its arbitrary-length
+extensions. Those results have their own hypotheses and proofs.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
