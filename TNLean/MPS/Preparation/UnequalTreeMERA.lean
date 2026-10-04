@@ -94,8 +94,10 @@ All lower disentanglers are identities. The regularization includes single-site 
 accuracies above one; the large-size bound is `O(log log(N/ε))`.
 
 Source: arXiv:2307.01696, eq. (16), the paragraph "Connection to MERA", and the unequal-block
-partition in the proof of Theorem 1. The nonzero-state qualification is the normalization
-condition recorded in `mswc24_depth_upper_bound_nonzero_state.tex`. -/
+partition in the proof of Theorem 1.
+
+**Local fix (nonvanishing periodic state):** The nonzero-state hypothesis is required
+for normalization. See `docs/paper-gaps/mswc24_depth_upper_bound_nonzero_state.tex`. -/
 theorem exists_unequalMERA_every_length {d D : ℕ} (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
     ∃ R : ℕ, 1 ≤ R ∧ ∃ C : ℝ, 2 ≤ C ∧

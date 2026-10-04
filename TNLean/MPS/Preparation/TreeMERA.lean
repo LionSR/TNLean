@@ -57,7 +57,7 @@ class is therefore a subclass of the finite-range MERA with `k + 2` layers.
   these bounds, also used with registers of `s` sites in
   `TNLean.MPS.Preparation.TreeMERARegisters`.
 
-**Scope of the equal-block construction:** the theorems
+**Scope restriction (chain length):** the theorems
 `approximatingMPVState_eq_state_treeMERA`, `exists_state_treeMERA_approximationError_le` and
 `exists_state_treeMERA_approximationError_le_and_le_logb` (and the definition `treeMERA`) assume
 that the two-site blocked tensor is injective, so that every layer `V⁽ʲ⁾` is an isometry, as in

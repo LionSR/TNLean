@@ -47,7 +47,7 @@ the approximation error of `A` itself applies, with no transport of the gauge da
   `k + 1 ≤ log₂(max 1 (ξ log(C N/ε))) + 1` isometry layers has error at most `ε` against the
   normalized state `|φ_N(A)⟩`, `N = M s 2^{k+1}`.
 
-**Scope of the equal-register construction:** the chain lengths are `N = M s 2^{k+1}`, with `k` given by
+**Scope restriction (chain length):** the chain lengths are `N = M s 2^{k+1}`, with `k` given by
 the threshold, not every fixed `N` and `ε`: the MERA has `M` complete binary trees of equal
 registers. `TNLean.MPS.Preparation.UnequalTreeMERA` supplies a sibling network for every
 positive length with nonzero periodic state, with a physical leaf bound fixed before
