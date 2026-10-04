@@ -287,7 +287,7 @@ $y=\sigma_y\otimes\sigma_z$,
     \mathcal E_y^{(2)}(\Id)\right] & =1
 \end{align}
 for every \emph{single-site} middle length, including odd lengths.
-The actual blocked-index decoding fixes the endpoint order. The corresponding
+The blocked-index convention fixes the endpoint order. The corresponding
 physical string-order predicate is also proved on the two-site blocked tensor
 by \leanid{MPSTensor.clusterBlockedRMP_hasPhysicalStringOrder}, where the
 middle length counts blocks and the twist is $u\otimes u$.
@@ -316,13 +316,17 @@ purity condition (a positive stationary density and a unique peripheral
 transfer eigenvalue). The explicit AKLT and cluster computations above do
 not remove that restriction from Lemma~1 or Theorems~1--2.
 
-Eliminating this restriction requires a theorem that realizes arbitrary
+The endpoint-realization restriction requires a theorem that realizes arbitrary
 virtual boundary matrices by physical endpoint operators for injective
 tensors, followed by a source-faithful proof of Theorem~1 in
 Ref.~\cite{PerezGarcia2008StringOrder}. The existing single-site construction
 \leanid{MPSTensor.physRealize} is a starting point.\footnote{Source path:
 \path{TNLean/MPS/Chain/VirtualInsertion.lean}. This file is not currently
-imported by the string-order files.} This work is tracked in \ghissue{4872}; \ghissue{2660} was absorbed into that issue.
+imported by the string-order files.} Separately, removing the purity-versus-injectivity restriction requires
+a spectral and symmetry argument under the source canonical-purity
+hypotheses; physical endpoint realization for an injective tensor does not
+establish that generalization. Both tasks are tracked in \ghissue{4872};
+\ghissue{2660} was absorbed into that issue.
 
 \bibliographystyle{alpha}
 \bibliography{references}

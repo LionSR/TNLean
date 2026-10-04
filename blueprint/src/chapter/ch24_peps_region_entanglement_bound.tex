@@ -1,0 +1,67 @@
+\section{Entanglement bounds on finite graphs}%
+\label{sec:peps_region_entanglement_bound}
+
+\begin{theorem}[Crossing-bond rank and entropy bounds]%
+    \label{thm:peps_region_boundary_entanglement_bound}
+    \lean{TNLean.PEPS.bondDim_pos_of_stateCoeff_ne_zero,
+        TNLean.PEPS.rank_regionReducedDensity_le_boundary,
+        TNLean.PEPS.rank_normalizedRegionReducedDensity_le_boundary,
+        TNLean.PEPS.entropy_normalizedRegionReducedDensity_le_boundary,
+        TNLean.PEPS.entropy_normalizedRegionReducedDensity_le_uniform_boundary}
+    \leanok
+    \uses{def:peps_normalized_region_reduced_density}
+    Let a PEPS on a finite graph have virtual dimension $D_e$ on
+    edge $e$, and let $R$ be any region. Its unnormalized reduced
+    density satisfies
+    \[
+        \operatorname{rank}\rho_R\leq
+        \prod_{e\in\partial R}D_e.
+    \]
+    If the closed vector is nonzero, every virtual bond has
+    positive dimension, and the normalized reduced density
+    $\widehat\rho_R$ satisfies
+    \[
+        0\leq S(\widehat\rho_R)
+        \leq\sum_{e\in\partial R}\log D_e.
+    \]
+    For a common crossing-bond dimension $D$, this gives
+    $S(\widehat\rho_R)\leq|\partial R|\log D$.
+    This is the finite-graph boundary-dimension argument underlying
+    the PEPS area law in \cite[Section~II.A.3]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The reduced-density range lies in the span of the open-region
+    tensors, indexed by the crossing-bond configurations. That
+    span has dimension at most $\prod_{e\in\partial R}D_e$.
+    Normalization preserves the range when the vector is nonzero.
+    The entropy of a trace-one positive operator is at most the
+    logarithm of its rank. Monotonicity of the logarithm and
+    the logarithm-of-product identity yield the entropy bound.
+    If any bond dimension vanished, every virtual contraction
+    would be an empty sum, contradicting nonvanishing.
+\end{proof}
+
+\begin{theorem}[Physical-dimension bounds and trivial cuts]%
+    \label{thm:peps_region_physical_entanglement_bound}
+    \lean{TNLean.PEPS.rank_regionReducedDensity_le_physical,
+        TNLean.PEPS.entropy_normalizedRegionReducedDensity_eq_zero_of_boundary_bondOne}
+    \leanok
+    \uses{thm:peps_region_boundary_entanglement_bound}
+    If every physical site has dimension $d$, then
+    \[
+        \operatorname{rank}\rho_R\leq
+        \min\{d^{|R|},d^{|R^c|}\}.
+    \]
+    For a nonzero closed PEPS, a cut whose crossing virtual bonds
+    all have dimension one has zero entanglement entropy. This
+    includes cuts with no crossing edges.
+\end{theorem}
+
+\begin{proof}\leanok
+    The reduced-density rank equals the rank of the physical
+    coefficient matrix across the cut. Its row and column
+    dimensions are $d^{|R|}$ and $d^{|R^c|}$. If all crossing
+    dimensions are one, the preceding entropy upper bound is zero;
+    nonnegativity gives equality.
+\end{proof}

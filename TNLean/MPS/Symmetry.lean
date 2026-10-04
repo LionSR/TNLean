@@ -36,6 +36,7 @@ import TNLean.MPS.Symmetry.CommonPhysicalFixedPointGroundPath
 import TNLean.MPS.Symmetry.CommonPhysicalFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
+import TNLean.MPS.Symmetry.CompactMinimalClassStability
 import TNLean.MPS.Symmetry.CompactSupportVirtualTransport
 import TNLean.MPS.Symmetry.CompactSupportedSequenceClass
 import TNLean.MPS.Symmetry.CompactUnitalTensors
@@ -49,6 +50,7 @@ import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath
 import TNLean.MPS.Symmetry.EntanglementSpectrum
+import TNLean.MPS.Symmetry.ExactGroundPathTransferClass
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance

@@ -52,7 +52,7 @@ theorems.
         MPSTensor.akltPGWSVC08_hasPhysicalStringOrder}
     \leanok
     \uses{def:aklt_physical_string_data, def:physical_string_order_param,
-        def:has_physical_string_order_with}
+        def:has_physical_string_order}
     The tensor $B$ is unital and has positive trace-one stationary density
     $\Lambda=\Id/2$. For every $N\geq0$,
     \begin{align}
@@ -77,6 +77,12 @@ theorems.
 \end{proof}
 
 \begin{remark}[Normalization in the printed AKLT example]
+    % **Local fix (normalized stationary density):** The printed identity
+    % boundary conflicts with the source normalization. The formal value uses
+    % I/2, with both readings proved and recorded in
+    % docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
+    \textbf{Local fix:} The detailed correction is recorded in
+    \path{docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex}.
     The source's display \texttt{fixed} requires $\tr\Lambda=1$, but its
     AKLT example prints $\Lambda=\Id$. In dimension two the normalized
     density is $\Id/2$. Using the literal identity in the same correlator
@@ -98,7 +104,7 @@ theorems.
         MPSTensor.clusterTensorRMP_not_hasPhysicalStringOrderWith}
     \leanok
     \uses{def:cluster_tensor_review, def:physical_string_order_param,
-        def:has_physical_string_order_with}
+        def:has_physical_string_order}
     For the printed cluster tensor $A^0=\ket{0}\bra{+}$,
     $A^1=\ket{1}\bra{-}$, let $u=-\sigma_x$, $V=\sigma_y$ and
     $\Lambda=\Id/2$. The transfer map is unital, $\Lambda$ is a positive
@@ -148,7 +154,7 @@ theorems.
     \leanok
     \uses{def:cluster_two_site_string_endpoints,
         thm:cluster_one_site_physical_string_obstruction,
-        def:has_physical_string_order_with}
+        def:has_physical_string_order}
     With $\mathcal E_x^{(2)},\mathcal E_y^{(2)}$ the insertions on the two-site
     endpoint blocks, every single-site middle length $N\geq0$ satisfies
     \begin{align}

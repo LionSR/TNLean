@@ -32,6 +32,7 @@ import TNLean.Algebra.CompactKernelGap
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
+import TNLean.Algebra.ConjClassesConjugation
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
