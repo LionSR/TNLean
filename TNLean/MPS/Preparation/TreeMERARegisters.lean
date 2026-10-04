@@ -49,7 +49,9 @@ the approximation error of `A` itself applies, with no transport of the gauge da
 
 **Scope restriction (chain length):** the chain lengths are `N = M s 2^{k+1}`, with `k` given by
 the threshold, not every fixed `N` and `ε`: the MERA has `M` complete binary trees of equal
-registers. Documented in `docs/paper-gaps/mswc24_tree_mera_scope.tex`.
+registers. `TNLean.MPS.Preparation.UnequalTreeMERA` supplies a sibling network for every
+positive length with nonzero periodic state, with a physical leaf bound fixed before
+`N` and `ε`. See the resolved note `docs/paper-gaps/mswc24_tree_mera_scope.tex`.
 
 ## References
 

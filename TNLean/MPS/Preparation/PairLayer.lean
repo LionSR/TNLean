@@ -7,7 +7,7 @@ import TNLean.MPS.Preparation.BlockSites
 import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.Circuit.Composition
 import TNLean.Circuit.EmbeddedProduct
-import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.MPS.Preparation.FixedPointPairState
 
 /-!
 # Pair windows and the layer of entangled pairs

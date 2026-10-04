@@ -14,8 +14,9 @@ Definition~\ref{def:ldp_register_mera} on, the finest isometries write
 registers of $s$ sites, where $A$ blocked over $s$ sites is injective; this
 removes the first restriction, and every normal tensor is covered for the
 chain lengths $N=Ms2^{k+1}$ (Theorem~\ref{thm:ldp_normal_mps_mera}). The
-remaining restriction on the chain length is recorded
-in~\cite{gap:mswc24_tree_mera_scope}.
+equal-register construction keeps this restriction on the chain length.
+Section~\ref{sec:ldp_unequal_mera} removes it with unequal bounded physical
+leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
 
 \begin{definition}[Binary finite-range network]
     \label{def:ldp_binary_mera}
@@ -373,8 +374,11 @@ in~\cite{gap:mswc24_tree_mera_scope}.
     containment of normal translation-invariant matrix product states in
     finite-range networks with $O(\log\log N)$ layers, within the
     approximation error, of~\cite[paragraph ``Connection to
-        MERA'']{Malz2024Preparation}. The containment for every fixed $N$ and
-    $\varepsilon$ is not formalized~\cite{gap:mswc24_tree_mera_scope}.
+        MERA'']{Malz2024Preparation}.
+    Theorem~\ref{thm:ldp_every_length_mera} gives an unequal-block network
+    for every positive length with nonzero periodic state, with a physical
+    leaf bound fixed before $N$ and $\varepsilon$; see the resolved
+    note~\cite{gap:mswc24_tree_mera_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
