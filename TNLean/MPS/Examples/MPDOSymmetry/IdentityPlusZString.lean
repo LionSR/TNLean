@@ -86,8 +86,9 @@ Project result: `σ_z^{⊗N} (I^{⊗N} + σ_z^{⊗N}) = σ_z^{⊗N} + I^{⊗N}`,
 of the Example 4.12 tensor (arXiv:1606.00608, lines 932–939) are strongly symmetric in the
 sense of arXiv:2504.16985, line 182, with eigenvalue `1` at every positive length. -/
 theorem isStrongMPOSymmetry_sigmaZ :
-    IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZ) M fun _ _ => 1 := by
+    IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZ) M 1 fun _ _ => 1 := by
   intro _ L _
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite, sigmaZ_eq_diagonal, Matrix.finKronecker_diagonal, rho_eq_diagonal,
     Matrix.diagonal_mul_diagonal, one_smul]
   congr 1
@@ -161,8 +162,9 @@ theorem not_isStrongSymmetry_sigmaX {N : ℕ} (hN : 0 < N) :
 Project result: weak symmetry of the family (arXiv:2504.16985, line 182) quantifies over every
 positive length, and fails at `N = 1` (`isWeakSymmetry_sigmaX_iff_even`). -/
 theorem not_isWeakMPOSymmetry_sigmaX :
-    ¬ IsWeakMPOSymmetry (fun _ : Unit => onSite sigmaX) M := by
+    ¬ IsWeakMPOSymmetry (fun _ : Unit => onSite sigmaX) M 1 := by
   intro h
+  simp only [IsWeakMPOSymmetry, mpoWithBoundary_one] at h
   have h1 := h () 1 one_pos
   simp only [mpo_onSite] at h1
   exact Nat.not_even_one ((isWeakSymmetry_sigmaX_iff_even 1).mp h1)
