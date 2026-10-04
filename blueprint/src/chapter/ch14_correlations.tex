@@ -283,8 +283,8 @@ spectral decomposition, and quantitative decay bounds.
 
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
-    \uses{thm:correlator_exponential_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
-    The rate $r<1$ in Theorem~\ref{thm:correlator_exponential_bound}
+    \uses{thm:physical_correlator_tp_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
+    The rate $r<1$ in Theorem~\ref{thm:physical_correlator_tp_bound}
     gives exponential decay. It
     is a transfer-map gap condition: all non-leading eigenvalues of $\E_A$ lie
     strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of
@@ -431,12 +431,12 @@ for the transfer map $\E_A$.
 \section{Relation to parent Hamiltonians}
 
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
-    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates, def:correlation_length, thm:correlator_exponential_bound}
+    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates, def:correlation_length, thm:physical_correlator_tp_bound}
     Suppose that the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
     (Definition~\ref{def:parent_hamiltonian}) whose ground state is the matrix
     product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and
     consider its fixed-point infinite-chain state. If the hypotheses of
-    Theorem~\ref{thm:correlator_exponential_bound} hold, then for every rate
+    Theorem~\ref{thm:physical_correlator_tp_bound} hold, then for every rate
     $r$ with $\rho_{\spec}(\E_A-P)<r<1$ the corresponding ground-state
     correlations decay as $r^n=e^{-n/\xi}$ with finite correlation length
     $\xi=-1/\log r$, the quantity of
