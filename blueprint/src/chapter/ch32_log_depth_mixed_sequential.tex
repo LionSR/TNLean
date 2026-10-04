@@ -131,8 +131,12 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_mixed_sequential_general, thm:ldp_central_coefficients}
-    Split the given chain at the chosen site and orient its right part
-    inward. Equation~(\ref{eq:ldp_central_coefficients}), with $G=P^{-1}$,
-    is precisely $V=BP^{-1}$. Apply the two-sided factorization theorem.
+    \uses{thm:ldp_mixed_sequential_general, thm:ldp_central_coefficients,
+        thm:ldpolar_tensor_injective, lem:ldp_sequential_factorization_first_inputs}
+    By Theorem~\ref{thm:ldpolar_tensor_injective}, $V^\dagger V=\Id$.
+    Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} expresses
+    $V=BP^{-1}$ in the matrix-product coefficients of the given chain.
+    Split the chain at the chosen site and orient its right part inward.
+    Equation~(\ref{eq:ldp_central_coefficients}), with $G=P^{-1}$, gives
+    these same coefficients. Apply the two-sided factorization theorem.
 \end{proof}
