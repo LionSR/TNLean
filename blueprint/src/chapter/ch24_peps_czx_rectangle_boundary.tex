@@ -1,0 +1,236 @@
+\section{The physical boundary symmetry of a CZX rectangle}%
+\label{sec:peps_czx_rectangle_boundary}
+
+Let $R=[x_0,x_0+w)\times[y_0,y_0+h)$ be a coordinate rectangle in a
+$W\times H$ torus. Assume $W,H\geq3$, $w,h>0$, $w<W$, $h<H$, and
+$x_0+w\leq W$, $y_0+h\leq H$. Write $P=2w+2h$.
+The following construction uses the actual open-region map $A_R$, summing
+only internal bonds and leaving crossing bonds free. It identifies the
+plaquette spins in the boundary discussion of \cite{ChenLiuWen2011CZX},
+source lines 330--345, with the image of this physical region map.
+
+\begin{definition}[Clockwise native rectangle boundary]%
+    \label{def:czx_rectangle_perimeter}
+    \lean{TNLean.PEPS.rectanglePerimeterCorner,
+        TNLean.PEPS.rectanglePerimeterEnd,
+        TNLean.PEPS.rectanglePerimeterReversed,
+        TNLean.PEPS.torusRectanglePerimeterCode,
+        TNLean.PEPS.torusRectanglePerimeterEdge,
+        TNLean.PEPS.torusRectanglePerimeterSite,
+        TNLean.PEPS.torusRectanglePerimeterLeg,
+        TNLean.PEPS.torusRectanglePerimeterCorner}
+    \leanok
+    \uses{def:peps_torus_rectangular_grid}
+    Number the crossing bonds clockwise, first across the top, then down
+    the right, across the bottom, and up the left. The corresponding first
+    plaquette corners are
+    $(i,h)$, $(w,h-j)$, $(w-k,0)$, and $(0,\ell)$ on the four sides.
+    Reverse the native pair order on the bottom and left.
+\end{definition}
+
+\begin{theorem}[Native perimeter and distinct plaquette corners]%
+    \label{thm:czx_rectangle_perimeter}
+    \lean{TNLean.PEPS.even_rectanglePerimeter,
+        TNLean.PEPS.rectanglePerimeterEnd_eq_corner_add_one,
+        TNLean.PEPS.torusRectanglePerimeterEdge_boundary,
+        TNLean.PEPS.torusRectanglePerimeterEdge_injective,
+        TNLean.PEPS.torusRectangleBoundaryEquiv,
+        TNLean.PEPS.torusRectangleBoundaryEquiv_apply_val,
+        TNLean.PEPS.torusRectanglePerimeterSite_mem,
+        TNLean.PEPS.torusRectanglePerimeterLeg_val,
+        TNLean.PEPS.rectanglePerimeterCorner_le,
+        TNLean.PEPS.rectanglePerimeterCorner_injective,
+        TNLean.PEPS.torusRectanglePerimeterCorner_injective}
+    \leanok
+    \uses{def:czx_rectangle_perimeter}
+    This numbering is a bijection from $\{0,\ldots,P-1\}$ to the actual
+    crossing bonds. Its cyclic successor is ordinary addition in
+    $\mathbb Z/P\mathbb Z$. Every bond has the specified endpoint in $R$,
+    the perimeter corners are distinct in the torus, and $P$ is even.
+    The assertions include rectangles meeting a coordinate seam.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:peps_torus_rectangle_boundary_card}
+    The four native edge families are disjoint and injective. The existing
+    crossing-bond cardinality theorem gives surjectivity. Proper side
+    lengths make the closed corner grid injective modulo each torus period.
+\end{proof}
+
+\begin{theorem}[Exact coefficients and disjoint boundary columns]%
+    \label{thm:czx_open_region_coefficients}
+    \lean{TNLean.PEPS.czx_regionIncidentConfig_unique,
+        TNLean.PEPS.openRegionWeight_czxPEPS,
+        TNLean.PEPS.openRegionWeight_czxPEPS_disjoint,
+        TNLean.PEPS.openRegionCoefficientMatrix_czxPEPS_gram_offDiagonal}
+    \leanok
+    \uses{def:peps_open_region_contraction,def:peps_czx_tensor}
+    For any finite region, a physical configuration determines at most one
+    nonzero incident-bond assignment. Its open-region coefficient is one
+    precisely when this assignment exists and has the specified boundary;
+    otherwise it is zero. Different boundary columns have disjoint physical
+    supports, so the region Gram matrix is diagonal in the native boundary
+    basis. No labels on edges wholly outside the region are summed.
+\end{theorem}
+\begin{proof}\leanok
+    The printed CZX tensor fixes all four incident labels from the four
+    physical qubits. Every incident edge touches a region vertex, so this
+    determines the entire assignment. The contraction sum has at most one
+    nonzero summand, whose value is one.
+\end{proof}
+
+\begin{definition}[Actual crossing-bond symmetry]%
+    \label{def:czx_region_boundary_symmetry}
+    \lean{TNLean.PEPS.czxRegionBoundaryFlip,
+        TNLean.PEPS.czxRegionBoundaryPhase}
+    \leanok
+    \uses{def:peps_czx_leg_operator,def:peps_open_region_contraction}
+    For a native boundary configuration $\mu$, let $f_R\mu$ flip both bits
+    on each crossing bond and let
+    $\phi_R(\mu)=\prod_{e\in\partial R}(-1)^{a_eb_e}$, where
+    $\mu_e=(a_e,b_e)$.
+\end{definition}
+
+\begin{theorem}[Physical region pull-through]%
+    \label{thm:czx_region_physical_pullthrough}
+    \lean{TNLean.PEPS.czxLegPhase_swap,
+        TNLean.PEPS.czxLegFlip_swap,
+        TNLean.PEPS.regionPhysicalMap_czxOnSite_openRegionWeight,
+        TNLean.PEPS.regionPhysicalProductMatrix_czxOnSite_intertwines}
+    \leanok
+    \uses{def:czx_region_boundary_symmetry,def:peps_czx_on_site}
+    Let $U_R$ apply the CZX on-site symmetry at each site of $R$. Then
+    \[
+        U_RA_R|\mu\rangle=\phi_R(\mu)A_R|f_R\mu\rangle.
+    \]
+    This identity holds for the actual open contraction of every finite
+    region. Reversal of a native bond pair preserves its phase and commutes
+    with its simultaneous bit flip.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_czx_pull_through,thm:peps_region_physical_maps}
+    Apply the one-site pull-through identity inside the finite contraction.
+    Reindex vertex--edge incidences by edge--endpoint incidences. Each
+    internal bond contributes the square of its controlled phase, hence
+    one; each crossing bond contributes its phase once. Reindex the
+    incident-bond sum by simultaneous bit flips.
+\end{proof}
+
+\begin{definition}[Oriented rectangle boundary labels]%
+    \label{def:czx_rectangle_boundary_labels}
+    \lean{TNLean.PEPS.czxRectangleBoundaryLabels,
+        TNLean.PEPS.czxRectangleCoordinatesEquiv,
+        TNLean.PEPS.czxRectangleCoordinatesEquiv_apply,
+        TNLean.PEPS.czxRectangleEffectiveBoundaryConfig,
+        TNLean.PEPS.czxRectangleBoundaryMatrix}
+    \leanok
+    \uses{def:czx_rectangle_perimeter,def:peps_czx_boundary_embedding,
+        def:peps_open_region_contraction}
+    Let $E_R\mu$ be the clockwise label sequence, with bottom and left
+    pairs reversed. This is a bijective change of coordinates. For
+    $c\in\{0,1\}^P$, set $\iota(c)_i=(c_i,c_{i+1})$, define
+    $\mu(c)=E_R^{-1}\iota(c)$, and let $F_R|c\rangle=A_R|\mu(c)\rangle$.
+\end{definition}
+
+\begin{theorem}[The contraction imposes the cyclic plaquette constraint]%
+    \label{thm:czx_rectangle_boundary_support}
+    \lean{TNLean.PEPS.czxRectangleBoundaryLabels_mem_range_of_openRegionWeight_ne_zero}
+    \leanok
+    \uses{def:czx_rectangle_boundary_labels}
+    If a coefficient of $A_R|\mu\rangle$ is nonzero, then
+    $E_R\mu=\iota(c)$ for some $c\in\{0,1\}^P$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:czx_rectangle_perimeter,thm:czx_open_region_coefficients}
+    Extract the nonzero incident-bond assignment. On each straight side,
+    the shared internal bond equates the adjacent physical qubits. At each
+    corner, the equality is within one site tensor. These eight cases give
+    the cyclic adjacent-pair constraint, including the final wraparound.
+\end{proof}
+
+\begin{definition}[Plaquette-bit witnesses]%
+    \label{def:czx_plaquette_witness}
+    \lean{TNLean.PEPS.czxPlaquettePhysical,TNLean.PEPS.czxPlaquetteBondConfig}
+    \leanok
+    \uses{def:peps_czx_tensor}
+    Given bits $q$ at torus plaquette corners, assign site $(x,y)$ the qubits
+    $(q_{x,y+1},q_{x+1,y+1},q_{x+1,y},q_{x,y})$ and give each native bond
+    the corresponding adjacent pair.
+\end{definition}
+
+\begin{theorem}[Exact witnesses and a faithful effective boundary]%
+    \label{thm:czx_rectangle_boundary_faithful}
+    \lean{TNLean.PEPS.czxPlaquetteBondConfig_right,
+        TNLean.PEPS.czxPlaquetteBondConfig_up,
+        TNLean.PEPS.component_czxPlaquettePhysical,
+        TNLean.PEPS.openRegionWeight_czxPlaquettePhysical,
+        TNLean.PEPS.czxRectangleBoundaryLabels_plaquette,
+        TNLean.PEPS.czxRectangleEffectiveBoundaryConfig_injective,
+        TNLean.PEPS.exists_czxRectangleBoundaryMatrix_selector,
+        TNLean.PEPS.czxRectangleBoundaryMatrix_mulVec_injective}
+    \leanok
+    \uses{def:czx_rectangle_boundary_labels,def:czx_plaquette_witness}
+    Each local tensor and each actual region witness coefficient equals
+    one. For every $c$ there is a physical configuration $\sigma_c$ with
+    $F_R(\sigma_c,c')=\delta_{c,c'}$. In particular, $F_R$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:czx_rectangle_perimeter,thm:czx_open_region_coefficients}
+    Extend arbitrary boundary bits from the distinct perimeter corners to
+    torus plaquette bits, assigning zero elsewhere. The resulting physical
+    configuration has coefficient one in the selected column and zero in
+    all other columns by disjointness.
+\end{proof}
+
+\begin{theorem}[Exact physical image and its dimension]%
+    \label{thm:czx_rectangle_physical_image}
+    \lean{TNLean.PEPS.range_openRegionMap_czxRectangle,
+        TNLean.PEPS.finrank_range_openRegionMap_czxRectangle}
+    \leanok
+    \uses{def:czx_rectangle_boundary_labels}
+    The image of the actual region map is exactly the span of the columns
+    of $F_R$, and its dimension is $2^P$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:czx_rectangle_boundary_support,thm:czx_rectangle_boundary_faithful}
+    Every nonzero native boundary column is an effective column; every
+    effective column is a native one. The selectors prove independence,
+    and there are $2^P$ effective spin configurations.
+\end{proof}
+
+\begin{theorem}[Physical action on the effective plaquette spins]%
+    \label{thm:czx_rectangle_effective_symmetry}
+    \lean{TNLean.PEPS.regionPhysicalMap_czxRectangleBoundaryMatrix_column}
+    \leanok
+    \uses{def:czx_rectangle_boundary_labels}
+    On the faithful physical boundary coordinates,
+    \[
+        U_RF_R|c\rangle
+        =(-1)^{\sum_i c_ic_{i+1}}F_R|\bar c\rangle.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:czx_region_physical_pullthrough,thm:czx_rectangle_boundary_faithful}
+    Reorder crossing bonds clockwise. Pair reversal preserves the controlled
+    phase and commutes with bit flip, giving one controlled phase for each
+    adjacent pair of effective spins.
+\end{proof}
+
+\begin{theorem}[The printed matrix product operator on the physical rectangle image]%
+    \label{thm:czx_rectangle_review_mpo}
+    \lean{TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review}
+    \uses{def:czx_rectangle_boundary_labels,def:asymex_czx_review_tensor}
+    The review's printed CZX matrix product operator $O(A)$ satisfies
+    $U_RF_R=F_RO(A)$ on the actual rectangle image.
+\end{theorem}
+\begin{proof}
+    \uses{thm:czx_rectangle_effective_symmetry,thm:czx_rectangle_perimeter,
+        thm:asymex_czx_kernel,thm:asymex_czx_review_kernel}
+    The printed matrices give $D_PX^{\otimes P}=(-1)^PX^{\otimes P}D_P$.
+    The rectangle perimeter $P$ is even, so this sign is one. The normalized
+    bra-ket display is not substituted for those printed matrices.
+\end{proof}
+
+The identification above is a linear identification of the actual
+open-region image. No formula for the normalized reduced density matrix,
+its flatness, or its entropy is asserted here. Nonrectangular regions
+remain outside the perimeter construction.

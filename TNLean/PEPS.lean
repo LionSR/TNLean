@@ -14,6 +14,7 @@ import TNLean.PEPS.BlockingDataEdgeGauge
 import TNLean.PEPS.BondCoordinateTransport
 import TNLean.PEPS.BoundaryIsometry
 import TNLean.PEPS.BoundaryNormalization
+import TNLean.PEPS.CZXRectangleBoundary
 import TNLean.PEPS.CoherentFrameInstance
 import TNLean.PEPS.CoherentMultiplicityTransport
 import TNLean.PEPS.ConfigurationCalculus
@@ -317,6 +318,7 @@ import TNLean.PEPS.TorusGaugedHorizontalFluxMove
 import TNLean.PEPS.TorusGaugedRouteStep
 import TNLean.PEPS.TorusGaugedVerticalFluxMove
 import TNLean.PEPS.TorusGaugedWeightCovariance
+import TNLean.PEPS.TorusIncidentCoordinates
 import TNLean.PEPS.TorusIncidentGInjectivity
 import TNLean.PEPS.TorusInitialStringPhysicalCrossing
 import TNLean.PEPS.TorusInitialStringRightPhysicalStep

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.TorusIncidentCoordinates
 import TNLean.PEPS.RegularTorusCut
 import TNLean.PEPS.RegularTwistedRegionEntropy
 import TNLean.PEPS.TorusRectangleConnectivity
@@ -40,67 +41,6 @@ variable [Fact (2 < width)] [Fact (2 < height)]
 local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
 local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
-
-private theorem torusIncidentEdge_eq_leg (v : TorusVertex width height)
-    (f : IncidentEdge (torusGraph width height) v) :
-    f = torusTopLeg v ∨ f = torusRightLeg v ∨ f = torusDownLeg v ∨ f = torusLeftLeg v := by
-  obtain ⟨z, hz⟩ := torusEdgeEquiv.surjective f.1
-  rcases z with p | p
-  · change torusRightEdge p = f.1 at hz
-    have hi := f.2
-    rw [← hz] at hi
-    have hep := Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
-    have hp : p = v ∨ (p.1 + 1, p.2) = v := by
-      rcases hep with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;> rcases hi with hi | hi
-      · exact Or.inl (h1.symm.trans hi)
-      · exact Or.inr (h2.symm.trans hi)
-      · exact Or.inr (h1.symm.trans hi)
-      · exact Or.inl (h2.symm.trans hi)
-    rcases hp with rfl | hp
-    · exact Or.inr (Or.inl (Subtype.ext hz.symm))
-    · have hp' : p = (v.1 - 1, v.2) := by
-        have hx := congrArg Prod.fst hp
-        have hy := congrArg Prod.snd hp
-        exact Prod.ext ((eq_sub_iff_add_eq).mpr hx) hy
-      exact Or.inr (Or.inr (Or.inr (Subtype.ext (by rw [← hz, hp']; rfl))))
-  · change torusUpEdge p = f.1 at hz
-    have hi := f.2
-    rw [← hz] at hi
-    have hep := Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2)
-    have hp : p = v ∨ (p.1, p.2 + 1) = v := by
-      rcases hep with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;> rcases hi with hi | hi
-      · exact Or.inl (h1.symm.trans hi)
-      · exact Or.inr (h2.symm.trans hi)
-      · exact Or.inr (h1.symm.trans hi)
-      · exact Or.inl (h2.symm.trans hi)
-    rcases hp with rfl | hp
-    · exact Or.inl (Subtype.ext hz.symm)
-    · have hp' : p = (v.1, v.2 - 1) := by
-        have hx := congrArg Prod.fst hp
-        have hy := congrArg Prod.snd hp
-        exact Prod.ext hx ((eq_sub_iff_add_eq).mpr hy)
-      exact Or.inr (Or.inr (Or.inl (Subtype.ext (by rw [← hz, hp']; rfl))))
-
-/-- The four native virtual labels of a site, in top, right, down, left order. -/
-def torusIncidentCoordinates (v : TorusVertex width height)
-    (η : IncidentEdge (torusGraph width height) v → G) : G × G × G × G :=
-  (η (torusTopLeg v), η (torusRightLeg v), η (torusDownLeg v), η (torusLeftLeg v))
-
-omit [Group G] [Fintype G] [DecidableEq G] in
-/-- The four native coordinates determine every incident-edge label. -/
-theorem torusIncidentCoordinates_injective (v : TorusVertex width height) :
-    Function.Injective (torusIncidentCoordinates (G := G) v) := by
-  intro η θ h
-  have ht := congrArg (fun p : G × G × G × G => p.1) h
-  have hr := congrArg (fun p : G × G × G × G => p.2.1) h
-  have hb := congrArg (fun p : G × G × G × G => p.2.2.1) h
-  have hl := congrArg (fun p : G × G × G × G => p.2.2.2) h
-  funext f
-  rcases torusIncidentEdge_eq_leg v f with rfl | rfl | rfl | rfl
-  · exact ht
-  · exact hr
-  · exact hb
-  · exact hl
 
 /-- Local regular isometry in the native torus coordinates gives the identical group-average
 Gram formula on the incident graph edges. Source: SCP10, Definition 6.1, lines 1692–1700. -/
