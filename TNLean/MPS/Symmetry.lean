@@ -24,6 +24,7 @@ import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
 import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CanonicalInjectiveGroundPath
+import TNLean.MPS.Symmetry.Character
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalCanonicalGroundPath

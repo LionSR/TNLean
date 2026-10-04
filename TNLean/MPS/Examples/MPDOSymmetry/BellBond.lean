@@ -95,8 +95,9 @@ Project result: at every positive length, `(σ_z ⊗ σ_z)^{⊗N} ρ^{(N)}(R) = 
 (strong symmetry, arXiv:2504.16985, line 182). On the support of `ρ^{(N)}(R)` the sign
 `∏_n z(l_n) z(r_n)` equals `(∏_n z(l_n))²`, because `r_n = l_{n+1}`. -/
 theorem isStrongMPOSymmetry_sigmaZZ :
-    IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZZ) R fun _ _ => 1 := by
+    IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZZ) R 1 fun _ _ => 1 := by
   intro _ L hL
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite, sigmaZZ, Matrix.finKronecker_diagonal, one_smul]
   ext p q
   rw [Matrix.diagonal_mul]
@@ -111,8 +112,9 @@ theorem isStrongMPOSymmetry_sigmaZZ :
 Project result: at every positive length, `(σ_x ⊗ σ_x)^{⊗N}` commutes with `ρ^{(N)}(R)` (weak
 symmetry, arXiv:2504.16985, line 182): flipping every qubit preserves the matching condition,
 and the weight matrix satisfies `w_{1-a, b} = w_{a, 1-b}`. -/
-theorem isWeakMPOSymmetry_sigmaXX : IsWeakMPOSymmetry (fun _ : Unit => onSite sigmaXX) R := by
+theorem isWeakMPOSymmetry_sigmaXX : IsWeakMPOSymmetry (fun _ : Unit => onSite sigmaXX) R 1 := by
   intro _ L hL
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite]
   change _ * _ = _ * _
   ext p q
@@ -150,8 +152,9 @@ theorem not_isStrongSymmetry_sigmaXX_one :
 Project result: strong symmetry of the family (arXiv:2504.16985, line 182) fails at `N = 1`
 (`not_isStrongSymmetry_sigmaXX_one`). -/
 theorem not_isStrongMPOSymmetry_sigmaXX (c : Unit → ℕ → ℂ) :
-    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaXX) R c := by
+    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaXX) R 1 c := by
   intro h
+  simp only [IsStrongMPOSymmetry, mpoWithBoundary_one] at h
   have h1 := h () 1 one_pos
   rw [mpo_onSite] at h1
   exact not_isStrongSymmetry_sigmaXX_one ⟨c () 1, h1⟩

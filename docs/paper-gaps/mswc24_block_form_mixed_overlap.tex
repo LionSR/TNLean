@@ -182,8 +182,21 @@ exponent $2q/\xi$ is sharp up to $\gamma<1$, and so is the factor $M$, by the nu
 $\varepsilon\approx M\tau^{2q}/8$.
 
 The positive part converges to $P_\infty$ only to first order in the overlaps: its blocks
-between distinct blocks are of order $\tau^q$. What is of second order is the dependence of
-the overlaps $z_j$ on $P$. As in the normal case, put $\iota(X)=(X^i\sqrt{\tilde\sigma_j})_i$
+between distinct blocks are of order $\tau^q$. For the displayed example, the active Gram matrix is
+$G_q=\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)>0$ for $q\ge1$,
+with $s=(3/5)^q$. Its square root has entries $u,v\ge0$ satisfying
+$u^2+v^2=1$ and $2uv=s$, so $u\le1$ and $v\ge s/2$. Consequently,
+\begin{align}
+    \lVert\sqrt{G_q}-I\rVert\ge s/2,\qquad
+    \lVert P_q-P_\infty\rVert\ge s/2,
+    \label{eq:mswc24_polar_first_order_lower_bound}
+\end{align}
+where $P_q=J\sqrt{G_q}J^\dagger$ and $P_\infty=JJ^\dagger$.
+For every $C\ge0$ and every threshold there is a larger positive $q$ with
+$Cs^2<s/2$. Hence even an eventual matrix-norm bound $O(s^2)$ is impossible;
+the quadratic state error does not follow from a quadratic square-root norm estimate.
+What is of second order is the dependence of the overlaps $z_j$ on $P$.
+As in the normal case, put $\iota(X)=(X^i\sqrt{\tilde\sigma_j})_i$
 for a tensor $X$ with physical index the output pair. The mixed transfer matrix $\tau_q$ of $P$
 against the fixed-point tensor $P'_{j,\infty}$ of block $j$ is compressed by the idempotent
 $R_j:\rho\mapsto\operatorname{Tr}(\Pi_j\rho)\tilde\sigma_j$ to $R_j\tau_qR_j=\alpha R_j$, with
@@ -324,6 +337,14 @@ along $q=M$ are formalized.\footnote{Formal declarations:
     \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.} The
 positive part and the support projector are computed from the uniqueness of the
 positive square root of $B^\dagger B$.
+The positive definiteness of the active Gram matrix, both lower bounds in
+(\ref{eq:mswc24_polar_first_order_lower_bound}), and the failure of every eventual
+quadratic polar-norm bound are also formalized.\footnote{Formal declarations:
+    \leanid{MPSTensor.posDef_diagGram_overlappingBlockDiag},
+    \leanid{MPSTensor.overlappingBlockOverlap_div_two_le_norm_sqrt_diagGram_sub_one},
+    \leanid{MPSTensor.overlappingBlockOverlap_div_two_le_norm_polarPos_sub_limit}, and
+    \leanid{MPSTensor.exists_norm_polarPos_overlappingBlockTensor_sub_limit_gt_sq} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.}
 
 The hypotheses of part~(ii) of the lemma are also formalized for this tensor.
 After ordering its bond coordinates it is the direct sum
