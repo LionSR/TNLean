@@ -1,0 +1,1424 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{corollary}[lemma]{Corollary}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\id}{\mathrm{id}}
+\title{Exact polynomial circuits for matrix product unitaries}
+\author{TNLean contributors}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+Let $N\geq1$ and let $U$ be a unitary on a chain of $N$ qubits. Its consecutive cut rank
+at $k$ is the smallest $r$ for which
+\[
+ U=\sum_{j=1}^r A_j\otimes B_j,
+\]
+where $A_j$ acts on sites $1,\ldots,k$ and $B_j$ acts on the remaining
+sites. An open-boundary MPO of maximal bond dimension two has cut ranks
+at most two. The converse follows from successive Schmidt decompositions
+of the operator regarded as a vector in Hilbert--Schmidt space.
+
+Styliaris--Trivedi--Cirac, arXiv:2508.08160, give a circuit construction
+whose cost depends on a conditioning parameter. Section~5 below removes
+this dependence: every MPU of bounded consecutive cut rank has an exact
+polynomial-size circuit with clean auxiliary registers. Its proof chooses
+positive boundary metrics by determinant maximization over affine spaces
+of cap Grams. The first three sections give a separate rank-two argument
+with fewer auxiliaries. Section~\ref{sec:uniform-averaged-grams} gives a
+preliminary all-length uniform argument by averaging cap Grams.
+The relevant source statements are Definition~1 (uniform-bulk MPU),
+Assumption~1 and Theorem~1, and the paragraph on nonuniform MPUs ending
+with Theorem~2, all in the main text of arXiv:2508.08160v2.
+No claim of priority is intended.
+Below, ``source lines'' are line numbers of the file \texttt{main.tex} in
+the arXiv source archive of version~2,
+\url{https://arxiv.org/e-print/2508.08160v2}, and names such as
+\nolinkurl{eq:def_q_k} are the equation and lemma labels of that file.
+
+Circuits use arbitrary one- and two-qudit gates. Auxiliary registers begin
+and end in $|0\rangle$. Gate bounds are nonuniform existence statements;
+they do not assert an efficient classical procedure for obtaining exact
+gate parameters from inexact tensor data. The general exact circuit
+theorem of Section~5 and its operator-norm approximation corollaries,
+including neighboring-pair circuits, exact auxiliary erasure, and the
+periodic-boundary specialization, are formalized in Lean in
+\nolinkurl{TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean} and
+\nolinkurl{TNLean/MPS/MPU/ApproximateBoundedCutRankCircuit.lean}. The separate rank-two structural argument in the
+first three sections is not yet fully formalized.
+
+\section{A two-operator simultaneous singular-value decomposition}
+
+\begin{lemma}\label{lem:two-kraus}
+Suppose two square complex matrices $E,F$ satisfy
+\[
+ E^\dagger E+F^\dagger F=I,
+ \qquad EE^\dagger+FF^\dagger=I.
+\]
+There are unitaries $L,R$ and diagonal matrices $D_E,D_F$ such that
+$E=LD_ER$ and $F=LD_FR$.
+\end{lemma}
+\begin{proof}
+Put $H=E^\dagger E$. Then $0\leq H\leq I$ and
+$F^\dagger F=I-H$. In finite dimension the partial isometries in the
+polar decompositions of square matrices extend to unitaries. Thus
+\[
+ E=V\sqrt H,\qquad F=W\sqrt{I-H}
+\]
+for unitaries $V,W$. The second assumed identity gives
+\[
+ VHV^\dagger+W(I-H)W^\dagger=I,
+ \qquad VHV^\dagger=WHW^\dagger.
+\]
+Consequently the unitary $Q=V^\dagger W$ commutes with $H$.
+A commuting Hermitian matrix and unitary matrix are simultaneously
+unitarily diagonalizable: diagonalize $H$, then diagonalize the
+restriction of $Q$ to each eigenspace of $H$. Write
+$H=S\operatorname{diag}(h_j)S^\dagger$ and
+$Q=S\operatorname{diag}(q_j)S^\dagger$. Then
+\[
+ E=VS\operatorname{diag}(\sqrt{h_j})S^\dagger,
+ \qquad
+ F=VS\operatorname{diag}(q_j\sqrt{1-h_j})S^\dagger.
+\]
+Taking $L=VS$ and $R=S^\dagger$ proves the assertion, including zero
+singular values.
+\end{proof}
+
+Unitary polar completion, equality of the two conjugations of $H$, and
+the relative-polar commutation conclusion are proved in the Lean module
+\nolinkurl{TNLean/MPS/MPU/TwoKrausPolar.lean}. Simultaneous
+diagonalization and the full conclusion of Lemma~\ref{lem:two-kraus}
+are not yet asserted as Lean theorems.
+
+\begin{lemma}\label{lem:bipartite-diagonal}
+Every bipartite unitary of operator Schmidt rank two admits a
+factorization
+\[
+ U=(L_A\otimes L_B)\operatorname{diag}(M_{ij})(R_A\otimes R_B),
+\]
+where the four outside factors are unitary, all $|M_{ij}|=1$, and
+$\operatorname{rank}M=2$. Here $\operatorname{diag}(M_{ij})$ means
+the diagonal operator on the product basis indexed by $(i,j)$.
+\end{lemma}
+\begin{proof}
+Let the two dimensions be $d_A,d_B$. Choose a Schmidt expansion
+$U=A_1\otimes B_1+A_2\otimes B_2$ such that the $A_i$ are
+Hilbert--Schmidt orthogonal and
+\[
+ \operatorname{Tr}(B_i^\dagger B_j)=d_B\delta_{ij}.
+\]
+Tracing $U^\dagger U=I$ and $UU^\dagger=I$ over the second factor gives
+\[
+ A_1^\dagger A_1+A_2^\dagger A_2=I,
+ \qquad A_1A_1^\dagger+A_2A_2^\dagger=I.
+\]
+Lemma~\ref{lem:two-kraus} simultaneously diagonalizes the two $A_i$
+by left and right unitaries $L_A,R_A$.
+
+For completeness, the opposite side can be diagonalized without changing
+these choices. Put
+\[
+ \alpha_i=\frac{\|A_i\|_\HS}{\sqrt{d_A}}>0,
+ \qquad \widehat A_i=A_i/\alpha_i,
+ \qquad \widehat B_i=\alpha_iB_i.
+\]
+The $\widehat A_i$ are orthogonal and have squared norm $d_A$.
+Partial traces over the first factor now show that $\widehat B_1,
+\widehat B_2$ satisfy the hypotheses of Lemma~\ref{lem:two-kraus}.
+Their simultaneous left and right diagonalization also diagonalizes the
+original $B_i$, since each rescaling is scalar. Hence the transformed
+$U$ is diagonal in a product basis. Its diagonal entries have modulus
+one by unitarity. They form a matrix $M$ of rank two because invertible
+local changes preserve operator Schmidt rank, and the Schmidt rank of
+this diagonal operator is exactly the ordinary matrix rank of $M$.
+\end{proof}
+
+\section{Two sectors with unitary factors in the Schmidt spaces}
+
+\begin{lemma}\label{lem:circle}
+If a nonempty finite matrix $M$ has unit-modulus entries and rank at
+most two, either its rows have at most two types up to a scalar multiple,
+or its columns have at most two such types.
+\end{lemma}
+\begin{proof}
+Rank one is immediate. Otherwise choose independent rows $u,v$.
+Divide column $j$ by $u_j$, and put $t_j=v_j/u_j$. Each resulting row
+is $a_i+b_it_j$, with $|t_j|=1$. If there are at most two values of
+$t_j$, there are at most two projective column types. Otherwise the
+identity
+\[
+ 1=|a_i+b_it_j|^2
+   =|a_i|^2+|b_i|^2+
+      2\operatorname{Re}(a_i\overline{b_i}\overline{t_j})
+\]
+holds at three distinct points of the unit circle. A nonconstant real
+linear functional has a level line, which intersects the unit circle
+in at most two points. Thus $a_i\overline{b_i}=0$, and every row is
+a scalar multiple of either $1$ or $t$.
+\end{proof}
+
+The preceding dichotomy is a mathematical proof. Its Lean formalization
+is not claimed in this note.
+
+\begin{lemma}\label{lem:two-sectors}
+Let $U$ be a bipartite unitary of Schmidt rank two. After possibly
+interchanging the names of the two factors, there are unitaries
+$A_0,A_1$ on the first factor and matrices $B_0,B_1$ on the second such
+that
+\[
+ U=A_0\otimes B_0+A_1\otimes B_1.
+\]
+The matrices $B_+=B_0+B_1$ and $B_-=B_0-B_1$ are unitary, and
+\[
+ R=B_+^\dagger B_-=R^\dagger,\qquad R^2=I.
+\]
+Moreover $A_0,A_1$ belong to the first Schmidt space of $U$, and
+$B_+,B_-$ belong to its second Schmidt space.
+\end{lemma}
+\begin{proof}
+Apply Lemmas~\ref{lem:bipartite-diagonal} and~\ref{lem:circle}.
+Suppose, for definiteness, that there are two projective row types.
+Choose normalized representative phase rows $r_0,r_1$ and write
+$M_{ij}=g_i r_{p(i),j}$, with $|g_i|=|r_{s,j}|=1$ and
+$p(i)\in\{0,1\}$. Both classes are nonempty. Let $P_s$ be the
+diagonal projection onto $p(i)=s$. The original $U$ is
+\[
+ \sum_{s=0}^1
+ \left[L_A\operatorname{diag}(g_i)P_sR_A\right]\otimes
+ \left[L_B\operatorname{diag}(r_{s,j})R_B\right].
+\]
+Rename the second factor as the first, so that the two bracketed phase
+operators there are $A_0,A_1$, while the former first-factor operators
+are $B_0,B_1$. Then
+\[
+ B_+=L_A\operatorname{diag}(g_i)R_A,
+ \qquad
+ B_-=L_A\operatorname{diag}(g_i)(P_0-P_1)R_A.
+\]
+Both are unitary, and
+$R=R_A^\dagger(P_0-P_1)R_A$ is explicitly a Hermitian involution.
+The column case is identical with the roles reversed. Each displayed
+pair is independent because $U$ has Schmidt rank two. Thus the pairs
+span the original Schmidt spaces, proving the final assertion.
+
+In particular the Hermitian property of $R$ follows from this sector
+construction. It does not follow from the unitarity of $B_+,B_-$ alone.
+\end{proof}
+
+\begin{lemma}\label{lem:inheritance}
+Let an operator $U$ have rank at most two at every consecutive cut of
+a chain. Split the chain into two consecutive intervals. Every element
+of either Schmidt space at this split has rank at most two at every
+consecutive cut inside its interval.
+\end{lemma}
+\begin{proof}
+Every element of a Schmidt space is obtained by applying a linear
+functional on the opposite factor to $U$. At a cut internal to the
+retained interval, apply that same functional to a rank-two expansion
+of $U$. It still has at most two summands. No assertion of positivity or
+physical realizability of the functional is needed; the statement is
+solely a bound on operator Schmidt rank.
+\end{proof}
+
+Taking adjoints preserves operator Schmidt rank: the adjoints of the
+factors in a rank-$r$ expansion give a rank-$r$ expansion of the adjoint,
+and applying the same argument a second time gives equality. This also
+preserves every consecutive cut-rank bound.
+
+\section{A recursion with a fixed number of controls}
+
+Write $C_c(W)$ for $W$ applied when a control qubit $c$ equals one.
+For the decomposition in Lemma~\ref{lem:two-sectors}, put
+$P_s=(I+(-1)^sR)/2$. Then $B_s=B_+P_s$, and
+\[
+ U=(I\otimes B_+)(A_0\otimes P_0+A_1\otimes P_1).
+\]
+Introduce a clean qubit $z$. The unitary
+\[
+ E_c=H_z C_{cz}(R)H_z
+\]
+records the sector in $z$ when $c=1$, and is the identity when $c=0$.
+Indeed, for a vector in the image of $P_s$ and $z$ initially zero,
+it sets $z=s$ if $c=1$. Since $R$ is a Hermitian involution,
+$E_c^\dagger=E_c$.
+
+After $E_c$, apply $A_0$ controlled by $c(1-z)$ and $A_1$ controlled
+by $cz$. These operations act on the opposite interval and preserve
+the recorded sector. Erasing the record and applying $B_+$ controlled
+by $c$ therefore implements $C_c(U)$ with $z$ returned to zero.
+This already uses seven controlled child unitaries: two for recording,
+two for erasing, two for the $A_s$, and one for $B_+$.
+
+One child call can be saved. Since $R=B_+^\dagger B_-$, and the
+outer control commutes with $H_z$,
+\[
+ C_c(B_+)E_c^\dagger
+   =H_z C_{c(1-z)}(B_+)C_{cz}(B_-)H_z.
+\]
+To verify this identity, use $E_c^\dagger=E_c$ and cancel the adjacent
+$C_c(B_+)$ and $C_{cz}(B_+^\dagger)$. On $c=0$ all controlled factors
+are identities; on $c=1,z=0$ the product is $B_+$, and on $c=1,z=1$
+it is $B_-$. Hence a controlled implementation uses precisely the
+following six child calls:
+\[
+ \underbrace{B_-,\ B_+^\dagger}_{\text{sector recording}},
+ \qquad A_0,\ A_1,
+ \qquad
+ \underbrace{B_+,\ B_-}_{\text{sector erasure and final factor}}.
+\]
+The last two calls lie between Hadamards on $z$, as in the displayed
+identity. Each child call has one control. Conjunctions $cz$ and
+$c(1-z)$ are computed into two additional clean qubits by Toffoli
+gates, used as the controls, then erased before any subsequent
+Hadamard on $z$. Toffoli gates have constant-size exact decompositions
+into the allowed gates. Thus three auxiliary qubits at this level
+suffice, and the number of controls does not grow with recursion depth.
+The control may be entangled with the data or with other registers;
+the identities are operator identities and remain valid in that case.
+
+The clean-record merging identity and the cancellation combining sector
+erasure with the final unitary factor are proved in the Lean module
+\nolinkurl{TNLean/MPS/MPU/TwoSectorMerging.lean}. Its hypotheses
+explicitly supply an orthogonal projection or a Hermitian involution.
+These algebraic identities support the six-call construction; the
+structural decomposition of an arbitrary Schmidt-rank-two unitary and
+its rank-two recursive circuit bound remain unformalized mathematical proofs.
+
+\begin{theorem}\label{thm:circuits}
+For $N\geq1$, every $N$-qubit unitary of rank at most two at every consecutive cut
+has an exact circuit with
+\[
+ O(N^{\log_2 6})\quad\text{one- and two-qubit gates},
+ \qquad O(\log(N+1))\quad\text{clean auxiliary qubits}.
+\]
+A sequential implementation has depth $O(N^{\log_2 6})$.
+On a line, routing gives gate count and depth
+$O(N^{1+\log_2 6})$, with the same auxiliary-space bound.
+\end{theorem}
+\begin{proof}
+Construct the controlled unitary recursively. At a balanced split of
+rank two, use the six-call construction just proved. Its four child
+unitaries $A_0,A_1,B_+,B_-$ have consecutive ranks at most two by
+Lemma~\ref{lem:inheritance}. In particular, the involution $R$ need
+not be assigned its own recursive implementation: its two factors
+$B_+^\dagger,B_-$ are the child unitaries that are implemented.
+The adjoint $B_+^\dagger$ retains the same internal cut ranks; its
+controlled implementation can equivalently be obtained by reversing the
+controlled circuit for $B_+$.
+
+At a rank-one split, $U=A\otimes B$ with $A,B$ rescaled to be
+unitary. This rescaling is possible because
+$A^\dagger A\otimes B^\dagger B=I$ forces both positive factors to
+be scalar multiples of the identity. The two controlled child calls
+also obey Lemma~\ref{lem:inheritance}. At one site the controlled
+unitary is an allowed two-qubit gate.
+
+If $G(n)$ denotes the maximum gate count for such controlled circuits,
+the balanced recursion gives
+\[
+ G(n)\leq6G(\lceil n/2\rceil)+C
+ \quad(n\geq2),
+\]
+with an absolute constant $C$ for the Hadamards and guard computations.
+Its recursion tree has height at most $\lceil\log_2 n\rceil$ and
+$O(6^{\lceil\log_2 n\rceil})=O(n^{\log_2 6})$ nodes. This height is not
+a circuit depth: the six child calls at each node run one after another
+on shared auxiliary workspace, so the circuit depth obeys the same
+recurrence as the gate count and is bounded by it, not by
+$O(\log n)$.
+The three current-level auxiliary qubits are retained during a child
+call, while the child's space is reused for subsequent calls. Thus at
+most $3\lceil\log_2 n\rceil+O(1)$ auxiliary qubits are present.
+Initialize the root control to one and return it to zero at the end.
+
+Sequential depth is bounded by the gate count. There are
+$N+O(\log(N+1))=O(N)$ total qubits. On a line every two-qubit
+interaction can be routed using $O(N)$ adjacent swaps and then the
+positions restored, giving the stated gate and depth bounds. No copying
+of quantum data is used or required.
+\end{proof}
+
+The numerical estimate for a recursion with a fixed number of child
+calls is formalized separately by the Lean theorem
+\nolinkurl{MPUCircuit.cost_le_pow_of_constant_branching} in
+\nolinkurl{TNLean/MPS/MPU/ConstantBranchingBounds.lean}. Its hypotheses
+concern a numerical recurrence; it does not assert that the controlled
+unitary decomposition above has been formalized. The exact finite-matrix
+identity for the six-call merging is checked in
+\nolinkurl{scripts/check_mpu_rank_two_controlled_merging.py}, on several
+noncommuting examples and both orientations of the controlling interval.
+
+The potentially complicated local unitaries in
+Lemma~\ref{lem:bipartite-diagonal} are never implemented as circuits.
+They establish the existence of four unitary elements of the original
+Schmidt spaces. The recursion implements those elements directly, using
+their inherited rank bounds. This distinction prevents a circular
+assumption that the local diagonalizing factors are already efficient.
+
+The exact theorem also implies the operator-norm approximation statement
+for this rank-two class, since the exact circuit has zero error. It
+does not require any conditioning hypothesis. A preliminary uniform
+argument follows; Section~5 then establishes the general fixed-bond
+exact theorem by a different choice of positive metrics.
+
+\section{Uniform families and averaged boundary Grams}
+\label{sec:uniform-averaged-grams}
+
+The all-length condition in the definition of a uniform-bulk MPU
+allows boundary Grams from different cap lengths to be averaged.
+Their isometry identities are separately linear in the two Grams.
+This gives a familywise polynomial bound without the source's
+exact-length spanning assumption.
+
+\begin{theorem}\label{thm:uniform-averaged-grams}
+Fix a physical dimension $d\geq2$, a finite-dimensional space $E$,
+matrices $A^{ij}\in\operatorname{End}(E)$, a row $l\in E^*$, and
+a column $r\in E$, where $1\leq i,j\leq d$. Suppose that
+\[
+ (U_N)_{\mathbf i,\mathbf j}
+   =lA^{i_1j_1}\cdots A^{i_Nj_N}r
+\]
+is unitary for every $N\geq1$. Then $U_N$ has an exact circuit of
+polynomial size and depth, using arbitrary one- and two-qudit gates
+and $O(N)$ auxiliary qudits which begin and end in $|0\rangle$.
+The polynomial constants and exponent may depend on the fixed
+$A,l,r,d$. The same conclusion holds with gates between adjacent sites
+on a line. No exact-length full-rank condition on the cap Grams
+is required.
+\end{theorem}
+
+This is the fixed-presentation, all-length hypothesis of the
+Uniform-bulk MPU definition in Styliaris--Trivedi--Cirac,
+arXiv:2508.08160. The circuit step uses their Local isometries:
+Uniform case lemma and Merging lemma, in the Supplemental Material
+of arXiv:2508.08160v2. The additional step
+here is to take convex averages of cap Grams over different lengths
+before taking their square roots.
+
+\begin{proof}
+\subsection*{The positive-word representation}
+
+Write $\alpha=(i,j)$ for the physical pair alphabet and
+$A_w=A_{\alpha_1}\cdots A_{\alpha_m}$ for a word $w$ of length $m$.
+Put
+\[
+ E_+=\operatorname{span}\{A_wr:|w|\geq1\},\qquad
+ K=\{x\in E_+:lA_wx=0\text{ for every }|w|\geq1\},
+ \qquad W=E_+/K.
+\]
+Both $E_+$ and $K$ are invariant under every $A_\alpha$.
+For $K$, this follows from
+$lA_wA_\alpha x=lA_{w\alpha}x=0$ for every positive-length $w$.
+Thus $A_\alpha$ induces a matrix $\overline A_\alpha$ on $W$.
+Define the endpoint tensors
+\[
+ B_\alpha([x])=lA_\alpha x,
+ \qquad C_\alpha=[A_\alpha r].
+\]
+The row $B_\alpha$ is well defined because $lA_\alpha$ vanishes on
+$K$, and $A_\alpha r$ lies in $E_+$. For every $N\geq2$,
+\[
+ (U_N)_{\mathbf i,\mathbf j}
+ =B_{(i_1,j_1)}\overline A_{(i_2,j_2)}\cdots
+       \overline A_{(i_{N-1},j_{N-1})}C_{(i_N,j_N)}.
+\]
+The case $N=2$ means $B_{(i_1,j_1)}C_{(i_2,j_2)}$.
+No assertion that $l$ or $r$ themselves descend to $W$ is needed.
+The one-site unitary will be treated separately.
+
+For every positive word define a row and column on $W$ by
+\[
+ f_u([x])=lA_ux,\qquad q_v=[A_vr].
+\]
+The columns $q_v$ span $W$ by construction, and the rows $f_u$
+span $W^*$: their common kernel is zero by the definition of $K$.
+Let $w=\dim W\leq\dim E$. Here $w>0$, since otherwise $U_2=0$.
+
+In fact cumulative word lengths $1,\ldots,w$ suffice on each side.
+The cumulative column spaces $S_j=\operatorname{span}\{q_v:1\leq|v|\leq j\}$
+satisfy
+\[
+ S_{j+1}=S_1+\sum_\alpha\overline A_\alpha S_j.
+\]
+If $S_{j+1}=S_j$, then $S_j$ is invariant and contains every
+future reachable column, so $S_j=W$. Since $S_1\ne0$, dimension
+therefore increases strictly until it reaches $W$, in at most
+$w$ steps. The same argument for rows, using right multiplication
+by $\overline A_\alpha$, gives
+\[
+ \operatorname{span}\{f_u:1\leq|u|\leq w\}=W^*.
+\]
+
+\subsection*{Averaging the cap Grams}
+
+Choose a Hilbert-space structure on $W$ and set, for $m,n\geq1$,
+\[
+ P_m=d^{-m}\sum_{|u|=m}f_u^\dagger f_u,
+ \qquad
+ Q_n=d^{-n}\sum_{|v|=n}q_vq_v^\dagger.
+\]
+The sums run over all words in the pair alphabet: the factors
+$d^{-m},d^{-n}$ average the cap input indices and sum the cap
+output indices. Define
+\[
+ P=\frac1w\sum_{m=1}^wP_m,
+ \qquad Q=\frac1w\sum_{n=1}^wQ_n.
+\]
+The cumulative spanning statements imply $P,Q\succ0$.
+Indeed a vector in the kernel of $P$ is annihilated by every
+$f_u$ of length at most $w$, and a vector in the kernel of $Q$
+is orthogonal to every $q_v$ of those lengths.
+
+For a central interval of length $k\geq1$, put
+\[
+ T_{\mathbf a,\mathbf b}
+ =\overline A^{a_1b_1}\cdots\overline A^{a_kb_k},
+ \qquad
+ \Phi_k(P',Q')_{\mathbf b,\mathbf b'}
+ =\sum_{\mathbf a}\operatorname{Tr}\!\left(
+ T_{\mathbf a,\mathbf b}^\dagger P'
+ T_{\mathbf a,\mathbf b'}Q'\right).
+\]
+For each $m,n\geq1$, unitarity at length $m+k+n$ gives
+\[
+ \Phi_k(P_m,Q_n)_{\mathbf b,\mathbf b'}
+       =\delta_{\mathbf b,\mathbf b'}.
+\]
+To see the normalization explicitly, fix the input words on the
+two caps, sum over both cap outputs and the central output in
+$U_{m+k+n}^\dagger U_{m+k+n}=\id$, and average over the cap inputs
+with weights $d^{-m}$ and $d^{-n}$. The resulting left side is
+\[
+ d^{-m-n}\sum_{\mathbf a,u,v}
+ \overline{f_uT_{\mathbf a,\mathbf b}q_v}\,
+              f_uT_{\mathbf a,\mathbf b'}q_v,
+\]
+which is the displayed trace formula.
+The function $\Phi_k$ is separately linear in $P',Q'$.
+Consequently the independent averages over $m$ and $n$ give
+\[
+ \Phi_k(P,Q)=\id\qquad(k\geq1).
+\]
+It is the Grams which are averaged here, not their square roots.
+
+The boundary versions follow in the same way. Write
+\[
+ F_{\mathbf a,\mathbf b}([x])
+   =lA^{a_1b_1}\cdots A^{a_kb_k}x,
+ \qquad
+ G_{\mathbf a,\mathbf b}
+ =[A^{a_1b_1}\cdots A^{a_kb_k}r].
+\]
+Tracing only a right cap in $U_{k+n}^\dagger U_{k+n}=\id$ gives
+\[
+ \sum_{\mathbf a}\operatorname{Tr}\!\left(
+ F_{\mathbf a,\mathbf b}^\dagger F_{\mathbf a,\mathbf b'}Q_n\right)
+ =\delta_{\mathbf b,\mathbf b'},
+\]
+and tracing only a left cap in $U_{m+k}^\dagger U_{m+k}=\id$ gives
+\[
+ \sum_{\mathbf a}G_{\mathbf a,\mathbf b}^\dagger
+                   P_mG_{\mathbf a,\mathbf b'}
+ =\delta_{\mathbf b,\mathbf b'}.
+\]
+The same identities hold after averaging to $Q$ and $P$.
+
+\subsection*{The interval isometries and their merger}
+
+Take $L=P^{1/2}$ and $R=Q^{1/2}$. Regard the row and column indices
+of $LT_{\mathbf a,\mathbf b}R$ as two additional output registers.
+The maps with amplitudes
+\[
+ LT_{\mathbf a,\mathbf b}R,\qquad
+ F_{\mathbf a,\mathbf b}R,\qquad
+ LG_{\mathbf a,\mathbf b}
+\]
+are respectively the interior, left-boundary and right-boundary
+interval isometries. For the first, the Gram matrix is
+\[
+ \sum_{\mathbf a}\operatorname{Tr}\!\left(
+ (LT_{\mathbf a,\mathbf b}R)^\dagger
+  LT_{\mathbf a,\mathbf b'}R\right)
+ =\Phi_k(P,Q)_{\mathbf b,\mathbf b'},
+\]
+and the preceding one-boundary identities prove the other two cases.
+For $k=1$ all these maps have fixed dimension, so each has a unitary
+extension with a fixed number of one- and two-qudit gates and
+auxiliary qudits. Non-power-of-$d$ flag dimensions are embedded in
+a fixed number of $d$-dimensional registers.
+
+For adjacent intervals contract the right flag of the first with
+the left flag of the second using the coefficient matrix
+\[
+ T=R^{-1}L^{-1},\qquad
+ \mu=\|T\|_{\HS}<\infty.
+\]
+Then $RTL=\id$, so this contraction gives precisely the longer
+interval tensor. The corresponding operator resets the two
+contracted registers to zero. Its norm is $\mu$, since its only
+nonzero output row is the contraction bra. In these matrix
+conventions $\mu^2=\operatorname{Tr}(P^{-1}Q^{-1})$;
+defining $\mu$ by the actual contraction bra avoids any dependence
+on vectorization transpose conventions.
+
+The product of the two child maps is an isometry and the merged
+map is an isometry. Hence the contraction has norm one on the
+child image, and in particular $\mu\geq1$. Its fixed-dimensional
+unitary dilation implements the contraction divided by $\mu$.
+On that image the success probability is $\mu^{-2}$, independent
+of the unknown physical input. The source's Subspace amplitude
+amplification lemma and Merging lemma therefore apply.
+
+For completeness, the exact amplification can be chosen using
+only ordinary plane rotations. Put
+\[
+ \ell=\left\lceil\frac{\pi\mu}{4}\right\rceil,
+ \qquad \theta=\frac{\pi}{4\ell+2},
+ \qquad c=\mu\sin\theta\leq1.
+\]
+Add an attenuation register initialized to zero and rotate it so
+that its zero amplitude is $c$. Let $\mathcal D$ be the merger
+dilation together with this rotation. On each vector in the
+initial child image it now has the form
+\[
+ \mathcal D\psi
+   =\sin\theta\,g_\psi+\cos\theta\,h_\psi,
+\]
+where $g_\psi$ is the desired merged output with the contracted
+flags and both new registers zero, and $h_\psi$ is orthogonal to
+the corresponding success subspace. Both $g_\psi$ and $h_\psi$
+preserve inner products as $\psi$ ranges over the child image:
+this follows from the constant success amplitude and unitarity.
+
+Let $R_{\rm initial}$ reflect about the initial child image with
+the new registers zero, and let $R_{\rm success}$ reflect about
+the zero contracted and new registers. The operator
+\[
+ -\mathcal D R_{\rm initial}\mathcal D^\dagger R_{\rm success}
+\]
+rotates each plane spanned by $g_\psi,h_\psi$ through $2\theta$.
+After $\ell$ rotations the output is exactly $g_\psi$, since
+$\sin((2\ell+1)\theta)=1$. The reflection about the initial image
+is obtained by undoing the child unitary extensions, reflecting
+about their initialized auxiliaries and the new zero registers,
+and reapplying the extensions. Thus a bounded number of child
+circuit invocations, depending only on $\mu$, performs the merge.
+The contracted registers and the amplification auxiliaries return
+exactly to zero; the interval's outer flags are retained.
+
+\subsection*{Circuit bounds and exact erasure}
+
+A balanced tree merges the single-site isometries into $U_N$.
+If $H(n)$ denotes the gate cost of an interval of length $n$,
+the preceding implementation gives a recurrence
+\[
+ H(n)\leq c_\mu\bigl(H(\lceil n/2\rceil)+H(\lfloor n/2\rfloor)\bigr)
+            +c_\mu n,
+\]
+where $c_\mu$ also includes the fixed physical and flag dimensions.
+The linear term covers the image reflections and their reversible
+conjunctions. The recurrence is polynomial; for example any fixed
+$p>1+\log_2c_\mu$ gives $H(n)=O(n^p)$ after increasing the constant.
+Depth is at most the gate count and is consequently polynomial.
+
+Each leaf and each merge introduces a fixed number of logical
+auxiliary registers, so the tree uses $O(N)$ of them. The reversible
+conjunction scratch can be taken from a common $O(N)$-sized pool:
+each conjunction is erased before a child invocation, and each
+child returns this scratch to zero for every logical input. Thus
+amplification repetitions and nested calls reuse the same pool.
+At every internal merge the two inner flag registers are reset
+exactly; only the interval's external flags remain. At the root
+the boundary tensors have no external flags. The final map is
+therefore $U_N$ with every auxiliary register exactly zero.
+For $N=1$, apply the fixed one-qudit unitary $U_1$ directly.
+On a line, route each two-qudit interaction by adjacent swaps and
+restore the positions. There are $O(N)$ total qudits, so this adds
+at most an $O(N)$ factor to the gate and depth bounds.
+\end{proof}
+
+The averaging proof has familywise quantifiers: its bound depends
+on the fixed presentation through $P,Q$ and $\mu$. Section~5 gives
+a stronger result by optimizing over an affine space of positive
+metrics, and covers nonuniform tensors specified at a single length.
+The averaging argument above is a mathematical proof; this separate
+familywise circuit construction is not asserted to have been formalized
+in Lean. The stronger general construction of Section~5 is formalized
+in Lean.
+
+Fixed trace boundaries are included. If the coefficient is
+$\operatorname{Tr}(bA_{\alpha_1}\cdots A_{\alpha_N})$, take the enlarged
+bond space $\operatorname{End}(E)$, let each letter act by
+$X\mapsto A_\alpha X$, and take the right vector $b$ and left
+functional $\operatorname{Tr}$. Cyclicity of the trace gives the
+same coefficients. This includes periodic boundaries $b=I$ and
+requires no invertibility assumption on $b$.
+
+An exact-length loss of rank does not obstruct the averages.
+For example, take a fixed unit-modulus phase $\lambda$ of infinite order and the
+one-qubit projection $P_0=|0\rangle\langle0|$. The family
+\[
+ U_N=\lambda^N\id+(1-\lambda^N)P_0^{\otimes N}
+\]
+is unitary for every $N$. It has a fixed three-dimensional
+presentation
+\[
+ A^{ij}=\operatorname{diag}(\lambda\delta_{ij},
+                  (P_0)_{ij},\lambda(P_0)_{ij}),\qquad
+ l=(1,1,-1),\quad r=(1,1,1)^T.
+\]
+At each fixed positive word length the reachable columns span
+at most two dimensions: a nonzero word containing the pair
+$(1,1)$ gives a multiple of $(1,0,0)^T$, while the all-$(0,0)$
+word gives
+$(\lambda^m,1,\lambda^m)^T$. The corresponding rows also span
+at most two dimensions. But lengths one and two together span
+all three dimensions on both sides, so their averaged Grams are
+positive definite. This loss of rank occurs in a minimal fixed
+presentation: with $a=(0,0)$ and $b=(1,1)$, the matrix
+$(lA_uA_vr)_{u,v\in\{a,aa,b\}}$ has determinant
+$-\lambda^4(\lambda-1)^2\ne0$. Every nontrivial consecutive
+cut of $U_N$ has rank two for $N\geq2$, since
+$1-\lambda^N\ne0$. Thus the deficient exact-length cap ranks
+persist on nondegenerate data; they are repaired by averaging, rather
+than by assuming exact-length full rank. The proof uses unitarity at
+every cap-extended length.
+
+\clearpage
+\section{Determinant normalization for arbitrary finite MPUs}
+\label{sec:determinant-normalization}
+
+The interval-isometry construction can be normalized without a lower
+bound on the nonzero operator Schmidt values. The relevant freedom is
+larger than the convex set of Grams obtained from physical cap states:
+one may choose a positive matrix in their real affine hull. Maximizing
+its determinant gives a dual normalization at the same cut. These
+normalizations are compatible across intervals, including intervals
+with entangled physical input states.
+
+\begin{theorem}\label{thm:general-determinant-circuits}
+Fix a physical dimension $d\geq2$ and an integer $D\geq1$.
+Let $U$ be a unitary on $N\geq1$
+$d$-dimensional sites, with operator Schmidt rank at most $D$ across
+each consecutive cut. There is an exact circuit for $U$, using
+arbitrary one- and two-qudit gates, with
+\[
+ (D+1)^{O_d(1)}N^{O_d(\log(D+1))}
+\]
+gates and $O_d(N\log(D+1))$ auxiliary qudits. Every auxiliary begins
+and ends in $|0\rangle$. The same bounds, with a change in the numerical
+exponent, hold using only adjacent two-qudit gates on a line.
+The implementation is an operator equality on clean-auxiliary inputs,
+and consequently remains exact when the data are entangled with an
+arbitrary reference system.
+\end{theorem}
+
+The theorem addresses the nonuniform fixed-bond-dimension circuit
+question treated under a spectral or conditioning requirement in
+Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, in particular the
+definition of $q_k$ and Theorem~2 in the main-text paragraph on
+nonuniform MPUs (source lines 1373--1402).
+The proof uses the isometry and merging argument of that paper,
+but obtains the positive metrics from affine Gram spaces rather than
+from physical cap states. The main-text definition of $q_k$ ranges over
+valid isometry normalizers (lines 1375--1379), whereas its appendix
+restatement restricts the boundary squares to physical cap-Gram sets
+(lines 2123--2124). These are different domains. We compute the merger
+norm directly below, without identifying it with either infimum. Any
+comparison must specify the domain and match the paper's transpose
+and boundary-index conventions.
+
+\begin{proof}
+\subsection*{A minimal open-boundary representation}
+
+Successive Schmidt decompositions of the operator give an open MPO
+\[
+ U_{\mathbf a,\mathbf b}
+ =A_1^{a_1b_1}\cdots A_N^{a_Nb_N},
+ \qquad A_j^{ab}:E_j\longrightarrow E_{j-1},
+\]
+where $E_0=E_N=\mathbb C$ and
+$r_j=\dim E_j\leq D$ for $1\leq j<N$.
+At every cut the prefix rows and suffix columns span $E_j^*$ and
+$E_j$, respectively. This follows from minimality of the cut rank:
+a linear dependence on either side would reduce that rank.
+All $r_j$ are positive, and put $r_0=r_N=1$.
+
+At cut $j$, denote the prefix row by
+\[
+ f^{(j)}_{\mathbf a,\mathbf b}
+   =A_1^{a_1b_1}\cdots A_j^{a_jb_j}.
+\]
+For a density matrix $\rho$ on the first $j$ sites, define its
+left cap Gram by
+\[
+ P_j(\rho)=
+ \sum_{\mathbf a,\mathbf b,\mathbf b'}
+ \rho_{\mathbf b',\mathbf b}
+ (f^{(j)}_{\mathbf a,\mathbf b})^\dagger
+  f^{(j)}_{\mathbf a,\mathbf b'}.
+\]
+This is positive semidefinite. For a pure input $\rho=|\psi\rangle
+\langle\psi|$ it is the sum of the positive matrices
+$(\sum_{\mathbf b}\psi_{\mathbf b}f^{(j)}_{\mathbf a,\mathbf b})^\dagger
+ (\sum_{\mathbf b}\psi_{\mathbf b}f^{(j)}_{\mathbf a,\mathbf b})$.
+The map $\rho\mapsto P_j(\rho)$ is linear on Hermitian matrices.
+
+Let $g^{(j)}_{\mathbf c,\mathbf e}$ be the suffix column obtained
+from sites $j+1,\ldots,N$, and let
+\[
+ \overline Q_j=d^{-(N-j)}
+       \sum_{\mathbf c,\mathbf e}
+        g^{(j)}_{\mathbf c,\mathbf e}
+       (g^{(j)}_{\mathbf c,\mathbf e})^\dagger.
+\]
+The spanning of the suffix columns gives $\overline Q_j\succ0$.
+Likewise the maximally mixed prefix input gives
+\[
+ P_j(d^{-j}\id)\succ0.
+\]
+Unitarity, applied to the product of $\rho$ with the maximally
+mixed suffix input, implies
+\[
+ \operatorname{Tr}(P_j(\rho)\overline Q_j)=1
+       \qquad\text{for every density matrix }\rho.
+\]
+The endpoint cases are scalar: $P_0(1)=1$, while
+$P_N(\rho)=\operatorname{Tr}(U\rho U^\dagger)=1$.
+
+\subsection*{The determinant maximizer and its dual metric}
+
+Let $\mathcal C_j$ be the real affine hull of all $P_j(\rho)$ as
+$\rho$ ranges over density matrices on the prefix. This is an
+affine subspace of the Hermitian matrices. Its elements are finite
+real combinations
+\[
+ P=\sum_t a_tP_j(\rho_t),\qquad
+ a_t\in\mathbb R,\qquad\sum_ta_t=1.
+\]
+The coefficients need not be positive. Thus $\mathcal C_j$ is
+distinguished from the physical convex set of cap Grams.
+The preceding trace identity extends to every $P\in\mathcal C_j$.
+
+The set $\mathcal C_j\cap\{P\succeq0\}$ is compact. It is closed,
+and $\overline Q_j\succ0$ gives
+\[
+ 1=\operatorname{Tr}(P\overline Q_j)
+     \geq\lambda_{\min}(\overline Q_j)\operatorname{Tr}P,
+\]
+which bounds the positive matrices. It contains the positive
+definite maximally mixed cap Gram. A determinant maximizer $P_j^*$
+therefore exists and has positive determinant, hence $P_j^*\succ0$.
+
+For every Hermitian direction $H$ parallel to $\mathcal C_j$,
+the matrices $P_j^*+tH$ remain positive definite for all sufficiently
+small positive and negative $t$. Jacobi's derivative formula gives
+\[
+ 0=\left.\frac{d}{dt}\log\det(P_j^*+tH)\right|_{t=0}
+   =\operatorname{Tr}((P_j^*)^{-1}H).
+\]
+Set
+\[
+ Q_j^*=\frac1{r_j}(P_j^*)^{-1}.
+\]
+For every $P\in\mathcal C_j$, stationarity and
+$\operatorname{Tr}(P_j^*Q_j^*)=1$ now imply
+\[
+ \operatorname{Tr}(P Q_j^*)=1.
+\]
+At the endpoints $\mathcal C_0=\mathcal C_N=\{1\}$, so choose
+$P_0^*=Q_0^*=P_N^*=Q_N^*=1$.
+Negative affine coefficients have only been used to establish
+linear identities. Both final matrices $P_j^*$ and $Q_j^*$ are
+positive definite.
+
+\subsection*{Compatibility across every interval}
+
+For $0\leq j<k\leq N$, write
+\[
+ A_{j:k}^{\mathbf a,\mathbf b}
+ =A_{j+1}^{a_{j+1}b_{j+1}}\cdots A_k^{a_kb_k}.
+\]
+For any density matrix $\sigma$ on this interval, define
+\[
+ \mathcal T_\sigma(P)=
+ \sum_{\mathbf a,\mathbf b,\mathbf b'}
+ \sigma_{\mathbf b',\mathbf b}
+ (A_{j:k}^{\mathbf a,\mathbf b})^\dagger
+ P A_{j:k}^{\mathbf a,\mathbf b'}.
+\]
+For a prefix density matrix $\rho$, concatenation gives exactly
+\[
+ \mathcal T_\sigma(P_j(\rho))=P_k(\rho\otimes\sigma).
+\]
+The input $\sigma$ is arbitrary: it may be entangled among all
+sites of the interval. Linearity and the affine-coefficient sum
+one therefore give
+\[
+ \mathcal T_\sigma(\mathcal C_j)\subseteq\mathcal C_k,
+ \qquad
+ \operatorname{Tr}\bigl(Q_k^*\mathcal T_\sigma(P_j^*)\bigr)=1.
+\]
+
+Put
+\[
+ L_j=(P_j^*)^{1/2},\qquad R_j=(Q_j^*)^{1/2}.
+\]
+Define $V_{j:k}$ from the physical input on sites $j+1,\ldots,k$
+to the physical output and two flag registers by amplitudes
+\[
+ (V_{j:k})_{(\mathbf a,\alpha,\beta),\mathbf b}
+    =(L_j A_{j:k}^{\mathbf a,\mathbf b}R_k)_{\alpha\beta}.
+\]
+Its input Gram has entries
+\[
+ (V_{j:k}^\dagger V_{j:k})_{\mathbf b,\mathbf b'}
+ =\sum_{\mathbf a}\operatorname{Tr}\!\left(
+ (A_{j:k}^{\mathbf a,\mathbf b})^\dagger
+ P_j^* A_{j:k}^{\mathbf a,\mathbf b'}Q_k^*\right).
+\]
+The trace against every density matrix $\sigma$ is one, by the
+transfer identity. A Hermitian matrix with that expectation for
+every density matrix is the identity. Thus $V_{j:k}$ is an
+isometry for every interval. When $j=0$ or $k=N$ the corresponding
+flag is one dimensional; $V_{0:N}=U$.
+
+This argument includes both endpoints and arbitrary interval input
+states. It uses only the unitarity of the given finite $U$;
+unitarity at other lengths is not required.
+
+\subsection*{A Bell contraction of bounded norm}
+
+At a cut $j$, the two adjacent flags have dimension $r_j$.
+The matrix that contracts them is
+\[
+ R_j^{-1}L_j^{-1}
+ =\sqrt{r_j}\,(P_j^*)^{1/2}(P_j^*)^{-1/2}
+ =\sqrt{r_j}\,\id.
+\]
+Consequently the merger is
+\[
+ M_j=\sqrt{r_j}\,|0,0\rangle
+                 \sum_{x=0}^{r_j-1}\langle x,x|,
+ \qquad \|M_j\|=r_j\leq D.
+\]
+Applying it to $V_{a:j}\otimes V_{j:b}$ gives exactly $V_{a:b}$
+with the contracted flags reset to zero. This follows by inserting
+$R_j(R_j^{-1}L_j^{-1})L_j=\id$ between the interval matrices.
+The product child map and the target are isometries.
+
+A fixed-dimensional unitary dilation of $M_j/r_j$ has success
+amplitude $1/r_j$ on the entire child image. The exact subspace
+amplitude amplification used in the preceding section therefore
+performs the merge with $O(r_j)$ invocations. Explicitly, take
+\[
+ \ell_j=\left\lceil\frac{\pi r_j}{4}\right\rceil,
+ \qquad\theta_j=\frac{\pi}{4\ell_j+2},
+ \qquad c_j=r_j\sin\theta_j\leq1.
+\]
+An additional attenuation register gives success amplitude
+$\sin\theta_j$. Before dilation, reflection about the child image
+is implemented by undoing the child unitary extensions, reflecting
+about their initialized flags and the new registers, and reapplying
+the extensions. Equivalently, let $Z_0$ be the full preparation,
+including the children, joining dilation, and attenuation. Reflection
+about its prepared image is $Z_0R_0Z_0^\dagger$, where $R_0$ tests
+all selected initialized flags for zero. This reflection undoes and
+reapplies the small-packet preparation as well as both child circuits.
+Reflection about success tests the contracted and new registers for zero. The usual two-plane calculation gives
+success amplitude $\sin((2\ell_j+1)\theta_j)=1$ after $\ell_j$
+rotations. Thus the merger is exact, including all input-dependent
+phases, and all contracted and new registers are erased exactly.
+This is the source's Merging lemma applied to the isometries proved
+above; no physical-cap representation of the metrics is needed.
+
+\subsection*{Gate and auxiliary bounds}
+
+Encode an $r$-dimensional flag in $\lceil\log_d r\rceil$ qudits.
+A single-site isometry acts between a $d$-dimensional input and
+a space of dimension at most $d^3(D+1)^2$, after padding the flags.
+Complete its columns to a unitary. QR elimination of a unitary of
+dimension $m$ uses $O(m^2)$ two-level factors and diagonal phases.
+A path between two basis words reduces each two-level factor to
+a pattern-controlled one-qudit gate and basis-word transpositions.
+These have polynomial cost in the number of qudits: compute the
+control conjunction with clean work registers, apply the controlled
+gate, and erase the conjunction. Toffoli on two encoded Boolean
+controls has a constant-size two-qudit decomposition. All phases
+of the two-level factors and the final diagonal are retained.
+Thus the leaf extensions and the fixed-dimensional merger
+dilations have $(D+1)^{O_d(1)}$ gate cost.
+
+The work registers of these elementary routines return to zero
+for every state of the data and logical flags, including arbitrary
+nonzero flags. Each implemented extension is therefore a genuine
+unitary on the logical registers during amplification and during
+inverse child calls. Reflection about zero on $a$ logical flags
+uses $O_d(a)$ gates and clean work registers, by a reversible
+conjunction; its work also returns to zero for every logical input.
+
+A balanced tree has height $h=\lceil\log_2N\rceil$. The merger
+bound gives
+\[
+ H(n)\leq b_D\bigl(H(\lceil n/2\rceil)+H(\lfloor n/2\rfloor)\bigr)
+           +(D+1)^{O_d(1)}n\log(D+1),
+ \qquad b_D\leq C_d(D+1).
+\]
+Increasing $b_D$ to at least two, expansion by tree levels yields
+\[
+ H(N)\leq(D+1)^{O_d(1)}N b_D^h
+          =(D+1)^{O_d(1)}N^{O_d(\log(D+1))}.
+\]
+Each leaf and each merge contributes $O_d(\log(D+1))$ logical
+auxiliary qudits, giving $O_d(N\log(D+1))$ in total. Use a common
+work pool of this same order for the conjunctions and gate
+decompositions. Work is erased before each child invocation, so
+repeated amplification and nested calls reuse the pool. Separate
+persistent work pools at every tree level are unnecessary.
+At the root there are no external flags, and every other register
+has been reset. The circuit therefore implements $U$ with exactly
+clean auxiliary output. Since these are equal linear maps, the
+statement remains true after tensoring with any reference identity.
+
+To obtain the line version, arrange the data and auxiliary registers
+on a line. Route each nonadjacent two-qudit gate using swaps, apply
+it, and undo the swaps. There are $O_d(N\log(D+1))$ registers, so
+this multiplies the gate count by at most that factor. The auxiliary
+count is unchanged, and the exponent remains $O_d(\log(D+1))$.
+Depth is bounded by gate count. For $N=1$, apply $U$ directly.
+\end{proof}
+
+A periodic MPO of bond dimension $\chi$ can be opened with bond
+dimension at most $\chi^2$. Applying the theorem with $D=\chi^2$
+gives the same fixed-bond polynomial conclusion, with gate exponent
+$O_d(\log(\chi+1))$ and $O_d(N\log(\chi+1))$ clean auxiliary qudits.
+
+The theorem is a nonuniform circuit-existence statement. Exact
+parameters for the determinant maximizers and unitary extensions
+are allowed as gate parameters; no efficient classical computation
+of those parameters is asserted. The gate set consists of arbitrary
+one- and two-qudit unitaries, as in the source, rather than a fixed
+finite alphabet. The general exact circuit theorem and its
+periodic-boundary specialization are formalized in
+\nolinkurl{TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean}
+(\nolinkurl{MPUCircuit.exists_clean_exact_circuit_of_bounded_cutCoefficientRank},
+\nolinkurl{MPUCircuit.exists_clean_exact_circuit_of_periodic_mpo_unitary}).
+The operator-norm approximation statements, with exact auxiliary erasure,
+are formalized in
+\nolinkurl{TNLean/MPS/MPU/ApproximateBoundedCutRankCircuit.lean}
+(\nolinkurl{MPUCircuit.exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientRank},
+\nolinkurl{MPUCircuit.exists_clean_operatorNorm_approximate_circuit_of_periodic_mpo_unitary}).
+These statements derive the complete circuit from the given finite
+unitary and its consecutive cut-rank bound.
+
+The exact theorem also proves the operator-norm approximation statement:
+for every $\varepsilon>0$ the same circuit has zero error, with exactly
+erased auxiliary outputs. This conclusion uses the arbitrary-gate model
+of the theorem.
+
+\subsection*{The transpose convention and the conditioning domain in the source}
+
+Write the virtual matrices with the left bond as the row index and the
+right bond as the column index, as in the tensor labels $m$ (left) and $n$
+(right) of Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, main-text
+paragraph on MPUs with uniform bulk (source lines 695--722).
+For an interval from site $j$ through site $k$, put
+$B^{\mathbf a,\mathbf b}=A_j^{a_jb_j}\cdots A_k^{a_kb_k}$.
+The two outward flag legs of the source's
+\nolinkurl{eq:isometries_inhomo} have amplitudes
+\[
+ (V_{jk}^{[L_j,R_k]})_{(\mathbf a,\alpha,\beta),\mathbf b}
+ =\sum_{u,v}(L_j)_{\alpha u}
+       B^{\mathbf a,\mathbf b}_{uv}(R_k)_{\beta v}
+ =(L_j B^{\mathbf a,\mathbf b}R_k^T)_{\alpha\beta}.
+\]
+The transpose is required because both flag operators act on outgoing
+legs. The ordering of the two flag registers can be interchanged by a
+fixed permutation; this does not change any norm or isometry assertion.
+
+Let $P_t\succ0$ and $Q_t=r_t^{-1}P_t^{-1}$ be the compatible balanced
+metrics at cut $t$ of Section~5. Its weighted interval amplitudes are
+$\bigl(P_{j-1}^{1/2}B^{\mathbf a,\mathbf b}Q_k^{1/2}\bigr)_{\alpha\beta}$.
+Consequently the source matrices for these same amplitudes are
+\[
+ L_j=P_{j-1}^{1/2},\qquad R_k=(Q_k^{1/2})^T.
+\]
+Transpose preserves positive definiteness. Both source matrices are
+therefore positive and full rank. The simultaneous interval-isometry
+identity proves their validity for every interval, including arbitrary
+internally entangled physical inputs. At the endpoints,
+$L_1=R_N=1$, so the full interval is exactly the original unitary.
+
+At cut $k$, the source's joining operator is
+$|00\rangle\langle I|(R_k^{-1}\otimes L_{k+1}^{-1})$; see the proof of
+\nolinkurl{lem:merging}, source lines 2157--2182. Its coefficient
+on the right flag $\beta$ of the left child and the left flag $\alpha$
+of the right child is
+\[
+ \sum_t(R_k^{-1})_{t\beta}(L_{k+1}^{-1})_{t\alpha}
+ =\bigl(R_k^{-T}L_{k+1}^{-1}\bigr)_{\beta\alpha}
+ =\bigl(Q_k^{-1/2}P_k^{-1/2}\bigr)_{\beta\alpha}
+ =\sqrt{r_k}\,\delta_{\alpha\beta}.
+\]
+Thus this operator is precisely the Bell reset used in Section~5,
+with norm $r_k$. Equivalently, the source's squared norm becomes
+\[
+ \operatorname{Tr}\!\left[R_k^{-2}(L_{k+1}^{-2})^T\right]
+ =\operatorname{Tr}\!\left[(Q_k^{-1})^T(P_k^{-1})^T\right]
+ =\operatorname{Tr}(P_k^{-1}Q_k^{-1})=r_k^2.
+\]
+These equalities identify an explicit full-rank candidate; no
+conditioning or trace identity is supplied as an extra assumption.
+
+The domain of the infimum must be stated separately. The main-text
+\nolinkurl{eq:def_q_k}, source lines 1375--1379, describes the
+infimum over valid choices producing the displayed interval isometries.
+For the unrestricted domain of all simultaneous valid positive metrics,
+the construction above therefore gives $q_k^{\mathrm{iso}}\leq r_k$.
+The appendix restatement, source lines 2123--2124, instead writes
+$R_k^2\in\mathcal R_k$ and $L_{k+1}^2\in\mathcal L_{k+1}$ explicitly.
+Those sets are defined from density operators on physical caps in
+\nolinkurl{eq:def_LR}, source lines 1758--1816.
+A positive matrix in the real affine hull of cap Grams need not itself
+be a cap Gram, and the dual metric is not asserted to belong to a
+physical cap set. Hence the argument does not bound that
+cap-restricted infimum. The exact circuit theorem uses the explicit
+Bell-reset norm $r_k$, independently of this difference between the
+source's two stated optimization domains.
+
+\subsection*{Physical cap conditioning can diverge for a single two-qubit gate}
+
+Consider the two-qubit unitary
+\[
+ U_\theta=\operatorname{diag}(1,1,1,e^{i\theta}),\qquad 0<\theta<\pi.
+\]
+It is one allowed two-qudit gate in the circuit model of
+Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, opening of the
+main-text paragraph on the main result (source line 820).
+Nevertheless, the infimum restricted to physical cap density operators
+in the appendix, source lines 2123--2124, diverges as
+$\theta\downarrow0$. This is a calculation of an upper-bound parameter
+for a particular construction; it is not a circuit lower bound.
+
+Put $z=e^{i\theta}$ and use virtual row and column coordinates indexed by
+$\{0,1\}$. A minimal open-boundary representation is given by
+\[
+\begin{array}{c|cccc}
+ (a,b)&(0,0)&(0,1)&(1,0)&(1,1)\\ \hline
+ A_1^{ab}&(1,0)&(0,0)&(0,0)&(0,1)\\[2pt]
+ A_2^{ab}&\binom{1}{1}&\binom{0}{0}&\binom{0}{0}&\binom{1}{z}
+\end{array}
+\]
+Thus $A_1^{ab}=\delta_{ab}e_b^T$ and
+$A_2^{cd}=\delta_{cd}g_d$, where
+$g_0=(1,1)^T$ and $g_1=(1,z)^T$. Their product is
+$\delta_{ab}\delta_{cd}z^{bd}$, exactly the matrix entries of $U_\theta$.
+The coefficient matrix
+$\left(\begin{smallmatrix}1&1\\1&z\end{smallmatrix}\right)$
+has determinant $z-1\ne0$, so the operator Schmidt rank is exactly two
+throughout the stated nondegenerate interval.
+
+The physical cap sets are defined in the source's
+\nolinkurl{eq:def_LR}, source lines 1758--1816, by tracing the
+physical outputs against arbitrary density operators on the cap inputs.
+Here the off-diagonal entries of those density operators disappear,
+because both local letters are diagonal on the physical indices.
+Consequently the complete families, in the present virtual coordinates,
+are
+\[
+ P_p=\begin{pmatrix}p&0\\0&1-p\end{pmatrix},\qquad
+ Q_t=\begin{pmatrix}
+ 1&t+(1-t)\overline z\\t+(1-t)z&1
+ \end{pmatrix},\qquad 0<p,t<1.
+\]
+Every displayed member is realized by a diagonal density operator, and
+these are precisely the positive-definite members of the cap families.
+In the outgoing-flag convention of the source,
+$L_2^2=P_p$ and $R_1^2=Q_t^T$. In particular, the transpose appearing
+in the source's joining norm gives
+\[
+ \operatorname{Tr}\!\left[R_1^{-2}(L_2^{-2})^T\right]
+ =\operatorname{Tr}\!\left[(Q_t^{-1})^T(P_p^{-1})^T\right]
+ =\operatorname{Tr}(P_p^{-1}Q_t^{-1}).
+\]
+There is no dimension normalization missing in these cap matrices:
+$\operatorname{Tr}(P_pQ_t)=1$ for every $p,t$.
+
+Since
+\[
+ \det Q_t=1-|t+(1-t)z|^2
+          =4t(1-t)\sin^2(\theta/2),
+\]
+the complete inverse-trace expression is
+\[
+ \operatorname{Tr}(P_p^{-1}Q_t^{-1})
+ =\frac{1}{4p(1-p)t(1-t)\sin^2(\theta/2)}.
+\]
+The inequalities $p(1-p)\le1/4$ and $t(1-t)\le1/4$, with equality
+simultaneously at $p=t=1/2$, prove that the infimum is attained and equals
+\[
+ \boxed{\displaystyle q_{\mathrm{cap}}(U_\theta)
+       =\frac{2}{\sin(\theta/2)}\sim\frac4\theta.}
+\]
+No limiting rank-deficient cap is needed for this minimum.
+
+The same value can be checked in the canonical normalization of the
+source, \nolinkurl{eq:choice_schmidt} and
+\nolinkurl{eq:app:choice_schmidt}, source lines 1633--1640 and
+1946--1952. The normalized Choi state has Schmidt values
+\[
+ c=\cos(\theta/4),\qquad s=\sin(\theta/4),\qquad c^2+s^2=1.
+\]
+Indeed, the two singular values of the coefficient matrix above are
+$2c,2s$, and the normalized Choi state divides this matrix by two;
+compare the normalization in source line 1393.
+Let
+\[
+ H=\frac1{\sqrt2}\begin{pmatrix}
+ e^{-i\theta/4}&e^{-i\theta/4}\\
+ e^{i\theta/4}&-e^{i\theta/4}
+ \end{pmatrix},\qquad X=\sqrt2H.
+\]
+Under the bond gauge $A_1\mapsto A_1X$ and
+$A_2\mapsto X^{-1}A_2$, the cap matrices become
+$\widetilde P=X^\dagger PX$ and
+$\widetilde Q=X^{-1}QX^{-\dagger}$.
+With $x=2p-1$ and $y=2t-1$, their complete families are
+\[
+ \widetilde P_x=\begin{pmatrix}1&x\\x&1\end{pmatrix},\qquad
+ \widetilde Q_y=\begin{pmatrix}c^2&-i ycs\\i ycs&s^2\end{pmatrix},
+ \qquad -1<x,y<1.
+\]
+Thus the maximally mixed caps give
+$\widetilde L_2=I$ and $\widetilde R_1=\operatorname{diag}(c,s)$,
+exactly the source's canonical scale. The inverse-trace becomes
+$[(1-x^2)(1-y^2)c^2s^2]^{-1}$; its minimum is
+$c^{-2}+s^{-2}=4/\sin^2(\theta/2)$.
+More generally, the trace is unchanged by the gauge because
+$\widetilde P^{-1}\widetilde Q^{-1}
+ =X^{-1}P^{-1}Q^{-1}X$.
+
+For comparison, the balanced metrics in the original coordinates are
+$P_*=I/2$ and $Q_*=I$. The first local isometry has columns given by the
+orthonormal flags $e_b$, while the second has columns $g_d/\sqrt2$ in
+distinct physical output sectors; hence both are isometries and their
+joining norm is exactly two. These metrics therefore give a valid
+unrestricted candidate with $q_{\mathrm{iso}}\le2$.
+They do not give a physical cap candidate: for $0<\theta<\pi$,
+$t+(1-t)e^{-i\theta}$ cannot vanish, so $Q_*=I$ is outside the family
+$\{Q_t\}$.
+The distinction between the unrestricted valid-isometry domain in
+source lines 1375--1379 and the physical-cap domain in lines
+2123--2124 therefore has an observable mathematical effect, even for
+this elementary rank-two unitary. A large physical-cap conditioning
+number is compatible with an exact one-gate implementation.
+
+\paragraph{The unrestricted two-site infimum.}
+The balanced candidate need not minimize over all valid interval metrics.
+In fact, this example also admits an explicit evaluation of that larger
+optimization domain. With $Z=\operatorname{diag}(1,-1)$ and
+$D_\theta=e^{-i\theta Z/4}$,
+\[
+ U_\theta=e^{i\theta/4}(D_\theta\otimes D_\theta)
+       \bigl(cI\otimes I+i sZ\otimes Z\bigr).
+\]
+Local output unitaries and a global phase preserve all the Gram and
+isometry conditions. Thus one may use the two letters $[I,Z]$ on the
+first site and $[cI,i sZ]^T$ on the second. For this two-site chain the
+only proper nonempty intervals are the two single sites; the full
+interval is the original unitary, with trivial endpoint metrics.
+The complete positive metrics making both single-site maps isometries
+are
+\[
+ P=\begin{pmatrix}a&x\\x&b\end{pmatrix},\qquad
+ Q=\begin{pmatrix}t&i y\\-i y&1-t\end{pmatrix},
+\]
+where $a,b>0$, $x,y\in\mathbb R$, $0<t<1$,
+$x^2<ab$, $y^2<t(1-t)$, and $c^2a+s^2b=1$.
+Indeed, the first site's rows $(1,1)$ and $(1,-1)$ force
+$\operatorname{Tr}Q=1$ and $\operatorname{Re}Q_{01}=0$.
+The second site's columns $(c,i s)^T$ and $(c,-i s)^T$ force
+$c^2P_{00}+s^2P_{11}=1$ and $\operatorname{Im}P_{01}=0$.
+There are no additional interval conditions in this two-site case.
+
+The off-diagonal terms cancel in the inverse trace:
+\[
+ \operatorname{Tr}(P^{-1}Q^{-1})
+ =\frac{b(1-t)+at}{(ab-x^2)[t(1-t)-y^2]}.
+\]
+For fixed $a,b,t$ this is minimized at $x=y=0$.
+Setting $u=c^2a\in(0,1)$ then reduces the squared norm to
+\[
+ F(u,t)=\frac{c^2}{ut}
+       +\frac{s^2}{(1-u)(1-t)}.
+\]
+The three-factor H\"older inequality gives
+\[
+\begin{split}
+ c^{2/3}+s^{2/3}
+ &=\left(\frac{c^2}{ut}\right)^{1/3}u^{1/3}t^{1/3}
+   +\left(\frac{s^2}{(1-u)(1-t)}\right)^{1/3}
+       (1-u)^{1/3}(1-t)^{1/3}\\
+ &\le F(u,t)^{1/3}.
+\end{split}
+\]
+Equality holds at
+$u=t=c^{2/3}/(c^{2/3}+s^{2/3})$, strictly inside the permitted domain.
+Consequently the unrestricted simultaneous-isometry infimum is
+\[
+ \boxed{\displaystyle q_{\mathrm{iso}}(U_\theta)
+   =\bigl(c^{2/3}+s^{2/3}\bigr)^{3/2}.}
+\]
+It is strictly less than two for $0<\theta<\pi$ and tends to one as
+$\theta\downarrow0$. This unrestricted optimization allows pairs for
+which $\operatorname{Tr}(PQ)\ne1$; it is therefore distinct from the
+positive-metric joining scheme normalized by
+$\operatorname{Tr}(PQ)=1$, within which the balanced candidate attains
+the optimal norm two. Neither calculation is an assertion about a
+lower bound for arbitrary circuits.
+
+\subsection*{Which polynomial circuit statement is established?}
+
+Fix the physical dimension $d\ge2$. For $N,D\ge1$, let
+$\mathcal U_d(N,D)$ denote the unitaries on $N$ $d$-dimensional sites
+whose operator Schmidt ranks across all consecutive cuts are at most
+$D$. No unitarity at other lengths and no lower bound on a nonzero
+Schmidt value is imposed. Gates are arbitrary one- and two-qudit
+unitaries, as in Styliaris--Trivedi--Cirac, arXiv:2508.08160v2, opening of the
+main-text paragraph on the main result (source line 820).
+
+For $A$ auxiliary qudits, write
+$J_A\psi=\psi\otimes|0\rangle^{\otimes A}$.
+An exact implementation is a unitary circuit $C$ satisfying
+\[
+ C J_A=J_AU.
+\]
+This is an equality on all initialized-auxiliary inputs, and remains an
+equality after tensoring with the identity on any reference system.
+It ensures exact auxiliary erasure. It does not require the stronger
+ambient equality $C=U\otimes I$, which prescribes the action on
+nonzero auxiliary inputs.
+
+\paragraph{The exact theorem and its quantifiers.}
+The determinant-normalization theorem of Section~5 establishes the
+following bound. For each fixed $d$ there are constants $C_d,c_d>0$,
+independent of $N,D$, the particular unitary, and its Schmidt values,
+such that every $U\in\mathcal U_d(N,D)$ has an exact implementation with
+\[
+ G\le C_d(D+1)^{c_d}
+             (N+1)^{c_d\log_2(D+1)},\qquad
+ A\le C_d N\log_2(D+1).
+\]
+Increasing $c_d$ absorbs harmless numerical factors and the passage
+to neighboring two-qudit gates on a line. Thus for every fixed $D$
+the gate count is polynomial in $N$, with exactly clean auxiliaries.
+The exponent may grow logarithmically with $D$.
+The circuit and its exact gate parameters may depend on $U$:
+this is a nonuniform existence assertion, not a claim that those
+parameters can be computed efficiently from finite-precision tensor
+entries. Uniformity of the numerical constants is distinct from an
+algorithm for constructing the gates.
+
+\paragraph{Joint dependence on length and bond dimension.}
+The same estimate is a uniform quasi-polynomial bound in the numerical
+parameters $N+D$. More precisely,
+\[
+ \log G\le O_d\!\left(
+       \log(D+1)[1+\log(N+1)]\right)
+ \le O_d\!\left(\log^2(N+D+2)\right),
+\]
+and hence
+\[
+ G\le \exp\!\left(O_d(\log^2(N+D+2))\right)
+       =(N+D+2)^{O_d(\log(N+D+2))}.
+\]
+The constants in these expressions depend only on the fixed physical
+dimension. This terminology refers to a gate-count bound in numerical
+parameters; arbitrary complex tensor entries do not supply a finite
+bit-length input model.
+It does not establish a bound
+\[
+ G\le C_d(N+D+1)^{k_d}
+\]
+with an exponent $k_d$ independent of $D$.
+For instance, putting $D=N$ into the established estimate gives
+$\exp(O_d((\log N)^2))$, rather than a polynomial bound from this
+argument. This observation is not a lower bound.
+
+\textbf{Open stronger statement:} a bound polynomial jointly in $N$
+and $D$ for exact arbitrary-gate implementations of every
+$U\in\mathcal U_d(N,D)$, with exactly clean auxiliaries.
+Retaining the present $O_d(N\log(D+1))$ auxiliary bound is a natural
+version of this question. The argument here also does not prove the
+version allowing an arbitrary polynomial number of auxiliaries.
+``Open'' means that these stronger statements are not established by
+the present proof or the cited local source; it is not a claim about
+all possible circuit constructions.
+
+\paragraph{Approximation and auxiliary erasure.}
+For every $\varepsilon>0$, the exact circuit above already satisfies
+\[
+ \|C J_A-J_AU\|_{\mathrm{op}}=0\le\varepsilon,
+\]
+with the same gate and auxiliary counts and exact erasure.
+Thus fixed-$D$ polynomial approximation in the arbitrary-gate model
+is an immediate consequence; no additional dependence on
+$\varepsilon$ is needed for this existence assertion.
+The estimate is uniform over inputs, including inputs entangled with
+an arbitrary reference system.
+
+\textbf{Open stronger approximation statement:} for each fixed $d$,
+constants $C_d,k_d$ independent of $N,D,\varepsilon,U$, giving
+\[
+ G\le C_d\bigl(N+D+\log(1/\varepsilon)+1\bigr)^{k_d},
+ \qquad A\le C_dN\log_2(D+1),
+\]
+for every $U\in\mathcal U_d(N,D)$ and $0<\varepsilon\le1/2$, with
+$\|C J_A-J_AU\|_{\mathrm{op}}\le\varepsilon$.
+This weaker auxiliary requirement permits a residual nonzero
+auxiliary component of norm at most $\varepsilon$.
+The stronger approximation convention requires a unitary $V$ with
+$C J_A=J_AV$ and $\|V-U\|_{\mathrm{op}}\le\varepsilon$, so that the
+auxiliaries are erased exactly. A joint polynomial bound with this
+stronger convention is also not proved here.
+Polynomial dependence on $1/\varepsilon$ is another, weaker precision
+requirement and must not be identified with polynomial dependence on
+$\log(1/\varepsilon)$. The present quasi-polynomial exact bound by
+itself proves neither joint polynomial formulation.
+
+\paragraph{Changing the gate alphabet.}
+The arbitrary-gate theorem permits exact continuous parameters.
+A fixed finite gate alphabet cannot represent every such unitary
+exactly: its finite circuits form a countable set.
+Approximation with a chosen finite universal alphabet is a separate
+formulation. If each allowed local gate can be approximated to error
+$\delta$ with at most $L_d(\delta)$ alphabet gates, telescoping the
+product gives an initialized-input error at most $\varepsilon$ by
+choosing $\delta=\varepsilon/G$, with at most
+$G L_d(\varepsilon/G)$ gates and the same auxiliary register allocation.
+This implication is conditional on the stated local synthesis bound;
+it does not assert an efficient algorithm for the determinant metrics.
+The local approximation is in operator norm including scalar phase;
+projective universality alone does not supply this hypothesis.
+The conversion also does not by itself preserve exact auxiliary erasure.
+In particular, such a gate-by-gate conversion does not remove the
+existing logarithmic dependence of the exponent on $D$.
+
+\paragraph{Small lengths and bond dimensions.}
+The conventions $N,D\ge1$ and the shifts $N+1,D+1$ avoid spurious
+zero logarithms. For $N=1$, one arbitrary one-qudit gate suffices;
+if only two-qudit gates are counted, one clean padding qudit realizes
+$U\otimes I$ as a single neighboring pair gate.
+For $D=1$, every consecutive operator Schmidt rank is one, so the
+unitary is a tensor product of on-site unitaries after distributing
+its scalar phase. It therefore has an $O(N)$ implementation with no
+auxiliaries in the one- and two-qudit model. The stated general
+bounds include both cases, without asserting that their auxiliary
+upper bounds are necessary.
+
+\end{document}

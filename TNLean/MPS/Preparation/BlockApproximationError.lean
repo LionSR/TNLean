@@ -13,9 +13,7 @@ Let `A` be a normal tensor in the gauge of arXiv:2307.01696, eq. (5), and cut th
 sites into `M ≥ 1` blocks of lengths `ℓ 0, …, ℓ (M - 1)`, each at least `q`, with injective
 blocked tensors. The approximating state `|ψ⟩ = (⊗ₖ V_k) ⊗ₖ |ω⟩` of these blocks
 (`MPSTensor.blockIsometryState`) has error `1 - |⟨ψ|φ_N⟩| ≤ C M e^{-γ q/ξ}`, with `C` depending
-only on `A`, `σ`, `λ₂`, and `γ` (`MPSTensor.exists_blockApproximationError_le_mul`),
-for every `0 < γ < 1`. The full rate uses the Lipschitz estimate at the positive definite
-fixed point (arXiv:2606.24475, Appendix B3, eqs. (S27)–(S38)).
+only on `A`, `σ`, `λ₂`, and `γ` (`MPSTensor.exists_blockApproximationError_le_mul`).
 
 For blocks of equal length this is Lemma 1'(i) of the source
 (`MPSTensor.exists_approximationError_le_mul`). The Supplemental Material, proof of Theorem 1,
@@ -100,9 +98,8 @@ Material, proof of Theorem 1, applies Lemma 1 to blocks "all of the same size, `
 the last one, which may be larger". The proof is that of `exists_approximationError_le`: the
 triangle inequality `one_sub_norm_inner_smul_inv_norm_le`, with the overlap bounded by
 `exists_norm_trace_prod_transferMatrix_sub_one_le` and the normalization by
-`exists_abs_norm_mpvState_sq_sub_one_le` at rate `γ / 2`, using `N ≥ q`. The wider
-range `γ < 1` is supplied by the positive-part Lipschitz bound, arXiv:2606.24475,
-Appendix B3, eqs. (S27)–(S38). -/
+`exists_abs_norm_mpvState_sq_sub_one_le`, using `N ≥ q`. The source states Lemma 1 for
+`0 < γ < 1/2`; the range `γ < 1` is a project result. -/
 theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
@@ -116,8 +113,7 @@ theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.Is
   obtain ⟨C₁, hC₁, hover⟩ :=
     exists_norm_trace_prod_transferMatrix_sub_one_le A hN hA hσ htr hfix hlam hlam₁ hγ0 hγ
   obtain ⟨K₅, hK₅, hc⟩ :=
-    exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix hlam
-      (γ := γ / 2) (by positivity) (by linarith)
+    exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
   set C := C₁ + K₅
   refine ⟨C * Real.exp C + 1, by positivity, fun M _ ℓ N hN q hq hinj => ?_⟩
   set x := Real.exp (-γ / correlationLength lam₂)
@@ -141,13 +137,8 @@ theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.Is
     exact this.trans (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ _))
   have hcu : |‖mpvState A N‖ ^ 2 - 1| ≤ K₅ * u := by
     refine (hc N).trans (mul_le_mul_of_nonneg_left ?_ hK₅)
-    have hhalf : Real.exp (-(γ / 2) / correlationLength lam₂) ^ 2 = x := by
-      rw [← Real.exp_nat_mul]
-      congr 1
-      ring
-    rw [hhalf]
-    exact (pow_le_pow_of_le_one hx0 hx1 hqN).trans
-      (le_mul_of_one_le_left (by positivity) hM)
+    calc x ^ N ≤ x ^ q := pow_le_pow_of_le_one hx0 hx1 hqN
+      _ ≤ u := le_mul_of_one_le_left (by positivity) hM
   have herr : 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤
       C₁ * u * Real.exp (C₁ * u) + K₅ * u :=
     one_sub_norm_inner_smul_inv_norm_le hψ.le (by

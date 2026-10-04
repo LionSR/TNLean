@@ -17,7 +17,8 @@ this file proves explicit forms of
 
 * the overlap estimate of Piroli, Styliaris, and Cirac (arXiv:2103.13367, Supplemental Material,
   "Proof of Theorem MPS_classification", eq. (S29)), quoted as eq. (S9) of arXiv:2307.01696:
-  `|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| = O((N/q) e^{-γ q/ξ})` for `0 < γ < 1/2`;
+  `|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| = O((N/q) e^{-γ q/ξ})` for every `0 < γ < 1`. The sources state
+  it for `0 < γ < 1/2`; the range `γ < 1` is a project result;
 * the approximation error `ε(φ'_N, φ_N) = 1 - |⟨φ'_N|φ_N⟩| = O((N/q) e^{-2γ q/ξ})` for every
   `0 < γ < 1`. arXiv:2307.01696, Lemma 1, eq. (17), and Lemma 1'(i), proves the rate
   `e^{-γ q/ξ}` for `0 < γ < 1/2`; the rate `e^{-2γ q/ξ}` is a project result.
@@ -47,11 +48,11 @@ stays bounded. The variants ending in `_mul` state the `O`-bound itself for all 
    `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied with
    `δ = K e^{-γ q/ξ}` from step 2 to the mixed transfer matrices `τ_{AB}` and `τ_{BB}` of `P_q`
    against `P_∞`.
-4. **Normalization.** `exists_norm_transferMatrix_pow_sub_le` calls the gap of step 1 separately
-   at `γ' = 2γ`, which is admissible because `γ < 1/2`; hence `c_N² = Tr E_A^N` differs from `1`
-   by `O(e^{-2γN/ξ})`. The triangle inequality of arXiv:2307.01696, proof of Lemma 1'(i),
-   combines the two errors. Since `N ≥ q` the normalization term is dominated by the overlap
-   term; no condition `q = o(N)` is needed.
+4. **Normalization.** `exists_norm_transferMatrix_pow_sub_le` calls the gap of step 1 at the
+   same rate `γ`; hence `c_N² = Tr E_A^N` differs from `1` by `O(e^{-γ N/ξ})` for every
+   `0 < γ < 1`. The triangle inequality of arXiv:2307.01696, proof of Lemma 1'(i), combines the
+   two errors. Since `N ≥ q` the normalization term is dominated by the overlap term; no
+   condition `q = o(N)` is needed.
 5. **Second order.** This step is a project result. The error is at most
    `2 (‖φ_N‖² - |⟨φ'_N|φ_N⟩|²)`, which is of second order in `‖P_q - P_∞‖`. Since `τ_∞` is the
    rank-one idempotent `X ↦ Tr(X) σ`, `τ_∞ τ_q τ_∞ = α τ_∞` with `1 - |α| = O(‖P_q - P_∞‖²)`,
@@ -120,16 +121,14 @@ open scoped Matrix.Norms.L2Operator in
 /-- **Telescoping bound for products of mixed transfer matrices.** In the setting of
 `exists_norm_polarPos_blockTensor_sub_le`, write `τ_L` for the mixed transfer matrix of the
 positive part `P_L` of the `L`-site blocked tensor against the fixed-point tensor `P_∞`, and
-`τ_∞` for that of `P_∞` against itself. For `0 < γ < 1`, there are `K ≥ 0` and `C > 0` such that
+`τ_∞` for that of `P_∞` against itself. There are `K ≥ 0` and `C > 0` such that
 `‖τ_L - τ_∞‖ ≤ K e^{-γ L/ξ}` for every `L`, and every family of matrices `X j` with
 `‖X j - τ_∞‖ ≤ K e^{-γ q/ξ}` satisfies `|Tr(X_0 ⋯ X_{M-1}) - 1| ≤ C y e^{C y}` for `M ≥ 1`,
 with `y = M e^{-γ q/ξ}`.
 
 arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", eqs.
 `final_eq` to `finished`: `τ_∞` is idempotent with `Tr τ_∞^M = 1`, and the telescoping estimate
-bounds the distance of the product from `τ_∞^M`. The full rate range follows from the
-Lipschitz estimate `exists_norm_polarPos_blockTensor_sub_le`, whose source is
-arXiv:2606.24475, Appendix B3, eqs. (S27)–(S38). -/
+bounds the distance of the product from `τ_∞^M`. -/
 theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
@@ -220,15 +219,14 @@ theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
       ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K, C, -, hC, hδ, h⟩ :=
-    exists_norm_trace_prod_range_transferMatrix_sub_one_le A hN hA hσ htr hfix hlam
-      hγ0 (by linarith)
+    exists_norm_trace_prod_range_transferMatrix_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
   refine ⟨C, hC, fun q M _ => ?_⟩
   have := h q M _ fun _ => hδ q
   rwa [List.map_const', List.length_range, List.prod_replicate,
@@ -238,7 +236,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
 /-- **Overlap of the positive part with the fixed point.** Let `A` be normal in the gauge
 `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` (arXiv:2307.01696, eq. (5)), let `λ₂`
 bound the moduli of the eigenvalues of `E_A` other than `1`, with correlation length `ξ`, and let
-`0 < γ < 1/2`. Then there is `C > 0` such that for all `q` and all `M ≥ 1`, with `N = qM` and
+`0 < γ < 1`. Then there is `C > 0` such that for all `q` and all `M ≥ 1`, with `N = qM` and
 `y = (N/q) e^{-γ q/ξ} = M e^{-γ q/ξ}`,
 `|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| ≤ C y e^{C y}`, where `P_q` is the positive part of the `q`-site
 blocked tensor and `P_∞` the fixed-point tensor.
@@ -246,12 +244,14 @@ blocked tensor and `P_∞` the fixed-point tensor.
 arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", eqs.
 `final_eq` to `finished` (the estimate (S29)), quoted as arXiv:2307.01696, eq. (S9). The source
 concludes `O(ε_q)` from `ε_q + ε_q² e^{ε_q}(1 + O(ε_q/M))`, which is the present bound in the
-regime where `ε_q` stays bounded. -/
+regime where `ε_q` stays bounded. The source states the estimate for `0 < γ < 1/2`; the range
+`γ < 1` is a project result, since the positive parts are estimated with the Lipschitz bound of
+the square root at the positive definite limit (`exists_norm_polarPos_blockTensor_sub_le`). -/
 theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
       |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
@@ -269,20 +269,18 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
 /-! ### The normalization `c_N` -/
 
 open scoped Matrix.Norms.L2Operator in
-/-- The transfer matrix of `E_A^n` is `e^{-2γ n/ξ}`-close to that of `X ↦ Tr(X) σ`, in the
+/-- The transfer matrix of `E_A^n` is `e^{-γ n/ξ}`-close to that of `X ↦ Tr(X) σ`, in the
 setting of `exists_norm_transferMap_pow_sub_le`. -/
 theorem exists_norm_transferMatrix_pow_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ n : ℕ,
       ‖transferMatrix (Kraus.transferMap A) ^ n -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤
-        K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ n := by
-  obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam
-    (γ := 2 * γ) (by positivity) (by linarith)
-  rw [exp_neg_two_mul_div_correlationLength] at hgap
+        K * Real.exp (-γ / correlationLength lam₂) ^ n := by
+  obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   obtain ⟨K, hK, h⟩ := exists_norm_le_of_entry_eq_pow_sub (Kraus.transferMap A) σ hC.le hgap
     (fun (_ b : Fin D × Fin D) => Matrix.single b.2 b.1 (1 : ℂ))
     (fun a _ => a.2) (fun a _ => a.1)
@@ -294,7 +292,8 @@ theorem exists_norm_transferMatrix_pow_sub_le (A : MPSTensor d D) (hN : Kraus.Is
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Normalization.** In the setting of `exists_norm_transferMap_pow_sub_le`, the squared norm
-`c_N² = Tr E_A^N` of the periodic state satisfies `|c_N² - 1| ≤ K e^{-2γ N/ξ}`.
+`c_N² = Tr E_A^N` of the periodic state satisfies `|c_N² - 1| ≤ K e^{-γ N/ξ}` for every
+`0 < γ < 1`.
 
 arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(i): `c_N = √(Tr E_A^N)` and
 `|c_N - 1| = O(e^{-N/ξ})`. -/
@@ -302,9 +301,9 @@ theorem exists_abs_norm_mpvState_sq_sub_one_le (A : MPSTensor d D) (hN : Kraus.I
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ N : ℕ,
-      |‖mpvState A N‖ ^ 2 - 1| ≤ K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ N := by
+      |‖mpvState A N‖ ^ 2 - 1| ≤ K * Real.exp (-γ / correlationLength lam₂) ^ N := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K₀, hK₀, hT⟩ := exists_norm_transferMatrix_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
@@ -356,8 +355,8 @@ theorem exists_norm_mpvState_sq_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   refine ⟨1 + K, fun N => ?_⟩
   have hx : Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ≤ 1 :=
     exp_neg_div_correlationLength_le_one (by norm_num) (hnorm.trans_le ht1.le)
-  have hpow : (Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ^ 2) ^ N ≤ 1 :=
-    pow_le_one₀ (by positivity) (pow_le_one₀ (by positivity) hx)
+  have hpow : Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ^ N ≤ 1 :=
+    pow_le_one₀ (by positivity) hx
   have := (abs_le.1 ((hc N).trans (mul_le_of_le_one_right hK hpow))).2
   linarith
 
@@ -393,7 +392,7 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
       |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
@@ -608,14 +607,10 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq A hN hA hσ htr hfix hlam hγ0 hγ
   obtain ⟨K₁, hK₁, hone⟩ :=
     exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le A hN hA hσ htr hfix hlam hγ0 hγ
-  obtain ⟨K₅, hK₅, hc⟩ := exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix hlam
-    (γ := γ / 2) (by positivity) (by linarith)
+  obtain ⟨K₅, hK₅, hc⟩ := exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
   obtain ⟨L, hLpos, hL⟩ := hN
   set x := Real.exp (-γ / correlationLength lam₂) with hxdef
   have hx : 0 < x := Real.exp_pos _
-  have hx2 : Real.exp (-(γ / 2) / correlationLength lam₂) ^ 2 = x := by
-    rw [← exp_neg_two_mul_div_correlationLength]; congr 2; ring
-  rw [hx2] at hc
   set C := 1 + ((x ^ 2) ^ L)⁻¹ + 4 * K₅ ^ 2 + 2 * K₅ + 2 * K₁ + 4 * C₁
   have hL0 : 0 < ((x ^ 2) ^ L)⁻¹ := by positivity
   have hK₅2 : 0 ≤ 4 * K₅ ^ 2 := by positivity

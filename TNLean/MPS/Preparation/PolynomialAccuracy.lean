@@ -13,8 +13,10 @@ For the normalized periodic state of a normal tensor, the choice
 `q = ⌈2 ξ (1 + η) log N⌉` gives approximation error at most `C N^(-η)`.
 The constant is independent of the exponent `η`, the block length, and the number of blocks.
 The exact-coefficient theorem uses the established second-order estimate at `γ = 1/4`.
-For any fixed `0 < γ < 1/2`, the block length `q = ⌈ξ (1 + η) log N / γ⌉` gives the
+For any fixed `0 < γ < 2`, the block length `q = ⌈ξ (1 + η) log N / γ⌉` gives the
 same polynomial accuracy, with a constant that may depend on `γ` but not on `η`, `q`, or `M`.
+The source's coefficient `2 ξ` is the case `γ = 1/2`; every coefficient above `ξ / 2` is
+admissible.
 
 Source: arXiv:2307.01696, p. 4, paragraph following Lemma 1. The stronger second-order
 estimate supplies the exact coefficient in the displayed block length; substitution into
@@ -88,7 +90,7 @@ theorem exists_approximationError_le_polynomial_of_uniformBlocks {d D : ℕ}
   exact (h q M).trans (mul_le_mul_of_nonneg_left
     (mul_exp_le_polynomial (2 * (1 / 4)) hξ hlength (by nlinarith [hceil])) hC.le)
 
-/-- Fix `0 < γ < 1/2`. Equal blocks of length `q = ⌈ξ (1 + η) log N / γ⌉`,
+/-- Fix `0 < γ < 2`. Equal blocks of length `q = ⌈ξ (1 + η) log N / γ⌉`,
 with `N = M q ≥ 2`, give approximation error at most `C N^(-η)` for one constant
 independent of `η`, `q`, and `M`. This is the polynomial-accuracy corollary of
 arXiv:2307.01696, Lemma 1, eq. (17), using the established second-order estimate
@@ -98,7 +100,7 @@ theorem exists_approximationError_le_polynomial_of_rate {d D : ℕ}
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    (hξ : 0 < correlationLength lam₂) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    (hξ : 0 < correlationLength lam₂) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 2) :
     ∃ C : ℝ, 0 < C ∧ ∀ η : ℝ, 0 < η → ∀ (q M : ℕ),
       2 ≤ M * q →
       q = ⌈correlationLength lam₂ * (1 + η) * Real.log (M * q) / γ⌉₊ →

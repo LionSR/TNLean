@@ -123,20 +123,20 @@ outcomes.
         Matrix.finKronecker_permMatrix_mulVec}
     \leanok
     \uses{def:qc_local_circuit}
-    Let $\sigma$ be a permutation of the configurations of the ring that
-    changes only the sites of a set $X$, the new values at these sites
-    depending only on the old values there. Its permutation matrix $P_\sigma$,
-    $(P_\sigma v)(x)=v(\sigma x)$, is a unitary acting on $X$. Examples are the
-    shift $x\mapsto x+f(x)e_t$ at a site $t\in X$, with values in
-    $\mathbb Z_d$ and $f$ reading only the sites of $X\setminus\{t\}$. If
-    $\sigma_k$, $k\in K$, are such permutations for pairwise disjoint
-    pairs $\{k,k+1\}$, the layer of the gates $P_{\sigma_k}$ acts as
-    $v\mapsto v\circ\rho$, where $\rho(x)$ agrees with $\sigma_k(x)$ on the
-    pair $\{k,k+1\}$ and with $x$ off all the pairs. For shifts
-    $\sigma_k\colon x\mapsto x+f_k(x)e_{t_k}$ this reads
-    $\rho(x)_{t_k}=x_{t_k}+f_k(x)$, and $\rho(x)_i=x_i$ at every site $i$
-    that is none of the $t_k$. Finally, for permutations $\tau_i$ of the
-    labels of the sites $i$, the product $\bigotimes_iP_{\tau_i}$ acts as
+    Let $\sigma$ be a permutation of the configurations of a finite set of
+    sites, such as the ring, that changes only the sites of a set $X$, the new
+    values at these sites depending only on the old values there. Its
+    permutation matrix $P_\sigma$, $(P_\sigma v)(x)=v(\sigma x)$, is a unitary
+    acting on $X$. Examples are the shift $x\mapsto x+f(x)e_t$ at a site $t\in
+        X$, with values in $\mathbb Z_d$ and $f$ reading only the sites of
+    $X\setminus\{t\}$. If $\sigma_k$, $k\in K$, are such permutations for
+    pairwise disjoint pairs $\{k,k+1\}$, the layer of the gates $P_{\sigma_k}$
+    acts as $v\mapsto v\circ\rho$, where $\rho(x)$ agrees with $\sigma_k(x)$
+    on the pair $\{k,k+1\}$ and with $x$ off all the pairs; here the sites
+    form the ring. For shifts $\sigma_k\colon x\mapsto x+f_k(x)e_{t_k}$ this
+    reads $\rho(x)_{t_k}=x_{t_k}+f_k(x)$, and $\rho(x)_i=x_i$ at every site
+    $i$ that is none of the $t_k$. Finally, for permutations $\tau_i$ of the
+    labels of the sites $i$ of the ring, the product $\bigotimes_iP_{\tau_i}$ acts as
     $v\mapsto v\circ\tau$, where $\tau(x)_i=\tau_i(x_i)$.
 \end{lemma}
 \begin{proof}
@@ -278,6 +278,82 @@ $d\ge1$.
     $T_2$, with $T_1+T_2\leq T$. The circuit $U$ does not depend on the
     outcomes of the measurements.
 \end{definition}
+
+\begin{lemma}[Trace norm of a difference of pure states]
+    \label{lem:qc_pure_state_trace_norm}
+    \lean{Matrix.traceNorm_vecMulVec_le, Matrix.traceNorm_pureStateProj_sub_le,
+        Matrix.traceNormPureSub, Matrix.traceNormPureSub_le}
+    \leanok
+    For vectors $\ket u,\ket v$ of a finite-dimensional Hilbert space,
+    $\lVert\ket u\bra v\rVert_1\leq\lVert u\rVert\,\lVert v\rVert$. For unit
+    vectors $\ket\psi,\ket\varphi$,
+    \begin{align*}
+        \bigl\lVert\ket\psi\bra\psi-\ket\varphi\bra\varphi\bigr\rVert_1
+        \leq2\sqrt{2\bigl(1-\lvert\braket{\psi|\varphi}\rvert\bigr)}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Let $U$ be a unitary with
+    $\lVert X\rVert_1=\operatorname{tr}(X^\dagger U)$ for $X=\ket u\bra v$.
+    Then $\lVert X\rVert_1=\lvert\braket{u|Uv}\rvert\leq\lVert u\rVert\,
+        \lVert v\rVert$. For the second statement choose a phase $c$ with
+    $\braket{\psi|c\varphi}=\lvert\braket{\psi|\varphi}\rvert$ and put
+    $\ket{\varphi'}=c\ket\varphi$, so that
+    $\ket{\varphi'}\bra{\varphi'}=\ket\varphi\bra\varphi$ and
+    \begin{align*}
+        \ket\psi\bra\psi-\ket\varphi\bra\varphi
+        =\ket{\psi-\varphi'}\bra\psi+\ket{\varphi'}\bra{\psi-\varphi'}.
+    \end{align*}
+    By the triangle inequality the trace norm is at most
+    $2\lVert\psi-\varphi'\rVert$, and
+    $\lVert\psi-\varphi'\rVert^2=2-2\lvert\braket{\psi|\varphi}\rvert$.
+\end{proof}
+
+\begin{definition}[Asymptotic preparation with measurements]
+    \label{def:qc_asymptotic_measurement_preparation}
+    \lean{QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth}
+    \leanok
+    \uses{def:qc_measurement_circuit_preparation}
+    Let $f\colon\mathbb N\to\mathbb R$ and let $\ket{\varphi_N}$ be a vector on
+    the ring of $N$ sites for every $N$. The sequence $(\ket{\varphi_N})_N$ is
+    \emph{asymptotically prepared with measurements in depth $f$} if there are
+    vectors $\ket{\psi_N}$ such that for all large $N$ the vector
+    $\ket{\psi_N}$ is a unit vector prepared with measurements and a circuit
+    in depth at most $f(N)$, and
+    $\lVert\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}\rVert_1\to0$.
+
+    In the paragraph ``Phases of matter'' of \cite{Piroli2021LOCC}, a
+    sequence $(\ket{\psi_M})_M$ is mapped to a sequence $(\ket{\varphi_M})_M$
+    if, for some $k$, compositions of $k$ channels, each a circuit of depth
+    $f(M)$ assisted by measurements and classical communication, map
+    $\ket{\psi_M}$ to states $\sigma_M$ with
+    $\lVert\sigma_M-\ket{\varphi_M}\bra{\varphi_M}\rVert_1\to0$, where $f$
+    is polylogarithmic. The definition is this relation from the sequence of
+    product states, with $k=2$ (measurements, then a circuit) and
+    $\sigma_N=\ket{\psi_N}\bra{\psi_N}$.
+\end{definition}
+
+\begin{lemma}[Asymptotic preparation from overlap errors]
+    \label{lem:qc_asymptotic_preparation_of_overlap}
+    \lean{QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le}
+    \leanok
+    \uses{def:qc_asymptotic_measurement_preparation,
+        lem:qc_pure_state_trace_norm}
+    Let $\varepsilon_N\to0$, let $\ket{\varphi_N}$ be unit vectors for all
+    large $N$, and suppose that for all large $N$ some unit vector
+    $\ket\psi$ with $1-\lvert\braket{\psi|\varphi_N}\rvert\leq\varepsilon_N$
+    is prepared with measurements and a circuit in depth at most $f(N)$. Then
+    $(\ket{\varphi_N})_N$ is asymptotically prepared with measurements in
+    depth $f$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose such a vector $\ket{\psi_N}$ for every large $N$. By
+    Lemma~\ref{lem:qc_pure_state_trace_norm} the trace norm of
+    $\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}$ is at most
+    $2\sqrt{2\varepsilon_N}$, which tends to zero.
+\end{proof}
 
 \begin{lemma}[Layers acting on configurations]
     \label{lem:qc_configuration_layers}

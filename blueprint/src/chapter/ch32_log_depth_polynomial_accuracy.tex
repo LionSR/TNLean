@@ -6,7 +6,7 @@
     with a positive definite fixed matrix $\rho$ satisfying
     $\E_A(\rho)=\rho$ and $\Tr\rho=1$.
     Let $\lambda_2$ bound the moduli of the transfer eigenvalues other than
-    $1$, assume $\xi=-1/\log|\lambda_2|>0$, and fix $0<\gamma<1/2$.
+    $1$, assume $\xi=-1/\log|\lambda_2|>0$, and fix $0<\gamma<2$.
     There is a constant $C_\gamma>0$, independent of $\eta,q,M$, such
     that for every $\eta>0$ and every uniform decomposition $N=Mq\geq2$,
     \begin{align}
@@ -19,10 +19,13 @@
     estimate of~\cite{Malz2024Preparation}. The uniform-blocking and
     positive-correlation-length scope is recorded
     in~\cite{gap:mswc24_polynomial_accuracy_uniform_blocks}.
+    The coefficient $2\xi$ printed after Lemma~1 of~\cite{Malz2024Preparation}
+    is the case $\gamma=1/2$; every coefficient larger than $\xi/2$ is
+    admissible.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_approximation_error_normal}
-    Apply the second-order estimate at rate $\gamma/2$ to obtain
+    Since $\gamma/2<1$, apply the second-order estimate at rate $\gamma/2$ to obtain
     $\varepsilon\leq C_\gamma M e^{-\gamma q/\xi}$.
     The ceiling condition gives $\gamma q\geq\xi(1+\eta)\log N$.
     Since $q\geq1$ and $M\leq N$,
