@@ -685,8 +685,8 @@ eigenspace.
     Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} at $L_{0}=2$,
     and not as a statement of the review, the three-site open-chain parent
     Hamiltonian also has a four-dimensional kernel for $N\ge3$. The spin-$0$
-    statement of the same passage is not part of this theorem; see
-    \cite{gap:rmp_example_parent_hamiltonian_scope}.
+    statement of the same passage is proved in
+    Theorem~\ref{rem:aklt_parent_hamiltonian}.
 \end{theorem}
 
 \begin{proof}
@@ -858,30 +858,96 @@ eigenspace.
     Theorem~\ref{thm:aklt_chain_ground_space_two}.
 \end{proof}
 
-\begin{remark}[AKLT edge modes]\label{rem:aklt_parent_hamiltonian}
-    For open boundary conditions and $N\geq2$,
+\begin{definition}[Open-chain AKLT polynomial Hamiltonian]%
+    \label{def:aklt_open_polynomial_hamiltonian}
+    \lean{MPSTensor.akltOpenHamiltonian, MPSTensor.akltOpenHamiltonianES}
+    \leanok
+    \uses{def:aklt_polynomial_hamiltonian}
+    On $N$ spin-$1$ sites with open boundaries, put
     \begin{align}
-        \dim\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
-         & = 4, \notag \\
-        \dim\bigl(\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
-        \cap\mathcal H_{S=0}
-        \bigr)
-         & = 1
+        H^{\mathrm{open}}_{\mathrm{AKLT},N}
+         & =\sum_{i=0}^{N-2}\left(\vec S_i\cdot\vec S_{i+1}
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right).
         \notag
     \end{align}
-    \cite[lines~1169--1174]{Cirac2021Matrix}.
-    Theorem~\ref{thm:aklt_open_ground_space} proves the fourfold count for
-    the open-chain projector parent Hamiltonian. Summing the displayed local
-    identity over the open chain gives
-    $H_{\mathrm{proj}}=\frac12\bigl(H_{\mathrm{poly}}+\frac{2(N-1)}{3}I\bigr)$,
-    so the projector kernel is the ground eigenspace of the polynomial
-    Hamiltonian and the kernel of that shifted operator. It is not the
-    kernel of the polynomial Hamiltonian: for $N=2$ that interaction has
-    eigenvalues $-\frac23$ and $\frac43$. The theorem says nothing about
-    the spin-$0$ count in the second equality; see
-    \cite{gap:rmp_example_parent_hamiltonian_scope}.
-    % Neither the polynomial-projector identification nor the spin-0 count is
-    % formalized; the periodic two-site uniqueness is
-    % thm:aklt_chain_ground_space_two, and the periodic polynomial Hamiltonian is
-    % thm:aklt_polynomial_ground_state.
-\end{remark}
+    There is no interaction joining the last site to the first.
+    This is the polynomial of~\cite[local TeX lines~340--349]{PerezGarcia2007MPSReps}
+    with the open boundaries of~\cite[lines~1171--1174]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[Ground energy of the open AKLT chain]%
+    \label{thm:aklt_open_polynomial_ground_space}
+    \lean{MPSTensor.akltOpenHamiltonianES_add_eq_parent,
+        MPSTensor.akltOpenHamiltonianES_add_isPositive,
+        MPSTensor.akltOpenHamiltonianES_eigenvalue_ge,
+        MPSTensor.akltOpenHamiltonianES_eigenspace_eq_groundSpaceES,
+        MPSTensor.akltOpenHamiltonianES_groundSpace_finrank,
+        MPSTensor.akltOpenHamiltonianES_hasEigenvalue}
+    \leanok
+    \uses{def:aklt_open_polynomial_hamiltonian, def:open_parent_hamiltonian_es}
+    For $N\ge2$, the ground energy is $E_0=-2(N-1)/3$, and
+    \begin{align}
+        H^{\mathrm{open}}_{\mathrm{AKLT},N}-E_0I
+         & =2H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}}),\notag\\
+        \ker\left(H^{\mathrm{open}}_{\mathrm{AKLT},N}-E_0I\right)
+         & =G_N(A_{\mathrm{AKLT}}),\notag\\
+        \dim G_N(A_{\mathrm{AKLT}})
+         & =4.\notag
+    \end{align}
+    The degeneracy is the open-boundary statement
+    of~\cite[lines~1171--1174]{Cirac2021Matrix}; the explicit energy is
+    the consequence of the polynomial normalization used here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:aklt_open_ground_space, thm:aklt_spin_two_projector}
+    Sum the local identity $h+\frac23I=2P^{(2)}$ over the $N-1$
+    nonwrapping bonds. The sum of projectors is positive and its kernel
+    is the four-dimensional open matrix-product space, so the lower
+    energy bound is attained precisely on that space.
+\end{proof}
+
+\begin{theorem}[Singlet and triplet AKLT edge modes]%
+    \label{rem:aklt_parent_hamiltonian}
+    \lean{MPSTensor.akltOpenHamiltonianES_ground_spinZero_finrank,
+        MPSTensor.akltBoundarySpin, MPSTensor.aklt_spinOne_commutator,
+        MPSTensor.aklt_totalSpin_groundSpaceMap, MPSTensor.akltBoundarySpin_casimir,
+        MPSTensor.aklt_totalSpinSq_groundSpaceMap,
+        MPSTensor.aklt_totalSpinSq_groundSpaceMap_eq_zero_iff,
+        MPSTensor.aklt_groundSpace_inf_ker_totalSpinSq,
+        MPSTensor.aklt_finrank_groundSpace_inf_ker_totalSpinSq,
+        MPSTensor.aklt_groundSpace_inf_eigenspace_totalSpinSq_two,
+        MPSTensor.aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two,
+        MPSTensor.aklt_finrank_openParent_ground_spinZero,
+        MPSTensor.aklt_finrank_openParent_ground_spinOne,
+        MPSTensor.akltOpenHamiltonianES_ground_spinOne_finrank}
+    \leanok
+    \uses{def:aklt_tensor, def:aklt_open_polynomial_hamiltonian}
+    For $N\ge2$, the open AKLT ground space contains one spin-$0$
+    state and a spin-$1$ triplet. In the boundary parametrization
+    $\Gamma_N(X)(\sigma)=\operatorname{tr}(A^\sigma X)$,
+    \begin{align}
+        \vec S_{\mathrm{tot}}^{\,2}\Gamma_N(X)
+         & =\Gamma_N\left(2X-\operatorname{tr}(X)I\right).\notag
+    \end{align}
+    The singlet line is $\Gamma_N(\C I)$, and the triplet is
+    $\Gamma_N(\{X:\operatorname{tr}(X)=0\})$.
+    Thus the ground-space intersections with the squared-spin
+    eigenspaces for $0$ and $2$ have dimensions $1$ and $3$, respectively.
+    The singlet count is stated in~\cite[lines~1171--1174]{Cirac2021Matrix};
+    the triplet description follows from the displayed action.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:aklt_open_polynomial_ground_space, thm:aklt_normal}
+    In the chosen bond basis let
+    $J^x=\sigma^x/2$, $J^y=-\sigma^y/2$ and $J^z=-\sigma^z/2$.
+    The local identity
+    $\sum_a(S^\alpha)_{ia}A^a=A^iJ^\alpha-J^\alpha A^i$
+    telescopes along the open chain. Cyclicity of the trace then gives
+    $S^\alpha_{\mathrm{tot}}\Gamma_N(X)=\Gamma_N([J^\alpha,X])$.
+    The Pauli identities yield
+    $\sum_\alpha[J^\alpha,[J^\alpha,X]]=2X-\operatorname{tr}(X)I$.
+    Block injectivity for $N\ge2$ makes $\Gamma_N$ injective. The scalar
+    matrices have dimension one and the traceless matrices dimension three;
+    the preceding theorem identifies their images with the ground sectors
+    of the physical polynomial Hamiltonian.
+\end{proof}
