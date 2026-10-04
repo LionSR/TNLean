@@ -1,0 +1,55 @@
+\begin{theorem}[Regular closures and local parent conditions]%
+    \label{thm:peps_regular_closure_parent_constraint}
+    \lean{TNLean.PEPS.IsGInjective.commute_of_cornerParent_annihilates_torusGClosure,
+        TNLean.PEPS.IsGInjective.regionParent_annihilates_torusGClosure_of_isSimplyConnected,
+        TNLean.PEPS.IsGInjective.regionParentHamiltonian_annihilates_torusGClosure,
+        TNLean.PEPS.IsGInjective.span_torusGClosure_commuting_le_parentKernel,
+        TNLean.PEPS.IsGInjective.card_commutingPairConjugacyClass_le_finrank_parentKernel}
+    \leanok
+    \uses{thm:peps_regular_torus_parent_flatness,
+        thm:peps_regular_region_parent_flatness,
+        def:peps_region_parent_interaction, thm:peps_pair_centralizer_count}
+    Let both torus periods be at least three, and let the native
+    tensor be regular $G$-injective. The original parent condition
+    on the plaquette at the intersection of the two seams forces
+    the labels $g,h$ of a closure vector to commute. Conversely,
+    every commuting closure satisfies the original parent condition
+    on every connected region whose actual closed-cell realization
+    is simply connected. These regions may meet either seam.
+
+    For any finite family of such regions, let $H$ be a sum of
+    positive parent interactions with the original regional kernels.
+    Then the span of the commuting closure vectors is contained in
+    $\ker H$, and
+    \[
+        \dim\ker H\ \geq\
+        \sum_{C\in\operatorname{Conj}(G)}
+        \left|\operatorname{Conj}\bigl(Z_G(c_C)\bigr)\right|,
+    \]
+    where $c_C$ represents $C$. No $G$-isometry is required.
+    This proves the inclusion and the resulting lower bound for
+    the regular case of \cite[Theorems~5.5 and~5.9]{Schuch2010PEPS}.
+    The assertion that every parent-kernel vector lies in the
+    closure span remains separate.
+    The regular native-torus restriction and the missing reverse global spanning inclusion are recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Regular $G$-injectivity makes every native closure vector
+    nonzero. The local parent constraint therefore forces trivial
+    plaquette holonomy. At the intersection of the two seams,
+    this is precisely the commutation relation for the closure
+    labels.
+
+    A simply connected closed-cell region admits an integer lift.
+    For commuting labels, the lift defines a vertex gauge which
+    removes every internal closure operator. The remaining
+    operators merely relabel the virtual boundary, so the original
+    and inserted regional ground spaces agree. Every physical
+    slice of the closed inserted contraction thus satisfies the
+    original regional parent condition. The kernel of a positive
+    sum is the intersection of the local kernels. Finally use
+    linear independence of the commuting pair-conjugacy classes
+    and their centralizer count.
+\end{proof}

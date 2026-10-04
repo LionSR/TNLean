@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\interfootnotelinepenalty=10000
+\widowpenalty=10000
+\clubpenalty=10000
+\input{command}
+\title{Polynomial Approximation Accuracy: Equal Blocks and Positive Correlation Length}
+\author{}
+\date{2026-10-03}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+After Lemma~1, \cite[p.~4]{Malz2024Preparation} states that, for any
+$\eta>0$, blocking
+\begin{equation}
+    q=\left\lceil 2\xi(1+\eta)\log N\right\rceil
+    \label{eq:mswc24_polynomial_block_length}
+\end{equation}
+sites gives approximation error $O(N^{-\eta})$. Here the target is the
+normalized periodic state of a normal tensor, the error is
+$\varepsilon(\psi,\phi)=1-|\langle\psi,\phi\rangle|$, and
+$\xi=-1/\log|\lambda_2|$ is the correlation length. The construction uses
+the gauge of eq.~(5), with identity left fixed matrix and positive definite
+right fixed matrix $\rho$ satisfying $\operatorname{tr}\rho=1$.
+
+\section{The statement proved for equal blocks}
+The result in \doclink{TNLean/MPS/Preparation/PolynomialAccuracy} concerns
+finite positive correlation length $\xi>0$ and equal blocks. There is
+$C>0$, depending on the tensor and its fixed-point data, such that for
+every $\eta>0$ and all positive integers $q,M$ with
+$N=Mq\geq2$ and (\ref{eq:mswc24_polynomial_block_length}),
+\begin{equation}
+    1-\left|\left\langle\widetilde\phi_N,\phi_N\right\rangle\right|
+    \leq C N^{-\eta}.
+    \label{eq:mswc24_polynomial_uniform_error}
+\end{equation}
+The vector $\widetilde\phi_N$ is the normalized periodic state obtained
+by replacing the positive part of the $q$-site blocked tensor by its
+fixed-point limit, as in eqs.~(9)--(10) of the source. The constant $C$ is
+independent of $\eta,q,M$.
+
+The proof uses the stronger second-order estimate already established in
+\doclink{TNLean/MPS/Preparation/ApproximationError}:
+\begin{equation}
+    \varepsilon(\widetilde\phi_N,\phi_N)
+    \leq C_\gamma M e^{-2\gamma q/\xi},\qquad 0<\gamma<1.
+    \label{eq:mswc24_polynomial_second_order}
+\end{equation}
+Fixing $\gamma=1/4$ makes the constant independent of $\eta$. Since
+$q\geq2\xi(1+\eta)\log N$ and $q\geq1$, one has $M\leq N$. The bound
+(\ref{eq:mswc24_polynomial_uniform_error}) follows from
+\begin{equation*}
+    M e^{-q/(2\xi)}
+    \leq N e^{-(1+\eta)\log N}=N^{-\eta}.
+\end{equation*}
+The printed Lemma~1 gives only $O(Me^{-\gamma q/\xi})$ for
+$\gamma<1/2$. Substituting (\ref{eq:mswc24_polynomial_block_length}) into
+that estimate gives $O(N^{1-2\gamma(1+\eta)}/q)$, whose power of $N$
+has exponent strictly greater than $-\eta$. The factor $1/q$ decays only
+logarithmically for fixed $\eta$. Thus that substitution alone does not
+establish the exact coefficient in
+(\ref{eq:mswc24_polynomial_block_length}); the proved second-order
+estimate (\ref{eq:mswc24_polynomial_second_order}) supplies the required
+justification.
+
+\section{The restriction and its elimination}
+The equality $N=Mq$ restricts
+(\ref{eq:mswc24_polynomial_uniform_error}) to chain lengths divisible by
+the prescribed block length. It does not assert that such a decomposition
+exists for every $N$ and $\eta$. For example, for fixed $\eta$ and
+sufficiently large prime $N$, the prescribed $q$ lies strictly between
+$1$ and $N$ and does not divide $N$.
+
+The divisibility restriction has been removed for the logarithmic-depth
+preparation theorem \cite{gap:mswc24_depth_upper_bound_divisible_length},
+but that result does not by itself prove the polynomial error bound with
+the exact block length (\ref{eq:mswc24_polynomial_block_length}). Its
+unequal-block error estimate has the slower rate of the printed Lemma~1.
+To remove the present restriction, extend the second-order estimate to
+blocks of lengths $q,\ldots,q,q'$ with $q\leq q'<2q$. The same exponential
+comparison then applies when $N\geq q$. For $N<q$, use exact preparation
+of the short chain, as in the logarithmic-depth theorem. Zero correlation
+length requires a separate fixed-point argument and is not covered by
+the hypothesis $\xi>0$ here.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

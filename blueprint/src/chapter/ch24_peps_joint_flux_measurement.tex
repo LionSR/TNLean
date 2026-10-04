@@ -1,0 +1,23 @@
+\begin{theorem}[A uniform boundary-column action passes to the actual cut]%
+    \label{thm:peps_physical_cut_column_action}
+    \lean{TNLean.PEPS.mul_regularPhysicalCutMatrix_eq_smul_of_openRegion_eigen,
+        TNLean.PEPS.mul_regularPhysicalCutMatrix_eq_ite_of_openRegion_eigen}
+    \leanok
+    \uses{thm:peps_regular_open_region_projector}
+    Let $B_R$ be the actual open-region coefficient matrix of a finite regular
+    tensor network, and let $K_R=B_R B_{R^c}^{\mathsf T}$ be its physical cut
+    matrix. If a physical matrix $Q$ satisfies
+    $Q\Psi_R(\theta)=z\Psi_R(\theta)$ for every crossing configuration $\theta$,
+    then $QK_R=zK_R$. In particular, if one condition $P$ selects every
+    actual group-labelled column or annihilates every such column, the same
+    condition selects $K_R$ or annihilates it.
+    This is the contraction step used in the local measurements of
+    \cite[Theorem~6.15]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The column identities give $QB_R=zB_R$. Therefore
+    $QK_R=(QB_R)B_{R^c}^{\mathsf T}=zK_R$.
+    For the conditional statement, reindex the finite group labels and take
+    $z=\mathbf1_P$.
+\end{proof}

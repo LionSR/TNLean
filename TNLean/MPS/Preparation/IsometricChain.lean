@@ -488,79 +488,78 @@ theorem exists_unitary_extension [NeZero d] {b : ℕ} {Q : Fin d → Matrix (Fin
     have := hbb (β, 0) ⟨hβ, rfl⟩
     simp [this, v]
 
-/-- The column matrix with first column `r` and all other columns zero. -/
-def colMat (r : Fin D → ℂ) : Matrix (Fin D) (Fin D) ℂ :=
-  fun α γ => if γ.val = 0 then r α else 0
-
 /-- The ancilla basis vector `|0⟩`. -/
-def basisVecZero (D : ℕ) : Fin D → ℂ := fun β => if β.val = 0 then 1 else 0
+def basisVecZero (hD : 0 < D) : Fin D → ℂ := Pi.single ⟨0, hD⟩ 1
+
+/-- The column matrix with first column `r` and all other columns zero. -/
+def colMat (hD : 0 < D) (r : Fin D → ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+  Matrix.vecMulVec r (basisVecZero hD)
 
 /-- The matrix whose row `0` is `v` and whose other rows vanish, `|0⟩⟨v|`-type
 boundary written bilinearly. -/
-def rowMat (v : Fin D → ℂ) : Matrix (Fin D) (Fin D) ℂ :=
-  fun α β => if α.val = 0 then v β else 0
+def rowMat (hD : 0 < D) (v : Fin D → ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+  Matrix.vecMulVec (basisVecZero hD) v
 
-/-- The matrix `rowMat v` vanishes beyond its first row. -/
-theorem isRowSupportedBelow_rowMat (v : Fin D → ℂ) : IsRowSupportedBelow 1 (rowMat v) :=
-  fun α β hα => by simp [rowMat, show α.val ≠ 0 by omega]
+/-- The matrix `rowMat hD v` vanishes beyond its first row. -/
+theorem isRowSupportedBelow_rowMat (hD : 0 < D) (v : Fin D → ℂ) :
+    IsRowSupportedBelow 1 (rowMat hD v) :=
+  fun α β hα => by simp [rowMat, basisVecZero, Matrix.vecMulVec_apply,
+    Fin.ext_iff, show α.val ≠ 0 by omega]
 
 /-- Pairing with `|0⟩` reads off the zeroth coordinate. -/
 theorem basisVecZero_dotProduct (hD : 0 < D) (w : Fin D → ℂ) :
-    basisVecZero D ⬝ᵥ w = w ⟨0, hD⟩ := by
-  rw [dotProduct, Finset.sum_eq_single ⟨0, hD⟩]
-  · simp [basisVecZero]
-  · intro b _ hb
-    have : b.val ≠ 0 := fun h => hb (Fin.ext h)
-    simp [basisVecZero, this]
-  · simp
+    basisVecZero hD ⬝ᵥ w = w ⟨0, hD⟩ :=
+  single_one_dotProduct _ _
 
 /-- The vector `|0⟩` is real. -/
-@[simp] theorem star_basisVecZero : star (basisVecZero D) = basisVecZero D := by
-  funext β; simp only [Pi.star_apply, basisVecZero]; split_ifs <;> simp
+@[simp] theorem star_basisVecZero (hD : 0 < D) : star (basisVecZero hD) = basisVecZero hD := by
+  simp only [basisVecZero, ← Pi.single_star, star_one]
 
 /-- Applying a matrix to `|0⟩` gives its zeroth column. -/
 theorem mulVec_basisVecZero_apply (hD : 0 < D) (M : Matrix (Fin D) (Fin D) ℂ) (α : Fin D) :
-    (M *ᵥ basisVecZero D) α = M α ⟨0, hD⟩ := by
-  rw [Matrix.mulVec, dotProduct_comm, basisVecZero_dotProduct hD]
+    (M *ᵥ basisVecZero hD) α = M α ⟨0, hD⟩ :=
+  congrFun (Matrix.mulVec_single_one M ⟨0, hD⟩) α
 
-/-- The zeroth coordinate of `rowMat v * M` applied to `w` is the bilinear pairing
+/-- The zeroth coordinate of `rowMat hD v * M` applied to `w` is the bilinear pairing
 `v ⬝ᵥ (M *ᵥ w)`. -/
 theorem rowMat_mul_mulVec_zero (hD : 0 < D) (v w : Fin D → ℂ)
     (M : Matrix (Fin D) (Fin D) ℂ) :
-    ((rowMat v * M) *ᵥ w) ⟨0, hD⟩ = v ⬝ᵥ (M *ᵥ w) := by
-  rw [← Matrix.mulVec_mulVec]
-  simp [rowMat, Matrix.mulVec, dotProduct]
+    ((rowMat hD v * M) *ᵥ w) ⟨0, hD⟩ = v ⬝ᵥ (M *ᵥ w) := by
+  rw [← Matrix.mulVec_mulVec, rowMat, Matrix.vecMulVec_mulVec]
+  simp [basisVecZero]
 
-/-- The zeroth column of `M * colMat r` is `M *ᵥ r`. -/
-theorem mul_colMat_apply (M : Matrix (Fin D) (Fin D) ℂ) (r : Fin D → ℂ) (α γ : Fin D)
-    (hγ : γ.val = 0) : (M * colMat r) α γ = (M *ᵥ r) α := by
-  simp [Matrix.mul_apply, colMat, hγ, Matrix.mulVec, dotProduct]
+/-- The zeroth column of `M * colMat hD r` is `M *ᵥ r`. -/
+theorem mul_colMat_apply (hD : 0 < D) (M : Matrix (Fin D) (Fin D) ℂ)
+    (r : Fin D → ℂ) (α γ : Fin D) (hγ : γ.val = 0) :
+    (M * colMat hD r) α γ = (M *ᵥ r) α := by
+  simp [colMat, Matrix.mul_vecMulVec, Matrix.vecMulVec_apply, basisVecZero,
+    Pi.single_apply, Fin.ext_iff, hγ]
 
-/-- The columns of `M * colMat r` other than the zeroth vanish. -/
-theorem mul_colMat_apply_of_ne (M : Matrix (Fin D) (Fin D) ℂ) (r : Fin D → ℂ) (α γ : Fin D)
-    (hγ : γ.val ≠ 0) : (M * colMat r) α γ = 0 := by
-  simp [Matrix.mul_apply, colMat, hγ]
+/-- The columns of `M * colMat hD r` other than the zeroth vanish. -/
+theorem mul_colMat_apply_of_ne (hD : 0 < D) (M : Matrix (Fin D) (Fin D) ℂ)
+    (r : Fin D → ℂ) (α γ : Fin D) (hγ : γ.val ≠ 0) :
+    (M * colMat hD r) α γ = 0 := by
+  simp [colMat, Matrix.mul_vecMulVec, Matrix.vecMulVec_apply, basisVecZero,
+    Fin.ext_iff, hγ]
 
 /-- A vector supported on the first coordinate is a multiple of `|0⟩`. -/
 theorem eq_smul_basisVecZero_of_isSupportedBelow_one (hD : 0 < D) {w : Fin D → ℂ}
-    (hw : IsSupportedBelow 1 w) : w = w ⟨0, hD⟩ • basisVecZero D := by
-  funext β
-  by_cases hβ : β.val = 0
-  · obtain rfl : β = ⟨0, hD⟩ := Fin.ext hβ
+    (hw : IsSupportedBelow 1 w) : w = w ⟨0, hD⟩ • basisVecZero hD := by
+  ext β
+  by_cases hβ : β = ⟨0, hD⟩
+  · subst β
     simp [basisVecZero]
-  · simp [basisVecZero, hβ, hw β (Nat.one_le_iff_ne_zero.mpr hβ)]
+  · simp [basisVecZero, hβ, hw β (by simpa [Nat.one_le_iff_ne_zero, Fin.ext_iff] using hβ)]
 
 /-- The squared norm of `x • |0⟩` is `star x * x`. -/
 theorem star_smul_basisVecZero_dotProduct_self (hD : 0 < D) (x : ℂ) :
-    star (x • basisVecZero D) ⬝ᵥ (x • basisVecZero D) = star x * x := by
-  rw [star_smul, star_basisVecZero, smul_dotProduct, dotProduct_smul,
-    basisVecZero_dotProduct hD]
-  simp [basisVecZero, mul_comm]
+    star (x • basisVecZero hD) ⬝ᵥ (x • basisVecZero hD) = star x * x := by
+  simp [star_smul, dotProduct_smul, basisVecZero, mul_comm]
 
 /-- The vector `|0⟩` is normalized. -/
 theorem star_basisVecZero_dotProduct_self (hD : 0 < D) :
-    star (basisVecZero D) ⬝ᵥ basisVecZero D = 1 := by
-  simpa using star_smul_basisVecZero_dotProduct_self hD 1
+    star (basisVecZero hD) ⬝ᵥ basisVecZero hD = 1 := by
+  simp [basisVecZero]
 
 end MPSPreparation
 
@@ -668,7 +667,7 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
   have hD : 0 < D := lt_of_lt_of_le (by omega) (hbD 0)
   let b' : Fin (n + 2) → ℕ := fun k => if k = Fin.last (n + 1) then 1 else b k
   let Q' : MPSChainTensor d D (n + 1) := fun p i =>
-    if p = Fin.last n then Q p i * colMat r' else Q p i
+    if p = Fin.last n then Q p i * colMat hD r' else Q p i
   have hb'D : ∀ k, b' k ≤ D := fun k => by
     simp only [b']; split_ifs
     · exact hD
@@ -690,7 +689,7 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     · subst hp
       simp only [Q', ite_eq_left rfl]
       simp only [b', Fin.succ_last, ite_eq_left rfl] at hβ
-      exact mul_colMat_apply_of_ne _ _ _ _ (by omega)
+      exact mul_colMat_apply_of_ne hD _ _ _ _ (by omega)
     · rw [hsc p hp] at hβ
       simp only [Q', ite_eq_right hp]
       exact hcol p i α β hβ
@@ -701,7 +700,7 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     have hQ' : (fun p : Fin n => Q' p.castSucc) = fun p => Q p.castSucc := by
       funext p i; simp [Q', Fin.castSucc_ne_last]
     simp only [hQ', Q', ite_eq_left rfl, ← Matrix.mul_assoc]
-    rw [mul_colMat_apply _ _ _ _ rfl, ← Matrix.mulVec_mulVec]
+    rw [mul_colMat_apply hD _ _ _ _ rfl, ← Matrix.mulVec_mulVec]
   · refine sum_conjTranspose_mul_ofSupported _ _ _ _ _ p (hrow' p) ?_
     rw [hsc p hp]
     simpa [Q', hp] using hiso p
@@ -712,7 +711,7 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     obtain rfl : β = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ)
     obtain rfl : β' = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ')
     simp only [Q', ite_eq_left rfl]
-    simp only [mul_colMat_apply _ _ _ (⟨0, hD⟩ : Fin D) rfl]
+    simp only [mul_colMat_apply hD _ _ _ (⟨0, hD⟩ : Fin D) rfl]
     have h := sum_normSq_mulVec_of_isIsometryOn (hiso (Fin.last n))
       (v := r') (by rw [Fin.succ_last]; exact hr')
     rw [hnorm] at h
@@ -730,18 +729,18 @@ theorem exists_isometric_chain_coeff {n : ℕ} (B : OBCChainTensor d D (n + 1)) 
       (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
       (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧ IsSupportedBelow (b (Fin.last (n + 1))) r' ∧
-      (∀ τ, eval Q τ *ᵥ r' = (c * B.coeff τ) • basisVecZero D) ∧
+      (∀ τ, eval Q τ *ᵥ r' = (c * B.coeff τ) • basisVecZero B.bondBound_pos) ∧
       star r' ⬝ᵥ r' = star (c • B.coeff) ⬝ᵥ (c • B.coeff) := by
   have hD := B.bondBound_pos
   obtain ⟨b, Q, r', hb0, -, hbc, hrow, hcol, hiso, hr', hprod⟩ :=
-    exists_isometric_chain (n + 1) 1 hD (rowMat (c • basisVecZero D))
-      (isRowSupportedBelow_rowMat _) (zeroPad B) (basisVecZero D)
+    exists_isometric_chain (n + 1) 1 hD (rowMat hD (c • basisVecZero hD))
+      (isRowSupportedBelow_rowMat hD _) (zeroPad B) (basisVecZero hD)
   have hbB : ∀ k, b k ≤ B.bondDim k := fun k => by
     refine Fin.cases ?_ (fun p => ?_) k
     · rw [hb0, B.left_dim]
     · refine hbc p _ fun i α γ hγ => ?_
       simp [zeroPad, Matrix.zeroPad, not_lt.mpr hγ]
-  have hout : ∀ τ, eval Q τ *ᵥ r' = (c * B.coeff τ) • basisVecZero D := fun τ => by
+  have hout : ∀ τ, eval Q τ *ᵥ r' = (c * B.coeff τ) • basisVecZero hD := fun τ => by
     have hsupp := isSupportedBelow_eval_mulVec b Q hrow r' hr' τ
     rw [hb0] at hsupp
     rw [eq_smul_basisVecZero_of_isSupportedBelow_one hD hsupp, ← hprod τ,

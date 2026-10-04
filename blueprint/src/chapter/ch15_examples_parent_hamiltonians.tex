@@ -884,14 +884,15 @@ eigenspace.
         MPSTensor.akltOpenHamiltonianES_groundSpace_finrank,
         MPSTensor.akltOpenHamiltonianES_hasEigenvalue}
     \leanok
-    \uses{def:aklt_open_polynomial_hamiltonian, def:open_parent_hamiltonian_es}
+    \uses{def:aklt_open_polynomial_hamiltonian, def:open_parent_hamiltonian_es,
+        def:ground_space_es}
     For $N\ge2$, the ground energy is $E_0=-2(N-1)/3$, and
     \begin{align}
         H^{\mathrm{open}}_{\mathrm{AKLT},N}-E_0I
          & =2H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}}),\notag \\
         \ker\left(H^{\mathrm{open}}_{\mathrm{AKLT},N}-E_0I\right)
-         & =G_N(A_{\mathrm{AKLT}}),\notag                      \\
-        \dim G_N(A_{\mathrm{AKLT}})
+         & =G_N^{\mathrm{ES}}(A_{\mathrm{AKLT}}),\notag        \\
+        \dim G_N^{\mathrm{ES}}(A_{\mathrm{AKLT}})
          & =4.\notag
     \end{align}
     The degeneracy is the open-boundary statement
@@ -921,7 +922,7 @@ eigenspace.
         MPSTensor.aklt_finrank_openParent_ground_spinOne,
         MPSTensor.akltOpenHamiltonianES_ground_spinOne_finrank}
     \leanok
-    \uses{def:aklt_tensor, def:aklt_open_polynomial_hamiltonian}
+    \uses{def:aklt_open_polynomial_hamiltonian, def:ground_space_map}
     For $N\ge2$, the open AKLT ground space contains one spin-$0$
     state and a spin-$1$ triplet. In the boundary parametrization
     $\Gamma_N(X)(\sigma)=\operatorname{tr}(A^\sigma X)$,
