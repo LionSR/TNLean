@@ -14,6 +14,7 @@ import TNLean.MPS.Preparation.BlockApproximationError
 import TNLean.MPS.Preparation.BlockGateUnitary
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.BlockSites
+import TNLean.MPS.Preparation.BlockStatePreparation
 import TNLean.MPS.Preparation.BlockSumError
 import TNLean.MPS.Preparation.BlockSumUnitary
 import TNLean.MPS.Preparation.BlockUnitary
@@ -33,6 +34,7 @@ import TNLean.MPS.Preparation.DepthLowerBoundCore
 import TNLean.MPS.Preparation.DepthLowerBoundNormal
 import TNLean.MPS.Preparation.DepthUpperBound
 import TNLean.MPS.Preparation.DiagonalPolar
+import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
