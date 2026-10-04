@@ -21,6 +21,11 @@ the sector-dependent boundary transport are still separate statements. See
 
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, regular blocking and
 boundary disentangling, local source lines 1840–1920 and 1935–1990.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

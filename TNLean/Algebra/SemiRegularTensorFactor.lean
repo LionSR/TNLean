@@ -21,6 +21,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Lemma 5.2,
 `Papers/1001.3807/paper_v3.tex`, lines 1334–1336, and Lemma 4.6, lines 1015–1029.
 The conclusion strengthens the source's tensor-product observation, which assumes
 both factors semi-regular. It does not assert a graph contraction theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap

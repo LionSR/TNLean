@@ -16,6 +16,12 @@ coefficient. No nonzero bond dimensions or injectivity assumptions are needed.
 Source: CPGSV21, arXiv:2011.12127, the regional parent construction in
 Section IV.C.1, lines 2003–2011. The nesting assertion is a consequence of that
 construction, rather than a separately stated theorem in the source.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators

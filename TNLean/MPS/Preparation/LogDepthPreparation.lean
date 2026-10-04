@@ -49,6 +49,7 @@ into it by a gauge transformation and a rescaling
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -236,12 +237,10 @@ theorem exists_mpvState_ne_zero_of_le {D : ℕ} [NeZero D] (A : MPSTensor d D)
   obtain ⟨K, hK, hc⟩ := exists_abs_norm_mpvState_sq_sub_one_le B hNB hLC hσ htr hfix hlam
     (γ := 1 / 4) (by norm_num) (by norm_num)
   set x := Real.exp (-(1 / 4) / correlationLength (t : ℂ))
-  have hx0 : 0 ≤ x ^ 2 := by positivity
-  have hx1 : x ^ 2 < 1 := by
-    have : x < 1 := by
-      rw [Real.exp_lt_one_iff, neg_div_correlationLength, hnorm]
-      exact mul_neg_of_pos_of_neg (by norm_num) (Real.log_neg ht0 ht1)
-    nlinarith [Real.exp_pos (-(1 / 4) / correlationLength (t : ℂ))]
+  have hx0 : 0 ≤ x := by positivity
+  have hx1 : x < 1 := by
+    rw [Real.exp_lt_one_iff, neg_div_correlationLength, hnorm]
+    exact mul_neg_of_pos_of_neg (by norm_num) (Real.log_neg ht0 ht1)
   obtain ⟨N₀, hN₀⟩ := exists_pow_lt_of_lt_one (show (0 : ℝ) < 1 / (K + 1) by positivity) hx1
   refine ⟨N₀, fun N hN h0 => ?_⟩
   have hB0 : mpvState B N = 0 := by
@@ -252,10 +251,10 @@ theorem exists_mpvState_ne_zero_of_le {D : ℕ} [NeZero D] (A : MPSTensor d D)
     rw [this, mul_zero, PiLp.zero_apply]
   have h1 := hc N
   rw [hB0, norm_zero] at h1
-  have h2 : (x ^ 2) ^ N ≤ (x ^ 2) ^ N₀ := pow_le_pow_of_le_one hx0 hx1.le hN
-  have h3 : K * (x ^ 2) ^ N < 1 := by
-    calc K * (x ^ 2) ^ N ≤ K * (x ^ 2) ^ N₀ := mul_le_mul_of_nonneg_left h2 hK
-      _ ≤ (K + 1) * (x ^ 2) ^ N₀ := by nlinarith [pow_nonneg hx0 N₀]
+  have h2 : x ^ N ≤ x ^ N₀ := pow_le_pow_of_le_one hx0 hx1.le hN
+  have h3 : K * x ^ N < 1 := by
+    calc K * x ^ N ≤ K * x ^ N₀ := mul_le_mul_of_nonneg_left h2 hK
+      _ ≤ (K + 1) * x ^ N₀ := by nlinarith [pow_nonneg hx0 N₀]
       _ < (K + 1) * (1 / (K + 1)) := by gcongr
       _ = 1 := by field_simp
   norm_num at h1

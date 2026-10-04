@@ -7,6 +7,7 @@ import TNLean.Algebra.FinKronecker
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
+import TNLean.MPS.ParentHamiltonian.PhysicalEmbedding
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 
 /-!
@@ -137,9 +138,8 @@ theorem groundSpaceMap_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPS
     (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMap (rotatePhysical Λ A) L X =
       Matrix.toLin' (onSiteTensorPow L Λ) (groundSpaceMap A L X) := by
-  ext σ
-  simp [groundSpaceMap_apply, evalWord_rotatePhysical_ofFn, Matrix.toLin'_apply, Matrix.mulVec,
-    dotProduct, Matrix.sum_mul, Matrix.trace_sum, Matrix.trace_smul]
+  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker,
+    Matrix.toLin'_apply] using groundSpaceMap_rotatePhysical_rectangular Λ A L X
 
 /-- The local ground space of the deformed tensor is the image of the local ground space of
 the original tensor under the tensor power: \(\mathcal G_L(\Lambda A) =
@@ -150,10 +150,8 @@ theorem groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTen
     (L : ℕ) :
     groundSpace (rotatePhysical Λ A) L =
       (groundSpace A L).map (Matrix.toLin' (onSiteTensorPow L Λ)) := by
-  have h : groundSpaceMap (rotatePhysical Λ A) L =
-      (Matrix.toLin' (onSiteTensorPow L Λ)).comp (groundSpaceMap A L) :=
-    LinearMap.ext (groundSpaceMap_rotatePhysical Λ A L)
-  rw [groundSpace, groundSpace, h, LinearMap.range_comp]
+  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker] using
+    groundSpace_rotatePhysical_rectangular Λ A L
 
 /-- The Hilbert-space realization of the local ground space of the deformed tensor is the
 image under the tensor power of the realization for the original tensor. -/
@@ -161,9 +159,8 @@ theorem groundSpaceES_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPST
     (L : ℕ) :
     groundSpaceES (rotatePhysical Λ A) L =
       (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L Λ)) := by
-  rw [groundSpaceES, groundSpaceES, groundSpace_rotatePhysical, ← Submodule.map_comp,
-    ← Submodule.map_comp]
-  rfl
+  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker] using
+    groundSpaceES_rotatePhysical_rectangular Λ A L
 
 /-! ### The deformed parent interaction -/
 

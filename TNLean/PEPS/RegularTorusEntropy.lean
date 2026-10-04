@@ -23,6 +23,11 @@ Cirac, and Pérez-García, arXiv:1001.3807, Theorem 6.9, proof, lines 2043–207
 The source's arbitrary topologically trivial disk remains separate; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. Noncommuting closure pairs are
 allowed only for this interior cut. No parent-Hamiltonian or ground-space assertion is made here.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

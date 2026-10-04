@@ -16,6 +16,11 @@ are derived from local G-isometry and the canonical invariant support.
 
 Source: SCP10, arXiv:1001.3807, accessible virtual coordinates and the boundary
 entropy calculation, local source lines 1765–1820 and 2043–2072.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix ComplexOrder

@@ -27,6 +27,11 @@ step in SCP10, Theorem 6.9, local source lines 1935–1990. It does not define a
 disk or assert path connectedness of the exterior collar. Routing the exposed
 boundary contours within that collar remains a separate theorem; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 noncomputable section
@@ -334,7 +339,8 @@ def integerClosedCellUnion (A : Finset (ℤ × ℤ)) : Set (ℝ × ℝ) :=
     (Icc (-1 / 2 : ℝ) (1 / 2) ×ˢ Icc (-1 / 2 : ℝ) (1 / 2))
 
 /-- Local path connectedness follows from the finite compact-cell quotient.
-Source: SCP10, §6.3, lines 1935–1957; auxiliary geometric statement. -/
+Locally proved auxiliary geometric statement for the block setting of SCP10, §6.3, lines 1935–1957;
+the source states no such lemma. -/
 instance integerClosedCellUnion_locallyPathConnectedSpace (A : Finset (ℤ × ℤ)) :
     LocallyPathConnectedSpace (integerClosedCellUnion A) := by
   let S := Icc (-1 / 2 : ℝ) (1 / 2) ×ˢ Icc (-1 / 2 : ℝ) (1 / 2)
@@ -510,8 +516,8 @@ theorem not_finite_integerCellHole_of_isSimplyConnected
 
 /-- Every four-neighbor component of the missing integer cells is infinite
 when the occupied closed-cell union is simply connected. Thus no bounded
-lattice hole can occur. Source: SCP10, Theorem 6.9,
-lines 1935–1990; auxiliary geometric statement. -/
+lattice hole can occur. Locally proved auxiliary geometric statement for the block setting of SCP10,
+Theorem 6.9, lines 1935–1990; the source states no such lemma. -/
 theorem infinite_integerCellComplement_component_of_isSimplyConnected
     (A : Finset (ℤ × ℤ)) (hSC : IsSimplyConnected (integerClosedCellUnion A))
     (v : {a : ℤ × ℤ // a ∉ A}) :
@@ -591,7 +597,8 @@ theorem integerClosedCellUnion_image_eq_torusRegionPlanarRealization
 /-- A simply connected genuine torus cell region admits planar integer
 coordinates for which every component of the missing cells is infinite.
 This excludes finite holes; it does not yet assert collar connectivity.
-Source: SCP10, Theorem 6.9, lines 1935–1990; auxiliary geometric theorem. -/
+Locally proved auxiliary geometric theorem for the block setting of SCP10, Theorem 6.9, lines
+1935–1990; the source states no such lemma. -/
 theorem exists_integerLift_no_finite_cellHole_of_isSimplyConnected
     {width height : ℕ} [NeZero width] [NeZero height]
     (R : Finset (TorusVertex width height))

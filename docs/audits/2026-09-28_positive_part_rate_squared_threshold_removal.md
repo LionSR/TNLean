@@ -25,6 +25,9 @@ exponent. So the transfer-map rate is needed only at `γ` itself, for every
 `γ < 1`. The one use, in the proof of
 `MPSTensor.exists_norm_transferMap_pow_sub_le`, now calls the replacement.
 
-Where the approximation-error argument still needs a rate at `2γ` for the
-normalization, it rewrites `e^{-2γ/ξ}` as `(e^{-γ/ξ})²` with the new
-`MPSTensor.exp_neg_two_mul_div_correlationLength`.
+The approximation-error argument (`MPSTensor.exists_approximationError_le`)
+calls the normalization bound `MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le`
+at the rate `γ` itself, `|‖φ_N‖² - 1| ≤ K e^{-γN/ξ}`. The second-order rate
+`e^{-2γq/ξ}` of the error then comes from `N = Mq ≥ 2q` when `M ≥ 2`, with the
+case `M = 1` treated separately; the rewriting of `e^{-2γ/ξ}` as `(e^{-γ/ξ})²`
+uses `MPSTensor.exp_neg_two_mul_div_correlationLength`.
