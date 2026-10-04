@@ -22,6 +22,11 @@ reconstruction, global closure-span representation, or G-isometry is assumed.
 
 Source: SCP10, arXiv:1001.3807, accessible regular coordinates and internal bond
 synchronization, lines 1765–1920. This is an auxiliary local contraction identity.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

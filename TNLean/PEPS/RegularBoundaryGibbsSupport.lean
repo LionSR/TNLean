@@ -23,6 +23,13 @@ Gibbs representation in the bulk–boundary conjecture of
 arXiv:1903.09439, Conjecture `gap2Dboundary1dlocal`, local source lines
 980–1024. They do not establish locality of a boundary Hamiltonian or a
 uniform bulk spectral gap.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+- [arXiv:1903.09439](https://arxiv.org/abs/1903.09439) -- J. I. Cirac, J. Garre-Rubio,
+  D. Pérez-García, *Mathematical open problems in Projected Entangled Pair States*
 -/
 
 open scoped Matrix ComplexOrder

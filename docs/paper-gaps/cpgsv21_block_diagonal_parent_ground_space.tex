@@ -1043,6 +1043,24 @@ The corresponding statements for canonical projectors and arbitrary positive
 parent terms are in
 \path{TNLean/MPS/ParentHamiltonian/CanonicalBlockGroundSpaceAtInjectivityLength.lean}.
 
+\section{A dimension bound including the minimal ring}
+
+For an original canonical tensor of positive bond dimension $D$, the distinct
+normal representatives have total bond dimension at most $D$. The quantitative
+separation argument gives a positive simultaneous injectivity length $S$ with
+$S+1\leq3D^5$. Indeed, in the case of $g\geq2$ representatives its length is
+$3(g-1)(D^4+1)$, and
+$(D-1)(D^4+1)<D^5$ leaves room for the additional site.
+The empty and singleton cases satisfy the same bound.
+
+Consequently there are normal representatives and a positive range
+$R\leq3D^5$ such that every parent Hamiltonian with $R\leq L\leq N$ has
+precisely their periodic vector span as its kernel. The terms may be arbitrary
+positive operators with the prescribed local kernels. The statement includes
+the minimal ring $N=L=R$; in particular it applies at $N=L=3D^5$ without an
+extra site or normalization assumption. These conclusions are proved in
+\path{TNLean/MPS/ParentHamiltonian/CanonicalBoundedRangeGroundSpace.lean}.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 

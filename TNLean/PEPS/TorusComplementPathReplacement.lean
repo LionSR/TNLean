@@ -26,6 +26,11 @@ trees describe chosen paths and are independent of all closure labels. See
 
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, exterior replacement
 in the proof of Theorem 6.9, local source lines 1935–1990.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 noncomputable section

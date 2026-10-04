@@ -15,6 +15,11 @@ non-tree bond remains outside the transported tree.
 
 Auxiliary to SCP10, arXiv:1001.3807, the finite blocking and adjacent-flux
 geometries in lines 1765–1920 and 2380–2415.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

@@ -1,0 +1,72 @@
+\section{Normalized split compressions}%
+\label{sec:asym_normalized_similarity}
+
+\begin{definition}[Assembled compression matrices]
+    \label{def:asym_assembled_compression}
+    \lean{MPSTensor.MultiBlockCompression.assembledLeft,
+        MPSTensor.MultiBlockCompression.assembledRight}
+    \leanok
+    \uses{thm:asym_multiblock}
+    For a multi-block compression with maps $V_s$ and $W_s$, let
+    $K=\bigoplus_{s\in S}\mathbb C^{D_s}$ and define
+    $L:\mathbb C^{D_B}\to K$ and $R:K\to\mathbb C^{D_B}$ by
+    $Lx=(W_sx)_s$ and $R(y_s)_s=\sum_sV_sy_s$.
+\end{definition}
+
+\begin{theorem}[Similarity from a normalized split compression]
+    \label{thm:asym_normalized_split_similarity}
+    \lean{MPSTensor.MultiBlockCompression.sum_right_mul_left_eq_one_of_leftCanonical,
+        MPSTensor.MultiBlockCompression.assembledLeft_mul_assembledRight,
+        MPSTensor.MultiBlockCompression.assembledRight_mul_assembledLeft_of_leftCanonical,
+        MPSTensor.MultiBlockCompression.assembledLeft_mul_letter_mul_assembledRight,
+        MPSTensor.MultiBlockCompression.assembledLinearEquiv_of_leftCanonical,
+        MPSTensor.MultiBlockCompression.dim_eq_sum_of_leftCanonical,
+        MPSTensor.MultiBlockCompression.z_eq_zero_of_leftCanonical,
+        MPSTensor.MultiBlockCompression.exists_simultaneous_similarity_of_leftCanonical}
+    \leanok
+    \uses{thm:asym_multiblock, def:asym_assembled_compression}
+    Suppose that a multi-block compression has zero remainder and that
+    $\sum_i(B^i)^\dagger B^i=\id$. Then
+    $\sum_sV_sW_s=\id$, the assembled matrices satisfy $LR=\id$ and
+    $RL=\id$, and $LB^iR=\bigoplus_sC_s^i$ for every physical index $i$.
+    In particular, $D_B=\sum_sD_s$ and there are no unmatched zero slots.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_multiblock, prop:asym_split_intertwiners}
+    Put $E=\sum_sV_sW_s$. Zero remainder and biorthogonality give
+    $B^iE=B^i$, hence $B^i(\id-E)=0$. Normalization yields
+    \begin{align}
+        (\id-E)^\dagger(\id-E)
+         & =\sum_i\bigl(B^i(\id-E)\bigr)^\dagger
+        \bigl(B^i(\id-E)\bigr)=0.
+    \end{align}
+    Thus $E=\id$. Biorthogonality gives $LR=\id$, and $RL=E=\id$.
+    The sitewise intertwiners give
+    $W_sB^iV_t=\delta_{st}C_s^i$, which is the stated simultaneous
+    similarity. The inverse maps give dimension equality; comparison
+    with $D_B=\sum_sD_s+z$ then gives $z=0$.
+\end{proof}
+
+\begin{theorem}[Faithful stationary asymmetric similarity]
+    \label{thm:asym_faithful_stationary_similarity}
+    \lean{MPSTensor.exists_simultaneous_similarity_of_leftCanonical_of_posDef_fixedPoint}
+    \leanok
+    \uses{thm:asym_multiblock, thm:asym_stationary_splitting,
+        thm:asym_normalized_split_similarity}
+    Let $A=\bigoplus_{s\in S}C_s$ be a finite direct sum of nonzero
+    normal tensors, and suppose that $V_N(B)=V_N(A)$ for every $N\geq1$.
+    If $\sum_i(B^i)^\dagger B^i=\id$ and
+    $\sum_iB^i\rho(B^i)^\dagger=\rho$ for some $\rho>0$, then
+    $D_B=\sum_sD_s$ and there are inverse maps $L,R$ with
+    $LB^iR=\bigoplus_sC_s^i$ for every physical index $i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_stationary_splitting, thm:asym_normalized_split_similarity}
+    Faithful stationary splitting supplies a compression with zero
+    remainder. The normalized split-compression theorem then supplies
+    the inverse maps, dimension equality, and simultaneous similarity.
+\end{proof}

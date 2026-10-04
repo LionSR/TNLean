@@ -16,6 +16,12 @@ reconstruction. No injectivity or nonzero-bond assumption is required.
 
 Source: CPGSV21, arXiv:2011.12127, the regional contraction and independent
 site maps in Section IV.C.1, lines 2003–2044.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators

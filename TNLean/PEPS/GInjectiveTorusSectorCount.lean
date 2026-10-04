@@ -22,6 +22,11 @@ lines 1582–1621. This is the dimension of the actual commuting closure
 span. Identification of this span with the parent-Hamiltonian ground
 space remains a separate assertion. Rectangular and size-one tori are
 algebraic extensions of the source's square-torus contraction.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators

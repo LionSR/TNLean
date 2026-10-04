@@ -21,6 +21,11 @@ parent-Hamiltonian ground space remains separate; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. Independence for
 noncommuting classes is an auxiliary extension of the closure-vector argument, not a
 ground-state assertion. Rectangular and size-one tori are algebraic extensions.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

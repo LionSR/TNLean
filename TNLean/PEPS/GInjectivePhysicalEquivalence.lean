@@ -18,6 +18,11 @@ an invertible comparison between different physical spaces.
 These are local consequences of SCP10, arXiv:1001.3807, Definition 5.1,
 lines 1278–1296. The comparison acts on physical coordinates; it is not a
 virtual gauge relation inferred from equality of closed states.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

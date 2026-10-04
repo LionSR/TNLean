@@ -18,6 +18,11 @@ Source: SCP10, arXiv:1001.3807, the iterated intersection argument of
 Theorem 4.11, lines 1177–1195, and strip growth in Theorem 5.4,
 lines 1373–1436. This is an open-strip statement; a graph PEPS application
 requires a separate identification of the blocked graph contractions.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap Representation

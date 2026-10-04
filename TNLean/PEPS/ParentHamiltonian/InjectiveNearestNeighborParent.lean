@@ -21,6 +21,12 @@ isolated site's unused physical directions. The edge-only statements assume
 that every vertex has a neighbor; the unrestricted graph statements include
 isolated-site singleton parents. See
 `docs/paper-gaps/cpgsv21_injective_parent_reconstruction.tex`.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 namespace TNLean.PEPS

@@ -24,6 +24,12 @@ This is its finite-graph covering-region consequence.
 derived from vertex coverage, rather than inferred from bare inverse-adjoint
 congruence. Isolated vertices must occur in some region. See
 `docs/paper-gaps/cpgsv21_injective_parent_reconstruction.tex`.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 namespace TNLean.PEPS

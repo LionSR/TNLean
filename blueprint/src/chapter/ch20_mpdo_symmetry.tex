@@ -4,19 +4,55 @@ For a unitary on-site symmetry $U$, a density operator $\rho$ satisfies
 $[U,\rho]=0$ (weak symmetry) or $U\rho=\lambda\rho$ (strong
 symmetry)~\cite{deGroot2022SPTOpen,GarreRubio2026LocalCharacterization}.
 Sun formulates both notions for families of matrix product
-operators~\cite{Sun2025Anomalous}. The statements below consider periodic
-operators $\rho^{(L)}=\rho^{(L)}(M)$ with identity boundary
-matrix~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
+operators~\cite{Sun2025Anomalous}. The density operators have a virtual boundary $\mathcal X$ commuting
+with every tensor letter~\cite{Sun2025Anomalous}.
+
+\begin{definition}[Commuting boundaries and density operators]
+    \label{def:mpdo_commuting_boundary}
+    \lean{MPOTensor.mpoWithBoundary, MPOTensor.commutingBoundaryAlgebra,
+        MPOTensor.IsMPDOWithBoundary, MPOTensor.mem_commutingBoundaryAlgebra_iff,
+        MPOTensor.mpoWithBoundary_one, MPOTensor.isMPDOWithBoundary_one_iff,
+        MPSTensor.mpvWithBoundary, MPSTensor.mpvWithBoundary_one}
+    \leanok
+    \uses{def:mpo_family}
+    For a virtual matrix $\mathcal X$, define the operator family by
+    \begin{align}
+        \rho^{(L)}(\mathcal X,M)_{\sigma,\tau}
+         & =\tr\bigl(\mathcal X M^{\sigma_1\tau_1}\cdots
+        M^{\sigma_L\tau_L}\bigr).
+        \label{eq:mpdo_boundary_operator}
+    \end{align}
+    The admissible boundaries form the centralizer
+    $\{\mathcal X:[\mathcal X,M^{ij}]=0\text{ for every }i,j\}$,
+    a complex subalgebra. The family is an MPDO when
+    $\rho^{(L)}(\mathcal X,M)\ge0$ for every $L>0$.
+    Commutation does not imply this positivity condition.
+    The vectorized coefficients are the same boundary-weighted traces
+    on the doubled physical alphabet. Identity boundary recovers the
+    ordinary periodic operator and vector families.
+    This is the family of~\cite[lines~175--182]{Sun2025Anomalous}.
+\end{definition}
+
+\begin{theorem}[Commutation of boundaries with virtual words]
+    \label{thm:mpdo_commuting_boundary_words}
+    \lean{MPOTensor.commute_evalWord_of_mem_commutingBoundaryAlgebra}
+    \leanok
+    \uses{def:mpdo_commuting_boundary}
+    An admissible boundary commutes with every product of virtual letters.
+\end{theorem}
+\begin{proof}\leanok
+    Commutation with each factor implies commutation with their product.
+\end{proof}
 
 \begin{definition}[Strong and weak symmetry]\label{def:mpdo_strong_weak_symmetry}
     \lean{Matrix.IsStrongSymmetry, Matrix.IsWeakSymmetry,
         MPOTensor.IsStrongMPOSymmetry, MPOTensor.IsWeakMPOSymmetry}
     \leanok
-    \uses{def:mpo_family}
+    \uses{def:mpo_family, def:mpdo_commuting_boundary}
     An operator $O$ is a \emph{strong symmetry} of a matrix $\rho$ if
     $O\rho=\lambda\rho$ for some $\lambda\in\mathbb C$, and a \emph{weak
         symmetry} if $[O,\rho]=0$. A family of periodic matrix product operators
-    $O_a^{(L)}$ is a strong symmetry of $M$, with eigenvalues
+    $O_a^{(L)}$ is a strong symmetry of $(\mathcal X,M)$, with eigenvalues
     $\lambda_a^{(L)}$, if
     $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$ for every label $a$ and
     every $L\ge 1$. It is a weak symmetry if
@@ -54,10 +90,10 @@ matrix~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
     one-by-one identity, whose trace is that scalar.
 \end{proof}
 
-By Theorem~\ref{thm:mpdo_onsite_mpo}, strong on-site symmetry with
-eigenvalue $\lambda_g^{(L)}$ is the following identity of periodic
-contractions, in which the upper row is the bond dimension one tensor with
-entries $(U_g)_{ij}$.
+With identity boundary, strong on-site symmetry with eigenvalue
+$\lambda_g^{(L)}$ is the following identity of periodic contractions.
+By Theorem~\ref{thm:mpdo_onsite_mpo}, the upper row is the bond dimension
+one tensor with entries $(U_g)_{ij}$.
 \begin{tenkzequation}
     % Formula: U_g^{\otimes L} rho^{(L)}(M) = lambda_g^{(L)} rho^{(L)}(M).
     % Source: Definition of on-site symmetry above and the preceding theorem,
@@ -103,8 +139,8 @@ entries $(U_g)_{ij}$.
         MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry,
         MPOTensor.IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry}
     \leanok
-    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_onsite_symmetry, def:mpdo,
-        thm:mpdo_onsite_mpo}
+    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_onsite_symmetry,
+        def:mpdo_commuting_boundary, thm:mpdo_onsite_mpo}
     Let $\rho$ be Hermitian. If $O$ and $O^\dagger$ are both strong
     symmetries of $\rho$, then $O$ is a weak symmetry of $\rho$. Hence a
     strong symmetry of an MPDO whose family contains the adjoint of each of
@@ -150,15 +186,18 @@ entries $(U_g)_{ij}$.
         MPOTensor.purificationAmplitude,
         MPOTensor.purificationDensity_eq_mul_conjTranspose,
         MPOTensor.mpo_mul_eq_smul_iff_purification,
-        MPOTensor.isStrongMPOSymmetry_iff_purification}
+        MPOTensor.isStrongMPOSymmetry_iff_purification,
+        MPOTensor.isStrongMPOSymmetry_one_iff_localPurification}
     \leanok
     \uses{def:mpdo_strong_weak_symmetry, thm:mpo_eq_purification_density}
     Let $\rho=\Phi\Phi^\dagger$, where $\Phi$ has system configurations as
     rows and ancilla configurations as columns, so that $\Phi$ is a
     purification $\Psi$ of $\rho$. Then $O\rho=\lambda\rho$ if and only if
     $(O\otimes\Id_{\mathrm{anc}})\Psi=\lambda\Psi$. For a locally purified
-    tensor the purification is the spin--ancilla matrix product state of the
-    purifying tensor, and $M$ is strongly symmetric under a family $O_a$ if
+    tensor with identity boundary the purification is the spin--ancilla
+    matrix product state of the purifying tensor. For any virtual boundary
+    and any supplied purification of $\rho^{(L)}(\mathcal X,M)$,
+    the family is strongly symmetric under $O_a$ if
     and only if every $O_a^{(L)}\otimes\Id_{\mathrm{anc}}$ acts on that
     state by $\lambda_a^{(L)}$~\cite{Sun2025Anomalous}.
 \end{theorem}
@@ -174,7 +213,7 @@ entries $(U_g)_{ij}$.
         MPOTensor.isWeakOnSiteSymmetry_of_gaugePhase_purification}
     \leanok
     \uses{thm:mpdo_strong_symmetry_purification, def:mpdo_onsite_symmetry}
-    Let $M$ be locally purified by $A$. Suppose that
+    With identity boundary, let $M$ be locally purified by $A$. Suppose that
     $\sum_j(U_g)_{ij}A^{(j,k)}=\zeta_gX_gA^{(i,k)}X_g^{-1}$ for invertible
     $X_g$. Then $M$ is strongly on-site symmetric under $U$ with
     eigenvalues $\zeta_g^L$. If instead
@@ -255,7 +294,8 @@ follows, the first for strong and the second for weak symmetry.
     \uses{thm:mpdo_strong_symmetry_purification, thm:mpdo_symmetry_local_conditions,
         def:nt_cpsv, thm:normal_proportional_mpv_geometric_phase,
         thm:cpsv_normal_mpv_phase_gauge}
-    Let $M$ be locally purified by $A$, let the spin--ancilla tensor with
+    With identity boundary, let $M$ be locally purified by $A$,
+    let the spin--ancilla tensor with
     entries $A^{(i,k)}$ be normal, and let $U$ be a unitary on-site
     representation. Then $M$ is strongly on-site symmetric under $U$ if and
     only if for every $g$ there are an invertible $X_g$ and a scalar
@@ -292,27 +332,35 @@ follows, the first for strong and the second for weak symmetry.
         MPOTensor.doubledRep, MPOTensor.pairTwist_map_star,
         MPOTensor.pairOperator_map_star, MPOTensor.doubledRep_apply,
         MPOTensor.mpo_pairTwist,
+        MPOTensor.mpoWithBoundary_ketTwist, MPOTensor.mpoWithBoundary_braTwist,
+        MPOTensor.mpoWithBoundary_pairTwist, Matrix.trace_mul_prod_ofFn_sum_smul,
+        MPOTensor.mpvWithBoundary_toMPSTensor,
+        MPOTensor.mpvWithBoundary_toMPSTensor_eq_mul_iff,
+        MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor,
+        MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor,
         MPOTensor.twistedTensor_toMPSTensor_pairRep,
         MPOTensor.mpv_toMPSTensor_eq_mul_iff, MPOTensor.sameMPV_toMPSTensor_iff,
         MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor,
         MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor}
     \leanok
     \uses{def:mpdo_onsite_symmetry, def:on_site_symmetric}
-    Regard $\rho^{(L)}(M)$ as the matrix product vector $|\rho\rangle\rangle$
-    of the tensor with doubled physical index $(i,j)$ and matrices $M^{ij}$.
+    Regard $\rho^{(L)}(\mathcal X,M)$ as the boundary-weighted
+    vector $|\rho\rangle\rangle$ of the tensor with doubled physical index $(i,j)$ and matrices $M^{ij}$.
     Acting with $u\otimes v$ on every doubled index sends $\rho^{(L)}$ to
     $u^{\otimes L}\rho^{(L)}(v^{\otimes L})^T$. For a unitary on-site
     representation $U$, the operator $M$ is weakly on-site symmetric if and
-    only if the doubled tensor is invariant under
+    only if this vector is invariant under
     $g\mapsto U_g\otimes\bar U_g$, and strongly on-site symmetric with
     eigenvalues $\lambda_g^{(L)}$ if and only if
     $(U_g\otimes\Id)^{\otimes L}|\rho\rangle\rangle
         =\lambda_g^{(L)}|\rho\rangle\rangle$ at every $L\ge
         1$~\cite{GarreRubio2026LocalCharacterization}.
+    At identity boundary these vectors are the ordinary periodic matrix
+    product vectors; weak symmetry is then on-site symmetry of the doubled tensor.
 \end{theorem}
 
 \begin{proof}\leanok
-    The matrix product vector of the doubled tensor at the configuration
+    The boundary-weighted vector of the doubled tensor at the configuration
     $((\sigma_1,\tau_1),\dots,(\sigma_L,\tau_L))$ is the entry
     $\rho^{(L)}_{\sigma\tau}$. Expanding the trace of a product of linear
     combinations gives the twisted operator. For unitary $u$, $[u,\rho]=0$

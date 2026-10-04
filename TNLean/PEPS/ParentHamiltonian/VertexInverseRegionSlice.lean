@@ -15,6 +15,12 @@ merely form a linear combination of the original physical slices.
 
 Source: the independent site inverses and virtual-pair construction in
 CPGSV21, arXiv:2011.12127, Section IV.C.1, lines 2017–2044.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators Matrix

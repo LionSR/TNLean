@@ -17,6 +17,12 @@ The constants for a finite family depend on the local interactions.
 This is the finite-dimensional comparison described in CPGSV21,
 arXiv:2011.12127, line 2170, applied to the PEPS parent interactions of
 Section IV.C.1, lines 2003–2011. No bound uniform in the number of sites is asserted.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators Kronecker ComplexOrder Matrix MatrixOrder
