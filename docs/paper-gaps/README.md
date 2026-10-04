@@ -65,11 +65,13 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
   realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
-- `spc11_uniform_gap_injective_scope.tex` (scope restriction) records that the
-  uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, is formalized
-  for continuous compact families of one-site injective tensors with the
-  canonical two-site interaction, while the source's path also covers
-  non-injective normal forms with several blocks.
+- `spc11_uniform_gap_injective_scope.tex` (scope restriction, resolved) records
+  that the uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, was
+  first formalized only for continuous compact families of one-site injective
+  tensors with the canonical two-site interaction, and that compact multiblock
+  families, continuous positive interactions, and the source's blocked
+  isometric deformation now cover the source path, using finite-range Knabe
+  windows in place of Nachtergaele's estimate.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
@@ -116,9 +118,12 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   of the Gauss-law configurations of trivial holonomy, the only sector the
   dual network reaches on a torus. It also records that stability of
   `G`-isometry under concatenation (Lemma 6.2) is formalized in one
-  dimension, with the constants multiplying, and that in two dimensions only
-  the simplification of the left inverse for the left-regular representation
-  on the contracted link is formalized (open scope restriction).
+  dimension and for the contraction of one link of two PEPS tensors, with
+  the constants multiplying. Finally it records the scope of the physical
+  entropy and local-equivalence results of Section 6: connected regular
+  regions, contiguous simply connected torus regions with periods at least
+  three, and no identification with the entire parent-Hamiltonian ground
+  space; these remaining restrictions are open.
 - `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
   records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
   operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product
@@ -541,14 +546,22 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
-- `ssvcw05_sequential_bond_upper_bound_scope.tex` records that only the upper
-  bounds `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of
-  the successive decompositions are formalized, not the exact dimension or the
-  equality with the Schmidt rank implied by "minimal resources".
+- `ssvcw05_sequential_bond_upper_bound_scope.tex` records the upper bounds
+  `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of the
+  successive decompositions, the formalized "minimal resources" (bond dimensions
+  equal to the cut ranks, least ancilla dimension equal to the largest cut rank,
+  and the bound `d^{⌊N/2⌋}` for every state), that the printed size is not
+  minimal for product states, and that the gauge conditions of the completeness
+  theorem are not formalized.
 - `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
   scheme without an ancilla presupposes two sites, since its first operation
   acts on sites 1 and 2, that the literal one-site reading of the theorem is
   false, and that the formal statements are for chains of length at least two.
+- `pgvwc07_sequential_with_ancilla_positive_length.tex` records that the
+  theorem on sequential generation with an ancilla fails on the empty chain and,
+  for the probabilistic scheme, for a zero-dimensional ancilla, and that the
+  formal set equalities are for chains of at least one site and, in the
+  probabilistic case, ancillas of dimension at least one.
 - `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
@@ -744,6 +757,14 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   arXiv:2405.00439; the two agree exactly when the stabilizer is normal, in
   particular for abelian groups, and `S_3` acting on three blocks separates
   them.
+- `gs24_truncation_detector_endpoint_dependence.tex` (false source claim)
+  records that the expectation value of the commutator of two truncated
+  symmetries depends on the choice of truncation: two circuit truncations
+  `Z_j X^{⊗[i,j]}` of the on-site symmetry `X^{⊗N}` give `-1` although the
+  anomaly is trivial; the detection holds for truncations whose walls on
+  `ψ_B` are the images under the symmetry of their walls on `ψ_A`, which the
+  formal theorem takes as the hypothesis that the truncations act on `ψ_A` as
+  the domain-wall strings.
 
 For the group matrix product operators of arXiv:2203.12563:
 
@@ -844,6 +865,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   the remaining repairs to the proof of Theorem 1 (normal versus injective,
   Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
   constant `ξ/4`, which is implicit in the source's final inequality.
+- `mswc24_depth_lower_bound_constant.tex` is the resolved local-correction
+  note for the constants of the closing inequality in the proof of Theorem 1:
+  `(1 - δ)^{k/2} < 1/e` gives a trace distance above `1 - 1/e - o(1)`, not
+  `√(3/4)`, and the factor `γ` of the final chain is undefined. Neither affects the rate
+  `4/ξ`; the formal bound `(ξ/4) log N ≤ T + (ξ/4) log(T+1) + C` and the
+  `Θ(log N)` depth at fixed error carry it.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
   in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
@@ -909,6 +936,17 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
+
+For the classification of translation-invariant MPS under circuits assisted by
+measurements and classical communication (arXiv:2103.13367, Theorem
+`MPS_classification`):
+
+- `psc21_mps_classification_scope.tex` (scope restriction) records that only
+  the direction from the trivial sequence to the MPS sequence is formalized,
+  for the canonical form with normal blocks and mixed transfer maps of
+  spectral radius below one, and for periodic states that are nonzero for all
+  large chain lengths; open: the converse direction needs channels acting on
+  arbitrary input states.
 
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
