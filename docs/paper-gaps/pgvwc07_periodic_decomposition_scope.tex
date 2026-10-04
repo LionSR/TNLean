@@ -9,11 +9,11 @@
 
 \title{Scope of the Formal Periodic Decomposition Relative to PGVWC07}
 \author{}
-\date{2026-08-12}
+\date{2026-10-04}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{Source theorem}
 
@@ -26,15 +26,15 @@ $A=(A_i)_{i=0}^{d-1}$ with $A_i\in M_D(\C)$. The associated completely
 positive transfer map is
 \begin{align}
     \mathcal E(X)
-        &= \sum_{i=0}^{d-1} A_i X A_i^\dagger.
+     & = \sum_{i=0}^{d-1} A_i X A_i^\dagger.
     \label{eq:pgvwc07_periodic_decomposition_scope_transfer_map}
 \end{align}
 Suppose $\mathcal E$ has exactly $p$ eigenvalues of modulus one. The source
 concludes:
 \begin{enumerate}
     \item If $p$ divides $N$, then $\psi$ is a superposition of $p$
-    $p$-periodic states, each admitting an MPS representation of bond
-    dimension $D$.
+          $p$-periodic states, each admitting an MPS representation of bond
+          dimension $D$.
     \item If $p$ does not divide $N$, then $\psi=0$.
 \end{enumerate}
 
@@ -43,7 +43,7 @@ map: there are orthogonal projectors $P_k$ that the matrices $A_i$ permute
 cyclically. Inserting their resolution of the identity,
 \begin{align}
     \sum_{k=0}^{p-1}P_k
-        &= \Id,
+     & = \Id,
     \label{eq:pgvwc07_periodic_decomposition_scope_source_projector_resolution}
 \end{align}
 into the periodic trace separates $\psi$ into the claimed $p$-periodic
@@ -52,43 +52,43 @@ summands
 
 \section{Formal boundary}
 
-TNLean proves three parts of the decomposition:
-\leanid{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd}
-is the boundary-aware divisible-length theorem;
-\leanid{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd} is the
-positive-length explicit component-chain theorem; and
-\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd} proves the vanishing
-branch. All three use \leanid{MPSTensor.IsPeriodic}. This predicate assumes a
-left-canonical orientation, irreducibility, positive period, and an exact
-$p$-th-root peripheral spectrum.
+The source-facing theorem
+\leanid{MPSTensor.pgvwc07_unital_stateVector_decomposition} now starts from
+exactly the one-block canonical conditions: unitality, a positive-definite
+adjoint fixed matrix, scalar fixed matrices, and the peripheral eigenvalue
+count. It constructs cyclic orthogonal projectors for the original tensor and
+proves both branches at all positive lengths. Diagonality of the adjoint fixed
+matrix is not needed; the printed diagonal case is included.
 
-The printed theorem instead begins with a one-block unital canonical
-representation and counts the peripheral eigenvalues of its transfer map
-\cite[Theorem~5]{PerezGarcia2007MPSReps}. The difference in normalized
-orientation remains tracked by issue~\#6232.
+The normalized companion declarations
+\leanid{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd},
+\leanid{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd}, and
+\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
+remain available for tensors already in the trace-preserving
+\leanid{MPSTensor.IsPeriodic} convention.
 
 Let $A=(A^i)_{i=0}^{d-1}$ be the formal MPS matrix family, and let
 $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be its cyclic projections. For a physical
 word
 \begin{align}
     \sigma
-        &= (i_0,\ldots,i_{N-1}),
+     & = (i_0,\ldots,i_{N-1}),
     \label{eq:pgvwc07_periodic_decomposition_scope_physical_word}
 \end{align}
 define the boundary component product
 \begin{align}
     F_u(\sigma)
-        &=
-        Q_u A^{i_0}Q_{u+1}A^{i_1}\cdots
-        Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
+     & =
+    Q_u A^{i_0}Q_{u+1}A^{i_1}\cdots
+    Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
     \label{eq:pgvwc07_periodic_decomposition_scope_boundary_component_product}
 \end{align}
 At every length $N\geq0$, the boundary-aware theorem gives
 \begin{align}
     \tr\!\left(A^{i_0}\cdots A^{i_{N-1}}\right)
-        &=
-        \sum_{u\in\mathbb Z/p\mathbb Z}
-        \tr\!\left(F_u(\sigma)\right).
+     & =
+    \sum_{u\in\mathbb Z/p\mathbb Z}
+    \tr\!\left(F_u(\sigma)\right).
     \label{eq:pgvwc07_periodic_decomposition_scope_boundary_trace_decomposition}
 \end{align}
 
@@ -100,7 +100,7 @@ with the corresponding coefficient of the explicit periodic component chain.
 At $N=0$, the word is empty and the boundary product retains its projector:
 \begin{align}
     F_u(\varnothing)
-        &= Q_u.
+     & = Q_u.
     \label{eq:pgvwc07_periodic_decomposition_scope_empty_boundary_product}
 \end{align}
 Consequently, the length-zero instance of
@@ -108,8 +108,8 @@ Consequently, the length-zero instance of
 is
 \begin{align}
     \tr(\Id)
-        &=
-        \sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
+     & =
+    \sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
     \label{eq:pgvwc07_periodic_decomposition_scope_empty_trace_decomposition}
 \end{align}
 
@@ -119,30 +119,37 @@ therefore forgets the boundary projector $Q_u$. The boundary-aware theorem
 closes the length-zero part of issue~\#6233 while leaving the positive-length
 explicit component-chain statement unchanged.
 
-\section{Remaining scope restriction}
+\section{Derivation from the canonical hypotheses}
 
-A source-facing theorem still requires a proof that the one-block unital
-canonical assumptions and peripheral-eigenvalue count in Theorem~5 of
-Ref.~\cite{PerezGarcia2007MPSReps} imply the hypotheses of
-\leanid{MPSTensor.IsPeriodic}. This proof must also account for the adjoint
-change between unital and left-canonical orientations.
+Unitality fixes the identity and makes the spectral radius one. The faithful
+adjoint fixed matrix and uniqueness of fixed matrices supply the spectral
+characterization of irreducibility. The cyclic peripheral spectrum then has a
+primitive generator, whose distinct powers identify its order with the given
+count $p$. Positivity and unitality rule out peripheral Jordan blocks, and the
+irreducible peripheral eigenspaces have dimension one. Thus the count agrees
+with algebraic multiplicity as well as distinct eigenvalues.
 
-Composing that normalization result with the three formal declarations listed
-in the preceding section would establish the printed periodic decomposition
-and vanishing dichotomy. No additional fixed-length coefficient calculation is
-needed.
+The formal declarations are
+\leanid{MPSTensor.isIrreducible_transferMap_of_unital_canonical},
+\leanid{MPSTensor.exists_peripheral_generator_of_unital_canonical}, and
+\leanid{MPSTensor.peripheral_genEigenspace_finrank_eq_one_of_unital_canonical}.
+The resulting cyclic projections act on the original virtual space and obey
+$Q_uA^i=A^iQ_{u+1}$. The existing corner-product calculation gives the state
+sum and the vanishing of every component when $p\nmid N$.
+
+The proof stays in the source's unital orientation. Unitality alone does not
+imply the trace-preserving hypothesis in \leanid{MPSTensor.IsPeriodic}; no
+such equivalence is asserted for the same tensor. Nor is the state silently
+conjugated or reversed by an adjoint-family substitution.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The positive-length restriction tracked
-by issue~\#6233 is closed. The divisible-period branch now has a boundary-aware
-coefficient decomposition for every $N\geq0$, while the explicit periodic
-component-chain theorem remains restricted to $N>0$, where its coefficients
-equal the boundary traces. The normalized-orientation restriction tracked by
-issue~\#6232 remains open. The current formal declarations are therefore
-normalized specializations of Theorem~5 of
-Ref.~\cite{PerezGarcia2007MPSReps}, not a derivation from its literal
-one-block unital hypotheses.
+\textbf{Verdict: resolved.} The source-facing periodic decomposition and
+vanishing dichotomy follow from the printed one-block canonical hypotheses.
+The former normalized-orientation restriction of issue~\#6232 is removed.
+The length-zero boundary identity remains the explicit convention already
+settled under issue~\#6233; the physical component-chain theorem is stated
+for positive lengths, as in the source.
 
 \bibliographystyle{alpha}
 \bibliography{references}

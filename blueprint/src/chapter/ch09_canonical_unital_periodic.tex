@@ -1,0 +1,76 @@
+\begin{lemma}[One-block canonical peripheral spectrum]
+    \label{lem:pgvwc07_unital_canonical_spectrum}
+    \lean{MPSTensor.isIrreducible_transferMap_of_unital_canonical,
+        MPSTensor.exists_peripheral_generator_of_unital_canonical,
+        MPSTensor.peripheral_genEigenspace_finrank_eq_one_of_unital_canonical}
+    \leanok
+    Let $D>0$ and let $A=(A^i)$ satisfy the one-block canonical conditions
+    of \cite[Theorem~4]{PerezGarcia2007Matrix}:
+    \begin{align}
+        \sum_i A^i(A^i)^\dagger        & =\Id,     &
+        \sum_i(A^i)^\dagger\Lambda A^i & =\Lambda, & \Lambda & >0,
+        \label{eq:pgvwc07_unital_canonical_conditions}
+    \end{align}
+    and every fixed matrix of $\E_A$ is a scalar multiple of $\Id$.
+    Diagonality of $\Lambda$ is unnecessary for the conclusions below.
+    Then $\E_A$ is irreducible. If its peripheral spectrum has cardinality
+    $p$, then $p>0$ and it is precisely
+    $\{\gamma^k:0\leq k<p\}$ for a primitive $p$-th root $\gamma$.
+    Each peripheral maximal generalized eigenspace has dimension one.
+    Thus counting distinct peripheral eigenvalues also counts their
+    algebraic multiplicities.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Unitality fixes $\Id$ and gives spectral radius one. Together with the
+    faithful adjoint fixed point $\Lambda$ and uniqueness of positive fixed
+    matrices up to scalars, these are the spectral characterization of
+    irreducibility. The irreducible unital peripheral spectrum is cyclic.
+    Its primitive-root powers are distinct, so its cardinality identifies
+    the cyclic order with $p$. Positivity and unitality exclude nontrivial
+    peripheral Jordan blocks; the irreducible peripheral eigenspaces are
+    one-dimensional. These are the peripheral spectral facts used in
+    \cite[proof of Theorem~5]{PerezGarcia2007Matrix}.
+\end{proof}
+
+\begin{theorem}[Periodic decomposition from the unital canonical form]
+    \label{thm:pgvwc07_unital_periodic_decomposition}
+    \lean{MPSTensor.pgvwc07_unital_stateVector_decomposition}
+    \leanok
+    \uses{def:pgvwc07_projector_component_chain,
+        lem:pgvwc07_unital_canonical_spectrum}
+    Under the hypotheses of
+    Lemma~\ref{lem:pgvwc07_unital_canonical_spectrum}, let $p$ count the
+    peripheral eigenvalues. There are nonzero orthogonal projections
+    $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ satisfying
+    \begin{align}
+        \sum_uQ_u & =\Id, & Q_uA^i & =A^iQ_{u+1}.
+        \label{eq:pgvwc07_unital_projector_shift}
+    \end{align}
+    For every positive ring length $N$, define the component chains by
+    $B_{u,j}^i=Q_{u+j}A^iQ_{u+j+1}$. Each chain repeats a $p$-site pattern
+    and has bond dimension $D$, and
+    \begin{align}
+        \ket{V^{(N)}(A)} & =\sum_{u\in\mathbb Z/p\mathbb Z}
+        \ket{V^{(N)}(B_u)}.
+        \label{eq:pgvwc07_unital_periodic_decomposition}
+    \end{align}
+    If $p\nmid N$, every component vector is zero, hence so is the original
+    vector. This is \cite[Theorem~5]{PerezGarcia2007Matrix}, directly in
+    its unital orientation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc07_unital_canonical_spectrum, lem:kraus_cyclic_shift,
+        thm:pgvwc07_boundary_trace_coefficients}
+    The cyclic peripheral decomposition supplies orthogonal projectors with
+    $\E_A(Q_{u+1})=Q_u$. Their sum is the identity, and cyclicity makes each
+    nonzero. The Kraus shift gives
+    (\ref{eq:pgvwc07_unital_projector_shift}) for the original matrices
+    $A^i$. Inserting the resolution of the identity into the trace proves
+    (\ref{eq:pgvwc07_unital_periodic_decomposition}). At a non-divisible
+    length, the starting and final projectors differ; their orthogonality
+    and cyclicity of the trace kill each component.
+\end{proof}

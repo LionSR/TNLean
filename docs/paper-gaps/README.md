@@ -989,3 +989,11 @@ For the finite-round extension of arXiv:2103.13367:
   number of composed `QCcc` blocks required by the asymptotic source relation.
   One source block may already contain sequential measurements at many sites;
   the adaptive tree does not record the required source-block decomposition.
+
+For the periodic decomposition in PGVWC07 Theorem 5:
+
+- `pgvwc07_periodic_decomposition_scope.tex` records the resolved normalization
+  boundary: the one-block unital canonical hypotheses now yield the peripheral
+  period and the original-tensor component decomposition. Non-divisible ring
+  lengths vanish componentwise; the separate empty-word boundary convention
+  remains explicit.

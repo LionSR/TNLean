@@ -78,8 +78,7 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
     calculation reduces to (\ref{eq:pgvwc07_empty_boundary_decomposition}).
 \end{proof}
 
-% Scope restriction (normalized orientation): this is the IsPeriodic surface,
-% not yet a theorem from PGVWC07's one-block unital hypotheses. Issue #6232.
+% The normalized companion is retained for the periodic-form consumers below.
 \begin{theorem}[Normalized periodic state-vector decomposition]
     \label{thm:pgvwc07_periodic_state_vector_decomposition}
     \lean{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd,
@@ -128,6 +127,8 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
     $Q_{u+N}\ne Q_u$; cyclicity of the trace and orthogonality give
     $\tr F_u(\sigma)=0$ for every $u$ and $\sigma$.
 \end{proof}
+
+\input{chapter/ch09_canonical_unital_periodic}
 
 Two normalizations appear. The unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used in

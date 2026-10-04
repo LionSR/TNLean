@@ -55,4 +55,6 @@ import TNLean.MPS.Periodic.SectorPhaseWord
 import TNLean.MPS.Periodic.StateVectorDecomposition
 import TNLean.MPS.Periodic.StepOrbitSectors
 import TNLean.MPS.Periodic.Symmetry
+import TNLean.MPS.Periodic.UnitalCanonicalSpectrum
+import TNLean.MPS.Periodic.UnitalStateVectorDecomposition
 import TNLean.MPS.Periodic.ZGauge
