@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Symmetry
 
 import TNLean.MPS.Symmetry.AdjointFixedSpaceDimension
+import TNLean.MPS.Symmetry.BlockingVirtualCovariance
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.Symmetry.BondInterpolationSymmetry
 import TNLean.MPS.Symmetry.BondProductContinuity
@@ -34,6 +35,8 @@ import TNLean.MPS.Symmetry.CommonPhysicalFixedPointGroundPath
 import TNLean.MPS.Symmetry.CommonPhysicalFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
+import TNLean.MPS.Symmetry.CompactSupportVirtualTransport
+import TNLean.MPS.Symmetry.CompactSupportedSequenceClass
 import TNLean.MPS.Symmetry.CompactUnitalTensors
 import TNLean.MPS.Symmetry.ContinuousCanonicalNormalization
 import TNLean.MPS.Symmetry.ContinuousInvariantCompression
