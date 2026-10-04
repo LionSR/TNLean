@@ -60,24 +60,15 @@ lemma exists_physicalObservableTransfer_eq {A : MPSTensor d D} {L : ℕ}
     ∃ O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
       physicalObservableTransfer A L O = Φ := by
   classical
-  have hcoeff : ∀ a b : Fin D, ∃ c : (Fin L → Fin d) → ℂ,
-      ∑ σ, c σ • Kraus.evalWord A (List.ofFn σ) = Matrix.single a b 1 := by
-    intro a b
-    have hmem : Matrix.single a b (1 : ℂ) ∈ Submodule.span ℂ
-        (Set.range fun σ : Fin L → Fin d ↦ Kraus.evalWord A (List.ofFn σ)) := by
-      rw [hL.span_eq_top]
-      exact Submodule.mem_top
-    obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hmem
-    exact ⟨c, hc⟩
-  choose C hC using hcoeff
-  let Ounit : Fin D → Fin D → Fin D → Fin D →
-      Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
-    fun a b c e τ σ ↦ C a b σ * starRingEnd ℂ (C c e τ)
-  have hunit : ∀ a b c e (X : Matrix (Fin D) (Fin D) ℂ),
-      physicalObservableTransfer A L (Ounit a b c e) X =
-        Matrix.single a b 1 * X * (Matrix.single c e 1)ᴴ := by
-    intro a b c e X
-    rw [physicalObservableTransfer_coeff_mul, hC, hC]
+  have hunit : ∀ a b c e : Fin D,
+      ∃ O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
+        ∀ X : Matrix (Fin D) (Fin D) ℂ,
+          physicalObservableTransfer A L O X =
+            Matrix.single a b 1 * X * (Matrix.single c e 1)ᴴ := by
+    intro a b c e
+    apply exists_physicalObservableTransfer_mul_of_mem_span
+    all_goals rw [hL.span_eq_top]; exact Submodule.mem_top
+  choose Ounit hunit using hunit
   refine ⟨∑ a, ∑ b, ∑ c, ∑ e, (Φ (Matrix.single b e 1)) a c • Ounit a b c e, ?_⟩
   apply LinearMap.ext
   intro X
@@ -100,23 +91,107 @@ lemma exists_physicalObservableTransfer_eq {A : MPSTensor d D} {L : ℕ}
 
 /-! ### The length-independent part of the correlator -/
 
-/-- The length-independent part of the connected correlator of observables
-`X` and `Y` on blocks of `L` sites, at `t` unobserved sites between the blocks:
-`Tr E_X((E_A - P)^t (E_Y ρ))`, with `P = fixedPointProj ρ`, `P(Z) = (Tr Z / Tr ρ) ρ`.
-In the gauge `E_A = |ρ⟩⟨1| + R` of arXiv:2307.01696, eq. (5), with `Tr ρ = 1`,
-`P` is the leading term `|R_1⟩⟨L_1|` of the transfer matrix in the Supplemental
-Material, proof of Lemma 2.
+/-- The connected fixed-point contraction of physical observables on independent
+finite blocks, with `n` unobserved sites between them. The inner insertion is
+centered so that the formula includes adjacent blocks (`n = 0`).
 
-This is the term that remains of the connected correlator `Δ` of
-arXiv:2307.01696, Supplemental Material, proof of Lemma 2, once the long arc
-`E_1^{N-s-1}` is replaced by its leading term `|R_1⟩⟨L_1|`; the source writes
-it as `∑_{i ≥ 2} λ_i^{s-1} ⟨L_1|E_O|R_i⟩⟨L_i|E_{O'}|R_1⟩`. -/
+Reference: arXiv:2011.12127, Section II.B.3, lines 433–441. In a trace-preserving
+gauge with normalized fixed state, this equals the two-point expectation minus
+the product of the one-point expectations. -/
+noncomputable def physicalConnectedCorrelator (A : MPSTensor d D)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Matrix.trace ρ ≠ 0) (L₁ L₂ : ℕ)
+    (X : Matrix (Cfg d L₁) (Cfg d L₁) ℂ)
+    (Y : Matrix (Cfg d L₂) (Cfg d L₂) ℂ) (n : ℕ) : ℂ :=
+  Matrix.trace (physicalObservableTransfer A L₁ X
+    (((Kraus.transferMap A - fixedPointProj ρ hρ) ^ n)
+      (physicalObservableTransfer A L₂ Y ρ -
+        fixedPointProj ρ hρ (physicalObservableTransfer A L₂ Y ρ))))
+
+/-- The length-independent connected correlator of two observables supported on
+blocks of the same length, including adjacent blocks.
+
+This specializes the connected fixed-point contraction to the equal-support
+observables of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
 noncomputable def limitCorrelator (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Matrix.trace ρ ≠ 0) (L : ℕ)
     (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (t : ℕ) : ℂ :=
-  Matrix.trace (physicalObservableTransfer A L X
-    (((Kraus.transferMap A - fixedPointProj ρ hρ) ^ t)
-      (physicalObservableTransfer A L Y ρ)))
+  physicalConnectedCorrelator A ρ hρ L L X Y t
+
+/-- Centering the input removes the fixed-point component of every power,
+including the zeroth power. This is the transfer-map reduction in
+arXiv:2011.12127, Section II.B.3, lines 433–441. -/
+private theorem compl_pow_apply_centered
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0)
+    (hTP : IsTracePreservingMap E) (hFix : E ρ = ρ)
+    (Z : Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
+    ((E - fixedPointProj ρ htr) ^ n) (Z - fixedPointProj ρ htr Z) =
+      (E ^ n) Z - fixedPointProj ρ htr Z := by
+  have hEP : E (fixedPointProj ρ htr Z) = fixedPointProj ρ htr Z := by
+    simp [fixedPointProj, hFix]
+  have hPE : ∀ k : ℕ, fixedPointProj ρ htr ((E ^ k) Z) = fixedPointProj ρ htr Z := by
+    intro k
+    induction k with
+    | zero => rfl
+    | succ k ih =>
+      simpa [pow_succ', Module.End.mul_apply, fixedPointProj, hTP ((E ^ k) Z)] using ih
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    rw [pow_succ', Module.End.mul_apply, ih]
+    simp only [LinearMap.sub_apply, map_sub, hEP, hPE n, fixedPointProj_idempotent,
+      sub_self, sub_zero, pow_succ', Module.End.mul_apply]
+
+/-- The centered physical contraction equals the two-point expectation minus
+the product of the one-point expectations, for every separation.
+Reference: arXiv:2011.12127, Section II.B.3, lines 433–441. -/
+theorem physicalConnectedCorrelator_eq_twoPoint_sub
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (htr : Matrix.trace ρ ≠ 0) (hTr : Matrix.trace ρ = 1)
+    (hTP : ∑ i, (A i)ᴴ * A i = 1) (hFix : Kraus.transferMap A ρ = ρ)
+    (L₁ L₂ : ℕ) (X : Matrix (Cfg d L₁) (Cfg d L₁) ℂ)
+    (Y : Matrix (Cfg d L₂) (Cfg d L₂) ℂ) (n : ℕ) :
+    physicalConnectedCorrelator A ρ htr L₁ L₂ X Y n =
+      Matrix.trace (physicalObservableTransfer A L₁ X
+        (((Kraus.transferMap A) ^ n) (physicalObservableTransfer A L₂ Y ρ))) -
+      Matrix.trace (physicalObservableTransfer A L₁ X ρ) *
+        Matrix.trace (physicalObservableTransfer A L₂ Y ρ) := by
+  rw [physicalConnectedCorrelator, compl_pow_apply_centered _ _ htr
+    (Kraus.isTracePreservingMap_mapLM_of_isTP A hTP) hFix]
+  simp [map_sub, fixedPointProj, hTr, map_smul, Matrix.trace_smul, mul_comm]
+
+/-- At positive separation the complementary transfer power already removes
+the disconnected contribution, as in arXiv:2307.01696, Supplemental Material,
+proof of Lemma 2. -/
+theorem physicalConnectedCorrelator_eq_compl_pow_of_pos
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (htr : Matrix.trace ρ ≠ 0) (hTP : ∑ i, (A i)ᴴ * A i = 1)
+    (hFix : Kraus.transferMap A ρ = ρ)
+    (L₁ L₂ : ℕ) (X : Matrix (Cfg d L₁) (Cfg d L₁) ℂ)
+    (Y : Matrix (Cfg d L₂) (Cfg d L₂) ℂ) {n : ℕ} (hn : 1 ≤ n) :
+    physicalConnectedCorrelator A ρ htr L₁ L₂ X Y n =
+      Matrix.trace (physicalObservableTransfer A L₁ X
+        (((Kraus.transferMap A - fixedPointProj ρ htr) ^ n)
+          (physicalObservableTransfer A L₂ Y ρ))) := by
+  rw [physicalConnectedCorrelator, compl_pow_apply_centered _ _ htr
+    (Kraus.isTracePreservingMap_mapLM_of_isTP A hTP) hFix,
+    pow_eq_fixedPointProj_add_compl_pow _ htr
+      (Kraus.isTracePreservingMap_mapLM_of_isTP A hTP) hFix hn]
+  simp only [LinearMap.add_apply, add_sub_cancel_left]
+
+/-- The equal-support limit correlator has the uncentered complementary-power
+formula at positive separation, as in arXiv:2307.01696, Supplemental Material,
+proof of Lemma 2. -/
+theorem limitCorrelator_eq_compl_pow_of_pos
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (htr : Matrix.trace ρ ≠ 0) (hTP : ∑ i, (A i)ᴴ * A i = 1)
+    (hFix : Kraus.transferMap A ρ = ρ) (L : ℕ)
+    (X Y : Matrix (Cfg d L) (Cfg d L) ℂ) {n : ℕ} (hn : 1 ≤ n) :
+    limitCorrelator A ρ htr L X Y n =
+      Matrix.trace (physicalObservableTransfer A L X
+        (((Kraus.transferMap A - fixedPointProj ρ htr) ^ n)
+          (physicalObservableTransfer A L Y ρ))) :=
+  physicalConnectedCorrelator_eq_compl_pow_of_pos A ρ htr hTP hFix L L X Y hn
 
 /-- For an eigenvector `R` of the transfer map with eigenvalue `λ ≠ 1`, there
 are observables on `L` sites whose length-independent correlator is exactly
@@ -164,8 +239,9 @@ lemma exists_limitCorrelator_eq_pow {A : MPSTensor d D} {L : ℕ}
   obtain ⟨Y, hY⟩ := exists_physicalObservableTransfer_eq hL
     (LinearMap.smulRight (Matrix.traceLinearMap (Fin D) ℂ ℂ) R)
   refine ⟨X, Y, fun _ t ↦ ?_⟩
-  simp only [limitCorrelator, hX, hY, Matrix.traceLinearMap_apply, hρ, one_smul, hpow,
-    LinearMap.smulRight_apply, map_smul, Matrix.trace_smul, smul_eq_mul]
+  simp only [limitCorrelator, physicalConnectedCorrelator, hX, hY,
+    Matrix.traceLinearMap_apply, hρ, one_smul, LinearMap.smulRight_apply, hP, htrR,
+    zero_smul, sub_zero, hpow, map_smul, Matrix.trace_smul, smul_eq_mul]
   simp [φ, hij]
 
 end MPSTensor

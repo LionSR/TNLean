@@ -1613,6 +1613,7 @@ $A$ along $w$.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:physical_observable_word_span_mul, lem:ldp_observable_transfer_products}
     Choose coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$. The operator
     with matrix elements $\bra{w'}X\ket{w}=c^{ab}_w\overline{c^{ce}_{w'}}$ gives
     $\E_X(Z)=e_{ab}Ze_{ec}=Z_{be}\,e_{ac}$. These maps span all linear maps on
@@ -1676,7 +1677,8 @@ $A$ along $w$.
     \end{align}
     When $\rho$ is the fixed point of the gauge (\ref{eq:ldp_normal_gauge}),
     the left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
-    $t=s-L-1$; it is bilinear in $(X,Y)$. This is the choice of observables in
+    $t=s-L-1$; it is bilinear in $(X,Y)$. The inner insertion has zero
+    trace, so centering it leaves the formula unchanged even at $t=0$. This is the choice of observables in
     the proof of \cite[Lemma~2]{Malz2024Preparation}, without the source's
     requirement that the one-point functions vanish.
 \end{lemma}
@@ -1748,15 +1750,17 @@ $A$ along $w$.
          & =\lvert\lambda\rvert^t\sum_{j=1}^Ka_j\mu_j^{\,t}.
         \notag
     \end{align}
-    This replaces the choice of observables in the proof of
-    \cite[Lemma~2]{Malz2024Preparation} by one with Hermitian observables: for
+    The inner insertion is traceless, so the displayed expression equals the
+    centered connected contraction also at $t=0$. This replaces the choice
+    of observables in the proof of \cite[Lemma~2]{Malz2024Preparation}
+    by one with Hermitian observables: for
     non-real $\lambda$ the eigenvector is not Hermitian, and a Hermitian
     observable pairs it with its adjoint, an eigenvector for $\bar\lambda$.
 \end{lemma}
 \begin{proof}
     \leanok
     This is the second and third paragraph of the proof of
-    Theorem~\ref{thm:ldp_decaying_correlations}: a Hermitian vector $v$ and a
+    Theorem~\ref{thm:ldp_decaying_correlations}: a traceless Hermitian vector $v$ and a
     functional $\ell$ with $\ell(Z^\dagger)=\overline{\ell(Z)}$ are built from
     an eigenvector $R$ and its adjoint, the maps $Z\mapsto\Tr(Z)\,v$ and
     $Z\mapsto\ell(Z)\,\rho$ are realized by Hermitian observables through
