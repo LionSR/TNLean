@@ -355,9 +355,9 @@ topological parameter space, assuming continuity only at the base point.
 The support dimension may vary; stationary densities, support frames, and
 virtual actions remain pointwise choices. Only the base supported tensor
 must be injective, and its ambient adjoint fixed space must be
-one-dimensional. This applies to convergent sequences and their limits;
-identifying the limiting supported tensor with the prescribed base rays
-remains separate.
+one-dimensional. Thus it applies to convergent sequences and their limits.
+The comparison with the prescribed base rays uses the stationary-support
+identification described below.
 
 The compact-limit argument now has the following proved auxiliary steps.
 Unital tensors and normalized stationary densities admit a common convergent
@@ -375,6 +375,27 @@ stationary matrix is unique. These results assume the transfer spectral
 bound; they do not derive it from the physical Hamiltonian gap, or assert
 exact equality of the ambient and compressed finite-ring rays.
 
+The full stationary support compression is now proved unital, irreducible,
+and normal under the supplied transfer spectral bound. Its positive-length
+periodic coefficients and those of the complementary corner sum exactly to
+the ambient coefficients. A vanishing complementary periodic norm can
+therefore be removed before the fundamental theorem identifies the retained
+bond dimension and gauge phase from an overlap of modulus tending to one.
+Trace-adjoint duality also identifies the dimensions of the primal and
+adjoint fixed spaces. Their pointwise synthesis identifies the actual normal
+support compression from a unit limiting overlap, deriving stationary
+uniqueness and transient decay internally. The declaration
+\leanid{MPSTensor.eventually_cohomologousTo_of_tendsto_unital_periodic_lines}
+now combines this identification with unitary transport and the supported-family
+class theorem on a convergent sequence and its limit. Eventual equality of the
+limiting periodic lines with those of a unital injective reference, together
+with supplied strict transfer spectral bounds, gives the reference virtual
+class eventually along the sequence. Continuity of the stationary densities,
+support frames, and virtual matrices is not assumed. Deriving the required
+limiting-line comparison for the physical path and the transfer bound from
+its Hamiltonian gap remains separate.
+
+\newpage
 The required realization need not be obtainable by gauging the supplied
 ambient tensor. For example, let $a$ be a normalized one-site vector and
 put $B^i=a_iI_2$. At every positive length $N$, the periodic MPS vector is
@@ -388,9 +409,10 @@ ambient realization recorded in the path. The checked declarations
 \leanid{MPSTensor.repeatedProductTensor_fixedSpace_finrank} and
 \leanid{MPSTensor.repeatedProductTensor_samePositiveMpvRay} record the
 stationary-space dimension and periodic-ray comparison for the product
-vector $a=\ket{0}$. The missing theorem must choose
-a new continuous unital realization of the same ground-state rays, rather
-than assert that every supplied realization admits such a gauge.
+vector $a=\ket{0}$. The remaining converse must obtain controlled minimal realizations of the
+same ground-state rays. The compact-sequence approach requires convergence
+along a subsequence and a uniform transfer bound; it does not require a
+continuous unital realization on the whole parameter interval.
 
 \section{Verdict}
 
