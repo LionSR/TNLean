@@ -974,6 +974,13 @@ measurements and classical communication (arXiv:2103.13367, Theorem
   large chain lengths; open: the converse direction needs channels acting on
   arbitrary input states.
 
+- `psc21_physical_port_simulation_scope.tex` records the derived
+  `2 * ceil(log_d B)` overhead per native layer, hence total intersite depth
+  at most `2 * ceil(log_d B) * T` for a depth-`T` bounded native channel protocol,
+  including exact reference preservation, original physical-port
+  input/output and product-zero designated memory reset. It separates the
+  remaining local dilation and source QCcc protocol-block witness conditions.
+
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
 - `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
