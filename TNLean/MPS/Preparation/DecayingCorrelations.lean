@@ -60,24 +60,15 @@ lemma exists_physicalObservableTransfer_eq {A : MPSTensor d D} {L : ℕ}
     ∃ O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
       physicalObservableTransfer A L O = Φ := by
   classical
-  have hcoeff : ∀ a b : Fin D, ∃ c : (Fin L → Fin d) → ℂ,
-      ∑ σ, c σ • Kraus.evalWord A (List.ofFn σ) = Matrix.single a b 1 := by
-    intro a b
-    have hmem : Matrix.single a b (1 : ℂ) ∈ Submodule.span ℂ
-        (Set.range fun σ : Fin L → Fin d ↦ Kraus.evalWord A (List.ofFn σ)) := by
-      rw [hL.span_eq_top]
-      exact Submodule.mem_top
-    obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hmem
-    exact ⟨c, hc⟩
-  choose C hC using hcoeff
-  let Ounit : Fin D → Fin D → Fin D → Fin D →
-      Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ :=
-    fun a b c e τ σ ↦ C a b σ * starRingEnd ℂ (C c e τ)
-  have hunit : ∀ a b c e (X : Matrix (Fin D) (Fin D) ℂ),
-      physicalObservableTransfer A L (Ounit a b c e) X =
-        Matrix.single a b 1 * X * (Matrix.single c e 1)ᴴ := by
-    intro a b c e X
-    rw [physicalObservableTransfer_coeff_mul, hC, hC]
+  have hunit : ∀ a b c e : Fin D,
+      ∃ O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
+        ∀ X : Matrix (Fin D) (Fin D) ℂ,
+          physicalObservableTransfer A L O X =
+            Matrix.single a b 1 * X * (Matrix.single c e 1)ᴴ := by
+    intro a b c e
+    apply exists_physicalObservableTransfer_mul_of_mem_span
+    all_goals rw [hL.span_eq_top]; exact Submodule.mem_top
+  choose Ounit hunit using hunit
   refine ⟨∑ a, ∑ b, ∑ c, ∑ e, (Φ (Matrix.single b e 1)) a c • Ounit a b c e, ?_⟩
   apply LinearMap.ext
   intro X
