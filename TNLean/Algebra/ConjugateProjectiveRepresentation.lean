@@ -174,7 +174,8 @@ theorem factorSystem_rephase {ω' : ScalarCocycle G}
   apply (eq_div_iff (ξ (g * h)).ne_zero).2
   calc
     (ω' g h : ℂ) * (ξ (g * h) : ℂ) =
-        (ξ g : ℂ) * (parityConj (α g) (ξ h : ℂ) * (ω g h : ℂ)) := hscalar.symm
+        (ξ g : ℂ) * (parityConj (α g) (ξ h : ℂ) * (ω g h : ℂ)) := by
+          simpa only [mul_left_comm] using hscalar.symm
     _ = _ := by ring
 
 end ConjugateProjectiveRepresentation
@@ -250,9 +251,13 @@ theorem isMulCocycle₂_toUnits (α : G →* SymmetryParity) (ω : G → G → u
     letI := parityUnitsAction α
     groupCohomology.IsMulCocycle₂ (fun p : G × G => Unitary.toUnits (ω p.1 p.2)) := by
   intro g h k
-  apply Units.ext
-  have h := congrArg (fun z : unitary ℂ => (z : ℂ)) (hω g h k)
-  simpa only [Submonoid.coe_mul, parityUnitary_coe] using h
+  change Unitary.toUnits (ω (g * h) k) * Unitary.toUnits (ω g h) =
+    Units.map (parityConj (α g)).toMonoidHom (Unitary.toUnits (ω h k)) *
+      Unitary.toUnits (ω g (h * k))
+  have heq := congrArg Unitary.toUnits (hω g h k)
+  change Unitary.toUnits (ω (g * h) k * ω g h) =
+    Unitary.toUnits (parityUnitary (α g) (ω h k) * ω g (h * k)) at heq
+  simpa only [map_mul, parityUnitary_toUnits] using heq
 
 /-- A unit-modulus complex unit, regarded as an element of U(1). -/
 def unitaryScalar (z : Units ℂ) (hz : star (z : ℂ) * (z : ℂ) = 1) : unitary ℂ :=
@@ -292,7 +297,7 @@ variable {α : G →* SymmetryParity} {D : ℕ}
 
 /-- A scalar rephasing of unitary virtual matrices gives a coboundary in
 U(1). The scalar's unit modulus is derived from the matrix relation. -/
-theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G → G → unitary ℂ}
+theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G → G → _root_.unitary ℂ}
     (ρ : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω g h))
       (D := D))
     (ρ' : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω' g h))
@@ -301,7 +306,7 @@ theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G → G → unitary ℂ}
       (ξ g : ℂ) • (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) :
     letI := parityUnitaryAction α
     groupCohomology.IsMulCoboundary₂ (Function.uncurry (ω' / ω)) := by
-  let ξu : G → unitary ℂ := fun g => unitaryScalar (ξ g) (ρ.rephase_unitary ρ' hD ξ hξ g)
+  let ξu : G → _root_.unitary ℂ := fun g => unitaryScalar (ξ g) (ρ.rephase_unitary ρ' hD ξ hξ g)
   have hξu (g : G) : Unitary.toUnits (ξu g) = ξ g := Units.ext rfl
   refine ⟨ξu, fun g h => ?_⟩
   change parityUnitary (α g) (ξu h) / ξu (g * h) * ξu g = ω' g h / ω g h
@@ -313,7 +318,7 @@ theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G → G → unitary ℂ}
 /-- Pointwise scalar gauge equivalence preserves the actual U(1)-valued
 second cohomology class. No unit-modulus assumption on the supplied scalars
 is needed, since both virtual representations are unitary. -/
-theorem parityUnitaryH2Class_eq_of_rephase {ω ω' : G → G → unitary ℂ}
+theorem parityUnitaryH2Class_eq_of_rephase {ω ω' : G → G → _root_.unitary ℂ}
     (ρ : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω g h))
       (D := D))
     (ρ' : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω' g h))
