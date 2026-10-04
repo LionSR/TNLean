@@ -987,7 +987,10 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
-  holds, and the rate correction for the decay bound.
+  holds, and the rate correction for the decay bound. The corrected
+  all-separation binomial and polynomial-plus-transient expansions are now
+  proved for normal tensors in an arbitrary bond basis. The broader singular
+  fixed-matrix source class remains open.
 
 For the finite-round extension of arXiv:2103.13367:
 
