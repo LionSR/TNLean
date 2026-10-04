@@ -1,0 +1,221 @@
+\section{Bounded physical leaves and arbitrary chain lengths}
+\label{sec:ldp_unequal_mera}
+
+The isometries in the network need not be equal within a layer.
+Allowing unequal positive block lengths removes the divisibility restriction,
+while a uniform bound on the physical leaves keeps every local dimension
+independent of the chain length and the requested accuracy.
+
+\begin{definition}[Isometry trees with bounded leaves]
+    \label{def:ldp_bounded_isometry_tree}
+    \lean{MPSPreparation.IsometryTree, MPSPreparation.IsometryTree.matrix,
+        MPSPreparation.IsometryTree.matrix_fork_apply,
+        MPSPreparation.IsometryTree.cast, MPSPreparation.IsometryTree.matrix_cast}
+    \notready
+    Fix a physical dimension $d$, a virtual dimension $\chi$ and a leaf
+    bound $R$. A depth-zero tree on $n$ sites, with $1\le n\le R$, is
+    an isometry $V\colon\C^\chi\to(\C^d)^{\otimes n}$.
+    A tree of coarse depth $h+1$ consists of two trees $T_1,T_2$ of
+    coarse depth $h$, on $n_1,n_2$ sites, and an isometry
+    $W\colon\C^\chi\to\C^\chi\otimes\C^\chi$.
+    Its contraction is
+    \begin{align}
+        T & =(T_1\otimes T_2)W
+        \colon\C^\chi\longrightarrow(\C^d)^{\otimes(n_1+n_2)}.
+        \label{eq:ldp_unequal_tree_contraction}
+    \end{align}
+    The physical sites keep their order under concatenation.
+    A tree of coarse depth $h$ has $2^h$ leaves and $h+1$ isometry
+    layers, counting the finest layer.
+\end{definition}
+
+\begin{theorem}[Isometric contraction of a tree]
+    \label{thm:ldp_bounded_tree_isometry}
+    \lean{MPSPreparation.IsometryTree.isIsometry_matrix}
+    \notready
+    \uses{def:ldp_bounded_isometry_tree}
+    Every tree contraction $T$ satisfies $T^\dagger T=\Id$.
+\end{theorem}
+\begin{proof}
+    Induct on the tree. At a binary vertex,
+    $T^\dagger T=W^\dagger(T_1^\dagger T_1\otimes T_2^\dagger T_2)W
+        =W^\dagger W=\Id$.
+\end{proof}
+
+\begin{theorem}[Polar trees for unequal block lengths]
+    \label{thm:ldp_unequal_polar_tree}
+    \lean{MPSPreparation.exists_isometryTree_matrix_eq_cfgPolarIso}
+    \notready
+    \uses{def:ldp_bounded_isometry_tree, thm:ldp_bounded_tree_isometry,
+        lem:ldp_polar_merge}
+    Let $s\ge1$, and assume that $A$ blocked over every $m\ge s$ sites
+    is injective. If $2^h s\le n\le2^h c$, its polar isometry $V_n$
+    is the contraction of a tree of coarse depth $h$ whose physical
+    leaves contain at most $c$ sites.
+\end{theorem}
+\begin{proof}
+    Split $n$ into $n_1=\lfloor n/2\rfloor$ and $n_2=n-n_1$.
+    At a successor depth both satisfy
+    $2^h s\le n_i\le2^h c$; no rounding error is added to the upper
+    bound, since its endpoint is even. The polar-merge identity gives
+    $V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W_{n_1,n_2}$.
+    Injectivity makes $W_{n_1,n_2}$ an isometry. Induction gives the
+    two descendants, and at depth zero the polar isometry is itself
+    the bounded leaf.
+\end{proof}
+
+\begin{definition}[Finite-range networks on unequal blocks]
+    \label{def:ldp_unequal_mera}
+    \lean{MPSPreparation.UnequalMERA, MPSPreparation.UnequalMERA.topPair,
+        MPSPreparation.UnequalMERA.treeMatrix,
+        MPSPreparation.UnequalMERA.treeMatrix_apply,
+        MPSPreparation.UnequalMERA.state, MPSPreparation.UnequalMERA.state_apply,
+        MPSPreparation.UnequalMERA.ofTrees}
+    \notready
+    \uses{def:ldp_bounded_isometry_tree}
+    Let $D,M\ge1$, let $\ell_0+\cdots+\ell_{M-1}=N$, and let $T_k$
+    be trees of common coarse depth $h$, virtual dimension $D^2$ and
+    physical leaf bound $R$, on their respective blocks of $\ell_k$
+    sites. A unitary $u$ on $\C^D\otimes\C^D$ prepares a pair
+    $\ket\omega=u\ket{0,0}$. The network state is
+    \begin{align}
+        \ket\psi
+         & =\left(\bigotimes_{k=0}^{M-1}T_k\right)
+        \bigotimes_{k=0}^{M-1}\ket\omega_{R_kL_{k+1}},
+        \label{eq:ldp_unequal_mera_state}
+    \end{align}
+    with cyclic indexing of the pair legs. All lower disentanglers
+    are identities. The network has $h+2$ layers, including the finest
+    isometries and the top unitary layer. Internal tree legs have
+    dimension $D^2$; every physical leaf has dimension at most $d^R$.
+\end{definition}
+
+\begin{theorem}[Normalization and arbitrary top pairs]
+    \label{thm:ldp_unequal_mera_norm}
+    \lean{MPSPreparation.UnequalMERA.isIsometry_treeMatrix,
+        MPSPreparation.UnequalMERA.sum_star_topPair_mul,
+        MPSPreparation.UnequalMERA.norm_state,
+        MPSPreparation.UnequalMERA.exists_disentangler_pair,
+        MPSPreparation.UnequalMERA.exists_of_trees}
+    \notready
+    \uses{thm:ldp_bounded_tree_isometry, def:ldp_unequal_mera,
+        thm:ldp_chain_block_iso_inner, thm:ldp_isometric_extension_overlap,
+        lem:ldp_unitary_implementing_isometry}
+    The state in (\ref{eq:ldp_unequal_mera_state}) has norm one.
+    Conversely, for any such forest and any unit pair $\ket\omega$,
+    a top unitary realizes that pair and hence the forest contraction.
+\end{theorem}
+\begin{proof}
+    Complete the unit column $\ket\omega$ to a unitary taking
+    $\ket{0,0}$ to it. Tensor products of the normalized pairs have
+    norm one, and the isometric forest preserves their norm.
+\end{proof}
+
+\begin{theorem}[Polar forests and the block-isometry state]
+    \label{thm:ldp_unequal_mera_polar_state}
+    \lean{MPSPreparation.UnequalMERA.state_eq_blockIsometryState,
+        MPSPreparation.UnequalMERA.exists_of_trees_eq_blockIsometryState}
+    \notready
+    \uses{thm:ldp_unequal_polar_tree, thm:ldp_unequal_mera_norm}
+    If $T_k=V_{\ell_k}$ and the top unitary prepares $\ket\omega$,
+    the network state equals
+    $(\bigotimes_k V_{\ell_k})\bigotimes_k\ket\omega_{R_kL_{k+1}}$.
+    In particular, every normalized top pair and every forest of
+    these polar trees give a network representing this block-isometry state.
+\end{theorem}
+\begin{proof}
+    Substitute the tree contractions into
+    (\ref{eq:ldp_unequal_mera_state}); the regrouping of physical
+    configurations is precisely the prescribed block partition.
+\end{proof}
+
+\begin{theorem}[Bounded single leaves and product states]
+    \label{thm:ldp_unequal_mera_caps}
+    \lean{MPSPreparation.UnequalMERA.exists_single_leaf,
+        MPSPreparation.UnequalMERA.nonempty_bond_one}
+    \notready
+    \uses{def:ldp_unequal_mera, thm:ldp_unequal_mera_norm}
+    Every unit state on $1\le N\le R$ sites is represented exactly
+    by a single leaf with virtual dimension one and coarse depth zero.
+    If $d,R,N\ge1$, a product-state network of coarse depth zero
+    also exists, with one physical site at each leaf and virtual
+    dimension one.
+\end{theorem}
+\begin{proof}
+    For the first assertion use the unit column $1\mapsto\ket\psi$
+    and the scalar top unitary. For the second use the column
+    $1\mapsto\ket0$ separately at every site.
+\end{proof}
+
+\begin{theorem}[Uniform finite-range networks at every positive length]
+    \label{thm:ldp_every_length_mera}
+    \lean{MPSPreparation.exists_unequalMERA_every_length}
+    \notready
+    \uses{thm:ldp_unequal_polar_tree, thm:ldp_unequal_mera_polar_state,
+        thm:ldp_unequal_mera_caps, thm:ldp_block_approximation_error,
+        thm:ldp_short_chain_preparation, lem:ldp_normalized_state_rescaling,
+        thm:ldp_depth_upper_bound_divisible, lem:ldp_log_threshold_error,
+        thm:prep_pair_norm}
+    Let $A$ be a normal tensor of physical dimension $d$ and bond
+    dimension $D$. There are constants $R\ge1$ and $C\ge2$, chosen
+    before $\varepsilon$ and $N$, such that for every $\varepsilon>0$
+    and every positive length $N$ with nonzero periodic state, a
+    network with some $1\le D'\le D$, physical leaf bound $R$ and
+    coarse depth $h$ satisfies
+    \begin{align}
+        h+2
+         & \le C\left[1+\log\!\left(1+\max\{0,\log(N/\varepsilon)\}\right)\right],
+        \label{eq:ldp_every_length_mera_layers}                                    \\
+        1-\left|\braket{\psi}{\phi_N(A)}\right|
+         & \le\varepsilon.
+        \label{eq:ldp_every_length_mera_error}
+    \end{align}
+    Its internal tree dimensions are at most $D^2$, and its physical
+    leaf dimensions are at most $d^R$. Thus the layer count is
+    $O(\log\log(N/\varepsilon))$ in the large-size, small-error regime,
+    with no divisibility restriction on $N$.
+\end{theorem}
+\begin{proof}
+    Pass to a normal left-canonical representative $B$, changing
+    normalized states only by a phase. Choose $s\ge1$ from its
+    eventual injectivity threshold and set $R=4s$. The unequal-block
+    second-order estimate at $\gamma=1/2$ gives constants $K,r>0$
+    with error at most $KM e^{-rq}$ for blocks of length at least $q$.
+    Choose $q=\lceil a\log(N/\varepsilon)+b\rceil$, with $a=1/r$
+    and fixed $b$ large enough that $q\ge s$ and $KN e^{-rq}\le\varepsilon$.
+
+    If $q\le N$, take $M=\lfloor N/q\rfloor$ blocks, the first
+    $M-1$ of length $q$ and the last of length $q+N\bmod q$.
+    Choose $h$ so that $2^h s\le q<2^h(2s)$. Every block then lies
+    between $2^h s$ and $2^h(4s)$, so
+    Theorem~\ref{thm:ldp_unequal_polar_tree} supplies its bounded-leaf
+    tree. Use the fixed-point pair at the top and apply the
+    unequal-block error estimate.
+
+    If $s\le N<q$, use one polar tree over $N$, with $h$ chosen
+    from $N/s$. The normalized trace pair at its root gives the
+    normalized periodic state exactly. This is not one leaf of
+    accuracy-dependent width: its terminal widths remain at most $4s$.
+    If $N<s$, the bounded single leaf of
+    Theorem~\ref{thm:ldp_unequal_mera_caps} gives the state exactly,
+    with $D'=1$. For $\varepsilon>1$ a product state suffices.
+
+    In the nontrivial branches $2^h\le q\le a\log(N/\varepsilon)+b+1$.
+    Taking logarithms and adding the finest and top layers gives
+    (\ref{eq:ldp_every_length_mera_layers}). The regularized expression
+    also covers $N=1$ and $\varepsilon\ge1$.
+\end{proof}
+
+\begin{theorem}[Normal states at every sufficiently large length]
+    \label{thm:ldp_eventual_every_length_mera}
+    \lean{MPSPreparation.exists_unequalMERA_of_normal}
+    \notready
+    \uses{thm:ldp_every_length_mera, lem:ldp_periodic_state_nonzero}
+    For a normal tensor with $D\ge1$, the same fixed dimension and
+    layer bounds hold for all $N\ge N_0$, for some fixed $N_0$,
+    without a separate nonvanishing hypothesis.
+\end{theorem}
+\begin{proof}
+    Normality implies eventual nonvanishing of the periodic state.
+    Apply Theorem~\ref{thm:ldp_every_length_mera} beyond that threshold.
+\end{proof}

@@ -38,6 +38,7 @@ import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.IsometricExtension
+import TNLean.MPS.Preparation.IsometryTree
 import TNLean.MPS.Preparation.LogDepthPreparation
 import TNLean.MPS.Preparation.LogLogDepthEveryLength
 import TNLean.MPS.Preparation.LogLogDepthPreparation
@@ -70,6 +71,7 @@ import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.PolarCompression
+import TNLean.MPS.Preparation.PolarIsometryTree
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PolynomialAccuracy
@@ -101,8 +103,10 @@ import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA
 import TNLean.MPS.Preparation.TreeMERARegisters
 import TNLean.MPS.Preparation.TreeMeasurement
+import TNLean.MPS.Preparation.UnequalMERA
 import TNLean.MPS.Preparation.UnequalRegisterTree
 import TNLean.MPS.Preparation.UnequalRegisterTreeState
+import TNLean.MPS.Preparation.UnequalTreeMERA
 import TNLean.MPS.Preparation.UnequalTreePreparation
 import TNLean.MPS.Preparation.VarianceOfAverages
 import TNLean.MPS.Preparation.VaryingBondBlocks
