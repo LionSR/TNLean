@@ -140,8 +140,13 @@ theorem physicalStringOrderParam_phase_adjusted_tendsto
       (nhds (Φ (Matrix.trace (Λ * (Vᴴ * twistedTransferMap A y 1)) • (1 : Mat)))) := by
     apply hlim.congr'
     exact Filter.Eventually.of_forall fun N => (hphase N).symm
-  simpa [Φ, LinearMap.comp_apply, Matrix.mul_smul, Matrix.trace_smul,
-    smul_eq_mul, ← Matrix.mul_assoc] using hFinal
+  have hvalue (c : ℂ) : Φ (c • (1 : Mat)) =
+      c * Matrix.trace (Λ * twistedTransferMap A x V) := by
+    change Matrix.trace (Λ * twistedTransferMap A x (V * (c • (1 : Mat)))) = _
+    rw [Matrix.mul_smul, Matrix.mul_one, map_smul, Matrix.mul_smul, Matrix.trace_smul]
+    rfl
+  rw [hvalue] at hFinal
+  simpa only [Matrix.mul_assoc] using hFinal
 
 /-- The limiting magnitude of the actual physical string correlator is the
 product of the two endpoint coefficient magnitudes. This retains arbitrary
@@ -187,9 +192,11 @@ theorem hasPhysicalStringOrderWith_iff_endpoint_coefficients
     rw [heq] at hs
     constructor
     · intro hzero
-      simp [hzero] at hs
+      rw [hzero, norm_zero, zero_mul] at hs
+      exact (lt_irrefl 0) hs
     · intro hzero
-      simp [hzero] at hs
+      rw [hzero, norm_zero, mul_zero] at hs
+      exact (lt_irrefl 0) hs
   · rintro ⟨hy, hx⟩
     exact ⟨_, mul_pos (norm_pos_iff.mpr hy) (norm_pos_iff.mpr hx), hlim⟩
 
