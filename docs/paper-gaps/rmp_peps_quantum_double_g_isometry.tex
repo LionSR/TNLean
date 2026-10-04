@@ -131,12 +131,17 @@ is $|G|\Pi_{\partial R}$. The boundary may be empty.\footnote{Result:
     \leanid{TNLean.PEPS.regularOpenRegionMatrix_gram_of_connected}.}
 
 The actual block also satisfies the defining invariant-subspace isometry
-relation, with the positive factor of~(\ref{eq:rmp_peps_qd_region_gram}). Its accessible physical
+relation, with the positive factor of~(\ref{eq:rmp_peps_qd_region_gram}).\footnote{Result:
+    \leanid{TNLean.PEPS.isGIsometric_regularOpenRegionMatrix_of_connected}.}
+Its accessible physical
 coordinates are obtained explicitly. Applying the local map
 $c_v^{-1}A_v^\dagger$ at every vertex turns the original open contraction
-into the open contraction $B_R$ of the averaging projectors $\Pi_v$.
+into the open contraction $B_R$ of the averaging projectors $\Pi_v$.\footnote{Result:
+    \leanid{TNLean.PEPS.regionPhysicalProductMatrix_mul_regularOpenRegionMatrix}.}
 Applying the original $A_v$ to these projector coordinates recovers the
-original contraction, since $A_v\Pi_v=A_v$. These are identities of
+original contraction, since $A_v\Pi_v=A_v$.\footnote{Result:
+    \leanid{TNLean.PEPS.regionPhysicalMap_regularProjectorOpenRegionMatrix}.}
+These are identities of
 the original finite sums, for arbitrary finite regions. They do not
 assert that the two rectangular maps are inverse on unused physical
 subspaces.
