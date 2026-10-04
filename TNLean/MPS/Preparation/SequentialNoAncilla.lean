@@ -149,7 +149,8 @@ theorem noAncillaState_eq_jointState :
     ∀ (n : ℕ) (U : Fin (n + 1) → Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
       (τ : Fin (n + 2) → Fin d),
       noAncillaState n U τ =
-        jointState (fun k => swapRows (U k)) (basisVecZero d) (fun p => τ p.succ) (τ 0)
+        jointState (fun k => swapRows (U k)) (basisVecZero (Nat.pos_of_neZero d))
+          (fun p => τ p.succ) (τ 0)
   | 0, U, τ => by
     have hd : 0 < d := Nat.pos_of_neZero d
     rw [noAncillaState, jointState, mulVec_basisVecZero_apply hd]
@@ -174,15 +175,15 @@ theorem hasOBCRep_of_eq_eval {n : ℕ} (M : Fin (n + 1) → Fin d → Matrix (Fi
   classical
   have hd : 0 < d := Nat.pos_of_neZero d
   let P : Fin (n + 2) → Fin d → Matrix (Fin d) (Fin d) ℂ :=
-    Fin.cons (fun j => rowMat (Pi.single j 1)) M
+    Fin.cons (fun j => rowMat hd (Pi.single j 1)) M
   obtain ⟨b, Q, r', hb0, hbD, -, hrow, hcol, hiso, -, hprod⟩ :=
-    exists_isometric_chain (n + 2) 1 hd (rowMat (basisVecZero d))
-      (isRowSupportedBelow_rowMat _) P v
+    exists_isometric_chain (n + 2) 1 hd (rowMat hd (basisVecZero hd))
+      (isRowSupportedBelow_rowMat hd _) P v
   obtain ⟨B, hB, -⟩ := OBCChainTensor.exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
   refine ⟨B, funext fun τ => ?_⟩
   rw [h τ, hB, ← hprod, rowMat_mul_mulVec_zero hd, basisVecZero_dotProduct hd, eval_succ P,
     ← Matrix.mulVec_mulVec]
-  simp [P, rowMat, Matrix.mulVec, dotProduct, Pi.single_apply]
+  simp [P, rowMat, basisVecZero, Matrix.vecMulVec_apply, Matrix.mulVec, dotProduct, Pi.single_apply]
 
 omit [NeZero d] in
 /-- The squared norm of a state `τ ↦ (w (τ₁, …))(τ₀)`. -/
@@ -210,7 +211,7 @@ theorem exists_isometric_chain_of_hasOBCRep {n : ℕ} {ψ : (Fin (n + 2) → Fin
   let Rm : Matrix (Fin d) (Fin d) ℂ := fun j γ => OBCChainTensor.zeroPad B 0 j ⟨0, hd⟩ γ
   obtain ⟨b, Q, r', -, -, -, hrow, -, hiso, hr', hprod⟩ :=
     exists_isometric_chain (n + 1) d le_rfl Rm (fun α _ hα => absurd α.isLt (by omega))
-      (fun p => OBCChainTensor.zeroPad B p.succ) (basisVecZero d)
+      (fun p => OBCChainTensor.zeroPad B p.succ) (basisVecZero hd)
   refine ⟨b, Q, r', hrow, hiso, hr', fun τ => ?_⟩
   rw [← hprod, OBCChainTensor.coeff_eq_eval_zeroPad, eval_succ (OBCChainTensor.zeroPad B),
     mulVec_basisVecZero_apply hd,
@@ -298,7 +299,7 @@ theorem jointState_update_zero [NeZero d] {D n : ℕ}
 
 /-- A unitary sending `|0⟩` to a given unit vector. -/
 private theorem exists_unitary_mulVec_basisVecZero {φ : Fin d → ℂ} (hφ : star φ ⬝ᵥ φ = 1) :
-    ∃ W ∈ Matrix.unitaryGroup (Fin d) ℂ, W *ᵥ basisVecZero d = φ := by
+    ∃ W ∈ Matrix.unitaryGroup (Fin d) ℂ, W *ᵥ basisVecZero (Nat.pos_of_neZero d) = φ := by
   classical
   have hd : 0 < d := Nat.pos_of_neZero d
   have hV : (Matrix.of fun (i : Fin d) (_ : Unit) => φ i).IsIsometry := by
@@ -325,14 +326,15 @@ theorem isProbabilisticallyGeneratedWithoutAncilla_iff {n : ℕ}
   · rintro ⟨U, rfl⟩
     exact ⟨_, _, noAncillaState_eq_jointState n U⟩
   · rintro ⟨U, φI, hψ⟩
-    let U' := Function.update U 0 (U 0 * (colMat φI ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)))
+    let U' := Function.update U 0
+      (U 0 * (colMat (Nat.pos_of_neZero d) φI ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)))
     refine ⟨fun k => swapRows (U' k), funext fun τ => ?_⟩
     rw [hψ, noAncillaState_eq_jointState]
     simp only [swapRows_swapRows, U', jointState_update_zero]
     congr 2
     funext α
     rw [mulVec_basisVecZero_apply (Nat.pos_of_neZero d), colMat]
-    simp
+    simp [basisVecZero, Matrix.vecMulVec_apply]
 
 /-- **Theorem "Sequential generation without ancilla", deterministic scheme**
 (arXiv:quant-ph/0608197, lines 1589--1595 and 1608--1615): on a chain of at least two sites, a

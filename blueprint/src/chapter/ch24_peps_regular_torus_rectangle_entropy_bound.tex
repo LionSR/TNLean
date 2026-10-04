@@ -1,0 +1,39 @@
+\begin{theorem}[The symmetry correction to a rectangular entropy bound]%
+    \label{thm:peps_regular_torus_rectangle_entropy_bound}
+    \lean{TNLean.PEPS.torusRectangleBoundaryEquiv,
+        TNLean.PEPS.rank_regionReducedDensity_regular_torusRectangle,
+        TNLean.PEPS.entropy_normalizedRegionReducedDensity_regular_torusRectangle}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_normalized_region_reduced_density,
+        lem:peps_torus_rectangle_boundary_card}
+    Let regular $G$-injective tensors be placed at the vertices of the
+    native square torus, with periods $W,H\geq3$. The tensors may vary
+    with the vertex. Let $R$ be a positive coordinate rectangle of
+    side lengths $w,h$, bounded by the coordinate intervals, with
+    $w<W$ and $h<H$. For the ordinary untwisted closed vector,
+    \[
+        \operatorname{rank}\rho_R=|G|^{2w+2h-1},
+        \qquad
+        0\leq S(\widehat\rho_R)\leq(2w+2h-1)\log|G|,
+        \qquad
+        S_0(\widehat\rho_R)=(2w+2h-1)\log|G|.
+    \]
+    Isometry and flatness of the physical spectrum are not assumed.
+    Coordinate intervals may start at zero or end at their torus
+    periods. This is an auxiliary regular rectangular-cut consequence
+    of the boundary count in
+    \cite[Corollary~6.10]{Schuch2010PEPS}.
+    The regular representation and proper-rectangle restrictions are recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_rectangle_cut_connectivity,
+        lem:peps_torus_rectangle_boundary_card,
+        thm:peps_regular_region_dimension,
+        thm:peps_regular_region_entropy_bound}
+    Both the rectangle and its complementary induced graph are
+    connected. The boundary has $2w+2h$ bonds, hence $2w+2h-1$
+    relative regular labels. The exact regular-cut rank and entropy
+    statements give the asserted formulas and inequality.
+\end{proof}
