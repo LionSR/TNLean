@@ -78,7 +78,7 @@ local-channel model with the source's phase relation; see
 
 \begin{lemma}[Parallel physical SWAP layers]
     \label{lem:qc_port_matching_swaps}
-    \uses{def:qc_physical_port_protocol}
+    \uses{def:qc_local_circuit}
     \lean{QuantumCircuit.permOpHom,
         QuantumCircuit.permOp_one,
         QuantumCircuit.permOp_mul,
@@ -109,7 +109,7 @@ local-channel model with the source's phase relation; see
 
 \begin{theorem}[Selected-memory routing at unchanged physical depth]
     \label{thm:qc_port_register_routing}
-    \uses{def:qc_physical_port_protocol, lem:qc_port_matching_swaps}
+    \uses{def:qc_physical_port_protocol}
     \lean{QuantumCircuit.PhysicalPortLayout.selectionPermutation,
         QuantumCircuit.PhysicalPortLayout.selectionPermutation_site,
         QuantumCircuit.PhysicalPortLayout.selectionPermutation_port,
@@ -132,6 +132,7 @@ local-channel model with the source's phase relation; see
     whole operator space, without assuming they were initialized or uncorrelated.
 \end{theorem}
 \begin{proof}
+    \uses{lem:qc_port_matching_swaps, lem:qc_placed_operators}
     \leanok
     The selection permutation preserves each spatial site, hence is free.
     Conjugating the port layer by it changes only the wire placement. Extend
@@ -142,7 +143,7 @@ local-channel model with the source's phase relation; see
 
 \begin{lemma}[Data and scratch placement]
     \label{lem:qc_port_data_scratch}
-    \uses{thm:qc_port_register_routing}
+    \uses{def:qc_physical_port_protocol, thm:qc_port_register_routing}
     \lean{QuantumCircuit.PortRegisters.layout,
         QuantumCircuit.PortRegisters.wire,
         QuantumCircuit.PortRegisters.site_wire,
@@ -176,6 +177,7 @@ local-channel model with the source's phase relation; see
     returns their outputs to their original sites and restores all other wires.
 \end{lemma}
 \begin{proof}
+    \uses{thm:qc_port_register_routing}
     \leanok
     A right endpoint of a nontrivial matching bond cannot be another left
     endpoint. Data and scratch slots are disjoint, and different digit selections
@@ -185,7 +187,7 @@ local-channel model with the source's phase relation; see
 
 \begin{theorem}[One shared routing for a channel family]
     \label{thm:qc_port_shared_channel_routing}
-    \uses{def:qc_physical_port_protocol, thm:qc_port_register_routing}
+    \uses{def:qc_physical_port_protocol, lem:qc_placed_operators}
     \lean{QuantumCircuit.sum_conjTranspose_embedOp_mul,
         QuantumCircuit.routingMatrixEquiv,
         QuantumCircuit.routingMatrixEquiv_apply,
@@ -216,8 +218,7 @@ local-channel model with the source's phase relation; see
 
 \begin{theorem}[Uniform bounded-register matching simulation]
     \label{thm:qc_bounded_physical_port_simulation}
-    \uses{lem:qc_register_code_completion, lem:qc_port_data_scratch,
-        thm:qc_port_shared_channel_routing}
+    \uses{def:qc_physical_port_protocol, lem:qc_register_code_completion, lem:qc_port_data_scratch}
     \lean{QuantumCircuit.PortRegisters.pairChannel,
         QuantumCircuit.PortRegisters.pairChannel_commute,
         QuantumCircuit.PortRegisters.matchingChannel,
@@ -238,6 +239,7 @@ local-channel model with the source's phase relation; see
     For $B=1$ the register width and this bound are zero.
 \end{theorem}
 \begin{proof}
+    \uses{lem:qc_register_code_completion, lem:qc_port_data_scratch, thm:qc_port_shared_channel_routing}
     \leanok
     Encode the two endpoints independently, then complete each pair channel
     outside its joint code. The resulting map is CPTP, so choose its normalized
@@ -252,7 +254,7 @@ local-channel model with the source's phase relation; see
 
 \begin{lemma}[Product onsite coding on arbitrary chain inputs]
     \label{lem:qc_product_register_encoding}
-    \uses{lem:qc_register_code_completion}
+    \uses{def:qc_onsite_channel, lem:qc_register_code_completion}
     \lean{QuantumCircuit.OnsiteChannel.ofSiteMaps,
         QuantumCircuit.OnsiteChannel.ofSiteMaps_siteMap,
         QuantumCircuit.OnsiteChannel.comp,
@@ -275,6 +277,7 @@ local-channel model with the source's phase relation; see
     with its original chain map, including entangled chain inputs.
 \end{lemma}
 \begin{proof}
+    \uses{lem:qc_register_code_completion}
     \leanok
     Choose normalized local Kraus families. On product operators, all formulas
     follow site by site; these products span the entire chain matrix algebra.
@@ -305,6 +308,7 @@ local-channel model with the source's phase relation; see
     placement identity holds on arbitrary correlated inputs.
 \end{lemma}
 \begin{proof}
+    \uses{lem:qc_placed_operators}
     \leanok
     Use the explicit configuration equivalence and the matrix reindexing
     algebra equivalence. Check tensoring on matrix units, then use linear
@@ -328,6 +332,7 @@ local-channel model with the source's phase relation; see
     correlations with the selected register.
 \end{theorem}
 \begin{proof}
+    \uses{lem:qc_product_register_encoding, lem:qc_register_channel_lift}
     \leanok
     The rectangular global encoding matrix splits as the tensor product of
     its selected and complementary encoding matrices. Check the resulting
@@ -346,6 +351,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
 
 \begin{definition}[Dimension-bounded native protocols]
     \label{def:qc_dimension_bounded_protocol}
+    \uses{def:qc_local_channel_conversion}
     \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol,
         QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.toIsLocalChannelProtocol,
         QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.dimension_bounds,
@@ -364,7 +370,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
 
 \begin{theorem}[Encoding a native channel layer]
     \label{thm:qc_encode_native_channel_layer}
-    \uses{thm:qc_encoded_channel_placement}
+    \uses{def:qc_local_channel_circuit, lem:qc_product_register_encoding}
     \lean{QuantumCircuit.ChannelLayer.exists_pairKraus,
         QuantumCircuit.ChannelLayer.exists_encodedRegisters}
     \leanok
@@ -375,6 +381,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
     with the same matching and an exact global code-intertwining identity.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_encoded_channel_placement, lem:qc_register_channel_lift}
     \leanok
     Use local CPTP completions, then the placed-channel intertwining theorem.
     Induction over the commuting gate product proves the whole-layer identity.
@@ -382,8 +389,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
 
 \begin{theorem}[A fixed-register word for a bounded native protocol]
     \label{thm:qc_fixed_register_word}
-    \uses{def:qc_dimension_bounded_protocol, thm:qc_encode_native_channel_layer,
-        lem:qc_product_register_encoding}
+    \uses{def:qc_dimension_bounded_protocol, lem:qc_product_register_encoding}
     \lean{QuantumCircuit.FixedRegisterOperation,
         QuantumCircuit.FixedRegisterOperation.map,
         QuantumCircuit.FixedRegisterOperation.depth,
@@ -404,6 +410,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
     no simulator identity is an input assumption.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_encode_native_channel_layer, lem:qc_product_register_encoding}
     \leanok
     Induct on the bounded protocol. Encode each onsite operation site by site,
     and use the encoded-layer theorem for a pair layer. Compose the exact
@@ -435,6 +442,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
     correlated chain inputs.
 \end{lemma}
 \begin{proof}
+    \uses{lem:qc_register_channel_lift, lem:qc_product_register_encoding}
     \leanok
     Restrict the site maps to a finite set and compose one new site at a time.
     Check the selected/complementary factorization on product matrices, which
@@ -443,7 +451,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
 
 \begin{lemma}[Native register maps on physical data wires]
     \label{lem:qc_native_register_wires}
-    \uses{lem:qc_register_channel_lift}
+    \uses{lem:qc_register_channel_lift, lem:qc_port_data_scratch}
     \lean{QuantumCircuit.PortRegisters.selectedData,
         QuantumCircuit.PortRegisters.selectedData_apply,
         QuantumCircuit.PortRegisters.allData,
@@ -471,10 +479,19 @@ alphabet, and then realizes those operations on the fixed physical ports.
     The basis regrouping is a coordinate equality, not an extra free gate.
 \end{lemma}
 
+\begin{proof}
+    \uses{lem:qc_register_channel_lift, lem:qc_port_data_scratch}
+    \leanok
+    Use the explicit finite-product basis equivalence independently at each
+    spatial site. The selected/complementary configuration formulas identify
+    the placed operator entry by entry. Channel conjugation and register
+    placement preserve composition by their linear-equivalence and tensor
+    identities.
+\end{proof}
+
 \begin{theorem}[Physical costs of native register operations]
     \label{thm:qc_native_port_layer}
-    \uses{lem:qc_native_register_wires, lem:qc_onsite_channel_product,
-        thm:qc_port_shared_channel_routing}
+    \uses{lem:qc_native_register_wires, def:qc_physical_port_protocol}
     \lean{QuantumCircuit.PortRegisters.nativeMatrixEquiv_complete,
         QuantumCircuit.PortRegisters.dataChannelLift_register_kraus,
         QuantumCircuit.PortRegisters.dataChannelLift_local,
@@ -487,6 +504,16 @@ alphabet, and then realizes those operations on the fixed physical ports.
     has no multiplier equal to the number of gates. All unused wires are restored
     exactly, including their correlations with the data.
 \end{theorem}
+
+\begin{proof}
+    \uses{lem:qc_onsite_channel_product, thm:qc_port_shared_channel_routing, lem:qc_port_data_scratch}
+    \leanok
+    Factor an onsite channel into its one-site lifts and place each local
+    Kraus family on the corresponding data digits. For a native layer,
+    extract its two-site Kraus matrices and use the data/scratch colocation
+    identities. Apply the shared-routing theorem once to the full commuting
+    family, with forward and backward depth $k$.
+\end{proof}
 
 \begin{lemma}[Physical encodings retain the complementary reference]
     \label{lem:qc_physical_register_encoding}
@@ -506,14 +533,24 @@ alphabet, and then realizes those operations on the fixed physical ports.
     is arbitrary and may be correlated with the logical input.
 \end{lemma}
 
+\begin{proof}
+    \uses{lem:qc_native_register_wires, lem:qc_register_channel_lift}
+    \leanok
+    Reindexing and tensoring with an identity preserve CPTP. The split and
+    its inverse cancel, as do the native encoding and completed decoding.
+    Tensor the native intertwining equation with the identity on the
+    complementary configuration space and conjugate by the same split.
+\end{proof}
+
 \begin{theorem}[Encoded physical-port simulation of bounded native protocols]
     \label{thm:qc_bounded_physical_protocol_compilation}
-    \uses{thm:qc_fixed_register_word, thm:qc_native_port_layer,
-        lem:qc_physical_register_encoding}
+    \uses{thm:qc_fixed_register_word, lem:qc_physical_register_encoding, def:qc_physical_port_protocol}
     \lean{QuantumCircuit.PortRegisters.dataChannelLift_word,
         QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation}
     \leanok
-    Fix $d\geq2$, $N\geq2$, and one positive intermediate-dimension bound $B$.
+    A fixed-register operation word with $T$ pair layers has physical depth at
+    most $2kT$. In particular, fix $d\geq2$, $N\geq2$, and one positive
+    intermediate-dimension bound $B$.
     Set $k=\lceil\log_d B\rceil$. Every bounded native protocol $\Psi$ of depth
     $T$ has an actual physical-port realization $\Gamma$ of depth at most
     $2kT$, with
@@ -527,6 +564,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
     before $N$.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_fixed_register_word, thm:qc_native_port_layer, lem:qc_physical_register_encoding}
     \leanok
     Compile to the fixed alphabet $d^k$, apply the zero-cost onsite and $2k$-cost
     layer implementations along the explicit word, then transport the native
@@ -546,7 +584,7 @@ a separate unitary-dilation representation obligation.
 
 \begin{lemma}[Channels on complete spatial-site wire blocks]
     \label{lem:qc_whole_site_channels}
-    \uses{lem:qc_native_register_wires, lem:qc_onsite_channel_product}
+    \uses{lem:qc_native_register_wires, def:qc_physical_port_protocol}
     \lean{QuantumCircuit.PortRegisters.blockDigits,
         QuantumCircuit.PortRegisters.blockDigits_apply,
         QuantumCircuit.PortRegisters.nativeMatrixEquiv_embedOp,
@@ -561,9 +599,18 @@ a separate unitary-dilation representation obligation.
     free global regrouping operation is assumed.
 \end{lemma}
 
+\begin{proof}
+    \uses{lem:qc_native_register_wires, lem:qc_onsite_channel_product}
+    \leanok
+    Cancel the injective all-data placement in the native selected-register
+    identity to obtain placement on whole spatial-site blocks. Decompose the
+    onsite channel into its single-site factors. Each factor has normalized
+    Kraus operators supported within one site, so composition retains depth zero.
+\end{proof}
+
 \begin{theorem}[Product-zero port and data codes]
     \label{thm:qc_physical_port_codes}
-    \uses{lem:qc_whole_site_channels, lem:qc_product_register_encoding}
+    \uses{lem:qc_native_register_wires, lem:qc_product_register_encoding, def:qc_physical_port_protocol}
     \lean{QuantumCircuit.PortRegisters.nativeWordCode,
         QuantumCircuit.PortRegisters.wordCodeConfiguration,
         QuantumCircuit.PortRegisters.wordCodeConfiguration_apply,
@@ -594,6 +641,17 @@ a separate unitary-dilation representation obligation.
     the code, and the exact code identities hold on all logical operators.
 \end{theorem}
 
+\begin{proof}
+    \uses{lem:qc_whole_site_channels, lem:qc_product_register_encoding}
+    \leanok
+    Write the port and data words as explicit injective basis maps.
+    Their product isometries agree with the onsite product encoders under
+    sitewise digit coordinates. Complete each local decoder outside its
+    code, and compose it with the other encoder. The onsite intertwining
+    identity gives exact code conversion, while whole-site locality gives
+    the zero-depth certificates.
+\end{proof}
+
 \begin{lemma}[Concrete data initialization and the zero reference]
     \label{lem:qc_data_initialization}
     \uses{thm:qc_physical_port_codes, lem:qc_physical_register_encoding}
@@ -610,10 +668,18 @@ a separate unitary-dilation representation obligation.
     not only classical configurations or product states.
 \end{lemma}
 
+\begin{proof}
+    \uses{thm:qc_physical_port_codes, lem:qc_physical_register_encoding}
+    \leanok
+    Split each data codeword into its data configuration and zero
+    complementary configuration. Check the initialization equality on matrix
+    units and use linear extensionality. The tensor-map action on Kronecker
+    products proves commutation with preparation of the fixed reference.
+\end{proof}
+
 \begin{theorem}[Bounded simulation on the original physical ports]
     \label{thm:qc_bounded_physical_port_io}
-    \uses{thm:qc_bounded_physical_protocol_compilation,
-        thm:qc_physical_port_codes, lem:qc_data_initialization}
+    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes}
     \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortIO}
     \leanok
     Let the native input and output dimensions both equal the physical
@@ -633,6 +699,7 @@ a separate unitary-dilation representation obligation.
     and remains exact with an external reference.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_bounded_physical_protocol_compilation, thm:qc_physical_port_codes, lem:qc_data_initialization}
     \leanok
     Preprocess locally into the data code, use the bounded encoded compiler,
     and postprocess locally back into the port code. The explicit initialization
