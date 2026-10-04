@@ -1,0 +1,46 @@
+\begin{theorem}[Compatible comparisons across a regular cut]%
+    \label{thm:peps_regular_ginjective_cut_comparison}
+    \lean{TNLean.PEPS.range_right_eq_of_regularBoundaryCutMatrix_eq,
+        TNLean.PEPS.IsGInjective.comp_leftInverse_of_range_eq,
+        TNLean.PEPS.averageMap_comp_leftInverse_of_range_eq,
+        TNLean.PEPS.IsGInjective.supported_comparison_unique,
+        TNLean.PEPS.IsGInjective.existsUnique_supportedComparison,
+        TNLean.PEPS.regularBoundaryComparison_pairing,
+        TNLean.PEPS.exists_regularBoundaryComparison_of_cut_eq}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $T,S$ and $T',S'$ be two pairs of regular $G$-injective
+    open maps on the same nonempty virtual boundary. Suppose
+    \[
+        TS^{\mathsf T}=T'(S')^{\mathsf T}.
+    \]
+    There are linear boundary maps $F,K$ such that
+    \[
+        T'F=T,\qquad S'K=S,\qquad FK^{\mathsf T}=P_G.
+    \]
+    The maps can be chosen with $P_GF=F$ and $P_GK=K$; with
+    these support conditions, the two physical identities
+    determine each comparison uniquely. The maps act on the whole boundary. This assertion does not
+    give a factorization into maps on individual bonds.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_ginjective_cut_range,
+        thm:peps_g_injective_left_inverse,thm:peps_regular_boundary_density}
+    The physical ranges agree on the first side by the cut-range
+    identity, and on the second side by applying the same identity
+    to the transposed coefficient matrices. Choose left inverses
+    $L$ and $M$ with $LT'=P_G$ and $MS'=P_G$, and set
+    $F=LT$, $K=MS$. Every vector in the range of $T$ is in the
+    range of $T'$. Since $T'P_G=T'$, this gives $T'LT=T$;
+    the second-side identity follows in the same way. Since
+    $LT$ and $MS$ take values in the invariant boundary, the
+    support identities hold. Injectivity of the target open maps
+    on that subspace proves uniqueness. Finally,
+    \[
+        FK^{\mathsf T}
+        =LTS^{\mathsf T}M^{\mathsf T}
+        =LT'(S')^{\mathsf T}M^{\mathsf T}
+        =P_GP_G^{\mathsf T}=P_G.
+    \]
+\end{proof}

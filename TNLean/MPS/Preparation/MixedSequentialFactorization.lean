@@ -18,12 +18,14 @@ The left and right bond dimensions are bounded by `D²`. No monotonicity of
 successive bond dimensions is asserted. The physical sites of the right chain
 are listed from the right boundary toward the centre.
 
-Source: arXiv:2307.01696, equations (13)–(15), especially footnote 4.
-
 The full-input polar specializations below assume the blocked tensor is injective.
 The non-injective pseudoinverse case of footnote 3 is proved on the actual polar support
 in `TNLean.MPS.Preparation.MixedSequentialSupport`; see
 `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
+
+## References
+
+* Malz, Styliaris, Wei and Cirac, arXiv:2307.01696, equations (13)–(15), footnotes 3 and 4.
 -/
 
 open scoped BigOperators Matrix Kronecker

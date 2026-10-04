@@ -157,14 +157,14 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_
   obtain ⟨C, hC⟩ := exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState d s (8 * s)
     (by omega)
   obtain ⟨Ks, hKs⟩ := exists_isPreparedInDepth_of_norm_eq_one hd (4 * s)
-  -- Lemma 1'(i) with `γ = 1/4`, for blocks of unequal lengths.
+  -- The quadratic unequal-block bound with `γ = 1/2`.
   obtain ⟨K, hK, herr⟩ := exists_blockApproximationError_le_mul B hNB hLC hσ htr hfix hlam
-    (by rw [hnorm]; exact ht1.le) (γ := 1 / 4) (by norm_num) (by norm_num)
-  set r := -(1 / 4 * Real.log t) with hr
+    (by rw [hnorm]; exact ht1.le) (γ := 1 / 2) (by norm_num) (by norm_num)
+  set r := -Real.log t with hr
   have hr0 : 0 < r := by
     have := Real.log_neg ht0 ht1
     rw [hr]; linarith
-  have hexp : ∀ q : ℕ, Real.exp (-(1 / 4) * q / correlationLength (t : ℂ)) =
+  have hexp : ∀ q : ℕ, Real.exp (-(2 * (1 / 2)) * q / correlationLength (t : ℂ)) =
       Real.exp (-(r * q)) := fun q => by
     congr 1
     rw [mul_div_right_comm, neg_div_correlationLength, hnorm, hr]

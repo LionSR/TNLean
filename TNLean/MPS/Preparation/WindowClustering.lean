@@ -386,7 +386,9 @@ theorem exists_norm_mpvExpectation_mul_sub_mul_le [NeZero D] {A : MPSTensor d D}
     simpa using this
   have hgl : ‖limitCorrelator A ρ htr w X Y g‖ ≤ K * r ^ g := by
     have e : limitCorrelator A ρ htr w X Y g = LinearMap.trace ℂ _ (EX * Q ^ g * EY * P) := by
-      rw [htrFP, hEX_def, hEY_def, hQ_def, hE_def, hP_def]; rfl
+      rw [limitCorrelator_eq_compl_pow_of_pos A ρ htr hA
+        (by simpa only [hE_def] using hρfix) w X Y (by omega),
+        htrFP, hEX_def, hEY_def, hQ_def, hE_def, hP_def]; rfl
     rw [e]
     refine htrK _ g ((hmul _ _ (hmul _ _ (hmul _ _ hEX (hQk g)) hEY) hPB).trans ?_)
     calc B * (B * r ^ g) * B * B = B ^ 4 * r ^ g := by ring

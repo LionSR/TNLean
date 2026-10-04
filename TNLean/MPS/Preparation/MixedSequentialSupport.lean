@@ -15,7 +15,9 @@ which can be prepared by two inward sweeps and a central isometry. This
 implements the pseudoinverse and central-input variants together, without
 assuming injectivity or a full-dimensional input.
 
-Source: arXiv:2307.01696, footnotes 3 and 4 to equations (13)–(15).
+## References
+
+* Malz, Styliaris, Wei and Cirac, arXiv:2307.01696, footnotes 3 and 4 to equations (13)–(15).
 -/
 
 open scoped Matrix BigOperators Kronecker

@@ -40,6 +40,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:ldp_central_input}
     Expand the two matrix products in (\ref{eq:ldp_central_coefficients})
     and interchange the finite sums over $\beta,\gamma,\delta$.
     Transposition reverses the order of matrix multiplication.
@@ -51,7 +52,6 @@
         MPSPreparation.sequentialEvaluation_isIsometry,
         MPSPreparation.exists_chainPairMatrix_factorization}
     \leanok
-    \uses{thm:seqanc_sweep_matrix_remainder}
     For any subchain with positive bond dimension $D$, its coefficient
     matrix $T_{\sigma,(\alpha,\beta)}=(A_1^{\sigma_1}\cdots
         A_n^{\sigma_n})_{\alpha\beta}$ factors as $T=ES$.
@@ -62,6 +62,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation,
+        thm:ldp_sequential_factorization_general}
     Apply successive decompositions to the initial row
     $\sum_\alpha\bra{\alpha,\alpha}$ and the matrices $\Id_D\otimes A_p^i$.
     Restrict the remainder to its nonzero rows. Preservation of inner
@@ -101,7 +103,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_pair_coefficient_factorization}
+    \uses{thm:ldp_pair_coefficient_factorization, def:ldp_central_input}
     Independent inward decompositions of the left and right virtual-pair
     coefficient matrices give $L=E_L T_L$ and $R=E_R T_R$.
     Set $C=(T_L\otimes\Id_d\otimes T_R)F$.
@@ -118,7 +120,7 @@
         MPSPreparation.exists_mixed_sequential_polarIsoMatrix,
         MPSPreparation.exists_mixed_sequential_polarIsoMatrix_of_split}
     \leanok
-    \uses{def:ldp_mixed_sequential, thm:ldpolar_tensor_decomposition}
+    \uses{def:ldp_mixed_sequential, def:ldpolar_tensor, def:injective}
     Let $A_1,\ldots,A_q$ have positive bond dimension $D$, let $q\ge1$,
     and suppose the blocked tensor $B$ is injective. Its polar isometry
     $V=BP^{-1}$ has a mixed sequential factorization about any chosen
@@ -132,8 +134,12 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_mixed_sequential_general, thm:ldp_central_coefficients}
-    Split the given chain at the chosen site and orient its right part
-    inward. Equation~(\ref{eq:ldp_central_coefficients}), with $G=P^{-1}$,
-    is precisely $V=BP^{-1}$. Apply the two-sided factorization theorem.
+    \uses{thm:ldp_mixed_sequential_general, thm:ldp_central_coefficients,
+        thm:ldpolar_tensor_injective, lem:ldp_sequential_factorization_first_inputs}
+    By Theorem~\ref{thm:ldpolar_tensor_injective}, $V^\dagger V=\Id$.
+    Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} expresses
+    $V=BP^{-1}$ in the matrix-product coefficients of the given chain.
+    Split the chain at the chosen site and orient its right part inward.
+    Equation~(\ref{eq:ldp_central_coefficients}), with $G=P^{-1}$, gives
+    these same coefficients. Apply the two-sided factorization theorem.
 \end{proof}
