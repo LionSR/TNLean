@@ -1,0 +1,38 @@
+\begin{definition}[Occupied square contact graph]%
+    \label{def:peps_integer_cell_contact_graph}
+    \lean{TNLean.PEPS.integerCellContactGraph}
+    \leanok
+    Let $A\subset\mathbb Z^2$ be finite, and let $Q_a$ be the closed
+    unit square centered at $a$. The contact graph has vertex set $A$;
+    distinct $a,b$ are adjacent when $|a_1-b_1|\leq1$ and
+    $|a_2-b_2|\leq1$. Thus shared corners, as well as shared sides,
+    are retained.
+\end{definition}
+
+\begin{theorem}[Connectivity through occupied square contacts]%
+    \label{thm:peps_integer_cell_contact_connectivity}
+    \lean{TNLean.PEPS.isIntegerCellNear_of_integerClosedCell_inter_nonempty,
+        TNLean.PEPS.integerCellContactGraph_preconnected_of_isPreconnected,
+        TNLean.PEPS.integerCellContactGraph_connected_of_isSimplyConnected}
+    \leanok
+    \uses{def:peps_integer_cell_contact_graph}
+    Write $P_A=\bigcup_{a\in A}Q_a$. If $P_A$ is preconnected, then
+    every two occupied centers can be joined in the contact graph.
+    In particular, if $P_A$ is simply connected, its contact graph
+    is connected. This auxiliary geometric consequence supports the
+    block decomposition in \cite[Theorem~6.9]{Schuch2010PEPS}, local
+    source lines 1935--1990. Four-neighbor connectivity of the
+    occupied centers is not assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    A point in $Q_a\cap Q_b$ places each coordinate of $a$ and $b$
+    within one half of that point, so their coordinate differences
+    have absolute value at most one. Fix an occupied center $u$ and
+    partition $A$ into the centers reachable from $u$ and the
+    remaining centers. The corresponding square unions are closed,
+    since $A$ is finite. If both are nonempty, preconnectedness of
+    $P_A$ forces an intersection between the unions. The intersecting
+    cells give a contact edge across the partition, a contradiction.
+    Simple connectedness also gives nonemptiness of $P_A$, hence of $A$.
+\end{proof}

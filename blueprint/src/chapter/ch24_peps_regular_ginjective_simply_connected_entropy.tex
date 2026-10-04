@@ -1,0 +1,42 @@
+\begin{theorem}[Zero-order entropy of regular $G$-injective torus closures]%
+    \label{thm:peps_regular_ginjective_simply_connected_entropy}
+    \lean{TNLean.PEPS.IsGInjective.torusPhysicalCut_rank_zeroEntropy_of_isSimplyConnected}
+    \leanok
+    \uses{def:peps_renyi_entropy}
+    Let both torus circumferences be at least three, and let $A$ be a
+    $G$-injective site tensor with the regular virtual representation.
+    Let $R$ be a contiguous block: its induced nearest-neighbour graph
+    is connected, and its actual closed-cell realization is simply
+    connected. Let $b$ be the number of bonds crossing its boundary.
+    For any nonzero coherent superposition of actual closures with
+    commuting pairs, let $M$ be its physical coefficient matrix across
+    the cut and put
+    \begin{align}
+        \rho_R & =\frac{MM^\dagger}{\operatorname{tr}(MM^\dagger)}.
+    \end{align}
+    The denominator is positive, $\rho_R$ is a density matrix, and
+    \begin{align}
+        \operatorname{rank}\rho_R & =|G|^{b-1},                    &
+        S_0(\rho_R)               & =\log\operatorname{rank}\rho_R
+        =(b-1)\log|G|.
+    \end{align}
+    Trees, roots, boundary numbering, and complementary paths are not
+    supplied. This is the regular native-torus conclusion of
+    \cite[Corollary~6.10]{Schuch2010PEPS}, under the stated contiguous
+    closed-cell geometry. It makes no flat-spectrum assertion and does
+    not identify the closure span with a parent-Hamiltonian ground space
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_g_injective_closure_rank_transport,
+        thm:peps_torus_simply_connected_physical_density}
+    The products of local inverse maps carry the original state to
+    the canonical closure superposition. The products of the original
+    site maps recover it. Thus the two coefficient matrices have equal rank. Numbering the canonical physical basis preserves its
+    isometry and its cut rank, so the simply connected isometric
+    density theorem gives the canonical rank $|G|^{b-1}$.
+    A matrix and its row Gram matrix have equal rank; division by the
+    positive trace preserves that rank. The definition of zero-order
+    Rényi entropy gives the stated logarithm.
+\end{proof}
