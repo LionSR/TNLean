@@ -78,16 +78,17 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   regular representation on `ℂ^G` supplies a unitary representation whose factor
   system lies in the class of the cocycle, and the fixed point built from it
   realizes that class.
-- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction) records that
-  the twist identity `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹` is proved for every
-  character `φ`, but on-site symmetry and the realization of the class of `ω`
-  only for `φ = 1`, because the formal symmetry predicate does not allow the
-  global phase `φ(g)^N`; symmetry up to a character would remove the restriction.
-- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction) records that the
-  source's construction covers groups combining on-site, time-reversal and
-  reflection symmetries, with cocycles twisted by `α` and `β`, while the
-  formalized fixed point and its symmetry results treat only a linear on-site
-  action with untwisted cocycles.
+- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction, resolved)
+  records the extension from exact vector invariance to symmetry up to an
+  arbitrary character. The length-`N` vector has phase `φ(g)^N`, and the same
+  character is retained in virtual-class uniqueness and finite-group realization.
+- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction, resolved) records
+  the mixed-symmetry extension of the corrected dimer fixed point. Time reversal
+  and reflection act on tensor letters and finite chains, with phase twist
+  `β = t` and virtual twist `α = t + r`. Every pair of twisted U(1) cocycles of a
+  finite group has a fixed-point representative with the prescribed character
+  and virtual factor system; its virtual U(1) cohomology class is independent
+  of the unitary gauge. This does not establish mixed-symmetry gapped interpolation.
 
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
@@ -804,6 +805,10 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
+- `mswc24_mixed_polar_injectivity_scope.tex` records the injective-only
+  mixed sequential polar factorization, distinguishes its full-input central
+  isometry from the source's non-injective pseudoinverse case, and gives the
+  partial-isometry or support-restriction extension needed to remove it.
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
@@ -956,3 +961,11 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
   holds, and the rate correction for the decay bound.
+
+For the finite-round extension of arXiv:2103.13367:
+
+- `psc21_adaptive_channel_round_scope.tex` records arbitrary-input adaptive
+  local channels and separates their quantum-layer depth from the fixed
+  number of composed `QCcc` blocks required by the asymptotic source relation.
+  One source block may already contain sequential measurements at many sites;
+  the adaptive tree does not record the required source-block decomposition.
