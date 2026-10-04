@@ -1,18 +1,18 @@
 \begin{theorem}[Arbitrarily translated irreducible character pairings]
     \label{thm:peps_translated_character_pairing}
     \lean{Representation.sum_character_inv_mul_character_translate,
-      Representation.sum_character_inv_mul_character_translate_eq_zero}
+        Representation.sum_character_inv_mul_character_translate_eq_zero}
     \leanok
     \uses{thm:peps_isotypic_projectors}
     Let $G$ be a finite group, and let $\sigma,\tau$ be finite-dimensional
     irreducible complex representations. Write $d_\sigma=\dim\sigma$.
     For all $a,b\in G$,
     \[
-      \sum_{g\in G}\chi_\sigma((ag)^{-1})\chi_\tau(bg)
-      =\begin{cases}
-        \dfrac{|G|}{d_\sigma}\chi_\tau(ba^{-1}),&\sigma\cong\tau,\\
-        0,&\sigma\not\cong\tau.
-      \end{cases}
+        \sum_{g\in G}\chi_\sigma((ag)^{-1})\chi_\tau(bg)
+        =\begin{cases}
+            \dfrac{|G|}{d_\sigma}\chi_\tau(ba^{-1}), & \sigma\cong\tau,     \\
+            0,                                       & \sigma\not\cong\tau.
+        \end{cases}
     \]
     In particular, if $\chi_\sigma\ne\chi_\tau$, every such translated pairing
     vanishes. This is an auxiliary group identity for
@@ -31,18 +31,18 @@
 \begin{theorem}[Translated charge-vector orthogonality and normalization]
     \label{thm:peps_translated_character_inner_product}
     \lean{Representation.sum_star_character_mul_character_translate,
-      Representation.sum_star_character_mul_character_translate_eq_zero,
-      Representation.sum_star_character_mul_character_self}
+        Representation.sum_star_character_mul_character_translate_eq_zero,
+        Representation.sum_star_character_mul_character_self}
     \leanok
     \uses{thm:peps_translated_character_pairing,
-      thm:peps_unitary_character_adjoint}
+        thm:peps_unitary_character_adjoint}
     Under the preceding hypotheses, suppose $\sigma$ is unitary. Then
     \[
-      \sum_{g\in G}\overline{\chi_\sigma(ag)}\chi_\tau(bg)
-      =\begin{cases}
-        \dfrac{|G|}{d_\sigma}\chi_\tau(ba^{-1}),&\sigma\cong\tau,\\
-        0,&\sigma\not\cong\tau.
-      \end{cases}
+        \sum_{g\in G}\overline{\chi_\sigma(ag)}\chi_\tau(bg)
+        =\begin{cases}
+            \dfrac{|G|}{d_\sigma}\chi_\tau(ba^{-1}), & \sigma\cong\tau,     \\
+            0,                                       & \sigma\not\cong\tau.
+        \end{cases}
     \]
     Thus distinct irreducible characters give orthogonal translated vectors,
     independently of $a$ and $b$. Each translated vector of one unitary
