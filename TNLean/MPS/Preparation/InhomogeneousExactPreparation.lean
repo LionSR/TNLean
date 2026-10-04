@@ -62,14 +62,15 @@ theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
   · have hsum : ∑ _ : Fin 1, N = N := by simp
     let Y : MPVSpace (D * D) 1 := (‖chainState A‖ : ℂ)⁻¹ • chainPosState A hsum
     have hY : ‖Y‖ = 1 := by
-      rw [Y, norm_smul, norm_inv, RCLike.norm_coe_norm,
+      dsimp only [Y]
+      rw [norm_smul, norm_inv, RCLike.norm_coe_norm,
         ← norm_chainState_eq A hsum, inv_mul_cancel₀ (norm_ne_zero_iff.mpr hA)]
     let e : Fin D × Fin D ≃ Cfg (D * D) 1 :=
       (Equiv.prodComm _ _).trans (finProdFinEquiv.trans (Equiv.funUnique (Fin 1) _).symm)
     let ω : Fin D × Fin D → ℂ := fun p => Y (e p)
     have hω : ∑ p, star (ω p) * ω p = 1 := by
       change ∑ p, star (Y (e p)) * Y (e p) = 1
-      rw [e.sum_comp, sum_star_mul_self_eq_norm_sq, hY]
+      rw [e.sum_comp (fun τ => star (Y τ) * Y τ), sum_star_mul_self_eq_norm_sq, hY]
       norm_num
     have hpair : pairFamilyVector (fun _ : Fin 1 => ω) = Y := by
       ext τ
@@ -86,7 +87,9 @@ theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
       exact congrArg Y he
     obtain ⟨W, _, hW, hprep⟩ := hC (fun _ : Fin 1 => N) hsum A (fun _ => ω)
       (fun _ => hω) N (fun _ => hN) (fun _ => le_rfl)
-    rw [hpair, Y, blockMatVector_smul, ← chainState_eq_blockMatVector hsum hW] at hprep
+    rw [hpair] at hprep
+    dsimp only [Y] at hprep
+    rw [blockMatVector_smul, ← chainState_eq_blockMatVector hsum hW] at hprep
     exact ⟨C * N, Nat.mul_le_mul_right N (le_max_left C K), hprep⟩
   · by_cases hN1 : N = 1
     · subst hN1
