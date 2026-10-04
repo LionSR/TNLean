@@ -938,6 +938,16 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
 
+For the phase relation of arXiv:2103.13367:
+
+- `psc21_local_channel_phase_scope.tex` records approximate and asymptotic
+  conversion by enlarged-site local channels without classical feedforward.
+  It distinguishes unit-cost gates on unbounded intermediate dimensions from
+  the source's physical-qudit gate convention, with no asserted uniform-depth
+  simulation or relation inclusion. The local results include
+  additive-error composition and mutual-conversion equivalence, and the
+  remaining extension to channels with measurements and classical communication.
+
 For the classification of translation-invariant MPS under circuits assisted by
 measurements and classical communication (arXiv:2103.13367, Theorem
 `MPS_classification`):
@@ -956,13 +966,3 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
   holds, and the rate correction for the decay bound.
-
-For the phase relation of arXiv:2103.13367:
-
-- `psc21_local_channel_phase_scope.tex` records approximate and asymptotic
-  conversion by enlarged-site local channels without classical feedforward.
-  It distinguishes unit-cost gates on unbounded intermediate dimensions from
-  the source's physical-qudit gate convention, with no asserted uniform-depth
-  simulation or relation inclusion. The local results include
-  additive-error composition and mutual-conversion equivalence, and the
-  remaining extension to channels with measurements and classical communication.

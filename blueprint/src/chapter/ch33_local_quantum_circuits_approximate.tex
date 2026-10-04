@@ -45,7 +45,7 @@ in the source relation is asserted; see
 
 \begin{theorem}[Zero error and monotonicity]
     \label{thm:qc_approx_conversion_properties}
-    \uses{def:qc_approx_local_channel_conversion, thm:qc_chain_trace_norm}
+    \uses{def:qc_approx_local_channel_conversion}
     \lean{QuantumCircuit.IsLocalChannelConversion.approx,
         QuantumCircuit.IsApproxLocalChannelConversion.refl,
         QuantumCircuit.IsApproxLocalChannelConversion.mono,
@@ -57,6 +57,7 @@ in the source relation is asserted; see
     with the same depth bound.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_chain_trace_norm}
     \leanok
     Use the identity channel, enlarge the bounds, and use
     $\lVert A\rVert_1=0$ if and only if $A=0$, respectively.
@@ -64,8 +65,7 @@ in the source relation is asserted; see
 
 \begin{theorem}[Composition of approximate conversions]
     \label{thm:qc_approx_conversion_trans}
-    \uses{def:qc_approx_local_channel_conversion,
-        lem:qc_local_channel_conversion_trans, thm:qc_chain_trace_norm}
+    \uses{def:qc_approx_local_channel_conversion}
     \lean{QuantumCircuit.IsLocalChannelProtocol.chainTraceNorm_map_le,
         QuantumCircuit.IsApproxLocalChannelConversion.trans}
     \leanok
@@ -76,6 +76,7 @@ in the source relation is asserted; see
     $\varepsilon_1+\varepsilon_2$.
 \end{theorem}
 \begin{proof}
+    \uses{lem:qc_local_channel_conversion_trans, thm:qc_chain_trace_norm}
     \leanok
     The composition $\Psi_2\circ\Psi_1$ has the sum of the two depths.
     The error $\Psi_1(\rho)-\sigma$ is Hermitian. Trace-norm contractivity of
@@ -108,8 +109,7 @@ in the source relation is asserted; see
 
 \begin{theorem}[Local channel phase equivalence]
     \label{thm:qc_local_channel_phase_equivalence}
-    \uses{def:qc_asymptotic_local_channel_conversion,
-        thm:qc_approx_conversion_trans}
+    \uses{def:qc_asymptotic_local_channel_conversion}
     \lean{QuantumCircuit.IsAsymptoticLocalChannelConversion.refl,
         QuantumCircuit.IsAsymptoticLocalChannelConversion.trans,
         QuantumCircuit.IsLocalChannelPhaseEquivalent.refl,
@@ -121,6 +121,7 @@ in the source relation is asserted; see
     Hermitian families, and in particular on density-matrix families.
 \end{theorem}
 \begin{proof}
+    \uses{thm:qc_approx_conversion_trans}
     \leanok
     Identity channels give reflexivity; the definition gives symmetry.
     For transitivity, compose the approximate conversions in each direction.
