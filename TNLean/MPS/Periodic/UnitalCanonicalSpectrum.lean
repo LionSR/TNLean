@@ -29,11 +29,18 @@ PGVWC07, arXiv:quant-ph/0608197, Theorems 4 and 5, `Th:TIcanonical` and
 `Th:periodic`, source lines 740–766 and 849–880.
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open scoped Matrix BigOperators ComplexOrder MatrixOrder TNOperatorSpace
 
 namespace MPSTensor
 
 variable {d D : ℕ} [NeZero D]
+
+open scoped Matrix.Norms.L2Operator in
+private theorem unital_spectralSup_eq_one (A : MPSTensor d D)
+    (hOne : Kraus.transferMap A 1 = 1) :
+    (⨆ μ ∈ spectrum ℂ (Kraus.transferMap A), (‖μ‖₊ : ENNReal)) = 1 := by
+  simpa only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq] using
+    (Kraus.isPositiveMap_mapLM A).spectralRadius_eq_one_of_map_one_eq_one hOne
 
 /-- The printed one-block unital canonical hypotheses imply irreducibility of
 the actual transfer map; irreducibility is not an extra source hypothesis.
@@ -67,8 +74,8 @@ theorem isIrreducible_transferMap_of_unital_canonical
   · simpa only [Complex.ofReal_one, one_smul] using hΛfix
   · intro X _ hX
     exact hUnique X (by simpa only [Complex.ofReal_one, one_smul] using hX)
-  · simpa only [ENNReal.ofReal_one] using
-      (Kraus.isPositiveMap_mapLM A).spectralRadius_eq_one_of_map_one_eq_one hOne
+  · simpa only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq,
+      ENNReal.ofReal_one] using unital_spectralSup_eq_one A hOne
 
 /-- The peripheral eigenvalue count in PGVWC07 Theorem 5 supplies a positive
 period and a primitive generator of the actual unital transfer spectrum.
