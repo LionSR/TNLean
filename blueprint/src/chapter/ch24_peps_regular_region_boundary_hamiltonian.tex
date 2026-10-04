@@ -1,0 +1,41 @@
+\begin{definition}[The supported Hamiltonian of an open region]%
+    \label{def:peps_regular_region_boundary_hamiltonian}
+    \lean{TNLean.PEPS.regularRegionBoundaryHamiltonian}
+    \leanok
+    \uses{def:peps_regular_boundary_support_embedding}
+    Let $R$ be a region of a finite graph with regular virtual bonds,
+    and number its $n+1$ boundary edges. Write $T_R$ for the actual
+    open-region contraction and $U$ for the normalized invariant-boundary
+    embedding. Define
+    \[
+        H_R=-\log\bigl((T_RU)^\dagger T_RU\bigr).
+    \]
+\end{definition}
+
+\begin{theorem}[The boundary logarithm of an actual PEPS region]%
+    \label{thm:peps_regular_region_boundary_hamiltonian}
+    \lean{TNLean.PEPS.regularRegionBoundaryHamiltonian_isHermitian,
+        TNLean.PEPS.regularOpenRegionMatrix_gram_eq_compressed_exp_of_connected}
+    \leanok
+    \uses{def:peps_regular_region_boundary_hamiltonian,
+        thm:peps_regular_boundary_supported_gram_gibbs}
+    Suppose the induced graph on $R$ is connected and each site tensor is
+    regular $G$-injective. If $R$ has at least one boundary edge, then
+    $H_R$ is Hermitian and
+    \[
+        T_R^\dagger T_R=Ue^{-H_R}U^\dagger.
+    \]
+    The complement need not be connected. This gives a finite supported
+    Gibbs representation; spatial decay of the interactions in $H_R$
+    remains a separate condition in the boundary-Hamiltonian conjecture
+    of \cite{Cirac2019OpenProblems}.
+    The regular virtual-space restriction and the broader source scope are recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Blocking a connected region preserves regular $G$-injectivity.
+    The supported Gram operator is therefore positive definite.
+    Applying its spectral logarithm and the invariant-boundary
+    compression formula proves the identity.
+\end{proof}

@@ -92,7 +92,8 @@ theorem twistedTransfer_eigenvalue_norm_le_one_of_irreducible
 
 /-- Every eigenvalue of an injective normalized tensor's twisted transfer map has
 modulus at most one. This is the injective specialization of the irreducible
-eigenvalue bound; its conclusion bounds an eigenvalue, not the spectral radius. -/
+eigenvalue bound; its conclusion bounds an eigenvalue, not the spectral radius.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)
@@ -159,7 +160,8 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible
     (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
 
 /-- For an injective normalized tensor, a modulus-one twisted-transfer eigenvalue
-forces gauge-phase equivalence with the twisted companion. -/
+forces gauge-phase equivalence with the twisted companion.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_modulus_one_implies_gaugePhase
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)

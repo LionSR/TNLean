@@ -75,7 +75,8 @@ theorem isIrreducibleMap_of_canonical_fixedSpace
 
 
 /-- The actual spectral radius of a physical-unitary twisted transfer map is at
-most one for an irreducible canonical tensor. One-site injectivity is unnecessary. -/
+most one for an irreducible canonical tensor. One-site injectivity is unnecessary.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_spectralRadius_le_one_of_irreducible
     (A : MPSTensor d D) (hIrr : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1)
@@ -91,7 +92,8 @@ theorem twistedTransfer_spectralRadius_le_one_of_irreducible
 
 /-- Equality in the twisted spectral-radius bound is equivalent to a unitary
 virtual intertwiner for the physical action. This is the basis-independent
-form of PGWSVC08 Lemma 1, valid without one-site injectivity. -/
+form of PGWSVC08 Lemma 1, valid without one-site injectivity.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_spectralRadius_eq_one_iff_intertwiner
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -140,7 +142,8 @@ theorem twistedTransfer_spectralRadius_eq_one_iff_intertwiner
       simpa only [coe_nnnorm, NNReal.coe_one] using hμ] using h
 
 /-- A virtual intertwiner conjugates the twisted transfer action to a phase times
-the ordinary transfer action. This identity retains the peripheral phase. -/
+the ordinary transfer action. This identity retains the peripheral phase.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_eq_phase_mul_transfer
     (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (V : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
@@ -158,7 +161,8 @@ theorem twistedTransfer_eq_phase_mul_transfer
       simp [Matrix.mul_assoc, Matrix.mul_sum, Finset.smul_sum]
 
 /-- Purity forces every peripheral twisted eigenmatrix into the single virtual
-intertwiner direction. In particular its eigenvalue equals the intertwiner phase. -/
+intertwiner direction. In particular its eigenvalue equals the intertwiner phase.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_peripheral_eq_of_primitive
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -205,7 +209,8 @@ theorem twistedTransfer_peripheral_eq_of_primitive
 
 /-- A pure canonical transfer map has at most one peripheral twisted eigenvalue,
 and its eigenspace is one-dimensional whenever it exists. Eigenmatrices are
-unique up to a nonzero scalar, rather than literally equal. -/
+unique up to a nonzero scalar, rather than literally equal.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_peripheral_unique
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -230,7 +235,8 @@ theorem twistedTransfer_peripheral_unique
 
 /-- Canonical-density form of the equality clause of PGWSVC08 Lemma 1.
 It includes invariance of the faithful normalized dual density, hence supplies
-the existing virtual local-covariance predicate with its original meaning. -/
+the existing virtual local-covariance predicate with its original meaning.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem pureCanonical_spectralRadius_eq_one_iff_localSymmetry
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -257,7 +263,8 @@ theorem pureCanonical_spectralRadius_eq_one_iff_localSymmetry
 The hypothesis explicitly includes the one-dimensional peripheral eigenspace,
 not merely uniqueness of its eigenvalue as a set. Irreducibility is derived
 from the faithful dual density and scalar fixed space, rather than assumed.
-The physical endpoint and reduced-state symmetry theorems are separate results. -/
+The physical endpoint and reduced-state symmetry theorems are separate results.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem pureCanonical_twistedTransfer_spectral_lemma
     [NeZero D] (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
@@ -302,7 +309,8 @@ private theorem rotatePhysical_virtual_conjugation
 
 /-- In a physical eigenbasis, the basis-independent covariance relation is
 exactly the source's phased intertwining relation. `W` contains the eigenbasis
-bras, so `W u = diag(ζ) W` and the transformed letters are `rotatePhysical W A`. -/
+bras, so `W u = diag(ζ) W` and the transformed letters are `rotatePhysical W A`.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem physicalEigenbasis_intertwining_iff
     (A : MPSTensor d D) (u W : Matrix (Fin d) (Fin d) ℂ)
     (hW : W * Wᴴ = 1) (ζ : Fin d → ℂ) (hζ : ∀ i, ζ i ≠ 0)
@@ -351,7 +359,8 @@ theorem physicalEigenbasis_intertwining_iff
 
 /-- The literal exponential-phase form of the source's eigenbasis equation.
 The angle representatives may be chosen modulo `2π`; the identity depends
-only on their unit-circle phases. -/
+only on their unit-circle phases.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem physicalEigenbasis_exp_intertwining_iff
     (A : MPSTensor d D) (u W : Matrix (Fin d) (Fin d) ℂ)
     (hW : W * Wᴴ = 1) (θj : Fin d → ℝ)
@@ -380,7 +389,8 @@ private theorem exists_unitPhase_angle (μ : ℂ) (hμ : ‖μ‖ = 1) :
       by linarith [Complex.arg_le_pi μ, Real.pi_pos]⟩, harg⟩
 
 /-- The literal source equality criterion in any physical unitary eigenbasis,
-including the principal phase representative `0 ≤ θ < 2π`. -/
+including the principal phase representative `0 ≤ θ < 2π`.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_spectralRadius_eq_one_iff_eigenbasis
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))

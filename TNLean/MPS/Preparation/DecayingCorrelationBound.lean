@@ -127,7 +127,7 @@ theorem exists_hermitian_vector_functional_compl_pow {A : MPSTensor d D}
     (hlam : Module.End.HasEigenvalue (Kraus.transferMap A) lam) (hlam1 : lam ≠ 1)
     (hlam0 : lam ≠ 0) :
     ∃ (ℓ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ) (v : Matrix (Fin D) (Fin D) ℂ),
-      vᴴ = v ∧ (∀ Z, ℓ Zᴴ = star (ℓ Z)) ∧
+      vᴴ = v ∧ Matrix.trace v = 0 ∧ (∀ Z, ℓ Zᴴ = star (ℓ Z)) ∧
       ∃ (K : ℕ) (μ : Fin K → ℂ) (a : Fin K → ℂ), 1 ≤ K ∧ K ≤ 2 ∧ (star lam = lam → K = 1) ∧
         Function.Injective μ ∧ (∀ j, ‖μ j‖ = 1) ∧ a ≠ 0 ∧
         ∀ t : ℕ, ℓ (((Kraus.transferMap A - fixedPointProj ρ htr) ^ t) v) =
@@ -179,7 +179,8 @@ theorem exists_hermitian_vector_functional_compl_pow {A : MPSTensor d D}
     let ℓ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ :=
       c⁻¹ • (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ H)
     have hℓ : ∀ Z, ℓ Z = c⁻¹ * Matrix.trace (H * Z) := fun Z ↦ rfl
-    refine ⟨ℓ, H, hHh, ?_, 1, fun _ ↦ lam / ‖lam‖, fun _ ↦ 1, le_rfl, by norm_num,
+    refine ⟨ℓ, H, hHh, trace_eq_zero_of_transferMap_eq_smul hA hHE hlam1,
+      ?_, 1, fun _ ↦ lam / ‖lam‖, fun _ ↦ 1, le_rfl, by norm_num,
       fun _ ↦ rfl, Function.injective_of_subsingleton _, fun _ ↦ hnormdiv lam rfl,
       fun h ↦ one_ne_zero (congrFun h 0), ?_⟩
     · intro Z
@@ -226,7 +227,10 @@ theorem exists_hermitian_vector_functional_compl_pow {A : MPSTensor d D}
     have hℓRH : ℓ Rᴴ = 1 := by
       rw [hℓ, hfRH, Matrix.conjTranspose_conjTranspose, hfR, star_one, zero_add]
     refine ⟨ℓ, R + Rᴴ, by rw [Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose,
-      add_comm], ?_, 2, ![lam / ‖lam‖, star lam / ‖lam‖], ![1, 1], by norm_num, le_rfl,
+      add_comm], by
+        rw [Matrix.trace_add, trace_eq_zero_of_transferMap_eq_smul hA hRE hlam1,
+          trace_eq_zero_of_transferMap_eq_smul hA hRHE hstar1, add_zero],
+      ?_, 2, ![lam / ‖lam‖, star lam / ‖lam‖], ![1, 1], by norm_num, le_rfl,
       fun h ↦ absurd h hreal, ?_, ?_, fun h ↦ one_ne_zero (congrFun h 0), ?_⟩
     · intro Z
       rw [hℓ, hℓ, Matrix.conjTranspose_conjTranspose, star_add, star_star, add_comm]
@@ -276,8 +280,9 @@ theorem exists_normalized_observables_limitCorrelator {A : MPSTensor d D} {L : �
         ∀ t : ℕ, limitCorrelator A ρ htr L O O' t = (‖lam‖ : ℂ) ^ t * ∑ j, a j * μ j ^ t := by
   classical
   have hpos : 0 < ‖lam‖ := norm_pos_iff.mpr hlam0
-  obtain ⟨ℓ, v, hv, hℓ, K, μ, a, hK1, hK2, hKreal, hμ, hμ1, ha, hform⟩ :=
+  obtain ⟨ℓ, v, hv, htrv, hℓ, K, μ, a, hK1, hK2, hKreal, hμ, hμ1, ha, hform⟩ :=
     exists_hermitian_vector_functional_compl_pow hA htr hlam hlam1 hlam0
+  have hPv : fixedPointProj ρ htr v = 0 := by simp [fixedPointProj, htrv]
   obtain ⟨X, hXh, hXE⟩ := exists_isHermitian_physicalObservableTransfer_eq hL (ℓ.smulRight ρ)
     (fun Z ↦ by
       rw [LinearMap.smulRight_apply, LinearMap.smulRight_apply, hℓ,
@@ -292,8 +297,10 @@ theorem exists_normalized_observables_limitCorrelator {A : MPSTensor d D} {L : �
       (‖lam‖ : ℂ) ^ t * ∑ j, a j * μ j ^ t := by
     intro t
     rw [← hform t]
-    simp only [limitCorrelator, hXE, hYE, LinearMap.smulRight_apply,
-      Matrix.traceLinearMap_apply, hρtr, one_smul, Matrix.trace_smul, smul_eq_mul, mul_one]
+    simp only [limitCorrelator, physicalConnectedCorrelator, hXE, hYE,
+      LinearMap.smulRight_apply,
+      Matrix.traceLinearMap_apply, hρtr, one_smul, hPv, sub_zero, Matrix.trace_smul,
+      smul_eq_mul, mul_one]
   obtain ⟨c₁, hc₁, hwin₁⟩ := Complex.exists_window_le_norm_sum_mul_pow hμ hμ1 ha
   obtain ⟨u₁, hu₁⟩ := hwin₁ 0
   have hGu : limitCorrelator A ρ htr L X Y (0 + u₁) ≠ 0 := by

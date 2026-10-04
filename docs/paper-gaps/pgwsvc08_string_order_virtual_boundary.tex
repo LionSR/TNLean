@@ -352,13 +352,20 @@ above now uses faithful canonical density and the explicit simple-peripheral
 spectral condition. The older virtual-boundary equivalence theorems still
 assume one-site injectivity and do not themselves prove Theorems~1--2.
 
-Eliminating this restriction requires a theorem that realizes arbitrary
+The endpoint-realization restriction requires a theorem that realizes arbitrary
 virtual boundary matrices by physical endpoint operators for injective
 tensors, followed by a source-faithful proof of Theorem~1 in
 Ref.~\cite{PerezGarcia2008StringOrder}. The existing single-site construction
 \leanid{MPSTensor.physRealize} is a starting point.\footnote{Source path:
 \path{TNLean/MPS/Chain/VirtualInsertion.lean}. This file is not currently
-imported by the string-order files.} This work is tracked in \ghissue{4872}; \ghissue{2660} was absorbed into that issue.
+imported by the string-order files.}
+
+Separately, Theorems~1--2 must be proved under the source canonical-purity
+hypotheses rather than one-site injectivity. The spectral step is now
+available above, but physical endpoint realization for an injective tensor
+alone does not prove either general physical equivalence. These remaining
+tasks are tracked in \ghissue{4872};
+\ghissue{2660} was absorbed into that issue.
 
 \bibliographystyle{alpha}
 \bibliography{references}

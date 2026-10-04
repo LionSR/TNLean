@@ -167,7 +167,8 @@ noncomputable def twistedTPGaugeSetup_of_irreducible [NeZero D]
       hIrrA' := hIrrA'
       hIrrB' := hIrrB' }
 
-/-- The trace-preserving gauge setup specialized to an injective normalized tensor. -/
+/-- The trace-preserving gauge setup specialized to an injective normalized tensor.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 noncomputable def twistedTPGaugeSetup [NeZero D]
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)
@@ -530,7 +531,8 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible
       (fun j => by simpa [B] using hBi j) i
 
 /-- An injective tensor admits a unitary representative of a twisted gauge-phase
-equivalence. -/
+equivalence.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)
@@ -695,7 +697,8 @@ theorem boundaryState_invariant_of_virtualUnitary_of_irreducible
     _ = Λ := by simp [hV']
 
 /-- A phased virtual symmetry of an injective tensor preserves its stationary
-boundary state. -/
+boundary state.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem boundaryState_invariant_of_virtualUnitary
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)
