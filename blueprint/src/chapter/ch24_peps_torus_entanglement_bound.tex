@@ -1,0 +1,32 @@
+\begin{theorem}[The rectangular PEPS area law]%
+    \label{thm:peps_torus_entanglement_bound}
+    \lean{TNLean.PEPS.entropy_torusRectangle_le_perimeter,
+        TNLean.PEPS.entropy_torusSquare_le_four_mul}
+    \leanok
+    \uses{thm:peps_region_boundary_entanglement_bound}
+    Consider a nonzero PEPS on a finite square-lattice torus whose two
+    periods are at least three. Let $R$ be a coordinate rectangle of
+    width $w$ and height $h$ contained in the chosen coordinate domain.
+    Suppose each virtual bond crossing its boundary has dimension $D$.
+    The normalized reduced density matrix obeys
+    \[
+        0\le S(\rho_R)\le (2w+2h)\log D.
+    \]
+    In particular a square of side length $L$ obeys
+    $S(\rho_R)\le4L\log D$, the PEPS area-law bound in
+    \cite[Section II.A.3]{Cirac2021Matrix}. The tensors may vary from site
+    to site. Empty rectangles and rectangles spanning a full coordinate
+    period are included. We use the convention $\log0=0$;
+    a nonzero PEPS permits $D=0$ here only when no bond crosses
+    the cut.
+    The period restriction of the finite simple-torus model is recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A coordinate rectangle has at most $2w+2h$ crossing bonds.
+    The general entropy bound gives the logarithm of the product of
+    their dimensions. Since $\log D\ge0$ for natural-number dimensions,
+    the boundary count yields the asserted inequality. When $D=0$,
+    nonvanishing forces an empty boundary, and the entropy is zero.
+\end{proof}
