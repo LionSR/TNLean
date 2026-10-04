@@ -287,7 +287,7 @@ $y=\sigma_y\otimes\sigma_z$,
     \mathcal E_y^{(2)}(\Id)\right] & =1
 \end{align}
 for every \emph{single-site} middle length, including odd lengths.
-The actual blocked-index decoding fixes the endpoint order. The corresponding
+The blocked-index convention fixes the endpoint order. The corresponding
 physical string-order predicate is also proved on the two-site blocked tensor
 by \leanid{MPSTensor.clusterBlockedRMP_hasPhysicalStringOrder}, where the
 middle length counts blocks and the twist is $u\otimes u$.
@@ -296,6 +296,41 @@ These results supply the printed data in Examples~1--2 of
 \cite[lines~392--411]{PerezGarcia2008StringOrder}, tracked by \ghissue{8268}.
 They do not close the general physical-endpoint realization or physical
 reduced-density-operator symmetry theorems in \ghissue{4872}.
+
+\section{Canonical purity and the spectral lemma}
+
+The spectral lemma is now treated without one-site injectivity in
+\leanid{MPSTensor.pureCanonical_twistedTransfer_spectral_lemma}.
+Its canonical hypotheses are $\mathcal E_A(\Id)=\Id$, a faithful normalized
+stationary dual density $\Lambda$, and the spectral-purity condition
+that every nonzero peripheral eigenmatrix is scalar, with eigenvalue $1$.
+This includes fixed-space simplicity. The source's phrase ``only one
+eigenvalue of modulus one'' must not be read merely as a condition on the
+set of eigenvalue values: the identity channel would then be a counterexample.
+No equivalence with algebraic simplicity or a separate physical-state
+purity predicate is asserted here.
+
+\leanid{MPSTensor.isIrreducibleMap_of_canonical_fixedSpace} derives
+irreducibility from faithful canonical density and fixed-space simplicity,
+using the channel library's spectral characterization. The older injective
+interfaces remain as specializations. The result bounds the actual spectral
+radius and characterizes equality by a unitary virtual intertwiner,
+including invariance of $\Lambda$.
+
+The identity
+\begin{align}
+    \mathcal E_u(X)&=\mu V\mathcal E_A(V^\dagger X)
+\end{align}
+retains the peripheral phase. It transfers every peripheral eigenpair to
+$\mathcal E_A$, proving that there is at most one peripheral eigenvalue
+and that the associated eigenmatrices are unique up to nonzero scalar.
+\leanid{MPSTensor.physicalEigenbasis_exp_intertwining_iff} identifies the
+literal source relation in a physical eigenbasis,
+$V^\dagger\widetilde A_j=e^{i(\theta-\theta_j)}
+\widetilde A_jV^\dagger$.
+This resolves the spectral lemma's one-site-injectivity restriction;
+it does not establish the physical endpoint theorem or the reduced-state
+symmetry theorem.
 
 \section{Verdict}
 
@@ -310,11 +345,10 @@ formal counterpart. Current general equivalence theorems therefore establish onl
 virtual-boundary formulation; the explicit physical examples above are
 proved independently.
 
-There is a further hypothesis restriction in the general equivalence
-results: their one-site injectivity assumption is stronger than the source's
-purity condition (a positive stationary density and a unique peripheral
-transfer eigenvalue). The explicit AKLT and cluster computations above do
-not remove that restriction from Lemma~1 or Theorems~1--2.
+The general physical equivalence results remain open. The spectral lemma
+above now uses faithful canonical density and the explicit simple-peripheral
+spectral condition. The older virtual-boundary equivalence theorems still
+assume one-site injectivity and do not themselves prove Theorems~1--2.
 
 Eliminating this restriction requires a theorem that realizes arbitrary
 virtual boundary matrices by physical endpoint operators for injective

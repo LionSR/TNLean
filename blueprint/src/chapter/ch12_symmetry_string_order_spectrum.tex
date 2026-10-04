@@ -1,0 +1,118 @@
+\subsection{Pure canonical tensors and the twisted peripheral spectrum}
+
+The spectral part of the string-order argument does not require one-site
+injectivity.  The canonical spectral-purity hypothesis used here says that
+every nonzero peripheral eigenmatrix of $\E_A$ is a scalar multiple of
+$\Id$, with eigenvalue $1$.  This explicitly includes the one-dimensional
+fixed space used in the source proof.  Merely requiring the set of
+peripheral eigenvalues to equal $\{1\}$ would not suffice: the identity
+channel has that set and a multidimensional fixed space.
+
+\begin{lemma}[Canonical fixed-space simplicity implies irreducibility]
+    \label{lem:canonical_fixed_space_irreducible}
+    \lean{MPSTensor.isIrreducibleMap_of_canonical_fixedSpace}
+    \notready
+    \uses{def:twisted_transfer_map}
+    Suppose $\E_A(\Id)=\Id$, $\Lambda>0$, and
+    $\E_A^*(\Lambda)=\Lambda$.  If every fixed matrix of $\E_A$ is a
+    scalar multiple of $\Id$, then $\E_A$ is irreducible.
+\end{lemma}
+
+\begin{proof}
+    Apply the channel library's spectral characterization of irreducibility
+    with right Perron matrix $\Id$, left Perron matrix $\Lambda$, and
+    Perron value $1$.  Positivity and unitality give the spectral radius
+    $1$; fixed-space simplicity gives the required uniqueness.
+\end{proof}
+
+\begin{lemma}[Irreducible twisted-transfer reduction]
+    \label{lem:irreducible_twisted_transfer_reduction}
+    \lean{MPSTensor.twistedTPGaugeSetup_of_irreducible,
+        MPSTensor.twistedTransfer_eigenvalue_norm_le_one_of_irreducible,
+        MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible,
+        MPSTensor.virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible,
+        MPSTensor.boundaryState_invariant_of_virtualUnitary_of_irreducible}
+    \notready
+    \uses{def:twisted_transfer_map, def:local_symmetry}
+    Let $A$ be unital and irreducible, and let $u$ be a physical unitary.
+    A common positive gauge puts $A$ and its unitary-mixed companion in
+    trace-preserving form.  Every eigenvalue of $\E_u$ has modulus at
+    most $1$.  A modulus-one eigenvalue gives gauge-phase equivalence;
+    the gauge can be normalized to a unitary $V$.  For a faithful
+    normalized stationary dual density, $V^\dagger\Lambda V=\Lambda$.
+    The earlier injective interfaces are specializations of these results.
+\end{lemma}
+
+\begin{theorem}[Actual twisted spectral radius and covariance]
+    \label{thm:irreducible_twisted_spectral_radius}
+    \lean{MPSTensor.twistedTransfer_spectralRadius_le_one_of_irreducible,
+        MPSTensor.twistedTransfer_spectralRadius_eq_one_iff_intertwiner,
+        MPSTensor.pureCanonical_spectralRadius_eq_one_iff_localSymmetry}
+    \notready
+    \uses{lem:irreducible_twisted_transfer_reduction, def:local_symmetry}
+    Under the preceding irreducible unital hypotheses,
+    $\rho(\E_u)\leq1$.  Equality holds exactly when there are a unitary
+    $V$ and a phase $\mu$, $|\mu|=1$, such that
+    \begin{align}
+        \sum_j u_{ij}A_j & =\mu V A_i V^\dagger.
+        \notag
+    \end{align}
+    With the canonical dual density this is precisely virtual local
+    covariance including boundary invariance.  This statement concerns
+    the actual spectral radius, not just a bound on a supplied eigenpair.
+\end{theorem}
+
+\begin{lemma}[Phase-retaining transfer conjugation]
+    \label{lem:twisted_transfer_phase_conjugation}
+    \lean{MPSTensor.twistedTransfer_eq_phase_mul_transfer}
+    \notready
+    \uses{def:twisted_transfer_map}
+    The local intertwining equation gives, for every matrix $X$,
+    \begin{align}
+        \E_u(X) & =\mu V\E_A(V^\dagger X).
+        \notag
+    \end{align}
+    No peripheral phase is discarded.
+\end{lemma}
+
+\begin{theorem}[Uniqueness of the twisted peripheral eigendirection]
+    \label{thm:twisted_peripheral_eigendirection_unique}
+    \lean{MPSTensor.twistedTransfer_peripheral_eq_of_primitive,
+        MPSTensor.twistedTransfer_peripheral_unique}
+    \notready
+    \uses{lem:twisted_transfer_phase_conjugation,
+        thm:irreducible_twisted_spectral_radius}
+    Assume additionally that $1$ is the only peripheral eigenvalue of
+    $\E_A$.  Every nonzero peripheral eigenmatrix of $\E_u$ is a
+    nonzero scalar multiple of the unitary intertwiner $V$, and its
+    eigenvalue is $\mu$.  Thus any two such eigenpairs have equal
+    eigenvalues and proportional eigenmatrices.
+\end{theorem}
+
+\begin{proof}
+    For $\E_u(X)=\lambda X$, phase-retaining conjugation gives
+    $\E_A(V^\dagger X)=\mu^{-1}\lambda V^\dagger X$.
+    This matrix is nonzero.  Peripheral primitivity forces
+    $\mu^{-1}\lambda=1$, and irreducibility makes the resulting fixed
+    matrix scalar.  Multiplication by $V$ recovers the claimed direction.
+\end{proof}
+
+\begin{lemma}[The source physical eigenbasis equation]
+    \label{lem:physical_eigenbasis_intertwining}
+    \lean{MPSTensor.physicalEigenbasis_intertwining_iff,
+        MPSTensor.physicalEigenbasis_exp_intertwining_iff}
+    \notready
+    \uses{thm:irreducible_twisted_spectral_radius}
+    Let $W$ contain physical eigenbasis bras, so
+    $Wu=\operatorname{diag}(\zeta_j)W$, and set
+    $\widetilde A_j=\sum_k W_{jk}A_k$.
+    The basis-independent covariance equation is equivalent to
+    \begin{align}
+        V^\dagger\widetilde A_j
+         & =\frac{\mu}{\zeta_j}\widetilde A_jV^\dagger.
+        \notag
+    \end{align}
+    Taking $\mu=e^{i\theta}$ and $\zeta_j=e^{i\theta_j}$ gives exactly
+    $e^{i(\theta-\theta_j)}$ in the source.  The phases, rather than
+    their angle representatives modulo $2\pi$, determine the identity.
+\end{lemma}
