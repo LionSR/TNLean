@@ -90,8 +90,8 @@ theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
     Function.Embedding.nonempty_of_card_le (by simpa using hDk)
   -- the isometric chain of the state
   obtain ⟨b, Q, r', hb0, -, -, hrow, -, hiso, hr', hprod⟩ :=
-    exists_isometric_chain N 1 hD (rowMat (basisVecZero D)) (isRowSupportedBelow_rowMat _)
-      (OBCChainTensor.zeroPad B) (basisVecZero D)
+    exists_isometric_chain N 1 hD (rowMat hD (basisVecZero hD)) (isRowSupportedBelow_rowMat hD _)
+      (OBCChainTensor.zeroPad B) (basisVecZero hD)
   have hψQ : ∀ σ, B.coeff σ = (eval Q σ *ᵥ r') ⟨0, hD⟩ := fun σ => by
     rw [← hprod, rowMat_mul_mulVec_zero hD, basisVecZero_dotProduct hD,
       mulVec_basisVecZero_apply hD, OBCChainTensor.coeff_eq_eval_zeroPad]
