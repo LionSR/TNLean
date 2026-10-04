@@ -16,8 +16,8 @@ Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors"). 
 the pair space whose first `r` columns span the range of `Π`
 (`Matrix.exists_unitary_mul_diagonal_of_isHermitian`) makes `V T` isometric on its first `r`
 inputs and zero on the others; `V T` is a matrix product map, so it has a sequential
-factorization on those inputs (`MPSPreparation.exists_isometric_chain_of_eq_mul_of_le`), and the
-block unitary of that chain, preceded by the gate `T†` on the input pair
+factorization on those inputs (`MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary`),
+and the block unitary of that chain, preceded by the gate `T†` on the input pair
 (`MPSPreparation.exists_blockUnitary_of_equiv_mul`), implements an isometry `W` with `W Π = V`,
 an isometric extension of `V` (`MPSPreparation.exists_blockUnitary_isometricExtension`).
 
@@ -163,25 +163,8 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
     (isHermitian_polarSupportMatrix B) (polarSupportMatrix_mul_self B)
   set Λ : Matrix (Fin (D * D)) (Fin (D * D)) ℂ := diagonal fun y => if y.val < r then 1 else 0
     with hΛ
-  obtain ⟨G₀, hG₀⟩ := exists_polarIsoMatrix_eq_sum B
-  have hgram : (V * T)ᴴ * (V * T) = Λ := by
-    rw [conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ,
-      conjTranspose_polarIsoMatrix_mul_polarIsoMatrix, ← hEdef, hET, ← Matrix.mul_assoc,
-      ← star_eq_conjTranspose, Unitary.star_mul_self_of_mem hT, Matrix.one_mul]
-  let V' : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ := fun σ y => (V * T) (dec.symm σ) y
-  obtain ⟨b, Q, hb0, hbl, -, hrow, -, hiso, hVQ⟩ :=
-    exists_isometric_chain_of_eq_mul_of_le A hr (G₀ * T) V' (fun σ y _ => by
-      simp only [V', mul_apply, Finset.mul_sum]
-      rw [Finset.sum_comm]
-      refine Finset.sum_congr rfl fun j _ => ?_
-      rw [hV, hG₀, Finset.sum_mul]
-      refine Finset.sum_congr rfl fun a _ => ?_
-      rw [hBdef, MPSChainTensor.blockTensor_decodeBlockEquiv_symm, mul_assoc]) (fun y y' hy _ => by
-      have h := congrFun (congrFun hgram y) y'
-      rw [mul_apply, ← dec.symm.sum_comp, hΛ, diagonal_apply] at h
-      simp only [conjTranspose_apply] at h
-      simp only [V', h]
-      split_ifs <;> simp_all)
+  obtain ⟨b, Q, hb0, hbl, -, hrow, -, hiso, hVQ, -⟩ :=
+    exists_isometric_chain_polarIsoMatrix_mul_unitary A (Nat.succ_pos n) hr hT hET
   obtain ⟨U, Z, hU, hZ, hUZ⟩ := hC (n + 1) hq b Q hb0 hrow hiso (star T) (Unitary.star_mem hT)
   let W : Matrix (Fin (blockPhysDim d (n + 1))) (Fin (D * D)) ℂ := of fun i x =>
     U (dec i) (blockInputCfg hd (n + 1) dig (virtualPairEquiv D x).1 (virtualPairEquiv D x).2)
@@ -220,8 +203,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
       ext i y
       rw [hΛ, mul_diagonal, mul_diagonal, of_apply]
       split_ifs with hy
-      · rw [hZ y (by rw [hbl]; exact hy), ← hVQ (dec i) y hy]
-        simp [V']
+      · rw [hZ y (by rw [hbl]; exact hy), ← hVQ (dec i) y hy, Equiv.symm_apply_apply]
       · simp
     rw [hWZ, Matrix.mul_assoc, hTE, ← Matrix.mul_assoc, hZΛ, Matrix.mul_assoc,
       Unitary.mul_star_self_of_mem hT, Matrix.mul_one]

@@ -7,6 +7,7 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.TwistedRegularProjective
+import TNLean.Algebra.UnitaryGeneralLinearInverse
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Character
 import TNLean.MPS.Symmetry.CocycleCoboundary
@@ -123,7 +124,10 @@ lemma star_sptScale_mul_sptScale : star (sptScale D) * sptScale D = (D : ℂ)⁻
   rw [sptScale, star_inv₀, Complex.star_def, Complex.conj_ofReal,
     Complex.ofReal_sqrt_inv_mul_self _ (Nat.cast_nonneg D), Complex.ofReal_natCast]
 
-private lemma sptScale_ne_zero [NeZero D] : sptScale D ≠ 0 := by
+/-- The matrix-unit normalization is nonzero at positive bond dimension.
+Source: arXiv:2011.12127, Section III.A, lines 1149–1150 in
+Papers/2011.12127/TN-Review-main.tex. -/
+lemma sptScale_ne_zero [NeZero D] : sptScale D ≠ 0 := by
   refine inv_ne_zero (Complex.ofReal_ne_zero.mpr ((Real.sqrt_ne_zero').mpr ?_))
   exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
 
@@ -255,8 +259,9 @@ module docstring. -/
 def sptKron (W : GL (Fin D) ℂ) : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   (W : Matrix (Fin D) (Fin D) ℂ)ᵀ ⊗ₖ ((W⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
 
-/-- Scalars cancel in `W ↦ Wᵀ ⊗ W⁻¹`. -/
-private lemma sptKron_eq_of_eq_smul {W V : GL (Fin D) ℂ} {c : ℂ}
+/-- Scalars cancel in `W ↦ Wᵀ ⊗ W⁻¹`. Source: arXiv:1010.3732,
+Section II.F.2, lines 880--896, the virtual expression for the physical symmetry. -/
+lemma sptKron_eq_of_eq_smul {W V : GL (Fin D) ℂ} {c : ℂ}
     (h : (W : Matrix (Fin D) (Fin D) ℂ) = c • (V : Matrix (Fin D) (Fin D) ℂ)) :
     sptKron W = sptKron V := by
   classical
@@ -394,10 +399,8 @@ theorem sptFixedPointAction_mem_unitaryGroup (ρ : ProjectiveRepresentation (D :
     (hφ : ∀ g, ‖φ g‖ = 1) (g : G) :
     sptFixedPointAction ρ φ g ∈ Matrix.unitaryGroup (Fin (D * D)) ℂ := by
   have hW := hρ g⁻¹
-  have hinv : (((sptGauge ρ g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
-      star (sptGauge ρ g : Matrix (Fin D) (Fin D) ℂ) := by
-    rw [Matrix.coe_units_inv]
-    exact Matrix.inv_eq_left_inv (Matrix.mem_unitaryGroup_iff'.mp hW)
+  have hinv := Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup
+    (sptGauge ρ g) hW
   have hφunitary : φ g ∈ unitary ℂ :=
     ((Group.isUnit g).map φ).mem_unitary_of_star_mul_self (by
       simpa [Complex.star_def, Complex.normSq_eq_norm_sq, hφ g] using
@@ -406,7 +409,7 @@ theorem sptFixedPointAction_mem_unitaryGroup (ρ : ProjectiveRepresentation (D :
     Matrix.coe_reindexAlgEquiv]
   apply Unitary.smul_mem_of_mem hφunitary
   apply Matrix.reindex_mem_unitaryGroup
-  rw [sptKron, hinv]
+  rw [sptKron, hinv, ← Matrix.star_eq_conjTranspose]
   exact Matrix.kronecker_mem_unitary (Matrix.transpose_mem_unitaryGroup_iff.mpr hW)
     (Unitary.star_mem hW)
 
