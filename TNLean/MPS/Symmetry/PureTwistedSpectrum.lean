@@ -81,7 +81,9 @@ theorem twistedTransfer_spectralRadius_le_one_of_irreducible
     (A : MPSTensor d D) (hIrr : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1)
     (hNorm : Kraus.transferMap A 1 = 1) :
-    spectralRadius ℂ (Module.End.toContinuousLinearMap _ (twistedTransferMap A u)) ≤ 1 := by
+    spectralRadius ℂ
+      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) ≤
+      1 := by
   apply spectralRadius_le_one_of_forall_eigenvalue_norm_le_one
   intro μ hμ
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
@@ -96,13 +98,14 @@ theorem twistedTransfer_spectralRadius_eq_one_iff_intertwiner
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1)
     (hNorm : Kraus.transferMap A 1 = 1) :
-    spectralRadius ℂ (Module.End.toContinuousLinearMap _ (twistedTransferMap A u)) = 1 ↔
+    spectralRadius ℂ
+      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) = 1 ↔
       ∃ (V : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ),
         V * Vᴴ = 1 ∧ ‖μ‖ = 1 ∧
         ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ) := by
-  let F := Module.End.toContinuousLinearMap _ (twistedTransferMap A u)
+  let F := Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)
   have hSpec : spectrum ℂ F = spectrum ℂ (twistedTransferMap A u) :=
-    AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap _) _
+    AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) _
   constructor
   · intro hRad
     obtain ⟨μ, hμspec, hμrad⟩ := spectrum.exists_nnnorm_eq_spectralRadius F
@@ -233,7 +236,8 @@ theorem pureCanonical_spectralRadius_eq_one_iff_localSymmetry
     (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     (hNorm : Kraus.transferMap A 1 = 1) :
-    spectralRadius ℂ (Module.End.toContinuousLinearMap _ (twistedTransferMap A u)) = 1 ↔
+    spectralRadius ℂ
+      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) = 1 ↔
       IsLocalSymmetry A u Λ := by
   rw [twistedTransfer_spectralRadius_eq_one_iff_intertwiner A hIrr u hu hNorm]
   constructor
@@ -261,8 +265,10 @@ theorem pureCanonical_twistedTransfer_spectral_lemma
       X ≠ 0 → ‖ev‖ = 1 → Kraus.transferMap A X = ev • X →
       ev = 1 ∧ ∃ c : ℂ, X = c • 1)
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1) :
-    spectralRadius ℂ (Module.End.toContinuousLinearMap _ (twistedTransferMap A u)) ≤ 1 ∧
-    (spectralRadius ℂ (Module.End.toContinuousLinearMap _ (twistedTransferMap A u)) = 1 ↔
+    spectralRadius ℂ
+      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) ≤ 1 ∧
+    (spectralRadius ℂ
+      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) = 1 ↔
       IsLocalSymmetry A u Λ) ∧
     ∀ (ev ν : ℂ) (X Y : Matrix (Fin D) (Fin D) ℂ),
       X ≠ 0 → Y ≠ 0 → ‖ev‖ = 1 → ‖ν‖ = 1 →
@@ -356,5 +362,45 @@ theorem physicalEigenbasis_exp_intertwining_iff
     physicalEigenbasis_intertwining_iff A u W hW
       (fun j => Complex.exp (θj j * Complex.I))
       (fun j => Complex.exp_ne_zero _) hDiag V hV (Complex.exp (θ * Complex.I))
+
+private theorem exists_unitPhase_angle (μ : ℂ) (hμ : ‖μ‖ = 1) :
+    ∃ θ ∈ Set.Ico (0 : ℝ) (2 * Real.pi), Complex.exp (θ * Complex.I) = μ := by
+  have harg : Complex.exp (μ.arg * Complex.I) = μ := by
+    simpa [hμ] using Complex.norm_mul_exp_arg_mul_I μ
+  by_cases hneg : μ.arg < 0
+  · refine ⟨μ.arg + 2 * Real.pi, ⟨?_, ?_⟩, ?_⟩
+    · linarith [Complex.neg_pi_lt_arg μ, Real.pi_pos]
+    · linarith
+    · simpa [Complex.ofReal_add, add_mul, Complex.ofReal_mul, Complex.exp_add,
+        Complex.exp_two_pi_mul_I] using harg
+  · exact ⟨μ.arg, ⟨le_of_not_gt hneg,
+      by linarith [Complex.arg_le_pi μ, Real.pi_pos]⟩, harg⟩
+
+/-- The literal source equality criterion in any physical unitary eigenbasis,
+including the principal phase representative `0 ≤ θ < 2π`. -/
+theorem twistedTransfer_spectralRadius_eq_one_iff_eigenbasis
+    [NeZero D] (A : MPSTensor d D)
+    (hIrr : IsIrreducibleMap (Kraus.transferMap A))
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (u W : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1) (hW : W * Wᴴ = 1)
+    (θj : Fin d → ℝ)
+    (hDiag : W * u = Matrix.diagonal (fun j => Complex.exp (θj j * Complex.I)) * W) :
+    spectralRadius ℂ
+      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) = 1 ↔
+      ∃ (V : Matrix (Fin D) (Fin D) ℂ) (θ : ℝ),
+        θ ∈ Set.Ico 0 (2 * Real.pi) ∧ V * Vᴴ = 1 ∧
+        ∀ i, Vᴴ * rotatePhysical W A i =
+          Complex.exp (((θ - θj i : ℝ) : ℂ) * Complex.I) •
+            (rotatePhysical W A i * Vᴴ) := by
+  rw [twistedTransfer_spectralRadius_eq_one_iff_intertwiner A hIrr u hu hNorm]
+  constructor
+  · rintro ⟨V, μ, hV, hμ, hInter⟩
+    obtain ⟨θ, hθ, hθμ⟩ := exists_unitPhase_angle μ hμ
+    refine ⟨V, θ, hθ, hV, ?_⟩
+    apply (physicalEigenbasis_exp_intertwining_iff A u W hW θj hDiag V hV θ).mp
+    simpa only [hθμ] using hInter
+  · rintro ⟨V, θ, _, hV, hInter⟩
+    exact ⟨V, Complex.exp (θ * Complex.I), hV, Complex.norm_exp_ofReal_mul_I θ,
+      (physicalEigenbasis_exp_intertwining_iff A u W hW θj hDiag V hV θ).mpr hInter⟩
 
 end MPSTensor

@@ -100,7 +100,8 @@ channel has that set and a multidimensional fixed space.
 \begin{lemma}[The source physical eigenbasis equation]
     \label{lem:physical_eigenbasis_intertwining}
     \lean{MPSTensor.physicalEigenbasis_intertwining_iff,
-        MPSTensor.physicalEigenbasis_exp_intertwining_iff}
+        MPSTensor.physicalEigenbasis_exp_intertwining_iff,
+        MPSTensor.twistedTransfer_spectralRadius_eq_one_iff_eigenbasis}
     \notready
     \uses{thm:irreducible_twisted_spectral_radius}
     Let $W$ contain physical eigenbasis bras, so
@@ -113,6 +114,7 @@ channel has that set and a multidimensional fixed space.
         \notag
     \end{align}
     Taking $\mu=e^{i\theta}$ and $\zeta_j=e^{i\theta_j}$ gives exactly
-    $e^{i(\theta-\theta_j)}$ in the source.  The phases, rather than
-    their angle representatives modulo $2\pi$, determine the identity.
+    $e^{i(\theta-\theta_j)}$ in the source.  The equality criterion also supplies the source representative
+    $0\leq\theta<2\pi$.  The phases determine the identity independently
+    of other representatives modulo $2\pi$.
 \end{lemma}
