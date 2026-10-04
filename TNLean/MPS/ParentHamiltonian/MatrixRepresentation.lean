@@ -39,6 +39,16 @@ theorem parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix
     EuclideanSpace.basisFun_toBasis, PiLp.basisFun_apply,
     parentInteraction, parentInteractionES]
 
+/-- The canonical parent interaction is represented by the same matrix in
+the function and Euclidean realizations of the finite configuration space.
+Source: arXiv:1010.3732, Section II.D. -/
+theorem parentInteractionES_eq_toEuclideanLin_parentMatrix
+    (A : MPSTensor d D) (L : ℕ) :
+    parentInteractionES A L = Matrix.toEuclideanLin
+      (LinearMap.toMatrix' (parentInteraction A L)) := by
+  rw [Matrix.toEuclideanLin_eq_toLin_orthonormal,
+    parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix, Matrix.toLin_toMatrix]
+
 /-- A cyclic parent term is the matrix embedding of its local interaction.
 Source: arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
 theorem localTerm_eq_toLin'_embedLocalOperator (A : MPSTensor d D)
