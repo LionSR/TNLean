@@ -1,0 +1,131 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\interfootnotelinepenalty=10000
+\title{Physical-Port Simulation of Bounded Register Channels}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source resource convention}
+Piroli, Styliaris and Cirac~\cite{Piroli2021LOCC}, Supplement pp.~7--8,
+distinguish counted nearest-neighbor gates on fixed-dimensional physical
+qudits from free onsite operations involving those qudits and their local
+ancillas. In the proof of Proposition~2, the entanglement increase per
+intersite layer depends on the physical dimension, independently of the
+number of onsite ancillas. This prevents replacing a physical gate by an
+arbitrary operation on two enlarged sites at the same unit cost without a
+simulation argument.
+
+The existing enlarged-site local-channel model allows arbitrary
+intermediate local dimensions. Its composition and trace-norm estimates
+remain statements about that model. The construction below supplies a
+bounded-register communication theorem; it is not an inclusion theorem
+for unrestricted intermediate dimensions.
+
+\section{The proved bounded matching theorem}
+Fix a physical dimension $d\ge2$, an upper bound $B$ on the local input
+dimension, and $m\le B$. The density witness below forces $m\ge1$, hence $B\ge1$. Set
+\begin{align}
+ k&=\lceil\log_d B\rceil.
+\end{align}
+The local basis code into $k$ qudits is chosen independently of the chain
+length. Its matrix $E$ is isometric. A completely positive trace-preserving
+decoder is obtained by completing $Y\mapsto E^\dagger YE$ outside the code:
+\begin{align}
+ D(Y)&=E^\dagger YE+
+ \operatorname{tr}[(I-EE^\dagger)Y(I-EE^\dagger)]\rho,
+\end{align}
+where $\rho$ is a fixed density matrix. Then $D(EXE^\dagger)=X$ for every
+operator $X$, and the identity persists after tensoring with the identity
+on any finite reference. The two-site encoding is the tensor product of
+the separate onsite encodings.\footnote{Formal declarations:
+\leanid{QuantumCircuit.registerDecoding_comp_encoding},
+\leanid{QuantumCircuit.registerDecoding_encoding_reference}, and
+\leanid{QuantumCircuit.registerEncoding_pair} in
+\doclink{TNLean/Circuit/Channel/RegisterEncoding}.}
+
+On a ring of $N\ge2$ sites, give each site one physical port, a $k$-qudit
+data register and a $k$-qudit scratch register. For an arbitrary matching
+of CPTP pair channels, extend each channel to its full two-register space
+by encoding its output after applying it to a completed decoding of the
+input. These extensions are CPTP on the entire register algebra and agree
+exactly with the original channels on encoded inputs. There are normalized
+finite Kraus representations whose actual placed matching channel has
+physical depth at most
+\begin{align}
+ 2k&=2\lceil\log_d B\rceil,
+\end{align}
+independently of $N$ and the number of selected bonds. Products of $L$
+such certified layers have depth at most $2kL$.\footnote{Formal declarations:
+\leanid{QuantumCircuit.exists_bounded_matching_simulation},
+\leanid{QuantumCircuit.PortRegisters.matchingChannel_isPhysicalPortProtocol},
+and \leanid{QuantumCircuit.IsPhysicalPortProtocol.list_prod_uniform} in
+\doclink{TNLean/Circuit/Channel/PortSimulation}.}
+For $B=1$, the data register has zero qudits and the bound is zero. A
+one-site ring's self-loop SWAP is separately proved to be the identity;
+the two-distinct-register statement assumes $N\ge2$.
+
+\section{Why the communication cost is uniform}
+To exchange one memory digit across a selected bond, swap that digit with
+the physical port locally at both endpoints, perform one physical-port
+SWAP, and undo the two local swaps. This exchanges the selected memory
+digits and restores the ports exactly, including when they carry arbitrary
+correlations. Every bond of a matching runs in parallel. Repeating over the
+$k$ digits moves each left data register into the right scratch register,
+while leaving the right data register in place.
+
+All pair channels can now be executed onsite. Reverse the one common
+routing afterward. The total cost is $k+k$, not $2k$ times the number of
+bonds. Conjugation by the routing preserves products of channel maps, so
+the resulting map is exactly the original placed family on the complete
+operator space. Outputs return to their original data registers and all
+other wires are restored.\footnote{Formal declarations:
+\leanid{QuantumCircuit.IsPhysicalPortUnitary.register_matching} in
+\doclink{TNLean/Circuit/Channel/PortRouting} and
+\leanid{QuantumCircuit.IsPhysicalPortProtocol.of_routed_family} in
+\doclink{TNLean/Circuit/Channel/PortChannelRouting}.}
+This construction follows the same gather, execute locally, and return
+principle used in the source's proof of Theorem~1 (Supplement pp.~8--9),
+but the displayed channel-resource bound is a derived result.
+
+The completed decoder for a joint code need not factor into separated
+onsite operations outside that code. No such assertion is used: the joint
+extension is applied only after the registers have been colocated. Separate
+input/output encoding and decoding use products of local maps. Decoding after encoding
+is the identity on every chain operator, with any finite
+reference.\footnote{Formal declarations:
+\leanid{QuantumCircuit.OnsiteChannel.decodeRegisters_encodeRegisters_reference}
+in \doclink{TNLean/Circuit/Channel/OnsiteRegisterEncoding}.}
+
+\section{Remaining comparison and source conditions}
+The fixed-port predicate records reduced onsite CPTP operations by local
+Kraus families. A full source protocol witness must also account for
+locally initialized dilation environments and their disposal, and, when
+claiming a pure-state preparation, the source's final system--ancilla
+condition. For the asymptotic \textit{QCcc} relation, the source fixes the number
+of composed \textit{QCcc} protocols independently of $N$. This is not a
+bound on individual local measurement/correction steps: one protocol can
+already contain sequential steps at many sites. A source-block decomposition
+must also satisfy the within-block control order and one-measurement-per-site
+restriction. None of these conditions follows from a quantum-depth bound.
+
+The encoded matching theorem and the product onsite coding identities are
+not yet an induction compiling every witness of the existing local-channel
+protocol predicate. That comparison must record a common bound on all
+intermediate local dimensions, instantiate the global placed-layer
+intertwining identities for that predicate, and compose them with site-consistent codes. In
+particular, taking $B=B(N)$ after choosing the system size would not supply
+the uniform constant claimed above. No equality of phase relations or MPS
+classification follows from the matching theorem alone.\footnote{The
+resource comparison is tracked by \ghissue{8640}, under \ghissue{8622};
+approximate and adaptive conversions are tracked by \ghissue{8380} and
+\ghissue{8382}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

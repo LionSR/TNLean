@@ -1,0 +1,336 @@
+\section{Fixed physical ports and bounded local registers}
+
+The intersite gates of~\cite[Supplement, pp.~7--8]{Piroli2021LOCC}
+act on fixed-dimensional physical qudits. Local ancillas are separate:
+free onsite operations may mix the physical qudit with its local ancillas,
+but a counted intersite gate does not act on an arbitrarily enlarged pair
+of sites. This section derives a resource bound for encoded matching
+channels in that convention. It does not identify the unrestricted
+local-channel model with the source's phase relation; see
+\cite{gap:psc21_physical_port_simulation_scope}.
+
+\begin{definition}[Physical-port channel protocols]
+    \label{def:qc_physical_port_protocol}
+    \lean{QuantumCircuit.PhysicalPortLayout,
+        QuantumCircuit.IsPhysicalPortUnitary,
+        QuantumCircuit.IsPhysicalPortUnitary.mem_unitary,
+        QuantumCircuit.IsPhysicalPortUnitary.conjTranspose,
+        QuantumCircuit.IsPhysicalPortUnitary.one,
+        QuantumCircuit.IsPhysicalPortUnitary.onsite_swap,
+        QuantumCircuit.IsPhysicalPortProtocol,
+        QuantumCircuit.IsPhysicalPortProtocol.isKrausCPTP,
+        QuantumCircuit.IsPhysicalPortProtocol.one}
+    \leanok
+    Every wire carries a $d$-level qudit. A layout assigns its wires to spatial
+    sites and selects one physical port at each site. Free operations are
+    unitaries supported inside one spatial site, wire permutations preserving
+    each spatial site, and normalized onsite Kraus channels. A counted layer
+    is an existing nearest-neighbor unitary layer placed on the physical ports,
+    with identity on every memory wire. Products add physical depth bounds;
+    a larger upper bound remains valid. Reversing a unitary circuit preserves
+    its depth. Every resulting channel protocol is CPTP on all input operators.
+\end{definition}
+
+\begin{lemma}[Register codes and completed decoding]
+    \label{lem:qc_register_code_completion}
+    \lean{QuantumCircuit.registerEncoding,
+        QuantumCircuit.registerEncoding_isIsometry,
+        QuantumCircuit.registerEncoding_isKrausCPTP,
+        QuantumCircuit.registerDecoding,
+        QuantumCircuit.registerDecoding_isKrausCPTP,
+        QuantumCircuit.registerDecoding_encoding,
+        QuantumCircuit.registerDecoding_comp_encoding,
+        QuantumCircuit.registerDecoding_encoding_reference,
+        QuantumCircuit.registerEncodedMap,
+        QuantumCircuit.registerEncodedMap_isKrausCPTP,
+        QuantumCircuit.registerEncodedMap_encoding,
+        QuantumCircuit.le_registerDimension,
+        QuantumCircuit.registerBasisEmbedding,
+        QuantumCircuit.pairRegisterBasisEmbedding,
+        QuantumCircuit.pairRegisterBasisEmbedding_apply,
+        QuantumCircuit.registerEncoding_apply,
+        QuantumCircuit.registerEncoding_pair}
+    \leanok
+    An injection $e$ of local basis labels into register words defines an
+    isometry $E$. The encoding is $X\mapsto EXE^\dagger$. For a fixed density
+    matrix $\rho$, the completed decoder is
+    \begin{align}
+        D(Y) & =E^\dagger YE+
+        \operatorname{tr}[(I-EE^\dagger)Y(I-EE^\dagger)]\rho.
+    \end{align}
+    It is CPTP and satisfies $D(EXE^\dagger)=X$ for every operator $X$.
+    The same identity holds after tensoring with the identity on any finite
+    reference. Encoding the two endpoints separately gives the tensor product
+    of their local encoding matrices. If $m\le B$ and $d\ge2$, then
+    $k=\lceil\log_d B\rceil$ qudits suffice. A channel $\Phi$ extends to the
+    full input register by $\widehat\Phi=\mathcal E_{\rm out}\Phi D_{\rm in}$;
+    this extension is CPTP and agrees with $\Phi$ on encoded inputs.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The inclusion has orthonormal columns. Complete the compression outside its
+    range using the existing support-completion channel; the complementary
+    term vanishes on $EXE^\dagger$. Matrix multiplication gives the exact left
+    inverse, and tensoring preserves composition. The paired basis inclusion
+    factors entrywise into two local inclusions. The ceiling-logarithm bound
+    is $B\le d^k$.
+\end{proof}
+
+\begin{lemma}[Parallel physical SWAP layers]
+    \label{lem:qc_port_matching_swaps}
+    \uses{def:qc_physical_port_protocol}
+    \lean{QuantumCircuit.permOpHom,
+        QuantumCircuit.permOp_one,
+        QuantumCircuit.permOp_mul,
+        QuantumCircuit.permOp_conjTranspose,
+        QuantumCircuit.PortMatching.perm,
+        QuantumCircuit.PortMatching.perm_apply_of_notMem,
+        QuantumCircuit.PortMatching.perm_apply_of_mem,
+        QuantumCircuit.PortMatching.perm_apply_left,
+        QuantumCircuit.PortMatching.perm_apply_right,
+        QuantumCircuit.PortMatching.perm_involutive,
+        QuantumCircuit.PortMatching.perm_symm,
+        QuantumCircuit.PortMatching.layer,
+        QuantumCircuit.PortMatching.layer_op,
+        QuantumCircuit.PortMatching.layer_op_one_site}
+    \leanok
+    A matching of ring bonds defines an involutive site permutation: each
+    selected bond exchanges its endpoints and every other site is fixed.
+    The actual layer containing these SWAP gates has exactly the associated
+    permutation matrix. Permutation matrices preserve products and inverses.
+    The self-loop of a one-site ring acts as the identity.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Swaps on disjoint bonds commute and fix each other's endpoints. Their
+    finite product therefore has the stated action. Applying the permutation
+    matrix homomorphism identifies that product with the layer operator.
+\end{proof}
+
+\begin{theorem}[Selected-memory routing at unchanged physical depth]
+    \label{thm:qc_port_register_routing}
+    \uses{def:qc_physical_port_protocol, lem:qc_port_matching_swaps}
+    \lean{QuantumCircuit.PhysicalPortLayout.selectionPermutation,
+        QuantumCircuit.PhysicalPortLayout.selectionPermutation_site,
+        QuantumCircuit.PhysicalPortLayout.selectionPermutation_port,
+        QuantumCircuit.PhysicalPortLayout.selectionPermutation_symm,
+        QuantumCircuit.IsPhysicalPortUnitary.selected_layer,
+        QuantumCircuit.embedOp_permOp_viaEmbedding,
+        QuantumCircuit.IsPhysicalPortUnitary.selected_permutation_layer,
+        QuantumCircuit.registerPermutation,
+        QuantumCircuit.registerPermutation_apply,
+        QuantumCircuit.registerPermutation_apply_of_notMem,
+        QuantumCircuit.registerPermutation_involutive,
+        QuantumCircuit.IsPhysicalPortUnitary.register_matching}
+    \leanok
+    Select one memory wire at each site. Swap it with the site's physical port,
+    apply a physical layer, and undo the onsite swaps. This acts exactly as the
+    layer on the selected wires and as identity on all other wires, at physical
+    depth one. Repeating this for $k$ disjoint register digits implements the
+    same matching permutation on each digit at depth at most $k$, independently
+    of the number of selected bonds. All unselected wires are restored on the
+    whole operator space, without assuming they were initialized or uncorrelated.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The selection permutation preserves each spatial site, hence is free.
+    Conjugating the port layer by it changes only the wire placement. Extend
+    each digit's site permutation by identity outside that digit's selected
+    wires. Disjoint ranges ensure the finite product has the desired action
+    on each digit; every factor has a one-layer implementation.
+\end{proof}
+
+\begin{lemma}[Data and scratch placement]
+    \label{lem:qc_port_data_scratch}
+    \uses{thm:qc_port_register_routing}
+    \lean{QuantumCircuit.PortRegisters.layout,
+        QuantumCircuit.PortRegisters.wire,
+        QuantumCircuit.PortRegisters.site_wire,
+        QuantumCircuit.PortRegisters.data,
+        QuantumCircuit.PortRegisters.scratch,
+        QuantumCircuit.PortRegisters.site_data,
+        QuantumCircuit.PortRegisters.site_scratch,
+        QuantumCircuit.PortRegisters.data_ne_scratch,
+        QuantumCircuit.PortRegisters.selection,
+        QuantumCircuit.PortRegisters.selection_apply,
+        QuantumCircuit.PortRegisters.site_selection,
+        QuantumCircuit.PortRegisters.selection_ranges_disjoint,
+        QuantumCircuit.PortRegisters.pairData,
+        QuantumCircuit.PortRegisters.pairData_left,
+        QuantumCircuit.PortRegisters.pairData_right,
+        QuantumCircuit.PortMatching.right_notMem,
+        QuantumCircuit.PortRegisters.routingPermutation,
+        QuantumCircuit.PortRegisters.data_notMem_selection,
+        QuantumCircuit.PortRegisters.routingPermutation_data_left,
+        QuantumCircuit.PortRegisters.routingPermutation_data_of_notMem,
+        QuantumCircuit.PortRegisters.routingPermutation_pairData_site,
+        QuantumCircuit.PortRegisters.routingPermutation_isPhysicalPortUnitary,
+        QuantumCircuit.PortRegisters.pairData_isPhysicalPortProtocol}
+    \leanok
+    Use $1+2k$ wires per spatial site: one physical port, $k$ data qudits and
+    $k$ scratch qudits. On a matching, select a data digit at each left endpoint
+    and a scratch digit at each right endpoint. The common routing moves the
+    left data register into the right scratch register and leaves the right
+    data register fixed. Thus both data registers of each nontrivial selected
+    bond lie at its right spatial site after routing. Reversing the routing
+    returns their outputs to their original sites and restores all other wires.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A right endpoint of a nontrivial matching bond cannot be another left
+    endpoint. Data and scratch slots are disjoint, and different digit selections
+    have disjoint ranges. The action formulas of
+    Theorem~\ref{thm:qc_port_register_routing} give the claimed placement.
+\end{proof}
+
+\begin{theorem}[One shared routing for a channel family]
+    \label{thm:qc_port_shared_channel_routing}
+    \uses{def:qc_physical_port_protocol, thm:qc_port_register_routing}
+    \lean{QuantumCircuit.sum_conjTranspose_embedOp_mul,
+        QuantumCircuit.routingMatrixEquiv,
+        QuantumCircuit.routingMatrixEquiv_apply,
+        QuantumCircuit.routingMatrixEquiv_symm_apply,
+        QuantumCircuit.routingChannelConj,
+        QuantumCircuit.routingChannelConj_apply,
+        QuantumCircuit.routingChannelConj_embeddedKraus,
+        QuantumCircuit.IsPhysicalPortProtocol.of_routed_map,
+        QuantumCircuit.IsPhysicalPortProtocol.of_register_routing,
+        QuantumCircuit.IsPhysicalPortProtocol.of_routed_family}
+    \leanok
+    Suppose an actual wire routing of physical depth $T$ moves every channel
+    in a commuting family into a single spatial site, possibly a different
+    site for each member. Execute all those conjugated channels locally,
+    then reverse the routing. The result is exactly the original family
+    product, with physical depth at most $2T$. The number of family members
+    does not multiply this depth bound. The identities hold for every input
+    operator, including arbitrary correlations with unused registers.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Wire reindexing is a linear equivalence on matrices. Its conjugation on
+    linear maps is multiplicative, so it preserves the commuting family
+    product. Placing Kraus operators preserves their completeness relation.
+    Each routed map is a zero-depth onsite channel; only the one forward and
+    one backward routing contribute to the depth.
+\end{proof}
+
+\begin{theorem}[Uniform bounded-register matching simulation]
+    \label{thm:qc_bounded_physical_port_simulation}
+    \uses{lem:qc_register_code_completion, lem:qc_port_data_scratch,
+        thm:qc_port_shared_channel_routing}
+    \lean{QuantumCircuit.PortRegisters.pairChannel,
+        QuantumCircuit.PortRegisters.pairChannel_commute,
+        QuantumCircuit.PortRegisters.matchingChannel,
+        QuantumCircuit.PortRegisters.matchingChannel_isPhysicalPortProtocol,
+        QuantumCircuit.boundedPairRegisterCode,
+        QuantumCircuit.exists_bounded_matching_simulation,
+        QuantumCircuit.IsPhysicalPortProtocol.list_prod_uniform}
+    \leanok
+    Fix $d\ge2$, $B$, and a local input dimension $m\le B$, and choose a
+    fallback density matrix on a pair of local inputs. Set
+    $k=\lceil\log_d B\rceil$, independently of the chain length.
+    For every ring of $N\ge2$ sites and every matching of CPTP pair channels,
+    there are normalized Kraus maps on the two $k$-qudit data registers that
+    agree with the prescribed code extensions on the entire register space,
+    and intertwine exactly with the original pair channels on encoded inputs.
+    Their actual placed matching channel has a physical-port protocol of depth
+    at most $2k$. A product of $L$ such certified layers has depth at most $2kL$.
+    For $B=1$ the register width and this bound are zero.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Encode the two endpoints independently, then complete each pair channel
+    outside its joint code. The resulting map is CPTP, so choose its normalized
+    finite Kraus representation. The common data-to-scratch routing has depth
+    $k$ and puts every pair channel onsite. Apply
+    Theorem~\ref{thm:qc_port_shared_channel_routing} once to the complete
+    matching. Protocol composition gives the final linear-in-$L$ bound.
+    The off-code joint decoder need not factor onsite; it is only executed
+    after colocation. This theorem is not an assertion about protocols with
+    an unrestricted intermediate dimension depending on $N$.
+\end{proof}
+
+\begin{lemma}[Product onsite coding on arbitrary chain inputs]
+    \label{lem:qc_product_register_encoding}
+    \uses{lem:qc_register_code_completion}
+    \lean{QuantumCircuit.OnsiteChannel.ofSiteMaps,
+        QuantumCircuit.OnsiteChannel.ofSiteMaps_siteMap,
+        QuantumCircuit.OnsiteChannel.comp,
+        QuantumCircuit.OnsiteChannel.comp_map,
+        QuantumCircuit.OnsiteChannel.map_eq_id_of_siteMap_eq_id,
+        QuantumCircuit.OnsiteChannel.encodeRegisters,
+        QuantumCircuit.OnsiteChannel.encodeRegisters_siteMap,
+        QuantumCircuit.OnsiteChannel.encodeRegisters_map,
+        QuantumCircuit.OnsiteChannel.decodeRegisters,
+        QuantumCircuit.OnsiteChannel.decodeRegisters_encodeRegisters,
+        QuantumCircuit.OnsiteChannel.decodeRegisters_encodeRegisters_reference,
+        QuantumCircuit.OnsiteChannel.encoded,
+        QuantumCircuit.OnsiteChannel.encoded_map_encodeRegisters}
+    \leanok
+    Finite CPTP maps at individual sites assemble into an onsite channel,
+    and assembly preserves composition. Product isometric encodings have
+    product completed local decoders whose composition is the identity on
+    all chain operators, also with any finite reference. Extending an existing
+    onsite channel between site-consistent input and output codes intertwines
+    with its original chain map, including entangled chain inputs.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose normalized local Kraus families. On product operators, all formulas
+    follow site by site; these products span the entire chain matrix algebra.
+    Use the exact local decoding identity before tensoring with a reference.
+\end{proof}
+
+\begin{lemma}[Representation-independent placement of register channels]
+    \label{lem:qc_register_channel_lift}
+    \uses{lem:qc_placed_operators}
+    \lean{QuantumCircuit.registerConfigurationSplit,
+        QuantumCircuit.registerConfigurationSplit_apply,
+        QuantumCircuit.registerConfigurationSplit_symm_comp,
+        QuantumCircuit.registerMatrixSplit,
+        QuantumCircuit.registerMatrixSplit_conjTranspose,
+        QuantumCircuit.registerMatrixSplit_embedOp,
+        QuantumCircuit.registerChannelLift,
+        QuantumCircuit.registerMatrixSplit_channelLift,
+        QuantumCircuit.registerChannelLift_id,
+        QuantumCircuit.registerChannelLift_comp,
+        QuantumCircuit.registerChannelLift_kraus,
+        QuantumCircuit.rectangularKrausMap_embedOp_congr}
+    \leanok
+    Splitting a configuration into a selected register and its complementary
+    wires identifies a placed operator with $A\otimes I$. Under the same
+    reindexing, placing a Kraus family gives precisely its local channel
+    tensored with the identity on the complement. Consequently the placed
+    channel is independent of its chosen Kraus representation, and the
+    placement identity holds on arbitrary correlated inputs.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Use the explicit configuration equivalence and the matrix reindexing
+    algebra equivalence. Check tensoring on matrix units, then use linear
+    extensionality. Applying the split to each placed Kraus operator proves
+    the full channel identity.
+\end{proof}
+
+\begin{theorem}[Intertwining of placed encoded channels]
+    \label{thm:qc_encoded_channel_placement}
+    \uses{lem:qc_product_register_encoding, lem:qc_register_channel_lift}
+    \lean{QuantumCircuit.reindex_rectKronecker_registerSplit,
+        QuantumCircuit.registerMatrixSplit_encodeRegisters,
+        QuantumCircuit.registerChannelLift_encodeRegisters}
+    \leanok
+    Let $E_S$ be the product code of a selected register and $E$ the product
+    code of the complete chain, possibly with different local input and output
+    dimensions. If $\widehat\Phi E_S=E_S\Phi$ as linear maps on operators,
+    then the placed channels satisfy
+    $\operatorname{Lift}(\widehat\Phi)E=E\operatorname{Lift}(\Phi)$
+    on every chain operator. The remaining sites may carry arbitrary
+    correlations with the selected register.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The rectangular global encoding matrix splits as the tensor product of
+    its selected and complementary encoding matrices. Check the resulting
+    tensor intertwining on matrix units, then use linear extensionality and
+    the representation-independent placement identity.
+\end{proof}

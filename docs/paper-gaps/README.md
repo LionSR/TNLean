@@ -949,6 +949,11 @@ measurements and classical communication (arXiv:2103.13367, Theorem
   large chain lengths; open: the converse direction needs channels acting on
   arbitrary input states.
 
+- `psc21_physical_port_simulation_scope.tex` records the derived
+  `2 * ceil(log_d B)` physical-port simulation of encoded matching channels
+  at fixed local dimension bound `B`, including exact reference preservation
+  and the remaining bounded native-protocol and source-ancilla conditions.
+
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
 - `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
