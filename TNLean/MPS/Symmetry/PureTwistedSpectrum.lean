@@ -20,13 +20,12 @@ hypotheses: the project's `IsPrimitive` predicate alone does not imply irreducib
 No one-site injectivity assumption is imposed.
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open scoped Matrix BigOperators ComplexOrder MatrixOrder TNOperatorSpace
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
-open scoped TNOperatorSpace in
 /-- Faithfulness of the stationary dual state and simplicity of the unital
 fixed eigenspace imply irreducibility. These are the canonical pure-FCS
 conditions used in arXiv:0802.0447, Lemma 1; the implication is Wolf's
@@ -111,7 +110,9 @@ theorem twistedTransfer_spectralRadius_eq_one_iff_intertwiner
     obtain ⟨μ, hμspec, hμrad⟩ := spectrum.exists_nnnorm_eq_spectralRadius F
     have hμ : ‖μ‖ = 1 := by
       have h : (‖μ‖₊ : ENNReal) = 1 := hμrad.trans hRad
-      exact_mod_cast h
+      have hnn : ‖μ‖₊ = 1 := by exact_mod_cast h
+      simpa only [coe_nnnorm, NNReal.coe_one] using
+        congrArg (fun r : NNReal => (r : ℝ)) hnn
     have hEig := Module.End.hasEigenvalue_iff_mem_spectrum.mpr (hSpec ▸ hμspec)
     obtain ⟨X, hX⟩ := hEig.exists_hasEigenvector
     have hGauge := twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible
@@ -134,7 +135,9 @@ theorem twistedTransfer_spectralRadius_eq_one_iff_intertwiner
     change 1 ≤ spectralRadius ℂ F
     rw [spectralRadius_eq_of_unital]
     have h := le_iSup₂ (f := fun z (_ : z ∈ spectrum ℂ F) => (‖z‖₊ : ENNReal)) μ hμspec
-    simpa [show ‖μ‖₊ = 1 by exact_mod_cast hμ] using h
+    simpa [show ‖μ‖₊ = 1 by
+      apply NNReal.coe_injective
+      simpa only [coe_nnnorm, NNReal.coe_one] using hμ] using h
 
 /-- A virtual intertwiner conjugates the twisted transfer action to a phase times
 the ordinary transfer action. This identity retains the peripheral phase. -/
