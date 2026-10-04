@@ -1,8 +1,8 @@
 \begin{definition}[The accessible two-register charge-pair operator]
     \label{def:peps_regular_charge_pair}
     \lean{TNLean.PEPS.regularChargePairCoefficient,
-      TNLean.PEPS.regularChargePairOperator,
-      TNLean.PEPS.normalizedRegularChargePairCoefficient}
+        TNLean.PEPS.regularChargePairOperator,
+        TNLean.PEPS.normalizedRegularChargePairCoefficient}
     \leanok
     Let $G$ be a finite group, $\chi:G\to\mathbb C$, and $p\in G$.
     On the two group registers, define the diagonal operator
@@ -20,8 +20,8 @@
 \begin{theorem}[Simultaneous-translation invariance of the actual charge pair]
     \label{thm:peps_regular_charge_pair_invariance}
     \lean{TNLean.PEPS.regularChargePairCoefficient_left_invariant,
-      TNLean.PEPS.regularChargePairOperator_commute,
-      TNLean.PEPS.regularChargePairOperator_conjugation}
+        TNLean.PEPS.regularChargePairOperator_commute,
+        TNLean.PEPS.regularChargePairOperator_conjugation}
     \leanok
     \uses{def:peps_regular_charge_pair}
     For every $x,g,h\in G$ and every coefficient function $\chi$,
@@ -33,7 +33,7 @@
         [U_x\otimes U_x,\Pi(\chi,p)]=0,
         \qquad
         (U_x\otimes U_x)\Pi(\chi,p)(U_x\otimes U_x)^*
-          =\Pi(\chi,p).
+        =\Pi(\chi,p).
     \]
     No invariance premise on $\chi$ is needed.
 \end{theorem}
@@ -46,11 +46,11 @@
 \begin{theorem}[Normalization and the nontrivial-charge orthogonality]
     \label{thm:peps_regular_charge_pair_normalization}
     \lean{TNLean.PEPS.regularChargePairCoefficient_normSq,
-      TNLean.PEPS.normalizedRegularChargePairCoefficient_normSq,
-      TNLean.PEPS.normalizedRegularChargePairCoefficient_orthogonal_uniform}
+        TNLean.PEPS.normalizedRegularChargePairCoefficient_normSq,
+        TNLean.PEPS.normalizedRegularChargePairCoefficient_orthogonal_uniform}
     \leanok
     \uses{def:peps_regular_charge_pair,
-      thm:peps_translated_character_inner_product}
+        thm:peps_translated_character_inner_product}
     If $\chi$ is the character of a unitary irreducible representation, then
     \[
         \|v_{\chi,p}\|^2=|G|^2,

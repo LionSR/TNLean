@@ -15,16 +15,16 @@
     vertical bond positions. Write $\sigma_v=(t_v,r_v,b_v,l_v)$ for the
     four original physical coordinates at $v$. Their bond regrouping is
     \begin{align}
-        \beta_{v,\mathrm h}&=(l_{v+\mathrm{east}},r_v),&
-        \beta_{v,\mathrm v}&=(t_v,b_{v+\mathrm{north}}).
+        \beta_{v,\mathrm h} & =(l_{v+\mathrm{east}},r_v),  &
+        \beta_{v,\mathrm v} & =(t_v,b_{v+\mathrm{north}}).
         \label{eq:peps_physical_bond_regrouping}
     \end{align}
     Each pair is ordered head, tail: horizontal bonds point right and
     vertical bonds point down. The inverse reads
     \begin{align}
-        t_v&=\beta^1_{v,\mathrm v},&r_v&=\beta^2_{v,\mathrm h},&
-        b_v&=\beta^2_{v-\mathrm{north},\mathrm v},&
-        l_v&=\beta^1_{v-\mathrm{east},\mathrm h}.
+        t_v & =\beta^1_{v,\mathrm v},                & r_v & =\beta^2_{v,\mathrm h}, &
+        b_v & =\beta^2_{v-\mathrm{north},\mathrm v}, &
+        l_v & =\beta^1_{v-\mathrm{east},\mathrm h}.
     \end{align}
     Thus regrouping is a bijection of the actual physical basis
     configurations. Its induced coefficient map is
@@ -49,12 +49,12 @@
     Every pair of physical coefficient vectors satisfies
     \begin{align}
         \langle\mathcal R\psi,\mathcal R\phi\rangle
-            &=\langle\psi,\phi\rangle.
+         & =\langle\psi,\phi\rangle.
     \end{align}
     For any complex bond factors $F_e$, the literal product identity is
     \begin{align}
         \prod_{v\in X}F_{v,\mathrm h}F_{v,\mathrm v}
-            &=\prod_{e\in\mathcal B}F_e.
+         & =\prod_{e\in\mathcal B}F_e.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
@@ -80,9 +80,9 @@
     in the orientations of (\ref{eq:peps_physical_bond_regrouping}). Then
     \begin{align}
         (\mathcal R\Psi_{U,W})(\beta)
-            &=|G|^{-N}\sum_{q:X\to G}\prod_{e\in\mathcal B}
-                \bigl[W^2U(q_{h(e)}q_{t(e)}^{-1})\bigr]_
-                    {\beta_e^1,\beta_e^2}.
+         & =|G|^{-N}\sum_{q:X\to G}\prod_{e\in\mathcal B}
+        \bigl[W^2U(q_{h(e)}q_{t(e)}^{-1})\bigr]_
+        {\beta_e^1,\beta_e^2}.
         \label{eq:peps_actual_regrouped_weighted_bonds}
     \end{align}
     In particular, $W=\Theta$ gives the actual square-root-weighted

@@ -1,9 +1,9 @@
 \begin{definition}[The flux-inserted charge pair and return measurement]
     \label{def:peps_regular_charge_pair_interference}
     \lean{TNLean.PEPS.regularBraidedChargePairCoefficient,
-      TNLean.PEPS.normalizedRegularBraidedChargePairCoefficient,
-      TNLean.PEPS.regularChargePairReturnProjection,
-      TNLean.PEPS.regularChargePairReturnMeasurement}
+        TNLean.PEPS.normalizedRegularBraidedChargePairCoefficient,
+        TNLean.PEPS.regularChargePairReturnProjection,
+        TNLean.PEPS.regularChargePairReturnMeasurement}
     \leanok
     \uses{def:peps_regular_charge_pair}
     Let $G$ be a finite group, let $\chi$ be a unitary irreducible character
@@ -25,11 +25,11 @@
 \begin{theorem}[The normalized interference amplitude]
     \label{thm:peps_regular_charge_pair_interference_overlap}
     \lean{TNLean.PEPS.regularChargePairCoefficient_braided_overlap,
-      TNLean.PEPS.normalizedRegularChargePairCoefficient_braided_overlap,
-      TNLean.PEPS.normalizedRegularBraidedChargePairCoefficient_normSq}
+        TNLean.PEPS.normalizedRegularChargePairCoefficient_braided_overlap,
+        TNLean.PEPS.normalizedRegularBraidedChargePairCoefficient_normSq}
     \leanok
     \uses{def:peps_regular_charge_pair_interference,
-      thm:peps_translated_character_inner_product}
+        thm:peps_translated_character_inner_product}
     For every $p,k,x\in G$,
     \[
         \langle v,v_k^x\rangle=\frac{\chi(k^{-1})}{d},
@@ -51,12 +51,12 @@
 \begin{theorem}[Action of the return projector]
     \label{thm:peps_regular_charge_pair_return_projection}
     \lean{TNLean.PEPS.regularChargePairReturnProjection_conjTranspose,
-      TNLean.PEPS.regularChargePairReturnProjection_mul_self,
-      TNLean.PEPS.regularChargePairReturnProjection_mulVec_braided}
+        TNLean.PEPS.regularChargePairReturnProjection_mul_self,
+        TNLean.PEPS.regularChargePairReturnProjection_mulVec_braided}
     \leanok
     \uses{def:peps_regular_charge_pair_interference,
-      thm:peps_regular_charge_pair_normalization,
-      thm:peps_regular_charge_pair_interference_overlap}
+        thm:peps_regular_charge_pair_normalization,
+        thm:peps_regular_charge_pair_interference_overlap}
     The return operator is an orthogonal projector and satisfies
     \[
         D^*=D,\qquad D^2=D,\qquad
@@ -73,7 +73,7 @@
 \begin{theorem}[Complete accessible measurement and return probability]
     \label{thm:peps_regular_charge_pair_return_probability}
     \lean{TNLean.PEPS.regularChargePairReturnMeasurement_complete,
-      TNLean.PEPS.regularChargePairReturnProjection_probability}
+        TNLean.PEPS.regularChargePairReturnProjection_probability}
     \leanok
     \uses{thm:peps_regular_charge_pair_return_projection}
     The outcomes $D$ and $1-D$ are positive Hermitian orthogonal projectors
