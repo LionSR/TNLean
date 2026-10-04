@@ -1,10 +1,10 @@
 \begin{definition}[A finite witness for the swept-string diagram]
     \label{def:peps_torus_swept_patch_endpoint_geometry}
     \lean{TNLean.PEPS.IsSweptPatchCoordinate,
-      TNLean.PEPS.sweptPatchCoordinateDecidable,
-      TNLean.PEPS.SweptPatchCoordinate,
-      TNLean.PEPS.torusSweptPatchCoordinate,
-      TNLean.PEPS.torusSweptPatchWitness}
+        TNLean.PEPS.sweptPatchCoordinateDecidable,
+        TNLean.PEPS.SweptPatchCoordinate,
+        TNLean.PEPS.torusSweptPatchCoordinate,
+        TNLean.PEPS.torusSweptPatchWitness}
     \leanok
     Let the horizontal and vertical torus periods be at least seven and six,
     respectively, and fix any translated position $v$. Write
@@ -27,9 +27,9 @@
 \begin{theorem}[The actual translated twenty-site geometry]
     \label{thm:peps_torus_swept_patch_endpoint_geometry}
     \lean{TNLean.PEPS.card_sweptPatchCoordinate,
-      TNLean.PEPS.torusSweptPatchCoordinate_injective,
-      TNLean.PEPS.torusSweptPatchWitness_card,
-      TNLean.PEPS.torusSweptPatchCoordinate_adj_iff}
+        TNLean.PEPS.torusSweptPatchCoordinate_injective,
+        TNLean.PEPS.torusSweptPatchWitness_card,
+        TNLean.PEPS.torusSweptPatchCoordinate_adj_iff}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_geometry}
     The twenty specified vertices are distinct and $|R_v|=20$.
@@ -50,9 +50,9 @@
 \begin{definition}[Four endpoint loops and partner connectors]
     \label{def:peps_torus_swept_patch_endpoint_walks}
     \lean{TNLean.PEPS.torusSweptPatchEndpoint,
-      TNLean.PEPS.torusSweptPatchEndpointLoop,
-      TNLean.PEPS.torusSweptPatchConnectorA,
-      TNLean.PEPS.torusSweptPatchConnectorB}
+        TNLean.PEPS.torusSweptPatchEndpointLoop,
+        TNLean.PEPS.torusSweptPatchConnectorA,
+        TNLean.PEPS.torusSweptPatchConnectorB}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_geometry}
     Take the four plaquette bases, in order, to be
@@ -72,14 +72,14 @@
 \begin{theorem}[Actual loop and connector containment]
     \label{thm:peps_torus_swept_patch_endpoint_walks}
     \lean{TNLean.PEPS.torusSweptPatchEndpoint_eq,
-      TNLean.PEPS.torusSweptPatchEndpointLoop_mem_witness,
-      TNLean.PEPS.torusSweptPatchConnectorA_mem_witness,
-      TNLean.PEPS.torusSweptPatchConnectorB_mem_witness,
-      TNLean.PEPS.torusSweptPatchConnectorA_length,
-      TNLean.PEPS.torusSweptPatchConnectorB_length}
+        TNLean.PEPS.torusSweptPatchEndpointLoop_mem_witness,
+        TNLean.PEPS.torusSweptPatchConnectorA_mem_witness,
+        TNLean.PEPS.torusSweptPatchConnectorB_mem_witness,
+        TNLean.PEPS.torusSweptPatchConnectorA_length,
+        TNLean.PEPS.torusSweptPatchConnectorB_length}
     \leanok
     \uses{thm:peps_torus_swept_patch_endpoint_geometry,
-      def:peps_torus_swept_patch_endpoint_walks}
+        def:peps_torus_swept_patch_endpoint_walks}
     All four endpoint loops and both partner connectors are actual native
     walks contained in $R_v$. The connectors have lengths six and three.
     No adjacency or loop-containment assumption is supplied.
@@ -97,19 +97,19 @@
 \begin{theorem}[Directed transport on the actual partner connectors]
     \label{thm:peps_torus_swept_patch_connector_transport}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorA,
-      TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorB}
+        TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorB}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_walks}
     For any bond assignment, write $R(p)$ and $U(p)$ for its rightward and
     upward directed transports at $p$. The reverse-ordered connector transports
     are
     \[
-      H_A=U(p(3,1))^{-1}R(p(2,2))R(p(1,2))R(p(0,2))
+        H_A=U(p(3,1))^{-1}R(p(2,2))R(p(1,2))R(p(0,2))
         R(p(-1,2))U(p(-1,1))
     \]
     and
     \[
-      H_B=U(p(1,-2))^{-1}U(p(1,-1))^{-1}U(p(1,0))^{-1}.
+        H_B=U(p(1,-2))^{-1}U(p(1,-1))^{-1}U(p(1,0))^{-1}.
     \]
     These equalities include the ordered-endpoint inversions at either seam.
 \end{theorem}

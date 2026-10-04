@@ -1,7 +1,7 @@
 \begin{definition}[The charge projection in the group-pair basis]
     \label{def:peps_regular_charge_detector_matrix}
     \lean{TNLean.PEPS.regularChargeDetectorMatrix,
-      TNLean.PEPS.regularChargeTranslationMatrix}
+        TNLean.PEPS.regularChargeTranslationMatrix}
     \leanok
     \uses{def:peps_regular_charge_translation_detector}
     Write $D_\chi$ for the matrix of the orthogonal projection onto
@@ -14,13 +14,13 @@
 \begin{theorem}[Matrix properties and translation covariance of the charge projection]
     \label{thm:peps_regular_charge_detector_matrix}
     \lean{TNLean.PEPS.regularChargeTranslationMatrix_eq_kronecker,
-      TNLean.PEPS.regularChargeDetectorMatrix_properties,
-      TNLean.PEPS.regularChargeDetectorMatrix_mulVec,
-      TNLean.PEPS.regularChargeDetectorMatrix_commute_translation,
-      TNLean.PEPS.regularChargeDetectorMatrix_translate_entries}
+        TNLean.PEPS.regularChargeDetectorMatrix_properties,
+        TNLean.PEPS.regularChargeDetectorMatrix_mulVec,
+        TNLean.PEPS.regularChargeDetectorMatrix_commute_translation,
+        TNLean.PEPS.regularChargeDetectorMatrix_translate_entries}
     \leanok
     \uses{def:peps_regular_charge_detector_matrix,
-      thm:peps_regular_charge_detector}
+        thm:peps_regular_charge_detector}
     The matrix $D_\chi$ is Hermitian, positive semidefinite, and idempotent.
     It acts on coefficient vectors as the orthogonal projection onto
     $\mathcal H_\chi$. Moreover,
@@ -43,10 +43,10 @@
 \begin{theorem}[Action on literal charge coefficient vectors]
     \label{thm:peps_regular_charge_detector_matrix_eigenvectors}
     \lean{TNLean.PEPS.regularChargeDetectorMatrix_chargeVector,
-      TNLean.PEPS.regularChargeDetectorMatrix_other_chargeVector}
+        TNLean.PEPS.regularChargeDetectorMatrix_other_chargeVector}
     \leanok
     \uses{thm:peps_regular_charge_detector_matrix,
-      thm:peps_regular_charge_subspace_orthogonality}
+        thm:peps_regular_charge_subspace_orthogonality}
     For every $p,x,y\in G$,
     \[
         D_\chi A_\chi(p;x,y)=A_\chi(p;x,y).

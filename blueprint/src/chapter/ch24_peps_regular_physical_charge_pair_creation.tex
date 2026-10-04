@@ -1,7 +1,7 @@
 \begin{definition}[The actual correlated two-bond charge insertion]
     \label{def:peps_regular_correlated_charge_column}
     \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix,
-      TNLean.PEPS.regularChargePairOpenRegionMatrix}
+        TNLean.PEPS.regularChargePairOpenRegionMatrix}
     \leanok
     \uses{def:peps_regular_charge_pair, def:peps_regular_projector_open_region}
     Let $R$ be a finite region of an ordered simple graph, let $e_0,e_1$
@@ -9,9 +9,9 @@
     For a physical configuration $s$ and crossing labels $\theta$, put
     \[
         C_{\chi,p}(s,\theta)
-          =\sum_{\eta|_{\partial R}=\theta}
-             \chi(p\eta_{e_1}^{-1}\eta_{e_0})
-             \prod_{v\in R} A_v(\eta|_v,s_v).
+        =\sum_{\eta|_{\partial R}=\theta}
+        \chi(p\eta_{e_1}^{-1}\eta_{e_0})
+        \prod_{v\in R} A_v(\eta|_v,s_v).
     \]
     Replacing $A_v$ by the local regular averaging projectors gives the
     canonical column $B_{\chi,p}$. This is a single correlated weight on
@@ -22,16 +22,16 @@
 \begin{theorem}[The correlated weight in actual tree coordinates]
     \label{thm:peps_regular_correlated_charge_coordinates}
     \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix_coordinates,
-      TNLean.PEPS.regularChargePairOpenRegionMatrix_eq_image,
-      TNLean.PEPS.regularChargePairOpenRegionMatrix_one_eq_openRegionWeight}
+        TNLean.PEPS.regularChargePairOpenRegionMatrix_eq_image,
+        TNLean.PEPS.regularChargePairOpenRegionMatrix_one_eq_openRegionWeight}
     \leanok
     \uses{def:peps_regular_correlated_charge_column,
-      thm:peps_regular_region_projector_coordinates}
+        thm:peps_regular_region_projector_coordinates}
     Choose a spanning tree of the induced region and a root. In its actual
     coordinates $c=(y,a,r,z)$,
     \[
         B_{\chi,p}(c,\theta)
-           =\chi(pa_{e_1}^{-1}a_{e_0}) B_{1,1}(c,\theta).
+        =\chi(pa_{e_1}^{-1}a_{e_0}) B_{1,1}(c,\theta).
     \]
     If every original site is regular $G$-injective, its product physical
     map $T_R$ satisfies $T_R B_{\chi,p}=C_{\chi,p}$. In particular,
@@ -60,22 +60,22 @@
 \begin{theorem}[Boundary-uniform preparation on the original spins]
     \label{thm:peps_regular_physical_charge_pair_creation}
     \lean{
-      TNLean.PEPS.exists_unitary_regularChargeReferencePreparation,
-      TNLean.PEPS.regularRegionChargeReferenceMatrix_mem_unitaryGroup,
-      TNLean.PEPS.regularRegionChargeReferenceMatrix_commute_vertexTranslation,
-      TNLean.PEPS.regularRegionChargeReferenceMatrix_commute_localProjector,
-      TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec,
-      TNLean.PEPS.exists_unitary_regularPhysicalChargePairCreation}
+        TNLean.PEPS.exists_unitary_regularChargeReferencePreparation,
+        TNLean.PEPS.regularRegionChargeReferenceMatrix_mem_unitaryGroup,
+        TNLean.PEPS.regularRegionChargeReferenceMatrix_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionChargeReferenceMatrix_commute_localProjector,
+        TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec,
+        TNLean.PEPS.exists_unitary_regularPhysicalChargePairCreation}
     \leanok
     \uses{def:peps_regular_charge_reference_matrix,
-      thm:peps_regular_charge_pair_normalization,
-      thm:peps_regular_charge_labels,
-      lem:peps_unitary_vector_swap,lem:peps_permutation_matrix_commutation}
+        thm:peps_regular_charge_pair_normalization,
+        thm:peps_regular_charge_labels,
+        lem:peps_unitary_vector_swap,lem:peps_permutation_matrix_commutation}
     For a unitary irreducible character $\chi$ and $p\in G$, there is a
     unitary $Q$ commuting with simultaneous left translation such that
     \[
         Q\bigl(|G|^{-1}\mathbf1\bigr)(a,b)
-           =|G|^{-1}\chi(pb^{-1}a).
+        =|G|^{-1}\chi(pb^{-1}a).
     \]
     The resulting $U_R(Q)$ is unitary and commutes with every independent
     vertex translation, hence with the product of local averaging projectors.
