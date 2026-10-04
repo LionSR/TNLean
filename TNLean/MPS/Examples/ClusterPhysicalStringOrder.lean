@@ -20,6 +20,11 @@ The tensor is the existing `clusterTensorRMP`, with stationary density matrix
 expressions of display `SOPMP`, rather than finite periodic expectations.
 The blocked physical alphabet is little-endian: `i = s₀ + 2s₁` represents
 `Aˢ⁰ Aˢ¹`.
+
+**Scope restriction (specified twist):** The one-site absence result fixes
+`u = -σx`; it does not exclude string order for arbitrary other physical twists.
+This restriction is recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -53,13 +58,15 @@ lemma clusterTensorRMP_twistedTransferMap (p X : Matrix (Fin 2) (Fin 2) ℂ) :
     simp [Matrix.mul_apply, Matrix.vecMul, dotProduct, Matrix.conjTranspose_apply,
       Fin.sum_univ_two] <;> ring_nf <;> simp [Complex.invSqrtTwo_sq] <;> ring
 
-/-- The printed cluster tensor is unital. -/
+/-- The printed cluster tensor is unital.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 theorem clusterTensorRMP_transferMap_one : Kraus.transferMap clusterTensorRMP 1 = 1 := by
   rw [← twistedTransferMap_one, clusterTensorRMP_twistedTransferMap]
   ext i j
   fin_cases i <;> fin_cases j <;> norm_num
 
-/-- The maximally mixed density matrix is stationary for the printed cluster tensor. -/
+/-- The maximally mixed density matrix is stationary for the printed cluster tensor.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 theorem clusterTensorRMP_adjoint_fixes_maximallyMixed :
     Kraus.transferMap (fun i => (clusterTensorRMP i)ᴴ) ((1 / 2 : ℂ) • 1) =
       (1 / 2 : ℂ) • 1 := by
@@ -153,7 +160,8 @@ private lemma clusterString_decodeBlock (h : blockPhysDim 2 2 = 4) (i : Fin 4) :
   fin_cases i <;> fin_cases j <;> norm_num [Fin.divNat, Fin.modNat]
 
 /-- The blocked index `i` represents the ordered two-site word
-`(i mod 2, i / 2)`. -/
+`(i mod 2, i / 2)`.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterBlockedRMP_eq_mul (i : Fin 4) :
     clusterBlockedRMP i = clusterTensorRMP (Fin.modNat (m := 2) (n := 2) i) *
       clusterTensorRMP (Fin.divNat (m := 2) (n := 2) i) := by
@@ -176,13 +184,15 @@ def clusterStringRight : Matrix (Fin 4) (Fin 4) ℂ :=
     pauliY (Fin.modNat (m := 2) (n := 2) i) (Fin.modNat (m := 2) (n := 2) j) *
       pauliZ (Fin.divNat (m := 2) (n := 2) i) (Fin.divNat (m := 2) (n := 2) j)
 
-/-- The two-site physical twist `(-σx) ⊗ (-σx)`, in the same blocked basis. -/
+/-- The two-site physical twist `(-σx) ⊗ (-σx)`, in the same blocked basis.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 def clusterStringTwist : Matrix (Fin 4) (Fin 4) ℂ :=
   fun i j =>
     (-pauliX) (Fin.modNat (m := 2) (n := 2) i) (Fin.modNat (m := 2) (n := 2) j) *
       (-pauliX) (Fin.divNat (m := 2) (n := 2) i) (Fin.divNat (m := 2) (n := 2) j)
 
-/-- The left endpoint acts on the decoded sites by `σz ⊗ σy`. -/
+/-- The left endpoint acts on the decoded sites by `σz ⊗ σy`.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterStringLeft_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
     clusterStringLeft i j =
       pauliZ (decodeBlock 2 2 (Fin.cast h.symm i) 0)
@@ -192,7 +202,8 @@ lemma clusterStringLeft_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
   simp [decodeBlock, clusterString_decodeBlock h i, clusterString_decodeBlock h j,
     clusterStringLeft]
 
-/-- The right endpoint acts on the decoded sites by `σy ⊗ σz`. -/
+/-- The right endpoint acts on the decoded sites by `σy ⊗ σz`.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterStringRight_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
     clusterStringRight i j =
       pauliY (decodeBlock 2 2 (Fin.cast h.symm i) 0)
@@ -202,7 +213,8 @@ lemma clusterStringRight_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
   simp [decodeBlock, clusterString_decodeBlock h i, clusterString_decodeBlock h j,
     clusterStringRight]
 
-/-- The blocked physical twist is the tensor square of `-σx`. -/
+/-- The blocked physical twist is the tensor square of `-σx`.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterStringTwist_eq_blockKron (h : blockPhysDim 2 2 = 4) :
     clusterStringTwist = (blockKron 2 (-pauliX)).submatrix
       (Fin.cast h.symm) (Fin.cast h.symm) := by
@@ -249,7 +261,8 @@ theorem clusterTensorRMP_twoSite_physicalStringOrderParam (N : ℕ) :
     Matrix.trace_smul]
   norm_num [Matrix.trace, Fin.sum_univ_two]
 
-/-- The blocked twist fixes the same virtual eigenmatrix `σy`. -/
+/-- The blocked twist fixes the same virtual eigenmatrix `σy`.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterBlockedRMP_twistedTransferMap_pauliY :
     twistedTransferMap clusterBlockedRMP clusterStringTwist pauliY = pauliY := by
   ext i j
@@ -260,7 +273,8 @@ lemma clusterBlockedRMP_twistedTransferMap_pauliY :
     ring_nf
 
 /-- On the two-site blocked chain, the physical string correlator is one.
-The middle length here counts two-site blocks. -/
+The middle length here counts two-site blocks.
+Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 theorem clusterBlockedRMP_physicalStringOrderParam (N : ℕ) :
     physicalStringOrderParam clusterBlockedRMP ((1 / 2 : ℂ) • 1)
       clusterStringLeft clusterStringRight clusterStringTwist N = 1 := by

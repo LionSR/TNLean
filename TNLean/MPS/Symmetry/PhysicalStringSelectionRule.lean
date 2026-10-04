@@ -14,6 +14,11 @@ arXiv:0802.0447, lines 241–276, for a fixed physical twist with a specified
 peripheral virtual intertwiner. They do not assert the existential Theorem 1
 over nontrivial twists, nor change `HasPhysicalStringOrder` or its convention
 for the identity action modulo scalar phases.
+
+**Scope restriction (fixed physical twist):** The theorem does not quantify
+over nontrivial twists or identify scalar phases with the identity action.
+The remaining global equivalence and its interface question are recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -24,7 +29,8 @@ variable {d D : ℕ}
 
 /-- For a fixed unitary twist and peripheral intertwiner, physical one-site
 endpoints with positive limiting string magnitude exist exactly when one of
-the source's physical-letter trace coefficients is nonzero. -/
+the source's physical-letter trace coefficients is nonzero.
+Supporting result for arXiv:0802.0447, lines 257–276. -/
 theorem exists_hasPhysicalStringOrderWith_iff_letter_coefficient
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -56,7 +62,8 @@ theorem exists_hasPhysicalStringOrderWith_iff_letter_coefficient
 
 /-- Source canonical spectral-purity form of the physical selection rule.
 Irreducibility is derived from faithful stationary density and the simple
-peripheral eigenspace. The twist and its virtual intertwiner stay fixed. -/
+peripheral eigenspace. The twist and its virtual intertwiner stay fixed.
+Supporting result for arXiv:0802.0447, lines 257–276. -/
 theorem pureCanonical_physicalString_selection_rule
     [NeZero D] (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)

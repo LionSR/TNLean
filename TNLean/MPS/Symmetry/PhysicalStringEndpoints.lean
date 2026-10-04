@@ -20,6 +20,10 @@ existence of a nontrivial physical symmetry is imposed on this algebraic result.
 
 Source: Pérez-García–Wolf–Sanz–Verstraete–Cirac, arXiv:0802.0447,
 lines 241--276.
+
+**Scope restriction (fixed physical twist):** These are supporting endpoint
+identities for a supplied twist and intertwiner, not the full existential
+Theorem 1. See `docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -54,7 +58,8 @@ theorem rotatePhysical_phaseShift
       simp [rotatePhysical, Finset.smul_sum, smul_smul]
     _ = V * A i * Vᴴ := by rw [hInter, smul_smul, inv_mul_cancel₀ hμ, one_smul]
 
-/-- A physical twist mixes the left Kraus family in the transfer contraction. -/
+/-- A physical twist mixes the left Kraus family in the transfer contraction.
+Supporting result for arXiv:0802.0447, display EU, lines 166–181. -/
 lemma twistedTransferMap_eq_sum_rotatePhysical
     (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -63,7 +68,8 @@ lemma twistedTransferMap_eq_sum_rotatePhysical
   simp only [rotatePhysical, Finset.sum_mul, smul_mul_assoc]
 
 /-- Taking adjoints in the physical and virtual arguments takes the adjoint of
-the twisted transfer output. -/
+the twisted transfer output.
+Supporting result for arXiv:0802.0447, display EU, lines 166–181. -/
 lemma twistedTransferMap_conjTranspose
     (A : MPSTensor d D) (x : Matrix (Fin d) (Fin d) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :

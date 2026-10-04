@@ -15,6 +15,15 @@ the actual endpoint coefficients in PGWSVC08, arXiv:0802.0447, lines 241–255.
 The leading term retains its length-dependent peripheral phase. The resulting
 criterion concerns `HasPhysicalStringOrderWith`, not an existential choice of
 nontrivial physical symmetry modulo scalar phases.
+
+**Local fix (peripheral phase):** The complex limit printed in arXiv:0802.0447,
+lines 249–250, omits the length-dependent phase. Here `(μ^N)⁻¹ S_N` converges,
+while the unadjusted complex correlator need not. The correction is recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
+
+**Scope restriction (fixed physical twist):** The twist and virtual intertwiner
+are fixed; the full existential Theorem 1 is separate, as recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder TNOperatorSpace
@@ -28,7 +37,8 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- The unital canonical transfer powers converge to the faithful stationary
 trace functional. The proof reuses the FNW complementary-remainder machinery
-on the conjugate-transposed family; no diagonalizability is assumed. -/
+on the conjugate-transposed family; no diagonalizability is assumed.
+Supporting result for arXiv:0802.0447, lines 241–255. -/
 theorem canonical_transfer_pow_tendsto_stationary_trace
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -90,7 +100,8 @@ theorem canonical_transfer_pow_tendsto_stationary_trace
   simpa [P, fnwLimitMap, hΛtr] using hresult
 
 /-- The exact iterate identity behind the physical asymptotic formula.
-It holds also at zero length and keeps the full phase `μ^N`. -/
+It holds also at zero length and keeps the full phase `μ^N`.
+Supporting result for arXiv:0802.0447, lines 241–255. -/
 theorem twistedTransferIter_eq_phase_mul_transfer_pow
     (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (V : Mat) (μ : ℂ) (hV : V * Vᴴ = 1)
@@ -107,7 +118,8 @@ theorem twistedTransferIter_eq_phase_mul_transfer_pow
     simp [← Matrix.mul_assoc, hV', pow_succ', Module.End.mul_apply, smul_smul, mul_comm μ]
 
 /-- The source physical correlator has a phase-retaining asymptotic coefficient.
-The factor `(μ^N)⁻¹` is essential: the complex correlator itself need not converge. -/
+The factor `(μ^N)⁻¹` is essential: the complex correlator itself need not converge.
+Supporting result for arXiv:0802.0447, lines 241–255. -/
 theorem physicalStringOrderParam_phase_adjusted_tendsto
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -150,7 +162,8 @@ theorem physicalStringOrderParam_phase_adjusted_tendsto
 
 /-- The limiting magnitude of the actual physical string correlator is the
 product of the two endpoint coefficient magnitudes. This retains arbitrary
-unit peripheral phases without assuming convergence of the complex correlator. -/
+unit peripheral phases without assuming convergence of the complex correlator.
+Supporting result for arXiv:0802.0447, lines 241–255. -/
 theorem physicalStringOrderParam_norm_tendsto
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
@@ -170,7 +183,8 @@ theorem physicalStringOrderParam_norm_tendsto
 
 /-- The physical selection rule for fixed endpoints, twist, and virtual
 intertwiner: positive limiting magnitude is equivalent to the two actual
-physical endpoint coefficients being nonzero. -/
+physical endpoint coefficients being nonzero.
+Supporting result for arXiv:0802.0447, lines 241–255. -/
 theorem hasPhysicalStringOrderWith_iff_endpoint_coefficients
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))

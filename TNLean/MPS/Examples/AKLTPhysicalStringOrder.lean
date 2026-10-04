@@ -24,10 +24,14 @@ boundary nondecay. The calculation is on the unblocked physical tensor.
 Two conventions are made explicit. The printed tensor has a positive last
 letter, whereas `akltTensor` has a negative one; the source tensor below is
 obtained by a diagonal unitary change of the physical basis. Both `S_z` and
-the twist are unchanged by that rephasing. The stationary density is `I/2`,
+the twist are unchanged by that rephasing.
+
+**Local fix (normalized stationary density):** The stationary density is `I/2`,
 as required by `tr Λ = 1` in the source's display `fixed` (lines 147–152).
 The example's literal `Λ = I` is missing this normalization and would give
 `-8/9` in display `SOPMP`; the stated physical value `-4/9` uses `I/2`.
+The correction and its literal-boundary countercheck are recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -38,15 +42,18 @@ noncomputable section
 namespace MPSTensor
 
 /-- The source's physical pi rotation about the spin-z axis, in the physical
-order `(m=0,m=+1,m=-1)`. -/
+order `(m=0,m=+1,m=-1)`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 def akltSpinRotationZ : Matrix (Fin 3) (Fin 3) ℂ := Matrix.diagonal ![1, -1, -1]
 
 /-- The normalized AKLT tensor printed in PGWSVC08 Example 1. The sign change
-of the last letter is a physical basis rephasing of the existing tensor. -/
+of the last letter is a physical basis rephasing of the existing tensor.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 def akltPGWSVC08Tensor : MPSTensor 3 2 :=
   rotatePhysical (Matrix.diagonal ![1, 1, -1]) akltTensor
 
-/-- The source tensor is exactly `(σ_z, √2 σ_+, √2 σ_-)/√3`. -/
+/-- The source tensor is exactly `(σ_z, √2 σ_+, √2 σ_-)/√3`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltPGWSVC08Tensor_apply (i : Fin 3) :
     akltPGWSVC08Tensor i = match i with
       | 0 => (↑(1 / Real.sqrt 3) : ℂ) • !![1, 0; 0, -1]
@@ -55,7 +62,8 @@ theorem akltPGWSVC08Tensor_apply (i : Fin 3) :
   fin_cases i <;>
     simp [akltPGWSVC08Tensor, rotatePhysical, Matrix.diagonal, akltTensor]
 
-/-- The source rephasing is unitary, so it is a genuine physical basis change. -/
+/-- The source rephasing is unitary, so it is a genuine physical basis change.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltPGWSVC08_rephasing_unitary :
     (Matrix.diagonal ![1, 1, -1] : Matrix (Fin 3) (Fin 3) ℂ) ∈
       Matrix.unitaryGroup (Fin 3) ℂ := by
@@ -64,7 +72,8 @@ theorem akltPGWSVC08_rephasing_unitary :
   fin_cases i <;> fin_cases j <;> norm_num [Matrix.mul_apply, Fin.sum_univ_three]
 
 /-- The source's virtual gauge `σ_z` implements the physical pi rotation on
-the printed tensor. -/
+the printed tensor.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltPGWSVC08_sigmaZ_intertwine (i : Fin 3) :
     (∑ j : Fin 3, akltSpinRotationZ i j • akltPGWSVC08Tensor j) =
       !![(1 : ℂ), 0; 0, -1] * akltPGWSVC08Tensor i * !![1, 0; 0, -1] := by
@@ -77,7 +86,8 @@ private theorem spinOneOperator_z_diagonal :
   ext i j
   fin_cases i <;> fin_cases j <;> simp [spinOneOperator, Matrix.diagonal]
 
-/-- The explicit string twist is the actual matrix exponential `exp(iπ S_z)`. -/
+/-- The explicit string twist is the actual matrix exponential `exp(iπ S_z)`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltSpinRotationZ_eq_exp :
     akltSpinRotationZ =
       NormedSpace.exp ((Complex.I * (Real.pi : ℂ)) • spinOneOperator 2) := by
@@ -88,7 +98,8 @@ theorem akltSpinRotationZ_eq_exp :
     simp [akltSpinRotationZ, Matrix.diagonal, Pi.coe_exp,
       ← Complex.exp_eq_exp_ℂ, hpi]
 
-/-- The pi rotation is a nontrivial unitary physical operator. -/
+/-- The pi rotation is a nontrivial unitary physical operator.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltSpinRotationZ_unitary_ne_one :
     akltSpinRotationZ * akltSpinRotationZᴴ = 1 ∧ akltSpinRotationZ ≠ 1 := by
   constructor
@@ -100,7 +111,8 @@ theorem akltSpinRotationZ_unitary_ne_one :
     norm_num [akltSpinRotationZ] at this
 
 /-- Every diagonal physical insertion is invariant under the source's change of
-physical phases. In particular this applies to `S_z` and `exp(iπ S_z)`. -/
+physical phases. In particular this applies to `S_z` and `exp(iπ S_z)`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem twistedTransferMap_akltPGWSVC08_diagonal (w : Fin 3 → ℂ) :
     twistedTransferMap akltPGWSVC08Tensor (Matrix.diagonal w) =
       twistedTransferMap akltTensor (Matrix.diagonal w) := by
@@ -109,7 +121,8 @@ theorem twistedTransferMap_akltPGWSVC08_diagonal (w : Fin 3 → ℂ) :
     Matrix.diagonal, Fin.sum_univ_three]
 
 /-- The transfer matrix with a diagonal physical insertion, in explicit virtual
-coordinates. This one calculation supplies both physical endpoints and twist. -/
+coordinates. This one calculation supplies both physical endpoints and twist.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem twistedTransferMap_aklt_diagonal (w : Fin 3 → ℂ)
     (X : Matrix (Fin 2) (Fin 2) ℂ) :
     twistedTransferMap akltTensor (Matrix.diagonal w) X =
@@ -127,7 +140,8 @@ theorem twistedTransferMap_aklt_diagonal (w : Fin 3 → ℂ)
 
 /-- The printed tensor is unital, with positive trace-one stationary density
 `I/2`. This is the canonical normalization required by the source's display
-`fixed`, rather than the unnormalized identity printed in the example. -/
+`fixed`, rather than the unnormalized identity printed in the example.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltPGWSVC08_canonical :
     Kraus.transferMap akltPGWSVC08Tensor 1 = 1 ∧
       Kraus.transferMap (fun i => (akltPGWSVC08Tensor i)ᴴ) ((1 / 2 : ℂ) • 1) =
@@ -158,7 +172,8 @@ theorem akltPGWSVC08_canonical :
     rw [hreindex, map_smul, hone]
   · norm_num [Matrix.trace_smul, Matrix.trace_one]
 
-/-- The physical right endpoint sends the identity to `(2/3) σ_z`. -/
+/-- The physical right endpoint sends the identity to `(2/3) σ_z`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem twistedTransferMap_aklt_spinZ_one :
     twistedTransferMap akltTensor (spinOneOperator 2) 1 =
       (2 / 3 : ℂ) • !![1, 0; 0, -1] := by
@@ -166,7 +181,8 @@ theorem twistedTransferMap_aklt_spinZ_one :
   ext i j
   fin_cases i <;> fin_cases j <;> norm_num
 
-/-- The twisted transfer fixes the virtual sigma-z matrix. -/
+/-- The twisted transfer fixes the virtual sigma-z matrix.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem twistedTransferMap_aklt_rotationZ_sigmaZ :
     twistedTransferMap akltTensor akltSpinRotationZ !![1, 0; 0, -1] =
       !![1, 0; 0, -1] := by
@@ -174,7 +190,8 @@ theorem twistedTransferMap_aklt_rotationZ_sigmaZ :
   ext i j
   fin_cases i <;> fin_cases j <;> norm_num
 
-/-- The physical left endpoint sends sigma-z to `-(2/3) I`. -/
+/-- The physical left endpoint sends sigma-z to `-(2/3) I`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem twistedTransferMap_aklt_spinZ_sigmaZ :
     twistedTransferMap akltTensor (spinOneOperator 2) !![1, 0; 0, -1] =
       (-2 / 3 : ℂ) • 1 := by
@@ -183,7 +200,8 @@ theorem twistedTransferMap_aklt_spinZ_sigmaZ :
   fin_cases i <;> fin_cases j <;> norm_num
 
 /-- The actual physical-endpoint AKLT string correlator is `-4/9` at every
-middle-string length, with normalized stationary boundary `I/2`. -/
+middle-string length, with normalized stationary boundary `I/2`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem physicalStringOrderParam_aklt (N : ℕ) :
     physicalStringOrderParam akltTensor ((1 / 2 : ℂ) • 1)
       (spinOneOperator 2) (spinOneOperator 2) akltSpinRotationZ N = -4 / 9 := by
@@ -198,7 +216,8 @@ theorem physicalStringOrderParam_aklt (N : ℕ) :
   norm_num
 
 /-- The printed tensor has the same physical string value: its diagonal
-physical rephasing changes neither the endpoints nor the string unitary. -/
+physical rephasing changes neither the endpoints nor the string unitary.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem physicalStringOrderParam_akltPGWSVC08 (N : ℕ) :
     physicalStringOrderParam akltPGWSVC08Tensor ((1 / 2 : ℂ) • 1)
       (spinOneOperator 2) (spinOneOperator 2) akltSpinRotationZ N = -4 / 9 := by
@@ -207,7 +226,8 @@ theorem physicalStringOrderParam_akltPGWSVC08 (N : ℕ) :
     physicalStringOrderParam_aklt N
 
 /-- Without the source's required trace-one normalization, the identity boundary
-gives `-8/9`, explaining the correction of Example 1's printed `Λ=I` to `I/2`. -/
+gives `-8/9`, explaining the correction of Example 1's printed `Λ=I` to `I/2`.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem physicalStringOrderParam_akltPGWSVC08_identity_boundary (N : ℕ) :
     physicalStringOrderParam akltPGWSVC08Tensor 1
       (spinOneOperator 2) (spinOneOperator 2) akltSpinRotationZ N = -8 / 9 := by
@@ -220,7 +240,8 @@ theorem physicalStringOrderParam_akltPGWSVC08_identity_boundary (N : ℕ) :
     _ = _ := by norm_num
 
 /-- The source's explicit physical endpoints witness physical string order for
-the unblocked AKLT tensor, rather than only virtual-boundary nondecay. -/
+the unblocked AKLT tensor, rather than only virtual-boundary nondecay.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltPGWSVC08_hasPhysicalStringOrderWith :
     HasPhysicalStringOrderWith akltPGWSVC08Tensor ((1 / 2 : ℂ) • 1)
       (spinOneOperator 2) (spinOneOperator 2) akltSpinRotationZ := by
@@ -235,7 +256,8 @@ theorem akltPGWSVC08_hasPhysicalStringOrderWith :
   exact tendsto_const_nhds
 
 /-- The printed AKLT tensor has physical string order with a nonidentity physical
-unitary, as defined by PGWSVC08's stationary correlator. -/
+unitary, as defined by PGWSVC08's stationary correlator.
+Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltPGWSVC08_hasPhysicalStringOrder :
     HasPhysicalStringOrder akltPGWSVC08Tensor ((1 / 2 : ℂ) • 1) :=
   ⟨akltSpinRotationZ, spinOneOperator 2, spinOneOperator 2,

@@ -23,11 +23,12 @@ theorems.
     \leanok
     \uses{def:aklt_tensor, def:aklt_polynomial_hamiltonian}
     In the order $(m=0,+1,-1)$, the source tensor has letters
-    \[
-        B^0=\frac{\sigma_z}{\sqrt3},\qquad
-        B^1=\sqrt{\frac23}\,\sigma_+,\qquad
-        B^2=\sqrt{\frac23}\,\sigma_-.
-    \]
+    \begin{align}
+        B^0 & =\frac{\sigma_z}{\sqrt3},  &
+        B^1 & =\sqrt{\frac23}\,\sigma_+, &
+        B^2 & =\sqrt{\frac23}\,\sigma_-.
+        \notag
+    \end{align}
     It is the diagonal physical rephasing $\operatorname{diag}(1,1,-1)$ of
     Definition~\ref{def:aklt_tensor}; this is a unitary basis change, not a
     virtual gauge. Take
@@ -52,7 +53,7 @@ theorems.
         MPSTensor.akltPGWSVC08_hasPhysicalStringOrder}
     \leanok
     \uses{def:aklt_physical_string_data, def:physical_string_order_param,
-        def:has_physical_string_order_with}
+        def:has_physical_string_order}
     The tensor $B$ is unital and has positive trace-one stationary density
     $\Lambda=\Id/2$. For every $N\geq0$,
     \begin{align}
@@ -67,16 +68,23 @@ theorems.
 \begin{proof}\leanok
     Diagonal insertions are invariant under the physical rephasing. Direct
     calculation gives
-    \[
-        \mathcal E_{S_z}(\Id)=\frac23\sigma_z,\qquad
-        \mathcal E_u(\sigma_z)=\sigma_z,\qquad
-        \mathcal E_{S_z}(\sigma_z)=-\frac23\Id.
-    \]
+    \begin{align}
+        \mathcal E_{S_z}(\Id)      & =\frac23\sigma_z, &
+        \mathcal E_u(\sigma_z)     & =\sigma_z,        &
+        \mathcal E_{S_z}(\sigma_z) & =-\frac23\Id.
+        \notag
+    \end{align}
     Iteration and the normalized trace give $-4/9$. The positive limit is
     constant, so no asymptotic approximation is needed.
 \end{proof}
 
 \begin{remark}[Normalization in the printed AKLT example]
+    % **Local fix (normalized stationary density):** The printed identity
+    % boundary conflicts with the source normalization. The formal value uses
+    % I/2, with both readings proved and recorded in
+    % docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
+    \textbf{Local fix:} The detailed correction is recorded in
+    \path{docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex}.
     The source's display \texttt{fixed} requires $\tr\Lambda=1$, but its
     AKLT example prints $\Lambda=\Id$. In dimension two the normalized
     density is $\Id/2$. Using the literal identity in the same correlator
@@ -106,11 +114,16 @@ theorems.
     Every pair of physical indices satisfies
     $\tr(V\Lambda A_nA_j^\dagger)=0$. For arbitrary one-site physical
     endpoints $x,y$,
-    \[
-        S_N(x,y,-\sigma_x)=0\qquad (N\geq2).
-    \]
+    \begin{align}
+        S_N(x,y,-\sigma_x) & =0\qquad (N\geq2).
+        \notag
+    \end{align}
     Hence no such endpoints give a positive limiting absolute value for
     this fixed twist. This does not quantify over other possible twists.
+    % **Scope restriction (specified twist):** Only u=-sigma_x is excluded;
+    % see docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
+    This scope is recorded in
+    \path{docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex}.
 \end{theorem}
 \begin{proof}\leanok
     Every $\mathcal E_y(\Id)$ is diagonal. The twist sends $\Id$ to zero,
@@ -147,8 +160,7 @@ theorems.
         MPSTensor.clusterBlockedRMP_hasPhysicalStringOrder}
     \leanok
     \uses{def:cluster_two_site_string_endpoints,
-        thm:cluster_one_site_physical_string_obstruction,
-        def:has_physical_string_order_with}
+        def:has_physical_string_order}
     With $\mathcal E_x^{(2)},\mathcal E_y^{(2)}$ the insertions on the two-site
     endpoint blocks, every single-site middle length $N\geq0$ satisfies
     \begin{align}
@@ -162,6 +174,7 @@ theorems.
     predicate with the nonidentity unitary $u\otimes u$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:cluster_one_site_physical_string_obstruction}
     The explicit endpoint maps satisfy
     $\mathcal E_y^{(2)}(\Id)=-\sigma_y$ and
     $\mathcal E_x^{(2)}(\sigma_y)=-\Id$, while
