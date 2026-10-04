@@ -51,3 +51,9 @@ example : toricCodeTorusState (Multiplicative.ofAdd (1 : ZMod 2)) 1 verticalProb
     Fintype.prod_prod_type, prod_zmod_three, ZMod.val_one_eq_one_mod,
     show (3 : ZMod 3) = 0 from by decide, show (2 : ZMod 3) ≠ 0 from by decide]
   decide
+
+example : toricCodeTorusState 1 (Multiplicative.ofAdd (1 : ZMod 2)) verticalProbe = 1 := by
+  rw [toricCodeTorusState_apply, ite_eq_left (by unfold IsToricCodeBondCompatible; decide)]
+  norm_num [toricCodeSeamPhase, verticalProbe, quantumDoublePrimalLabels,
+    Fintype.prod_prod_type, prod_zmod_three, ZMod.val_one_eq_one_mod,
+    show (3 : ZMod 3) = 0 from by decide, show (2 : ZMod 3) ≠ 0 from by decide]
