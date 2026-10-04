@@ -65,11 +65,13 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
   realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
-- `spc11_uniform_gap_injective_scope.tex` (scope restriction) records that the
-  uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, is formalized
-  for continuous compact families of one-site injective tensors with the
-  canonical two-site interaction, while the source's path also covers
-  non-injective normal forms with several blocks.
+- `spc11_uniform_gap_injective_scope.tex` (scope restriction, resolved) records
+  that the uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, was
+  first formalized only for continuous compact families of one-site injective
+  tensors with the canonical two-site interaction, and that compact multiblock
+  families, continuous positive interactions, and the source's blocked
+  isometric deformation now cover the source path, using finite-range Knabe
+  windows in place of Nachtergaele's estimate.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
@@ -117,7 +119,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   dual network reaches on a torus. It also records that stability of
   `G`-isometry under concatenation (Lemma 6.2) is formalized in one
   dimension and for the contraction of one link of two PEPS tensors, with
-  the constants multiplying (resolved).
+  the constants multiplying. Finally it records the scope of the physical
+  entropy and local-equivalence results of Section 6: connected regular
+  regions, contiguous simply connected torus regions with periods at least
+  three, and no identification with the entire parent-Hamiltonian ground
+  space; these remaining restrictions are open.
 - `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
   records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
   operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product
@@ -859,6 +865,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   the remaining repairs to the proof of Theorem 1 (normal versus injective,
   Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
   constant `ξ/4`, which is implicit in the source's final inequality.
+- `mswc24_depth_lower_bound_constant.tex` is the resolved local-correction
+  note for the constants of the closing inequality in the proof of Theorem 1:
+  `(1 - δ)^{k/2} < 1/e` gives a trace distance above `1 - 1/e - o(1)`, not
+  `√(3/4)`, and the factor `γ` of the final chain is undefined. Neither affects the rate
+  `4/ξ`; the formal bound `(ξ/4) log N ≤ T + (ξ/4) log(T+1) + C` and the
+  `Θ(log N)` depth at fixed error carry it.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
   in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
@@ -924,6 +936,17 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
+
+For the classification of translation-invariant MPS under circuits assisted by
+measurements and classical communication (arXiv:2103.13367, Theorem
+`MPS_classification`):
+
+- `psc21_mps_classification_scope.tex` (scope restriction) records that only
+  the direction from the trivial sequence to the MPS sequence is formalized,
+  for the canonical form with normal blocks and mixed transfer maps of
+  spectral radius below one, and for periodic states that are nonzero for all
+  large chain lengths; open: the converse direction needs channels acting on
+  arbitrary input states.
 
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 

@@ -118,7 +118,7 @@ $\sum_i(A_j^i)^\dagger A_j^i=\mathbf 1$ with positive definite fixed points
 $\sigma_j$ of trace one. Let $\lambda_2$ bound the moduli of the eigenvalues other than
 one of every transfer matrix $E_{jj}$ and the moduli of all eigenvalues of the mixed
 transfer matrices $E_{jj'}$, $j\neq j'$, so that $\xi=-1/\ln\lvert\lambda_2\rvert$ is at
-least $\xi_{\mathrm{diag}}$ and $\xi_{\mathrm{off\text{-}diag}}$, and let $0<\gamma<1/2$.
+least $\xi_{\mathrm{diag}}$ and $\xi_{\mathrm{off\text{-}diag}}$, and let $0<\gamma<1$.
 Then there is $C$ with
 \begin{align}
     \varepsilon\leq Cy\,e^{Cy}\quad\text{and}\quad\varepsilon\leq Cy,\qquad
@@ -128,7 +128,8 @@ Then there is $C$ with
 for every $q\geq1$ and $M\geq1$, for the source's state (S7) itself: the same $V$, the
 same pairs and the same weights. No orthogonality and no condition $q=o(N)$ is needed.
 This is the statement of part~(ii) with $\xi_{\mathrm{diag}}$ replaced by
-$\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$.
+$\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, for $0<\gamma<1$ in place of the
+source's $0<\gamma<1/2$.
 
 The proof replaces the block form (\ref{eq:mswc24_mixed_block_form}) by an estimate.
 With $K_j$ the isometries placing the bond pairs of block $j$, the blocked map is
@@ -155,7 +156,7 @@ $\tilde\sigma_j$ the embedded fixed point; it is idempotent with trace one. The
 telescoping estimate of the normal case then gives
 $\lvert z_j-1\rvert\leq Cy\,e^{Cy}$. Finally
 $\lVert\phi_N(A)\rVert^2=\sum_{j,j'}\braket{\phi_N(A_j)}{\phi_N(A_{j'})}$, whose diagonal
-terms are one up to $O(e^{-2\gamma N/\xi})$ and whose other terms are
+terms are one up to $O(e^{-\gamma N/\xi})$ and whose other terms are
 $O(e^{-\gamma N/\xi})$. With $S=\sum_jz_j$ and $t=\lVert\phi_N(A)\rVert$, the
 inequality $1-\lvert S\rvert/(\sqrt b\,t)\leq\lvert S-b\rvert+\lvert t^2-b\rvert$ for
 $b\geq1$ gives (\ref{eq:mswc24_mixed_corrected}).
@@ -165,7 +166,7 @@ counterexample and the numerical checks below show the error to be of order
 $(N/q)\tau^{2q}$, of second order in the overlaps. The next section proves this rate.
 
 \section{The second-order rate}
-Keep the hypotheses of the previous section, with $0<\gamma<1$ in place of $0<\gamma<1/2$.
+Keep the hypotheses of the previous section.
 Then there is $C$ with
 \begin{align}
     \varepsilon\leq Cy\,e^{Cy}\quad\text{and}\quad\varepsilon\leq Cy,\qquad
@@ -247,6 +248,13 @@ With $S=\sum_j\beta_jz_j$ and $b=\sum_j\beta_j^2\geq1$ one has
 $\lvert S-b\rvert\leq\sum_j\lvert z_j-\beta_j\rvert$, and as before
 $\bigl\lvert\lVert\phi_N(A)\rVert^2-b\bigr\rvert\leq Ke^{-\gamma N/\xi}$; the inequality of the
 previous section gives (\ref{eq:mswc24_mixed_corrected}).
+
+The Hölder step limits this argument to $0<\gamma<1/2$. The bound
+(\ref{eq:mswc24_mixed_corrected}) holds for every $0<\gamma<1$, with a constant that does not
+depend on the weights: blocks of weight zero contribute nothing and may be dropped, and for
+nonzero weights the direct sum is the case of multiplicity one of the repeated blocks of
+\cite{gap:mswc24_repeated_overlap_small_weight_sum}, where the positive part is estimated
+relative to the weights and no exponent is lost.
 
 The phase cannot be kept in $\beta_j$. Write $\mu_j=\lvert\mu_j\rvert u_j$ with
 $u_j=e^{i\theta_j}$, let $B_0$ be the blocked map for the weights $\lvert\mu_j\rvert$, and let
@@ -339,7 +347,7 @@ The corrected bound (\ref{eq:mswc24_mixed_corrected}) for blocks of multiplicity
 and weight one, with its ingredients, is formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum} and
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockError};
+    \doclink{TNLean/MPS/Preparation/BlockSumError};
     \leanid{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockGram};
     \leanid{MPSTensor.mixedMapLM_blockSumPosLimit_apply},
@@ -352,10 +360,11 @@ multiplicity one and weight one and every $0<\gamma<1$, with its ingredients, is
 formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum_sq},
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_sq},
-    \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le_of_lt_one},
     \leanid{MPSTensor.exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le} and
     \leanid{MPSTensor.one_sub_norm_nonNormalApproxOverlap_blockSum_le} in
     \doclink{TNLean/MPS/Preparation/SecondOrderBlockError};
+    \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap};
     \leanid{MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq},
     \leanid{MPSTensor.mixedTransferMatrixLeft_blockSumPosLimit_mul_mul},
     \leanid{MPSTensor.transferMap_blockSum_embeddedBlockState} and
@@ -364,22 +373,13 @@ formalized.\footnote{Formal declarations:
     \leanid{IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq} in
     \doclink{TNLean/Algebra/IdempotentTracePerturbation}.}
 
-The bound (\ref{eq:mswc24_mixed_corrected}) for weights $0\leq w_j\leq1$ with $\max_jw_j=1$ and
-multiplicity one, with the three ingredients of the previous section, is formalized; the case
-of weight one is derived from it.\footnote{Formal declarations:
+The bound (\ref{eq:mswc24_mixed_corrected}) for real weights $w_j\geq0$, not all zero, and
+multiplicity one, for every $0<\gamma<1$ and with a constant independent of the weights, is
+formalized as a case of complex weights below; the case of weight one is derived from
+it.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum_weight} and
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_weight} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockError};
-    \leanid{MPSTensor.gram_blockTensor_blockSum},
-    \leanid{MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le} and
-    \leanid{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_weight_sub_le} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockGram};
-    \leanid{MPSTensor.mixedMapLM_blockSumPosLimit_smul_apply},
-    \leanid{MPSTensor.exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le} and
-    \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_weight_sq_sub_le} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap};
-    \leanid{norm_prod_range_sub_pow_le_of_forall_norm_pow_le} in
-    \doclink{TNLean/Algebra/NormedRingTelescoping}.}
+    \doclink{TNLean/MPS/Preparation/BlockSumError}.}
 The counterexample (\ref{eq:mswc24_phase_overlap}), with the hypotheses of part~(ii) for it and
 the failure of the printed bound for $\mu=-1$, is formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.nonNormalApproxOverlap_phaseBlockTensor_of_norm},
@@ -390,13 +390,21 @@ the failure of the printed bound for $\mu=-1$, is formalized.\footnote{Formal de
     \leanid{MPSTensor.isBNTCanonicalForm_phaseBlockSector} and
     \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_phaseBlock} in
     \doclink{TNLean/MPS/Preparation/PhaseWeightCounterexample}.}
-The bound (\ref{eq:mswc24_mixed_corrected}) for complex weights $\lvert\mu_j\rvert\leq1$ with
-$\max_j\lvert\mu_j\rvert=1$, multiplicity one, and $\beta_j=\lvert\mu_j\rvert^N$, obtained by
-absorbing the phases into the blocks, is formalized.\footnote{Formal declarations:
-    \leanid{MPSTensor.blockSum_eq_blockSum_phase},
+The bound (\ref{eq:mswc24_mixed_corrected}) for complex weights $\mu_j$, not all zero,
+multiplicity one, $\beta_j=\lvert\mu_j\rvert^N$ and every $0<\gamma<1$, with a constant
+independent of the weights, is formalized. Blocks of weight zero are dropped, and for nonzero
+weights the direct sum is the case of one copy of each block of
+\cite{gap:mswc24_repeated_block_corrected_state}, where the coefficients for the pairs on the one
+copy are $\lvert\mu_j\rvert^N$.\footnote{Formal declarations:
+    \leanid{MPSTensor.CopyWeights.single},
+    \leanid{MPSTensor.repeatedBlockSum_single},
+    \leanid{MPSTensor.nonNormalApproxOverlap_blockSum_eq_copyApproxOverlap},
+    \leanid{MPSTensor.blockSum_comp_of_eq_zero},
+    \leanid{MPSTensor.nonNormalApproxOverlap_comp_of_eq_zero},
+    \leanid{MPSTensor.ghzAmplitude_comp_of_eq_zero},
     \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum_complexWeight} and
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight} in
-    \doclink{TNLean/MPS/Preparation/ComplexWeightError}.}
+    \doclink{TNLean/MPS/Preparation/BlockSumError}.}
 
 \section{Numerical check}
 A script evaluates the overlap through $P$, using $V^\dagger B=P$ and the support
@@ -451,23 +459,28 @@ The states of distinct blocks, before and after the replacement by the fixed
 points, are then exactly orthogonal, the term $O(e^{-N/\xi_{\mathrm{off\text{-}diag}}})$
 vanishes, and part~(ii) reduces to part~(i) for each block, with no condition
 $q=o(N)$. For multiplicity one the phase of $\mu_j$ can be absorbed into $A_j$,
-which stays normal with the same transfer map, so $\mu_j>0$ is no loss. This
-repair is formalized.\footnote{Formal declarations:
+which stays normal with the same transfer map, so $\mu_j>0$ is no loss. The orthogonality
+at one block length $q_0$ also makes the mixed transfer matrices nilpotent,
+$E_{jj'}^{q_0}=0$, so every $\lambda_2$ bounds their eigenvalues and this repair is a case of the
+second statement below. It is formalized, for every $0<\gamma<1$ and with a constant
+independent of the weights.\footnote{Formal declarations:
     \leanid{Matrix.polarIso_sum_of_orthogonal} in
     \doclink{TNLean/MPS/Preparation/OrthogonalSumPolar};
-    \leanid{MPSTensor.nonNormalApproxVector_blockSum} in
+    \leanid{MPSTensor.nonNormalApproxVector_blockSum} and
+    \leanid{MPSTensor.mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero} in
     \doclink{TNLean/MPS/Preparation/OrthogonalBlockSum};
+    \leanid{MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero},
     \leanid{MPSTensor.exists_approximationError_le_blockSum} and
     \leanid{MPSTensor.exists_approximationError_le_mul_blockSum} in
-    \doclink{TNLean/MPS/Preparation/OrthogonalBlockError}.}
+    \doclink{TNLean/MPS/Preparation/BlockSumError}.}
 The orthogonality holds for instance when distinct blocks use disjoint sets of
 physical indices.
 
 The second keeps the source's hypotheses and construction, apart from the phases of the
 weights, and corrects the rate: it
 is (\ref{eq:mswc24_mixed_corrected}), with the correlation lengths of the mixed
-transfer matrices included in $\xi$. It is formalized for multiplicity one and complex
-weights $\lvert\mu_j\rvert\leq1$ with $\max_j\lvert\mu_j\rvert=1$, with
+transfer matrices included in $\xi$. It is formalized for multiplicity one and all complex
+weights not all zero, for every $0<\gamma<1$ and with a constant independent of the weights, with
 $\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\mu_j^N$ that (S6) and (S7) take
 from (S4); with those coefficients the counterexample (\ref{eq:mswc24_phase_overlap}) refutes
 (S7). Blocks with multiplicity combined with overlaps are formalized for the corrected state of

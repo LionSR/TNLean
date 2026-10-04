@@ -13,7 +13,8 @@ The polar decomposition `M = V P` of `Matrix.polarIso` and `Matrix.polarPos` is 
 following sense: if `M = W Q` with `Q` positive semidefinite and `Wᴴ W = E`, where `E` is an
 orthogonal projector with the same range as `Q`, then `Q = polarPos M`, `E = polarSupport M`,
 and `W = polarIso M`.  The log-depth preparation of matrix product states uses this to identify
-the product of the layers of its tree circuit with the isometry of the blocked tensor.
+the polar factors of an orthogonal sum (`TNLean.MPS.Preparation.OrthogonalSumPolar`); the other
+results here serve the diagonal, supported and block-sum cases.
 
 ## Main declarations
 
@@ -32,11 +33,9 @@ the product of the layers of its tree circuit with the isometry of the blocked t
 
 ## References
 
-* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eq. (16) and the sentence before it: the
-  layers of the tree circuit act "to the same effect" as the polar decomposition of the directly
-  blocked tensor. The source asserts this without proof; the uniqueness of the polar
-  decomposition proved here is the step that identifies the product of the layers with the
-  isometry `V` of the blocked tensor.
+* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eq. (8) and its Supplemental Material: the
+  polar decomposition `B = V P`. The source does not state its uniqueness; it is supplied here
+  for the identifications of polar factors listed above.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder
@@ -98,9 +97,8 @@ private lemma gram_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ ℂ
 positive semidefinite and `Wᴴ W = E` for an orthogonal projector `E` with the same range as
 `Q`, then `Q = polarPos M`.
 
-Supplied step for arXiv:2307.01696, eq. (16): the source asserts that the tree layers act "to
-the same effect" as blocking; uniqueness of the polar decomposition, which the source does not
-state, identifies the positive parts. -/
+Supplied step for arXiv:2307.01696, eq. (8): uniqueness of the polar decomposition, which the
+source does not state, identifies the positive part of an orthogonal sum. -/
 theorem polarPos_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ ℂ} (hM : M = W * Q)
     (hQ : Q.PosSemidef) (hW : Wᴴ * W = E) (hE : E.IsHermitian) (hEE : E * E = E)
     (hran : LinearMap.range E.mulVecLin = LinearMap.range Q.mulVecLin) :
@@ -124,9 +122,8 @@ theorem polarSupport_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ �
 positive semidefinite and `Wᴴ W = E` for an orthogonal projector `E` with the same range as
 `Q`, then `W = polarIso M`.
 
-Supplied step for arXiv:2307.01696, eq. (16): the source asserts that the tree layers act "to
-the same effect" as blocking; uniqueness of the polar decomposition, which the source does not
-state, identifies the product of the layers with the isometry `V`. -/
+Supplied step for arXiv:2307.01696, eq. (8): uniqueness of the polar decomposition, which the
+source does not state, identifies the partial isometry of an orthogonal sum. -/
 theorem polarIso_eq_of_eq_mul {M W : Matrix ι κ ℂ} {Q E : Matrix κ κ ℂ} (hM : M = W * Q)
     (hQ : Q.PosSemidef) (hW : Wᴴ * W = E) (hE : E.IsHermitian) (hEE : E * E = E)
     (hran : LinearMap.range E.mulVecLin = LinearMap.range Q.mulVecLin) :
