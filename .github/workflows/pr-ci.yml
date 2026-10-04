@@ -37,6 +37,8 @@ on:
       - 'tenkz.toml'
       - 'scripts/fetch_tenkz.py'
       - 'scripts/tenkz_paths.py'
+      - 'scripts/prune_tenkz_render_cache.py'
+      - 'scripts/test_prune_tenkz_render_cache.py'
       - 'blueprint/src/**'
       - 'docs/paper-gaps/**'
       # Trees the paper-gap reference check scans (texra-blueprint
@@ -111,6 +113,8 @@ on:
       - 'tenkz.toml'
       - 'scripts/fetch_tenkz.py'
       - 'scripts/tenkz_paths.py'
+      - 'scripts/prune_tenkz_render_cache.py'
+      - 'scripts/test_prune_tenkz_render_cache.py'
       - 'blueprint/src/**'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
@@ -211,6 +215,8 @@ jobs:
               - 'tenkz.toml'
               - 'scripts/fetch_tenkz.py'
               - 'scripts/tenkz_paths.py'
+              - 'scripts/prune_tenkz_render_cache.py'
+              - 'scripts/test_prune_tenkz_render_cache.py'
               - 'docs/slides/**'
               - 'blueprint/.chktexrc'
               - 'blueprint/latexindent.yaml'
@@ -329,7 +335,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ElementaryStates AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator; do
+          for example in ElementaryStates AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -569,6 +575,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Test tenkz render-cache pruning
+        run: python3 scripts/test_prune_tenkz_render_cache.py
+
       - name: Fetch pinned tenkz package
         run: python3 scripts/fetch_tenkz.py
 
@@ -716,6 +725,10 @@ jobs:
           if grep -q "WARNING: File not found:" "$tmp_output_file"; then
             echo "::warning::Blueprint has missing file references (see WARNING lines above)"
           fi
+
+      - name: Prune unused tenkz pictures
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/prune_tenkz_render_cache.py
 
       - name: Test tenkz blueprint sweep unit selection
         if: env.TEX_CHANGED == 'true'

@@ -1,0 +1,118 @@
+\subsection{Four twisted sectors of the primal toric code}
+\label{sec:peps_toric_code_torus_sectors}
+
+The local parity symmetry of the primal tensor gives four distinct states
+on a torus. The construction uses the literal tensor of
+\cite[Appendix A]{Cirac2021Matrix}, with its unnormalized entries zero and
+one, and the two seam insertions of
+\cite[Definition 5.6 and Theorem 5.9]{Schuch2010PEPS}.
+Write the group additively as $G=\mathbb Z_2$.
+
+\begin{definition}[One-bond parity action and torus states]
+    \label{def:toric_code_torus_states}
+    \lean{TNLean.PEPS.toricCodeBondRep,TNLean.PEPS.toricCodeBondRep_diagonal,
+        TNLean.PEPS.toricCodeBondRep_generator,TNLean.PEPS.toricCodeTorusState}
+    \leanok
+    \uses{def:peps_toric_code_primal_virtual_symmetry}
+    On one virtual bond set
+    \begin{align}
+        U_g=\operatorname{diag}_{a\in\mathbb Z_2}(-1)^{ga},
+        \qquad U_0=I,\quad U_1=Z.
+    \end{align}
+    For a torus with positive periods $L,M$, let $\Psi_{g,h}$ be the
+    contraction of the primal tensor with $U_h$ on each horizontal bond
+    crossing the seam from the last column to the first, and $U_g$ on
+    each vertical bond crossing the seam from the last row to the first.
+    Horizontal edges point right and vertical edges point down.
+\end{definition}
+
+\begin{lemma}[The parity action is semi-regular]
+    \label{lem:toric_code_bond_semiregular}
+    \lean{TNLean.PEPS.torusLegRep_toricCodeBondRep,
+        TNLean.PEPS.isSemiRegular_toricCodeBondRep}
+    \leanok
+    \uses{def:toric_code_torus_states,thm:peps_toric_code_primal_g_isometric}
+    The oriented four-leg action of $U$ is the primal tensor's parity
+    representation. The one-bond representation is semi-regular.
+\end{lemma}
+\begin{proof}\leanok
+    On the identity element both actions are the identity. On the
+    nontrivial element, $Z^{-1}=Z=Z^{\mathsf T}$, so the four-leg action
+    is $Z^{\otimes4}$. If $aI+bZ=0$, its two diagonal entries give
+    $a+b=a-b=0$, hence $a=b=0$. The linear independence of the group
+    matrices implies semi-regularity.
+\end{proof}
+
+\begin{theorem}[Four independent primal toric-code states]
+    \label{thm:toric_code_four_torus_sectors}
+    \lean{TNLean.PEPS.linearIndependent_toricCodeTorusState,
+        TNLean.PEPS.finrank_span_toricCodeTorusState}
+    \leanok
+    \uses{lem:toric_code_bond_semiregular,thm:peps_toric_code_primal_g_isometric}
+    For every positive pair of torus periods, the vectors
+    $\Psi_{0,0},\Psi_{0,1},\Psi_{1,0},\Psi_{1,1}$ are linearly independent.
+    In particular,
+    \begin{align}
+        \dim_{\mathbb C}\operatorname{span}
+        \{\Psi_{g,h}:g,h\in\mathbb Z_2\}=4.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The primal tensor is injective on the invariant virtual subspace.
+    Semi-regularity therefore makes its pair-conjugacy-class torus
+    contractions independent. Since $\mathbb Z_2$ is abelian, all pairs
+    commute and each pair-conjugacy class is a singleton. There are four
+    such classes.
+\end{proof}
+
+\begin{definition}[Bond compatibility and seam signs]
+    \label{def:toric_code_physical_seam_signs}
+    \lean{TNLean.PEPS.IsToricCodeBondCompatible,TNLean.PEPS.toricCodeSeamPhase}
+    \leanok
+    For a physical configuration $s$, write
+    $f(s_v)=(t_v,r_v,b_v,l_v)$ for the four virtual labels fixed by the
+    primal tensor. Call $s$ compatible when every site $v=(x,y)$ satisfies
+    \begin{align}
+        l_{(x+1,y)}=r_{(x,y)},\qquad b_{(x,y+1)}=t_{(x,y)}.
+    \end{align}
+    Its seam phase is
+    \begin{align}
+        \chi_{g,h}(s)=
+        \prod_{x+1=0}(-1)^{h r_{(x,y)}}
+        \prod_{y+1=0}(-1)^{g t_{(x,y)}},
+    \end{align}
+    where coordinates are periodic and each product includes all sites
+    on the indicated seam.
+\end{definition}
+
+\begin{theorem}[Exact physical amplitudes]
+    \label{thm:toric_code_torus_amplitudes}
+    \lean{TNLean.PEPS.toricCodeTorusState_apply,
+        TNLean.PEPS.toricCodeTorusState_one_one_apply,
+        TNLean.PEPS.toricCodeTorusState_ne_zero_iff}
+    \leanok
+    \uses{def:toric_code_torus_states,def:toric_code_physical_seam_signs}
+    For every physical configuration $s$,
+    \begin{align}
+        \langle s\mid\Psi_{g,h}\rangle
+        =\mathbf1_{\{s\text{ is compatible}\}}\chi_{g,h}(s).
+    \end{align}
+    Thus all four vectors have the same physical support and differ by
+    relative seam signs. The untwisted coefficient is exactly the
+    compatibility indicator; no scalar normalization is suppressed.
+\end{theorem}
+\begin{proof}\leanok
+    Each physical tensor fixes its four bond-end indices uniquely.
+    Hence exactly one assignment of bond ends survives the site-tensor
+    factors. A diagonal bond matrix then vanishes unless its two ends
+    match. On matching ends it contributes its diagonal character, which
+    is nontrivial only on a chosen seam. Multiplying these entries gives
+    the formula. Every seam factor is nonzero.
+\end{proof}
+
+The contractions keep distinct oriented bonds, including when a period
+is one or two. On tori with both periods at least three they agree with
+the four-leg simple-graph convention of the PEPS examples. The small
+periods are algebraic extensions, as in the general closure construction.
+The four-dimensional span here is not identified with a parent-Hamiltonian
+kernel; that additional ground-space assertion remains separate.

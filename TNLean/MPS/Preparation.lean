@@ -56,6 +56,7 @@ import TNLean.MPS.Preparation.NormalGauge
 import TNLean.MPS.Preparation.ObservableTransferBound
 import TNLean.MPS.Preparation.OneCopyPairState
 import TNLean.MPS.Preparation.OneDimensionalBlocks
+import TNLean.MPS.Preparation.OrderedBlockOverlap
 import TNLean.MPS.Preparation.OrthogonalBlockSum
 import TNLean.MPS.Preparation.OrthogonalSumPolar
 import TNLean.MPS.Preparation.OverlappingBlockCounterexample
@@ -68,6 +69,7 @@ import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
+import TNLean.MPS.Preparation.PolarCompression
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PolynomialAccuracy

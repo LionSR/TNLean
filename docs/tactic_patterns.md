@@ -386,6 +386,20 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** all callers use the shared matrix identity; the virtual gauge
   convention is unchanged.
 
+### Unit-vector inner-product deficit — promoted
+- **Pattern:** expand a squared distance, substitute both unit norms, and
+  orient the real inner product to obtain its quadratic deficit.
+- **Seen:** three checked uses in `MPS/Preparation/SecondOrderOverlap.lean:337`,
+  `MPS/Preparation/SecondOrderBlockOverlap.lean:357`, and
+  `MPS/Preparation/PolarCompression.lean:95` (2026-10-03).
+- **Abstraction:** `one_sub_re_inner_eq_norm_sub_sq_div_two` in
+  `MPS/Preparation/SecondOrderOverlap.lean:55` specializes Mathlib's
+  `norm_sub_sq` to two unit vectors over a real or complex inner-product
+  space. All three callers use the same identity.
+- **Notes:** no custom tactic or positivity hypothesis is needed. The
+  abstraction and three substitutions add ten lines, including the helper's
+  mathematical documentation; future uses require one application.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
