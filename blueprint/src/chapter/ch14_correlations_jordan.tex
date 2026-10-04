@@ -1,6 +1,7 @@
-\textbf{Local fix (Jordan factors and zero eigenvalues):}
-The pure-exponential formula in \cite[Section~II.B.3]{Cirac2021Matrix},
-\texttt{Papers/2011.12127/TN-Review-main.tex}:433--441, omits both polynomial
+% Local fix (Jordan factors and zero eigenvalues).
+% Source: Papers/2011.12127/TN-Review-main.tex:433--441.
+The pure-exponential formula in \cite[Section~II.B.3]{Cirac2021Matrix}
+omits both polynomial
 Jordan factors and finite nilpotent transients. The following all-separation
 expansion replaces that formula; see
 \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
@@ -39,7 +40,7 @@ expansion replaces that formula; see
     \label{thm:physical_correlator_jordan_transient}
     \lean{MPSTensor.physicalConnectedCorrelator_exists_jordan_expansion}
     \leanok
-    \uses{thm:physical_correlator_binomial}
+    \uses{def:physical_connected_correlator}
     The same correlator has the all-separation form
     \begin{align}
         C_{\mathrm{phys}}(X,Y;n)
@@ -64,7 +65,8 @@ expansion replaces that formula; see
     \label{lem:physical_correlation_normal_gauge}
     \lean{MPSTensor.IsNormalTensor.exists_physicalCorrelation_normalGauge}
     \leanok
-    \uses{lem:ldp_normal_gauge_reduction,thm:physical_correlator_gauge}
+    \uses{def:nt_cpsv, def:gauge_equiv, def:left_canonical_tensor,
+        def:physical_left_right_correlator}
     A normal tensor $A$ with leading transfer eigenvalue one admits a
     trace-preserving gauge representative $B$
     with positive trace-one fixed state $\rho_B$, and positive normalized
@@ -87,8 +89,8 @@ expansion replaces that formula; see
     \lean{MPSTensor.physicalConnectedCorrelator_exists_normal_jordan_expansion}
     \lean{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion}
     \leanok
-    \uses{thm:physical_correlator_jordan_transient,
-        lem:physical_correlation_normal_gauge,def:nt_cpsv}
+    \uses{def:nt_cpsv, def:physical_connected_correlator,
+        def:physical_left_right_correlator}
     Let $A$ be normal with leading transfer eigenvalue one. There are positive
     normalized left/right fixed matrices for which every finite-support
     physical connected correlator has the form

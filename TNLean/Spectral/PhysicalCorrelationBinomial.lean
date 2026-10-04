@@ -100,7 +100,11 @@ private theorem transfer_pairing_exists_binomial {D : ℕ}
 /-- Every centered physical connected correlator has an exact finite binomial
 spectral expansion at every separation. The cutoff is the generalized-eigenspace
 stabilization index of the actual complementary transfer map; zero eigenvalues
-are retained rather than discarded. -/
+are retained rather than discarded.
+
+Source: arXiv:2011.12127, Section II.B.3, source lines 433–441.
+The Jordan correction is documented in
+`docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`. -/
 theorem physicalConnectedCorrelator_exists_binomial_expansion {d D : ℕ}
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Matrix.trace ρ ≠ 0)
     (L₁ L₂ : ℕ) (X : Matrix (Cfg d L₁) (Cfg d L₁) ℂ)

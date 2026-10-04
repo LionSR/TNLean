@@ -54,7 +54,11 @@ private theorem transfer_eigenvalue_of_complement_ne_zero {d D : ℕ}
 /-- In trace-preserving gauge, a normal tensor has an all-separation physical
 Jordan expansion whose nonzero frequencies are genuine subleading transfer
 eigenvalues. The zero-eigenvalue transient vanishes by the squared bond
-dimension, and each polynomial has degree below its maximal Jordan-block size. -/
+dimension, and each polynomial has degree below its maximal Jordan-block size.
+
+Source: arXiv:2011.12127, Section II.B.3, source lines 433–441.
+The Jordan correction is documented in
+`docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`. -/
 theorem physicalConnectedCorrelator_exists_normal_jordan_expansion {d D : ℕ}
     {A : MPSTensor d D} (hNormal : IsNormalTensor A)
     (hTP : ∑ i, (A i)ᴴ * A i = 1)
@@ -97,7 +101,11 @@ normalized left/right fixed matrices
 for which every finite-support physical connected correlator has an exact
 Jordan expansion, without a trace-preserving hypothesis on the original
 representation. A single canonical representative supplies the sharp Jordan
-indices for all supports and observables. -/
+indices for all supports and observables.
+
+Source: arXiv:2011.12127, Section II.B.3, source lines 433–441.
+The Jordan correction is documented in
+`docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`. -/
 theorem IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion
     {d D : ℕ} {A : MPSTensor d D} (hNormal : IsNormalTensor A) :
     ∃ ℓ ρ : Matrix (Fin D) (Fin D) ℂ,

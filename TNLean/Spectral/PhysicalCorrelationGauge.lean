@@ -101,7 +101,11 @@ private theorem gauge_left_fixedPoint {A B : MPSTensor d D} (U : GL (Fin D) ℂ)
 /-- A normal tensor with leading transfer eigenvalue one has a trace-preserving
 representative and positive left/right
 fixed matrices whose physical connected contractions agree at every separation.
-This packages the existing gauge transport independently of any decay estimate. -/
+This packages the existing gauge transport independently of any decay estimate.
+
+Source: arXiv:2011.12127, Section II.B.3, source lines 433–441.
+The Jordan correction is documented in
+`docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`. -/
 theorem IsNormalTensor.exists_physicalCorrelation_normalGauge
     {A : MPSTensor d D} (hNormal : IsNormalTensor A) :
     ∃ B : MPSTensor d D, ∃ ρB ℓ ρ : Matrix (Fin D) (Fin D) ℂ,
