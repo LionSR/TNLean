@@ -12,6 +12,10 @@ import Mathlib.Data.ZMod.Basic
 The successor permutation, its cyclic-group coordinates, and the exchange of
 entries of a window are finite index geometry. They are independent of the
 Knabe, spectator-transport, and singlet-Hamiltonian developments that use them.
+
+## References
+
+See `TNLean.MPS.ParentHamiltonian.CyclicWindow` for the cyclic window convention.
 -/
 
 namespace MPSTensor

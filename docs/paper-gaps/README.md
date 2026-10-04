@@ -821,6 +821,10 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
+- `mswc24_mixed_polar_injectivity_scope.tex` records the injective-only
+  mixed sequential polar factorization, distinguishes its full-input central
+  isometry from the source's non-injective pseudoinverse case, and gives the
+  partial-isometry or support-restriction extension needed to remove it.
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective

@@ -15,7 +15,9 @@ These energies tend to zero as the ring grows. Positive energy and symmetry
 place each vector in the orthogonal complement of the entire actual kernel,
 not merely the vacuum complement. Thus no eventual positive uniform gap exists.
 
-Source: Bachmann–Nachtergaele, arXiv:1112.4097, Section II, the one-particle
+## References
+
+Bachmann–Nachtergaele, arXiv:1112.4097, Section II, the one-particle
 dispersion following equation (8), specialized to one species and zero phase.
 No vanishing finite-volume gap above the enlarged critical kernel is asserted.
 -/

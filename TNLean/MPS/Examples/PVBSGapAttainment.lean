@@ -16,7 +16,9 @@ this attains the uniform lower bound and determines the exact finite-ring gap.
 At μ = 1 it joins the ground space; no zero finite-volume gap above the enlarged
 kernel is asserted.
 
-Source: Bachmann–Nachtergaele, arXiv:1112.4097, Section II, the one-particle
+## References
+
+ Bachmann–Nachtergaele, arXiv:1112.4097, Section II, the one-particle
 dispersion following equation (8). The general multi-species thermodynamic
 formula is a conjecture there and is not claimed here.
 

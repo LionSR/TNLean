@@ -14,6 +14,11 @@ Periodic summation cancels the asymmetric boundary fields. The resulting
 Hamiltonian is a nonnegative multiple of the critical PVBS parent Hamiltonian
 plus `(μ - 1)² / (1 + μ²)` times particle number. This identity retains the
 two oriented windows when the ring has exactly two sites.
+
+## References
+
+Bachmann–Nachtergaele, arXiv:1112.4097, Section II, equations (4)–(8),
+restricted here to one species with zero phase.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace

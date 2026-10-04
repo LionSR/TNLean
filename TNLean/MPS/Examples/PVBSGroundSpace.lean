@@ -14,7 +14,9 @@ The nearest-neighbour parent constraints exclude adjacent particles and relate
 `01` and `10` amplitudes by the parameter `q`. They select exactly the vacuum
 and the geometric one-particle state on an open interval.
 
-Source: Bachmann and Nachtergaele, arXiv:1112.4097, Section II,
+## References
+
+- Bachmann and Nachtergaele, arXiv:1112.4097, Section II,
 equations (4), (6)–(8); arXiv:1212.3718, Section 2.
 -/
 

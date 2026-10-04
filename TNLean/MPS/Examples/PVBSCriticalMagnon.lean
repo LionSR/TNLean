@@ -13,7 +13,9 @@ The double-occupation projector vanishes on every one-particle vector.
 The remaining critical local interaction is one half of identity minus site
 exchange, so the actual periodic parent Hamiltonian acts by the cycle Laplacian.
 
-Source: Bachmann–Nachtergaele, arXiv:1112.4097, Section II, the one-particle
+## References
+
+Bachmann–Nachtergaele, arXiv:1112.4097, Section II, the one-particle
 dispersion after equation (8), specialized to one species and zero phase.
 -/
 
