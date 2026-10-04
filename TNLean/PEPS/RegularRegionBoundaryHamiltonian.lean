@@ -26,6 +26,13 @@ boundary coordinates of Theorem 6.9, lines 1278–1358 and 2043–2076.
 The finite logarithm is relevant to arXiv:1903.09439,
 Conjecture `gap2Dboundary1dlocal`, lines 980–1024, but no short-range
 decomposition or uniform bulk gap is asserted.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+- [arXiv:1903.09439](https://arxiv.org/abs/1903.09439) -- *Mathematical open problems
+  in Projected Entangled Pair States*
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator

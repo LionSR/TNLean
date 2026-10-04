@@ -13,6 +13,11 @@ can be assigned independently. The number of assignments is therefore a power
 of the group order. These finite counting identities are used in the region
 contraction of Schuch, Cirac, and Pérez-García, arXiv:1001.3807, proof of
 Theorem 6.9, local source lines 1935–1957 and 2043–2072.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators

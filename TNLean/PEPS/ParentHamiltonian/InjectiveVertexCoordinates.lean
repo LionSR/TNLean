@@ -19,6 +19,14 @@ argument for injective PEPS, lines 2017–2044; arXiv:1804.04964,
 Section 3, the site inverse and contracting-back argument, lines 205–250.
 These are finite-graph coordinate identities, not a ground-state
 uniqueness assertion.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+- [arXiv:1804.04964](https://arxiv.org/abs/1804.04964) -- *Normal projected entangled pair
+  states generating the same state*
 -/
 
 open scoped BigOperators Matrix

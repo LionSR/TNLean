@@ -20,6 +20,11 @@ Definition 5.1, lines 1278–1296, and Definition `def:iso:isopeps`,
 lines 1692–1697. For the regular virtual representation this produces a
 normalized G-isometric tensor. It is a physical change of coordinates and
 does not claim equality of the original and filtered closed PEPS states.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

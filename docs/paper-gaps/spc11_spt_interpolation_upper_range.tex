@@ -95,6 +95,89 @@ smooth MPS paths. The blueprint theorem therefore concerns symmetric MPS paths
 and their parent Hamiltonians. It does not claim invariance under arbitrary
 gapped Hamiltonian paths.
 
+The fixed-dimension virtual argument is now proved for continuous invertible
+projective matrices, without requiring them to be unitary: the determinant
+admits a continuous root on the parameter interval, and the resulting
+determinant-one factor system takes values in a finite set of roots of unity.
+For a prescribed continuous family of one-site injective tensors of that
+fixed positive dimension, with symmetry preserving the periodic vectors
+exactly, continuous invertible virtual matrices can now be derived on the
+whole interval. The inverse Gram matrix gives a continuous right inverse
+of the coefficient map. A matrix-unit column selects a local conjugating
+matrix; a finite subdivision and scalar uniqueness join these choices.
+The subdivision is chosen separately for each group element, so no
+finiteness assumption on the group is needed. The resulting virtual
+projective representations have factor systems continuous in the interval
+parameter for each fixed pair of group elements, and cohomologous endpoint
+factors. Arbitrary endpoint choices have the same classes by
+scalar gauge uniqueness. Continuity here is in the interval parameter,
+separately for each group element; no joint continuity in a topological
+group variable is asserted.
+
+The scalar character of the physical ground line need not be imposed as
+part of the phase condition. At each finite chain length, the continuous
+nonzero MPS vector gives a continuous invariant line. Its eigenvalue under
+each fixed physical symmetry operator is continuous and belongs to that
+operator's finite spectrum, hence is constant along the interval. These
+eigenvalues form a unitary character. Positive-length ray equality transfers
+these eigenvalues to each minimal one-site injective representative,
+even when its dimension changes. The characters at lengths two and three
+determine one common on-site character: if the chain eigenvalues are $c_N(g)$, then
+$\chi(g)=c_3(g)/c_2(g)$ and $c_N(g)=\chi(g)^N$ for every $N\geq2$.
+Injectivity extends the representative's rephased vector equality to every
+chain length; ray equality transfers its one-site symmetry back to the
+ambient tensor. Thus the common character can be derived without ambient
+injectivity or a locally constant minimal dimension.
+This argument does not add a one-site-ring hypothesis or a further
+chain-length threshold.
+
+The passage from an exact MPS ground-state path to such a continuous
+fixed-dimension injective tensor family remains to be proved, as does the
+change-of-support argument of Appendix~C,
+\path{app:coh-class-cont-dimchange}, in
+\path{Papers/1010.3732/paper_v3.tex}, lines~2653--2717. In particular, the
+larger ambient bond space used by the direct-sum interpolation must not be
+assumed injective at parameters where the minimal bond dimension decreases.
+The remaining separation theorem must include such parameters while retaining
+the exact MPS ground-state hypothesis; the Hamiltonian-only converse is a
+different unresolved statement.
+
+Continuity of an ambient tensor alone does not give continuity of its
+minimal canonical support. For example, let $X,Y,Z$ be the Pauli matrices
+and consider the four-letter tensor
+\[
+ A_0(t)=\mathbf{1}_2,\qquad
+ A_1(t)=tX,\qquad A_2(t)=tY,\qquad A_3(t)=tZ.
+\]
+The on-site action of $\mathbb Z_2\times\mathbb Z_2$ is the fixed diagonal
+sign action induced by conjugation with $X$ and $Z$. For every $t>0$ the
+tensor is one-site injective; its virtual generators anticommute, so its
+projective class is nontrivial. At $t=0$ the periodic vectors are nonzero
+multiples of the product vector $\ket{0}^{\otimes N}$, whose minimal bond
+dimension is one and whose virtual class is trivial. This example concerns
+raw tensor continuity, not a uniformly gapped path with a unique exact MPS
+ground state. Indeed, the canonical two-site local ground spaces tend to
+\[
+ \operatorname{span}\{\ket{00},\;
+   \ket{0a}+\ket{a0}:a=1,2,3\};
+\]
+the limiting two-site ring therefore has additional ground vectors.
+Thus the independent relation's uniform-gap and exact-ground-state
+conditions cannot be discarded when deriving continuous canonical data.
+The derivation of those data remains an outstanding theorem, rather than
+an additional hypothesis in the phase relation.
+
+Appendix~C starts with differentiable standard-form tensors and asserts an
+extension to continuous tensors by approximation (lines~2660--2664).
+It contains no additional spectral-gap estimate; the finite-chain gap is
+used earlier to obtain ground-state continuity (lines~953--993).
+Consequently the required canonical-support construction must justify the
+passage from that continuity to the standard-form support used in the
+appendix. The displayed inverses of the off-diagonal and complementary
+blocks in lines~2692--2706 also require a separate formulation when the
+blocks are rectangular or singular. The source passage alone does not
+provide that general support-compression lemma.
+
 The formal predicate \leanid{MPSTensor.IsSameSPTPhase} records equality of the
 virtual cocycle labels; it does not construct the interpolation. The blueprint
 classification theorem remains marked \path{notready}.
@@ -115,13 +198,221 @@ Hamiltonian-path conditions. The declaration
 from the corrected bond interpolation: its two-site interactions are the
 independent-bond penalties of the normalized bond vector, and its uniform gap
 is one. The blueprint theorem \path{thm:spt_direct_sum_fixed_point_path}
-records it with \path{leanok}. Its endpoints are the direct-sum fixed-point
-interactions; connecting arbitrary injective symmetric parent Hamiltonians to
-those endpoints remains open.
+records it with \path{leanok}.
 In independent-bond coordinates, before regrouping the physical registers,
 \leanid{MPSTensor.normalizedBondInterpolation_parent_uniform_gap} proves the
 same uniform gap of one for every parameter and every positive chain length
 (blueprint lemma \path{lem:spt_independent_bond_gap}).
+
+The forward construction now also joins the canonical two-site parents of
+the actual common physical images of two one-site injective tensors.
+The theorem
+\leanid{MPSTensor.exists_commonPhysicalInjectiveGappedPath_of_cohomologous}
+assumes positive bond dimensions, unitary physical and virtual actions,
+exact adjoint tensor covariance, and cohomologous virtual factors. It derives
+the factor-aligning unit-circle rephasing and constructs a symmetric uniformly
+gapped interaction path. The common physical inclusions retain the whole
+original physical spaces, including directions outside the occupied polar
+frames. This is a proved restricted forward construction, rather than an
+assumption of the independent phase condition.
+
+For the middle, fixed-point part of that construction,
+\leanid{MPSTensor.commonPhysicalNormalizedBondExactMPSGroundPath}
+gives a continuous exact MPS realization of the common-space normalized bond
+path. The declaration
+\leanid{MPSTensor.commonPhysicalCanonicalFixedPointExactMPSGroundPath}
+also includes the comparisons with the canonical fixed-point parents.
+Its ambient bond dimension is $D_0+D_1$, and its pointwise injective
+representatives can have smaller dimensions at the endpoints. Nonvanishing
+and the unique ground-line identity hold at every required ring length.
+Thus the changing minimal dimension in this explicit fixed-point
+interpolation does not require an injectivity assumption on the whole ambient
+space. The declarations
+\leanid{MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath} and
+\leanid{MPSTensor.commonPhysicalRightPolarExactMPSGroundPath}
+now give exact ground-state realizations of the two polar deformations in
+that same ambient bond dimension. Supported bond lifts retain the
+off-corner letters of the weighted fixed-point endpoints while preserving
+every positive-length word trace. The tensors therefore agree exactly at
+both joins. Their concatenation is
+\leanid{MPSTensor.commonPhysicalInjectiveExactMPSGroundPath}.
+
+The theorem
+\leanid{MPSTensor.isSameExactMPSGappedPhase_of_isInjective_cohomologous}
+proves the independent exact MPS phase condition for one-site injective
+tensors with cohomologous actual invertible virtual implementations of
+their exact physical symmetries. Unit-circle rephasing aligns unitary factors;
+gauge preparation removes the unitary-virtual assumption, and nonzero
+rescaling and bond conjugation preserve the parent interactions and endpoint
+vector lines. The entire original physical spaces have orthogonal isometric
+images in the common physical representation. No physical path or continuous
+virtual family is assumed in this forward theorem. Its one-site injective
+and trivial-character restrictions remain explicit.
+
+The proved forward construction is distinct from the unresolved separation
+argument of Appendix~C. The latter must derive compatible continuous
+balanced canonical data and surviving invariant single-bond subspaces from
+an independent physical exact MPS ground-state path. The local
+dimension-direction assertion can already be justified without canonical
+coordinates. The coefficient matrix of the periodic two-site vector has
+rank $D^2$ for a one-site injective representative of dimension $D$.
+Its continuity and rank lower semicontinuity prove
+\leanid{MPSTensor.ExactMPSGroundPath.eventually_minimalBondDimension_ge}:
+near a parameter with representative dimension $D_0$, every representative
+has dimension at least $D_0$. This concerns a physical two-boundary Schmidt
+space; it does not identify an invariant subspace of the single virtual
+bond or its projective factor.
+
+Local continuous frames
+for supplied continuous fixed-rank orthogonal projections, compression of
+supplied continuous unitary projective actions, and continuous spectrally
+separated corners are proved auxiliary results. They do not establish the
+required implication from the physical gap. Continuity of virtual actions
+in these results is in the path parameter separately for each group element;
+continuity of the factors is separately for each fixed pair. No joint
+continuity in a topological group variable is asserted.
+
+The restriction argument is now also proved for supplied continuous
+ambient tensors $B(t)$ and continuous positive trace-one bond densities
+$\sigma(t)$. Pointwise support frames identify the minimal tensors as
+$A^i(t)=K(t)^\dagger B^i(t)K(t)$. A separated spectral corner retains
+the full support at the base parameter and admits a continuous isometric
+frame nearby. Restricting the actual unitary virtual actions to that
+frame preserves their factors exactly. This proves local cohomology
+invariance when the compressed density commutes with those actions and
+the minimal tensor is injective at the base. Neither the minimal
+dimensions nor the chosen support frames or virtual matrices need be
+continuous. No projective representation on the complementary bond space
+is assumed.
+
+For a continuous unital tensor family, a one-dimensional adjoint fixed
+space at the base parameter gives a local continuous positive trace-one
+stationary density, unique among all trace-one fixed matrices. The proof
+augments $I-\mathcal E^*$ by the trace normalization to obtain an
+invertible linear map, then uses continuity of its inverse. Positivity
+follows by identification with a stationary state. Uniqueness descends
+through support compression and forces the actual virtual actions to
+commute with the compressed density. Thus the declaration
+\leanid{MPSTensor.eventually_cohomologousTo_of_continuous_unital_supported_family}
+proves local constancy of the virtual class with injectivity only at the
+base parameter. The pointwise normalized stationary density is not
+assumed continuous. These results remove several auxiliary continuity
+and invariance assumptions once the continuous unital bond family is
+available. They do not construct that
+family from the independent physical exact MPS path and its uniform gap;
+this remains the analytic question required for the general converse.
+
+The declaration
+\leanid{MPSTensor.exists_local_continuous_canonicalNormalization_of_isInjective}
+now supplies local continuous Perron data, an explicit unital normalization,
+and a unique normalized adjoint stationary density for any supplied continuous
+tensor family in a fixed positive bond dimension, with injectivity only at the
+base point. No stationary-space hypothesis is added. This completes the
+normalization once a continuous realization is available; choosing that
+realization through a change of minimal bond dimension remains separate.
+
+Finite-ring reconstruction is now proved for already injective realizations.
+The declaration
+\leanid{MPSTensor.samePositiveMpvRay_of_mpv_two_three_eq_smul}
+shows that nonzero proportionality at ring lengths two and three determines
+the whole positive-length ray family. Two-site traces identify the physical
+coefficient quotient, and three-site traces recover multiplication on it;
+Skolem--Noether then gives the scalar and bond conjugation. The trace form
+is complex bilinear, so its inverse is not a positive spectral-support
+construction. Continuous canonical coordinates through a change of quotient
+dimension still require a separate theorem.
+
+At constant minimal dimension,
+\leanid{Matrix.exists_local_continuous_traceQuotientUnit}
+constructs local continuous quotient multiplication and its unit from
+$(C^\dagger C)^{-1}C^\dagger R$, where $C=GF$ is a fixed section of the
+two-site trace form and $R$ contains contracted three-site traces. Minimal
+injective tensors and their scalar normalizations are required only
+pointwise. The trace form is complex bilinear; only $C^\dagger C$ is positive
+Hermitian. The local continuous realization is now supplied by
+\leanid{MPSTensor.exists_local_continuous_unitalTensor_of_samePositiveMpvRay}:
+it constructs an injective unital tensor for the same full periodic-ray family,
+and a continuous unique normalized adjoint stationary density, without a
+continuous choice of the pointwise minimal representatives. Changes of minimal
+bond dimension remain open.
+
+The projective class is now locally constant for a supplied continuous
+injective tensor family on an arbitrary topological parameter space.
+The declaration
+\leanid{MPSTensor.eventually_cohomologousTo_of_continuousAt_exact_unitary_covariance}
+requires injectivity only at the base parameter, a fixed unitary physical
+action, and pointwise exact unitary projective covariance. It requires neither
+continuity of chosen virtual representatives nor a finite symmetry group.
+The coefficient operator and its Gram right inverse give a uniform estimate
+for all virtual adjoint actions; a nearby invariant line in the space of
+intertwiners then identifies the cohomology classes. In particular, this
+argument applies to convergent sequences. Identifying a limiting supported
+tensor with the prescribed ground-state rays, and deriving the necessary
+uniform transfer bound from the physical gap, remain separate obligations.
+
+Local constancy for a supplied unital ambient family now holds on any
+topological parameter space, assuming continuity only at the base point.
+The support dimension may vary; stationary densities, support frames, and
+virtual actions remain pointwise choices. Only the base supported tensor
+must be injective, and its ambient adjoint fixed space must be
+one-dimensional. Thus it applies to convergent sequences and their limits.
+The comparison with the prescribed base rays uses the stationary-support
+identification described below.
+
+The compact-limit argument now has the following proved auxiliary steps.
+Unital tensors and normalized stationary densities admit a common convergent
+subsequence in fixed dimensions. A common fixed line remains the entire
+fixed space under a uniform bound $q<1$ on every other eigenvalue, and that
+spectral bound passes to the limit. The transfer trace identity gives
+$\bigl|\|V_N\|^2-1\bigr|\leq(D^2-1)q^N$, so one blocking length makes all
+positive-length periodic vectors nonzero uniformly. Their limiting lines
+then retain equality when both limiting vectors are nonzero. The
+complementary diagonal corner has no eigenvalue one and its periodic norm
+tends to zero. Removing such a remainder preserves asymptotic overlaps
+against an eventually bounded periodic family. A unital compression to the
+entire stationary support is irreducible when the ambient normalized
+stationary matrix is unique. These results assume the transfer spectral
+bound; they do not derive it from the physical Hamiltonian gap, or assert
+exact equality of the ambient and compressed finite-ring rays.
+
+The full stationary support compression is now proved unital, irreducible,
+and normal under the supplied transfer spectral bound. Its positive-length
+periodic coefficients and those of the complementary corner sum exactly to
+the ambient coefficients. A vanishing complementary periodic norm can
+therefore be removed before the fundamental theorem identifies the retained
+bond dimension and gauge phase from an overlap of modulus tending to one.
+Trace-adjoint duality also identifies the dimensions of the primal and
+adjoint fixed spaces. Their pointwise synthesis identifies the actual normal
+support compression from a unit limiting overlap, deriving stationary
+uniqueness and transient decay internally. The declaration
+\leanid{MPSTensor.eventually_cohomologousTo_of_tendsto_unital_periodic_lines}
+now combines this identification with unitary transport and the supported-family
+class theorem on a convergent sequence and its limit. Eventual equality of the
+limiting periodic lines with those of a unital injective reference, together
+with supplied strict transfer spectral bounds, gives the reference virtual
+class eventually along the sequence. Continuity of the stationary densities,
+support frames, and virtual matrices is not assumed. Deriving the required
+limiting-line comparison for the physical path and the transfer bound from
+its Hamiltonian gap remains separate.
+
+\newpage
+The required realization need not be obtainable by gauging the supplied
+ambient tensor. For example, let $a$ be a normalized one-site vector and
+put $B^i=a_iI_2$. At every positive length $N$, the periodic MPS vector is
+$2a^{\otimes N}$, so its ray agrees with the bond-one product tensor.
+The adjoint transfer map of $B$ is the identity on $M_2(\C)$ and hence has
+a four-dimensional fixed space. Every invertible bond conjugation leaves
+these scalar letters unchanged. This redundant realization can accompany
+a constant, uniformly gapped product-state parent Hamiltonian. Thus the
+physical gap cannot force a simple adjoint fixed space for the particular
+ambient realization recorded in the path. The checked declarations
+\leanid{MPSTensor.repeatedProductTensor_fixedSpace_finrank} and
+\leanid{MPSTensor.repeatedProductTensor_samePositiveMpvRay} record the
+stationary-space dimension and periodic-ray comparison for the product
+vector $a=\ket{0}$. The remaining converse must obtain controlled minimal realizations of the
+same ground-state rays. The compact-sequence approach requires convergence
+along a subsequence and a uniform transfer bound; it does not require a
+continuous unital realization on the whole parameter interval.
 
 \section{Verdict}
 

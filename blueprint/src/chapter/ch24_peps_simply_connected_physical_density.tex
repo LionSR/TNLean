@@ -2,9 +2,7 @@
     \label{thm:peps_torus_simply_connected_physical_density}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected}
     \leanok
-    \uses{thm:peps_torus_physical_cut_density,
-        thm:peps_torus_simply_connected_boundary_loops,
-        thm:peps_torus_simply_connected_complement}
+    \uses{def:peps_renyi_entropy}
     Work on a native torus with both dimensions at least three and
     an original regular $G$-isometric site map. Assume the actual
     closed-cell realization $X_R$ is simply connected and the induced
@@ -14,12 +12,14 @@
     torus closures, with coefficient matrix $M$. It satisfies
     \begin{align}
         \frac{MM^\dagger}{\operatorname{tr}(MM^\dagger)} & =\rho_R,             &
-        \rho_R                                           & \geq0,               & \operatorname{tr}\rho_R & =1, \\
+        \rho_R                                           & \geq0,               & \operatorname{tr}\rho_R & =1,
+        \label{eq:peps_simply_connected_density}                                                                \\
         \operatorname{rank}\rho_R                        & =|G|^{b-1},          &
-        \rho_R^2                                         & =|G|^{-(b-1)}\rho_R,                                 \\
+        \rho_R^2                                         & =|G|^{-(b-1)}\rho_R,
+        \label{eq:peps_simply_connected_density_flat}                                                           \\
         S(\rho_R)                                        & =(b-1)\log|G|,       &
         S_\alpha(\rho_R)                                 & =(b-1)\log|G|.
-        \label{eq:peps_simply_connected_density}
+        \label{eq:peps_simply_connected_density_entropy}
     \end{align}
     The R\'enyi formula holds for every nonnegative finite order,
     including zero and the von Neumann value at one.
@@ -33,22 +33,26 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_torus_physical_cut_density,
+        thm:peps_torus_simply_connected_boundary_loops,
+        thm:peps_torus_simply_connected_complement}
     The induced complement graph is connected. Choose spanning trees
     and roots in both regions and enumerate the nonempty boundary.
     The simply connected planar lift and its exterior collar provide
     complementary boundary loops with the winding of the two-tree
     boundary routes. Applying
     \ref{thm:peps_torus_physical_cut_density} to these derived loops
-    gives (\ref{eq:peps_simply_connected_density}).
+    gives (\ref{eq:peps_simply_connected_density}),
+    (\ref{eq:peps_simply_connected_density_flat}), and
+    (\ref{eq:peps_simply_connected_density_entropy}).
 \end{proof}
 
 \begin{theorem}[Physical local equivalence with geometrically derived exterior walks]%
     \label{thm:peps_torus_simply_connected_physical_local_equivalence}
     \lean{TNLean.PEPS.IsGIsometric.torusPhysicalCut_local_equivalence_of_isSimplyConnected}
     \leanok
-    \uses{thm:peps_torus_physical_local_equivalence,
-        thm:peps_torus_simply_connected_boundary_loops,
-        thm:peps_torus_simply_connected_complement}
+    \uses{thm:peps_torus_simply_connected_physical_density,
+        def:peps_normalized_pure_cut_matrix}
     Under the hypotheses of
     \ref{thm:peps_torus_simply_connected_physical_density}, let $A$ and
     $B$ be the physical coefficient matrices of any two nonzero
@@ -69,6 +73,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_torus_physical_local_equivalence,
+        thm:peps_torus_simply_connected_boundary_loops,
+        thm:peps_torus_simply_connected_complement}
     Derive the complementary winding loops from the actual simple
     connectedness and apply
     \ref{thm:peps_torus_physical_local_equivalence}.

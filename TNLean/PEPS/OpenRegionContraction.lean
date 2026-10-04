@@ -21,6 +21,11 @@ virtual boundary state in Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
 Theorem 6.9 can be identified with a physical cut. The source's blocking and cut
 are described in `Papers/1001.3807/paper_v3.tex`, lines 1935–1980 and 2043–2076.
 No assertion about the entropy of a particular PEPS is made here.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

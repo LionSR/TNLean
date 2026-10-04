@@ -25,6 +25,14 @@ arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254–582.
 consequences assume positive bond dimensions, following the convention
 recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 The complementary-map support theorem does not need this restriction.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+- [arXiv:1804.04964](https://arxiv.org/abs/1804.04964) -- *Normal projected entangled pair
+  states generating the same state*
 -/
 
 open scoped BigOperators Matrix

@@ -18,6 +18,12 @@ Source: CPGSV21, arXiv:2011.12127, the parent construction in Section IV.C.1,
 lines 2003–2011, and the projector-sum expansion and anticommutator criterion
 in Section IV.C.3, lines 2170–2179. The overlapping-pair estimate is an explicit
 hypothesis; no implication from boundary locality is assumed.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder

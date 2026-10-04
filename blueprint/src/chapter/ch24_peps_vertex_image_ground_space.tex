@@ -34,9 +34,17 @@
         TNLean.PEPS.globalVertexTensorMap_leftInverse_eq_self_of_mem,
         TNLean.PEPS.globalVertexTensorMap_mem_vertexImageGroundSpace,
         TNLean.PEPS.vertexImageGroundSpace_eq_range_globalVertexTensorMap,
-        TNLean.PEPS.vertexImageGroundSpace_map_fullRegionPhysicalEquiv}
+        TNLean.PEPS.vertexImageGroundSpace_map_fullRegionPhysicalEquiv,
+        TNLean.PEPS.globalPhysicalMap_one,
+        TNLean.PEPS.globalPhysicalMap_comp,
+        TNLean.PEPS.globalPhysicalMap_oneVertex_apply,
+        TNLean.PEPS.globalPhysicalMap_fixed_of_oneVertex_fixed,
+        TNLean.PEPS.vertexPhysicalSlice_globalPhysicalMap_oneVertex,
+        TNLean.PEPS.globalPhysicalMap_vertexImageProjection,
+        TNLean.PEPS.oneVertexPhysicalMap_vertexImageProjection_eq_self_of_mem,
+        TNLean.PEPS.oneVertexPhysicalMap_comp_globalVertexTensorMap}
     \leanok
-    \uses{def:peps_vertex_image_ground_space,thm:peps_injective_vertex_reconstruction}
+    \uses{def:peps_vertex_image_ground_space}
     If every site map $A_v$ is injective, then
     \[
         \mathcal K_A=\operatorname{ran}T_A.
@@ -51,14 +59,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.globalPhysicalMap_one,
-        TNLean.PEPS.globalPhysicalMap_comp,
-        TNLean.PEPS.globalPhysicalMap_oneVertex_apply,
-        TNLean.PEPS.globalPhysicalMap_fixed_of_oneVertex_fixed,
-        TNLean.PEPS.vertexPhysicalSlice_globalPhysicalMap_oneVertex,
-        TNLean.PEPS.globalPhysicalMap_vertexImageProjection,
-        TNLean.PEPS.oneVertexPhysicalMap_vertexImageProjection_eq_self_of_mem,
-        TNLean.PEPS.oneVertexPhysicalMap_comp_globalVertexTensorMap}
+    \uses{thm:peps_injective_vertex_reconstruction}
     For each $v$, the map $P_v=A_vL_v$ fixes exactly
     $\operatorname{ran}A_v$. Therefore its action at the vertex $v$,
     with the identity at all other vertices, fixes every vector in

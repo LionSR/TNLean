@@ -25,6 +25,14 @@ and the regular cut in Theorem 6.9, lines 1278–1358 and 2043–2076;
 the general parent-interaction definition is CPGSV21, arXiv:2011.12127,
 Section IV.C.1, lines 2003–2011. These are local necessary consequences,
 not a bondwise Fundamental Theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped Matrix ComplexOrder

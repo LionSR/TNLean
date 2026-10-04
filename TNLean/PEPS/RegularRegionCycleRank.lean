@@ -19,6 +19,11 @@ the exponent is zero.
 These are auxiliary graph-counting facts for the finite-region contraction in
 Schuch, Cirac, and Pérez-García, arXiv:1001.3807, lines 1935–1957. They do not
 assert the full physical entropy theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators

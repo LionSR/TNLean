@@ -157,8 +157,9 @@ Project result: at every positive length, `(Z_L Z_R)^{⊗N} ρ^{(N)}(T) = ρ^{(N
 symmetry, arXiv:2504.16985, line 182), because on the support the `R` bit of each site is the
 `L` bit of the next, so the product of the signs is a square. -/
 theorem isStrongMPOSymmetry_sigmaZZ :
-    IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZZ) T fun _ _ => 1 := by
+    IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZZ) T 1 fun _ _ => 1 := by
   intro _ L hL
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite, sigmaZZ, Matrix.finKronecker_diagonal, one_smul]
   ext σ τ
   rw [Matrix.diagonal_mul]
@@ -174,8 +175,9 @@ symmetry, arXiv:2504.16985, line 182). Flipping the `L` and `R` bits preserves t
 condition and, together with the flag sign, exchanges the two block labels of the one-site
 coefficient: `Z_F · coef_k(X_L X_R i, j) = coef_{1-k}(i, j)`. -/
 theorem isStrongMPOSymmetry_flipXXZF :
-    IsStrongMPOSymmetry (fun _ : Unit => onSite flipXXZF) T fun _ _ => 1 := by
+    IsStrongMPOSymmetry (fun _ : Unit => onSite flipXXZF) T 1 fun _ _ => 1 := by
   intro _ L hL
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite, flipXXZF, ← Matrix.finKronecker_mul, sigmaZF, Matrix.finKronecker_diagonal,
     one_smul, Matrix.mul_assoc]
   ext σ τ
@@ -194,8 +196,9 @@ theorem isStrongMPOSymmetry_flipXXZF :
 Project result: at every positive length, `(X_L X_R)^{⊗N}` commutes with `ρ^{(N)}(T)` (weak
 symmetry, arXiv:2504.16985, line 182): flipping the `L` and `R` bits preserves the matching
 condition, and `C_k(1 - l, l') = C_k(l, 1 - l')`. -/
-theorem isWeakMPOSymmetry_flipXX : IsWeakMPOSymmetry (fun _ : Unit => onSite flipXX) T := by
+theorem isWeakMPOSymmetry_flipXX : IsWeakMPOSymmetry (fun _ : Unit => onSite flipXX) T 1 := by
   intro _ L hL
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite]
   change _ * _ = _ * _
   ext σ τ
@@ -208,8 +211,9 @@ theorem isWeakMPOSymmetry_flipXX : IsWeakMPOSymmetry (fun _ : Unit => onSite fli
 
 Project result: at every positive length, `Z_F^{⊗N}` commutes with `ρ^{(N)}(T)` (weak symmetry,
 arXiv:2504.16985, line 182), because every one-site coefficient is diagonal in the flag bit. -/
-theorem isWeakMPOSymmetry_sigmaZF : IsWeakMPOSymmetry (fun _ : Unit => onSite sigmaZF) T := by
+theorem isWeakMPOSymmetry_sigmaZF : IsWeakMPOSymmetry (fun _ : Unit => onSite sigmaZF) T 1 := by
   intro _ L hL
+  simp only [mpoWithBoundary_one]
   rw [mpo_onSite, sigmaZF, Matrix.finKronecker_diagonal]
   change _ * _ = _ * _
   ext σ τ
@@ -276,8 +280,9 @@ theorem not_isStrongSymmetry_flipXX_one :
 
 /-- **The family is not strongly `X_L X_R`-symmetric**, for any eigenvalues. -/
 theorem not_isStrongMPOSymmetry_flipXX (c : Unit → ℕ → ℂ) :
-    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite flipXX) T c := by
+    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite flipXX) T 1 c := by
   intro h
+  simp only [IsStrongMPOSymmetry, mpoWithBoundary_one] at h
   have h1 := h () 1 one_pos
   rw [mpo_onSite] at h1
   exact not_isStrongSymmetry_flipXX_one ⟨c () 1, h1⟩
@@ -300,8 +305,9 @@ theorem not_isStrongSymmetry_sigmaZF_one :
 
 /-- **The family is not strongly `Z_F`-symmetric**, for any eigenvalues. -/
 theorem not_isStrongMPOSymmetry_sigmaZF (c : Unit → ℕ → ℂ) :
-    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZF) T c := by
+    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZF) T 1 c := by
   intro h
+  simp only [IsStrongMPOSymmetry, mpoWithBoundary_one] at h
   have h1 := h () 1 one_pos
   rw [mpo_onSite] at h1
   exact not_isStrongSymmetry_sigmaZF_one ⟨c () 1, h1⟩
