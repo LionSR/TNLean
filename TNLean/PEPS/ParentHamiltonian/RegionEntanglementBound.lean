@@ -18,6 +18,12 @@ Source: Cirac, Pérez-García, Schuch, and Verstraete, arXiv:2011.12127,
 Section II.A.3, the boundary-rank argument and PEPS area law,
 local source lines 429–448 and 539. The variable-dimension finite-graph
 statement is the same crossing-bond dimension argument.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

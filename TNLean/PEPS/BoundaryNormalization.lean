@@ -20,6 +20,11 @@ positive scalar convention used for isometric tensors in Schuch, Cirac, and Pér
 arXiv:1001.3807, Definition 6.1 and Lemma 6.2; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. The boundary entropy step is
 Theorem 6.9, proof (`Papers/1001.3807/paper_v3.tex`, lines 2043–2072).
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix ComplexOrder

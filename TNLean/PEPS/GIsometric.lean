@@ -142,7 +142,8 @@ difference with the winding of the corresponding interior route.
 connectedness argument. `TNLean.PEPS.IntegerCellNoHoles` rules out finite
 components of missing integer cells from genuine simple connectedness of the
 closed-cell union, and derives this obstruction for the actual planar torus lift.
-Routing between the exterior boundary endpoints inside the collar remains open.
+`TNLean.PEPS.IntegerCellBoundaryContour` then connects the exterior collar graph,
+so the exterior boundary endpoints are joined inside the collar.
 `TNLean.PEPS.RegularCycleControlledBoundary` constructs the unitary boundary
 permutation controlled by cycle coordinates and computes its exact action on the
 actual canonical block. Its relative-word consequence remains conditional on
@@ -150,8 +151,8 @@ the complement path identity. `TNLean.PEPS.TorusComplementCycleWords` derives
 that identity for actual closures from fixed complementary loops with the required
 geometric winding. `TNLean.PEPS.TorusComplementDisentangling` obtains one unitary
 before choosing any commuting closure labels, with its exact action on every
-actual canonical complementary block. Existence of the required exterior paths
-remains part of the unrestricted disk entropy theorem.
+actual canonical complementary block. The required complementary loops are
+constructed from simple connectedness in `TNLean.PEPS.TorusComplementPathReplacement`.
 `TNLean.PEPS.RegularControlledBoundaryFactor` contracts the two actual canonical
 blocks and separates the fixed normalized maximally entangled boundary factor
 and a fixed normalized region ancillary vector from every finite coherent sector
@@ -173,8 +174,9 @@ obtains one density on the original physical region, chosen before all closure
 labels and coefficients, with rank equal to the expected boundary power.
 `TNLean.Algebra.FlatDensityRenyiEntropy` computes all nonnegative finite Rényi
 orders from the genuine spectral trace powers, including rank at order zero
-and von Neumann entropy at order one. The unrestricted disk conclusion still
-requires construction of the complementary walks from the geometric region.
+and von Neumann entropy at order one. `TNLean.PEPS.TorusSimplyConnectedPhysicalDensity`
+combines these steps for contiguous regions with simply connected closed-cell
+realization on tori of periods at least three.
 The overlaps of actual torus contractions with noncontractible regular closure operators
 are computed in `TNLean.PEPS.RegularTorusGram`; the class vectors are nonzero, orthogonal,
 and linearly independent in `TNLean.PEPS.RegularTorusSectors`. The commuting subfamily
@@ -190,8 +192,12 @@ The projected mixed Gram operators of actual complementary twists are computed i
 a common reduced density for their nonzero superpositions.
 `TNLean.PEPS.RegularTorusEntropy` derives the same density and entropy for actual torus
 closure superpositions on strictly interior rectangles, from local isometry and coordinate
-bounds alone. Arbitrary disk cuts meeting
-the torus closure seams still require the source's disentangling argument; see
+bounds alone. Through the complementary disentangling above,
+`TNLean.PEPS.TorusSimplyConnectedPhysicalDensity` extends the common density, local
+equivalence and entropy to every graph-connected region with simply connected closed-cell
+realization, including cuts meeting the closure seams, for the regular representation on
+tori with both periods at least three; `TNLean.PEPS.TorusStripeLocalEquivalence` applies it
+to the two width-one stripes. Tori with a period below three remain outside this scope; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 **Local fix (normalization):** as for `TNLean.PEPS.IsGIsometric`, `𝒫(A†) 𝒫(A)` is required to

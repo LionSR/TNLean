@@ -25,6 +25,11 @@ not have this property. Safe graph walks give genuine continuous collar paths.
 is not proved here and is not adopted as a disk hypothesis. This is the continuous
 geometric step in SCP10, arXiv:1001.3807, proof of Theorem 6.9, lines 1935–1990;
 see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 noncomputable section
@@ -194,7 +199,8 @@ private theorem combination_near_cell (a q r : ℤ × ℤ)
       smul_eq_mul, he, abs_le, mem_Icc] using hb₂
 
 /-- Every safe exterior edge is a straight segment contained in the genuine
-radius-three-quarters collar. Source: SCP10, lines 1935–1990; auxiliary geometry. -/
+radius-three-quarters collar. Locally proved auxiliary geometry for the block setting of SCP10,
+lines 1935–1990; the source states no such lemma. -/
 theorem integerExteriorCollarGraph_segment_subset (A : Finset (ℤ × ℤ))
     {q r : integerExteriorBand A} (hqr : (integerExteriorCollarGraph A).Adj q r) :
     segment ℝ (integerCellCenter q.1) (integerCellCenter r.1) ⊆ integerExteriorCollar A := by

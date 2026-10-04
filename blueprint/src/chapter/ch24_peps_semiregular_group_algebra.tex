@@ -5,7 +5,7 @@
         Representation.isSemiRegular_iff_linearIndependent,
         Representation.isSemiRegular_iff_injective_asAlgebraHom}
     \leanok
-    \uses{def:peps_semiregular, thm:peps_semiregular_trace}
+    \uses{def:peps_semiregular}
     Let $G$ be a finite group and let $\rho$ be a finite-dimensional complex
     representation. The following assertions are equivalent:
     $\rho$ contains every irreducible representation; the operators
@@ -18,6 +18,7 @@
     of its monoid-algebra homomorphism.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:peps_semiregular_trace}
     The trace-dual identity gives independence for a semi-regular
     representation. Conversely, if an irreducible character $\chi$ is
     absent, its character projector vanishes:
@@ -37,7 +38,7 @@
     \lean{Representation.IsSemiRegular.dual,
         Representation.isSemiRegular_dual_iff}
     \leanok
-    \uses{thm:peps_semiregular_group_algebra}
+    \uses{def:peps_semiregular}
     A finite-dimensional complex representation $\rho$ of a finite group
     is semi-regular if and only if its contragredient
     $\rho^*(g)=\rho(g^{-1})^{\mathsf T}$ is semi-regular.
@@ -45,6 +46,7 @@
     convention of \cite[Definition~5.1 and Lemma~5.2]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:peps_semiregular_group_algebra}
     Inversion permutes the group indices, and transposition is injective
     on endomorphisms of a finite-dimensional vector space. It therefore
     preserves independence of the group operators. Conversely,
@@ -57,8 +59,7 @@
     \lean{Representation.IsSemiRegular.tprod_of_nontrivial,
         Representation.IsSemiRegular.tprod_left_of_nontrivial}
     \leanok
-    \uses{thm:peps_semiregular_group_algebra, thm:peps_semiregular_trace,
-        thm:peps_semiregular_equivalence}
+    \uses{def:peps_semiregular}
     Let $G$ be a finite group, let $\rho$ be a finite-dimensional
     semi-regular complex representation, and let $\sigma$ be any
     nonzero finite-dimensional complex representation. Then both
@@ -68,6 +69,8 @@
     the trivial representation.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:peps_semiregular_group_algebra, thm:peps_semiregular_trace,
+        thm:peps_semiregular_equivalence}
     A dependence among the tensor-product operators is a dependence
     among the tensors $\rho(g)\otimes\sigma(g)$, by the natural
     identification of their endomorphism spaces. Applying the

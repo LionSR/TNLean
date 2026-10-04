@@ -24,6 +24,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
 `Papers/1001.3807/paper_v3.tex`, equation `eq:2d:peps-with-ug-uh`, lines 1515–1525,
 and Definition 6.1 (`def:iso:isopeps`), lines 1692–1702. The orientation is that of
 `torusBondNetwork`: horizontal bonds point right and vertical bonds point down.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

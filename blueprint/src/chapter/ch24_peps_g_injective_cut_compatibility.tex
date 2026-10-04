@@ -8,7 +8,7 @@
         TNLean.PEPS.regularBoundaryComparison_pairing,
         TNLean.PEPS.exists_regularBoundaryComparison_of_cut_eq}
     \leanok
-    \uses{lem:peps_regular_ginjective_cut_range}
+    \uses{def:peps_g_injective}
     Let $T,S$ and $T',S'$ be two pairs of regular $G$-injective
     open maps on the same nonempty virtual boundary. Suppose
     \[
@@ -25,6 +25,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_regular_ginjective_cut_range,
+        thm:peps_g_injective_left_inverse,thm:peps_regular_boundary_density}
     The physical ranges agree on the first side by the cut-range
     identity, and on the second side by applying the same identity
     to the transposed coefficient matrices. Choose left inverses

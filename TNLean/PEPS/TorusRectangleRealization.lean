@@ -15,9 +15,15 @@ homeomorphic to the corresponding closed planar rectangle, provided that each
 side length is strictly smaller than its torus period. Convexity then gives
 simple connectedness of the actual realization.
 
-This is auxiliary geometry for the reduction to horizontal and vertical stripes
-in SCP10, Theorem 6.7 (arXiv:1001.3807, local source lines 1995–2011). It asserts
+This is locally proved auxiliary geometry, motivated by the reduction to
+horizontal and vertical stripes in SCP10, Theorem 6.7 (arXiv:1001.3807, local
+source lines 1995–2011); the source states no rectangle realization. It asserts
 neither a physical disentangling identity nor a parent-Hamiltonian statement.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Set
@@ -141,7 +147,8 @@ private theorem projection_planarRectangle_injOn
 
 /-- The actual closed-cell realization of a positive nonwrapping rectangle
 with both side lengths shorter than the torus periods is simply connected.
-Source: SCP10, Theorem 6.7, lines 1995–2011; auxiliary rectangle geometry. -/
+This is locally proved auxiliary geometry: SCP10, Theorem 6.7, lines 1995–2011,
+uses two wrapping stripes and states no rectangle realization. -/
 theorem isSimplyConnected_torusRegionRealization_rectangle
     {width height : ℕ} [NeZero width] [NeZero height]
     (xStart yStart xLen yLen : ℕ) (hx : 0 < xLen) (hy : 0 < yLen)

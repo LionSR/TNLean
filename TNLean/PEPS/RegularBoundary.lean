@@ -22,6 +22,11 @@ This is the virtual boundary dimension entering Schuch, Cirac, and Pérez-Garcí
 arXiv:1001.3807, Theorem 6.9 (`Papers/1001.3807/paper_v3.tex`, lines 2027–2072).
 The identification of these vectors with the support of a reduced density operator requires
 the separate tensor-contraction and isometry arguments of that theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module Representation

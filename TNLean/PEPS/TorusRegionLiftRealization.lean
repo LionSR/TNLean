@@ -20,6 +20,11 @@ statement required by the controlled disentangling argument in lines 1957–1990
 In particular, no boundary-word or group-valued flatness hypothesis is introduced.
 The exterior lattice walk with prescribed torus winding remains a separate theorem.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 noncomputable section
@@ -42,8 +47,9 @@ private def cellPoint (R : Finset (TorusVertex width height)) (v : {v // v ∈ R
     mem_iUnion_of_mem v.1 (mem_iUnion_of_mem v.2 ⟨d, hd, rfl⟩)⟩
 
 /-- A genuine covering lift translates every native closed cell to the unit
-square centered at the lifted site. Source: SCP10, the realized block domains
-in §6.3, lines 1935–1957; auxiliary geometric statement. -/
+square centered at the lifted site. Locally proved auxiliary geometric statement for the block
+setting of SCP10, the realized block domains in §6.3, lines 1935–1957; the source states no such
+lemma. -/
 theorem continuousLift_torusClosedUnitCell
     (R : Finset (TorusVertex width height)) (F : C(torusRegionRealization R, ℝ × ℝ))
     (hF : ∀ p, torusRealProjection width height (F p) = p.1)
