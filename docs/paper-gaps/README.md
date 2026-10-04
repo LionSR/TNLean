@@ -949,8 +949,10 @@ For the phase relation of arXiv:2103.13367:
   It distinguishes unit-cost gates on unbounded intermediate dimensions from
   the source's physical-qudit gate convention, with no asserted uniform-depth
   simulation or relation inclusion. The local results include
-  additive-error composition and mutual-conversion equivalence, and the
-  remaining extension to channels with measurements and classical communication.
+  additive-error composition and mutual-conversion equivalence. Finite adaptive
+  channels and composition are formalized separately; a system-size-independent
+  decomposition into source-ordered QCcc blocks and a uniform physical gate-cost
+  comparison remain open.
 
 For the classification of translation-invariant MPS under circuits assisted by
 measurements and classical communication (arXiv:2103.13367, Theorem

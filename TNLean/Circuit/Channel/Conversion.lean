@@ -79,8 +79,9 @@ Approximate conversions in trace norm and mutual asymptotic conversion in polylo
 depth are treated in `TNLean.Circuit.Channel.ApproximateConversion` and
 `TNLean.Circuit.Channel.AsymptoticConversion`, for the same class of local channels. Blocking
 a fixed number of sites into one, which changes the number of sites, is not treated here.
-Measurements with classical feedforward,
-the LOCC part of arXiv:2103.13367, are not treated here.
+Finite adaptive channels on arbitrary inputs and their composition are treated separately
+in `TNLean.Circuit.Measurement.AdaptiveConversion`. That model still lacks a fixed-number
+source `QCcc` block decomposition and a uniform physical gate-cost comparison.
 
 ## References
 

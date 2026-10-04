@@ -72,19 +72,22 @@ The equivalence proved here belongs to the enlarged-site local-channel model.
 It is not identified with the source's phase equivalence or asserted to be
 a subclass at the same asymptotic depth. The classification asserting that
 every translation-invariant matrix product state belongs to the trivial
-source phase is not obtained. The existing deterministic measurement
-preparations start from product states, so they cannot supply channels on
-arbitrary input states for the source relation.
+source phase is not obtained. Finite adaptive channels on arbitrary input
+operators and their additive-depth composition are now available separately,
+as described in~\cite{gap:psc21_adaptive_channel_round_scope}. They are not
+included in the non-feedforward asymptotic relation formalized here.
 
-A source-faithful relation must distinguish the fixed-dimensional physical
-qudits from onsite ancillas, count intersite gates according to the source
-convention, and include the channels induced by adaptive measurements on
-arbitrary inputs and their finite compositions.\footnote{The adaptive-input
-    extension is tracked by \ghissue{8382}, under \ghissue{8622}.}
-Alternatively, comparison with the present relation would require a proved
-uniform simulation bound or explicit restrictions on intermediate dimensions.
-Trace-norm contractivity supplies the same error estimate once those channels
-and depth bounds are established. The separate restrictions of the
+The remaining source comparison needs a decomposition into a fixed number
+of \textit{QCcc} blocks, with that number independent of system size. Each
+block must satisfy the source's internal measurement/control order and
+one-measurement-per-site rule. The finite adaptive tree does not record this
+decomposition: counting its individual instrument steps would not express
+the source condition. The comparison must also distinguish fixed-dimensional
+physical qudits from onsite ancillas and control the intersite gate cost
+uniformly in the chain length. A proved simulation bound or explicit
+restrictions on intermediate dimensions could supply this resource comparison.
+Once those source-model depth bounds are established, trace-norm contractivity
+supplies the same error estimate. The separate restrictions of the
 matrix-product-state classification are recorded
 in~\cite{gap:psc21_mps_classification_scope}.
 
