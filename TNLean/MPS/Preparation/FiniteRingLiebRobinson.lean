@@ -40,7 +40,7 @@ set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
-open Set
+open Set NormedSpace
 
 /-- The integral form of Grönwall's inequality. This is the scalar comparison
 used after weighting the finite-volume commutator recursion. -/
