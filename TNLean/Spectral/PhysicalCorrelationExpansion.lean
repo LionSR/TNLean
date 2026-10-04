@@ -20,6 +20,10 @@ existing exact gauge invariance of physical insertions.
 algebraically simple dominant eigenvalue with possibly singular fixed
 matrices. The physical normalization here uses the normal-tensor Perron gauge;
 see `docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`.
+
+## References
+
+- arXiv:2011.12127, Section II.B.3, lines 433–441.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Polynomial
@@ -59,7 +63,7 @@ theorem physicalConnectedCorrelator_exists_normal_jordan_expansion {d D : ℕ}
     (L₁ L₂ : ℕ) (X : Matrix (Cfg d L₁) (Cfg d L₁) ℂ)
     (Y : Matrix (Cfg d L₂) (Cfg d L₂) ℂ) :
     let htr : Matrix.trace ρ ≠ 0 := by simp [hTr]
-    let T := Kraus.transferMap A - fixedPointProj ρ htr
+    let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := Kraus.transferMap A - fixedPointProj ρ htr
     ∃ s : Finset ℂ, ∃ p : ℂ → Polynomial ℂ, ∃ t : ℕ → ℂ,
       0 ∉ s ∧ (∀ μ ∈ s, Module.End.HasEigenvalue (Kraus.transferMap A) μ ∧ ‖μ‖ < 1) ∧
       (∀ μ ∈ s, (p μ).degree < (T.maxGenEigenspaceIndex μ : WithBot ℕ)) ∧
@@ -70,7 +74,7 @@ theorem physicalConnectedCorrelator_exists_normal_jordan_expansion {d D : ℕ}
   let : NeZero D := ⟨hNormal.bondDim_ne_zero⟩
   dsimp only
   let htr : Matrix.trace ρ ≠ 0 := by simp [hTr]
-  let T := Kraus.transferMap A - fixedPointProj ρ htr
+  let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := Kraus.transferMap A - fixedPointProj ρ htr
   obtain ⟨s, p, t, hs0, hs, hp, ht, hsum⟩ :=
     physicalConnectedCorrelator_exists_jordan_expansion A ρ htr L₁ L₂ X Y
   refine ⟨s, p, t, hs0, ?_, hp, ?_, hsum⟩
@@ -104,7 +108,8 @@ theorem IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion
         ρB.PosDef ∧ Kraus.transferMap B ρB = ρB ∧ Matrix.trace ρB = 1 ∧
         ∀ (L₁ L₂ : ℕ) (X : Matrix (Cfg d L₁) (Cfg d L₁) ℂ)
           (Y : Matrix (Cfg d L₂) (Cfg d L₂) ℂ),
-          let T := Kraus.transferMap B - fixedPointProj ρB htrB
+          let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+            Kraus.transferMap B - fixedPointProj ρB htrB
           ∃ s : Finset ℂ, ∃ p : ℂ → Polynomial ℂ, ∃ t : ℕ → ℂ,
             0 ∉ s ∧
             (∀ μ ∈ s, Module.End.HasEigenvalue (Kraus.transferMap A) μ ∧ ‖μ‖ < 1) ∧

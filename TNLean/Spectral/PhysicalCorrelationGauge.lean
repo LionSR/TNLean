@@ -19,7 +19,9 @@ all finite supports, including adjacent observables.
 Normality already includes spectral-radius-one normalization; the bond gauge
 in this argument introduces no scalar rescaling.
 
-Reference: arXiv:2011.12127, Section II.B.3, lines 433–441.
+## References
+
+- arXiv:2011.12127, Section II.B.3, lines 433–441.
 
 **Scope restriction (normal tensors):** The theorem assumes irreducibility
 and the normalized peripheral spectral condition of normality. The source's

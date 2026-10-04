@@ -13,6 +13,11 @@ The exact binomial expansion is rewritten as polynomial-times-exponential
 terms only at nonzero eigenvalues. The zero-eigenvalue contribution is kept
 as a finite transient. Polynomial degrees are strictly below the respective
 generalized-eigenspace stabilization indices, the maximal Jordan-block sizes.
+
+## References
+
+- arXiv:2011.12127, Section II.B.3, lines 433–441, with the Jordan correction
+  documented in `docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`.
 -/
 
 open scoped Matrix BigOperators Polynomial
@@ -92,7 +97,7 @@ theorem physicalConnectedCorrelator_exists_jordan_expansion {d D : ℕ}
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Matrix.trace ρ ≠ 0)
     (L₁ L₂ : ℕ) (X : Matrix (Cfg d L₁) (Cfg d L₁) ℂ)
     (Y : Matrix (Cfg d L₂) (Cfg d L₂) ℂ) :
-    let T := Kraus.transferMap A - fixedPointProj ρ hρ
+    let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := Kraus.transferMap A - fixedPointProj ρ hρ
     ∃ s : Finset ℂ, ∃ p : ℂ → Polynomial ℂ, ∃ t : ℕ → ℂ,
       0 ∉ s ∧ (∀ μ ∈ s, T.HasEigenvalue μ) ∧
       (∀ μ ∈ s, (p μ).degree < (T.maxGenEigenspaceIndex μ : WithBot ℕ)) ∧
@@ -101,7 +106,7 @@ theorem physicalConnectedCorrelator_exists_jordan_expansion {d D : ℕ}
         t n + ∑ μ ∈ s, (p μ).eval (n : ℂ) * μ ^ n := by
   classical
   dsimp only
-  let T := Kraus.transferMap A - fixedPointProj ρ hρ
+  let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := Kraus.transferMap A - fixedPointProj ρ hρ
   obtain ⟨s, c, hs, hsum⟩ :=
     physicalConnectedCorrelator_exists_binomial_expansion A ρ hρ L₁ L₂ X Y
   obtain ⟨p, t, hp, ht, hpt⟩ := correlation_binomial_to_polynomial s c T.maxGenEigenspaceIndex
