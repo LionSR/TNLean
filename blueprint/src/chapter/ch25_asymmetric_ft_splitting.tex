@@ -82,6 +82,41 @@ Theorem~\ref{thm:asym_multiblock} split into sitewise intertwiners.
     relations follow from the biorthogonality of the pairs.
 \end{proof}
 
+\begin{theorem}[Faithful stationary splitting]
+    \label{thm:asym_stationary_splitting}
+    \lean{MPSTensor.isSemisimpleModule_wordModule_of_hasInvariantProjectorClosure,
+        MPSTensor.isSemisimpleModule_wordModule_of_leftCanonical_of_posDef_fixedPoint,
+        MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_leftCanonical_of_posDef_fixedPoint,
+        MPSTensor.exists_fusionTensors_of_leftCanonical_of_posDef_fixedPoint}
+    \leanok
+    \uses{thm:asym_multiblock, def:asym_word_module,
+        def:invariant_projector_closure, thm:faithful_stationary_projector_closure}
+    Invariant-projector closure makes the word-algebra module semisimple.
+    In particular, suppose that the source tensor in
+    Theorem~\ref{thm:asym_multiblock} satisfies
+    \[
+        \sum_i (B^i)^\dagger B^i=\id,\qquad
+        \sum_i B^i\rho(B^i)^\dagger=\rho
+        \quad\text{for some }\rho>0.
+    \]
+    Then its compression may be chosen with zero remainder and with
+    two-sided sitewise intertwiners as in
+    Corollary~\ref{cor:asym_fusion_tensors_star}.
+    Normalization and faithful stationarity are sufficient hypotheses
+    here; they are not inferred from periodic equality.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:faithful_stationary_projector_closure, thm:asym_splitting}
+    An invariant subspace has an orthogonal projection whose lower
+    off-diagonal Kraus blocks vanish. Invariant-projector closure forces
+    the upper blocks to vanish as well, so its orthogonal complement is
+    invariant. Every invariant subspace therefore has an invariant
+    complement. Semisimplicity splits the composition flag, and the
+    zero-remainder compression gives the asserted intertwiners.
+\end{proof}
+
 \begin{corollary}[Obstruction to closure under conjugate transposition]
     \label{cor:asym_anomaly_not_star}
     \lean{MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero,

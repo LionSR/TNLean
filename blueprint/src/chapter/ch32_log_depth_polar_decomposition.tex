@@ -116,6 +116,28 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     Take the polar factors of Definition~\ref{def:ldpolar_matrix}.
 \end{proof}
 
+\begin{theorem}[Polar factors of a left product]
+    \label{thm:ldpolar_left_product}
+    \lean{Matrix.gram_mul_eq_of_conjTranspose_mul_self_mul_eq,
+        Matrix.polarPos_mul_of_gram_eq, Matrix.polarSupport_mul_of_gram_eq,
+        Matrix.polarIso_mul_of_gram_eq}
+    \leanok
+    \uses{def:ldpolar_matrix}
+    Let $M=VP$ be the polar decomposition of $M$, with $V^\dagger V=\Pi$, and
+    let $K$ be a matrix with $(KM)^\dagger KM=M^\dagger M$. This holds when
+    $K^\dagger KM=M$, for instance when $K$ is an isometry, or a partial
+    isometry whose initial projector fixes the range of $M$. Then the positive
+    part of $KM$ is $P$, its support projector is $\Pi$, and its partial
+    isometry is $KV$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $K^\dagger KM=M$, then $(KM)^\dagger KM=M^\dagger K^\dagger KM=M^\dagger M$.
+    The positive part and the support projector are functions of
+    $M^\dagger M$, so they do not change, and the partial isometry of $KM$ is
+    $KM\,g(M^\dagger M)=KV$.
+\end{proof}
+
 \subsection{A tensor as a map on the virtual pair space}
 
 \begin{definition}[Physical matrix of a tensor]
@@ -307,6 +329,38 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     Write $B=P_V$ by Theorem~\ref{thm:ldpolar_tensor_decomposition}. Since
     $V^\dagger V=\Pi$ and $P_\Pi=P$, Theorem~\ref{thm:ldpolar_transfer_rotate}
     gives $\E_{P_V}=\E_P$.
+\end{proof}
+
+\begin{theorem}[Polar factors of a rotated tensor]
+    \label{thm:ldpolar_tensor_rotate}
+    \lean{MPSTensor.polarIsoMatrix_rotatePhysical,
+        MPSTensor.polarPosTensor_rotatePhysical,
+        MPSTensor.polarSupportMatrix_rotatePhysical,
+        MPSTensor.polarIsoMatrix_comp_equiv,
+        MPSTensor.polarPosTensor_comp_equiv,
+        MPSTensor.polarSupportMatrix_comp_equiv}
+    \leanok
+    \uses{def:ldpolar_tensor, def:rotate_physical}
+    Let $X$ be a tensor with isometric factor $V$, positive-part tensor $P$ and
+    support projector $\Pi$, and let $W$ be a matrix on its physical leg with
+    $X_{W^\dagger W}=X$. Then $X_W$ has isometric factor $WV$, positive-part
+    tensor $P$ and support projector $\Pi$. In particular, relabelling the
+    physical index of $X$ by a bijection relabels the rows of $V$ and does not
+    change $P$ or $\Pi$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldpolar_physical_matrix_rotate, thm:ldpolar_left_product}
+    The physical matrix of $X_W$ is $W\widehat X$
+    (Lemma~\ref{lem:ldpolar_physical_matrix_rotate}), and $X_{W^\dagger W}=X$
+    reads $W^\dagger W\widehat X=\widehat X$. Apply
+    Theorem~\ref{thm:ldpolar_left_product} and reindex. A relabelling by a
+    bijection is the rotation by its permutation matrix, which is an isometry;
+    this gives $P$ and $\Pi$. For $V$ the relabelling is read off directly:
+    relabelling the rows of $\widehat X$ leaves $\widehat X^\dagger\widehat X$
+    unchanged, so it relabels the rows of
+    $V=\widehat X\,g(\widehat X^\dagger\widehat X)$
+    (Definition~\ref{def:ldpolar_matrix}).
 \end{proof}
 
 \begin{theorem}[Polar factors of an injective tensor]

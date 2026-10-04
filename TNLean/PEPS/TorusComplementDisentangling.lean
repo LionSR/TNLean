@@ -25,6 +25,11 @@ factorization of a contracted tensor is assumed.
 three, and the actual complementary loops with the specified winding are
 supplied. Their existence for the paper's disk geometry remains separate,
 as recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

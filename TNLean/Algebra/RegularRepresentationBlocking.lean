@@ -22,6 +22,11 @@ any finite collection of coordinates into the first coordinate.
 These are the virtual changes of coordinates used in Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, Section 6, immediately before the observation on preservation of \(G\)-isometry
 (`Papers/1001.3807/paper_v3.tex`, lines 1830–1850).
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix Kronecker

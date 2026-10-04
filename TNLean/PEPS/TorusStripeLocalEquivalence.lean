@@ -19,6 +19,11 @@ The statements concern the actual coherent closure vectors. The identification
 of this family with a parent-Hamiltonian ground space is a separate result.
 Source: SCP10, arXiv:1001.3807, Theorem 6.7, lines 1995–2015;
 see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

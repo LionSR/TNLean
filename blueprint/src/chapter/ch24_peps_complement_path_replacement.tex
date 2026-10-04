@@ -3,9 +3,7 @@
     \lean{TNLean.PEPS.exists_complementWalk_of_integerExteriorCollarGraph_connected,
         TNLean.PEPS.exists_complementBoundaryLoops_of_integerExteriorCollarGraph_connected}
     \leanok
-    \uses{thm:peps_integer_exterior_collar_paths,
-        thm:peps_torus_region_boundary_lift,
-        thm:peps_torus_exterior_path_approximation}
+    \uses{def:peps_integer_exterior_collar_graph}
     Let both torus periods be at least three. Suppose a region has an
     integer unit-step lift, its safe exterior graph is connected, and
     its exterior collar projects outside the actual torus region.
@@ -22,6 +20,9 @@
     construction for \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:peps_integer_exterior_collar_paths,
+        thm:peps_torus_region_boundary_lift,
+        thm:peps_torus_exterior_path_approximation}
     Lift the two exterior crossing endpoints. They belong to the
     integer band, and the deck-coordinate difference equals the
     crossing numbers of the interior route. A safe graph walk gives
@@ -36,9 +37,6 @@
 \begin{theorem}[Complementary boundary loops of a simply connected region]%
     \label{thm:peps_torus_simply_connected_boundary_loops}
     \lean{TNLean.PEPS.exists_complementBoundaryLoops_of_isSimplyConnected}\leanok
-    \uses{thm:peps_torus_complement_path_replacement,
-        thm:peps_integer_boundary_contour_connected,
-        thm:peps_torus_integer_cell_lift}
     Let both torus periods be at least three, and suppose the actual
     closed-cell realization of $R$ is simply connected. Choose rooted
     spanning trees in $R$ and its induced complement and fix a
@@ -50,6 +48,9 @@
     in \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:peps_torus_complement_path_replacement,
+        thm:peps_integer_boundary_contour_connected,
+        thm:peps_torus_integer_cell_lift}
     Choose one covering lift whose planar integer-cell union is simply
     connected and whose exterior collar projects outside the torus
     region. Its safe exterior graph is connected by the boundary contour

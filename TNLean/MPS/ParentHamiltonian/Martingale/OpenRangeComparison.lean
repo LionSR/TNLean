@@ -226,6 +226,81 @@ theorem openParentHamiltonianES_comparison_of_local
     _ ≤ ((W - R + 1 : ℕ) : ℂ) • openParentHamiltonianES A R N :=
           (openParentHamiltonianES_C1 A hRW).2
 
+/-- A positive comparison on one interval transfers the open-chain gap
+from range \(W\) to range \(R\) at a specified chain length, provided
+both kernels are the canonical local MPS space. The loss is the window
+multiplicity \(W-R+1\). Source: arXiv:cond-mat/9410110, Section 6. -/
+theorem openParentHamiltonianES_gap_of_long_gap_at_length
+    (A : MPSTensor d D) {R W N : ℕ}
+    (hR : 0 < R) (hRW : R ≤ W) (hWN : W ≤ N) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
+    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
+      openParentHamiltonianES A R W)
+    (hShortKer : LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N)
+    (hLongKer : LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N)
+    (hLong : ∀ v ∈ (groundSpaceES A N)ᗮ,
+      γ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖) :
+    ∀ v ∈ (groundSpaceES A N)ᗮ,
+      (κ * γ / (W - R + 1 : ℕ)) * ‖v‖ ≤
+        ‖openParentHamiltonianES A R N v‖ := by
+  intro v hv
+  have hOrder := openParentHamiltonianES_comparison_of_local A
+    hR hRW hWN hLocal
+  have hκ' : (κ : ℂ) ≠ 0 := by exact_mod_cast hκ.ne'
+  have hm : 0 < (W - R + 1 : ℕ) := by omega
+  have hm' : ((W - R + 1 : ℕ) : ℂ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
+  have hGapScaled : ∀ u ∈
+      (LinearMap.ker ((κ : ℂ) • openParentHamiltonianES A W N))ᗮ,
+      (κ * γ) * ‖u‖ ≤
+        ‖((κ : ℂ) • openParentHamiltonianES A W N) u‖ := by
+    intro u hu
+    have hu' : u ∈ (groundSpaceES A N)ᗮ := by
+      simpa only [LinearMap.ker_smul _ _ hκ', hLongKer] using hu
+    simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_pos hκ, mul_assoc] using
+      mul_le_mul_of_nonneg_left (hLong u hu') hκ.le
+  have hKerScaled :
+      LinearMap.ker ((κ : ℂ) • openParentHamiltonianES A W N) =
+      LinearMap.ker (((W - R + 1 : ℕ) : ℂ) • openParentHamiltonianES A R N) := by
+    simp only [LinearMap.ker_smul _ _ hκ', LinearMap.ker_smul _ _ hm',
+      hLongKer, hShortKer]
+  have hTransfer := LinearMap.IsPositive.norm_gap_of_le_of_ker_eq
+    ((openParentHamiltonianES_isPositive A W N).smul_of_nonneg
+      (by exact_mod_cast hκ.le))
+    (mul_nonneg hκ.le hγ.le) hOrder
+    hKerScaled hGapScaled
+  have hv' : v ∈
+      (LinearMap.ker (((W - R + 1 : ℕ) : ℂ) • openParentHamiltonianES A R N))ᗮ := by
+    simpa only [LinearMap.ker_smul _ _ hm', hShortKer] using hv
+  have h := hTransfer v hv'
+  rw [div_mul_eq_mul_div]
+  apply (div_le_iff₀ (Nat.cast_pos.mpr hm)).mpr
+  calc
+    (κ * γ) * ‖v‖ ≤ ((W - R + 1 : ℕ) : ℝ) * ‖openParentHamiltonianES A R N v‖ := by
+      simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_natCast,
+        Real.norm_natCast] using h
+    _ = ‖openParentHamiltonianES A R N v‖ * ((W - R + 1 : ℕ) : ℝ) := mul_comm _ _
+
+/-- A positive finite-interval comparison transfers a uniform open-chain
+gap from range \(W\) to range \(R\), provided both open kernels are the
+canonical local MPS space. The loss is the window multiplicity
+\(W-R+1\). Source: arXiv:cond-mat/9410110, Section 6. -/
+theorem openParentHamiltonianES_gap_of_long_gap
+    (A : MPSTensor d D) {R W : ℕ} (hR : 0 < R) (hRW : R ≤ W) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
+    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
+      openParentHamiltonianES A R W)
+    (hShortKer : ∀ N, W ≤ N →
+      LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N)
+    (hLongKer : ∀ N, W ≤ N →
+      LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N)
+    (hLong : ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
+      γ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖) :
+    ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
+      (κ * γ / (W - R + 1 : ℕ)) * ‖v‖ ≤
+        ‖openParentHamiltonianES A R N v‖ := by
+  intro N hWN
+  exact openParentHamiltonianES_gap_of_long_gap_at_length A hR hRW hWN
+    hκ hγ hLocal (hShortKer N hWN) (hLongKer N hWN) (hLong N hWN)
+
 /-- For a one-site injective tensor, a uniform open-chain gap at a longer
 range transfers to the canonical two-site parent Hamiltonian. The interval
 comparison is supplied at the long range, and the resulting constant is
@@ -242,59 +317,21 @@ theorem openParentHamiltonianES_two_gap_of_long_gap
         ‖openParentHamiltonianES A 2 N v‖ := by
   have hInjOne : Kraus.IsNBlkInjective A 1 :=
     Kraus.isNBlkInjective_one_of_isInjective hInj
-  intro N hWN v hv
-  have hShortKer : LinearMap.ker (openParentHamiltonianES A 2 N) =
-      groundSpaceES A N := by
+  have hShortKer (N : ℕ) (hWN : W ≤ N) :
+      LinearMap.ker (openParentHamiltonianES A 2 N) = groundSpaceES A N := by
     simpa only [Nat.reduceAdd] using
       ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
         hInjOne (by norm_num : 0 < 1) (by omega : 1 + 1 ≤ N)
   have hInjLong : Kraus.IsNBlkInjective A (W - 1) :=
     isNBlkInjective_of_le (by norm_num : 0 < 1) hInjOne (by omega)
-  have hLongKer : LinearMap.ker (openParentHamiltonianES A W N) =
-      groundSpaceES A N := by
-    have hWN' : W - 1 + 1 ≤ N := by
-      rw [Nat.sub_add_cancel (by omega : 1 ≤ W)]
-      exact hWN
+  have hLongKer (N : ℕ) (hWN : W ≤ N) :
+      LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N := by
     simpa only [Nat.sub_add_cancel (by omega : 1 ≤ W)] using
       ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-        hInjLong (by omega : 0 < W - 1) hWN'
-  have hOrder := openParentHamiltonianES_comparison_of_local A
-    (by norm_num : 0 < 2) hW hWN hLocal
-  have hκ' : (κ : ℂ) ≠ 0 := by exact_mod_cast hκ.ne'
-  have hm : 0 < (W - 1 : ℕ) := by omega
-  have hm' : ((W - 1 : ℕ) : ℂ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
-  have hGapScaled : ∀ u ∈
-      (LinearMap.ker ((κ : ℂ) • openParentHamiltonianES A W N))ᗮ,
-      (κ * γ) * ‖u‖ ≤
-        ‖((κ : ℂ) • openParentHamiltonianES A W N) u‖ := by
-    intro u hu
-    have hu' : u ∈ (groundSpaceES A N)ᗮ := by
-      simpa only [LinearMap.ker_smul _ _ hκ', hLongKer] using hu
-    simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
-      Real.norm_eq_abs, abs_of_pos hκ, mul_assoc] using
-      mul_le_mul_of_nonneg_left (hLong N hWN u hu') hκ.le
-  have hKerScaled :
-      LinearMap.ker ((κ : ℂ) • openParentHamiltonianES A W N) =
-      LinearMap.ker (((W - 1 : ℕ) : ℂ) • openParentHamiltonianES A 2 N) := by
-    simp only [LinearMap.ker_smul _ _ hκ', LinearMap.ker_smul _ _ hm',
-      hLongKer, hShortKer]
-  have hTransfer := LinearMap.IsPositive.norm_gap_of_le_of_ker_eq
-    ((openParentHamiltonianES_isPositive A W N).smul_of_nonneg
-      (by exact_mod_cast hκ.le))
-    (mul_nonneg hκ.le hγ.le) (by
-      simpa only [show W - 2 + 1 = W - 1 by omega] using hOrder)
-    hKerScaled hGapScaled
-  have hv' : v ∈
-      (LinearMap.ker (((W - 1 : ℕ) : ℂ) • openParentHamiltonianES A 2 N))ᗮ := by
-    simpa only [LinearMap.ker_smul _ _ hm', hShortKer] using hv
-  have h := hTransfer v hv'
-  rw [div_mul_eq_mul_div]
-  apply (div_le_iff₀ (Nat.cast_pos.mpr hm)).mpr
-  calc
-    (κ * γ) * ‖v‖ ≤ ((W - 1 : ℕ) : ℝ) * ‖openParentHamiltonianES A 2 N v‖ := by
-      simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_natCast,
-        Real.norm_natCast] using h
-    _ = ‖openParentHamiltonianES A 2 N v‖ * ((W - 1 : ℕ) : ℝ) := mul_comm _ _
+        hInjLong (by omega : 0 < W - 1) (by omega : W - 1 + 1 ≤ N)
+  simpa only [show W - 2 + 1 = W - 1 by omega] using
+    openParentHamiltonianES_gap_of_long_gap A (by norm_num : 0 < 2) hW
+      hκ hγ hLocal hShortKer hLongKer hLong
 
 /-- Equality of the local MPS spaces at one length makes the corresponding
 open-chain parent Hamiltonians equal at every volume. -/

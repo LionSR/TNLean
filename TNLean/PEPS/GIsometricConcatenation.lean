@@ -30,6 +30,11 @@ Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 Source: Schuch, Cirac, Pérez-García, arXiv:1001.3807, Lemma 6.2
 (`lemma:iso:iso-stable-under-concat`), lines 1704–1716 of
 `Papers/1001.3807/paper_v3.tex`, together with Lemma 5.2, lines 1319–1344.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap Representation TensorProduct

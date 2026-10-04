@@ -23,6 +23,12 @@ is required.
 
 Source: Cirac, Pérez-García, Schuch, and Verstraete, arXiv:2011.12127,
 Section IV.C.1, local source lines 2003–2011.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators

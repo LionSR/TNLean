@@ -85,14 +85,14 @@ The blocking over $s$ sites makes the two-site injectivity assumed for the
 multiscale network of~\cite{gap:mswc24_tree_mera_scope} unnecessary here: the
 tree is that of the blocked tensor, whose sites are the registers.
 The formal statements\footnote{Formal declarations:
-    \leanid{MPSPreparation.TeleportHop.isImplementationOn_round} in
-    \doclink{TNLean/MPS/Preparation/TeleportationRound},
-    \leanid{MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds} in
-    \doclink{TNLean/MPS/Preparation/LongRangeGates}, and
+    \leanid{QuantumCircuit.TeleportHop.isImplementationOn_round} in
+    \doclink{TNLean/Circuit/Teleportation/Round},
+    \leanid{QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds} in
+    \doclink{TNLean/Circuit/Teleportation/LongRangeGates}, and
     \leanid{MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp} in
     \doclink{TNLean/MPS/Preparation/TreeMeasurement},
-    \leanid{MPSPreparation.RegisterGate.exists_rounds} in
-    \doclink{TNLean/MPS/Preparation/RegisterGates},
+    \leanid{QuantumCircuit.RegisterGate.exists_rounds} in
+    \doclink{TNLean/Circuit/Teleportation/RegisterGates},
     \leanid{MPSPreparation.exists_rounds_blockLayerOp_regTreeOp} in
     \doclink{TNLean/MPS/Preparation/RegisterTree},
     \leanid{MPSPreparation.regTreeOp_apply_blockInputCfg} in
@@ -137,13 +137,15 @@ widths.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
     in \doclink{TNLean/MPS/Preparation/LogLogDepthEveryLength}.}
 \begin{enumerate}
-    \item \emph{Halves of unequal lengths.} If $A$ blocked over $n_1$ and over
-          $n_2$ sites is injective, with polar decompositions
-          $\mathcal B_{n_i}=V_{n_i}P_{n_i}$, then
-          $V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W$, where $W$ is the isometry of
-          the polar decomposition of the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of
-          two neighbouring sites. This is uniqueness of the polar decomposition,
-          as for halves of equal lengths.
+    \item \emph{Halves of unequal lengths.} For polar decompositions
+          $\mathcal B_{n_i}=V_{n_i}P_{n_i}$ of $A$ blocked over $n_1$ and over
+          $n_2$ sites, $V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W$, where $W$ is the
+          partial isometry of the polar decomposition of the tensor
+          $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two neighbouring sites. No
+          injectivity is needed: the initial projector of
+          $V_{n_1}\otimes V_{n_2}$ fixes that tensor, so
+          $V_{n_1}\otimes V_{n_2}$ composes with its partial isometry. The tree
+          below uses injectivity only to make $W$ and the leaf maps isometries.
     \item \emph{The tree of a block.} A block of $\ell\ge2^{h+2}s$ sites is cut
           into $2^{h+1}$ leaves of even widths, as equal as possible, at least
           $2s$ each; when $\ell$ is odd the last leaf has one more site. The node

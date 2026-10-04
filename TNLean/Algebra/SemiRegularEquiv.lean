@@ -16,6 +16,11 @@ to nonzero intertwining maps. Thus semi-regularity does not depend on coordinate
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 4.5,
 `Papers/1001.3807/paper_v3.tex`, lines 1010–1013. This is the equivalence principle
 for the occurrence condition in that definition.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace Representation
