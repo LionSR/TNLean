@@ -804,6 +804,10 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
+- `mswc24_mixed_polar_injectivity_scope.tex` records the injective-only
+  mixed sequential polar factorization, distinguishes its full-input central
+  isometry from the source's non-injective pseudoinverse case, and gives the
+  partial-isometry or support-restriction extension needed to remove it.
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
@@ -956,3 +960,11 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
   holds, and the rate correction for the decay bound.
+
+For the finite-round extension of arXiv:2103.13367:
+
+- `psc21_adaptive_channel_round_scope.tex` records arbitrary-input adaptive
+  local channels and separates their quantum-layer depth from the fixed
+  number of composed `QCcc` blocks required by the asymptotic source relation.
+  One source block may already contain sequential measurements at many sites;
+  the adaptive tree does not record the required source-block decomposition.
