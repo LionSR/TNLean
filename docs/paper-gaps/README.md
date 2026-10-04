@@ -920,7 +920,10 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   every positive ring length. If `L_N = O(log N)` and `δ_N → 0`, the prepared
   states have logarithmic depth and vanishing error. Open: removing the
   additional positive lower-growth hypothesis and deriving the
-  uniform accuracy rate needed for `O(log(N/ε))`.
+  uniform accuracy rate needed for `O(log(N/ε))`. The conditional theorem
+  assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
+  with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
+  when the selected block length exceeds the ring length.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes

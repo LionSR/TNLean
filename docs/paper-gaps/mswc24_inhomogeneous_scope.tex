@@ -189,6 +189,23 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
           hypothesis would be a further scope-restricted theorem, not the
           source's; with $\delta_N\to0$ alone the sequence-level depth
           $O(\log(N/\varepsilon))$ remains open.
+
+          A conditional variant is now formalized in
+          \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
+          in \doclink{TNLean/MPS/Preparation/InhomogeneousUniformRate}.
+          It assumes a rate $KN^ke^{-rq}$, with $K,r>0$ and $k\ge0$
+          independent of $N$, at every scale $1\le q\le N$ for some
+          partition with $q\le\ell_j\le2q$.
+          Choosing $q=\lceil ((k+1)/r)\log(N/\varepsilon)+b\rceil$
+          gives the accuracy-dependent depth for every positive ring length.
+          If $q>N$, the ring is prepared exactly in depth $O(N)$ by
+          \leanid{MPSPreparation.exists_isPreparedInDepth_normalizedChainState}
+          in \doclink{TNLean/MPS/Preparation/InhomogeneousExactPreparation}:
+          the whole ring is one block, and its normalized positive-part state
+          is the input pair. Generic finite-dimensional synthesis is used
+          only for the fixed finite set $N<3D$. This proves the stated
+          conditional consequence; it does not derive the uniform rate from
+          the source's definition.
 \end{enumerate}
 
 \bibliographystyle{alpha}

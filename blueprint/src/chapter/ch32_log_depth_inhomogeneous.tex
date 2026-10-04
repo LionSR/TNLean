@@ -697,3 +697,61 @@ into a single constant.
     for every prepared unit vector, and convergence follows by squeezing
     between zero and $\delta_N$.
 \end{proof}
+
+\begin{theorem}[Exact linear-depth preparation of an inhomogeneous state]
+    \label{thm:ldp_inhomogeneous_exact}
+    \lean{MPSPreparation.exists_isPreparedInDepth_normalizedChainState}
+    \notready
+    \uses{thm:ldp_isometric_extension_depth, thm:ldp_isometric_extension_overlap,
+        thm:ldp_short_chain_preparation}
+    Fix $d\ge1$ and $D$. There is $C$ such that the normalized state of every
+    nonzero inhomogeneous chain of bond dimension $D$ on $N\ge1$ sites is
+    prepared exactly by a local circuit of depth at most $CN$. No injectivity
+    or correlation-decay assumption is required. This is the sequential
+    circuit of~\cite{Malz2024Preparation}, applied to one block covering the
+    ring, including the isometric extension for a non-injective tensor.
+\end{theorem}
+\begin{proof}
+    For $N\ge3D$ and $d\ge2$, use one block with positive-part state
+    $\phi_{\mathrm{pos}}$. Its normalized vector is a single unit pair on
+    $\mathbb C^D\otimes\mathbb C^D$, with its two indices interchanged to
+    match the cyclic contraction. The block isometry satisfies $WP=B$, so
+    it sends that pair to $\phi_N/\lVert\phi_N\rVert$ in depth at most $C_0N$.
+    For $2\le N<3D$, bounded-dimensional synthesis gives a constant depth
+    $K$ depending only on $d,D$; take $C=\max(C_0,K)$. One-site states and
+    states with $d=1$ are product states and need no gates.
+\end{proof}
+
+\begin{theorem}[Accuracy-dependent preparation under a uniform decay rate]
+    \label{thm:ldp_inhomogeneous_uniform_rate}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
+    \notready
+    \uses{thm:ldp_inhomogeneous, thm:ldp_inhomogeneous_exact,
+        def:ldp_pair_approximable}
+    Fix $d\ge1$ and a family $A^{(N)}$ of inhomogeneous chains with bond
+    dimensions at most $D$. Suppose there are constants $K,r>0$ and an integer
+    $k\ge0$, independent of $N$, such that at every scale $1\le q\le N$
+    there is a partition into blocks of lengths between $q$ and $2q$ with a
+    nonzero positive-part state approximable by unit pairs with error at most
+    $KN^k e^{-rq}$. Then there is $C$ such that for every $N\ge1$ and
+    $0<\varepsilon\le1$, a unit vector $\psi$ can be prepared with depth
+    $T\le C\log(N/\varepsilon)$ and error
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$.
+
+    This is a conditional variant of the accuracy-dependent claim in the
+    inhomogeneous paragraph of~\cite{Malz2024Preparation}. The uniform rate
+    is an additional assumption: convergence of the approximation errors
+    alone does not establish it~\cite{gap:mswc24_inhomogeneous_scope}.
+\end{theorem}
+\begin{proof}
+    For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$, where
+    $a=(k+1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
+    $rq\ge\log K+k\log N-\log\varepsilon$, so $KN^k e^{-rq}\le\varepsilon$.
+    If $q\le N$, choose the partition supplied by the approximation hypothesis.
+    Its block lengths are at most $2q$, so Theorem~\ref{thm:ldp_inhomogeneous}
+    gives depth at most $2C_0q$. If $q>N$, apply
+    Theorem~\ref{thm:ldp_inhomogeneous_exact} to obtain exact preparation in
+    depth at most $C_1N<C_1(a\log(N/\varepsilon)+b)$.
+    Since $\log(N/\varepsilon)\ge\log2$, both bounds are a constant multiple
+    of $\log(N/\varepsilon)$. The one-site case has depth zero.
+\end{proof}
