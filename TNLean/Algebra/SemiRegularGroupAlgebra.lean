@@ -35,6 +35,45 @@ open scoped BigOperators
 
 namespace Representation
 
+section IrreducibleDual
+
+variable {G : Type*} [Group G]
+variable {E : Type*} [AddCommGroup E] [Module ℂ E] [FiniteDimensional ℂ E]
+
+/-- The dual of a finite-dimensional irreducible complex representation is
+irreducible. Source: the conjugate charge in SCP10, lines 2514–2518. -/
+theorem isIrreducible_dual (σ : Representation ℂ G E) [σ.IsIrreducible] :
+    σ.dual.IsIrreducible := by
+  let := nontrivial_of_isIrreducible σ
+  let := (Module.nontrivial_dual_iff ℂ).mpr (inferInstance : Nontrivial E)
+  have : Nontrivial (Subrepresentation σ.dual) := ⟨⊥, ⊤, fun h =>
+    (bot_ne_top : (⊥ : Submodule ℂ (Module.Dual ℂ E)) ≠ ⊤)
+      (congrArg Subrepresentation.toSubmodule h)⟩
+  refine ⟨fun S => ?_⟩
+  let A : Subrepresentation σ :=
+    { toSubmodule := S.toSubmodule.dualCoannihilator
+      apply_mem_toSubmodule := by
+        intro g v hv
+        rw [Submodule.mem_dualCoannihilator] at hv ⊢
+        intro φ hφ
+        have h := hv (σ.dual g⁻¹ φ) (S.apply_mem_toSubmodule g⁻¹ hφ)
+        simpa only [dual_apply, inv_inv, Module.Dual.transpose_apply,
+          LinearMap.comp_apply] using h }
+  have hd := Subspace.dualCoannihilator_dualAnnihilator_eq (W := S.toSubmodule)
+  rcases eq_bot_or_eq_top A with h | h
+  · right
+    have ha : S.toSubmodule.dualCoannihilator = ⊥ :=
+      congrArg Subrepresentation.toSubmodule h
+    rw [ha, Submodule.dualAnnihilator_bot] at hd
+    exact Subrepresentation.toSubmodule_injective hd.symm
+  · left
+    have ha : S.toSubmodule.dualCoannihilator = ⊤ :=
+      congrArg Subrepresentation.toSubmodule h
+    rw [ha, Submodule.dualAnnihilator_top] at hd
+    exact Subrepresentation.toSubmodule_injective hd.symm
+
+end IrreducibleDual
+
 section GroupAlgebra
 
 variable {k M W : Type*} [CommSemiring k] [Monoid M] [AddCommMonoid W] [Module k W]
@@ -102,11 +141,10 @@ theorem isSemiRegular_of_linearIndependent (ρ : Representation ℂ G V)
     obtain ⟨w, hw⟩ := exists_ne (0 : W)
     exact hw (e.toLinearEquiv.injective (by simpa using hezero w))
   have hzero : charProjector ρ σ.character = 0 := by
-    obtain ⟨s, hsA, hs⟩ := exists_isInternal_isAtom ρ
-    apply hs.linearMap_ext
-    intro S v hv
-    let := Subrepresentation.isIrreducible_toRepresentation_of_isAtom (hsA S.1 S.2)
-    rw [charProjector_apply_of_mem ρ σ S.1 hv, ite_eq_right (hχ S.1), LinearMap.zero_apply]
+    apply linearMap_ext_on_irreducible ρ
+    intro S hS v hv
+    let := hS
+    rw [charProjector_apply_of_mem ρ σ S hv, ite_eq_right (hχ S), LinearMap.zero_apply]
   have hd : σ.character 1 ≠ 0 := by
     rw [char_one, Nat.cast_ne_zero]
     exact (finrank_pos_of_isIrreducible σ).ne'

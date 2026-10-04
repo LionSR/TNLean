@@ -78,16 +78,17 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   regular representation on `ℂ^G` supplies a unitary representation whose factor
   system lies in the class of the cocycle, and the fixed point built from it
   realizes that class.
-- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction) records that
-  the twist identity `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹` is proved for every
-  character `φ`, but on-site symmetry and the realization of the class of `ω`
-  only for `φ = 1`, because the formal symmetry predicate does not allow the
-  global phase `φ(g)^N`; symmetry up to a character would remove the restriction.
-- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction) records that the
-  source's construction covers groups combining on-site, time-reversal and
-  reflection symmetries, with cocycles twisted by `α` and `β`, while the
-  formalized fixed point and its symmetry results treat only a linear on-site
-  action with untwisted cocycles.
+- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction, resolved)
+  records the extension from exact vector invariance to symmetry up to an
+  arbitrary character. The length-`N` vector has phase `φ(g)^N`, and the same
+  character is retained in virtual-class uniqueness and finite-group realization.
+- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction, resolved) records
+  the mixed-symmetry extension of the corrected dimer fixed point. Time reversal
+  and reflection act on tensor letters and finite chains, with phase twist
+  `β = t` and virtual twist `α = t + r`. Every pair of twisted U(1) cocycles of a
+  finite group has a fixed-point representative with the prescribed character
+  and virtual factor system; its virtual U(1) cohomology class is independent
+  of the unitary gauge. This does not establish mixed-symmetry gapped interpolation.
 
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
@@ -792,6 +793,22 @@ For the group matrix product operators of arXiv:2203.12563:
   formalized, so the anomaly class is the type-II class; the comparison with
   the original odd-ring or two-site-blocked family remains open.
 
+For the PVBS spectral formulas of Bachmann--Nachtergaele, arXiv:1112.4097:
+
+- `bn12_pvbs_periodic_gap.tex` records the exact finite periodic one-species,
+  zero-phase gap and its local-projector normalization, including the
+  two-oriented-window convention at length two. It distinguishes this
+  result from the broader multi-species thermodynamic conjecture and
+  explains why the critical finite-volume gap is not asserted to vanish.
+
+For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
+
+- `cpgsv21_pvbs_threshold.tex` corrects the right-boundary threshold under
+  `q = 1 + λ`, records the finite-ring condition `q^N ≠ 1` for periodic
+  vacuum uniqueness, and gives the critical W-state counterexample. The
+  open-chain ground space and both geometric localization regimes are
+  formalized; no uniform spectral-gap theorem is claimed.
+
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
 - `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis
@@ -942,6 +959,18 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
 
+For the phase relation of arXiv:2103.13367:
+
+- `psc21_local_channel_phase_scope.tex` records approximate and asymptotic
+  conversion by enlarged-site local channels without classical feedforward.
+  It distinguishes unit-cost gates on unbounded intermediate dimensions from
+  the source's physical-qudit gate convention, with no asserted uniform-depth
+  simulation or relation inclusion. The local results include
+  additive-error composition and mutual-conversion equivalence. Finite adaptive
+  channels and composition are formalized separately; a system-size-independent
+  decomposition into source-ordered QCcc blocks and a uniform physical gate-cost
+  comparison remain open.
+
 For the classification of translation-invariant MPS under circuits assisted by
 measurements and classical communication (arXiv:2103.13367, Theorem
 `MPS_classification`):
@@ -953,13 +982,23 @@ measurements and classical communication (arXiv:2103.13367, Theorem
   large chain lengths; open: the converse direction needs channels acting on
   arbitrary input states.
 
+- `psc21_physical_port_simulation_scope.tex` records the derived
+  `2 * ceil(log_d B)` overhead per native layer, hence total intersite depth
+  at most `2 * ceil(log_d B) * T` for a depth-`T` bounded native channel protocol,
+  including exact reference preservation, original physical-port
+  input/output and product-zero designated memory reset. It separates the
+  remaining local dilation and source QCcc protocol-block witness conditions.
+
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
 - `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
   pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
-  holds, and the rate correction for the decay bound.
+  holds, and the rate correction for the decay bound. The corrected
+  all-separation binomial and polynomial-plus-transient expansions are now
+  proved for normal tensors in an arbitrary bond basis. The broader singular
+  fixed-matrix source class remains open.
 
 For the finite-round extension of arXiv:2103.13367:
 

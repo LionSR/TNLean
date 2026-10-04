@@ -1,0 +1,21 @@
+\begin{theorem}[Internal walks retain the inserted operators]%
+    \label{thm:peps_regular_inserted_walk_holonomy}
+    \lean{TNLean.PEPS.regularRegionInternalOperators_bondExtension,
+        TNLean.PEPS.regularWalkHolonomy_induced_bondExtension}
+    \leanok
+    \uses{thm:peps_regular_two_cycle_global_flux_move}
+    Let $R$ be a finite vertex region, and let $u,w$ be group-valued
+    assignments on the edges of an ordered finite graph. Extend the
+    internal assignment $u$ by the arbitrary crossing and exterior
+    assignment $w$. Its restriction to the induced graph on $R$ equals
+    the restriction of $u$. Consequently every walk in that induced
+    graph has the same holonomy as its ambient image evaluated with $u$.
+    This elementary restriction identity is auxiliary to the actual
+    closed-walk flux measurements of
+    \cite[\S6.6, local lines 2380--2415]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The extension selects $u$ on every internal edge. Apply this identity
+    edge by edge in the walk product.
+\end{proof}

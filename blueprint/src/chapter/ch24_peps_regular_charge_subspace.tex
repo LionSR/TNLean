@@ -1,0 +1,109 @@
+\begin{definition}[The full accessible subspace of a charge label]
+    \label{def:peps_regular_charge_subspace}
+    \lean{TNLean.PEPS.regularChargeVector,TNLean.PEPS.regularChargeSubspace}
+    \leanok
+    \uses{def:peps_regular_charge_coordinates}
+    Regard the actual matrix $A_\chi(p;x,y)$ as a vector in
+    $\ell^2(G\times G)$, with its ordinary Hilbert--Schmidt inner product.
+    For a coefficient function $\chi:G\to\mathbb C$, define
+    \[
+        \mathcal H_\chi
+        =\operatorname{span}\{A_\chi(p;x,y):p,x,y\in G\}.
+    \]
+    Every internal parameter and both unknown vertex translations are included.
+    This is an auxiliary accessible-coordinate subspace for
+    \cite[charge detection]{Schuch2010PEPS}, lines 2470--2486;
+    no original-spin detector is asserted.
+\end{definition}
+
+\begin{definition}[Independent translations and the accessible charge projection]
+    \label{def:peps_regular_charge_translation_detector}
+    \lean{TNLean.PEPS.regularChargeTranslation,TNLean.PEPS.regularChargeDetector}
+    \leanok
+    \uses{def:peps_regular_charge_subspace}
+    Define the unitary register permutation
+    $T_{z,w}f(r,s)=f(z^{-1}r,w^{-1}s)$.
+    Let $P_\chi$ be the orthogonal projection onto $\mathcal H_\chi$.
+\end{definition}
+
+\begin{theorem}[The actual vectors and their Hilbert-space pairing]
+    \label{thm:peps_regular_charge_subspace_vectors}
+    \lean{TNLean.PEPS.regularChargeVector_mem_subspace,
+        TNLean.PEPS.regularChargeVector_inner}
+    \leanok
+    \uses{def:peps_regular_charge_subspace}
+    Every $A_\chi(p;x,y)$ belongs to $\mathcal H_\chi$, and its
+    Hilbert-space inner product with $A_\psi(q;x',y')$ is exactly
+    \[
+        \sum_{r,s\in G}\overline{A_\chi(p;x,y)_{r,s}}
+        A_\psi(q;x',y')_{r,s}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Membership follows from the defining span. The inner product is the
+    ordinary sum of the entrywise pairings.
+\end{proof}
+
+\begin{theorem}[The unknown translations preserve the complete charge subspace]
+    \label{thm:peps_regular_charge_subspace_translation}
+    \lean{TNLean.PEPS.regularChargeTranslation_vector,
+        TNLean.PEPS.regularChargeSubspace_map_translation}
+    \leanok
+    \uses{def:peps_regular_charge_translation_detector,
+        thm:peps_regular_charge_coordinates_covariance}
+    For all $p,x,y,z,w\in G$,
+    \[
+        T_{z,w}A_\chi(p;x,y)=A_\chi(p;zx,wy),
+        \qquad T_{z,w}\mathcal H_\chi=\mathcal H_\chi.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Apply the actual row and column covariance formula. The inverse
+    translations give the reverse inclusion of the subspaces.
+\end{proof}
+
+\begin{theorem}[The accessible projection and its selected-charge action]
+    \label{thm:peps_regular_charge_detector}
+    \lean{TNLean.PEPS.regularChargeDetector_isSymmetricProjection,
+        TNLean.PEPS.regularChargeDetector_vector,
+        TNLean.PEPS.regularChargeDetector_commute_translation}
+    \leanok
+    \uses{thm:peps_regular_charge_subspace_translation,
+        thm:peps_regular_charge_subspace_vectors}
+    The operator $P_\chi$ is an orthogonal projection. For every $p,x,y$,
+    \[
+        P_\chi A_\chi(p;x,y)=A_\chi(p;x,y),
+        \qquad P_\chi T_{z,w}=T_{z,w}P_\chi.
+    \]
+    Thus the same accessible projection works for all unknown translations.
+\end{theorem}
+\begin{proof}\leanok
+    Orthogonal projection fixes its range. A unitary preserving the subspace
+    also preserves its orthogonal complement, and hence commutes with the
+    corresponding projection.
+\end{proof}
+
+\begin{theorem}[Orthogonality of distinct full charge subspaces]
+    \label{thm:peps_regular_charge_subspace_orthogonality}
+    \lean{TNLean.PEPS.regularChargeSubspace_isOrtho,
+        TNLean.PEPS.regularChargeDetector_other_vector}
+    \leanok
+    \uses{thm:peps_regular_charge_coordinates_orthogonality,
+        thm:peps_regular_charge_detector}
+    Let $\sigma,\tau$ be finite-dimensional irreducible complex
+    representations, with $\sigma$ unitary and distinct characters.
+    Then $\mathcal H_{\chi_\sigma}\perp\mathcal H_{\chi_\tau}$, and
+    \[
+        P_{\chi_\sigma}A_{\chi_\tau}(p;x,y)=0
+        \quad\text{for every }p,x,y\in G.
+    \]
+    These are auxiliary charge-space identities from
+    \cite[charge detection]{Schuch2010PEPS}, lines 2474--2486;
+    neither completeness of a physical measurement nor its original-spin
+    implementation is asserted here.
+\end{theorem}
+\begin{proof}\leanok
+    Every generator of one span is orthogonal to every generator of the
+    other by the actual charge-matrix pairing. Extend by linearity and
+    apply orthogonal projection onto the first span.
+\end{proof}

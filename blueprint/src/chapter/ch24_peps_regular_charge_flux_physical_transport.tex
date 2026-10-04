@@ -1,0 +1,200 @@
+\begin{theorem}[Literal diagonal weights in the regular bond contraction]
+    \label{thm:peps_regular_weighted_bond_contraction}
+    \lean{TNLean.PEPS.graphInsertedBondNetwork_leftRegular_mul_diagonal}
+    \leanok
+    \uses{thm:peps_graph_inserted_averaging_bond_state}
+    Orient every edge of a finite simple graph from its smaller endpoint to
+    its larger endpoint. For arbitrary original site tensors $A_v$, group
+    operators $u_e$, and scalar functions $f_e:G\to\mathbb C$, the actual
+    closed contraction with bond matrices $U_{u_e}\operatorname{diag}(f_e)$ is
+    \[
+        \sum_{\eta:E\to G}\left(\prod_e f_e(\eta_e)\right)
+        \prod_v A_v\bigl((u\eta)_v,\sigma_v\bigr).
+    \]
+    Here the incident label is $\eta_e$ at the tail and $u_e\eta_e$ at
+    the head. This is an auxiliary coefficient identity for the diagonal
+    charge insertions of \cite{Schuch2010PEPS}, lines 2449--2486 and
+    2569--2581. No expansion of diagonal matrices into group matrices is used.
+\end{theorem}
+\begin{proof}\leanok
+    Sum the independent head labels in the literal inserted contraction.
+    The regular permutation matrix enforces head $=u_e$ times tail, while
+    the diagonal factor retains the weight at that tail label.
+\end{proof}
+
+\begin{definition}[Weighted canonical contraction and reconstructed labels]
+    \label{def:peps_regular_weighted_projector_contraction}
+    \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix,
+        TNLean.PEPS.regularRegionTreeReferenceLabels}
+    \leanok
+    \uses{def:peps_regular_region_coordinates}
+    Let $R$ be a finite region with a chosen spanning tree $T$ and root $o$.
+    Let $k$ be its actual tree gauge for $u$, and write $(y,a,r,z)$ for its
+    accessible coordinates. For an arbitrary scalar weight $F$ on incident
+    label configurations, define
+    \[
+        M_R(u,F)_{\alpha,\theta}
+        =\sum_\eta\mathbf1_{\eta|_{\partial R}=\theta}F(\eta)
+        \prod_{v\in R}P_v[\alpha_v,(u\eta)_v],
+    \]
+    where $P_v$ is the actual regular invariant projector.
+    The reconstructed label $\eta_x$ is $k_t x^{-1}a_e$ on an internal edge,
+    $k_t x^{-1}y_e$ on an outgoing boundary edge, and
+    $u_e^{-1}k_hx^{-1}y_e$ on an incoming boundary edge.
+    These definitions retain the literal diagonal weights of
+    \cite{Schuch2010PEPS}, lines 2569--2581, in the accessible coordinates
+    of lines 1765--1920.
+\end{definition}
+
+\begin{theorem}[The actual weighted common-translation formula]
+    \label{thm:peps_regular_weighted_projector_coordinates}
+    \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_apply,
+        TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_coordinates}
+    \leanok
+    \uses{def:peps_regular_weighted_projector_contraction}
+    Expanding each local projector first gives
+    $|G|^{-|R|}\sum_{\eta,q}\mathbf1_{\eta|_{\partial R}=\theta,\,
+            \alpha_v=q_v(u\eta)_v}F(\eta)$.
+    If $\rho$ is the actual cycle residual and $B(k,u)\theta$ the transported
+    boundary configuration, then
+    \[
+        M_R(u,F)_{E^{-1}(y,a,r,z),\theta}
+        =|G|^{-|R|}\sum_{x\in G}
+        \mathbf1_{y=xB(k,u)\theta,\ z=x\rho x^{-1}}F(\eta_x).
+    \]
+    This is an auxiliary weighted extension of the actual finite-block
+    calculation, without a supplied coefficient or Gram identity.
+\end{theorem}
+\begin{proof}\leanok
+    The original compatibility equations determine every surviving incident
+    configuration and every vertex translation from the root translation $x$.
+    The existing bijection of surviving terms retains its scalar weight.
+    Constant weight one recovers the unweighted formula.
+\end{proof}
+
+\begin{definition}[The literal weighted open contraction]
+    \label{def:peps_regular_weighted_open_contraction}
+    \lean{TNLean.PEPS.regularWeightedOpenRegionWeight}
+    \leanok
+    \uses{def:peps_regular_weighted_projector_contraction}
+    For original site tensors $A_v$, replace $P_v[\alpha_v,(u\eta)_v]$ by
+    $A_v((u\eta)_v,\sigma_v)$ in the preceding incident-label sum.
+    Denote the resulting actual original-spin coefficient vector by
+    $\Psi_R(u,F;\theta)$.
+\end{definition}
+
+\begin{theorem}[Recovery of the original weighted physical coefficients]
+    \label{thm:peps_regular_weighted_open_recovery}
+    \lean{TNLean.PEPS.regularWeightedOpenRegionWeight_one,
+        TNLean.PEPS.regionPhysicalMap_regularProjectorWeightedTwistedRegionMatrix}
+    \leanok
+    \uses{def:peps_regular_weighted_open_contraction,
+        thm:peps_regular_twisted_region_accessibility}
+    Constant weight one gives the existing numbered open contraction.
+    If the original sites are $G$-injective, their product physical map $A_R$
+    satisfies
+    \[
+        A_R M_R(u,F)_{\cdot,\theta}=\Psi_R(u,F;\theta)
+    \]
+    for every scalar weight and every boundary column.
+\end{theorem}
+\begin{proof}\leanok
+    Interchange the literal finite sums and use $A_vP_v=A_v$ at each vertex.
+    Numbering group labels by their finite coordinate bijection yields the
+    original unweighted open contraction when $F=1$.
+\end{proof}
+
+\begin{definition}[Transported coordinate permutations]
+    \label{def:peps_regular_coordinate_physical_permutation}
+    \lean{TNLean.PEPS.regularRegionCoordinatePhysicalPermutation}
+    \leanok
+    \uses{def:peps_regular_region_coordinates}
+    For a permutation $C$ of the accessible coordinate tuples, define its
+    physical half-edge permutation to be $E^{-1}CE$.
+\end{definition}
+
+\begin{theorem}[Translation-equivariant permutations preserve local support]
+    \label{thm:peps_regular_coordinate_permutation_support}
+    \lean{TNLean.PEPS.regularRegionCoordinatePhysicalPermutation_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionCoordinatePhysicalPermutation_commute_localProjector}
+    \leanok
+    \uses{def:peps_regular_coordinate_physical_permutation,
+        thm:peps_cycle_controlled_local_support}
+    If $C$ commutes with the actual independent vertex translations in the
+    accessible coordinates, its permutation matrix commutes with every
+    original half-edge translation and with the product
+    of the local regular invariant projectors.
+\end{theorem}
+\begin{proof}\leanok
+    Transport the commutation through $E$, then average all independent
+    vertex translations. This average is the actual product projector.
+\end{proof}
+
+\begin{definition}[Reference-cycle multiplication and the charge parameter]
+    \label{def:peps_regular_charge_flux_coordinate_permutation}
+    \lean{TNLean.PEPS.regularChargeFluxCoordinatePermutation,
+        TNLean.PEPS.regularChargeFluxPhysicalPermutation,
+        TNLean.PEPS.regularChargeFluxParameter}
+    \leanok
+    \uses{def:peps_regular_coordinate_physical_permutation}
+    Choose an internal charge edge $e$ and a non-tree flux edge $b$.
+    Retain $y,r,z$ and every reference register except
+    $a_e\mapsto z_ba_e$; call this permutation $C_{e,b}$.
+    Its original half-edge permutation is $E^{-1}C_{e,b}E$.
+    For actual operators $u$, let
+    $K_{u,e,b}=k_{\mathrm{tail}(e)}\rho_bk_{\mathrm{tail}(e)}^{-1}$.
+    The transported charge parameter is $p'=pK_{u,e,b}^{-1}$.
+\end{definition}
+
+\begin{theorem}[Actual weighted columns under reference-cycle multiplication]
+    \label{thm:peps_regular_charge_flux_weighted_columns}
+    \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_internalCharge_coordinates,
+        TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_chargeFlux_coordinates,
+        TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_chargeFlux_mulVec,
+        TNLean.PEPS.regularChargeFluxCoordinatePermutation_coordinateTranslation,
+        TNLean.PEPS.regularChargeFluxPhysicalPermutation_commute_localProjector}
+    \leanok
+    \uses{thm:peps_regular_weighted_projector_coordinates,
+        def:peps_regular_charge_flux_coordinate_permutation,
+        thm:peps_regular_coordinate_permutation_support}
+    For $F_p(\eta)=\chi(p\eta_e)$ the surviving scalar weight is
+    $\chi(pk_{\mathrm{tail}(e)}x^{-1}a_e)$. The permutation $C_{e,b}$
+    commutes with independent vertex translations. Its permutation matrix
+    sends the actual weighted column with parameter $p$ to the column with
+    parameter $pK_{u,e,b}^{-1}$, retaining $u$, $\chi$ and $\theta$.
+\end{theorem}
+\begin{proof}\leanok
+    On each surviving term, $z_b=x\rho_bx^{-1}$. Substitute this equality
+    into $a_e\mapsto z_ba_e$ and cancel adjacent group inverses.
+    Reference registers translate on the left, while cycle registers are
+    conjugated by the root translation, so the controlled multiplication
+    is translation-equivariant.
+\end{proof}
+
+\begin{theorem}[One original-spin unitary for the weighted charge parameter]
+    \label{thm:peps_regular_charge_flux_physical_transport}
+    \lean{TNLean.PEPS.exists_unitary_regularChargeFluxPhysicalTransport}
+    \leanok
+    \uses{thm:peps_regular_charge_flux_weighted_columns,
+        thm:peps_regular_weighted_open_recovery,
+        thm:peps_regular_physical_unitary_transport}
+    Suppose the original sites are locally $G$-isometric for the regular
+    incident-edge action. There exists one unitary $W_{e,b}$ on the original
+    spins of $R$, chosen before every actual bond assignment $u$, coefficient
+    function $\chi$, parameter $p$ and boundary configuration $\theta$, such that
+    \[
+        W_{e,b}\Psi_R(u,F_p;\theta)
+        =\Psi_R(u,F_{pK_{u,e,b}^{-1}};\theta).
+    \]
+    In particular an irreducible character is retained unchanged.
+    This is a chosen finite-block physical realization of the parameter
+    change in \cite{Schuch2010PEPS}, lines 2569--2581. It is not the full
+    geometric charge--flux braid; that scope remains recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+    Local $G$-isometry gives the derived product Gram identity $A_R^\dagger A_R=cP$.
+    The native permutation is unitary and commutes with $P$, so it has a
+    unitary original-spin implementation. Apply that implementation to the
+    proved literal weighted columns and recover the original coefficients.
+\end{proof}

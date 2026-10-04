@@ -1,0 +1,143 @@
+\subsection{Exact Periodic Gap in the One-Species, Zero-Phase Model}
+\label{sec:pvbs_periodic_gap}
+
+For positive real hopping $\mu$, the one-particle dispersion in
+\cite[Section~II, after equation~(8)]{BachmannNachtergaele2012PVBS} is
+$1-2\mu\cos(k)/(1+\mu^2)$ at zero phase. The general multi-species
+thermodynamic gap formula stated there is a conjecture. The finite-ring
+result below is a proved one-species specialization, with an explicit
+operator argument; its scope is recorded
+in~\cite{gap:bn12_pvbs_periodic_gap}.
+
+\begin{lemma}[Cyclic site and window permutations]
+    \label{lem:pvbs_cyclic_geometry}
+    \lean{MPSTensor.cyclicSuccessorEquiv,
+        MPSTensor.cyclicSuccessorEquiv_apply,
+        MPSTensor.cyclicSuccessorEquiv_ne,
+        MPSTensor.finEquiv_cyclicSuccessorEquiv,
+        MPSTensor.finEquiv_cyclicSuccessorEquiv_symm,
+        MPSTensor.cyclicCfg_extractWindow_comp_swap_of_le}
+    \leanok
+    On a ring of at least two sites, the cyclic successor is a permutation
+    without fixed points. In cyclic-group coordinates it is addition by
+    one, and its inverse is subtraction by one. Exchanging two entries
+    of an extracted window exchanges the corresponding physical sites
+    when that window is inserted back into the configuration.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Transport addition through the equivalence between finite site indices
+    and the cyclic group. For the exchange identity, express each
+    transposition as two function updates and commute those updates with
+    insertion of the cyclic window.
+\end{proof}
+
+\begin{lemma}[Normalized local PVBS projector]
+    \label{lem:pvbs_local_projector}
+    \lean{MPSTensor.parentInteraction_pvbs_two_apply}
+    \leanok
+    \uses{def:pvbs_tensor, def:parent_interaction}
+    At real hopping $\mu$, the canonical two-site parent interaction is
+    \begin{align}
+        h_\mu & =|11\rangle\langle11|+
+        \frac{(|01\rangle-\mu|10\rangle)
+            (\langle01|-\mu\langle10|)}{1+\mu^2}.
+        \label{eq:pvbs_normalized_interaction}
+    \end{align}
+    Equivalently, with occupation projections $n_L,n_R$, it is
+    $(\mu^2n_L+n_R-\mu T)/(1+\mu^2)$, where $T$ exchanges $01$ and $10$
+    and annihilates $00$ and $11$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:pvbs_open_parent}
+    The image of the displayed operator is orthogonal to the two-site
+    vacuum-particle space, and subtracting its image from any vector leaves
+    a vector in that space. Uniqueness of orthogonal projection identifies
+    the displayed operator with the actual parent interaction.
+\end{proof}
+
+\begin{theorem}[Periodic occupation decomposition]
+    \label{thm:pvbs_periodic_occupation}
+    \lean{MPSTensor.localTermES_pvbs_two_apply,
+        MPSTensor.localTermES_pvbs_decomposition,
+        MPSTensor.parentHamiltonianES_pvbs_decomposition}
+    \leanok
+    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
+    On every ring of $N\ge2$ sites, the actual PVBS parent Hamiltonian satisfies
+    \begin{align}
+        H_\mu & =\frac{2\mu}{1+\mu^2}H_1+
+        \frac{(\mu-1)^2}{1+\mu^2}\mathcal N,
+              & \mathcal N|\sigma\rangle  & =
+        \left(\sum_i\sigma_i\right)|\sigma\rangle.
+        \label{eq:pvbs_periodic_number}
+    \end{align}
+    The sum defining $H_\mu$ contains both oriented windows when $N=2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:pvbs_local_projector, lem:pvbs_cyclic_geometry}
+    The difference between $h_\mu$ and $2\mu h_1/(1+\mu^2)$ is the
+    diagonal field $[(\mu^2-\mu)n_L+(1-\mu)n_R]/(1+\mu^2)$.
+    Summing cyclically gives the same total occupation at the left and
+    right ends of the windows, yielding (\ref{eq:pvbs_periodic_number}).
+\end{proof}
+
+\begin{theorem}[Uniform periodic PVBS lower gap bound]
+    \label{thm:pvbs_uniform_lower_gap}
+    \lean{MPSTensor.parentHamiltonianES_pvbs_energy_decomposition,
+        MPSTensor.pvbs_particle_number_ge_norm_sq,
+        MPSTensor.parentHamiltonianES_pvbs_energy_lower_bound,
+        MPSTensor.pvbs_zero_of_mem_orthogonal_parent_kernel,
+        MPSTensor.parentHamiltonianES_pvbs_gap}
+    \leanok
+    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
+    For $\mu\ge0$, set $c(\mu)=(\mu-1)^2/(1+\mu^2)$.
+    If $v$ has zero vacuum amplitude, then
+    $\langle v,H_\mu v\rangle\ge c(\mu)\|v\|^2$.
+    Consequently, for every $N\ge2$ and $v\perp\ker H_\mu$,
+    \begin{align}
+        c(\mu)\|v\| & \le\|H_\mu v\|.
+        \label{eq:pvbs_uniform_norm_gap}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:pvbs_periodic_occupation, thm:pvbs_periodic_parent}
+    The critical parent $H_1$ is positive. Every nonvacuum configuration
+    contains at least one particle, so $\langle v,\mathcal N v\rangle
+        \ge\|v\|^2$ when the vacuum coefficient vanishes. Apply
+    (\ref{eq:pvbs_periodic_number}). The vacuum belongs to the actual
+    kernel, so kernel-orthogonal vectors meet this condition. The norm
+    bound follows from Cauchy--Schwarz.
+\end{proof}
+
+\begin{theorem}[Attainment and exact noncritical finite-ring gap]
+    \label{thm:pvbs_exact_periodic_gap}
+    \lean{MPSTensor.parentHamiltonianES_pvbs_critical_uniformParticle,
+        MPSTensor.parentHamiltonianES_pvbs_uniformParticle,
+        MPSTensor.parentHamiltonianES_pvbs_gap_le,
+        MPSTensor.parentHamiltonianES_pvbs_gap_exact}
+    \leanok
+    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
+    The uniform one-particle vector $W_N=\sum_j|0\cdots1_j\cdots0\rangle$
+    satisfies $H_\mu W_N=c(\mu)W_N$ for every real $\mu$ and $N\ge2$.
+    For $\mu>0$ and $\mu\ne1$, $c(\mu)>0$ is the largest possible
+    norm-gap constant in (\ref{eq:pvbs_uniform_norm_gap}), hence the exact
+    gap above the unique periodic vacuum.
+    At $\mu=1$, the W vector is instead another zero-energy state;
+    this does not assert that the finite-ring gap above the enlarged
+    kernel is zero.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:pvbs_periodic_occupation, thm:pvbs_uniform_lower_gap}
+    The uniform one-particle vector is invariant under exchange of two
+    sites and has no adjacent double occupation. Every critical local
+    term therefore annihilates it. It has particle number one, so
+    (\ref{eq:pvbs_periodic_number}) gives its eigenvalue $c(\mu)$.
+    For noncritical hopping, this is positive, and symmetry of the
+    Hamiltonian makes the eigenvector orthogonal to its kernel.
+    Applying any proposed norm-gap bound to this nonzero vector gives
+    the matching upper bound $c(\mu)$.
+\end{proof}

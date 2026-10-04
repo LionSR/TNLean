@@ -1,0 +1,84 @@
+\begin{theorem}[A common joint-flux measurement on double-exchange outputs]%
+    \label{thm:peps_torus_three_plaquette_output_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusThreePlaquetteOutput_physicalMeasurement}
+    \leanok
+    \uses{thm:peps_three_plaquette_geometry,
+        thm:peps_torus_three_plaquette_flux_holonomy,
+        thm:peps_torus_three_plaquette_double_exchange_holonomy,
+        thm:peps_closed_walk_class_physical_measurement,
+        thm:peps_physical_cut_column_action}
+    Let $G$ be finite and let the native four-leg tensor be $G$-isometric
+    for the regular action. On a torus of horizontal period at least five
+    and vertical period at least three, fix any translated eight-site strip
+    $R_v$. For directed transports $t$, write
+    \begin{align}
+        (a,b,c) & =(t_0^{-1}t_1,t_1^{-1}t_2,t_2^{-1}), \\
+        k(t)    & =aba^{-1}c.
+    \end{align}
+    There is one complete projective measurement
+    $(Q_C)_{C\in\operatorname{Conj}(G)\cup\{\bot\}}$ on the original spins
+    of $R_v$, chosen before every $t$, common exterior and crossing
+    assignment $u$, and boundary configuration $\theta$.
+    Each $Q_C$ is positive and self-adjoint, with
+    \begin{align}
+        Q_CQ_D & =\delta_{C,D}Q_C, & \sum_C Q_C & =I.
+    \end{align}
+    On the actual output transports
+    $t'=(t_0,t_2t_0^{-1}t_1t_2^{-1}t_0,t_2)$, this family satisfies
+    \begin{align}
+        Q_C\Psi_{R_v}(t',u,\theta)
+                   & =\mathbf1_{C=[k(t)]}\Psi_{R_v}(t',u,\theta), \\
+        Q_CM(t',u) & =\mathbf1_{C=[k(t)]}M(t',u),
+    \end{align}
+    where $M$ is the actual global physical cut matrix.
+    The unused outcome $\bot$ annihilates every such column and cut.
+    All positions and both seams are included, with no supplied tree,
+    holonomy, Gram or state hypothesis.
+    This is the joint-measurement step for the constructed auxiliary
+    double exchange in \cite[braiding passage]{Schuch2010PEPS}, using
+    \cite[Theorem 6.15]{Schuch2010PEPS}. Identification with a prescribed
+    physical string braid, energies and parent-Hamiltonian membership
+    remain separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    The actual outer walk surrounding the middle and right plaquettes lies
+    in $R_v$, whose induced graph is connected. Induce this closed walk
+    in the region and apply the common closed-walk measurement theorem.
+    Internal restriction removes every common exterior and crossing
+    operator from its holonomy. The literal output formula gives $k(t)$.
+    The uniform boundary-column action passes to the actual cut by its
+    open-region contraction identity.
+\end{proof}
+
+\begin{theorem}[The same physical double exchange followed by joint measurement]%
+    \label{thm:peps_torus_three_plaquette_measured_double_exchange}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusThreePlaquetteMeasuredDoubleExchange}
+    \leanok
+    \uses{thm:peps_torus_three_plaquette_output_measurement,
+        thm:peps_torus_three_plaquette_double_exchange_physical}
+    Under the preceding hypotheses, the measurement $Q$ can be chosen
+    together with one unitary $W$ implementing the literal double exchange.
+    Both witnesses precede every $t,u,\theta$. The same $W$ satisfies
+    \begin{align}
+        W\Psi_{R_v}(t,\theta)         & =\Psi_{R_v}(t',\theta),                    \\
+        (W\otimes I_{R_v^c})\Psi(t,u) & =\Psi(t',u),                               \\
+        Q_CW\Psi_{R_v}(t,\theta)
+                                      & =\mathbf1_{C=[k(t)]}W\Psi_{R_v}(t,\theta), \\
+        Q_CWM(t,u)                    & =\mathbf1_{C=[k(t)]}WM(t,u).
+    \end{align}
+    Its identity extension is unitary. In particular, input plaquette
+    holonomies $(g,h,h^{-1})$ give the joint eigenspace
+    $[ghg^{-1}h^{-1}]$ after this constructed operation.
+    The scope is the same auxiliary double exchange, without a
+    prescribed string-crossing or parent-Hamiltonian assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose $W$ from the literal double-exchange theorem and $Q$ from the
+    output measurement theorem. Their uniform quantifiers allow both
+    choices before the transports and boundary data. Substitute the local
+    column identity into the measurement action. Evaluate the global
+    identity on every assembled cut configuration to obtain
+    $WM(t,u)=M(t',u)$, then substitute it into the output cut measurement.
+\end{proof}

@@ -1,0 +1,24 @@
+\begin{theorem}[Adjoints, inversion, and unitary characters]
+    \label{thm:peps_unitary_character_adjoint}
+    \lean{LinearMap.trace_adjoint,
+        Representation.character_inv_of_unitary}
+    \leanok
+    Let $E$ be a finite-dimensional complex inner-product space. For every
+    linear endomorphism $A$ of $E$,
+    \[
+        \operatorname{tr}(A^\dagger)
+        =\overline{\operatorname{tr}(A)}.
+    \]
+    Consequently, if $\rho$ is a unitary representation of a group $G$ on $E$,
+    then its character satisfies
+    \[
+        \chi_\rho(g^{-1})=\overline{\chi_\rho(g)}\qquad(g\in G).
+    \]
+    These are auxiliary trace identities for the character-pairing calculation
+    in \cite[charge-detection proof]{Schuch2010PEPS}, lines 2464--2486.
+\end{theorem}
+\begin{proof}\leanok
+    Choose an orthonormal basis. The matrix of an adjoint is the conjugate
+    transpose, whose trace is the conjugate trace. In a unitary representation,
+    $\rho(g^{-1})=\rho(g)^\dagger$.
+\end{proof}

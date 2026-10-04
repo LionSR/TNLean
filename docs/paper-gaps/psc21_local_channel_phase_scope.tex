@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Asymptotic Local Channel Conversion without Classical Feedforward}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source relation}
+In the paragraph ``Phases of matter'' of~\cite{Piroli2021LOCC}, a sequence
+$\{\ket{\psi_N}\}$ is convertible into $\{\ket{\varphi_N}\}$ if there is a
+fixed number $k$ of compositions of channels assisted by measurements and
+classical communication, each of depth $f(N)$, whose outputs $\sigma_N$
+satisfy
+\begin{align}
+    \lVert\sigma_N-\ket{\varphi_N}\bra{\varphi_N}\rVert_1 & \longrightarrow 0.
+\end{align}
+Here $f$ is polylogarithmic. Mutual convertibility defines the source's
+phase equivalence. The fixed number of compositions and the polylogarithmic
+depth bound are allowed to depend on the pair of sequences, but not on $N$.
+
+\section{The enlarged-site local-channel model}
+The available local protocols alternate onsite channels with layers of
+channels on disjoint nearest-neighbor pairs. They act on arbitrary input
+operators and allow changes of local dimension. A layer of two-site channels
+on the resulting enlarged sites costs one depth unit, regardless of that
+dimension. Intermediate dimensions may depend on the system size without a
+uniform bound. The model has no classical feedforward between separated
+sites. For this class, approximate conversion
+means $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$, with protocol depth at
+most $T$.\footnote{Formal declaration:
+    \leanid{QuantumCircuit.IsApproxLocalChannelConversion} in
+    \doclink{TNLean/Circuit/Channel/ApproximateConversion}.}
+For Hermitian input operators, composition adds the depths and errors:
+\begin{align}
+    \lVert\Psi_2(\Psi_1(\rho))-\tau\rVert_1
+     & \le \lVert\Psi_2(\Psi_1(\rho)-\sigma)\rVert_1
+    +\lVert\Psi_2(\sigma)-\tau\rVert_1               \\
+     & \le \lVert\Psi_1(\rho)-\sigma\rVert_1
+    +\lVert\Psi_2(\sigma)-\tau\rVert_1
+    \le\varepsilon_1+\varepsilon_2.
+\end{align}
+The middle inequality is trace-norm contractivity for trace-preserving
+positive maps on Hermitian operators.
+
+For families, the error tends to zero and the depth is eventually bounded
+by $C(1+\log(N+1))^p$, for a nonnegative constant $C$ and integer $p\ge0$.
+Mutual conversion is an equivalence relation on eventually Hermitian
+families, and in particular on families of density matrices.\footnote{Formal
+    declarations: \leanid{QuantumCircuit.IsAsymptoticLocalChannelConversion} and
+    \leanid{QuantumCircuit.IsLocalChannelPhaseEquivalent.equivalence} in
+    \doclink{TNLean/Circuit/Channel/AsymptoticConversion}.}
+The shift in the logarithm only affects the bound at small system sizes.
+Finite compositions are already included: their depths add, and a finite sum
+of polylogarithmic bounds is polylogarithmic. No bound on the dimension of
+onsite ancillas is imposed.
+
+This gate convention differs from the source. In the Supplement's proof of
+Proposition~2 (p.~8), the intersite gates act only on the physical qudits;
+the entanglement bound across a cut depends on their fixed dimension $d$,
+not on the number of onsite ancillas. Allowing one intersite layer to act
+on an arbitrarily enlarged local space does not by itself give a
+uniform-depth simulation in that convention. No such simulation or
+inclusion between the two asymptotic conversion relations is proved here.
+
+\section{Remaining scope}
+The equivalence proved here belongs to the enlarged-site local-channel model.
+It is not identified with the source's phase equivalence or asserted to be
+a subclass at the same asymptotic depth. The classification asserting that
+every translation-invariant matrix product state belongs to the trivial
+source phase is not obtained. Finite adaptive channels on arbitrary input
+operators and their additive-depth composition are now available separately,
+as described in~\cite{gap:psc21_adaptive_channel_round_scope}. They are not
+included in the non-feedforward asymptotic relation formalized here.
+
+The remaining source comparison needs a decomposition into a fixed number
+of \textit{QCcc} blocks, with that number independent of system size. Each
+block must satisfy the source's internal measurement/control order and
+one-measurement-per-site rule. The finite adaptive tree does not record this
+decomposition: counting its individual instrument steps would not express
+the source condition. The comparison must also distinguish fixed-dimensional
+physical qudits from onsite ancillas and control the intersite gate cost
+uniformly in the chain length. A proved simulation bound or explicit
+restrictions on intermediate dimensions could supply this resource comparison.
+Once those source-model depth bounds are established, trace-norm contractivity
+supplies the same error estimate. The separate restrictions of the
+matrix-product-state classification are recorded
+in~\cite{gap:psc21_mps_classification_scope}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
