@@ -1,61 +1,61 @@
 \begin{definition}[Native bond supporting a charge]
-\label{def:peps_torus_edge_physical_charge_measurement}
-\lean{TNLean.PEPS.torusChargeMeasurementEdge}
-\leanok
-\uses{def:peps_regular_edge_charge_contraction}
-On a finite simple torus, choose either the right edge or the up edge of a
-native vertex $v$. Its ordered endpoints form the measured two-site region.
-The diagonal insertion is $\chi(pk)$ on this actual shared bond, including
-bonds that cross either coordinate seam.
+    \label{def:peps_torus_edge_physical_charge_measurement}
+    \lean{TNLean.PEPS.torusChargeMeasurementEdge}
+    \leanok
+    \uses{def:peps_regular_edge_charge_contraction}
+    On a finite simple torus, choose either the right edge or the up edge of a
+    native vertex $v$. Its ordered endpoints form the measured two-site region.
+    The diagonal insertion is $\chi(pk)$ on this actual shared bond, including
+    bonds that cross either coordinate seam.
 \end{definition}
 
 \begin{theorem}[Nonzero native two-spin charged columns]
-\label{thm:peps_torus_edge_charge_nonzero}
-\lean{TNLean.PEPS.IsGIsometric.openRegionWeight_torusEdgeCharacterSite_ne_zero}
-\leanok
-\uses{def:peps_torus_edge_physical_charge_measurement,
-thm:peps_regular_two_site_charge_nonzero,lem:peps_regular_torus_incident_isometry}
-Suppose both torus periods are at least three and the original four-leg tensor
-is regular $G$-isometric. For every actual irreducible character $\chi$, every
-$p\in G$, and every native boundary configuration $\theta$, the charged
-open column on the two endpoints of a chosen right or up edge is nonzero.
-This asserts no nonvanishing under an arbitrary global exterior contraction.
+    \label{thm:peps_torus_edge_charge_nonzero}
+    \lean{TNLean.PEPS.IsGIsometric.openRegionWeight_torusEdgeCharacterSite_ne_zero}
+    \leanok
+    \uses{def:peps_torus_edge_physical_charge_measurement,
+        thm:peps_regular_two_site_charge_nonzero,lem:peps_regular_torus_incident_isometry}
+    Suppose both torus periods are at least three and the original four-leg tensor
+    is regular $G$-isometric. For every actual irreducible character $\chi$, every
+    $p\in G$, and every native boundary configuration $\theta$, the charged
+    open column on the two endpoints of a chosen right or up edge is nonzero.
+    This asserts no nonvanishing under an arbitrary global exterior contraction.
 \end{theorem}
 \begin{proof}\leanok
-At each endpoint a perpendicular incident edge differs from the shared edge.
-Thus both sites have remaining boundary legs. Native incident-edge coordinates
-preserve regular $G$-isometry, and hence $G$-injectivity. The nonzero charged
-column theorem applies; the actual contraction identity and physical endpoint
-bijection preserve nonvanishing.
+    At each endpoint a perpendicular incident edge differs from the shared edge.
+    Thus both sites have remaining boundary legs. Native incident-edge coordinates
+    preserve regular $G$-isometry, and hence $G$-injectivity. The nonzero charged
+    column theorem applies; the actual contraction identity and physical endpoint
+    bijection preserve nonvanishing.
 \end{proof}
 
 \begin{theorem}[Native complete two-spin charge detection]
-\label{thm:peps_torus_edge_physical_charge_measurement}
-\lean{TNLean.PEPS.IsGIsometric.exists_torusEdgePhysicalAllChargeMeasurement}
-\leanok
-\uses{thm:peps_regular_edge_physical_charge_measurement,
-lem:peps_regular_torus_incident_isometry,thm:peps_physical_cut_column_action}
-Suppose both torus periods are at least three and the original four-leg tensor
-is regular $G$-isometric. At every native right or up edge there is one complete
-projective measurement $Q$ on its two original physical spins such that
-\begin{align}
- Q_r\Psi^{\chi,p}_{R_e,\theta}
- &=\mathbf1_{r=\chi}\Psi^{\chi,p}_{R_e,\theta},\\
- Q_r C^{\chi,p}_{R_e}
- &=\mathbf1_{r=\chi}C^{\chi,p}_{R_e}.
-\end{align}
-Here $C^{\chi,p}_{R_e}$ is the actual coefficient matrix of the global cut.
-The same measurement precedes every irreducible charge, internal parameter,
-boundary label, and arbitrary exterior site family agreeing with the original
-tensors at the measured pair. Both seam orientations are included by using
-the actual ordered edge. This is the finite-torus specialization of
-\cite[Detection of chargeons]{Schuch2010PEPS}, lines 2464--2486; it includes
-no parent-Hamiltonian assertion.
+    \label{thm:peps_torus_edge_physical_charge_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusEdgePhysicalAllChargeMeasurement}
+    \leanok
+    \uses{thm:peps_regular_edge_physical_charge_measurement,
+        lem:peps_regular_torus_incident_isometry,thm:peps_physical_cut_column_action}
+    Suppose both torus periods are at least three and the original four-leg tensor
+    is regular $G$-isometric. At every native right or up edge there is one complete
+    projective measurement $Q$ on its two original physical spins such that
+    \begin{align}
+        Q_r\Psi^{\chi,p}_{R_e,\theta}
+         & =\mathbf1_{r=\chi}\Psi^{\chi,p}_{R_e,\theta}, \\
+        Q_r C^{\chi,p}_{R_e}
+         & =\mathbf1_{r=\chi}C^{\chi,p}_{R_e}.
+    \end{align}
+    Here $C^{\chi,p}_{R_e}$ is the actual coefficient matrix of the global cut.
+    The same measurement precedes every irreducible charge, internal parameter,
+    boundary label, and arbitrary exterior site family agreeing with the original
+    tensors at the measured pair. Both seam orientations are included by using
+    the actual ordered edge. This is the finite-torus specialization of
+    \cite[Detection of chargeons]{Schuch2010PEPS}, lines 2464--2486; it includes
+    no parent-Hamiltonian assertion.
 \end{theorem}
 \begin{proof}\leanok
-Use the complete physical pair measurement in native incident-edge
-coordinates. Its action holds on every original open-region column. The
-actual region-complement contraction expresses the cut matrix as the open
-matrix times the transpose of the complementary matrix, so the same
-indicator action holds on the cut for arbitrary exterior tensors.
+    Use the complete physical pair measurement in native incident-edge
+    coordinates. Its action holds on every original open-region column. The
+    actual region-complement contraction expresses the cut matrix as the open
+    matrix times the transpose of the complementary matrix, so the same
+    indicator action holds on the cut for arbitrary exterior tensors.
 \end{proof}

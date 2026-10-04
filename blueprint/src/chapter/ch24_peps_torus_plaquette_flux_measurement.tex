@@ -8,10 +8,10 @@
     $v=(x,y)$. Define the plaquette walk $p_v$ and its physical region
     $R_v$ by
     \begin{align}
-        p_v&:\ (x,y)\longrightarrow(x+1,y)
-            \longrightarrow(x+1,y+1)\longrightarrow(x,y+1)
-            \longrightarrow(x,y),\\
-        R_v&=\{(x,y),(x+1,y),(x+1,y+1),(x,y+1)\},& |R_v|&=4.
+        p_v & :\ (x,y)\longrightarrow(x+1,y)
+        \longrightarrow(x+1,y+1)\longrightarrow(x,y+1)
+        \longrightarrow(x,y),                                     \\
+        R_v & =\{(x,y),(x+1,y),(x+1,y+1),(x,y+1)\}, & |R_v| & =4.
         \label{eq:peps_plaquette_flux_walk}
     \end{align}
     Coordinates are periodic, so this definition includes plaquettes
@@ -32,7 +32,7 @@
     its orientation agrees with the walk and $g^{-1}$ otherwise.
     Denote this actual assignment by $u^{v,g}$. Its plaquette holonomy is
     \begin{align}
-        \operatorname{Hol}_{u^{v,g}}(p_v)&=g.
+        \operatorname{Hol}_{u^{v,g}}(p_v) & =g.
         \label{eq:peps_plaquette_flux_holonomy}
     \end{align}
     This is the one-bond open regular string of
@@ -68,15 +68,15 @@
     configuration $\theta$, its twisted open-block column satisfies
     \begin{align}
         Q_C\psi_{u,\theta}
-            &=\mathbf1_{\{[\operatorname{Hol}_u(p_v)]=C\}}\psi_{u,\theta},&
-        Q_\perp\psi_{u,\theta}&=0.
+                               & =\mathbf1_{\{[\operatorname{Hol}_u(p_v)]=C\}}\psi_{u,\theta}, &
+        Q_\perp\psi_{u,\theta} & =0.
         \label{eq:peps_plaquette_holonomy_measurement}
     \end{align}
     The same operators act on the actual globally contracted coefficient
     matrix $M_u$ across $R_v$ by
     \begin{align}
-        Q_CM_u&=\mathbf1_{\{[\operatorname{Hol}_u(p_v)]=C\}}M_u,&
-        Q_\perp M_u&=0.
+        Q_CM_u      & =\mathbf1_{\{[\operatorname{Hol}_u(p_v)]=C\}}M_u, &
+        Q_\perp M_u & =0.
         \label{eq:peps_plaquette_arbitrary_closed_measurement}
     \end{align}
     This is the native regular torus version of the local conjugacy
@@ -112,8 +112,8 @@
     If $M_{v,g}$ is the physical coefficient matrix of the globally
     contracted inserted torus PEPS across the cut $R_v$, then
     \begin{align}
-        Q_CM_{v,g}&=\mathbf1_{\{[g]=C\}}M_{v,g},&
-        Q_\perp M_{v,g}&=0.
+        Q_CM_{v,g}      & =\mathbf1_{\{[g]=C\}}M_{v,g}, &
+        Q_\perp M_{v,g} & =0.
         \label{eq:peps_plaquette_flux_closed_measurement}
     \end{align}
     Thus the measurement detects $[g]$ with certainty on every nonzero
@@ -143,7 +143,7 @@
     on side $i$ and identity transport on all other bonds. The ordered
     bond receives $g$ or $g^{-1}$ according to its orientation. Then
     \begin{align}
-        \operatorname{Hol}_{u^{v,i,g}}(p_v)&=g.
+        \operatorname{Hol}_{u^{v,i,g}}(p_v) & =g.
         \label{eq:peps_plaquette_all_sides_holonomy}
     \end{align}
     This realizes the four attachment directions in the final paragraph
@@ -170,8 +170,8 @@
     Writing $M_{v,i,g}$ for its actual globally contracted coefficient
     matrix, one has
     \begin{align}
-        Q_CM_{v,i,g}&=\mathbf1_{\{[g]=C\}}M_{v,i,g},&
-        Q_\perp M_{v,i,g}&=0.
+        Q_CM_{v,i,g}      & =\mathbf1_{\{[g]=C\}}M_{v,i,g}, &
+        Q_\perp M_{v,i,g} & =0.
         \label{eq:peps_plaquette_all_sides_measurement}
     \end{align}
     The operators are independent of both $i$ and $g$. This is the
@@ -195,7 +195,7 @@
     $p_v$ have distinct conjugacy classes, then their globally contracted
     coefficient matrices satisfy
     \begin{align}
-        M_u^\dagger M_w&=0.
+        M_u^\dagger M_w & =0.
         \label{eq:peps_plaquette_class_orthogonality}
     \end{align}
     Thus every physical coefficient column of one is orthogonal to every
