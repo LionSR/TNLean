@@ -3001,6 +3001,18 @@ abstracted — record why, so it is not re-proposed).
   are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
   arguments use the reduction lemma instead of repeating the projection algebra.
 
+### Finite group fibers in local tensor isometries — candidate
+- **Pattern:** parameterize all preimages of a virtual label by one group
+  coordinate, use that coordinate as the inverse in a finite-sum bijection,
+  and evaluate the resulting weighted sum or fiber cardinality.
+- **Seen:** the dual tensor's `siteMap_quantumDoubleDualTensor_apply_spins`
+  argument in `TNLean/PEPS/Examples/QuantumDouble.lean` and the private
+  `primalLabels_fiber_sum` argument in
+  `TNLean/PEPS/Examples/ToricCodePrimal.lean` (2026-10-03).
+- **Notes:** these two occurrences have different label maps. The primal
+  parameterization is already shared by its weighted sum and fiber count;
+  no further abstraction is needed before a third distinct occurrence.
+
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
   the original ket-bra alphabet, then transport the physical-trace contraction
