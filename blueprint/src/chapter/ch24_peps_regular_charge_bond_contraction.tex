@@ -1,0 +1,52 @@
+\begin{theorem}[Literal character insertions and the actual closed graph contraction]
+    \label{thm:peps_regular_charge_bond_contraction}
+    \lean{TNLean.PEPS.regularChargeMatrix_eq_leftRegular_diagonal,
+        TNLean.PEPS.graphInsertedBondNetwork_averagingSite_charge}
+    \leanok
+    \uses{def:peps_regular_charge_coordinates,
+        thm:peps_graph_inserted_averaging_bond_state}
+    Let $U_x$ denote the left-regular matrix and
+    $D_{\chi,p}=\operatorname{diag}(g\mapsto\chi(pg))$.
+    Independent translations at the two endpoints give exactly
+    \[
+        U_xD_{\chi,p}U_{y^{-1}}=A_\chi(p;x,y).
+    \]
+    Consequently, for a finite simple graph with the regular averaging
+    tensor at every vertex, inserting $D_{\chi_e,p_e}$ on every edge
+    gives the actual regrouped closed coefficient
+    \[
+        \Psi(\beta)
+        =|G|^{-|V|}\sum_{q:V\to G}
+        \prod_{e\in E}
+        A_{\chi_e}(p_e;q_{\mathrm{head}(e)},q_{\mathrm{tail}(e)})
+        _{\beta_{e,\mathrm{head}},\beta_{e,\mathrm{tail}}}.
+    \]
+    This is an auxiliary finite-graph coefficient identity for
+    \cite[charge definition and detection]{Schuch2010PEPS}, lines 2449--2486.
+    It makes no original-spin measurement or general semiregular
+    isometry claim for the character insertions.
+\end{theorem}
+\begin{proof}\leanok
+    The regular permutation matrices leave one surviving intermediate label,
+    giving the displayed matrix entry. Substitute this identity into the
+    proved closed contraction with arbitrary bond insertions.
+\end{proof}
+
+\begin{theorem}[Conjugation of a character insertion by a flux]
+    \label{thm:peps_regular_charge_flux_conjugation}
+    \lean{TNLean.PEPS.leftRegular_diagonal_character_conjugate}
+    \leanok
+    \uses{thm:peps_regular_charge_bond_contraction}
+    For every coefficient function $\chi:G\to\mathbb C$ and $p,k\in G$,
+    \[
+        U_kD_{\chi,p}U_{k^{-1}}=D_{\chi,pk^{-1}}.
+    \]
+    This is the virtual coefficient identity in
+    \cite[braiding of charges with fluxes]{Schuch2010PEPS}, lines 2569--2581.
+    The physical braid remains a separate assertion.
+\end{theorem}
+\begin{proof}\leanok
+    Evaluate the translated charge matrix with both endpoint translations
+    equal to $k$. Its entries vanish off the diagonal; the diagonal entry
+    at $g$ is $\chi(pk^{-1}g)$.
+\end{proof}

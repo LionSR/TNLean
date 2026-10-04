@@ -1,0 +1,39 @@
+\begin{theorem}[Cycle operations from an arbitrary actual bond assignment]
+    \label{thm:peps_actual_cycle_physical_permutation}
+    \lean{
+        TNLean.PEPS.exists_unitary_regularActualCyclePhysicalPermutation,
+        TNLean.PEPS.regularGaugedTreeCycleAssignment_treeGauge_of_internal,
+        TNLean.PEPS.regularRegionBondExtension_treeGauge,
+        TNLean.PEPS.regularActualCyclePermutation
+    }
+    \leanok
+    Fix a finite region, an actual spanning tree of its induced graph, and a root.
+    The bond assignment $u$ determines its normalized tree gauge $k_u$ and its
+    cycle residual tuple $\omega_u$. Reconstructing those coordinates on internal
+    edges and retaining the literal exterior recovers $u$ itself.
+
+    Let $\phi$ be a permutation of the cycle tuples commuting with simultaneous
+    conjugation, and suppose the original site maps are $G$-isometric for the
+    regular virtual action. There is one unitary on the original region spins,
+    chosen before every $u$ and every boundary configuration, sending the actual
+    contraction with assignment $u$ to that with internal coefficients reconstructed
+    from $k_u$ and $\phi(\omega_u)$. Every exterior and crossing operator is unchanged.
+    The identity extension outside the region acts on the actual closed contraction
+    in the same way.
+
+    This is an auxiliary consequence of the accessible-coordinate and physical
+    movement constructions of SCP10, local lines 1765--1920 and 2271--2305.
+    The tree and the conjugation-equivariant permutation remain explicit.
+    An occupied-to-vacant native plaquette interpretation requires its actual
+    holonomy calculation; the full four-endpoint braid is not asserted here.
+    See \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    \uses{thm:peps_regular_gauged_cycle_permutation}
+\end{theorem}
+\begin{proof}\leanok
+    The tree-gradient identity recovers every internal tree coefficient. On a
+    remaining internal edge, the residual is $k_{\rm head}^{-1}u_e k_{\rm tail}$,
+    so reconstruction recovers $u_e$ as well. Apply the fixed common-background
+    physical unitary to these derived coordinates. The literal exterior extension
+    recovers the input assignment, and the boundary-column and cut identities give
+    the stated actual contractions.
+\end{proof}

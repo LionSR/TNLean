@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Mixed Sequential Polar Factorization: Injective Input Scope}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and restricted statement}
+For a blocked matrix product map $B=VP$,
+\cite[p.~3, footnotes~3--4 to eqs.~(13)--(15)]{Malz2024Preparation}
+allows $B$ to be non-injective, interprets the inverse of $P$ as its
+pseudoinverse, and permits the input to be placed at any chosen tensor,
+with sequential decompositions from both boundaries toward that site.
+
+The mixed polar factorization presently assumes that $B$ is injective.
+Its positive polar factor is then invertible and $V^\dagger V=\Id_{D^2}$.
+The two inward sweeps give isometric evaluations $E_L,E_R$ and a central
+map $C$ with
+\begin{align}
+    V & =(E_L\otimes\Id_d\otimes E_R)C, & C^\dagger C & =\Id_{D^2}.
+    \label{eq:mswc24_mixed_injective}
+\end{align}
+Both outer bonds have dimension one, and every bond has dimension at most
+$D^2$. The input may be attached at either endpoint as well as at an
+interior site.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_mixed_sequential_polarIsoMatrix_of_split} and
+    \leanid{MPSPreparation.exists_mixed_sequential_polarIsoMatrix} in
+    \doclink{TNLean/MPS/Preparation/MixedSequentialFactorization}.}
+
+\section{Missing extension and elimination}
+For non-injective $B$, let $\Pi$ be the orthogonal projector onto the
+support of $P$ and let $P^+$ be its pseudoinverse. Then $V=BP^+$ satisfies
+$V^\dagger V=\Pi$. If $V=EC$ with
+$E=E_L\otimes\Id_d\otimes E_R$ isometric, then
+$C^\dagger C=V^\dagger V=\Pi$, so $C$ need not be an isometry on all
+$D^2$ input coordinates. Thus (\ref{eq:mswc24_mixed_injective}) cannot
+simply be retained after dropping injectivity.
+
+To remove this restriction, factor the pseudoinverse polar map by the same
+inward sweeps and allow the central map to be a partial isometry with
+initial projector $\Pi$. Equivalently, choose an isometry
+$J\colon\C^r\to\C^{D^2}$ onto the support, where $r=\operatorname{rank}B$,
+and state the mixed factorization for $VJ$, with a central isometry on
+$\C^r$. No mixed theorem of either form is asserted here. The one-sided
+factorization already treats the polar support after a unitary change of
+input coordinates.\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary}
+    in \doclink{TNLean/MPS/Preparation/SequentialFactorization}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
