@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.MPS.Preparation.OverlappingBlockError
+import TNLean.MPS.Preparation.PolarCompression
 
 /-!
 # Overlaps of blocks with overlapping states, to second order
@@ -73,42 +74,6 @@ namespace MPSTensor
 variable {d D b : ℕ}
 
 /-! ### The compression coefficient -/
-
-/-- The compression coefficient of a tensor `X` read from a `D² × D²` matrix `H`, against the
-fixed-point tensor of `σ`, is a trace: `Tr(∑ᵢ Xⁱ σ (P_∞ⁱ)†) = Tr(H ((√σ)ᵀ ⊗ σ))`. -/
-theorem trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor
-    (H : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) (σ : Matrix (Fin D) (Fin D) ℂ) :
-    (Kraus.mixedMapLM (ofPhysicalMatrixLM H) (fixedPointTensor σ) σ).trace =
-      (H * ((CFC.sqrt σ)ᵀ ⊗ₖ σ)).trace := by
-  rw [Kraus.mixedMapLM_apply, Matrix.trace_sum]
-  rw [← (virtualPairEquiv D).symm.sum_comp]
-  have hS : (CFC.sqrt σ)ᴴ = CFC.sqrt σ := Matrix.conjTranspose_cfc_sqrt σ
-  simp only [ofPhysicalMatrixLM, LinearMap.coe_mk, AddHom.coe_mk, fixedPointTensor,
-    virtualPairEquiv, Equiv.symm_symm, Equiv.symm_apply_apply, Matrix.conjTranspose_mul, hS,
-    Matrix.conjTranspose_single, star_one]
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, ofPhysicalMatrix, Matrix.submatrix_apply,
-    Equiv.symm_apply_apply, id, Matrix.kroneckerMap_apply, Matrix.transpose_apply,
-    Matrix.single_apply, Fintype.sum_prod_type, ite_and, ite_mul, one_mul, zero_mul,
-    Finset.sum_mul]
-  simp only [Finset.sum_ite_irrel, Finset.sum_ite_eq, Finset.mem_univ, ite_true,
-    Finset.sum_const_zero, mul_ite, mul_zero]
-  exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
-    Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring
-
-/-- For a Hermitian `H` and a Hermitian `σ`, the compression coefficient of
-`trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor` is real: `Tr(H W)` with `W = (√σ)ᵀ ⊗ σ`
-Hermitian. -/
-theorem im_trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor
-    {H : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hH : H.IsHermitian)
-    {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.IsHermitian) :
-    (Kraus.mixedMapLM (ofPhysicalMatrixLM H) (fixedPointTensor σ) σ).trace.im = 0 := by
-  rw [trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor]
-  have hW : ((CFC.sqrt σ)ᵀ ⊗ₖ σ)ᴴ = (CFC.sqrt σ)ᵀ ⊗ₖ σ := by
-    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_transpose_eq_transpose_conjTranspose,
-      Matrix.conjTranspose_cfc_sqrt, hσ.eq]
-  have h : star (H * ((CFC.sqrt σ)ᵀ ⊗ₖ σ)).trace = (H * ((CFC.sqrt σ)ᵀ ⊗ₖ σ)).trace := by
-    rw [← Matrix.trace_conjTranspose, Matrix.conjTranspose_mul, hW, hH.eq, Matrix.trace_mul_comm]
-  exact Complex.conj_eq_iff_im.1 h
 
 /-! ### The fixed points of the blocks -/
 
@@ -389,8 +354,8 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
     exact (Complex.re_le_norm _).trans ((norm_inner_le_norm _ _).trans
       (by rw [hιF, hιq q, one_mul]))
   have hαsq : 1 - αc.re ≤ δ ^ 2 := by
-    have h := @norm_sub_sq ℂ _ _ _ _ (ιL H) (sqrtWeightLM σ' F)
-    rw [hιq q, hιF, ← inner_conj_symm, RCLike.conj_re, ← hαι] at h
+    have h := one_sub_re_inner_eq_norm_sub_sq_div_two (𝕜 := ℂ) hιF (hιq q)
+    rw [← hαι, norm_sub_rev] at h
     have h2 := pow_le_pow_left₀ (norm_nonneg _) hιd 2
     have h3 : (Kι * K₁ * x ^ q) ^ 2 ≤ δ ^ 2 := by
       refine pow_le_pow_left₀ (by positivity) ?_ 2

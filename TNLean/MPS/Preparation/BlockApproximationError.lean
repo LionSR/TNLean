@@ -3,26 +3,23 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.ApproximationError
+import TNLean.MPS.Preparation.OrderedBlockOverlap
 import TNLean.MPS.Preparation.BlockIsometryState
 
 /-!
 # The approximation error for blocks of unequal lengths
 
-Let `A` be a normal tensor in the gauge of arXiv:2307.01696, eq. (5), and cut the ring of `N`
-sites into `M ≥ 1` blocks of lengths `ℓ 0, …, ℓ (M - 1)`, each at least `q`, with injective
-blocked tensors. The approximating state `|ψ⟩ = (⊗ₖ V_k) ⊗ₖ |ω⟩` of these blocks
-(`MPSTensor.blockIsometryState`) has error `1 - |⟨ψ|φ_N⟩| ≤ C M e^{-γ q/ξ}`, with `C` depending
-only on `A`, `σ`, `λ₂`, and `γ` (`MPSTensor.exists_blockApproximationError_le_mul`).
+Let `A` be normal and left canonical, with a positive definite normalized fixed point as in
+arXiv:2307.01696, eq. (5). Cut the ring into `M ≥ 1` blocks of lengths at least `q`, with
+injective blocked tensors. The approximating state `(⊗ₖ V_k) ⊗ₖ |ω⟩` has normalized overlap
+error at most `C M exp(-2γq/ξ)` for every `0 < γ < 1`.
 
-For blocks of equal length this is Lemma 1'(i) of the source
-(`MPSTensor.exists_approximationError_le_mul`). The Supplemental Material, proof of Theorem 1,
-uses the same bound for blocks "all of the same size, `q_N`, except for the last one, which may
-be larger". The proof is the source's: the overlap `⟨ψ|φ_N(A)⟩` is the trace of the ordered
-product of the mixed transfer matrices `τ_k` of the positive parts `P_{ℓ k}` against the fixed
-point, each within `O(e^{-γ q/ξ})` of the same idempotent, and the telescoping bound of
-arXiv:2103.13367, eqs. `final_eq` to `finished`, holds for a product of such matrices
-(`exists_norm_trace_prod_range_transferMatrix_sub_one_le`).
+This quadratic rate is a project improvement of the source's first-order bound in
+Supplemental Material, Lemma 1'(i), `eq:fid_err_gen_normal`. For at least two blocks, the overlap
+is the trace of an ordered product of mixed transfer matrices, and the compressed
+perturbation of each factor cancels to first order. For a single block, the normalized
+squared-distance estimate is used instead. The older absolute complex trace estimate remains
+valid for all positive numbers of blocks at its first-order rate.
 
 ## Main declarations
 
@@ -54,7 +51,7 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    (hlam₁ : ‖lam₂‖ ≤ 1) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    (hlam₁ : ‖lam₂‖ ≤ 1) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) (q : ℕ), (∀ k, q ≤ ℓ k) →
       ‖Matrix.trace (List.ofFn fun k => transferMatrix (Kraus.mixedMapLM
           (polarPosTensor (blockTensor A (ℓ k))) (fixedPointTensor σ))).prod - 1‖ ≤
@@ -85,77 +82,149 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le (A : MPSTensor d D)
   rw [hprod]
   exact h q M X hδ
 
-/-- **Approximation error for blocks of unequal lengths.** Let `A` be normal in the gauge
-`∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` (arXiv:2307.01696, eq. (5)), let
-`|λ₂| ≤ 1` bound the moduli of the eigenvalues of `E_A` other than `1`, with correlation length
-`ξ = -1/log|λ₂|`, and let `0 < γ < 1/2`. There is `C > 0` such that for every cutting of a ring
-of `N` sites into `M ≥ 1` blocks of lengths `ℓ k ≥ q` with injective blocked tensors, the
-approximating state `|ψ⟩ = (⊗ₖ V_k) ⊗ₖ |ω⟩` has error
-`1 - |⟨ψ|φ_N⟩| ≤ C M e^{-γ q/ξ}`.
+/-- The unequal-block preparation error satisfies `C M exp(-2γq/ξ)` for every `0 < γ < 1`.
+The tensor is normal and left canonical, with a positive definite normalized fixed point;
+each block has length at least `q` and its blocked tensor is injective.
 
-arXiv:2307.01696, Lemma 1 and Lemma 1'(i), for blocks of different lengths; the Supplemental
-Material, proof of Theorem 1, applies Lemma 1 to blocks "all of the same size, `q_N`, except for
-the last one, which may be larger". The proof is that of `exists_approximationError_le`: the
-triangle inequality `one_sub_norm_inner_smul_inv_norm_le`, with the overlap bounded by
-`exists_norm_trace_prod_transferMatrix_sub_one_le` and the normalization by
-`exists_abs_norm_mpvState_sq_sub_one_le`, using `N ≥ q`. -/
+This is a project improvement of arXiv:2307.01696, Supplemental Material, Lemma 1'(i),
+`eq:fid_err_gen_normal`. For `M ≥ 2`, the ordered mixed-transfer product is estimated to
+second order and the target normalization uses `N ≥ 2q`. For one block, the squared-distance
+estimate supplies the same rate after normalization. The first-order absolute trace bound
+remains a separate statement and is not asserted to have this rate for a single factor. -/
 theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    (hlam₁ : ‖lam₂‖ ≤ 1) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    (hlam₁ : ‖lam₂‖ ≤ 1) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} (hN : ∑ k, ℓ k = N)
       (q : ℕ), (∀ k, q ≤ ℓ k) → (∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) →
         1 - ‖⟪blockIsometryState A (fixedPointPair σ) hN, normalizedMPVState A N⟫_ℂ‖ ≤
-          C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
+          C * (M * Real.exp (-(2 * γ) * q / correlationLength lam₂)) := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨C₁, hC₁, hover⟩ :=
-    exists_norm_trace_prod_transferMatrix_sub_one_le A hN hA hσ htr hfix hlam hlam₁ hγ0 hγ
-  obtain ⟨K₅, hK₅, hc⟩ :=
-    exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
-  set C := C₁ + K₅
-  refine ⟨C * Real.exp C + 1, by positivity, fun M _ ℓ N hN q hq hinj => ?_⟩
+    exists_norm_trace_prod_transferMatrix_sub_one_le_sq A hN hA hσ htr hfix hlam hlam₁ hγ0 hγ
+  obtain ⟨K₁, hK₁, hone⟩ :=
+    exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le A hN hA hσ htr hfix hlam hγ0 hγ
+  obtain ⟨K₅, hK₅, hc⟩ := exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix hlam
+    (γ := γ) hγ0 hγ
   set x := Real.exp (-γ / correlationLength lam₂)
   have hx0 : 0 ≤ x := (Real.exp_pos _).le
   have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hlam₁
-  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
-    rw [← Real.exp_nat_mul]; congr 1; ring
-  have hover' := hover M ℓ q hq
-  rw [hxq] at hover' ⊢
-  set u := (M : ℝ) * x ^ q
+  set C := 1 + 4 * K₅ ^ 2 + 2 * K₅ + 2 * K₁ + 4 * C₁
+  have hCpos : 0 < C := by dsimp only [C]; positivity
+  have hCa : 4 * K₅ ^ 2 ≤ C := by dsimp only [C]; linarith
+  have hCb : 2 * K₁ ≤ C := by dsimp only [C]; nlinarith [sq_nonneg K₅]
+  have hCc : C₁ ≤ C := by dsimp only [C]; nlinarith [sq_nonneg K₅]
+  have hCd : 2 * K₅ + 4 * C₁ ≤ C := by dsimp only [C]; nlinarith [sq_nonneg K₅]
+  have hC1 : 1 ≤ C := by dsimp only [C]; nlinarith [sq_nonneg K₅]
+  have hCexp : C ≤ C * Real.exp C + 1 := by
+    have := le_mul_of_one_le_right hCpos.le (Real.one_le_exp hCpos.le)
+    linarith only [this]
+  refine ⟨C * Real.exp C + 1, by positivity, fun M _ ℓ N hN q hq hinj => ?_⟩
+  have hxq : Real.exp (-(2 * γ) * q / correlationLength lam₂) = (x ^ 2) ^ q := by
+    rw [Real.exp_neg_mul_div_eq_pow, exp_neg_two_mul_div_correlationLength]
+  rw [hxq]
+  set u := (M : ℝ) * (x ^ 2) ^ q
+  have hu0 : 0 ≤ u := by positivity
   have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  have hu : 0 ≤ u := by positivity
   set ψ := blockIsometryState A (fixedPointPair σ) hN
   have hψ : ‖ψ‖ = 1 := norm_blockIsometryState A
     (by rw [fixedPointPair_norm_sq hσ.posSemidef, htr]) hN hinj
   have hz := inner_blockIsometryState_mpvState A σ hN hinj
-  -- `N ≥ q`, so the normalization term is dominated by `u`.
+  have hε1 : 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ 1 := by
+    linarith only [norm_nonneg ⟪ψ, normalizedMPVState A N⟫_ℂ]
+  by_cases hsmall : C * u < 1
+  swap
+  · have hbig : 1 ≤ C * u := le_of_not_gt hsmall
+    exact hε1.trans (hbig.trans (mul_le_mul_of_nonneg_right hCexp hu0))
+  have hMN : M * q ≤ N := by
+    calc M * q = ∑ _ : Fin M, q := by simp
+      _ ≤ ∑ k, ℓ k := Finset.sum_le_sum fun k _ => hq k
+      _ = N := hN
   have hqN : q ≤ N := by
-    have := hq ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩
-    rw [← hN]
-    exact this.trans (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ _))
-  have hcu : |‖mpvState A N‖ ^ 2 - 1| ≤ K₅ * u := by
-    refine (hc N).trans (mul_le_mul_of_nonneg_left ?_ hK₅)
-    calc (x ^ 2) ^ N = x ^ (2 * N) := (pow_mul _ _ _).symm
-      _ ≤ x ^ q := pow_le_pow_of_le_one hx0 hx1 (by omega)
-      _ ≤ u := le_mul_of_one_le_left (by positivity) hM
-  have herr : 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤
-      C₁ * u * Real.exp (C₁ * u) + K₅ * u :=
-    one_sub_norm_inner_smul_inv_norm_le hψ.le (by
-      rw [hz]
-      refine le_trans ?_ hover'
-      rw [norm_sub_rev]
-      simpa only [norm_one] using abs_norm_sub_norm_le (1 : ℂ) _) hcu
+    exact (Nat.le_mul_of_pos_left q (Nat.pos_of_ne_zero (NeZero.ne M))).trans hMN
+  set δ := x ^ q
+  have hδ2 : (x ^ 2) ^ q = δ ^ 2 := by
+    rw [← pow_mul, ← pow_mul, mul_comm]
+  have hδu : δ ^ 2 ≤ u := by
+    rw [← hδ2]
+    exact le_mul_of_one_le_left (by positivity) hM
+  have hK5 : K₅ * δ ≤ 1 / 2 := by
+    have h4 : 4 * K₅ ^ 2 * u < 1 :=
+      lt_of_le_of_lt (mul_le_mul_of_nonneg_right hCa hu0) hsmall
+    have h5 : K₅ ^ 2 * δ ^ 2 ≤ K₅ ^ 2 * u :=
+      mul_le_mul_of_nonneg_left hδu (sq_nonneg _)
+    have h6 : (K₅ * δ) ^ 2 < (1 / 2) ^ 2 := by
+      rw [mul_pow]
+      linarith only [h4, h5]
+    exact ((pow_lt_pow_iff_left₀ (by positivity) (by norm_num) two_ne_zero).1 h6).le
+  have hcn : |‖mpvState A N‖ ^ 2 - 1| ≤ K₅ * δ :=
+    (hc N).trans (mul_le_mul_of_nonneg_left (pow_le_pow_of_le_one hx0 hx1 hqN) hK₅)
+  have hv : 1 / 2 ≤ ‖mpvState A N‖ ^ 2 := by
+    linarith only [(abs_le.1 hcn).1, hK5]
   have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
-  have hbound : 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ C * u * Real.exp (C * u) := by
-    have h1 : C₁ * u * Real.exp (C₁ * u) ≤ C₁ * u * Real.exp (C * u) := by
-      gcongr
-      simp only [C]; linarith
-    have h2 : K₅ * u ≤ K₅ * u * Real.exp (C * u) := le_mul_of_one_le_right (by positivity) hexp
-    have h3 : C * u * Real.exp (C * u) = C₁ * u * Real.exp (C * u) + K₅ * u * Real.exp (C * u) := by
-      simp only [C]; ring
-    linarith
-  exact le_mul_of_le_mul_exp_of_le (by positivity) zero_le_one hu hbound
-    (by linarith [norm_nonneg ⟪ψ, normalizedMPVState A N⟫_ℂ])
+  have herr : 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ C * u * Real.exp (C * u) := by
+    rcases Nat.lt_or_ge M 2 with hM2 | hM2
+    · obtain rfl : M = 1 := by have := NeZero.ne M; omega
+      have hℓ : ℓ 0 = N := by simpa only [Fin.sum_univ_one] using hN
+      have hz1 : ⟪ψ, mpvState A N⟫_ℂ =
+          mpvOverlap (polarPosTensor (blockTensor A N)) (fixedPointTensor σ) 1 := by
+        rw [hz, ← trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap]
+        simp only [List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil,
+          mul_one, pow_one]
+        rw [hℓ]
+      have hvu : ‖mpvState A N‖ = ‖mpvState (polarPosTensor (blockTensor A N)) 1‖ := by
+        rw [norm_mpvState_polarPosTensor_blockTensor, mul_one]
+      have hW : ‖mpvState A N‖ ^ 2 - ‖⟪ψ, mpvState A N⟫_ℂ‖ ^ 2 ≤ K₁ * u := by
+        rw [hz1, hvu]
+        refine (hone N).trans (mul_le_mul_of_nonneg_left ?_ hK₁)
+        simp only [u, Nat.cast_one, one_mul]
+        exact pow_le_pow_of_le_one (sq_nonneg _) (pow_le_one₀ hx0 hx1) hqN
+      calc 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ 2 * (K₁ * u) :=
+            one_sub_norm_inner_smul_inv_norm_le_two_mul hψ.le hv hW
+        _ ≤ C * u := by nlinarith only [hCb, hu0]
+        _ ≤ C * u * Real.exp (C * u) := le_mul_of_one_le_right (by positivity) hexp
+    have hlow := hover M ℓ q hM2 hq
+      (lt_of_le_of_lt (mul_le_mul_of_nonneg_right hCc hu0) hsmall)
+    have hcy : |‖mpvState A N‖ ^ 2 - 1| ≤ K₅ * u := by
+      refine (hc N).trans (mul_le_mul_of_nonneg_left ?_ hK₅)
+      calc x ^ N ≤ x ^ (2 * q) :=
+            pow_le_pow_of_le_one hx0 hx1 ((Nat.mul_le_mul_right q hM2).trans hMN)
+        _ = (x ^ 2) ^ q := pow_mul x 2 q
+        _ ≤ u := le_mul_of_one_le_left (by positivity) hM
+    set s := ‖⟪ψ, mpvState A N⟫_ℂ‖
+    have hs0 : 0 ≤ s := norm_nonneg _
+    set v := C₁ * u * Real.exp (C₁ * u)
+    have hv0 : 0 ≤ v := by positivity
+    have hgap : 1 - s ≤ v := by
+      have h := norm_sub_norm_le (1 : ℂ) ⟪ψ, mpvState A N⟫_ℂ
+      rw [norm_one, norm_sub_rev, hz] at h
+      change 1 - ‖⟪ψ, mpvState A N⟫_ℂ‖ ≤ v
+      rw [hz]
+      exact h.trans hlow
+    have hsq : 1 - s ^ 2 ≤ 2 * v := by
+      by_cases hs1 : s ≤ 1
+      · nlinarith only [hgap, hs1, hs0]
+      · nlinarith only [hs1, hv0]
+    have hW : ‖mpvState A N‖ ^ 2 - s ^ 2 ≤ K₅ * u + 2 * v := by
+      linarith only [(abs_le.1 hcy).2, hsq]
+    have hexpC : Real.exp (C₁ * u) ≤ Real.exp (C * u) :=
+      Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right hCc hu0)
+    have h1 : v ≤ C₁ * u * Real.exp (C * u) :=
+      mul_le_mul_of_nonneg_left hexpC (by positivity)
+    have h2 : K₅ * u ≤ K₅ * u * Real.exp (C * u) :=
+      le_mul_of_one_le_right (by positivity) hexp
+    have h3 : (2 * K₅ + 4 * C₁) * u * Real.exp (C * u) ≤ C * u * Real.exp (C * u) :=
+      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hCd hu0) (by positivity)
+    have h4 : (2 * K₅ + 4 * C₁) * u * Real.exp (C * u) =
+        2 * (K₅ * u * Real.exp (C * u)) + 4 * (C₁ * u * Real.exp (C * u)) := by ring
+    have herror := one_sub_norm_inner_smul_inv_norm_le_two_mul hψ.le hv hW
+    change 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ 2 * (K₅ * u + 2 * v) at herror
+    linarith only [herror, h1, h2, h3, h4]
+  refine herr.trans ?_
+  calc C * u * Real.exp (C * u) ≤ C * u * Real.exp C := by
+        gcongr
+        exact hsmall.le.trans hC1
+    _ ≤ (C * Real.exp C + 1) * u := by nlinarith only [hu0]
 
 end MPSTensor

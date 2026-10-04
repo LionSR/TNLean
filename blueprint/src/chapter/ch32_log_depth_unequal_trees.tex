@@ -25,41 +25,57 @@ $\{0,\dots,n-1\}$, and for a tensor $A$ we write $\mathcal B_n=V_nP_n$ for the
 polar decomposition of $A$ blocked over $n$ sites, with $V_n$ read on the
 configurations of the $n$ sites.
 
-\begin{lemma}[The isometry of a block of unequal halves]
+\begin{lemma}[The partial isometry of a block of unequal halves]
     \label{lem:ldp_polar_merge}
     \lean{MPSPreparation.pairProductTensor, MPSPreparation.cfgPolarIso,
         MPSPreparation.mergeIso, MPSPreparation.isIsometry_cfgPolarIso,
         MPSPreparation.blockTensor_add_apply,
         MPSPreparation.cfgPolarIso_append, MPSPreparation.cfgPolarIso_split,
+        MPSPreparation.polarPosTensor_blockTensor_add,
+        MPSPreparation.pairProductTensor_self, MPSPreparation.mergeIso_self,
         MPSPreparation.isInjective_pairProductTensor,
-        MPSPreparation.isIsometry_mergeIso}
+        MPSPreparation.isIsometry_mergeIso,
+        MPSPreparation.polarPosTensor_blockTensor_two_pow,
+        MPSPreparation.mergeIso_two_pow}
     \leanok
-    \uses{thm:ldp_polar_uniqueness, thm:ldpolar_tensor_decomposition,
-        thm:ldpolar_tensor_injective}
-    Let $A$ be a tensor whose blocked tensors over $n_1$ and over $n_2$ sites are
-    injective, and let $W:\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ be the partial
-    isometry of the polar decomposition of the tensor
-    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two neighbouring sites. Then
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_tree_factorization}
+    Let $A$ be a tensor, $n_1,n_2\ge0$, and let
+    $W:\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ be the partial isometry of the polar
+    decomposition of the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two
+    neighbouring sites. Then
     \begin{align}
-        V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W.
+        V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W,
         \label{eq:ldp_polar_merge}
     \end{align}
-    If the blocked tensor over $n_1+n_2$ sites is injective, so is the tensor
-    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$, and $W$ is an isometry.
+    and $P_{n_1+n_2}$ is the positive part of the tensor
+    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$. No injectivity is assumed, as in the
+    footnote of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}.
+    For $n_1=n_2=n$ the tensor $(a,b)\mapsto P_n^aP_n^b$ is the two-site blocked
+    tensor of $P_n$, and $W$ is the partial isometry of its polar decomposition.
+    For $n=2^j$, $j\ge1$, the positive part $P_n$ is the tensor $T_j$ of the
+    tree of \cite[eq.~(16)]{Malz2024Preparation}, so $W$ is its layer
+    $V^{(j+1)}$. If the blocked tensor over $n_1+n_2$
+    sites is injective, so is the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$, and
+    $W$ is an isometry.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:ldpolar_tensor_rotate, thm:ldpolar_tensor_injective}
     Write $\mathcal B_{n_i}^{\tau}=\sum_y\bra\tau V_{n_i}\ket yP_{n_i}^y$. Then
     $\mathcal B_{n_1+n_2}^{\tau_1\tau_2}
-        =\mathcal B_{n_1}^{\tau_1}\mathcal B_{n_2}^{\tau_2}$ is
-    $(V_{n_1}\otimes V_{n_2})WQ$, with $Q$ the positive part of the tensor of
-    the positive parts. The map $(V_{n_1}\otimes V_{n_2})W$ is a partial isometry
-    with initial projector the support projector of $Q$, since
-    $V_{n_1}\otimes V_{n_2}$ is an isometry, and uniqueness of the polar
-    decomposition (Theorem~\ref{thm:ldp_polar_uniqueness}) identifies it with
-    $V_{n_1+n_2}$. The matrices $\mathcal B_{n_1+n_2}^{\tau}$ are combinations of
-    the products $P_{n_1}^aP_{n_2}^b$, so these span the full matrix algebra when
-    the former do.
+        =\mathcal B_{n_1}^{\tau_1}\mathcal B_{n_2}^{\tau_2}$, so
+    $\mathcal B_{n_1+n_2}$ is the tensor $C$ of the positive parts rotated by
+    $K=V_{n_1}\otimes V_{n_2}$. Here
+    $K^\dagger K=\Pi_{n_1}\otimes\Pi_{n_2}$, and $\Pi_{n_i}$ fixes the tensor of
+    $P_{n_i}$, so $K^\dagger K$ fixes $C$. By
+    Theorem~\ref{thm:ldpolar_tensor_rotate}, $V_{n_1+n_2}=KW$ and $C$ has the
+    positive part of $\mathcal B_{n_1+n_2}$. The matrices
+    $\mathcal B_{n_1+n_2}^{\tau}$ are combinations of the products
+    $P_{n_1}^aP_{n_2}^b$, so these span the full matrix algebra when the former
+    do. For $n=2^j$, the equal-halves case of the identity of positive parts
+    gives $P_{2^{j+1}}$ as the positive part of the two-site blocked tensor of
+    $P_{2^j}$, which is the recursion defining $T_{j+1}$ from $T_j$; induction
+    on $j$ from $P_2=T_1$ gives $P_{2^j}=T_j$.
 \end{proof}
 
 \begin{theorem}[Layers of register gates one after the other]
@@ -67,7 +83,7 @@ configurations of the $n$ sites.
     \lean{MPSPreparation.registerLayersOp,
         MPSPreparation.exists_rounds_registerLayersOp}
     \leanok
-    \uses{thm:ldp_register_layer, lem:ldp_round_implementation_compose}
+    \uses{thm:qc_register_layer, lem:qc_round_implementation_compose}
     Let $G_0,\dots,G_{m-1}$ be lists of register gates, the gates of each list
     with pairwise disjoint stretches, such that no register of a gate of $G_{j'}$
     lies in the interior of a gate of $G_j$ for $j'<j$, and every matrix of a
@@ -78,11 +94,11 @@ configurations of the $n$ sites.
 \end{theorem}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:ldp_register_layer} each list is applied in depth
+    By Theorem~\ref{thm:qc_register_layer} each list is applied in depth
     $4s+K+2$ on the vectors with $\ket0$ at the interiors of its gates. The
     gates of $G_{j'}$ act on their registers only, which lie outside the
     interiors of the later lists, so they keep $\ket0$ there. Induction on the
-    number of lists and Lemma~\ref{lem:ldp_round_implementation_compose}.
+    number of lists and Lemma~\ref{lem:qc_round_implementation_compose}.
 \end{proof}
 
 \begin{definition}[Tree layout of a block]
@@ -140,11 +156,11 @@ configurations of the $n$ sites.
         MPSPreparation.registerLayersOp_treeLevelGates,
         MPSPreparation.treeCentralSites,
         MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp,
-        MPSPreparation.isCircuitOn_list_prod_embedOp,
         MPSPreparation.isCircuitOn_blockLayerOp_treeLeafOp}
     \leanok
     \uses{def:ldp_tree_layout, thm:ldp_register_layers,
-        thm:ldp_register_tree_rounds, def:ldp_local_circuit}
+        thm:ldp_register_tree_rounds, def:qc_local_circuit,
+        lem:qc_parallel_circuits}
     Cut a ring into blocks, each with a tree layout with $h+1$ coarse depths, and
     let a unitary $X_{j,p}$ on $2s$ sites act on the two registers of the node
     $p$ of depth $j\le h$ of every block. If every $X_{j,p}$ is a product of at
@@ -254,8 +270,8 @@ configurations of the $n$ sites.
     \uses{thm:ldp_unequal_tree_isometry, thm:ldp_unequal_tree_rounds,
         lem:ldp_balanced_widths, def:ldp_block_isometry_state,
         thm:ldp_approximating_state_depth,
-        thm:ldp_bounded_unitary_two_site_gates, def:ldp_measurement_rounds,
-        lem:ldp_round_implementation_compose}
+        thm:qc_bounded_unitary_two_site_gates, def:qc_measurement_rounds,
+        lem:qc_round_implementation_compose}
     For every $s\ge2$ and $c$ there is $C$, depending only on $d$, $s$ and $c$,
     with the following property. Let $A$ be a tensor whose blocked tensors over
     $m\ge s$ sites are injective, and $\omega$ a unit vector on the pair space.
@@ -278,7 +294,7 @@ configurations of the $n$ sites.
     state; Theorem~\ref{thm:ldp_unequal_tree_rounds} applies the depths
     $0,\dots,h$ of the trees with the unitaries of
     Theorem~\ref{thm:ldp_unequal_tree_isometry}; and a local circuit of
-    bounded depth, by Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} for
+    bounded depth, by Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} for
     the boundedly many lengths of the leaves, applies the leaves in one round.
     The output is the state of the blocks as in
     Theorem~\ref{thm:ldp_approximating_state_depth}.
@@ -289,7 +305,7 @@ configurations of the $n$ sites.
     \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero,
         MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
     \leanok
-    \uses{def:ldp_measurement_rounds}
+    \uses{def:qc_measurement_rounds}
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
     for every $N\ge2$ and $0<\varepsilon\le1$ for which the periodic state
     $\ket{\phi_N(A)}$ is nonzero, a unit vector $\ket\psi$ with
@@ -309,12 +325,12 @@ configurations of the $n$ sites.
         thm:normalized_primitive_gauge, lem:ldp_normalized_state_rescaling,
         lem:ldp_periodic_state_nonzero,
         lem:ldp_approximating_state_unit_norm,
-        lem:ldp_measurement_rounds_outputs, lem:ldp_measurement_unitary_case}
+        lem:qc_measurement_rounds_outputs, lem:qc_measurement_unitary_case}
     Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}), which multiplies
     $\ket{\phi_N}$ by a nonzero scalar, with a bound $t<1$ on the moduli of the
-    subleading eigenvalues, $r=-\tfrac14\log t$, and an injectivity length $L$;
+    subleading eigenvalues, $r=-\log t$, and an injectivity length $L$;
     put $s=L+2$, $a=1/r$, $b=\max(\log K,0)/r+4s+1$ with $K$ the constant of
-    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/4$, and
+    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/2$, and
     $q=\lceil a\log(N/\varepsilon)+b\rceil\ge4s$. If $q\le N$, write
     $N=(M-1)q+q'$ with $q\le q'<2q$; the state of these blocks with the pair of
     the fixed point has error at most $KMe^{-rq}\le\varepsilon$ by

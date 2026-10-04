@@ -1,0 +1,57 @@
+\begin{lemma}[Right invariance of a shared internal regular bond]%
+    \label{lem:peps_regular_region_bond_right_invariance}
+    \lean{TNLean.PEPS.regularRegionHalfEdgeRightMul,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_halfEdgeRightMul,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix_halfEdgeRightMul,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix_internalEdgeRightMul,
+        TNLean.PEPS.regionPhysicalMap_halfEdgeRightMul_of_mem_regularGroundSpace,
+        TNLean.PEPS.regionPhysicalMap_slice_halfEdgeRightMul_of_parent_annihilates}
+    \leanok
+    \uses{def:peps_region_ground_space, def:peps_region_parent_interaction}
+    Consider the actual canonical regular contraction on any
+    finite graph region $R$. Choose group elements $r_e$ on its
+    bonds, with $r_e=1$ on every crossing bond. Simultaneously
+    multiply both exposed half-edge labels of each internal bond
+    $e$ on the right by $r_e$. Every canonical regional column
+    remains unchanged. In particular this holds for one internal
+    bond, with both its endpoints in $R$. The same statement
+    holds in the presence of arbitrary inserted left group multiplications.
+
+    Let the physical coefficients be $a_v$, and suppose that local
+    inverse coefficients $F_v$ satisfy
+    \[
+        \sum_s F_v(\alpha,s)a_v(\eta,s)
+        =\Pi_v(\alpha,\eta),
+    \]
+    where $\Pi_v$ is the regular averaging projector. Then every
+    original regional ground vector exposed by the product of
+    the $F_v$ has this internal right invariance. Consequently,
+    every complementary slice of an arbitrary global vector
+    satisfying the original regional parent condition has this
+    invariance after exposure. Such inverse coefficients exist
+    for regular $G$-injective tensors.
+
+    No $G$-isometry, flat-connection reconstruction, or global
+    closure-span representation is assumed. This is a local
+    identity of the contractions appearing in the accessible
+    coordinate argument of \cite{Schuch2010PEPS}.
+    This auxiliary regular bond identity does not establish global closure spanning; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The regular averaging kernel is unchanged when its two
+    configurations are multiplied on the right, leg by leg, by
+    the same labels: common left translation commutes with these
+    right multiplications. Change each summed shared bond label
+    $\eta_e$ to $\eta_e r_e$. This is a bijection of the summation
+    variables. It fixes the crossing condition, and associativity
+    gives the same identity in the presence of inserted left
+    group multiplications. The canonical column equality follows.
+
+    Apply the stated inverse coefficients to an actual original
+    regional column. The result is its canonical column, so it
+    inherits the identity. Linearity extends it to the entire
+    original regional ground space. A regional parent constraint
+    places every complementary physical slice in that space.
+\end{proof}

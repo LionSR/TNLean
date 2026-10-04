@@ -1,0 +1,69 @@
+\begin{theorem}[Commuting closure labels and centralizers]%
+    \label{thm:peps_pair_centralizer_count}
+    \lean{TNLean.PEPS.card_commutingPairConjugacyClass_eq_sum_card_centralizer_of_representatives,
+        TNLean.PEPS.card_commutingPairConjugacyClass_eq_sum_card_centralizer,
+        TNLean.PEPS.commutingPairConjugacyClassEquivSigmaCentralizerOfRepresentatives,
+        TNLean.PEPS.commutingPairConjugacyClassEquivSigmaCentralizer,
+        TNLean.PEPS.centralizerConjClassEquivCommutingPairFiber}
+    \leanok
+    \uses{def:peps_pair_conjugacy}
+    Let $G$ be a group and choose a representative $g_C$ of each
+    conjugacy class $C$. Write $\operatorname{Cl}(H)$ for the set of
+    conjugacy classes of a group $H$. The simultaneous-conjugacy classes
+    of commuting pairs are in bijection with
+    $\coprod_{C\in\operatorname{Cl}(G)}\operatorname{Cl}(Z_G(g_C))$.
+    If $G$ is finite, their number is therefore
+    \begin{align}
+        K=\sum_{C\in\operatorname{Cl}(G)}
+        \bigl|\operatorname{Cl}(Z_G(g_C))\bigr|.
+        \label{eq:peps_pair_class_count}
+    \end{align}
+    This is the group-theoretic classification following
+    \cite[Theorem~5.9]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_pair_conjugacy_centralizer}
+    Assign to the class of $(g,h)$ the conjugacy class of $g$.
+    If $xgx^{-1}=g_C$, then $xhx^{-1}\in Z_G(g_C)$ and
+    $(g,h)$ is simultaneously conjugate to $(g_C,xhx^{-1})$.
+    For a fixed first element $g_C$, two such pairs have the same
+    simultaneous-conjugacy class exactly when their second elements
+    are conjugate in $Z_G(g_C)$, by
+    Theorem~\ref{thm:peps_pair_conjugacy_centralizer}.
+    This proves the stated bijection. Counting its disjoint components
+    gives (\ref{eq:peps_pair_class_count}).
+\end{proof}
+
+\begin{theorem}[Dimension of the commuting torus closure span]%
+    \label{thm:peps_g_injective_closure_dimension}
+    \lean{TNLean.PEPS.IsGInjective.finrank_span_torusGClosure_commuting_eq_sum_card_centralizer,
+        TNLean.PEPS.IsGInjective.finrank_span_torusGClosureClass_commuting_eq_sum_card_centralizer,
+        TNLean.PEPS.IsGInjective.finrank_span_torusGClosureClass_commuting_of_isSemiRegular,
+        TNLean.PEPS.range_torusGClosure_commuting_eq_range_torusGClosureClass}
+    \leanok
+    \uses{def:peps_semiregular, def:peps_g_injective,
+        def:peps_torus_g_closure, def:peps_pair_conjugacy}
+    Let $U$ be a semi-regular representation of a finite group $G$,
+    and let $A$ be $G$-injective for its four-leg virtual representation.
+    On a nonempty rectangular torus, let $\mathcal V_A$ be the span
+    of the vectors $\ket{\mathcal M(A\mid C)}$ indexed by commuting
+    simultaneous-conjugacy classes $C$. Then
+    \begin{align}
+        \dim\mathcal V_A
+        =\sum_{C\in\operatorname{Cl}(G)}
+        \bigl|\operatorname{Cl}(Z_G(g_C))\bigr|.
+    \end{align}
+    This is the dimension of the commuting closure span appearing in
+    \cite[Theorem~5.9]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_semiregular_g_injective_closure_independence,
+        thm:peps_pair_centralizer_count}
+    The class-labelled vectors are linearly independent by
+    Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence}.
+    They form a basis of their span, whose dimension is therefore
+    the number of commuting pair classes. Apply
+    Theorem~\ref{thm:peps_pair_centralizer_count}.
+\end{proof}

@@ -1,0 +1,43 @@
+\begin{theorem}[Unitary equivalence of closure states on two width-one stripes]%
+    \label{thm:peps_torus_stripe_local_equivalence}
+    \lean{TNLean.PEPS.mem_compl_torusStripeInterior_iff_coordinate_zero,
+        TNLean.PEPS.IsGIsometric.torusClosureSuperpositionCut_stripe_local_equivalence}
+    \leanok
+    \uses{def:peps_normalized_pure_cut_matrix}
+    Consider an original regular $G$-isometric tensor on a native
+    torus whose two periods are at least three. Let $R$ be the
+    nonwrapping rectangle of sites with both coordinates nonzero.
+    Its complement is the union of two width-one stripes wrapping
+    around the torus:
+    \begin{align}
+        S & =\{(x,y):x=0\lor y=0\}.
+        \label{eq:peps_width_one_stripes}
+    \end{align}
+    For any two nonzero coherent superpositions of commuting torus
+    closures, let $A$ and $B$ be their physical coefficient matrices
+    across $R\mid S$. There exists a unitary $U$ on the physical
+    factor of $S$ satisfying
+    \begin{align}
+        \widehat B & =\widehat A U^{\mathsf T}.
+        \label{eq:peps_stripe_physical_unitary}
+    \end{align}
+    Thus $U$ transforms the first normalized physical state into the
+    second while acting only on the stripes
+    (\ref{eq:peps_width_one_stripes}). This is the closure-vector
+    specialization of \cite[Theorem~6.7]{Schuch2010PEPS} to regular
+    native tori with periods at least three. Identification of the
+    closure span with a parent-Hamiltonian ground space is separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_rectangle_realization,
+        thm:peps_torus_rectangle_cut_connectivity,
+        thm:peps_torus_simply_connected_physical_local_equivalence}
+    The coordinate-value bounds identify $R$ with the rectangle
+    starting at $(1,1)$ with side lengths one less than the two periods.
+    Its induced graph is connected, and
+    \ref{thm:peps_torus_rectangle_realization} gives simple
+    connectedness of its actual closed-cell realization.
+    Apply \ref{thm:peps_torus_simply_connected_physical_local_equivalence}
+    to obtain (\ref{eq:peps_stripe_physical_unitary}).
+\end{proof}

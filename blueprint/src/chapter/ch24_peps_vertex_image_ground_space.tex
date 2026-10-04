@@ -1,0 +1,71 @@
+\section{The common one-site image space}%
+\label{sec:peps_vertex_image_ground_space}
+
+\begin{definition}[One-site image conditions]%
+    \label{def:peps_vertex_image_ground_space}
+    \lean{TNLean.PEPS.oneVertexPhysicalFamily,
+        TNLean.PEPS.vertexPhysicalSlice,
+        TNLean.PEPS.vertexImageGroundSpace,
+        TNLean.PEPS.mem_vertexImageGroundSpace_iff,
+        TNLean.PEPS.globalVertexTensorMap,
+        TNLean.PEPS.globalVertexLeftInverse,
+        TNLean.PEPS.vertexImageProjection}
+    \leanok
+    \uses{def:peps_injective_vertex_coordinates}
+    Let $A$ be a tensor on a finite graph, with physical space
+    $\mathcal P_v=\mathbb C^d$ at each vertex and independent virtual
+    half-edge space $\mathcal V_v$ at that vertex.
+    Write $A_v:\mathcal V_v\to\mathcal P_v$ for its site map and
+    $T_A=\bigotimes_v A_v$ for their product.
+    The common one-site image space $\mathcal K_A$ consists of those
+    physical vectors whose one-site slices lie in
+    $\operatorname{ran}A_v$, for every vertex $v$ and every choice of
+    physical indices at all other vertices.
+    If every $A_v$ is injective, choose left inverses $L_v$ and set
+    $P_v=A_vL_v$. These retractions need not be orthogonal.
+    This is the independent site-image condition preceding the
+    virtual bond constraints in
+    \cite[Section~IV.C.1]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[Intersection of the one-site images]%
+    \label{thm:peps_vertex_image_ground_space}
+    \lean{TNLean.PEPS.vertexImageProjection_mulVec_eq_self_iff,
+        TNLean.PEPS.globalVertexTensorMap_leftInverse_eq_self_of_mem,
+        TNLean.PEPS.globalVertexTensorMap_mem_vertexImageGroundSpace,
+        TNLean.PEPS.vertexImageGroundSpace_eq_range_globalVertexTensorMap,
+        TNLean.PEPS.vertexImageGroundSpace_map_fullRegionPhysicalEquiv,
+        TNLean.PEPS.globalPhysicalMap_one,
+        TNLean.PEPS.globalPhysicalMap_comp,
+        TNLean.PEPS.globalPhysicalMap_oneVertex_apply,
+        TNLean.PEPS.globalPhysicalMap_fixed_of_oneVertex_fixed,
+        TNLean.PEPS.vertexPhysicalSlice_globalPhysicalMap_oneVertex,
+        TNLean.PEPS.globalPhysicalMap_vertexImageProjection,
+        TNLean.PEPS.oneVertexPhysicalMap_vertexImageProjection_eq_self_of_mem,
+        TNLean.PEPS.oneVertexPhysicalMap_comp_globalVertexTensorMap}
+    \leanok
+    \uses{def:peps_vertex_image_ground_space}
+    If every site map $A_v$ is injective, then
+    \[
+        \mathcal K_A=\operatorname{ran}T_A.
+    \]
+    More precisely, every $\psi\in\mathcal K_A$ satisfies
+    \[
+        \psi=T_A\Bigl(\bigotimes_v L_v\Bigr)\psi.
+    \]
+    This assertion holds for an arbitrary finite graph. It identifies
+    the product site image, before imposing virtual bond constraints;
+    it does not assert uniqueness of a PEPS parent ground state.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_injective_vertex_reconstruction}
+    For each $v$, the map $P_v=A_vL_v$ fixes exactly
+    $\operatorname{ran}A_v$. Therefore its action at the vertex $v$,
+    with the identity at all other vertices, fixes every vector in
+    $\mathcal K_A$. Multiplying these commuting actions gives
+    $\bigotimes_vP_v=T_A(\bigotimes_vL_v)$, proving the reconstruction
+    identity and the inclusion $\mathcal K_A\subseteq\operatorname{ran}T_A$.
+    Conversely, $P_vA_v=A_v$ shows that every vector in
+    $\operatorname{ran}T_A$ satisfies every one-site image condition.
+\end{proof}

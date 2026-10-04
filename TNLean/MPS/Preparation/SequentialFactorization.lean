@@ -34,6 +34,10 @@ of the source, `Q_p` is the isometry `V_{q-p}` of eq. (14) and `b_p = D'_{q+1-p}
 * `MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` — the factorization
   of the isometric factor of a blocked tensor injective on a set of bond pairs, on the inputs of
   that set.
+* `MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary` — the factorization of the
+  partial isometry of any blocked tensor, with no injectivity, after a unitary `T` that puts the
+  range of the support projector on the first `r` inputs (the footnote to "The sequential-RG
+  circuit", with `P⁻¹` the pseudo-inverse).
 * `MPSPreparation.exists_isometric_chain_polarIsoMatrix` — the isometric factor of
   the polar decomposition of an injective blocked tensor of a chain of site-dependent
   tensors factors into `q` isometries with bonds `b₁, …, b_q` at most `D²`,
@@ -47,12 +51,16 @@ tensors are then injective only on the rectangle of their bonds, and
 factor on those inputs.
 
 **Scope restriction (positive block length):** the hypothesis `0 < q` of
-`MPSPreparation.exists_isometric_chain_polarIsoMatrix` and
-`MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` is absent from
-arXiv:2307.01696, eqs. (13)–(15), which state no lower bound on the block length. The empty
-block `q = 0` is injective, or injective on a set `S` of bond pairs, only for `D ≤ 1`; the
-conclusion holds trivially at `D = 1` and fails at `D = 0`, where `b₀ = 1` and `b₀ = D²`, or
-`b₀ = |S| = 0`, name the same bond. Documented in
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix`,
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` and
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary` is absent from
+arXiv:2307.01696, eqs. (13)–(15) and the footnote to "The sequential-RG circuit", which state
+no lower bound on the block length. The empty block `q = 0` is injective, or injective on a set
+`S` of bond pairs, only for `D ≤ 1`; the conclusion holds trivially at `D = 1` and fails at
+`D = 0`, where `b₀ = 1` and `b₀ = D²`, or `b₀ = |S| = 0`, name the same bond. Without
+injectivity, the conclusion fails at `q = 0` for every `D`: `r = 0` contradicts `b₀ = 1` when
+`D = 0`, and for `D ≥ 1` it asks the unit-modulus scalar `V T |0⟩` to equal `1`, which a sign
+on the first column of `T` breaks. Documented in
 `docs/paper-gaps/mswc24_sequential_factorization_positive_block_length.tex`.
 
 ## References
@@ -117,12 +125,8 @@ theorem sum_pairJoin_mul_pairEmbed (X : Matrix (Fin D) (Fin D) ℂ) (b : Fin (D 
 private theorem star_dotProduct_of_isSupportedBelow_one {D' : ℕ} (hD : 0 < D')
     {u v : Fin D' → ℂ} (hu : IsSupportedBelow 1 u) :
     star u ⬝ᵥ v = star (u ⟨0, hD⟩) * v ⟨0, hD⟩ := by
-  rw [dotProduct, Finset.sum_eq_single ⟨0, hD⟩]
-  · rfl
-  · intro α _ hα
-    have : 1 ≤ α.val := Nat.one_le_iff_ne_zero.mpr fun h => hα (Fin.ext h)
-    simp [hu α this]
-  · simp
+  conv_lhs => rw [eq_smul_basisVecZero_of_isSupportedBelow_one hD hu]
+  simp [star_smul, basisVecZero_dotProduct]
 
 /-- **Sequential factorization of a matrix product map isometric on its first inputs.** Let
 `V : ℂ^{D²} → (ℂ^d)^{⊗(n+1)}` have matrix elements
@@ -162,18 +166,19 @@ theorem exists_isometric_chain_of_eq_mul_of_le {n : ℕ} (A : MPSChainTensor d D
     if x.val < r then G a x else 0 with hG'
   -- The open-boundary product of eq. (13), swept from the left (eq. (14)).
   obtain ⟨b, Q, R, hb0, hbD, -, hrow, hcol, hisoQ, hR, hprod⟩ :=
-    exists_isometric_chain_mul (n + 1) 1 hDD (rowMat (pairJoin D))
-      (isRowSupportedBelow_rowMat _) fun p i => pairEmbed D (A p i)
+    exists_isometric_chain_mul (n + 1) 1 hDD (rowMat hDD (pairJoin D))
+      (isRowSupportedBelow_rowMat hDD _) fun p i => pairEmbed D (A p i)
   set C := R * G' with hCdef
   have hC : IsRowSupportedBelow (b (Fin.last (n + 1))) C := hR.mul G'
   have hCr : ∀ γ x, r ≤ x.val → C γ x = 0 := fun γ x hx => by
     simp [hCdef, hG', Matrix.mul_apply, show ¬x.val < r by omega]
   have hjoin : ∀ (σ : Fin (n + 1) → Fin d) a,
-      (rowMat (pairJoin D) * eval (fun p i => pairEmbed D (A p i)) σ) ⟨0, hDD⟩ a =
+      (rowMat hDD (pairJoin D) * eval (fun p i => pairEmbed D (A p i)) σ) ⟨0, hDD⟩ a =
       eval A σ (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 :=
     fun σ a => by
       rw [eval_pairEmbed, Matrix.mul_apply]
-      exact (Finset.sum_congr rfl fun j _ => by simp [rowMat]).trans
+      exact (Finset.sum_congr rfl fun j _ => by
+        simp [rowMat, basisVecZero, Matrix.vecMulVec_apply]).trans
         (sum_pairJoin_mul_pairEmbed _ a)
   have hVC : ∀ σ x, x.val < r → V σ x = (eval Q σ * C) ⟨0, hDD⟩ x := fun σ x hx => by
     rw [hCdef, ← Matrix.mul_assoc, ← hprod σ, hV σ x hx, Matrix.mul_apply]
@@ -394,5 +399,71 @@ theorem exists_isometric_chain_polarIsoMatrix {q : ℕ} (A : MPSChainTensor d D 
       (fun x => by simp [hc, x.isLt])
   exact ⟨b, Q, h0, hl.trans hc, hb, hrow, hcol, hiso, fun σ x => by
     simpa using hV σ x (by rw [hc]; exact x.isLt)⟩
+
+/-- **Sequential factorization of the partial isometry of any blocked tensor.** Let
+`A₀, …, A_{q-1}` be tensors with bond dimension `D`, one on each site, `q ≥ 1`, with no
+injectivity assumed, and let `B = V P` be the polar decomposition of the blocked tensor, with
+`V†V = Π`. Let `T` be a unitary on `ℂ^{D²}` whose first `r` columns span the range of `Π`:
+`Π T = T diag(1, …, 1, 0, …, 0)` with `r` ones. Then `V T` vanishes on the inputs `x ≥ r`, and
+there are bond dimensions `b₀ = 1`, `b_q = r` and `b₁, …, b_q ≤ D²`, and site matrices `Q_p`,
+vanishing outside the `b_p × b_{p+1}` block and isometric on it, such that
+`⟨σ| V T |x⟩ = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0x}` for every input `x < r`.
+
+arXiv:2307.01696, footnote to the paragraph "The sequential-RG circuit": the derivation of
+eqs. (13)–(15) "remains valid also for non-injective tensors `B`. In that case `P⁻¹` is
+understood as pseudo-inverse." Here `V = B G` for a matrix `G` on the bond pairs
+(`MPSTensor.exists_polarIsoMatrix_eq_sum`), and the first `r` columns of `V T` are orthonormal
+because `(V T)† (V T) = T† Π T` is the diagonal projector. -/
+theorem exists_isometric_chain_polarIsoMatrix_mul_unitary {q : ℕ} (A : MPSChainTensor d D q)
+    (hq : 0 < q) {r : ℕ} (hr : r ≤ D * D) {T : Matrix (Fin (D * D)) (Fin (D * D)) ℂ}
+    (hT : T ∈ unitary (Matrix (Fin (D * D)) (Fin (D * D)) ℂ))
+    (hET : MPSTensor.polarSupportMatrix (MPSChainTensor.blockTensor A) * T =
+      T * Matrix.diagonal fun y => if y.val < r then 1 else 0) :
+    ∃ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
+      b 0 = 1 ∧ b (Fin.last q) = r ∧ (∀ p : Fin q, b p.succ ≤ D * D) ∧
+      (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
+      (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
+      (∀ (σ : Fin q → Fin d) (x : Fin (D * D)), x.val < r →
+        (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * T)
+            ((decodeBlockEquiv d q).symm σ) x = eval Q σ ⟨0, x.pos⟩ x) ∧
+      ∀ (σ : Fin q → Fin d) (x : Fin (D * D)), r ≤ x.val →
+        (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * T)
+          ((decodeBlockEquiv d q).symm σ) x = 0 := by
+  classical
+  obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
+  set B := MPSChainTensor.blockTensor A with hBdef
+  set V := MPSTensor.polarIsoMatrix B with hV
+  set dec := decodeBlockEquiv d (n + 1)
+  have hgram : (V * T)ᴴ * (V * T) = Matrix.diagonal fun y => if y.val < r then 1 else 0 := by
+    rw [Matrix.conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ,
+      MPSTensor.conjTranspose_polarIsoMatrix_mul_polarIsoMatrix, hET, ← Matrix.mul_assoc,
+      ← Matrix.star_eq_conjTranspose, Unitary.star_mul_self_of_mem hT, Matrix.one_mul]
+  have hcol : ∀ x y, ∑ σ, star ((V * T) (dec.symm σ) x) * (V * T) (dec.symm σ) y =
+      if x = y then (if x.val < r then 1 else 0) else 0 := fun x y => by
+    have h := congrFun (congrFun hgram x) y
+    rw [Matrix.mul_apply, ← dec.symm.sum_comp, Matrix.diagonal_apply] at h
+    simpa only [Matrix.conjTranspose_apply] using h
+  obtain ⟨G₀, hG₀⟩ := MPSTensor.exists_polarIsoMatrix_eq_sum B
+  obtain ⟨b, Q, hb0, hbl, hb, hrow, hcolQ, hiso, hVQ⟩ :=
+    exists_isometric_chain_of_eq_mul_of_le A hr (G₀ * T) (fun σ y => (V * T) (dec.symm σ) y)
+      (fun σ y _ => by
+        simp only [Matrix.mul_apply, Finset.mul_sum]
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun j _ => ?_
+        rw [hV, hG₀, Finset.sum_mul]
+        refine Finset.sum_congr rfl fun a _ => ?_
+        rw [hBdef, MPSChainTensor.blockTensor_decodeBlockEquiv_symm, mul_assoc])
+      (fun x y hx _ => by
+        rw [hcol x y]
+        split_ifs <;> simp_all)
+  refine ⟨b, Q, hb0, hbl, hb, hrow, hcolQ, hiso, hVQ, fun σ x hx => ?_⟩
+  have h := hcol x x
+  simp only [↓reduceIte, show ¬ x.val < r by omega] at h
+  have hz := (Finset.sum_eq_zero_iff_of_nonneg fun σ _ => star_mul_self_nonneg
+    ((V * T) (dec.symm σ) x)).mp h σ (Finset.mem_univ _)
+  rcases mul_eq_zero.mp hz with h' | h'
+  · exact star_eq_zero.mp h'
+  · exact h'
 
 end MPSPreparation
