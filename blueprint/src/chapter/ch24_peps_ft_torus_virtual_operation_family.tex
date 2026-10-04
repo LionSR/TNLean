@@ -608,6 +608,7 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_region_partial_state_same_state}
     The blocked tensor map sends a coefficient vector to the corresponding
     linear combination of the tensors $T_{A,R}(\mu)$. Inverting the blocked
     tensor on the complementary region identifies this image with the
@@ -659,7 +660,8 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_regionInsertedCoeff_injective}
+    \uses{thm:peps_regionInsertedCoeff_injective,
+        thm:peps_deformedRegionState_bondInsertedRegionInsert}
     Contract the two equal boundary-indexed tensors with the complementary
     blocked tensor. Their inserted coefficients coincide, so the inserted
     matrices coincide.
@@ -732,7 +734,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_cross_tensor_virtual_operation_of_staircase,
         thm:peps_global_left_relation_insert, thm:peps_staircase_left_realization,
-        thm:peps_physical_operator_same_state_transfer}
+        thm:peps_physical_operator_same_state_transfer,
+        thm:peps_deformedRegionState_bondInsertedRegionInsert}
     The globally quantified left end relation gives the boundary insertion.
     Apply the same-state physical-operator identity to $O_1^A(X)$ and
     substitute its two insertion realizations.
