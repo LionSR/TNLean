@@ -34,7 +34,8 @@ depending only on `d` and `D`, and its error against `|φ_N⟩` is exactly `ε(�
 partial isometry and the block unitaries implement isometric extensions of it; that case, and
 the preparation under the approximation hypothesis, are in
 `TNLean.MPS.Preparation.PartialIsometryPreparation`. The source states a total depth
-`O(log(N/ε))`; the bound `C L` gives this depth when `L = O(log(N/ε))`. The choice of block lengths for a requested accuracy is not formalized.
+`O(log(N/ε))`; the bound `C L` gives this depth when `L = O(log(N/ε))`. The choice of block
+lengths for a requested accuracy is not formalized.
 `TNLean.MPS.Preparation.InhomogeneousSequence` proves depth `O(L_N)` with errors tending to
 zero for sequences with a positive logarithmic lower bound on block lengths, preparing the
 finitely many short rings exactly.

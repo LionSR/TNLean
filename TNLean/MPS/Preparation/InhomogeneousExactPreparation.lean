@@ -56,7 +56,8 @@ theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
   obtain ⟨K, hK⟩ := exists_isPreparedInDepth_of_norm_eq_one hd (3 * D)
   refine ⟨max C K, fun N _ A hA => ?_⟩
   have hunit : ‖(‖chainState A‖ : ℂ)⁻¹ • chainState A‖ = 1 := by
-    simpa only [Complex.ofReal_inv] using (norm_smul_inv_norm (𝕜 := ℂ) hA)
+    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+      inv_mul_cancel₀ (norm_ne_zero_iff.mpr hA)]
   by_cases hN : 3 * D ≤ N
   · have hsum : ∑ _ : Fin 1, N = N := by simp
     let Y : MPVSpace (D * D) 1 := (‖chainState A‖ : ℂ)⁻¹ • chainPosState A hsum
@@ -89,7 +90,9 @@ theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
     exact ⟨C * N, Nat.mul_le_mul_right N (le_max_left C K), hprep⟩
   · by_cases hN1 : N = 1
     · subst N
-      exact ⟨0, Nat.zero_le _, isPreparedInDepth_zero_one_site _⟩
+      refine ⟨0, Nat.zero_le _, ?_⟩
+      exact isPreparedInDepth_zero_one_site (d := d)
+        (fun s => ((‖chainState A‖ : ℂ)⁻¹ • chainState A) s)
     · refine ⟨K, ?_, hK N (by have := NeZero.ne N; omega) (by omega) _ hunit⟩
       exact (le_max_right C K).trans
         (Nat.le_mul_of_pos_right _ (Nat.pos_of_ne_zero (NeZero.ne N)))

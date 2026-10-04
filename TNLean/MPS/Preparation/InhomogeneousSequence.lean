@@ -95,12 +95,13 @@ theorem exists_isPreparedInDepth_inhomogeneous_of_log_lower (d D : ℕ) (hd : 0 
       rw [state_eq_chainState, norm_chainState_eq _ hN]
       exact norm_ne_zero_iff.mpr hne
     have hunit : ‖(‖state A‖ : ℂ)⁻¹ • state A‖ = 1 := by
-      simpa only [Complex.ofReal_inv] using
-        (norm_smul_inv_norm (𝕜 := ℂ) (norm_ne_zero_iff.mp hn))
+      rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+        inv_mul_cancel₀ hn]
     have hδ0 : 0 ≤ δ := by
       have hu : ‖(‖chainPosState (zeroPad A) hN‖ : ℂ)⁻¹ •
           chainPosState (zeroPad A) hN‖ = 1 := by
-        simpa only [Complex.ofReal_inv] using (norm_smul_inv_norm (𝕜 := ℂ) hne)
+        rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+          inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)]
       have hle := norm_inner_le_norm (𝕜 := ℂ) (pairFamilyVector (padPairs A ℓ ω))
         ((‖chainPosState (zeroPad A) hN‖ : ℂ)⁻¹ • chainPosState (zeroPad A) hN)
       rw [hu, norm_pairFamilyVector (sum_star_padPairs_mul_self A ℓ hω), mul_one] at hle
@@ -111,7 +112,9 @@ theorem exists_isPreparedInDepth_inhomogeneous_of_log_lower (d D : ℕ) (hd : 0 
       simpa using hδ0
     by_cases hN1 : N = 1
     · subst N
-      exact ⟨_, 0, hunit, Nat.zero_le _, isPreparedInDepth_zero_one_site _, herr, fun _ => rfl⟩
+      refine ⟨_, 0, hunit, Nat.zero_le _, ?_, herr, fun _ => rfl⟩
+      exact isPreparedInDepth_zero_one_site (d := d)
+        (fun s => ((‖state A‖ : ℂ)⁻¹ • state A) s)
     · refine ⟨_, K, hunit, ?_, hK N (by have := NeZero.ne N; omega) hshort.le _ hunit,
         herr, fun _ => rfl⟩
       exact (le_max_right C K).trans (Nat.le_mul_of_pos_right _ hLpos)
@@ -164,8 +167,8 @@ theorem exists_isPreparedInDepth_inhomogeneous_sequence (d D : ℕ) (hd : 0 < d)
     rw [state_eq_chainState, norm_chainState_eq _ (hN n)]
     exact norm_ne_zero_iff.mpr (happrox n).1
   have hu : ‖(‖state (A n)‖ : ℂ)⁻¹ • state (A n)‖ = 1 := by
-    simpa only [Complex.ofReal_inv] using
-      (norm_smul_inv_norm (𝕜 := ℂ) (norm_ne_zero_iff.mp hn))
+    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+      inv_mul_cancel₀ hn]
   have hle := norm_inner_le_norm (𝕜 := ℂ) (ψ n)
     ((‖state (A n)‖ : ℂ)⁻¹ • state (A n))
   rw [(hψ n).1, hu, mul_one] at hle
