@@ -290,6 +290,37 @@
     direct sum of tensor products.
 \end{proof}
 
+\begin{theorem}[Periodic commuting products under an isometric inclusion]
+    \label{thm:mpdo_isometric_commuting_bond_product}
+    \lean{MPOTensor.isometricBondProduct_left_supported,
+        MPOTensor.singleKrausMap_bondProduct_of_isometry}
+    \leanok
+    Let $E:H\to H'$ be an isometry and $B$ a Hermitian two-site
+    matrix. Put $\widetilde B=(E\otimes E)B(E\otimes E)^\dagger$.
+    Suppose its periodic translates commute on a ring of length $N\ge2$.
+    Their complete product is supported on the included one-site
+    space at every site, and
+    \begin{align}
+        E^{\otimes N}\Bigl(\prod_{n=0}^{N-1}B_{n,n+1}\Bigr)
+        (E^{\otimes N})^\dagger
+        =\prod_{n=0}^{N-1}\widetilde B_{n,n+1}.
+        \notag
+    \end{align}
+    This is the isometric product identity used in the physical-support
+    passage of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each lifted bond is supported on the included physical space at
+    both ends. Commutation permits that factor to be placed first in
+    the full product, so the product has the support constraint at
+    every site. Isometric conjugation preserves nonempty products.
+    Conjugating one original translate gives its lifted translate
+    multiplied by the full included-space projection. That projection
+    commutes with each lifted Hermitian translate and acts as the
+    identity on their complete product, which gives the formula.
+\end{proof}
+
 % **Local fix (proportionality scalar):** The converse at source lines
 % 1603--1605 invokes the coefficient-free equation sigmaNK2 after assuming
 % only proportionality to the commuting-bond product.  The statement below

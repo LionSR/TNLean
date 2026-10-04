@@ -22,12 +22,17 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_g_injective_invariants_range,
+        thm:peps_regular_boundary_invariants,
+        thm:peps_regular_boundary_density}
     Write $P_G$ for the regular boundary averaging projector.
     There is a linear map $L$ with $LS=P_G$. Since
-    $P_G^{\mathsf T}=P_G$ and $TP_G=T$, one has
-    $CL^{\mathsf T}=T$. Thus $\operatorname{im}T\subseteq
+    $P_G^{\mathsf T}=P_G$
+    (Theorem~\ref{thm:peps_regular_boundary_density}) and $TP_G=T$,
+    one has $CL^{\mathsf T}=T$. Thus $\operatorname{im}T\subseteq
         \operatorname{im}C$, while $C=TS^{\mathsf T}$ gives the reverse
-    inclusion. The rank follows from the dimension of the
-    invariant boundary space. Applying the range identity to
-    each factorization proves the comparison assertion.
+    inclusion. The rank follows from the dimension $|G|^{b-1}$ of the
+    invariant boundary space
+    (Theorem~\ref{thm:peps_regular_boundary_invariants}). Applying the
+    range identity to each factorization proves the comparison assertion.
 \end{proof}

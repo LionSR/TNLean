@@ -22,11 +22,13 @@ import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.CircuitEquivalence
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
+import TNLean.MPS.Preparation.CutCoefficientRank
 import TNLean.MPS.Preparation.CutRank
 import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.DepthLowerBound
+import TNLean.MPS.Preparation.DepthLowerBoundConstant
 import TNLean.MPS.Preparation.DepthLowerBoundCore
 import TNLean.MPS.Preparation.DepthLowerBoundNormal
 import TNLean.MPS.Preparation.DepthUpperBound
@@ -41,6 +43,12 @@ import TNLean.MPS.Preparation.LogLogDepthEveryLength
 import TNLean.MPS.Preparation.LogLogDepthPreparation
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.MeasurementPreparation
+import TNLean.MPS.Preparation.MinimalCutRepresentation
+import TNLean.MPS.Preparation.MinimalCutRepresentationBases
+import TNLean.MPS.Preparation.MinimalCutRepresentationCuts
+import TNLean.MPS.Preparation.MinimalCutRepresentationFactorization
+import TNLean.MPS.Preparation.MinimalCutRepresentationIntervals
+import TNLean.MPS.Preparation.MinimalCutRepresentationPadding
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.NonNormalMeasurementPreparation
@@ -65,6 +73,7 @@ import TNLean.MPS.Preparation.PolarCompression
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
+import TNLean.MPS.Preparation.QCccClassification
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
 import TNLean.MPS.Preparation.RelativePositivePart
@@ -84,6 +93,7 @@ import TNLean.MPS.Preparation.SequentialResources
 import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.ShortChainPreparation
 import TNLean.MPS.Preparation.Staircase
+import TNLean.MPS.Preparation.StaircasePreparation
 import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization
