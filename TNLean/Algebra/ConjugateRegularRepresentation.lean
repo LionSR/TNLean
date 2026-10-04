@@ -65,7 +65,7 @@ theorem conjugateLeftRegular_mul (α : G →* SymmetryParity) (ω : ScalarCocycl
   have hk := congrArg (fun z : Units ℂ => (z : ℂ)) (hω g h k)
   change (ω (g * h) k : ℂ) * (ω g h : ℂ) =
     parityConj (α g) (ω h k : ℂ) * (ω g (h * k) : ℂ) at hk
-  simpa only [Equiv.mulLeft_apply, Pi.smul_apply, smul_eq_mul, mul_comm] using hk.symm
+  simpa only [Equiv.coe_mulLeft, Pi.smul_apply, smul_eq_mul, mul_comm] using hk.symm
 
 /-- Unit-modulus phases make every regular matrix unitary. -/
 theorem conjugateLeftRegular_mem_unitaryGroup (ω : ScalarCocycle G)
