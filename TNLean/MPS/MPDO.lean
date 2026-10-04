@@ -75,6 +75,7 @@ import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
+import TNLean.MPS.MPDO.Boundary
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVBlockingChannelAmbientCounterexample
@@ -207,6 +208,7 @@ import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.LocalPurificationAreaLaw
 import TNLean.MPS.MPDO.LocalPurificationRFP
+import TNLean.MPS.MPDO.MatrixUnitRegister
 import TNLean.MPS.MPDO.MutualInfoAreaLaw
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.MutualInfoMonotone

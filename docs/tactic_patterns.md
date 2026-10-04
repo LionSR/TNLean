@@ -2856,7 +2856,42 @@ abstracted — record why, so it is not re-proposed).
   Isometric projection transport additionally uses
   `LinearIsometry.starProjection_map_eq_comp_adjoint`.
 
+### adjoint transfer along a stationary support — promoted
+
+- **Pattern:** stationary support invariance makes expansion of a compressed
+  matrix intertwine the two adjoint transfer maps.
+- **Helper:** `MPSTensor.adjointMap_compression_lift` in
+  `TNLean/MPS/Symmetry/StationarySupportedDensityPhaseInvariance.lean`.
+- **Call sites:** normalized stationary uniqueness in that module, and
+  adjoint eigenvector lifting in
+  `TNLean/MPS/Symmetry/StationarySupportPreparation.lean` (2026-10-03).
+- **Decision:** expose the existing mathematical identity and remove its
+  duplicate proof. No new tactic or additional hypothesis is needed.
+
+### normalized adjoint fixed-matrix uniqueness — promoted
+
+- **Pattern:** trace-adjoint duality identifies a one-dimensional adjoint fixed space;
+  a trace-one fixed matrix spans it, and traces determine the scalar of any other
+  trace-one fixed matrix.
+- **Helper:** `MPSTensor.normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one`
+  in `MPS/Symmetry/StationarySupportLimitIdentification.lean`.
+- **Call sites:** stationary-support identification in that module and the convergent
+  sequence argument in `MPS/Symmetry/CompactSupportedSequenceClass.lean` (2026-10-03).
+- **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
+  comparison matrix is not needed.
+
 ## Candidates
+
+### boundary-weighted physical twists — candidate
+- **Pattern:** expand the trace of an ordered product of linear combinations, then match
+  each coefficient with the corresponding Kronecker-power matrix entry.
+- **Seen:** the ket and bra twists, with and without a boundary, in
+  `TNLean/MPS/Symmetry/MPDO/Vectorized.lean` (four occurrences in one file, 2026-10-02).
+- **Existing abstraction:** `Matrix.trace_prod_ofFn_sum_smul` and
+  `Matrix.trace_mul_prod_ofFn_sum_smul` perform the trace expansion. The remaining entry
+  arguments are short and distinguish left multiplication from right multiplication.
+- **Decision:** retain these proofs; no further abstraction is warranted before this
+  pattern occurs in another file.
 
 ### Exponential error converted to polynomial accuracy — candidate
 - **Pattern:** bound the number of blocks by the chain length, compare the
@@ -4547,6 +4582,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   the quotient by a simple fixed line would contain the common argument.
 - **Notes:** two occurrences across two modules; below the promotion threshold.
 
+### one-sided letter invariance from adjoint stationarity — candidate
+
+- **Pattern:** apply stationary support invariance to the adjoint Kraus
+  letters, then take adjoints to obtain
+  `P * B i * (1 - P) = 0` for the stationary support projection.
+- **Seen:** `prepare_stationary_support_compression` and
+  `exists_dim_eq_gaugePhase_of_unital_stationary_support_overlap`, in
+  `StationarySupportPreparation.lean` and
+  `StationarySupportLimitIdentification.lean` (2026-10-03).
+- **Abstraction:** a Kraus-family support identity for an adjoint fixed
+  positive matrix would contain the common argument.
+- **Notes:** two occurrences across two modules; below the promotion threshold.
+
 ## Retired
 
 ### block_words — retired
@@ -4642,3 +4690,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   coefficients when possible; a matrix conjugation linear equivalence may
   contain the common cancellation when a scalar action is also present.
 - **Notes:** both occurrences are in one module, below the promotion threshold.
+
+### positivity and unit bounds for the two-block square root — candidate
+- **Pattern:** use `u² + v² = 1` and the nonnegativity of the two square-root
+  coefficients to obtain `u ≤ 1` and `v ≤ 1`, then use `2uv = s`.
+- **Seen:** three occurrences in
+  `MPS/Preparation/OverlappingBlockCounterexample.lean`: the two normalized
+  state-error bounds and the polar matrix lower bound (2026-10-03).
+- **Abstraction:** a small conjunction lemma for these scalar inequalities
+  could replace the repeated derivations if a second file uses the pattern.
+- **Notes:** the occurrences currently lie in one file; the promotion
+  criterion of at least two files is not met.
