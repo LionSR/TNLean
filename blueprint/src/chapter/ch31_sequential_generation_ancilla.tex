@@ -1538,3 +1538,90 @@ representation, it is a general recipe for its sequential generation.
     Theorem~\ref{thm:seqanc_absorb_initial}, and interchange the outputs of
     every operation by Theorem~\ref{thm:seqanc_no_ancilla_joint}.
 \end{proof}
+
+\section{Preparation by a staircase of local gates}
+
+Encoding the bond index in the configurations of $k$ sites turns the scheme
+with an ancilla into a circuit on the chain itself: the ancilla becomes a
+register of $k$ sites that moves one site to the left at each step, as in the
+sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
+    circuit'']{Malz2024Preparation}.
+
+\begin{lemma}[The staircase of an isometric chain]
+    \label{lem:seqanc_staircase}
+    \lean{MPSPreparation.exists_step_unitary,
+        MPSPreparation.exists_staircase_isWindowProduct,
+        MPSPreparation.exists_staircase}
+    \leanok
+    \uses{def:qc_window_gate, def:seqanc_isometry_on, def:seqanc_support}
+    Let $d\ge1$, let $r\le n$, and let $e$ be an injective map from the bond
+    levels $\{0,\dots,D'-1\}$, $D'\ge1$, to the configurations of $r$ sites.
+    Let $Q_0,\dots,Q_{n-1}$ be square matrices of size $D'$ indexed by the
+    physical index, with bonds $b_0=1,b_1,\dots,b_n$, such that $Q_p^i$ vanishes
+    on the rows $\alpha\ge b_p$ and $Q_p$ is isometric on its first $b_{p+1}$
+    bond levels. Then there is a unitary $U$ on the open chain of $n$ sites,
+    a product of at most $n-r+1$ gates on windows of $r+1$ sites, with
+    \begin{align}
+        \bra{\sigma}U\ket{0\cdots0,e(x)} & =\bigl(Q^\sigma\bigr)_{0x}
+        \qquad\text{for every } x<b_n,
+        \label{eq:seqanc_staircase}
+    \end{align}
+    where $e(x)$ occupies the last $r$ sites. If $r\ge2$, there are $K_0,K_1$,
+    depending only on $d$ and $r$, such that $U$ is a product of at most
+    $K_0+(n-r)K_1$ gates on two neighbouring sites.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation,
+        lem:qc_window_products}
+    Induction on $n$. For $n=r$ the vectors $\sum_\sigma(Q^\sigma)_{0x}\ket\sigma$,
+    $x<b_r$, are orthonormal by the sweep identity
+    (\ref{eq:seqanc_sweep_inner_product}) and the support of $Q^\sigma$ in the
+    row $0$, so a unitary on the $r$ sites sends $\ket{e(x)}$ to them. For
+    the step from $n$ to $n+1$, the vectors
+    $\sum_{\alpha,i}(Q_n^i)_{\alpha x}\ket{e(\alpha),i}$, $x<b_{n+1}$, are
+    orthonormal, so a unitary on the last $r+1$ sites sends $\ket{0,e(x)}$ to
+    them. Applying it first and the unitary of the shorter chain on the first
+    $n$ sites afterwards gives~(\ref{eq:seqanc_staircase}) by the product rule
+    $Q^\sigma=Q^{\sigma_0\cdots\sigma_{n-1}}Q_n^{\sigma_n}$ and the row support
+    of $Q_n$. The count of two-site gates follows from
+    Lemma~\ref{lem:qc_window_products}.
+\end{proof}
+
+\begin{theorem}[Exact preparation by gates on $k+1$ consecutive sites]
+    \label{thm:seqanc_staircase_preparation}
+    \lean{MPSPreparation.exists_unitary_apply_zero,
+        MPSPreparation.exists_isWindowProduct_mulVec_eq_of_hasOBCRep,
+        MPSPreparation.exists_isPairProduct_mulVec_eq_of_hasOBCRep}
+    \leanok
+    \uses{def:seqanc_obc_rep, def:qc_window_gate}
+    Let $d\ge1$, and let $\psi$ be a unit vector of $(\C^d)^{\otimes N}$ with an
+    open-boundary representation of bond dimension $D\le d^k$. Then
+    $\psi=U\ket{0}^{\otimes N}$ for a unitary $U$ that is a product of at most
+    $N-k+2$ gates, each acting on at most $k+1$ consecutive sites of the open
+    chain (with $N-k$ read as $0$ when $N<k$). In particular, if $D\le d$ and
+    $N\ge2$, then $U$ is a product of at most $N+1$ gates on two neighbouring
+    sites. This is the sequential preparation
+    of~\cite{Schoen2005Sequential} and~\cite[paragraph ``The sequential-RG
+        circuit'']{Malz2024Preparation}, with each isometry embedded into a
+    unitary on consecutive sites.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_sweep, thm:seqanc_coeff_corner, thm:seqanc_norm,
+        lem:seqanc_staircase, lem:qc_window_products}
+    If $N\le k$, one unitary on all the sites with first column $\psi$
+    suffices. Otherwise Theorems~\ref{thm:seqanc_coeff_corner}
+    and~\ref{thm:seqanc_sweep} write $\psi(\sigma)=(Q^\sigma r')_0$ for an
+    isometric chain with $b_0=1$ and a vector $r'$ supported below $b_N$. The
+    row support gives $\sum_\sigma|\psi(\sigma)|^2=\sum_\sigma\|Q^\sigma
+        r'\|^2=\|r'\|^2$ by Theorem~\ref{thm:seqanc_norm}, so $r'$ is a unit
+    vector. Since $D\le d^k$, the bond levels are encoded injectively in the
+    configurations of $k$ sites by some $e$. A unitary on the last $k$ sites
+    sends $\ket{0\cdots0}$ to $\sum_x r'_x\ket{e(x)}$, and the staircase of
+    Lemma~\ref{lem:seqanc_staircase} with $r=k$, applied afterwards, gives
+    $\sum_x r'_x(Q^\sigma)_{0x}=\psi(\sigma)$ by~(\ref{eq:seqanc_staircase}).
+    These are $1+(N-k+1)$ gates. For $k=1$, gates on windows of two sites are
+    gates on neighbouring sites by Lemma~\ref{lem:qc_window_products}.
+\end{proof}
+

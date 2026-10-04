@@ -14,7 +14,7 @@
 
 For blocks of multiplicity one and weight one whose states overlap,
 Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected} bounds the error at the
-rate $e^{-\gamma q/\xi}$ with $\gamma<1/2$. The positive part $P$ converges to $P_\infty$
+rate $e^{-\gamma q/\xi}$ with $\gamma<1$. The positive part $P$ converges to $P_\infty$
 only to first order in the overlaps of distinct blocks, but the overlaps
 $z_j=\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}$ depend on $P$ only to second order
 around $P_\infty$, as in the normal case
@@ -145,8 +145,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
 
 \begin{lemma}[The norm of the target and one block of sites]
     \label{lem:ldp_overlapping_one_block_second_order}
-    \lean{MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le_of_lt_one,
-        MPSTensor.mpvOverlap_fixedPointTensor_embeddedBlockState,
+    \lean{MPSTensor.mpvOverlap_fixedPointTensor_embeddedBlockState,
         MPSTensor.norm_sq_sub_norm_inner_sq_div_le,
         MPSTensor.exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le}
     \leanok
@@ -170,10 +169,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
 \end{lemma}
 \begin{proof}
     \leanok
-    For part~(1), $\lVert\phi_N\rVert^2=\sum_{j,j'}\braket{\phi_N(A_j)}{\phi_N(A_{j'})}$; the
-    diagonal terms minus one are bounded by $K_je^{-\gamma N/\xi}$ by the normalization in
-    the proof of Theorem~\ref{thm:ldp_approximation_error_normal} at $\gamma/2$, and the
-    others by $K_{jj'}e^{-\gamma N/\xi}$ by Lemma~\ref{lem:ldp_mixed_transfer_decay}. Part~(2)
+    Part~(1) is Lemma~\ref{lem:ldp_overlapping_overlaps}(5). Part~(2)
     holds because the pairs of the $\tilde\rho_j$ are orthonormal and the overlap of products
     of pairs is the $N$-th power of the overlap of the pairs. Part~(3) is
     $c-2\operatorname{Re}z+\lvert z\rvert^2/c=\lvert c-z\rvert^2/c\ge0$ with $z=\braket Wu$.
@@ -204,7 +200,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
         lem:ldp_overlapping_overlaps_second_order,
         lem:ldp_overlapping_one_block_second_order, def:correlation_length}
     In the setting of Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected}, let
-    $0<\gamma<1$ in place of $0<\gamma<1/2$. There are constants $C,C'>0$ such that for every
+    $0<\gamma<1$. There are constants $C,C'>0$ such that for every
     block length $q$ and every $M\ge1$, with $N=qM$ and $y=Me^{-2\gamma q/\xi}$, which is
     $(N/q)e^{-2\gamma q/\xi}$ for $q\ge1$,
     \begin{align*}
@@ -222,8 +218,9 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     If $e^{-\gamma/\xi}\ge1$, if $q=0$, or if $Cy\ge1$, the bound holds because
     $\varepsilon\le1$; otherwise $0<\lvert\lambda_2\rvert<1$ and $q\ge1$. With
     $z_j=\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}$,
-    $s=\lvert\sum_jz_j\rvert/\sqrt b$ and $t=\lVert\phi_N(A)\rVert$, the proof of
-    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights} gives
+    $s=\lvert\sum_jz_j\rvert/\sqrt b$ and $t=\lVert\phi_N(A)\rVert$, by
+    Lemma~\ref{lem:ldp_overlapping_overlaps}(2) the unnormalized approximating vector has
+    inner product $\sum_jz_j/\sqrt b$ with $\ket{\phi_N(A)}$ and norm at most one, so
     $\varepsilon\le1-s/t$. If $t^2\ge1/2$ and $t^2-s^2\le X$ with $X\ge0$, then
     $1-s/t\le2X$: for $s<t$, $1-s/t\le1-s^2/t^2=(t^2-s^2)/t^2$. For $M=1$,
     Lemma~\ref{lem:ldp_overlapping_one_block_second_order}(4) gives $X=K'y$, and
