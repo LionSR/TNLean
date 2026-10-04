@@ -1,0 +1,19 @@
+\begin{theorem}[Equality of ordered edges from their endpoints]%
+    \label{thm:peps_cycle_assignment_support}
+    \lean{TNLean.PEPS.Edge.ofAdj_eq_iff_endpoints,
+        TNLean.PEPS.Edge.ofAdj_ne_of_endpoint_coordinates}
+    \leanok
+    Two edges of an ordered simple graph are equal precisely when their
+    unordered endpoint pairs agree. A coordinate that is constant on
+    the endpoints of one edge distinguishes it from an edge whose
+    endpoint has a different coordinate. These are auxiliary geometric
+    identities for the accessible regular blocks of
+    \cite[Section~6.3]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each edge is determined by its sorted endpoint pair. Equality of the
+    unordered pairs is therefore equivalent to equality of the ordered
+    edges. If an endpoint coordinate differs, neither possible matching
+    of the endpoint pairs can identify the two edges.
+\end{proof}

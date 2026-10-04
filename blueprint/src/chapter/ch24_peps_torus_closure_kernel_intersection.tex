@@ -1,0 +1,46 @@
+\begin{theorem}[Parent kernel within the full regular closure span]%
+    \label{thm:peps_regular_closure_kernel_intersection}
+    \lean{TNLean.PEPS.torusPlaquetteHolonomy_closure_corner_eq_one_iff_commute,
+        TNLean.PEPS.IsGInjective.exists_torusClosureCommutationFilter,
+        TNLean.PEPS.IsGInjective.inf_parentKernel_span_torusGClosureClass_eq_commutingSpan,
+        TNLean.PEPS.IsGInjective.finrank_parentKernel_inf_closureSpan}
+    \leanok
+    \uses{lem:peps_regular_region_holonomy_filter,
+        thm:peps_regular_closure_parent_constraint, thm:peps_pair_centralizer_count}
+    Let both native torus periods be at least three, and let the
+    tensor be regular $G$-injective. Let $\mathcal C$ be the span
+    of all native pair-conjugacy-class closure vectors, including
+    noncommuting labels, and let $\mathcal C_{\mathrm{comm}}$ be
+    the commuting closure span. Let $H$ be a finite sum of positive
+    original parent interactions on connected regions whose
+    actual closed-cell realizations are simply connected. Assume
+    that this family contains the plaquette at the intersection
+    of the two closure seams. Then
+    \[
+        \ker H\cap\mathcal C=\mathcal C_{\mathrm{comm}}.
+    \]
+    Its dimension is the number of commuting pair-conjugacy
+    classes, equivalently the centralizer sum.
+    This equality applies to arbitrary coherent sums of closure
+    vectors and requires no $G$-isometry. It proves the final
+    closure constraint within the finite closure span in the
+    regular case of \cite[Theorem~5.5]{Schuch2010PEPS}.
+    The separate assertion that every parent-kernel vector lies
+    in $\mathcal C$ remains unproved.
+    The restriction to the closure-span intersection and the remaining full-kernel identification are recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    At the seam-intersection plaquette, identity holonomy is
+    equivalent to commutativity of the two closure labels. The
+    identity-holonomy filter therefore fixes every commuting
+    closure and removes every noncommuting closure. Its image
+    of $\mathcal C$ is contained in
+    $\mathcal C_{\mathrm{comm}}$. Positivity of the parent sum
+    forces each of its local constraints separately, so every
+    vector in $\ker H$ is fixed by the corner filter. Such a
+    vector in $\mathcal C$ thus belongs to
+    $\mathcal C_{\mathrm{comm}}$. The reverse inclusion is the
+    local parent inclusion for commuting closures.
+\end{proof}
