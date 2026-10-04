@@ -1,0 +1,80 @@
+\subsection{Critical One-Particle Dynamics and the Thermodynamic Gap}
+\label{sec:pvbs_critical_gap}
+
+\begin{theorem}[Critical PVBS one-particle dynamics]
+    \label{thm:pvbs_one_particle_dynamics}
+    \lean{MPSTensor.localTermES_pvbs_critical_oneMagnon,
+        MPSTensor.parentHamiltonianES_pvbs_critical_oneMagnon,
+        MPSTensor.parentHamiltonianES_pvbs_critical_uniformParticle}
+    \leanok
+    \uses{lem:pvbs_local_projector,lem:pvbs_cyclic_geometry}
+    For site amplitudes $f_j$, write
+    $W(f)=\sum_j f_j|0\cdots1_j\cdots0\rangle$.
+    On the one-particle sector, the actual critical local term is one half
+    of identity minus exchange of its two sites. Thus for $N\ge2$,
+    \begin{align}
+        H_1W(f) & =W(Lf),
+                & (Lf)_j  & =f_j-\frac{f_{j+1}+f_{j-1}}2.
+        \label{eq:pvbs_one_particle_laplacian}
+    \end{align}
+    The indices are cyclic, with both oriented edges retained for $N=2$.
+    In particular, the constant-amplitude W vector is a zero-energy state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A one-particle configuration has no doubly occupied bond. The
+    $|11\rangle\langle11|$ part of the local projector therefore vanishes,
+    leaving the singlet exchange term. Sum the exchange differences using
+    the existing one-magnon permutation identity. Constant coefficients
+    have zero cycle Laplacian.
+\end{proof}
+
+\begin{theorem}[Positive low-energy Fourier magnons]
+    \label{thm:pvbs_critical_fourier_magnon}
+    \lean{MPSTensor.pvbs_fourierMagnon_ne_zero,
+        MPSTensor.parentHamiltonianES_pvbs_critical_fourierMagnon,
+        MPSTensor.pvbs_fourierMagnon_mem_orthogonal_kernel}
+    \leanok
+    \uses{thm:pvbs_one_particle_dynamics}
+    Set $f_j=\exp(2\pi\mathrm{i}j/N)$ and $\psi_N=W(f)$.
+    For every $N\ge2$, $\psi_N\ne0$ and
+    \begin{align}
+        H_1\psi_N & =\eta_N\psi_N,
+                  & \eta_N         & =1-\cos(2\pi/N)>0.
+        \label{eq:pvbs_critical_fourier_energy}
+    \end{align}
+    The vector $\psi_N$ is orthogonal to the whole kernel of $H_1$,
+    including the uniform W state, rather than only to the vacuum.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The existing cyclic Fourier identity gives $Lf=\eta_N f$.
+    The particle amplitude at the zero site is one, so $\psi_N$ is nonzero.
+    The eigenvalue is positive for $N\ge2$. For every ground vector $w$,
+    symmetry gives $0=\langle H_1w,\psi_N\rangle
+        =\eta_N\langle w,\psi_N\rangle$, proving the full-kernel orthogonality.
+\end{proof}
+
+\begin{theorem}[No uniform critical periodic gap]
+    \label{thm:pvbs_critical_gaplessness}
+    \lean{MPSTensor.not_exists_eventual_uniform_gap_pvbs_critical}
+    \leanok
+    \uses{thm:pvbs_critical_fourier_magnon}
+    There are no $\delta>0$ and $N_0$ such that every ring of length
+    $N\ge N_0$ satisfies
+    $\delta\|v\|\le\|H_1v\|$ for all $v\perp\ker H_1$.
+    This is thermodynamic gaplessness in the finite-periodic-volume
+    criterion; no zero gap above the enlarged kernel of a fixed finite
+    ring is asserted.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The Fourier energies $\eta_N$ tend to zero. Given a proposed
+    $\delta>0$ and threshold $N_0$, choose $N\ge\max\{N_0,2\}$ with
+    $0<\eta_N<\delta$. Applying the proposed inequality to the nonzero
+    kernel-orthogonal vector $\psi_N$ forces $\delta\le\eta_N$, a contradiction.
+    This proves the critical specialization of the one-particle
+    dispersion following equation~(8)
+    in~\cite{BachmannNachtergaele2012PVBS}; the broader multi-species
+    scope remains as recorded in~\cite{gap:bn12_pvbs_periodic_gap}.
+\end{proof}

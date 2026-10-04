@@ -798,7 +798,8 @@ For the PVBS spectral formulas of Bachmann--Nachtergaele, arXiv:1112.4097:
   zero-phase gap and its local-projector normalization, including the
   two-oriented-window convention at length two. It distinguishes this
   result from the broader multi-species thermodynamic conjecture and
-  explains why the critical finite-volume gap is not asserted to vanish.
+  proves critical finite-periodic-volume gaplessness with positive-energy
+  Fourier magnons, while no fixed finite-volume gap is asserted to vanish.
 
 For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
 

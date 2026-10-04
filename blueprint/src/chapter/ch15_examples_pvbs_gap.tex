@@ -111,12 +111,11 @@ in~\cite{gap:bn12_pvbs_periodic_gap}.
 
 \begin{theorem}[Attainment and exact noncritical finite-ring gap]
     \label{thm:pvbs_exact_periodic_gap}
-    \lean{MPSTensor.parentHamiltonianES_pvbs_critical_uniformParticle,
-        MPSTensor.parentHamiltonianES_pvbs_uniformParticle,
+    \lean{MPSTensor.parentHamiltonianES_pvbs_uniformParticle,
         MPSTensor.parentHamiltonianES_pvbs_gap_le,
         MPSTensor.parentHamiltonianES_pvbs_gap_exact}
     \leanok
-    \uses{thm:pvbs_uniform_lower_gap}
+    \uses{thm:pvbs_uniform_lower_gap,thm:pvbs_one_particle_dynamics}
     The uniform one-particle vector $W_N=\sum_j|0\cdots1_j\cdots0\rangle$
     satisfies $H_\mu W_N=c(\mu)W_N$ for every real $\mu$ and $N\ge2$.
     For $\mu>0$ and $\mu\ne1$, $c(\mu)>0$ is the largest possible
@@ -137,3 +136,5 @@ in~\cite{gap:bn12_pvbs_periodic_gap}.
     Applying any proposed norm-gap bound to this nonzero vector gives
     the matching upper bound $c(\mu)$.
 \end{proof}
+
+\input{chapter/ch15_examples_pvbs_critical_gap}
