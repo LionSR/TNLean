@@ -14,6 +14,7 @@ import TNLean.Circuit.Channel.DimensionBoundedConversion
 import TNLean.Circuit.Channel.EncodedChannelLayer
 import TNLean.Circuit.Channel.EncodedChannelPlacement
 import TNLean.Circuit.Channel.EncodedChannelProtocol
+import TNLean.Circuit.Channel.Feedforward
 import TNLean.Circuit.Channel.Layer
 import TNLean.Circuit.Channel.NativePortLayer
 import TNLean.Circuit.Channel.NativeRegisterWires

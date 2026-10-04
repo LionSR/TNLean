@@ -44,6 +44,28 @@ example {N m q : ℕ} {δ : Type*}
       tensorMapIdLM (δ := δ) (OnsiteChannel.encodeRegisters e).map = LinearMap.id :=
   OnsiteChannel.decodeRegisters_encodeRegisters_reference e ρ hρ htr
 
+section AxiomChecks
+set_option linter.hashCommand false
+
+/--
+info: 'QuantumCircuit.exists_bounded_matching_simulation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.exists_bounded_matching_simulation
+
+/--
+info: 'QuantumCircuit.PortRegisters.matchingChannel_isPhysicalPortProtocol'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.PortRegisters.matchingChannel_isPhysicalPortProtocol
+
+/--
+info: 'QuantumCircuit.OnsiteChannel.encoded_map_encodeRegisters'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.OnsiteChannel.encoded_map_encodeRegisters
+
+end AxiomChecks

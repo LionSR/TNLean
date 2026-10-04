@@ -37,6 +37,28 @@ example {N m q : ℕ} (e : Fin N → (Fin m ↪ Fin q))
       (OnsiteChannel.encodeRegisters e).map = LinearMap.id :=
   OnsiteChannel.decodeRegisters_encodeRegisters e ρ hρ htr
 
+section AxiomChecks
+set_option linter.hashCommand false
+
+/--
+info: 'QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation
+
+/--
+info: 'QuantumCircuit.PortRegisters.physicalEncoding_isKrausCPTP'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.PortRegisters.physicalEncoding_isKrausCPTP
+
+/--
+info: 'QuantumCircuit.PortRegisters.physicalDecoding_encoding'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.PortRegisters.physicalDecoding_encoding
+
+end AxiomChecks

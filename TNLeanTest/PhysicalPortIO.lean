@@ -42,4 +42,14 @@ example {N B T d : ℕ} [NeZero N] [NeZero d] {δ : Type*}
   refine ⟨Γ, hΓ, ?_⟩
   simpa only [tensorMapIdLM_comp] using congrArg (tensorMapIdLM (δ := δ)) hIO
 
+section AxiomChecks
+set_option linter.hashCommand false
+
+/--
+info: 'QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortIO'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortIO
+
+end AxiomChecks

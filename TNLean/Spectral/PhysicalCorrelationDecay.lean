@@ -19,11 +19,10 @@ bound holds also for adjacent blocks, because the inner insertion is centered.
 Reference: arXiv:2011.12127, Section II.B.3, lines 433–441.
 
 **Scope restriction (trace-preserving gauge):** The normality-based gap and
-rate-existence theorems assume the trace-preserving gauge and a normalized
-positive fixed state. Transporting physical connected correlations from an
-arbitrary normal representation still requires covariance of the physical
-insertions under the gauge transformation. The existing normal-gauge
-existence results do not supply that identity; see
+rate-existence theorems in this module assume the trace-preserving gauge and
+a normalized positive fixed state. The physical left-right contraction and
+its transport from an arbitrary normal representation are treated in
+`TNLean/Spectral/PhysicalCorrelationGauge.lean`; see
 `docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex`.
 
 **Local fix (Jordan blocks):** The source's unqualified pure-exponential
