@@ -162,3 +162,12 @@ duplicated-window lens reached, so those shapes remain under-surveyed in MPDO
 and PEPS. The two-day-old staged files under `Reduction` have six open
 follow-ups adding examples in the same shapes, so the corresponding changes
 should be sequenced behind them.
+
+## S3 continuation (2026-10-04, #7902)
+
+After the removal of `ThreeBlockResonate2.lean` in #7875, its predecessor
+`ThreeBlockResonate.lean` has only three live declarations. They move unchanged
+into `UnionInjectivity.lean`; the remaining twenty declarations and the 874-line
+module are deleted. The general partition results remain the proof of union
+injectivity. The declaration-by-declaration census and validation are recorded in
+`2026-10-04_peps_three_block_resonate.md`.
