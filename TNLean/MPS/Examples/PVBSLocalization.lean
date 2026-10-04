@@ -14,6 +14,11 @@ For `1 < ‖q‖`, amplitudes relative to the rightmost particle decay exponenti
 with distance from the right boundary. These are the two boundary regimes of
 the one-species PVBS model.
 
+**Local fix (right-boundary threshold):** the review prints `λ > 1` in
+its real family `q = 1 + λ`, `λ ∈ [-1, 1]`. The correct right-localized
+regime is `λ > 0`, represented here by `1 < ‖q‖`. See
+`docs/paper-gaps/cpgsv21_pvbs_threshold.tex`.
+
 ## References
 
 - Bachmann and Nachtergaele, arXiv:1112.4097, Section II, equation (8).
