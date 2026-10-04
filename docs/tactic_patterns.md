@@ -2664,14 +2664,19 @@ three-plaquette output measurement, and the routed reunion measurement.
   criteria now reduce to generator membership facts. Public theorem statements and
   trace-pairing order are unchanged.
 - **Update (2026-09-19):** the representation step is no longer proved from matrix
-  units. `exists_trace_repr` is now the inverse of the linear equivalence with the
+  units. `Matrix.exists_trace_representation` is now the inverse of the linear equivalence with the
   dual space induced by the nondegenerate trace form
   (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
   `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
   three-line consequences of it. The separation step itself still runs by hand,
   because no nondegeneracy statement exists yet for the pi-indexed or product trace
-  form; once one does, `matrix_pi_span_top_of_trace_separating` and
+  form; once one does, `Matrix.family_submodule_eq_top_of_trace_separating` and
   `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
+- **Update (2026-10-02):** the ordinary representation, finite-family
+  representation, and family span criterion are public in
+  `MPS/SharedInfra/MatrixFamilyTracePairing.lean`. The MPDO criteria and
+  the prescribed-length converse for the joint parent boundary map reuse
+  these proofs. No parallel product bilinear form is needed.
 - **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
   vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
   the trace functional: `pair_trace_zero_on_span` in
@@ -3219,6 +3224,22 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
   table. All three consumers use it; no custom tactic is needed.
 
+### finite-volume continuity from the local interaction — promoted
+- **Pattern:** express a translated parent term as the finite average of
+  restriction–interaction–adjoint products, prove each product continuous,
+  and sum the terms over the chain.
+- **Seen:** the injective-family and direct-sum-family continuity theorems in
+  `MPS/ParentHamiltonian/GroundSpaceMapContinuity.lean` and
+  `MPS/ParentHamiltonian/BlockGroundSpaceMapContinuity.lean` (2026-10-02).
+- **Abstraction:** `continuous_parentInteractionES_family_of_groundProjection`,
+  `continuous_localTermES_family_of_groundProjection`,
+  `continuous_openParentHamiltonianES_family_of_groundProjection`, and
+  `continuous_parentHamiltonianES_family_of_groundProjection` take
+  continuity of the local ground-space projection as their analytic input.
+- **Notes:** both tensor-family arguments use the same finite-volume proof;
+  the injectivity and simultaneous-word-span conditions are confined to
+  the construction of the local projector.
+
 ### contracting a two-site bond penalty — promoted
 - **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
   contract the two exterior identity factors, and evaluate the remaining
@@ -3413,6 +3434,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** the physical two-point identity and positive-separation reduction
   are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
   arguments use the reduction lemma instead of repeating the projection algebra.
+
+### Finite group fibers in local tensor isometries — candidate
+- **Pattern:** parameterize all preimages of a virtual label by one group
+  coordinate, use that coordinate as the inverse in a finite-sum bijection,
+  and evaluate the resulting weighted sum or fiber cardinality.
+- **Seen:** the dual tensor's `siteMap_quantumDoubleDualTensor_apply_spins`
+  argument in `TNLean/PEPS/Examples/QuantumDouble.lean` and the private
+  `primalLabels_fiber_sum` argument in
+  `TNLean/PEPS/Examples/ToricCodePrimal.lean` (2026-10-03).
+- **Notes:** these two occurrences have different label maps. The primal
+  parameterization is already shared by its weighted sum and fiber count;
+  no further abstraction is needed before a third distinct occurrence.
 
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with

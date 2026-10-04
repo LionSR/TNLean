@@ -5,7 +5,7 @@
 \input{command}
 \title{Quantum-Double PEPS: Normalization, Representations and Scope}
 \author{}
-\date{2026-10-02}
+\date{2026-10-03}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -62,6 +62,43 @@ $C^{ij}=A^iB^j$ the constants multiply, $c_C=c_Ac_B$, and for $c_A=c_B=1$
 this is the source's Lemma~``lemma:iso:iso-stable-under-concat''.\footnote{Source
     traceability: \path{Papers/1001.3807/paper_v3.tex}, lines
     1704--1716.}
+
+\subsection{The primal toric-code tensor}
+For the primal tensor in Appendix~A of \cite{Cirac2021Matrix}, specialize to
+$G=\mathbb Z_2$ and write the group operation additively. Its map $P$ from
+the four virtual legs to the four physical edge spins is
+\begin{align}
+    (Px)(g_1,g_2,g_3,g_4)
+    &=x(g_1+g_2,\ g_2+g_3,\ g_4+g_3,\ g_1+g_4).
+    \label{eq:rmp_peps_toric_primal_map}
+\end{align}
+Let $Z\ket a=(-1)^a\ket a$ and $S=Z^{\otimes4}$ on the virtual legs.
+The invariant subspace of the representation of $\mathbb Z_2$ generated
+by $S$ consists of vectors supported on even virtual configurations
+$t+r+b+l=0$. Each such configuration has exactly two physical preimages
+under the label map in~(\ref{eq:rmp_peps_toric_primal_map}), whereas odd
+configurations have none.
+Consequently,
+\begin{align}
+    PS&=P,
+    \label{eq:rmp_peps_toric_primal_invariance}\\
+    P^\dagger P&=2\Pi_{\mathrm{even}},
+    \label{eq:rmp_peps_toric_primal_gram}\\
+    \Pi_{\mathrm{even}}&=\frac{I+S}{2}.
+    \label{eq:rmp_peps_toric_primal_projection}
+\end{align}
+Thus $P$ is injective on the invariant subspace and satisfies
+$\langle Px,Py\rangle=2\langle x,y\rangle$ there; $P/\sqrt2$ is
+an isometry onto its range. This is a local $\mathbb Z_2$ consequence
+of the primal tensor~(\ref{eq:rmp_peps_toric_primal_map}), with its character
+representation on the virtual legs. The general-group primal symmetry is discussed
+below.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2451--2465,
+    equation \texttt{eq:app:tcode-rep-primal}. Formal declarations in
+    \path{TNLean/PEPS/Examples/ToricCodePrimal.lean}:
+    \leanid{TNLean.PEPS.toricCodePrimalVirtualRep_generator},
+    \leanid{TNLean.PEPS.toricCodePrimalMatrix_conjTranspose_mul_self},
+    and \leanid{TNLean.PEPS.isGIsometric_toricCodePrimalTensor}.}
 
 \section{Representations}
 The formal notions of $G$-injectivity and $G$-isometry take the
