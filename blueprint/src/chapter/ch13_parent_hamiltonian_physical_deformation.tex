@@ -86,12 +86,16 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.onSiteTensorPow_inv_mul}
     \lean{MPSTensor.onSiteTensorPow_mul_inv}
     \lean{MPSTensor.toEuclideanLin_onSiteTensorPow_mul_apply}
+    \lean{MPSTensor.blockKron_mul}
+    \lean{MPSTensor.blockKron_one}
+    \lean{MPSTensor.blockKron_mul_conjTranspose}
     \leanok
     \uses{def:on_site_tensor_pow}
     For $\Lambda,\Lambda'\in\MN{d}$ one has
     $(\Lambda\Lambda')^{\otimes L}=\Lambda^{\otimes L}\Lambda'^{\otimes L}$,
     $\Id^{\otimes L}=\Id$, and
     $(\Lambda^{\otimes L})^\dagger=(\Lambda^\dagger)^{\otimes L}$.
+    In particular, $\Lambda^{\otimes L}$ is unitary when $\Lambda$ is.
     If $\Lambda$ is invertible, then $(\Lambda^{-1})^{\otimes L}$ is a two-sided
     inverse of $\Lambda^{\otimes L}$.
 \end{lemma}
