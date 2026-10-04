@@ -1,0 +1,331 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\title{Joint polynomial circuits for permutation and monomial unitaries}
+\author{TNLean contributors}
+\date{3 October 2026}
+\begin{document}
+\maketitle
+
+Consecutive operator Schmidt rank bounds admit an exact circuit with
+polynomial gate count in the chain length when the maximal rank is fixed.
+The general construction has a rank-dependent exponent. For permutation
+unitaries, the following argument instead gives polynomial dependence
+jointly on the chain length and the maximal rank. The probability gap of
+a permutation permits an exact reversible computation from finite-precision
+canonical tensors. Combining this computation with diagonal phase evaluation
+also gives joint polynomial operator-norm approximation of monomial unitaries.
+The mathematical results below are not asserted to be formalized in Lean.
+
+\section{Joint polynomial circuits for permutation and monomial MPUs}
+
+The following argument concerns nonuniform circuit existence.
+The local dimension $d\ge2$ is fixed. Gates are arbitrary one-
+and two-qudit unitaries, or only adjacent two-qudit unitaries after
+the routing described below. Every work register is initialized
+and returned to the computational basis vector $|0\rangle$.
+The argument does not assert efficient conversion of a supplied
+tensor representation into canonical tensors or into the resulting
+gate parameters. It is a mathematical proof, not a Lean
+formalization.
+
+\begin{theorem}\label{thm:joint-polynomial-permutation}
+Let $N,D\ge1$, and let $\pi$ be a permutation of
+$(\mathbb Z/d\mathbb Z)^N$. Suppose that its permutation unitary
+$P_\pi|y\rangle=|\pi(y)\rangle$ has operator Schmidt rank at most
+$D$ across every consecutive cut.
+There is an exact circuit $C$ for $P_\pi$ with gate count and
+auxiliary space polynomial jointly in $N,D$, with exponents
+depending only on $d$. In particular, for a constant $c_d>0$, put
+\[
+ B=c_d\bigl(N+\log_2(N+1)+\log_2(D+1)+1\bigr),\qquad
+ S=c_dN^2(D+1)^4B^2.
+\]
+The constants may be chosen so that $O_d(S)$ arbitrary one- and
+two-qudit gates and $O_d(S)$ auxiliary qudits suffice.
+On a line, $O_d(S^2)$ adjacent two-qudit gates suffice with the same
+auxiliary bound. The exact implementation identity is
+$CJ=JP_\pi$, including the scalar phase, where
+$J\psi=\psi\otimes|0\rangle$ initializes all auxiliaries.
+\end{theorem}
+
+\begin{proof}
+Normalize the coefficient vector of the permutation unitary:
+\[
+ \psi(a,y)=d^{-N/2}(P_\pi)_{a,y}.
+\]
+Its norm is one. Pairing $a_j,y_j$ site by site identifies it with
+a vector on $N$ sites of local dimension $d^2$. Its Schmidt ranks
+are the operator Schmidt ranks of $P_\pi$, hence are at most $D$.
+Successive Schmidt decompositions give a right-canonical
+open-boundary MPS
+\[
+ \psi(a,y)=A_1(a_1,y_1)\cdots A_N(a_N,y_N),\qquad
+ A_j(a,b):E_j\longrightarrow E_{j-1},
+\]
+where $\dim E_j\le D$, $E_0=E_N=\mathbb C$, and
+\[
+ \sum_{a,b=0}^{d-1} A_j(a,b)A_j(a,b)^\dagger=I_{E_{j-1}}.
+\]
+Every individual matrix has operator norm at most one.
+This canonical form is the same bounded-contraction ingredient
+used in the diagonal approximation argument of
+\nolinkurl{docs/audits/2026-10-02_mpu_diagonal_circuits.tex},
+Section~3, and in the minimal-representation
+step of Section~5 of the exact MPU circuit note.
+
+\subsection*{Output-prefix probabilities}
+
+For a fixed input word $y$ and output prefix
+$z=(z_1,\ldots,z_k)$, define
+\[
+ p(z\mid y)=\sum_{a_{k+1},\ldots,a_N}
+       |\psi(z_1,\ldots,z_k,a_{k+1},\ldots,a_N;y)|^2.
+\]
+Because $\pi$ has exactly one output on each input,
+\[
+ p(z\mid y)=
+ \begin{cases}
+  d^{-N},& z\text{ is the prefix of }\pi(y),\\
+  0,&\text{otherwise}.
+ \end{cases}
+\]
+The probability is an MPS contraction. Start with the scalar
+$R_N=1$ and, in order $j=N,\ldots,1$, apply
+\[
+ R_{j-1}=\mathcal T_j(R_j),\qquad
+ \mathcal T_j(X)=
+ \begin{cases}
+  A_j(z_j,y_j)X A_j(z_j,y_j)^\dagger,&j\le k,\\[2pt]
+  \displaystyle\sum_{a=0}^{d-1}
+       A_j(a,y_j)X A_j(a,y_j)^\dagger,&j>k.
+ \end{cases}
+\]
+The final scalar $R_0$ is $p(z\mid y)$.
+Every $\mathcal T_j$ is positive and subunital:
+$0\le\mathcal T_j(I)\le I$. Therefore $0\le R_j\le I$.
+It is also a contraction of the operator norm on Hermitian
+matrices. Indeed, $-\|X\|I\le X\le\|X\|I$ implies
+$-\|X\|I\le\mathcal T_j(X)\le\|X\|I$.
+This is the reason the probability computation does not require
+a lower bound on any Schmidt value.
+
+\subsection*{A uniform finite-precision estimate}
+
+Let $u=2^{-b}$, and round every real and imaginary tensor entry
+to an integer multiple of $u$, with absolute error at most $u$.
+Write the rounded matrices as $\widehat A_j$. Then
+\[
+ \|\widehat A_j-A_j\|\le2Du.
+\]
+For Hermitian $X$, define $\widehat{\mathcal T}_j$ using the
+rounded matrices but exact arithmetic. If $Du\le1$, the difference
+of the two transfer maps satisfies
+\[
+ \|(\widehat{\mathcal T}_j-\mathcal T_j)(X)\|
+ \le c_dDu\|X\|.
+\]
+This follows by expanding
+$\widehat A X\widehat A^\dagger-A X A^\dagger$ into its
+two linear error terms and its quadratic error term, using
+$\|A\|\le1$, and summing at most $d$ terms.
+
+Compute each transfer with fixed-point arithmetic of mesh $u$.
+Compute one triangle of its matrix, set the other triangle to its
+complex conjugate, and retain only the real part of each diagonal
+entry. Every computed matrix is consequently Hermitian.
+When its input has norm at most two, the additional arithmetic
+error has operator norm at most $c_dD^3u$.
+For example, directly evaluate the double sum for each entry:
+there are at most $dD^2$ summands, each with a bounded number of
+rounded scalar operations. Each entry error is at most
+$c_dD^2u$ and matrix operator norm is at most $D$ times the
+maximum entry absolute value. All partial sums have magnitude
+at most $c_d(D+1)^2$, so $O_d(\log(D+1))$ integer guard bits
+suffice. Conjugate completion and diagonal real-part selection
+do not change this bound.
+
+Let $e_j=\|\widehat R_j-R_j\|$.
+Increasing a constant $L=c_d(D+1)^3$ absorbs the tensor and
+arithmetic errors, and gives
+\[
+ e_{j-1}\le(1+Lu)e_j+Lu,\qquad e_N=0,
+\]
+as long as $e_j\le1$. Choose
+\[
+ b=\left\lceil
+      N\log_2d+\log_2(16NL)\right\rceil.
+\]
+Then $NLu\le d^{-N}/16\le1/16$. Iterating the last recurrence
+gives, for all $j$,
+\[
+ e_j\le(1+Lu)^N-1\le2NLu\le d^{-N}/8.
+\]
+The bound also justifies the assumed condition $e_j\le1$ at
+every preceding step by induction; in particular, the computed
+matrices have norm at most two.
+This estimate holds simultaneously for every input word, every
+prefix, and every candidate next output letter.
+
+The resulting real scalar $\widehat p(z\mid y)$ is above
+$d^{-N}/2$ exactly when $z$ is the correct prefix.
+The comparison itself is an exact integer operation:
+if $\widehat p=mu$ with signed integer $m$, compare
+$2d^Nm$ with $2^b$.
+Multiplication may use a constant multiple of the input bit
+length for its intermediate integers; this does not change the
+quadratic Boolean cost below. All integers used here have
+$B=O_d(N+\log(N+1)+\log(D+1)+1)$ bits.
+
+\subsection*{An exact reversible permutation}
+
+Starting with the empty prefix, test the $d$ possible next
+letters at each of the $N$ positions. Exactly one candidate
+passes the threshold. This determines $\pi(y)$ exactly.
+Recomputing every candidate probability from the full MPS uses
+at most $dN^2$ transfer evaluations. The direct double-sum
+method uses $O_d((D+1)^4)$ scalar operations per transfer.
+Binary multiplication, rounding, addition, and the final
+integer comparison use $O(B^2)$ Boolean operations per scalar
+operation. Selection from the $d^2$ fixed tensor matrices per
+site is a bounded-choice lookup and has polynomial cost within
+the same estimate. Thus a Boolean circuit of size at most
+$S=c_dN^2(D+1)^4B^2$ computes $\pi(y)$.
+The rounded tensor table contains
+$O_d(ND^2B)$ bits, also within this bound.
+
+Retain the intermediate Boolean results, add the computed output
+componentwise modulo $d$ into a second $N$-qudit register, and
+reverse the calculation. This gives the exact unitary action
+\[
+ |y,z\rangle|0\rangle_{\rm work}
+       \longmapsto
+ |y,z+\pi(y)\rangle|0\rangle_{\rm work}.
+\]
+Each bounded-arity Boolean gate has an exact reversible
+implementation with a constant number of gates on at most
+three qudits. Boolean work values occupy the levels $0,1$;
+the gates have a full unitary extension on the other levels.
+For fixed $d$, an arbitrary three-qudit unitary has a
+constant-size decomposition into arbitrary one- and two-qudit
+gates. The exact synthesis includes its scalar phase.
+Thus retaining and erasing the computation costs $O_d(S)$
+gates and $O_d(S)$ initialized work qudits. The calculation is
+correct for every input basis word, so its linear extension
+applies to arbitrary coherent inputs.
+
+The inverse permutation has the same operator cut ranks.
+It also has bounded right-canonical tensors explicitly:
+$B_j(a,b)=\overline{A_j(b,a)}$ represents the normalized
+coefficients of $P_\pi^\dagger$ and satisfies the same canonical
+identity. Apply the preceding construction to $\pi^{-1}$,
+using subtraction in its output register. Starting with
+$|y,0\rangle$, the two calculations give
+\[
+ |y,0\rangle\ \longmapsto\
+ |y,\pi(y)\rangle\ \longmapsto\
+ |y-\pi^{-1}(\pi(y)),\pi(y)\rangle
+ =|0,\pi(y)\rangle.
+\]
+Swap the two $N$-qudit registers. The result is
+$|\pi(y),0\rangle$, with all arithmetic work also at zero.
+Every displayed operation has the specified coefficient $1$;
+no input-dependent or scalar phase has been discarded.
+This proves $CJ=JP_\pi$.
+
+Finally, arrange the $O_d(S+N)=O_d(S)$ physical and work qudits
+on a line. Route each two-qudit gate by swaps, apply it, and
+undo the swaps. This multiplies the gate count by at most
+$O_d(S)$ and leaves all initialized-output identities unchanged.
+\end{proof}
+
+\begin{corollary}\label{cor:joint-polynomial-qubit-permutation}
+For $d=2$, the permutation circuit in
+Theorem~\ref{thm:joint-polynomial-permutation} can be chosen
+from the Clifford+$T$ gate alphabet, with the same polynomial
+gate and clean auxiliary bounds, including on a line.
+\end{corollary}
+
+\begin{proof}
+The arithmetic and comparisons above are exact Boolean
+calculations. Their reversible implementations use only
+NOT, CNOT, and Toffoli gates, including the bitwise additions
+and subtractions that erase the input. All three gates have
+exact Clifford+$T$ implementations with their specified scalar
+phase; the phase-exact Toffoli construction is recorded in
+\nolinkurl{docs/audits/2026-10-03_mpu_finite_gate_phase_lift.tex}.
+Register swaps use three CNOT gates. Substituting these
+constant-size implementations gives the claimed circuit.
+\end{proof}
+
+\begin{corollary}\label{cor:joint-polynomial-monomial}
+Let $U$ be a monomial unitary on $N$ sites of fixed local
+dimension $d$, with consecutive operator Schmidt ranks at
+most $D$. For $0<\varepsilon<1$, it has a circuit with gate
+count and auxiliary space polynomial jointly in
+$N,D,\log(1/\varepsilon)$ whose exact initialized action is
+$CJ=J\widetilde U$ for a unitary $\widetilde U$ satisfying
+$\|\widetilde U-U\|_{\rm op}\le\varepsilon$.
+All auxiliaries are returned exactly to zero.
+\end{corollary}
+
+\begin{proof}
+Write $U|y\rangle=f(y)|\pi(y)\rangle$, with $|f(y)|=1$.
+The permutation coefficients satisfy
+$(P_\pi)_{a,y}=|U_{a,y}|^2$.
+At any cut, the entrywise product of an operator Schmidt
+expansion of $U$ with its complex conjugate gives a coefficient
+factorization of $P_\pi$ with at most $D^2$ terms.
+Thus its operator cut ranks are at most $D^2$, and the theorem
+implements $P_\pi$ exactly with joint polynomial resources.
+
+The operator $P_\pi^\dagger U$ is diagonal. Multiplying
+operator Schmidt expansions shows that its cut ranks are at
+most $D^3$. The diagonal approximation argument of
+\nolinkurl{docs/audits/2026-10-02_mpu_diagonal_circuits.tex}
+therefore gives a diagonal unitary $\widetilde D$ with
+$\|\widetilde D-P_\pi^\dagger U\|_{\rm op}\le\varepsilon$
+using joint polynomial resources and exact auxiliary erasure.
+For local dimension $d$ the same proof normalizes its phase
+vector by $d^{-N/2}$ and uses
+$O_d(N+\log(ND+1)+\log(1/\varepsilon))$ precision bits;
+the bounded-contraction and reversible phase-evaluation
+steps are unchanged.
+Compose this circuit with the exact permutation circuit.
+Then $\widetilde U=P_\pi\widetilde D$ and left multiplication
+by a unitary preserves operator norm, proving the conclusion.
+\end{proof}
+
+The workspace bound in these results is polynomial in $N,D$;
+it is not the sharper $O_d(N\log(D+1))$ bound of the general
+fixed-bond theorem. The permutation theorem is exact, whereas
+the monomial conclusion approximates its arbitrary diagonal
+phase factor. Neither result proves joint polynomial synthesis
+for arbitrary MPUs that mix basis states coherently.
+The inverse-erasure step uses the fact that the output is a
+single basis word that determines the input basis word.
+Preparing a general column $U|y\rangle$ while retaining $y$
+does not provide this step: the map
+$|y\rangle\mapsto|y\rangle U|y\rangle$ loses the inter-column
+coherences after tracing out the retained label. Its physical
+channel therefore differs from $\rho\mapsto U\rho U^\dagger$.
+An auxiliary-only unitary cannot repair that difference.
+
+\begin{thebibliography}{2}
+\bibitem{exact-mpu-circuits}
+TNLean contributors,
+\emph{Exact polynomial circuits for matrix product unitaries},
+2 October 2026, Section~5.
+Local source:
+\nolinkurl{docs/audits/2026-10-02_mpu_rank_two_circuits.tex}.
+\bibitem{diagonal-mpu-circuits}
+TNLean contributors,
+\emph{Exact rank-two diagonal MPU circuits and approximation at arbitrary rank},
+2 October 2026, Section~3.
+Local source:
+\nolinkurl{docs/audits/2026-10-02_mpu_diagonal_circuits.tex}.
+\end{thebibliography}
+\end{document}

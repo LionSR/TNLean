@@ -117,12 +117,13 @@ noncomputable def outcomeProj (S : Finset (Fin N)) (m : S → Fin d) :
 
 theorem outcomeProj_eq_ctrlProj (S : Finset (Fin N)) (m : S → Fin d) (c : Fin N → Fin d)
     (hc : ∀ i : S, c i = m i) : outcomeProj S m = ctrlProj S c := by
-  unfold outcomeProj ctrlProj
-  congr 1
-  funext x
-  refine if_congr ⟨fun h i hi => ?_, fun h i => ?_⟩ rfl rfl
-  · rw [h ⟨i, hi⟩, hc ⟨i, hi⟩]
-  · rw [h i i.2, hc i]
+  rw [outcomeProj, ctrlProj]
+  refine congrArg diagonal (funext fun x => ?_)
+  have hiff : (∀ i : S, x i = m i) ↔ ∀ i ∈ S, x i = c i :=
+    ⟨fun h i hi => by rw [h ⟨i, hi⟩, hc ⟨i, hi⟩], fun h i => by rw [h i i.2, hc i]⟩
+  by_cases h : ∀ i : S, x i = m i
+  · rw [ite_eq_left h, ite_eq_left (hiff.mp h)]
+  · rw [ite_eq_right h, ite_eq_right (mt hiff.mpr h)]
 
 theorem outcomeProj_mulVec_apply (S : Finset (Fin N)) (m : S → Fin d) (v : (Fin N → Fin d) → ℂ)
     (x : Fin N → Fin d) :
