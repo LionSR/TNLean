@@ -1,10 +1,10 @@
 \begin{theorem}[Literal character insertions and the actual closed graph contraction]
     \label{thm:peps_regular_charge_bond_contraction}
     \lean{TNLean.PEPS.regularChargeMatrix_eq_leftRegular_diagonal,
-      TNLean.PEPS.graphInsertedBondNetwork_averagingSite_charge}
+        TNLean.PEPS.graphInsertedBondNetwork_averagingSite_charge}
     \leanok
     \uses{def:peps_regular_charge_coordinates,
-      thm:peps_graph_inserted_averaging_bond_state}
+        thm:peps_graph_inserted_averaging_bond_state}
     Let $U_x$ denote the left-regular matrix and
     $D_{\chi,p}=\operatorname{diag}(g\mapsto\chi(pg))$.
     Independent translations at the two endpoints give exactly
@@ -16,10 +16,10 @@
     gives the actual regrouped closed coefficient
     \[
         \Psi(\beta)
-          =|G|^{-|V|}\sum_{q:V\to G}
-            \prod_{e\in E}
-              A_{\chi_e}(p_e;q_{\mathrm{head}(e)},q_{\mathrm{tail}(e)})
-                 _{\beta_{e,\mathrm{head}},\beta_{e,\mathrm{tail}}}.
+        =|G|^{-|V|}\sum_{q:V\to G}
+        \prod_{e\in E}
+        A_{\chi_e}(p_e;q_{\mathrm{head}(e)},q_{\mathrm{tail}(e)})
+        _{\beta_{e,\mathrm{head}},\beta_{e,\mathrm{tail}}}.
     \]
     This is an auxiliary finite-graph coefficient identity for
     \cite[charge definition and detection]{Schuch2010PEPS}, lines 2449--2486.

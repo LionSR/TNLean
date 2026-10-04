@@ -13,13 +13,13 @@
 \begin{theorem}[Actual partner transports before and after the gauge sweep]
     \label{thm:peps_torus_swept_patch_partner_transports}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_connectorA,
-      TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_connectorB,
-      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_connectorA,
-      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_connectorB}
+        TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_connectorB,
+        TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_connectorA,
+        TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_connectorB}
     \leanok
     \uses{thm:peps_torus_swept_patch_connector_transport,
-      thm:peps_torus_swept_string_transport,
-      thm:peps_torus_swept_string_endpoint_holonomy}
+        thm:peps_torus_swept_string_transport,
+        thm:peps_torus_swept_string_endpoint_holonomy}
     For the literal initial string assignment, the actual A and B connector
     transports are respectively $g^{-1}$ and $1$.
     After either of the two swept vertex gauges, they are respectively
@@ -37,13 +37,13 @@
 \begin{theorem}[The same-connector gauge comparison has trivial joint flux]
     \label{thm:peps_torus_swept_patch_B_joint_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_BJointLoop,
-      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_transportedBPartner,
-      TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_BJointLoop}
+        TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_transportedBPartner,
+        TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_BJointLoop}
     \leanok
     \uses{def:peps_torus_swept_patch_B_joint_loop,
-      thm:peps_torus_swept_patch_partner_transports,
-      thm:peps_regular_connector_holonomy,
-      thm:peps_torus_swept_string_endpoint_holonomy}
+        thm:peps_torus_swept_patch_partner_transports,
+        thm:peps_regular_connector_holonomy,
+        thm:peps_torus_swept_string_endpoint_holonomy}
     Initially the actual based B-partner comparison has joint holonomy $1$.
     After either gauge sweep, the transported inverse partner is
     $g h^{-1}g^{-1}$, and the joint holonomy is still
