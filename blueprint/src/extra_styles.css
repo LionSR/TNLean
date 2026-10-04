@@ -121,3 +121,33 @@ div.content-wrapper {
 	font-size: .9rem;
 	vertical-align: middle;
 }
+
+/* ---- Client-side search (Pagefind) --------------------------------------
+ * The plasTeX table of contents lists only section titles; this search box,
+ * added after the web build by scripts/add_blueprint_search.py, lets a reader
+ * find any phrase in the blueprint from any page. Pagefind ships its own
+ * component styles -- these rules only size and place the box within the page
+ * header and tint it with the blueprint accent colour. */
+header {
+	flex-wrap: wrap;
+}
+
+#blueprint-search {
+	flex-basis: 100%;
+	margin: .4rem 0 0;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+#blueprint-search *,
+#blueprint-search *::before,
+#blueprint-search *::after {
+	box-sizing: border-box;
+}
+
+:root {
+	--pagefind-ui-scale: .85;
+	--pagefind-ui-primary: #0969da;
+	--pagefind-ui-font: inherit;
+	--pagefind-ui-border-radius: 6px;
+}

@@ -37,6 +37,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/add_blueprint_search.py'
   workflow_dispatch:
 
 # Rapid pushes to main only need the newest build; actual Pages deployments
@@ -230,6 +231,11 @@ jobs:
           python3 -m pip install --disable-pip-version-check playwright==1.55.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+
+      - name: Add client-side search to blueprint web pages
+        run: |
+          python3 -m pip install --disable-pip-version-check 'pagefind[extended]==1.5.2'
+          python3 scripts/add_blueprint_search.py --web-root blueprint/web
 
       # Drop pictures no page references any more, so neither the published
       # site nor the saved cache carries figures that were edited away.

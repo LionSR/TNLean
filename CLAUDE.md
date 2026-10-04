@@ -58,6 +58,8 @@ cd blueprint && leanblueprint checkdecls
 
 # Blueprint web/PDF generation
 cd blueprint && leanblueprint web
+# Add client-side search to the web pages (run from repo root after the web build)
+python3 scripts/add_blueprint_search.py --web-root blueprint/web
 cd blueprint && leanblueprint pdf
 ```
 

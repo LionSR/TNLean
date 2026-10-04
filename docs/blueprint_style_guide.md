@@ -412,6 +412,7 @@ leanblueprint web     # HTML → blueprint/web/
 leanblueprint serve   # local server at http://0.0.0.0:8000/
 leanblueprint all     # pdf + web + checkdecls
 cd ..
+python3 scripts/add_blueprint_search.py --web-root blueprint/web  # search index → blueprint/web/pagefind/
 ./scripts/build_blueprint_ch01_12.sh  # FT--MPS PDF → blueprint/print/print12.pdf
 ```
 
