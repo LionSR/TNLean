@@ -793,6 +793,14 @@ For the group matrix product operators of arXiv:2203.12563:
   formalized, so the anomaly class is the type-II class; the comparison with
   the original odd-ring or two-site-blocked family remains open.
 
+For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
+
+- `cpgsv21_pvbs_threshold.tex` corrects the right-boundary threshold under
+  `q = 1 + λ`, records the finite-ring condition `q^N ≠ 1` for periodic
+  vacuum uniqueness, and gives the critical W-state counterexample. The
+  open-chain ground space and both geometric localization regimes are
+  formalized; no uniform spectral-gap theorem is claimed.
+
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
 - `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis
@@ -942,6 +950,18 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
+
+For the phase relation of arXiv:2103.13367:
+
+- `psc21_local_channel_phase_scope.tex` records approximate and asymptotic
+  conversion by enlarged-site local channels without classical feedforward.
+  It distinguishes unit-cost gates on unbounded intermediate dimensions from
+  the source's physical-qudit gate convention, with no asserted uniform-depth
+  simulation or relation inclusion. The local results include
+  additive-error composition and mutual-conversion equivalence. Finite adaptive
+  channels and composition are formalized separately; a system-size-independent
+  decomposition into source-ordered QCcc blocks and a uniform physical gate-cost
+  comparison remain open.
 
 For the classification of translation-invariant MPS under circuits assisted by
 measurements and classical communication (arXiv:2103.13367, Theorem

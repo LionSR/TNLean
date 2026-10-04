@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Finite-Group Commutants: The Unital Qualification}
+\author{}
+\date{2026-10-02}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source and its necessary qualification}
+Schuch, Cirac, and P\'erez-Garc\'ia state that every complex matrix
+$\mathrm C^*$-subalgebra is the commutant of a unitary representation
+of a finite group \cite[Theorem~4.1]{Schuch2010PEPS}. Their proof uses
+\begin{align}
+    \mathcal D\cong\bigoplus_i I_{d_i}\otimes M_{m_i}(\mathbb C),
+    \label{eq:commutant_unital_blocks}
+\end{align}
+with no zero summand. Source traceability is
+\path{Papers/1001.3807/paper_v3.tex}, lines 852--886. Earlier, however,
+the source defines a $\mathrm C^*$-algebra simply as a linear matrix
+space closed under multiplication and adjoint, at lines 561--563.
+That wording alone does not require the ambient identity to belong to
+$\mathcal D$.
+
+The ambient identity belongs to every commutant. Consequently the
+claim requires $I_D\in\mathcal D$. For example,
+$\{\operatorname{diag}(z,0):z\in\mathbb C\}\subset M_2(\mathbb C)$
+is closed under multiplication and adjoint, but cannot be a commutant
+in $M_2(\mathbb C)$. This explains why the absence of a zero summand
+in (\ref{eq:commutant_unital_blocks}) matters.
+
+\section{The formal statement and the supported interpretation}
+The library theorem is stated for a unital complex star subalgebra,
+so membership of the ambient identity is part of the mathematical
+object. It constructs the finite group and its unitary representation
+from the subalgebra, and assumes no block decomposition or irreducible
+representations as additional data. Its blueprint entry explicitly
+states the unital qualification and is the unital version of
+Theorem~4.1, rather than the unrestricted reading of the earlier
+wording. This is a local correction to the source statement.
+
+For a subalgebra whose identity is a proper projection $p$, the
+appropriate ambient algebra is $pM_D(\mathbb C)p$, acting on
+$p\mathbb C^D$. There the subalgebra is unital, and the corrected
+commutant theorem applies. In the matrix-product-state application,
+passing to this support removes unused bond directions. No claim
+about the commutant in the original larger matrix algebra follows.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

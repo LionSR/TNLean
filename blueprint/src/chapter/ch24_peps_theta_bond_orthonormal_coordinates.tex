@@ -1,0 +1,36 @@
+\begin{theorem}[Orthonormal coordinates for weighted bond coefficients]%
+    \label{thm:peps_theta_bond_orthonormal_coordinates}
+    \lean{TNLean.PEPS.exists_thetaBond_orthonormalCoordinates}
+    \leanok
+    \uses{thm:peps_representation_theta_squared, thm:peps_multiplicity_bond_weight}
+    Let a representation $\rho$ of a finite group on a finite-dimensional
+    complex Hilbert space have a
+    supplied orthogonal internal decomposition into irreducible subrepresentations $S_i$,
+    each with character multiplicity one. Choose orthonormal bases of the $S_i$, and let $D_i(g)$ be the matrices of
+    the restricted representations in these coordinates.
+    There is one global orthonormal basis $e$ for which
+    \begin{align}
+        [\rho(g)]_e         & =\bigoplus_iD_i(g),             &
+        [\Theta^2\rho(g)]_e & =\bigoplus_i\sqrt{d_i}\,D_i(g).
+    \end{align}
+    Apply the normalized multiplicity-restoring bond map to the actual
+    diagonal blocks of the second matrix. Its result is
+    $\bigl(D_i(g)\otimes I_{d_i}\bigr)_i$.
+    This is the coefficient transformation displayed in
+    \cite[Section~7]{Schuch2010PEPS}.
+    The assertion concerns the occurring irreducible sectors in the supplied
+    decomposition; it does not require all irreducibles to occur.
+    Its coordinate identification is unitary. Orthogonality and the
+    decomposition are supplied hypotheses; this auxiliary assertion does not
+    construct them or identify complete PEPS.
+\end{theorem}
+
+\begin{proof}\leanok
+    Collect the sector orthonormal bases into a global orthonormal basis, simultaneously
+    for the endomorphisms $\rho(g)$ and $\Theta^2\rho(g)$.
+    Each preserves every irreducible summand. On the summand $S_i$, the
+    fourth-root square acts by $\sqrt{d_i}$, so the second family has precisely
+    the stated weighted diagonal blocks. Irreducibility gives $d_i>0$.
+    The normalized bond map sends
+    $\sqrt{d_i}D_i(g)$ to $D_i(g)\otimes I_{d_i}$, cancelling its normalization.
+\end{proof}

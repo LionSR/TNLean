@@ -40,8 +40,9 @@ parent Hamiltonian has the same four-dimensional kernel for \(N \ge 3\).
 These statements concern the projector parent Hamiltonian of the AKLT tensor.
 The review's line 1174 speaks of the AKLT model, whose Hamiltonian is the
 polynomial \(\vec S_i\cdot\vec S_{i+1} + \tfrac13(\vec S_i\cdot\vec S_{i+1})^2\);
-the identification of that polynomial with the spin-\(2\) projector is not
-formalized (see `docs/paper-gaps/rmp_example_parent_hamiltonian_scope.tex`).
+the local identification with the spin-\(2\) projector is proved in
+`AKLTPolynomialHamiltonian`. The open-chain energy shift and ground-space
+identification are proved in `AKLTOpenPolynomialHamiltonian`.
 The two-site statements combine line 1174 with the local hand check of line
 2095, which the review prints for the periodic chain; the check itself is an
 identity of three-site local spaces, and the proof reuses it on nonwrapping
@@ -54,7 +55,7 @@ Hamiltonian). Neither change affects local ground spaces or kernel dimensions.
 
 Line 1174 continues: only one state of this four-dimensional space lies in the
 spin-\(0\) sector. That sentence needs the total-spin operator on \(N\) spin-\(1\)
-sites and is not formalized here.
+sites. Its singlet and triplet sectors are proved in `AKLTSpinSectors`.
 
 ## Main results
 
@@ -128,8 +129,8 @@ theorem aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES {N : ℕ} (hN : 2 
 /-- For \(N \ge 2\), the open-chain two-site projector parent Hamiltonian of
 the AKLT tensor has a four-dimensional kernel. The fourfold count in
 arXiv:2011.12127, line 1174, concerns the AKLT model. The polynomial
-Hamiltonian of that passage is not identified with this projector, so this
-count is not that statement. -/
+Hamiltonian of that passage is identified with the shifted projector sum in
+`AKLTOpenPolynomialHamiltonian`; the present statement concerns the projector kernel. -/
 theorem aklt_finrank_ker_openParentHamiltonianES_two {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES akltTensor 2 N)) = 4 := by
   rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN,

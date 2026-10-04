@@ -1,0 +1,146 @@
+\begin{definition}[Three plaquette coordinates from directed bond labels]%
+    \label{def:peps_regular_three_plaquette_coordinates}
+    \lean{TNLean.PEPS.regularThreeCyclePlaquetteCoordinates}
+    \leanok
+    Let $J$ index group labels, and choose distinct $e_0,e_1,e_2\in J$.
+    Define a permutation $C$ of $G^J$ which retains the other coordinates and
+    sends the selected directed labels $(t_0,t_1,t_2)$ to
+    \begin{align}
+        C(t_0,t_1,t_2)
+         & =(t_0^{-1}t_1,t_1^{-1}t_2,t_2^{-1}).
+    \end{align}
+    Its inverse sends $(a,b,c)$ to
+    $(c^{-1}b^{-1}a^{-1},c^{-1}b^{-1},c^{-1})$.
+\end{definition}
+
+\begin{theorem}[Evaluation and equivariance of three plaquette coordinates]%
+    \label{thm:peps_regular_three_plaquette_coordinates}
+    \lean{TNLean.PEPS.regularThreeCyclePlaquetteCoordinates_apply,
+        TNLean.PEPS.regularThreeCyclePlaquetteCoordinates_conjugation}
+    \leanok
+    \uses{def:peps_regular_three_plaquette_coordinates}
+    The selected coordinates of $Cz$ are
+    $(z_{e_0}^{-1}z_{e_1},z_{e_1}^{-1}z_{e_2},z_{e_2}^{-1})$, and
+    $C(xzx^{-1})=xC(z)x^{-1}$ for every common conjugating element $x$.
+\end{theorem}
+\begin{proof}\leanok
+    Evaluate the defining cases at the three distinct indices.
+    Conjugation preserves multiplication and inversion, so it commutes with
+    each selected coordinate formula and with every retained coordinate.
+\end{proof}
+
+\begin{definition}[Exchange of two group labels]%
+    \label{def:peps_regular_two_cycle_exchange}
+    \lean{TNLean.PEPS.regularTwoCycleExchange}
+    \leanok
+    \uses{def:peps_regular_two_cycle_conjugation}
+    For distinct selected indices, let $H$ conjugate the second label by the
+    first and then interchange the two coordinates. It sends
+    $(a,b)$ to $(aba^{-1},a)$ and retains every other label.
+\end{definition}
+
+\begin{theorem}[Equivariance and the double exchange formula]%
+    \label{thm:peps_regular_two_cycle_exchange}
+    \lean{TNLean.PEPS.regularTwoCycleExchange_conjugation,
+        TNLean.PEPS.regularTwoCycleExchange_apply,
+        TNLean.PEPS.regularTwoCycleExchange_apply_other,
+        TNLean.PEPS.regularTwoCycleExchange_twice_apply,
+        TNLean.PEPS.regularTwoCycleExchange_twice_product,
+        TNLean.PEPS.regularTwoCycleExchange_twice_classes}
+    \leanok
+    \uses{def:peps_regular_two_cycle_exchange,
+        thm:peps_conjugacy_class_invariance,
+        thm:peps_regular_two_cycle_conjugation}
+    The permutation $H$ commutes with simultaneous conjugation.
+    Its square retains the other coordinates and satisfies
+    \begin{align}
+        H^2(a,b)                 & =(abab^{-1}a^{-1},aba^{-1}), \\
+        (H^2(a,b))_0(H^2(a,b))_1 & =ab.
+    \end{align}
+    The two output labels are respectively conjugate to $a$ by $ab$ and to
+    $b$ by $a$.
+\end{theorem}
+\begin{proof}\leanok
+    Evaluate the controlled conjugation followed by the interchange.
+    A second evaluation gives the formula for $H^2$; multiplication cancels
+    $b^{-1}a^{-1}ab$ and gives $ab$. Both component formulas commute with
+    common conjugation.
+\end{proof}
+
+\begin{definition}[Oriented double exchange in three plaquette coordinates]%
+    \label{def:peps_regular_three_plaquette_double_exchange}
+    \lean{TNLean.PEPS.regularThreePlaquetteDoubleExchange,
+        TNLean.PEPS.regularCycleOrientation,
+        TNLean.PEPS.regularOrientedThreePlaquetteDoubleExchange}
+    \leanok
+    \uses{def:peps_regular_three_plaquette_coordinates,
+        def:peps_regular_two_cycle_exchange}
+    Define $\Phi=C^{-1}H^2C$ on directed bond labels.
+    For a common orientation flag $\varepsilon\in\{0,1\}$, let
+    $I_0z=z$ and $I_1z=z^{-1}$ coordinatewise, and define
+    $\Phi_\varepsilon=I_\varepsilon^{-1}\Phi I_\varepsilon$.
+\end{definition}
+
+\begin{theorem}[Equivariance and action of oriented double exchange]%
+    \label{thm:peps_regular_three_plaquette_double_exchange}
+    \lean{TNLean.PEPS.regularThreePlaquetteDoubleExchange_conjugation,
+        TNLean.PEPS.regularThreePlaquetteDoubleExchange_coordinates,
+        TNLean.PEPS.regularCycleOrientation_conjugation,
+        TNLean.PEPS.regularOrientedThreePlaquetteDoubleExchange_conjugation,
+        TNLean.PEPS.regularOrientedThreePlaquetteDoubleExchange_coordinates,
+        TNLean.PEPS.regularOrientedThreePlaquetteDoubleExchange_apply_other}
+    \leanok
+    \uses{thm:peps_regular_three_plaquette_coordinates,
+        def:peps_regular_three_plaquette_double_exchange,
+        thm:peps_regular_two_cycle_exchange}
+    For every $z\in G^J$ and $x\in G$, the maps $I_\varepsilon$,
+    $\Phi$ and $\Phi_\varepsilon$ commute with simultaneous conjugation.
+    Their coordinate action satisfies
+    \begin{align}
+        C\Phi z                          & =H^2Cz,               \\
+        CI_\varepsilon\Phi_\varepsilon z & =H^2CI_\varepsilon z.
+    \end{align}
+    Thus the selected plaquette coordinates change from $(a,b,c)$ to
+    $((ab)a(ab)^{-1},aba^{-1},c)$, retaining all other coordinates.
+    Their ordered product $abc$ and their individual conjugacy classes are
+    preserved. At $(g,h,h^{-1})$, the last two output labels have joint product
+    $ghg^{-1}h^{-1}$.
+\end{theorem}
+\begin{proof}\leanok
+    Equivariance of $C$ implies equivariance of its inverse. Inversion is
+    equivariant under conjugation, and so is $H$. Compose these identities
+    in the defining order. The coordinate identities follow by cancelling
+    the inverse coordinate maps; the double exchange formula gives the
+    product and conjugacy assertions.
+\end{proof}
+
+\begin{theorem}[A fixed original-spin double exchange]%
+    \label{thm:peps_regular_three_plaquette_double_exchange_physical}
+    \lean{TNLean.PEPS.exists_unitary_regularOrientedThreePlaquetteDoubleExchange}
+    \leanok
+    \uses{thm:peps_regular_three_plaquette_double_exchange,
+        thm:peps_regular_cycle_global_permutation}
+    Let $G$ be finite, let $R$ be a finite graph region with a chosen spanning
+    tree and root, and choose three distinct internal bonds outside the tree.
+    Suppose the original site tensors are locally $G$-isometric for the
+    regular incident-edge action. For each common orientation flag, there is
+    one unitary $W$ on the original spins of $R$, chosen before every inserted
+    cycle assignment $\omega$, boundary configuration $\theta$, and common
+    exterior and crossing bond assignment $u$, such that
+    \begin{align}
+        W\Psi_R(u_\omega,\theta)
+         & =\Psi_R(u_{\Phi_\varepsilon\omega},\theta), \\
+        (W\otimes I_{R^c})\Psi(u_\omega,u)
+         & =\Psi(u_{\Phi_\varepsilon\omega},u).
+    \end{align}
+    These are actual original-spin contractions. The operation is auxiliary to
+    the conjugation and controlling-flux backreaction discussed in
+    \cite[Section 6.6]{Schuch2010PEPS}. Identifying it with the prescribed
+    oriented lattice string crossing remains separate.
+\end{theorem}
+\begin{proof}\leanok
+    The permutation $\Phi_\varepsilon$ is conjugation-equivariant.
+    Apply the actual physical and global cycle-permutation theorem to this
+    single permutation. It supplies the same $W$ for every boundary column
+    and its identity extension for every common exterior contraction.
+\end{proof}
