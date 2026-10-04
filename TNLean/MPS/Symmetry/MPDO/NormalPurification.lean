@@ -33,9 +33,12 @@ and Lemma `equalMPS`, lines 1080–1117) turns proportional purifications into a
 The projective virtual representation `g ↦ X_g` and its cocycle are not constructed here;
 they need uniqueness of the gauge between normal tensors up to a scalar.
 
-**Scope restriction (boundary `X = 1`):** as in `TNLean/MPS/Symmetry/MPDO/Defs.lean`, the
-density operators are the periodic operators `mpo M L`; documented in
-`docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+**Scope restriction (local gauge characterization):** The local gauge-phase converse,
+its equivalence, and the geometric eigenvalue conclusion use identity boundary.
+The general arbitrary-boundary purification theorem in `Purification` instead uses a
+supplied global purification. A commuting boundary on the doubled bond space need not admit
+the local tensor factorization assumed here.
+See `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
 
 ## Main definitions
 
@@ -168,7 +171,7 @@ theorem exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor [NeZero D'
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
     (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
-    {c : G → ℕ → ℂ} (hsym : IsStrongOnSiteSymmetry M U c)
+    {c : G → ℕ → ℂ} (hsym : IsStrongOnSiteSymmetry M 1 U c)
     (hA : IsNormalTensor (purificationTensor A)) (g : G) :
     ∃ (X : GL (Fin D') ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i k, ∑ j, U g i j • A j k =
       ζ • ((X : Matrix (Fin D') (Fin D') ℂ) * A i k *
@@ -177,7 +180,8 @@ theorem exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor [NeZero D'
   have hB : IsNormalTensor B := isNormalTensor_purificationTensor_spinTwist (hU g) hA
   have hrel : ∀ L, 0 < L → ∀ w : Fin L → Fin (d * dK),
       mpv B w = c g L * mpv (purificationTensor A) w := fun L hL w =>
-    mpv_purificationTensor_spinTwist_of_mpo_mul_eq_smul A e hM (hsym g L hL) w
+    mpv_purificationTensor_spinTwist_of_mpo_mul_eq_smul A e hM
+      (by simpa only [mpoWithBoundary_one] using hsym g L hL) w
   have hProp : EventuallyNonzeroProportionalMPV₂ (purificationTensor A) B := by
     have hev : ∀ᶠ N in atTop, mpvOverlap (d := d * dK) B B N ≠ 0 :=
       hB.selfOverlap_tendsto_one.eventually_ne one_ne_zero
@@ -213,7 +217,7 @@ theorem exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor [NeZero D']
     (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (hA : IsNormalTensor (purificationTensor A)) :
-    (∃ c, IsStrongOnSiteSymmetry M U c) ↔
+    (∃ c, IsStrongOnSiteSymmetry M 1 U c) ↔
       ∀ g, ∃ (X : GL (Fin D') ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i k, ∑ j, U g i j • A j k =
         ζ • ((X : Matrix (Fin D') (Fin D') ℂ) * A i k *
           ((X⁻¹ : GL (Fin D') ℂ) : Matrix (Fin D') (Fin D') ℂ)) := by
@@ -236,7 +240,7 @@ theorem IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor [NeZero D']
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
     (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
-    {c : G → ℕ → ℂ} (hsym : IsStrongOnSiteSymmetry M U c)
+    {c : G → ℕ → ℂ} (hsym : IsStrongOnSiteSymmetry M 1 U c)
     (hA : IsNormalTensor (purificationTensor A)) :
     ∃ ζ : G → ℂ, (∀ g, ‖ζ g‖ = 1) ∧
       ∀ g L, 0 < L → mpo M L ≠ 0 → c g L = ζ g ^ L := by
@@ -244,7 +248,9 @@ theorem IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor [NeZero D']
     exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor U hU A e hM hsym hA
   refine ⟨ζ, hζ, fun g L hL hρ => ?_⟩
   have h1 := hsym g L hL
+  simp only [mpoWithBoundary_one] at h1
   have h2 := isStrongOnSiteSymmetry_of_gaugePhase_purification U A e hM X ζ hX g L hL
+  simp only [mpoWithBoundary_one] at h2
   exact smul_left_injective ℂ hρ (h1.symm.trans h2)
 
 end MPOTensor

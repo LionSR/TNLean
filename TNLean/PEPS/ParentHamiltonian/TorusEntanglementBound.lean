@@ -22,6 +22,12 @@ not an assertion about arbitrary winding regions. See
 
 Source: CPGSV21, arXiv:2011.12127, Section II.A.3, PEPS area law,
 `Papers/2011.12127/TN-Review-main.tex`, line 445.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 namespace TNLean.PEPS

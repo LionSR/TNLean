@@ -14,6 +14,11 @@ connectivity of the occupied centers is not assumed.
 
 This is an auxiliary geometric consequence for the block decomposition in
 SCP10, arXiv:1001.3807, proof of Theorem 6.9, lines 1935–1990.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Set
@@ -21,7 +26,8 @@ open Set
 namespace TNLean.PEPS
 
 /-- The occupied-square contact graph, including diagonal contacts.
-Source: SCP10, proof of Theorem 6.9, lines 1935–1990; auxiliary geometry. -/
+Locally proved auxiliary geometry for the block setting of SCP10, proof of Theorem 6.9, lines
+1935–1990; the source states no such lemma. -/
 def integerCellContactGraph (A : Finset (ℤ × ℤ)) :
     SimpleGraph {a : ℤ × ℤ // a ∈ A} where
   Adj a b := a ≠ b ∧ IsIntegerCellNear a.1 b.1
@@ -32,7 +38,8 @@ def integerCellContactGraph (A : Finset (ℤ × ℤ)) :
   loopless := ⟨by intro a h; exact h.1 rfl⟩
 
 /-- Intersecting occupied cells have centers at coordinate distance at most one.
-Source: SCP10, proof of Theorem 6.9, lines 1935–1990; auxiliary geometry. -/
+Locally proved auxiliary geometry for the block setting of SCP10, proof of Theorem 6.9, lines
+1935–1990; the source states no such lemma. -/
 theorem isIntegerCellNear_of_integerClosedCell_inter_nonempty (a b : ℤ × ℤ)
     (h : (integerClosedCell a ∩ integerClosedCell b).Nonempty) : IsIntegerCellNear a b := by
   obtain ⟨x, ha, hb⟩ := h
@@ -54,7 +61,8 @@ private theorem isClosed_integerClosedCell (a : ℤ × ℤ) : IsClosed (integerC
 
 /-- Preconnectedness of the actual occupied square union gives reachability
 through all square contacts, including shared corners.
-Source: SCP10, proof of Theorem 6.9, lines 1935–1990; auxiliary geometry. -/
+Locally proved auxiliary geometry for the block setting of SCP10, proof of Theorem 6.9, lines
+1935–1990; the source states no such lemma. -/
 theorem integerCellContactGraph_preconnected_of_isPreconnected (A : Finset (ℤ × ℤ))
     (hP : IsPreconnected (integerClosedCellUnion A)) :
     (integerCellContactGraph A).Preconnected := by
@@ -98,8 +106,8 @@ theorem integerCellContactGraph_preconnected_of_isPreconnected (A : Finset (ℤ 
   exact hb (ha.trans hadj.reachable)
 
 /-- A genuinely simply connected occupied square union has a connected contact
-graph. Diagonal contacts are retained. Source: SCP10, proof of Theorem 6.9,
-lines 1935–1990; auxiliary geometry. -/
+graph. Diagonal contacts are retained. Locally proved auxiliary geometry for the block setting of
+SCP10, proof of Theorem 6.9, lines 1935–1990; the source states no such lemma. -/
 theorem integerCellContactGraph_connected_of_isSimplyConnected (A : Finset (ℤ × ℤ))
     (hSC : IsSimplyConnected (integerClosedCellUnion A)) :
     (integerCellContactGraph A).Connected := by

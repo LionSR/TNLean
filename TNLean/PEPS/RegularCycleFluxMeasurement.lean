@@ -34,6 +34,11 @@ of these versions of the source calculation is recorded in
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. The positive local
 isometry factors are canceled in the physical detector, as in the normalization
 convention recorded in the same note.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

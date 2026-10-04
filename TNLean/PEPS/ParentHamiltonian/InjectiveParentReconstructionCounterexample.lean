@@ -23,6 +23,12 @@ equation `eq:4:deformed-parent-1`, local source lines 2031–2037, for
 rectangular injective site maps. The corrected positive interaction is
 separate, in `InjectiveRegionParentTransport`; the source correction is
 recorded in `docs/paper-gaps/cpgsv21_injective_parent_reconstruction.tex`.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators Kronecker Matrix ComplexOrder

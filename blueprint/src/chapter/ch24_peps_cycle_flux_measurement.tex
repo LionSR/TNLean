@@ -2,7 +2,7 @@
     \label{def:peps_cycle_class_detector}
     \lean{TNLean.PEPS.regularCycleClassDetector}
     \leanok
-    \uses{lem:peps_regular_region_coordinates}
+    \uses{def:peps_regular_region_coordinates}
     Let $G$ be a finite group and let $R$ be a finite region of an ordered
     graph. Fix a rooted spanning tree $T$ of the induced graph on $R$
     and a non-tree internal edge $e$. Write the exposed coordinates of a
@@ -51,8 +51,7 @@
     cycle residual with certainty. This establishes the conjugacy
     calculation $ab^{-1}=xgx^{-1}$ in
     \cite[proof of Theorem~6.15]{Schuch2010PEPS} for a connected block
-    with a chosen spanning-tree cycle. Its geometric scope and the
-    remaining native plaquette identification are recorded in
+    with a chosen spanning-tree cycle. Its geometric scope and the native plaquette specialization are recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
@@ -83,7 +82,7 @@
     \label{thm:peps_closed_walk_class_physical_measurement}
     \lean{TNLean.PEPS.exists_regularClosedWalkClass_physicalMeasurement}
     \leanok
-    \uses{lem:peps_regular_region_coordinates,
+    \uses{def:peps_regular_region_coordinates,
         thm:peps_conjugacy_class_invariance,
         thm:peps_regular_region_cycle_holonomy,
         thm:peps_regular_twisted_projector_coordinates,

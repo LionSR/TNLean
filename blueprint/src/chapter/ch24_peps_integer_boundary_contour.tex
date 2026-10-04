@@ -2,10 +2,7 @@
     \label{thm:peps_integer_boundary_contour_connected}
     \lean{TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected}
     \leanok
-    \uses{def:peps_integer_exterior_collar_graph,
-        thm:peps_integer_cell_exterior_connected,
-        thm:peps_integer_cell_contact_connectivity,
-        thm:peps_integer_contour_ray_potential}
+    \uses{def:peps_integer_exterior_collar_graph}
     Let $A\subset\mathbb Z^2$ be finite and suppose that the actual union
     $P_A=\bigcup_{a\in A}(a+[-1/2,1/2]^2)$ is simply connected.
     Let $B_A$ consist of the unoccupied centers whose coordinate distances
@@ -19,6 +16,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_integer_cell_exterior_connected,
+        thm:peps_integer_cell_contact_connectivity,
+        thm:peps_integer_contour_ray_potential}
     Orient each exposed cell edge with its occupied cell on the left.
     At an edge endpoint, continue with a right turn when the diagonal
     cell is occupied, straight ahead when only the forward cell is

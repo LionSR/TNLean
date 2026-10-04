@@ -8,7 +8,7 @@
 \date{2026-10-02}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{What the sources print}
 Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
@@ -120,16 +120,18 @@ $A_v^\dagger A_v=c_v\Pi_v$, its genuine open tensor satisfies
     T_R^\dagger T_R
       =\left(\prod_{v\in R}c_v\right)
         \frac{|G|^{I_R+1}}{|G|^{V_R}}\Pi_{\partial R}.
+    \label{eq:rmp_peps_qd_region_gram}
 \end{align}
 The bonds are unnormalized, and no group operators are inserted on
 them. Expanding the local Gram identities yields a group label at
 each vertex. Equality along every internal edge and connectedness
 make these labels one common translation. Each internal label remains
 free, contributing one factor $|G|$; the remaining boundary average
-is $|G|\Pi_{\partial R}$. The boundary may be empty.
+is $|G|\Pi_{\partial R}$. The boundary may be empty.\footnote{Result:
+    \leanid{TNLean.PEPS.regularOpenRegionMatrix_gram_of_connected}.}
 
 The actual block also satisfies the defining invariant-subspace isometry
-relation, with the positive factor displayed above. Its accessible physical
+relation, with the positive factor of~(\ref{eq:rmp_peps_qd_region_gram}). Its accessible physical
 coordinates are obtained explicitly. Applying the local map
 $c_v^{-1}A_v^\dagger$ at every vertex turns the original open contraction
 into the open contraction $B_R$ of the averaging projectors $\Pi_v$.
@@ -148,6 +150,7 @@ the tree. In these coordinates the actual canonical block is
  B_R(y,a,r,z;\theta)
    =|G|^{1-|R|}\Pi_{\partial R}(y,\theta)
      \mathbf 1_{\{z_e=1\text{ for all }e\notin T\}}.
+    \label{eq:rmp_peps_qd_canonical_block}
 \end{align}
 Thus the reference and normalized vertex labels give uniform factors,
 while the residual cycle labels give fixed identity factors. This
@@ -155,7 +158,8 @@ factorization is derived from the internal-bond summation, without
 assuming a block decomposition. It gives an explicit form of the
 accessible-coordinate and blocking arguments of
 \cite{Schuch2010PEPS}.\footnote{Source traceability:
-    \path{Papers/1001.3807/paper_v3.tex}, lines 1765--1920.}
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1765--1920. Result:
+    \leanid{TNLean.PEPS.regularProjectorOpenRegionMatrix_coordinates}.}
 
 The same coefficient formula proves $G$-injectivity of a connected
 regular block from local $G$-injectivity alone. Choose local inverses
@@ -167,7 +171,8 @@ connected-region consequence of Lemma~5.2 and the following
 observation of \cite{Schuch2010PEPS}, including internal cycles and an
 empty boundary. The general semi-regular connected-region conclusion
 is not asserted by this argument.\footnote{Source traceability:
-    \path{Papers/1001.3807/paper_v3.tex}, lines 1318--1358.}
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1318--1358. Result:
+    \leanid{TNLean.PEPS.isGInjective_regularOpenRegionMatrix_of_connected}.}
 
 For arbitrary inserted bond operators $u_e$, the same physical maps
 relate the actual open tensor to the canonical contraction
@@ -179,7 +184,9 @@ unrestricted. The transported boundary label is
 $k_v^{-1}\theta_e$ at a tail endpoint and
 $k_v^{-1}u_e\theta_e$ at a head endpoint. These are actual
 coordinate identities; they do not assert that arbitrary internal
-twists preserve the untwisted boundary projector or its rank.
+twists preserve the untwisted boundary projector or its rank.\footnote{Results:
+    \leanid{TNLean.PEPS.regionPhysicalMap_eq_regularProjectorTwistedRegionMatrix},
+    \leanid{TNLean.PEPS.regularRegionGaugeResidual_eq_one_of_tree}.}
 
 In spanning-tree coordinates, the twisted canonical coefficient is
 \begin{align}
@@ -187,11 +194,13 @@ In spanning-tree coordinates, the twisted canonical coefficient is
  = |G|^{-|R|}\sum_{x\in G}
    \mathbf 1_{\{y=x\theta'\}}
    \mathbf 1_{\{z_e=x\omega_e x^{-1}\text{ for all }e\notin T\}}.
+    \label{eq:rmp_peps_qd_twisted_canonical_block}
 \end{align}
 The internal reference and normalized vertex coordinates remain free.
 This identity includes arbitrary crossing operators, and follows from a
 bijection between compatible internal labelings and the surviving
-common translations $x$.
+common translations $x$.\footnote{Result:
+    \leanid{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}.}
 
 More generally, an arbitrary vertex gauge changes the actual open
 tensor to the tensor with internal operators $k_t^{-1}u_ek_s$ and
@@ -202,6 +211,7 @@ then give
 \begin{align}
  (T_R^u)^\dagger T_R^u
    =c_R F^\dagger\Pi_{\partial R}F,\qquad c_R>0.
+    \label{eq:rmp_peps_qd_transported_gram}
 \end{align}
 The transported projector has rank and trace $|G|^{|\partial R|-1}$
 for a nonempty boundary. The residual-flatness condition here is an
@@ -209,7 +219,10 @@ explicit hypothesis; it is not a substitute for the source's geometric
 disk condition. On the closed lattice, the same endpoint gauge change
 leaves the original physical vector exactly unchanged, without any
 isometry assumption, by local regular invariance and reindexing the
-summed bond labels.
+summed bond labels.\footnote{Results:
+    \leanid{TNLean.PEPS.exists_positive_gram_regularTwistedOpenRegionMatrix_of_regularRegionGaugeResidual_eq_one},
+    \leanid{TNLean.PEPS.rank_regularTwistedOpenRegionMatrix_of_regularRegionGaugeResidual_eq_one},
+    \leanid{TNLean.PEPS.sameState_regularVertexGauge}.}
 
 For a native torus region with circumferences $w,H\geq3$, a supplied
 integer lift $L:R\to\mathbb Z^2$ is required to project to each original
@@ -219,11 +232,15 @@ closure labels, the explicit gauge
 \begin{align}
  k_v=h^{\lfloor L_x(v)/w\rfloor}
       g^{-\lfloor L_y(v)/H\rfloor}
+    \label{eq:rmp_peps_qd_lift_gauge}
 \end{align}
 has the native closure operator as its gradient on every internal edge,
 including seam edges. Thus identity residuals, the positive transported
 Gram formula, and the boundary rank follow without an additional
-group-valued flatness hypothesis. Normalizing this gauge at the root
+group-valued flatness hypothesis.\footnote{Results:
+    \leanid{TNLean.PEPS.IsGIsometric.exists_positive_gram_torusClosureRegionMatrix_of_integerLift},
+    \leanid{TNLean.PEPS.IsGIsometric.rank_torusClosureRegionMatrix_of_integerLift}.}
+Normalizing this gauge at the root
 identifies it with the spanning-tree gauge. The actual canonical tensor
 then has the same normalized internal ancillary vector in every commuting
 sector; only its transported boundary configuration depends on the sector.
@@ -241,19 +258,24 @@ connected, the two additive-circle covering maps give a continuous
 lift to the real plane. Its values at native sites are integers, and
 uniqueness of path lifts gives exactly the required integer unit-step
 equations. Thus no arithmetic lift is an additional hypothesis in
-this simply connected case.
+this simply connected case.\footnote{Result:
+    \leanid{TNLean.PEPS.exists_isTorusRegionIntegerLift_of_isSimplyConnected}.}
 
 The continuous lift is a closed embedding. On each native cell, it is
 translation of the closed unit square by the lifted integer site, and
 its image is exactly the finite union of these planar squares. Thus
 the original torus cell domain is homeomorphic to this actual planar
 cell union. This identifies the domain for an exterior path argument;
-it does not supply such a path.
+it does not supply such a path.\footnote{Results:
+    \leanid{TNLean.PEPS.continuousLift_torusRegionRealization_isClosedEmbedding},
+    \leanid{TNLean.PEPS.range_continuousLift_torusRegionRealization}.}
 
 For a graph-connected native region with simply connected cell
 realization, local regular isometry and commuting closure labels
 therefore imply that its actual open-region matrix has rank
-$|G|^{|\partial R|-1}$ whenever the boundary is nonempty. Graph
+$|G|^{|\partial R|-1}$ whenever the boundary is nonempty.\footnote{Result:
+    \leanid{TNLean.PEPS.IsGIsometric.rank_torusClosureRegionMatrix_of_isSimplyConnected}.}
+Graph
 connectivity remains explicit: cells touching only at diagonal points
 can be connected as a geometric union without connecting the native
 induced graph. This auxiliary rank statement concerns one closure
@@ -268,29 +290,34 @@ calculations. For arbitrary twisted open regions, the cycle and crossing
 compatibility constraints remain essential. The actual torus overlap
 calculation below retains the noncontractible closure operators, and
 does not justify discarding those constraints on an arbitrary open region.
-The residual small-period torus and stripe restrictions, together with the
+The residual small-period torus restriction, together with the
 remaining source results, are tracked in issue~\#8271.
 
 \section{Actual torus closure overlaps}
 The regular $G$-isometric torus closure vectors are contracted with the
-horizontal $h$-seam and the downward-oriented vertical $g$-seam of
-\cite[equation~``eq:2d:peps-with-ug-uh'']{Schuch2010PEPS}. For $N$ sites,
+horizontal $h$-seam and the downward-oriented vertical $g$-seam of the
+closure definition in \cite{Schuch2010PEPS}.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1515--1524.} For $N$ sites,
 allowing site-dependent normalization $c_v>0$, their overlap is
 \begin{align}
     \langle\psi_{g,h},\psi_{g',h'}\rangle
       =\left(\prod_v c_v\right)|G|^N
         \#\{x\in G:hx=xh',\ gx=xg'\}.
+    \label{eq:rmp_peps_qd_closure_overlap}
 \end{align}
 This identity is derived from the actual tensor contraction. The local
 Gram averages contribute $|G|^{-N}$; the two families of free bond
 labels contribute $|G|^{2N}$. Every vertex translation is constant off
-the seams, and the seam equations are the two displayed intertwining
-conditions. The proof includes tori with a circumference of one.
+the seams, and the seam equations are the two intertwining
+conditions in~(\ref{eq:rmp_peps_qd_closure_overlap}). The proof includes tori with a circumference of one.\footnote{Result:
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusGClosure_overlap}.}
 
 For a self-overlap the count is $|Z_G(g)\cap Z_G(h)|>0$, since it
 contains the identity. Different pair-conjugacy classes give orthogonal
 nonzero vectors. Consequently the family indexed by all pair-conjugacy
-classes is linearly independent, as is its commuting subfamily.
+classes is linearly independent, as is its commuting subfamily.\footnote{Results:
+    \leanid{TNLean.PEPS.IsGIsometric.linearIndependent_torusGClosureClass},
+    \leanid{TNLean.PEPS.IsGIsometric.linearIndependent_torusGClosureClass_commuting}.}
 Noncommuting closures are not asserted to be ground states.
 
 The isometry assumption is now removed for regular virtual representations.
@@ -303,7 +330,10 @@ physical product map to a linear relation proves independence of the
 original closures. In particular the commuting family satisfies the
 regular-representation independence assertion in
 \cite[Theorem~5.9]{Schuch2010PEPS}, with no isometry or physical
-surjectivity hypothesis. The auxiliary extension to all pair classes
+surjectivity hypothesis.\footnote{Results:
+    \leanid{TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass},
+    \leanid{TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting}.}
+The auxiliary extension to all pair classes
 still makes no ground-state assertion.
 
 Conversely, applying $T$ at every physical site to a projector closure
@@ -312,7 +342,9 @@ physical maps recover the corresponding actual vectors; they need not
 be inverses on the full physical spaces. A physical product map changes
 the coefficient matrix across any partition by
 $C\mapsto F_R C F_{R^c}^{\mathsf T}$, so its rank cannot increase.
-Recovery in both directions therefore preserves the Schmidt rank.
+Recovery in both directions therefore preserves the Schmidt
+rank.\footnote{Result:
+    \leanid{TNLean.PEPS.IsGInjective.rank_physicalCutMatrix_torusGClosure_sum}.}
 This is the local deformation argument required in
 \cite[Corollary~6.10]{Schuch2010PEPS}; it does not yet supply the
 source's boundary-rank formula on arbitrary contractible regions.
@@ -325,14 +357,17 @@ $\Delta$ gives $\delta_{q_v,q_{v'}}$. Thus all vertex labels coincide.
 On each seam retain one operator, and contract the remaining seam
 operators with the sum of the trace-dual functionals, which takes value
 one on every $U_g$. The resulting linear map $E$ satisfies
-\[
+\begin{align}
  E\psi^\Pi_{g,h}=|G|^{-N}
    \sum_{x\in G}U_{xhx^{-1}}\otimes U_{xgx^{-1}}.
-\]
+    \label{eq:rmp_peps_qd_closure_extraction}
+\end{align}
 These operator sums are independent when indexed by pair-conjugacy
 classes: the tensor product of the two trace-dual functionals vanishes
 on different classes and gives $|Z_G(g)\cap Z_G(h)|>0$ on its own class.
-Since $|G|^{-N}\ne0$, the actual closure vectors are independent.
+Since $|G|^{-N}\ne0$, the actual closure vectors are
+independent.\footnote{Result:
+    \leanid{TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_of_isSemiRegular}.}
 This proves the independence component of
 \cite[Theorem~5.9]{Schuch2010PEPS}, with its semi-regular hypothesis,
 without a local isometry or a contracted-region Gram hypothesis.
@@ -349,14 +384,20 @@ $R$ and its complement are nonempty and connected, the boundary is
 nonempty, and the contraction has no inserted bond operators.
 The two region Gram identities are derived from the local isometries;
 they are not additional hypotheses. Their positive factors give an
-explicit positive normalization of the actual coefficient vector.
+explicit positive normalization of the actual coefficient
+vector.\footnote{Results:
+    \leanid{TNLean.PEPS.exists_positive_gram_regularOpenRegionMatrix_of_connected},
+    \leanid{TNLean.PEPS.exists_normalization_regularPhysicalCutState_of_connected}.}
 
 Theorem~6.9 of \cite{Schuch2010PEPS} concerns the torus states with
 $(g,h)$-closures, including their superpositions. The finite untwisted
 statement above is therefore a restriction, not the formalization of
 that source theorem. The local controlled permutation
 $(a,b,c)\mapsto(cb^{-1}a,b,c)$ and its inverse have been established,
-including the cancellation of a twist $t$ when $c=tb$. Accessible
+including the cancellation of a twist $t$ when $c=tb$.\footnote{Results:
+    \leanid{TNLean.PEPS.regularTweezerMatrix_mem_unitaryGroup},
+    \leanid{TNLean.PEPS.regularTweezerEquiv_symm_apply_twisted}.}
+Accessible
 coordinates, exact twisted coefficients and mixed Gram matrices, and
 the factorization on supplied integer-lifted regions are established above.
 Simple connectedness of the cell realization now yields the geometric
@@ -374,7 +415,8 @@ $D_f$ transports from $v_f$ to $w_f$. The actual closed route from
 the complementary root through $f_0$ backwards, the region tree,
 $f$ forwards, and the complementary tree back to the root has
 holonomy $m_fm_{f_0}^{-1}$. This identity is established for arbitrary
-bond operators; the route passes through $R$.
+bond operators; the route passes through $R$.\footnote{Result:
+    \leanid{TNLean.PEPS.regularBoundaryTreeRoute_holonomy}.}
 
 For each actual induced complementary walk, assigning free generators
 to the non-tree edges constructs a word whose evaluation at $\omega$
@@ -388,7 +430,10 @@ gives equality of the required transports. Inside an integer-lifted
 region, the crossing numbers are the differences of the endpoint
 integer deck coordinates. Simple connectedness of the actual cell
 domain derives the lift and hence makes those numbers independent of
-the interior path with fixed endpoints.
+the interior path with fixed endpoints.\footnote{Results:
+    \leanid{TNLean.PEPS.regularRegionCycleWord_eval_conj},
+    \leanid{TNLean.PEPS.regularWalkHolonomy_torusClosure_eq_of_winding_eq},
+    \leanid{TNLean.PEPS.torusWalkWinding_eq_of_isSimplyConnected}.}
 
 The exterior loop with the required numbers is now constructed from the
 actual simply connected cell domain. The full plane preimage of the region
@@ -416,7 +461,10 @@ paths. Lattice-path approximation projects these paths to actual
 induced-complement walks with their exact deck-coordinate differences as
 crossing numbers. Appending the two complementary tree paths gives the
 fixed root loops for all boundary routes, independently of every
-closure label. No condition on group holonomies replaces the geometry.
+closure label. No condition on group holonomies replaces the
+geometry.\footnote{Results:
+    \leanid{TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected},
+    \leanid{TNLean.PEPS.exists_complementBoundaryLoops_of_isSimplyConnected}.}
 
 The occupied connectivity condition must be distinguished from simple
 connectedness of the closed-cell realization. Two squares meeting only at
@@ -450,7 +498,11 @@ ancillary vector, and a complementary cycle-orbit amplitude. All dependence
 on the reference crossing multiplier cancels in the boundary sum.
 Region cycle residuals and relative-word identities are explicit premises
 of the finite-graph formula; the torus specialization derives them from
-the geometric lift and constructed complementary winding loops.
+the geometric lift and constructed complementary winding
+loops.\footnote{Results:
+    \leanid{TNLean.PEPS.exists_unitary_torusComplementDisentangling_of_winding_eq},
+    \leanid{TNLean.PEPS.regularControlledProjectorCutMatrix_sum_factorization},
+    \leanid{TNLean.PEPS.exists_unitary_torusControlledBoundaryFactor_of_isSimplyConnected_and_winding}.}
 
 A canonical unitary
 commuting with the product of the local invariant projectors is proved
@@ -463,7 +515,9 @@ evaluation of a free-group word respects that conjugation. Hence the
 controlled permutation commutes with each vertex translation and with
 their average, the actual product of local invariant projectors. It
 preserves the supported canonical physical space and has a unitary
-implementation on the original physical region.
+implementation on the original physical region.\footnote{Results:
+    \leanid{TNLean.PEPS.regularCycleControlledBoundaryMatrix_commute_localProjector},
+    \leanid{TNLean.PEPS.exists_unitary_regionPhysicalProductMatrix_mul_cycleWords}.}
 The resulting common reduced matrix is now computed in the native canonical
 half-edge coordinates. For every coherent sum $C$, it satisfies
 $CC^\dagger=\operatorname{tr}(CC^\dagger)\rho_R^0$, with $\rho_R^0$ fixed
@@ -475,26 +529,33 @@ for every nonzero coherent commuting-closure sum. Its rank is $|G|^{b-1}$,
 its nonzero spectrum is flat, and every finite nonnegative R\'enyi entropy is
 $(b-1)\log|G|$. The positive-order calculation uses the genuine spectral trace
 of a real power, with the rank convention at zero and von Neumann entropy at
-one. For a contiguous block with actually simply connected closed-cell realization,
+one.\footnote{Results:
+    \leanid{TNLean.PEPS.torusControlledCut_reducedMatrix_eq_trace_smul},
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_density_transfer}.}
+For a contiguous block with actually simply connected closed-cell realization,
 the induced complement is connected. Indeed, every complementary component
 has a crossing bond to the nonempty occupied region, and the collar argument
 joins all exterior crossing endpoints. The two spanning trees, their roots,
 the boundary numbering, and the winding loops can therefore be chosen within
 the proof. The common-density and entropy statements require none of these
-choices as hypotheses.
+choices as hypotheses.\footnote{Result:
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected}.}
 
 The regular-torus statements retain periods at least three. Periods one or two
 require a model retaining multiple bonds between the same sites and self-bonds;
 the simple-graph statements do not cover them. The operation on the two
-width-one coordinate-zero stripes is established for actual coherent closure
-states: their complementary rectangle projects injectively from a compact
-convex planar rectangle, so the common-density theorem gives a physical
-complementary unitary relating any two normalized states. Identification
+width-one coordinate-zero stripes is established for actual coherent
+superpositions of closure states whose closure pairs all commute: their
+complementary rectangle projects injectively from a compact convex planar
+rectangle, so the common-density theorem gives a physical complementary
+unitary relating any two such normalized superpositions.\footnote{Result:
+    \leanid{TNLean.PEPS.IsGIsometric.torusClosureSuperpositionCut_stripe_local_equivalence}.}
+Identification
 with the entire two-dimensional parent-Hamiltonian ground space remains
 separate. This is
-the general-coordinate form of the controlled operation in
-equation~``eq:iso:tweezer-duplicate-operation'', leading to
-equation~``eq:iso:block-disent-decomposition'' and the common reduced
+the general-coordinate form of the controlled operation displayed in
+\cite{Schuch2010PEPS} at source lines 1961--1965, leading to the
+block decomposition displayed at lines 1970--1976 and the common reduced
 state for commuting closure superpositions.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2027--2072.}
 
@@ -504,18 +565,22 @@ bonds. For assignments $u,w$ that are the identity on crossing bonds,
 suppose their common identity bonds contain a connected spanning
 subgraph of the region. The local translations are then constant.
 Let $\kappa_R$ be the untwisted region factor and put
-\[
+\begin{align}
     F_{u,w}=\{x\in G:u_ex=xw_e\text{ for every internal bond }e\}.
-\]
+    \label{eq:rmp_peps_qd_intertwiner_set}
+\end{align}
 Then the actual cross-Gram operator satisfies
 \begin{align}
     (T_R^u)^\dagger T_R^w
-      &=\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},\\
+      &=\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},
+      \label{eq:rmp_peps_qd_cross_gram}\\
     P(T_R^u)^\dagger T_R^wP
       &=\kappa_R\frac{|F_{u,w}|}{|G|}P.
+      \label{eq:rmp_peps_qd_projected_cross_gram}
 \end{align}
 The second identity uses only that every common translation acts as
-the identity on the invariant boundary.
+the identity on the invariant boundary.\footnote{Result:
+    \leanid{TNLean.PEPS.sum_regularBoundary_filtered_translation_eq_weightedTranslation}.}
 
 Consequently, let the original region $D$ be connected, and consider
 any finite family of twists supported entirely inside $D^c$, with a
@@ -525,12 +590,15 @@ same normalized reduced density on $D$:
 \begin{align}
     \rho_D=\frac{1}{c_D|G|^{b-1}}T_DPT_D^\dagger,
     \qquad T_D^\dagger T_D=c_DP,\quad c_D>0.
+    \label{eq:rmp_peps_qd_common_density}
 \end{align}
 Its rank is $|G|^{b-1}$ and its nonzero spectrum is flat, so its
 von Neumann entropy is $(b-1)\log|G|$. The region and mixed Gram
 identities are derived from local regular isometry. Positivity of the
 combined complementary Gram factor follows from nonvanishing of the
-actual superposition, with no extra condition on its coefficients.
+actual superposition, with no extra condition on its
+coefficients.\footnote{Result:
+    \leanid{TNLean.PEPS.exists_normalization_regularTwistedPhysicalCutSuperposition}.}
 
 This removes the absence-of-twists restriction for this finite-cut
 setting. It still requires the twists to avoid every edge incident to
@@ -544,13 +612,16 @@ reduced density, rank, flat spectrum, and entropy for every nonzero
 superposition of native closures on such a rectangle. The boundary
 count and these connectivity conditions are proved from the coordinate
 bounds, rather than supplied as additional hypotheses. This restricted
-calculation permits noncommuting closure pairs as well.
+calculation permits noncommuting closure pairs as well.\footnote{Result:
+    \leanid{TNLean.PEPS.exists_normalization_torusClosureSuperpositionCut_rectangle}.}
 
 Commuting closure seams may also be placed at arbitrary rows and columns:
 local virtual invariance removes the corresponding vertex changes of
 basis, while commutation preserves the transverse closure. This deformation
 identity is established for the actual torus contraction, without
-isometry or semi-regularity. The geometry-derived common-density theorem covers contiguous actually
+isometry or semi-regularity.\footnote{Result:
+    \leanid{TNLean.PEPS.torusBondNetwork_closureAt_eq_torusGClosure}.}
+The geometry-derived common-density theorem covers contiguous actually
 simply connected regions meeting either closure seam, for commuting
 closure families on native tori of periods at least three.
 
@@ -561,7 +632,8 @@ Schmidt rank across the physical cut. The normalized reduced density
 therefore has rank $|G|^{\partial D-1}$, and its genuine zero-order
 R\'enyi entropy is $(\partial D-1)\log|G|$. This proves the regular
 native-torus version of Corollary~6.10 on the same contiguous simply
-connected regions. Only rank is preserved by these local maps;
+connected regions.\footnote{Result:
+    \leanid{TNLean.PEPS.IsGInjective.torusPhysicalCut_rank_zeroEntropy_of_isSimplyConnected}.} Only rank is preserved by these local maps;
 flat spectrum is the additional isometric conclusion.
 
 \section{Scope: statements about the whole network}
@@ -570,10 +642,11 @@ one tensor.
 \begin{enumerate}
     \item The primal tensor's virtual symmetry under every irreducible
     representation $\pi$ is formalized as the single-tensor identity
-    \[
+    \begin{align}
         A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}
           =A_{t,r,b,l}\,\mathbb 1
-    \]
+        \label{eq:rmp_peps_qd_primal_virtual_symmetry}
+    \end{align}
     for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support,
     and for the contracted network on the torus: the virtual string that
     multiplies $\pi(g)$ for each bond with label $g$ it crosses can be
@@ -618,17 +691,27 @@ one tensor.
 \section{Flux detection on a connected block}
 Fix a spanning tree of a connected regular block and one non-tree
 internal edge. Its exposed cycle coordinate is conjugate to the residual
-of the actual inserted group operators. The diagonal projections onto
+of the actual inserted group operators.\footnote{Result:
+    \leanid{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}.}
+The diagonal projections onto
 its conjugacy classes commute with the product local averaging
 projector. Through the original local $G$-isometric maps $A$, they give
 physical projections $Q_C=c^{-1}AD_CA^\dagger$.
 An additional projection $I-\sum_C Q_C$ completes the measurement on
 the whole physical Hilbert space and annihilates every actual twisted
 block column. The outcome on a nonzero column is exactly the conjugacy
-class of the derived residual. Thus the conjugacy calculation in the
-proof of Theorem~6.15 is established for a chosen cycle in an actual
-connected block. The four-site plaquette geometry and its explicit
-holonomy remain separate; no parent-Hamiltonian assertion is used.
+class of the derived residual. This establishes the conjugacy
+calculation in the proof of Theorem~6.15 for a chosen cycle in an actual
+connected block. The same construction detects the conjugacy class of
+any specified closed-walk holonomy.\footnote{Results:
+    \leanid{TNLean.PEPS.exists_regularCycleClass_physicalMeasurement},
+    \leanid{TNLean.PEPS.exists_regularClosedWalkClass_physicalMeasurement}.}
+On native tori of periods at least three, the four-site plaquette
+walk and its inserted-bond holonomy give the corresponding physical
+plaquette measurement.\footnote{Results:
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_physicalMeasurement},
+    \leanid{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_fluxClass_measurement}.}
+No parent-Hamiltonian assertion is used in these measurement results.
 
 \section{The semi-regular bond isometry}
 For each irreducible block, the map
@@ -639,7 +722,10 @@ $\sqrt{d_i}D^i(gh^{-1})$ to $D^i(gh^{-1})\otimes I_{d_i}$,
 exactly as in Section~7. The coefficient map and its product over any
 finite family of bonds are isometries, and the product map carries
 arbitrary coherent sums of the weighted bond products to their
-repeated-multiplicity counterparts. The identification of the
+repeated-multiplicity counterparts.\footnote{Results:
+    \leanid{TNLean.PEPS.sum_trace_multiplicityBondFamilyMap_conjTranspose_mul},
+    \leanid{TNLean.PEPS.multiplicityBondFamilyMap_sqrt_smul}.}
+The identification of the
 fourth-root-weighted site tensor with those bond sums is a further
 statement; it is not assumed in this isometry calculation.
 

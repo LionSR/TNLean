@@ -25,6 +25,11 @@ hypotheses remains separate; see
 No physical range surjectivity or global Gram identity is assumed.
 
 Source: SCP10, arXiv:1001.3807, lines 1765–1820 and 1935–2072.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

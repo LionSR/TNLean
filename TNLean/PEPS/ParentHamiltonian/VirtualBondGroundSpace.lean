@@ -23,6 +23,12 @@ is zero, so the same span formula remains valid.
 Source: CPGSV21, arXiv:2011.12127, the independent-bond ground-state argument
 preceding equation `eq:4:deformed-parent-1`, lines 2017–2044. This is its
 purely virtual part; no physical injectivity assumption is used.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 open scoped BigOperators

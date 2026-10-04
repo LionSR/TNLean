@@ -319,27 +319,35 @@ theorem nonNormalApproxVector_blockSum (hι : ∀ j, Function.Injective (ι j))
 
 /-! ### Orthogonality of states -/
 
+/-- **Orthogonal columns give a vanishing mixed transfer map.** If the physical matrices of two
+tensors have orthogonal columns, `(Y)ᴴ X = 0`, i.e. `∑ᵢ conj(Yⁱ_{a'c'}) Xⁱ_{ac} = 0`, then the
+mixed transfer map `E_{XY}(ρ) = ∑ᵢ Xⁱ ρ (Yⁱ)†` vanishes. -/
+theorem mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero {n D₁ D₂ : ℕ}
+    {X : MPSTensor n D₁} {Y : MPSTensor n D₂} (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) :
+    Kraus.mixedMapLM X Y = 0 := by
+  ext ρ a a'
+  have hij : ∀ a c a' c', ∑ i, X i a c * star (Y i a' c') = 0 := fun a c a' c' => by
+    have := congrFun (congrFun h (a', c')) (a, c)
+    simpa [mul_apply, physicalMatrix, conjTranspose_apply, mul_comm] using this
+  simp only [Kraus.mixedMapLM_apply, LinearMap.zero_apply, Matrix.zero_apply, Matrix.sum_apply,
+    mul_apply, conjTranspose_apply, Finset.sum_mul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_eq_zero fun c' _ => ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_eq_zero fun c _ => ?_
+  calc ∑ i, X i a c * ρ c c' * star (Y i a' c') = ρ c c' * ∑ i, X i a c * star (Y i a' c') := by
+        rw [Finset.mul_sum]; exact Finset.sum_congr rfl fun i _ => by ring
+    _ = 0 := by rw [hij, mul_zero]
+
 /-- **Orthogonal states.** If the physical matrices of two tensors have orthogonal columns,
-`(Y)ᴴ X = 0`, i.e. `∑ᵢ conj(Yⁱ_{a'c'}) Xⁱ_{ac} = 0`, then the mixed transfer map vanishes and
-the periodic states on `M ≥ 1` sites are orthogonal: `∑_s φ_M(X)(s) conj(φ_M(Y)(s)) = 0`. -/
+`(Y)ᴴ X = 0`, then the periodic states on `M ≥ 1` sites are orthogonal:
+`∑_s φ_M(X)(s) conj(φ_M(Y)(s)) = 0`, since the mixed transfer map vanishes
+(`mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero`). -/
 theorem mpvOverlap_eq_zero {n D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] {X : MPSTensor n D₁}
     {Y : MPSTensor n D₂} (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) {M : ℕ}
     (hM : M ≠ 0) : mpvOverlap X Y M = 0 := by
-  have hmix : Kraus.mixedMapLM X Y = 0 := by
-    ext ρ a a'
-    have hij : ∀ a c a' c', ∑ i, X i a c * star (Y i a' c') = 0 := fun a c a' c' => by
-      have := congrFun (congrFun h (a', c')) (a, c)
-      simpa [mul_apply, physicalMatrix, conjTranspose_apply, mul_comm] using this
-    simp only [Kraus.mixedMapLM_apply, LinearMap.zero_apply, Matrix.zero_apply, Matrix.sum_apply,
-      mul_apply, conjTranspose_apply, Finset.sum_mul]
-    rw [Finset.sum_comm]
-    refine Finset.sum_eq_zero fun c' _ => ?_
-    rw [Finset.sum_comm]
-    refine Finset.sum_eq_zero fun c _ => ?_
-    calc ∑ i, X i a c * ρ c c' * star (Y i a' c') = ρ c c' * ∑ i, X i a c * star (Y i a' c') := by
-          rw [Finset.mul_sum]; exact Finset.sum_congr rfl fun i _ => by ring
-      _ = 0 := by rw [hij, mul_zero]
-  rw [← trace_mixedMapLM_rect_pow_eq_mpvOverlap, hmix, zero_pow hM, map_zero]
+  rw [← trace_mixedMapLM_rect_pow_eq_mpvOverlap,
+    mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero h, zero_pow hM, map_zero]
 
 /-- The physical matrices of the approximating tensors `V_j P_{j,∞}` of blocks with orthogonal
 blocked tensors have orthogonal columns: `(V_j F_j)ᴴ (V_{j'} F_{j'}) = 0`. -/

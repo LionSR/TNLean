@@ -23,6 +23,11 @@ This is a necessary local flatness step in the converse torus ground-space
 argument, not a representation of every parent-kernel vector by inserted bonds.
 Source: SCP10, arXiv:1001.3807, proof of Theorem 5.5, lines 1440–1514,
 and accessible regular coordinates, lines 1765–1920.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

@@ -24,6 +24,11 @@ Source: SCP10, arXiv:1001.3807, the closure constraints in Theorem 5.5,
 lines 1440–1514, and accessible-coordinate calculation, lines 1765–1920.
 This is an auxiliary regular closed-walk statement, rather than a complete
 classification of the torus parent kernel.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

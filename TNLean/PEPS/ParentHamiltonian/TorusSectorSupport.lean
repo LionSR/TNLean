@@ -28,6 +28,11 @@ full parent-Hamiltonian ground space; see
 
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Theorem 5.5
 and Corollary 6.10, local source lines 1440–1545 and 2074–2090.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

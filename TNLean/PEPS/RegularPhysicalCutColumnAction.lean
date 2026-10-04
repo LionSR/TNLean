@@ -16,6 +16,11 @@ into the open-region matrix and the transpose of its complementary matrix.
 Source: SCP10, arXiv:1001.3807, cut contraction in lines 1935–1957 and flux
 measurement in Theorem 6.15, lines 2217–2267. No unitary or eigenstate
 hypothesis on the global contraction is used.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix

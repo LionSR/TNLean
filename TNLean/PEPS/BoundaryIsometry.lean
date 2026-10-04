@@ -25,6 +25,11 @@ They express the transport step in Schuch, Cirac, and Pérez-García, arXiv:1001
 Theorem 6.9, proof (`Papers/1001.3807/paper_v3.tex`, lines 2043–2076). Identifying the
 maps with contractions of a particular PEPS across a topologically trivial region is a
 separate geometric statement.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix Kronecker ComplexOrder

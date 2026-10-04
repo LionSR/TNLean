@@ -20,6 +20,12 @@ Source: CPGSV21, arXiv:2011.12127, Section IV.C.1, the product of virtual
 entangled pairs and its physical image, lines 2017–2044. These are global
 contraction identities; no assertion about a smaller-region physical
 parent Hamiltonian is made here.
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
 -/
 
 namespace TNLean.PEPS

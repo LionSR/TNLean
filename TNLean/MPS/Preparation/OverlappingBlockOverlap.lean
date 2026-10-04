@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.OverlappingBlockGram
-import TNLean.MPS.Preparation.OrthogonalBlockError
+import TNLean.MPS.Preparation.OrthogonalBlockSum
 
 /-!
 # Overlaps for a direct sum of blocks with overlapping states
@@ -581,7 +581,7 @@ theorem exists_norm_mpvOverlap_le_of_mixedMapLM {D₁ D₂ : ℕ} [NeZero D₁] 
     _ = K₂ * C * ‖(Matrix.single p r 1 : Matrix (Fin D₁) (Fin D₂) ℂ)‖ * x ^ N := by ring
 
 /-- **The norm of a combination of block states.** In the setting of
-`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1/2`, there is `K` such that for
+`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1`, there is `K` such that for
 all `R` and all coefficients `βⱼ` with `|βⱼ| ≤ R`, the vector `∑ⱼ βⱼ |φ_N(A_j)⟩` on `N` sites
 satisfies `|‖∑ⱼ βⱼ |φ_N(A_j)⟩‖² - ∑ⱼ |βⱼ|²| ≤ R² K e^{-γ N/ξ}`: its squared norm is
 `∑ⱼ ∑ₖ βⱼ conj(βₖ) ⟨φ_N(A_k)|φ_N(A_j)⟩`, the diagonal terms are `|βⱼ|²` up to the normalization
@@ -599,14 +599,13 @@ theorem exists_abs_sum_norm_sq_sum_mpv_sub_le
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ (R : ℝ) (β : Fin b → ℂ), (∀ j, ‖β j‖ ≤ R) → ∀ N : ℕ,
       |∑ s : Fin N → Fin d, ‖∑ j, β j * mpv (Aj j) s‖ ^ 2 - ∑ j, ‖β j‖ ^ 2| ≤
         R ^ 2 * K * Real.exp (-γ / correlationLength lam₂) ^ N := by
   have hD : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
   set x := Real.exp (-γ / correlationLength lam₂)
   have hx0 : 0 ≤ x := (Real.exp_pos _).le
-  have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hl.le
   choose K₅ hK₅ hc using fun j => exists_abs_norm_mpvState_sq_sub_one_le (Aj j) (hN j) (hA j)
     (hσ j) (htr j) (hfix j) (hlam j) hγ0 hγ
   have hoff : ∀ j k, ∃ K : ℝ, 0 ≤ K ∧ (j ≠ k → ∀ N : ℕ,
@@ -614,7 +613,7 @@ theorem exists_abs_sum_norm_sq_sum_mpv_sub_le
     by_cases hjk : j = k
     · exact ⟨0, le_rfl, fun h => absurd hjk h⟩
     · obtain ⟨K, hK, h⟩ := exists_norm_mpvOverlap_le_of_mixedMapLM (Aj j) (Aj k) hl
-        (hmix j k hjk) hγ0 (by linarith)
+        (hmix j k hjk) hγ0 hγ
       exact ⟨K, hK, fun _ => h⟩
   choose Ko hKo hob using hoff
   refine ⟨∑ j, K₅ j + ∑ j, ∑ k, Ko j k,
@@ -654,16 +653,13 @@ theorem exists_abs_sum_norm_sq_sum_mpv_sub_le
     rw [hsplit, Finset.sum_sub_distrib]
     simp_rw [hcjj]
     ring
-  have hxx : ∀ n : ℕ, (x ^ 2) ^ n ≤ x ^ n := fun n =>
-    pow_le_pow_left₀ (by positivity) (by nlinarith) n
   rw [← Real.norm_eq_abs, ← Complex.norm_real, hexp, mul_add, add_mul, Finset.mul_sum,
     Finset.sum_mul, Finset.mul_sum, Finset.sum_mul]
   refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
   · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
     rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
     calc ‖c j j‖ * |‖mpvState (Aj j) N‖ ^ 2 - 1| ≤ R ^ 2 * (K₅ j * x ^ N) :=
-          mul_le_mul (hc1 j j) ((hc j N).trans (mul_le_mul_of_nonneg_left (hxx N) (hK₅ j)))
-            (abs_nonneg _) (sq_nonneg R)
+          mul_le_mul (hc1 j j) (hc j N) (abs_nonneg _) (sq_nonneg R)
       _ = R ^ 2 * K₅ j * x ^ N := by ring
   · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
     rw [Finset.mul_sum, Finset.sum_mul]
@@ -677,7 +673,7 @@ theorem exists_abs_sum_norm_sq_sum_mpv_sub_le
       _ = R ^ 2 * Ko j k * x ^ N := by ring
 
 /-- **The norm of the target with weights.** In the setting of
-`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1/2`, there is `K` such that for all
+`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1`, there is `K` such that for all
 weights `μⱼ` with `|μⱼ| ≤ 1` the periodic state of the direct sum `⊕ⱼ μⱼ A_j` on `N ≥ 1` sites
 satisfies `|‖φ_N‖² - ∑ⱼ |μⱼ^N|²| ≤ K e^{-γ N/ξ}`: it is `∑ⱼ μⱼ^N |φ_N(A_j)⟩` (`mpv_blockSum`),
 and `exists_abs_sum_norm_sq_sum_mpv_sub_le` applies with `R = 1`.
@@ -695,7 +691,7 @@ theorem exists_abs_norm_mpvState_blockSum_weight_sq_sub_le
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ μ : Fin b → ℂ, (∀ j, ‖μ j‖ ≤ 1) → ∀ N : ℕ, N ≠ 0 →
       |‖mpvState (blockSum Aj ι μ) N‖ ^ 2 - ∑ j, ‖μ j ^ N‖ ^ 2| ≤
         K * Real.exp (-γ / correlationLength lam₂) ^ N := by
@@ -708,7 +704,7 @@ theorem exists_abs_norm_mpvState_blockSum_weight_sq_sub_le
   simpa only [mpvState_apply, mpv_blockSum hι hdisj μ hN0] using h'
 
 /-- **The norm of the target.** In the setting of `exists_norm_gram_blockTensor_blockSum_sub_le`,
-with `0 < γ < 1/2`, the periodic state of the direct sum with unit weights on `N ≥ 1` sites
+with `0 < γ < 1`, the periodic state of the direct sum with unit weights on `N ≥ 1` sites
 satisfies `|‖φ_N‖² - b| ≤ K e^{-γ N/ξ}`: its squared norm is `∑ⱼ ∑ₖ ⟨φ_N(A_j)|φ_N(A_k)⟩`, the
 diagonal terms are `1` up to the normalization of the normal case
 (`exists_abs_norm_mpvState_sq_sub_one_le`), and the others decay at the rate of the mixed
@@ -726,7 +722,7 @@ theorem exists_abs_norm_mpvState_blockSum_sq_sub_le
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ N : ℕ, N ≠ 0 →
       |‖mpvState (blockSum Aj ι fun _ => 1) N‖ ^ 2 - b| ≤
         K * Real.exp (-γ / correlationLength lam₂) ^ N := by

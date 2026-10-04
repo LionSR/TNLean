@@ -16,6 +16,11 @@ and its von Neumann entropy is `log (|G| ^ n) = n log |G|`.
 This is the virtual calculation in Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
 Theorem 6.9 (`Papers/1001.3807/paper_v3.tex`, lines 2027–2072). Identifying this entropy
 with that of a physical PEPS region requires the separate contraction and isometry arguments.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

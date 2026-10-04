@@ -20,6 +20,11 @@ These reversible group-coordinate identities accompany the accessible virtual
 systems and blocking argument of Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, local source lines 1765–1920. They do not assume a factorization
 of a twisted region contraction or assert a parent-Hamiltonian theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

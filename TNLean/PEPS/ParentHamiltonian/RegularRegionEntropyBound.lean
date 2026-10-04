@@ -24,6 +24,12 @@ not the general semi-regular entropy assertion; see
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Corollary 6.10,
 local source lines 2074–2090; Wolf, Quantum Channels & Operations, Section 8.2,
 for the entropy bound by the logarithm of the support dimension.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+- M. M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 8.2
 -/
 
 open scoped BigOperators Matrix ComplexOrder

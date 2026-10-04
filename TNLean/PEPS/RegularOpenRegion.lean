@@ -19,6 +19,11 @@ This is the boundary symmetry step in Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, proof of Theorem 6.9 (local source lines 1935–1980 and 2043–2072).
 It does not assert that a region containing loops is isometric on its invariant
 boundary space, and does not establish the physical entropy formula.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix
