@@ -128,13 +128,14 @@ Source: the minimal representation step in Section 5 of
 theorem initialCutEvaluation_row {d N D : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
     (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
     (hB0 : ∀ q, (B 0 q).val = 1) (σ : Fin N → Fin d) (hD : 0 < D) :
-    (Matrix.zeroPad D (cutEvaluationMatrix ψ B σ 0)) ⟨0, hD⟩ = basisVecZero D := by
+    (Matrix.zeroPad D (cutEvaluationMatrix ψ B σ 0)) ⟨0, hD⟩ = basisVecZero hD := by
   have hentries : ∀ a b, cutEvaluationMatrix ψ B σ 0 a b = 1 := by
     intro a b
     rw [cutEvaluationMatrix_apply, hB0 b]
     rfl
   ext β
-  simp [Matrix.zeroPad, cutCoefficientRank_zero ψ hψ, hentries, basisVecZero]
+  simp [Matrix.zeroPad, cutCoefficientRank_zero ψ hψ, hentries, basisVecZero,
+    Pi.single_apply, Fin.ext_iff]
 
 /-- The normalized initial evaluation matrix preserves the zero-coordinate
 row of every matrix.
