@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
 import TNLean.MPS.Symmetry.BondProductContinuity
+import TNLean.Algebra.MatrixProjectionReindex
 
 /-!
 # A symmetric gapped path for the direct-sum fixed points
@@ -36,11 +37,7 @@ theorem normalizedBondInteraction_isStarProjection {D₀ D₁ : ℕ}
   apply twoSiteBondInteraction_isStarProjection
   have h := bondPenalty_isStarProjection _
     (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ)
-  refine ⟨h.isIdempotentElem.map (Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv.symm), ?_⟩
-  simpa only [IsSelfAdjoint, Matrix.star_eq_conjTranspose,
-    Matrix.conjTranspose_reindex] using
-    congrArg (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm)
-      h.isSelfAdjoint.star_eq
+  exact Matrix.isStarProjection_reindex finProdFinEquiv.symm _ h
 
 /-- The normalized two-site interaction depends continuously on the
 parameter. Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/

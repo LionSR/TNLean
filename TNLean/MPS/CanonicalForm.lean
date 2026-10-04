@@ -23,6 +23,7 @@ import TNLean.MPS.CanonicalForm.Conjugation
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.Existence
+import TNLean.MPS.CanonicalForm.FaithfulStationaryClosure
 import TNLean.MPS.CanonicalForm.FixedLengthIntertwiner
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.NormalTensorGauge

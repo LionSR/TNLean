@@ -8,15 +8,34 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit
 
+import TNLean.Circuit.ArbitrarySiteGateEmbedding
 import TNLean.Circuit.Channel
+import TNLean.Circuit.CleanImplementationPlacement
+import TNLean.Circuit.CleanUnitaryImplementation
 import TNLean.Circuit.Composition
 import TNLean.Circuit.ConfigurationLayers
 import TNLean.Circuit.EmbeddedProduct
+import TNLean.Circuit.ExactAmplificationBudget
+import TNLean.Circuit.ExactSubspaceAmplification
 import TNLean.Circuit.Gates
+import TNLean.Circuit.ImageReflectionCircuit
+import TNLean.Circuit.InitializedRegisterProjection
 import TNLean.Circuit.LocalCircuit
 import TNLean.Circuit.Measurement
 import TNLean.Circuit.PairProduct
+import TNLean.Circuit.PairProductPowers
+import TNLean.Circuit.PartialIsometryDilation
 import TNLean.Circuit.ProductStateCircuit
 import TNLean.Circuit.ProductVector
+import TNLean.Circuit.QuantitativeSitePermutation
+import TNLean.Circuit.QuantitativeUnitaryGates
+import TNLean.Circuit.SelectedZeroRegisterReflection
+import TNLean.Circuit.SelectedZeroRegisterReflectionPool
+import TNLean.Circuit.SelectedZeroRegisterSupport
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.Teleportation
+import TNLean.Circuit.UniformPostselection
+import TNLean.Circuit.UniformSuccessAttenuation
+import TNLean.Circuit.WindowProduct
+import TNLean.Circuit.ZeroRegisterConjunction
+import TNLean.Circuit.ZeroRegisterReflection
