@@ -1,56 +1,56 @@
 \begin{theorem}[Vacancy in an actual horizontal two-plaquette block]
-\label{thm:peps_actual_horizontal_vacancy}
-\lean{TNLean.PEPS.regularWalkHolonomy_rightPlaquette_eq_one_iff_treeGauge,
-TNLean.PEPS.regularRegionTreeCycleResidual_middle_eq_one_iff_rightPlaquette,
-TNLean.PEPS.translatedTwoPlaquetteIso_vertex_coordinates}
-\leanok
-\uses{thm:peps_tree_gauge_transport}
-On a finite torus of width at least four and height at least three, take
-the actual translated three-by-two block with its derived spanning path.
-For arbitrary ordered bond operators, the right plaquette is vacant exactly
-when the middle upward bond has trivial residual in the root-normalized
-tree gauge. Both periodic seams are included.
-This is an auxiliary finite-torus criterion for SCP10, Theorem~6.16,
-lines 2271--2305; the unrestricted geometry and the complete prescribed
-braid remain separate \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    \label{thm:peps_actual_horizontal_vacancy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_rightPlaquette_eq_one_iff_treeGauge,
+        TNLean.PEPS.regularRegionTreeCycleResidual_middle_eq_one_iff_rightPlaquette,
+        TNLean.PEPS.translatedTwoPlaquetteIso_vertex_coordinates}
+    \leanok
+    \uses{thm:peps_tree_gauge_transport}
+    On a finite torus of width at least four and height at least three, take
+    the actual translated three-by-two block with its derived spanning path.
+    For arbitrary ordered bond operators, the right plaquette is vacant exactly
+    when the middle upward bond has trivial residual in the root-normalized
+    tree gauge. Both periodic seams are included.
+    This is an auxiliary finite-torus criterion for SCP10, Theorem~6.16,
+    lines 2271--2305; the unrestricted geometry and the complete prescribed
+    braid remain separate \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
-The other three sides of the right plaquette belong to the spanning path.
-Apply the three-tree-edge criterion and identify the fourth edge with
-the derived middle chord. Directed transport retains the sorting convention
-at a periodic seam.
+    The other three sides of the right plaquette belong to the spanning path.
+    Apply the three-tree-edge criterion and identify the fourth edge with
+    the derived middle chord. Directed transport retains the sorting convention
+    at a periodic seam.
 \end{proof}
 
 \begin{theorem}[A fixed physical operation on arbitrary actual patch inputs]
-\label{thm:peps_actual_horizontal_flux_operation}
-\lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusActualHorizontalFluxMove,
-TNLean.PEPS.torusActualHorizontalFluxMove,
-TNLean.PEPS.torusActualHorizontalFluxMove_eq_of_ne,
-TNLean.PEPS.torusActualHorizontalFluxMove_middle_of_vacancy,
-TNLean.PEPS.torusActualHorizontalFluxMove_up_transport_of_vacancy}
-\leanok
-\uses{thm:peps_actual_cycle_physical_permutation,thm:peps_actual_horizontal_vacancy}
-Assume the regular virtual action and original $G$-isometric site tensors.
-For each actual translated horizontal block there is one six-spin unitary,
-chosen before every actual bond assignment and every outgoing boundary
-configuration. It multiplies the derived middle cycle residual on the left
-by the derived left residual and reconstructs with the original tree gauge.
-It acts on both the actual open contraction and the actual closed state,
-retaining every ordered bond other than the middle chord, including all
-crossing and exterior bonds. If the right plaquette is vacant, its new
-middle ordered coefficient is $k_{\mathrm{head}}\omega_{\mathrm{left}}
- k_{\mathrm{tail}}^{-1}$. Equivalently, its directed upward transport becomes
-$T L B^{-1}$, where $T$, $L$, and $B$ are the original top-left rightward,
-left upward, and bottom-left rightward transports, respectively.
-The finite-torus scope is the same as above. This auxiliary operation uses
-actual derived coordinates; it does not assert the complete prescribed braid
-\cite{gap:rmp_peps_quantum_double_g_isometry}.
+    \label{thm:peps_actual_horizontal_flux_operation}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusActualHorizontalFluxMove,
+        TNLean.PEPS.torusActualHorizontalFluxMove,
+        TNLean.PEPS.torusActualHorizontalFluxMove_eq_of_ne,
+        TNLean.PEPS.torusActualHorizontalFluxMove_middle_of_vacancy,
+        TNLean.PEPS.torusActualHorizontalFluxMove_up_transport_of_vacancy}
+    \leanok
+    \uses{thm:peps_actual_cycle_physical_permutation,thm:peps_actual_horizontal_vacancy}
+    Assume the regular virtual action and original $G$-isometric site tensors.
+    For each actual translated horizontal block there is one six-spin unitary,
+    chosen before every actual bond assignment and every outgoing boundary
+    configuration. It multiplies the derived middle cycle residual on the left
+    by the derived left residual and reconstructs with the original tree gauge.
+    It acts on both the actual open contraction and the actual closed state,
+    retaining every ordered bond other than the middle chord, including all
+    crossing and exterior bonds. If the right plaquette is vacant, its new
+    middle ordered coefficient is $k_{\mathrm{head}}\omega_{\mathrm{left}}
+        k_{\mathrm{tail}}^{-1}$. Equivalently, its directed upward transport becomes
+    $T L B^{-1}$, where $T$, $L$, and $B$ are the original top-left rightward,
+    left upward, and bottom-left rightward transports, respectively.
+    The finite-torus scope is the same as above. This auxiliary operation uses
+    actual derived coordinates; it does not assert the complete prescribed braid
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
-Apply the original-spin cycle permutation to the tree gauge and residuals
-derived from each input. Reconstruction recovers the input literally.
-Controlled multiplication changes only the selected middle residual.
-Vacancy makes its initial residual equal to the identity. The two upward
-chords have the same sorting comparison, including at the vertical seam.
-The two adjacent tree-edge gradients then give the literal formula $T L B^{-1}$.
+    Apply the original-spin cycle permutation to the tree gauge and residuals
+    derived from each input. Reconstruction recovers the input literally.
+    Controlled multiplication changes only the selected middle residual.
+    Vacancy makes its initial residual equal to the identity. The two upward
+    chords have the same sorting comparison, including at the vertical seam.
+    The two adjacent tree-edge gradients then give the literal formula $T L B^{-1}$.
 \end{proof}
