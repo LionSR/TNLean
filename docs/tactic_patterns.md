@@ -2856,6 +2856,18 @@ abstracted — record why, so it is not re-proposed).
   Isometric projection transport additionally uses
   `LinearIsometry.starProjection_map_eq_comp_adjoint`.
 
+### adjoint transfer along a stationary support — promoted
+
+- **Pattern:** stationary support invariance makes expansion of a compressed
+  matrix intertwine the two adjoint transfer maps.
+- **Helper:** `MPSTensor.adjointMap_compression_lift` in
+  `TNLean/MPS/Symmetry/StationarySupportedDensityPhaseInvariance.lean`.
+- **Call sites:** normalized stationary uniqueness in that module, and
+  adjoint eigenvector lifting in
+  `TNLean/MPS/Symmetry/StationarySupportPreparation.lean` (2026-10-03).
+- **Decision:** expose the existing mathematical identity and remove its
+  duplicate proof. No new tactic or additional hypothesis is needed.
+
 ## Candidates
 
 ### One-site doubled-alphabet transport — candidate
@@ -4515,6 +4527,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/Symmetry/PeriodicMPSNormLowerBound.lean` (2026-10-03).
 - **Abstraction:** a finite-dimensional linear-map lemma for the spectrum of
   the quotient by a simple fixed line would contain the common argument.
+- **Notes:** two occurrences across two modules; below the promotion threshold.
+
+### one-sided letter invariance from adjoint stationarity — candidate
+
+- **Pattern:** apply stationary support invariance to the adjoint Kraus
+  letters, then take adjoints to obtain
+  `P * B i * (1 - P) = 0` for the stationary support projection.
+- **Seen:** `prepare_stationary_support_compression` and
+  `exists_dim_eq_gaugePhase_of_unital_stationary_support_overlap`, in
+  `StationarySupportPreparation.lean` and
+  `StationarySupportLimitIdentification.lean` (2026-10-03).
+- **Abstraction:** a Kraus-family support identity for an adjoint fixed
+  positive matrix would contain the common argument.
 - **Notes:** two occurrences across two modules; below the promotion threshold.
 
 ## Retired

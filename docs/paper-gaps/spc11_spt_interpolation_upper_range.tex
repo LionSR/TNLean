@@ -375,6 +375,19 @@ stationary matrix is unique. These results assume the transfer spectral
 bound; they do not derive it from the physical Hamiltonian gap, or assert
 exact equality of the ambient and compressed finite-ring rays.
 
+The full stationary support compression is now proved unital, irreducible,
+and normal under the supplied transfer spectral bound. Its positive-length
+periodic coefficients and those of the complementary corner sum exactly to
+the ambient coefficients. A vanishing complementary periodic norm can
+therefore be removed before the fundamental theorem identifies the retained
+bond dimension and gauge phase from an overlap of modulus tending to one.
+Trace-adjoint duality also identifies the dimensions of the primal and
+adjoint fixed spaces. Their pointwise synthesis identifies the actual normal
+support compression from a unit limiting overlap, deriving stationary
+uniqueness and transient decay internally. The compact-sequence converse and
+the transfer bound from a physical gap remain separate.
+
+\newpage
 The required realization need not be obtainable by gauging the supplied
 ambient tensor. For example, let $a$ be a normalized one-site vector and
 put $B^i=a_iI_2$. At every positive length $N$, the periodic MPS vector is
@@ -388,9 +401,10 @@ ambient realization recorded in the path. The checked declarations
 \leanid{MPSTensor.repeatedProductTensor_fixedSpace_finrank} and
 \leanid{MPSTensor.repeatedProductTensor_samePositiveMpvRay} record the
 stationary-space dimension and periodic-ray comparison for the product
-vector $a=\ket{0}$. The missing theorem must choose
-a new continuous unital realization of the same ground-state rays, rather
-than assert that every supplied realization admits such a gauge.
+vector $a=\ket{0}$. The remaining converse must obtain controlled minimal realizations of the
+same ground-state rays. The compact-sequence approach requires convergence
+along a subsequence and a uniform transfer bound; it does not require a
+continuous unital realization on the whole parameter interval.
 
 \section{Verdict}
 

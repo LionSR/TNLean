@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Symmetry
 
+import TNLean.MPS.Symmetry.AdjointFixedSpaceDimension
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.Symmetry.BondInterpolationSymmetry
 import TNLean.MPS.Symmetry.BondProductContinuity
@@ -107,15 +108,19 @@ import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
 import TNLean.MPS.Symmetry.ScalarIdentityAmbientObstruction
 import TNLean.MPS.Symmetry.SpinHalfObstruction
 import TNLean.MPS.Symmetry.StationaryDensitySymmetry
+import TNLean.MPS.Symmetry.StationarySupportLimitIdentification
+import TNLean.MPS.Symmetry.StationarySupportPreparation
 import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Symmetry.StringOrderDefs
+import TNLean.MPS.Symmetry.SupportPeriodicDecomposition
 import TNLean.MPS.Symmetry.SupportedCompressionIrreducible
 import TNLean.MPS.Symmetry.SupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.TimeReversalIndex
 import TNLean.MPS.Symmetry.TransientCornerSpectrum
+import TNLean.MPS.Symmetry.TransientSupportGaugeIdentification
 import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
 import TNLean.MPS.Symmetry.UniformProjectiveRigidity
