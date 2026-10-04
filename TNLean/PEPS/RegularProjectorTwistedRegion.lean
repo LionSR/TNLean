@@ -53,6 +53,49 @@ noncomputable def regularProjectorTwistedRegionMatrix (R : Finset V) (u : Edge �
             (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩))
     else 0
 
+/-- Literal canonical contraction with a scalar weight on the incident bond labels.
+Source: SCP10, diagonal charge insertion, lines 2449–2486 and 2569–2581. -/
+noncomputable def regularProjectorWeightedTwistedRegionMatrix (R : Finset V)
+    (u : Edge Γ → G) (F : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) → ℂ) :
+    Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ℂ :=
+  fun α θ => ∑ η : {e : Edge Γ // IsRegionIncidentEdge R e} → G,
+    if (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
+      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+      F η * ∏ w : {v : V // v ∈ R}, regularLegProjector (IncidentEdge Γ w.1) (α w)
+        (regularTwistedLabels u w.1
+          (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩))
+    else 0
+
+/-- Expanding the actual weighted projector uses one independent translation per vertex.
+Source: SCP10, lines 1765–1920 and 2569–2581. -/
+theorem regularProjectorWeightedTwistedRegionMatrix_apply (R : Finset V) (u : Edge Γ → G)
+    (F : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) → ℂ)
+    (α : RegionHalfEdgeConfig (Γ := Γ) G R) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    regularProjectorWeightedTwistedRegionMatrix R u F α θ =
+      (Fintype.card G : ℂ)⁻¹ ^ R.card *
+        ∑ p : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) × ({v : V // v ∈ R} → G),
+          if (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
+              p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
+            (∀ w (f : IncidentEdge Γ w.1), α w f = p.2 w *
+              regularTwistedLabels u w.1
+                (fun e => p.1 ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) f)
+          then F p.1 else 0 := by
+  classical
+  unfold regularProjectorWeightedTwistedRegionMatrix
+  rw [Finset.mul_sum, Fintype.sum_prod_type]
+  apply Finset.sum_congr rfl
+  intro η _
+  by_cases hb : (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
+      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ
+  · simp only [hb, ↓reduceIte, true_and]
+    simp only [regularLegProjector_apply, Finset.prod_mul_distrib,
+      Finset.prod_const, Finset.card_univ, Fintype.card_coe]
+    rw [Fintype.prod_sum_boole]
+    simp only [funext_iff, Pi.smul_apply, smul_eq_mul]
+    rw [Finset.mul_sum, Finset.mul_sum]
+    simp only [mul_ite, mul_one, mul_zero, mul_comm]
+  · simp only [hb, ↓reduceIte, false_and, Finset.sum_const_zero, mul_zero]
+
 /-- Identity operators recover the original canonical open-region matrix. -/
 theorem regularProjectorTwistedRegionMatrix_one (R : Finset V) :
     regularProjectorTwistedRegionMatrix (Γ := Γ) (G := G) R (fun _ => 1) =
@@ -80,19 +123,10 @@ theorem regularProjectorTwistedRegionMatrix_apply (R : Finset V) (u : Edge Γ �
                   regularTwistedLabels u w.1
                     (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩))
             then 1 else 0 := by
-  classical
-  unfold regularProjectorTwistedRegionMatrix
-  rw [Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro η _
-  by_cases hb : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ
-  · simp only [hb, ↓reduceIte, true_and]
-    simp only [regularLegProjector_apply, Finset.prod_mul_distrib,
-      Finset.prod_const, Finset.card_univ, Fintype.card_coe]
-    congr 1
-    exact Fintype.prod_sum_boole _
-  · simp only [hb, ↓reduceIte, false_and, Finset.sum_const_zero, mul_zero]
+  have h := regularProjectorWeightedTwistedRegionMatrix_apply R u (fun _ => 1) α θ
+  rw [Fintype.sum_prod_type] at h
+  simpa only [regularProjectorWeightedTwistedRegionMatrix, regularProjectorTwistedRegionMatrix,
+    one_mul, funext_iff, Pi.smul_apply, smul_eq_mul] using h
 
 variable {d : ℕ}
 

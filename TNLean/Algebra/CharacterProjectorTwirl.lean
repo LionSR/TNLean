@@ -135,22 +135,15 @@ theorem averageMap_linHom_rep (g : G) :
     (linHom ρ ρ).averageMap (ρ g) =
       ∑ χ ∈ irreducibleCharacterFinset ρ, (χ g / χ 1) • charProjector ρ χ := by
   classical
-  obtain ⟨s, hsA, hs⟩ := exists_isInternal_isAtom ρ
-  refine hs.linearMap_ext fun S v hv => ?_
-  have := Subrepresentation.isIrreducible_toRepresentation_of_isAtom (hsA S.1 S.2)
-  have hχ : ∀ χ ∈ irreducibleCharacterFinset ρ, ((χ g / χ 1) • charProjector ρ χ) v =
-      if S.1.toRepresentation.character = χ then (χ g / χ 1) • v else 0 := by
-    intro χ hχ
-    obtain ⟨S', hS', rfl⟩ := (mem_irreducibleCharacterFinset ρ).1 hχ
-    rw [LinearMap.smul_apply, charProjector_apply_of_mem ρ S'.toRepresentation S.1 hv]
-    split_ifs <;> simp
-  rw [LinearMap.sum_apply, Finset.sum_congr rfl hχ, Finset.sum_ite_eq,
-    ite_eq_left ((mem_irreducibleCharacterFinset ρ).2 ⟨S.1, this, rfl⟩),
+  apply linearMap_ext_on_irreducible ρ
+  intro S hS v hv
+  let := hS
+  rw [sum_smul_charProjector_apply_of_mem ρ _ S hv,
     averageMap_linHom_apply, LinearMap.smul_apply, LinearMap.sum_apply]
   have hsum : ∑ h, (ρ h ∘ₗ ρ g ∘ₗ ρ h⁻¹) v = ∑ h, ρ (h * g * h⁻¹) v := by
     refine Finset.sum_congr rfl fun h _ => ?_
     simp only [LinearMap.comp_apply, map_mul, Module.End.mul_apply]
-  rw [hsum, sum_rep_conj_apply_of_mem ρ S.1 g hv, smul_smul]
+  rw [hsum, sum_rep_conj_apply_of_mem ρ S g hv, smul_smul]
   congr 1
   have hG : (Fintype.card G : ℂ) ≠ 0 := Nat.cast_ne_zero.2 Fintype.card_pos.ne'
   rw [invOf_eq_inv]

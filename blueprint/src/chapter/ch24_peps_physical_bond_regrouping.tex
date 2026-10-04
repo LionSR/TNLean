@@ -1,0 +1,103 @@
+\begin{definition}[Regrouping original physical legs by torus bonds]%
+    \label{def:peps_torus_physical_bond_regrouping}
+    \lean{TNLean.PEPS.torusSiteBondEndpointEquiv,
+        TNLean.PEPS.torusSiteBondEndpointEquiv_apply_horizontal,
+        TNLean.PEPS.torusSiteBondEndpointEquiv_apply_vertical,
+        TNLean.PEPS.torusSiteBondEndpointEquiv_symm_apply,
+        TNLean.PEPS.torusBondRegrouping,
+        TNLean.PEPS.torusBondRegrouping_apply,
+        TNLean.PEPS.torusBondRegroupingIsometry,
+        TNLean.PEPS.torusBondRegroupingIsometry_apply}
+    \leanok
+    \uses{thm:peps_torus_projector_expansion}
+    Let $X$ be the vertex set of a torus with positive periods and let
+    $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ be its horizontal and
+    vertical bond positions. Write $\sigma_v=(t_v,r_v,b_v,l_v)$ for the
+    four original physical coordinates at $v$. Their bond regrouping is
+    \begin{align}
+        \beta_{v,\mathrm h} & =(l_{v+\mathrm{east}},r_v),  &
+        \beta_{v,\mathrm v} & =(t_v,b_{v+\mathrm{north}}).
+        \label{eq:peps_physical_bond_regrouping}
+    \end{align}
+    Each pair is ordered head, tail: horizontal bonds point right and
+    vertical bonds point down. The inverse reads
+    \begin{align}
+        t_v & =\beta^1_{v,\mathrm v},                & r_v & =\beta^2_{v,\mathrm h}, &
+        b_v & =\beta^2_{v-\mathrm{north},\mathrm v}, &
+        l_v & =\beta^1_{v-\mathrm{east},\mathrm h}.
+    \end{align}
+    Thus regrouping is a bijection of the actual physical basis
+    configurations. Its induced coefficient map is
+    $(\mathcal R\psi)(\beta)=\psi(\sigma(\beta))$, and is a linear
+    isometric equivalence of the finite-dimensional physical Hilbert spaces.
+    This is the grouping into the two physical bond endpoints used in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{definition}
+\begin{proof}\leanok
+    First use the torus bond-to-site coordinate bijection, then pair the
+    head and tail coordinates of each horizontal and vertical bond.
+    The displayed inverse recovers all four site coordinates. A bijection
+    of orthonormal basis configurations induces a linear isometry.
+\end{proof}
+
+\begin{lemma}[Overlap and product identities under bond regrouping]%
+    \label{lem:peps_torus_physical_bond_regrouping_overlap}
+    \lean{TNLean.PEPS.torusBondRegrouping_dotProduct,
+        TNLean.PEPS.torusBond_product}
+    \leanok
+    \uses{def:peps_torus_physical_bond_regrouping}
+    Every pair of physical coefficient vectors satisfies
+    \begin{align}
+        \langle\mathcal R\psi,\mathcal R\phi\rangle
+         & =\langle\psi,\phi\rangle.
+    \end{align}
+    For any complex bond factors $F_e$, the literal product identity is
+    \begin{align}
+        \prod_{v\in X}F_{v,\mathrm h}F_{v,\mathrm v}
+         & =\prod_{e\in\mathcal B}F_e.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Reindex the finite overlap sum by the physical configuration bijection.
+    For the product, separate the vertex and direction indices and use
+    commutativity of the scalar factors.
+\end{proof}
+
+\begin{theorem}[Actual torus bond coefficients after physical regrouping]%
+    \label{thm:peps_torus_regrouped_averaging_bonds}
+    \lean{TNLean.PEPS.torusBondRegrouping_averagingSite,
+        TNLean.PEPS.torusBondRegrouping_dressedAveragingSite,
+        TNLean.PEPS.torusBondRegrouping_thetaWeightedAveragingSite}
+    \leanok
+    \uses{def:peps_torus_physical_bond_regrouping,
+        lem:peps_torus_physical_bond_regrouping_overlap,
+        thm:peps_torus_projector_expansion,
+        thm:peps_theta_weighted_torus_bonds}
+    Let $U$ be a finite-group representation on the virtual space, and
+    let $W$ commute with every $U(g)$. Denote by $\Psi_{U,W}$ the actual
+    torus state of the normalized averaging site with $W$ on each virtual
+    leg. Put $N=|X|$, and let $h(e),t(e)$ be the head and tail of a bond
+    in the orientations of (\ref{eq:peps_physical_bond_regrouping}). Then
+    \begin{align}
+        (\mathcal R\Psi_{U,W})(\beta)
+         & =|G|^{-N}\sum_{q:X\to G}\prod_{e\in\mathcal B}
+        \bigl[W^2U(q_{h(e)}q_{t(e)}^{-1})\bigr]_
+        {\beta_e^1,\beta_e^2}.
+        \label{eq:peps_actual_regrouped_weighted_bonds}
+    \end{align}
+    In particular, $W=\Theta$ gives the actual square-root-weighted
+    bond vectors in \cite[Section~7]{Schuch2010PEPS}.
+    For ordinary averaging sites with inserted bond matrices $O_e$, the
+    regrouped coefficients instead contain
+    $[U(q_{h(e)})O_eU(q_{t(e)}^{-1})]_{\beta_e^1,\beta_e^2}$.
+    All coefficients are obtained from the original torus contraction;
+    no equality of states is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the averaging-site expansion to the recovered site
+    configuration. The inverse coordinate formulas identify each matrix
+    row and column with its actual physical bond endpoint. For dressed
+    sites, the two endpoint weights combine to $W^2$, which commutes
+    through the relative group action. The product identity then groups
+    the horizontal and vertical factors into the product over all bonds.
+\end{proof}

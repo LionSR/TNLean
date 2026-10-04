@@ -1,0 +1,83 @@
+\begin{theorem}[Separating internal and crossing incidence products]%
+    \label{thm:peps_graph_open_incidence_product}
+    \lean{TNLean.PEPS.prod_region_incident_eq_internal_boundary}
+    \leanok
+    \uses{def:peps_region_half_edge_label_equiv}
+    For a region $R$ in a finite simple graph, a product over its incidences
+    equals the product of both endpoint factors on each internal edge,
+    multiplied by the product of the single retained endpoint factor on each
+    crossing edge. This is the regional incidence decomposition underlying
+    \cite[Sections~6.2 and~7]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Extend incidence factors by $1$ outside $R$, regroup the ambient incidence
+    product by edges, and separate internal edges from crossing edges.
+\end{proof}
+
+\begin{definition}[Coherent open weighted bond coefficients]%
+    \label{def:peps_graph_open_averaging_bond_state}
+    \lean{TNLean.PEPS.graphOpenAveragingBondState}
+    \leanok
+    \uses{def:peps_region_half_edge_label_equiv}
+    Let $G$ be finite, $U:G\to\operatorname{Mat}_X(\mathbb C)$ a
+    representation, $W$ a virtual weight, and $R$ a region of a finite simple
+    graph with ordered endpoints. Write $\kappa=|G|$, and prescribe crossing
+    virtual labels $\theta_e$. The physical labels are
+    $(\beta_{\partial},\beta_t,\beta_h)$ in crossing, internal-tail, and
+    internal-head coordinates. For $q:R\to G$, set
+    \begin{align}
+        B_e(q) & =
+        \begin{cases}
+            (WU(q_t^{-1}))_{\theta_e,\beta_{\partial,e}}, & t\in R, \\
+            (U(q_h)W)_{\beta_{\partial,e},\theta_e},      & h\in R.
+        \end{cases}
+    \end{align}
+    Define
+    \begin{align}
+        H_R(\theta,\beta)
+        =\kappa^{-|R|}\sum_{q:R\to G}
+        \left(\prod_{e\text{ internal}}
+        (W^2U(q_hq_t^{-1}))_{\beta_{h,e},\beta_{t,e}}\right)
+        \left(\prod_{e\text{ crossing}}B_e(q)\right).
+    \end{align}
+    These are the regional endpoint factors from the contraction calculation
+    in \cite[Sections~6.2 and~7]{Schuch2010PEPS}; the site average is normalized
+    as described in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{theorem}[Actual open weighted averaging contraction]%
+    \label{thm:peps_graph_open_averaging_bond_state}
+    \lean{TNLean.PEPS.graphOpenRegionNetwork_dressedAveragingSite_coherent,
+        TNLean.PEPS.graphOpenBondRegrouping_dressedAveragingSite,
+        TNLean.PEPS.graphOpenRegionNetwork_averagingSite_coherent,
+        TNLean.PEPS.openRegionWeight_groupBondTensor_dressedAveragingSite}
+    \leanok
+    \uses{def:peps_graph_open_region_contraction,
+        thm:peps_graph_open_region_contraction,
+        thm:peps_graph_open_incidence_product,
+        def:peps_graph_open_averaging_bond_state,
+        lem:peps_region_half_edge_label_endpoints,
+        thm:peps_monoid_hom_commuting_weight}
+    Suppose $W$ commutes with every $U(g)$. The actual open contraction of
+    the averaging sites dressed by $W$, evaluated at a physical incidence
+    configuration $\alpha$, equals $H_R(\theta,\beta)$, where $\beta$ is
+    the incidence regrouping of $\alpha$. Thus regrouping by the coordinate
+    bijection gives exactly the displayed bond formula. The case $W=I$
+    gives the ordinary averaging-site coefficients. If the local physical
+    incidence configurations have uniform finite enumerations, the same
+    formula is exactly the numbered open-region coefficient of those
+    enumerated site tensors. The crossing labels are arbitrary throughout.
+    These finite-simple-graph coefficient identities do not assert an
+    equivalence of all open-boundary state spaces.
+\end{theorem}
+
+\begin{proof}\leanok
+    Fix the crossing labels and sum only over internal virtual labels.
+    Expand the independent site averages and regroup their incidence products.
+    Each internal label is summed once, giving
+    $(U(q_h)W)(WU(q_t^{-1}))=W^2U(q_hq_t^{-1})$.
+    Crossing labels are fixed, so their single endpoint factors remain.
+    The incidence bijection reads the physical endpoint labels literally.
+    Finally, finite enumerations reindex the same coefficient sum.
+\end{proof}

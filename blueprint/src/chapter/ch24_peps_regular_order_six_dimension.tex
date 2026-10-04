@@ -1,0 +1,41 @@
+\begin{theorem}[A positive square-sum of six]%
+    \label{thm:peps_order_six_dimensions}
+    \lean{TNLean.PEPS.positive_dimensions_of_sum_sq_eq_six}
+    \leanok
+    Let $(d_i)_{i\in I}$ be a finite family of positive integers satisfying
+    $\sum_i d_i^2=6$, and suppose some $d_i>1$. There is exactly one index
+    $j$ with $d_j=2$, every other $d_i$ equals one, $|I|=3$, and $\sum_i d_i=4$.
+\end{theorem}
+\begin{proof}\leanok
+    The square of any selected dimension is at most six. Thus a dimension
+    larger than one must equal two. Removing that index leaves square-sum two,
+    which forces every remaining positive dimension to equal one and exactly
+    two indices to remain. The total dimension is therefore four.
+\end{proof}
+
+\begin{theorem}[The smallest semi-regular dimension at noncommutative order six]%
+    \label{thm:peps_order_six_smallest_semiregular}
+    \lean{TNLean.PEPS.exists_smallestSemiRegular_dimension_four_of_order_six}
+    \leanok
+    \uses{thm:peps_order_six_dimensions,thm:peps_regular_minimal_representation,
+        thm:peps_fourier_bond_dimensions,thm:peps_fourier_commutativity,
+        thm:peps_semiregular_dimension_bound}
+    Let $G$ be a noncommutative finite group of order six. The group determines
+    three pairwise inequivalent unitary irreducible representations $D_i$ with
+    dimensions $2,1,1$. Their single-copy sum $U=\bigoplus_iD_i$ is unitary
+    and semi-regular, has dimension four, and each sector occurs in it with
+    character multiplicity one. For every finite-dimensional complex
+    semi-regular representation $\sigma$, one has $4\leq\dim\sigma$;
+    no unitarity assumption on $\sigma$ is required.
+    This is the order-six specialization of the actual block construction in
+    \cite[Section 7]{Schuch2010PEPS}, without a supplied character table.
+\end{theorem}
+\begin{proof}\leanok
+    The actual orthonormal regular Fourier basis gives positive dimensions
+    with $\sum_i d_i^2=|G|=6$. Noncommutativity forces some $d_i>1$.
+    The arithmetic theorem gives the pattern $2,1,1$ and total dimension four.
+    Retaining one copy of each Fourier sector gives the asserted unitary
+    semi-regular representation and multiplicities. The dimension bound for
+    distinct irreducibles gives $4\leq\dim\sigma$ for every comparison
+    representation.
+\end{proof}

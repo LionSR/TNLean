@@ -1,0 +1,84 @@
+\begin{lemma}[The matching-sector bond inclusion]%
+    \label{lem:peps_matching_sector_bond_inclusion}
+    \lean{TNLean.PEPS.endpointEmbeddingMatrix,
+        TNLean.PEPS.endpointEmbeddingMatrix_isIsometry,
+        TNLean.PEPS.blockBondInclusion,
+        TNLean.PEPS.blockBondInclusion_isIsometry,
+        TNLean.PEPS.blockBondInclusion_mulVec}
+    \leanok
+    Let $V=\bigoplus_{i\in I}V_i$ be a finite orthogonal direct sum.
+    Any injective relabelling of orthonormal endpoint coordinates defines
+    an isometric inclusion. In particular, the natural inclusion
+    \begin{align}
+        E_V:\bigoplus_{i\in I}(V_i\otimes V_i)
+        \longrightarrow V\otimes V
+    \end{align}
+    is an isometry. If a bond vector is obtained by arranging the entries
+    of matrices $X_i$ in their respective summands, its image under $E_V$
+    is the vector of entries of $\bigoplus_i X_i$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each basis vector maps to a distinct pair of endpoint basis vectors.
+    Entries in different summands vanish; entries in a common summand
+    are unchanged.
+\end{proof}
+
+\begin{definition}[Multiplicity restoration in endpoint coordinates]%
+    \label{def:peps_multiplicity_block_bond_matrix}
+    \lean{TNLean.PEPS.multiplicityBlockBondMatrix,
+        TNLean.PEPS.multiplicityBlockBondMatrix_isIsometry,
+        TNLean.PEPS.multiplicityBlockBondMatrix_mulVec_sqrt}
+    \leanok
+    \uses{def:peps_multiplicity_bond_coefficients}
+    Choose nonempty finite multiplicity sets $M_i$, with $m_i=|M_i|$.
+    In paired endpoint coordinates the bond isometry is
+    \begin{align}
+        J\ket{i,a,b}=\frac{1}{\sqrt{m_i}}
+        \sum_{u\in M_i}\ket{i,(a,u),(b,u)}.
+    \end{align}
+    Thus $J$ carries the vector of entries of $\sqrt{m_i}X_i$ to the
+    vector of entries of $X_i\otimes I_{M_i}$, block by block.
+    This is the bond transformation of
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{proof}\leanok
+    Relabel the coefficient isometry by the two restored endpoints.
+    Its square-root normalization cancels the bond weight.
+\end{proof}
+
+\begin{theorem}[The bond map on the full endpoint spaces]%
+    \label{thm:peps_full_multiplicity_bond_map}
+    \lean{TNLean.PEPS.fullMultiplicityBondMap,
+        TNLean.PEPS.fullMultiplicityBondMap_initialProjection,
+        TNLean.PEPS.fullMultiplicityBondMap_mulVec_sqrt_blockDiagonal,
+        TNLean.PEPS.fullMultiplicityBondMap_dotProduct}
+    \leanok
+    \uses{lem:peps_matching_sector_bond_inclusion,
+        def:peps_multiplicity_block_bond_matrix}
+    Put $V'=\bigoplus_i(V_i\otimes\mathbb C^{M_i})$ and define
+    \begin{align}
+        F=E_{V'}JE_V^\dagger:V\otimes V\longrightarrow V'\otimes V'.
+    \end{align}
+    Then $F^\dagger F=E_VE_V^\dagger$, so $F$ preserves inner products
+    on the matching-sector subspace. More precisely, whenever
+    $E_VE_V^\dagger\phi=\phi$,
+    \begin{align}
+        \langle F\psi,F\phi\rangle=\langle\psi,\phi\rangle.
+    \end{align}
+    It sends the full endpoint vector of
+    $\bigoplus_i\sqrt{m_i}X_i$ to that of
+    $\bigoplus_i(X_i\otimes I_{M_i})$.
+    For $m_i=\dim V_i$, this is the local physical bond transformation
+    used in \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Both inclusions and $J$ are isometries. Cancelling their Gram
+    operators gives $F^\dagger F=E_VE_V^\dagger$. The overlap identity
+    follows by moving $F$ to the other side of the inner product.
+    On a block-diagonal bond vector, $E_V^\dagger$ recovers its
+    matching-sector coordinates, to which the preceding action of $J$
+    applies.
+\end{proof}

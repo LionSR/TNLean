@@ -1,0 +1,120 @@
+\begin{definition}[A finite witness for the swept-string diagram]
+    \label{def:peps_torus_swept_patch_endpoint_geometry}
+    \lean{TNLean.PEPS.IsSweptPatchCoordinate,
+        TNLean.PEPS.sweptPatchCoordinateDecidable,
+        TNLean.PEPS.SweptPatchCoordinate,
+        TNLean.PEPS.torusSweptPatchCoordinate,
+        TNLean.PEPS.torusSweptPatchWitness}
+    \leanok
+    Let the horizontal and vertical torus periods be at least seven and six,
+    respectively, and fix any translated position $v$. Write
+    $p(i,j)=(v_x+i,v_y+j)$, with coordinates taken modulo the periods.
+    Complete the displayed four-column, three-row patch
+    $\{p(i,j):0\leq i\leq3,\ 0\leq j\leq2\}$ by the side sites
+    \[
+        p(-1,1),\ p(-1,2),\ p(4,1),\ p(4,2)
+    \]
+    and the lower sites
+    \[
+        p(1,-1),\ p(2,-1),\ p(1,-2),\ p(2,-2).
+    \]
+    Denote this finite set by $R_v$. This is an auxiliary completion of the
+    swept-string diagram in \cite[fluxon-braiding passage]{Schuch2010PEPS}.
+    The distant lower partner lies beyond the final string detour; it is not
+    placed at the endpoint of the displayed lower bond.
+\end{definition}
+
+\begin{theorem}[The actual translated twenty-site geometry]
+    \label{thm:peps_torus_swept_patch_endpoint_geometry}
+    \lean{TNLean.PEPS.card_sweptPatchCoordinate,
+        TNLean.PEPS.torusSweptPatchCoordinate_injective,
+        TNLean.PEPS.torusSweptPatchWitness_card,
+        TNLean.PEPS.torusSweptPatchCoordinate_adj_iff}
+    \leanok
+    \uses{def:peps_torus_swept_patch_endpoint_geometry}
+    The twenty specified vertices are distinct and $|R_v|=20$.
+    On their six-column, five-row coordinate envelope, native torus adjacency
+    holds exactly when one coordinate is equal and the other differs by one.
+    In particular, there are no additional periodic bonds in this envelope.
+    These assertions hold at every translated position, including either seam.
+\end{theorem}
+\begin{proof}\leanok
+    All coordinate offsets lie in intervals strictly shorter than their torus
+    periods, so equality of their residue classes implies equality of the
+    offsets. The same argument applies to unit differences, excluding an
+    additional wrap adjacency. Translation preserves both equality and
+    adjacency. Count the twelve patch sites, the four side sites, and the four
+    lower sites.
+\end{proof}
+
+\begin{definition}[Four endpoint loops and partner connectors]
+    \label{def:peps_torus_swept_patch_endpoint_walks}
+    \lean{TNLean.PEPS.torusSweptPatchEndpoint,
+        TNLean.PEPS.torusSweptPatchEndpointLoop,
+        TNLean.PEPS.torusSweptPatchConnectorA,
+        TNLean.PEPS.torusSweptPatchConnectorB}
+    \leanok
+    \uses{def:peps_torus_swept_patch_endpoint_geometry}
+    Take the four plaquette bases, in order, to be
+    \[
+        A_2=p(-1,1),\quad A_1=p(3,1),\quad
+        B_1=p(1,1),\quad B_2=p(1,-2).
+    \]
+    At each base take the clockwise four-bond plaquette loop.
+    The $A_2$--$A_1$ connector goes up, then right four times, then down.
+    The $B_1$--$B_2$ connector goes down three times.
+    For the eventual bond assignments, a group element $s$ written along a
+    rightward or downward matrix arrow in the source figure corresponds to
+    native directed transport $s^{-1}$. The value on an ordered bond is this
+    directed transport or its inverse, according to its endpoint order.
+\end{definition}
+
+\begin{theorem}[Actual loop and connector containment]
+    \label{thm:peps_torus_swept_patch_endpoint_walks}
+    \lean{TNLean.PEPS.torusSweptPatchEndpoint_eq,
+        TNLean.PEPS.torusSweptPatchEndpointLoop_mem_witness,
+        TNLean.PEPS.torusSweptPatchConnectorA_mem_witness,
+        TNLean.PEPS.torusSweptPatchConnectorB_mem_witness,
+        TNLean.PEPS.torusSweptPatchConnectorA_length,
+        TNLean.PEPS.torusSweptPatchConnectorB_length}
+    \leanok
+    \uses{thm:peps_torus_swept_patch_endpoint_geometry,
+        def:peps_torus_swept_patch_endpoint_walks}
+    All four endpoint loops and both partner connectors are actual native
+    walks contained in $R_v$. The connectors have lengths six and three.
+    No adjacency or loop-containment assumption is supplied.
+    This establishes only the finite geometry of an explicit four-endpoint
+    completion. It does not identify a physical operation with the prescribed
+    string braid, or assert parent-Hamiltonian membership.
+\end{theorem}
+\begin{proof}\leanok
+    List the four corners of each endpoint plaquette and use the exact unit
+    adjacency relation. The two connector lists consist respectively of seven
+    and four vertices of the specified coordinate set. Each successive pair
+    differs by one coordinate unit, and every listed vertex belongs to $R_v$.
+\end{proof}
+
+\begin{theorem}[Directed transport on the actual partner connectors]
+    \label{thm:peps_torus_swept_patch_connector_transport}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorA,
+        TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorB}
+    \leanok
+    \uses{def:peps_torus_swept_patch_endpoint_walks}
+    For any bond assignment, write $R(p)$ and $U(p)$ for its rightward and
+    upward directed transports at $p$. The reverse-ordered connector transports
+    are
+    \[
+        H_A=U(p(3,1))^{-1}R(p(2,2))R(p(1,2))R(p(0,2))
+        R(p(-1,2))U(p(-1,1))
+    \]
+    and
+    \[
+        H_B=U(p(1,-2))^{-1}U(p(1,-1))^{-1}U(p(1,0))^{-1}.
+    \]
+    These equalities include the ordered-endpoint inversions at either seam.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the six and three successive traversals. Reversing an upward
+    traversal replaces its transport by its inverse, and concatenation
+    multiplies the successive transports in reverse order.
+\end{proof}

@@ -1,0 +1,99 @@
+\begin{lemma}[Common exterior operators and native boundary transport]%
+    \label{lem:peps_regular_bond_extension_transport}
+    \lean{TNLean.PEPS.regularTwistedSite_regularRegionBondExtension_eq_outside,
+        TNLean.PEPS.openRegionWeight_regularTreeCycleBondExtension}
+    \leanok
+    \uses{thm:peps_regular_region_gauge_contraction}
+    Prescribe internal bond operators in a finite region $R$ and retain one
+    common assignment $u$ on exterior and crossing bonds. Altering the internal
+    operators leaves every exterior site tensor unchanged. If the original
+    sites are invariant under simultaneous regular translation, every
+    tree-cycle assignment $\omega$ satisfies
+    \begin{align}
+        A_R(\omega;u;\theta)
+        =A_R(\omega;1;\mathcal B_u\theta),
+    \end{align}
+    where $\mathcal B_u$ is the native boundary transport for the identity
+    vertex gauge. It depends on $u$ but not on $\omega$. Here a graph on $R$
+    specifies which internal bonds carry the cycle assignment; a spanning-tree
+    hypothesis is unnecessary for these identities. These are the shared
+    contraction facts in the operations of
+    \cite[Theorems~6.16--6.17]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    An edge incident to an exterior vertex cannot be wholly internal to $R$,
+    so its operator is the common exterior one. A crossing edge is likewise
+    not internal. The identity vertex gauge therefore retains each prescribed
+    internal operator and transfers the common crossing operators into exactly
+    the same boundary transport for every internal assignment. The actual
+    gauge-contraction identity gives the displayed open-region equality.
+\end{proof}
+
+\begin{theorem}[Global contraction of the two-cycle flux operation]%
+    \label{thm:peps_regular_two_cycle_global_flux_move}
+    \lean{TNLean.PEPS.regularRegionSiteExtension,
+        TNLean.PEPS.regionLocalTerm_mem_unitaryGroup,
+        TNLean.PEPS.exists_unitary_regularTwoCycleGlobalFluxMove,
+        TNLean.PEPS.regularRegionBondExtension,
+        TNLean.PEPS.exists_unitary_regularTwoCycleGlobalFluxMove_bondOperators}
+    \leanok
+    \uses{lem:peps_regular_bond_extension_transport,
+        thm:peps_regular_two_cycle_physical_flux_move,
+        thm:peps_open_region_cut,
+        thm:peps_regular_region_gauge_contraction}
+    Let the original regular site maps be $G$-isometric. Choose a spanning
+    tree and a root of a finite region $R$, together with distinct internal
+    bonds $e_0,e_1$ outside the tree. Let $u_g$ have value $g$ on $e_0$ and
+    identity on every other internal bond; let $u'_g$ have value $g$ on
+    $e_0,e_1$ and identity on every other internal bond.
+    There is one physical unitary $W$ on $R$ whose extension
+    $\widehat W=W\otimes I_{R^c}$ is unitary on the whole system and satisfies
+    \begin{align}
+        \widehat W\Psi(u_g,b)=\Psi(u'_g,b)
+    \end{align}
+    for every $g\in G$ and every common family $b$ of complementary site
+    coefficients. Here both vectors are the actual finite graph contractions,
+    using the inserted original sites in $R$ and $b$ outside $R$.
+
+    There is also such a fixed identity-extended unitary with the following
+    bond-operator formulation. For an arbitrary common assignment $u$ on
+    exterior and crossing bonds, retain $u$ on those bonds and prescribe
+    $u_g$, respectively $u'_g$, on internal bonds. Denote the resulting
+    assignments by $\widetilde u_g$ and $\widetilde u'_g$. Then
+    \begin{align}
+        \widehat W\Psi(\widetilde u_g)
+        =\Psi(\widetilde u'_g)
+        \qquad (g\in G).
+    \end{align}
+    The unitary is chosen before both $g$ and the common exterior data.
+    Crossing operators need not be trivial, and no contraction or Gram
+    identity is a hypothesis. Linearity therefore permits coherent
+    superpositions of flux labels.
+    This is the global contraction consequence of the auxiliary two-cycle
+    operation for \cite[Theorem~6.16]{Schuch2010PEPS}. Its six-vertex torus
+    instance is established below. The unrestricted string statement and
+    parent-Hamiltonian conclusions remain separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    Extend the regional unitary by the complementary identity and transport
+    it through the physical configuration partition. Kronecker products
+    and reindexing preserve unitarity. For fixed complementary spins, its
+    action is exactly the regional matrix action.
+    The actual cut formula gives
+    \begin{align}
+        \Psi(\sigma,\tau)
+        =\sum_{\theta}\Psi_R(\sigma,\theta)
+        \Psi_{R^c}(\tau,\theta).
+    \end{align}
+    Apply the all-boundary-column identity to the first factor. The second
+    factor is arbitrary and common, so the sum gives the global equality.
+    For the bond-operator formulation, the identity vertex gauge moves
+    each crossing operator into its label at the region endpoint. This
+    boundary transport is the same for the one- and two-insertion families;
+    their internal operators are exactly the prescribed tree and cycle
+    assignments. Their complementary sites also agree, because the changed
+    bonds are wholly inside $R$. The same cut argument proves the equality
+    for every common exterior and crossing assignment.
+\end{proof}

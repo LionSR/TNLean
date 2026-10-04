@@ -1,0 +1,18 @@
+\begin{theorem}[The square-root weights on bond sectors]%
+    \label{thm:peps_representation_theta_squared}
+    \lean{Representation.thetaOperator_sq_apply_of_mem,
+        Representation.thetaOperator_sq_apply_of_multiplicity_one}
+    \leanok
+    \uses{thm:peps_representation_theta_scalar}
+    On an irreducible sector of dimension $d_i$ and multiplicity $m_i$,
+    the operator $\Theta^2$ acts by $\sqrt{d_i/m_i}$. In particular, for
+    multiplicity one it acts by $\sqrt{d_i}$. This is the bond weight
+    obtained from two endpoint fourth-root factors in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The operator $\Theta$ acts by $(d_i/m_i)^{1/4}$ on the sector.
+    Applying it twice squares this positive real fourth root and gives
+    $\sqrt{d_i/m_i}$. Set $m_i=1$ for the second assertion.
+\end{proof}

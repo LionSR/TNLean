@@ -1,0 +1,76 @@
+\begin{definition}[A constant vertex gauge on a swept patch]%
+    \label{def:peps_regular_swept_patch}
+    \lean{TNLean.PEPS.regularSweptPatchGauge,
+        TNLean.PEPS.regularSweptPatchOperators}
+    \leanok
+    \uses{thm:peps_regular_closed_gauge}
+    Let $G$ be a group, let $\Gamma$ have linearly ordered vertices,
+    and let $R$ be a finite set of vertices. For $g\in G$, put
+    $k_v=g^{-1}$ on $R$ and $k_v=1$ outside $R$.
+    For ordered edges $e=(s,t)$, define the swept assignment by
+    \begin{align}
+        u_e^{R,g}=
+        \begin{cases}
+            gu_eg^{-1}, & s,t\in R,          \\
+            gu_e,       & s\notin R, t\in R, \\
+            u_eg^{-1},  & s\in R, t\notin R, \\
+            u_e,        & s,t\notin R.
+        \end{cases}
+        \label{eq:peps_swept_patch_cases}
+    \end{align}
+    This is an auxiliary formulation of the vertex-invariance calculation
+    in \cite[Section~6.6]{Schuch2010PEPS}, the virtual string-deformation
+    figure, local source lines 2361--2386.
+    % Source label: eq:anyons:fluxon-braiding-lazy.
+\end{definition}
+
+\begin{theorem}[Ordered and traversed swept-bond transports]%
+    \label{thm:peps_regular_swept_patch_transport}
+    \lean{TNLean.PEPS.regularSweptPatchOperators_eq_vertexGauge,
+        TNLean.PEPS.regularDirectedTransport_regularSweptPatchOperators}
+    \leanok
+    \uses{def:peps_regular_swept_patch,thm:peps_regular_walk_holonomy}
+    The assignment in (\ref{eq:peps_swept_patch_cases}) is exactly
+    $u_e^{R,g}=k_t^{-1}u_ek_s$.
+    For any adjacent vertices $v,w$, its directed transport is
+    \begin{align}
+        D_{u^{R,g}}(v,w)=
+        \begin{cases}
+            gD_u(v,w)g^{-1}, & v,w\in R,          \\
+            gD_u(v,w),       & v\notin R, w\in R, \\
+            D_u(v,w)g^{-1},  & v\in R, w\notin R, \\
+            D_u(v,w),        & v,w\notin R.
+        \end{cases}
+        \label{eq:peps_swept_directed_cases}
+    \end{align}
+    The traversal need not agree with the ordered orientation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_walk_holonomy}
+    Substituting the two possible values of $k$ at the endpoints gives
+    the ordered formula. Directed gauge covariance gives
+    $D_{u^{R,g}}(v,w)=k_w^{-1}D_u(v,w)k_v$ and hence the four cases.
+\end{proof}
+
+\begin{theorem}[Equality of the actual closed swept contractions]%
+    \label{thm:peps_regular_swept_patch_state}
+    \lean{TNLean.PEPS.stateCoeff_regularSweptPatchOperators}
+    \leanok
+    \uses{def:peps_regular_swept_patch,thm:peps_regular_closed_gauge}
+    Suppose the graph and $G$ are finite and each site coefficient
+    satisfies $a_v(x\eta,s)=a_v(\eta,s)$ under simultaneous left
+    multiplication of its incident group labels.
+    Let $\Psi_a(u)$ be the actual closed regular PEPS coefficient vector
+    with ordered bond insertion $u$.
+    Then $\Psi_a(u)=\Psi_a(u^{R,g})$ for every $R,g,u$.
+    No isometry or connectedness is required, and crossing bonds are
+    included in the replacement.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_swept_patch_transport,thm:peps_regular_closed_gauge}
+    The swept assignment is the vertex gauge $k_t^{-1}u_ek_s$.
+    The closed vertex-gauge identity therefore equates every physical
+    coefficient of the two actual contractions.
+\end{proof}
