@@ -24,6 +24,51 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Averaged left inverse of a G-injective MPS tensor (promoted, 2026-10-02)
+
+- **Pattern:** Extract the invariant tensor and its averaged left inverse from
+  general G-injectivity, then rewrite map invariance as conjugation invariance
+  of every physical tensor coefficient.
+- **Seen:** The concatenation proof in `PEPS/GInjectiveMPS.lean`, both original
+  intersection and closure proofs in `PEPS/GInjectiveMPSIntersection.lean`,
+  and the inhomogeneous intersection proof in
+  `PEPS/GInjectiveStripIntersection.lean`.
+- **Abstraction:** `IsGInjective.exists_mpsLeftInverse` in
+  `TNLean/PEPS/GInjectiveMPS.lean` combines the existing general left-inverse
+  theorem with the conjugation-invariance characterization.
+- **Notes:** All four consumers use this mathematical helper. The repeated
+  conjugation rewrite is removed; the helper adds no mathematical hypothesis
+  and does not require a finite physical alphabet.
+
+### Regional PEPS subspace inclusion by open contraction columns — promoted (2026-10-02)
+
+- **Pattern:** Rewrite the regional ground space as the span of its actual
+  open contraction columns, apply `Submodule.span_le`, and extract each
+  crossing configuration from the generator range.
+- **Seen:** Twice in `PEPS/ParentHamiltonian/RegularRegionFlatness.lean`
+  (exposure into canonical coordinates and recovery through the inverse),
+  and once in `RegularRegionBondRightInvariance.lean`
+  (exposed shared-bond right invariance).
+- **Abstraction:** `TNLean.PEPS.regionGroundSpace_le_iff` in
+  `TNLean/PEPS/ParentHamiltonian/RegionGroundSpace.lean` gives the universal
+  subspace property of the actual regional contraction.
+- **Notes:** All three consumers use this mathematical equivalence. It
+  composes Mathlib's `Submodule.span_le` and `Set.range_subset_iff`, adds no
+  hypotheses, and leaves the consumer theorem signatures unchanged.
+
+### Finite linear combinations in a supported subspace — promoted (2026-10-02)
+
+- **Pattern:** prove membership of a sum by `Submodule.sum_mem`, then prove
+  each scalar multiple belongs by `Submodule.smul_mem`.
+- **Seen:** regional support transport in
+  `PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean`,
+  `VertexInverseRegionSlice.lean`, and `VertexVirtualParentTransport.lean`.
+- **Abstraction:** existing Mathlib `Submodule.sum_smul_mem`; all three
+  consumers now apply it directly. No new lemma or tactic is needed.
+- **Notes:** the summands are actual regional slices, transformed by regional
+  site maps or site inverses. The scalar coefficients come from the
+  complementary region; no positivity assumption is involved.
+
 ### injectivity under translations of a torus region — promoted
 - **Pattern:** transport blocked-region injectivity along a torus translation,
   then replace the transported tensor by the original translation-invariant tensor.
@@ -408,6 +453,20 @@ abstracted — record why, so it is not re-proposed).
   in `Algebra/UnitaryGeneralLinearInverse.lean`.
 - **Notes:** all callers use the shared matrix identity; the virtual gauge
   convention is unchanged.
+
+### Unit-vector inner-product deficit — promoted
+- **Pattern:** expand a squared distance, substitute both unit norms, and
+  orient the real inner product to obtain its quadratic deficit.
+- **Seen:** three checked uses in `MPS/Preparation/SecondOrderOverlap.lean:337`,
+  `MPS/Preparation/SecondOrderBlockOverlap.lean:357`, and
+  `MPS/Preparation/PolarCompression.lean:95` (2026-10-03).
+- **Abstraction:** `one_sub_re_inner_eq_norm_sub_sq_div_two` in
+  `MPS/Preparation/SecondOrderOverlap.lean:55` specializes Mathlib's
+  `norm_sub_sq` to two unit vectors over a real or complex inner-product
+  space. All three callers use the same identity.
+- **Notes:** no custom tactic or positivity hypothesis is needed. The
+  abstraction and three substitutions add ten lines, including the helper's
+  mathematical documentation; future uses require one application.
 
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
@@ -3855,10 +3914,9 @@ spectral split → block extraction → MPV calculation → strict bounds
     rw [Finset.mem_filter] at hη
     rw [if_neg hη.2, smul_zero]
   ```
-- **Seen:** 4 occurrences in `TNLean/PEPS/`
-  (`RegionBlock/ThreeBlockResonate.lean:670`,
-  `RegionBlock/UnionInjectivityGeneral.lean:492`,
-  `TorusWindowChain4.lean:242`, +1).
+- **Seen:** 2 verified occurrences in `TNLean/PEPS/`
+  (`RegionBlock/UnionInjectivityGeneral.lean:492`,
+  `TorusWindowChain4.lean:242`).
 - **Abstraction (proposed):** a lemma of the shape
   `∑ η in s.filter p, (if p η then f η else 0) • g η = ...` — scout
   Mathlib's `Finset.sum_filter` / `Finset.sum_ite_of_true` family first.
@@ -3884,10 +3942,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   · rcases Finset.mem_union.mp hrb with hr | hbl
   · exact absurd hr hwnotred
   ```
-- **Seen:** 8 occurrences in `TNLean/PEPS/RegionBlock/`
+- **Seen:** surviving examples in `TNLean/PEPS/RegionBlock/`
   (`CoarseThreeSiteCoherentFrame.lean:381`,
-  `ThreeBlockResonate.lean:97`,
-  `UnionInjectivityGeneral.lean:95`, +5).
+  `UnionInjectivityGeneral.lean:95`, `UnionInjectivityGeneral.lean:121`).
 - **Abstraction (proposed):** a case-elimination lemma on the three-region
   cover (membership in red/blue/crossing regions) stated once in the
   RegionBlock development.
@@ -4707,3 +4764,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   could replace the repeated derivations if a second file uses the pattern.
 - **Notes:** the occurrences currently lie in one file; the promotion
   criterion of at least two files is not met.
+
+### algebraic simplicity from a positive unital fixed line — promoted
+- **Pattern:** identify the generalized eigenspace at one with the fixed
+  space by excluding peripheral Jordan blocks, then identify the algebraic
+  multiplicity with the dimension of that space.
+- **Seen:** `simple_fixedEigenvalue_of_unital_positive` in
+  `MPS/Symmetry/PeriodicMPSNormLowerBound.lean`, reused by the periodic norm
+  estimate and `MPS/Symmetry/CompactMinimalClassStability.lean` (2026-10-03).
+- **Abstraction:** expose the existing fixed-eigenvalue lemma; the compact
+  sequence proof uses it without repeating the Jordan-block argument.
+- **Notes:** a theorem suffices; no additional tactic is required.

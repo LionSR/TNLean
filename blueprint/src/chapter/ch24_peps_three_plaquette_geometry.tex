@@ -1,0 +1,19 @@
+\begin{theorem}[Ordered edges and transported subgraphs]%
+    \label{thm:peps_edge_map_subgraph}
+    \lean{TNLean.PEPS.Edge.comap_adj_map_iff}
+    \leanok
+    Let $\varphi:\Gamma\simeq\Gamma'$ be a graph isomorphism between
+    linearly ordered vertex sets, and let $T$ be a graph on the vertices
+    of $\Gamma$. For an ordered edge $e=(v,w)$ of $\Gamma$, sort the
+    mapped endpoints to obtain $\varphi e$. Its endpoints are adjacent
+    in the transported graph $T\circ\varphi^{-1}$ if and only if $v,w$
+    are adjacent in $T$. In particular, a non-tree bond remains outside
+    the transported tree. This elementary assertion is used in the finite
+    blocking and flux geometries of \cite{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The mapped endpoints occur in their original order or in the reverse
+    order. Pullback cancels the isomorphism in the first case; symmetry
+    of graph adjacency gives the same equivalence in the second case.
+\end{proof}
