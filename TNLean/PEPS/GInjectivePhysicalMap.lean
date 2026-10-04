@@ -21,6 +21,11 @@ Source: SCP10, arXiv:1001.3807, Definition 5.1, lines 1278–1296, and the
 physical changes of coordinates in Observation `obs:iso:accessible-virt`,
 lines 1765–1820. These are local consequences and assert no classification
 of virtual bond representations.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

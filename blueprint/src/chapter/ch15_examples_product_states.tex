@@ -6,7 +6,7 @@ one~\cite[Appendix~A, ``Product states'']{Cirac2021Matrix}. For site-dependent
 local tensors, the matrix product is closed by boundary vectors.
 
 \begin{definition}[Product vector and its tensor]\label{def:product_state_tensor}
-    \lean{MPSTensor.productVector,
+    \lean{QuantumCircuit.productVector,
         MPSTensor.productSiteTensor}
     \leanok
     \uses{def:mps_tensor}
@@ -15,7 +15,9 @@ local tensors, the matrix product is closed by boundary vectors.
     $\ket{\psi}=\ket{\phi^1}\otimes\cdots\otimes\ket{\phi^N}$ has coefficient
     $a^{i_1,[1]}\cdots a^{i_N,[N]}$ on $\ket{i_1,\ldots,i_N}$. Its tensor has
     bond dimension $D=1$: at site $s$ the matrix of physical index $i$ is the
-    $1\times1$ matrix $a^{i,[s]}$.
+    $1\times1$ matrix $a^{i,[s]}$. The product vector
+    $\bigotimes_{s\in I}\ket{\phi^s}$ is defined in the same way for any
+    finite set of sites $I$.
 \end{definition}
 
 The boundary vectors are the scalars $v_L=v_R=1$.

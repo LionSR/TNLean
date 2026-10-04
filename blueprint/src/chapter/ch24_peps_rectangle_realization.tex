@@ -2,11 +2,11 @@
     \label{thm:peps_torus_rectangle_realization}
     \lean{TNLean.PEPS.isSimplyConnected_torusRegionRealization_rectangle}
     \leanok
-    \uses{lem:peps_torus_region_realization,
-        lem:peps_torus_rectangle_cut_connectivity}
-    Let the torus periods be positive integers $w,h$. Let $R$ be the native
-    rectangle with coordinate ranges $a\leq x<a+\ell$ and $b\leq y<b+m$,
-    where $\ell,m>0$, $\ell<w$, $m<h$, $a+\ell\leq w$, and $b+m\leq h$.
+    \uses{thm:peps_torus_region_realization}
+    Let the torus periods be positive integers $w,h$. Let $a,b\geq0$ and
+    $\ell,m>0$ be integers with $\ell<w$, $m<h$, $a+\ell\leq w$, and
+    $b+m\leq h$, and let $R$ be the native rectangle with coordinate ranges
+    $a\leq x<a+\ell$ and $b\leq y<b+m$.
     Then the actual closed-cell realization of $R$ is simply connected.
     This is auxiliary geometry for the stripe reduction in
     \cite[Theorem~6.7]{Schuch2010PEPS}, local source lines 1995--2011.

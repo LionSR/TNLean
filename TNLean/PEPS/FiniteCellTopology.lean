@@ -13,6 +13,11 @@ A finite union of continuous images of a compact locally path connected space
 in a Hausdorff space is locally path connected. The finite disjoint union maps
 onto the union by a closed quotient map. This supplies local path connectedness
 for the closed-cell domains in SCP10, §6.3, lines 1935–1957.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

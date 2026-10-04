@@ -16,6 +16,11 @@ required. It is the algebraic operation behind deformation of closure strings.
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
 `eq:2d:move-strings`, local source lines 1622–1647. This identity does not
 assert that a prescribed region admits a gauge removing its incident twists.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators

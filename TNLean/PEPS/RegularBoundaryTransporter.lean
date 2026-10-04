@@ -17,6 +17,11 @@ Schuch, Cirac, and Pérez-García, arXiv:1001.3807, proof of Theorem 6.9,
 `Papers/1001.3807/paper_v3.tex`, lines 1935–1990 and 2043–2072. The identities
 below concern the regular boundary representation; the derivation of its
 weights from the contracted region is separate.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

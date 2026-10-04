@@ -19,6 +19,11 @@ This is the finite contraction underlying Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, proof of Theorem 6.9 (`Papers/1001.3807/paper_v3.tex`,
 lines 1935–1957 and 2062–2072). The expansion is valid for arbitrary local
 tensors and contains no assumption about the Gram operator of the region.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

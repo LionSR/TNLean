@@ -23,6 +23,11 @@ for all pair classes, including noncommuting pairs, is an auxiliary extension. R
 and size-one tori are algebraic extensions. No parent-Hamiltonian ground-space assertion
 is made; that separate part of the source theorem remains open, as recorded in
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

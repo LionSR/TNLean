@@ -17,6 +17,11 @@ shows that the native regular matrix representation is semi-regular.
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 4.5,
 `Papers/1001.3807/paper_v3.tex`, lines 1010–1013, and the regular-representation
 specialization of Theorem 5.9, lines 1582–1621.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix

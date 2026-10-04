@@ -18,6 +18,11 @@ This is a local consequence of the left inverses in Schuch, Cirac, and
 Pérez-García, arXiv:1001.3807, Definition 5.1, and the regular cut in the
 proof of Theorem 6.9, lines 1278–1296 and 2043–2076. It concerns an entire
 boundary; factorization into individual bond maps requires further work.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix
@@ -163,7 +168,7 @@ theorem regularBoundaryComparison_pairing [Finite Phys] [Finite Out] (n : ℕ)
       rw [regularBoundaryProjector_transpose, regularBoundaryProjector_mul_self]
 
 omit [Fintype Phys] [Fintype Out] in
-/-- Equal regular G-injective cut states admit compatible virtual boundary
+/-- Equal regular G-injective cut states have compatible virtual boundary
 comparisons. The comparisons recover both open maps and pair to the
 invariant projector. This is a local statement about the whole boundary,
 derived from SCP10, Definition 5.1 and Theorem 6.9,
