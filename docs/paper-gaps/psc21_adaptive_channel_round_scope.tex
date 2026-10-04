@@ -20,10 +20,10 @@ of matter'' allows a number of composed channels that is fixed independently
 of the system size.
 
 \section{Finite adaptive channels}
-An onsite quantum instrument has local Kraus operators $K_{i,j}$ satisfying
-$\sum_jK_{i,j}^{\dagger}K_{i,j}=I$. For an outcome tuple $J$, write
-$K_J=\bigotimes_iK_{i,J(i)}$. If $\Psi_J$ is the subsequent channel selected
-by that tuple, the channel after averaging the outcomes is
+An onsite instrument has local Kraus operators $K_{i,j}$.
+At each site they satisfy $\sum_jK_{i,j}^{\dagger}K_{i,j}=I$.
+For an outcome tuple $J$, let $K_J=\bigotimes_iK_{i,J(i)}$.
+If $\Psi_J$ is the channel selected by that tuple, averaging the outcomes gives
 \begin{align}
  \rho&\longmapsto\sum_J\Psi_J(K_J\rho K_J^{\dagger}).
 \end{align}
@@ -53,12 +53,36 @@ most $T_1$ and $T_2$ has depth at most $T_1+T_2$.\footnote{Formal declarations:
 The existing fixed-basis measurement round has Kraus operators
 $V_mP_mU$, where $U$ is its circuit, the orthogonal projections $P_m$ sum to
 $I$, and $V_m$ is the product of conditional local corrections.
-The identity
-$\sum_m(V_mP_mU)^{\dagger}(V_mP_mU)=I$ gives its average channel on mixed
-inputs as well as pure inputs.\footnote{Formal declarations:
+Its Kraus operators satisfy
+\begin{align}
+  \sum_m(V_mP_mU)^{\dagger}(V_mP_mU)&=I.
+\end{align}
+Thus its average map is a channel on arbitrary inputs.\footnote{Formal declarations:
 \leanid{QuantumCircuit.MeasurementRound.map} and
 \leanid{QuantumCircuit.MeasurementRound.map_isKrausCPTP} in
 \doclink{TNLean/Circuit/Measurement/Channel}.}
+The round is also a finite adaptive protocol of depth equal to its circuit
+length: an onsite instrument measures the selected sites, then the outcome
+selects the onsite correction.\footnote{Formal declaration:
+\leanid{QuantumCircuit.MeasurementRound.adaptive} in
+\doclink{TNLean/Circuit/Measurement/AdaptiveRound}.}
+
+\section{Physical gate-cost boundary}
+The adaptive predicate inherits the enlarged-site convention of the local
+channel model. Onsite channels may change the local dimension without a
+uniform bound, and later gates on a pair of enlarged sites still cost one
+layer. The source distinguishes fixed-dimensional physical qudits from
+onsite ancillas. In particular, the Supplement's proof of Proposition 2
+(p.~8) bounds the entanglement increase using the physical dimension,
+independently of the number of onsite ancillas.
+
+Consequently, the formal quantum-depth bound is not yet a bound in the
+source's resource model. A comparison needs an explicit simulation by
+physical-qudit gates, with a depth overhead controlled uniformly in the
+chain length. A possible restricted target bounds every intermediate
+onsite dimension by one constant before quantifying over chain lengths,
+then derives an explicit simulation overhead depending on that constant
+and the physical dimension. No such simulation is established here.
 
 \section{Asymptotic boundary}
 The finite adaptive relation does not bound the number of measurement rounds
@@ -66,7 +90,7 @@ independently of system size. Its depth bound counts quantum layers only,
 so a family may have arbitrarily many free instrument steps as the chain
 length grows. It must therefore not be substituted for the source's
 fixed-number-of-rounds asymptotic phase relation.
-To obtain that relation, retain a separate bound on the number of composed
+In addition to the physical gate-cost comparison, retain a separate bound on the number of composed
 single-round channels and quantify that bound before the chain length.
 The finite adaptive conversion results address the finite-round task; the
 fixed-round asymptotic relation and MPS classification remain separate.

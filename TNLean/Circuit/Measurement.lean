@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Circuit.Measurement
 
 import TNLean.Circuit.Measurement.AdaptiveConversion
+import TNLean.Circuit.Measurement.AdaptiveRound
 import TNLean.Circuit.Measurement.Asymptotic
 import TNLean.Circuit.Measurement.Channel
 import TNLean.Circuit.Measurement.GHZ

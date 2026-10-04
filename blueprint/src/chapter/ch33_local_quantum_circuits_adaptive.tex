@@ -1,12 +1,15 @@
 \section{Adaptive channels on arbitrary inputs}
 
 Finite local measurements and classical feedforward act on mixed states by
-summing unnormalized completely positive operations. This includes the
-finite-round extension discussed in~\cite[paragraph ``State transformations
-    with QC and LOCC'']{Piroli2021LOCC}. The number of rounds is not bounded
-independently of system size here; this condition is separate from circuit
-depth in the source's asymptotic phase relation, as explained
-in~\cite{gap:psc21_adaptive_channel_round_scope}.
+summing unnormalized completely positive operations. The model below is
+motivated by the finite-round extension discussed in~\cite[paragraph
+    ``State transformations with QC and LOCC'']{Piroli2021LOCC}. It allows
+arbitrary intermediate onsite dimensions and counts gates on enlarged
+sites at unit cost. The source instead counts gates on fixed-dimensional
+physical qudits, with onsite ancillas treated separately; no uniform-depth
+simulation between the models is established here. In addition, the number
+of instrument rounds is not bounded independently of system size.
+Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
 
 \begin{definition}[Onsite instruments with conditional continuation]
     \label{def:qc_onsite_feedforward}
@@ -136,4 +139,27 @@ in~\cite{gap:psc21_adaptive_channel_round_scope}.
     $c_m=0$ for an outcome of probability zero. Thus the average output is
     $(\sum_m|c_m|^2)\ket\psi\bra\psi$. Trace preservation and normalization
     give $\sum_m|c_m|^2=1$.
+\end{proof}
+
+\begin{theorem}[Measurement rounds are adaptive protocols]
+    \label{thm:qc_measurement_round_adaptive}
+    \uses{def:qc_measurement_round_channel, def:qc_adaptive_protocol,
+        thm:qc_adaptive_protocol_properties}
+    \lean{QuantumCircuit.MeasurementRound.adaptive}
+    \leanok
+    The average channel of a computational-basis measurement round is a
+    finite adaptive protocol whose quantum-depth bound is the length of
+    the round's circuit.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use the round's circuit as a deterministic local channel protocol.
+    The following onsite instrument has the computational-basis projectors
+    at measured sites and one identity Kraus operator at each unmeasured
+    site. Its outcome tuples correspond bijectively to the measured
+    configurations $m$, and its product Kraus operators are $P_m$.
+    For outcome $m$, choose the onsite channel of the product correction
+    unitary $V_m$. The resulting Kraus operators are exactly $V_mP_mU$.
+    The instrument and corrections have depth zero, so composition leaves
+    the circuit's depth bound unchanged.
 \end{proof}

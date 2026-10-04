@@ -1770,13 +1770,18 @@ in `MPS/Preparation/` uses it.
   `OnsiteChannel.feedforwardMap` sums unnormalized outcome operations,
   including zero-probability outcomes, and never divides by probabilities.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
-  LOCC", the finite-round extension mentioned after the one-round protocol.
+  LOCC", motivates finite adaptive operations. The formal predicate uses
+  enlarged-site gate costs rather than the source's fixed physical-qudit costs.
 - **Sanctioned bridges:** `IsAdaptiveChannelProtocol.isKrausCPTP`,
   `IsAdaptiveChannelProtocol.comp` (additive depth bounds),
   `IsAdaptiveChannelProtocol.onsite_comp`, and
-  `IsLocalChannelProtocol.adaptive` (deterministic local protocols are included).
-- **Caveat:** this is an upper bound on quantum depth, not a bound on the
-  number of instrument steps. It permits arbitrary finite measurement
+  `IsLocalChannelProtocol.adaptive` (deterministic local protocols are included),
+  and `MeasurementRound.adaptive` (the existing measurement round's average
+  channel has the same quantum-depth bound).
+- **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
+  gate on the enlarged spaces still costs one layer. No uniform-depth
+  simulation into the source physical-qudit model is established. Also,
+  this is an upper bound on quantum depth, not a bound on instrument steps. It permits arbitrary finite measurement
   rounds and does not supply the system-size-independent round bound of
   the source's asymptotic `QCcc` phase relation. See
   `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
@@ -1789,7 +1794,8 @@ in `MPS/Preparation/` uses it.
 - **Meaning:** there is a map `Ψ` with `IsAdaptiveChannelProtocol T Ψ`
   and `Ψ ρ = σ`.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
-  LOCC", with the finite-round scope of `IsAdaptiveChannelProtocol`.
+  LOCC", with the enlarged-site and finite-round scope of
+  `IsAdaptiveChannelProtocol`.
 - **Sanctioned bridges:** `IsAdaptiveChannelConversion.refl`,
   `IsAdaptiveChannelConversion.mono`, `IsAdaptiveChannelConversion.trans`,
   `IsAdaptiveChannelConversion.density`, and

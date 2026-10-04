@@ -15,10 +15,12 @@ depth bound holds on every branch; histories can affect all subsequent instrumen
 Averaging over all outcomes gives a trace-preserving completely positive map on arbitrary
 input operators.
 
-This is the finite-round extension mentioned by Piroli, Styliaris and Cirac
-(arXiv:2103.13367, paragraph "State transformations with QC and LOCC"). It allows measurements
-between circuit layers, so it is broader than a single `QCcc` round. No asymptotic claim with
-a system-size-independent number of `QCcc` rounds is made here. See
+This finite adaptive model is motivated by Piroli, Styliaris and Cirac
+(arXiv:2103.13367, paragraph "State transformations with QC and LOCC"). Intermediate onsite
+dimensions are unrestricted and gates on enlarged sites still cost one layer. The source
+instead counts gates on fixed-dimensional physical qudits with separate onsite ancillas;
+no uniform-depth simulation or inclusion in the source model is proved here. Furthermore,
+there is no system-size-independent bound on the number of measurement rounds. See
 `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
 
 ## Main results
@@ -46,8 +48,9 @@ variable {N : ℕ} [NeZero N]
 its local Kraus indices and communicates them globally; subsequent operations can depend on
 the full outcome history. Depth counts only nearest-neighbor layers, along the longest branch.
 
-Source: arXiv:2103.13367, paragraph "State transformations with QC and LOCC", the finite-round
-extension. This does not impose the fixed-round bound of the paper's asymptotic phase relation. -/
+Motivated by arXiv:2103.13367, paragraph "State transformations with QC and LOCC". This model
+allows unrestricted intermediate onsite dimensions at unit intersite gate cost. It supplies
+neither a source-depth simulation nor the fixed-round bound of the source phase relation. -/
 inductive IsAdaptiveChannelProtocol : {d e : ℕ} → ℕ →
     (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop
