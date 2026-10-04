@@ -1,0 +1,51 @@
+\begin{definition}[Fourth-root isotypic weights]%
+    \label{def:peps_representation_theta}
+    \lean{Representation.thetaOperator}
+    \leanok
+    \uses{def:peps_delta_operator}
+    For a finite-dimensional complex representation of a finite group,
+    let $P_i$ be its isotypic projectors, $d_i$ the irreducible dimensions,
+    and $m_i$ their multiplicities. Define
+    $\Theta=\sum_i(d_i/m_i)^{1/4}P_i$, with the positive real fourth root.
+    For the multiplicity-one representation in
+    \cite[Section~7]{Schuch2010PEPS}, this is the displayed operator
+    $\bigoplus_i d_i^{1/4}I_{d_i}$.
+\end{definition}
+
+\begin{theorem}[Action of the fourth-root weights]%
+    \label{thm:peps_representation_theta_scalar}
+    \lean{Representation.thetaOperator_apply_of_mem,
+        Representation.thetaOperator_apply_of_multiplicity_one}
+    \leanok
+    \uses{def:peps_representation_theta, thm:peps_weighted_character_projectors}
+    On an irreducible summand of character $\chi_i$, the operator $\Theta$
+    is multiplication by $(d_i/m_i)^{1/4}$. If $m_i=1$, the scalar is $d_i^{1/4}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each isotypic projector is the identity on its own irreducible summands
+    and zero on the others. The weighted sum retains precisely the coefficient
+    of the given character.
+\end{proof}
+
+\begin{theorem}[Fourth power and symmetry of the weight operator]%
+    \label{thm:peps_representation_theta_power}
+    \lean{Representation.thetaOperator_pow_four,
+        Representation.thetaOperator_commute}
+    \leanok
+    \uses{thm:peps_representation_theta_scalar, thm:peps_delta_block_form,
+        thm:peps_weighted_character_projectors}
+    The weight operator commutes with the representation and satisfies
+    $\Theta^4=|G|\Delta$. These algebraic identities require neither unitarity
+    nor semi-regularity. The factor $|G|$ corrects the printed equality
+    in \cite[Section~7]{Schuch2010PEPS}, because its Lemma~4.4 includes
+    $|G|^{-1}$ in the definition of $\Delta$; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    On every irreducible summand, the fourth power of the positive real root
+    is $d_i/m_i$, while $\Delta$ acts by $d_i/(m_i|G|)$.
+    Complete reducibility gives the operator identity. Each weighted isotypic
+    sum commutes with the representation.
+\end{proof}

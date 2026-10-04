@@ -1776,8 +1776,61 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
   Heisenberg dual).
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
-  are free. There are no measurements or classical communication, so this is
-  not the LOCC class of the source.
+  are free. Onsite channels may enlarge the dimension, and a layer on the
+  enlarged sites still costs one depth unit. No uniform intermediate-dimension
+  bound is imposed. There is no classical feedforward. The source's intersite
+  gates act only on fixed-dimensional physical qudits; no uniform-depth
+  simulation or inclusion in its LOCC relation is proved. See
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+#### `QuantumCircuit.IsAdaptiveChannelProtocol`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelProtocol T Ψ : Prop`,
+  for `[NeZero N]`, a depth bound `T : ℕ`, and a linear map between chain
+  operators with possibly different local dimensions.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** a finite tree of onsite channels, nearest-neighbor channel
+  layers, and onsite instruments with outcome-dependent continuations.
+  Each branch has at most `T` nearest-neighbor layers; onsite operations
+  and communication of the complete outcome tuple cost zero depth.
+  `OnsiteChannel.feedforwardMap` sums unnormalized outcome operations,
+  including zero-probability outcomes, and never divides by probabilities.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", motivates finite adaptive operations. The formal predicate uses
+  enlarged-site gate costs rather than the source's fixed physical-qudit costs.
+- **Sanctioned bridges:** `IsAdaptiveChannelProtocol.isKrausCPTP`,
+  `IsAdaptiveChannelProtocol.comp` (additive depth bounds),
+  `IsAdaptiveChannelProtocol.onsite_comp`, and
+  `IsLocalChannelProtocol.adaptive` (deterministic local protocols are included),
+  and `MeasurementRound.adaptive` (the existing measurement round's average
+  channel has the same quantum-depth bound).
+- **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
+  gate on the enlarged spaces still costs one layer. No uniform-depth
+  simulation into the source physical-qudit model is established. Also,
+  this is an upper bound on quantum depth. The source fixes the number of
+  composed `QCcc` blocks independently of system size; a block can already
+  contain sequential measurements/corrections at many sites. The tree does
+  not record a fixed-number source-block decomposition with the required
+  internal measurement/control order and one-measurement-per-site rule. See
+  `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
+
+#### `QuantumCircuit.IsAdaptiveChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelConversion T ρ σ : Prop`,
+  for `[NeZero N]` and operators on `N`-site chains.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** there is a map `Ψ` with `IsAdaptiveChannelProtocol T Ψ`
+  and `Ψ ρ = σ`.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", with the enlarged-site and finite-round scope of
+  `IsAdaptiveChannelProtocol`.
+- **Sanctioned bridges:** `IsAdaptiveChannelConversion.refl`,
+  `IsAdaptiveChannelConversion.mono`, `IsAdaptiveChannelConversion.trans`,
+  `IsAdaptiveChannelConversion.density`, and
+  `IsLocalChannelConversion.adaptive`.
+- **Caveat:** exact, directed conversion on arbitrary input operators;
+  positivity and unit trace of the output follow from those of the input.
+  No symmetry or asymptotic phase classification is asserted.
 
 #### `QuantumCircuit.IsLocalChannelConversion`
 
@@ -1802,9 +1855,81 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the relation is directed and not symmetric: a channel need not be
   undone by another channel. Neither `ρ` nor `σ` is required to be a density
   matrix; positivity and unit trace of `σ` follow from those of `ρ` by
-  `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
-  polylogarithmic-depth conversions of the phase equivalence in
-  arXiv:2103.13367 are not formalized, nor is blocking of sites.
+  `IsLocalChannelConversion.density`. Conversions are exact; the approximate
+  and asymptotic local-channel relations below extend this relation without
+  classical feedforward. The full phase equivalence in arXiv:2103.13367 and
+  blocking of sites are not formalized here.
+
+#### `QuantumCircuit.IsApproxLocalChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsApproxLocalChannelConversion T ε ρ σ : Prop`,
+  for `T : ℕ`, `ε : ℝ`, `[NeZero N]`, and operators on `N`-site chains whose
+  fixed local dimensions may differ.
+- **Defined in:** `TNLean/Circuit/Channel/ApproximateConversion.lean`.
+- **Meaning:** there are `S ≤ T` and a map `Ψ` with
+  `IsLocalChannelProtocol S Ψ` such that $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$.
+  The trace norm is `QuantumCircuit.chainTraceNorm`, the sum of singular
+  values after enumerating the chain configurations.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
+- **Sanctioned bridges:** `IsApproxLocalChannelConversion.refl`,
+  `IsApproxLocalChannelConversion.mono` (both bounds may increase),
+  `IsApproxLocalChannelConversion.trans` (depths and errors add for Hermitian
+  source and intermediate operators), and
+  `QuantumCircuit.isApproxLocalChannelConversion_zero_iff` (zero error is exact
+  local channel conversion).
+- **Caveat:** the definition does not require density matrices or Hermiticity;
+  the composition theorem requires the stated Hermiticity hypotheses.
+  Intermediate dimensions are unrestricted and two-site layers on enlarged
+  sites have unit depth. Classical feedforward is excluded, but no uniform
+  simulation or inclusion in the source relation is established; see
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+#### `QuantumCircuit.IsAsymptoticLocalChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsAsymptoticLocalChannelConversion ρ σ : Prop`,
+  for operator families on `N`-site chains with fixed, possibly different,
+  local dimensions.
+- **Defined in:** `TNLean/Circuit/Channel/AsymptoticConversion.lean`.
+- **Meaning:** there are $k\in\mathbb N$, $C\ge0$, and errors
+  $\varepsilon_N\to0$ such that, for all sufficiently large positive `N`, an
+  approximate local channel conversion from $\rho_N$ to $\sigma_N$ has depth
+  $T_N\le C(1+\log(N+1))^k$ and trace-norm error at most $\varepsilon_N$.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
+- **Sanctioned bridges:** `IsAsymptoticLocalChannelConversion.refl` and
+  `IsAsymptoticLocalChannelConversion.trans`, the latter for eventually
+  Hermitian source and intermediate families.
+- **Caveat:** only the tails of the families matter; the logarithmic shift
+  fixes small sizes. The relation is directed, and its definition does not
+  assume density matrices. Intermediate local dimensions may grow with `N`
+  without changing the unit cost per two-site layer. No uniform-depth
+  inclusion in the source `QCcc` relation is established; see
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+#### `QuantumCircuit.IsLocalChannelPhaseEquivalent`
+
+- **Declaration:** `QuantumCircuit.IsLocalChannelPhaseEquivalent ρ σ : Prop`,
+  for operator families on `N`-site chains with fixed, possibly different,
+  local dimensions.
+- **Defined in:** `TNLean/Circuit/Channel/AsymptoticConversion.lean`.
+- **Meaning:** asymptotic local channel conversion holds in both directions.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
+- **Sanctioned bridges:** `IsLocalChannelPhaseEquivalent.refl`,
+  `IsLocalChannelPhaseEquivalent.symm`, and
+  `IsLocalChannelPhaseEquivalent.trans` (for three eventually Hermitian
+  families). `IsLocalChannelPhaseEquivalent.equivalence` gives an equivalence
+  relation on eventually Hermitian families of one fixed local dimension.
+- **Caveat:** density-matrix families satisfy the Hermiticity condition, but
+  arbitrary operator families are not asserted to form an equivalence
+  relation. The enlarged-site gate convention and absence of classical
+  feedforward differ from the source model; no inclusion in its phase
+  relation or source `QCcc` classification is asserted. See
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 ## Inhomogeneous short-range correlated chains
 
@@ -2451,6 +2576,81 @@ involve no boundary.
 
 ## Exact circuits with initialized auxiliaries
 
+### `QuantumCircuit.IsPhysicalPortUnitary`
+
+- **Declaration:** `QuantumCircuit.IsPhysicalPortUnitary P T U : Prop`,
+  for a fixed qudit dimension `d`, a finite `PhysicalPortLayout N W`,
+  and a unitary operator on the `W` qudit wires.
+- **Defined in:** `TNLean/Circuit/Channel/PhysicalPort.lean`.
+- **Meaning:** a circuit generated by free one-site unitaries, free wire
+  permutations preserving every spatial site, and counted nearest-neighbor
+  layers acting only on the one designated physical port per site.
+  Multiplication adds upper bounds, and the bound can be enlarged.
+- **Source:** the physical-qudit/onsite-ancilla distinction in
+  arXiv:2103.13367, Supplement pp. 7–8. The routing estimates are derived
+  comparisons, not claims that the paper states the same formal predicate.
+- **Sanctioned bridges:** `.mem_unitary`, `.conjTranspose`, `.selected_layer`,
+  `.register_matching`, and `IsPhysicalPortProtocol.unitary`.
+- **Caveat:** the physical dimension is fixed throughout the circuit. The
+  layout may include separate local memory; a counted gate cannot act
+  directly on all of an enlarged site's wires. This predicate alone does
+  not impose source preparation ancilla initialization or cleanup conditions.
+
+### `QuantumCircuit.IsPhysicalPortProtocol`
+
+- **Declaration:** `QuantumCircuit.IsPhysicalPortProtocol P T Φ : Prop`,
+  for a fixed qudit dimension and an endomorphism of the full wire operator
+  space of `PhysicalPortLayout N W`.
+- **Defined in:** `TNLean/Circuit/Channel/PhysicalPort.lean`.
+- **Meaning:** a finite composition of certified physical-port unitaries
+  and normalized Kraus channels supported within one spatial site.
+  Local channels cost zero; only physical-port intersite layers contribute
+  to the depth upper bound. The statement acts on arbitrary input operators.
+- **Source:** the reduced-channel resource convention motivated by
+  arXiv:2103.13367, Supplement pp. 7–8, with the scope recorded in
+  `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
+- **Sanctioned bridges:** `.isKrausCPTP`, `.of_register_routing`,
+  `.of_routed_family`, `.list_prod_uniform`,
+  `PortRegisters.matchingChannel_isPhysicalPortProtocol`, and
+  `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
+  and `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`.
+- **Caveat:** a local channel is a reduced CPTP operation. A complete source
+  protocol witness must also record local dilation environments and their
+  initialization/disposal; source pure-state conditions and the fixed number of
+  composed `QCcc` blocks with their internal measurement/control rules are
+  separate. The uniform `2 * Nat.clog d B` matching bound requires a
+  fixed `d ≥ 2` and one dimension bound `B` chosen independently of chain
+  length. It does not apply with the same constant to unrestricted
+  intermediate dimensions depending on `N`.
+
+
+### `QuantumCircuit.IsDimensionBoundedLocalChannelProtocol`
+
+- **Declaration:** `IsDimensionBoundedLocalChannelProtocol B T Ψ : Prop`,
+  for a native chain channel between possibly different local dimensions.
+- **Defined in:** `TNLean/Circuit/Channel/DimensionBoundedConversion.lean`.
+- **Meaning:** the native onsite/layer protocol constructors carry explicit
+  positivity and upper bounds by the same `B` for every intermediate local
+  dimension. Depth counts native pair-channel layers.
+- **Source:** a resource-refined abstraction for comparing the enlarged-site
+  channel model with the physical-qudit convention in arXiv:2103.13367,
+  Supplement pp. 7–8. The paper does not state this predicate.
+- **Sanctioned bridges:** `.toIsLocalChannelProtocol`, `.dimension_bounds`,
+  `.mono_bound`, `.comp`, `.exists_fixedRegisterWord`, and
+  `.exists_physicalPortSimulation`, and `.exists_physicalPortIO`. A finite
+  positive-input native protocol
+  admits some finite bound via `IsLocalChannelProtocol.exists_dimension_bound`.
+- **Caveat:** an existential bound separately for each chain length is not a
+  uniform family bound. For fixed physical `d ≥ 2` and `N ≥ 2`, the encoded
+  simulation has physical depth at most `2 * Nat.clog d B * T`; a uniform
+  constant requires `B` and `d` chosen independently of `N`. The exact channel
+  identity retains arbitrary port/scratch-reference correlations. When the
+  native input/output dimension is exactly the physical `d`, the port-I/O
+  theorem supplies product-zero designated memory, output on the original
+  ports, and exact data/scratch reset at the same intersite depth. Local
+  CPTP dilation environments and a full source QCcc witness remain separate;
+  the bound does not count onsite operations as extra layers.
+
 ### `QuantumCircuit.IsCleanImplementation`
 
 - **Declaration:** `IsCleanImplementation J C Z`.
@@ -2516,4 +2716,3 @@ involve no boundary.
 - **Caveat:** minimal bases, metrics, and child implementations occur only
   in intermediate statements; the final existence theorem does not assume
   them as additional witnesses.
-

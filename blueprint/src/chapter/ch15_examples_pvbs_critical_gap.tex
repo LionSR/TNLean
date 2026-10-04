@@ -7,7 +7,7 @@
         MPSTensor.parentHamiltonianES_pvbs_critical_oneMagnon,
         MPSTensor.parentHamiltonianES_pvbs_critical_uniformParticle}
     \leanok
-    \uses{lem:pvbs_local_projector,lem:pvbs_cyclic_geometry}
+    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     For site amplitudes $f_j$, write
     $W(f)=\sum_j f_j|0\cdots1_j\cdots0\rangle$.
     On the one-particle sector, the actual critical local term is one half
@@ -22,6 +22,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:pvbs_periodic_occupation, lem:pvbs_cyclic_geometry,
+        thm:short_range_parent_gap_counterexample}
     A one-particle configuration has no doubly occupied bond. The
     $|11\rangle\langle11|$ part of the local projector therefore vanishes,
     leaving the singlet exchange term. Sum the exchange differences using
@@ -35,7 +37,7 @@
         MPSTensor.parentHamiltonianES_pvbs_critical_fourierMagnon,
         MPSTensor.pvbs_fourierMagnon_mem_orthogonal_kernel}
     \leanok
-    \uses{thm:pvbs_one_particle_dynamics}
+    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     Set $f_j=\exp(2\pi\mathrm{i}j/N)$ and $\psi_N=W(f)$.
     For every $N\ge2$, $\psi_N\ne0$ and
     \begin{align}
@@ -48,6 +50,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:pvbs_one_particle_dynamics, lem:pvbs_cyclic_geometry,
+        thm:short_range_parent_gap_counterexample, lem:transported_es_positive}
     The existing cyclic Fourier identity gives $Lf=\eta_N f$.
     The particle amplitude at the zero site is one, so $\psi_N$ is nonzero.
     The eigenvalue is positive for $N\ge2$. For every ground vector $w$,
@@ -59,7 +63,7 @@
     \label{thm:pvbs_critical_gaplessness}
     \lean{MPSTensor.not_exists_eventual_uniform_gap_pvbs_critical}
     \leanok
-    \uses{thm:pvbs_critical_fourier_magnon}
+    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     There are no $\delta>0$ and $N_0$ such that every ring of length
     $N\ge N_0$ satisfies
     $\delta\|v\|\le\|H_1v\|$ for all $v\perp\ker H_1$.
@@ -69,6 +73,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:pvbs_critical_fourier_magnon, thm:short_range_parent_gap_counterexample}
     The Fourier energies $\eta_N$ tend to zero. Given a proposed
     $\delta>0$ and threshold $N_0$, choose $N\ge\max\{N_0,2\}$ with
     $0<\eta_N<\delta$. Applying the proposed inequality to the nonzero
