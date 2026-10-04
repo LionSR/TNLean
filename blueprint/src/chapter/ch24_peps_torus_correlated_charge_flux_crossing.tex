@@ -16,17 +16,17 @@
 \begin{theorem}[Correlated weights in the actual physical cut]
     \label{thm:peps_regular_correlated_charge_cut}
     \lean{TNLean.PEPS.openRegionWeight_regularEdgeCharacterSite_eq_weighted,
-      TNLean.PEPS.regularCorrelatedChargeState_apply,
-      TNLean.PEPS.regionLocalTerm_mulVec_regularCorrelatedChargeState}
+        TNLean.PEPS.regularCorrelatedChargeState_apply,
+        TNLean.PEPS.regionLocalTerm_mulVec_regularCorrelatedChargeState}
     \leanok
     \uses{def:peps_regular_correlated_charge_state,
-      def:peps_regular_weighted_open_contraction,
-      thm:peps_regular_coherent_global_transport}
+        def:peps_regular_weighted_open_contraction,
+        thm:peps_regular_coherent_global_transport}
     The preceding actual closed state has coefficient
     \[
-       \Psi_z(u;\chi,p)(\sigma)
-       =\sum_{\eta:E\to G}\chi(p\eta_{e_1}^{-1}z\eta_{e_0})
-          \prod_v a_v\bigl(\eta^{u}|_v,\sigma_v\bigr).
+        \Psi_z(u;\chi,p)(\sigma)
+        =\sum_{\eta:E\to G}\chi(p\eta_{e_1}^{-1}z\eta_{e_0})
+        \prod_v a_v\bigl(\eta^{u}|_v,\sigma_v\bigr).
     \]
     A diagonal inserted at an edge tail in a region gives precisely the
     corresponding weighted open coefficient. Suppose $t(e_0)\in R$
@@ -34,12 +34,12 @@
     weighted boundary column by
     \[
         \chi(pq^{-1}\eta_{e_0})
-          \longmapsto\chi(pq^{-1}k^{-1}\eta_{e_0}),
+        \longmapsto\chi(pq^{-1}k^{-1}\eta_{e_0}),
     \]
     uniformly in $\chi,p,q$ and the crossing labels, its extension by
     the identity gives
     \[
-       (W_R\otimes I)\Psi_1(u;\chi,p)=\Psi_{k^{-1}}(u;\chi,p).
+        (W_R\otimes I)\Psi_1(u;\chi,p)=\Psi_{k^{-1}}(u;\chi,p).
     \]
     This is a linear contraction identity for
     \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581.
@@ -70,26 +70,26 @@
 \begin{theorem}[A physical crossing with the actual remote partner]
     \label{thm:peps_torus_correlated_charge_flux_crossing_global}
     \lean{TNLean.PEPS.torusChargeFluxPartnerEdge_tail_not_mem,
-      TNLean.PEPS.IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global}
+        TNLean.PEPS.IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global}
     \leanok
     \uses{def:peps_torus_charge_flux_partner_edge,
-      thm:peps_regular_correlated_charge_cut,
-      thm:peps_torus_charge_flux_crossing}
+        thm:peps_regular_correlated_charge_cut,
+        thm:peps_torus_charge_flux_crossing}
     Let $G$ be finite, let the periods satisfy $w\geq5$ and $H\geq4$,
     and let the native four-leg tensor be regular $G$-isometric.
     For every translated crossing strip there is a regional unitary
     $W_R$, chosen before $k,\chi,p$, whose extension by the complementary
     identity is unitary and satisfies
     \[
-       (W_R\otimes I)\Psi_1(u^{(0)}_k;\chi,p)
-          =\Psi_{k^{-1}}(u^{(0)}_k;\chi,p).
+        (W_R\otimes I)\Psi_1(u^{(0)}_k;\chi,p)
+        =\Psi_{k^{-1}}(u^{(0)}_k;\chi,p).
     \]
     Here $e_0$ is the displayed charge bond, $e_1$ is the actual remote
     edge above, and $u^{(0)}_k$ is the literal initial flux string.
     Thus the actual joint weight changes in the order
     \[
         \chi(p\eta_1^{-1}\eta_0)
-          \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
+        \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
     \]
     The remote label is summed in the genuine original-spin contraction.
     No tree gauge, factorization, Gram identity or state-action premise is

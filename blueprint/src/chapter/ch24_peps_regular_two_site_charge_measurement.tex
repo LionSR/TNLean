@@ -1,118 +1,118 @@
 % Auxiliary finite-leg form of the charge detection calculation in SCP10,
 % local source lines 2464--2486. Checked auxiliary statements.
 \begin{definition}[Shared-leg coordinates and literal charged columns]
-\label{def:peps_regular_two_site_charge_coordinates}
-Let $I,J$ be finite incident-leg sets, with distinguished shared legs $i_0,j_0$.
-Write $I_0=I\setminus\{i_0\}$ and $J_0=J\setminus\{j_0\}$. Splitting the
-shared labels gives the bijection
-\[
- G^I\times G^J\simeq(G\times G)\times(G^{I_0}\times G^{J_0}).
-\]
-If $\iota_I(k,\theta_I)$ inserts $k$ at the shared leg, the actual canonical
-charged column is
-\[
- C_{\chi,p,\theta}(\alpha,\beta)=\sum_{k\in G}\chi(pk)
- P_I(\alpha,\iota_I(k,\theta_I))P_J(\beta,\iota_J(k,\theta_J)).
-\]
-Here $P_I,P_J$ are the local regular averaging projectors.
-\lean{TNLean.PEPS.regularSharedLegEquiv,TNLean.PEPS.regularTwoSiteChargeColumn}
-\uses{def:peps_regular_site_gram}
-\leanok
+    \label{def:peps_regular_two_site_charge_coordinates}
+    Let $I,J$ be finite incident-leg sets, with distinguished shared legs $i_0,j_0$.
+    Write $I_0=I\setminus\{i_0\}$ and $J_0=J\setminus\{j_0\}$. Splitting the
+    shared labels gives the bijection
+    \[
+        G^I\times G^J\simeq(G\times G)\times(G^{I_0}\times G^{J_0}).
+    \]
+    If $\iota_I(k,\theta_I)$ inserts $k$ at the shared leg, the actual canonical
+    charged column is
+    \[
+        C_{\chi,p,\theta}(\alpha,\beta)=\sum_{k\in G}\chi(pk)
+        P_I(\alpha,\iota_I(k,\theta_I))P_J(\beta,\iota_J(k,\theta_J)).
+    \]
+    Here $P_I,P_J$ are the local regular averaging projectors.
+    \lean{TNLean.PEPS.regularSharedLegEquiv,TNLean.PEPS.regularTwoSiteChargeColumn}
+    \uses{def:peps_regular_site_gram}
+    \leanok
 \end{definition}
 
 \begin{theorem}[Actual two-site charge expansion]
-\label{thm:peps_regular_two_site_charge_expansion}
-Put $N=|G|$ and
-$A_{\chi,p;x,y}(r,s)=\mathbf1_{s=yx^{-1}r}\chi(px^{-1}r)$.
-The literal contraction satisfies
-\[
- C_{\chi,p,\theta}(\alpha,\beta)=N^{-2}\sum_{x,y\in G}
- A_{\chi,p;x,y}(\alpha_{i_0},\beta_{j_0})
- \mathbf1_{\alpha|_{I_0}=x\theta_I}
- \mathbf1_{\beta|_{J_0}=y\theta_J}.
-\]
-It is also $(P_I\otimes P_J)$ applied to the character-weighted shared bond,
-with every other boundary label retained.
-\lean{TNLean.PEPS.regularTwoSiteChargeColumn_apply,TNLean.PEPS.regularTwoSiteChargeColumn_eq_projector}
-\uses{def:peps_regular_two_site_charge_coordinates,def:peps_regular_charge_coordinates}
-\leanok
+    \label{thm:peps_regular_two_site_charge_expansion}
+    Put $N=|G|$ and
+    $A_{\chi,p;x,y}(r,s)=\mathbf1_{s=yx^{-1}r}\chi(px^{-1}r)$.
+    The literal contraction satisfies
+    \[
+        C_{\chi,p,\theta}(\alpha,\beta)=N^{-2}\sum_{x,y\in G}
+        A_{\chi,p;x,y}(\alpha_{i_0},\beta_{j_0})
+        \mathbf1_{\alpha|_{I_0}=x\theta_I}
+        \mathbf1_{\beta|_{J_0}=y\theta_J}.
+    \]
+    It is also $(P_I\otimes P_J)$ applied to the character-weighted shared bond,
+    with every other boundary label retained.
+    \lean{TNLean.PEPS.regularTwoSiteChargeColumn_apply,TNLean.PEPS.regularTwoSiteChargeColumn_eq_projector}
+    \uses{def:peps_regular_two_site_charge_coordinates,def:peps_regular_charge_coordinates}
+    \leanok
 \end{theorem}
 \begin{proof}\leanok
-Expand both local averages and sum the shared label. For each $x,y$ its value
-is forced to be $x^{-1}\alpha_{i_0}$, giving the displayed charge matrix.
+    Expand both local averages and sum the shared label. For each $x,y$ its value
+    is forced to be $x^{-1}\alpha_{i_0}$, giving the displayed charge matrix.
 \end{proof}
 
 \begin{definition}[Shared-leg charge detector]
-\label{def:peps_regular_two_site_charge_detector}
-Let $D_\chi$ be the orthogonal projector onto the span of all translated charge
-matrices $A_{\chi,p;x,y}$. In the shared-leg coordinates define
-$\widehat D_\chi=D_\chi\otimes I$ on the remaining labels, and transport it
-back by the preceding bijection.
-\lean{TNLean.PEPS.regularTwoSiteChargeDetector}
-\uses{def:peps_regular_two_site_charge_coordinates}
-\leanok
+    \label{def:peps_regular_two_site_charge_detector}
+    Let $D_\chi$ be the orthogonal projector onto the span of all translated charge
+    matrices $A_{\chi,p;x,y}$. In the shared-leg coordinates define
+    $\widehat D_\chi=D_\chi\otimes I$ on the remaining labels, and transport it
+    back by the preceding bijection.
+    \lean{TNLean.PEPS.regularTwoSiteChargeDetector}
+    \uses{def:peps_regular_two_site_charge_coordinates}
+    \leanok
 \end{definition}
 
 \begin{theorem}[Canonical charge projection and local averages]
-\label{thm:peps_regular_two_site_charge_detector}
-The operator $\widehat D_\chi$ is a positive Hermitian projection, commutes with
-$P_I\otimes P_J$, and satisfies
-\[
- \widehat D_\chi C_{\chi,p,\theta}=C_{\chi,p,\theta}.
-\]
-If $\chi,\psi$ are distinct irreducible characters and $\chi$ is the character
-of a finite-dimensional unitary representation, then
-$\widehat D_\chi C_{\psi,p,\theta}=0$ for every $p,\theta$.
-Its kernel is invariant under independent translations of the two vertices.
-\lean{TNLean.PEPS.regularTwoSiteChargeDetector_properties,TNLean.PEPS.regularTwoSiteChargeDetector_column,TNLean.PEPS.regularTwoSiteChargeDetector_other_column,TNLean.PEPS.regularTwoSiteChargeDetector_translate_entries,TNLean.PEPS.regularTwoSiteChargeDetector_commute_projector}
-\uses{thm:peps_regular_two_site_charge_expansion,def:peps_regular_two_site_charge_detector}
-\leanok
+    \label{thm:peps_regular_two_site_charge_detector}
+    The operator $\widehat D_\chi$ is a positive Hermitian projection, commutes with
+    $P_I\otimes P_J$, and satisfies
+    \[
+        \widehat D_\chi C_{\chi,p,\theta}=C_{\chi,p,\theta}.
+    \]
+    If $\chi,\psi$ are distinct irreducible characters and $\chi$ is the character
+    of a finite-dimensional unitary representation, then
+    $\widehat D_\chi C_{\psi,p,\theta}=0$ for every $p,\theta$.
+    Its kernel is invariant under independent translations of the two vertices.
+    \lean{TNLean.PEPS.regularTwoSiteChargeDetector_properties,TNLean.PEPS.regularTwoSiteChargeDetector_column,TNLean.PEPS.regularTwoSiteChargeDetector_other_column,TNLean.PEPS.regularTwoSiteChargeDetector_translate_entries,TNLean.PEPS.regularTwoSiteChargeDetector_commute_projector}
+    \uses{thm:peps_regular_two_site_charge_expansion,def:peps_regular_two_site_charge_detector}
+    \leanok
 \end{theorem}
 \begin{proof}\leanok
-The shared-pair projector commutes with independent endpoint translations.
-Tensoring with the identity preserves this commutation and the projection
-properties. Averaging gives commutation with the local projectors, and the
-literal expansion gives the two eigenvalue formulas.
+    The shared-pair projector commutes with independent endpoint translations.
+    Tensoring with the identity preserves this commutation and the projection
+    properties. Averaging gives commutation with the local projectors, and the
+    literal expansion gives the two eigenvalue formulas.
 \end{proof}
 
 \begin{definition}[Original physical charged column]
-\label{def:peps_regular_two_site_physical_charge_column}
-For local tensors $a:G^I\to\mathcal H_A$ and $b:G^J\to\mathcal H_B$, define
-\[
- F_{\chi,p,\theta}(s,t)=\sum_{k\in G}\chi(pk)
- a(\iota_I(k,\theta_I),s)b(\iota_J(k,\theta_J),t).
-\]
-This is the actual contraction of the two original physical tensors along the
-character-weighted shared bond.
-\lean{TNLean.PEPS.regularTwoSitePhysicalChargeColumn}
-\uses{def:peps_regular_two_site_charge_coordinates}
-\leanok
+    \label{def:peps_regular_two_site_physical_charge_column}
+    For local tensors $a:G^I\to\mathcal H_A$ and $b:G^J\to\mathcal H_B$, define
+    \[
+        F_{\chi,p,\theta}(s,t)=\sum_{k\in G}\chi(pk)
+        a(\iota_I(k,\theta_I),s)b(\iota_J(k,\theta_J),t).
+    \]
+    This is the actual contraction of the two original physical tensors along the
+    character-weighted shared bond.
+    \lean{TNLean.PEPS.regularTwoSitePhysicalChargeColumn}
+    \uses{def:peps_regular_two_site_charge_coordinates}
+    \leanok
 \end{definition}
 
 \begin{theorem}[Two-site physical charge measurement]
-\label{thm:peps_regular_two_site_physical_charge_measurement}
-Assume the two original site maps are regular $G$-isometric, with their positive
-local isometry factors. Their product $T$ satisfies
-$F_{\chi,p,\theta}=T C_{\chi,p,\theta}$. There is a positive Hermitian projection
-$Q_\chi$ on $\mathcal H_A\otimes\mathcal H_B$, chosen before all $p,\theta$, such that
-\[
- Q_\chi T=T\widehat D_\chi,
- \qquad Q_\chi F_{\chi,p,\theta}=F_{\chi,p,\theta}.
-\]
-For a selected irreducible unitary character $\chi$, the pair
-$(Q_\chi,I-Q_\chi)$ is a complete projective measurement. It has eigenvalue
-zero on every $F_{\psi,p,\theta}$ for an inequivalent irreducible character
-$\psi$. Positivity, completeness, and the physical coefficient identities are
-derived from the original local isometry assumptions.
-\lean{TNLean.PEPS.exists_physicalProjectionFamily,TNLean.PEPS.regularTwoSitePhysicalChargeColumn_eq_image,TNLean.PEPS.exists_regularTwoSitePhysicalChargeProjector,TNLean.PEPS.exists_regularTwoSitePhysicalChargeMeasurement}
-\uses{thm:peps_regular_two_site_charge_detector,def:peps_regular_two_site_physical_charge_column}
-\leanok
+    \label{thm:peps_regular_two_site_physical_charge_measurement}
+    Assume the two original site maps are regular $G$-isometric, with their positive
+    local isometry factors. Their product $T$ satisfies
+    $F_{\chi,p,\theta}=T C_{\chi,p,\theta}$. There is a positive Hermitian projection
+    $Q_\chi$ on $\mathcal H_A\otimes\mathcal H_B$, chosen before all $p,\theta$, such that
+    \[
+        Q_\chi T=T\widehat D_\chi,
+        \qquad Q_\chi F_{\chi,p,\theta}=F_{\chi,p,\theta}.
+    \]
+    For a selected irreducible unitary character $\chi$, the pair
+    $(Q_\chi,I-Q_\chi)$ is a complete projective measurement. It has eigenvalue
+    zero on every $F_{\psi,p,\theta}$ for an inequivalent irreducible character
+    $\psi$. Positivity, completeness, and the physical coefficient identities are
+    derived from the original local isometry assumptions.
+    \lean{TNLean.PEPS.exists_physicalProjectionFamily,TNLean.PEPS.regularTwoSitePhysicalChargeColumn_eq_image,TNLean.PEPS.exists_regularTwoSitePhysicalChargeProjector,TNLean.PEPS.exists_regularTwoSitePhysicalChargeMeasurement}
+    \uses{thm:peps_regular_two_site_charge_detector,def:peps_regular_two_site_physical_charge_column}
+    \leanok
 \end{theorem}
 \begin{proof}\leanok
-Derive $T^\dagger T=c(P_I\otimes P_J)$ with $c>0$ from the two local Gram
-identities. Then $Q_\chi=c^{-1}T\widehat D_\chi T^\dagger$ is the required
-projection. Its complement supplies the second outcome, including unused
-physical directions.
+    Derive $T^\dagger T=c(P_I\otimes P_J)$ with $c>0$ from the two local Gram
+    identities. Then $Q_\chi=c^{-1}T\widehat D_\chi T^\dagger$ is the required
+    projection. Its complement supplies the second outcome, including unused
+    physical directions.
 \end{proof}
 
 These are auxiliary finite-leg identities for the charge detection argument in
@@ -123,26 +123,26 @@ no six-spin creation or parent-Hamiltonian assertion is included here.
 
 
 \begin{theorem}[Nonzero original two-site charge columns]
-\label{thm:peps_regular_two_site_charge_nonzero}
-Suppose $I_0,J_0$ are nonempty. At the reconstructed diagonal shared row $k$,
-\[
- C_{\chi,p,\theta}(\iota_I(k,\theta_I),\iota_J(k,\theta_J))
- =|G|^{-2}\chi(pk).
-\]
-Thus $\chi(1)\ne0$ implies that every canonical charged column is nonzero.
-For regular $G$-injective original physical site maps, the actual physical
-charged columns are also nonzero for every internal and boundary label.
-For every actual regular irreducible charge label, the condition
-$\chi(1)\ne0$ follows from the positive dimension of its irreducible
-representative and need not be supplied separately.
-\lean{TNLean.PEPS.regularTwoSiteChargeColumn_diagonal,TNLean.PEPS.regularTwoSiteChargeColumn_ne_zero,TNLean.PEPS.regularTwoSitePhysicalChargeColumn_ne_zero,
-TNLean.PEPS.regularTwoSitePhysicalChargeColumn_ne_zero_of_mem_regularChargeLabels}
-\uses{thm:peps_regular_two_site_charge_expansion,def:peps_regular_two_site_physical_charge_column,thm:peps_regular_charge_labels}
-\leanok
+    \label{thm:peps_regular_two_site_charge_nonzero}
+    Suppose $I_0,J_0$ are nonempty. At the reconstructed diagonal shared row $k$,
+    \[
+        C_{\chi,p,\theta}(\iota_I(k,\theta_I),\iota_J(k,\theta_J))
+        =|G|^{-2}\chi(pk).
+    \]
+    Thus $\chi(1)\ne0$ implies that every canonical charged column is nonzero.
+    For regular $G$-injective original physical site maps, the actual physical
+    charged columns are also nonzero for every internal and boundary label.
+    For every actual regular irreducible charge label, the condition
+    $\chi(1)\ne0$ follows from the positive dimension of its irreducible
+    representative and need not be supplied separately.
+    \lean{TNLean.PEPS.regularTwoSiteChargeColumn_diagonal,TNLean.PEPS.regularTwoSiteChargeColumn_ne_zero,TNLean.PEPS.regularTwoSitePhysicalChargeColumn_ne_zero,
+        TNLean.PEPS.regularTwoSitePhysicalChargeColumn_ne_zero_of_mem_regularChargeLabels}
+    \uses{thm:peps_regular_two_site_charge_expansion,def:peps_regular_two_site_physical_charge_column,thm:peps_regular_charge_labels}
+    \leanok
 \end{theorem}
 \begin{proof}
-\leanok
-The remaining legs force both translations to be the identity. Choose
-$k=p^{-1}$, then apply the derived local $G$-injective inverses to the actual
-physical contraction.
+    \leanok
+    The remaining legs force both translations to be the identity. Choose
+    $k=p^{-1}$, then apply the derived local $G$-injective inverses to the actual
+    physical contraction.
 \end{proof}

@@ -8,8 +8,8 @@
     order top, right, bottom, left. The two checkerboard orientations of the
     elementary tensor are
     \begin{align}
-        T_0(t,r,d,l;k)&=\delta_{t,r}\delta_{d,l}\delta_{k,t+d},&
-        T_1(t,r,d,l;k)&=\delta_{t,l}\delta_{d,r}\delta_{k,t+d}.
+        T_0(t,r,d,l;k) & =\delta_{t,r}\delta_{d,l}\delta_{k,t+d}, &
+        T_1(t,r,d,l;k) & =\delta_{t,l}\delta_{d,r}\delta_{k,t+d}.
     \end{align}
     These are the tensor of
     \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}
@@ -33,10 +33,10 @@
     \begin{align}
         B(N,E,S,W;\sigma)
         =\sum_{x_0,x_1,x_2,x_3}
-        &T_0(N_0,x_0,x_3,W_1;\sigma_3)
-          T_1(N_1,E_0,x_1,x_0;\sigma_0)\notag\\
-        &\qquad\cdot T_0(x_1,E_1,S_0,x_2;\sigma_1)
-          T_1(x_3,x_2,S_1,W_0;\sigma_2).
+         & T_0(N_0,x_0,x_3,W_1;\sigma_3)
+        T_1(N_1,E_0,x_1,x_0;\sigma_0)\notag          \\
+         & \qquad\cdot T_0(x_1,E_1,S_0,x_2;\sigma_1)
+        T_1(x_3,x_2,S_1,W_0;\sigma_2).
     \end{align}
     The boundary transformation $C$ applies $(a,b)\mapsto(a,a+b)$ on
     each of the four pairs. This is the CNOT transformation in the
@@ -66,16 +66,16 @@
     For every boundary labeling and every physical configuration,
     \begin{align}
         B(N,E,S,W;\sigma)
-        &=\delta_{N_1,N_0}\delta_{E_1,E_0}
-          \delta_{S_1,S_0}\delta_{W_1,W_0}
-          \delta_{\sigma,F(N_0,E_0,S_0,W_0)}.
+         & =\delta_{N_1,N_0}\delta_{E_1,E_0}
+        \delta_{S_1,S_0}\delta_{W_1,W_0}
+        \delta_{\sigma,F(N_0,E_0,S_0,W_0)}.
     \end{align}
     Consequently, if the four transformed boundary pairs are
     $(p,a_N),(q,a_E),(r,a_S),(s,a_W)$, then
     \begin{align}
         B\bigl(C((p,a_N),(q,a_E),(r,a_S),(s,a_W));\sigma\bigr)
-        &=\delta_{a_N,0}\delta_{a_E,0}\delta_{a_S,0}\delta_{a_W,0}
-          \delta_{\sigma,F(p,q,r,s)}.
+         & =\delta_{a_N,0}\delta_{a_E,0}\delta_{a_S,0}\delta_{a_W,0}
+        \delta_{\sigma,F(p,q,r,s)}.
     \end{align}
     Thus the actual contraction gives the color-difference tensor
     $K$ of \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}

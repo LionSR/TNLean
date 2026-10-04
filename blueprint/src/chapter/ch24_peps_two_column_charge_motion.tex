@@ -1,9 +1,9 @@
 \begin{definition}[Joining labels of two actual open regions]
     \label{def:peps_open_region_joining_labels}
     \lean{TNLean.PEPS.RegionJoiningEdge,
-      TNLean.PEPS.regionJoiningEdge_ofAdj,
-      TNLean.PEPS.regionGluingLabels,
-      TNLean.PEPS.regionGluingBoundary}
+        TNLean.PEPS.regionJoiningEdge_ofAdj,
+        TNLean.PEPS.regionGluingLabels,
+        TNLean.PEPS.regionGluingBoundary}
     \leanok
     Let $L,S$ be disjoint vertex regions of a finite simple graph.
     Their joining bonds are the bonds internal to $L\cup S$ but internal
@@ -18,15 +18,15 @@
 \begin{theorem}[Joining two open contractions]
     \label{thm:peps_graph_open_region_gluing}
     \lean{TNLean.PEPS.regionJoiningEdge_boundary,
-      TNLean.PEPS.graphOpenRegionNetwork_union}
+        TNLean.PEPS.graphOpenRegionNetwork_union}
     \leanok
     \uses{def:peps_open_region_joining_labels}
     Write $\Psi_R(\theta)$ for the original open tensor contraction on $R$.
     With vertex-dependent physical alphabets and regular group bond labels,
     \[
-      \Psi_{L\cup S}(\theta)
+        \Psi_{L\cup S}(\theta)
         =\sum_\mu \Psi_L(\beta_L(\mu,\theta))
-                    \otimes\Psi_S(\beta_S(\mu,\theta)).
+        \otimes\Psi_S(\beta_S(\mu,\theta)).
     \]
     Every exterior label remains fixed, and each joining label is summed
     exactly once. No factorization identity is assumed.
@@ -52,16 +52,16 @@
 \begin{theorem}[Original-spin implementation of a boundary exchange]
     \label{thm:peps_regular_boundary_register_transport}
     \lean{TNLean.PEPS.regularBoundaryRegisterPermutation_coordinateTranslation,
-      TNLean.PEPS.exists_unitary_regularBoundaryRegisterTransport}
+        TNLean.PEPS.exists_unitary_regularBoundaryRegisterTransport}
     \leanok
     \uses{def:peps_boundary_register_permutation,
-      thm:peps_regular_coordinate_permutation_support,
-      thm:peps_regular_physical_unitary_transport}
+        thm:peps_regular_coordinate_permutation_support,
+        thm:peps_regular_physical_unitary_transport}
     For an untwisted connected region with locally regular $G$-isometric
     original sites, one original-spin unitary $W_\tau$ satisfies
     \[
-      W_\tau\Psi_R(\theta)=\Psi_R(\theta\circ\tau)
-      \qquad\text{for every actual boundary configuration }\theta.
+        W_\tau\Psi_R(\theta)=\Psi_R(\theta\circ\tau)
+        \qquad\text{for every actual boundary configuration }\theta.
     \]
     The spanning tree is chosen internally, and $W_\tau$ is chosen before
     $\theta$. Its preservation of the full Gram form is derived from the
@@ -78,7 +78,7 @@
 \begin{theorem}[Literal diagonal weights on a joining bond]
     \label{thm:peps_regular_boundary_charge_contraction}
     \lean{TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_boundary,
-      TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_union}
+        TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_union}
     \leanok
     \uses{thm:peps_graph_open_region_gluing}
     A diagonal insertion $\operatorname{diag}\chi(p\cdot)$ on a joining
@@ -86,10 +86,10 @@
     contraction. On its tail part this is the prescribed boundary weight;
     on the other part no site factor changes. Thus
     \[
-      \Psi_{L\cup S}^{e,\chi,p}(\theta)
+        \Psi_{L\cup S}^{e,\chi,p}(\theta)
         =\sum_\mu\chi(p\mu_e)
-          \Psi_L(\beta_L(\mu,\theta))\otimes
-          \Psi_S(\beta_S(\mu,\theta)).
+        \Psi_L(\beta_L(\mu,\theta))\otimes
+        \Psi_S(\beta_S(\mu,\theta)).
     \]
     This is the literal charge insertion of \cite{Schuch2010PEPS},
     Section~6.6, source lines 2432--2453.
@@ -113,15 +113,15 @@
     \lean{TNLean.PEPS.exists_unitary_regularTwoPartChargeMotion}
     \leanok
     \uses{def:peps_joining_boundary_edge,
-      thm:peps_regular_boundary_register_transport,
-      thm:peps_regular_boundary_charge_contraction}
+        thm:peps_regular_boundary_register_transport,
+        thm:peps_regular_boundary_charge_contraction}
     Let $L,S$ be disjoint connected regions with locally regular
     $G$-isometric original sites, and let $e,f$ be joining bonds.
     There are independent unitaries $W_L,W_S$, chosen before every
     coefficient function $\chi$, parameter $p$ and exterior configuration
     $\theta$, such that
     \[
-      (W_L\otimes W_S)\Psi_{L\cup S}^{e,\chi,p}(\theta)
+        (W_L\otimes W_S)\Psi_{L\cup S}^{e,\chi,p}(\theta)
         =\Psi_{L\cup S}^{f,\chi,p}(\theta).
     \]
     The physical tensor product is identified with the original site
@@ -138,8 +138,8 @@
 \begin{definition}[The actual two-column torus square]
     \label{def:peps_torus_two_column_charge_geometry}
     \lean{TNLean.PEPS.torusChargeMotionColumn,
-      TNLean.PEPS.torusColumnChargeMotionBond,
-      TNLean.PEPS.torusColumnChargeMotionBond_val}
+        TNLean.PEPS.torusColumnChargeMotionBond,
+        TNLean.PEPS.torusColumnChargeMotionBond_val}
     \leanok
     At $v=(x,y)$ the two columns are
     $L=\{(x,y),(x,y+1)\}$ and
@@ -151,12 +151,12 @@
 \begin{theorem}[Derived native column geometry]
     \label{thm:peps_torus_two_column_charge_geometry}
     \lean{TNLean.PEPS.torusChargeMotionColumn_card,
-      TNLean.PEPS.torusChargeMotionColumn_disjoint,
-      TNLean.PEPS.torusChargeMotionColumn_union,
-      TNLean.PEPS.torusChargeMotionColumn_connected}
+        TNLean.PEPS.torusChargeMotionColumn_disjoint,
+        TNLean.PEPS.torusChargeMotionColumn_union,
+        TNLean.PEPS.torusChargeMotionColumn_connected}
     \leanok
     \uses{def:peps_torus_two_column_charge_geometry,
-      def:peps_torus_plaquette_flux_geometry}
+        def:peps_torus_plaquette_flux_geometry}
     On a finite torus with both periods at least three, each column contains
     exactly two sites and its actual induced graph is connected. The
     columns are disjoint and their union is the original plaquette region.
@@ -173,7 +173,7 @@
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTwoColumnChargeMotion}
     \leanok
     \uses{thm:peps_regular_two_part_charge_motion,
-      thm:peps_torus_two_column_charge_geometry}
+        thm:peps_torus_two_column_charge_geometry}
     Suppose the original four-leg tensor is $G$-isometric for the regular
     action. On every translated square of a finite torus with periods at
     least three, independent two-spin unitaries on its left and right

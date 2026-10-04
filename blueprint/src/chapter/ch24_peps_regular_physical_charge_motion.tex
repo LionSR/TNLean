@@ -1,7 +1,7 @@
 \begin{definition}[Exchanging actual internal reference registers]
     \label{def:peps_regular_charge_move_coordinates}
     \lean{TNLean.PEPS.regularChargeMoveCoordinatePermutation,
-      TNLean.PEPS.regularChargeMoveParameter}
+        TNLean.PEPS.regularChargeMoveParameter}
     \leanok
     \uses{def:peps_regular_coordinate_physical_permutation}
     Let $R$ be a connected finite block, with a spanning tree and root.
@@ -17,19 +17,19 @@
 \begin{theorem}[One original-spin unitary moves a literal charge]
     \label{thm:peps_regular_physical_charge_motion}
     \lean{TNLean.PEPS.regularChargeMoveCoordinatePermutation_coordinateTranslation,
-      TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion}
+        TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion}
     \leanok
     \uses{def:peps_regular_charge_move_coordinates,
-      thm:peps_regular_coordinate_permutation_support,
-      thm:peps_regular_weighted_open_recovery,
-      thm:peps_regular_physical_unitary_transport}
+        thm:peps_regular_coordinate_permutation_support,
+        thm:peps_regular_weighted_open_recovery,
+        thm:peps_regular_physical_unitary_transport}
     Suppose the original sites are locally $G$-isometric for the regular
     incident-edge action. One unitary $W_{e,f}$ on the original spins of $R$
     is chosen before every actual group-valued background $u$, coefficient
     function $\chi$, parameter $p$ and boundary configuration $\theta$.
     It satisfies
     \[
-      W_{e,f}\Psi_R(u;\chi,p,e,\theta)
+        W_{e,f}\Psi_R(u;\chi,p,e,\theta)
         =\Psi_R(u;\chi,p',f,\theta),
     \]
     where $\Psi_R$ is the literal weighted open contraction with weight
@@ -69,10 +69,10 @@
 \begin{theorem}[Untwisted motion without supplied tree choices]
     \label{thm:peps_regular_untwisted_physical_charge_motion}
     \lean{TNLean.PEPS.regularRegionTreeGauge_one,
-      TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion_of_connected}
+        TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion_of_connected}
     \leanok
     \uses{thm:peps_regular_physical_charge_motion,
-      thm:peps_regular_weighted_charge_contraction}
+        thm:peps_regular_weighted_charge_contraction}
     If the group operators are the identity, the actual rooted gauge is
     the identity. For any connected finite block and two internal bonds,
     one original-spin unitary therefore moves the literal diagonal insertion

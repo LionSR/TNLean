@@ -1,24 +1,24 @@
 \begin{theorem}[Literal weighted contractions under vertex gauges]
     \label{thm:peps_regular_weighted_gauge_transport}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_diagonal_vertexGauge,
-      TNLean.PEPS.regularWeightedOpenRegionWeight_vertexGauge,
-      TNLean.PEPS.regularWeightedOpenRegionWeight_chargePair_swept}
+        TNLean.PEPS.regularWeightedOpenRegionWeight_vertexGauge,
+        TNLean.PEPS.regularWeightedOpenRegionWeight_chargePair_swept}
     \leanok
     \uses{thm:peps_regular_weighted_bond_contraction,
-      def:peps_regular_weighted_open_contraction,
-      def:peps_regular_swept_patch}
+        def:peps_regular_weighted_open_contraction,
+        def:peps_regular_swept_patch}
     Let $G$ be finite, and let the original site coefficients be invariant
     under simultaneous left translation of their incident labels. Orient each
     edge from its smaller endpoint $t(e)$ to its larger endpoint $h(e)$.
     For a vertex gauge $\ell$, put
     \[
-      u'_e=\ell_{h(e)}^{-1}u_e\ell_{t(e)},\qquad
-      (L\eta)_e=\ell_{t(e)}\eta_e,\qquad
-      \theta'_e=\ell_{t(e)}^{-1}\theta_e.
+        u'_e=\ell_{h(e)}^{-1}u_e\ell_{t(e)},\qquad
+        (L\eta)_e=\ell_{t(e)}\eta_e,\qquad
+        \theta'_e=\ell_{t(e)}^{-1}\theta_e.
     \]
     The actual weighted open coefficient satisfies
     \[
-      \Psi_R(u,F;\theta)=\Psi_R(u',F\circ L;\theta').
+        \Psi_R(u,F;\theta)=\Psi_R(u',F\circ L;\theta').
     \]
     The weight $F$ may correlate several edges. For independent diagonal
     edge weights, the same equality holds for the actual closed contraction
@@ -29,8 +29,8 @@
     If the first selected edge has its tail in $S$ and the second does not,
     the correlated weight transforms as
     \[
-      \chi(p\eta_1^{-1}\eta_0)
-         \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
+        \chi(p\eta_1^{-1}\eta_0)
+        \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
     \]
     These are auxiliary actual contraction identities for
     \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581.
@@ -59,11 +59,11 @@
 \begin{theorem}[The literal native charge--flux deformation]
     \label{thm:peps_torus_charge_string_deformation}
     \lean{TNLean.PEPS.torusSweptStringChargeEdge_tail_mem,
-      TNLean.PEPS.IsGIsometric.graphInsertedBondNetwork_torusChargeStringDeformation}
+        TNLean.PEPS.IsGIsometric.graphInsertedBondNetwork_torusChargeStringDeformation}
     \leanok
     \uses{thm:peps_regular_weighted_gauge_transport,
-      def:peps_torus_charge_string_edge,
-      thm:peps_torus_swept_string_transport}
+        def:peps_torus_charge_string_edge,
+        thm:peps_torus_swept_string_transport}
     Let the torus periods satisfy $w\geq5$ and $H\geq4$, and let the native
     four-leg tensor be regular $G$-isometric. Use the literal initial flux
     string $u^{(0)}$ with label $k$ and no second flux string. Insert the
@@ -72,7 +72,7 @@
     contraction with the swept string $u^{(j)}$, for either displayed
     sweep $j=1,2$, and with diagonal
     \[
-       \operatorname{diag}\bigl(\chi(pk^{-1}t)\bigr)
+        \operatorname{diag}\bigl(\chi(pk^{-1}t)\bigr)
     \]
     on the same charge edge. This holds at every translated position,
     including both periodic seams, and for every scalar function $\chi$.
