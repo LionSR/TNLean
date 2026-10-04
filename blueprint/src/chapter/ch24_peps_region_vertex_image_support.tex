@@ -1,0 +1,56 @@
+\begin{definition}[One-site slices inside a region]%
+    \label{def:peps_region_vertex_physical_slice}
+    \lean{TNLean.PEPS.regionVertexPhysicalSlice}
+    \leanok
+    Fix all physical indices in $R$ except the index at $v\in R$.
+    The resulting one-site coefficient vector is a linear slice of
+    the regional vector.
+\end{definition}
+
+\begin{theorem}[Regional support supplies the site-image conditions]%
+    \label{thm:peps_region_vertex_image_support}
+    \lean{TNLean.PEPS.regionIncidentWeight_update,
+        TNLean.PEPS.regionVertexPhysicalSlice_mem_localTensorMap_range,
+        TNLean.PEPS.regionParentGroundSpace_le_vertexImageGroundSpace}
+    \leanok
+    \uses{def:peps_region_vertex_physical_slice,def:peps_region_ground_space,
+        def:peps_vertex_image_ground_space}
+    Every one-site slice at $v\in R$ of a vector in $\mathcal G_R$
+    lies in the image of the site map $A_v$. Consequently a collection
+    of parent regions covering every vertex supplies all one-site
+    image conditions. No injectivity or positive-bond hypothesis is
+    needed. This is a consequence of the finite contractions in
+    \cite[Section IV.C.1]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand a regional vector as a sum over actual incident-edge
+    assignments, with a coefficient depending on the crossing labels.
+    For each assignment the selected site's coefficient vector is a
+    column of $A_v$ multiplied by the product of all other site
+    coefficients. Every summand belongs to the site image, hence so
+    does the slice. Apply this to a parent region containing each vertex.
+\end{proof}
+
+\begin{theorem}[Exact virtual reconstruction for a covering parent family]%
+    \label{thm:peps_covering_parent_virtual_image}
+    \lean{TNLean.PEPS.vertexVirtualParentGroundSpace_map_globalVertexTensorMap_of_cover,
+        TNLean.PEPS.ker_regionParentHamiltonian_eq_virtual_image_of_cover}
+    \leanok
+    \uses{thm:peps_region_vertex_image_support,
+        thm:peps_vertex_virtual_parent_transport}
+    Suppose the site maps are injective and the parent regions cover
+    every vertex. Their common physical ground space is exactly the
+    image under the product site map of the common genuine virtual
+    regional bond space. The kernel of any positive exact-kernel
+    parent Hamiltonian with finitely many terms on these regions has the same description.
+\end{theorem}
+
+\begin{proof}\leanok
+    The regional conditions imply the site-image conditions by the
+    preceding theorem. The product site inverse therefore reconstructs
+    each physical vector and sends its actual regional conditions to
+    the genuine virtual conditions. The product site map sends the
+    virtual conditions back to the physical conditions. Positivity
+    identifies the kernel of the parent sum with the common local space.
+\end{proof}

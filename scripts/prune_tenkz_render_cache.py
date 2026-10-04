@@ -25,8 +25,11 @@ PICTURE = re.compile(r"tenkz-[0-9a-f]{16}")
 
 
 def referenced_pictures(web_root: Path) -> set[str]:
+    pages = [page for page in web_root.rglob("*.html") if page.is_file()]
+    if not pages:
+        raise SystemExit(f"no generated HTML pages under {web_root}; refusing to prune")
     names: set[str] = set()
-    for page in web_root.rglob("*.html"):
+    for page in pages:
         names.update(PICTURE.findall(page.read_text(encoding="utf-8", errors="replace")))
     return names
 
@@ -53,8 +56,6 @@ def main() -> int:
     args = parser.parse_args()
 
     keep = referenced_pictures(args.web_root)
-    if not keep:
-        raise SystemExit(f"no page under {args.web_root} references a tenkz picture")
     svgs = prune(args.web_root / "tenkz_svg", keep)
     products = prune(args.compile_cache, keep)
     print(f"kept {len(keep)} pictures; removed {svgs} SVGs and {products} compile products")

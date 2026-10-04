@@ -865,6 +865,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:ldp_unit_vector_deficit}
     By Theorem~\ref{thm:ldp_positive_part_rate}, every linear function of the
     tensor $P_q$ is within $K'e^{-\gamma q/\xi}$ of its value at $P_\infty$. Let
     $\tau_q$ and $\tau_\infty$ be as in the proof of
@@ -1041,50 +1042,52 @@ and its error extend to blocks of any lengths.
     Theorem~\ref{thm:mpu_transfer_matrix_overlap}.
 \end{proof}
 
+\input{chapter/ch32_log_depth_ordered_block_overlap}
+
 \begin{theorem}[Approximation error for blocks of unequal lengths]
     \label{thm:ldp_block_approximation_error}
-    \lean{MPSTensor.exists_blockApproximationError_le_mul,
-        MPSTensor.exists_norm_trace_prod_transferMatrix_sub_one_le,
-        MPSTensor.one_sub_norm_inner_smul_inv_norm_le,
-        norm_prod_range_sub_pow_le_of_isIdempotentElem,
-        prod_range_sub_pow_eq_sum_mul_sub_mul}
+    \lean{MPSTensor.exists_blockApproximationError_le_mul}
     \leanok
-    \uses{lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
-        def:ldp_block_isometry_state, lem:ldp_block_isometry_state_overlap,
-        def:correlation_length}
+    \uses{thm:ldp_unequal_absolute_trace_second_order,
+        thm:ldp_approximation_error_normal, def:ldp_block_isometry_state,
+        lem:ldp_block_isometry_state_overlap, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
-    length $\xi$, and let $0<\gamma<1$. There is a constant $C>0$ depending
-    only on $A$, $\rho$, and $\gamma$ such that for every cutting of the ring of
-    $N$ sites into $M\ge1$ blocks of lengths $\ell_k\ge q$ with injective
-    blocked tensors, the state $\ket{\psi_{\ell,\omega}}$ of
-    Definition~\ref{def:ldp_block_isometry_state} with the pair $\omega$ of the
-    fixed point satisfies
-    $\varepsilon(\psi_{\ell,\omega},\phi_N)\le CM\,e^{-\gamma q/\xi}$.
+    length $\xi$, and let $0<\gamma<1$. There is $C>0$, depending only on
+    the tensor, its normalized fixed state and the chosen spectral bound
+    and rate, such that every partition of $N$ sites into $M\ge1$ blocks
+    of lengths $\ell_j\ge q$ with injective blocked tensors satisfies
+    $\varepsilon(\psi_{\ell,\omega},\phi_N)\le CM e^{-2\gamma q/\xi}$.
+    Here $\psi_{\ell,\omega}$ is the state of
+    Definition~\ref{def:ldp_block_isometry_state} constructed from the
+    fixed-point pair, and $\phi_N$ is the normalized target.
+    This refines the first-order rate of
+    \cite[Lemma~1$'$(i), eq.~(S11)]{Malz2024Preparation}.
 \end{theorem}
-\begin{proof}
-    \leanok
-    By Lemma~\ref{lem:ldp_block_isometry_state_overlap} the overlap
-    $\braket{\psi_{\ell,\omega}}{\phi_N(A)}$ is
-    $\Tr(\tau_{\ell_1}\cdots\tau_{\ell_M})$, and $1=\Tr\tau_\infty^M$. As in the
-    proof of Lemma~\ref{lem:ldp_positive_part_overlap},
-    $\lVert\tau_\ell-\tau_\infty\rVert\le K_3e^{-\gamma\ell/\xi}\le\delta$ with
-    $\delta=K_3e^{-\gamma q/\xi}$ for $\ell\ge q$, since
-    $\lvert\lambda_2\rvert<1$. For matrices $X_1,\dots,X_M$ with
-    $\lVert X_k-E\rVert\le\delta$ and $E^2=E$,
-    \begin{align}
-        X_1\cdots X_M-E^M
-         & =\sum_{k=1}^MX_1\cdots X_{k-1}(X_k-E)E^{M-k},
-        \label{eq:ldp_block_telescoping}
-    \end{align}
-    and the induction of Lemma~\ref{lem:ldp_positive_part_overlap}, with
-    $\lVert X_1\cdots X_{k-1}\rVert\le c+\lVert X_1\cdots X_{k-1}-E^{k-1}\rVert$,
-    gives $\lVert X_1\cdots X_M-E^M\rVert\le c((1+c\delta)^M-1)$. So
-    $\lvert\braket{\psi_{\ell,\omega}}{\phi_N(A)}-1\rvert\le Cy\,e^{Cy}$ with
-    $y=Me^{-\gamma q/\xi}$. The triangle inequality of
-    Theorem~\ref{thm:ldp_approximation_error_normal} and
-    $\lvert c_N^2-1\rvert\le Ke^{-\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
-    $N\ge\ell_1\ge q$, bound $\varepsilon$ by $Cy\,e^{Cy}+Ky$, and
-    $\varepsilon\le1$ covers $y>1$.
+\begin{proof}\leanok
+    \uses{thm:ldp_unequal_absolute_trace_second_order,
+        thm:ldp_positive_part_overlap_second_order,
+        thm:ldp_approximation_error_normal,
+        lem:ldp_block_isometry_state_overlap}
+    Put $v=\phi_N(A)$, $c_N=\lVert v\rVert$ and
+    $a=\langle\psi_{\ell,\omega},v\rangle$.
+    The block isometries give $\lVert\psi_{\ell,\omega}\rVert=1$ and
+    $a=\Tr(\tau_{\ell_0}\cdots\tau_{\ell_{M-1}})$.
+    As in Theorem~\ref{thm:ldp_approximation_error_normal}, once
+    $c_N^2\ge1/2$, normalization gives
+    $\varepsilon\le2(c_N^2-|a|^2)$.
+    Write $u=Me^{-2\gamma q/\xi}$.
+    If $M\ge2$, Theorem~\ref{thm:ldp_unequal_absolute_trace_second_order}
+    bounds $1-|a|$ by $Cu e^{Cu}$ in the small-error regime. The transfer
+    gap gives $|c_N^2-1|\le K e^{-\gamma N/\xi}$; since
+    $N\ge Mq\ge2q$, this is at most $K e^{-2\gamma q/\xi}$.
+    If $M=1$, Theorem~\ref{thm:ldp_positive_part_overlap_second_order}
+    bounds $c_N^2-|a|^2$ directly by $K e^{-2\gamma N/\xi}$, hence by
+    $K e^{-2\gamma q/\xi}$.
+    The first-order normalization estimate also yields $c_N^2\ge1/2$
+    when a sufficiently large fixed multiple of $u$ is below one.
+    The remaining regime is covered by $\varepsilon\le1$.
+    Finally $Cu e^{Cu}\le Ce^C u$ for $u\le1$, giving the assertion
+    after increasing the constant.
 \end{proof}
 
 \section{Depth of the preparation}
@@ -1215,9 +1218,9 @@ Chapter~\ref{ch:local_quantum_circuits}.
     Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
     Theorem~\ref{thm:ldp_depth_upper_bound_divisible}, with fixed point $\sigma$,
     a bound $t<1$ on the moduli of the eigenvalues other than $1$, and
-    $r=-\tfrac14\log t$; the error is unchanged by
+    $r=-\log t$; the error is unchanged by
     Lemma~\ref{lem:ldp_normalized_state_rescaling}. Let $K$ be the constant of
-    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/4$, so the error
+    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/2$, so the error
     is at most $KMe^{-rq}$, and let $L_0$ be a length at which the blocked
     tensor is injective. Put $a=1/r$, $b=\max(\log K,0)/r+L_0+3D+1$,
     $Q=a\log(N/\varepsilon)+b$ and $q=\lceil Q\rceil$, so $Q\le q<2Q$ and
@@ -1226,7 +1229,8 @@ Chapter~\ref{ch:local_quantum_circuits}.
     If $q\le N$, write $N=(M-1)q+q'$ with $M=\lfloor N/q\rfloor$ and
     $q'=q+(N\bmod q)$, so $q\le q'<2q$, and cut the ring into $M-1$ blocks of
     length $q$ followed by one of length $q'$, as in the Supplemental Material
-    of \cite{Malz2024Preparation}, proof of Theorem~1. All blocked tensors are
+    of \cite{Malz2024Preparation}, also used in its lower-bound proof of
+    Theorem~1. All blocked tensors are
     injective since $q\ge L_0$, and
     Theorem~\ref{thm:ldp_block_approximation_error} gives error at most
     $KMe^{-rq}\le KNe^{-rQ}=Ke^{-rb}\varepsilon\le\varepsilon$. By
@@ -1607,6 +1611,7 @@ $A$ along $w$.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:physical_observable_word_span_mul, lem:ldp_observable_transfer_products}
     Choose coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$. The operator
     with matrix elements $\bra{w'}X\ket{w}=c^{ab}_w\overline{c^{ce}_{w'}}$ gives
     $\E_X(Z)=e_{ab}Ze_{ec}=Z_{be}\,e_{ac}$. These maps span all linear maps on
@@ -1670,7 +1675,8 @@ $A$ along $w$.
     \end{align}
     When $\rho$ is the fixed point of the gauge (\ref{eq:ldp_normal_gauge}),
     the left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
-    $t=s-L-1$; it is bilinear in $(X,Y)$. This is the choice of observables in
+    $t=s-L-1$; it is bilinear in $(X,Y)$. The inner insertion has zero
+    trace, so centering it leaves the formula unchanged even at $t=0$. This is the choice of observables in
     the proof of \cite[Lemma~2]{Malz2024Preparation}, without the source's
     requirement that the one-point functions vanish.
 \end{lemma}
@@ -1742,15 +1748,17 @@ $A$ along $w$.
          & =\lvert\lambda\rvert^t\sum_{j=1}^Ka_j\mu_j^{\,t}.
         \notag
     \end{align}
-    This replaces the choice of observables in the proof of
-    \cite[Lemma~2]{Malz2024Preparation} by one with Hermitian observables: for
+    The inner insertion is traceless, so the displayed expression equals the
+    centered connected contraction also at $t=0$. This replaces the choice
+    of observables in the proof of \cite[Lemma~2]{Malz2024Preparation}
+    by one with Hermitian observables: for
     non-real $\lambda$ the eigenvector is not Hermitian, and a Hermitian
     observable pairs it with its adjoint, an eigenvector for $\bar\lambda$.
 \end{lemma}
 \begin{proof}
     \leanok
     This is the second and third paragraph of the proof of
-    Theorem~\ref{thm:ldp_decaying_correlations}: a Hermitian vector $v$ and a
+    Theorem~\ref{thm:ldp_decaying_correlations}: a traceless Hermitian vector $v$ and a
     functional $\ell$ with $\ell(Z^\dagger)=\overline{\ell(Z)}$ are built from
     an eigenvector $R$ and its adjoint, the maps $Z\mapsto\Tr(Z)\,v$ and
     $Z\mapsto\ell(Z)\,\rho$ are realized by Hermitian observables through

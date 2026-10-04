@@ -161,7 +161,7 @@ set_option linter.mathlibStandardSet true
 
 /-- Wolf Proposition 6.2 identifies geometric and algebraic multiplicity at one
 for a positive unital map. -/
-private theorem simple_fixedEigenvalue_of_unital_positive
+theorem simple_fixedEigenvalue_of_unital_positive
     {D : ℕ} [NeZero D]
     (T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
     (hPos : IsPositiveMap T) (hOne : T 1 = 1)
