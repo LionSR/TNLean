@@ -43,14 +43,14 @@ theorem supportedOperators_submatrix_siteEquiv {S : Set (Fin N)}
   induction hA using Submodule.span_induction with
   | mem A hA =>
     obtain ⟨m, hm, rfl⟩ := hA
-    have heq : (finKronecker m).submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) =
-        finKronecker (fun k ↦ m (p.symm k)) := by
+    have heq : (rectKronecker m).submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) =
+        rectKronecker (fun k ↦ m (p.symm k)) := by
       ext σ τ
-      simp only [Matrix.submatrix_apply, finKronecker_apply, Function.comp_apply]
+      simp only [Matrix.submatrix_apply, rectKronecker_apply, Function.comp_apply]
       exact (Fintype.prod_equiv p (fun k ↦ m k (σ (p k)) (τ (p k)))
         (fun k ↦ m (p.symm k) (σ k) (τ k)) (by simp))
     rw [heq]
-    exact finKronecker_mem_supportedOperators fun k hk ↦ hm _ (by
+    exact rectKronecker_mem_supportedOperators fun k hk ↦ hm _ (by
       intro h; exact hk ⟨p.symm k, h, p.apply_symm_apply k⟩)
   | zero => simp
   | add A B _ _ hA hB =>
