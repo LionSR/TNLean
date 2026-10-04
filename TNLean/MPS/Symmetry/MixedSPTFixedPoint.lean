@@ -143,7 +143,7 @@ theorem mixedSptAction_unitary (g : G) :
 theorem sptFixedPointTensor_isMixedSymmetric :
     IsMixedSymmetric (sptFixedPointTensor D) t r (mixedSptAction t r ρ φ)
       (fun g => (φ g : ℂ)) (fun g => (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) :=
-  fun g i => mixedTensorAction_sptFixedPointTensor _ _ _ _ i
+  fun _g i => mixedTensorAction_sptFixedPointTensor _ _ _ _ i
 
 /-- The physical action is a genuine time-reversal-semilinear representation:
 the virtual two-cocycle disappears from its multiplication law. -/
@@ -153,8 +153,9 @@ theorem mixedSptAction_mul [NeZero D]
     mixedSptAction t r ρ φ (g * h) =
       mixedSptAction t r ρ φ g * parityConjMatrix (t g) (mixedSptAction t r ρ φ h) := by
   have hphase : (φ (g * h) : ℂ) = (φ g : ℂ) * parityConj (t g) (φ h : ℂ) := by
-    have h := congrArg (fun z : unitary ℂ => (z : ℂ)) (hφ g h)
-    simpa only [Submonoid.coe_mul, parityUnitary_coe, mul_comm] using h
+    have hu : φ (g * h) = parityUnitary (t g) (φ h) * φ g := hφ g h
+    have hc := congrArg (fun z : unitary ℂ => (z : ℂ)) hu
+    simpa only [Submonoid.coe_mul, parityUnitary_coe, mul_comm] using hc
   simp only [mixedSptAction, map_mul, hphase]
   exact (mixedSptMatrix_mul _ _ _ _ _ (ω g h : ℂ) _ _ _
     (ρ.map_mul g h) (ρ.factor_unitary (Nat.pos_of_ne_zero (NeZero.ne D)) g h)).symm
@@ -238,7 +239,7 @@ theorem exists_rephase_of_mixedSptSymmetry [NeZero D]
         _ = (ρ'.X g : Matrix (Fin D) (Fin D) ℂ) *
             ((u : ℂ) • (((ρ.X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
               (ρ.X g : Matrix (Fin D) (Fin D) ℂ) := by rw [hu]
-        _ = _ := by simp [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc]
+        _ = _ := by simp [Matrix.mul_assoc]
     refine ⟨u⁻¹, ?_⟩
     rw [hv, smul_smul]
     simp
@@ -291,7 +292,7 @@ theorem exists_mixed_spt_fixedPoint {G : Type} [Group G] [Fintype G]
         (mixedSptAction t r ρ φ) (fun g => (φ g : ℂ))
         (fun g => (ρ.X g : Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ)) := by
   classical
-  letI : NeZero (Fintype.card G) := ⟨Fintype.card_ne_zero⟩
+  let : NeZero (Fintype.card G) := ⟨Fintype.card_ne_zero⟩
   let ρ := conjugateRegularUnitaryRepresentation (t * r) ω hω
   exact ⟨ρ, sptFixedPointTensor_isInjective, sptFixedPointTensor_isTransferIdempotent,
     finrank_range_transferMap_sptFixedPointTensor, mixedSptAction_unitary t r ρ φ,

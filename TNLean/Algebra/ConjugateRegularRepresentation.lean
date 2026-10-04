@@ -33,6 +33,7 @@ factor system. No normalization of the cochain is assumed. -/
 def conjugateLeftRegular (ω : ScalarCocycle G) (g : G) : Matrix G G ℂ :=
   Matrix.monomial (Equiv.mulLeft g) fun h => (ω g h : ℂ)
 
+omit [Fintype G] in
 /-- The regular matrix sends the basis vector at `y` to `ω(g,y)` times the
 basis vector at `g*y`. -/
 theorem conjugateLeftRegular_apply (ω : ScalarCocycle G) (g x y : G) :
