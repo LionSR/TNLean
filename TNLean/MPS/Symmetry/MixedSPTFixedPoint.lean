@@ -33,7 +33,7 @@ variable {D : ℕ}
 def sptPairingEquiv (r : SymmetryParity) : Fin D × Fin D ≃ Fin (D * D) :=
   (if r = 1 then Equiv.refl _ else Equiv.prodComm _ _).trans finProdFinEquiv
 
-/-- The physical symmetry matrix of a dimer: `φ (X̄ ⊗ X)`, followed by the
+/-- The physical symmetry matrix of a dimer: `φ (conj(X) ⊗ X)`, followed by the
 swap of physical factors when the symmetry reflects the chain. -/
 noncomputable def mixedSptMatrix (X : Matrix (Fin D) (Fin D) ℂ)
     (φ : ℂ) (r : SymmetryParity) : Matrix (Fin (D * D)) (Fin (D * D)) ℂ :=
