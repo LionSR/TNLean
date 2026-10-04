@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Finite Periodic One-Species PVBS Gap}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and scope}
+Bachmann and Nachtergaele, arXiv:1112.4097, Section II after equation (8),
+give the one-particle dispersion
+$\epsilon_i(k)=1-2\lambda_i\cos(k+\theta_{i0})/(1+\lambda_i^2)$.
+They then conjecture that the exact thermodynamic gap for the multi-species
+model is the minimum of $(1-\lambda_i)^2/(1+\lambda_i^2)$ over species.
+The result proved here is the finite periodic one-species, zero-phase case,
+with positive hopping $\mu\ne1$. It is not a formal proof of that general
+thermodynamic conjecture.
+
+\section{Normalization and the finite ring}
+The local parent interaction is exactly
+\begin{align}
+    h_\mu & =|11\rangle\langle11|+
+    \frac{(|01\rangle-\mu|10\rangle)
+        (\langle01|-\mu\langle10|)}{1+\mu^2}.
+    \label{eq:bn12_gap_local}
+\end{align}
+On a ring of $N\ge2$ sites, sum this interaction over the $N$ ordered
+windows $(i,i+1)$ modulo $N$. For $N=2$, this includes both orientations;
+a convention with only one undirected bond is not covered by the claimed
+constant. The local formula is identified with the repository's actual
+orthogonal-projector parent interaction, rather than defining a replacement
+Hamiltonian.
+
+Let $\mathcal N$ count occupied sites. The exact periodic identity is
+\begin{align}
+    H_\mu & =a(\mu)H_1+c(\mu)\mathcal N,
+          & a(\mu)                       & =\frac{2\mu}{1+\mu^2},
+          & c(\mu)                       & =\frac{(\mu-1)^2}{1+\mu^2}.
+    \label{eq:bn12_gap_decomposition}
+\end{align}
+Indeed, the hopping coefficients agree, while the difference in diagonal
+terms is $[(\mu^2-\mu)n_L+(1-\mu)n_R]/(1+\mu^2)$ at each bond.
+Periodic summation identifies the two occupation sums.
+
+\section{Lower bound and attainment}
+For $\mu\ge0$, the critical Hamiltonian $H_1$ and the coefficient $a(\mu)$
+are nonnegative. Every configuration except the vacuum has at least one
+particle. Thus for a vector with zero vacuum amplitude,
+\begin{align}
+    \langle v,H_\mu v\rangle & \ge c(\mu)\|v\|^2,
+                             & \|H_\mu v\|        & \ge c(\mu)\|v\|.
+    \label{eq:bn12_gap_bound}
+\end{align}
+In particular this holds on the orthogonal complement of the actual kernel,
+since the vacuum is a zero-energy vector.
+
+The uniform one-particle vector $W_N=\sum_j|0\cdots1_j\cdots0\rangle$
+is annihilated by every critical local term and has particle number one.
+Hence $H_\mu W_N=c(\mu)W_N$. For positive $\mu\ne1$, its eigenvalue is
+positive, and symmetry makes $W_N$ orthogonal to the kernel. This nonzero
+vector attains the bound, so the exact finite-ring gap is $c(\mu)$.
+
+At $\mu=1$, the same vector joins the ground space. The vanishing of
+$c(1)$ does not say that a fixed finite ring has zero gap above its enlarged
+kernel. Thermodynamic critical gap closure would require a separate
+sequence of nonzero low-energy excitations as $N$ grows.
+
+\section{Remaining scope}
+The coefficient and norm-gap theorems prove the positive-hopping
+one-species finite-ring assertion. The general
+multi-species thermodynamic conjecture, nonzero phases, and open-chain
+spectral-gap estimates remain outside this statement. The open verdict
+tracks that broader source scope, not a missing hypothesis in the finite
+one-species result.\footnote{Formal declarations:
+    \leanid{MPSTensor.parentInteraction_pvbs_two_apply},
+    \leanid{MPSTensor.parentHamiltonianES_pvbs_decomposition}, and
+    \leanid{MPSTensor.parentHamiltonianES_pvbs_gap_exact}.}
+\end{document}
