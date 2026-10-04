@@ -31,11 +31,13 @@ Write the group additively as $G=\mathbb Z_2$.
     \lean{TNLean.PEPS.torusLegRep_toricCodeBondRep,
         TNLean.PEPS.isSemiRegular_toricCodeBondRep}
     \leanok
-    \uses{def:toric_code_torus_states,thm:peps_toric_code_primal_g_isometric}
+    \uses{def:toric_code_torus_states,def:peps_semiregular}
     The oriented four-leg action of $U$ is the primal tensor's parity
     representation. The one-bond representation is semi-regular.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{def:peps_toric_code_primal_virtual_symmetry,
+        thm:peps_semiregular_group_algebra}
     On the identity element both actions are the identity. On the
     nontrivial element, $Z^{-1}=Z=Z^{\mathsf T}$, so the four-leg action
     is $Z^{\otimes4}$. If $aI+bZ=0$, its two diagonal entries give
@@ -48,7 +50,7 @@ Write the group additively as $G=\mathbb Z_2$.
     \lean{TNLean.PEPS.linearIndependent_toricCodeTorusState,
         TNLean.PEPS.finrank_span_toricCodeTorusState}
     \leanok
-    \uses{lem:toric_code_bond_semiregular,thm:peps_toric_code_primal_g_isometric}
+    \uses{def:toric_code_torus_states}
     For every positive pair of torus periods, the vectors
     $\Psi_{0,0},\Psi_{0,1},\Psi_{1,0},\Psi_{1,1}$ are linearly independent.
     In particular,
@@ -58,6 +60,8 @@ Write the group additively as $G=\mathbb Z_2$.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:toric_code_bond_semiregular,thm:peps_toric_code_primal_g_isometric,
+        thm:peps_semiregular_g_injective_closure_independence,thm:peps_abelian_pair_classes}
     The primal tensor is injective on the invariant virtual subspace.
     Semi-regularity therefore makes its pair-conjugacy-class torus
     contractions independent. Since $\mathbb Z_2$ is abelian, all pairs
