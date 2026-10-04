@@ -38,11 +38,11 @@
     \label{thm:pgvwc07_unital_periodic_decomposition}
     \lean{MPSTensor.pgvwc07_unital_stateVector_decomposition}
     \leanok
-    \uses{def:pgvwc07_projector_component_chain,
-        lem:pgvwc07_unital_canonical_spectrum}
-    Under the hypotheses of
-    Lemma~\ref{lem:pgvwc07_unital_canonical_spectrum}, let $p$ count the
-    peripheral eigenvalues. There are nonzero orthogonal projections
+    \uses{def:pgvwc07_projector_component_chain, def:transfer_map}
+    Let $A$ have bond dimension $D>0$, with $\sum_iA^i(A^i)^\dagger=\Id$,
+    a positive-definite matrix $\Lambda$ satisfying $\E_A^*(\Lambda)=\Lambda$,
+    and only scalar multiples of $\Id$ as fixed matrices of $\E_A$.
+    Let $p$ count its peripheral eigenvalues. There are nonzero orthogonal projections
     $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ satisfying
     \begin{align}
         \sum_uQ_u & =\Id, & Q_uA^i & =A^iQ_{u+1}.

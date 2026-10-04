@@ -11,3 +11,5 @@ The source's diagonal faithful adjoint fixed matrix is included as a specializat
 A live audit of all 38 open PR changed-file lists found no overlap in the periodic modules, canonical chapter or periodic-decomposition source note. The half-chain owner confirmed no competing source-hypothesis API. The local narrow probe checks the exact cyclic-cardinality and peripheral generalized-eigenspace proof bodies with all package options and no diagnostics. The broad public irreducibility wrapper and existing state-vector consumer are reserved for exact-head full remote CI; this is not yet a complete local module build.
 
 The revised source note compiles to three PDF pages with no final TeX warnings; all rendered pages were visually checked. The existing normalized theorem/proof token streams are unchanged.
+
+Independent read-only mathematical/source review passed on the exact new theorem sources. It checked the original Theorems 4–5, the public spectral characterization and cyclic-decomposition APIs, the unital orientation, multiplicity count, original bond dimension and componentwise vanishing. No source-scope blocker was found.

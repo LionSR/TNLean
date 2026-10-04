@@ -49,9 +49,19 @@ theorem isIrreducible_transferMap_of_unital_canonical
   have hOne : Kraus.transferMap A 1 = 1 := by
     simpa only [Kraus.transferMap_apply, Matrix.mul_one] using hU
   apply isIrreducibleMap_of_hasSpectralProperties
-  refine ⟨{ n := d, K := A, map_eq := rfl, ρ := 1, σ := Λ, r := 1,
-    ρ_posDef := Matrix.PosDef.one, σ_posDef := hΛ, hr_pos := zero_lt_one,
-    right_eig := ?_, left_eig := ?_, unique_psd_eigenvector := ?_,
+  refine ⟨{
+    n := d
+    K := A
+    map_eq := rfl
+    ρ := 1
+    σ := Λ
+    r := 1
+    ρ_posDef := Matrix.PosDef.one
+    σ_posDef := hΛ
+    hr_pos := zero_lt_one
+    right_eig := ?_
+    left_eig := ?_
+    unique_psd_eigenvector := ?_
     spectralRadius_eq := ?_ }⟩
   · simpa only [Complex.ofReal_one, one_smul] using hOne
   · simpa only [Complex.ofReal_one, one_smul] using hΛfix
