@@ -2858,6 +2858,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### centering physical insertions carried by transfer eigenvectors — candidate
+- **Pattern:** trace preservation and a transfer eigenvalue different from one
+  imply that the eigenvector is traceless; the fixed-state projection then
+  vanishes on the inner physical insertion, including the zeroth transfer power.
+- **Seen:** two occurrences across two files (2026-10-02):
+  `DecayingCorrelations.lean` and `DecayingCorrelationBound.lean`, under
+  `TNLean/MPS/Preparation/`.
+- **Abstraction:** the existing
+  `MPSTensor.trace_eq_zero_of_transferMap_eq_smul` supplies tracelessness;
+  a Hermitian-vector realization now records this property in its conclusion.
+- **Notes:** the physical two-point identity and positive-separation reduction
+  are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
+  arguments use the reduction lemma instead of repeating the projection algebra.
+
+
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
   the original ket-bra alphabet, then transport the physical-trace contraction
