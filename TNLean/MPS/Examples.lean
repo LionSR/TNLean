@@ -46,6 +46,10 @@ import TNLean.MPS.Examples.MajumdarGhoshHamiltonian
 import TNLean.MPS.Examples.MajumdarGhoshLowerBound
 import TNLean.MPS.Examples.MajumdarGhoshTotalSpin
 import TNLean.MPS.Examples.MultiBlock
+import TNLean.MPS.Examples.PVBS
+import TNLean.MPS.Examples.PVBSGroundSpace
+import TNLean.MPS.Examples.PVBSLocalization
+import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
