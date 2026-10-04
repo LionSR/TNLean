@@ -184,6 +184,37 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
           $O(\log(N/\varepsilon))$ remains open.
 \end{enumerate}
 
+
+\section{A quantitative sufficient condition on actual blocks}
+A separate structural result assumes a common faithful fixed state $\sigma$
+of trace one and normalized Choi domination
+$J(F_j)\ge(\eta/D)(\sigma\otimes I)$, $0\le\eta\le1$, for the transfer maps
+$F_j$ of actual contiguous blocks of at most $s$ sites. It proves
+\begin{align}
+    \lVert B^\dagger B-\sigma^\mathsf{T}\otimes I\rVert
+     & \le2D(1-\eta)^{\lfloor N/s\rfloor},\notag  \\
+    \lVert P_B-(\sqrt\sigma)^\mathsf{T}\otimes I\rVert
+     & \le K_\sigma(1-\eta)^{\lfloor N/s\rfloor},
+\end{align}
+for the whole blocked chain, with $K_\sigma$ independent of its tensors and
+length. The declarations are
+\leanid{MPSChainTensor.transferMap_blockTensor},
+\leanid{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination},
+and
+\leanid{MPSPreparation.exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination}
+in \doclink{TNLean/MPS/Chain/Transfer},
+\doclink{TNLean/MPS/Preparation/InhomogeneousDoeblin}, and
+\doclink{TNLean/MPS/Preparation/InhomogeneousPositivePartRate}.
+
+This condition is imposed on ordered products over actual intervals, not on
+powers of the individual site maps. Separate sitewise spectral gaps are
+insufficient to justify that replacement. The result is restricted to a
+common bond space and a common faithful fixed state. It gives a uniform
+Gram and polar estimate under those additional structural hypotheses, not
+the full source preparation theorem: varying rectangular bond spaces,
+varying fixed states, and the uniform overlap and normalization argument
+remain separate requirements.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
