@@ -1,0 +1,332 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\title{Circuits for permutation MPUs and finite-phase monomial MPUs}
+\author{TNLean contributors}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\section{Statement and scope}
+
+Let $U$ act on $N\geq1$ qubits. Write its coefficients as a function of the
+paired physical indices, with output listed first:
+\begin{align}
+ f(a_1,b_1;\ldots;a_N,b_N)
+ &=\langle a_1\cdots a_N|U|b_1\cdots b_N\rangle.
+ \label{eq:coefficients}
+\end{align}
+For $0\leq k\leq N$, let $M_k$ be the matrix with rows indexed by the
+first $k$ pairs and columns by the remaining $N-k$ pairs. An open-boundary
+MPO of bond dimension at most $D$ gives a factorization of $M_k$ through a
+vector space of dimension at most $D$. Consequently $\operatorname{rank}M_k\leq D$.
+This rank is the operator Schmidt rank at the corresponding cut, rather
+than the rank of $U$ as an operator on the full chain.
+
+\begin{theorem}\label{thm:monomial}
+Suppose $U$ is monomial: there are a permutation $F$ of $\{0,1\}^N$ and
+phases $z(x)$ of modulus one such that $U|x\rangle=z(x)|F(x)\rangle$.
+Suppose the set of values of $z$ has at most $m$ elements, and
+$\operatorname{rank}M_k\leq D$ at every cut, where $D\geq1$.
+Put $W=(m+1)^D$. Then $U$ has an exact circuit with arbitrary one- and
+two-qubit gates, using
+\begin{align}
+ \text{gate count}&=O(NW^3),&
+ \text{auxiliary qubits}&=O(NW^3),&
+ \text{depth}&=O\bigl(\log(N+1)\log(W+1)\bigr).
+ \label{eq:resources}
+\end{align}
+All auxiliary qubits begin and end in $|0\rangle$.
+The constants in these estimates are absolute.
+\end{theorem}
+
+\begin{corollary}\label{cor:permutation}
+Every permutation MPU with maximal bond dimension $D$ has an exact circuit
+of $O(N8^D)$ gates and auxiliary qubits, and depth
+$O(D\log(N+1))$, with arbitrary two-qubit interactions.
+In particular, fixed bond dimension gives linear circuit size and
+logarithmic depth, without a lower bound on Schmidt coefficients.
+More generally, $D\leq c\log_2(N+1)$ for a fixed $c$ gives gate count and
+auxiliary space $O(N(N+1)^{3c})$ and depth $O(\log^2(N+1))$.
+\end{corollary}
+
+The finite phase alphabet restricts monomial MPUs, but imposes no further
+hypothesis on permutation MPUs, whose nonzero entries are all one.
+The dependence on $D$ is exponential. Thus this is a polynomial bound in
+$N$ for fixed $D$, not a polynomial bound in $N,D$ for variable $D$.
+The logarithmic depth permits arbitrary pairs of qubits to interact. It is
+not a bound for geometrically local circuits. Routing every gate on a line
+by swaps gives the weaker, but still polynomial for fixed $D$, bound
+$O(N^2W^6)$ on gate count and depth.
+
+Styliaris--Trivedi--Cirac's general construction depends on conditioning
+\cite{STC25}; see \nolinkurl{references/2508.08160/main.tex}, lines 1373--1402.
+The argument here uses finite coefficient values and leaves general MPUs
+unresolved. No claim of priority for the underlying finite-state or
+reversible-computation arguments is intended.
+
+\section{Rank bounds the number of residual functions}
+
+\begin{lemma}\label{lem:rows}
+Let $M$ be a matrix over a field, with finitely many columns and rank $r$.
+If its entries belong to a finite set $S$ of cardinality $s$, then $M$ has
+at most $s^r$ distinct rows.
+\end{lemma}
+
+\begin{proof}
+Choose $r$ columns forming a basis of the column space. If two rows agree
+on those columns, they agree on every linear combination of them and hence
+on all columns. Restriction to the chosen columns therefore injects the
+set of distinct rows into $S^r$, which has $s^r$ elements.
+\end{proof}
+
+Let $\mathcal A=\{0,1\}\times\{0,1\}$ and let
+$S=\{0\}\cup\{z(x):x\in\{0,1\}^N\}$, so $|S|\leq m+1$.
+For a prefix $p\in\mathcal A^k$, define the residual function
+$r_p:\mathcal A^{N-k}\to S$ by $r_p(t)=f(pt)$, where juxtaposition is
+concatenation. Let $Q_k$ be the set of distinct residual functions at cut
+$k$. These are precisely the distinct rows of $M_k$. Lemma~\ref{lem:rows}
+gives
+\begin{align}
+ |Q_k|\leq |S|^{\operatorname{rank}M_k}\leq W.
+ \label{eq:width}
+\end{align}
+There is a well-defined transition
+\begin{align}
+ \delta_j:Q_{j-1}\times\mathcal A&\longrightarrow Q_j,&
+ \delta_j(r_p,c)&=r_{pc}.
+ \label{eq:transition}
+\end{align}
+Indeed, $r_p=r_{p'}$ implies $f(pct)=f(p'ct)$ for every suffix $t$.
+The initial state $q_0$ is $r_{\varnothing}$.
+Each terminal state $q\in Q_N$ is a scalar $\omega(q)\in S$.
+The transitions and terminal values exactly recover $f$.
+
+For matrix notation, embed each $Q_k$ in a common set of $W$ labels.
+Define transitions arbitrarily on unused labels, always into the next
+$Q_j$, and assign unused terminal labels weight zero. Actual trajectories
+stay in $Q_j$, so this extension does not change the coefficients.
+The zero residual, when present, is a rejecting state. No reversible
+transition assumption is made: the classical computation will retain and
+then erase its intermediate values.
+
+\section{Recovering the output string}
+
+Fix an input string $x=(x_1,\ldots,x_N)$. A terminal state is accepting
+when its weight is nonzero. Let $t(q)$ be its accepting indicator.
+For a state $q$ at cut $j$, let $s_j(q)$ indicate that some output suffix
+completes the fixed input suffix $x_{j+1},\ldots,x_N$ to an accepting path.
+Then
+\begin{align}
+ s_N(q)&=t(q),\\
+ s_{j-1}(q)&=\bigvee_{a\in\{0,1\}}
+       s_j\bigl(\delta_j(q,(a,x_j))\bigr).
+ \label{eq:suffix}
+\end{align}
+For fixed $x_j$, define the Boolean matrix
+\begin{align}
+ E_j(q,q')&=\bigvee_{a\in\{0,1\}}
+       [\delta_j(q,(a,x_j))=q'].
+ \label{eq:relation}
+\end{align}
+Multiplication of Boolean matrices uses disjunction in place of addition
+and conjunction in place of multiplication. Thus
+$s_j=E_{j+1}\cdots E_Nt$.
+All suffix matrices can be obtained simultaneously by products on a
+balanced binary tree: first compute the product in each subtree; then
+propagate the product strictly to its right from the root to the leaves.
+This uses $O(N)$ matrix multiplications in $O(\log(N+1))$ stages.
+Associativity suffices; commutativity is not needed.
+
+For each state $q$ define $a_j(q)$ to be the least bit $a$ for which
+$s_j(\delta_j(q,(a,x_j)))=1$. If no such bit exists, set $a_j(q)=0$.
+Define the state transformation
+\begin{align}
+ h_j(q)&=\delta_j(q,(a_j(q),x_j)).
+ \label{eq:greedy}
+\end{align}
+These tables depend only on $x_j$ and the suffix indicators, so every table
+can be computed in parallel after (\ref{eq:suffix}).
+All successive states are then obtained by a second computation of
+associative products, now composing functions:
+\begin{align}
+ q_j&=(h_j\circ\cdots\circ h_1)(q_0),&
+ y_j&=a_j(q_{j-1}).
+ \label{eq:output}
+\end{align}
+Function composition may be represented by Boolean matrix multiplication,
+with one nonzero entry in each row.
+
+There is an accepting path for every input $x$, because $U$ is monomial.
+Induction in (\ref{eq:greedy}) shows that the chosen prefix always admits
+an accepting completion. Hence (\ref{eq:output}) ends at an accepting
+terminal state. Such a path is unique for fixed $x$, again by monomiality.
+It follows that $y=F(x)$ and $\omega(q_N)=z(x)$.
+Uniqueness is needed only along the path from $q_0$; arbitrary states may
+have several accepted completions, for which the least-bit rule is harmless.
+
+For the inverse permutation, use $f^{\mathrm{op}}(a,b)=f(b,a)$ and ignore
+its nonzero weights. Swapping the two indices at each site merely permutes
+the rows and columns of every cut matrix, so its ranks remain at most $D$
+and its coefficient alphabet is still $S$. Its unique accepted output for
+input $y$ is $F^{-1}(y)$. Complex conjugation is unnecessary for recovering
+the inverse permutation; phases are handled separately.
+
+\section{From the Boolean computation to a quantum circuit}
+
+A Boolean product of two $W$ by $W$ matrices requires $W^3$ conjunctions
+and $O(W^3)$ binary disjunctions. A balanced disjunction tree has depth
+$O(\log(W+1))$. Each matrix entry is used by at most $W$ conjunctions;
+copying it to those uses takes $O(W)$ controlled-NOT gates and logarithmic
+depth. Thus the computation has bounded fan-in and bounded fan-out after
+copies are supplied, with size $O(W^3)$ and depth $O(\log(W+1))$ per product.
+The tables $E_j,h_j,a_j$ and the evaluations in (\ref{eq:output}) use no
+larger resources. An input bit $x_j$ is copied to its $O(W^2)$ table uses
+with a binary tree of controlled-NOT gates.
+
+The two balanced-tree computations therefore form a Boolean circuit for
+$F$ of size $O(NW^3)$ and depth
+$O(\log(N+1)\log(W+1))$, including copies. The same bounds hold for
+$F^{-1}$. This is a circuit with fixed transition tables, not an algorithm
+that reads a full $2^N$ by $2^N$ matrix during execution.
+
+To make this circuit reversible, record each Boolean gate's output on a
+fresh auxiliary bit. An AND is a Toffoli gate; an OR uses the identity
+$a\lor b=a\oplus b\oplus ab$ and hence two controlled-NOT gates and one
+Toffoli gate; a NOT and a copy have immediate reversible implementations.
+Disjoint Boolean gates, with their previously supplied copies, can still
+be applied in parallel. A Toffoli has an exact decomposition into a constant
+number of one- and two-qubit gates \cite{Barenco95}.
+Copy the desired output to a separate register and reverse the computation,
+as in Bennett's construction \cite{Bennett73}. This gives
+\begin{align}
+ C_F:\ |x\rangle|b\rangle|0\rangle
+ &\longmapsto |x\rangle|b\oplus F(x)\rangle|0\rangle
+ \label{eq:reversible}
+\end{align}
+with a constant factor increase in size and depth and $O(NW^3)$ auxiliary
+bits. The inverse-permutation circuit gives $C_{F^{-1}}$ in the same form.
+The copies correlate computational-basis labels coherently; this reasoning
+does not require, or assert, copying an arbitrary unknown quantum state.
+
+For a monomial unitary, the computation of $F$ also supplies the terminal
+state $q_N$. Encode it with $W$ bits, exactly one of which is one. For each
+terminal label of nonzero weight, apply the one-qubit phase
+$\operatorname{diag}(1,\omega(q))$ to its label bit; use the identity for
+zero-weight labels. On the actual trajectory this multiplies the state by
+$z(x)$. These gates act on separate bits and can be applied in one layer.
+Insert this layer before reversing the computation that erases intermediate
+values. Starting with a zero output register gives
+\begin{align}
+ |x\rangle|0\rangle|0\rangle
+ &\longmapsto z(x)|x\rangle|F(x)\rangle|0\rangle\\
+ &\longmapsto z(x)|F(x)\rangle|x\rangle|0\rangle\\
+ &\longmapsto z(x)|F(x)\rangle|0\rangle|0\rangle.
+ \label{eq:clean}
+\end{align}
+The second step swaps the two data registers, and the third applies
+$C_{F^{-1}}$. The procedure acts correctly on every basis state and therefore
+on every superposition. It proves Theorem~\ref{thm:monomial}.
+Corollary~\ref{cor:permutation} takes $m=1$ and $W=2^D$.
+
+\section{Reduction of arbitrary monomial MPUs to diagonal MPUs}
+
+The permutation part can be separated even when the phases take arbitrarily
+many values.
+
+\begin{theorem}\label{thm:diagonal-reduction}
+Let $U$ be any monomial MPU of bond dimension at most $D$.
+Then $U=P\Phi$, where $P$ is a permutation MPU of bond dimension at most
+$D^2$ and $\Phi$ is a diagonal MPU of bond dimension at most $D^3$.
+The permutation $P$ has an exact circuit of $O(N8^{D^2})$ gates and auxiliary
+qubits, and depth $O(D^2\log(N+1))$, with arbitrary two-qubit interactions.
+\end{theorem}
+
+\begin{proof}
+Put $P_{yx}=|U_{yx}|^2$. Since $U|x\rangle=z(x)|F(x)\rangle$ and
+$|z(x)|=1$, these entries are precisely $[y=F(x)]$.
+If the local matrices of $U$ are $A_j(a,b)$, the coefficientwise squared
+modulus has local matrices
+\begin{align}
+ B_j(a,b)&=A_j(a,b)\otimes\overline{A_j(a,b)},
+ \label{eq:support-tensor}
+\end{align}
+and similarly tensored boundary vectors. The identity
+$(A\otimes\overline A)(B\otimes\overline B)
+=AB\otimes\overline{AB}$ proves that these tensors represent $P$ with
+bond dimension at most $D^2$. Corollary~\ref{cor:permutation} implements it.
+Now $\Phi=P^\dagger U$ acts as
+$\Phi|x\rangle=z(x)|x\rangle$ and is therefore diagonal.
+The product of two MPOs is obtained by summing the shared physical index
+and tensoring their bond indices. Its bond dimension is at most the product
+of the two bond dimensions, here $D^2D=D^3$.
+\end{proof}
+
+Thus polynomial circuit size for arbitrary diagonal MPUs of fixed bond
+dimension would imply it for arbitrary monomial MPUs of fixed bond dimension.
+The reverse implication is immediate because diagonal unitaries are
+monomial. This reduction concerns circuit size with auxiliary qubits and
+arbitrary two-qubit interactions; it imposes no finite phase alphabet.
+It does not resolve the diagonal case with arbitrary phases.
+
+\section{Construction of the finite tables and formalization}
+
+The residual tables need not be found by enumerating all prefixes and
+suffixes. Suppose an MPO representation is given by matrices $A_j(c)$,
+left boundary $l$, and right boundary $r$. Starting with $V_N=\operatorname{span}\{r\}$,
+compute backwards
+\begin{align}
+ V_{j-1}&=\operatorname{span}\{A_j(c)v:c\in\mathcal A,\ v\in V_j\}.
+ \label{eq:suffix-span}
+\end{align}
+Keep a basis of each $V_j$, of dimension at most $D$.
+A prefix has bond row $v_p=lA_1(c_1)\cdots A_j(c_j)$.
+Two prefixes have the same residual if and only if their bond rows agree
+on the selected basis of $V_j$. Starting from $l$, extend every retained
+representative by all four local letters and retain one representative of
+each distinct restricted row. Lemma~\ref{lem:rows} bounds the number retained
+by $W$ at every step. Elementary linear algebra and exact equality tests
+therefore construct the finite tables with $O(N\,\mathrm{poly}(D,W))$ field
+operations. This is an exact arithmetic statement. No bound on bit complexity
+for arbitrary complex tensor entries is claimed. The circuit existence and
+gate bounds do not require a numerical separation between those entries.
+
+The script \texttt{scripts/check\_mpu\_finite\_alphabet\_recovery.py}
+checks output recovery and inverse erasure on every basis input of 424
+examples: all 384 signed two-qubit permutations, 36 three- and four-qubit
+finite-phase examples, and four multi-controlled NOT gates. Ranks and
+comparisons are exact. Its enumeration of small residual tables verifies
+the reconstruction, not compiled quantum gates or the construction cost.
+
+The module \texttt{TNLean/MPS/MPU/FiniteAlphabetRows.lean} proves
+Lemma~\ref{lem:rows}, the separating-column assertion, and the rank-bound,
+finite-bond, and zero-one consequences. The remaining arguments in this note
+are mathematical proofs rather than Lean theorems.
+
+For arbitrary complex coefficients, the set of residual functions can grow
+exponentially even when its span has dimension one, as for a product of
+one-site phase gates. Such gates have efficient circuits, so this failure
+of the finite-state bound gives no complexity lower bound. General
+nonuniform MPUs require further structure beyond finite coefficient values.
+
+\begin{thebibliography}{9}
+\bibitem{STC25}
+G.~Styliaris, R.~Trivedi, and J.~I.~Cirac,
+\emph{Quantum Circuits for Matrix-Product Unitaries},
+Physical Review Letters \textbf{135}, 260602 (2025),
+\href{https://arxiv.org/abs/2508.08160}{arXiv:2508.08160v2}.
+\bibitem{Bennett73}
+C.~H.~Bennett, \emph{Logical Reversibility of Computation},
+IBM Journal of Research and Development \textbf{17}, 525--532 (1973),
+\href{https://doi.org/10.1147/rd.176.0525}{doi:10.1147/rd.176.0525}.
+\bibitem{Barenco95}
+A.~Barenco et al., \emph{Elementary gates for quantum computation},
+Physical Review A \textbf{52}, 3457--3467 (1995),
+\href{https://arxiv.org/abs/quant-ph/9503016}{arXiv:quant-ph/9503016}.
+\end{thebibliography}
+\end{document}

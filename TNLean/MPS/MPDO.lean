@@ -169,6 +169,7 @@ import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.FibonacciBoundaryRank
 import TNLean.MPS.MPDO.FibonacciPeriodicRank
 import TNLean.MPS.MPDO.FigureEightPairwise
+import TNLean.MPS.MPDO.FiniteLengthIndependentCoefficients
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorConstructor
@@ -302,6 +303,7 @@ import TNLean.MPS.MPDO.RFPSubspinMaps
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.RFPViaTSBlocking
 import TNLean.MPS.MPDO.RFPViaTSGlobal
+import TNLean.MPS.MPDO.RFPViaTSPositivity
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.RecurrentSectorRephasing
 import TNLean.MPS.MPDO.ReflectedMarkedChain
