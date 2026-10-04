@@ -23,6 +23,40 @@
     preserves column inner products.
 \end{proof}
 
+\begin{definition}[A normal rank-deficient polar input]
+    \label{def:ldp_full_input_counterexample}
+    \lean{MPSPreparation.mixedPolarFullInputCounterexample}
+    \leanok
+    With physical dimension four and bond dimension two, set
+    $B=(\Id,E_{01},E_{10},0)/\sqrt2$, where $E_{ij}$ are matrix units.
+    A single physical site already satisfies the capacity condition
+    $d^q=D^2=4$.
+\end{definition}
+\begin{theorem}[Failure of the full-input pseudoinverse isometry]
+    \label{thm:ldp_full_input_counterexample}
+    \lean{MPSPreparation.mixedPolarFullInputCounterexample_spec}
+    \leanok
+    \uses{def:ldp_full_input_counterexample, def:normal, def:ldpolar_tensor}
+    The tensor $B$ is nonzero, unital and trace preserving, and is normal
+    with blocking length two. Nevertheless, its canonical polar factor
+    $V=BP^+$ does not satisfy $V^\dagger V=\Id_4$.
+    Thus the literal full-input pseudoinverse extension in
+    \cite[footnote~3 to equations~(13)--(15)]{Malz2024Preparation} fails
+    even for a normal tensor with sufficient physical dimension.
+    The support-domain correction is recorded in
+    \cite{gap:mswc24_mixed_polar_injectivity_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_left_product}
+    Direct multiplication gives both normalization identities. The products
+    $B^1B^2,B^0B^1,B^0B^2,B^2B^1$ are respectively one half of the four
+    matrix units, proving two-site injectivity. Since $B^3=0$ and $V=BG$,
+    the final physical row of $V$ is zero. If the square matrix $V$ were
+    an isometry, it would also satisfy $VV^\dagger=\Id_4$, contradicting
+    its final diagonal entry.
+\end{proof}
+
 \begin{theorem}[Mixed sequential preparation on the actual polar support]
     \label{thm:ldp_mixed_polar_support}
     \lean{MPSPreparation.exists_mixed_sequential_polarIsoMatrix_on_support,
@@ -48,7 +82,8 @@
     This is the support-domain correction of footnotes~3 and~4 to
     equations~(13)--(15) of~\cite{Malz2024Preparation}. For a non-injective
     block, the printed full-input identity fails because
-    $V^\dagger V=\Pi\ne\Id_{D^2}$; a nonzero tensor witness and the
+    $V^\dagger V=\Pi\ne\Id_{D^2}$; a normal counterexample is proved in
+    Theorem~\ref{thm:ldp_full_input_counterexample}; the witnesses and
     correction are recorded in~\cite{gap:mswc24_mixed_polar_injectivity_scope}.
 \end{theorem}
 \begin{proof}

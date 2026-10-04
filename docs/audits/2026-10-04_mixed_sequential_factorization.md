@@ -42,3 +42,5 @@ The mixed factorization predicate and central-input constructions now allow
 arbitrary finite input dimension. Their original full-input specializations
 are unchanged. The existing chain splitting argument is shared rather than
 duplicated, and no new support predicate or spectral-basis proof is introduced.
+
+The source error is additionally formalized on a normal, unital and trace-preserving tensor with physical dimension four and bond dimension two: `(I,E01,E10,0)/sqrt(2)`. Its length-two products span the four matrix units, but the actual polar map has a zero physical row and cannot be a square isometry. The witness module passed full-option Lean elaboration with no diagnostics. The external GHZ counterexample and false-source correction are preserved alongside this stronger normal witness.

@@ -809,6 +809,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   tensor witness. The local correction is proved: parametrize the actual polar
   support by an isometry, apply the inward sweeps to that input, and reconstruct
   the full polar partial isometry with the support embedding's adjoint.
+  A formal normal, unital and trace-preserving witness also satisfies the
+  physical-dimension capacity condition and refutes the full-input identity.
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective

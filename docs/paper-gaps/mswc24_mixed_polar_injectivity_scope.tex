@@ -3,7 +3,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Mixed Sequential Polar Factorization on the Actual Support}
+\title{The Full-Input Pseudoinverse Obstruction and Its Support Correction}
 \author{}
 \date{2026-10-04}
 \begin{document}
@@ -47,6 +47,36 @@ $V^\dagger V=\Pi\ne\Id_4$. The pseudoinverse construction already fails
 on these nondegenerate data. One may separately complete the partial
 isometry on its kernel, but that completion is not $BP^+$ and is not the
 construction asserted in equation~(13).
+
+\section{A nonzero normal counterexample}
+Take one physical site with $d=4$ and bond dimension $D=2$, so the
+capacity condition $d^q\ge D^2$ in footnote~1 holds with equality. With
+$a=1/\sqrt2$, let
+\begin{align}
+    B^0 & =a\Id, & B^1 & =aE_{01}, & B^2 & =aE_{10}, & B^3 & =0.
+    \label{eq:mswc24_pseudoinverse_witness}
+\end{align}
+This tensor is nonzero, unital and trace preserving. Its length-two
+products include $E_{00}/2,E_{01}/2,E_{10}/2,E_{11}/2$, so it is normal.
+The one-site physical matrix, in virtual-pair order $00,01,10,11$, is
+\begin{align}
+    B      & =\begin{pmatrix}a&0&0&a\\0&a&0&0\\0&0&a&0\\0&0&0&0\end{pmatrix}, &
+    V=BP^+ & =\begin{pmatrix}a&0&0&a\\0&1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}.
+    \label{eq:mswc24_pseudoinverse_witness_matrix}
+\end{align}
+For the unit vector $w=(1,0,0,-1)^{\mathsf T}/\sqrt2$, one has $Vw=0$;
+indeed $V^\dagger V=\Id-|w\rangle\langle w|\ne\Id$.
+Thus neither a zero tensor nor an insufficient output dimension accounts
+for the obstruction. The formal witness is
+\leanid{MPSPreparation.mixedPolarFullInputCounterexample_spec}.
+Its proof uses the zero final physical row and the actual polar
+right-factor identity $V=BG$, without assuming a formula for a shadow
+polar map.
+
+An isometric extension on the unused input direction can exist here,
+but it differs from $BP^+$. The counterexample concerns that printed
+pseudoinverse identification, not the existence of an extension or the
+injective-block preparation theorem.
 
 \section{The support construction}
 Choose orthonormal coordinates for the range of $\Pi$: an isometry

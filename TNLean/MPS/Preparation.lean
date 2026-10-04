@@ -56,6 +56,7 @@ import TNLean.MPS.Preparation.MinimalCutRepresentationCuts
 import TNLean.MPS.Preparation.MinimalCutRepresentationFactorization
 import TNLean.MPS.Preparation.MinimalCutRepresentationIntervals
 import TNLean.MPS.Preparation.MinimalCutRepresentationPadding
+import TNLean.MPS.Preparation.MixedPolarFullInputCounterexample
 import TNLean.MPS.Preparation.MixedSequentialFactorization
 import TNLean.MPS.Preparation.MixedSequentialSupport
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
