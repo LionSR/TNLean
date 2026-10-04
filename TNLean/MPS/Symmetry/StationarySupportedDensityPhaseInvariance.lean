@@ -44,7 +44,7 @@ namespace MPSTensor
 
 /-- Stationary support invariance makes the adjoint transfer map intertwine
 expansion from support coordinates. Source: Wolf, Lemma 6.4. -/
-private theorem adjointMap_compression_lift
+theorem adjointMap_compression_lift
     {d k D : ℕ} (B : MPSTensor d k) (A : MPSTensor d D)
     (K : Matrix (Fin k) (Fin D) ℂ) (hK : K.IsIsometry)
     (hA : ∀ i, A i = Kᴴ * B i * K)
