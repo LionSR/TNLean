@@ -961,4 +961,6 @@ For the finite-round extension of arXiv:2103.13367:
 
 - `psc21_adaptive_channel_round_scope.tex` records arbitrary-input adaptive
   local channels and separates their quantum-layer depth from the fixed
-  number of measurement rounds required by the asymptotic source relation.
+  number of composed `QCcc` blocks required by the asymptotic source relation.
+  One source block may already contain sequential measurements at many sites;
+  the adaptive tree does not record the required source-block decomposition.
