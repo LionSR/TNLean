@@ -8,7 +8,7 @@
 \date{2026-10-04}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{false-source}{resolved}
 
 \section{Source and the full-input obstruction}
 For a blocked matrix product map $B=VP$,
@@ -22,8 +22,31 @@ produce a central isometry on the full virtual-pair input.
 For non-injective $B$, its polar support $\Pi$ instead satisfies
 $V^\dagger V=\Pi$. Thus a central map on all $D^2$ input coordinates
 cannot remain an isometry when $\Pi\ne\Id_{D^2}$.
-This is a genuine distinction between the full-input and support-input
-statements, rather than an alternative meaning of isometry.
+The assertion that the full-input isometry identity in equation~(15)
+remains valid under footnote~3 is therefore false as printed. Restricting
+the domain to the support corrects the assertion; it does not prove that
+full-input identity.
+
+\section{A nonzero rank-deficient witness}
+Take $d=D=2$ and the two nonzero matrices
+\begin{align}
+    A^0 & =\begin{pmatrix}1&0\\0&0\end{pmatrix}, &
+    A^1 & =\begin{pmatrix}0&0\\0&1\end{pmatrix}.
+    \label{eq:mswc24_ghz_tensor}
+\end{align}
+On a ring these give the nonzero vector $\ket{0}^{\otimes N}+\ket{1}^{\otimes N}$.
+Block two sites, and order both the physical and virtual pairs as
+$00,01,10,11$. Since $B_{ij,ab}=(A^iA^j)_{ab}$, the blocked map and its
+canonical polar factors are
+\begin{align}
+    B & =P=P^+=V=\Pi=\operatorname{diag}(1,0,0,1).
+    \label{eq:mswc24_ghz_polar}
+\end{align}
+Thus $d^2=D^2=4$, both tensor components are nonzero, and
+$V^\dagger V=\Pi\ne\Id_4$. The pseudoinverse construction already fails
+on these nondegenerate data. One may separately complete the partial
+isometry on its kernel, but that completion is not $BP^+$ and is not the
+construction asserted in equation~(13).
 
 \section{The support construction}
 Choose orthonormal coordinates for the range of $\Pi$: an isometry
@@ -60,8 +83,11 @@ polar support, with no injectivity assumption. The full-input theorems
 remain useful specializations for injective blocks. The same mixed
 factorization predicate handles arbitrary finite input dimension, so
 no second isometry notion or support representation is introduced.
-This resolves the former scope restriction while preserving the fact
-that the unreduced polar map is only a partial isometry.\footnote{Formal
+The corrected support-domain theorem is proved, so the local repair is
+resolved. The false-source record and the witness in
+(\ref{eq:mswc24_ghz_polar}) remain: the printed full-input pseudoinverse
+claim is not established, and the unreduced polar map is only a partial
+isometry.\footnote{Formal
     declarations: \leanid{MPSPreparation.exists_mixed_sequential_polar_support_of_split}
     and \leanid{MPSPreparation.exists_mixed_sequential_polar_support} in
     \doclink{TNLean/MPS/Preparation/MixedSequentialSupport}.}

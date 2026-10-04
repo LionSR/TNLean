@@ -804,9 +804,10 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
-- `mswc24_mixed_polar_injectivity_scope.tex` resolves the former injective-only
-  mixed factorization by parametrizing the actual polar support with an
-  isometry, applying the inward sweeps to that input, and reconstructing
+- `mswc24_mixed_polar_injectivity_scope.tex` retains the false-source record
+  for footnote 3's full-input pseudoinverse claim, with a nonzero two-site GHZ
+  tensor witness. The local correction is proved: parametrize the actual polar
+  support by an isometry, apply the inward sweeps to that input, and reconstruct
   the full polar partial isometry with the support embedding's adjoint.
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),

@@ -1,5 +1,5 @@
-\begin{lemma}[Central input coordinates and polar support]
-    \label{lem:ldp_mixed_support_coordinates}
+\begin{theorem}[Central input coordinates and polar support]
+    \label{thm:ldp_mixed_support_coordinates}
     \lean{MPSPreparation.centralInputMatrix_mul,
         MPSPreparation.mixedProductMap_mul,
         MPSPreparation.exists_mixedPolarIsoMatrix_eq_mixedProductMap,
@@ -12,7 +12,7 @@
     a central input factor and satisfies $V^\dagger V=\Pi$, where $\Pi$
     is the polar support projector. Splitting the physical configurations
     into left, central, and reversed-right parts preserves this identity.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_left_product, thm:ldp_central_coefficients, thm:ldpolar_support}
@@ -45,13 +45,15 @@
     Both outer bonds have dimension one, every side bond is at most
     $D^2$, and every inward site map is isometric on its bond space.
     Either endpoint may be the centre, and zero support is allowed.
-    This combines footnotes~3 and~4 to equations~(13)--(15)
-    of~\cite{Malz2024Preparation}, resolving the support restriction
-    recorded in~\cite{gap:mswc24_mixed_polar_injectivity_scope}.
+    This is the support-domain correction of footnotes~3 and~4 to
+    equations~(13)--(15) of~\cite{Malz2024Preparation}. For a non-injective
+    block, the printed full-input identity fails because
+    $V^\dagger V=\Pi\ne\Id_{D^2}$; a nonzero tensor witness and the
+    correction are recorded in~\cite{gap:mswc24_mixed_polar_injectivity_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:ldp_mixed_support_coordinates, thm:ldp_mixed_sequential_general}
+    \uses{thm:ldp_mixed_support_coordinates, thm:ldp_mixed_sequential_general}
     Parametrize the range of the Hermitian idempotent $\Pi$ by orthonormal
     coordinates $J$, so $J^\dagger J=\Id_s$ and $JJ^\dagger=\Pi$.
     Then $(VJ)^\dagger(VJ)=J^\dagger\Pi J=\Id_s$.

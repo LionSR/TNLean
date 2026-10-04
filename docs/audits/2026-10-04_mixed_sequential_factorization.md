@@ -32,7 +32,10 @@ The non-injective case permitted by source footnote 3 is now handled in
 isometry supplies J with J†J = I and JJ† equal to the actual polar support.
 The same inward sweeps factor VJ on this finite input, and multiplication
 by J† reconstructs V. No full-dimensional isometry is asserted for V itself.
-The resolved source note is
+The pseudoinverse does not preserve the printed full-input isometry claim:
+V†V equals the support projector, which need not be the identity. The corrected
+support-domain theorem closes the implementation gap, while the false-source
+record and a two-site GHZ tensor witness remain in
 [`mswc24_mixed_polar_injectivity_scope`](../paper-gaps/mswc24_mixed_polar_injectivity_scope.tex).
 
 The mixed factorization predicate and central-input constructions now allow

@@ -1390,7 +1390,9 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** no monotonicity of bond dimensions is asserted. For a non-injective
   block, only the support-restricted polar map is an isometry; its extension
   to the full virtual-pair space remains a partial isometry. The original
-  map is recovered by the adjoint of the support embedding. See
+  map is recovered by the adjoint of the support embedding. This is a local
+  correction to the printed full-input pseudoinverse claim, whose nonzero
+  rank-deficient witness remains in
   `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
 
 ## Quantum circuits

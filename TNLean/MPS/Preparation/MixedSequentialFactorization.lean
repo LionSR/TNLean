@@ -18,9 +18,13 @@ The left and right bond dimensions are bounded by `D²`. No monotonicity of
 successive bond dimensions is asserted. The physical sites of the right chain
 are listed from the right boundary toward the centre.
 
-The full-input polar specializations below assume the blocked tensor is injective.
-The non-injective pseudoinverse case of footnote 3 is proved on the actual polar support
-in `TNLean.MPS.Preparation.MixedSequentialSupport`; see
+**Scope restriction (full-input polar specializations):** The theorems
+`mixedPolarIsoMatrix_eq_mixedProductMap`, `exists_mixed_sequential_polarIsoMatrix_of_split`,
+and `exists_mixed_sequential_polarIsoMatrix` assume the blocked tensor is injective.
+For non-injective input, arXiv:2307.01696, footnote 3 to equations (13)–(15),
+requires a support-domain correction: the pseudoinverse polar map is only a partial
+isometry. The corrected support-input theorem is proved in
+`TNLean.MPS.Preparation.MixedSequentialSupport`; see
 `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
 
 ## References
@@ -285,6 +289,8 @@ noncomputable def mixedPolarIsoMatrix {l r : ℕ} (L : MPSChainTensor d D l)
 /-- Moving the inverse polar factor to the central site does not change the polar isometry.
 The two outer chains remain independent of that inverse.
 
+Source: arXiv:2307.01696, equation (13), footnotes 3–4.
+
 This is the ordinary-inverse specialization. The non-injective right-factor identity is
 `MPSPreparation.exists_mixedPolarIsoMatrix_eq_mixedProductMap`; see
 `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`. -/
@@ -327,7 +333,9 @@ theorem exists_mixed_sequential_polarIsoMatrix_of_split {l r : ℕ} (hD : 0 < D)
   exact exists_mixed_isometric_factorization hD L A R _ hV
 
 /-- Any site-dependent chain splits at a chosen physical site into two chains
-indexed from the outer boundaries inward and one central tensor. -/
+indexed from the outer boundaries inward and one central tensor.
+
+Auxiliary chain decomposition for arXiv:2307.01696, footnote 4 to equations (13)–(15). -/
 theorem exists_eq_mixedChain {l r : ℕ} (A : MPSChainTensor d D (l + (r + 1))) :
     ∃ (L : MPSChainTensor d D l) (M : MPSTensor d D) (R : MPSChainTensor d D r),
       mixedChain L M R = A := by

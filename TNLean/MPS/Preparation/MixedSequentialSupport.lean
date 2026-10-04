@@ -15,6 +15,13 @@ which can be prepared by two inward sweeps and a central isometry. This
 implements the pseudoinverse and central-input variants together, without
 assuming injectivity or a full-dimensional input.
 
+**Local fix (polar support domain):** In arXiv:2307.01696, footnote 3 to
+equations (13)–(15), the pseudoinverse gives `Vᴴ * V = Π`, not the full-input
+isometry identity when the blocked tensor is rank deficient. The construction
+below uses the isometry `V * J` on orthonormal support coordinates and reconstructs
+`V` by right multiplication by `Jᴴ`. This corrects the printed full-input claim;
+see `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
+
 ## References
 
 * Malz, Styliaris, Wei and Cirac, arXiv:2307.01696, footnotes 3 and 4 to equations (13)–(15).
@@ -26,21 +33,27 @@ namespace MPSPreparation
 
 variable {d D : ℕ}
 
-/-- Changing the input coordinates commutes with attaching the input at the centre. -/
+/-- Changing the input coordinates commutes with attaching the input at the centre.
+
+Auxiliary coordinate identity for arXiv:2307.01696, equations (13)–(15), footnotes 3–4. -/
 theorem centralInputMatrix_mul {s t : ℕ} (A : MPSTensor d D)
     (G : Matrix (Fin (D * D)) (Fin s) ℂ) (J : Matrix (Fin s) (Fin t) ℂ) :
     centralInputMatrix A (G * J) = centralInputMatrix A G * J := by
   ext z x
   simp [centralInputMatrix, Matrix.mul_apply, Finset.mul_sum, mul_assoc]
 
-/-- A change of input coordinates does not alter either outer sweep. -/
+/-- A change of input coordinates does not alter either outer sweep.
+
+Auxiliary coordinate identity for arXiv:2307.01696, equations (13)–(15), footnotes 3–4. -/
 theorem mixedProductMap_mul {l r s t : ℕ} (L : MPSChainTensor d D l)
     (A : MPSTensor d D) (R : MPSChainTensor d D r)
     (G : Matrix (Fin (D * D)) (Fin s) ℂ) (J : Matrix (Fin s) (Fin t) ℂ) :
     mixedProductMap L A R (G * J) = mixedProductMap L A R G * J := by
   simp only [mixedProductMap, centralInputMatrix_mul, Matrix.mul_assoc]
 
-/-- The polar partial isometry admits a central input factor even without injectivity. -/
+/-- The polar partial isometry admits a central input factor even without injectivity.
+
+Source: arXiv:2307.01696, equation (13), footnotes 3–4. -/
 theorem exists_mixedPolarIsoMatrix_eq_mixedProductMap {l r : ℕ}
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r) :
     ∃ G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ,
@@ -55,7 +68,10 @@ theorem exists_mixedPolarIsoMatrix_eq_mixedProductMap {l r : ℕ}
   rw [hG, mixedProductMap_apply]
   simp only [MPSChainTensor.blockTensor_decodeBlockEquiv_symm, eval_mixedChain]
 
-/-- Splitting and reversing physical coordinates preserves the polar support Gram matrix. -/
+/-- Splitting and reversing physical coordinates preserves the polar support Gram matrix.
+
+The support-projector identity corrects the full-input identity in
+arXiv:2307.01696, equation (15), under the pseudoinverse convention of footnote 3. -/
 theorem conjTranspose_mixedPolarIsoMatrix_mul {l r : ℕ}
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r) :
     (mixedPolarIsoMatrix L A R)ᴴ * mixedPolarIsoMatrix L A R =
