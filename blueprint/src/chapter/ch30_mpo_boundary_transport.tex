@@ -1,0 +1,231 @@
+% Source: Garre-Rubio--Lootens--Molnar, arXiv:2203.12563v3,
+% REsubmission.tex lines 321--391, 431--490, and Appendix A, 2305 onwards.
+% The reverse existence and uniqueness of biorthogonal decompositions remains
+% separate from the sufficient local criteria below.
+
+\section{Arbitrary boundary transport}
+\label{sec:mpo_boundary_transport}
+
+For $N\geq1$, an operator tensor $T$ and a state tensor $A$ define
+\begin{align}
+    O^N_{T,X}(\sigma,\tau)
+     & =\tr\!\left(XT^{\sigma_1\tau_1}\cdots T^{\sigma_N\tau_N}\right),
+    \label{eq:glm_boundary_operator}                                    \\
+    \psi^N_{A,Y}(\sigma)
+     & =\tr\!\left(YA^{\sigma_1}\cdots A^{\sigma_N}\right).
+    \label{eq:glm_boundary_state}
+\end{align}
+No commutation condition is imposed on $X$ or $Y$. Cyclicity of trace
+identifies $\psi^N_{A,Y}$ with the usual boundary parametrization
+$\Gamma_N(Y)$ of the MPS ground space.
+
+\begin{theorem}[Stacking arbitrary boundaries]
+    \label{thm:glm_boundary_stack}
+    \lean{MPOTensor.productBoundary,
+        MPSTensor.mpvWithBoundary_eq_groundSpaceMap,
+        MPOTensor.mpoWithBoundary_eq_physCloseN,
+        MPOTensor.mpoWithBoundary_mulTensor,
+        MPOTensor.mpvWithBoundary_actTensor,
+        MPOTensor.mpoWithBoundary_mulVec_mpvWithBoundary}
+    \leanok
+    Write $R^{ik}=\sum_jP^{ij}\otimes Q^{jk}$ and
+    $(T\cdot A)^i=\sum_jT^{ij}\otimes A^j$.
+    For all boundary matrices and all lengths, including zero,
+    \begin{align}
+        O^N_{P,X}O^N_{Q,Y}    & =O^N_{R,X\otimes Y},
+        \label{eq:glm_boundary_stack}                          \\
+        O^N_{T,X}\psi^N_{A,Y} & =\psi^N_{T\cdot A,X\otimes Y}.
+        \label{eq:glm_boundary_action}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand the product letters over the intermediate physical configuration.
+    For the resulting word matrices $U,V$, use
+    $(X\otimes Y)(U\otimes V)=XU\otimes YV$ and
+    $\tr(XU\otimes YV)=\tr(XU)\tr(YV)$.
+\end{proof}
+
+For the diagram, write $R=PQ$ and $C=X\otimes Y$.
+\begin{center}
+    \tenkzkernel
+    % Formula: (\ref{eq:glm_boundary_stack}).
+    % Ink-to-index map: the first boxes carry X and Y and have no physical
+    % legs; every other box is an operator letter. The two operator rows
+    % contract the shared physical indices. Horizontal loops contract the
+    % virtual indices through the displayed boundary matrices. Bonds are
+    % authored explicitly: X and Y have no connecting physical edge.
+    % Boundary signature on either side: (virtual-west=0 | virtual-east=0 |
+    % physical-up=2 | physical-down=2). Dots denote the omitted sites.
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{X} &
+        \tn[skin=mpo,ports={90:physical:$i_1$,270:physical}]{P} &
+        \tn[skin=dots,ports={180:virtual,0:virtual}]{} &
+        \tn[skin=mpo,ports={90:physical:$i_N$,270:physical}]{P} \\
+        \tn[skin=box,ports={180:virtual,0:virtual}]{Y} &
+        \tn[skin=mpo,ports={90:physical,270:physical:$k_1$}]{Q} &
+        \tn[skin=dots,ports={180:virtual,0:virtual}]{} &
+        \tn[skin=mpo,ports={90:physical,270:physical:$k_N$}]{Q}
+        \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+        \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+        \tnwire{(1,2)}{(2,2)} \tnwire{(1,4)}{(2,4)}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{C} &
+        \tn[skin=mpo,ports={90:physical:$i_1$,270:physical:$k_1$}]{R} &
+        \tn[skin=dots,ports={180:virtual,0:virtual}]{} &
+        \tn[skin=mpo,ports={90:physical:$i_N$,270:physical:$k_N$}]{R}
+    \end{tenkz}
+\end{center}
+
+\begin{definition}[Length-independent boundary closedness and compatibility]
+    \label{def:glm_boundary_closedness}
+    \lean{MPOTensor.IsBoundaryClosed, MPOTensor.IsBoundaryCompatible,
+        MPOTensor.IsBoundaryClosed.mul_mem_range,
+        MPOTensor.IsBoundaryCompatible.mulVec_mem_groundSpace}
+    \leanok
+    The closedness condition of \cite[Section~2]{GarreRubio2023MPOSym}
+    requires, for every $X,Y\in\MN{\chi}$, a single $Z\in\MN{\chi}$
+    such that $O^N_{T,X}O^N_{T,Y}=O^N_{T,Z}$ for every $N\geq1$.
+    Compatibility requires, for every operator boundary $X\in\MN{\chi}$
+    and state boundary $Y\in\MN{D}$, a single $Z\in\MN{D}$ such that
+    $O^N_{T,X}\psi^N_{A,Y}=\psi^N_{A,Z}$ for every $N\geq1$.
+    In both statements, the output boundary is chosen before the length.
+    At each positive length, the operator range is therefore closed under
+    multiplication, and every operator preserves the state ground space.
+\end{definition}
+
+\begin{theorem}[Separation by product boundaries]
+    \label{thm:glm_boundary_separation}
+    \lean{MPOTensor.productBoundary_single, MPOTensor.eq_iff_trace_productBoundary}
+    \leanok
+    Let $U,V$ be matrices on $\C^{D_1}\otimes\C^{D_2}$.
+    They are equal if and only if
+    $\tr((X\otimes Y)U)=\tr((X\otimes Y)V)$ for all matrices $X,Y$
+    on the two factors.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Taking $X=E_{ji}$ and $Y=E_{lk}$ identifies the
+    $((i,k),(j,l))$ entries of $U$ and $V$, since
+    $E_{ji}\otimes E_{lk}=E_{(j,l),(i,k)}$.
+\end{proof}
+
+\begin{theorem}[Linear boundary transport]
+    \label{thm:glm_boundary_linear}
+    \lean{MPOTensor.isBoundaryClosed_iff_exists_linearMap,
+        MPOTensor.isBoundaryCompatible_iff_exists_linearMap}
+    \leanok
+    \uses{def:glm_boundary_closedness}
+    Closedness is equivalent to the existence of a linear map
+    $b:\MN{\chi^2}\to\MN{\chi}$ satisfying
+    $O^N_{TT,C}=O^N_{T,b(C)}$ for every $C$ and $N\geq1$.
+    Compatibility is equivalent to the existence of a linear map
+    $b:\MN{\chi D}\to\MN{D}$ satisfying
+    $\psi^N_{T\cdot A,C}=\psi^N_{A,b(C)}$ for every $C$ and $N\geq1$.
+    These are the boundary maps at the start of
+    \cite[Appendix~A]{GarreRubio2023MPOSym}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_stack}
+    Matrix units on a product bond space have the form $E_{ij}\otimes E_{kl}$.
+    Choose an output boundary for each such matrix, simultaneously for all
+    lengths, and extend linearly over this basis. Linearity of the
+    boundary contraction gives the required identities. Conversely, apply
+    the linear map to $X\otimes Y$ in
+    (\ref{eq:glm_boundary_stack}) or (\ref{eq:glm_boundary_action}).
+\end{proof}
+
+\begin{definition}[Exact biorthogonal decomposition]
+    \label{def:glm_boundary_decomposition}
+    \lean{MPSTensor.IsBiorthogonalDecomposition}
+    \leanok
+    Let $B$ have bond dimension $D$, and let $A_c$ have bond dimension
+    $D_c$ for each member of a finite index set. A biorthogonal decomposition
+    consists of rectangular matrices $V_c:\C^D\to\C^{D_c}$ and
+    $W_c:\C^{D_c}\to\C^D$ satisfying
+    \begin{align}
+        V_cW_c & =\Id_{D_c},         & V_cW_b & =0\quad(c\ne b),
+        \label{eq:glm_boundary_biorthogonal}                     \\
+        B^i    & =\sum_cW_cA_c^iV_c.
+        \label{eq:glm_boundary_letter}
+    \end{align}
+    The index $c$ may contain a block label and its multiplicity index.
+    These are the local fusion and action equations of
+    \cite[Section~2]{GarreRubio2023MPOSym}.
+\end{definition}
+
+\begin{theorem}[Transport by an exact decomposition]
+    \label{thm:glm_boundary_decomposition}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.sum_mul_sum,
+        MPSTensor.IsBiorthogonalDecomposition.evalWord,
+        MPSTensor.IsBiorthogonalDecomposition.trace_mul_evalWord,
+        MPSTensor.IsBiorthogonalDecomposition.mpvWithBoundary,
+        MPOTensor.mpoWithBoundary_mul_eq_sum_of_biorthogonalDecomposition,
+        MPOTensor.mpoWithBoundary_mulVec_eq_sum_of_biorthogonalDecomposition}
+    \leanok
+    \uses{def:glm_boundary_decomposition}
+    Under (\ref{eq:glm_boundary_biorthogonal}) and
+    (\ref{eq:glm_boundary_letter}), each nonempty word $w$ satisfies
+    \begin{align}
+        B^w       & =\sum_cW_cA_c^wV_c,                      &
+        \tr(XB^w) & =\sum_c\tr\!\left((V_cXW_c)A_c^w\right).
+        \label{eq:glm_boundary_word}
+    \end{align}
+    In particular, an exact fusion decomposition of $PQ$ yields
+    \begin{align}
+        O^N_{P,X}O^N_{Q,Y}
+         & =\sum_c O^N_{T_c,V_c(X\otimes Y)W_c},
+        \label{eq:glm_boundary_fusion_transport}  \\
+        O^N_{T,X}\psi^N_{A,Y}
+         & =\sum_c\psi^N_{B_c,V_c(X\otimes Y)W_c}
+        \label{eq:glm_boundary_action_transport}
+    \end{align}
+    for $N\geq1$, where the second identity uses an exact action
+    decomposition of $T\cdot A$ into the tensors $B_c$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_stack}
+    Induct on the nonempty word. Multiplying two reconstructed products
+    inserts $V_cW_b$; (\ref{eq:glm_boundary_biorthogonal}) removes all unequal
+    intermediate labels. Cyclicity of trace moves $V_c$ to the left of
+    the boundary. Apply (\ref{eq:glm_boundary_stack}) and
+    (\ref{eq:glm_boundary_action}) to obtain the operator and state formulas.
+\end{proof}
+
+\begin{theorem}[Closedness from copies of one target]
+    \label{thm:glm_boundary_closedness_of_decomposition}
+    \lean{MPOTensor.isBoundaryClosed_of_biorthogonalDecomposition,
+        MPOTensor.isBoundaryCompatible_of_biorthogonalDecomposition}
+    \leanok
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition}
+    If $TT$ has an exact biorthogonal decomposition into copies of $T$,
+    then $T$ is boundary closed. If $T\cdot A$ has such a decomposition
+    into copies of $A$, then $T$ and $A$ are boundary compatible.
+    In either case the output boundary is
+    $Z=\sum_cV_c(X\otimes Y)W_c$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_decomposition}
+    Combine the sums in (\ref{eq:glm_boundary_fusion_transport}) or
+    (\ref{eq:glm_boundary_action_transport}) by linearity in the boundary.
+\end{proof}
+
+\begin{theorem}[The empty-word condition]
+    \label{thm:glm_boundary_empty_word}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.evalWord_of_complete}
+    \leanok
+    \uses{def:glm_boundary_decomposition}
+    If in addition $\sum_cW_cV_c=\Id_D$, then
+    $B^w=\sum_cW_cA_c^wV_c$ also holds for the empty word.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_decomposition}
+    For $w=\varnothing$ the equality is the additional hypothesis.
+    For nonempty words use (\ref{eq:glm_boundary_word}).
+\end{proof}

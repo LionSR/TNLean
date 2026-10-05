@@ -22,8 +22,9 @@ Together with the integrality theorem `MPOTensor.exists_isNIMRep_of_isMPOSymmetr
 nonempty symmetric family of at most two normal blocks with the unit acting trivially has exactly
 two blocks, transforming as in line 1993.
 
-**Scope restriction (at most two blocks):** the source's uniqueness claim covers invariant
-subspaces with any number of blocks; only one and two blocks are classified here. Documented in
+The unrestricted direct-sum classification and its indecomposable two-block corollary are
+proved in `FibonacciNIMRepDecomposition.lean`. The resolved rank restriction and the
+indecomposable interpretation of the source's uniqueness claim are documented in
 `docs/paper-gaps/glm23_fibonacci_module_rank_scope.tex`.
 
 ## Main results
