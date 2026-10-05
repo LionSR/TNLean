@@ -201,6 +201,7 @@ into a single constant.
 \begin{definition}[Chains with bond dimensions at most $D$]
     \label{def:ldp_varying_bond_chain}
     \lean{VaryingBondChain,
+        VaryingBondChain.ofChain,
         Matrix.zeroPad,
         VaryingBondChain.coeff,
         VaryingBondChain.state,
@@ -221,7 +222,9 @@ into a single constant.
     $\ket{\phi_N}=\sum_s\Tr(A_1^{s_1}\cdots A_N^{s_N})\ket s$, the setting of
     the paragraph ``Inhomogeneous short-range correlated MPS''
     of~\cite{Malz2024Preparation}. Padding every $A_k^i$ with zeros to a
-    $D\times D$ matrix gives a chain of bond dimension $D$. For blocks as in
+    $D\times D$ matrix gives a chain of bond dimension $D$. A chain with
+    common bond dimension $D$ is the special case $D_k=D$ with unchanged
+    matrices. For blocks as in
     Definition~\ref{def:ldp_chain_block_tensor}, let $a_k=D_{o_k+1}$ and
     $b_k=a_{k+1}$ be the dimensions of the bonds at the left and right end of
     block $k$, cyclically, and let $R_k$ be the rectangle of pairs
@@ -247,6 +250,7 @@ into a single constant.
 \begin{theorem}[Zero padding]
     \label{thm:ldp_zero_pad}
     \lean{VaryingBondChain.zeroPad_eq_zero,
+        VaryingBondChain.zeroPad_ofChain,
         VaryingBondChain.coeff_zeroPad,
         VaryingBondChain.state_eq_chainState_zeroPad,
         VaryingBondChain.state_eq_chainState,
@@ -266,7 +270,8 @@ into a single constant.
     \leanok
     \uses{def:ldp_varying_bond_chain, def:ldpolar_injective_on}
     On a ring of $N\ge1$ sites the padded chain has the state $\ket{\phi_N}$ of
-    the chain. If every block has at least one site, the blocked tensor $B_k$
+    the chain. If all bonds already have dimension $D$, zero padding leaves
+    every matrix unchanged. If every block has at least one site, the blocked tensor $B_k$
     of the padded chain vanishes outside $R_k$; if moreover the blocked tensors
     are injective, $B_k$ is injective on $R_k$. Padding preserves inner
     products of pairs, so padded unit pairs are unit vectors, and the product
