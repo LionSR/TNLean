@@ -1,0 +1,38 @@
+{
+  "twistedTransfer_eigenvalue_norm_le_one_of_irreducible": {
+    "source": "TNLean/MPS/Symmetry/StringOrder.lean at 964c8cd3e",
+    "destination": "TNLean/MPS/Symmetry/StringOrderAux.lean",
+    "declaration_sha256": "54d5aa191397637af8e1874c626a6f351269778fb320b4468aab1969ca67f386",
+    "byte_preserved": true,
+    "declaration_sites": [
+      "TNLean/MPS/Symmetry/StringOrderAux.lean"
+    ]
+  },
+  "twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible": {
+    "source": "TNLean/MPS/Symmetry/StringOrder.lean at 964c8cd3e",
+    "destination": "TNLean/MPS/Symmetry/StringOrderAux.lean",
+    "declaration_sha256": "8784f7c219327bc08b7ad78d8e1a0d61944678f3e65797b5ff6cbbd80a330181",
+    "byte_preserved": true,
+    "declaration_sites": [
+      "TNLean/MPS/Symmetry/StringOrderAux.lean"
+    ]
+  },
+  "reverse_consumers": {
+    "twistedTransfer_eigenvalue_norm_le_one_of_irreducible": [
+      "TNLean.MPS.Symmetry.StringOrder",
+      "TNLean.MPS.Symmetry.StringOrderAux",
+      "TNLean.MPS.Symmetry.PureTwistedSpectrum"
+    ],
+    "twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible": [
+      "TNLean.MPS.Symmetry.StringOrder",
+      "TNLean.MPS.Symmetry.StringOrderAux",
+      "TNLean.MPS.Symmetry.PureTwistedSpectrum",
+      "TNLean.MPS.Examples.StringOrderScalarPhase"
+    ]
+  },
+  "import_graph": {
+    "production_modules": 2784,
+    "cycles": [],
+    "check": "Comment-stripped static imports; actual-import validation remains separate."
+  }
+}

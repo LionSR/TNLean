@@ -296,7 +296,7 @@ theorem clusterBlockedRMP_hasPhysicalStringOrderWith :
     (tendsto_const_nhds : Filter.Tendsto (fun _ : ℕ => (1 : ℝ)) Filter.atTop (nhds 1))
 
 /-- The two-site blocked cluster state has physical string order under the
-nontrivial unitary `(-σx) ⊗ (-σx)`.
+nonscalar unitary `(-σx) ⊗ (-σx)`.
 Source: arXiv:0802.0447, Example 2. -/
 theorem clusterBlockedRMP_hasPhysicalStringOrder :
     HasPhysicalStringOrder clusterBlockedRMP ((1 / 2 : ℂ) • 1) := by
@@ -306,7 +306,7 @@ theorem clusterBlockedRMP_hasPhysicalStringOrder :
     fin_cases i <;> fin_cases j <;>
       norm_num [clusterStringTwist, pauliX, Matrix.mul_apply,
         Fin.sum_univ_four, Fin.divNat, Fin.modNat]
-  · intro h
+  · intro c h
     have h03 := congrArg (fun M : Matrix (Fin 4) (Fin 4) ℂ => M 0 3) h
     norm_num [clusterStringTwist, pauliX, Fin.divNat, Fin.modNat] at h03
 

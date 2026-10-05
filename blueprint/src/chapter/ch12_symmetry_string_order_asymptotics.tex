@@ -1,7 +1,20 @@
 \subsection{The physical endpoint selection rule at a fixed twist}
 
-Throughout this subsection, $A$ is canonical with faithful normalized
-stationary dual density $\Lambda$, and its ordinary transfer map is
+\begin{lemma}[Physical decay below spectral radius one]
+    \label{lem:physical_string_spectral_decay}
+    \lean{MPSTensor.physicalStringOrderParam_tendsto_zero_of_spectralRadius_lt_one}
+    \notready
+    \uses{def:physical_string_order_param, lem:boundary_string_order_tendsto_zero}
+    For any $A,\Lambda,x,y,u$, if $\rho(\E_u)<1$, then
+    $S_N(x,y,u)\to0$.
+    Expand the left endpoint insertion into its finite matrix sum and
+    apply virtual-boundary decay to each term after trace cyclicity.
+\end{lemma}
+
+For the statements from Lemma~\ref{lem:canonical_transfer_stationary_trace_limit}
+through Theorem~\ref{thm:physical_string_fixed_twist_letter_criterion},
+let $A$ be canonical with faithful normalized
+stationary dual density $\Lambda$, and suppose its ordinary transfer map is
 irreducible and peripheral-primitive.  Fix a physical twist $u$, a unitary
 $V$, and $|\mu|=1$ satisfying
 $\sum_j u_{ij}A_j=\mu V A_iV^\dagger$.
@@ -22,6 +35,21 @@ Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius}.
     Apply the existing FNW complementary-remainder argument to the
     conjugate-transposed Kraus family.  No diagonalizability or explicit
     eigenbasis of the transfer map is assumed.
+\end{lemma}
+
+\begin{lemma}[Demodulated virtual transfer limit]
+    \label{lem:twisted_transfer_vector_phase_limit}
+    \lean{MPSTensor.twistedTransferIter_phase_adjusted_tendsto}
+    \notready
+    \uses{lem:canonical_transfer_stationary_trace_limit,
+        lem:twisted_transfer_phase_conjugation}
+    For every virtual input $Z$, the phase-retaining iterate identity gives
+    \begin{align}
+        \mu^{-N}\E_u^N(Z) & \longrightarrow\tr(\Lambda V^\dagger Z)V.
+        \notag
+    \end{align}
+    This limit allows physical endpoint functionals of any finite support;
+    the one-site physical limit below is its corresponding trace contraction.
 \end{lemma}
 
 \begin{theorem}[Phase-retaining physical correlator asymptotics]
@@ -118,4 +146,29 @@ Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius}.
     This does not assert that $u_0\ne\Id$, or classify scalar phases as
     nontrivial physical actions.  The existential Theorem~1 over twists
     and the physical reduced-state symmetry Theorem~2 remain separate.
+\end{theorem}
+
+The following criterion starts only from canonical spectral purity and a
+fixed physical unitary; its virtual eigenmatrix is existentially quantified.
+
+\begin{theorem}[Peripheral letter criterion for a fixed physical twist]
+    \label{thm:physical_string_peripheral_letter_criterion}
+    \lean{MPSTensor.pureCanonical_exists_physicalStringOrderWith_iff_peripheral_letter}
+    \notready
+    \uses{lem:pgwsvc08_twisted_spectral_radius,
+        lem:physical_string_spectral_decay,
+        thm:physical_string_fixed_twist_letter_criterion}
+    Suppose $A$ has faithful normalized canonical density and the source's
+    simple-peripheral purity property. For a fixed unitary $u$, physical
+    one-site endpoints with positive limiting string magnitude exist if
+    and only if there are a virtual matrix $V$, a phase $|\mu|=1$, and
+    physical indices $n,m$ satisfying
+    \begin{align}
+        \E_u(V) & =\mu V,
+                & \tr(V\Lambda A_nA_m^\dagger) & \ne0.
+        \notag
+    \end{align}
+    The physical twist is unchanged. The nonzero coefficient excludes
+    $V=0$, and peripheral rigidity identifies its direction with that of
+    a unitary intertwiner, so the fixed-intertwiner endpoint criterion applies.
 \end{theorem}

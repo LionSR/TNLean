@@ -255,14 +255,18 @@ theorem akltPGWSVC08_hasPhysicalStringOrderWith :
   rw [hfun]
   exact tendsto_const_nhds
 
-/-- The printed AKLT tensor has physical string order with a nonidentity physical
+/-- The printed AKLT tensor has physical string order with a nonscalar physical
 unitary, as defined by PGWSVC08's stationary correlator.
 Supporting calculation for arXiv:0802.0447, Example 1, lines 392–399. -/
 theorem akltPGWSVC08_hasPhysicalStringOrder :
-    HasPhysicalStringOrder akltPGWSVC08Tensor ((1 / 2 : ℂ) • 1) :=
-  ⟨akltSpinRotationZ, spinOneOperator 2, spinOneOperator 2,
-    akltSpinRotationZ_unitary_ne_one.1, akltSpinRotationZ_unitary_ne_one.2,
-    akltPGWSVC08_hasPhysicalStringOrderWith⟩
+    HasPhysicalStringOrder akltPGWSVC08Tensor ((1 / 2 : ℂ) • 1) := by
+  refine ⟨akltSpinRotationZ, spinOneOperator 2, spinOneOperator 2,
+    akltSpinRotationZ_unitary_ne_one.1, ?_, akltPGWSVC08_hasPhysicalStringOrderWith⟩
+  intro c hc
+  have h00 := congrArg (fun M : Matrix (Fin 3) (Fin 3) ℂ => M 0 0) hc
+  have h11 := congrArg (fun M : Matrix (Fin 3) (Fin 3) ℂ => M 1 1) hc
+  norm_num [akltSpinRotationZ] at h00 h11
+  exact (by norm_num : (1 : ℂ) ≠ -1) (h00.trans h11.symm)
 
 end MPSTensor
 

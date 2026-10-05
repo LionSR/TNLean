@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-05",
+  "lean_toolchain": "leanprover/lean4:v4.35.0-rc3",
+  "qic_pin": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f",
+  "scope": "Local checkpoint. Publication and source-theorem completion remain gated on full actual-import validation.",
+  "compiler_options": {
+    "threads": 1,
+    "pp.unicode.fun": true,
+    "relaxedAutoImplicit": false,
+    "weak.linter.mathlibStandardSet": true,
+    "maxSynthPendingDepth": 3,
+    "warningAsError": true,
+    "timeout_seconds": 120
+  },
+  "actual_file": {
+    "module": "TNLean.MPS.Symmetry.StringOrderDefs",
+    "exit_code": 0,
+    "source_sha256": "9181ad337e2271408dbe8809a24fd14d762e259c1a04b8e95d5bf3b688d55e35",
+    "artifact_sha256": "8c8b7a58032dcc17aed879e7a9abd233604c9e00b999f0ee45687817930eb04b",
+    "diagnostics": "none",
+    "current_source_sha256": "40ceff7700d171bfdbada07732d596dc0335ea441ca1871529553ff06641364e",
+    "post_check_change": "Documentation-only endpoint-comparison update; declaration signatures and proof bodies unchanged."
+  },
+  "exact_body_probes": [
+    {
+      "source": "TNLean/MPS/Symmetry/PhysicalStringPhase.lean",
+      "scope": "Exact opening declaration bodies through scalar-phase identities and spectral-radius decay; excludes canonical peripheral selection criterion",
+      "body_sha256": "bd5983d6afc90dde5591c341d85ecb26d8de14ad3e3057777bdc869ef4ef7978",
+      "probe_sha256": "f35721346747bc3a14e1d44c6864fc850ce3a5c5d2ea1e9cf49a34f6755bd0bb",
+      "artifact_sha256": "38df4eb4c3db4b300b10e08cad04aa08dc3741ae8ac2d561c11ac54402eb098c",
+      "exit_code": 0,
+      "diagnostics": "none"
+    },
+    {
+      "source": "TNLean/MPS/Examples/StringOrderScalarPhase.lean",
+      "scope": "Exact algebraic bodies through virtual covariance; excludes QIC primitivity and final criterion assembly",
+      "segments": [
+        {
+          "start_character": 1148,
+          "end_character": 6414,
+          "sha256": "05ee8d2b160f1dff5c3f3f6c43b4ceebab9ed2d46a39c86033735c999abee731"
+        },
+        {
+          "start_character": 7588,
+          "end_character": 14749,
+          "sha256": "905c95281626c9d0ec6067018bf07b63049c7d78e61a900c0ec5d87fbb0921ea"
+        }
+      ],
+      "probe_sha256": "c12da4bb4a419c170540b0619185947118f67205c836d0c7670e889a2ea17621",
+      "artifact_sha256": "cec39138b480bb51c81d8c5c7e0db5d98066f3759d21058908cae9d173b9bb02",
+      "exit_code": 0,
+      "diagnostics": "No proof diagnostics. Intentional external #print commands produce hash-command notices.",
+      "axiom_audits": [
+        "MPSTensor.stringPhaseTensor_linearIndependent",
+        "MPSTensor.stringPhaseTensor_isInjective",
+        "MPSTensor.stringPhaseTensor_canonical",
+        "MPSTensor.stringPhaseTensor_conjugation_eq_of_condC2"
+      ],
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "still_required": [
+    "Actual PhysicalStringPhase import closure and canonical peripheral-letter selection proof.",
+    "Actual StringOrderScalarPhase primitivity bridge, fixed-twist rigidity, and full source counterexample assembly.",
+    "Actual AKLT and cluster physical-example migrations and scripts/string_order_phase_regression.lean.",
+    "Consolidated finite D² endpoint integration, source/scope review, blueprint and diagram gates."
+  ],
+  "bounded_attempt": {
+    "scope": "Combined tensor and primitivity exact-body probe",
+    "exit_code": 124,
+    "diagnostics_before_timeout": "none",
+    "result": "No validation credit; not retried as a heavy local check."
+  },
+  "packaging": "Added required module headers/reference sections after body checks; certified proof-body hashes are unchanged."
+}

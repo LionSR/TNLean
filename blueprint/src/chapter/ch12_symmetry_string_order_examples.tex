@@ -51,7 +51,8 @@ theorems.
         MPSTensor.physicalStringOrderParam_akltPGWSVC08_identity_boundary,
         MPSTensor.akltPGWSVC08_hasPhysicalStringOrderWith,
         MPSTensor.akltPGWSVC08_hasPhysicalStringOrder}
-    \leanok
+    % The migrated nonscalar witness awaits actual-import validation.
+    \notready
     \uses{def:aklt_physical_string_data, def:physical_string_order_param,
         def:has_physical_string_order}
     The tensor $B$ is unital and has positive trace-one stationary density
@@ -61,11 +62,11 @@ theorems.
         \label{eq:aklt_physical_string_order_value}
     \end{align}
     Thus the actual unblocked physical endpoints witness string order with
-    limiting absolute value $4/9$ and a nonidentity physical unitary.
+    limiting absolute value $4/9$ and a nonscalar physical unitary.
     The same value holds for the existing representative $A$ of
     Definition~\ref{def:aklt_tensor}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     Diagonal insertions are invariant under the physical rephasing. Direct
     calculation gives
     \begin{align}
@@ -75,7 +76,8 @@ theorems.
         \notag
     \end{align}
     Iteration and the normalized trace give $-4/9$. The positive limit is
-    constant, so no asymptotic approximation is needed.
+    constant, so no asymptotic approximation is needed. The twist has
+    distinct diagonal entries and is therefore nonscalar.
 \end{proof}
 
 \begin{remark}[Normalization in the printed AKLT example]
@@ -158,7 +160,8 @@ theorems.
         MPSTensor.clusterBlockedRMP_physicalStringOrderParam,
         MPSTensor.clusterBlockedRMP_hasPhysicalStringOrderWith,
         MPSTensor.clusterBlockedRMP_hasPhysicalStringOrder}
-    \leanok
+    % The migrated nonscalar witness awaits actual-import validation.
+    \notready
     \uses{def:cluster_two_site_string_endpoints,
         def:has_physical_string_order}
     With $\mathcal E_x^{(2)},\mathcal E_y^{(2)}$ the insertions on the two-site
@@ -171,14 +174,61 @@ theorems.
     \end{align}
     Odd middle lengths are included. The two-site blocked tensor also has
     physical string-order parameter one and satisfies the positive-limit
-    predicate with the nonidentity unitary $u\otimes u$.
+    projective predicate with the nonscalar unitary $u\otimes u$.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:cluster_one_site_physical_string_obstruction}
     The explicit endpoint maps satisfy
     $\mathcal E_y^{(2)}(\Id)=-\sigma_y$ and
     $\mathcal E_x^{(2)}(\sigma_y)=-\Id$, while
     $\mathcal E_{-\sigma_x}(\sigma_y)=\sigma_y$. Both minus signs cancel,
     and the normalized trace is one. The same fixed-point calculation applies
-    to the blocked twist.
+    to the blocked twist, whose nonzero off-diagonal entry makes it
+    nonscalar.
 \end{proof}
+
+\subsection{A canonical tensor testing the scalar-phase convention}
+
+\begin{example}[Four independent quarter-turn letters]
+    \label{ex:string_order_scalar_phase_tensor}
+    \lean{MPSTensor.stringPhaseTensor,
+        MPSTensor.stringPhaseTensor_linearIndependent,
+        MPSTensor.stringPhaseTensor_isInjective,
+        MPSTensor.stringPhaseTensor_unital,
+        MPSTensor.stringPhaseTensor_isTP,
+        MPSTensor.stringPhaseTensor_canonical,
+        MPSTensor.stringPhaseTensor_pure,
+        MPSTensor.stringPhaseTensor_conjugation_eq_of_condC2,
+        MPSTensor.stringPhaseTensor_twist_eq_one_of_nonzero_fixed,
+        MPSTensor.stringPhaseTensor_literal_criterion_counterexample,
+        MPSTensor.stringPhaseTensor_not_hasPhysicalStringOrder}
+    \notready
+    \uses{lem:physical_string_scalar_phases, thm:projective_physical_string_order}
+    Take $D=2$, $d=4$, $\Lambda=\Id/2$, and
+    \begin{align}
+        A_j & =\sqrt{p_j}\,U_j,
+            & (p_0,p_x,p_y,p_z) & =(1/2,1/4,1/6,1/12),\notag             \\
+        U_0 & =\Id,
+            & U_k               & =(\Id-i\sigma_k)/\sqrt2\quad(k=x,y,z).
+        \notag
+    \end{align}
+    The four letters span $\MN{2}$, and the transfer map is unital and
+    trace preserving. On the Pauli basis of traceless matrices its matrix is
+    \begin{align}
+        T & =\begin{pmatrix}
+                 3/4  & -1/12 & 1/6  \\
+                 1/12 & 2/3   & -1/4 \\
+                 -1/6 & 1/4   & 7/12
+             \end{pmatrix}.
+        \notag
+    \end{align}
+    Its symmetric part has distinct diagonal entries, and all its skew
+    off-diagonal entries are nonzero. A conjugation symmetry has an
+    orthogonal Pauli matrix $R$ commuting with $T$ and $T^{\mathsf T}$,
+    forcing $R=c\Id$. Preservation of
+    $\sigma_x\sigma_y=i\sigma_z$ forces $c=1$.
+    This nondegenerate tensor separates the literal scalar-phase test from
+    projective nontriviality.
+    % The final fixed-twist and source-counterexample conclusions remain
+    % pending full actual-import validation.
+\end{example}
