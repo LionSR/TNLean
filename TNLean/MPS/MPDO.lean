@@ -76,10 +76,17 @@ import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
 import TNLean.MPS.MPDO.Boundary
+import TNLean.MPS.MPDO.BoundaryActionComparison
+import TNLean.MPS.MPDO.BoundaryActionLMatrix
+import TNLean.MPS.MPDO.BoundaryActionTrees
 import TNLean.MPS.MPDO.BoundaryBiorthogonal
 import TNLean.MPS.MPDO.BoundaryBlockAction
 import TNLean.MPS.MPDO.BoundaryBlockFusion
 import TNLean.MPS.MPDO.BoundaryClosedness
+import TNLean.MPS.MPDO.BoundaryDecompositionComparison
+import TNLean.MPS.MPDO.BoundaryDecompositionCoordinates
+import TNLean.MPS.MPDO.BoundaryDecompositionIntertwining
+import TNLean.MPS.MPDO.BoundaryDecompositionOperations
 import TNLean.MPS.MPDO.BoundaryMultiplicity
 import TNLean.MPS.MPDO.BoundaryRepresentation
 import TNLean.MPS.MPDO.BoundaryRepresentationClosedness
