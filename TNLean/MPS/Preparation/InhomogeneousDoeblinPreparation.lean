@@ -31,38 +31,6 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
 
 namespace MPSPreparation
 
-/-- The inverse Gram reshuffling bounds the transfer-matrix error with a constant independent
-of physical dimension. This uses the same index permutation as the Gram identity in
-arXiv:2307.01696, eq. (8). -/
-theorem exists_norm_transferMatrix_sub_le_gram
-    {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) :
-    ∃ K : ℝ, 0 < K ∧ ∀ {d : ℕ} (A : MPSTensor d D),
-      ‖transferMatrix (Kraus.transferMap A) -
-          transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤
-        K * ‖(physicalMatrix A)ᴴ * physicalMatrix A -
-          σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ := by
-  classical
-  let R : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ]
-      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
-    { toFun := fun T a b => T (a.1, b.1) (a.2, b.2)
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl }
-  let Rc := LinearMap.toContinuousLinearMap R
-  refine ⟨‖Rc‖ + 1, by positivity, fun {d} A => ?_⟩
-  have heq : transferMatrix (Kraus.transferMap A) -
-      transferMatrix (Kraus.transferMap (fixedPointTensor σ)) =
-      Rc ((physicalMatrix A)ᴴ * physicalMatrix A -
-        σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-    ext a b
-    change Kraus.transferMap A (Matrix.single b.2 b.1 1) a.2 a.1 -
-      Kraus.transferMap (fixedPointTensor σ) (Matrix.single b.2 b.1 1) a.2 a.1 =
-      ((physicalMatrix A)ᴴ * physicalMatrix A -
-        σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) (a.1, b.1) (a.2, b.2)
-    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply,
-      transpose_kronecker_one_apply, transferMap_fixedPointTensor_apply hσ]
-  rw [heq]
-  exact (Rc.le_opNorm _).trans (mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg _))
-
 private theorem transferMap_chainBlockTensor_one {d D N : ℕ} (A : MPSChainTensor d D N)
     (hN : ∑ _ : Fin N, 1 = N) (j : Fin N) :
     Kraus.transferMap (chainBlockTensor A hN j) = Kraus.transferMap (A j) := by

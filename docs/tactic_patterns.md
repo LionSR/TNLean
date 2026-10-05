@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Transported-reference Choi residual estimate — promoted (2026-10-05)
+
+- **Pattern:** Subtract trace-preparation terms from actual block channels,
+  compose the completely positive residuals, and bound their normalized Choi
+  traces before reshuffling to the physical Gram matrix.
+- **Seen:** `InhomogeneousPositivePartRate` and `WindowMixing` previously need
+  the same residual/trace bookkeeping with different reference hypotheses.
+- **Abstraction:**
+  `MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination`
+  in `InhomogeneousChoiResidual` handles varying strengths and minorizers.
+- **Notes:** This is a substantive transported-reference estimate, not a new
+  tactic. The common faithful theorem preserves its signature and exponent;
+  the new fixed-window consumer supplies its own compatible references.
+
 ### Simultaneous permutation invariance of matrix entries — promoted (2026-10-03)
 
 - **Pattern:** Convert simultaneous invariance of matrix entries into commutation
