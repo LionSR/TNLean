@@ -16,6 +16,11 @@ The pair on the bond leaving block `j` uses the reference of the following block
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS". They assume
 ordered-product estimates on a fixed square bond space; they do not infer those estimates
 from qualitative finite correlation. See `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS".
+* arXiv:2103.13367, Supplemental Material, eq. (26) and proof of Theorem MPS_classification.
 -/
 
 open Matrix MPSTensor

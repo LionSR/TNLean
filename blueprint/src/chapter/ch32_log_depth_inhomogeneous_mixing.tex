@@ -50,7 +50,6 @@ panels; the internal index $u$ has dimension $D^2$.
     \lean{MPSPreparation.exists_norm_polarPos_sub_le_transferMatrix,
         MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le}
     \leanok
-    \uses{thm:ldp_chain_transfer_product}
     There is $C_0>0$, depending only on $D$ and $\sigma$, with the following
     property. Let $B_j$ be any family of tensors with common bond dimension
     $D$, let $P_j$ be their positive polar factors, and suppose
@@ -64,6 +63,7 @@ panels; the internal index $u$ has dimension $D^2$.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_sqrt_lipschitz_constant,thm:ldp_ordered_telescoping_bound}
     The entries of $B_j^\dagger B_j$ are a fixed reshuffling of $T_{B_j}$.
     That linear reshuffling has bounded norm on the fixed $D^2$-dimensional
     matrix space. Since $\sigma^\mathsf T\otimes I$ is positive definite,

@@ -22,6 +22,11 @@ from individual sitewise spectral gaps or from qualitative convergence of the pa
 faithful reference state are additional hypotheses, not consequences of the source's
 qualitative finite-correlation definition. See
 `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* arXiv:2307.01696, eq. (8) and paragraph "Inhomogeneous short-range correlated MPS".
+* arXiv:2103.13367, Supplemental Material, eqs. (19), (21), (26), and (29)--(34).
 -/
 
 open Matrix MPSTensor

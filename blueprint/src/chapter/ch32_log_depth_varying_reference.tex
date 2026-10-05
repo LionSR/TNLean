@@ -11,19 +11,19 @@ of~\cite{Malz2024Preparation} does not supply them.
 Rectangular bond spaces remain outside this statement
 (\cite{gap:mswc24_inhomogeneous_scope}).
 
-\begin{lemma}[Ordered perturbations of varying references]
-    \label{lem:ldp_varying_reference_products}
+\begin{theorem}[Ordered perturbations of varying references]
+    \label{thm:ldp_varying_reference_products}
     \lean{prod_range_sub_prod_range_eq_sum_mul_sub_mul,
         norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le}
     \leanok
     Let $X_j,Y_j$ lie in a normed ring. Suppose every contiguous product of
     the $Y_j$, including the empty product, has norm at most $c$, and
     $\|X_j-Y_j\|\le\eta$. Then
-    \[
+    \begin{align}
         \left\|\prod_{j=0}^{M-1}X_j-\prod_{j=0}^{M-1}Y_j\right\|
         \le c\bigl((1+c\eta)^M-1\bigr).
-    \]
-\end{lemma}
+    \end{align}
+\end{theorem}
 \begin{proof}\leanok
     Telescope the difference by taking an initial segment from $X$, one
     difference $X_j-Y_j$, and the remaining segment from $Y$. Bound each
@@ -31,21 +31,21 @@ Rectangular bond spaces remain outside this statement
     The resulting geometric sum gives the assertion.
 \end{proof}
 
-\begin{lemma}[The reference on an outgoing pair]
-    \label{lem:ldp_varying_reference_pairs}
+\begin{theorem}[The reference on an outgoing pair]
+    \label{thm:ldp_varying_reference_pairs}
     \lean{MPSPreparation.mpvFamily_fixedPointTensor,
         MPSPreparation.sum_mpvFamily_mul_star_mpvFamily}
     \leanok
     Write $F_j^{l,r}=\sqrt{\sigma_j}\,|l\rangle\langle r|$.
     For a periodic family of $M\ge1$ such tensors,
-    \[
+    \begin{align}
         \operatorname{Tr}(F_0^{l_0,r_0}\cdots F_{M-1}^{l_{M-1},r_{M-1}})
         =\prod_{j=0}^{M-1}(\sqrt{\sigma_{j+1}})_{r_j,l_{j+1}},
-    \]
+    \end{align}
     with cyclic subscripts. In particular the pair leaving block $j$
     uses the reference of block $j+1$. The overlap of two periodic tensor
     families is the trace of their ordered mixed-transfer product.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Expand the cyclic virtual contraction in matrix units. Each right
     index fixes the incoming virtual index of the next tensor. Expanding
@@ -100,7 +100,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
         MPSPreparation.exists_abs_norm_chainState_sq_sub_one_le_uniform_reference,
         MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}
     \leanok
-    \uses{lem:ldp_varying_reference_products,lem:ldp_varying_reference_pairs,
+    \uses{thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,
         thm:ldp_inhomogeneous_normalized_pairs}
     There are constants depending only on $D$ such that, if each actual
     block transfer matrix differs from its reset reference by at most
@@ -134,10 +134,10 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     $A_{N,i}$ be actual tensors and $\sigma_{N,i}$ density matrices on
     the common bond space. Suppose every positive nonwrapping interval
     starting at $a$ and of length $\ell$ satisfies
-    \[
+    \begin{align}
         \|T_{A_{N,a}\cdots A_{N,a+\ell-1}}-R_{\sigma_{N,a}}\|
         \le K e^{-r\ell}.
-    \]
+    \end{align}
     There exist a uniform cutoff $N_0$ and $C$ such that the normalized
     original state at every $N\ge N_0$ and $0<\varepsilon\le1$ has a
     physical unit-state approximation of error at most $\varepsilon$

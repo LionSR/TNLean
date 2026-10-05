@@ -35,6 +35,11 @@ the form `C y e^{C y}` into a linear bound.
   the telescoping bound near an idempotent, for ordered products and for powers.
 * `one_add_pow_sub_one_le_mul_exp` — `(1 + y)^M - 1 ≤ M y e^{M y}`.
 * `le_mul_of_le_mul_exp_of_le` — `v ≤ C y e^{C y}` and `v ≤ B` give `v ≤ (C e^C + B) y`.
+
+## References
+
+* arXiv:2103.13367, Supplemental Material, proof of Theorem MPS_classification.
+* arXiv:2307.01696, Supplemental Material, eq. (S9) and Lemma 1'(i).
 -/
 
 /-- The telescoping identity for two ordered products in a ring:

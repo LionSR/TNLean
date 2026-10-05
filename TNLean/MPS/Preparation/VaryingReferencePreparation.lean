@@ -18,6 +18,11 @@ exponent, while keeping all constants uniform before the ring and its reference 
 sufficient hypotheses for arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated
 MPS". Rectangular bonds and deriving a rate from qualitative convergence remain outside this
 statement. See `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS".
+* arXiv:2103.13367, Supplemental Material, eq. (26) and proof of Theorem MPS_classification.
 -/
 
 open Matrix MPSTensor QuantumCircuit VaryingBondChain
