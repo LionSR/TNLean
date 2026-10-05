@@ -219,7 +219,8 @@ end AuxiliaryAction
 'MPOTensor.CompleteZipperFusionFamily.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPOTensor.CompleteZipperFusionFamily.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one
+#print axioms
+  MPOTensor.CompleteZipperFusionFamily.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one
 
 /-- info:
 'MPOTensor.CompleteZipperFusionFamily.printedFMatrix_eq_inv_dim_mul_trace'
@@ -231,7 +232,8 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 'MPOTensor.CompleteZipperFusionFamily.leftTripleAnalysis_mul_rightTripleSynthesis_eq_smul_one'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPOTensor.CompleteZipperFusionFamily.leftTripleAnalysis_mul_rightTripleSynthesis_eq_smul_one
+#print axioms
+  MPOTensor.CompleteZipperFusionFamily.leftTripleAnalysis_mul_rightTripleSynthesis_eq_smul_one
 
 /-- info:
 'MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_eq_inv_dim_mul_trace'
