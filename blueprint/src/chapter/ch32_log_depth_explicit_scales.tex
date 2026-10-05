@@ -1,0 +1,139 @@
+\section{Explicit blocking scales and physical depth}
+
+The rate of convergence controls a sufficient block length. The circuit
+construction then supplies a separate dimension-dependent depth constant.
+The two constants need not be optimal. Throughout this section, the
+physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
+
+\begin{theorem}[Polynomial-exponential error at an explicit scale]
+    \label{thm:ldp_polynomial_exponential_scale}
+    \lean{mul_pow_mul_exp_neg_le_of_le}
+    \leanok
+    Let $K,r>0$, $N\ge1$, and let $k$ be a nonnegative integer. If
+    $a\ge\max(k,1)/r$, $b\ge\max(\log K,0)/r$, and
+    $q\ge a\log(N/\varepsilon)+b$, then $KN^ke^{-rq}\le\varepsilon$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_log_threshold_error}
+    The inequalities $ra\ge k$, $ra\ge1$, $\log N\ge0$ and
+    $-\log\varepsilon\ge0$ give
+    $rq\ge\log K+k\log N-\log\varepsilon$.
+    Apply Lemma~\ref{lem:ldp_log_threshold_error}.
+\end{proof}
+
+\begin{theorem}[Explicit scale with a minimum usable block length]
+    \label{thm:ldp_explicit_usable_scale}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_min_of_rate}
+    \leanok
+    \uses{def:ldp_pair_approximable, def:qc_local_circuit}
+    There is $C=C(d,D)$ with the following property. Let $A$ be an
+    inhomogeneous chain with bond dimensions at most $D$ on $N\ge1$ sites,
+    with nonzero periodic state. Let $K,r>0$, let $k,L\ge0$ be integers, and
+    choose
+    \begin{align}
+        a&\ge\frac{\max(k,1)}r,
+        &b&\ge\frac{\max(\log K,0)}r+L+3D+1,
+        &q&=\left\lceil a\log(N/\varepsilon)+b\right\rceil .
+        \label{eq:ldp_explicit_scale}
+    \end{align}
+    Suppose that whenever $L\le q\le N$, there is a partition into blocks
+    $q\le\ell_j\le2q$ whose positive-part state is approximable by unit
+    pairs with error at most $KN^ke^{-rq}$. Then $q\ge3D+1$ and some unit
+    vector $\psi$ satisfies $\varepsilon(\psi,\phi_N(A))\le\varepsilon$
+    and is prepared in depth $T\le C\min(N,q)$.
+
+    This is a sufficient quantitative condition for the inhomogeneous
+    scheme of~\cite{Malz2024Preparation}; qualitative convergence does not
+    supply the assumed rate~\cite{gap:mswc24_inhomogeneous_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_polynomial_exponential_scale, thm:ldp_inhomogeneous,
+        thm:ldp_inhomogeneous_exact}
+    Since $\log(N/\varepsilon)\ge0$, the selected scale satisfies
+    $q\ge L$ and $q\ge3D+1$. If $q\le N$, the block circuit has depth
+    at most $2C_bq$, and
+    Theorem~\ref{thm:ldp_polynomial_exponential_scale} bounds its error.
+    If $q>N$, exact preparation has depth at most $C_eN$ and error zero.
+    Thus $C=\max(2C_b,C_e)$ works, independently of all rate data.
+\end{proof}
+
+\begin{theorem}[Pair rate from ordered mixing]
+    \label{thm:ldp_ordered_mixing_pair_rate}
+    \lean{MPSPreparation.exists_isPairApproximable_of_ordered_mixing,
+        MPSPreparation.le_remainderBlockLengths,
+        MPSPreparation.remainderBlockLengths_lt_two_mul}
+    \leanok
+    Fix a faithful density matrix $\sigma$ on $\mathbb C^D$. There is
+    $C_p>0$, independent of the physical dimension, chain and ring length,
+    with the following property. Suppose every positive contiguous block
+    of a nonzero chain has ordered transfer error at most $Ke^{-r\ell}$
+    relative to $X\mapsto\operatorname{Tr}(X)\sigma$, with $K,r>0$.
+    For every $1\le q\le N$, the remainder-absorbing partition has
+    $q\le\ell_j<2q$ and normalized pair error at most $C_pKN e^{-rq}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_inhomogeneous_normalized_pairs}
+    There are $M=\lfloor N/q\rfloor$ blocks, of lengths
+    $q,\ldots,q,q+(N\bmod q)$. Both each block and the whole ring have
+    transfer error at most $Ke^{-rq}$. The normalized positive-part
+    estimate gives pair error at most $C_pMKe^{-rq}\le C_pNKe^{-rq}$.
+\end{proof}
+
+\begin{theorem}[Selected coefficient from ordered mixing]
+    \label{thm:ldp_ordered_mixing_explicit_scale}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_min_of_ordered_mixing}
+    \leanok
+    There is $C=C(d,D)$ such that for each faithful density matrix $\sigma$
+    and $K,r>0$, there is $b\ge1$ with the following property. Every
+    nonzero chain satisfying the ordered mixing hypothesis of
+    Theorem~\ref{thm:ldp_ordered_mixing_pair_rate} has a unit approximation
+    of error at most $\varepsilon$, prepared in depth
+    $T\le C\min(N,q)$ with
+    $q=\lceil r^{-1}\log(N/\varepsilon)+b\rceil\ge3D+1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_ordered_mixing_pair_rate, thm:ldp_explicit_usable_scale}
+    Apply Theorem~\ref{thm:ldp_explicit_usable_scale} with $k=1$, $L=0$,
+    prefactor $C_pK$, $a=1/r$, and
+    $b=\max(\log(C_pK),0)/r+3D+1$.
+\end{proof}
+
+\begin{theorem}[Every prescribed slope above half the correlation length]
+    \label{thm:ldp_all_length_prescribed_slope}
+    \lean{MPSPreparation.exists_isPreparedInDepth_allLength_of_slope}
+    \leanok
+    There is $C=C(d,D)$ with the following property. Let $B$ be normal and
+    left canonical, with a faithful fixed density matrix $\sigma$, and let
+    $\phi_N(B)=\zeta^N\phi_N(A)$ for every $N$, with $\zeta\ne0$.
+    Let $0<t<1$ bound the moduli of the eigenvalues other than $1$ of
+    its transfer map, and set $\xi=-1/\log t$. For each prescribed
+    $a>\xi/2$, there is $b\ge1$ such that every $N\ge1$ with
+    $\phi_N(A)\ne0$, and every integer $q\ge a\log(N/\varepsilon)+b$,
+    admit a unit approximation of error at most $\varepsilon$ prepared
+    in depth $T\le C\min(N,q)$. In particular, $q$ may be the ceiling
+    of this threshold; no divisibility of $N$ is required.
+
+    This refines the sufficient blocking scale in
+    \cite{Malz2024Preparation}; it makes no assertion at $a=\xi/2$ or
+    at the spectral-bound endpoint $t=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_block_approximation_error, thm:ldp_approximating_state_depth,
+        thm:ldp_inhomogeneous_exact, thm:ldp_polynomial_exponential_scale,
+        lem:ldp_normalized_state_rescaling, thm:wordspan_blk_inj_succ,
+        lem:isNBlkInjective_iff_blockTensor_isInjective}
+    Choose $\gamma=\xi/(2a)\in(0,1)$. The unequal-block bound gives
+    $KMe^{-2\gamma q/\xi}=KMe^{-q/a}$. Let $L$ be an eventual injectivity
+    length and take $b=a\max(\log K,0)+L+3D+1$. If $q\le N$, use
+    the $M=\lfloor N/q\rfloor$ remainder-absorbing blocks. Every block
+    is injective and has between $3D$ and $2q$ sites, so its approximating
+    state is a unit vector prepared in depth at most $2C_bq$, with error
+    at most $KNe^{-q/a}\le\varepsilon$. The normalized overlap is unchanged
+    by the factor $\zeta^N$. If $q>N$, prepare $\phi_N(A)$ exactly in
+    depth at most $C_eN$. Again $C=\max(2C_b,C_e)$ suffices.
+\end{proof}

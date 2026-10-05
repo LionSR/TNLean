@@ -748,7 +748,7 @@ into a single constant.
 \begin{proof}
     \leanok
     For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$, where
-    $a=(k+1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
+    $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
     $rq\ge\log K+k\log N-\log\varepsilon$, so Lemma~\ref{lem:ldp_log_threshold_error}
     gives $KN^k e^{-rq}\le\varepsilon$.
     If $q\le N$, choose the partition supplied by the approximation hypothesis.
