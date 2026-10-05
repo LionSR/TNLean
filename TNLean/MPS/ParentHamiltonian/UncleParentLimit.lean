@@ -21,8 +21,9 @@ open scoped Matrix Topology
 
 namespace MPSTensor
 
-/-- Base-point block injectivity suffices for continuity of the actual local
-MPS ground-space projector. No injectivity away from that point is assumed. -/
+/-- Injectivity after blocking \(L\) sites at the base point suffices for
+continuity of the actual local MPS ground-space projector. No injectivity
+away from that point is assumed. -/
 theorem continuousAt_groundSpaceES_starProjection_of_isNBlkInjective
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) {x₀ : X} (hA : ContinuousAt A x₀) (L : ℕ)
@@ -36,8 +37,9 @@ theorem continuousAt_groundSpaceES_starProjection_of_isNBlkInjective
     (groundSpaceMapES_injective_of_isNBlkInjective hInj)
   simpa only [range_groundSpaceMapES] using hproj
 
-/-- The actual canonical interaction is continuous at every block-injective
-base point of a continuous tensor family. -/
+/-- The actual canonical interaction on \(L\) sites is continuous when the
+tensor family is continuous and injective after blocking \(L\) sites at the
+base point. -/
 theorem continuousAt_parentInteractionES_of_isNBlkInjective
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
     (A : X → MPSTensor d D) {x₀ : X} (hA : ContinuousAt A x₀) (L : ℕ)
