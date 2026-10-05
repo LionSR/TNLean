@@ -49,10 +49,15 @@ def mixedEndpointActiveEdgePosition (p : MixedEndpointActiveEdgeSite N) :
 def mixedEndpointActiveEdgeStart (p : MixedEndpointActiveEdgeSite N) :
     NonwrappingStart 2 (N + 1 + 1 + 1) :=
   match p with
-  | .first => ⟨0, by simp; omega⟩
+  | .first => ⟨0, by simp⟩
   | .interior i => ⟨⟨i.1.val + 1, by have := i.1.isLt; omega⟩,
-      by have := i.2; simp only [Fin.val_mk]; omega⟩
-  | .last => ⟨⟨N + 1, by omega⟩, by simp only [Fin.val_mk]; omega⟩
+      by
+        change i.1.val + 1 + 2 ≤ N + 1 + 1 + 1
+        have := i.2
+        omega⟩
+  | .last => ⟨⟨N + 1, by omega⟩, by
+      change N + 1 + 2 ≤ N + 1 + 1 + 1
+      omega⟩
 
 /-- Every actual nonwrapping edge has one of the three coordinate descriptions. -/
 theorem mixedEndpointActiveEdgeStart_surjective :
@@ -70,7 +75,9 @@ theorem mixedEndpointActiveEdgeStart_surjective :
       exact hlast.symm
     · have hi := i.2
       let j : NonwrappingStart 2 (N + 1) :=
-        ⟨⟨i.1.val - 1, by omega⟩, by simp only [Fin.val_mk]; omega⟩
+        ⟨⟨i.1.val - 1, by omega⟩, by
+          change i.1.val - 1 + 2 ≤ N + 1
+          omega⟩
       refine ⟨.interior j, ?_⟩
       apply Subtype.ext
       apply Fin.ext
@@ -187,10 +194,33 @@ theorem mixedEndpointActiveEdgePlacement_apply (p : MixedEndpointActiveEdgeSite 
     mixedEndpointActiveEdgePlacement p T v ξ =
       T (mixedEndpointActiveEdgeFiber p v (mixedEndpointActiveEdgeConfigEquiv D₀ D₁ p ξ).2)
         (mixedEndpointActiveEdgeConfigEquiv D₀ D₁ p ξ).1 := by
+  have hRF
+      (x : EuclideanSpace ℂ
+        (mixedEndpointEdgeCfg D₀ D₁ (mixedEndpointActiveEdgePosition p) ×
+          mixedEndpointActiveEdgeSpectator D₀ D₁ p))
+      (z : mixedEndpointEdgeCfg D₀ D₁ (mixedEndpointActiveEdgePosition p) ×
+        mixedEndpointActiveEdgeSpectator D₀ D₁ p) :
+      ContinuousLinearMap.rightFiberwiseMap
+          (S := mixedEndpointActiveEdgeSpectator D₀ D₁ p) T.toContinuousLinearMap x z =
+        T (ContinuousLinearMap.rightFiber x z.2) z.1 := by
+    rcases z with ⟨η, s⟩
+    exact ContinuousLinearMap.rightFiberwiseMap_apply_apply T.toContinuousLinearMap x η s
   simp [mixedEndpointActiveEdgePlacement, LinearEquiv.conj_apply,
     mixedEndpointActiveEdgeLinearIsometryEquiv,
     LinearIsometryEquiv.piLpCongrLeft_symm, LinearIsometryEquiv.piLpCongrLeft_apply,
-    ContinuousLinearMap.rightFiber, mixedEndpointActiveEdgeFiber]
+    hRF, ContinuousLinearMap.rightFiber, mixedEndpointActiveEdgeFiber]
+
+private theorem contiguousCfg_apply_mem {d L M s : ℕ}
+    {ω : Cfg d M} {τ : Cfg d L} {k : Fin L}
+    (hk : s ≤ k.val ∧ k.val < s + M) :
+    contiguousCfg s M ω τ k = ω ⟨k.val - s, by omega⟩ :=
+  dite_eq_left hk
+
+private theorem contiguousCfg_apply_not_mem {d L M s : ℕ}
+    {ω : Cfg d M} {τ : Cfg d L} {k : Fin L}
+    (hk : ¬ (s ≤ k.val ∧ k.val < s + M)) :
+    contiguousCfg s M ω τ k = τ k :=
+  dite_eq_right hk
 
 private theorem firstEdge_contiguousReplacement
     (ξ : endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ (N + 1))
@@ -204,18 +234,25 @@ private theorem firstEdge_contiguousReplacement
   rcases η with ⟨⟨a', b'⟩, q⟩
   funext k
   refine Fin.cases ?_ (fun k => ?_) k
-  · simp [contiguousCfg, mixedEndpointEdgePhysicalCfg,
-      mixedEndpointActivePhysicalCfg, mixedEndpointFirstEdgeConfigEquiv]
+  · rw [contiguousCfg_apply_mem (M := 2) (s := 0)
+      (k := (0 : Fin (N + 1 + 1 + 1))) (by simp)]
+    simp [mixedEndpointEdgePhysicalCfg, mixedEndpointActivePhysicalCfg,
+      mixedEndpointFirstEdgeConfigEquiv]
   · refine Fin.lastCases ?_ (fun k => ?_) k
-    · simp only [contiguousCfg, Fin.val_succ, Fin.val_last]
-      rw [dif_neg (by omega)]
+    · rw [contiguousCfg_apply_not_mem (M := 2) (s := 0)
+        (k := (Fin.last (N + 1)).succ)
+        (by simp only [Fin.val_succ, Fin.val_last]; omega)]
       simp [mixedEndpointActivePhysicalCfg, mixedEndpointFirstEdgeConfigEquiv]
     · refine Fin.cases ?_ (fun k => ?_) k
-      · simp [contiguousCfg, mixedEndpointEdgePhysicalCfg,
-          mixedEndpointActivePhysicalCfg, mixedEndpointFirstEdgeConfigEquiv]
-      · simp only [contiguousCfg, Fin.val_succ, Fin.val_castSucc]
-        rw [dif_neg (by omega)]
-        simp [mixedEndpointActivePhysicalCfg, mixedEndpointFirstEdgeConfigEquiv, Fin.tail]
+      · rw [contiguousCfg_apply_mem (M := 2) (s := 0)
+          (k := (0 : Fin (N + 1)).castSucc.succ) (by simp)]
+        simp [mixedEndpointEdgePhysicalCfg, mixedEndpointActivePhysicalCfg,
+          mixedEndpointFirstEdgeConfigEquiv]
+      · rw [contiguousCfg_apply_not_mem (M := 2) (s := 0)
+          (k := k.succ.castSucc.succ)
+          (by simp only [Fin.val_succ, Fin.val_castSucc]; omega)]
+        simp only [mixedEndpointActivePhysicalCfg, mixedEndpointFirstEdgeConfigEquiv,
+          Fin.cons_succ, Fin.snoc_castSucc, Fin.tail]
 
 private theorem lastEdge_contiguousReplacement
     (ξ : endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ (N + 1))
@@ -229,21 +266,24 @@ private theorem lastEdge_contiguousReplacement
   rcases η with ⟨q, c', e'⟩
   funext k
   refine Fin.cases ?_ (fun k => ?_) k
-  · simp only [contiguousCfg, Fin.val_zero]
-    rw [dif_neg (by omega)]
+  · rw [contiguousCfg_apply_not_mem (M := 2) (s := N + 1)
+      (k := (0 : Fin (N + 1 + 1 + 1))) (by simp)]
     simp [mixedEndpointActivePhysicalCfg, mixedEndpointLastEdgeConfigEquiv]
   · refine Fin.lastCases ?_ (fun k => ?_) k
-    · simp only [contiguousCfg, Fin.val_succ, Fin.val_last]
-      rw [dif_pos (by omega)]
+    · rw [contiguousCfg_apply_mem (M := 2) (s := N + 1)
+        (k := (Fin.last (N + 1)).succ)
+        (by simp only [Fin.val_succ, Fin.val_last]; omega)]
       simp [mixedEndpointEdgePhysicalCfg, mixedEndpointActivePhysicalCfg,
         mixedEndpointLastEdgeConfigEquiv]
     · refine Fin.lastCases ?_ (fun k => ?_) k
-      · simp only [contiguousCfg, Fin.val_succ, Fin.val_castSucc, Fin.val_last]
-        rw [dif_pos (by omega)]
+      · rw [contiguousCfg_apply_mem (M := 2) (s := N + 1)
+          (k := (Fin.last N).castSucc.succ)
+          (by simp only [Fin.val_succ, Fin.val_castSucc, Fin.val_last]; omega)]
         simp [mixedEndpointEdgePhysicalCfg, mixedEndpointActivePhysicalCfg,
           mixedEndpointLastEdgeConfigEquiv]
-      · simp only [contiguousCfg, Fin.val_succ, Fin.val_castSucc]
-        rw [dif_neg (by have := k.isLt; omega)]
+      · rw [contiguousCfg_apply_not_mem (M := 2) (s := N + 1)
+          (k := k.castSucc.castSucc.succ)
+          (by have hk := k.isLt; simp only [Fin.val_succ, Fin.val_castSucc]; omega)]
         simp [mixedEndpointActivePhysicalCfg, mixedEndpointLastEdgeConfigEquiv, Fin.init]
 
 private theorem interiorEdge_contiguousReplacement
@@ -255,25 +295,37 @@ private theorem interiorEdge_contiguousReplacement
       mixedEndpointActivePhysicalCfg (a, (b, contiguousCfg i.1.val 2 η σ, c), e) := by
   funext k
   refine Fin.cases ?_ (fun k => ?_) k
-  · simp only [contiguousCfg, Fin.val_zero]
-    rw [dif_neg (by omega)]
+  · rw [contiguousCfg_apply_not_mem (M := 2) (s := i.1.val + 1)
+      (k := (0 : Fin (N + 1 + 1 + 1))) (by simp)]
     rfl
   · refine Fin.lastCases ?_ (fun k => ?_) k
-    · simp only [contiguousCfg, Fin.val_succ, Fin.val_last]
-      rw [dif_neg (by have := i.2; omega)]
+    · rw [contiguousCfg_apply_not_mem (M := 2) (s := i.1.val + 1)
+        (k := (Fin.last (N + 1)).succ)
+        (by have hi := i.2; simp only [Fin.val_succ, Fin.val_last]; omega)]
       simp [mixedEndpointActivePhysicalCfg]
-    · simp only [contiguousCfg, Fin.val_succ, Fin.val_castSucc]
-      simp only [mixedEndpointActivePhysicalCfg, Fin.cons_succ, Fin.snoc_castSucc]
-      dsimp only [mixedEndpointEdgePhysicalCfg]
-      split_ifs with hglobal hbulk
-      · congr 1
-        congr 1
+    · simp only [mixedEndpointActivePhysicalCfg, Fin.cons_succ, Fin.snoc_castSucc]
+      by_cases hk : i.1.val ≤ k.val ∧ k.val < i.1.val + 2
+      · have hglobal : i.1.val + 1 ≤ k.castSucc.succ.val ∧
+            k.castSucc.succ.val < i.1.val + 1 + 2 := by
+          simp only [Fin.val_succ, Fin.val_castSucc]
+          omega
+        rw [contiguousCfg_apply_mem (M := 2) (s := i.1.val + 1)
+            (k := k.castSucc.succ) hglobal,
+          contiguousCfg_apply_mem (M := 2) (s := i.1.val) (k := k) hk]
+        dsimp only [mixedEndpointEdgePhysicalCfg]
+        apply congrArg (mixedEndpointFirstPhysicalIndex D₁)
+        apply congrArg η
         apply Fin.ext
-        simp only [Fin.val_mk]
+        change k.val + 1 - (i.1.val + 1) = k.val - i.1.val
         omega
-      · omega
-      · omega
-      · rfl
+      · have hglobal : ¬ (i.1.val + 1 ≤ k.castSucc.succ.val ∧
+            k.castSucc.succ.val < i.1.val + 1 + 2) := by
+          simp only [Fin.val_succ, Fin.val_castSucc]
+          omega
+        rw [contiguousCfg_apply_not_mem (M := 2) (s := i.1.val + 1)
+            (k := k.castSucc.succ) hglobal,
+          contiguousCfg_apply_not_mem (M := 2) (s := i.1.val) (k := k) hk]
+        simp only [Fin.cons_succ, Fin.snoc_castSucc]
 
 /-- Replacing the actual physical edge by an encoded cropped configuration
 is exactly replacement of the selected edge coordinate in the active split. -/
@@ -293,16 +345,23 @@ theorem mixedEndpointActivePhysicalCfg_edgeReplacement
   | first => exact firstEdge_contiguousReplacement ξ η
   | last => exact lastEdge_contiguousReplacement ξ η
   | interior i =>
+    change Cfg (D₀ * D₀) 2 at η
     rcases ξ with ⟨a, ⟨b, σ, c⟩, e⟩
+    have hbulk : 2 ≤ N + 1 := by have := i.2; omega
     change contiguousCfg (i.1.val + 1) 2 (mixedEndpointEdgePhysicalCfg .interior η)
       (mixedEndpointActivePhysicalCfg (a, (b, σ, c), e)) =
         mixedEndpointActivePhysicalCfg (a,
-          (b, (cyclicActiveBlockConfigEquiv (D₀ * D₀) 2 (by have := i.2; omega) i.1).symm
-            (η, (cyclicActiveBlockConfigEquiv (D₀ * D₀) 2
-              (by have := i.2; omega) i.1 σ).2), c), e)
-    rw [← cyclicCfg_eq_join_cyclicActiveBlock (by have := i.2; omega),
-      cyclicCfg_eq_contiguousCfg _ (by have := i.2; omega) i.2]
-    exact interiorEdge_contiguousReplacement i a e b c σ η
+          (b, (cyclicActiveBlockConfigEquiv (D₀ * D₀) 2 hbulk i.1).symm
+            (η, (cyclicActiveBlockConfigEquiv (D₀ * D₀) 2 hbulk i.1 σ).2), c), e)
+    have hjoin :
+        (cyclicActiveBlockConfigEquiv (D₀ * D₀) 2 hbulk i.1).symm
+            (η, (cyclicActiveBlockConfigEquiv (D₀ * D₀) 2 hbulk i.1 σ).2) =
+          contiguousCfg i.1.val 2 η σ :=
+      (cyclicCfg_eq_join_cyclicActiveBlock hbulk i.1 η σ).symm.trans
+        (cyclicCfg_eq_contiguousCfg (Fin.pos i.1) hbulk i.2 η σ)
+    exact (interiorEdge_contiguousReplacement i a e b c σ η).trans
+      (congrArg (fun τ : Cfg (D₀ * D₀) (N + 1) =>
+        mixedEndpointActivePhysicalCfg (a, (b, τ, c), e)) hjoin.symm)
 
 private theorem extractWindow_cyclicCfg_two {d L : ℕ} (hL : 2 ≤ L)
     (i : Fin L) (ω : Cfg d 2) (τ : Cfg d L) :
@@ -380,7 +439,7 @@ private theorem localInteraction_apply_restriction {d L : ℕ}
   change h (WithLp.toLp 2 fun ω => v
     ((cyclicActiveBlockConfigEquiv d 2 hL i).symm
       (ω, (cyclicActiveBlockConfigEquiv d 2 hL i σ).2))) (extractWindow 2 i σ) = _
-  congr 1
+  apply congrArg (fun w : EuclideanSpace ℂ (Cfg d 2) => h w (extractWindow 2 i σ))
   apply PiLp.ext
   intro ω
   change v ((cyclicActiveBlockConfigEquiv d 2 hL i).symm

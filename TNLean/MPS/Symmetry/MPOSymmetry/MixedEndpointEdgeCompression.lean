@@ -418,7 +418,7 @@ private theorem twoSiteBoundaryMapSum_apply_activeCfg
       (WithLp.toLp 2 fun p => X (finSumFinEquiv.symm p.1) (finSumFinEquiv.symm p.2))
       (mixedEndpointActivePhysicalCfg (a, (b, σ, c), e)) =
     mixedEndpointActiveBoundaryMap A₀ A₁ 0 X (a, (b, σ, c), e)
-  simp [mixedEndpointActiveBoundaryMap, mixedEndpointActivePhysicalCfg, WithLp.ofLp_toLp,
+  simp [mixedEndpointActiveBoundaryMap, mixedEndpointActivePhysicalCfg,
     insertedTwoSiteMap_apply, insertedGroundSpaceMap_apply, insertedEvalWord,
     List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc, Fin.snoc_zero, Matrix.submatrix]
 
