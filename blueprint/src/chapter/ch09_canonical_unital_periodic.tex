@@ -1,5 +1,5 @@
-\begin{lemma}[One-block canonical peripheral spectrum]
-    \label{lem:pgvwc07_unital_canonical_spectrum}
+\begin{theorem}[One-block canonical peripheral spectrum]
+    \label{thm:pgvwc07_unital_canonical_spectrum}
     \lean{MPSTensor.isIrreducible_transferMap_of_unital_canonical,
         MPSTensor.exists_peripheral_generator_of_unital_canonical,
         MPSTensor.peripheral_genEigenspace_finrank_eq_one_of_unital_canonical}
@@ -19,7 +19,7 @@
     Each peripheral maximal generalized eigenspace has dimension one.
     Thus counting distinct peripheral eigenvalues also counts their
     algebraic multiplicities.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -63,8 +63,8 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc07_unital_canonical_spectrum, lem:kraus_cyclic_shift,
-        lem:pgvwc07_component_sum_and_vanishing}
+    \uses{thm:pgvwc07_unital_canonical_spectrum, lem:kraus_cyclic_shift,
+        thm:pgvwc07_component_sum_and_vanishing}
     The cyclic peripheral decomposition supplies orthogonal projectors with
     $\E_A(Q_{u+1})=Q_u$. Their sum is the identity, and cyclicity makes each
     nonzero. The Kraus shift gives
