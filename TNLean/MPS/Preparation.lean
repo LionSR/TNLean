@@ -23,10 +23,12 @@ import TNLean.MPS.Preparation.BlockSumUnitary
 import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
+import TNLean.MPS.Preparation.BondEmbedding
 import TNLean.MPS.Preparation.CircuitEquivalence
 import TNLean.MPS.Preparation.CoherentBlockTreePreparation
 import TNLean.MPS.Preparation.CompatibleSeedCircuitEquivalence
 import TNLean.MPS.Preparation.ConfigurationLayers
+import TNLean.MPS.Preparation.CornerReferenceOverlap
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
 import TNLean.MPS.Preparation.CutCoefficientRank
 import TNLean.MPS.Preparation.CutRank
@@ -102,6 +104,7 @@ import TNLean.MPS.Preparation.OverlappingBlockOverlap
 import TNLean.MPS.Preparation.OverlappingBlockStates
 import TNLean.MPS.Preparation.OverlappingLogLogPreparation
 import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
+import TNLean.MPS.Preparation.PaddedBondState
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
@@ -113,6 +116,9 @@ import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PolynomialAccuracy
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.QCccClassification
+import TNLean.MPS.Preparation.RectangularBlocks
+import TNLean.MPS.Preparation.RectangularPreparation
+import TNLean.MPS.Preparation.RectangularTransferEstimate
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
 import TNLean.MPS.Preparation.RelativePositivePart

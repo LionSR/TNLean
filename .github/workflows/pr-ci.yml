@@ -88,6 +88,7 @@ on:
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
+      - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
@@ -178,6 +179,7 @@ on:
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
+      - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
@@ -288,6 +290,7 @@ jobs:
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
+              - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
@@ -500,7 +503,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression InhomogeneousMixingPreparation VaryingReferencePreparation WindowMixingPreparation ExplicitPreparationScale; do
+          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression InhomogeneousMixingPreparation VaryingReferencePreparation RectangularPreparation WindowMixingPreparation ExplicitPreparationScale; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -522,7 +525,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in DependentPhysicalProductRangeSupport PEPS/DependentBondCut PEPS/DependentBondProjectors PEPS/DependentCutBondSupport PEPS/DependentTorusClosure PEPS/FourTorusCut PEPS/FourTorusCutClosure PEPS/MatchedTorusProjectors PEPS/TorusBondClosureSeamMovement PhysicalProductFamilyRangeSupport RegularGraphBondBlocking RegularGraphPhysicalBlocking TorusBondFlatConnection ThreeBlockBoundaryOrientation ThreeBlockDependentCutIntersection ThreeBlockGInjectiveIntersection ThreeBlockNonabelianIntersection TorusTwoByTwoBlocking TwoByTwoTensorIsometry TorusParentGroundStateObservables; do
+          for example in DependentPhysicalProductRangeSupport PEPS/DependentBondCut PEPS/DependentBondProjectors PEPS/DependentCutBondSupport PEPS/DependentTorusClosure PEPS/FourTorusCut PEPS/FourTorusCutClosure PEPS/MatchedTorusProjectors PEPS/TorusBondClosureSeamMovement PhysicalProductFamilyRangeSupport RegularGraphBondBlocking RegularGraphPhysicalBlocking TorusBondFlatConnection ThreeBlockBoundaryOrientation ThreeBlockDependentCutIntersection ThreeBlockGInjectiveIntersection ThreeBlockNonabelianIntersection TorusTwoByTwoBlocking TwoByTwoTensorIsometry TorusParentGroundStateObservables PEPS/DependentTorusClosureDimension NonabelianParentSeamCuts NonuniformParentSeamCuts RegularTwoByTwoTwistedTensor NonuniformNativeParentClassification PEPS/NativeTorusClosureDimension; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -923,6 +926,7 @@ jobs:
           python3 scripts/test_tenkz_peps_four_cut.py
           python3 scripts/check_peps_four_cut_blueprint.py
           python3 scripts/test_tenkz_peps_three_block.py
+          python3 scripts/test_tenkz_peps_parent_seams.py
           python3 scripts/test_tenkz_peps_regular_reblocking.py
           python3 scripts/check_peps_three_block_blueprint.py
 
