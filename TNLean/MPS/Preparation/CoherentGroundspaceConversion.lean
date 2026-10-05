@@ -75,8 +75,8 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
     rw [hnorm, Complex.norm_real, Real.norm_eq_abs, abs_of_pos htA0]; exact le_max_left _ _
   have htB : ‖(tB : ℂ)‖ ≤ ‖(t : ℂ)‖ := by
     rw [hnorm, Complex.norm_real, Real.norm_eq_abs, abs_of_pos htB0]; exact le_max_right _ _
-  have hAλ := fun j μ hμ hne => (hlamA j μ hμ hne).trans htA
-  have hBλ := fun j μ hμ hne => (hlamB j μ hμ hne).trans htB
+  have hAlam := fun j μ hμ hne => (hlamA j μ hμ hne).trans htA
+  have hBlam := fun j μ hμ hne => (hlamB j μ hμ hne).trans htB
   have hAμ := fun i j hij μ hμ => (hmixleA i j hij μ hμ).trans htA
   have hBμ := fun i j hij μ hμ => (hmixleB i j hij μ hμ).trans htB
   let ιA := flatCoord DA
@@ -90,9 +90,9 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
   have hDBs : 0 < ∑ j, DB j := Finset.sum_pos (fun j _ => @NeZero.pos _ (hDB j))
     ⟨0, Finset.mem_univ _⟩
   obtain ⟨LA, hinjA⟩ := exists_isInjectiveOn_blockTensor_blockSum hιA hdisjA hAN hAL hσA htrA
-    hfixA (lam₂ := (t : ℂ)) (by rwa [hnorm]) hAλ hAμ
+    hfixA (lam₂ := (t : ℂ)) (by rwa [hnorm]) hAlam hAμ
   obtain ⟨LB, hinjB⟩ := exists_isInjectiveOn_blockTensor_blockSum hιB hdisjB hBN hBL hσB htrB
-    hfixB (lam₂ := (t : ℂ)) (by rwa [hnorm]) hBλ hBμ
+    hfixB (lam₂ := (t : ℂ)) (by rwa [hnorm]) hBlam hBμ
   set r₀ := (∑ j, DA j) + (∑ j, DB j) + b + 2
   have hr₀ : 2 ≤ r₀ := by omega
   have hpow : r₀ < d ^ r₀ := Nat.lt_two_pow_self.trans_le (Nat.pow_le_pow_left hd r₀)
@@ -108,10 +108,10 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
   have hLA : LA ≤ L := by have := le_max_left LA LB; omega
   have hLB : LB ≤ L := by have := le_max_right LA LB; omega
   obtain ⟨CA, KA, hKA, hAp, hAe⟩ := exists_sectorEncoder_preparation_bounds A ιA hιA hdisjA
-    (fun j => @NeZero.pos _ (hDA j)) hDAs hAN hAL hσA htrA hfixA ht0 ht1 hAλ hAμ
+    (fun j => @NeZero.pos _ (hDA j)) hDAs hAN hAL hσA htrA hfixA ht0 ht1 hAlam hAμ
     hr₀ digA.injective dig₀.injective L hL (fun n hn => hinjA n (hLA.trans hn))
   obtain ⟨CB, KB, hKB, hBp, hBe⟩ := exists_sectorEncoder_preparation_bounds B ιB hιB hdisjB
-    (fun j => @NeZero.pos _ (hDB j)) hDBs hBN hBL hσB htrB hfixB ht0 ht1 hBλ hBμ
+    (fun j => @NeZero.pos _ (hDB j)) hDBs hBN hBL hσB htrB hfixB ht0 ht1 hBlam hBμ
     hr₀ digB.injective dig₀.injective L hL (fun n hn => hinjB n (hLB.trans hn))
   set r := -(1 / 2 * Real.log t)
   have hr : 0 < r := by have := Real.log_neg ht0 ht1; dsimp [r]; linarith
