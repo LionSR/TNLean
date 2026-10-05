@@ -76,6 +76,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install system dependencies
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           # texlive-fonts-extra supplies dsfont, which paper-gap notes load;
@@ -172,6 +173,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install system dependencies
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3

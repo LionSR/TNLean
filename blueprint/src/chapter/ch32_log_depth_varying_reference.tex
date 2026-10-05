@@ -8,8 +8,7 @@ $R_\sigma(X)=\operatorname{Tr}(X)\sigma$.
 The ordered exponential estimates below are sufficient hypotheses; the
 qualitative convergence definition in the inhomogeneous paragraph
 of~\cite{Malz2024Preparation} does not supply them.
-Rectangular bond spaces remain outside this statement
-(\cite{gap:mswc24_inhomogeneous_scope}).
+The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
 
 \begin{theorem}[Ordered perturbations of varying references]
     \label{thm:ldp_varying_reference_products}
@@ -96,9 +95,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
 \begin{theorem}[Uniform error with singular varying references]
     \label{thm:ldp_varying_reference_error}
     \lean{MPSPreparation.exists_norm_polarPos_sub_le_sqrt_transferMatrix,
-        MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference,
-        MPSPreparation.exists_abs_norm_chainState_sq_sub_one_le_uniform_reference,
-        MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}
+        MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference}
     \leanok
     There are constants depending only on $D$ such that, if each actual
     block transfer matrix differs from its reset reference by at most
@@ -112,7 +109,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     $C'_DM\sqrt\delta$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:ldp_uniform_gram_transfer,thm:ldp_sqrt_holder,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner}
+    \uses{thm:ldp_uniform_gram_transfer,thm:ldp_sqrt_holder,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner,thm:ldp_rectangular_error}
     Apply the global square-root H\"older bound to the reshuffled Gram
     matrices. Density matrices form a compact set, so the reset matrices
     and the linear maps defining mixed transfers have uniform bounds.
@@ -162,8 +159,8 @@ is not required for logarithmic preparation under the stated product bound.
 
 The factor two lost in the exponential rate is a consequence of using a
 global H\"older estimate, not a lower bound on preparation complexity.
-A sharper estimate on supported sectors could improve it. Extending the
-argument to rectangular bonds requires compatible corner-supported reset
-maps and the corresponding pair supports. Deriving the uniform ordered
+A sharper estimate on supported sectors could improve it. Section~\ref{sec:ldp_rectangular}
+extends the argument to rectangular bonds with compatible corner-supported
+reset maps and the corresponding pairs. Deriving the uniform ordered
 rate from a more intrinsic physical condition remains distinct from these
 norm and normalization estimates.

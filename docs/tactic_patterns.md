@@ -24,6 +24,27 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Logarithmic normalization cutoff — promoted (2026-10-05)
+
+- **Pattern:** Turn `(log K - log ε) / r ≤ x` into `K exp(-rx) ≤ ε`.
+- **Seen:** The three eventual-nonvanishing proofs in
+  `InhomogeneousMixingPreparation`, `VaryingReferencePreparation`, and
+  `RectangularPreparation`.
+- **Abstraction:** `mul_exp_neg_mul_le_of_div_log_le` in
+  `InjectivityCutoff`, using the existing exponential threshold theorem.
+- **Refactor:** Three copied arithmetic blocks become calls to the shared bound.
+
+
+### Sites in a one-block partition — promoted (2026-10-05)
+
+- **Pattern:** Proving that the site map of a singleton partition is the identity
+  by finite-index extensionality and unfolding the block offset.
+- **Seen:** Five uses in `RectangularPreparation`, `VaryingReferencePreparation`,
+  `InhomogeneousMixingPreparation`, and `OrderedMixingPairRate`.
+- **Abstraction:** `MPSPreparation.blockSite_singleton` in `BlockSites`.
+- **Refactor:** All five consumers use the shared identity.
+
+
 ### Uniform Gram/transfer reshuffling — promoted (2026-10-05)
 
 - **Pattern:** Reshuffle the transfer-matrix error into the physical Gram

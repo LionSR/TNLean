@@ -109,11 +109,13 @@ zeros to $D\times D$ matrices\footnote{Formal declarations:
 The padded chain has the same state, which is proved. For a block of at least
 one site, its blocked tensor $B_k$ vanishes outside the upper-left corner
 $[0,D_{o_k})\times[0,D_{o_{k+1}})$, which is also proved, and its entries on
-that corner are those of the rectangular blocked tensor. That last
-identification is not formalized: the injectivity hypothesis of the statement
-for injective blocked tensors is stated directly for $B_k$, as spanning every
-matrix unit in the corner, and its reading as injectivity of the rectangular
-blocked tensor is the observation just made. For a block of length zero the
+that corner are those of the rectangular blocked tensor. This identification
+is proved by
+\leanid{VaryingBondChain.zeroPad_rectangularBlockTensor} in
+\doclink{TNLean/MPS/Preparation/RectangularBlocks}, together with the ordered
+composition formula for the actual rectangular site transfer maps.
+The injectivity hypothesis of the statement for injective blocked tensors
+is stated directly for $B_k$, as spanning every matrix unit in the corner. For a block of length zero the
 two readings differ, since $B_k$ is then the identity matrix of size $D$; the
 statement using the hypothesis assumes blocks of at least one site. Under the hypothesis, the
 support projector of the polar decomposition $B_k=V_kP_k$ is the coordinate
@@ -413,6 +415,37 @@ This establishes a useful local sufficient criterion. It does not prove
 that the source's qualitative finite-correlation definition implies
 uniform window minorization. Rectangular varying bonds remain outside
 this theorem: zero-padding does not preserve full-space trace preservation.
+
+\section{Actual rectangular transfer rates}
+The rectangular dimensions need not be replaced by a fixed square-bond
+hypothesis. For $F_{a:b}:M_{D_b}\to M_{D_a}$, use the Hilbert--Schmidt
+induced operator norm in the matrix-unit bases and assume a uniform rate
+$\|F_{a:b}-\operatorname{Tr}(\cdot)\sigma_a\|\le Ke^{-r(b-a)}$
+for every nonempty block of every partition, with $K,r>0$ chosen before
+the ring length. The references $\sigma_a$ are positive semidefinite of
+trace one on the actual bonds and may be singular.
+
+The padded reference is
+$X\mapsto\operatorname{Tr}(P_bX)J_a\sigma_aJ_a^\dagger$,
+where $J_a$ is the coordinate isometry and $P_b=J_bJ_b^\dagger$.
+The full-space trace reset would be incorrect on inputs outside the
+outgoing corner. Its Gram reference is
+$(J_a\sigma_aJ_a^\dagger)^{\mathsf T}\otimes P_b$.
+The shared square-root and ordered-product estimates give pair error
+$C_D\sqrt K\,N e^{-rq/2}$ for blocks of lengths between $q$ and $2q$.
+Whole-ring mixing supplies nonvanishing beyond a fixed cutoff.
+The theorem
+\leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing}
+in \doclink{TNLean/MPS/Preparation/RectangularPreparation}
+therefore gives physical depth $C\log(N/\varepsilon)$ for all
+$N\ge N_0$ and $0<\varepsilon\le1$, with $N_0,C$ selected first.
+This is a quantitative sufficient condition, and does not derive the
+required rate from qualitative convergence alone.
+
+Dimension-one bonds are included. Equation (S39) concerns the paper's
+numerical open-boundary study; the formal physical circuit conclusion
+uses ring adjacency. It does not assert open-line locality without a
+proof that the wrap-around edge is unused.
 
 \bibliography{references}
 \end{document}

@@ -107,6 +107,12 @@ def blockSite (hN : ∑ k, ℓ k = N) (k : Fin M) (j : Fin (ℓ k)) : Fin N :=
     (blockSite hN k j).val = blockOffset ℓ k.val + j.val :=
   rfl
 
+/-- A one-block partition enumerates the sites in their original order. -/
+theorem blockSite_singleton (hN : ∑ _ : Fin 1, N = N) (i : Fin N) :
+    blockSite hN 0 i = i := by
+  apply Fin.ext
+  simp [blockSite, blockOffset]
+
 theorem blockSite_injective (hN : ∑ k, ℓ k = N) (k : Fin M) :
     Function.Injective (blockSite hN k) := fun j j' h =>
   Fin.ext (by have := congrArg Fin.val h; simp at this; omega)

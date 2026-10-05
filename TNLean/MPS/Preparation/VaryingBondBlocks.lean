@@ -93,8 +93,9 @@ For a block of length at least one the padded blocked tensor vanishes outside th
 (`VaryingBondChain.chainBlockTensor_zeroPad_eq_zero`), and its corner there is the product of
 the rectangular matrices along the block, so the condition reads as injectivity of the
 rectangular blocked tensor: its matrices, of size `D_{o_k} × D_{o_{k+1}}`, span all matrices of
-that size. This identification of the corner with the rectangular product is not proved here;
-see the section on zero padding in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. For a block
+that size. The exact product identification is
+`VaryingBondChain.zeroPad_rectangularBlockTensor` in
+`TNLean.MPS.Preparation.RectangularBlocks`. For a block
 of length zero the two readings differ: the padded blocked tensor is the identity `1_D`.
 
 arXiv:2307.01696, footnote to the paragraph "Approximation through the fixed-point state": the
