@@ -100,8 +100,6 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
         MPSPreparation.exists_abs_norm_chainState_sq_sub_one_le_uniform_reference,
         MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}
     \leanok
-    \uses{thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,
-        thm:ldp_inhomogeneous_normalized_pairs}
     There are constants depending only on $D$ such that, if each actual
     block transfer matrix differs from its reset reference by at most
     $\delta$, its positive polar factor differs from
@@ -114,6 +112,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     $C'_DM\sqrt\delta$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_sqrt_holder,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner}
     Apply the global square-root H\"older bound to the reshuffled Gram
     matrices. Density matrices form a compact set, so the reset matrices
     and the linear maps defining mixed transfers have uniform bounds.
@@ -129,7 +128,6 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     \label{thm:ldp_varying_reference_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_reference}
     \leanok
-    \uses{thm:ldp_varying_reference_error,thm:ldp_inhomogeneous_uniform_rate_from}
     Fix $d,D$ with $d>0$, and $K,r>0$. For every positive ring length let
     $A_{N,i}$ be actual tensors and $\sigma_{N,i}$ density matrices on
     the common bond space. Suppose every positive nonwrapping interval
@@ -144,6 +142,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     prepared in depth $C\log(N/\varepsilon)$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_varying_reference_error,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product,lem:ldp_log_threshold_error}
     The whole-ring estimate bounds the squared-norm deviation from one
     by $K_nK e^{-rN}$, uniformly over the density references. Choose the
     cutoff so this is at most $1/2$. On blocks of lengths between $q$ and
