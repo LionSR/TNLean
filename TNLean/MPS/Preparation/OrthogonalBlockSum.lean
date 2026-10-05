@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Preparation.BondEmbedding
 import TNLean.MPS.Preparation.DiagonalPolar
 import TNLean.MPS.Preparation.OrthogonalSumPolar
 
@@ -64,71 +65,6 @@ open Matrix
 namespace MPSTensor
 
 variable {d D b : ℕ}
-
-/-! ### Coordinate embeddings -/
-
-/-- The coordinate isometry `E : ℂ^{D'} → ℂ^D`, `|a⟩ ↦ |ι a⟩`. -/
-def coordEmbedding {D' : ℕ} (ι : Fin D' → Fin D) : Matrix (Fin D) (Fin D') ℂ :=
-  of fun x a => if x = ι a then 1 else 0
-
-/-- `E_ιᴴ E_ι'` has the entry `1` where `ι a = ι' a'` and `0` elsewhere. -/
-theorem conjTranspose_coordEmbedding_mul_apply {D' D'' : ℕ} (ι : Fin D' → Fin D)
-    (ι' : Fin D'' → Fin D) (a : Fin D') (a' : Fin D'') :
-    ((coordEmbedding ι)ᴴ * coordEmbedding ι') a a' = if ι a = ι' a' then 1 else 0 := by
-  rw [mul_apply, Finset.sum_eq_single (ι a)]
-  · by_cases h : ι a = ι' a' <;> simp [coordEmbedding, conjTranspose_apply, h]
-  · intro x _ hx
-    simp [coordEmbedding, conjTranspose_apply, hx]
-  · simp
-
-/-- An injective coordinate map gives an isometry, `E_ιᴴ E_ι = 1`. -/
-theorem conjTranspose_coordEmbedding_mul_self {D' : ℕ} {ι : Fin D' → Fin D}
-    (hι : Function.Injective ι) : (coordEmbedding ι)ᴴ * coordEmbedding ι = 1 := by
-  ext a a'
-  rw [conjTranspose_coordEmbedding_mul_apply, one_apply]
-  exact if_congr hι.eq_iff rfl rfl
-
-/-- Coordinate maps with disjoint ranges give isometries with orthogonal ranges. -/
-theorem conjTranspose_coordEmbedding_mul_eq_zero {D' D'' : ℕ} {ι : Fin D' → Fin D}
-    {ι' : Fin D'' → Fin D} (h : ∀ a a', ι a ≠ ι' a') :
-    (coordEmbedding ι)ᴴ * coordEmbedding ι' = 0 := by
-  ext a a'
-  rw [conjTranspose_coordEmbedding_mul_apply, Matrix.zero_apply, ite_eq_right (h a a')]
-
-/-- `E_ιᴴ (E_ι' Y) = 0` for coordinate maps with disjoint ranges. -/
-theorem conjTranspose_coordEmbedding_mul_mul_eq_zero {D' D'' : ℕ} {ι : Fin D' → Fin D}
-    {ι' : Fin D'' → Fin D} (h : ∀ a a', ι a ≠ ι' a') {γ : Type*} (Y : Matrix (Fin D'') γ ℂ) :
-    (coordEmbedding ι)ᴴ * (coordEmbedding ι' * Y) = 0 := by
-  rw [← Matrix.mul_assoc, conjTranspose_coordEmbedding_mul_eq_zero h, Matrix.zero_mul]
-
-/-- `E_ιᴴ (E_ι Y) = Y` for an injective coordinate map. -/
-theorem conjTranspose_coordEmbedding_mul_mul_self {D' : ℕ} {ι : Fin D' → Fin D}
-    (hι : Function.Injective ι) {γ : Type*} (Y : Matrix (Fin D') γ ℂ) :
-    (coordEmbedding ι)ᴴ * (coordEmbedding ι * Y) = Y := by
-  rw [← Matrix.mul_assoc, conjTranspose_coordEmbedding_mul_self hι, Matrix.one_mul]
-
-/-- The isometry `K = E_ι ⊗ E_ι` embedding the bond pairs `ℂ^{D'} ⊗ ℂ^{D'}` of a block into the
-bond pairs of the direct sum; these index the columns of the physical matrix. -/
-def pairEmbedding {D' : ℕ} (ι : Fin D' → Fin D) : Matrix (Fin D × Fin D) (Fin D' × Fin D') ℂ :=
-  coordEmbedding ι ⊗ₖ coordEmbedding ι
-
-theorem pairEmbedding_apply {D' : ℕ} (ι : Fin D' → Fin D) (p : Fin D × Fin D)
-    (r : Fin D' × Fin D') : pairEmbedding ι p r = if p = (ι r.1, ι r.2) then 1 else 0 := by
-  rcases p with ⟨x, y⟩
-  rcases r with ⟨a, c⟩
-  simp only [pairEmbedding, kroneckerMap_apply, coordEmbedding, of_apply, Prod.mk.injEq]
-  by_cases h1 : x = ι a <;> by_cases h2 : y = ι c <;> simp [h1, h2]
-
-theorem conjTranspose_pairEmbedding_mul_self {D' : ℕ} {ι : Fin D' → Fin D}
-    (hι : Function.Injective ι) : (pairEmbedding ι)ᴴ * pairEmbedding ι = 1 := by
-  rw [pairEmbedding, conjTranspose_kronecker, ← mul_kronecker_mul,
-    conjTranspose_coordEmbedding_mul_self hι, one_kronecker_one]
-
-theorem conjTranspose_pairEmbedding_mul_eq_zero {D' D'' : ℕ} {ι : Fin D' → Fin D}
-    {ι' : Fin D'' → Fin D} (h : ∀ a a', ι a ≠ ι' a') :
-    (pairEmbedding ι)ᴴ * pairEmbedding ι' = 0 := by
-  rw [pairEmbedding, pairEmbedding, conjTranspose_kronecker, ← mul_kronecker_mul,
-    conjTranspose_coordEmbedding_mul_eq_zero h, zero_kronecker]
 
 /-! ### The direct sum of blocks of multiplicity one -/
 
