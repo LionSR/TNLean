@@ -958,9 +958,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   of equal length except a larger last one, using the isometries of the direct
   sum with weights one, so that its error bound has no factor
   `min(1, ∑ⱼ |βⱼ|²)^{-1/2}`. The note also records two readings of the
-  construction, the circuit applied after the measurement and the depth `O(q)`,
-  rather than constant, of the GHZ-type state on the chain of `N` sites, which
-  remains open.
+  construction and the original one-round GHZ depth `O(q)`. The sparse-register
+  measurement-round construction resolves the remaining depth restriction:
+  it prepares the same GHZ state in constant depth for arbitrary block lengths
+  at least `3r`, every parity pattern, and a singleton ring. All physical
+  scratch sites are restored, with input-independent fixed-history scalars.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
   (paragraph "Connection to MERA") was first formalized for tensors whose

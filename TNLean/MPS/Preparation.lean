@@ -12,6 +12,7 @@ import TNLean.MPS.Preparation.AllLengthPolynomialAccuracy
 import TNLean.MPS.Preparation.AllLengthPrescribedSlope
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
+import TNLean.MPS.Preparation.BinaryMERA
 import TNLean.MPS.Preparation.BlockApproximationError
 import TNLean.MPS.Preparation.BlockGateUnitary
 import TNLean.MPS.Preparation.BlockIsometryState
@@ -61,6 +62,7 @@ import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.IsometricExtension
 import TNLean.MPS.Preparation.IsometryTree
+import TNLean.MPS.Preparation.IsometryTreePreparation
 import TNLean.MPS.Preparation.LogDepthPreparation
 import TNLean.MPS.Preparation.LogLogDepthEveryLength
 import TNLean.MPS.Preparation.LogLogDepthPreparation
@@ -123,10 +125,14 @@ import TNLean.MPS.Preparation.SequentialNoAncilla
 import TNLean.MPS.Preparation.SequentialResources
 import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.ShortChainPreparation
+import TNLean.MPS.Preparation.SparseRegisterPadding
+import TNLean.MPS.Preparation.SparseWindowGHZ
 import TNLean.MPS.Preparation.Staircase
 import TNLean.MPS.Preparation.StaircasePreparation
 import TNLean.MPS.Preparation.StateApproximationError
 import TNLean.MPS.Preparation.SupportedPolar
+import TNLean.MPS.Preparation.SupportedPolarTree
+import TNLean.MPS.Preparation.SupportedTreePreparation
 import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA

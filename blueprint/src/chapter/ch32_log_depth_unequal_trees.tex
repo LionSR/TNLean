@@ -192,7 +192,7 @@ configurations of the $n$ sites.
         MPSPreparation.leafInput_injective, MPSPreparation.treeNodeGate,
         MPSPreparation.treeLeafGate, MPSPreparation.treeBlockOp,
         MPSPreparation.treeNodeGate_mem_unitary,
-        MPSPreparation.treeLeafGate_mem_unitary,
+        MPSPreparation.treeLeafGate_mem_unitary, MPSPreparation.treeBlockOp_mem_unitary,
         MPSPreparation.nodeLen_two_mul_add, MPSPreparation.two_mul_le_nodeLen,
         MPSPreparation.placeCfg_coarseOutput_eq_nodeCfg,
         MPSPreparation.nodeCfg_comp_leafWindow,
@@ -200,15 +200,15 @@ configurations of the $n$ sites.
         MPSPreparation.treeLevelsOp_apply_nodeCfg,
         MPSPreparation.treeBlockOp_apply}
     \leanok
-    \uses{lem:ldp_polar_merge, def:ldp_tree_layout,
-        lem:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes,
-        thm:ldp_register_tree_isometry}
-    Let $A$ be a tensor whose blocked tensors over $m\ge s$ sites are injective,
-    let a register of $s$ sites carry $\C^{D^2}$ through an injective map of
-    $\{0,\dots,D^2-1\}$ into its configurations, and let a block of $n$ sites
+    \uses{def:ldp_tree_layout, lem:ldp_unitary_implementing_isometry}
+    Let $V_m\colon\C^\chi\to(\C^d)^{\otimes m}$ and
+    $W_{l,r}\colon\C^\chi\to\C^\chi\otimes\C^\chi$ be isometries for
+    $m,l,r\ge s$, satisfying $V_{l+r}=(V_l\otimes V_r)W_{l,r}$.
+    Let a register of $s$ sites carry $\C^\chi$ through an injective map of
+    $\{0,\dots,\chi-1\}$ into its configurations, and let a block of $n$ sites
     carry a tree layout. Let the node $p$ of depth $j$ cover $\ell_{j,p}$ sites.
-    The unitary of a node of depth $j\le h$ extends the isometry $W$ of
-    Lemma~\ref{lem:ldp_polar_merge} joining its two halves, from its input to
+    The unitary of a node of depth $j\le h$ extends $W_{l,r}$ for its
+    two child lengths, from its input to
     its two registers; the input of the root is placed on its two registers by
     a given injective map, and below the root the input is a register on the
     first register of an even node and on the last register of an odd one, the
@@ -223,6 +223,7 @@ configurations of the $n$ sites.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes}
     By induction from the leaves: after the leaves and the depths $h,\dots,j$,
     the amplitude of $\tau$ on the inputs $x_p$ of the nodes of depth $j$ is
     $\prod_p\bra{\tau_{j,p}}V_{\ell_{j,p}}\ket{x_p}$, with $\tau_{j,p}$ the part
@@ -231,8 +232,61 @@ configurations of the $n$ sites.
     input to its two registers with the amplitudes of $W$, and the registers it
     writes are the inputs of the two nodes below it, by the second item of
     Lemma~\ref{lem:ldp_tree_amplitudes}; summing over these inputs and
-    applying~(\ref{eq:ldp_polar_merge}) at every node gives the claim for
+    applying $V_{l+r}=(V_l\otimes V_r)W_{l,r}$ at every node gives the claim for
     depth $j$. The root covers the block.
+\end{proof}
+
+\begin{theorem}[Coherent measurement implementation of bounded-leaf trees]
+    \label{thm:ldp_supported_tree_rounds}
+    \lean{QuantumCircuit.MeasurementRound.OutcomeHistory,
+        QuantumCircuit.MeasurementRound.historyKraus,
+        QuantumCircuit.MeasurementRound.historyKraus_mulVec_mem_outputs,
+        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.exists_history_scalar,
+        QuantumCircuit.zeroOnSubmodule, QuantumCircuit.mem_zeroOnSubmodule,
+        MPSPreparation.exists_rounds_blockLayerOp_treeBlockOp,
+        MPSPreparation.treeBlockOp_apply_supportedCfgPolarIso,
+        MPSPreparation.exists_rounds_blockLayerOp_supportedPolarTree}
+    \leanok
+    \uses{thm:ldp_unequal_tree_isometry, thm:ldp_supported_polar_tree,
+        def:qc_measurement_rounds, def:qc_round_implementation}
+    Fix $d,s\ge1$ and a physical leaf bound $c$.
+    There is $C$, depending only on $d,s,c$, such that any ring partitioned
+    into blocks with tree layouts of $h+1$ coarse depths and leaves of at most
+    $c$ sites has the following property. For the register tree $T_b$ of each
+    block from Theorem~\ref{thm:ldp_unequal_tree_isometry}, measurement rounds
+    implement $T=\bigotimes_bT_b$ in depth at most $C(h+1)$ on the subspace
+    $E$ with every interior scratch site in $\ket0$.
+    For every fixed outcome history $\mathbf m$, there is a scalar
+    $a_{\mathbf m}$, independent of $v\in E$, such that
+    \begin{align}
+        K_{\mathbf m}v & =a_{\mathbf m}Tv.
+        \label{eq:ldp_tree_branch_scalar}
+    \end{align}
+    The scalar may be zero. The equality includes every physical output site.
+    In particular, substituting the supported polar maps of
+    Theorem~\ref{thm:ldp_supported_polar_tree} gives one physical
+    implementation on all supported labels and their coherent superpositions.
+    Only nearest-neighbour unitary layers contribute to the depth;
+    measurements, classical communication and on-site corrections are free.
+    The number of rounds is allowed to grow with $h$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_unequal_tree_rounds, thm:qc_bounded_unitary_two_site_gates}
+    Each node unitary acts on $2s$ sites, so a fixed number $K$ of
+    nearest-neighbour gates suffices. Register teleportation applies every
+    coarse depth in depth $4s+K+2$, independently of register separation.
+    The finitely many leaf widths between $2$ and $c$ have a common exact
+    synthesis bound, and the leaf windows are disjoint.
+    Concatenating the coarse rounds and the leaf circuit gives $C(h+1)$.
+    The gates extend the same isometries on every supported input.
+
+    To verify the independence in (\ref{eq:ldp_tree_branch_scalar}), fix a
+    history and its linear Kraus map $K$. The all-input implementation says
+    $Kv\in\C Tv$ for every $v\in E$. Since $T$ is unitary,
+    $T^\dagger K$ restricts to an endomorphism of $E$ preserving every
+    one-dimensional subspace. Such an endomorphism is $aI$, including when
+    $\dim E$ is zero or one. Thus $Kv=aTv$ with one scalar throughout $E$.
 \end{proof}
 
 \begin{lemma}[Leaves of a block of any length]
