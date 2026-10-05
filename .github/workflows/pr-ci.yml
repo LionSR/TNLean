@@ -329,6 +329,14 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/OperatorClosurePowerSum.lean
 
+      - name: Test canonical fixed-point pairs
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CanonicalFixedPoint.lean
+
       - name: Test structure coefficients, cocycles, and boundary examples
         timeout-minutes: 5
         run: |

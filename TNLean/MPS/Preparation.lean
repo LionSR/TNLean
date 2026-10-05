@@ -21,6 +21,8 @@ import TNLean.MPS.Preparation.BlockSumUnitary
 import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
+import TNLean.MPS.Preparation.CanonicalFixedPoint
+import TNLean.MPS.Preparation.CanonicalOneCopyState
 import TNLean.MPS.Preparation.CircuitEquivalence
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
@@ -105,6 +107,7 @@ import TNLean.MPS.Preparation.RepeatedOverlappingBlockWeights
 import TNLean.MPS.Preparation.SecondOrderBlockError
 import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap
+import TNLean.MPS.Preparation.SectorCopyCoordinates
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
