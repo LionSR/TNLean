@@ -13,6 +13,7 @@ import TNLean.MPS.Examples.AKLTCorrelation
 import TNLean.MPS.Examples.AKLTOpenBoundary
 import TNLean.MPS.Examples.AKLTOpenPolynomialHamiltonian
 import TNLean.MPS.Examples.AKLTParentHamiltonian
+import TNLean.MPS.Examples.AKLTPhysicalStringOrder
 import TNLean.MPS.Examples.AKLTPolynomialHamiltonian
 import TNLean.MPS.Examples.AKLTReview
 import TNLean.MPS.Examples.AKLTRotation
@@ -24,6 +25,7 @@ import TNLean.MPS.Examples.CZX
 import TNLean.MPS.Examples.CZY
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.ClusterParentHamiltonian
+import TNLean.MPS.Examples.ClusterPhysicalStringOrder
 import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState
@@ -49,7 +51,13 @@ import TNLean.MPS.Examples.MajumdarGhoshLowerBound
 import TNLean.MPS.Examples.MajumdarGhoshTotalSpin
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.PVBS
+import TNLean.MPS.Examples.PVBSCriticalGap
+import TNLean.MPS.Examples.PVBSCriticalMagnon
+import TNLean.MPS.Examples.PVBSEnergyGap
+import TNLean.MPS.Examples.PVBSGapAttainment
 import TNLean.MPS.Examples.PVBSGroundSpace
+import TNLean.MPS.Examples.PVBSHamiltonian
+import TNLean.MPS.Examples.PVBSLocalInteraction
 import TNLean.MPS.Examples.PVBSLocalization
 import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 import TNLean.MPS.Examples.ProductState

@@ -793,6 +793,15 @@ For the group matrix product operators of arXiv:2203.12563:
   formalized, so the anomaly class is the type-II class; the comparison with
   the original odd-ring or two-site-blocked family remains open.
 
+For the PVBS spectral formulas of Bachmann--Nachtergaele, arXiv:1112.4097:
+
+- `bn12_pvbs_periodic_gap.tex` records the exact finite periodic one-species,
+  zero-phase gap and its local-projector normalization, including the
+  two-oriented-window convention at length two. It distinguishes this
+  result from the broader multi-species thermodynamic conjecture and
+  proves critical finite-periodic-volume gaplessness with positive-energy
+  Fourier magnons, while no fixed finite-volume gap is asserted to vanish.
+
 For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
 
 - `cpgsv21_pvbs_threshold.tex` corrects the right-boundary threshold under
@@ -813,10 +822,13 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
-- `mswc24_mixed_polar_injectivity_scope.tex` records the injective-only
-  mixed sequential polar factorization, distinguishes its full-input central
-  isometry from the source's non-injective pseudoinverse case, and gives the
-  partial-isometry or support-restriction extension needed to remove it.
+- `mswc24_mixed_polar_injectivity_scope.tex` retains the false-source record
+  for footnote 3's full-input pseudoinverse claim, with a nonzero two-site GHZ
+  tensor witness. The local correction is proved: parametrize the actual polar
+  support by an isometry, apply the inward sweeps to that input, and reconstruct
+  the full polar partial isometry with the support embedding's adjoint.
+  A formal normal, unital and trace-preserving witness also satisfies the
+  physical-dimension capacity condition and refutes the full-input identity.
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
@@ -923,8 +935,16 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   least `3D` sites, against the source's requirement `d^q ≥ D²`, which for
   such blocks implies the hypothesis `D² ≤ d^{3D}` of the exact error
   identity, with the finite-correlation assumption
-  stated for one ring with error `δ`; open: the block-length bound and the
-  sequence-level statement.
+  stated for one ring with error `δ`. For sequences with the explicit lower
+  bound `c log N ≤ ℓ_k`, `c > 0`, finite exceptional rings are now prepared
+  exactly and their depths absorbed into one constant: `T_N ≤ C L_N` for
+  every positive ring length. If `L_N = O(log N)` and `δ_N → 0`, the prepared
+  states have logarithmic depth and vanishing error. Open: removing the
+  additional positive lower-growth hypothesis and deriving the
+  uniform accuracy rate needed for `O(log(N/ε))`. The conditional theorem
+  assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
+  with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
+  when the selected block length exceeds the ring length.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes
@@ -974,13 +994,23 @@ measurements and classical communication (arXiv:2103.13367, Theorem
   large chain lengths; open: the converse direction needs channels acting on
   arbitrary input states.
 
+- `psc21_physical_port_simulation_scope.tex` records the derived
+  `2 * ceil(log_d B)` overhead per native layer, hence total intersite depth
+  at most `2 * ceil(log_d B) * T` for a depth-`T` bounded native channel protocol,
+  including exact reference preservation, original physical-port
+  input/output and product-zero designated memory reset. It separates the
+  remaining local dilation and source QCcc protocol-block witness conditions.
+
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
 - `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
   pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
-  holds, and the rate correction for the decay bound.
+  holds, and the rate correction for the decay bound. The corrected
+  all-separation binomial and polynomial-plus-transient expansions are now
+  proved for normal tensors in an arbitrary bond basis. The broader singular
+  fixed-matrix source class remains open.
 
 For the finite-round extension of arXiv:2103.13367:
 
@@ -989,6 +1019,11 @@ For the finite-round extension of arXiv:2103.13367:
   number of composed `QCcc` blocks required by the asymptotic source relation.
   One source block may already contain sequential measurements at many sites;
   the adaptive tree does not record the required source-block decomposition.
+
+- `pgvwc07_half_chain_spectrum_conventions.tex` records the boundary-index
+  convention in the half-chain calculation, normalization by the actual
+  finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
+  transfer-error estimate used for ordered physical eigenvalue convergence.
 
 For the periodic decomposition in PGVWC07 Theorem 5:
 

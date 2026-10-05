@@ -1,0 +1,55 @@
+\begin{theorem}[The actual contragredient regular charge]
+    \label{thm:peps_regular_contragredient_charge}
+    \lean{TNLean.PEPS.regularChargeLabels_inv_mem}
+    \leanok
+    \uses{thm:peps_regular_charge_labels, thm:peps_irreducible_dual}
+    For every actual regular charge character
+    $\chi$, the function $\chi^\vee(g)=\chi(g^{-1})$ is also an actual
+    regular charge character. For unitary characters this is $\overline\chi$.
+    This is the contragredient charge in
+    \cite[charge-pair creation]{Schuch2010PEPS}, lines 2514--2518.
+\end{theorem}
+\begin{proof}\leanok
+    The contragredient representation is irreducible, and its character
+    is $g\mapsto\chi(g^{-1})$. Every irreducible character occurs in
+    the actual regular representation.
+\end{proof}
+
+\begin{definition}[The contragredient label of an actual regular charge]
+    \label{def:peps_regular_dual_charge_label}
+    \lean{TNLean.PEPS.regularDualChargeLabel}
+    \leanok
+    \uses{thm:peps_regular_contragredient_charge}
+    Label $\chi^\vee$ by its function $g\mapsto\chi(g^{-1})$ in the actual
+    finite family of regular irreducible characters.
+\end{definition}
+
+\begin{theorem}[The two original-spin charge slices of the correlated pair]
+    \label{thm:peps_regular_physical_charge_pair_slices}
+    \lean{TNLean.PEPS.regularChargePairCoefficient_top,
+        TNLean.PEPS.regularChargePairCoefficient_middle,
+        TNLean.PEPS.exists_regularPhysicalChargePairSliceMeasurement}
+    \leanok
+    \uses{def:peps_regular_dual_charge_label,
+        thm:peps_regular_contragredient_charge}
+    In the correlated coefficient $\chi(pm^{-1}t)$, fixing $m$ gives the
+    translated $\chi$-character on $t$. Fixing $t$ gives
+    \[
+        \chi(pm^{-1}t)=\chi^\vee((tp)^{-1}m).
+    \]
+    For two original regular $G$-isometric site maps sharing one bond,
+    one complete positive orthogonal projective measurement distinguishes
+    both types of character-weighted contraction. It is chosen before
+    all charges, $p$, fixed partner labels and remaining half-edge labels.
+    The first slice has outcome $\chi$, and the second has outcome
+    $\chi^\vee$; every other outcome annihilates the corresponding column.
+
+    This is an auxiliary shared-bond slice statement. The regional assertion is derived separately by literal contraction
+    slicing along the two internal bonds; no regional factorization is
+    assumed in this slice statement.
+\end{theorem}
+\begin{proof}\leanok
+    Character cyclicity identifies the second slice with the translated
+    dual character. Apply the already derived complete original-spin
+    charge measurement to each literal shared-bond column.
+\end{proof}

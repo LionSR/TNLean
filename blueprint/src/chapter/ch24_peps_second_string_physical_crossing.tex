@@ -1,0 +1,27 @@
+\begin{theorem}[The upward step following the rightward endpoint move]
+    \label{thm:peps_second_string_physical_crossing}
+    \lean{TNLean.PEPS.torusSecondStringCrossingBase,TNLean.PEPS.torusSecondStringCrossingGauge,TNLean.PEPS.torusSecondStringCrossingOutput,TNLean.PEPS.torusSecondStringCrossing_initial_extension,TNLean.PEPS.torusSecondStringCrossingOutput_eq_of_ne,TNLean.PEPS.torusSecondStringCrossingOutput_middle_transport,TNLean.PEPS.IsGIsometric.exists_unitary_torusSecondStringCrossing}
+    \leanok
+    On a native torus with $w\ge8$ and $H\ge7$, take the actual assignment
+    after the first rightward endpoint move. The vertical tile based at
+    $v+(2,1)$ has a common reconstruction gauge equal to $1,h$ on its lower
+    row and $gh$ on the middle and upper rows. Its canonical lower insertion
+    is $h^{-1}$, although the corresponding actual lower bond has identity
+    transport. Extending that insertion to the middle chord changes only the
+    rightward transport based at $v+(2,2)$, which becomes $gh^{-1}g^{-1}$.
+    The actual partner string and every crossing and exterior operator remain
+    unchanged. For an original regular $G$-isometric site tensor, one unitary
+    on the six original spins, chosen before $g,h$ and all boundary labels,
+    gives the actual all-column and closed-state equalities. This is the next
+    elementary step in \cite[Section~6.6]{Schuch2010PEPS}, not a complete braid
+    or a reunion operation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_two_plaquette_transport_table,thm:peps_torus_gauged_vertical_flux_move,thm:peps_internal_gauge_transport}
+    The seven directed input transports give the stated reconstruction, with
+    the same gauge on both sides of the single-to-double insertion. The
+    original-spin unitary theorem therefore applies uniformly to the flux
+    labels and boundary columns. Its global extension retains the literal
+    exterior assignment.
+\end{proof}

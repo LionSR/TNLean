@@ -76,6 +76,7 @@ import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
+import TNLean.MPS.ParentHamiltonian.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.ExtendRight
@@ -100,7 +101,10 @@ import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.ParentHamiltonian.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
+import TNLean.MPS.ParentHamiltonian.HalfChainCanonicalSpectrum
 import TNLean.MPS.ParentHamiltonian.HalfChainSchmidt
+import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
+import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.IsometricDeformation
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
@@ -143,6 +147,9 @@ import TNLean.MPS.ParentHamiltonian.SpectatorOverlap
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
+import TNLean.MPS.ParentHamiltonian.UncleParentLimit
+import TNLean.MPS.ParentHamiltonian.UncleTensor
+import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 import TNLean.MPS.ParentHamiltonian.WrappingWindow

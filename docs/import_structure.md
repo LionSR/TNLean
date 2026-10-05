@@ -48,6 +48,13 @@ therefore enter the generated import surface automatically.
 
 ## Preparation algebra and convergence
 
+`MPS.Core.PhysicalMatrix` owns the tensor-to-physical-matrix reshape, its inverse,
+physical-rotation compatibility, and Gram/transfer entry identities. These are
+MPS-typed finite-dimensional algebra; they do not depend on polar decomposition,
+canonical gauges, or preparation circuits. `Preparation.BlockedPolar` adds polar
+factors, and `Preparation.ApproximatingState` adds spectral convergence. See the
+[physical-matrix ownership audit](audits/2026-10-04_physical_matrix_core.md).
+
 `MPS.Preparation.FixedPointPairState` contains the concrete fixed-point tensor,
 cyclic pair states and their algebraic identities. `BlockIsometryState` owns the
 existing finite-configuration contraction identities used by its block-state

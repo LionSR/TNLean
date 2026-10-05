@@ -73,17 +73,6 @@ theorem Region_map_insert (a : ZMod width) (b : ZMod height)
       insert (translate a b v) (Region.map (translate a b) R) :=
   Finset.map_insert _ _ _
 
-/-- Blocked-region injectivity of a translation-invariant tensor transports to every translated
-region. -/
-theorem regionBlockedTensorInjective_translate {T : Tensor (torusGraph width height) d}
-    (hT : IsTorusTranslationInvariant T) (a : ZMod width) (b : ZMod height)
-    (R : Finset (TorusVertex width height))
-    (h : RegionBlockedTensorInjective (G := torusGraph width height) T R) :
-    RegionBlockedTensorInjective (G := torusGraph width height) T
-      (Region.map (translate a b) R) := by
-  have htr := (regionBlockedTensorInjective_transport T (translate a b) R).mpr h
-  rwa [hT a b] at htr
-
 /-- **The per-vertex gauge relation from the corner-region comparison.**
 
 For a translation-invariant pair with a translation-covariant gauge family, the two comparison

@@ -1,0 +1,123 @@
+% Local fix (Jordan factors and zero eigenvalues).
+% Source: Papers/2011.12127/TN-Review-main.tex:433--441.
+The pure-exponential formula in \cite[Section~II.B.3]{Cirac2021Matrix}
+omits both polynomial
+Jordan factors and finite nilpotent transients. The following all-separation
+expansion replaces that formula; see
+\cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
+
+\begin{theorem}[Exact binomial expansion of physical correlations]
+    \label{thm:physical_correlator_binomial}
+    \lean{MPSTensor.physicalConnectedCorrelator_exists_binomial_expansion}
+    \leanok
+    \uses{def:physical_connected_correlator}
+    Let $T=\E_A-P$ be the complementary transfer map used in the centered
+    physical correlator. There is a finite set $S$ of eigenvalues of $T$
+    and coefficients $c_{\mu j}$ such that, at every separation $n\ge0$,
+    \begin{align}
+        C_{\mathrm{phys}}(X,Y;n)
+         & =\sum_{\mu\in S}\sum_{j=0}^{k_\mu-1}
+        \binom nj\mu^{\max(n-j,0)}c_{\mu j},
+        \label{eq:physical_correlator_binomial}
+    \end{align}
+    where $k_\mu$ is the least exponent at which the generalized
+    $\mu$-eigenspace stabilizes. Terms with $j>n$ have zero binomial
+    coefficient; the displayed exponent uses truncated natural subtraction.
+    This formula includes $n=0$ and $\mu=0$, with $0^0=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The generalized-eigenspace decomposition writes the centered inner
+    insertion as a finite sum of components $v_\mu$. On each component,
+    $(T-\mu I)^{k_\mu}v_\mu=0$. Apply the commuting binomial formula to
+    $T=(T-\mu I)+\mu I$ and then the outer physical insertion and trace.
+    Powers beyond $k_\mu$ vanish; missing terms when $n<k_\mu$ have zero
+    binomial coefficient. The coefficients are the resulting fixed trace
+    pairings with $(T-\mu I)^jv_\mu$.
+\end{proof}
+
+\begin{theorem}[Nonzero exponentials and the nilpotent transient]
+    \label{thm:physical_correlator_jordan_transient}
+    \lean{MPSTensor.physicalConnectedCorrelator_exists_jordan_expansion}
+    \leanok
+    \uses{def:physical_connected_correlator}
+    The same correlator has the all-separation form
+    \begin{align}
+        C_{\mathrm{phys}}(X,Y;n)
+         & =t(n)+\sum_{\mu\in S\setminus\{0\}}p_\mu(n)\mu^n,
+        \label{eq:physical_correlator_jordan_transient}
+    \end{align}
+    with $\deg p_\mu<k_\mu$ and $t(n)=0$ for $n\ge k_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_correlator_binomial}
+    For $\mu\ne0$, use the falling-factorial polynomial
+    $p_\mu(x)=\sum_{j<k_\mu}c_{\mu j}\mu^{-j}
+        x(x-1)\cdots(x-j+1)/j!$. Its degree is below $k_\mu$ and its value
+    times $\mu^n$ gives the nonzero-eigenvalue binomial sum, even when $j>n$.
+    Keep the zero-eigenvalue sum separately. For $n\ge k_0$ every surviving
+    index satisfies $j<n$, so its factor $0^{n-j}$ vanishes. Replacing this
+    transient by a polynomial times $0^n$ would be incorrect.
+\end{proof}
+
+\begin{lemma}[A common physical normal gauge]
+    \label{lem:physical_correlation_normal_gauge}
+    \lean{MPSTensor.IsNormalTensor.exists_physicalCorrelation_normalGauge}
+    \leanok
+    \uses{def:nt_cpsv, def:gauge_equiv, def:left_canonical_tensor,
+        def:physical_left_right_correlator}
+    A normal tensor $A$ with leading transfer eigenvalue one admits a
+    trace-preserving gauge representative $B$
+    with positive trace-one fixed state $\rho_B$, and positive normalized
+    left/right fixed matrices $\rho^L,\rho^R$ for $A$. At every separation
+    and for every pair of finite-support physical operators, the left-right
+    connected contraction for $A$ equals that for $B,\Id,\rho_B$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_normal_gauge_reduction,thm:physical_correlator_gauge}
+    If $B^i=UA^iU^{-1}$, set $\rho^L=U^\dagger U$ and
+    $\rho^R=U^{-1}\rho_B U^{-\dagger}$. The existing gauge covariance,
+    trace cyclicity and positive congruence identities prove all assertions.
+    This common construction supplies both the decay theorem and the
+    spectral expansion.
+\end{proof}
+
+\begin{theorem}[Jordan-aware physical spectral expansion for normal tensors]
+    \label{thm:correlator_sum_exponentials}
+    \lean{MPSTensor.physicalConnectedCorrelator_exists_normal_jordan_expansion}
+    \lean{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion}
+    \leanok
+    \uses{def:nt_cpsv, def:physical_connected_correlator,
+        def:physical_left_right_correlator}
+    Let $A$ be normal with leading transfer eigenvalue one. There are positive
+    normalized left/right fixed matrices for which every finite-support
+    physical connected correlator has the form
+    \begin{align}
+        C_{\rho^L,\rho^R}^{A}(X,Y;n)
+         & =t(n)+\sum_{\mu\in S}p_\mu(n)\mu^n,
+        \label{eq:correlations_spectral_expansion}
+    \end{align}
+    at every $n\ge0$. Here $0\notin S$, each $\mu\in S$ is an actual transfer
+    eigenvalue of $A$ with $|\mu|<1$, and $t(n)=0$ for $n\ge D^2$.
+    A single canonical representative $B$ supplies all Jordan indices:
+    $\deg p_\mu$ is strictly below the stabilization index of the generalized
+    $\mu$-eigenspace of its complementary transfer map. No diagonalizability,
+    assumed expansion, or trace-preserving condition on the original $A$
+    is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_correlator_jordan_transient,
+        lem:physical_correlation_normal_gauge}
+    In trace-preserving gauge, every nonzero complementary eigenvalue is a
+    transfer eigenvalue: its eigenvector has zero trace. Normality and the
+    existing irreducible-channel peripheral theorem place all complementary
+    eigenvalues strictly inside the unit disk. Generalized-eigenspace
+    stabilization occurs by the dimension $D^2$, bounding the transient.
+    Apply the preceding expansion in the common gauge and transport the
+    physical contraction back to $A$. Gauge similarity preserves the transfer
+    eigenvalues, so the frequencies in the resulting physical formula are
+    eigenvalues of the original tensor.
+\end{proof}

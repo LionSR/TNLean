@@ -1,0 +1,25 @@
+\begin{theorem}[Directed transport of reconstructed internal bonds]
+    \label{thm:peps_internal_gauge_transport}
+    \lean{TNLean.PEPS.regularDirectedTransport_eq_of_internal_reconstruction,TNLean.PEPS.regularDirectedTransport_injective_on_edge,TNLean.PEPS.regularDirectedTransport_eq_of_endpoints,TNLean.PEPS.regularRegionBondExtension_congr_of_internal,TNLean.PEPS.regularRegionBondExtension_eq_of_internal}
+    \leanok
+    Let $\Gamma$ be a simple graph with ordered vertices, $R$ a finite vertex
+    set, and $k_v\in G$ for $v\in R$. If its internal ordered bond assignments
+    satisfy $w_e=k_{\mathrm{head}(e)}u_e k_{\mathrm{tail}(e)}^{-1}$, then
+    the directed transport along any internal step $x\to y$ satisfies
+    \begin{align}
+        D_w(x\to y)=k_yD_u(x\to y)k_x^{-1}.
+    \end{align}
+    Directed transport determines its ordered bond coefficient and depends
+    only on the endpoints of the step. Equal internal assignments give equal
+    extensions with any common exterior assignment; in particular, extending
+    an internal restriction of an ambient assignment returns that assignment.
+    These are auxiliary identities for the accessible-coordinate construction
+    in \cite[Section~6.3]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regular_walk_holonomy}
+    A reversed traversal uses the inverse operator, which gives the stated
+    formula in both possible endpoint orders. The remaining assertions follow
+    by separating internal and exterior bonds.
+\end{proof}

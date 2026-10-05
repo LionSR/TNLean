@@ -1,0 +1,68 @@
+\begin{definition}[Star algebra of a unitary representation]
+    \label{def:peps_unitary_representation_algebra}
+    \lean{Representation.euclideanMatrixRepresentation,
+        Representation.generatedMatrixStarAlgebra,
+        Representation.matrixInvariantSubrepresentation}
+    \leanok
+    Let $U:G\to\mathrm U(D)$ be a unitary representation. Regard its
+    matrices as operators on the standard Hilbert space $\mathbb C^D$,
+    and let $\mathcal A_U$ be their generated unital star algebra.
+    Every $\mathcal A_U$-invariant subspace carries the restriction of $U$.
+    These are the algebra and invariant sectors used in
+    \cite[Section~4.1]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Group and algebra invariant sectors]
+    \label{thm:peps_unitary_representation_algebra}
+    \lean{Subrepresentation.isAtom_of_isIrreducible_toRepresentation,
+        Representation.isInvariantSubspace_generatedMatrixStarAlgebra_iff,
+        Representation.isIrreducibleSubspace_generatedMatrixStarAlgebra_iff,
+        Representation.isIntertwiner_generatedMatrixStarAlgebra_iff,
+        Representation.sameIsotype_generatedMatrixStarAlgebra_iff}
+    \leanok
+    \uses{def:peps_unitary_representation_algebra}
+    A subspace is invariant under $\mathcal A_U$ if and only if it is
+    invariant under every $U(g)$. Its restricted group representation
+    is irreducible if and only if it is an irreducible invariant subspace
+    of $\mathcal A_U$. An operator intertwines the algebra on an invariant
+    subspace if and only if it intertwines every group operator there.
+    Two irreducible invariant subspaces have the same algebra isotype
+    if and only if their restricted group representations are equivalent.
+\end{theorem}
+\begin{proof}\leanok
+    Since $U(g)^*=U(g^{-1})$, closure under adjoints introduces no new
+    generators. Invariance and intertwining extend from the generators
+    by sums, products, and scalar multiples. Thus the two notions have
+    identical invariant subspaces. Irreducibility is minimality among
+    nonzero invariant subspaces, or equivalently the atom condition for
+    the lattice of subrepresentations. A nonzero intertwiner between
+    irreducible subspaces is an isomorphism. Conversely, extend an
+    isomorphism of the restricted representations to the ambient space
+    by first projecting orthogonally onto its source subspace.
+\end{proof}
+
+\begin{theorem}[Orthonormal irreducible matrix blocks]
+    \label{thm:peps_unitary_irreducible_blocks}
+    \lean{Representation.exists_unitary_irreducible_matrix_blocks}
+    \leanok
+    \uses{thm:peps_unitary_representation_algebra}
+    Suppose $G$ is finite. There are positive integers $d_i,m_i$ and an
+    orthonormal basis $(e_{i,a,j})$, with $1\leq a\leq m_i$ and
+    $1\leq j\leq d_i$, such that every row spans an irreducible
+    subrepresentation. Rows belonging to distinct indices $i$ have
+    distinct characters. For each $g\in G$, there are matrices $D_i(g)$
+    satisfying
+    \begin{align}
+        U(g)e_{i,a,j}=\sum_{j'}D_i(g)_{j'j}e_{i,a,j'}.
+        \label{eq:peps_unitary_irreducible_rows}
+    \end{align}
+    This is the unitary sector decomposition used in
+    \cite[Sections~4.1 and~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the orthonormal adapted-basis decomposition of a finite-dimensional
+    star algebra to $\mathcal A_U$. The preceding correspondence identifies
+    its irreducible rows and distinct isotypes with irreducible group
+    representations and distinct characters. Its common matrix action on
+    the multiplicity rows gives (\ref{eq:peps_unitary_irreducible_rows}).
+\end{proof}

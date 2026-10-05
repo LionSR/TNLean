@@ -1,0 +1,22 @@
+\begin{theorem}[Directed tree transport and vacancy]
+    \label{thm:peps_tree_gauge_transport}
+    \lean{TNLean.PEPS.regularRegionTreeGauge_directedTransport,
+        TNLean.PEPS.regularRegionGaugeResidual_eq_one_iff_directedTransport,
+        TNLean.PEPS.regularRegionTreeGauge_fourStep_holonomy_eq_one_iff}
+    \leanok
+    Let $T$ be a spanning tree of a finite region, and let $k$ be the
+    root-normalized gauge determined by its actual ordered bond operators $u$.
+    For a directed tree edge $x\to y$, its transport is $k_y k_x^{-1}$.
+    For any internal edge, the residual is trivial if and only if its directed
+    transport equals this endpoint gradient. Consequently, a four-step loop
+    whose first three edges belong to $T$ is vacant if and only if the fourth
+    edge has trivial residual.
+    These are auxiliary coordinate identities for SCP10, lines 1765--1920
+    and the proof of Theorem~6.16, lines 2271--2305.
+\end{theorem}
+\begin{proof}\leanok
+    The unique tree path between adjacent vertices is the single edge, so its
+    transport is the endpoint gradient. Cancel the intermediate vertex gauges
+    on the three-edge path. The closing edge then has identity loop transport
+    precisely when its residual is the identity.
+\end{proof}

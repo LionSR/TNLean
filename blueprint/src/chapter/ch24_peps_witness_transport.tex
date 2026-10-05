@@ -1,0 +1,101 @@
+\subsection{Transport and the vertical reference edge}
+\label{subsec:peps_witness_transport}
+
+\begin{theorem}[Composition of graph transport]%
+    \label{thm:peps_graph_transport_composition}
+    \lean{TNLean.PEPS.Edge.map_trans}
+    \lean{TNLean.PEPS.Tensor.transport_trans}
+    \leanok
+    Let $\phi:G\simeq G'$ and $\psi:G'\simeq G''$ be graph
+    isomorphisms between graphs with linearly ordered vertex sets.
+    For every edge $e$ of $G$, one has
+    $\psi(\phi(e))=(\psi\circ\phi)(e)$.
+    For every tensor $A$ on $G$, one also has
+    $(A^\phi)^\psi=A^{\psi\circ\phi}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_tensor_transport}
+    Both edge maps send the endpoint pair of $e$ to the same pair.
+    At a vertex $z$, both transported tensors read the component of $A$
+    at $\phi^{-1}(\psi^{-1}(z))$. The incident-edge bijections compose,
+    and the identifications of equal bond spaces compose with them.
+    Thus the local components agree at every physical and virtual index.
+\end{proof}
+
+\begin{theorem}[Pulling a coefficient identity back along a graph isomorphism]%
+    \label{thm:peps_edge_witness_pullback}
+    \lean{TNLean.PEPS.exists_edgeCoeffIdentityWitness_of_transport}
+    \leanok
+    Let $\phi$ be a graph isomorphism between two tori whose side
+    lengths exceed one, and let $A'=A^\phi$ and $B'=B^\phi$.
+    Let $e$ be an edge of the original torus and put $f=\phi(e)$.
+    Write $e_-$ and $f_-$ for their first endpoints in the chosen edge ordering, and assume
+    $\phi(e_-)=f_-$.
+    Suppose $f\in\partial R'$, $f_-\in R'$, all bond dimensions
+    of $B'$ are positive, and $B'$ is injective on $R'$ and $(R')^c$.
+    Suppose also $D_{A'}(f)=D_{B'}(f)$ and there is an invertible
+    matrix $Z$ such that
+    \begin{align}
+        C_{A'}(R',f,M;\sigma',\tau')
+         & =C_{B'}(R',f,Z M Z^{-1};\sigma',\tau')
+        \label{eq:peps_witness_image_identity}
+    \end{align}
+    for every inserted matrix $M$ and every physical configuration
+    on $R'$ and its complement, after identifying the equal bond spaces.
+    Then $R=\phi^{-1}(R')$ has $e\in\partial R$ and $e_-\in R$;
+    all bond dimensions of $B$ are positive, $B$ is injective on $R$
+    and $R^c$, and $D_A(e)=D_B(e)$.
+    There is an invertible matrix $Y$ such that
+    \begin{align}
+        C_A(R,e,N;\sigma,\tau)
+         & =C_B(R,e,Y N Y^{-1};\sigma,\tau)
+        \label{eq:peps_witness_original_identity}
+    \end{align}
+    for every inserted matrix $N$ and every physical configuration
+    on $R$ and its complement, with the equal bond spaces identified.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regionInsertedCoeff_transport,
+        thm:peps_region_injective_identification}
+    Transport the configurations in~(\ref{eq:peps_witness_original_identity})
+    to $R'$ and apply~(\ref{eq:peps_witness_image_identity}).
+    Carrying $Z$ back to the bond of $e$ gives $Y$; this identification
+    preserves multiplication and inversion, so it carries conjugation
+    by $Z$ to conjugation by $Y$.
+    Injectivity of both regions and positivity of every bond dimension
+    are preserved by the inverse graph isomorphism.
+    Finally, $\phi(e_-)=f_-\in R'$ implies $e_-\in\phi^{-1}(R')$.
+\end{proof}
+
+\begin{theorem}[A vertical reference-edge coefficient identity]%
+    \label{thm:peps_vertical_arc_window_witness}
+    \lean{TNLean.PEPS.exists_verticalEdgeCoeffIdentityWitness_of_normalArcWindows}
+    \leanok
+    Let $A,B$ be translation-invariant tensors on the $w\times h$
+    torus, with positive bond dimensions and the same contracted state.
+    Suppose every cyclic $L\times K$ window is injective for each tensor,
+    where $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$.
+    Then there exist a vertical edge $e$, a region $R$, and an invertible
+    matrix $Y$ such that $D_A(e)=D_B(e)$, $e\in\partial R$, $e_-\in R$,
+    and $B$ is injective on $R$ and $R^c$.
+    They satisfy~(\ref{eq:peps_witness_original_identity}) for every
+    inserted matrix and every physical configuration on the two regions.
+    This is the vertical reference construction in the two-dimensional
+    argument of~\cite{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_horizontal_arc_window_witness,
+        thm:peps_torus_coordinate_swap_windows, thm:peps_sameState_transport,
+        thm:peps_edge_witness_pullback}
+    Exchange the coordinates and apply the horizontal construction
+    with window lengths $K,L$, at placement $(1,0)$.
+    The size bounds give $1+2K\leq h$ and $2L-1\leq w$,
+    so this placement satisfies the required inequalities.
+    The distinguished right edge is based at $(K,L-1)$ in the
+    exchanged torus. Its inverse image is the upward edge based at
+    $(L-1,K)$ in the original torus.
+    Since $K+1<h$, neither edge crosses a coordinate seam, and
+    coordinate exchange preserves the first endpoint in the chosen
+    edge ordering. Pull the horizontal identity and its
+    injective regions back by Theorem~\ref{thm:peps_edge_witness_pullback}.
+\end{proof}

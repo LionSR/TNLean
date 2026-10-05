@@ -25,12 +25,10 @@ ordinary multiplication after passing to `O₃ᵀ`.  Choosing the globally uniqu
 configuration is selected in this argument, and no bond-dimension identification or gauge is
 constructed.
 
-**Scope restriction (displayed horizontal staircase, `L, K ≥ 2`):** The result is stated for the
-non-wrapping horizontal staircase coordinates supported by the present boundary-geometry API.
-It assumes `L, K ≥ 2`, so the displayed windows straddle the highlighted edge; the paper treats
-`L = K = 2` in its sketch and leaves the cases `L = 1` or `K = 1` unaddressed.  This clarification
-and the rotation/translation assembly needed for the full two-dimensional corollary are recorded
-in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
+The extraction is written in displayed non-wrapping horizontal staircase coordinates.
+It requires only positive window lengths. Coordinate exchange and translation supply
+both edge orientations in the full torus theorem. The derivation is recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 ## References
 
@@ -48,7 +46,8 @@ section RegionPhysicalOperation
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-private noncomputable def regionBoundaryConfigSplitAt
+/-- Separate one boundary bond coordinate from the remaining boundary coordinates. -/
+noncomputable def regionBoundaryConfigSplitAt
     (A : Tensor G d) (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
     RegionBoundaryConfig (G := G) A R ≃
@@ -72,7 +71,10 @@ private theorem sameAwayFromBond_iff_splitAt_snd_eq
   · intro h g hg
     exact congrFun h ⟨g, hg⟩
 
-private theorem bondInsertedRegionInsert_splitAt
+/-- Inserting a bond matrix acts on its separated boundary coordinate by matrix multiplication.
+
+Source: arXiv:1804.04964, the virtual insertion equations at lines 563--582. -/
+theorem bondInsertedRegionInsert_splitAt
     (A : Tensor G d) (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -181,7 +183,8 @@ variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (1 < width)] [Fact (1 < height)]
 variable {d L K : ℕ}
 
-private noncomputable def regionPhysicalOperationCongr
+/-- Transport a physical operation along an equality of vertex regions. -/
+noncomputable def regionPhysicalOperationCongr
     {R S : Finset (TorusVertex width height)} (h : R = S)
     (O : Module.End ℂ
       (RegionPhysicalConfig (V := TorusVertex width height) (d := d) R → ℂ)) :
@@ -200,7 +203,8 @@ private theorem regionPhysicalOperationCongr_mul
   subst S
   rfl
 
-private noncomputable def regionInsertCongr
+/-- Transport a boundary-indexed physical tensor along an equality of vertex regions. -/
+noncomputable def regionInsertCongr
     (B : Tensor (torusGraph width height) d)
     {R S : Finset (TorusVertex width height)} (h : R = S)
     (C : RegionInsert (G := torusGraph width height) (d := d) B R) :
@@ -208,7 +212,8 @@ private noncomputable def regionInsertCongr
   subst S
   exact C
 
-private theorem regionInsertOfPhysicalOp_congr
+/-- Physical realization commutes with transport along an equality of vertex regions. -/
+theorem regionInsertOfPhysicalOp_congr
     (B : Tensor (torusGraph width height) d)
     {R S : Finset (TorusVertex width height)} (h : R = S)
     (O : Module.End ℂ
@@ -372,7 +377,7 @@ theorem existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameStat
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X : Matrix
@@ -512,7 +517,7 @@ noncomputable def staircaseCrossTensorVirtualOperation
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X : Matrix
@@ -547,7 +552,7 @@ theorem staircaseCrossTensorVirtualOperation_spec
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X : Matrix
@@ -599,7 +604,8 @@ multiplication in the `O₃ᵀ` orientation.  The globally unique `B`-bond matri
 displayed equality.
 
 This theorem records the multiplicative part of the source's algebra-homomorphism assertion.
-Additivity, scalar compatibility, and the unit law are not packaged here.
+The remaining algebraic laws and the inverse assignment are established in
+`TorusWindowCrossTensorAlgebra`.
 
 Source: arXiv:1804.04964, the cross-tensor algebra-homomorphism statement `X \mapsto Y` at
 line 582, the end-operation statements in Lemma 5 at lines 2129 and 2252, and the
@@ -615,7 +621,7 @@ theorem staircaseCrossTensorVirtualOperation_mul
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X Y : Matrix
