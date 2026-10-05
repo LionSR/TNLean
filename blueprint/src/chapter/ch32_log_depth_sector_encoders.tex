@@ -1,0 +1,238 @@
+\section{Canonical sector encoders}
+\label{sec:ldp_sector_encoders}
+
+Fix two explicitly labelled sector families with the same number of labels.
+The constructions below retain their complex relative phases and transport
+one logical encoding to the other. They do not identify the coefficients of
+separately selected periodic vectors. This is an operator-norm refinement
+motivated by the discussion of~\cite{Malz2024Preparation}, rather than a
+definition of the non-normal phase relation in that discussion.
+
+\begin{definition}[Canonical encoding of periodic sectors]
+    \label{def:ldp_sector_encoder}
+    \lean{MPSTensor.sectorColumnMatrix, MPSTensor.sectorEncoder}
+    \leanok
+    For a family $A_j$, $1\le j\le b$, of tensors with physical dimension
+    $d$, let $\mathcal H_N=(\C^d)^{\otimes N}$ and define
+    \begin{align}
+        V_{A,N}e_j & =|\phi_N(A_j)\rangle,     &
+        G_{A,N}    & =V_{A,N}^\dagger V_{A,N}, &
+        F_{A,N}    & =V_{A,N}G_{A,N}^{-1/2}.
+        \label{eq:ldp_canonical_encoder}
+    \end{align}
+    The inverse square root is zero on the kernel, so $F_{A,N}$ is the
+    polar partial isometry also when the columns are dependent. The
+    columns of $V_{A,N}$ are the actual unnormalized periodic vectors,
+    with their given phases. The endpoint $F_{A,N}$ depends only on the
+    family and $N$, not on an accuracy or a block partition.
+\end{definition}
+
+\begin{theorem}[Range and isometricity of the sector encoder]
+    \label{thm:ldp_sector_encoder_range}
+    \lean{MPSTensor.range_sectorEncoder, MPSTensor.isIsometry_sectorEncoder}
+    \leanok
+    \uses{def:ldp_sector_encoder}
+    For every length, $\operatorname{ran}F_{A,N}$ is the span of the
+    original periodic sector vectors. If those vectors are linearly
+    independent, $F_{A,N}^\dagger F_{A,N}=I_b$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_injective}
+    Write $P=(V_{A,N}^\dagger V_{A,N})^{1/2}$. The polar identities
+    $F_{A,N}=V_{A,N}G_{A,N}^{-1/2}$ and $V_{A,N}=F_{A,N}P$ give both
+    range inclusions. Injectivity makes the initial support projector
+    $I_b$.
+\end{proof}
+
+\begin{definition}[The common register encoder and the block encoder]
+    \label{def:ldp_register_block_encoders}
+    \lean{MPSPreparation.registerEncoder, MPSTensor.blockIsometryEncoder}
+    \leanok
+    Let a positive ring have positive many blocks of lengths $\ell_k$,
+    and choose an injective encoding of the logical labels in registers
+    of length $r$, with $2r\le\ell_k$. Define $J:\C^b\to\mathcal H_N$
+    by $Je_j=|\operatorname{reg}(j)\rangle$, repeating the same register
+    word in every block and setting all unused sites to zero. For a
+    tensor $A$ and pair vectors $\omega_j$, define
+    \begin{align}
+        We_j=\left(\bigotimes_k V_k\right)
+        \bigotimes_k|\omega_j\rangle_{R_kL_{k+1}},
+        \label{eq:ldp_block_encoder_columns}
+    \end{align}
+    where $V_k$ is the polar isometry of the $\ell_k$-site blocked tensor.
+\end{definition}
+
+\begin{theorem}[The register seed is isometric]
+    \label{thm:ldp_register_encoder_isometric}
+    \lean{MPSPreparation.registerCfg_injective,
+        MPSPreparation.isIsometry_registerEncoder}
+    \leanok
+    \uses{def:ldp_register_block_encoders}
+    The common register encoder satisfies $J^\dagger J=I_b$.
+\end{theorem}
+\begin{proof}\leanok
+    Reading any one register recovers its word, so distinct labels give
+    distinct physical basis configurations. The corresponding columns
+    of the identity matrix are orthonormal.
+\end{proof}
+
+\begin{theorem}[A genuine unitary implements the whole block encoder]
+    \label{thm:ldp_whole_block_encoder}
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerEncoder,
+        MPSPreparation.mul_registerEncoder_eq_blockIsometryEncoder}
+    \leanok
+    \uses{def:ldp_register_block_encoders, def:qc_local_circuit}
+    Fix $d,D\ge1$, $r\ge2$, and injective encodings of the $D$ bond
+    values and $b$ logical labels in $r$ sites. There is $C$ such that
+    the following holds. Let $A$ be a tensor, $S$ a set of bond pairs,
+    and $\omega_j$ orthonormal pair vectors whose cyclic products are
+    supported on $S$ at every site and every positive length. For any
+    positive ring partition with $3r\le\ell_k\le L$, suppose every
+    blocked tensor is injective on the coordinate subspace spanned by
+    $S$. Then a single genuine local unitary $U$ has depth at most $CL$
+    and satisfies $UJ=W$ and $W^\dagger W=I_b$.
+    The constant precedes $A$, the pair vectors, and the partition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_coherent_sector_circuit, thm:ldp_register_encoder_isometric}
+    Theorem~\ref{thm:ldp_coherent_sector_circuit} chooses one circuit
+    whose action agrees on every column of $J$. Therefore $UJ=W$ as
+    matrices, and $W^\dagger W=J^\dagger U^\dagger UJ=I_b$.
+\end{proof}
+
+\begin{theorem}[Complex Gram and cross entries]
+    \label{thm:ldp_sector_gram_cross_entries}
+    \lean{MPSTensor.gram_sectorColumnMatrix_apply,
+        MPSTensor.cross_blockIsometryEncoder_sectorColumnMatrix_apply}
+    \leanok
+    \uses{def:ldp_sector_encoder, def:ldp_register_block_encoders}
+    The entries used in coherent estimates are exactly
+    \begin{align}
+        (V_{A,N}^\dagger V_{A,N})_{ij}
+         & =\langle\phi_N(A_i),\phi_N(A_j)\rangle, \\
+        (W^\dagger V_{A,N})_{ij}
+         & =\langle We_i,\phi_N(A_j)\rangle.
+        \label{eq:ldp_sector_complex_entries}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Expand matrix multiplication and the Euclidean inner product in
+    the common physical configuration basis.
+\end{proof}
+
+\begin{theorem}[Perturbation of the fixed polar encoder]
+    \label{thm:ldp_polar_frame_bound}
+    \lean{Matrix.norm_polarPos_sub_one_le, Matrix.norm_polarIso_sub_isometry_le}
+    \leanok
+    \uses{def:ldpolar_matrix}
+    Let $V$ be an injective column matrix, $F$ its polar isometry, and
+    $W$ any isometry on the same coordinate spaces. Set
+    $\eta=\|V^\dagger V-I\|$ and $\zeta=\|W^\dagger V-I\|$. Then
+    \begin{align}
+        \|(V^\dagger V)^{1/2}-I\| & \le\eta,                    &
+        \|F-W\|                   & \le\sqrt{\eta+2\zeta}+\eta.
+        \label{eq:ldp_polar_frame_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_sqrt_lipschitz, thm:ldpolar_decomposition, thm:ldpolar_injective}
+    The square-root Lipschitz bound at $I$ gives the first inequality.
+    Since $V=F(V^\dagger V)^{1/2}$ and $\|F\|\le1$, it follows that
+    $\|F-V\|\le\eta$. Moreover,
+    $(V-W)^\dagger(V-W)=(V^\dagger V-I)-(W^\dagger V-I)-(W^\dagger V-I)^\dagger$,
+    so $\|V-W\|^2\le\eta+2\zeta$. Add these two distances.
+\end{proof}
+
+\begin{theorem}[Coherent local conversion through a common seed]
+    \label{thm:ldp_common_encoder_conversion}
+    \lean{QuantumCircuit.IsLocalCircuitOfDepth.norm_encoder_conversion_le}
+    \leanok
+    \uses{def:qc_local_circuit}
+    Let $U_A,U_B$ be genuine local unitaries of depths $T_A,T_B$ on the
+    same positive ring with $d\ge1$. For arbitrary column matrices
+    $F_A,F_B,J$ of compatible sizes, $U=U_BU_A^\dagger$ has depth
+    $T_A+T_B$ and
+    \begin{align}
+        \|UF_A-F_B\|
+        \le\|F_A-U_AJ\|+\|F_B-U_BJ\|.
+        \label{eq:ldp_common_encoder_conversion}
+    \end{align}
+    No cost for preparing $J$ from a product state is included.
+
+    % Formula: U J_A = J_B with J_A = U_A J and J_B = U_B J.
+    % Each physical wire carries H_N, the full N-site Hilbert space.
+    % The virtual bottom wire carries the logical space C^b.
+    % The diagram contracts one H_N index and has boundary C^b -> H_N.
+    % No reference, ancillary output, trace, or phase is suppressed.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+                \tn[at=(1,1), skin=box, name=u,
+                    ports={90:physical:$\mathcal H_N$,270:physical}]{U_B U_A^\dagger}
+                \tn[at=(2,1), skin=box, name=wa,
+                    ports={90:physical,270:virtual:$\C^b$}]{U_A J}
+                \tnwire{wa.90}{u.270}
+            \end{tenkz}
+            =
+            \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+                \tn[skin=box,
+                    ports={90:physical:$\mathcal H_N$,270:virtual:$\C^b$}]{U_B J}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+    The physical boxes denote complete circuits, not elementary gates
+    on $N$ sites. The logical wire carries every superposition at once.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:qc_circuit_inverse_composition}
+    Inversion and composition give the depth. Since
+    $U(U_AJ)=U_BJ$, the difference is
+    $U(F_A-U_AJ)+(U_BJ-F_B)$. Use the triangle inequality and $\|U\|=1$.
+\end{proof}
+
+\begin{theorem}[Conversion of canonical sector encoders]
+    \label{thm:ldp_canonical_encoder_conversion}
+    \lean{MPSPreparation.norm_sectorEncoder_conversion_le}
+    \leanok
+    \uses{def:ldp_sector_encoder, def:qc_local_circuit}
+    Let $A_j,B_j$ be equally labelled tensor families at one positive
+    length $N$, and suppose the periodic columns of each family are
+    independent. Let $J:\C^b\to\mathcal H_N$ be an isometry and
+    $U_A,U_B$ genuine local unitaries of depths $T_A,T_B$. For $X=A,B$,
+    assume
+    \begin{align}
+        \|V_{X,N}^\dagger V_{X,N}-I_b\| & \le\eta_X,  &
+        \|(U_XJ)^\dagger V_{X,N}-I_b\|  & \le\zeta_X.
+        \label{eq:ldp_encoder_defects}
+    \end{align}
+    Then $U=U_BU_A^\dagger$ is a local circuit of depth $T_A+T_B$ and
+    \begin{align}
+        \|UF_{A,N}-F_{B,N}\|
+        \le \bigl(\sqrt{\eta_A+2\zeta_A}+\eta_A\bigr)
+        +\bigl(\sqrt{\eta_B+2\zeta_B}+\eta_B\bigr).
+        \label{eq:ldp_encoder_conversion_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_polar_frame_bound, thm:ldp_common_encoder_conversion}
+    Both $U_AJ$ and $U_BJ$ are isometries. Apply
+    Theorem~\ref{thm:ldp_polar_frame_bound} to each family, use the
+    monotonicity of the square root in (\ref{eq:ldp_encoder_defects}),
+    and then apply Theorem~\ref{thm:ldp_common_encoder_conversion}.
+\end{proof}
+
+For every finite reference $\C^k$ and every input
+$\xi\in\C^b\otimes\C^k$, an operator error
+$\|UF_{A,N}-F_{B,N}\|\le\delta$ gives
+$\|(U\otimes I_k)(F_{A,N}\otimes I_k)\xi-(F_{B,N}\otimes I_k)\xi\|
+    \le\delta\|\xi\|$. To see this, write $\xi=\sum_r\xi_r\otimes e_r$
+and sum the squared bounds for $(UF_{A,N}-F_{B,N})\xi_r$.
+There is no factor depending on $k$.
+
+The finite-length estimates in this section do not assert a uniform
+logarithmic depth for all accuracies. That requires quantitative Gram and
+cross estimates for a common partition, and an exact whole-encoder
+construction when that partition would exceed the ring length.
+No assertion about parent kernels at arbitrary interaction ranges is made
+\cite{gap:mswc24_coherent_sector_encoder_scope}.

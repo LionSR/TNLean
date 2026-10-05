@@ -98,6 +98,7 @@ import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.PolarCompression
+import TNLean.MPS.Preparation.PolarFrame
 import TNLean.MPS.Preparation.PolarIsometryTree
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
@@ -117,6 +118,7 @@ import TNLean.MPS.Preparation.RepeatedOverlappingBlockWeights
 import TNLean.MPS.Preparation.SecondOrderBlockError
 import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap
+import TNLean.MPS.Preparation.SectorEncoder
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
