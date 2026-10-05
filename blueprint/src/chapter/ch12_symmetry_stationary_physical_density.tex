@@ -1,0 +1,200 @@
+\subsection{Stationary Physical Block Densities}
+
+\begin{definition}[Stationary physical block density]
+    \label{def:stationary_physical_block_density}
+    \lean{MPSTensor.stationaryBlockDensity,
+        MPSTensor.physicalMatrix_mul_conjTranspose_apply,
+        MPSTensor.stationaryBlockDensity_apply,
+        MPSTensor.stationaryBlockDensity_word}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be a tensor of bond dimension $D$ and let $\Lambda\in\MN{D}$.
+    For words $s,t$ of length $N$, define the physical matrix
+    \begin{align}
+        (\varrho_N(A,\Lambda))_{s,t}
+         & :=\tr(\Lambda A_sA_t^\dagger),
+        \qquad A_s=A_{s_0}\cdots A_{s_{N-1}}.
+        \label{eq:stationary_density_entries}
+    \end{align}
+    If $P_N(s,(a,b))=(A_s)_{ab}$ and
+    $K=\Lambda^{\mathsf T}\otimes\Id_D$, then
+    $\varrho_N=P_NKP_N^\dagger$. The upper and lower physical legs remain
+    open, while the virtual boundary is contracted with $\Lambda$:
+    % Formula: (rho_N)_{s,t} = sum_{a,b,c} Lambda_{a,b}
+    % (A_s)_{b,c} conjugate((A_t)_{a,c}).
+    % Source verdict: Papers/0802.0447/StringOrder-v10.tex, lines 297--323;
+    % this is the stationary finite-block density used in Theorem 2.
+    % Ink-to-index: the north physical leg is s and the south leg is t.
+    % The west cup has lower index a and upper index b, carrying Lambda_{a,b}.
+    % The east cup contracts the common right virtual index c.
+    % Contraction set: both virtual cups; neither physical leg is contracted.
+    % Boundary signature: virtual-west=0 | virtual-east=0 |
+    % physical-up=1 | physical-down=1; each physical leg has dimension d^N.
+    % TENKZ-STATIONARY-DENSITY-BEGIN
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, bonds=none,
+                west={cup=$\Lambda$}, east=cup]
+            \tn[skin=box, label pos=45, ports={90:physical:$s$, 180:virtual,
+                        0:virtual}]{A^{[N]}} \\
+            \tn[skin=box, label pos=-45, conjugate, ports={270:physical:$t$, 180:virtual,
+                        0:virtual}]{\overline{A^{[N]}}}
+        \end{tenkz}.
+    \end{center}
+    % TENKZ-STATIONARY-DENSITY-END
+\end{definition}
+
+\begin{theorem}[Stationary density expectation of a physical observable]
+    \label{thm:stationary_density_observable}
+    \lean{MPSTensor.trace_stationaryBlockDensity_mul_observable}
+    \leanok
+    \uses{def:stationary_physical_block_density, def:physical_observable_transfer}
+    For every physical block operator $O$, with no Hermitian assumption,
+    \begin{align}
+        \tr(\varrho_N(A,\Lambda)O)
+         & =\tr\!\left(\Lambda\,\E_O^{[N]}(\Id)\right),
+        \label{eq:stationary_density_observable}        \\
+        \E_O^{[N]}(X)
+         & =\sum_{s,t}O_{t,s}A_sXA_t^\dagger.
+        \notag
+    \end{align}
+    Thus the physical density represents the same block-observable
+    functional as the stationary transfer contraction.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $\tr(\varrho_NO)=\sum_{s,t}(\varrho_N)_{s,t}O_{t,s}$ and
+    substitute (\ref{eq:stationary_density_entries}). Linearity of the trace
+    gives (\ref{eq:stationary_density_observable}).
+\end{proof}
+
+\begin{theorem}[Normalization and consistency of stationary densities]
+    \label{thm:stationary_density_consistency}
+    \lean{MPSTensor.stationaryBlockDensity_posSemidef,
+        MPSTensor.trace_stationaryBlockDensity,
+        MPSTensor.trace_stationaryBlockDensity_eq_one,
+        MPSTensor.stationaryBlockDensity_right_marginal,
+        MPSTensor.stationaryBlockDensity_left_marginal,
+        MPSTensor.rank_stationaryBlockDensity_le}
+    \leanok
+    \uses{def:stationary_physical_block_density, def:transfer_map}
+    Suppose $\Lambda\geq0$, $\tr\Lambda=1$, $\E_A(\Id)=\Id$, and
+    $\E_A^*(\Lambda)=\Lambda$. Then each $\varrho_N(A,\Lambda)$ is positive
+    semidefinite, has trace one, and has rank at most $D^2$.
+    For words $s,t$ of length $N$, tracing out either end gives
+    \begin{align}
+        \sum_i(\varrho_{N+1})_{si,ti}
+         & =(\varrho_N)_{s,t}, &
+        \sum_i(\varrho_{N+1})_{is,it}
+         & =(\varrho_N)_{s,t}.
+        \label{eq:stationary_density_marginals}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Positivity and the rank bound follow from $\varrho_N=P_NKP_N^\dagger$
+    with $K\geq0$ on the $D^2$-dimensional virtual pair space. Its trace is
+    $\tr(\Lambda\E_A^N(\Id))=1$. Summation over the rightmost letter in
+    (\ref{eq:stationary_density_entries}) inserts $\sum_i A_iA_i^\dagger=\Id$.
+    Cyclicity of the trace makes summation over the leftmost letter insert
+    $\sum_iA_i^\dagger\Lambda A_i=\Lambda$.
+\end{proof}
+
+\begin{theorem}[Uniform lower bound on physical block purity]
+    \label{thm:stationary_density_purity}
+    \lean{MPSTensor.stationaryBlockDensity_eq_mul_conjTranspose,
+        MPSTensor.inv_sq_le_purity_stationaryBlockDensity}
+    \leanok
+    \uses{thm:stationary_density_consistency}
+    If $D>0$, $\Lambda\geq0$, $\tr\Lambda=1$, and $\E_A(\Id)=\Id$, then
+    \begin{align}
+        D^{-2} & \leq\tr(\varrho_N(A,\Lambda)^2).
+        \label{eq:stationary_density_purity}
+    \end{align}
+    This is the lower bound in the proof of
+    \cite[Theorem~2, lines~316--320]{PerezGarcia2008StringOrder}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Put $F_N=P_N\sqrt K$, so $\varrho_N=F_NF_N^\dagger$.
+    The matrix $G_N=F_N^\dagger F_N$ has dimension $D^2$ and satisfies
+    $\tr G_N=1$ and $\tr(G_N^2)=\tr(\varrho_N^2)$.
+    Cauchy--Schwarz gives $(\tr G_N)^2\leq D^2\tr(G_N^2)$.
+\end{proof}
+
+\begin{theorem}[Physical overlap as a quadratic transfer contraction]
+    \label{thm:stationary_density_overlap}
+    \lean{MPSTensor.trace_stationaryBlockDensity_mul_eq,
+        MPSTensor.stationaryBlockDensity_overlap_tendsto_zero}
+    \leanok
+    \uses{def:stationary_physical_block_density}
+    Let $A,B$ have the same physical and bond dimensions. Write
+    $P_N^A(s,(a,b))=(A_s)_{ab}$,
+    $P_N^B(s,(a,b))=(B_s)_{ab}$,
+    $G_N=(P_N^A)^\dagger P_N^B$, and
+    $K=\Lambda^{\mathsf T}\otimes\Id_D$. Then
+    \begin{align}
+        \tr\!\left(\varrho_N(A,\Lambda)\varrho_N(B,\Lambda)\right)
+         & =\tr(KG_NKG_N^\dagger),
+        \label{eq:stationary_density_overlap}           \\
+        (G_N)_{(a,b),(c,e)}
+         & =\bigl[\E_{BA}^N(\ketbra{e}{b})\bigr]_{c,a},
+        \qquad \E_{BA}(X)=\sum_iB_iXA_i^\dagger.
+        \label{eq:stationary_density_mixed_gram}
+    \end{align}
+    In particular, if $\E_{BA}^N(X)\to0$ for every $X\in\MN{D}$,
+    then the overlap in (\ref{eq:stationary_density_overlap}) tends to zero.
+    The contraction has four factors on the fixed virtual pair space:
+    % Formula: tr(K G_N K G_N^dagger).
+    % Source verdict: the quadratic contraction in PGWSVC08 Theorem 2,
+    % lines 316--320, after reshuffling the two mixed transfer iterates.
+    % Ink-to-index: consecutive virtual pair indices connect K,G_N,K,G_N^dagger.
+    % The periodic return identifies the last outgoing and first incoming index.
+    % Contraction set: all four pair-space indices; no physical index is free.
+    % Boundary signature: virtual-west=0 | virtual-east=0 |
+    % physical-up=0 | physical-down=0.
+    % TENKZ-STATIONARY-OVERLAP-BEGIN
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=4, boundary=periodic]
+            \tn[skin=box, label pos=n]{K} & \tn[skin=box, label pos=n]{G_N} &
+            \tn[skin=box, label pos=n]{K} & \tn[skin=box, label pos=n]{G_N^\dagger}
+        \end{tenkz}.
+    \end{center}
+    % TENKZ-STATIONARY-OVERLAP-END
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Cyclicity of the trace moves the physical factors in
+    $\tr(P_N^AK(P_N^A)^\dagger P_N^BK(P_N^B)^\dagger)$ onto the virtual
+    pair space. Expanding the mixed transfer iterate gives
+    (\ref{eq:stationary_density_mixed_gram}). Since all factors in
+    (\ref{eq:stationary_density_overlap}) have dimension $D^2$, entrywise
+    decay of $G_N$ forces the scalar overlap to vanish.
+\end{proof}
+
+\begin{theorem}[Physical density covariance]
+    \label{thm:stationary_density_covariance}
+    \lean{MPSTensor.stationaryBlockDensity_rotatePhysical,
+        MPSTensor.stationaryBlockDensity_eq_of_unitary_gaugePhase}
+    \leanok
+    \uses{def:stationary_physical_block_density}
+    For $B_i=\sum_j u_{ij}A_j$,
+    $\varrho_N(B,\Lambda)=u^{\otimes N}\varrho_N(A,\Lambda)(u^\dagger)^{\otimes N}$.
+    If $B_i=\mu VA_iV^\dagger$, $V$ is unitary, $|\mu|=1$, and
+    $V^\dagger\Lambda V=\Lambda$, then
+    $\varrho_N(B,\Lambda)=\varrho_N(A,\Lambda)$ for every $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Physical rotation multiplies the blocked physical matrix by
+    $u^{\otimes N}$. In the virtual-gauge case,
+    $B_s=\mu^NVA_sV^\dagger$, so the phases cancel in
+    $B_sB_t^\dagger$. Cyclicity of the trace then replaces
+    $V^\dagger\Lambda V$ by $\Lambda$.
+\end{proof}

@@ -95,6 +95,7 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -182,6 +183,7 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   workflow_dispatch:
 
 concurrency:
@@ -286,6 +288,7 @@ jobs:
               - 'scripts/test_tenkz_ordered_mixing.py'
               - 'scripts/test_tenkz_sector_weight.py'
               - 'scripts/test_tenkz_string_endpoints.py'
+              - 'scripts/test_tenkz_stationary_density.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -337,13 +340,19 @@ jobs:
           build: false
           use-github-cache: false
 
+      - name: Build stationary physical symmetry and capture timings
+        run: |
+          set -eo pipefail
+          lake build TNLean.MPS.Symmetry.StationaryPhysicalSymmetry \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
           {
             lake build
             lake build lint_style
-          } 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
+          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
@@ -390,6 +399,14 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           scripts/string_order_phase_regression.lean
+
+      - name: Test stationary physical densities
+        timeout-minutes: 2
+        run: >
+          lake env lean -j 1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/StationaryPhysicalDensity.lean
 
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
@@ -856,6 +873,11 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         timeout-minutes: 2
         run: python3 scripts/test_tenkz_string_endpoints.py
+
+      - name: Test stationary physical density contractions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_tenkz_stationary_density.py
 
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py

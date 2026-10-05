@@ -5508,3 +5508,15 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The scalar rate conversion likewise reuses
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
+
+### Cyclic matrix traces in physical density contractions — rejected (2026-10-05)
+
+- **Pattern:** Normalize matrix associativity around a cyclic trace permutation.
+- **Seen:** The left marginal and unitary-gauge proofs in
+  `Core/StationaryPhysicalDensity`, and the virtual-Gram purity and overlap
+  proofs in `Core/StationaryPhysicalOverlap`.
+- **Abstraction:** Reuse Mathlib's `Matrix.trace_mul_comm` with its rectangular
+  intermediate dimensions, followed by `simp only [Matrix.mul_assoc]`.
+- **Notes:** The common mathematical step is already abstracted upstream.
+  A local four-factor trace wrapper would add a parallel API without removing
+  an independent proof argument. No additional tactic or helper was added.
