@@ -154,9 +154,17 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
     obtain ⟨UA, TA, hUA, hTA, heA⟩ := hAe N hLN
     obtain ⟨UB, TB, hUB, hTB, heB⟩ := hBe N hLN
     refine ⟨UB * UAᴴ, TA + TB, hUA.star.mul hUB, by nlinarith, ?_⟩
-    rw [← heA, ← Matrix.mul_assoc, Matrix.mul_assoc UB UAᴴ UA,
-      (show UAᴴ * UA = 1 from Unitary.star_mul_self_of_mem hUA.mem_unitary), Matrix.mul_one]
-    exact heB
+    let J : Matrix (Cfg d N) (Fin b) ℂ := registerEncoder
+      (ℓ := fun _ : Fin 1 => N) (by simp) (fun _ => by omega) dig₀
+    -- Normalize the `CStarMatrix` multiplication carried by the encoder hypotheses.
+    have heA' : (UA * J : Matrix (Cfg d N) (Fin b) ℂ) = sectorEncoder A N := heA
+    have heB' : (UB * J : Matrix (Cfg d N) (Fin b) ℂ) = sectorEncoder B N := heB
+    have hunit : (UAᴴ * UA : Matrix (Cfg d N) (Cfg d N) ℂ) = 1 :=
+      Unitary.star_mul_self_of_mem hUA.mem_unitary
+    change (UB * UAᴴ : Matrix (Cfg d N) (Cfg d N) ℂ) * sectorEncoder A N =
+      sectorEncoder B N
+    rw [← heA', ← Matrix.mul_assoc, Matrix.mul_assoc UB UAᴴ UA, hunit, Matrix.mul_one]
+    exact heB'
   obtain ⟨c, hc, hconv⟩ := exists_log_depth_sectorEncoder_conversion_of_block_approximation
     A B L L (CA + CB) hL2 (KA + KB) r (by linarith) hr happ hexact
   refine ⟨L, c, hL2, hc, fun N _ hLN => ⟨?_, ?_, fun ε hε hε1 => ?_⟩⟩
