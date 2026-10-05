@@ -1,0 +1,211 @@
+\subsection{The four-block closure property}
+\label{sec:peps_full_four_cut_closure}
+
+The four blocks in \cite[Theorem~5.5]{Schuch2010PEPS} occupy
+$\Lambda=(\mathbb Z/2\mathbb Z)^2$. There are eight labelled bonds,
+including two distinct bonds between each horizontal or vertical pair of
+blocks. Every bond $e$ has its own finite virtual alphabet $X_e$ and
+semi-regular representation $U_e$; every block has its own finite physical
+alphabet $Y_v$. The head acts by $U_e$ and the tail by $U_e^{-\mathsf T}$,
+so the two incident tensors use the same representation on their shared bond.
+% Exact source: Papers/1001.3807/paper_v3.tex:1424--1513,
+% thm:2d:closure and eq:2d:closure-intersection. Link matching is
+% paper_v3.tex:1310--1316. No common virtual or physical dimension is imposed.
+
+\begin{definition}[Four cut spaces and commuting closures]%
+    \label{def:peps_full_four_cut_space}
+    \lean{TNLean.PEPS.DependentTorus.Vertex,
+        TNLean.PEPS.DependentTorus.Bond,
+        TNLean.PEPS.DependentTorus.LocalConfig,
+        TNLean.PEPS.DependentTorus.cutBonds,
+        TNLean.PEPS.DependentTorus.fourCutSpace,
+        TNLean.PEPS.DependentTorus.mem_fourCutSpace_iff,
+        TNLean.PEPS.DependentTorus.cutBonds_cover,
+        TNLean.PEPS.DependentTorus.closure,
+        TNLean.PEPS.DependentTorus.commutingClosureSpan}
+    \leanok
+    \uses{def:peps_labelled_bonds, def:peps_labelled_cut,
+        def:peps_labelled_closure, def:peps_dependent_cut}
+    Let $C_{c,r}$ be the cut consisting of horizontal bonds with head
+    column $c$ and vertical bonds with tail row $r$.
+    Its virtual domain is $\mathcal X_{\partial C_{c,r}}$, with eight
+    independent incidence indices. Define
+    \begin{align}
+        \mathcal I_A & =\bigcap_{c,r\in\mathbb Z/2\mathbb Z}
+        \operatorname{im}\mathcal C_{A,C_{c,r}},
+        \label{eq:peps_full_four_cut_space}                       \\
+        \zeta_A(g,h) & =\mathcal N_A((U_e(p^{g,h}_e))_e),
+        \label{eq:peps_full_four_cut_closure}                     \\
+        \mathcal Z_A & =\spn_{\C}\{\zeta_A(g,h):gh=hg\}.\nonumber
+    \end{align}
+    Here $p^{g,h}$ is $h$ on the horizontal seam, $g$ on the vertical seam,
+    and $1$ elsewhere. Membership in $\mathcal I_A$ means membership in
+    all four displayed ranges. Every bond is uncut for at least one of
+    these four choices: its own base-vertex cut leaves it uncut.
+\end{definition}
+
+\begin{theorem}[Four-block closure for independently sized $G$-injective tensors]%
+    \label{thm:peps_four_cut_closure}
+    \lean{TNLean.PEPS.DependentTorus.fourCutSpace_eq_commutingClosureSpan}
+    \leanok
+    \uses{def:peps_full_four_cut_space, def:peps_g_injective,
+        def:peps_dependent_incident_action, def:peps_semiregular}
+    Let $G$ be finite. Assign a semi-regular representation $U_e$ to each
+    of the eight bonds, and let the four tensors $A_v$ be $G$-injective
+    for their actual incident representations. Then
+    \begin{align}
+        \bigcap_{c,r\in\mathbb Z/2\mathbb Z}
+        \{\mathcal C_{A,C_{c,r}}(M):M\in\C^{\mathcal X_{\partial C_{c,r}}}\}
+        =\left\{\sum_{gh=hg}\lambda_{g,h}\zeta_A(g,h):
+        \lambda_{g,h}\in\C\right\}.
+        \label{eq:peps_full_four_cut_equality}
+    \end{align}
+    This is \cite[Theorem~5.5]{Schuch2010PEPS}. The bond and physical
+    dimensions may differ independently. Each boundary $M$ is one arbitrary
+    tensor on all eight open incidences. Algebraic semi-regularity suffices;
+    the unitary convention of the source is a special case.
+    % Source ownership: thm:2d:closure, eq:2d:closure-intersection.
+    % Proof source labels: eq:2d:closure-inv, eq:2d:close-in-in.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_full_four_cut_transport,
+        thm:peps_full_four_cut_canonical_equality}
+    Write $A^0$ for the four incident averaging tensors and
+    $\mathcal T=\bigotimes_vT_v$ for the product of the original local
+    coefficient maps. A common product of genuine $G$-injective inverses
+    gives $\mathcal I_A=\mathcal T(\mathcal I_{A^0})$; the same physical
+    map gives $\mathcal T(\mathcal Z_{A^0})=\mathcal Z_A$.
+    For the canonical tensors, every commuting seam can be moved to any
+    of the four cuts, giving explicit boundary witnesses. Conversely,
+    uncut-bond slices give a coherent expansion of every
+    $\psi\in\mathcal I_{A^0}$. Trace-dual extraction forces each nonzero
+    coefficient to satisfy every plaquette equation. A vertex gauge sends
+    every such flat assignment to commuting seams, and the product
+    invariant projection turns each bare bond product into its actual
+    closure. Hence $\mathcal I_{A^0}=\mathcal Z_{A^0}$, proving the result.
+\end{proof}
+
+\begin{theorem}[Common physical transport of cuts and closures]%
+    \label{thm:peps_full_four_cut_transport}
+    \lean{TNLean.PEPS.DependentTorus.physicalMap_closure,
+        TNLean.PEPS.DependentTorus.map_commutingClosureSpan,
+        TNLean.PEPS.DependentTorus.fourCutSpace_eq_map_averagingSite,
+        TNLean.PEPS.DependentTorus.map_commutingClosureSpan_recover}
+    \leanok
+    \uses{def:peps_full_four_cut_space, def:peps_dependent_physical_site}
+    For arbitrary local physical maps and $\mathcal F=\bigotimes_vF_v$,
+    $\mathcal F\zeta_A(g,h)=\zeta_{FA}(g,h)$ and
+    $\mathcal F(\mathcal Z_A)=\mathcal Z_{FA}$.
+    For $G$-injective $A$, let $\mathcal T=\bigotimes_vT_v$ and let $A^0$
+    be the incident averaging tensors. Then
+    $\mathcal I_A=\mathcal T(\mathcal I_{A^0})$.
+    Invariance of $A$ alone gives $\mathcal T(\mathcal Z_{A^0})=\mathcal Z_A$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_physical_contraction,
+        thm:peps_dependent_common_inverse}
+    Commute physical maps through the network defining $\zeta_A$ and
+    take spans. Apply (\ref{eq:peps_dependent_cut_transport}) to the four
+    cuts, choosing $(0,0)$ as a member of this nonempty family. Finally,
+    $T_vP_v=T_v$ identifies the recovered tensors with $A_v$ themselves.
+\end{proof}
+
+\begin{definition}[Canonical four-block tensors and projection]%
+    \label{def:peps_full_four_cut_canonical}
+    \lean{TNLean.PEPS.DependentTorus.canonicalSites,
+        TNLean.PEPS.DependentTorus.canonicalProjector}
+    \leanok
+    \uses{def:peps_dependent_averaging_site, def:peps_dependent_average_projection}
+    On the four-block torus, the canonical tensors are
+    $A_v^0(\eta,s)=(P_v)_{s,\eta}$ and their product projection is
+    $\mathcal P=\bigotimes_{v\in\Lambda}P_v$. The physical alphabet of
+    the canonical tensor at $v$ is precisely its own $\mathcal X_v$.
+\end{definition}
+
+\begin{theorem}[Moving a commuting closure to every cut]%
+    \label{thm:peps_full_four_cut_forward}
+    \lean{TNLean.PEPS.DependentTorus.canonicalClosure_mem_cutSpace,
+        TNLean.PEPS.DependentTorus.commutingClosureSpan_le_fourCutSpace_canonical}
+    \leanok
+    \uses{def:peps_full_four_cut_space, def:peps_full_four_cut_canonical}
+    If $gh=hg$, then $\zeta_{A^0}(g,h)\in\mathcal S_{A^0,C_{c,r}}$
+    for every $(c,r)$. In particular $\mathcal Z_{A^0}\subseteq\mathcal I_{A^0}$.
+    This inclusion requires no semi-regularity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_labelled_closure_gauge, thm:peps_labelled_closure_support,
+        thm:peps_dependent_vertex_gauge, thm:peps_dependent_cut_basis}
+    Move the seams to $(c,r)$ by the group-valued vertex gauge, producing
+    labels $p^{g,h;c,r}$ equal to $1$ off $C_{c,r}$. An explicit boundary is
+    $M(\eta)=\prod_{e\in C_{c,r}}
+        U_e(p^{g,h;c,r}_e)_{\eta_{e,+},\eta_{e,-}}$.
+    The matrix-boundary contraction and vertex-gauge invariance identify
+    its image with $\zeta_{A^0}(g,h)$. Take spans and intersect the four ranges.
+\end{proof}
+
+\begin{theorem}[Projected flat products are actual commuting closures]%
+    \label{thm:peps_full_four_cut_flat_projection}
+    \lean{TNLean.PEPS.DependentTorus.canonicalProjector_bondProduct,
+        TNLean.PEPS.DependentTorus.exists_canonicalProjector_bondProduct_eq_closure,
+        TNLean.PEPS.DependentTorus.canonicalProjector_bondProduct_mem_closureSpan}
+    \leanok
+    \uses{def:peps_full_four_cut_canonical, def:peps_dependent_bond_product,
+        def:peps_bond_flat}
+    For every bond assignment $p$, one has
+    $\mathcal P b_p=\mathcal N_{A^0}((U_e(p_e))_e)$.
+    If $p$ is flat, there exist $g,h$ with $gh=hg$ and
+    $\mathcal P b_p=\zeta_{A^0}(g,h)$; thus
+    $\mathcal P b_p\in\mathcal Z_{A^0}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_average_projection,
+        thm:peps_labelled_flat_classification, thm:peps_dependent_vertex_gauge}
+    The bare product $b_p$ is the identity-site network, so product
+    averaging proves the first equality. Flat labelled bonds are
+    vertex-gauge equivalent to two commuting seams. Canonical
+    vertex-gauge invariance therefore gives the asserted closure.
+\end{proof}
+
+\begin{theorem}[Nonflat coefficients vanish in the four-cut intersection]%
+    \label{thm:peps_full_four_cut_nonflat_zero}
+    \lean{TNLean.PEPS.DependentTorus.coefficient_eq_zero_of_mem_fourCutSpace_not_flat}
+    \leanok
+    \uses{def:peps_full_four_cut_space, def:peps_dependent_bond_coefficient,
+        def:peps_bond_flat}
+    Suppose every $U_e$ is semi-regular. If
+    $\psi\in\mathcal I_{A^0}$ and $p$ is not flat, then $c_p(\psi)=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_uncut_coefficients, thm:peps_labelled_uncut_flat}
+    Choose a plaquette where flatness fails, and use the corresponding cut.
+    If $c_p(\psi)\ne0$, (\ref{eq:peps_dependent_uncut_coefficients}) supplies
+    one vertex assignment realizing all four uncut labels simultaneously.
+    Its relative labels satisfy that plaquette equation, a contradiction.
+\end{proof}
+
+\begin{theorem}[Canonical four-cut equality]%
+    \label{thm:peps_full_four_cut_canonical_equality}
+    \lean{TNLean.PEPS.DependentTorus.fourCutSpace_canonical_le_commutingClosureSpan,
+        TNLean.PEPS.DependentTorus.fourCutSpace_canonical_eq_commutingClosureSpan}
+    \leanok
+    \uses{def:peps_full_four_cut_space, def:peps_full_four_cut_canonical}
+    If all eight bond representations are semi-regular, then
+    $\mathcal I_{A^0}\subseteq\mathcal Z_{A^0}$ and in fact
+    $\mathcal I_{A^0}=\mathcal Z_{A^0}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_average_projection, thm:peps_dependent_cut_expansion,
+        thm:peps_full_four_cut_nonflat_zero, thm:peps_full_four_cut_flat_projection,
+        thm:peps_full_four_cut_forward}
+    Let $\psi\in\mathcal I_{A^0}$. Membership in the $(0,0)$ cut gives
+    $\mathcal P\psi=\psi$. Every bond is uncut in at least one of the four
+    cuts, so (\ref{eq:peps_dependent_extracted_expansion}) and linearity give
+    \begin{align}
+        \psi=\mathcal P\psi=\sum_p c_p(\psi)\mathcal P b_p
+        =\sum_{p\ \mathrm{flat}}c_p(\psi)\mathcal P b_p
+        \in\mathcal Z_{A^0}.
+        \label{eq:peps_full_four_cut_reconstruction}
+    \end{align}
+    Nonflat terms vanish by coefficient extraction; each remaining projected
+    term is a commuting closure. The forward inclusion proves equality.
+\end{proof}

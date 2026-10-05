@@ -1,0 +1,170 @@
+% SCP10, source lines 1765--1880: physical support accessibility and bond separation.
+% The bundled graph is arbitrary, but geometric 2x2 fine-lattice blocking is separate.
+
+\begin{theorem}[Normalized adjoints on the physical support]%
+    \label{thm:peps_g_isometric_support_coordinates}
+    \lean{TNLean.PEPS.IsGIsometric.exists_accessibleCoordinates,
+        TNLean.PEPS.coordinateSupportIsometry,
+        TNLean.PEPS.coordinateSupportIsometry_apply}
+    \leanok
+    Let $G$ be finite, let $\rho$ be a unitary representation on a finite
+    coordinate Hilbert space, and let $T$ be $G$-isometric for $\rho$.
+    Write $P_\rho=|G|^{-1}\sum_g\rho(g)$. There is a positive number $c$ such
+    that the explicit map $J=c^{-1/2}T^*$ satisfies $JT=\sqrt c\,P_\rho$ and,
+    for every $x,y\in\operatorname{ran}T$,
+    \begin{align}
+        \langle Jx,Jy\rangle=\langle x,y\rangle.
+    \end{align}
+    Thus $J$ restricts to a Hilbert-space isometry on the actual physical
+    range. No surjectivity onto the ambient physical space is required.
+    This is the support-restricted operation in
+    \cite[Observation~6.4]{Schuch2010PEPS}, with the positive local
+    normalization factor retained.
+\end{theorem}
+
+\begin{proof}\leanok
+    The average of the unitary representation is self-adjoint.
+    Local $G$-isometry gives $T^*T=cP_\rho$ for some $c>0$.
+    Consequently $JT=\sqrt c\,P_\rho$. For $x=Tu$ and $y=Tv$, both
+    $\langle Jx,Jy\rangle$ and $\langle x,y\rangle$ equal
+    $c\langle u,P_\rho v\rangle$. Restriction of the same linear map to the
+    range, with its induced inner product, gives the stated isometry.
+\end{proof}
+
+\begin{definition}[Products of heterogeneous physical maps]%
+    \label{def:peps_graph_physical_product_map}
+    \lean{TNLean.PEPS.graphPhysicalProductMatrix,
+        TNLean.PEPS.graphPhysicalProductMap}
+    \leanok
+    For a finite vertex set and matrices $F_v:\mathbb C^{P_v}\to
+        \mathbb C^{Q_v}$, define the product physical operation by
+    \begin{align}
+        (\mathcal F\psi)(\tau)
+        =\sum_{\sigma\in\prod_v P_v}
+        \left(\prod_v(F_v)_{\tau_v,\sigma_v}\right)\psi(\sigma).
+    \end{align}
+    The physical alphabets may vary independently with the vertex.
+\end{definition}
+
+\begin{theorem}[Physical operations on actual graph contractions]%
+    \label{thm:peps_graph_physical_support_transport}
+    \lean{TNLean.PEPS.graphPhysicalProductMatrix_mul,
+        TNLean.PEPS.graphPhysicalProductMatrix_conjTranspose,
+        TNLean.PEPS.graphPhysicalProductMap_graphBondNetwork,
+        TNLean.PEPS.graphBondNetwork_mem_range_productSiteMap,
+        TNLean.PEPS.graphBondNetwork_mem_euclideanRange_productSiteMap,
+        TNLean.PEPS.graphPhysicalProductMap_dotProduct_on_range}
+    \leanok
+    \uses{def:peps_graph_physical_product_map}
+    Let $\Gamma$ be a finite simple graph and let $T_v$ be arbitrary site
+    matrices with a common finite virtual edge alphabet. Denote the actual
+    contracted state by $\Psi_T$ and put $\mathcal T=\bigotimes_vT_v$.
+    Then $\Psi_T\in\operatorname{ran}\mathcal T$ and
+    $\mathcal F\Psi_T=\Psi_{FT}$. Products of physical matrices compose
+    vertexwise and their adjoints are the products of the local adjoints.
+    If $(F_vT_v)^*(F_vT_v)=T_v^*T_v$ at each vertex, then $\mathcal F$
+    preserves every inner product on $\operatorname{ran}\mathcal T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each virtual edge assignment $\eta$, form the basis vector whose
+    incident label at $(v,e)$ is $\eta_e$. Applying $\mathcal T$ to the sum
+    of these basis vectors gives exactly $\Psi_T$, proving range membership.
+    Interchanging finite sums applies $F_v$ separately to each site column,
+    proving $\mathcal F\Psi_T=\Psi_{FT}$. The same finite product-of-sums
+    identity gives composition of product matrices. The local Gram
+    equalities therefore imply
+    $(\mathcal F\mathcal T)^*(\mathcal F\mathcal T)=\mathcal T^*\mathcal T$,
+    which gives the inner-product statement on the actual product range.
+\end{proof}
+
+\begin{theorem}[Unitary incident action of a regular bond bundle]%
+    \label{thm:peps_regular_bundle_incident_action}
+    \lean{TNLean.PEPS.regularBundleMatrix_apply,
+        TNLean.PEPS.graphIncidentMatrix_regularBundle_apply,
+        TNLean.PEPS.graphIncidentRepresentation_regularBundle_apply,
+        TNLean.PEPS.graphIncidentRepresentation_regularBundle_unitary}
+    \leanok
+    \uses{def:peps_regular_graph_bond_blocking}
+    For $X=G\times G^K$, the representation $M_g$ has entries
+    $(M_g)_{x,y}=\delta_{x,gy}$. On all incident coordinates at a vertex,
+    the oriented tensor action is $f(\sigma)\mapsto f(g^{-1}\sigma)$.
+    In particular this action is unitary, including vertices of degree zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    On an outgoing leg, the transposed inverse gives
+    $(M_{g^{-1}})_{\eta,\sigma}=\delta_{\sigma,g\eta}$, exactly as on an
+    incoming leg. Multiplying the indicators gives simultaneous translation
+    of the full incident configuration. Translation permutes its basis and
+    hence preserves all inner products.
+\end{proof}
+
+\begin{definition}[Physical disentangling of G-isometric bundled sites]%
+    \label{def:peps_regular_graph_physical_disentangler}
+    \lean{TNLean.PEPS.regularGraphSupportMatrix,
+        TNLean.PEPS.regularGraphSupportMatrix_apply,
+        TNLean.PEPS.regularGraphPhysicalDisentangler}
+    \leanok
+    \uses{def:peps_graph_physical_product_map,
+        def:peps_regular_graph_bond_blocking}
+    Let $a_v$ be a site tensor on the bundled virtual alphabet $G\times G^K$
+    with arbitrary finite physical alphabet $P_v$. For positive numbers $c_v$,
+    define the local physical map and its global composition with the relative
+    coordinate unitary by
+    \begin{align}
+        (J_v)_{\alpha,s}
+                   & =c_v^{-1/2}\overline{a_v(\alpha,s)}, &
+        \mathcal D & =U\left(\bigotimes_vJ_v\right).
+    \end{align}
+    Every map $J_v$ acts only on the original physical system at $v$.
+\end{definition}
+
+\begin{theorem}[Physical Bell separation for arbitrary G-isometric bundled sites]%
+    \label{thm:peps_regular_graph_physical_blocking}
+    \lean{TNLean.PEPS.exists_regularGraphPhysicalDisentangler,
+        TNLean.PEPS.exists_regularGraphPhysicalSupportIsometry}
+    \leanok
+    \uses{thm:peps_g_isometric_support_coordinates,
+        thm:peps_graph_physical_support_transport,
+        thm:peps_regular_bundle_incident_action,
+        def:peps_regular_graph_physical_disentangler,
+        thm:peps_regular_graph_bond_blocking}
+    Let $G$ and $K$ be finite and let $\Gamma$ be any finite simple graph.
+    Suppose every $a_v$ is $G$-isometric for the incident action of the bundled
+    representation $M_g$, with no uniformity requirement on the physical
+    alphabets or site tensors. There exist positive $c_v$ for which each
+    $J_v$ is isometric on $\operatorname{ran}T_v$, where $T_v$ is the
+    original site map. The actual state belongs to
+    $S=\operatorname{ran}(\bigotimes_vT_v)$, and $\mathcal D$ restricts to a
+    Hilbert-space isometry $I:S\to\mathcal H_0\otimes\mathcal H_{\mathrm{res}}$.
+    With $D=|G^K|$, its exact action on that state is
+    \begin{align}
+        I\Psi_a
+        =\left(\prod_v\sqrt{c_v}\right)(\sqrt D)^{|E(\Gamma)|}
+        \Psi_0\otimes\Omega_K.
+    \end{align}
+    Here $\Psi_0$ and the unit-normalized Bell product $\Omega_K$ are those
+    of Theorem~\ref{thm:peps_regular_graph_bond_blocking}. All physical
+    overlaps on $S$, and in particular the norm of the actual state, are
+    preserved. No ambient-surjectivity, state-support, or global-factorization
+    hypothesis is imposed.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the normalized-adjoint construction at each vertex, using the
+    derived unitarity of the bundled incident action. It gives
+    $J_vT_v=\sqrt{c_v}P_v$, where $P_v$ is the canonical averaging tensor,
+    and preserves inner products on the local range. Testing on site columns
+    gives $(J_vT_v)^*(J_vT_v)=T_v^*T_v$, so the product operation is isometric
+    on $S$. Actual contraction transports it to
+    $(\prod_v\sqrt{c_v})\Psi_K$. Physical bond separation then gives the
+    asserted normalized Bell product and its scalar. Restricting this same
+    explicit map to $S$ gives $I$; membership of $\Psi_a$ in $S$ was derived
+    from the contraction and is not an additional assumption.
+\end{proof}
+
+This separates physical bond bundles on the given graph. The geometric
+$2\times2$ lattice reblocking and identification with the original coarse
+tensor remain separate, as recorded in
+\cite{gap:scp10_general_group_physical_blocking}.
