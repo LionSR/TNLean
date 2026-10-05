@@ -3458,6 +3458,36 @@ three-plaquette output measurement, and the routed reunion measurement.
   are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
   arguments use the reduction lemma instead of repeating the projection algebra.
 
+### Exponential error converted to polynomial accuracy — candidate
+- **Pattern:** bound the number of blocks by the chain length, compare the
+  exponential rate using the logarithmic block-length threshold, and use
+  `Real.exp_add`, `Real.exp_log`, and `Real.rpow_def_of_pos` to obtain
+  the factor `N ^ (-η)`.
+- **Seen:** private `mul_exp_le_polynomial` in
+  `TNLean/MPS/Preparation/PolynomialAccuracy.lean` and private
+  `polynomial_error_factor` in
+  `TNLean/MPS/Preparation/AllLengthPolynomialAccuracy.lean` (2026-10-03).
+- **Notes:** there are two implementations. The former derives `M ≤ N`
+  from uniform blocks; the latter accepts that inequality for the
+  remainder-absorbing construction. At a third occurrence, extract the
+  common scalar inequality. The promoted logarithmic-threshold helpers
+  address a prescribed error tolerance rather than this polynomial form.
+
+### Ceiling block lengths and logarithmic circuit depth — candidate
+- **Pattern:** apply `Nat.le_ceil` and `Nat.ceil_lt_add_one` to the
+  prescribed block length, then absorb the additive one using
+  `log N ≥ log 2` to bound circuit depth by a multiple of `log N`.
+- **Seen:** the block-length choice in
+  `TNLean/MPS/Preparation/LogDepthPreparation.lean` and private
+  `polynomialBlockLength_bounds` in
+  `TNLean/MPS/Preparation/AllLengthPolynomialAccuracy.lean` (2026-10-03).
+- **Notes:** these are two related arguments with different logarithmic
+  thresholds. The new polynomial argument also proves a lower bound
+  uniform in the accuracy exponent. The existing promoted depth helper
+  uses a logarithmic offset and does not cover that lower-bound argument.
+  Retain the local proofs until a third occurrence identifies a common
+  assertion.
+
 ### Finite group fibers in local tensor isometries — candidate
 - **Pattern:** parameterize all preimages of a virtual label by one group
   coordinate, use that coordinate as the inverse in a finite-sum bijection,
