@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.PVBSEnergyGap
-import TNLean.Algebra.OneMagnon
+import TNLean.MPS.Examples.PVBSCriticalMagnon
 
 /-!
 # Exact periodic gap of the one-species PVBS model
@@ -31,52 +31,6 @@ multi-species thermodynamic gap conjecture is not asserted. See
 open scoped Matrix BigOperators InnerProductSpace
 
 namespace MPSTensor
-
-private theorem localTermES_pvbs_critical_uniformParticle {N : ℕ} (hN : 2 ≤ N)
-    (i : Fin N) (σ : Cfg 2 N) :
-    localTermES (pvbsTensor 1) 2 i
-      (WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))) σ = 0 := by
-  let : NeZero N := ⟨by omega⟩
-  have hn : cyclicForwardSite i 1 ≠ i := by
-    rw [← cyclicSuccessorEquiv_apply]
-    exact cyclicSuccessorEquiv_ne hN i
-  have hswap : SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ))
-      (σ ∘ Equiv.swap i (cyclicForwardSite i 1)) =
-      SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)) σ := by
-    rw [SpinChain.oneMagnon_comp_swap]
-    rfl
-  have h := localTermES_pvbs_two_apply 1 hN i
-    (WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))) σ
-  norm_num only [Complex.ofReal_one, one_pow, one_mul] at h
-  rw [h]
-  change (((((σ i).val : ℂ) + (σ (cyclicForwardSite i 1)).val) *
-    SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)) σ -
-      (if σ i = σ (cyclicForwardSite i 1) then 0 else
-        SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ))
-          (σ ∘ Equiv.swap i (cyclicForwardSite i 1)))) / 2) = 0
-  rw [hswap]
-  by_cases hσ : ∃ j, σ = SpinChain.singleDown j
-  · obtain ⟨j, rfl⟩ := hσ
-    simp only [SpinChain.oneMagnon_singleDown, mul_one]
-    by_cases hi : i = j
-    · subst j
-      simp [SpinChain.singleDown, hn]
-    · by_cases hj : cyclicForwardSite i 1 = j
-      · simp [SpinChain.singleDown, hi, hj]
-      · simp [SpinChain.singleDown, hi, hj]
-  · have hz := SpinChain.oneMagnon_eq_zero_of_not_singleDown
-      (fun _ : Fin N => (1 : ℂ)) (by simpa using hσ)
-    simp [hz]
-
-/-- At critical hopping, the uniform one-particle vector is a periodic ground
-state on every ring of at least two sites. -/
-theorem parentHamiltonianES_pvbs_critical_uniformParticle {N : ℕ} (hN : 2 ≤ N) :
-    parentHamiltonianES (pvbsTensor 1) 2 N
-      (WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))) = 0 := by
-  rw [parentHamiltonianES_eq_sum_localTermES]
-  ext σ
-  simp only [LinearMap.sum_apply, WithLp.ofLp_sum, Finset.sum_apply, PiLp.zero_apply]
-  exact Finset.sum_eq_zero fun i _ => localTermES_pvbs_critical_uniformParticle hN i σ
 
 private theorem particle_number_uniformParticle {N : ℕ} (σ : Cfg 2 N) :
     (∑ i : Fin N, ((σ i).val : ℂ)) *
