@@ -33,8 +33,7 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
 
 \begin{theorem}[Residual product relative to a transported density]
     \label{thm:ldp_transported_choi_residual}
-    \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination,
-        MPSPreparation.exists_norm_transferMatrix_sub_le_gram_uniform_reference}
+    \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination}
     \leanok
     Partition an actual chain into blocks with trace-preserving transfer
     maps $F_j$. Let $\tau_j$ have trace one, let $\delta_j\in\mathbb R$,
@@ -54,7 +53,7 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
     positive semidefinite references, including singular ones.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:ldp_chain_transfer_product}
+    \uses{thm:ldp_chain_transfer_product,thm:ldp_uniform_gram_transfer}
     Set $Q_j=F_j-\delta_jR_{\tau_j}$. Choi domination makes each $Q_j$
     completely positive, and it scales trace by $1-\delta_j$. On
     traceless inputs the ordered products of $F_j$ and $Q_j$ agree.

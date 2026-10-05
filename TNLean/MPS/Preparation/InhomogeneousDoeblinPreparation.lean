@@ -57,7 +57,7 @@ theorem exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination
       ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ K * (1 - η) ^ N := by
   have := Matrix.neZero_of_trace_eq_one htr
-  obtain ⟨Kr, hKr, hr⟩ := exists_norm_transferMatrix_sub_le_gram hσ.posSemidef
+  obtain ⟨Kr, hKr, hr⟩ := exists_norm_gram_transferMatrix_sub_le D
   obtain ⟨_, _, hg⟩ := exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination hσ htr
   have hD : (0 : ℝ) < D := Nat.cast_pos.mpr (Nat.pos_of_ne_zero (NeZero.ne D))
   refine ⟨Kr * (2 * D), mul_pos hKr (mul_pos two_pos hD),
@@ -69,8 +69,8 @@ theorem exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination
     (fun j => by rw [hmaps j]; exact hfix j)
     (fun j => by rw [hmaps j]; exact hchoi j)).1
   simp only [Nat.div_one] at hb
-  exact (hr _).trans (by simpa only [mul_assoc] using
-    mul_le_mul_of_nonneg_left hb hKr.le)
+  exact (hr _ σ hσ.posSemidef).2.trans (by
+    simpa only [mul_assoc] using mul_le_mul_of_nonneg_left hb hKr.le)
 
 /-- Strict actual-site Choi domination bounds the squared norm of every positive-length
 periodic target below by the domination parameter. Split off the first site as

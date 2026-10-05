@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Uniform Gram/transfer reshuffling — promoted (2026-10-05)
+
+- **Pattern:** Reshuffle the transfer-matrix error into the physical Gram
+  error, bound the reshuffling by its operator norm, and reverse the same
+  involution when starting from a Gram estimate.
+- **Seen:** `InhomogeneousOverlap`, `VaryingReferenceOverlap`, and
+  `InhomogeneousChoiResidual` repeated this fixed-dimensional argument.
+- **Abstraction:** `MPSTensor.exists_norm_gram_transferMatrix_sub_le` in
+  `PositivePartRate` proves both directions with one constant chosen before
+  the physical dimension, tensor, and positive semidefinite reference.
+- **Notes:** Both polar estimates and the actual-site/window Choi consumers
+  use the same comparison; the fixed-reference inverse wrapper is removed.
+  No generic channel definition or new import is introduced.
+
+
 ### Transported-reference Choi residual estimate — promoted (2026-10-05)
 
 - **Pattern:** Subtract trace-preparation terms from actual block channels,

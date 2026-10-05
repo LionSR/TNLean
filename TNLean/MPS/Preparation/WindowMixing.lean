@@ -185,7 +185,7 @@ theorem exists_norm_transferMatrix_interval_sub_le_of_window_domination
         ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (A.interval a n h))) -
           transferMatrix (Kraus.transferMap (fixedPointTensor (σ a)))‖ ≤
             K * (1 - δ) ^ (n / s) := by
-  obtain ⟨Kr, hKr, hconv⟩ := exists_norm_transferMatrix_sub_le_gram_uniform_reference D
+  obtain ⟨Kr, hKr, hconv⟩ := exists_norm_gram_transferMatrix_sub_le D
   have hD : (0 : ℝ) < D := Nat.cast_pos.mpr (Nat.pos_of_ne_zero (NeZero.ne D))
   refine ⟨Kr * (2 * D), by positivity, fun {d N} A s hs δ htp hwindow => ?_⟩
   obtain ⟨σ, hσ, hcyc, htransport⟩ := exists_compatible_density_family A htp
@@ -208,7 +208,7 @@ theorem exists_norm_transferMatrix_interval_sub_le_of_window_domination
       (Kraus.transferMap (MPSChainTensor.blockTensor (A.interval a n h)) (σ (a + n)))ᵀ ⊗ₖ
         (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤ _ at hg
   rw [htransport] at hg
-  exact (hconv (σ a) (hσ a).1 (MPSChainTensor.blockTensor B)).trans
+  exact (hconv (MPSChainTensor.blockTensor B) (σ a) (hσ a).1).2.trans
     (by simpa only [mul_assoc] using mul_le_mul_of_nonneg_left hg hKr.le)
 
 end MPSPreparation

@@ -45,6 +45,39 @@ panels; the internal index $u$ has dimension $D^2$.
 \end{center}
 % TENKZ-ORDERED-MIXING-BLOCK-END
 
+\begin{theorem}[Uniform Gram and transfer-matrix comparison]
+    \label{thm:ldp_uniform_gram_transfer}
+    \lean{MPSTensor.exists_norm_gram_transferMatrix_sub_le,
+        MPSTensor.transpose_kronecker_one_apply}
+    \leanok
+    For each bond dimension $D$, there is $K_D>0$ such that, for every
+    physical dimension $d$, tensor $A$, and positive semidefinite matrix
+    $\rho$, write $B$ for the physical matrix of $A$ and $T_\rho$ for
+    the transfer matrix of $X\mapsto\operatorname{Tr}(X)\rho$. Then
+    \begin{align}
+        \|B^\dagger B-\rho^\mathsf T\otimes I\|
+         & \le K_D\|T_A-T_\rho\|,                          \\
+        \|T_A-T_\rho\|
+         & \le K_D\|B^\dagger B-\rho^\mathsf T\otimes I\|.
+    \end{align}
+    For paired indices $a=(a_1,a_2)$ and $b=(b_1,b_2)$, the reset Gram
+    matrix has entry $(\rho^\mathsf T\otimes I)_{a,b}
+        =\delta_{a_2,b_2}\rho_{b_1,a_1}$.
+    Both norms are $L^2$ operator norms. No trace-one, stationarity, or
+    faithfulness assumption is required of $\rho$. The first inequality
+    is the Gram rearrangement of~\cite{Piroli2021LOCC}, Supplemental Material,
+    (19) and (21), expressed in operator norm.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:prep_transfer_fixed_point_tensor}
+    The linear permutation $(\mathcal RT)_{(a,b),(c,e)}=T_{(a,c),(b,e)}$
+    satisfies $\mathcal R^2=I$. Direct evaluation on matrix units gives
+    $B^\dagger B-\rho^\mathsf T\otimes I=\mathcal R(T_A-T_\rho)$.
+    Taking $K_D=1+\|\mathcal R\|$ proves both inequalities.
+    This reset-map identity is algebraic; positivity identifies the
+    reset map with the transfer map of the fixed-point tensor.
+\end{proof}
+
 \begin{theorem}[Uniform ordered mixed-transfer overlap]
     \label{thm:ldp_inhomogeneous_mixed_overlap}
     \lean{MPSPreparation.exists_norm_polarPos_sub_le_transferMatrix,
@@ -63,7 +96,7 @@ panels; the internal index $u$ has dimension $D^2$.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:ldp_sqrt_lipschitz_constant,thm:ldp_ordered_telescoping_bound}
+    \uses{thm:ldp_uniform_gram_transfer,thm:ldp_sqrt_lipschitz_constant,thm:ldp_ordered_telescoping_bound}
     The entries of $B_j^\dagger B_j$ are a fixed reshuffling of $T_{B_j}$.
     That linear reshuffling has bounded norm on the fixed $D^2$-dimensional
     matrix space. Since $\sigma^\mathsf T\otimes I$ is positive definite,
@@ -117,7 +150,6 @@ $(\hbox{lower bond},\hbox{upper bond})$.
         MPSPreparation.exists_abs_norm_chainState_sq_sub_one_le,
         MPSPreparation.exists_one_sub_norm_inner_chainPosState_le}
     \leanok
-    \uses{thm:ldp_inhomogeneous_mixed_overlap}
     There is $C_1>0$, depending only on $D,\sigma$, such that the following
     holds. Partition an inhomogeneous ring into $M\ge1$ actual contiguous
     blocks. Suppose the transfer matrices of each block and of the whole
@@ -133,6 +165,7 @@ $(\hbox{lower bond},\hbox{upper bond})$.
     requires $c_N>0$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous_mixed_overlap,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner,lem:ldp_block_isometry_state_overlap}
     The actual whole-ring transfer matrix satisfies
     $c_N^2=\operatorname{Tr}(T_{B_{\mathrm{whole}}})$, hence
     $|c_N^2-1|\le K_D\delta$. The preceding theorem bounds
@@ -201,7 +234,6 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     \label{thm:ldp_inhomogeneous_ordered_mixing_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
     \leanok
-    \uses{thm:ldp_inhomogeneous_normalized_pairs, thm:ldp_inhomogeneous_uniform_rate}
     Fix $d,D\ge1$, $K,r>0$, and $\sigma>0$ of trace one. Let $A_N$ be a
     family of inhomogeneous chains with nonzero periodic states. Suppose
     every positive contiguous interval $I$ in the ordering $0,\ldots,N-1$ satisfies
@@ -215,6 +247,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     $1-|\langle\psi,\phi_N/\|\phi_N\|\rangle|\le\varepsilon$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product}
     For $1\le q\le N$, partition the ring with
     $q\le\ell_j\le2q$, putting the remainder into the last block.
     Both the block and whole-ring transfer errors are at most
@@ -230,8 +263,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     \label{thm:ldp_inhomogeneous_uniform_rate_from}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from}
     \leanok
-    \uses{thm:ldp_inhomogeneous, thm:ldp_inhomogeneous_exact,
-        def:ldp_pair_approximable, lem:ldp_log_threshold_error}
+    \uses{def:ldp_pair_approximable}
     Fix $N_0\ge0$. Suppose a family of nonzero targets at lengths
     $N\ge\max(1,N_0)$ has pair error at most $KN^ke^{-rq}$ at every
     blocking scale $1\le q\le N$, on some partition with
@@ -240,6 +272,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     to error $0<\varepsilon\le1$ in depth $C\log(N/\varepsilon)$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact,lem:ldp_log_threshold_error}
     For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
     $a=(k+1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
     $KN^ke^{-rq}\le\varepsilon$. When $q\le N$, the supplied partition
@@ -253,7 +286,6 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     \label{thm:ldp_inhomogeneous_eventual_mixing_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixing}
     \leanok
-    \uses{thm:ldp_inhomogeneous_normalized_pairs, thm:ldp_inhomogeneous_uniform_rate_from}
     Under the uniform ordered-mixing hypothesis of
     Theorem~\ref{thm:ldp_inhomogeneous_ordered_mixing_preparation}, but
     without a nonzero-target assumption, there exist $N_0$ and $C$ such
@@ -262,6 +294,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     against a unit vector prepared in depth at most $C\log(N/\varepsilon)$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product,lem:ldp_log_threshold_error}
     The whole-ring estimate gives
     $|\|\phi_N\|^2-1|\le K_DK e^{-rN}$.
     Choose $N_0$ so that this is at most $1/2$ for $N\ge N_0$.
@@ -272,13 +305,10 @@ preparation, and $d\le1$ is prepared directly in depth zero.
 
 \begin{theorem}[Physical preparation from uniform Choi domination]
     \label{thm:ldp_inhomogeneous_doeblin_preparation}
-    \lean{MPSPreparation.exists_norm_transferMatrix_sub_le_gram,
-        MPSPreparation.exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination,
+    \lean{MPSPreparation.exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination,
         MPSPreparation.le_norm_chainState_sq_of_choi_domination,
         MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_choi_domination}
     \leanok
-    \uses{thm:ldp_chain_positive_part_rate,
-        thm:ldp_inhomogeneous_ordered_mixing_preparation}
     Fix $d,D\ge1$, a faithful density matrix $\sigma$, and $0<\eta\le1$.
     Suppose every site map of every chain in a family preserves trace,
     fixes $\sigma$, and satisfies the normalized Choi bound
@@ -289,6 +319,9 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     with one constant for the family.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:ldp_uniform_gram_transfer,thm:ldp_chain_positive_part_rate,
+        thm:ldp_inhomogeneous_ordered_mixing_preparation,
+        thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_chain_transfer_product}
     Split the first map as $E_0=\eta R_\sigma+Q$, with $Q$ completely
     positive, and let $S$ be the remaining ordered product. Trace preservation
     gives $R_\sigma S=R_\sigma$. Since a completely positive map has

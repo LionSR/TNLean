@@ -334,6 +334,17 @@ with $K,r>0$ independent of all intervals and rings. There is no separate
 transport or stationarity hypothesis: the global estimate is proved directly
 from these quantitative tensor-product bounds.
 
+The tensor-level comparison
+\leanid{MPSTensor.exists_norm_gram_transferMatrix_sub_le} in
+\doclink{TNLean/MPS/Preparation/PositivePartRate} uses one constant $K_D>0$
+chosen before the physical dimension, tensor, and positive semidefinite
+reference. It bounds the Gram error by the transfer-matrix error and
+conversely, both in the $L^2$ operator norm. No trace-one, stationarity, or
+faithfulness assumption is needed for this comparison. Positivity is
+needed only to identify the fixed-point tensor's transfer map with the
+algebraic trace-reset map. This finite-dimensional norm comparison
+supplies no mixing rate by itself.
+
 The global square-root H\"older bound replaces a reference-dependent
 Lipschitz constant by a dimension-dependent factor and halves the exponential
 rate. Compactness of the set of density matrices makes the mixed-transfer
