@@ -281,9 +281,10 @@ theorem mixedEndpointEdgeLinearIsometry_comp_adjoint (k : MixedEndpointEdgePosit
   change (coordinateLin (mixedEndpointEdgeConfigEmbedding D₀ D₁ k) ∘ₗ
     (coordinateLin (mixedEndpointEdgeConfigEmbedding D₀ D₁ k)).adjoint) v _ = _
   rw [coordinateLin_projection_apply]
-  change (if ![mixedEndpointPhysicalIndex a b, mixedEndpointPhysicalIndex c e] ∈
-      Set.range (mixedEndpointEdgePhysicalCfg k) then _ else _) = _
-  rw [mem_range_mixedEndpointEdgePhysicalCfg_iff]
+  have hmem := mem_range_mixedEndpointEdgePhysicalCfg_iff k a b c e
+  change (![mixedEndpointPhysicalIndex a b, mixedEndpointPhysicalIndex c e] ∈
+    Set.range (mixedEndpointEdgeConfigEmbedding D₀ D₁ k)) ↔ _ at hmem
+  simp only [hmem]
   cases k <;> cases a <;> cases b <;> cases c <;> cases e <;>
     simp [mixedEndpointEdgeSectorProjection, Module.End.mul_apply,
       mixedEndpointRowSector_apply, mixedEndpointColumnSector_apply,
@@ -346,7 +347,7 @@ private def twoSiteBoundaryMapSum
   let V : Matrix (Fin D₀ ⊕ Fin D₁) (Fin D₀ ⊕ Fin D₁) ℂ →ₗ[ℂ]
       EuclideanSpace ℂ (Fin (D₀ + D₁) × Fin (D₀ + D₁)) :=
     { toFun X := WithLp.toLp 2 fun p =>
-        (Matrix.reindex finSumFinEquiv finSumFinEquiv X) p.1 p.2
+        X (finSumFinEquiv.symm p.1) (finSumFinEquiv.symm p.2)
       map_add' _ _ := rfl
       map_smul' _ _ := rfl }
   exact (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
@@ -365,12 +366,15 @@ private theorem range_twoSiteBoundaryMapSum
       fun a b => w (finSumFinEquiv a, finSumFinEquiv b)
     refine ⟨X, ?_⟩
     have hw : WithLp.toLp 2 (fun p =>
-        (Matrix.reindex finSumFinEquiv finSumFinEquiv X) p.1 p.2) = w := by
+        X (finSumFinEquiv.symm p.1) (finSumFinEquiv.symm p.2)) = w := by
       apply PiLp.ext
       rintro ⟨a, b⟩
-      simp [X, Matrix.reindex_apply, Matrix.submatrix_apply]
-    change insertedTwoSiteMap _ _ _ = _
-    rw [hw]
+      change w (finSumFinEquiv (finSumFinEquiv.symm a),
+        finSumFinEquiv (finSumFinEquiv.symm b)) = w (a, b)
+      rw [Equiv.apply_symm_apply, Equiv.apply_symm_apply]
+    exact congrArg
+      (fun z : EuclideanSpace ℂ (Fin (D₀ + D₁) × Fin (D₀ + D₁)) =>
+        insertedTwoSiteMap (mixedEndpointBase A₀ A₁) (bondInterpolationMatrix D₀ D₁ 0) z) hw
 
 private def edgeActiveCfg (k : MixedEndpointEdgePosition) :
     mixedEndpointEdgeCfg D₀ D₁ k → endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ 0 :=
@@ -412,7 +416,7 @@ private theorem twoSiteBoundaryMapSum_apply_activeCfg
   rcases ξ with ⟨a, ⟨b, σ, c⟩, e⟩
   simp [twoSiteBoundaryMapSum, mixedEndpointActiveBoundaryMap, mixedEndpointActivePhysicalCfg,
     insertedTwoSiteMap_apply, insertedGroundSpaceMap_apply, insertedEvalWord,
-    List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc, Fin.snoc_zero]
+    List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc, Fin.snoc_zero, Matrix.submatrix]
 
 private theorem edgeAdjoint_comp_twoSiteBoundaryMapSum
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)

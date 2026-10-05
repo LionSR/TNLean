@@ -104,8 +104,9 @@ theorem mixedEndpoint_open_norm_gap_of_active_norm_gap
     apply add_le_add
     · exact (mul_le_mul_of_nonneg_right (min_le_left _ _) (sq_nonneg _)).trans hactive
     · have hi : (1 / 2 : ℝ) * ‖y‖ ^ 2 ≤ (⟪H y, y⟫_ℂ).re := by
-        rw [inner_re_symm]
-        exact hinactive
+        calc
+          _ ≤ (⟪y, H y⟫_ℂ).re := hinactive
+          _ = _ := inner_re_symm (𝕜 := ℂ) y (H y)
       exact (mul_le_mul_of_nonneg_right (min_le_right _ _) (sq_nonneg _)).trans hi
   have hbound := hquadratic.trans (re_inner_le_norm (𝕜 := ℂ) (H v) v)
   by_cases hv0 : v = 0

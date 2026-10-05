@@ -29,7 +29,7 @@ variable {D : ℕ} {ι : Type*} [Fintype ι]
 
 /-- Move the first exterior index to a separate spectator coordinate. -/
 def endpointFirstEdgeSpectatorEquiv (ι : Type*) (D : ℕ) :
-    endpointFirstEdgeCfg ι D ≃ endpointFirstEdgeCfg PUnit D × ι where
+    endpointFirstEdgeCfg ι D ≃ endpointFirstEdgeCfg PUnit.{1} D × ι where
   toFun := fun ((a, b), q) => (((PUnit.unit, b), q), a)
   invFun := fun (((_, b), q), a) => ((a, b), q)
   left_inv := fun _ => rfl
@@ -37,7 +37,7 @@ def endpointFirstEdgeSpectatorEquiv (ι : Type*) (D : ℕ) :
 
 /-- Move the last exterior index to a separate spectator coordinate. -/
 def endpointLastEdgeSpectatorEquiv (ι : Type*) (D : ℕ) :
-    endpointLastEdgeCfg ι D ≃ endpointLastEdgeCfg PUnit D × ι where
+    endpointLastEdgeCfg ι D ≃ endpointLastEdgeCfg PUnit.{1} D × ι where
   toFun := fun (q, (c, e)) => ((q, (c, PUnit.unit)), e)
   invFun := fun ((q, (c, _)), e) => (q, (c, e))
   left_inv := fun _ => rfl
@@ -46,13 +46,13 @@ def endpointLastEdgeSpectatorEquiv (ι : Type*) (D : ℕ) :
 /-- The first-edge spectator regrouping is unitary in Euclidean coordinates. -/
 def endpointFirstEdgeSpectatorIsometry (ι : Type*) [Fintype ι] (D : ℕ) :
     EuclideanSpace ℂ (endpointFirstEdgeCfg ι D) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit D × ι) :=
+      EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit.{1} D × ι) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (endpointFirstEdgeSpectatorEquiv ι D)
 
 /-- The last-edge spectator regrouping is unitary in Euclidean coordinates. -/
 def endpointLastEdgeSpectatorIsometry (ι : Type*) [Fintype ι] (D : ℕ) :
     EuclideanSpace ℂ (endpointLastEdgeCfg ι D) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (endpointLastEdgeCfg PUnit D × ι) :=
+      EuclideanSpace ℂ (endpointLastEdgeCfg PUnit.{1} D × ι) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (endpointLastEdgeSpectatorEquiv ι D)
 
 private theorem mem_firstEdgeCoreSupport_iff
@@ -87,7 +87,7 @@ theorem mem_endpointFirstEdgeCoreSupportES_iff_fibers
     (A : MPSTensor (D * D) D) (v : EuclideanSpace ℂ (endpointFirstEdgeCfg ι D)) :
     v ∈ endpointFirstEdgeCoreSupportES A ι ↔
       ∀ a, rightFiber (endpointFirstEdgeSpectatorIsometry ι D v) a ∈
-        endpointFirstEdgeCoreSupportES A PUnit := by
+        endpointFirstEdgeCoreSupportES A PUnit.{1} := by
   classical
   rw [mem_firstEdgeCoreSupport_iff]
   simp only [mem_firstEdgeCoreSupport_iff]
@@ -108,7 +108,7 @@ theorem mem_endpointLastEdgeCoreSupportES_iff_fibers
     (A : MPSTensor (D * D) D) (v : EuclideanSpace ℂ (endpointLastEdgeCfg ι D)) :
     v ∈ endpointLastEdgeCoreSupportES A ι ↔
       ∀ e, rightFiber (endpointLastEdgeSpectatorIsometry ι D v) e ∈
-        endpointLastEdgeCoreSupportES A PUnit := by
+        endpointLastEdgeCoreSupportES A PUnit.{1} := by
   classical
   rw [mem_lastEdgeCoreSupport_iff]
   simp only [mem_lastEdgeCoreSupport_iff]
@@ -159,15 +159,18 @@ theorem endpointFirstEdgeCoreConstraintES_conj_spectator
     (A : MPSTensor (D * D) D) (ι : Type*) [Fintype ι] :
     (endpointFirstEdgeSpectatorIsometry ι D).toLinearEquiv.conj
         (endpointFirstEdgeCoreConstraintES A ι) =
-      (rightFiberwiseMap (S := ι)
-        (endpointFirstEdgeCoreConstraintES A PUnit).toContinuousLinearMap).toLinearMap := by
+      (rightFiberwiseMap (I := endpointFirstEdgeCfg PUnit.{1} D) (S := ι)
+        (LinearMap.toContinuousLinearMap (𝕜 := ℂ)
+          (E := EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit.{1} D))
+          (F' := EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit.{1} D))
+          (endpointFirstEdgeCoreConstraintES A PUnit.{1}))).toLinearMap := by
   apply conj_projection_eq_fiberwise_of_ker_iff
     (E := EuclideanSpace ℂ (endpointFirstEdgeCfg ι D))
-    (I := endpointFirstEdgeCfg PUnit D) (S := ι)
+    (I := endpointFirstEdgeCfg PUnit.{1} D) (S := ι)
     (endpointFirstEdgeSpectatorIsometry ι D)
-    (endpointFirstEdgeCoreConstraintES A ι) (endpointFirstEdgeCoreConstraintES A PUnit)
+    (endpointFirstEdgeCoreConstraintES A ι) (endpointFirstEdgeCoreConstraintES A PUnit.{1})
     (endpointFirstEdgeCoreConstraintES_isSymmetricProjection A ι)
-    (endpointFirstEdgeCoreConstraintES_isSymmetricProjection A PUnit)
+    (endpointFirstEdgeCoreConstraintES_isSymmetricProjection A PUnit.{1})
   intro v
   simpa only [endpointFirstEdgeCoreConstraintES, Submodule.ker_starProjection,
     Submodule.orthogonal_orthogonal] using mem_endpointFirstEdgeCoreSupportES_iff_fibers A v
@@ -178,15 +181,18 @@ theorem endpointLastEdgeCoreConstraintES_conj_spectator
     (A : MPSTensor (D * D) D) (ι : Type*) [Fintype ι] :
     (endpointLastEdgeSpectatorIsometry ι D).toLinearEquiv.conj
         (endpointLastEdgeCoreConstraintES A ι) =
-      (rightFiberwiseMap (S := ι)
-        (endpointLastEdgeCoreConstraintES A PUnit).toContinuousLinearMap).toLinearMap := by
+      (rightFiberwiseMap (I := endpointLastEdgeCfg PUnit.{1} D) (S := ι)
+        (LinearMap.toContinuousLinearMap (𝕜 := ℂ)
+          (E := EuclideanSpace ℂ (endpointLastEdgeCfg PUnit.{1} D))
+          (F' := EuclideanSpace ℂ (endpointLastEdgeCfg PUnit.{1} D))
+          (endpointLastEdgeCoreConstraintES A PUnit.{1}))).toLinearMap := by
   apply conj_projection_eq_fiberwise_of_ker_iff
     (E := EuclideanSpace ℂ (endpointLastEdgeCfg ι D))
-    (I := endpointLastEdgeCfg PUnit D) (S := ι)
+    (I := endpointLastEdgeCfg PUnit.{1} D) (S := ι)
     (endpointLastEdgeSpectatorIsometry ι D)
-    (endpointLastEdgeCoreConstraintES A ι) (endpointLastEdgeCoreConstraintES A PUnit)
+    (endpointLastEdgeCoreConstraintES A ι) (endpointLastEdgeCoreConstraintES A PUnit.{1})
     (endpointLastEdgeCoreConstraintES_isSymmetricProjection A ι)
-    (endpointLastEdgeCoreConstraintES_isSymmetricProjection A PUnit)
+    (endpointLastEdgeCoreConstraintES_isSymmetricProjection A PUnit.{1})
   intro v
   simpa only [endpointLastEdgeCoreConstraintES, Submodule.ker_starProjection,
     Submodule.orthogonal_orthogonal] using mem_endpointLastEdgeCoreSupportES_iff_fibers A v

@@ -49,8 +49,8 @@ Source: arXiv:2203.12563, Section 5, `defAgamma`, lines 1586–1601. -/
 theorem mixedEndpointBase_emptyEndpointTensor
     (A₀ : MPSTensor (D₀ * D₀) D₀) : mixedEndpointBase A₀ emptyEndpointTensor = A₀ := by
   ext p i j
-  simp [mixedEndpointBase, Matrix.reindex_apply, Matrix.submatrix_apply,
-    finSumFinEquiv_symm_zeroSector, mixedEndpointLetter, Matrix.fromBlocks]
+  simp only [mixedEndpointBase, Matrix.reindex_apply, Matrix.submatrix_apply,
+    finSumFinEquiv_symm_zeroSector, mixedEndpointLetter, Matrix.fromBlocks_apply₁₁]
   exact congrArg (fun q : Fin (D₀ * D₀) => A₀ q i j)
     (finProdFinEquiv.apply_symm_apply p)
 
