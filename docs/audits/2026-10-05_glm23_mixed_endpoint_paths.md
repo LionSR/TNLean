@@ -89,9 +89,16 @@ Their dependency edges distinguish definitions needed to state each claim
 from results used in its proof.
 
 The full blueprint web workflow also passed at `991b083e`, including the
-Tenkz and browser checks. This subsequent documentation-only dependency
-repair requires fresh exact-head CI and final review. These
-successful checks do not establish the separate, unpublished endpoint
-open-gap continuation, a uniform gap across the whole parameter interval,
-or the full classification theorem. No merge-readiness claim is made while
-the remaining checks are unfinished.
+Tenkz and browser checks. After the dependency-graph, checked-marker, and
+formatting repairs, all eight checks passed again at
+`a8af219542af396c76d1a0f4cdeb15137ef1f2cc` on 5 October 2026. This includes
+the complete Lean build, both strict regressions, all three guarded axiom
+reports, blueprint/web rendering, Tenkz and browser checks, generated
+imports, module policies, and compilation-time checks.
+
+These are immutable, commit-specific validation checkpoints. Later
+integration or review repairs must satisfy the repository's exact-head CI
+and review gates; the live PR records their outcome. This audit does not
+attribute a previous commit's success to a later tree. None of these checks
+establishes the separate endpoint-open-gap continuation, the whole-interval
+uniform-gap theorem, or the full MPO phase classification.

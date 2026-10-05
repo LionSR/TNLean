@@ -1,0 +1,179 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 2243--2287.
+% Insert after Theorem thm:asymex_group_cocycle_fusion and its proof.
+
+\subsubsection{The projector at a periodic cut}
+
+For the periodic tensors, the source replaces the right zipper and exact
+factorization by an identity with a projector on the incoming product
+bond~\cite{GarreRubio2023MPOSym}. Write
+$B^{ij}=(\hat T_g\hat T_h)^{ij}$,
+$T^{ij}=\hat T_{gh}^{ij}$, $V=F^<_{g,h}$ and $W=F^>_{g,h}$, with the
+fusion tensors of Definition~\ref{def:asymex_group_cocycle_fusion_tensors}.
+The support identities hold for every three-cochain
+$\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
+
+\begin{definition}[The compatible-pair projector]
+    \label{def:asymex_pbc_projector}
+    \lean{MPOTensor.GroupCocycle.fusionProjector,
+        MPOTensor.GroupCocycle.fusionProjector_apply}
+    \leanok
+    \uses{def:asymex_group_cocycle_fusion_tensors}
+    On the product bond $\C[G]\otimes\C[G]$, define the diagonal matrix
+    $P_{g,h}$ by
+    \begin{align}
+        (P_{g,h})_{(a,b),(c,d)}
+         & =\delta_{a,c}\delta_{b,d}\delta_{a,hb}.
+        \label{eq:asymex_pbc_projector}
+    \end{align}
+    Thus $P_{g,h}$ is independent of $g$ and $\omega$.
+\end{definition}
+
+\begin{theorem}[The projected factorization and right zipper]
+    \label{thm:asymex_pbc_projected_zipper}
+    \lean{MPOTensor.GroupCocycle.fusionProjector_mul_self,
+        MPOTensor.GroupCocycle.fusionProjector_conjTranspose,
+        MPOTensor.GroupCocycle.mul_fusionW_apply,
+        MPOTensor.GroupCocycle.fusionW_mul_apply,
+        MPOTensor.GroupCocycle.fusionW_mul_fusionV,
+        MPOTensor.GroupCocycle.mulTensor_tensor_apply,
+        MPOTensor.GroupCocycle.mulTensor_mul_fusionProjector,
+        MPOTensor.GroupCocycle.fusionProjector_mul_mulTensor,
+        MPOTensor.GroupCocycle.fusionProjector_mul_mulTensor_mul_fusionW}
+    \leanok
+    \uses{def:asymex_pbc_projector, def:asymex_group_cocycle_tensor,
+        def:asymex_group_cocycle_fusion_tensors}
+    For every three-cochain, $P_{g,h}^2=P_{g,h}=P_{g,h}^{\dagger}$,
+    $P_{g,h}=WV$, and $B^{ij}P_{g,h}=B^{ij}$ for every physical pair $(i,j)$.
+    If $\omega$ is a three-cocycle, then
+    \begin{align}
+        P_{g,h}B^{ij}  & =WT^{ij}V,
+        \label{eq:asymex_pbc_factorization} \\
+        P_{g,h}B^{ij}W & =WT^{ij}.
+        \label{eq:asymex_pbc_zipper}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_group_cocycle_fusion}
+    Every diagonal component of $P_{g,h}$ is zero or one, proving
+    idempotence and self-adjointness. The nonzero components of $W$ and
+    $V$ select the same pairs $(hk,k)$, with reciprocal factors
+    $\omega(g,h,k)$ and $\omega(g,h,k)^{-1}$, so $WV=P_{g,h}$.
+    Contracting the physical intermediate index gives
+    \begin{align}
+        B^{ij}_{(a,b),(c,d)}
+         & =\delta_{i,ghj}\delta_{c,hj}\delta_{d,j}\,
+        \omega(g,hj,(hj)^{-1}a)\,\omega(h,j,j^{-1}b).
+        \label{eq:asymex_pbc_stacked_letter}
+    \end{align}
+    Its outgoing pair is $(hj,j)$, proving $B^{ij}P_{g,h}=B^{ij}$.
+    The left zipper and $VW=1$ from
+    Theorem~\ref{thm:asymex_group_cocycle_fusion} give
+    $P_{g,h}B^{ij}=WVB^{ij}=WT^{ij}V$ and
+    $P_{g,h}B^{ij}W=WT^{ij}VW=WT^{ij}$.
+\end{proof}
+
+\begin{tenkzequation}
+    % Formula: P_{g,h} B^{ij} = W T^{ij} V, equation
+    % (eq:asymex_pbc_factorization), GLM23v3 lines 2243--2263.
+    % Ink-to-index map: west pairs (a,b) and east pairs (c,d) are ordered
+    % g above h; i is physical output, j physical input. P keeps a=hb.
+    % Left contractions: the two wires from P to the stacked letters,
+    % and the physical wire between T_g and T_h. Right contractions:
+    % W to T_gh and T_gh to V. W expands a fused label to a compatible
+    % pair; V reduces a compatible pair to a fused label.
+    % Index equations: P_(a,b),(u,v) T_g^(i,k)_(u,c) T_h^(k,j)_(v,d)
+    % contracts u,v,k. W_(a,b),l T_gh^(i,j)_(l,r) V_r,(c,d) contracts l,r.
+    % P contributes delta_(a,u) delta_(b,v) delta_(a,hb); W contributes
+    % delta_(a,hl) delta_(b,l) omega(g,h,l); V contributes
+    % delta_(c,hr) delta_(d,r) omega(g,h,r)^(-1).
+    % Boundary signature on each side: two virtual-west, two virtual-east,
+    % one physical-up, one physical-down. Every internal port is paired once.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+        \tn[at=(2,1), name=P, skin=box, size=l,
+            ports={150:virtual:$a$, 210:virtual:$b$, 30:virtual, 330:virtual}]{P_{g,h}}
+        \tn[at=(1,3), name=G, skin=mpo, size=l,
+            ports={180:virtual, 0:virtual:$c$, 90:physical:$i$, 270:physical}]{\hat T_g}
+        \tn[at=(3,3), name=H, skin=mpo, size=l,
+            ports={180:virtual, 0:virtual:$d$, 90:physical, 270:physical:$j$}]{\hat T_h}
+        \tnwire{P.30}{G.180}
+        \tnwire{P.330}{H.180}
+        \tnwire{G.270}{H.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+        \tn[at=(2,1), name=W, skin=box, size=l,
+            ports={150:virtual:$a$, 210:virtual:$b$, 0:virtual}]{F^>_{g,h}}
+        \tn[at=(2,2), name=T, skin=mpo, size=l,
+            ports={180:virtual, 0:virtual, 90:physical:$i$, 270:physical:$j$}]{\hat T_{gh}}
+        \tn[at=(2,3), name=V, skin=box, size=l,
+            ports={180:virtual, 30:virtual:$c$, 330:virtual:$d$}]{F^<_{g,h}}
+        \tnwire{W.0}{T.180}
+        \tnwire{T.0}{V.180}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[The projector disappears on closing the chain]
+    \label{thm:asymex_pbc_projector_closure}
+    \lean{MPOTensor.GroupCocycle.fusionProjector_mul_evalWord,
+        MPOTensor.GroupCocycle.evalWord_mul_fusionProjector,
+        MPOTensor.GroupCocycle.trace_fusionProjector_mul_evalWord,
+        MPOTensor.GroupCocycle.trace_evalWord_mulTensor_eq}
+    \leanok
+    \uses{def:asymex_pbc_projector, def:asymex_group_cocycle_fusion_tensors}
+    For every three-cochain and every nonempty word $\mathbf w$,
+    $B^{\mathbf w}P_{g,h}=B^{\mathbf w}$ and
+    $\tr(P_{g,h}B^{\mathbf w})=\tr(B^{\mathbf w})$.
+    If $\omega$ is a three-cocycle, then
+    $P_{g,h}B^{\mathbf w}=WT^{\mathbf w}V$ for every word, including the
+    empty word. Consequently $\tr(B^{\mathbf w})=\tr(T^{\mathbf w})$
+    whenever $\mathbf w$ is nonempty.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_pbc_projected_zipper, thm:asymex_group_cocycle_fusion}
+    The last letter of a nonempty word absorbs the projector on its right,
+    giving $B^{\mathbf w}P_{g,h}=B^{\mathbf w}$, and cyclicity of the trace
+    gives $\tr(P_{g,h}B^{\mathbf w})=\tr(B^{\mathbf w}P_{g,h})=\tr(B^{\mathbf w})$.
+    Iterating the left zipper gives $VB^{\mathbf w}=T^{\mathbf w}V$.
+    Hence $P_{g,h}B^{\mathbf w}=WVB^{\mathbf w}=WT^{\mathbf w}V$, and the
+    closed-chain fusion follows from
+    $\tr(WT^{\mathbf w}V)=\tr(VWT^{\mathbf w})=\tr(T^{\mathbf w})$.
+\end{proof}
+
+\begin{theorem}[Failure of the unprojected right identities]
+    \label{thm:asymex_pbc_unprojected_failure}
+    \lean{MPOTensor.GroupCocycle.exists_mulTensor_mul_fusionW_ne,
+        MPOTensor.GroupCocycle.exists_mulTensor_ne_fusionW_mul_tensor_mul_fusionV}
+    \leanok
+    \uses{def:asymex_group_cocycle_tensor, def:asymex_group_cocycle_fusion_tensors}
+    If $G$ is nontrivial, then for every three-cochain and every $g,h\in G$
+    there are physical indices $(i,j)$ such that $B^{ij}W\ne WT^{ij}$.
+    There are also physical indices for which $B^{ij}\ne WT^{ij}V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_pbc_projected_zipper, thm:asymex_group_cocycle_fusion}
+    Choose $a\ne b$, take $j=b$ and $i=ghb$, and compare the entry from
+    the incoming pair $(ha,b)$ to the fused outgoing label $b$.
+    The corresponding entry of $B^{ij}W$ is
+    \begin{align}
+        \omega(g,hb,(hb)^{-1}ha)\omega(h,b,1)\omega(g,h,b) & \ne0.
+        \label{eq:asymex_pbc_failure_entry}
+    \end{align}
+    The entry of $WT^{ij}$ is zero because $ha\ne hb$.
+    If $B^{ij}=WT^{ij}V$, multiplying by $W$ and using $VW=1$ would
+    contradict this failure of the right zipper.
+\end{proof}
+
+For example, take $G=\Z_2$, $g=h=e$, and $\omega=1$. At physical
+indices $(0,0)$, incoming pair $(1,0)$, and fused outgoing label $0$,
+the entries of $B^{00}W$ and $WT^{00}$ are respectively $1$ and $0$.
+Here $P_{e,e}$ has diagonal $(1,0,0,1)$, so even this trivial-cocycle
+example requires the projector. For the empty word,
+$\tr(P_{e,e})=2\ne4=\tr(1)$; the periodic support assertion concerns
+nonempty chains.
