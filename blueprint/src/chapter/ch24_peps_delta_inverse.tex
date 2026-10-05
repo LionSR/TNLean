@@ -1,0 +1,92 @@
+\begin{theorem}[Scalar calculus of character projectors]
+    \label{thm:peps_weighted_character_projectors}
+    \lean{Representation.sum_smul_charProjector_apply_of_mem,
+        Representation.sum_smul_charProjector_commute,
+        Representation.charProjector_mul_self}
+    \leanok
+    \uses{thm:peps_isotypic_projectors}
+    Let $\rho$ be a finite-dimensional complex representation of a finite
+    group. Given complex weights $f(\chi)$ on the occurring irreducible
+    characters, put $A_f=\sum_\chi f(\chi)P_\chi$.
+    If $v$ lies in an irreducible summand with character $\psi$, then
+    $A_fv=f(\psi)v$. Moreover, $A_f\rho(g)=\rho(g)A_f$.
+    Each projector $P_\chi$ is idempotent.
+    These formulas express the isotypic decomposition used in
+    \cite[Lemma~4.4]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    On the summand with character $\psi$, the projector $P_\chi$ is the
+    identity if $\chi=\psi$ and zero otherwise. Thus only its recorded
+    weight survives. Each summand is preserved by the group action,
+    which commutes with scalar multiplication. The irreducible summands
+    span the whole representation space.
+\end{proof}
+
+\begin{definition}[Reciprocal weighted trace operator]
+    \label{def:peps_delta_inverse}
+    \lean{Representation.deltaOperatorInverse}
+    \leanok
+    \uses{def:peps_delta_operator}
+    For the occurring irreducible characters, with dimensions $d_\chi$
+    and multiplicities $m_\chi$, define
+    \begin{align}
+        \Delta^{-1}=\sum_\chi\frac{|G|m_\chi}{d_\chi}P_\chi.
+        \label{eq:peps_delta_inverse}
+    \end{align}
+    These are the reciprocal coefficients of the weighted trace operator
+    in \cite[Lemma~4.4]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Invertibility of the weighted trace operator]
+    \label{thm:peps_delta_inverse}
+    \lean{Representation.deltaOperatorInverse_apply_of_mem,
+        Representation.deltaOperatorInverse_mul,
+        Representation.deltaOperator_mul_inverse,
+        Representation.isUnit_deltaOperator,
+        Representation.deltaOperatorInverse_commute,
+        Representation.deltaOperator_commute}
+    \leanok
+    \uses{def:peps_delta_inverse, thm:peps_weighted_character_projectors,
+        thm:peps_delta_expansion}
+    The operator in (\ref{eq:peps_delta_inverse}) is the two-sided inverse
+    of $\Delta$. On a summand with character $\chi$, it acts by
+    $|G|m_\chi/d_\chi$. Both $\Delta$ and its inverse commute with every
+    group operator. These assertions hold without semi-regularity or
+    unitarity, for every finite-dimensional complex representation of a
+    finite group.
+\end{theorem}
+\begin{proof}\leanok
+    The dimensions and multiplicities of the occurring summands are
+    positive. On each irreducible summand the two coefficients multiply
+    to one:
+    $[d_\chi/(|G|m_\chi)][|G|m_\chi/d_\chi]=1$.
+    Hence $\Delta^{-1}\Delta=I$ on their direct sum. In finite dimension
+    a left inverse is also a right inverse. Commutation follows from
+    the scalar calculus of the character projectors.
+\end{proof}
+
+\begin{theorem}[Positive weighted trace operator]
+    \label{thm:peps_delta_positive}
+    \lean{Representation.adjoint_subrepresentation_of_unitary,
+        Representation.charProjector_adjoint_of_unitary,
+        Representation.isPositive_charProjector_of_unitary,
+        Representation.isPositive_sum_smul_charProjector_of_nonneg,
+        Representation.isPositive_deltaOperator_of_unitary,
+        Representation.posDef_toMatrix_deltaOperator_of_unitary}
+    \leanok
+    \uses{thm:peps_delta_inverse, thm:peps_isotypic_projectors}
+    Let $\rho$ be a unitary finite-dimensional representation of a finite
+    group. Every invariant subrepresentation is unitary. Then $\Delta$ is positive, and its matrix in every orthonormal
+    basis is positive definite. For unitary representations, the character
+    projector of any irreducible summand is self-adjoint and positive.
+    More generally, every nonnegative weighted sum of the occurring
+    character projectors is positive. This supplies the positive bond weights
+    appearing in \cite[Lemma~4.4]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Unitarity gives $\chi(g^{-1})=\overline{\chi(g)}$. Hence the character
+    projectors of the occurring summands are self-adjoint. They are also
+    idempotent, so they are positive. The coefficients
+    $d_\chi/(|G|m_\chi)$ are positive. Their weighted sum is therefore
+    positive; its invertibility makes it positive definite.
+\end{proof}

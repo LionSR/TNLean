@@ -1,0 +1,104 @@
+\subsection{Both edge directions and reference witnesses}
+\label{subsec:peps_arc_window_gauge}
+
+\begin{definition}[Exchange of torus coordinates]%
+    \label{def:peps_torus_coordinate_swap}
+    \lean{TNLean.PEPS.torusCoordinateSwap}
+    \lean{TNLean.PEPS.torusCoordinateSwap_apply}
+    \lean{TNLean.PEPS.torusCoordinateSwap_symm}
+    \leanok
+    The coordinate exchange $S(x,y)=(y,x)$ is a graph isomorphism from
+    the $w\times h$ torus to the $h\times w$ torus. Its inverse is the
+    coordinate exchange in the opposite direction.
+\end{definition}
+
+\begin{theorem}[Arc windows and translations under coordinate exchange]%
+    \label{thm:peps_torus_coordinate_swap_windows}
+    \lean{TNLean.PEPS.Region_map_torusCoordinateSwap_arcRectangle}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.transportCoordinateSwap}
+    \lean{TNLean.PEPS.torusCoordinateSwap_translate}
+    \lean{TNLean.PEPS.Edge.map_torusCoordinateSwap_rightEdge}
+    \lean{TNLean.PEPS.IsTorusTranslationInvariant.transportCoordinateSwap}
+    \leanok
+    Coordinate exchange sends the cyclic $L\times K$ rectangle starting
+    at $(x,y)$ to the cyclic $K\times L$ rectangle starting at $(y,x)$,
+    and sends the right edge at $(x,y)$ to the up edge at $(y,x)$.
+    It intertwines translation by $(a,b)$ with translation by $(b,a)$.
+    Consequently, translation invariance and injectivity of every
+    cyclic $L\times K$ window are preserved, with the side lengths
+    exchanged.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_torus_coordinate_swap, thm:peps_graph_transport_composition,
+        thm:peps_region_injective_identification}
+    Membership in the two coordinate arcs is exchanged. Graph
+    transport preserves regional injectivity. The identity
+    $S\circ t_{a,b}=t_{b,a}\circ S$ and composition of graph transports
+    give translation invariance of the transported tensor.
+\end{proof}
+
+\begin{theorem}[Equality of all bond dimensions from normal arc windows]%
+    \label{thm:peps_arc_window_all_bond_dimensions}
+    \lean{TNLean.PEPS.bondDim_eq_of_normalArcWindows_sameState}
+    \leanok
+    Let $A$ and $B$ be translation-invariant PEPS tensors on the
+    $w\times h$ torus, with positive bond dimensions and the same
+    contracted state. Suppose every cyclic $L\times K$ window is
+    injective for each tensor, where $L,K>0$, $2L+1\leq w$, and
+    $2K+1\leq h$. Then $D_A(e)=D_B(e)$ at every edge $e$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_staircase_cross_tensor_bond_dimension,
+        thm:peps_torus_coordinate_swap_windows,
+        thm:peps_torusUniformBondDim_of_translationInvariant}
+    Apply the staircase bond-dimension comparison to a horizontal
+    reference edge. Apply it again after coordinate exchange, with
+    the side lengths $K,L$, to obtain equality at a vertical reference
+    edge. Translation invariance makes the bond dimension constant
+    within each orientation, so these two comparisons determine every
+    edge dimension. No equality of non-boundary bond products is
+    assumed.
+\end{proof}
+
+\begin{theorem}[A covariant absorbed gauge family from two witnesses]%
+    \label{thm:peps_absorbed_family_reference_witnesses}
+    \lean{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily_of_edgeReferenceWitnesses}
+    \leanok
+    Let $A,B$ be translation-invariant tensors on a torus with
+    $w,h>2$, matched bond dimensions, and positive bond dimensions
+    for $A$. Let $e_{\mathrm h}$ and $e_{\mathrm v}$ be distinguished
+    horizontal and vertical edges. Suppose that at each of these
+    edges there is a coefficient-identity witness: its region and
+    complement are injective for $B$, all bond dimensions of $B$ are
+    positive, and its two invertible matrices $Z,Z_{\mathrm{ref}}$ satisfy
+    $C_A(R,e,M;\sigma,\tau)=C_B(R,e,Z M Z^{-1};\sigma,\tau)$
+    for both choices $Z$ and $Z_{\mathrm{ref}}$, all matrices, and all
+    physical configurations, after identifying
+    the matched matrix sizes. Require that the first stored endpoint
+    of each distinguished edge belongs to its witnessing region.
+    Then there is a translation-covariant family of invertible edge
+    matrices $X_e$ such that, for every edge $e$, global physical
+    configuration $\sigma$, and matrix $M$,
+    \begin{align}
+        C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma).
+    \end{align}
+    Here $X\cdot B$ denotes the tensor obtained by the edge gauges,
+    and the matrix on the right is identified by the matched bond
+    dimensions. The witnessing regions need not be rectangles.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_absorbedBoundaryGauge,
+        thm:peps_regionInsertedCoeff_translate_coeffIdentity}
+    Translate the horizontal witness to each horizontal edge and
+    the vertical witness to each vertical edge. Absorb the gauge on
+    each witnessing boundary into the tensor $B$.
+    The translation reaching an edge is unique when $w,h>2$;
+    composition of translations therefore gives covariance of the
+    resulting family. If the stored endpoint order is reversed, the
+    absorbed matrix is replaced by its transposed inverse.
+    The translated coefficient identity gives the displayed
+    bare-edge identity at each edge.
+\end{proof}

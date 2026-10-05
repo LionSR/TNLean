@@ -17,3 +17,6 @@ import TNLean.PEPS.Examples.ClusterStabilizer
 import TNLean.PEPS.Examples.GHZ
 import TNLean.PEPS.Examples.QuantumDouble
 import TNLean.PEPS.Examples.RVB
+import TNLean.PEPS.Examples.ToricCodePrimal
+import TNLean.PEPS.Examples.ToricCodeTorusAmplitudes
+import TNLean.PEPS.Examples.ToricCodeTorusSectors

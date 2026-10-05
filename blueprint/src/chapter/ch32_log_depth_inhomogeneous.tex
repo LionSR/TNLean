@@ -23,7 +23,10 @@ also assume $D^2\le d^{3D}$, which holds for every $D$ when $d\ge2$. The source
 requires $d^q\ge D^2$ for its polar decompositions, which implies
 $D^2\le d^{3D}$ for blocks of $q\ge3D\ge1$ sites, and holds the two legs of a
 block, of dimension $D$ each, on its sites, but states no bound $3D$. The restriction
-is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
+is recorded in~\cite{gap:mswc24_inhomogeneous_scope}. For block lengths with
+an explicit positive logarithmic lower bound, Theorem~\ref{thm:ldp_inhomogeneous_sequence}
+prepares the finitely many exceptional rings exactly and absorbs their depths
+into a single constant.
 
 \begin{definition}[Blocked tensors of an inhomogeneous chain]
     \label{def:ldp_chain_block_tensor}
@@ -649,4 +652,110 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     (\ref{eq:ldp_chain_block_iso_inner}) by
     Theorem~\ref{thm:ldp_chain_block_iso_inner}, since the padded chain has the
     state $\ket{\phi_N}$ by Theorem~\ref{thm:ldp_zero_pad}.
+\end{proof}
+
+
+\begin{theorem}[Inhomogeneous sequences with logarithmically growing blocks]
+    \label{thm:ldp_inhomogeneous_sequence}
+    \lean{MPSPreparation.exists_threshold_three_mul_le_of_log,
+        MPSPreparation.isPreparedInDepth_zero_one_site,
+        MPSPreparation.exists_isPreparedInDepth_inhomogeneous_of_log_lower,
+        MPSPreparation.exists_isPreparedInDepth_inhomogeneous_sequence}
+    \leanok
+    \uses{thm:ldp_inhomogeneous, thm:ldp_short_chain_preparation,
+        def:ldp_pair_approximable}
+    Fix a physical dimension $d\ge1$, a bond bound $D$, and $c>0$.
+    There are constants $C$ and $N_0$, depending only on $d,D,c$, with the
+    following property. For every $N\ge1$, let $A^{(N)}$ be a chain with bond
+    dimensions at most $D$, and cut it into $M_N\ge1$ blocks satisfying
+    $c\log N\le\ell_{N,k}\le L_N$.
+    Suppose its positive-part state is nonzero and approximable by unit pairs
+    with error at most $\delta_N$. Then there are unit vectors $\psi_N$ prepared
+    by local circuits of depths $T_N\le CL_N$ with
+    $0\le\varepsilon(\psi_N,\phi_N)\le\delta_N$.
+    For $N<N_0$ one can take $\psi_N=\phi_N/\lVert\phi_N\rVert$ exactly.
+    In particular, $\delta_N\to0$ implies
+    $\varepsilon(\psi_N,\phi_N)\to0$, and $L_N=O(\log N)$ implies
+    $T_N=O(\log N)$. No injectivity is required.
+
+    The positive lower bound on block lengths is an additional hypothesis:
+    the source's upper bound $q_N=O(\log N)$ alone does not imply it.
+    Convergence of the errors supplies no accuracy-dependent rate, so this
+    statement does not establish $O(\log(N/\varepsilon))$ for arbitrary
+    requested accuracy~\cite{gap:mswc24_inhomogeneous_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose $N_0>\exp(3D/c)$. For $N\ge N_0$, all block lengths are at least
+    $3D$, so Theorem~\ref{thm:ldp_inhomogeneous} gives depth at most $C_0L_N$.
+    On the finitely many rings $2\le N<N_0$, apply
+    Theorem~\ref{thm:ldp_short_chain_preparation} to the normalized target:
+    extending it to a unitary and decomposing that unitary into nearest-neighbour
+    gates gives a bound $K$ depending only on $d,N_0$. A one-site vector is a
+    product vector and has depth zero. Since $N\ge1$ and the blocks cover the
+    ring, $L_N\ge1$, so $C=\max(C_0,K)$ bounds every depth by $CL_N$.
+    The exact states have zero error. Cauchy--Schwarz gives nonnegative error
+    for every prepared unit vector, and convergence follows by squeezing
+    between zero and $\delta_N$.
+\end{proof}
+
+\begin{theorem}[Exact linear-depth preparation of an inhomogeneous state]
+    \label{thm:ldp_inhomogeneous_exact}
+    \lean{MPSPreparation.exists_isPreparedInDepth_normalizedChainState}
+    \leanok
+    \uses{thm:ldp_isometric_extension_depth, thm:ldp_isometric_extension_overlap,
+        thm:ldp_short_chain_preparation}
+    Fix $d\ge1$ and $D$. There is $C$ such that the normalized state of every
+    nonzero inhomogeneous chain of bond dimension $D$ on $N\ge1$ sites is
+    prepared exactly by a local circuit of depth at most $CN$. No injectivity
+    or correlation-decay assumption is required. This is the sequential
+    circuit of~\cite{Malz2024Preparation}, applied to one block covering the
+    ring, including the isometric extension for a non-injective tensor.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $N\ge3D$ and $d\ge2$, use one block with positive-part state
+    $\phi_{\mathrm{pos}}$. Its normalized vector is a single unit pair on
+    $\mathbb C^D\otimes\mathbb C^D$, with its two indices interchanged to
+    match the cyclic contraction. The block isometry satisfies $WP=B$, so
+    it sends that pair to $\phi_N/\lVert\phi_N\rVert$ in depth at most $C_0N$.
+    For $2\le N<3D$, bounded-dimensional synthesis gives a constant depth
+    $K$ depending only on $d,D$; take $C=\max(C_0,K)$. One-site states and
+    states with $d=1$ are product states and need no gates.
+\end{proof}
+
+\begin{theorem}[Accuracy-dependent preparation under a uniform decay rate]
+    \label{thm:ldp_inhomogeneous_uniform_rate}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
+    \leanok
+    \uses{thm:ldp_inhomogeneous, thm:ldp_inhomogeneous_exact,
+        def:ldp_pair_approximable, lem:ldp_log_threshold_error}
+    Fix $d\ge1$ and a family $A^{(N)}$ of inhomogeneous chains with bond
+    dimensions at most $D$. Suppose there are constants $K,r>0$ and an integer
+    $k\ge0$, independent of $N$, such that at every scale $1\le q\le N$
+    there is a partition into blocks of lengths between $q$ and $2q$ with a
+    nonzero positive-part state approximable by unit pairs with error at most
+    $KN^k e^{-rq}$. Then there is $C$ such that for every $N\ge1$ and
+    $0<\varepsilon\le1$, a unit vector $\psi$ can be prepared with depth
+    $T\le C\log(N/\varepsilon)$ and error
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$.
+
+    This is a conditional variant of the accuracy-dependent claim in the
+    inhomogeneous paragraph of~\cite{Malz2024Preparation}. The uniform rate
+    is an additional assumption: convergence of the approximation errors
+    alone does not establish it~\cite{gap:mswc24_inhomogeneous_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$, where
+    $a=(k+1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
+    $rq\ge\log K+k\log N-\log\varepsilon$, so Lemma~\ref{lem:ldp_log_threshold_error}
+    gives $KN^k e^{-rq}\le\varepsilon$.
+    If $q\le N$, choose the partition supplied by the approximation hypothesis.
+    Its block lengths are at most $2q$, so Theorem~\ref{thm:ldp_inhomogeneous}
+    gives depth at most $2C_0q$. If $q>N$, apply
+    Theorem~\ref{thm:ldp_inhomogeneous_exact} to obtain exact preparation in
+    depth at most $C_1N<C_1(a\log(N/\varepsilon)+b)$.
+    Since $\log(N/\varepsilon)\ge\log2$, both bounds are a constant multiple
+    of $\log(N/\varepsilon)$. The one-site case has depth zero.
 \end{proof}

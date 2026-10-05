@@ -1,0 +1,72 @@
+\begin{theorem}[Isometry of the normalized averaging site]%
+    \label{thm:peps_averaging_site_isometry}
+    \lean{TNLean.PEPS.isGIsometric_averagingSite}
+    \leanok
+    \uses{def:peps_regular_averaging_site}
+    Let $U$ be a matrix representation of a finite group and let $P$
+    be the normalized average of its four-leg action. The corresponding
+    site map is $G$-isometric, with factor one on the invariant virtual
+    subspace: $\langle Px,Py\rangle=\langle x,y\rangle$ for invariant
+    $x,y$. This is an auxiliary projector consequence of the isometry
+    condition in \cite[Definition~6.1]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    The site map is the averaging map. It is invariant, injective on
+    invariant vectors, and acts as the identity on that subspace.
+\end{proof}
+
+\begin{theorem}[Exact norm of the actual regular torus state]%
+    \label{thm:peps_regular_averaging_torus_norm}
+    \lean{TNLean.PEPS.torusBondNetwork_regular_averagingSite_norm,
+        TNLean.PEPS.torusBondNetwork_regular_averagingSite_ne_zero}
+    \leanok
+    \uses{def:peps_regular_averaging_site, thm:peps_isometric_adjoint,
+        thm:peps_regular_torus_closure_overlap}
+    Let $G$ be finite, let the torus have positive periods, and let $N$
+    be its number of sites. For the actual torus contraction
+    $\Psi_{\mathrm{reg}}$ of normalized regular averaging sites with
+    identity bond operators,
+    \begin{align}
+        \langle\Psi_{\mathrm{reg}},\Psi_{\mathrm{reg}}\rangle
+                            & =|G|^{N+1}, \\
+        \Psi_{\mathrm{reg}} & \ne0.
+    \end{align}
+    This is an auxiliary normalization consequence for the regular state
+    in \cite[Section~7]{Schuch2010PEPS}, with unnormalized virtual bonds.
+\end{theorem}
+\begin{proof}\leanok
+    The regular averaging projector is self-adjoint and idempotent,
+    so its actual site Gram kernel has factor one.
+    In the regular torus Gram contraction with trivial closures, every
+    group element is a simultaneous closure intertwiner. The overlap is
+    therefore $|G|^N|G|$. The group order is positive, proving nonvanishing.
+\end{proof}
+
+\begin{theorem}[Normalization under the physical state isometry]%
+    \label{thm:peps_weighted_torus_norm}
+    \lean{TNLean.PEPS.norm_ne_zero_of_isometry_to_regularTorus,
+        TNLean.PEPS.torusBondNetwork_blockFourthRootWeight_norm_ne_zero}
+    \leanok
+    \uses{thm:peps_regular_averaging_torus_norm,
+        thm:peps_torus_semiregular_isometric_extension,
+        lem:peps_torus_physical_bond_regrouping_overlap}
+    Every norm-preserving physical map carrying a vector $\psi$ to the
+    actual regrouped regular torus state gives
+    $\langle\psi,\psi\rangle=|G|^{N+1}$ and $\psi\ne0$.
+    In particular, choose positive-dimensional blocks $D_i$ and an
+    isometric Fourier intertwiner with the regular representation.
+    The actual fourth-root-weighted block state $\Psi_{U,W}$ then satisfies
+    \begin{align}
+        \langle\Psi_{U,W},\Psi_{U,W}\rangle
+                   & =|G|^{N+1}, \\
+        \Psi_{U,W} & \ne0.
+    \end{align}
+    Both conclusions concern finite tori with positive periods.
+\end{theorem}
+\begin{proof}\leanok
+    Move the norm-preserving map across the overlap and substitute the
+    actual regular-state equality. Physical coordinate regrouping preserves
+    overlaps, giving the exact regular norm. Its positivity implies that
+    the original vector is nonzero. For the weighted block construction,
+    use the already derived ambient physical state isometry.
+\end{proof}

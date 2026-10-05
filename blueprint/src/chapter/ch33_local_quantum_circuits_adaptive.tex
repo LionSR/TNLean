@@ -1,0 +1,167 @@
+\section{Adaptive channels on arbitrary inputs}
+
+Finite local measurements and classical feedforward act on mixed states by
+summing unnormalized completely positive operations. The model below is
+motivated by the finite-round extension discussed in~\cite[paragraph
+    ``State transformations with QC and LOCC'']{Piroli2021LOCC}. It allows
+arbitrary intermediate onsite dimensions and counts gates on enlarged
+sites at unit cost. The source instead counts gates on fixed-dimensional
+physical qudits, with onsite ancillas treated separately; no uniform-depth
+simulation between the models is established here. In addition, no decomposition into a fixed number of source \textit{QCcc}
+protocols is supplied. This block count differs from the number of individual
+site measurements permitted within one block.
+Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
+
+\begin{definition}[Onsite instruments with conditional continuation]
+    \label{def:qc_onsite_feedforward}
+    \uses{def:qc_onsite_channel}
+    \lean{QuantumCircuit.OnsiteChannel.feedforwardMap}
+    \leanok
+    An onsite instrument has local Kraus operators $K_{i,j}$ satisfying
+    $\sum_jK_{i,j}^{\dagger}K_{i,j}=I$. For the communicated tuple of outcomes
+    $J$, let $K_J=\bigotimes_iK_{i,J(i)}$ and let $\Psi_J$ be the selected
+    continuation. Averaging the outcomes gives the map
+    \begin{align}
+        \mathcal F(\rho) & =\sum_J\Psi_J(K_J\rho K_J^{\dagger}).
+        \label{eq:qc_onsite_feedforward}
+    \end{align}
+    Each summand uses an unnormalized post-measurement operator.
+\end{definition}
+
+\begin{theorem}[Trace preservation with classical feedforward]
+    \label{thm:qc_onsite_feedforward_cptp}
+    \uses{def:qc_onsite_feedforward}
+    \lean{QuantumCircuit.OnsiteChannel.feedforwardMap_isKrausCPTP,
+        QuantumCircuit.OnsiteChannel.feedforwardMap_const,
+        QuantumCircuit.OnsiteChannel.comp_feedforwardMap}
+    \leanok
+    If each $\Psi_J$ is trace preserving and completely positive, then so is
+    $\mathcal F$. If $\Psi_J=\Psi$ is independent of $J$, then
+    $\mathcal F=\Psi\circ\Phi$, where $\Phi$ is the channel of the onsite
+    instrument with its outcomes forgotten. A further linear map $\Theta$
+    may be composed into every continuation in
+    (\ref{eq:qc_onsite_feedforward}).
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $B_{J,a}$ be Kraus operators for $\Psi_J$. Then $B_{J,a}K_J$ are
+    Kraus operators for $\mathcal F$, and
+    \begin{align}
+        \sum_{J,a}(B_{J,a}K_J)^{\dagger}(B_{J,a}K_J)
+         & =\sum_JK_J^{\dagger}\Bigl(\sum_aB_{J,a}^{\dagger}B_{J,a}\Bigr)K_J
+        =\sum_JK_J^{\dagger}K_J=I. \notag
+    \end{align}
+    The two composition identities follow by linearity of the finite sum.
+\end{proof}
+
+\begin{definition}[Finite adaptive local protocol]
+    \label{def:qc_adaptive_protocol}
+    \uses{def:qc_onsite_feedforward, def:qc_local_channel_circuit}
+    \lean{QuantumCircuit.IsAdaptiveChannelProtocol,
+        QuantumCircuit.IsAdaptiveChannelConversion}
+    \leanok
+    A finite adaptive local protocol is a tree formed from onsite channels,
+    nearest-neighbor channel layers, and onsite instruments with a
+    continuation chosen according to the complete communicated outcome tuple.
+    A depth bound $T$ bounds the number of nearest-neighbor layers on every
+    branch. Onsite channels and instruments have zero cost, and one layer
+    adds one to the depth. A larger depth bound also bounds the same protocol.
+    An operator $\rho$ is adaptively converted into $\sigma$ in depth $T$
+    when $\Psi(\rho)=\sigma$ for such a protocol $\Psi$.
+\end{definition}
+
+\begin{theorem}[Channels, composition, and deterministic inclusion]
+    \label{thm:qc_adaptive_protocol_properties}
+    \uses{def:qc_adaptive_protocol}
+    \lean{QuantumCircuit.IsAdaptiveChannelProtocol.isKrausCPTP,
+        QuantumCircuit.IsAdaptiveChannelProtocol.onsite_comp,
+        QuantumCircuit.IsAdaptiveChannelProtocol.comp,
+        QuantumCircuit.IsAdaptiveChannelProtocol.channelLayer,
+        QuantumCircuit.IsLocalChannelProtocol.adaptive,
+        QuantumCircuit.IsAdaptiveChannelConversion.refl,
+        QuantumCircuit.IsAdaptiveChannelConversion.mono,
+        QuantumCircuit.IsAdaptiveChannelConversion.trans,
+        QuantumCircuit.IsAdaptiveChannelConversion.density,
+        QuantumCircuit.IsLocalChannelConversion.adaptive}
+    \leanok
+    Every finite adaptive protocol is trace preserving and completely
+    positive. Two protocols with depth bounds $T_1,T_2$ compose with depth
+    bound $T_1+T_2$. Deterministic local channel protocols are adaptive
+    protocols with the same depth bound. Adaptive conversion is reflexive
+    in depth zero, monotone in its depth bound, transitive with additive
+    depth, and preserves density matrices.
+\end{theorem}
+\begin{proof}
+    \uses{thm:qc_onsite_feedforward_cptp}
+    \leanok
+    Induct on the protocol tree. The onsite and layer cases use their
+    channel properties, and the instrument case uses
+    Theorem~\ref{thm:qc_onsite_feedforward_cptp}. To compose protocols, put
+    the second protocol after each branch of the first. An instrument keeps
+    the same branch depth, a nearest-neighbor layer adds one, and enlarging
+    a depth bound commutes with adding the second depth. An onsite operation
+    followed by a fixed continuation is an instrument whose continuation
+    ignores its outcomes. This also embeds deterministic protocols.
+    The remaining conversion properties follow from the identity channel,
+    the depth bounds, composition, and preservation of positivity and trace.
+\end{proof}
+
+\begin{definition}[The average channel of a measurement round]
+    \label{def:qc_measurement_round_channel}
+    \uses{def:qc_measurement_rounds}
+    \lean{QuantumCircuit.MeasurementRound.map}
+    \leanok
+    For a measurement round with circuit $U$, outcome projectors $P_m$, and
+    conditional product unitaries $V_m$, its average channel is
+    $\rho\mapsto\sum_m V_mP_mU\rho U^{\dagger}P_mV_m^{\dagger}$.
+\end{definition}
+
+\begin{theorem}[Measurement rounds act on density matrices]
+    \label{thm:qc_measurement_round_channel}
+    \uses{def:qc_measurement_round_channel, def:qc_measurement_rounds}
+    \lean{QuantumCircuit.MeasurementRound.sum_kraus,
+        QuantumCircuit.MeasurementRound.map_isKrausCPTP,
+        QuantumCircuit.MeasurementRound.map_vecMulVec,
+        QuantumCircuit.MeasurementRound.map_vecMulVec_of_isPreparationOf}
+    \leanok
+    The average map of a measurement round is trace preserving and
+    completely positive. On a pure input $\ket v\bra v$, its output is
+    $\sum_m\ket{V_mP_mUv}\bra{V_mP_mUv}$. In particular, if the round
+    deterministically prepares $\psi$ from a product input $v$, and both
+    input and target pure operators have trace one, its average output is
+    $\ket\psi\bra\psi$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Unitarity of $U,V_m$, orthogonality of each $P_m$, and
+    $\sum_mP_m=I$ give
+    $\sum_m(V_mP_mU)^{\dagger}(V_mP_mU)=I$.
+    Conjugating a rank-one operator gives the stated pure-input formula.
+    For deterministic preparation, every output is $c_m\psi$, including
+    $c_m=0$ for an outcome of probability zero. Thus the average output is
+    $(\sum_m|c_m|^2)\ket\psi\bra\psi$. Trace preservation and normalization
+    give $\sum_m|c_m|^2=1$.
+\end{proof}
+
+\begin{theorem}[Measurement rounds are adaptive protocols]
+    \label{thm:qc_measurement_round_adaptive}
+    \uses{def:qc_measurement_round_channel, def:qc_adaptive_protocol}
+    \lean{QuantumCircuit.MeasurementRound.adaptive}
+    \leanok
+    The average channel of a computational-basis measurement round is a
+    finite adaptive protocol whose quantum-depth bound is the length of
+    the round's circuit.
+\end{theorem}
+\begin{proof}
+    \uses{thm:qc_adaptive_protocol_properties}
+    \leanok
+    Use the round's circuit as a deterministic local channel protocol.
+    The following onsite instrument has the computational-basis projectors
+    at measured sites and one identity Kraus operator at each unmeasured
+    site. Its outcome tuples correspond bijectively to the measured
+    configurations $m$, and its product Kraus operators are $P_m$.
+    For outcome $m$, choose the onsite channel of the product correction
+    unitary $V_m$. The resulting Kraus operators are exactly $V_mP_mU$.
+    The instrument and corrections have depth zero, so composition leaves
+    the circuit's depth bound unchanged.
+\end{proof}

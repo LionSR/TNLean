@@ -1,0 +1,27 @@
+\begin{theorem}[Multiplicity-one semi-regular representation]
+    \label{thm:peps_regular_minimal_representation}
+    \lean{TNLean.PEPS.exists_minimalSemiRegular_leftRegular_fourier}
+    \leanok
+    \uses{thm:peps_regular_unitary_fourier,
+        thm:peps_semiregular_group_algebra,
+        thm:peps_torus_block_multiplicity_state}
+    For every finite group, the Fourier representations in
+    (\ref{eq:peps_regular_unitary_fourier}) can be chosen so that
+    $U_{\min}(g)=\bigoplus_i D_i(g)$ is unitary and semi-regular.
+    The multiplicity of each character $\chi_i$ in $U_{\min}$ is one.
+    The same chosen matrices give the actual unitary Fourier decomposition
+    $U_{\mathrm{reg}}\cong\bigoplus_i D_i\otimes I_{d_i}$.
+    Thus the group determines the multiplicity-one representation used
+    in \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    The direct sum is unitary because each $D_i$ is unitary. If a linear
+    combination of the minimal group matrices vanishes, it vanishes in
+    every block $D_i$. Repeating each zero block $d_i$ times and changing
+    back by the actual Fourier basis gives the same zero combination of
+    regular group matrices. Those matrices are linearly independent.
+    Thus the minimal matrices are linearly independent and their
+    group-algebra action is faithful, which implies semi-regularity.
+    Finally, its character is $\sum_i\chi_i$. Character orthogonality
+    and pairwise inequivalence give multiplicity one for each $\chi_i$.
+\end{proof}

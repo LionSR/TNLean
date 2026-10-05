@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.FiniteRangeKnabe
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
+import TNLean.MPS.ParentHamiltonian.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 
@@ -50,20 +51,6 @@ theorem sum_zmodLocalTermES_eq_parentHamiltonianES {N : ℕ} [NeZero N]
       ((ZMod.finEquiv N).toEquiv.sum_comp (zmodLocalTermES A R)).symm
     _ = ∑ i : Fin N, localTermES A R i := by
       simp [zmodLocalTermES]
-
-/-- Addition in \(\mathbb Z/N\mathbb Z\) is cyclic forward motion on the
-corresponding finite site. -/
-theorem finEquiv_symm_add_eq_cyclicForwardSite {N : ℕ} [NeZero N]
-    (s : ZMod N) (q : ℕ) :
-    (ZMod.finEquiv N).symm (s + q) =
-      cyclicForwardSite ((ZMod.finEquiv N).symm s) q := by
-  cases N with
-  | zero => exact (NeZero.ne 0 rfl).elim
-  | succ N =>
-      apply Fin.ext
-      change (s.val + (q : ZMod (N + 1)).val) % (N + 1) =
-        (s.val + q) % (N + 1)
-      rw [ZMod.val_natCast, Nat.add_mod_mod]
 
 /-- Two range-\(R\) cyclic windows are disjoint when their oriented start
 separation \(e\) satisfies \(R \leq e\) and \(e + R \leq N\). -/

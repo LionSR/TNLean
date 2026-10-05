@@ -1,0 +1,39 @@
+\begin{theorem}[Fixed physical route and commutator-class measurement]%
+    \label{thm:peps_torus_swept_physical_route_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusSweptPhysicalRoute_commutatorMeasurement}
+    \leanok
+    \uses{thm:peps_torus_swept_physical_route_composition,
+        thm:peps_torus_swept_route_joint_flux_measurement}
+    Assume torus periods at least eight and seven, and regular
+    G-isometry of every original site tensor. There are twelve global
+    unitary factors, each supported on its actual six-site movement
+    region, and a complete projective measurement on the six reunion
+    spins, all chosen before both initial flux labels $g,h$.
+    Let $U=M_{11}\cdots M_0$ be their chronological product and let
+    $\Psi_0(g,h)$ be the literal four-endpoint initial state. Then $U$
+    sends it to the actual final route state. If $Q_C$ is the reunion
+    projector for conjugacy class $C$ and $\widehat Q_C$ its identity
+    extension to the whole physical space, then
+    \begin{align}
+        \widehat Q_C U\Psi_0(g,h)
+         & =\mathbf1_{C=[ghg^{-1}h^{-1}]}U\Psi_0(g,h),               \\
+        Q_C\mathcal C_R(U\Psi_0(g,h))
+         & =\mathbf1_{C=[ghg^{-1}h^{-1}]}\mathcal C_R(U\Psi_0(g,h)).
+    \end{align}
+    Here $\mathcal C_R$ is the actual coefficient matrix across the
+    reunion cut. The complementary physical-range outcome annihilates
+    these states. The measured class is the identity precisely when
+    $g$ and $h$ commute.
+    This is the explicit finite-torus route and subsequent class
+    measurement for \cite[\S6.6, local lines 2340--2423]{Schuch2010PEPS}.
+    It does not assert an unrestricted braid or partner annihilation.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the twelve elementary physical operations and the reunion
+    projectors independently of the flux labels. Their checked
+    chronological action identifies the output with the actual final
+    contraction. Apply the reunion cut identity to that contraction.
+    Evaluation at every assembled region/complement configuration
+    gives the whole-state action of the identity-extended projector.
+\end{proof}

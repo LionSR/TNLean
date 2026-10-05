@@ -9,7 +9,7 @@
     its tensor and list the left and right subchains from their respective
     outer boundaries inward. Thus the right product $R(\sigma_R)$ is the
     transpose of the product in the original physical ordering. For a
-    matrix $G$ on the virtual pairs, define
+    matrix $G\colon\C^s\to\C^{D^2}$ from an arbitrary finite input to the virtual pairs, define
     \begin{align}
         F_{((\alpha,\beta),i,(\delta,\gamma)),x}
          & =A^i_{\beta\gamma}G_{(\alpha,\delta),x},
@@ -76,10 +76,10 @@
     \leanok
     Fix a central site of a chain of $q=\ell+1+r$ sites and a positive
     bond dimension $D$. A mixed sequential factorization of
-    $V\colon\C^{D^2}\to(\C^d)^{\otimes q}$ consists of two families of local
+    $V\colon\C^s\to(\C^d)^{\otimes q}$ consists of two families of local
     isometries $Q^L_p$ and $Q^R_p$, with outer bond dimensions
     $b^L_0=b^R_0=1$ and every bond dimension at most $D^2$, and an isometry
-    $C\colon\C^{D^2}\to\C^{b^L_\ell}\otimes\C^d\otimes\C^{b^R_r}$.
+    $C\colon\C^s\to\C^{b^L_\ell}\otimes\C^d\otimes\C^{b^R_r}$.
     Define $(E_L)_{\sigma_L,a}=(Q^L_1(\sigma_{L,1})\cdots
         Q^L_\ell(\sigma_{L,\ell}))_{1a}$ and define $E_R$ in the same manner
     from the right boundary. The required contraction is
@@ -89,7 +89,7 @@
           & \sum_i(Q^R_p(i))^\dagger Q^R_p(i) & =\Id_{b^R_p}.
         \label{eq:ldp_mixed_factorization}
     \end{align}
-    The input of dimension $D^2$ is attached to the centre, rather than to
+    The input of dimension $s$ is attached to the centre, rather than to
     either exterior boundary.
 \end{definition}
 
@@ -115,7 +115,7 @@
 
 \begin{theorem}[Mixed sequential factorization of a polar isometry]
     \label{thm:ldp_mixed_sequential_polar}
-    \lean{MPSPreparation.mixedPolarIsoMatrix,
+    \lean{MPSPreparation.exists_eq_mixedChain, MPSPreparation.mixedPolarIsoMatrix,
         MPSPreparation.mixedPolarIsoMatrix_eq_mixedProductMap,
         MPSPreparation.exists_mixed_sequential_polarIsoMatrix,
         MPSPreparation.exists_mixed_sequential_polarIsoMatrix_of_split}
@@ -128,7 +128,9 @@
     two-sided construction in \cite[footnote~4 to eqs.~(13)--(15)]{Malz2024Preparation}.
     For non-injective $B$, footnote~3 uses the pseudoinverse and
     $V^\dagger V$ is the polar support projector, rather than the identity;
-    the corresponding mixed factorization on that support is not included here
+    the full-input isometry assertion therefore fails. The corrected
+    support-restricted factorization is given below in
+    Theorem~\ref{thm:ldp_mixed_polar_support}
     \cite{gap:mswc24_mixed_polar_injectivity_scope}.
 \end{theorem}
 \begin{proof}

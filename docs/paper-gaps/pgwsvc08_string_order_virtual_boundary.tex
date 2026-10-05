@@ -8,7 +8,7 @@
 
 \title{PGWSVC08 Physical String Order versus Virtual-Boundary Nondecay}
 \author{}
-\date{2026-06-11}
+\date{2026-10-04}
 
 \begin{document}
 \maketitle
@@ -130,12 +130,13 @@ but it changes the complex asymptotic formula.
 The blueprint restores the phase in the proof of
 \path{thm:pgwsvc08_physical_string_order} in
 \path{blueprint/src/chapter/ch12_symmetry_string_order.tex}. The correlator is
-formalized as \leanid{MPSTensor.physicalStringOrderParam}. The source theorem
-and asymptotic argument remain marked \path{notready}; no \Lean{} theorem is
-claimed for
-(\ref{eq:pgwsvc08_string_order_virtual_boundary_corrected_asymptotic}). The
-inline \path{Local fix} comment at the corrected display records this local
-source correction.
+formalized as \leanid{MPSTensor.physicalStringOrderParam}. The full existential source theorem remains marked \path{notready}.
+The fixed-correlator asymptotic formula is now supplied by
+\leanid{MPSTensor.physicalStringOrderParam_phase_adjusted_tendsto}:
+$\mu^{-N}S_N\to\alpha_y\beta_x$. The magnitude limit is proved by
+\leanid{MPSTensor.physicalStringOrderParam_norm_tendsto}.
+The inline \path{Local fix} comment at the corrected display records the
+source phase correction.
 
 \section{Formalized physical and virtual-boundary forms}
 
@@ -238,6 +239,139 @@ The physical and virtual-boundary notions differ in four respects.
           finer, and existential quantification can be recovered from it.
 \end{enumerate}
 
+\section{Explicit physical-endpoint examples}
+
+The two printed one-dimensional examples are now proved directly with
+physical endpoint operators. These calculations use the stationary
+infinite-chain transfer expression above; they do not identify it with an
+arbitrary finite periodic-ring expectation. They also do not invoke the
+one-site injectivity hypothesis of the general virtual-boundary criteria.
+
+\paragraph{AKLT.}
+In the physical order $(m=0,+1,-1)$, the printed tensor has letters
+$(\sigma_z,\sqrt2\sigma_+,\sqrt2\sigma_-)/\sqrt3$. It is a diagonal unitary
+physical rephasing of the existing AKLT tensor, which has a negative last
+letter. The rephasing commutes with the chosen endpoints
+$x=y=S_z=\operatorname{diag}(0,1,-1)$ and twist
+$u=e^{i\pi S_z}=\operatorname{diag}(1,-1,-1)$.
+\leanid{MPSTensor.akltPGWSVC08_sigmaZ_intertwine} exhibits the printed virtual
+gauge $V=\sigma_z$, and \leanid{MPSTensor.akltSpinRotationZ_eq_exp} identifies
+the actual matrix exponential.
+
+The canonical density is $\Lambda=\Id/2$. It is positive, normalized and
+stationary, as proved by \leanid{MPSTensor.akltPGWSVC08_canonical}.
+The source's display \texttt{fixed} requires $\tr\Lambda=1$, whereas
+Example~1 prints $\Lambda=\Id$. The latter is a normalization error:
+\leanid{MPSTensor.physicalStringOrderParam_akltPGWSVC08} proves the printed
+value $-4/9$ for every middle length $N\geq0$ with $\Id/2$, and
+\leanid{MPSTensor.physicalStringOrderParam_akltPGWSVC08_identity_boundary}
+proves that the literal identity boundary would give $-8/9$.
+The concrete endpoints satisfy the physical positive-limit predicate,
+\leanid{MPSTensor.akltPGWSVC08_hasPhysicalStringOrder}.
+
+\paragraph{Cluster state.}
+The source matrices are exactly the existing review tensor
+\leanid{MPSTensor.clusterTensorRMP}, rather than its transposed representative.
+With $u=-\sigma_x$, $V=\sigma_y$ and $\Lambda=\Id/2$, every endpoint trace
+$\tr(V\Lambda A_nA_j^\dagger)$ vanishes. Moreover,
+\leanid{MPSTensor.clusterTensorRMP_physicalStringOrderParam_eq_zero} proves
+$S_N(x,y,-\sigma_x)=0$ for arbitrary one-site endpoints whenever $N\geq2$.
+The absence assertion fixes this twist; it does not quantify over other
+possible physical unitaries.
+
+For the printed two-site endpoints $x=\sigma_z\otimes\sigma_y$ and
+$y=\sigma_y\otimes\sigma_z$,
+\leanid{MPSTensor.clusterTensorRMP_twoSite_physicalStringOrderParam} gives
+\begin{align}
+    \tr\!\left[\frac{\Id}{2}\,
+        \mathcal E_x^{(2)}\mathcal E_{-\sigma_x}^{N}
+    \mathcal E_y^{(2)}(\Id)\right] & =1
+\end{align}
+for every \emph{single-site} middle length, including odd lengths.
+The blocked-index convention fixes the endpoint order. The corresponding
+physical string-order predicate is also proved on the two-site blocked tensor
+by \leanid{MPSTensor.clusterBlockedRMP_hasPhysicalStringOrder}, where the
+middle length counts blocks and the twist is $u\otimes u$.
+
+These results supply the printed data in Examples~1--2 of
+\cite[lines~392--411]{PerezGarcia2008StringOrder}, tracked by \ghissue{8268}.
+They do not close the general physical-endpoint realization or physical
+reduced-density-operator symmetry theorems in \ghissue{4872}.
+
+\section{Canonical purity and the spectral lemma}
+
+The spectral lemma is now treated without one-site injectivity in
+\leanid{MPSTensor.pureCanonical_twistedTransfer_spectral_lemma}.
+Its canonical hypotheses are $\mathcal E_A(\Id)=\Id$, a faithful normalized
+stationary dual density $\Lambda$, and the spectral-purity condition
+that every nonzero peripheral eigenmatrix is scalar, with eigenvalue $1$.
+This includes fixed-space simplicity. The source's phrase ``only one
+eigenvalue of modulus one'' must not be read merely as a condition on the
+set of eigenvalue values: the identity channel would then be a counterexample.
+No equivalence with algebraic simplicity or a separate physical-state
+purity predicate is asserted here.
+
+\leanid{MPSTensor.isIrreducibleMap_of_canonical_fixedSpace} derives
+irreducibility from faithful canonical density and fixed-space simplicity,
+using the channel library's spectral characterization. The older injective
+interfaces remain as specializations. The result bounds the actual spectral
+radius and characterizes equality by a unitary virtual intertwiner,
+including invariance of $\Lambda$.
+
+The identity
+\begin{align}
+    \mathcal E_u(X)&=\mu V\mathcal E_A(V^\dagger X)
+\end{align}
+retains the peripheral phase. It transfers every peripheral eigenpair to
+$\mathcal E_A$, proving that there is at most one peripheral eigenvalue
+and that the associated eigenmatrices are unique up to nonzero scalar.
+\leanid{MPSTensor.physicalEigenbasis_exp_intertwining_iff} identifies the
+literal source relation in a physical eigenbasis,
+$V^\dagger\widetilde A_j=e^{i(\theta-\theta_j)}
+\widetilde A_jV^\dagger$.
+\leanid{MPSTensor.twistedTransfer_spectralRadius_eq_one_iff_eigenbasis}
+also supplies the exact representative $0\leq\theta<2\pi$.
+This resolves the spectral lemma's one-site-injectivity restriction;
+it does not establish the physical endpoint theorem or the reduced-state
+symmetry theorem.
+
+\section{The physical selection rule for a fixed twist}
+
+For a fixed physical unitary $u$ with virtual unitary intertwiner $V$ and
+peripheral phase $\mu$, define the actual physical endpoint coefficients
+\begin{align}
+    \alpha_y&=\tr[\Lambda V^\dagger\mathcal E_y(\Id)], &
+    \beta_x&=\tr[\Lambda\mathcal E_x(V)].
+\end{align}
+The canonical spectral-purity hypotheses imply the ordinary transfer limit
+$\mathcal E_A^N(X)\to\tr(\Lambda X)\Id$. The proof reuses the existing
+FNW remainder machinery on the conjugate-transposed family and does not
+assume diagonalizability. The exact phase-retaining identity
+$\mathcal E_u^N(X)=\mu^N V\mathcal E_A^N(V^\dagger X)$ then gives
+$|S_N|\to|\alpha_y|\,|\beta_x|$.
+
+\leanid{MPSTensor.hasPhysicalStringOrderWith_iff_endpoint_coefficients}
+proves the positive-limit criterion for these fixed physical data.
+Writing $u_0=\mu^{-1}u$, the actual endpoint choice
+$y=x^\dagger u_0$ satisfies $\alpha_y=\overline{\beta_x}$.
+Matrix-unit realization and this pairing give
+\leanid{MPSTensor.exists_hasPhysicalStringOrderWith_iff_letter_coefficient}:
+for the fixed twist and intertwiner, physical one-site endpoints exist
+exactly when $\tr(V\Lambda A_nA_m^\dagger)\ne0$ for some $n,m$.
+\leanid{MPSTensor.pureCanonical_physicalString_selection_rule} uses the
+explicit source canonical spectral-purity condition, deriving irreducibility
+rather than assuming one-site injectivity.
+
+This fixed-twist result does not redefine the global source predicate.
+The current \leanid{MPSTensor.HasPhysicalStringOrder} excludes the literal
+matrix $u=\Id$. Nontrivial physical action modulo a scalar phase is a
+separate interface question for the full existential equivalence in
+\ghissue{4872}. In particular, removing a peripheral phase does not itself
+prove $u_0\ne\Id$. The present results neither assert that conclusion nor
+interpret a conventional global phase as a new physical symmetry.
+The full existential Theorem~1, finite-support endpoint realization and
+physical reduced-state Theorem~2 remain open.
+
 \section{Verdict}
 
 Virtual-boundary nondecay is mathematically sound. For the injective tensors
@@ -247,16 +381,30 @@ span argument
 (\ref{eq:pgwsvc08_string_order_virtual_boundary_endpoint_span}). The physical
 correlator and the source's positive-limit predicate are now formal
 definitions, but the equivalence between physical and virtual endpoints has no
-formal counterpart. Current nondecay theorems therefore establish only the
-virtual-boundary formulation.
+formal counterpart. The fixed-data physical selection rule above is now proved directly.
+The existing existential symmetry/order equivalences still concern the
+virtual-boundary formulation; the explicit physical examples are also
+proved independently.
 
-Eliminating this restriction requires a theorem that realizes arbitrary
+The general physical equivalence results remain open. The spectral lemma
+above now uses faithful canonical density and the explicit simple-peripheral
+spectral condition. The older virtual-boundary equivalence theorems still
+assume one-site injectivity and do not themselves prove Theorems~1--2.
+
+The endpoint-realization restriction requires a theorem that realizes arbitrary
 virtual boundary matrices by physical endpoint operators for injective
 tensors, followed by a source-faithful proof of Theorem~1 in
 Ref.~\cite{PerezGarcia2008StringOrder}. The existing single-site construction
 \leanid{MPSTensor.physRealize} is a starting point.\footnote{Source path:
 \path{TNLean/MPS/Chain/VirtualInsertion.lean}. This file is not currently
-imported by the string-order files.} This work is tracked in \ghissue{2660}.
+imported by the string-order files.}
+
+Separately, Theorems~1--2 must be proved under the source canonical-purity
+hypotheses rather than one-site injectivity. The spectral and fixed-twist selection steps are now
+available above, but physical endpoint realization for an injective tensor
+alone does not prove either general physical equivalence. These remaining
+tasks are tracked in \ghissue{4872};
+\ghissue{2660} was absorbed into that issue.
 
 \bibliographystyle{alpha}
 \bibliography{references}
