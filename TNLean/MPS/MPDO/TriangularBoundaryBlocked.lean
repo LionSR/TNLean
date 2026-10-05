@@ -57,7 +57,7 @@ namespace MPOTensor
 /-- The derived common-block inverse is independent of the finite label
 coordinates. Only its row label is transported by the given equivalence. -/
 theorem exists_blockTensor_leftInverse_of_labelEquiv
-    {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p g : ℕ} {D : Λ → ℕ}
+    {Λ : Type*} [DecidableEq Λ] {p g : ℕ} {D : Λ → ℕ}
     (e : Λ ≃ Fin g) (T : ∀ c, MPOTensor p (D c))
     (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c)
     (hne : ∀ a b : Λ, a ≠ b → ∀ h : D a = D b,
@@ -80,6 +80,8 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
     Equiv.piCongrLeft (fun c ↦ Matrix (Fin (D c) × Fin (D c))
       (Fin (MPSTensor.blockPhysDim p L) × Fin (MPSTensor.blockPhysDim p L)) ℂ)
       e.symm (fun c xy ij ↦ K ⟨c, xy⟩ ij)
+  have hKrow (j : Fin g) : Krow (e.symm j) = (fun xy ij ↦ K ⟨j, xy⟩ ij) := by
+    exact Equiv.piCongrLeft_apply_apply _ e.symm _ j
   refine ⟨L, hL, ?_, (fun q ↦ Krow q.1 q.2), ?_⟩
   · intro c
     obtain ⟨j, rfl⟩ := e.symm.surjective c
@@ -88,12 +90,15 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
     obtain ⟨j, rfl⟩ := e.symm.surjective a
     obtain ⟨k, rfl⟩ := e.symm.surjective b
     intro x y x' y'
+    change (∑ i, ∑ l, Krow (e.symm j) (x, y) (i, l) *
+      blockTensor (T (e.symm k)) L i l x' y') = _
+    rw [hKrow j]
     have hspec := hK j k x y x' y'
     by_cases hjk : j = k
     · subst k
-      simpa [Krow] using hspec
+      simpa only [dif_pos rfl] using hspec
     · have hne' : e.symm j ≠ e.symm k := e.symm.injective.ne hjk
-      simpa [Krow, hjk, hne'] using hspec
+      simpa only [dif_neg hjk, dif_neg hne'] using hspec
 
 private theorem gaugePhaseEquiv_of_operatorPhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hD : D₁ = D₂) {O : MPOTensor d D₁} {P : MPOTensor d D₂}

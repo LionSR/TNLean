@@ -83,7 +83,17 @@ theorem triangular_printedFMatrix_eq_actionLMatrix
     ((Equiv.prodCongr (finProdFinEquiv : Fin (χ a) × Fin (χ b) ≃ Fin (χ a * χ b))
       (Equiv.refl (Fin (D x)))).trans finProdFinEquiv) _ _ ?_
   rintro ⟨⟨xa, xb⟩, xx⟩
+  change
+    (∑ t : Fin (D z),
+      VA a z y i u (finProdFinEquiv (xa, t)) *
+        VA b x z j t (finProdFinEquiv (xb, xx))) *
+      (∑ t : Fin (χ c),
+        WF a b c mu (finProdFinEquiv (xa, xb)) t *
+          WA c x y k (finProdFinEquiv (t, xx)) v) =
+    sequentialActionAnalysis VA a b x ⟨⟨z, j⟩, y, i⟩ u
+        (finProdFinEquiv (finProdFinEquiv (xa, xb), xx)) *
+      fusionThenActionSynthesis WF WA a b x ⟨⟨c, mu⟩, y, k⟩
+        (finProdFinEquiv (finProdFinEquiv (xa, xb), xx)) v
   rw [sequentialActionAnalysis_apply, fusionThenActionSynthesis_apply]
-  rfl
 
 end MPOTensor

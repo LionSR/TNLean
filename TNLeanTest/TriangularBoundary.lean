@@ -168,7 +168,7 @@ example {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
       (fun q : (c : Λ) × Fin (N c) ↦ (blockTensor (T q.1) L).toMPSTensor)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) := h.blockMPO_fintype hL
 
-example {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p g : ℕ} {D : Λ → ℕ}
+example {Λ : Type*} [DecidableEq Λ] {p g : ℕ} {D : Λ → ℕ}
     (e : Λ ≃ Fin g) (T : ∀ c, MPOTensor p (D c))
     (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c)
     (hne : ∀ a b : Λ, a ≠ b → ∀ h : D a = D b,

@@ -48,15 +48,18 @@ followed by right synthesis. In the source's main fusion section these
 maps are respectively `W` and hatted `W`; here `V` always means analysis. -/
 noncomputable def fusionFMatrix (a b c d : Fin r) :
     Matrix (FusionLeftMultiplicity N a b c d) (FusionRightMultiplicity N a b c d) ℂ :=
-  fun ⟨e, mu, nu⟩ ⟨f, lambda, sigma⟩ ↦ (χ d : ℂ)⁻¹ * Matrix.trace
-    ((fun (z : Fin (χ d)) (v : (Fin (χ a) × Fin (χ b)) × Fin (χ c)) ↦
-      ∑ t : Fin (χ e),
-        V e c d nu z (finProdFinEquiv (t, v.2)) *
-          V a b e mu t (finProdFinEquiv v.1)) *
-      (fun (v : (Fin (χ a) × Fin (χ b)) × Fin (χ c)) (z : Fin (χ d)) ↦
+  fun ⟨e, mu, nu⟩ ⟨f, lambda, sigma⟩ ↦
+    let H : Matrix (Fin (χ d)) ((Fin (χ a) × Fin (χ b)) × Fin (χ c)) ℂ :=
+      fun z v ↦
+        ∑ t : Fin (χ e),
+          V e c d nu z (finProdFinEquiv (t, v.2)) *
+            V a b e mu t (finProdFinEquiv v.1)
+    let S : Matrix ((Fin (χ a) × Fin (χ b)) × Fin (χ c)) (Fin (χ d)) ℂ :=
+      fun v z ↦
         ∑ t : Fin (χ f),
           W b c f lambda (finProdFinEquiv (v.1.2, v.2)) t *
-            W a f d sigma (finProdFinEquiv (v.1.1, t)) z))
+            W a f d sigma (finProdFinEquiv (v.1.1, t)) z
+    (χ d : ℂ)⁻¹ * Matrix.trace (H * S)
 
 variable {T : ∀ a, MPOTensor p (χ a)}
   (hD : ∀ a, 0 < χ a) (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
@@ -77,8 +80,8 @@ blocking does not appear in either contraction. -/
 theorem ofBiorthogonal_inversePrintedFMatrix_eq_fusionFMatrix
     (a b c d : Fin r) (q : FusionLeftMultiplicity N a b c d)
     (t : FusionRightMultiplicity N a b c d) :
-    (CompleteZipperFusionFamily.ofBiorthogonal hD hT V W hVW K hK).
-        inversePrintedFMatrix a b c d q t = fusionFMatrix V W a b c d q t := by
+    (CompleteZipperFusionFamily.ofBiorthogonal hD hT V W hVW K hK).inversePrintedFMatrix
+      a b c d q t = fusionFMatrix V W a b c d q t := by
   rw [CompleteZipperFusionFamily.inversePrintedFMatrix_eq_inv_dim_mul_trace]
   rcases q with ⟨e, mu, nu⟩
   rcases t with ⟨f, lambda, sigma⟩

@@ -137,15 +137,18 @@ variable
   (W : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
 
 example (a b c d : Fin r) : fusionFMatrix V W a b c d =
-  fun ⟨e, mu, nu⟩ ⟨f, lambda, sigma⟩ ↦ (χ d : ℂ)⁻¹ * Matrix.trace
-    ((fun (z : Fin (χ d)) (v : (Fin (χ a) × Fin (χ b)) × Fin (χ c)) ↦
-      ∑ t : Fin (χ e),
-        V e c d nu z (finProdFinEquiv (t, v.2)) *
-          V a b e mu t (finProdFinEquiv v.1)) *
-      (fun (v : (Fin (χ a) × Fin (χ b)) × Fin (χ c)) (z : Fin (χ d)) ↦
+  fun ⟨e, mu, nu⟩ ⟨f, lambda, sigma⟩ ↦
+    let H : Matrix (Fin (χ d)) ((Fin (χ a) × Fin (χ b)) × Fin (χ c)) ℂ :=
+      fun z v ↦
+        ∑ t : Fin (χ e),
+          V e c d nu z (finProdFinEquiv (t, v.2)) *
+            V a b e mu t (finProdFinEquiv v.1)
+    let S : Matrix ((Fin (χ a) × Fin (χ b)) × Fin (χ c)) (Fin (χ d)) ℂ :=
+      fun v z ↦
         ∑ t : Fin (χ f),
           W b c f lambda (finProdFinEquiv (v.1.2, v.2)) t *
-            W a f d sigma (finProdFinEquiv (v.1.1, t)) z)) := by
+            W a f d sigma (finProdFinEquiv (v.1.1, t)) z
+    (χ d : ℂ)⁻¹ * Matrix.trace (H * S) := by
   rfl
 
 variable {T : ∀ a, MPOTensor p (χ a)}
@@ -164,8 +167,8 @@ variable {T : ∀ a, MPOTensor p (χ a)}
 example
     (a b c d : Fin r) (q : FusionLeftMultiplicity N a b c d)
     (t : FusionRightMultiplicity N a b c d) :
-    (CompleteZipperFusionFamily.ofBiorthogonal hD hT V W hVW K hK).
-        inversePrintedFMatrix a b c d q t = fusionFMatrix V W a b c d q t :=
+    (CompleteZipperFusionFamily.ofBiorthogonal hD hT V W hVW K hK).inversePrintedFMatrix
+      a b c d q t = fusionFMatrix V W a b c d q t :=
   MPOTensor.ofBiorthogonal_inversePrintedFMatrix_eq_fusionFMatrix V W hD hT hVW K hK a b c d q t
 
 end SourceFusion
