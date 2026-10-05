@@ -80,6 +80,67 @@ theorem registerMatrixSplit_embedOp (e : Fin m ↪ Fin W)
     registerConfigurationSplit_symm_comp, Matrix.one_apply]
   split_ifs <;> simp_all
 
+/-- A chosen relabeling of the complementary configuration space does not change
+operator placement. The complement equivalence cannot depend on selected coordinates. -/
+theorem registerMatrixSplit_embedOp_reindex_complement {β : Type*}
+    [Fintype β] [DecidableEq β] (e : Fin m ↪ Fin W)
+    (c : ({j // j ∉ Set.range e} → Fin d) ≃ β)
+    (A : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
+    Matrix.reindexAlgEquiv ℂ ℂ
+      ((registerConfigurationSplit e).trans (Equiv.prodCongr (Equiv.refl _) c))
+      (embedOp e A) = A ⊗ₖ (1 : Matrix β β ℂ) := by
+  change Matrix.reindex (Equiv.prodCongr (Equiv.refl _) c)
+    (Equiv.prodCongr (Equiv.refl _) c) (registerMatrixSplit e (embedOp e A)) = _
+  rw [registerMatrixSplit_embedOp, ← Matrix.kroneckerMap_reindex]
+  simp
+
+/-- A wire-sum decomposition identifies its second block with precisely the wires
+outside the selected register. -/
+def registerComplementOfSum {b : ℕ} (e : Fin m ↪ Fin W)
+    (q : Fin m ⊕ Fin b ≃ Fin W) (hq : ∀ i, q (Sum.inl i) = e i) :
+    Fin b ≃ {j // j ∉ Set.range e} := by
+  let f : Fin b ↪ Fin W := Function.Embedding.inr.trans q.toEmbedding
+  have hrange : Set.range f = (Set.range e)ᶜ := by
+    have he : (e : Fin m → Fin W) = q ∘ Sum.inl := funext fun i => (hq i).symm
+    change Set.range (q ∘ Sum.inr) = (Set.range e)ᶜ
+    rw [he, Set.range_comp, Set.range_comp, ← q.image_compl, Set.compl_range_inl]
+  exact f.toEquivRange.trans (Set.equivOfEq hrange)
+
+@[simp] theorem registerComplementOfSum_apply_val {b : ℕ} (e : Fin m ↪ Fin W)
+    (q : Fin m ⊕ Fin b ≃ Fin W) (hq : ∀ i, q (Sum.inl i) = e i) (j : Fin b) :
+    (registerComplementOfSum e q hq j).val = q (Sum.inr j) := rfl
+
+/-- Restrict a wire configuration to the two blocks of an explicit wire-sum equivalence. -/
+def registerSumConfigurationSplit {b : ℕ} (q : Fin m ⊕ Fin b ≃ Fin W) :
+    (Fin W → Fin d) ≃ (Fin m → Fin d) × (Fin b → Fin d) :=
+  (Equiv.arrowCongr q.symm (Equiv.refl _)).trans
+    (Equiv.sumArrowEquivProdArrow _ _ _)
+
+/-- The whole wire-sum split, including its independent complementary coordinates,
+agrees with the canonical register split followed by complement relabeling. -/
+theorem registerSumConfigurationSplit_eq {b : ℕ} (e : Fin m ↪ Fin W)
+    (q : Fin m ⊕ Fin b ≃ Fin W) (hq : ∀ i, q (Sum.inl i) = e i) :
+    registerSumConfigurationSplit (d := d) q = (registerConfigurationSplit e).trans
+      (Equiv.prodCongr (Equiv.refl _)
+        (Equiv.arrowCongr (registerComplementOfSum e q hq).symm (Equiv.refl _))) := by
+  apply Equiv.ext
+  intro x
+  apply Prod.ext
+  · funext i
+    change x (q (Sum.inl i)) = x (e i)
+    rw [hq]
+  · rfl
+
+/-- Placing an operator on the first wire block is tensoring by the identity on the
+second block. This follows from canonical register placement, independently of coordinates. -/
+theorem registerSumConfigurationSplit_embedOp {b : ℕ} (e : Fin m ↪ Fin W)
+    (q : Fin m ⊕ Fin b ≃ Fin W) (hq : ∀ i, q (Sum.inl i) = e i)
+    (A : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
+    Matrix.reindexAlgEquiv ℂ ℂ (registerSumConfigurationSplit q) (embedOp e A) =
+      A ⊗ₖ (1 : Matrix (Fin b → Fin d) (Fin b → Fin d) ℂ) := by
+  rw [registerSumConfigurationSplit_eq e q hq]
+  exact registerMatrixSplit_embedOp_reindex_complement e _ A
+
 /-- Place a local linear map while acting identically on the complementary wires. -/
 def registerChannelLift (e : Fin m ↪ Fin W)
     (Φ : Module.End ℂ (Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ)) :
@@ -113,8 +174,9 @@ theorem registerChannelLift_comp (e : Fin m ↪ Fin W)
   apply (registerMatrixSplit e).injective
   simp only [LinearMap.comp_apply, registerMatrixSplit_channelLift, tensorMapIdLM_comp]
 
-private theorem tensorMapIdLM_rectangularKrausMap {δ : Type*} [Fintype δ] [DecidableEq δ]
-    (K : Fin r → Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
+private theorem tensorMapIdLM_rectangularKrausMap {δ η : Type*}
+    [Fintype δ] [DecidableEq δ] [Fintype η]
+    (K : η → Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
     tensorMapIdLM (δ := δ) (rectangularKrausMap K) =
       rectangularKrausMap (fun j => K j ⊗ₖ (1 : Matrix δ δ ℂ)) := by
   apply Matrix.ext_linearMap
@@ -136,8 +198,8 @@ private theorem tensorMapIdLM_rectangularKrausMap {δ : Type*} [Fintype δ] [Dec
 
 /-- The representation-independent channel lift is exactly the map obtained by placing
 each local Kraus operator. This identity includes all correlations with the complement. -/
-theorem registerChannelLift_kraus (e : Fin m ↪ Fin W)
-    (K : Fin r → Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
+theorem registerChannelLift_kraus {η : Type*} [Fintype η] (e : Fin m ↪ Fin W)
+    (K : η → Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
     registerChannelLift e (rectangularKrausMap K) =
       rectangularKrausMap (fun j => embedOp e (K j)) := by
   apply LinearMap.ext

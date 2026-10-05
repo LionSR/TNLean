@@ -19,6 +19,9 @@ module name matching its non-Archive path. This provenance lets the generator
 remove stale aggregators after their source directory disappears, while copying
 the marker into handwritten code does not make that file disposable.
 
+For the maintained boundaries inside circuits and preparation, see
+[`circuit_channel_architecture.md`](circuit_channel_architecture.md).
+
 ## Conceptual layers
 
 The generated files sort imports by module name; they do not encode dependency

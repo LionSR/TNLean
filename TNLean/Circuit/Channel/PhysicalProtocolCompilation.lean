@@ -17,13 +17,14 @@ backward register routing. The resulting actual physical-port protocol has depth
 most `2 * k * T` and intertwines exactly with the independent input and output codes.
 The entire port/scratch configuration is retained as an arbitrary reference. The bound
 counts intersite layers only, following the free onsite-unitary resource convention in
-arXiv:2103.13367, main text p. 1; the local CPTP dilation bridge remains separate.
+arXiv:2103.13367, main text p. 1. `PhysicalPortDilation.lean` supplies an actual
+same-depth unitary realization with fresh local environments and one final discard.
 
 **Scope restriction (bounded encoded-input comparison):** the assumptions `d ≥ 2`, `N ≥ 2`,
 and one common intermediate dimension bound are
 explicit. Uniform family overhead requires choosing `B` before the chain length.
-Full source QCcc dilation, ancilla-factorization, and protocol-block conditions remain
-separate from this finite reduced-channel resource comparison. See
+Source QCcc block/control and pure-output system--ancilla conditions remain separate
+from this finite channel identity. The discarded dilation environments need not reset. See
 `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
 -/
 

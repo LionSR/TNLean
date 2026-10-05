@@ -20,8 +20,9 @@ distinction follows Piroli, Styliaris and Cirac,
 arXiv:2103.13367, Supplement pp. 7–8. This finite, fixed-memory channel model records
 the physical-port gate cost. Source pure-state ancilla conditions, a fixed number of composed
 QCcc blocks, and their internal measurement/control rules remain additional conditions.
-They do not follow from the quantum-depth index. The explicit local unitary-dilation and
-source protocol-block representation remain separate; see
+They do not follow from the quantum-depth index. `PhysicalPortDilation.lean` proves an
+actual same-depth unitary realization with fresh local product-zero environments and one
+final discard. It does not assert environment reset or a source QCcc block witness; see
 `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
 -/
 

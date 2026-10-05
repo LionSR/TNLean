@@ -2590,11 +2590,33 @@ involve no boundary.
   arXiv:2103.13367, Supplement pp. 7–8. The routing estimates are derived
   comparisons, not claims that the paper states the same formal predicate.
 - **Sanctioned bridges:** `.mem_unitary`, `.conjTranspose`, `.selected_layer`,
-  `.register_matching`, and `IsPhysicalPortProtocol.unitary`.
+  `.register_matching`, `.appendEnvironment_comp`,
+  `PhysicalPortEmbedding.unitary`, and `IsPhysicalPortProtocol.unitary`.
 - **Caveat:** the physical dimension is fixed throughout the circuit. The
   layout may include separate local memory; a counted gate cannot act
   directly on all of an enlarged site's wires. This predicate alone does
   not impose source preparation ancilla initialization or cleanup conditions.
+
+### `QuantumCircuit.PhysicalPortEmbedding`
+
+- **Declaration:** `PhysicalPortEmbedding P Q`, for two wire layouts on the
+  same spatial sites.
+- **Defined in:** `TNLean/Circuit/Channel/PhysicalPortEmbedding.lean`.
+- **Meaning:** an injection of wires preserving each wire's spatial owner
+  and carrying every designated physical port to the corresponding port.
+  Additional wires are local memories, not new communication ports.
+- **Source:** the physical-qudit/onsite-ancilla distinction in
+  arXiv:2103.13367, Supplement pp. 7–8; this embedding is the finite spatial
+  construction used to retain that distinction when adding environments.
+- **Sanctioned bridges:** `.unitary` lifts an actual physical-port unitary
+  circuit at unchanged intersite depth. `PhysicalPortLayout.append` assigns
+  owners to fresh wires; `.appendEmbedding`, `.appendLeftEmbedding`, and
+  `.appendRightEmbedding` preserve the original ports. The maps
+  `appendEnvironmentInput` and `discardAppendedEnvironment` prepare literal
+  product-zero environment wires and discard precisely those wires.
+- **Caveat:** this embedding does not permit a free site-changing permutation.
+  A coordinate regrouping used to prove a matrix identity supplies no physical
+  gate by itself. The final discard does not assert that the environment resets.
 
 ### `QuantumCircuit.IsPhysicalPortProtocol`
 
@@ -2611,15 +2633,18 @@ involve no boundary.
   `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
 - **Sanctioned bridges:** `.isKrausCPTP`, `.of_register_routing`,
   `.of_routed_family`, `.list_prod_uniform`,
-  `PortRegisters.matchingChannel_isPhysicalPortProtocol`, and
+  `PortRegisters.matchingChannel_isPhysicalPortProtocol`,
   `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
-  and `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`.
-- **Caveat:** a local channel is a reduced CPTP operation. A complete source
-  protocol witness must also record local dilation environments and their
-  initialization/disposal; source pure-state conditions and the fixed number of
-  composed `QCcc` blocks with their internal measurement/control rules are
-  separate. The uniform `2 * Nat.clog d B` matching bound requires a
-  fixed `d ≥ 2` and one dimension bound `B` chosen independently of chain
+  `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
+  `.exists_appended_unitary_dilation`, and
+  `.exists_appended_unitary_dilation_reference`. The last two construct an
+  actual same-depth unitary on a port-preserving extension, with fresh local
+  product-zero environments initialized once and discarded only at the end.
+- **Caveat:** source pure-state conditions and the fixed number of composed
+  `QCcc` blocks with their internal measurement/control rules remain separate.
+  The appended environments need not reset, and their total number is only
+  asserted finite for each protocol. The uniform `2 * Nat.clog d B` matching
+  bound requires a fixed `d ≥ 2` and one dimension bound `B` chosen independently of chain
   length. It does not apply with the same constant to unrestricted
   intermediate dimensions depending on `N`.
 
@@ -2636,9 +2661,9 @@ involve no boundary.
   channel model with the physical-qudit convention in arXiv:2103.13367,
   Supplement pp. 7–8. The paper does not state this predicate.
 - **Sanctioned bridges:** `.toIsLocalChannelProtocol`, `.dimension_bounds`,
-  `.mono_bound`, `.comp`, `.exists_fixedRegisterWord`, and
-  `.exists_physicalPortSimulation`, and `.exists_physicalPortIO`. A finite
-  positive-input native protocol
+  `.mono_bound`, `.comp`, `.exists_fixedRegisterWord`,
+  `.exists_physicalPortSimulation`, `.exists_physicalPortIO`, and
+  `.exists_physicalPortUnitaryIO`. A finite positive-input native protocol
   admits some finite bound via `IsLocalChannelProtocol.exists_dimension_bound`.
 - **Caveat:** an existential bound separately for each chain length is not a
   uniform family bound. For fixed physical `d ≥ 2` and `N ≥ 2`, the encoded
@@ -2647,9 +2672,11 @@ involve no boundary.
   identity retains arbitrary port/scratch-reference correlations. When the
   native input/output dimension is exactly the physical `d`, the port-I/O
   theorem supplies product-zero designated memory, output on the original
-  ports, and exact data/scratch reset at the same intersite depth. Local
-  CPTP dilation environments and a full source QCcc witness remain separate;
-  the bound does not count onsite operations as extra layers.
+  ports, and exact data/scratch reset at the same intersite depth. The unitary
+  theorem additionally supplies fresh local product-zero environments and one
+  final trace; it does not assert reset of these discarded environments.
+  A full source QCcc witness and its pure-output system--ancilla conditions
+  remain separate. The bound does not count onsite operations as extra layers.
 
 ### `QuantumCircuit.IsCleanImplementation`
 

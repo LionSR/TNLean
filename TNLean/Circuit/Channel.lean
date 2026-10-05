@@ -24,7 +24,12 @@ import TNLean.Circuit.Channel.OnsiteChannelProduct
 import TNLean.Circuit.Channel.OnsiteRegisterEncoding
 import TNLean.Circuit.Channel.PhysicalPort
 import TNLean.Circuit.Channel.PhysicalPortCodes
+import TNLean.Circuit.Channel.PhysicalPortDilation
+import TNLean.Circuit.Channel.PhysicalPortEmbedding
+import TNLean.Circuit.Channel.PhysicalPortEnvironmentComposition
 import TNLean.Circuit.Channel.PhysicalPortIO
+import TNLean.Circuit.Channel.PhysicalPortLocalDilation
+import TNLean.Circuit.Channel.PhysicalPortUnitaryCompilation
 import TNLean.Circuit.Channel.PhysicalProtocolCompilation
 import TNLean.Circuit.Channel.PhysicalRegisterEncoding
 import TNLean.Circuit.Channel.PortChannelRouting
@@ -34,4 +39,5 @@ import TNLean.Circuit.Channel.PortRouting
 import TNLean.Circuit.Channel.PortSimulation
 import TNLean.Circuit.Channel.RegisterChannelLift
 import TNLean.Circuit.Channel.RegisterEncoding
+import TNLean.Circuit.Channel.RegisterEnvironment
 import TNLean.Circuit.Channel.WholeSiteChannels
