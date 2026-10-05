@@ -1,5 +1,12 @@
 import TNLean.MPS.MPDO.BoundarySourceMixedPentagon
 
+/-!
+# Source mixed-pentagon regressions
+
+The examples retain the exact decomposition hypotheses and actual coefficient
+contractions. Guarded axiom reports check the source capstones and their dependencies.
+-/
+
 open scoped Matrix BigOperators
 
 set_option linter.hashCommand false
