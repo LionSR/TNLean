@@ -1,0 +1,1549 @@
+{
+  "declarations": [
+    {
+      "row": "B01",
+      "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+      "declaration": "MPSTensor.groundSpaceMap",
+      "line": 33
+    },
+    {
+      "row": "B01",
+      "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+      "declaration": "MPSTensor.groundSpace",
+      "line": 56
+    },
+    {
+      "row": "B01",
+      "module": "TNLean/MPS/Defs.lean",
+      "declaration": "MPSTensor.mpv",
+      "line": 55
+    },
+    {
+      "row": "B02",
+      "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+      "declaration": "MPSTensor.groundSpace",
+      "line": 56
+    },
+    {
+      "row": "B02",
+      "module": "TNLean/MPS/BNT/Basic.lean",
+      "declaration": "MPSTensor.IsBNT",
+      "line": 77
+    },
+    {
+      "row": "B03",
+      "module": "TNLean/MPS/ParentHamiltonian/Defs.lean",
+      "declaration": "MPSTensor.parentInteraction",
+      "line": 85
+    },
+    {
+      "row": "B03",
+      "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+      "declaration": "MPSTensor.groundSpace",
+      "line": 56
+    },
+    {
+      "row": "B04",
+      "module": "TNLean/MPS/MPDO/Boundary.lean",
+      "declaration": "MPOTensor.mpoWithBoundary",
+      "line": 69
+    },
+    {
+      "row": "B04",
+      "module": "TNLean/MPS/MPDO/Boundary.lean",
+      "declaration": "MPOTensor.mpoWithBoundary_one",
+      "line": 86
+    },
+    {
+      "row": "A02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+      "declaration": "MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum",
+      "line": 200
+    },
+    {
+      "row": "A02",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionOfCompression.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.ofCompression",
+      "line": 188
+    },
+    {
+      "row": "A03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+      "declaration": "MPSTensor.exists_multiplicityReductions_of_isNormal",
+      "line": 110
+    },
+    {
+      "row": "A03",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionDefs.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily",
+      "line": 68
+    },
+    {
+      "row": "A04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean",
+      "declaration": "MPOTensor.IsMPOFusionAlgebra",
+      "line": 67
+    },
+    {
+      "row": "A04",
+      "module": "TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean",
+      "declaration": "MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression",
+      "line": 38
+    },
+    {
+      "row": "F01",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusion.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.printedFMatrix",
+      "line": 367
+    },
+    {
+      "row": "F01",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusion.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.rightTripleSynthesis_mul_printedFMatrix",
+      "line": 395
+    },
+    {
+      "row": "F01",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionInverse.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mul_inversePrintedFMatrix",
+      "line": 132
+    },
+    {
+      "row": "F02",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon",
+      "line": 873
+    },
+    {
+      "row": "F03",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.regauge_fusionTensor",
+      "line": 204
+    },
+    {
+      "row": "F03",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge",
+      "line": 356
+    },
+    {
+      "row": "F03",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge",
+      "line": 383
+    },
+    {
+      "row": "F03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean",
+      "declaration": "MPOTensor.exists_unique_zipperFusionGauge",
+      "line": 455
+    },
+    {
+      "row": "A05",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean",
+      "declaration": "MPOTensor.IsMPOSymmetricFamily",
+      "line": 96
+    },
+    {
+      "row": "A05",
+      "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+      "declaration": "MPSTensor.groundSpaceMap",
+      "line": 33
+    },
+    {
+      "row": "A06",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+      "declaration": "MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum",
+      "line": 245
+    },
+    {
+      "row": "A06",
+      "module": "TNLean/MPS/MPDO/ActionTensor.lean",
+      "declaration": "MPOTensor.actTensor",
+      "line": 58
+    },
+    {
+      "row": "A06",
+      "module": "TNLean/MPS/MPDO/ActionTensorReduction.lean",
+      "declaration": "MPSTensor.IsReduction.actTensor_idKron",
+      "line": 56
+    },
+    {
+      "row": "A07",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+      "declaration": "MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum",
+      "line": 245
+    },
+    {
+      "row": "A07",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean",
+      "declaration": "MPOTensor.exists_unique_zipperActionGauge",
+      "line": 479
+    },
+    {
+      "row": "L01",
+      "module": "TNLean/MPS/MPDO/ActionTensorReduction.lean",
+      "declaration": "MPOTensor.actTensor_mulTensor",
+      "line": 99
+    },
+    {
+      "row": "L03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean",
+      "declaration": "MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily",
+      "line": 92
+    },
+    {
+      "row": "L03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean",
+      "declaration": "MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily",
+      "line": 118
+    },
+    {
+      "row": "L04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean",
+      "declaration": "MPOTensor.IsMPOSymmetricFamily",
+      "line": 96
+    },
+    {
+      "row": "L04",
+      "module": "TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean",
+      "declaration": "MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression",
+      "line": 58
+    },
+    {
+      "row": "L05",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean",
+      "declaration": "MPOTensor.exists_unique_zipperActionGauge",
+      "line": 479
+    },
+    {
+      "row": "O01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean",
+      "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant",
+      "line": 359
+    },
+    {
+      "row": "O01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Character.lean",
+      "declaration": "MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter",
+      "line": 115
+    },
+    {
+      "row": "O02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean",
+      "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass",
+      "line": 376
+    },
+    {
+      "row": "G01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/GroupFusion.lean",
+      "declaration": "MPOTensor.GroupFamily.isMPOFusionAlgebra",
+      "line": 42
+    },
+    {
+      "row": "G01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+      "declaration": "MPOTensor.GroupFamily.FusionData.IsClosed",
+      "line": 275
+    },
+    {
+      "row": "G02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+      "declaration": "MPOTensor.GroupFamily.FusionData.omega",
+      "line": 339
+    },
+    {
+      "row": "G02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+      "declaration": "MPOTensor.GroupFamily.FusionData.isCocycle_omega",
+      "line": 372
+    },
+    {
+      "row": "G02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+      "declaration": "MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge",
+      "line": 516
+    },
+    {
+      "row": "G02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/AssociatorCohomology.lean",
+      "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass",
+      "line": 57
+    },
+    {
+      "row": "G02",
+      "module": "TNLean/Algebra/ScalarThreeCocycleGroupCohomology.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.anomalyClass",
+      "line": 334
+    },
+    {
+      "row": "G03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Character.lean",
+      "declaration": "MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel",
+      "line": 265
+    },
+    {
+      "row": "G03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean",
+      "declaration": "MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily",
+      "line": 118
+    },
+    {
+      "row": "G04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+      "declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+      "line": 219
+    },
+    {
+      "row": "G04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+      "declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+      "line": 326
+    },
+    {
+      "row": "G04",
+      "module": "TNLean/Algebra/LSymbol.lean",
+      "declaration": "TNLean.Algebra.LSymbol.IsCompatible",
+      "line": 75
+    },
+    {
+      "row": "G05",
+      "module": "TNLean/Algebra/LSymbol.lean",
+      "declaration": "TNLean.Algebra.LSymbol.gauge",
+      "line": 85
+    },
+    {
+      "row": "G05",
+      "module": "TNLean/Algebra/LSymbol.lean",
+      "declaration": "TNLean.Algebra.LSymbol.IsCompatible.gauge",
+      "line": 107
+    },
+    {
+      "row": "G05",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+      "declaration": "MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge",
+      "line": 516
+    },
+    {
+      "row": "G06",
+      "module": "TNLean/Algebra/LSymbol.lean",
+      "declaration": "TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge",
+      "line": 245
+    },
+    {
+      "row": "G06",
+      "module": "TNLean/Algebra/LSymbol.lean",
+      "declaration": "TNLean.Algebra.LSymbol.IsCompatible.apply_right_one",
+      "line": 218
+    },
+    {
+      "row": "G06",
+      "module": "TNLean/Algebra/LSymbol.lean",
+      "declaration": "TNLean.Algebra.LSymbol.IsCompatible.apply_left_one",
+      "line": 233
+    },
+    {
+      "row": "G07",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses",
+      "line": 517
+    },
+    {
+      "row": "G07",
+      "module": "TNLean/Algebra/ScalarThreeCocycleCyclicInvariant.lean",
+      "declaration": "TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible",
+      "line": 152
+    },
+    {
+      "row": "G08",
+      "module": "TNLean/Algebra/ScalarThreeCocycleCyclicInvariant.lean",
+      "declaration": "TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible",
+      "line": 152
+    },
+    {
+      "row": "G08",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.LSymbol.IsCompatible.isCocycle_restrict",
+      "line": 104
+    },
+    {
+      "row": "G08",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap",
+      "line": 123
+    },
+    {
+      "row": "G09",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol",
+      "line": 152
+    },
+    {
+      "row": "G09",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_isCompatible",
+      "line": 246
+    },
+    {
+      "row": "G09",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_gauge_eq_reconstructedLSymbol",
+      "line": 377
+    },
+    {
+      "row": "G10",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.solutionSetoid",
+      "line": 393
+    },
+    {
+      "row": "G10",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.solutionAddAction",
+      "line": 480
+    },
+    {
+      "row": "G10",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses",
+      "line": 517
+    },
+    {
+      "row": "G10",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.existsUnique_vadd_eq",
+      "line": 557
+    },
+    {
+      "row": "G12",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+      "declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+      "line": 326
+    },
+    {
+      "row": "G13",
+      "module": "TNLean/Algebra/StabilizerCocycleLSymbol.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible",
+      "line": 48
+    },
+    {
+      "row": "G13",
+      "module": "TNLean/MPS/Symmetry/CocycleCoboundary.lean",
+      "declaration": "MPSTensor.cohomologousTo_of_isInjective",
+      "line": 50
+    },
+    {
+      "row": "G14",
+      "module": "TNLean/Algebra/StabilizerCocycleLSymbol.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible",
+      "line": 48
+    },
+    {
+      "row": "G14",
+      "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+      "declaration": "TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_inducedLSymbol",
+      "line": 278
+    },
+    {
+      "row": "T02",
+      "module": "TNLean/Algebra/ScalarThreeCocycleTimeReversal.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_star_eq_self",
+      "line": 168
+    },
+    {
+      "row": "T03",
+      "module": "TNLean/Algebra/ScalarThreeCocycleTimeReversal.lean",
+      "declaration": "TNLean.Algebra.LSymbol.star_apply_eq_gauge_one_apply",
+      "line": 284
+    },
+    {
+      "row": "T03",
+      "module": "TNLean/Algebra/ScalarThreeCocycleTimeReversal.lean",
+      "declaration": "TNLean.Algebra.LSymbol.phase_sq_eq_of_gauge_eq_star",
+      "line": 307
+    },
+    {
+      "row": "P01",
+      "module": "TNLean/MPS/MPU/GroupRepresentation.lean",
+      "declaration": "MPOTensor.GroupFamily",
+      "line": 83
+    },
+    {
+      "row": "P01",
+      "module": "TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean",
+      "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation",
+      "line": 153
+    },
+    {
+      "row": "P01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+      "declaration": "MPOTensor.GroupFamily.CarriesMPV",
+      "line": 66
+    },
+    {
+      "row": "P02",
+      "module": "TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean",
+      "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors",
+      "line": 207
+    },
+    {
+      "row": "P03",
+      "module": "TNLean/MPS/Core/ReductionResidualComposition.lean",
+      "declaration": "MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans",
+      "line": 202
+    },
+    {
+      "row": "P03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+      "declaration": "MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_left",
+      "line": 234
+    },
+    {
+      "row": "P03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+      "declaration": "MPOTensor.GroupFamily.FusionData.isCocycle_omega",
+      "line": 372
+    },
+    {
+      "row": "P04",
+      "module": "TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean",
+      "declaration": "MPOTensor.exists_isReduction_actTensor_of_isNormal",
+      "line": 235
+    },
+    {
+      "row": "P04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+      "declaration": "MPOTensor.GroupFamily.nonempty_blockActionData",
+      "line": 152
+    },
+    {
+      "row": "P05",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+      "declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+      "line": 219
+    },
+    {
+      "row": "P05",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+      "declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+      "line": 326
+    },
+    {
+      "row": "P06",
+      "module": "TNLean/MPS/Core/ReductionBlocking.lean",
+      "declaration": "MPSTensor.IsReductionExteriorBufferLength",
+      "line": 72
+    },
+    {
+      "row": "P06",
+      "module": "TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean",
+      "declaration": "MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression",
+      "line": 38
+    },
+    {
+      "row": "P07",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+      "declaration": "MPOTensor.GroupFamily.isOnSite_of_closed_fusion",
+      "line": 316
+    },
+    {
+      "row": "P07",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+      "declaration": "MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion",
+      "line": 289
+    },
+    {
+      "row": "P07",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+      "declaration": "MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion",
+      "line": 407
+    },
+    {
+      "row": "C02",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionCoproduct.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.coproduct",
+      "line": 129
+    },
+    {
+      "row": "C02",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionCoassoc.lean",
+      "declaration": "MPOTensor.CompleteZipperFusionFamily.coproduct_coassoc",
+      "line": 165
+    },
+    {
+      "row": "C03",
+      "module": "TNLean/MPS/Symmetry/GappedInteractionPath.lean",
+      "declaration": "MPSTensor.SymmetricGappedInteractionPath",
+      "line": 45
+    },
+    {
+      "row": "C04",
+      "module": "TNLean/MPS/Symmetry/ExactMPSGappedPhase.lean",
+      "declaration": "MPSTensor.ExactMPSGroundPath",
+      "line": 62
+    },
+    {
+      "row": "C05",
+      "module": "TNLean/MPS/Symmetry/ParentHamiltonianSymmetry.lean",
+      "declaration": "MPSTensor.parentInteractionES_commute_onSiteTensorPow",
+      "line": 50
+    },
+    {
+      "row": "C07",
+      "module": "TNLean/Algebra/CommonKernelSpectralGap.lean",
+      "declaration": "Matrix.spectrum_gap_interpolation_of_le",
+      "line": 168
+    },
+    {
+      "row": "C08",
+      "module": "TNLean/MPS/MPDO/CompleteZipperFusionBlocked.lean",
+      "declaration": "MPOTensor.exists_blockTensor_isMPOBlockLeftInverse",
+      "line": 227
+    },
+    {
+      "row": "C09",
+      "module": "TNLean/MPS/Symmetry/CanonicalInjectiveGappedPath.lean",
+      "declaration": "MPSTensor.continuous_parentInteraction_matrix_family",
+      "line": 62
+    },
+    {
+      "row": "C14",
+      "module": "TNLean/MPS/Symmetry/CanonicalInjectiveGappedPath.lean",
+      "declaration": "MPSTensor.canonicalInjectiveGappedPath",
+      "line": 119
+    },
+    {
+      "row": "C18",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean",
+      "declaration": "MPOTensor.IsNIMRep.exists_pos_left_eigenvector",
+      "line": 86
+    },
+    {
+      "row": "C18",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean",
+      "declaration": "MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim",
+      "line": 124
+    },
+    {
+      "row": "C18",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean",
+      "declaration": "MPOTensor.exists_pos_symmetric_boundary_state",
+      "line": 175
+    },
+    {
+      "row": "C19",
+      "module": "TNLean/MPS/Examples/Fibonacci/FibonacciBoundary.lean",
+      "declaration": "FibonacciCompression.mpo_fibTau_mulVec_boundary",
+      "line": 86
+    },
+    {
+      "row": "C19",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionRing.lean",
+      "declaration": "MPOTensor.IsFusionRing.perronFrobeniusDim_pos",
+      "line": 155
+    },
+    {
+      "row": "Z01",
+      "module": "TNLean/Algebra/ScalarThreeCocycleCyclicTwo.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_sigma_generator_eq_one",
+      "line": 68
+    },
+    {
+      "row": "Z01",
+      "module": "TNLean/Algebra/ScalarThreeCocycleCyclicClass.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.nat_card_groupCohomology_three_cyclic",
+      "line": 163
+    },
+    {
+      "row": "Z02",
+      "module": "TNLean/Algebra/LSymbol.lean",
+      "declaration": "TNLean.Algebra.LSymbol.IsCompatible.apply_involution",
+      "line": 255
+    },
+    {
+      "row": "Z02",
+      "module": "TNLean/Algebra/LSymbolFreeAction.lean",
+      "declaration": "TNLean.Algebra.LSymbol.actionGaugeEquiv_of_bijective_smul",
+      "line": 24
+    },
+    {
+      "row": "Z03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/CZXPermutedBlocks.lean",
+      "declaration": "CZXCompression.czx_lSymbol_ratio_eq_neg_one",
+      "line": 199
+    },
+    {
+      "row": "Z03",
+      "module": "TNLean/Algebra/LSymbolFreeAction.lean",
+      "declaration": "TNLean.Algebra.LSymbol.isCompatible_regular",
+      "line": 51
+    },
+    {
+      "row": "Z03",
+      "module": "TNLean/Algebra/ScalarThreeCocycleCyclicTwo.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one",
+      "line": 114
+    },
+    {
+      "row": "Z04",
+      "module": "TNLean/MPS/Examples/CZX/ClusterIsingSymmetry.lean",
+      "declaration": "MPOTensor.GroupCocycle.rooseHamiltonian",
+      "line": 135
+    },
+    {
+      "row": "Z04",
+      "module": "TNLean/MPS/Examples/CZX/ClusterIsingSymmetry.lean",
+      "declaration": "MPOTensor.GroupCocycle.czxDecorated_mul_rooseHamiltonian",
+      "line": 290
+    },
+    {
+      "row": "K01",
+      "module": "TNLean/Algebra/KleinCocycleTable.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily",
+      "line": 53
+    },
+    {
+      "row": "K01",
+      "module": "TNLean/Algebra/KleinCocycleCompleteness.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.existsUnique_cohomologousTo_kleinCocycleFamily",
+      "line": 367
+    },
+    {
+      "row": "K01",
+      "module": "TNLean/Algebra/KleinCocycleCompleteness.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinH3Equiv",
+      "line": 459
+    },
+    {
+      "row": "K02",
+      "module": "TNLean/Algebra/KleinCocycleTable.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_signs",
+      "line": 74
+    },
+    {
+      "row": "K02",
+      "module": "TNLean/Algebra/KleinCocycleTable.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators",
+      "line": 232
+    },
+    {
+      "row": "K02",
+      "module": "TNLean/Algebra/KleinCocycleCompleteness.lean",
+      "declaration": "TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_klein_three_cyclicInvariants",
+      "line": 400
+    },
+    {
+      "row": "K03",
+      "module": "TNLean/Algebra/KleinCocyclePhase.lean",
+      "declaration": "TNLean.Algebra.LSymbol.exists_regular_actionGaugeEquiv_of_kleinCocycleFamily_one",
+      "line": 28
+    },
+    {
+      "row": "K03",
+      "module": "TNLean/Algebra/KleinCocycleTable.lean",
+      "declaration": "TNLean.Algebra.LSymbol.card_of_kleinCocycleFamily_one",
+      "line": 303
+    },
+    {
+      "row": "K04",
+      "module": "TNLean/MPS/Examples/KleinSymmetry.lean",
+      "declaration": "KleinSymmetry.operator_mul",
+      "line": 82
+    },
+    {
+      "row": "K04",
+      "module": "TNLean/MPS/Examples/KleinSymmetry.lean",
+      "declaration": "KleinSymmetry.generators_preserve_constantSpinSpace",
+      "line": 197
+    },
+    {
+      "row": "K04",
+      "module": "TNLean/MPS/Examples/KleinSymmetry.lean",
+      "declaration": "KleinSymmetry.generators_preserve_clusterPairSpace",
+      "line": 208
+    },
+    {
+      "row": "K05",
+      "module": "TNLean/MPS/Examples/KleinSymmetryAnomaly.lean",
+      "declaration": "KleinSymmetry.cyclicInvariant_omega_printedFamily",
+      "line": 113
+    },
+    {
+      "row": "K05",
+      "module": "TNLean/MPS/Examples/KleinSymmetryAnomaly.lean",
+      "declaration": "KleinSymmetry.not_isTrivialGaugeClass_omega_printedFamily",
+      "line": 122
+    },
+    {
+      "row": "K05",
+      "module": "TNLean/Algebra/KleinCocyclePhase.lean",
+      "declaration": "TNLean.Algebra.LSymbol.apply_self_of_kleinCocycleFamily",
+      "line": 63
+    },
+    {
+      "row": "S01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24Fusion",
+      "line": 73
+    },
+    {
+      "row": "S01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isFusionUnit_su24Fusion",
+      "line": 81
+    },
+    {
+      "row": "S01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isNIMRep_su24Fusion",
+      "line": 88
+    },
+    {
+      "row": "S02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24TY",
+      "line": 95
+    },
+    {
+      "row": "S02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isNIMRep_su24TY",
+      "line": 105
+    },
+    {
+      "row": "S03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24TY",
+      "line": 95
+    },
+    {
+      "row": "S03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isNIMRep_su24TY",
+      "line": 105
+    },
+    {
+      "row": "S04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24TY_repS3ToSU24_castSucc",
+      "line": 203
+    },
+    {
+      "row": "S04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24TY_repS3ToSU24_last",
+      "line": 209
+    },
+    {
+      "row": "S04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24TY_repS3ToSU24_mix",
+      "line": 215
+    },
+    {
+      "row": "R01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.repS3Fusion",
+      "line": 112
+    },
+    {
+      "row": "R01",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24Fusion_repS3ToSU24",
+      "line": 191
+    },
+    {
+      "row": "R02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.repS3Z1",
+      "line": 138
+    },
+    {
+      "row": "R02",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isFusionCharacter_repS3Fusion_iff",
+      "line": 240
+    },
+    {
+      "row": "R03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.repS3Z2",
+      "line": 149
+    },
+    {
+      "row": "R03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isNIMRep_repS3Z2",
+      "line": 155
+    },
+    {
+      "row": "R03",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.su24Fusion_repS3ToSU24_half",
+      "line": 223
+    },
+    {
+      "row": "R04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.repS3Z3",
+      "line": 161
+    },
+    {
+      "row": "R04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isNIMRep_repS3Z3",
+      "line": 167
+    },
+    {
+      "row": "R04",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.not_isNIMRep_repS3Z3Printed",
+      "line": 180
+    },
+    {
+      "row": "R05",
+      "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+      "declaration": "MPOTensor.isNIMRep_repS3Fusion",
+      "line": 133
+    },
+    {
+      "row": "FIB",
+      "module": "TNLean/MPS/Examples/Fibonacci/FibonacciNIMRepClassification.lean",
+      "declaration": "FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock",
+      "line": 131
+    },
+    {
+      "row": "FIB",
+      "module": "TNLean/MPS/Examples/Fibonacci/FibonacciNIMRepClassification.lean",
+      "declaration": "FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two",
+      "line": 89
+    },
+    {
+      "row": "X02",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+      "declaration": "MPOTensor.GroupCocycle.fusionV",
+      "line": 86
+    },
+    {
+      "row": "X02",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+      "declaration": "MPOTensor.GroupCocycle.fusionData_omega",
+      "line": 282
+    },
+    {
+      "row": "X03",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+      "declaration": "MPOTensor.GroupCocycle.wGate",
+      "line": 137
+    },
+    {
+      "row": "X03",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+      "declaration": "MPOTensor.GroupCocycle.leftShift",
+      "line": 90
+    },
+    {
+      "row": "X03",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+      "declaration": "MPOTensor.GroupCocycle.wGate_one",
+      "line": 143
+    },
+    {
+      "row": "X03",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO/Instances.lean",
+      "declaration": "MPOTensor.GroupCocycle.wGate_cyclicTwo",
+      "line": 86
+    },
+    {
+      "row": "X08",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+      "declaration": "MPOTensor.GroupCocycle.tensor",
+      "line": 158
+    },
+    {
+      "row": "X08",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+      "declaration": "MPOTensor.GroupCocycle.mpo_tensor_mul",
+      "line": 252
+    },
+    {
+      "row": "X08",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+      "declaration": "MPOTensor.GroupCocycle.mpo_tensor_one",
+      "line": 263
+    },
+    {
+      "row": "X08",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO/Instances.lean",
+      "declaration": "MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo",
+      "line": 122
+    },
+    {
+      "row": "X09",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+      "declaration": "MPOTensor.GroupCocycle.fusionV_mul_mulTensor",
+      "line": 125
+    },
+    {
+      "row": "X09",
+      "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+      "declaration": "MPOTensor.GroupCocycle.isReduction_fusion",
+      "line": 172
+    },
+    {
+      "row": "AB1",
+      "module": "TNLean/MPS/Symmetry/ParentHamiltonianSymmetry.lean",
+      "declaration": "MPSTensor.parentInteractionES_commute_onSiteTensorPow",
+      "line": 50
+    }
+  ],
+  "source_sha256": "c820b20187584d441c1a40ef80fdccbc8a2aad819ac6673464c6b913c28fa58c",
+  "source_label_count": 58,
+  "leaves": 29,
+  "errors": [],
+  "no_build_run": true,
+  "blueprint_qa": {
+    "snapshot": "f3d3bade1f56b87f88fc8a87314bf451591483b7",
+    "source_sha256": "c820b20187584d441c1a40ef80fdccbc8a2aad819ac6673464c6b913c28fa58c",
+    "claims": 103,
+    "source_label_count": 58,
+    "exact_qualified_declaration_references": 166,
+    "referenced_lean_modules": 62,
+    "blueprint_owner_matching": "exact fully qualified declaration-tag equality; baseline git objects only",
+    "blueprint_nodes_scanned": 6584,
+    "row_owner_associations_before": 153,
+    "row_owner_associations_after": 138,
+    "removed_false_owner_associations": [
+      {
+        "row": "G01",
+        "file": "blueprint/src/chapter/ch25_asymmetric_examples_z3clock.tex",
+        "line": 197,
+        "labels": [
+          "thm:asymex_group_cocycle_defect"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.isMPOFusionAlgebra",
+            "blueprint_declaration": "MPOTensor.GroupCocycle.isMPOFusionAlgebra"
+          }
+        ]
+      },
+      {
+        "row": "G02",
+        "file": "blueprint/src/chapter/ch21_mpdo_rfp_simple_local_normalized_preparations_completed_channels.tex",
+        "line": 32,
+        "labels": [
+          "def:mpdo_eta_omega"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.FusionData.omega",
+            "blueprint_declaration": "MPOTensor.ExplicitEtaOperators.omega"
+          }
+        ]
+      },
+      {
+        "row": "G04",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 4768,
+        "labels": [
+          "def:mpug_single_block_l_symbol"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.lSymbol"
+          }
+        ]
+      },
+      {
+        "row": "G04",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 4879,
+        "labels": [
+          "thm:mpug_single_block_l_compatibility"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol"
+          }
+        ]
+      },
+      {
+        "row": "G05",
+        "file": "blueprint/src/chapter/ch21_mpdo_rfp_bnt_theorem_data_singleton.tex",
+        "line": 1,
+        "labels": [
+          "def:mpdo_bond_two_singleton_deformation"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "TNLean.Algebra.LSymbol.gauge",
+            "blueprint_declaration": "MPOTensor.BondTwoSingletonGramBoundary.gauge"
+          },
+          {
+            "referenced_declaration": "TNLean.Algebra.LSymbol.IsCompatible.gauge",
+            "blueprint_declaration": "MPOTensor.BondTwoSingletonGramBoundary.gauge"
+          }
+        ]
+      },
+      {
+        "row": "G06",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 8188,
+        "labels": [
+          "thm:mpug_restricted_scalar_gauge_action",
+          "eq:mpug_restricted_gauge_action"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge",
+            "blueprint_declaration": "TNLean.Algebra.RestrictedScalarGauge.isNormalized_gauge"
+          }
+        ]
+      },
+      {
+        "row": "G12",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 4879,
+        "labels": [
+          "thm:mpug_single_block_l_compatibility"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol"
+          }
+        ]
+      },
+      {
+        "row": "P02",
+        "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+        "line": 247,
+        "labels": [
+          "cor:asym_fusion_action_multiplicity"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors",
+            "blueprint_declaration": "MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors"
+          }
+        ]
+      },
+      {
+        "row": "P05",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 4768,
+        "labels": [
+          "def:mpug_single_block_l_symbol"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.lSymbol"
+          }
+        ]
+      },
+      {
+        "row": "P05",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 4879,
+        "labels": [
+          "thm:mpug_single_block_l_compatibility"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol"
+          }
+        ]
+      },
+      {
+        "row": "X02",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 11473,
+        "labels": [
+          "def:mpug_czx_fusion_caps"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.fusionV",
+            "blueprint_declaration": "MPOTensor.CZX.fusionV"
+          }
+        ]
+      },
+      {
+        "row": "X08",
+        "file": "blueprint/src/chapter/ch21_mpdo_rfp_foundations.tex",
+        "line": 306,
+        "labels": [
+          "thm:kato_deformed_mpdo_fixed_tensor_obstruction"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPOTensor.KatoDeformedRFPObstruction.tensor"
+          }
+        ]
+      },
+      {
+        "row": "X08",
+        "file": "blueprint/src/chapter/ch21_mpdo_rfp_renormalization.tex",
+        "line": 367,
+        "labels": [
+          "def:cpsv_fibonacci_support_tensor",
+          "eq:cpsv_fib_support"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPSTensor.FibonacciBoundary.tensor"
+          }
+        ]
+      },
+      {
+        "row": "X08",
+        "file": "blueprint/src/chapter/ch25_asymmetric_examples_elementary_states.tex",
+        "line": 473,
+        "labels": [
+          "def:asymex_jordan"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPSTensor.JordanBoundary.tensor"
+          }
+        ]
+      },
+      {
+        "row": "X08",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 10492,
+        "labels": [
+          "def:mpug_czx_exact_tensor"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPOTensor.CZX.tensor"
+          }
+        ]
+      }
+    ],
+    "rows_newly_without_owner": [],
+    "declarations_without_exact_blueprint_owner": [
+      {
+        "row": "F01",
+        "module": "TNLean/MPS/MPDO/CompleteZipperFusion.lean",
+        "declaration": "MPOTensor.CompleteZipperFusionFamily.printedFMatrix"
+      }
+    ],
+    "leaves": 29,
+    "row_leaf_resolution": "all implementation destinations are concrete DAG nodes; external interface separately typed",
+    "external_interfaces": [
+      {
+        "row": "C17",
+        "destination": "PEPS-interface",
+        "reason": "The PEPS implementation is owned separately; this audit records only the required mathematical interface and does not assign it an internal implementation leaf."
+      }
+    ],
+    "errors": [],
+    "no_build_run": true,
+    "owner_matching_reconciliation": {
+      "baseline": "f3d3bade1f56b87f88fc8a87314bf451591483b7",
+      "association_identity": [
+        "row",
+        "file",
+        "line"
+      ],
+      "before_stage": "Terminal-name candidate matching recomputed from the baseline Git objects.",
+      "after_stage": "Exact fully qualified declaration-tag equality recomputed from the same baseline Git objects.",
+      "previous_log_entries": 34,
+      "genuine_removed_associations": 15,
+      "retained_associations_with_changed_recorded_lines": 19,
+      "cause": "The previous removal log compared earlier working-tree line coordinates with baseline coordinates. It classified 19 retained exact owners as removals solely because their recorded lines differed. These are coordinate corrections, not additional owner removals.",
+      "retained_owner_line_relocations": [
+        {
+          "row": "C18",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1223,
+          "baseline_line": 1221,
+          "labels": [
+            "thm:mposym_nimrep_pos_eigenvector",
+            "eq:mposym_nimrep_eigenvector"
+          ],
+          "matched_declarations": [
+            "MPOTensor.IsNIMRep.exists_pos_left_eigenvector",
+            "MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim"
+          ]
+        },
+        {
+          "row": "C18",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1256,
+          "baseline_line": 1254,
+          "labels": [
+            "thm:mposym_symmetric_boundary_state"
+          ],
+          "matched_declarations": [
+            "MPOTensor.exists_pos_symmetric_boundary_state"
+          ]
+        },
+        {
+          "row": "C19",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1291,
+          "baseline_line": 1289,
+          "labels": [
+            "ex:mposym_fibonacci_boundary_state"
+          ],
+          "matched_declarations": [
+            "FibonacciCompression.mpo_fibTau_mulVec_boundary"
+          ]
+        },
+        {
+          "row": "C19",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1190,
+          "baseline_line": 1188,
+          "labels": [
+            "thm:mposym_fusion_ring_regular"
+          ],
+          "matched_declarations": [
+            "MPOTensor.IsFusionRing.perronFrobeniusDim_pos"
+          ]
+        },
+        {
+          "row": "S01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1026,
+          "baseline_line": 1024,
+          "labels": [
+            "def:mposym_su24_reps3"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24Fusion"
+          ]
+        },
+        {
+          "row": "S01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1042,
+          "baseline_line": 1040,
+          "labels": [
+            "thm:mposym_su24_reps3_units"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isFusionUnit_su24Fusion"
+          ]
+        },
+        {
+          "row": "S01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isNIMRep_su24Fusion"
+          ]
+        },
+        {
+          "row": "S02",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24TY",
+            "MPOTensor.isNIMRep_su24TY"
+          ]
+        },
+        {
+          "row": "S03",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24TY",
+            "MPOTensor.isNIMRep_su24TY"
+          ]
+        },
+        {
+          "row": "S04",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1104,
+          "baseline_line": 1102,
+          "labels": [
+            "thm:mposym_reps3_in_su24"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24TY_repS3ToSU24_castSucc",
+            "MPOTensor.su24TY_repS3ToSU24_last",
+            "MPOTensor.su24TY_repS3ToSU24_mix"
+          ]
+        },
+        {
+          "row": "R01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1026,
+          "baseline_line": 1024,
+          "labels": [
+            "def:mposym_su24_reps3"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Fusion"
+          ]
+        },
+        {
+          "row": "R01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1042,
+          "baseline_line": 1040,
+          "labels": [
+            "thm:mposym_su24_reps3_units"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24Fusion_repS3ToSU24"
+          ]
+        },
+        {
+          "row": "R02",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Z1"
+          ]
+        },
+        {
+          "row": "R02",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1128,
+          "baseline_line": 1126,
+          "labels": [
+            "thm:mposym_su24_reps3_one_block"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isFusionCharacter_repS3Fusion_iff"
+          ]
+        },
+        {
+          "row": "R03",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Z2",
+            "MPOTensor.isNIMRep_repS3Z2"
+          ]
+        },
+        {
+          "row": "R03",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1104,
+          "baseline_line": 1102,
+          "labels": [
+            "thm:mposym_reps3_in_su24"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24Fusion_repS3ToSU24_half"
+          ]
+        },
+        {
+          "row": "R04",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Z3",
+            "MPOTensor.isNIMRep_repS3Z3",
+            "MPOTensor.not_isNIMRep_repS3Z3Printed"
+          ]
+        },
+        {
+          "row": "R05",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isNIMRep_repS3Fusion"
+          ]
+        },
+        {
+          "row": "FIB",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 951,
+          "baseline_line": 949,
+          "labels": [
+            "thm:mpo_symmetry_fibonacci_rank_two"
+          ],
+          "matched_declarations": [
+            "FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock",
+            "FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two"
+          ]
+        }
+      ],
+      "checks": {
+        "before_minus_after_equals_removal_count": true,
+        "removed_and_retained_are_disjoint": true,
+        "retained_matches_source_index": true,
+        "all_removed_have_terminal_name_but_no_exact_match": true,
+        "all_relocated_have_exact_qualified_matches": true,
+        "c18_owners_retained_at_baseline_lines": [
+          1221,
+          1254
+        ]
+      }
+    }
+  }
+}

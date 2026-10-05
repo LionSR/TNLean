@@ -5321,10 +5321,13 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Rewrite each local coefficient as its indicator, identify
   the joint support with one explicit internal labeling and a condition
   on the retained indices, and collapse the finite sum.
-- **Occurrence:** `PEPS/KitaevCheckerboardBlocking.lean`, for the four
-  elementary checkerboard tensors and their eight exterior binary legs.
-- **Status:** One contraction. Mathlib's finite-sum and equivalence
-  lemmas handle the reduction directly.
+- **Occurrences:** `PEPS/KitaevCheckerboardBlocking.lean`, for the four
+  elementary checkerboard tensors and their eight exterior binary legs;
+  `PEPS/KitaevGlobalCheckerboardBlocking.lean`, for the globally paired
+  crossing labels on a periodic tiling.
+- **Status:** Two contractions. Mathlib's `Fintype.sum_of_injective` and
+  equivalence lemmas handle the global support restriction directly.
+  Nested bond-sum congruences reuse the promoted `Finset.sum_congr₂`.
 ### Full logical unitary implementation in an initialized packet — promoted (2026-10-02)
 
 - **Pattern:** Include a complete logical unitary in prescribed physical basis
@@ -5442,3 +5445,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Weyl monotonicity and CFC square roots are reused from QICLean and
   Mathlib. The local perturbation/padding results compose those public APIs;
   no QICLean implementation is copied into TNLean.
+
+### Remainder-absorbing preparation blocks — promoted (2026-10-05)
+
+- **Pattern:** Split a ring into `N / q` blocks, enlarge the final block by
+  `N % q`, prove their sum is `N`, and bound every length between `q` and `2q`.
+- **Seen:** `AllLengthPolynomialAccuracy.lean`, `OrderedMixingPairRate.lean`,
+  and `AllLengthPrescribedSlope.lean` under `MPS/Preparation/`.
+- **Abstraction:** `RemainderBlocks.lean` owns `remainderBlockLengths`,
+  `sum_remainderBlockLengths`, `le_remainderBlockLengths`, and the stronger
+  strict upper bound `remainderBlockLengths_lt_two_mul`. The definition and
+  sum theorem were moved without renaming; the three consumers share them.
+- **Notes:** The scalar rate conversion likewise reuses
+  `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
+  the original uniform-rate proof no longer repeats that arithmetic.

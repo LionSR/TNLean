@@ -54,6 +54,12 @@ open MPSTensor
 
 variable {d D N : ℕ}
 
+/-- Regard a chain with common bond dimension as a chain with that same bound. -/
+def ofChain (A : MPSChainTensor d D N) : VaryingBondChain d D N where
+  bondDim := fun _ => D
+  bondDim_le := fun _ => le_rfl
+  tensor := A
+
 /-- The coefficient `Tr(A_0^{s_0} ⋯ A_{N-1}^{s_{N-1}})` of the state of the chain, written as the
 sum over the cyclic bond configurations `α` of `∏ₖ (A_k^{s_k})_{α_k α_{k+1}}`. -/
 def coeff (A : VaryingBondChain d D N) (s : Fin N → Fin d) : ℂ :=
@@ -71,6 +77,10 @@ noncomputable def state (A : VaryingBondChain d D N) : MPVSpace d N :=
 `D × D` matrix (`Matrix.zeroPad`), giving a chain with the common bond dimension `D`. -/
 def zeroPad (A : VaryingBondChain d D N) : MPSChainTensor d D N :=
   fun k i => Matrix.zeroPad D (A.tensor k i)
+
+@[simp] theorem zeroPad_ofChain (A : MPSChainTensor d D N) : zeroPad (ofChain A) = A := by
+  funext j i a b
+  simp [ofChain, zeroPad, Matrix.zeroPad]
 
 /-- An entry of a padded matrix outside the rectangle `[0, D_k) × [0, D_{k+1})` vanishes. -/
 theorem zeroPad_eq_zero (A : VaryingBondChain d D N) {k : Fin N} {i : Fin d} {a b : Fin D}

@@ -76,6 +76,19 @@ import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
 import TNLean.MPS.MPDO.Boundary
+import TNLean.MPS.MPDO.BoundaryBiorthogonal
+import TNLean.MPS.MPDO.BoundaryBlockAction
+import TNLean.MPS.MPDO.BoundaryBlockFusion
+import TNLean.MPS.MPDO.BoundaryClosedness
+import TNLean.MPS.MPDO.BoundaryMultiplicity
+import TNLean.MPS.MPDO.BoundaryRepresentation
+import TNLean.MPS.MPDO.BoundaryRepresentationClosedness
+import TNLean.MPS.MPDO.BoundaryRestriction
+import TNLean.MPS.MPDO.BoundarySourceDecomposition
+import TNLean.MPS.MPDO.BoundaryTransport
+import TNLean.MPS.MPDO.BoundaryZipper
+import TNLean.MPS.MPDO.BoundaryZipperBlocked
+import TNLean.MPS.MPDO.BoundaryZipperUniqueness
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVBlockingChannelAmbientCounterexample
@@ -192,6 +205,7 @@ import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
 import TNLean.MPS.MPDO.IdentityTensor
+import TNLean.MPS.MPDO.InjectiveBlockWordSpan
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
