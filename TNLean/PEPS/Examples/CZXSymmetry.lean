@@ -167,6 +167,13 @@ private theorem regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_czxTensor
       czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp =
     czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp *
       MPOTensor.mpo CZXCompression.czxTensor (2 * w + 2 * h) := by
+  change @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+    (regionPhysicalProductMatrix (torusContiguousRectangle xStart yStart w h)
+      (fun _ => czxOnSite))
+    (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp) =
+    @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+      (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp)
+      (MPOTensor.mpo CZXCompression.czxTensor (2 * w + 2 * h))
   rw [regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_monomial,
     CZXCompression.mpo_czxTensor]
   apply congrArg (fun M =>
@@ -188,6 +195,13 @@ theorem regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review :
       czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp =
     czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp *
       MPOTensor.mpo CZXCompression.reviewCZXTensor (2 * w + 2 * h) := by
+  change @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+    (regionPhysicalProductMatrix (torusContiguousRectangle xStart yStart w h)
+      (fun _ => czxOnSite))
+    (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp) =
+    @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+      (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp)
+      (MPOTensor.mpo CZXCompression.reviewCZXTensor (2 * w + 2 * h))
   rw [CZXCompression.mpo_reviewCZXTensor_eq_smul]
   have hsign : (-1 : ℂ) ^ (2 * w + 2 * h) = 1 := by
     simp [pow_add, pow_mul]
