@@ -1,0 +1,194 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\interfootnotelinepenalty=10000
+\title{Physical-Port Simulation of Bounded Register Channels}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source resource convention}
+Piroli, Styliaris and Cirac~\cite{Piroli2021LOCC}, Supplement pp.~7--8,
+distinguish counted nearest-neighbor gates on fixed-dimensional physical
+qudits from free onsite operations involving those qudits and their local
+ancillas. In the proof of Proposition~2, the entanglement increase per
+intersite layer depends on the physical dimension, independently of the
+number of onsite ancillas. This prevents replacing a physical gate by an
+arbitrary operation on two enlarged sites at the same unit cost without a
+simulation argument.
+
+The existing enlarged-site local-channel model allows arbitrary
+intermediate local dimensions. Its composition and trace-norm estimates
+remain statements about that model. The construction below supplies a
+bounded-register communication theorem; it is not an inclusion theorem
+for unrestricted intermediate dimensions.
+
+The depth used here counts only physical-port intersite layers. In the
+main text, p.~1, the source defines depth by nearest-neighbor pair-gate
+layers and treats local unitaries on each spin and its ancillas as free.
+The displayed constants therefore do not count onsite operations as extra
+gate layers. Replacing a local CPTP primitive by an explicit local unitary
+dilation remains a separate formal bridge.
+
+\section{The proved bounded matching theorem}
+Fix a physical dimension $d\ge2$, an upper bound $B$ on the local input
+dimension, and $m\le B$. The density witness below forces $m\ge1$, hence $B\ge1$. Set
+\begin{align}
+ k&=\lceil\log_d B\rceil.
+\end{align}
+The local basis code into $k$ qudits is chosen independently of the chain
+length. Its matrix $E$ is isometric. A completely positive trace-preserving
+decoder is obtained by completing $Y\mapsto E^\dagger YE$ outside the code:
+\begin{align}
+ D(Y)&=E^\dagger YE+
+ \operatorname{tr}[(I-EE^\dagger)Y(I-EE^\dagger)]\rho,
+\end{align}
+where $\rho$ is a fixed density matrix. Then $D(EXE^\dagger)=X$ for every
+operator $X$, and the identity persists after tensoring with the identity
+on any finite reference. The two-site encoding is the tensor product of
+the separate onsite encodings.\footnote{Formal declarations:
+\leanid{QuantumCircuit.registerDecoding_comp_encoding},
+\leanid{QuantumCircuit.registerDecoding_encoding_reference}, and
+\leanid{QuantumCircuit.registerEncoding_pair} in
+\doclink{TNLean/Circuit/Channel/RegisterEncoding}.}
+
+On a ring of $N\ge2$ sites, give each site one physical port, a $k$-qudit
+data register and a $k$-qudit scratch register. For an arbitrary matching
+of CPTP pair channels, extend each channel to its full two-register space
+by encoding its output after applying it to a completed decoding of the
+input. These extensions are CPTP on the entire register algebra and agree
+exactly with the original channels on encoded inputs. There are normalized
+finite Kraus representations whose actual placed matching channel has
+physical depth at most
+\begin{align}
+ 2k&=2\lceil\log_d B\rceil,
+\end{align}
+independently of $N$ and the number of selected bonds. Products of $L$
+such certified layers have depth at most $2kL$.\footnote{Formal declarations:
+\leanid{QuantumCircuit.exists_bounded_matching_simulation},
+\leanid{QuantumCircuit.PortRegisters.matchingChannel_isPhysicalPortProtocol},
+and \leanid{QuantumCircuit.IsPhysicalPortProtocol.list_prod_uniform} in
+\doclink{TNLean/Circuit/Channel/PortSimulation}.}
+For $B=1$, the data register has zero qudits and the bound is zero. A
+one-site ring's self-loop SWAP is separately proved to be the identity;
+the two-distinct-register statement assumes $N\ge2$.
+
+\section{Why the communication cost is uniform}
+To exchange one memory digit across a selected bond, swap that digit with
+the physical port locally at both endpoints, perform one physical-port
+SWAP, and undo the two local swaps. This exchanges the selected memory
+digits and restores the ports exactly, including when they carry arbitrary
+correlations. Every bond of a matching runs in parallel. Repeating over the
+$k$ digits moves each left data register into the right scratch register,
+while leaving the right data register in place.
+
+All pair channels can now be executed onsite. Reverse the one common
+routing afterward. The total cost is $k+k$, not $2k$ times the number of
+bonds. Conjugation by the routing preserves products of channel maps, so
+the resulting map is exactly the original placed family on the complete
+operator space. Outputs return to their original data registers and all
+other wires are restored.\footnote{Formal declarations:
+\leanid{QuantumCircuit.IsPhysicalPortUnitary.register_matching} in
+\doclink{TNLean/Circuit/Channel/PortRouting} and
+\leanid{QuantumCircuit.IsPhysicalPortProtocol.of_routed_family} in
+\doclink{TNLean/Circuit/Channel/PortChannelRouting}.}
+This construction follows the same gather, execute locally, and return
+principle used in the source's proof of Theorem~1 (Supplement pp.~8--9),
+but the displayed channel-resource bound is a derived result.
+
+The completed decoder for a joint code need not factor into separated
+onsite operations outside that code. No such assertion is used: the joint
+extension is applied only after the registers have been colocated. Separate
+input/output encoding and decoding use products of local maps. Decoding after encoding
+is the identity on every chain operator, with any finite
+reference.\footnote{Formal declarations:
+\leanid{QuantumCircuit.OnsiteChannel.decodeRegisters_encodeRegisters_reference}
+in \doclink{TNLean/Circuit/Channel/OnsiteRegisterEncoding}.}
+
+\section{The encoded bounded-protocol compiler}
+The dimension bound now records every positive intermediate local space of
+an actual native protocol, not just its endpoint dimensions. For fixed
+$d\geq2$, $N\geq2$, and one common bound $B$, set
+$k=\lceil\log_d B\rceil$. A native protocol $\Psi$ of depth $T$ compiles into
+an explicit word on the alphabet $d^k$. Its onsite operations cost zero and
+its $T$ native matching layers cost at most $2kT$ in total.\footnote{Formal
+constructive compiler:
+\leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation}
+in \doclink{TNLean/Circuit/Channel/PhysicalProtocolCompilation}.}
+
+The resulting physical channel $\Gamma$ obeys the exact identity
+\begin{equation}
+ \Gamma\mathcal E_{\mathrm{in}}
+ =\mathcal E_{\mathrm{out}}(\Psi\otimes\operatorname{id}_{R}),
+\end{equation}
+where $R$ is the entire complementary port/scratch system. The equation
+holds on all joint input-reference operators. The maps $\mathcal E$ are
+product onsite codes transported through explicit sitewise digit and
+selected/complementary coordinate equivalences. Encoders and completed
+decoders are CPTP, and decoding after encoding is exactly the identity.
+The coordinate changes are not assumed free intersite gates.
+
+This is an encoded logical-input statement: the data occupy local data
+registers. The next construction supplies the original-port input/output
+interface when the native input and output dimensions both equal $d$.
+
+\section{Original-port input, output, and designated memory reset}
+Let $J_{\mathrm{port}}$ be the explicit product code that stores the input
+qudit on each original physical port and initializes its $2k$ data/scratch
+digits to zero. A second product code stores the register encoding on the
+data digits, with zero port and scratch digits. Completed channels on each
+whole spatial-site block convert these codes in both directions at zero
+intersite depth. They are CPTP on the entire physical operator space, not
+merely on the code.
+
+Compose this preprocessing and postprocessing with the encoded compiler.
+For a bounded native endomorphism $\Psi$ whose input/output dimension is
+$d$, the resulting physical-port protocol satisfies
+\begin{equation}
+ \Gamma_{\mathrm{port}}J_{\mathrm{port}}
+ = J_{\mathrm{port}}\Psi,
+ \qquad \operatorname{depth}_{\mathrm{intersite}}(\Gamma_{\mathrm{port}})
+ \le 2kT.
+\end{equation}
+Thus the output returns to the same physical ports, and all designated
+data/scratch memory is again in its product zero state and uncorrelated
+with the output. The identity holds on all logical operators and persists
+with an arbitrary external reference.\footnote{Formal theorem:
+\leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortIO}
+in \doclink{TNLean/Circuit/Channel/PhysicalPortIO}.}
+
+The explicit initializer is identified with the earlier physical encoding
+by splitting data from its complementary wires and preparing the latter
+in their zero configuration. This identity is checked on matrix units,
+so it includes off-diagonal coherences. The reset assertion concerns the
+designated data/scratch wires; it does not assert that unmodeled dilation
+environments for the local CPTP primitives are reset.
+
+\section{Remaining comparison and source conditions}
+The fixed-port predicate records reduced onsite CPTP operations by local
+Kraus families. A full source protocol witness must also account for
+locally initialized dilation environments and their disposal, and, when
+claiming a pure-state preparation, the source's final system--ancilla
+condition. For the asymptotic \textit{QCcc} relation, the source fixes the number
+of composed \textit{QCcc} protocols independently of $N$. This is not a
+bound on individual local measurement/correction steps: one protocol can
+already contain sequential steps at many sites. A source-block decomposition
+must also satisfy the within-block control order and one-measurement-per-site
+restriction. None of these conditions follows from a quantum-depth bound.
+
+Every finite positive-input native protocol admits some finite dimension
+budget. For a family this gives only a potentially size-dependent $B(N)$,
+which does not supply the uniform constant above. The encoded compiler
+therefore does not identify the unrestricted enlarged-site phase relation
+with the source's relation. No MPS classification is inferred.\footnote{The
+resource comparison is tracked by \ghissue{8640}, under \ghissue{8622};
+approximate and adaptive conversions are tracked by \ghissue{8380} and
+\ghissue{8382}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

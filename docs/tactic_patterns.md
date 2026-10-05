@@ -3483,6 +3483,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
   and the existing realization identities; no tactic is needed at this count.
 
+### Remainder-absorbing block lengths — candidate
+- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
+  of length `q + N % q`, and prove the sum is `N` by separating the last
+  summand, summing the constants, and applying `Nat.div_add_mod`.
+- **Seen:** two production occurrences in
+  `TNLean/MPS/Preparation/LogDepthPreparation.lean:152` and
+  `TNLean/MPS/Preparation/ZeroSubleadingPreparation.lean:120` (2026-10-03).
+- **Abstraction:** at a third occurrence, a partition lemma for arbitrary
+  `N,q,m` with `N / q = m + 1` can supply the sum and the lower/upper bounds
+  from `Nat.mod_lt`, using the existing `Fin.sum_univ_castSucc` and
+  `Finset.sum_const`.
+- **Notes:** Mathlib already supplies the finite-sum and division identities;
+  no general partition lemma was found. The two production occurrences are
+  below the rule-of-three threshold.
+
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
   the original ket-bra alphabet, then transport the physical-trace contraction

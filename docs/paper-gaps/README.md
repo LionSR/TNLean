@@ -793,6 +793,14 @@ For the group matrix product operators of arXiv:2203.12563:
   formalized, so the anomaly class is the type-II class; the comparison with
   the original odd-ring or two-site-blocked family remains open.
 
+For the PVBS spectral formulas of Bachmann--Nachtergaele, arXiv:1112.4097:
+
+- `bn12_pvbs_periodic_gap.tex` records the exact finite periodic one-species,
+  zero-phase gap and its local-projector normalization, including the
+  two-oriented-window convention at length two. It distinguishes this
+  result from the broader multi-species thermodynamic conjecture and
+  explains why the critical finite-volume gap is not asserted to vanish.
+
 For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
 
 - `cpgsv21_pvbs_threshold.tex` corrects the right-boundary threshold under
@@ -974,13 +982,23 @@ measurements and classical communication (arXiv:2103.13367, Theorem
   large chain lengths; open: the converse direction needs channels acting on
   arbitrary input states.
 
+- `psc21_physical_port_simulation_scope.tex` records the derived
+  `2 * ceil(log_d B)` overhead per native layer, hence total intersite depth
+  at most `2 * ceil(log_d B) * T` for a depth-`T` bounded native channel protocol,
+  including exact reference preservation, original physical-port
+  input/output and product-zero designated memory reset. It separates the
+  remaining local dilation and source QCcc protocol-block witness conditions.
+
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
 - `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
   pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
-  holds, and the rate correction for the decay bound.
+  holds, and the rate correction for the decay bound. The corrected
+  all-separation binomial and polynomial-plus-transient expansions are now
+  proved for normal tensors in an arbitrary bond basis. The broader singular
+  fixed-matrix source class remains open.
 
 For the finite-round extension of arXiv:2103.13367:
 

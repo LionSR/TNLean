@@ -28,7 +28,7 @@ string-order universality theorems that use them.
 
 ## Main results
 
-* `MPSTensor.twistedTransfer_spectralRadius_le_one` — spectral radius bound
+* `MPSTensor.twistedTransfer_eigenvalue_norm_le_one_of_irreducible` — eigenvalue bound
 * `MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase` — modulus-one
   rigidity bridge
 * `MPSTensor.stringOrder_iff_localSymmetry` — string order ↔ local
@@ -60,17 +60,13 @@ variable {d D : ℕ}
 
 section MainTheorems
 
-/-- **Spectral radius bound** (Lemma 1 of arXiv:0802.0447):
-for an injective pure FCS, every eigenvalue of the twisted
-transfer map `ℰ_u` has modulus at most `1`.
-
-The proof rewrites `ℰ_u` as a mixed transfer map, passes to a common
-positive-definite fixed point of the adjoint channels, gauges both
-Kraus families to trace-preserving form, and applies the mixed-transfer
-eigenvalue bound `Kraus.eigenvalue_norm_le_one`. -/
-theorem twistedTransfer_spectralRadius_le_one
+/-- Every eigenvalue of a unital irreducible tensor's twisted transfer map has
+modulus at most one (arXiv:0802.0447, Lemma 1). The proof passes the two Kraus
+families to a common trace-preserving gauge and applies the mixed-transfer
+eigenvalue bound. -/
+theorem twistedTransfer_eigenvalue_norm_le_one_of_irreducible
     (A : MPSTensor d D)
-    (hA : Kraus.IsInjective A)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (hNorm : Kraus.transferMap A 1 = 1)
@@ -86,7 +82,7 @@ theorem twistedTransfer_spectralRadius_le_one
     ext i j
     exact Fin.elim0 i
   have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
-  let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
+  let setup := twistedTPGaugeSetup_of_irreducible (A := A) hIrrA u hu hNorm
   have hHas : Module.End.HasEigenvalue
       (Kraus.mixedMapLM setup.A' setup.B') ev :=
     twistedTPGaugeSetup_hasEigenvalue
@@ -94,13 +90,30 @@ theorem twistedTransfer_spectralRadius_le_one
   exact Kraus.eigenvalue_norm_le_one
     (A := setup.A') (B := setup.B') setup.hA'TP setup.hB'TP ev hHas
 
-/-- A modulus-one eigenvalue of the twisted transfer map forces the twisted
-companion tensor to be gauge-phase equivalent to the original tensor. The proof
-passes both families to a common trace-preserving gauge and applies the
-irreducible mixed-transfer rigidity theorem. -/
-theorem twistedTransfer_modulus_one_implies_gaugePhase
+/-- Every eigenvalue of an injective normalized tensor's twisted transfer map has
+modulus at most one. This is the injective specialization of the irreducible
+eigenvalue bound; its conclusion bounds an eigenvalue, not the spectral radius.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
+theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
+    (hV : V ≠ 0)
+    (hEig : twistedTransferMap A u V = ev • V) :
+    ‖ev‖ ≤ 1 :=
+  twistedTransfer_eigenvalue_norm_le_one_of_irreducible
+    A (Kraus.injective_implies_irreducibleCP A hA) u hu hNorm ev V hV hEig
+
+/-- For a unital irreducible tensor, a modulus-one twisted-transfer eigenvalue
+forces the twisted companion tensor to be gauge-phase equivalent to the original
+tensor (arXiv:0802.0447, Lemma 1). The proof passes to a common trace-preserving
+gauge and applies irreducible mixed-transfer rigidity. -/
+theorem twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible
+    (A : MPSTensor d D)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (hNorm : Kraus.transferMap A 1 = 1)
@@ -117,7 +130,7 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     ext i j
     exact Fin.elim0 i
   have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
-  let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
+  let setup := twistedTPGaugeSetup_of_irreducible (A := A) hIrrA u hu hNorm
   have hHas : Module.End.HasEigenvalue (Kraus.mixedMapLM setup.A' setup.B') ev :=
     twistedTPGaugeSetup_hasEigenvalue
       (A := A) (u := u) (setup := setup) ev V hV hEig
@@ -145,6 +158,23 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     (gaugeEquiv_tpGauge (A := A) (ρ := setup.σ) setup.hσ_pd)
     hGauge'
     (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
+
+/-- For an injective normalized tensor, a modulus-one twisted-transfer eigenvalue
+forces gauge-phase equivalence with the twisted companion.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
+theorem twistedTransfer_modulus_one_implies_gaugePhase
+    (A : MPSTensor d D)
+    (hA : Kraus.IsInjective A)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
+    (hV : V ≠ 0)
+    (hEig : twistedTransferMap A u V = ev • V)
+    (hev : ‖ev‖ = 1) :
+    GaugePhaseEquiv A (twistedMixedCompanion A u) :=
+  twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible
+    A (Kraus.injective_implies_irreducibleCP A hA) u hu hNorm ev V hV hEig hev
 
 /-- If string order exists for `u`, then the twisted companion family is gauge-phase
 equivalent to the original tensor.  The proof extracts a modulus-one peripheral
