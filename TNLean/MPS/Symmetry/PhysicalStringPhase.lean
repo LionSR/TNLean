@@ -190,7 +190,8 @@ theorem pureCanonical_exists_physicalStringOrderWith_iff_peripheral_letter
     obtain ⟨V, μ, hV, _, hμ, _, hInter⟩ := hSpect.2.1.mp hRad
     obtain ⟨n, m, hnm⟩ :=
       (pureCanonical_physicalString_selection_rule
-        A Λ hΛpos hΛtr hΛfix hNorm hPure u hu V μ hV hμ hInter).2.mp hSO
+        A Λ hΛpos hΛtr hΛfix hNorm hPure u hu V μ hV hμ hInter).2.mp
+        ⟨x, y, s, hs, hlim⟩
     exact ⟨V, μ, n, m, hμ,
       twistedTransfer_eigen_of_virtualUnitary A u V μ hNorm hV hInter, hnm⟩
   · rintro ⟨Q, ev, n, m, hev, hEig, hnm⟩
@@ -229,7 +230,7 @@ theorem pureCanonical_exists_physicalStringOrderWith_iff_peripheral_letter
     refine ⟨n, m, ?_⟩
     intro hzero
     apply hnm
-    simp [hQV, Matrix.smul_mul, Matrix.trace_smul, hzero]
+    simp [hQV, Matrix.trace_smul, hzero]
 
 /-- The fixed-point selection criterion with explicit projective
 nontriviality: both twists are required to be nonscalar.

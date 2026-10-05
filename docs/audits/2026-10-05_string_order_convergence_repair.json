@@ -98,5 +98,50 @@
     "merge_tree_conflicts": [],
     "QIC_pin": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f",
     "action": "Read-only compatibility check; no unrelated main merge."
+  },
+  "second_CI_run": {
+    "head": "5b7edb9a6790aaa024606c5b94260ac04a245901",
+    "run": "https://github.com/LionSR/TNLean/actions/runs/37383585493",
+    "job_id": 112011333939,
+    "actual_import_passes": [
+      "TNLean.MPS.Symmetry.PhysicalStringAsymptotics",
+      "TNLean.MPS.Symmetry.PhysicalStringSelectionRule"
+    ],
+    "remaining_errors": [
+      "PhysicalStringBlockOrder: unfold Kraus.IsTP explicitly when deriving adjoint TP from unitality",
+      "PhysicalStringPhase: reconstruct the existential physical endpoints after destructuring the original witness"
+    ],
+    "warning_repair": "Remove the reported unused Matrix.smul_mul simplification argument.",
+    "mathematical_signatures_changed": false,
+    "definition_only_regression": {
+      "scope": "Definition-only adjoint-TP normalization and existential endpoint-witness reconstruction under actual scopes/Mat alias; no full analytic-import claim.",
+      "start": "2026-10-05T22:44:43.017958+00:00",
+      "end": "2026-10-05T22:44:54.518490+00:00",
+      "exit_code": 0,
+      "command": [
+        "timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+        "-j",
+        "1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dweak.linter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "StringPhaseWitnessProbe.lean",
+        "-o",
+        "StringPhaseWitnessProbe.olean"
+      ],
+      "source_sha256": "d918bca2fa49f80205faf9fbc752a2b9fe8c709f9045828f237e38ed7d04e237",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "c3732bcba5434151937820487d4c5d571db42c2b3c166857f1f417740d85cff7"
+    },
+    "repaired_source_sha256": {
+      "TNLean/MPS/Symmetry/PhysicalStringBlockOrder.lean": "731dee08674cd0a080deaed2797541740c71989bd5b27ec56bc82b56fde0665d",
+      "TNLean/MPS/Symmetry/PhysicalStringPhase.lean": "408d3d1668cdbcb781cb492b120211675d1c0e304b14b525430fbca5cd547129"
+    }
   }
 }

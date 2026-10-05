@@ -49,7 +49,7 @@ theorem isNormal_of_pureCanonical [NeZero D]
   obtain ⟨hIrr, hPrim⟩ :=
     pureCanonical_isIrreducibleMap_and_isPrimitive A Λ hΛpos hΛfix hNorm hPure
   let B : MPSTensor d D := fun i => (A i)ᴴ
-  have hTP : Kraus.IsTP B := by simpa [B, Kraus.transferMap_apply] using hNorm
+  have hTP : Kraus.IsTP B := by simpa [B, Kraus.IsTP, Kraus.transferMap_apply] using hNorm
   have hIrrB : IsIrreducibleMap (Kraus.transferMap B) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A hIrr
   have hPrimB : IsPrimitive (Kraus.transferMap B) := by
