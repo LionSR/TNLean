@@ -120,6 +120,13 @@ theorem mixedEndpointActiveFirstEdgePlacement_commute_lastBoundaryMap
         T v (a, (b, σ, r.1), r.2)) (c, e) =
     mixedEndpointActiveEdgePlacement (.first : MixedEndpointActiveEdgeSite N) T
       (mixedEndpointActiveLastBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
+  refine (congrArg (fun g => lastBoundaryCoordinateMap F g (c, e))
+    (funext fun r : Fin D₀ × (Fin D₀ ⊕ Fin D₁) =>
+      mixedEndpointActiveEdgePlacement_apply (.first : MixedEndpointActiveEdgeSite N)
+        T v (a, (b, σ, r.1), r.2))).trans ?_
+  refine Eq.trans ?_
+    (mixedEndpointActiveEdgePlacement_apply (.first : MixedEndpointActiveEdgeSite N) T
+      (mixedEndpointActiveLastBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)).symm
   change lastBoundaryCoordinateMap F
       (fun r => T (mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N)
         v (Fin.tail σ, r.1, r.2)) ((a, b), σ 0)) (c, e) =
@@ -149,6 +156,13 @@ theorem mixedEndpointActiveLastEdgePlacement_commute_firstBoundaryMap
         T v (r.1, (r.2, σ, c), e)) (a, b) =
     mixedEndpointActiveEdgePlacement (.last : MixedEndpointActiveEdgeSite N) T
       (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
+  refine (congrArg (fun g => firstBoundaryCoordinateMap F g (a, b))
+    (funext fun r : (Fin D₀ ⊕ Fin D₁) × Fin D₀ =>
+      mixedEndpointActiveEdgePlacement_apply (.last : MixedEndpointActiveEdgeSite N)
+        T v (r.1, (r.2, σ, c), e))).trans ?_
+  refine Eq.trans ?_
+    (mixedEndpointActiveEdgePlacement_apply (.last : MixedEndpointActiveEdgeSite N) T
+      (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)).symm
   change firstBoundaryCoordinateMap F
       (fun r => T (mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N)
         v (r.1, r.2, Fin.init σ)) (σ (Fin.last N), (c, e))) (a, b) =
@@ -183,6 +197,13 @@ theorem mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
           (r.1, (r.2, σ, c), e)) (a, b) =
       mixedEndpointActiveEdgePlacement (.interior i) T
         (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
+    refine (congrArg (fun g => firstBoundaryCoordinateMap F g (a, b))
+      (funext fun r : (Fin D₀ ⊕ Fin D₁) × Fin D₀ =>
+        mixedEndpointActiveEdgePlacement_apply (.interior i) T v
+          (r.1, (r.2, σ, c), e))).trans ?_
+    refine Eq.trans ?_
+      (mixedEndpointActiveEdgePlacement_apply (.interior i) T
+        (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)).symm
     change firstBoundaryCoordinateMap F
         (fun r => T (mixedEndpointActiveEdgeFiber (.interior i)
           v (r.1, (r.2, (f σ).2, c), e)) (f σ).1) (a, b) =
@@ -205,6 +226,13 @@ theorem mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
           (a, (b, σ, r.1), r.2)) (c, e) =
       mixedEndpointActiveEdgePlacement (.interior i) T
         (mixedEndpointActiveLastBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
+    refine (congrArg (fun g => lastBoundaryCoordinateMap F g (c, e))
+      (funext fun r : Fin D₀ × (Fin D₀ ⊕ Fin D₁) =>
+        mixedEndpointActiveEdgePlacement_apply (.interior i) T v
+          (a, (b, σ, r.1), r.2))).trans ?_
+    refine Eq.trans ?_
+      (mixedEndpointActiveEdgePlacement_apply (.interior i) T
+        (mixedEndpointActiveLastBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)).symm
     change lastBoundaryCoordinateMap F
         (fun r => T (mixedEndpointActiveEdgeFiber (.interior i)
           v (a, (b, (f σ).2, r.1), r.2)) (f σ).1) (c, e) =

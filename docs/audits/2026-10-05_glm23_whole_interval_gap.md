@@ -126,3 +126,30 @@ passed a strict check and a targeted build. The exposed scalar-inner-product
 proof in `BondProductSpectralGap` is repaired using explicit inner-product
 identities; its statement is unchanged and its strict check and targeted
 build passed. No toolchain or dependency pin changes are included.
+
+## Exact-head follow-up: 2026-10-05 23:12 UTC
+
+CI build job `112012180762` checked head
+`20a4a5d9c5ba4c90a7797ae4493cf2fc27ec5e01`. The repaired placement,
+periodic-state continuity, and all but four normalization proof sites
+compiled. Those four sites incorrectly treated the placement evaluation
+identity as definitional equality. This follow-up applies the proved
+placement identity explicitly through each boundary coordinate map before
+normalizing the concrete fibers; the statements are unchanged. Its source
+hash is `5e169cf157c81e9473af9383b7cb7238f388250d35e213b1ee5f05d7be18bf24`.
+A focused strict local check is pending; only a fresh complete CI pass can
+credit the downstream gap and guarded regressions.
+
+The same CI exposed a missing direct import in
+`ExactMPSPhaseGaugeInvariance`: its two uses of `GaugeEquiv.blockTensor`
+previously inherited `CPSVBlocking` through the wider physical-Gibbs import
+cone. That module now imports the owning declaration file explicitly.
+No theorem body or statement changes there. The full local check lacks the
+cached `ExactMPSGappedPhase` prerequisite, so it is not reported as passed.
+The exact-head full blueprint/browser job `112012180709` did succeed.
+
+At 23:22 UTC, the strict focused prefix containing all four revised
+commutation proofs and their helpers passed with no diagnostics. A separate
+strict declaration-import check of `GaugeEquiv.blockTensor` also passed.
+These focused checks do not replace full-file, downstream, or guarded
+regression validation on the next published head.
