@@ -39,34 +39,19 @@ theorem exists_norm_polarPos_sub_le_sqrt_transferMatrix (D : ℕ) :
         K * Real.sqrt ‖transferMatrix (Kraus.transferMap A) -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ := by
   classical
-  let R : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ]
-      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
-    { toFun := fun T a b => T (a.1, b.1) (a.2, b.2)
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl }
-  let Rc := LinearMap.toContinuousLinearMap R
-  refine ⟨Real.sqrt ‖Rc‖, Real.sqrt_nonneg _, fun {d} A σ hσ => ?_⟩
-  have hgram : (physicalMatrix A)ᴴ * physicalMatrix A -
-      σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-      Rc (transferMatrix (Kraus.transferMap A) -
-        transferMatrix (Kraus.transferMap (fixedPointTensor σ))) := by
-    ext a b
-    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply,
-      transpose_kronecker_one_apply]
-    change _ = Kraus.transferMap A (Matrix.single b.2 a.2 1) b.1 a.1 -
-      Kraus.transferMap (fixedPointTensor σ) (Matrix.single b.2 a.2 1) b.1 a.1
-    rw [transferMap_fixedPointTensor_apply hσ]
+  obtain ⟨K, hK, hgram⟩ := exists_norm_gram_transferMatrix_sub_le D
+  refine ⟨Real.sqrt K, Real.sqrt_nonneg _, fun {d} A σ hσ => ?_⟩
   have hsqrt := CFC.norm_sqrt_sub_sqrt_le
     (Matrix.posSemidef_conjTranspose_mul_self (physicalMatrix A)).nonneg
     (hσ.transpose.kronecker Matrix.PosSemidef.one).nonneg
-  rw [sqrt_transpose_kronecker_one hσ, hgram] at hsqrt
+  rw [sqrt_transpose_kronecker_one hσ] at hsqrt
   refine hsqrt.trans ?_
-  calc Real.sqrt ‖Rc (transferMatrix (Kraus.transferMap A) -
-          transferMatrix (Kraus.transferMap (fixedPointTensor σ)))‖
-      ≤ Real.sqrt (‖Rc‖ * ‖transferMatrix (Kraus.transferMap A) -
+  calc Real.sqrt ‖(physicalMatrix A)ᴴ * physicalMatrix A -
+          σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖
+      ≤ Real.sqrt (K * ‖transferMatrix (Kraus.transferMap A) -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖) :=
-        Real.sqrt_le_sqrt (Rc.le_opNorm _)
-    _ = _ := Real.sqrt_mul (norm_nonneg _) _
+        Real.sqrt_le_sqrt (hgram A σ hσ).1
+    _ = _ := Real.sqrt_mul hK.le _
 
 /-- Site-dependent fixed-point tensors give the nearest-neighbor pair of the *following*
 site on each outgoing bond. This cyclic shift is invisible in the constant-reference case. -/

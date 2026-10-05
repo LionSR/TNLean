@@ -50,6 +50,7 @@ import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.GHZSeedCircuit
 import TNLean.MPS.Preparation.GHZSeedRegisters
 import TNLean.MPS.Preparation.InhomogeneousApproximationError
+import TNLean.MPS.Preparation.InhomogeneousChoiResidual
 import TNLean.MPS.Preparation.InhomogeneousDoeblin
 import TNLean.MPS.Preparation.InhomogeneousDoeblinPreparation
 import TNLean.MPS.Preparation.InhomogeneousExactPreparation
@@ -154,6 +155,8 @@ import TNLean.MPS.Preparation.VaryingReferencePreparation
 import TNLean.MPS.Preparation.WindowClustering
 import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Preparation.WindowGHZ
+import TNLean.MPS.Preparation.WindowMixing
+import TNLean.MPS.Preparation.WindowMixingPreparation
 import TNLean.MPS.Preparation.WindowOperatorSupport
 import TNLean.MPS.Preparation.WindowSeparation
 import TNLean.MPS.Preparation.ZeroSubleadingPreparation
