@@ -36,6 +36,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/add_blueprint_search.py'
@@ -89,6 +90,9 @@ jobs:
 
       - name: Fetch pinned tenkz package
         run: python3 scripts/fetch_tenkz.py
+
+      - name: Test blueprint PDF string-pool capacity
+        run: python3 scripts/test_blueprint_pdf_capacity.py
 
       - name: Check native tenkz sources and picture pipeline
         run: |
