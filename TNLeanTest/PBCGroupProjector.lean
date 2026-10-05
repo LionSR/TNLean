@@ -22,6 +22,8 @@ set_option linter.hashCommand false
 
 open scoped Matrix
 
+section General
+
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 example (h : G) : fusionProjector e h * fusionProjector e h = fusionProjector e h :=
@@ -99,7 +101,13 @@ example [Nontrivial G] {ω : ScalarThreeCochain G} (hn : ScalarThreeCochain.IsNo
     ¬ Kraus.IsNormal (tensor e ω 1).toMPSTensor :=
   not_isNormal_tensor_one e hn
 
-local notation "e₂" => (Multiplicative.toAdd : Multiplicative (ZMod 2) ≃ Fin 2)
+end General
+
+private def cyclicTwoEquiv : Multiplicative (ZMod 2) ≃ Fin 2 :=
+  (Multiplicative.toAdd : Multiplicative (ZMod 2) ≃ ZMod 2).trans
+    (ZMod.finEquiv 2).symm.toEquiv
+
+local notation "e₂" => cyclicTwoEquiv
 local notation "ω₀" => (fun _ _ _ ↦ 1 : ScalarThreeCochain (Multiplicative (ZMod 2)))
 
 -- At g = h = e, physical letter (0,0), incoming pair (1,0), and fused outgoing
@@ -107,20 +115,26 @@ local notation "ω₀" => (fun _ _ _ ↦ 1 : ScalarThreeCochain (Multiplicative 
 example :
     (mulTensor (tensor e₂ ω₀ 1) (tensor e₂ ω₀ 1) 0 0 * fusionW e₂ ω₀ 1 1)
       (finProdFinEquiv (1, 0)) 0 = 1 := by
-  simp [mul_fusionW_apply, pairLabel, mulTensor_tensor_apply]
+  rw [mul_fusionW_apply (e := e₂)]
+  simp only [pairLabel]
+  rw [mulTensor_tensor_apply (e := e₂)]
+  simp [siteShift_apply e₂]
 
 example :
     (fusionW e₂ ω₀ 1 1 * tensor e₂ ω₀ 1 0 0) (finProdFinEquiv (1, 0)) 0 = 0 := by
-  simp [fusionW_mul_apply]
+  rw [fusionW_mul_apply (e := e₂)]
+  simp [siteShift_apply e₂]
 
 -- The support projector on Z₂ has diagonal (1,0,0,1), so it is not the full identity.
 example : fusionProjector e₂ 1 (finProdFinEquiv (1, 0)) (finProdFinEquiv (1, 0)) = 0 := by
-  simp [fusionProjector_apply]
+  rw [fusionProjector_apply e₂]
+  simp [siteShift_apply e₂]
 
 example : fusionProjector e₂ 1 ≠ 1 := by
   intro heq
   have hentry := congrArg (fun M ↦ M (finProdFinEquiv (1, 0)) (finProdFinEquiv (1, 0))) heq
-  simpa [fusionProjector_apply] using hentry
+  rw [fusionProjector_apply e₂] at hentry
+  simp [siteShift_apply e₂] at hentry
 
 -- The same failure occurs for the nontrivial three-cocycle and nonidentity elements.
 example :

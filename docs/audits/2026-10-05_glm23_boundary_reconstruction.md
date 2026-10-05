@@ -167,23 +167,36 @@ declaration tags but intentionally no `leanok` until that verification.
   types allows this same-multiplicity comparison; no separate gauge theory
   has been introduced.
 
-The complete blocked family is the input expected by the existing printed
-F-move, inverse, uniqueness, pentagon, and gauge-covariance results in
+The constructed blocked family supports both existing fusion comparisons in
 `CompleteZipperFusion`, `CompleteZipperFusionInverse`,
-`CompleteZipperFusionPentagon`, and `CompleteZipperFusionGauge`. Regressions
-apply those results directly; this addition does not reprove them or change
-their orientation. In particular the gauge covariance is
-`F' = G_R⁻¹ F G_L`, and the existing literal indexed pentagon uses the inverse
-F orientation. These are fusion associator consequences for the constructed
-blocked family, not a construction of general action L-symbols, a mixed
-pentagon, or a proof of unblocked action-gauge exhaustiveness.
+`CompleteZipperFusionPentagon`, and `CompleteZipperFusionGauge`.
+Write P for the synthesis-oriented `printedFMatrix` of arXiv:1511.08090 and
+Q for its `inversePrintedFMatrix`. They satisfy S_R P = S_L and
+H_L = Q H_R, suppressing the final-bond identity factor. With GLM23's printed
+upper indices as rows, its F-symbol in `Fsymbolsdef` is Q, not P or Pᵀ.
+Thus `inversePrintedFMatrix_pentagon` gives GLM23's indexed `pentagon0F`.
+The existing synthesis-basis regauge gives P′ = G_R⁻¹ P G_L and
+Q′ = G_L⁻¹ Q G_R. For a GLM23 analysis-basis gauge A, use the API parameter
+A⁻ᵀ; the result is Q′ = A_L Q A_R⁻¹. The exact theorem for this orientation
+is `inversePrintedFMatrix_regauge`.
+
+This dictionary follows the source's matrix directions: its unhatted fusion
+W is analysis (our V), while its hatted W is synthesis (our W). The TikZ
+picture names V1/W1 are different from those source matrix names. Regressions
+apply both existing inverse and coherence results directly, without changing
+their definitions. These are fusion associator consequences for the constructed
+blocked family. General action L-symbols and the mixed pentagon are separate
+remaining work. Their source index conventions must be checked independently.
 
 ## Source multiplicity laws
 
 `BoundaryMultiplicity.lean` and its separate regression
 `TNLeanTest/BoundaryMultiplicity.lean` extend the batch without modifying the
-frozen existence/zipper proof modules. They remain pending canonical
-elaboration and their blueprint nodes therefore omit `leanok`.
+existence/zipper proof modules. All sixteen production modules in this batch
+passed full Lean compilation in the remote validation run at commit
+`250210d89cb53370084922a7c063346b57b610f6`. Their blueprint statements and
+proofs are marked checked. Strict regression validation continues separately;
+production compilation does not certify unelaborated regression examples.
 
 The trace formula gives `IsMPOFusionAlgebra` and `IsMPOSymmetricFamily` for the
 exact natural multiplicities obtained from W/V. A simultaneous word span
