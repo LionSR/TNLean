@@ -296,11 +296,11 @@
         \label{eq:glm_boundary_action_l_diagram}
     \end{align}
     \begin{tenkzequation}
-        % The registered web row is a group. Its local alias suppresses only
-        % the native scope commands; native TeX keeps the hard signature check.
-        \newif\ifplastex\plastexfalse
-        \ifplastex
-            \let\tenkzeq\relax
+        % The parser defines ifplastex; native TeX does not. Keep this empty
+        % definition local to the registered web row, preserving the native
+        % tenkzeq hard signature check without emitting renderer fallback nodes.
+        \ifdefined\ifplastex
+            \def\tenkzeq{}
         \fi
         \begin{tenkzeq}
             % Source: GLM23 v3, eq:F_symbol2 (REsubmission.tex:517--534).
