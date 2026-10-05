@@ -27,13 +27,20 @@ an injective blocked site-dependent chain at an arbitrary chosen site,
 including either endpoint. Positive bond dimension is explicit. No
 translation-invariance, normalization, or additional rank condition is used.
 
-The source is broader in one respect: footnote 3 on page 3 permits non-injective
-blocked tensors and interprets the inverse as a pseudoinverse. The mixed polar
-result here is the injective specialization, with C†C = I on all D² input
-coordinates. For a non-injective blocked map, V†V is its support projector;
-a mixed extension must either allow that projector as C†C or restrict the
-central input to the support. This extension is not claimed. Its scope and
-elimination plan are recorded in
+The non-injective case permitted by source footnote 3 is now handled in
+`MixedSequentialSupport`. QICLean's existing orthogonal-projection range
+isometry supplies J with J†J = I and JJ† equal to the actual polar support.
+The same inward sweeps factor VJ on this finite input, and multiplication
+by J† reconstructs V. No full-dimensional isometry is asserted for V itself.
+The pseudoinverse does not preserve the printed full-input isometry claim:
+V†V equals the support projector, which need not be the identity. The corrected
+support-domain theorem closes the implementation gap, while the false-source
+record and a two-site GHZ tensor witness remain in
 [`mswc24_mixed_polar_injectivity_scope`](../paper-gaps/mswc24_mixed_polar_injectivity_scope.tex).
-The one-sided support-restricted factorization already exists as
-`MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary`.
+
+The mixed factorization predicate and central-input constructions now allow
+arbitrary finite input dimension. Their original full-input specializations
+are unchanged. The existing chain splitting argument is shared rather than
+duplicated, and no new support predicate or spectral-basis proof is introduced.
+
+The source error is additionally formalized on a normal, unital and trace-preserving tensor with physical dimension four and bond dimension two: `(I,E01,E10,0)/sqrt(2)`. Its length-two products span the four matrix units, but the actual polar map has a zero physical row and cannot be a square isometry. The witness module passed full-option Lean elaboration with no diagnostics. The external GHZ counterexample and false-source correction are preserved alongside this stronger normal witness.
