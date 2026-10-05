@@ -59,8 +59,9 @@ Documented in `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 **Scope restriction (boundary region):** the actual open-region image and its effective
 plaquette-spin action are identified for positive proper bounded coordinate rectangles in
-`CZXRectangleMap`. The normalized reduced density matrix and arbitrary nonrectangular regions
-remain outside this result. Documented in `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
+`CZXRectangleMap`. The actual reduced-density support and rank, including trace normalization,
+are proved in `CZXRectangleDensity`. Its nonzero spectrum and arbitrary nonrectangular regions
+remain outside these results. Documented in `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
 
 ## Main definitions
 

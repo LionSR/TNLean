@@ -94,3 +94,24 @@ merging main `b46e0aab`, every mathematical source in the audited local core
 closure remained unchanged; only four module headers differed.
 The revised standalone note compiles to three pages without undefined
 references or overfull boxes; all pages were visually inspected.
+
+## Actual reduced-density support extension
+
+The subsequent rectangle extension uses the existing actual closed-state cut
+factorization and reduced-density definition. Global plaquette witnesses select
+one native crossing assignment on the complement, so every effective column is
+literally a closed-state physical slice. The reduced-density range equals the
+cut-matrix range; together with generic support containment this proves equality
+with the open-region image and rank `2^(2*w+2*h)`. Its nonzero trace follows from
+positive semidefiniteness and positive rank. Trace normalization preserves the
+same support and rank, without asserting flatness, entropy, or an isometric
+normalization of the effective boundary map.
+
+The existing plaquette extension argument is factored into one public witness;
+the original selector reuses it. Independent source review checked actual
+complement-edge identification, coefficient one (not only proportionality),
+proper rectangle and seam conditions, and the absence of a parent-kernel
+hypothesis. Both source modules pass individual full-option isolated compilation.
+Strict regression tests include actual one-site rank 16, trace-normalized
+seam-crossing rank 64, nonzero trace for a maximal proper rectangle, and guarded
+standard-only axiom audits. No proof heartbeat limit was raised.

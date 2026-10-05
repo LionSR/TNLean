@@ -16,7 +16,7 @@ retains the source's bottom/left bond orientation.
 
 **Scope restriction (rectangular region):** both torus periods are at least
 three and the region is a positive proper bounded coordinate rectangle.
-Normalized reduced-density and nonrectangular-region assertions remain open;
+Normalized spectrum, entropy and nonrectangular-region assertions remain open;
 see `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
 
 ## References
@@ -43,7 +43,7 @@ noncomputable def czxRectangleCoordinatesEquiv :
     RegionBoundaryConfig (czxPEPS width height)
       (torusContiguousRectangle xStart yStart w h) ≃ (Fin (2 * w + 2 * h) → Fin 4) :=
   (Equiv.arrowCongr
-    (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp).symm
+    (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp).symm
     (Equiv.refl (Fin 4))).trans
       (Equiv.piCongrRight fun i => if w + h ≤ i.val then czxBondSwap else Equiv.refl _)
 
@@ -56,7 +56,7 @@ noncomputable def czxRectangleCoordinatesEquiv :
     IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} → Fin 4) at μ
   funext i
   change (if w + h ≤ i.val then czxBondSwap else Equiv.refl (Fin 4))
-      (μ (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i)) = _
+      (μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i)) = _
   unfold czxRectangleBoundaryLabels
   by_cases hi : w + h ≤ i.val <;> simp only [hi, ite_true, ite_false, Equiv.refl_apply]
 
@@ -117,12 +117,13 @@ theorem czxRectangleBoundaryLabels_plaquette (q : TorusVertex width height → F
     simp only [← Nat.cast_add_one, ← Nat.cast_add]
   all_goals first | rfl | (congr 1; omega)
 
-/-- Every effective plaquette-spin column has a physical basis coefficient
-that selects exactly that column. Hence the effective boundary action is faithful. -/
-theorem exists_czxRectangleBoundaryMatrix_selector
+/-- Any effective perimeter spin configuration extends to global plaquette bits
+with exactly the specified native crossing-bond configuration. -/
+theorem exists_czxRectanglePlaquetteBoundary
     (c : Fin (2 * w + 2 * h) → Fin 2) :
-    ∃ σ, ∀ c', czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp σ c' =
-      if c' = c then 1 else 0 := by
+    ∃ q : TorusVertex width height → Fin 2,
+      (fun e => czxPlaquetteBondConfig q e.1) =
+        czxRectangleEffectiveBoundaryConfig xStart yStart w h hw hh hx hy hwp hhp c := by
   classical
   let corner := torusRectanglePerimeterCorner (width := width) (height := height)
     xStart yStart w h
@@ -140,6 +141,18 @@ theorem exists_czxRectangleBoundaryMatrix_selector
     funext i
     have hi := czxRectangleBoundaryLabels_plaquette xStart yStart w h hw hh hx hy hwp hhp q i
     exact hi.trans (by simp only [← hq, czxBoundaryLegs]; rfl)
+  exact ⟨q, hμ⟩
+
+/-- Every effective plaquette-spin column has a physical basis coefficient
+that selects exactly that column. Hence the effective boundary action is faithful. -/
+theorem exists_czxRectangleBoundaryMatrix_selector
+    (c : Fin (2 * w + 2 * h) → Fin 2) :
+    ∃ σ, ∀ c', czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp σ c' =
+      if c' = c then 1 else 0 := by
+  classical
+  obtain ⟨q, hμ⟩ := exists_czxRectanglePlaquetteBoundary
+    xStart yStart w h hw hh hx hy hwp hhp c
+  let R : Finset (TorusVertex width height) := torusContiguousRectangle xStart yStart w h
   let σ : RegionPhysicalConfig (d := 16) R := fun v => czxPlaquettePhysical q v.1
   have hself : openRegionWeight (czxPEPS width height) R
       (czxRectangleEffectiveBoundaryConfig xStart yStart w h hw hh hx hy hwp hhp c) σ = 1 := by
@@ -227,9 +240,9 @@ private theorem czxRectangleCoordinatesEquiv_flip
     IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} → Fin 4) at μ
   funext i
   change (if w + h ≤ i.val then czxBondSwap else Equiv.refl (Fin 4))
-      (czxLegFlip (μ (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i))) =
+      (czxLegFlip (μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i))) =
     czxLegFlip ((if w + h ≤ i.val then czxBondSwap else Equiv.refl (Fin 4))
-      (μ (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i)))
+      (μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i)))
   by_cases hi : w + h ≤ i.val
   · simp only [hi, ite_true]
     exact (czxLegFlip_swap _).symm
@@ -243,7 +256,7 @@ private theorem czxRectangleBoundaryPhase_coordinates
       ∏ i, czxLegPhase (czxRectangleCoordinatesEquiv
         xStart yStart w h hw hh hx hy hwp hhp μ i) := by
   classical
-  let e := torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp
+  let e := torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp
   calc
     _ = ∏ i, czxLegPhase (μ (e i)) :=
       (Fintype.prod_equiv e _ _ (fun _ => rfl)).symm

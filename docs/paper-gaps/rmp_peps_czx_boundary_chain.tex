@@ -98,26 +98,47 @@ Since $P$ is even, it also gives $U_RF_R=F_RO(A)$ for the review's printed
 matrix product operator, without a remaining sign.
 
 
+\section{Physical reduced-density support}
+The same plaquette witnesses identify the support of the actual regional
+reduced density. Fix effective boundary bits $c$ and extend them to global
+plaquette bits. On the complement, the copied physical configuration has
+open coefficient one at the selected native crossing labels and zero at
+all other labels. The actual closed-state contraction across the cut
+therefore contains the column $F_R|c\rangle$ as a literal physical slice.
+Using the coefficient-matrix factorization $\rho_R=MM^\dagger$ gives
+\[
+    \operatorname{ran}\rho_R=\operatorname{im}F_R,
+    \qquad \operatorname{rank}\rho_R=2^P.
+\]
+Here $\rho_R$ is the unnormalized partial trace of the actual closed PEPS.
+Its trace is nonzero because it is positive semidefinite of positive rank.
+Division by that trace preserves the proved support and rank.
+
 \section{Remaining scope}
-The theorem identifies the actual open-region image as a vector space,
-with a faithful effective boundary action. It does not identify a normalized
-reduced density matrix, assert that $F_R$ itself is an isometry, or compute
-its Gram normalization or entropy. The source's explicit reduced-state
-projection and general nonrectangular-region statement remain to be
-formalized. No parent-Hamiltonian ground-space completeness result is
-asserted here. The torus-size and bond-orientation conventions in the
-separate notes are unchanged.
+The exact support and its dimension, including trace normalization, are
+now proved for the stated rectangles. The source's explicit reduced-state
+projection, its nonzero eigenvalues, the Gram normalization of $F_R$, and
+entropy remain open. The support theorem alone does not imply flatness or
+that $F_R$ itself is an isometry. General nonrectangular regions and
+parent-Hamiltonian ground-space completeness are not asserted. The
+torus-size and bond-orientation conventions in the separate notes are
+unchanged.
 
 \section{Formal statements}
 \begin{enumerate}
     \item \leanid{TNLean.PEPS.czxRectangleBoundaryLabels_mem_range_of_openRegionWeight_ne_zero}.
     \item \leanid{TNLean.PEPS.exists_czxRectangleBoundaryMatrix_selector},
-    \leanid{TNLean.PEPS.czxRectangleBoundaryMatrix_mulVec_injective},
-    \leanid{TNLean.PEPS.range_openRegionMap_czxRectangle},
-    \leanid{TNLean.PEPS.finrank_range_openRegionMap_czxRectangle}.
+          \leanid{TNLean.PEPS.czxRectangleBoundaryMatrix_mulVec_injective},
+          \leanid{TNLean.PEPS.range_openRegionMap_czxRectangle},
+          \leanid{TNLean.PEPS.finrank_range_openRegionMap_czxRectangle}.
     \item \leanid{TNLean.PEPS.regionPhysicalMap_czxOnSite_openRegionWeight},
-    \leanid{TNLean.PEPS.regionPhysicalMap_czxRectangleBoundaryMatrix_column},
-    \leanid{TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review}.
+          \leanid{TNLean.PEPS.regionPhysicalMap_czxRectangleBoundaryMatrix_column},
+          \leanid{TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review}.
+    \item \leanid{TNLean.PEPS.range_regionReducedDensity_czxRectangle},
+          \leanid{TNLean.PEPS.rank_regionReducedDensity_czxRectangle},
+          \leanid{TNLean.PEPS.trace_regionReducedDensity_czxRectangle_ne_zero},
+          \leanid{TNLean.PEPS.range_normalizedRegionReducedDensity_czxRectangle},
+          \leanid{TNLean.PEPS.rank_normalizedRegionReducedDensity_czxRectangle}.
 \end{enumerate}
 
 \bibliographystyle{alpha}

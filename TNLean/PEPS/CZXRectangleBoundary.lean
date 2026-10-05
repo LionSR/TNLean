@@ -306,7 +306,7 @@ theorem torusRectanglePerimeterEdge_injective (xStart yStart w h : ℕ)
 
 /-- The clockwise numbering is a bijection onto the actual crossing bonds.
 Surjectivity uses the existing native rectangle perimeter cardinality. -/
-noncomputable def torusRectangleBoundaryEquiv (xStart yStart w h : ℕ)
+noncomputable def torusRectanglePerimeterEquiv (xStart yStart w h : ℕ)
     (hw : 0 < w) (hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hwp : w < width) (hhp : h < height) :
     Fin (2 * w + 2 * h) ≃ {e : Edge (torusGraph width height) //
@@ -321,10 +321,10 @@ noncomputable def torusRectangleBoundaryEquiv (xStart yStart w h : ℕ)
       rw [Fintype.card_fin,
         card_regionBoundaryEdge_torusRectangle xStart yStart w h hw hh hx hy hwp hhp]⟩)
 
-@[simp] theorem torusRectangleBoundaryEquiv_apply_val (xStart yStart w h : ℕ)
+@[simp] theorem torusRectanglePerimeterEquiv_apply_val (xStart yStart w h : ℕ)
     (hw : 0 < w) (hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hwp : w < width) (hhp : h < height) (i : Fin (2 * w + 2 * h)) :
-    (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i).val =
+    (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i).val =
       torusRectanglePerimeterEdge xStart yStart w h i := rfl
 
 /-- The unique endpoint inside the rectangle of a clockwise crossing bond. -/

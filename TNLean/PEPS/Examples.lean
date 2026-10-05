@@ -13,6 +13,7 @@ import TNLean.PEPS.Examples.CZX
 import TNLean.PEPS.Examples.CZXBoundaryChain
 import TNLean.PEPS.Examples.CZXOnSiteSymmetry
 import TNLean.PEPS.Examples.CZXOpenRegion
+import TNLean.PEPS.Examples.CZXRectangleDensity
 import TNLean.PEPS.Examples.CZXRectangleMap
 import TNLean.PEPS.Examples.CZXRectangleSupport
 import TNLean.PEPS.Examples.CZXRegionSymmetry

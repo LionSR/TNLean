@@ -34,8 +34,8 @@ source lines 330--345, with the image of this physical region map.
         TNLean.PEPS.rectanglePerimeterEnd_eq_corner_add_one,
         TNLean.PEPS.torusRectanglePerimeterEdge_boundary,
         TNLean.PEPS.torusRectanglePerimeterEdge_injective,
-        TNLean.PEPS.torusRectangleBoundaryEquiv,
-        TNLean.PEPS.torusRectangleBoundaryEquiv_apply_val,
+        TNLean.PEPS.torusRectanglePerimeterEquiv,
+        TNLean.PEPS.torusRectanglePerimeterEquiv_apply_val,
         TNLean.PEPS.torusRectanglePerimeterSite_mem,
         TNLean.PEPS.torusRectanglePerimeterLeg_val,
         TNLean.PEPS.rectanglePerimeterCorner_le,
@@ -165,6 +165,7 @@ source lines 330--345, with the image of this physical region map.
         TNLean.PEPS.openRegionWeight_czxPlaquettePhysical,
         TNLean.PEPS.czxRectangleBoundaryLabels_plaquette,
         TNLean.PEPS.czxRectangleEffectiveBoundaryConfig_injective,
+        TNLean.PEPS.exists_czxRectanglePlaquetteBoundary,
         TNLean.PEPS.exists_czxRectangleBoundaryMatrix_selector,
         TNLean.PEPS.czxRectangleBoundaryMatrix_mulVec_injective}
     \leanok
@@ -219,11 +220,12 @@ source lines 330--345, with the image of this physical region map.
 \begin{theorem}[The printed matrix product operator on the physical rectangle image]%
     \label{thm:czx_rectangle_review_mpo}
     \lean{TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review}
+    \leanok
     \uses{def:czx_rectangle_boundary_labels,def:asymex_czx_review_tensor}
     The review's printed CZX matrix product operator $O(A)$ satisfies
     $U_RF_R=F_RO(A)$ on the actual rectangle image.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:czx_rectangle_effective_symmetry,thm:czx_rectangle_perimeter,
         thm:asymex_czx_kernel,thm:asymex_czx_review_kernel}
     The printed matrices give $D_PX^{\otimes P}=(-1)^PX^{\otimes P}D_P$.
@@ -231,7 +233,53 @@ source lines 330--345, with the image of this physical region map.
     bra-ket display is not substituted for those printed matrices.
 \end{proof}
 
-The identification above is a linear identification of the actual
-open-region image. No formula for the normalized reduced density matrix,
-its flatness, or its entropy is asserted here. Nonrectangular regions
-remain outside the perimeter construction.
+\begin{theorem}[Actual closed-state slices and reduced-density support]%
+    \label{thm:czx_rectangle_density_support}
+    \lean{TNLean.PEPS.openRegionWeight_czxPlaquetteComplement,
+        TNLean.PEPS.stateCoeff_czxPlaquetteComplement,
+        TNLean.PEPS.range_regionReducedDensity_czxRectangle,
+        TNLean.PEPS.rank_regionReducedDensity_czxRectangle}
+    \leanok
+    \uses{def:czx_rectangle_boundary_labels,def:czx_plaquette_witness,
+        def:peps_region_reduced_density}
+    For every effective boundary column there is a physical configuration
+    on the complement whose closed-state slice is exactly that column.
+    Consequently the actual unnormalized reduced density satisfies
+    \[
+        \operatorname{ran}\rho_R=\operatorname{im}F_R
+        =\operatorname{ran}\Gamma_R,\qquad
+        \operatorname{rank}\rho_R=2^P.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:czx_open_region_coefficients,thm:czx_rectangle_boundary_faithful,
+        thm:czx_rectangle_physical_image,thm:peps_open_region_cut_unconditional,
+        thm:peps_region_reduced_density_support}
+    Extend the chosen perimeter bits to global plaquette bits. On the
+    complement, the copied physical configuration has coefficient one for
+    its native crossing labels and zero for all others by disjointness.
+    The actual cut contraction therefore reduces to a single boundary
+    term. Its coefficient-matrix range is the reduced-density range, while
+    the generic support inclusion gives the reverse inclusion.
+\end{proof}
+
+\begin{theorem}[Trace normalization preserves the physical support]%
+    \label{thm:czx_rectangle_density_normalization}
+    \lean{TNLean.PEPS.trace_regionReducedDensity_czxRectangle_ne_zero,
+        TNLean.PEPS.range_normalizedRegionReducedDensity_czxRectangle,
+        TNLean.PEPS.rank_normalizedRegionReducedDensity_czxRectangle}
+    \leanok
+    \uses{def:peps_region_reduced_density,def:czx_rectangle_boundary_labels}
+    The trace of $\rho_R$ is nonzero. Dividing by that trace preserves its
+    range and rank $2^P$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:czx_rectangle_density_support,thm:peps_region_reduced_density_support}
+    A positive semidefinite matrix with zero trace is zero, contradicting
+    the positive rank. Multiplication by a nonzero scalar preserves the
+    column space.
+\end{proof}
+
+No formula for the nonzero eigenvalues, flatness, or entropy is asserted
+here. Nor is the unnormalized effective map $F_R$ asserted to be an
+isometry. Nonrectangular regions remain outside the perimeter construction.

@@ -1,0 +1,151 @@
+\subsection{Exact preparation with vanishing subleading spectrum}
+
+The fixed-point replacement in \cite{Malz2024Preparation} becomes exact
+once the complementary transfer map is nilpotent. This endpoint uses a
+finite block length, rather than substituting zero into the logarithmic
+correlation-length prescription
+\cite{gap:mswc24_zero_subleading_spectrum_endpoint}.
+
+\begin{theorem}[Finite stabilization of a zero subleading spectrum]
+    \label{thm:ldp_zero_subleading_transfer_stabilization}
+    \lean{MPSTensor.transferMap_pow_eq_fixedPointProj_of_subleading_eigenvalues_eq_zero}
+    \leanok
+    \uses{def:normal, def:left_canonical_tensor, def:transfer_map}
+    Let $A$ be a normal left-canonical tensor of virtual dimension $D$,
+    with fixed point $\sigma>0$, $\tr\sigma=1$, and
+    $\E_A(\sigma)=\sigma$. Suppose every eigenvalue of $\E_A$ distinct
+    from $1$ is zero. Then, for every $n\geq D^2$,
+    \begin{align}
+        \E_A^n(X) & =\tr(X)\sigma.
+        \label{eq:ldp_zero_subleading_transfer}
+    \end{align}
+    Nilpotent Jordan blocks are allowed.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $P(X)=\tr(X)\sigma$ and $R=\E_A-P$. Trace preservation and
+    stationarity give $P^2=P$ and $PR=RP=0$. Normality and the spectral
+    assumption imply that every eigenvalue of $R$ is zero. Its generalized
+    zero-eigenspace is therefore the entire $D^2$-dimensional matrix
+    space, so $R^{D^2}=0$. For $n\geq D^2$, the identity
+    $\E_A^n=P+R^n$ gives (\ref{eq:ldp_zero_subleading_transfer}).
+\end{proof}
+
+\begin{theorem}[Exact positive polar factor at the transfer fixed point]
+    \label{thm:ldp_exact_fixed_point_polar}
+    \lean{MPSTensor.polarPosTensor_eq_fixedPointTensor_of_transferMap_eq_trace_smul,
+        MPSTensor.isInjective_of_transferMap_eq_trace_smul}
+    \leanok
+    \uses{def:ldpolar_physical_matrix, def:ldpolar_tensor,
+        def:prep_fixed_point_tensor}
+    Let $B$ be a tensor with $\E_B(X)=\tr(X)\sigma$ for every $X$.
+    If $\sigma\geq0$, the positive polar tensor of $B$ is exactly
+    $P_\infty(\sigma)$. If $\sigma>0$, then $B$ is injective.
+    This is the exact fixed-point case of the transfer/polar identity in
+    \cite{Malz2024Preparation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:ldpolar_physical_matrix,
+        thm:prep_fixed_point_tensor_psd}
+    The physical matrix satisfies
+    \begin{align}
+        \widehat B^\dagger\widehat B & =\sigma^{\mathsf T}\otimes I,
+        \label{eq:ldp_exact_fixed_point_gram}                               \\
+        (\widehat B^\dagger\widehat B)^{1/2}
+                                     & =(\sqrt\sigma)^{\mathsf T}\otimes I.
+        \label{eq:ldp_exact_fixed_point_sqrt}
+    \end{align}
+    The second matrix is the physical matrix of $P_\infty(\sigma)$.
+    When $\sigma>0$, the Gram matrix in
+    (\ref{eq:ldp_exact_fixed_point_gram}) is invertible. Multiplication
+    by it is surjective on the virtual pair space, so every virtual matrix
+    is a linear combination of the matrices $B^i$.
+\end{proof}
+
+\begin{theorem}[Exact reconstruction from fixed-point polar factors]
+    \label{thm:ldp_exact_block_polar_reconstruction}
+    \lean{MPSTensor.blockIsometryState_eq_mpvState_of_polarPosTensor_eq_fixedPointTensor}
+    \leanok
+    \uses{def:ldp_block_isometry_state, def:prep_fixed_point_tensor}
+    Let $A$ be a tensor, let $\sigma\in\MN{D}$, and partition a ring of
+    $N$ sites into $M\geq1$ blocks of lengths $\ell_k$ with
+    $\sum_k\ell_k=N$. Suppose that the positive polar tensor of every
+    blocked tensor $A^{[\ell_k]}$ equals $P_\infty(\sigma)$. Then the
+    state obtained from the pair of $\sigma$ and the block polar
+    isometries is exactly $\ket{\phi_N(A)}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ldpolar_tensor_decomposition,
+        lem:ldp_block_isometry_state_overlap,
+        thm:prep_mpv_fixed_point_tensor}
+    The local polar decompositions give
+    $A^{[\ell_k]}=V_kP_\infty(\sigma)$. Contracting these identities
+    around the ring yields
+    $\ket{\phi_N(A)}=(\bigotimes_kV_k)\ket{\Omega_\sigma}$, precisely
+    the fixed-point pair construction. This is the exact-factor case of
+    the construction in \cite{Malz2024Preparation}.
+\end{proof}
+
+\begin{theorem}[Exact reconstruction after a nilpotent transient]
+    \label{thm:ldp_zero_subleading_exact_reconstruction}
+    \lean{MPSTensor.blockIsometryState_eq_mpvState_of_subleading_eigenvalues_eq_zero}
+    \leanok
+    \uses{thm:ldp_zero_subleading_transfer_stabilization,
+        thm:ldp_exact_fixed_point_polar,
+        thm:ldp_exact_block_polar_reconstruction}
+    Under the hypotheses of
+    Theorem~\ref{thm:ldp_zero_subleading_transfer_stabilization},
+    partition $N$ into $M\geq1$ blocks with
+    $\ell_k\geq D^2$ for every $k$. Then the fixed-point pair
+    construction with the block polar isometries equals
+    $\ket{\phi_N(A)}$ exactly. The lengths need not coincide.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ldp_zero_subleading_transfer_stabilization,
+        thm:ldp_exact_fixed_point_polar,
+        thm:ldp_exact_block_polar_reconstruction}
+    Every block has transfer map $X\mapsto\tr(X)\sigma$ by
+    (\ref{eq:ldp_zero_subleading_transfer}). Its positive polar tensor
+    is therefore $P_\infty(\sigma)$. Apply
+    Theorem~\ref{thm:ldp_exact_block_polar_reconstruction}.
+\end{proof}
+
+\begin{theorem}[Constant-depth exact preparation with zero subleading spectrum]
+    \label{thm:ldp_zero_subleading_constant_depth}
+    \lean{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState_of_subleading_eigenvalues_eq_zero}
+    \leanok
+    \uses{thm:ldp_zero_subleading_exact_reconstruction,
+        thm:ldp_approximating_state_depth}
+    For each physical and virtual dimension $d,D$, there is a depth
+    $T=T(d,D)$ with the following property. Let $A$ be a normal
+    left-canonical tensor with $\sigma>0$, $\tr\sigma=1$, and
+    $\E_A(\sigma)=\sigma$, and suppose every transfer eigenvalue
+    distinct from $1$ is zero. For every
+    $N\geq q_0=D^2+3D+1$, the unnormalized periodic vector
+    $\ket{\phi_N(A)}$ has norm one, and its normalized vector is
+    prepared exactly by a local circuit of depth $T$.
+    This is a finite-block endpoint of the fixed-point construction in
+    \cite{Malz2024Preparation}; its relation to the correlation-length
+    prescription is recorded in
+    \cite{gap:mswc24_zero_subleading_spectrum_endpoint}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ldp_zero_subleading_transfer_stabilization,
+        thm:ldp_exact_fixed_point_polar,
+        thm:ldp_zero_subleading_exact_reconstruction,
+        thm:prep_pair_norm, lem:ldp_block_isometry_state_overlap,
+        thm:ldp_approximating_state_depth}
+    Write $N=Mq_0+r$ with $M\geq1$ and $0\leq r<q_0$.
+    Choose $M-1$ blocks of length $q_0$ and one block of length
+    $q_0+r$. Thus $q_0\leq\ell_k<2q_0$, so all blocks have at least
+    $D^2$ sites and at least $3D$ sites. Their transfers are exactly
+    $X\mapsto\tr(X)\sigma$, which gives their positive polar factors
+    and injectivity. The fixed-point pair has norm one, and the block
+    isometries preserve that norm. Exact reconstruction therefore gives
+    $\|\phi_N(A)\|=1$. The block preparation theorem gives depth at most
+    $2C(d,D)q_0$, independent of $A$, $\sigma$, and $N$.
+\end{proof}

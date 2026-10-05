@@ -43,8 +43,8 @@ noncomputable def czxRectangleBoundaryLabels (xStart yStart w h : ℕ)
     (μ : RegionBoundaryConfig (czxPEPS width height)
       (torusContiguousRectangle xStart yStart w h)) : Fin (2 * w + 2 * h) → Fin 4 :=
   fun i => if w + h ≤ i.val then
-      czxBondSwap (μ (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i))
-    else μ (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i)
+      czxBondSwap (μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i))
+    else μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i)
 
 private theorem czx_component_constraints
     (ζ : Edge (torusGraph width height) → Fin 4) (v : TorusVertex width height) (s : Fin 16)
@@ -333,10 +333,10 @@ theorem czxRectangleBoundaryLabels_mem_range_of_openRegionWeight_ne_zero
     rw [heq]
     simpa only [τ, dite_eq_left hv] using hlocal
   have hboundary (i : Fin (2 * w + 2 * h)) :
-      μ (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i) =
+      μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i) =
         ζ (torusRectanglePerimeterEdge xStart yStart w h i) := by
     have he := congrFun hημ
-      (torusRectangleBoundaryEquiv xStart yStart w h hw hh hx hy hwp hhp i)
+      (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i)
     have hi := isRegionBoundaryEdge_touches R
       (torusRectanglePerimeterEdge_boundary xStart yStart w h hw hh hx hy hwp hhp i)
     dsimp only [ζ]
