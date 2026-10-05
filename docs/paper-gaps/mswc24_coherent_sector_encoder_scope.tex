@@ -60,6 +60,30 @@ with the reference identity. The proof sums squared norms of reference
 slices, with no reference-dimension factor. No channel diamond-norm theorem
 is asserted by this statement.
 
+\section{Proved exact construction through a fixed virtual space}
+For injective virtual placements with disjoint ranges, let $B=\bigoplus_jA_j$
+be the unweighted direct sum of bond dimension $D$. Let $C_N$ be its
+blocked physical matrix on configurations, $S_N$ its polar partial
+isometry, $P_N=(C_N^\dagger C_N)^{1/2}$, and $T$ the sector-trace selector.
+The identity $C_NT=V_{A,N}$ gives, with $R_N=P_NT$,
+\begin{align}
+    V_{A,N}=S_NR_N,\qquad F_{A,N}=S_NQ_N,
+\end{align}
+where $Q_N$ is the polar partial isometry of $R_N$. The intermediate
+space is $\mathbb C^{D^2}$, with dimension independent of the ring length.
+
+If the blocked sum is injective on its sector-pair support and all sector
+bond dimensions are positive, the trace selectors show directly that
+$V_{A,N}$ is injective. Then $Q_N$ is an isometry supported on that same
+virtual set. Its columns, with the one-block cyclic pair orientation,
+form an orthonormal family to which the simultaneous genuine-unitary
+compiler applies. For fixed encodings into registers of width $r\ge2$,
+a constant $C$ is chosen before the tensors and $N$. At any supported-
+injective length $N\ge3r$, one circuit satisfies $U_NJ_N=F_{A,N}$ exactly
+and has depth at most $CN$. Pair support is needed only at the actual
+single block. The whole logical encoder is transported; the construction
+uses fixed-width pair synthesis and sequential blocked-polar unitaries.
+
 \section{Uniform logarithmic-depth target}
 The intended extension fixes two explicitly matched families of $b>0$
 distinct normal sectors with physical dimension $d\ge2$. Each sector is
@@ -80,10 +104,8 @@ results above. The remaining work is:
           dimension is fixed before $N$ and $\varepsilon$.
     \item Choose the common block length for squared accuracy, so the square
           root in the encoder estimate still gives error $\varepsilon$.
-    \item When the chosen block length exceeds $N$, factor the entire encoder
-          through a supported virtual space of fixed dimension and compile
-          it by genuine sequential unitaries. Preparing one selected vector
-          is insufficient; arbitrary full-chain synthesis has the wrong cost.
+    \item When the chosen block length exceeds $N$, use the exact construction
+          above and absorb its linear depth into the same logarithmic budget.
     \item Choose an eventual cutoff for injectivity and register fit. Identify
           parent kernels only at a valid interaction range using the existing
           periodic-span theorem.

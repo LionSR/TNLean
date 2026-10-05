@@ -1377,6 +1377,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
 
 \input{chapter/ch32_log_depth_compatible_seed}
 \input{chapter/ch32_log_depth_sector_encoders}
+\input{chapter/ch32_log_depth_exact_sector_encoder}
 
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
 %% R_k are realized on groups of D sites, as in
@@ -2948,9 +2949,8 @@ $A$ along $w$.
 \begin{theorem}[Approximation error for orthogonal blocks of multiplicity one]
     \label{thm:ldp_approximation_error_orthogonal_blocks}
     \lean{MPSTensor.exists_approximationError_le_mul_blockSum,
-        MPSTensor.exists_approximationError_le_blockSum, MPSTensor.blockSum,
+        MPSTensor.exists_approximationError_le_blockSum,
         MPSTensor.nonNormalApproxVector_blockSum,
-        MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum,
         MPSTensor.mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero,
         MPSTensor.mpvOverlap_eq_zero,
         MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero}

@@ -25,6 +25,9 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/coherent_qic_prerequisites.json'
+      - 'scripts/export_coherent_qic_prerequisites.py'
+      - 'scripts/test_export_coherent_qic_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -112,6 +115,9 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/coherent_qic_prerequisites.json'
+      - 'scripts/export_coherent_qic_prerequisites.py'
+      - 'scripts/test_export_coherent_qic_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -205,6 +211,7 @@ jobs:
       blueprint: ${{ steps.filter.outputs.blueprint }}
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
+      coherent_prerequisites: ${{ steps.filter.outputs.coherent_prerequisites }}
     steps:
       - uses: dorny/paths-filter@v4
         id: filter
@@ -217,6 +224,16 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
+              - 'scripts/coherent_qic_prerequisites.json'
+              - 'scripts/export_coherent_qic_prerequisites.py'
+              - 'scripts/test_export_coherent_qic_prerequisites.py'
+            coherent_prerequisites:
+              - 'TNLean/MPS/Preparation/ExactSectorEncoder.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderRates.lean'
+              - 'TNLean/MPS/Preparation/CoherentGroundspaceConversion.lean'
+              - 'scripts/coherent_qic_prerequisites.json'
+              - 'scripts/export_coherent_qic_prerequisites.py'
+              - 'scripts/test_export_coherent_qic_prerequisites.py'
             module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
@@ -224,6 +241,9 @@ jobs:
               - 'scripts/test_lean_file_policies.py'
               - 'docbuild/**'
               - 'scripts/check_docbuild_manifest.py'
+              - 'scripts/coherent_qic_prerequisites.json'
+              - 'scripts/export_coherent_qic_prerequisites.py'
+              - 'scripts/test_export_coherent_qic_prerequisites.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/lake_build_locked.sh'
@@ -318,6 +338,28 @@ jobs:
         with:
           build: false
           use-github-cache: false
+
+      # Build and export only the allowlisted QIC prerequisites before the TN root build.
+      # The root build reuses their Lake traces; an artifact is not a TN build pass.
+      # Export only the explicit QIC allowlist and hashes, never the whole workspace.
+      - name: Prepare verified coherent QIC prerequisites
+        id: coherent-prerequisites
+        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
+        continue-on-error: true
+        run: >
+          python3 scripts/export_coherent_qic_prerequisites.py --build --root .
+          --output "$RUNNER_TEMP/coherent-qic-prerequisites"
+
+      - name: Export coherent QIC prerequisites
+        if: success() && steps.coherent-prerequisites.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: coherent-qic-prerequisites-${{ github.sha }}
+          path: ${{ runner.temp }}/coherent-qic-prerequisites
+          if-no-files-found: ignore
+          retention-days: 1
+          compression-level: 9
 
       - name: Build Lean project and capture timings
         run: |
@@ -574,6 +616,9 @@ jobs:
 
       - name: Test Lean compilation-time checker
         run: python3 scripts/test_lake_build_hotspots.py
+
+      - name: Test bounded coherent prerequisite export
+        run: python3 scripts/test_export_coherent_qic_prerequisites.py
 
       - name: Check local cache-seeding shell syntax
         run: |

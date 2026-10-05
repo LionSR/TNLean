@@ -40,5 +40,31 @@ class SectorEncoderDiagramTests(unittest.TestCase):
         self.assertIn("logical wire carries every superposition", self.source)
 
 
+class ExactSectorEncoderDiagramTests(unittest.TestCase):
+    def setUp(self):
+        self.source = (ROOT / "blueprint/src/chapter/ch32_log_depth_exact_sector_encoder.tex").read_text()
+        self.diagram = self.source.split(r"\begin{tenkzequation}", 1)[1].split(
+            r"\end{tenkzequation}", 1
+        )[0]
+
+    def test_fixed_virtual_factor_and_matching_boundaries(self):
+        self.assertEqual(self.diagram.count(r"90:physical:$\mathcal H_N$"), 2)
+        self.assertEqual(self.diagram.count(r"270:virtual:$\C^b$"), 2)
+        self.assertEqual(self.diagram.count(r"270:virtual:$\C^{D^2}$"), 1)
+        self.assertEqual(
+            re.findall(r"\\tnwire\{([^}]+)\}\{([^}]+)\}", self.diagram),
+            [("q.90", "s.270")],
+        )
+        self.assertIn("{F_{A,N}}", self.diagram)
+        self.assertIn("{S_N}", self.diagram)
+        self.assertIn("{Q_N}", self.diagram)
+
+    def test_whole_ring_and_no_hidden_contractions(self):
+        self.assertIn("full ring, not a one-site gate", self.source)
+        self.assertNotIn(r"\Tr", self.diagram)
+        self.assertNotIn(r"\operatorname{tr}", self.diagram)
+        self.assertNotIn("reference:", self.diagram)
+
+
 if __name__ == "__main__":
     unittest.main()
