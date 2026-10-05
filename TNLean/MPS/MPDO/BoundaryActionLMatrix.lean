@@ -135,7 +135,8 @@ theorem actionLMatrix_cross (a b : Fin r) (x y : Fin s)
     (q : FusionActionMultiplicity N M a b x y) :
     sequentialActionAnalysis VA a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) *
       fusionThenActionSynthesis WF WA a b x (fusionActionPathEquiv a b x ⟨y, q⟩) =
-        actionLMatrix WF VA WA a b x y p q • 1 := by
+        actionLMatrix WF VA WA a b x y p q •
+          (1 : Matrix (Fin (D y)) (Fin (D y)) ℂ) := by
   apply eq_inv_dim_trace_smul_one_of_commute (hNormal y) (hD y)
   intro i
   exact ((sequentialAction_isBiorthogonal VA WA hA a b x).cross_intertwines
@@ -150,7 +151,8 @@ theorem inverseActionLMatrix_cross (a b : Fin r) (x y : Fin s)
     (q : SequentialActionMultiplicity M a b x y) :
     fusionThenActionAnalysis VF VA a b x (fusionActionPathEquiv a b x ⟨y, p⟩) *
       sequentialActionSynthesis WA a b x (sequentialActionPathEquiv a b x ⟨y, q⟩) =
-        inverseActionLMatrix VF VA WA a b x y p q • 1 := by
+        inverseActionLMatrix VF VA WA a b x y p q •
+          (1 : Matrix (Fin (D y)) (Fin (D y)) ℂ) := by
   apply eq_inv_dim_trace_smul_one_of_commute (hNormal y) (hD y)
   intro i
   exact ((fusionThenAction_isBiorthogonal VF WF VA WA hF hA a b x).cross_intertwines
@@ -175,8 +177,7 @@ theorem fusionToSequentialComparison_eq_blockDiagonal (a b : Fin r) (x : Fin s)
   by_cases hyz : y = z
   · subst z
     rw [actionLMatrix_cross VF WF VA WA hF hA hNormal hD]
-    simp [Matrix.blockDiagonal'_apply_eq, Matrix.kronecker_apply,
-      Matrix.smul_apply, smul_eq_mul]
+    exact (Matrix.blockDiagonal'_apply_eq _ y (p, u) (q, v)).symm
   · have hzero := MPSTensor.rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
       hSpan y z hyz
       (sequentialActionAnalysis VA a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) *
@@ -204,8 +205,7 @@ theorem sequentialToFusionComparison_eq_blockDiagonal (a b : Fin r) (x : Fin s)
   by_cases hyz : y = z
   · subst z
     rw [inverseActionLMatrix_cross VF WF VA WA hF hA hNormal hD]
-    simp [Matrix.blockDiagonal'_apply_eq, Matrix.kronecker_apply,
-      Matrix.smul_apply, smul_eq_mul]
+    exact (Matrix.blockDiagonal'_apply_eq _ y (p, u) (q, v)).symm
   · have hzero := MPSTensor.rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
       hSpan y z hyz
       (fusionThenActionAnalysis VF VA a b x (fusionActionPathEquiv a b x ⟨y, p⟩) *
