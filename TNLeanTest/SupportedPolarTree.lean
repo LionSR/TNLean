@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.SupportedTreePreparation
+import TNLean.MPS.Preparation.UnequalMERA
 import TNLean.MPS.Preparation.UnequalTreePreparation
 
 /-! Supported and normal trees share an algebraic physical compiler.
