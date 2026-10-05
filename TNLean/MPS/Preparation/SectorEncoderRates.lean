@@ -53,8 +53,10 @@ theorem exists_norm_gram_sectorColumnMatrix_sub_one_le
       obtain ⟨K, hK, h⟩ := exists_abs_norm_mpvState_sq_sub_one_le (A i) (hnormal i) (hA i)
         (hσ i) (htr i) (hfix i) (hlam i) hγ0 hγ
       refine ⟨K, hK, fun N => ?_⟩
-      simpa [Matrix.sub_apply, Matrix.one_apply, gram_sectorColumnMatrix_apply,
-        inner_self_eq_norm_sq_to_K, ← Complex.ofReal_sub] using h N
+      rw [Matrix.sub_apply, Matrix.one_apply_eq, gram_sectorColumnMatrix_apply,
+        inner_self_eq_norm_sq_to_K, ← RCLike.ofReal_pow, ← RCLike.ofReal_one,
+        ← RCLike.ofReal_sub, RCLike.norm_ofReal]
+      exact h N
     · obtain ⟨K, hK, h⟩ := exists_norm_mpvOverlap_le_of_mixedMapLM (A j) (A i) hl
         (hmix j i hij.symm) hγ0 hγ
       refine ⟨K, hK, fun N => ?_⟩
