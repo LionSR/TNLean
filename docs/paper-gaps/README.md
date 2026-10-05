@@ -1026,3 +1026,11 @@ For the finite-round extension of arXiv:2103.13367:
   convention in the half-chain calculation, normalization by the actual
   finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
   transfer-error estimate used for ordered physical eigenvalue convergence.
+
+For the periodic decomposition in PGVWC07 Theorem 5:
+
+- `pgvwc07_periodic_decomposition_scope.tex` records the resolved normalization
+  boundary: the one-block unital canonical hypotheses now yield the peripheral
+  period and the original-tensor component decomposition. Non-divisible ring
+  lengths vanish componentwise; the separate empty-word boundary convention
+  remains explicit.
