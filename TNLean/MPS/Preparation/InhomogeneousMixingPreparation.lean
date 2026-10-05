@@ -32,7 +32,7 @@ qualitative finite-correlation definition. See
 -/
 
 open Matrix MPSTensor QuantumCircuit VaryingBondChain
-open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
+open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace MPSPreparation
 
