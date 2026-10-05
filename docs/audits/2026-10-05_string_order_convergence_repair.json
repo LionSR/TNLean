@@ -143,5 +143,46 @@
       "TNLean/MPS/Symmetry/PhysicalStringBlockOrder.lean": "731dee08674cd0a080deaed2797541740c71989bd5b27ec56bc82b56fde0665d",
       "TNLean/MPS/Symmetry/PhysicalStringPhase.lean": "408d3d1668cdbcb781cb492b120211675d1c0e304b14b525430fbca5cd547129"
     }
+  },
+  "third_CI_run": {
+    "head": "ee966026f0a917432f1acf5adb5ec3d64f99d3b6",
+    "run": "https://github.com/LionSR/TNLean/actions/runs/37384615235",
+    "job_id": 112014902133,
+    "actual_import_passes": [
+      "TNLean.MPS.Symmetry.PhysicalStringAsymptotics",
+      "TNLean.MPS.Symmetry.PhysicalStringSelectionRule",
+      "TNLean.MPS.Symmetry.PhysicalStringBlockOrder",
+      "TNLean.MPS.Symmetry.PhysicalStringPhase"
+    ],
+    "remaining_error": "StringOrderScalarPhase: explicitly unfold CondC1 when eliminating the unit peripheral phase.",
+    "definition_only_regression": {
+      "scope": "Exact CondC1 phase-one normalization for an arbitrary tensor, with production scopes/Mat alias; definition-level check only.",
+      "start": "2026-10-05T22:56:23.334702+00:00",
+      "end": "2026-10-05T22:56:41.948477+00:00",
+      "exit_code": 0,
+      "command": [
+        "timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+        "-j",
+        "1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dweak.linter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "StringPhaseCondC1Probe.lean",
+        "-o",
+        "StringPhaseCondC1Probe.olean"
+      ],
+      "source_sha256": "f645fdd5c426b0c7d2d469f75c692da3ed1184197f8c2638000239bf4da03d6e",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "491b817bd9f372308ddc0f1cae4a9a7e53401d95636fa5b01938f80448e54f8b"
+    },
+    "repaired_source_sha256": "6972290480c1ec589e34971008ae16683197b4b3f1c64f1282c4dc6c6949d0f7",
+    "mathematical_signatures_changed": false,
+    "source_refutation_verdict": "Still pending full counterexample module validation."
   }
 }
