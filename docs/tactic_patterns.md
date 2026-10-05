@@ -399,6 +399,29 @@ three-plaquette output measurement, and the routed reunion measurement.
   site maps or site inverses. The scalar coefficients come from the
   complementary region; no positivity assumption is involved.
 
+### injectivity under translations of a torus region — promoted
+- **Pattern:** transport blocked-region injectivity along a torus translation,
+  then replace the transported tensor by the original translation-invariant tensor.
+- **Seen:** four uses in `TorusWitnessTranslate.lean`,
+  `TorusTranslatedScalarComparison.lean`, and `TorusWindowGaugeUniqueness.lean`.
+- **Abstraction:** the existing `regionBlockedTensorInjective_translate` now lives in
+  `TorusTranslationInvariant.lean`, so the witness, scalar and uniqueness arguments
+  can use it without importing the later torus Fundamental Theorem.
+- **Notes:** the statement and proof are unchanged. Four duplicated uses are replaced;
+  the move has no line cost, consumer proofs lose five lines, and the necessary
+  `RegionTransport` import adds one line (net Lean line delta: -4).
+
+
+### propagation of two PEPS reference witnesses — promoted
+- **Pattern:** translate horizontal and vertical coefficient witnesses to every edge,
+  absorb their boundary gauges, and prove covariance by composition of translations.
+- **Seen:** the rectangle construction in `PEPS/TorusCovariantAbsorbedFamily.lean`
+  and the normal-window construction in `PEPS/TorusArcWindowGaugeExistence.lean`.
+- **Abstraction:** `exists_torusCovariantAbsorbedGaugeFamily_of_edgeReferenceWitnesses`
+  in `PEPS/TorusReferenceAbsorbedFamily.lean` accepts arbitrary witnessing regions.
+- **Notes:** both constructions use the same proof; the rectangle module loses
+  139 lines while retaining its theorem statement.
+
 ### Integer-cell collar offset decomposition (promoted, 2026-10-02)
 
 - **Pattern:** Split the displacement from an occupied integer center into
@@ -3435,6 +3458,36 @@ three-plaquette output measurement, and the routed reunion measurement.
   are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
   arguments use the reduction lemma instead of repeating the projection algebra.
 
+### Exponential error converted to polynomial accuracy — candidate
+- **Pattern:** bound the number of blocks by the chain length, compare the
+  exponential rate using the logarithmic block-length threshold, and use
+  `Real.exp_add`, `Real.exp_log`, and `Real.rpow_def_of_pos` to obtain
+  the factor `N ^ (-η)`.
+- **Seen:** private `mul_exp_le_polynomial` in
+  `TNLean/MPS/Preparation/PolynomialAccuracy.lean` and private
+  `polynomial_error_factor` in
+  `TNLean/MPS/Preparation/AllLengthPolynomialAccuracy.lean` (2026-10-03).
+- **Notes:** there are two implementations. The former derives `M ≤ N`
+  from uniform blocks; the latter accepts that inequality for the
+  remainder-absorbing construction. At a third occurrence, extract the
+  common scalar inequality. The promoted logarithmic-threshold helpers
+  address a prescribed error tolerance rather than this polynomial form.
+
+### Ceiling block lengths and logarithmic circuit depth — candidate
+- **Pattern:** apply `Nat.le_ceil` and `Nat.ceil_lt_add_one` to the
+  prescribed block length, then absorb the additive one using
+  `log N ≥ log 2` to bound circuit depth by a multiple of `log N`.
+- **Seen:** the block-length choice in
+  `TNLean/MPS/Preparation/LogDepthPreparation.lean` and private
+  `polynomialBlockLength_bounds` in
+  `TNLean/MPS/Preparation/AllLengthPolynomialAccuracy.lean` (2026-10-03).
+- **Notes:** these are two related arguments with different logarithmic
+  thresholds. The new polynomial argument also proves a lower bound
+  uniform in the accuracy exponent. The existing promoted depth helper
+  uses a logarithmic offset and does not cover that lower-bound argument.
+  Retain the local proofs until a third occurrence identifies a common
+  assertion.
+
 ### Finite group fibers in local tensor isometries — candidate
 - **Pattern:** parameterize all preimages of a virtual label by one group
   coordinate, use that coordinate as the inverse in a finite-sum bijection,
@@ -3446,6 +3499,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** these two occurrences have different label maps. The primal
   parameterization is already shared by its weighted sum and fiber count;
   no further abstraction is needed before a third distinct occurrence.
+
+### linearity of a recovered bond operation — candidate
+- **Pattern:** apply injectivity of the boundary-insertion map, rewrite the
+  virtual operations by their physical realizations, and use linearity of the
+  physical operation and boundary insertion.
+- **Seen:** two occurrences in
+  `TNLean/PEPS/TorusWindowCrossTensorAlgebra.lean`, in
+  `staircaseCrossTensorVirtualOperation_add` and
+  `staircaseCrossTensorVirtualOperation_smul` (2026-10-02).
+- **Abstraction:** a linear recovery map from realized physical operations,
+  if a third use in another module needs the same argument.
+- **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
+  and the existing realization identities; no tactic is needed at this count.
 
 ### Remainder-absorbing block lengths — candidate
 - **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
@@ -4923,6 +4989,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   The three-object calculation also needs simplification of the finite
   dependent dimensions before rewriting the trace expressions.
 
+### finite block coordinates with zero complements — candidate
+- **Pattern:** split active and zero block labels, decide the active label,
+  derive the coordinate bounds with `omega`, and simplify the block inclusions
+  and projections before proving the scalar entry identity.
+- **Seen:** three coordinate cases in
+  `TNLean/MPS/Examples/Ising/IsingThreeObjectGauge.lean` (2026-10-02).
+- **Abstraction:** a coordinate lemma for regrouping active direct sums with
+  one-dimensional zero complements, if a second example requires the same
+  construction.
+- **Notes:** bounds should be supplied before simplifying dependent matrix
+  indices; exhaustive enumeration of all bond-coordinate pairs is unnecessary.
+
 ## Rejected
 
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
@@ -5309,3 +5387,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** expose the existing fixed-eigenvalue lemma; the compact
   sequence proof uses it without repeating the Jordan-block argument.
 - **Notes:** a theorem suffices; no additional tactic is required.
+
+### Positive half-chain spectral comparison — candidate (2026-10-04)
+
+- **Pattern:** Rewrite a positive matrix characteristic polynomial as the product
+  over its eigenvalues, sort the real roots in decreasing order, and compare
+  finite eigenvalue lists after appending zeros.
+- **Seen:** `HalfChainSpectralComparison.lean`, ordered monotone functional
+  calculus and padded characteristic-polynomial comparison (two occurrences).
+- **Abstraction:** Existing Mathlib characteristic-root and sorted-list APIs do
+  most of the work. `paddedEigenvalues_eq_of_charpoly` is the physical consumer's
+  common statement; no additional tactic is warranted below the rule of three.
+- **Notes:** Weyl monotonicity and CFC square roots are reused from QICLean and
+  Mathlib. The local perturbation/padding results compose those public APIs;
+  no QICLean implementation is copied into TNLean.

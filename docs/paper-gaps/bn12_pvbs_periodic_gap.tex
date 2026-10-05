@@ -45,7 +45,10 @@ Let $\mathcal N$ count occupied sites. The exact periodic identity is
 \end{align}
 Indeed, the hopping coefficients agree, while the difference in diagonal
 terms is $[(\mu^2-\mu)n_L+(1-\mu)n_R]/(1+\mu^2)$ at each bond.
-Periodic summation identifies the two occupation sums.
+Periodic summation identifies the two occupation sums.\footnote{Formal declarations:
+    \leanid{MPSTensor.parentInteraction_pvbs_two_apply},
+    \leanid{MPSTensor.parentHamiltonianES_pvbs_decomposition}, and
+    \leanid{MPSTensor.parentHamiltonianES_pvbs_gap_exact}.}
 
 \section{Lower bound and attainment}
 For $\mu\ge0$, the critical Hamiltonian $H_1$ and the coefficient $a(\mu)$
@@ -67,8 +70,28 @@ vector attains the bound, so the exact finite-ring gap is $c(\mu)$.
 
 At $\mu=1$, the same vector joins the ground space. The vanishing of
 $c(1)$ does not say that a fixed finite ring has zero gap above its enlarged
-kernel. Thermodynamic critical gap closure would require a separate
-sequence of nonzero low-energy excitations as $N$ grows.
+kernel. The separate Fourier-magnon argument below supplies nonzero low-energy
+excitations as $N$ grows.
+
+\section{Critical thermodynamic limit}
+On the entire one-particle sector at $\mu=1$, the double-occupation
+projector vanishes and the local interaction is the singlet exchange term.
+The actual parent therefore acts by the normalized cycle Laplacian on the
+particle amplitudes. The first Fourier character gives a nonzero vector
+$\psi_N$ with
+\begin{align}
+    H_1\psi_N & =\eta_N\psi_N,
+              & \eta_N         & =1-\cos(2\pi/N)>0\quad(N\ge2).
+    \label{eq:bn12_critical_fourier}
+\end{align}
+Since the Hamiltonian is symmetric and $\eta_N>0$, this vector is
+orthogonal to its entire kernel. As $\eta_N\to0$, any proposed positive
+norm-gap bound on all sufficiently large rings is contradicted by this
+family. This is the finite-periodic-volume criterion of thermodynamic
+gaplessness, without constructing an infinite-volume operator or claiming
+that any fixed finite ring has zero gap above its full kernel.\footnote{Formal
+    declarations: \leanid{MPSTensor.parentHamiltonianES_pvbs_critical_fourierMagnon}
+    and \leanid{MPSTensor.not_exists_eventual_uniform_gap_pvbs_critical}.}
 
 \section{Remaining scope}
 The coefficient and norm-gap theorems prove the positive-hopping
@@ -76,8 +99,5 @@ one-species finite-ring assertion. The general
 multi-species thermodynamic conjecture, nonzero phases, and open-chain
 spectral-gap estimates remain outside this statement. The open verdict
 tracks that broader source scope, not a missing hypothesis in the finite
-one-species result.\footnote{Formal declarations:
-    \leanid{MPSTensor.parentInteraction_pvbs_two_apply},
-    \leanid{MPSTensor.parentHamiltonianES_pvbs_decomposition}, and
-    \leanid{MPSTensor.parentHamiltonianES_pvbs_gap_exact}.}
+one-species result.
 \end{document}

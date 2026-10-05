@@ -1,0 +1,129 @@
+\subsection{Complements and staircase comparisons for positive windows}
+\label{subsec:peps_positive_window_comparison}
+
+\begin{theorem}[Complement of a horizontal consecutive-window union]%
+    \label{thm:peps_positive_window_complements}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalUnionComplement_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.regionBlockedTensorInjective_horizontalUnionComplement}
+    \leanok
+    Let $\mathcal I$ be a family of torus regions closed under unions,
+    containing every cyclic $L\times K$ window. Assume $L,K>0$,
+    $2L+1\leq w$ and $2K+1\leq h$. Then
+    $\mathcal R(s;L+1,K)^c\in\mathcal I$ for every starting vertex $s$.
+    In particular, this conclusion applies to blocked-tensor injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_arc_rectangle_complement, thm:peps_arc_rectangle_injective}
+    The complement is the union of a full-height band with
+    $w-L-1\geq L$ columns and an $(L+1)$-column band with
+    $h-K\geq K$ rows. Each band is a union of cyclic $L\times K$
+    windows, so each belongs to $\mathcal I$. Apply union closure.
+\end{proof}
+
+\begin{theorem}[Complement of a vertical consecutive-window union]%
+    \label{thm:peps_positive_vertical_window_complement}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.verticalUnionComplement_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.regionBlockedTensorInjective_verticalUnionComplement}
+    \leanok
+    Under the same hypotheses,
+    $\mathcal R(s;L,K+1)^c\in\mathcal I$ for every $s$.
+    In particular, this conclusion applies to blocked-tensor injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_arc_rectangle_complement, thm:peps_arc_rectangle_injective}
+    The complement is the union of a full-height band with
+    $w-L\geq L$ columns and an $L$-column band with
+    $h-K-1\geq K$ rows. Both bands are unions of injective windows.
+\end{proof}
+
+\begin{theorem}[Horizontal consecutive staircase windows]%
+    \label{thm:peps_positive_staircase_comparison}
+    \lean{TNLean.PEPS.horizontalStaircaseConsecutiveWindow_extend_eq}
+    \leanok
+    Let $B$ have positive bond dimensions and injective cyclic
+    $L\times K$ windows, with union closure for injective regions.
+    Assume $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$.
+    Write $W_j$ for the staircase windows and $U_j=W_j\cup W_{j+1}$.
+    If $j<L$ and inserts $C_j,C_{j+1}$ have the same deformed state,
+    then
+    \begin{align}
+        \Ext_{W_j\subseteq U_j}(C_j)
+         & =\Ext_{W_{j+1}\subseteq U_j}(C_{j+1}).
+        \label{eq:peps_positive_union_comparison}
+    \end{align}
+    The equality of deformed states is an equality at every physical
+    configuration on the torus.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_positive_window_complements,
+        thm:peps_corner_extension_state_preserves}
+    The union $U_j$ is a cyclic $(L+1)\times K$ rectangle, so its
+    complement is injective. Corner extension preserves the deformed
+    state, giving equal states for the two extended inserts on $U_j$.
+    Injectivity of $U_j^c$ makes contraction against the complement
+    injective and hence gives~(\ref{eq:peps_positive_union_comparison}).
+\end{proof}
+
+\begin{theorem}[Vertical consecutive staircase windows]%
+    \label{thm:peps_positive_vertical_staircase_comparison}
+    \lean{TNLean.PEPS.verticalConsecutiveWindow_extend_eq}
+    \leanok
+    Under the same tensor and size hypotheses, if $L\leq j$ and
+    $j+1<L+K$, equality of the deformed states of $C_j,C_{j+1}$
+    again implies~(\ref{eq:peps_positive_union_comparison}).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_positive_vertical_window_complement,
+        thm:peps_corner_extension_state_preserves}
+    Here $U_j$ is a cyclic $L\times(K+1)$ rectangle. Its complement
+    is injective, and the same contraction argument applies.
+\end{proof}
+
+\begin{theorem}[One staircase comparison on the full patch]%
+    \label{thm:peps_positive_staircase_patch_step}
+    \lean{TNLean.PEPS.staircaseStep_patch_extend_eq}
+    \leanok
+    Under the same hypotheses, let $P$ be the staircase patch.
+    For $j+1<L+K$, equality of the deformed states of two consecutive
+    inserts implies
+    \begin{align}
+        \Ext_{W_j\subseteq P}(C_j)
+         & =\Ext_{W_{j+1}\subseteq P}(C_{j+1}).
+        \label{eq:peps_positive_patch_step}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_positive_staircase_comparison,
+        thm:peps_positive_vertical_staircase_comparison,
+        thm:peps_corner_extension_linear_transitive}
+    Use the horizontal comparison when $j<L$ and the vertical comparison
+    otherwise. Extend~(\ref{eq:peps_positive_union_comparison}) from
+    $U_j$ to $P$. Transitivity of corner extension gives
+    (\ref{eq:peps_positive_patch_step}).
+\end{proof}
+
+\begin{theorem}[Chaining the staircase comparisons]%
+    \label{thm:peps_positive_staircase_patch_chain}
+    \lean{TNLean.PEPS.staircasePatch_insert_eq_aux}
+    \lean{TNLean.PEPS.staircasePatch_insert_eq}
+    \leanok
+    Under the same hypotheses, suppose inserts $C_j$ on the staircase
+    windows have one common deformed state for $0\leq j<L+K$.
+    Then for each $n<L+K$,
+    \begin{align}
+        \Ext_{W_0\subseteq P}(C_0)
+         & =\Ext_{W_n\subseteq P}(C_n).
+        \label{eq:peps_positive_patch_chain}
+    \end{align}
+    In particular, the extensions of the two end-window inserts agree,
+    by taking $n=L+K-1$.
+    These comparisons implement the overlapping-window argument
+    of~\cite{Molnar2018NormalPEPS} for every positive pair $L,K$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_positive_staircase_patch_step}
+    Induct on $n$. The case $n=0$ is immediate. At the induction step,
+    the common-state hypothesis gives equality of the states on
+    $W_n$ and $W_{n+1}$. Apply~(\ref{eq:peps_positive_patch_step})
+    and compose it with the induction hypothesis.
+\end{proof}

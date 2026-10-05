@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Preparation
 
+import TNLean.MPS.Preparation.AllLengthPolynomialAccuracy
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.BlockApproximationError
@@ -41,7 +42,10 @@ import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.MPS.Preparation.InhomogeneousExactPreparation
 import TNLean.MPS.Preparation.InhomogeneousPreparation
+import TNLean.MPS.Preparation.InhomogeneousSequence
+import TNLean.MPS.Preparation.InhomogeneousUniformRate
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.IsometricExtension

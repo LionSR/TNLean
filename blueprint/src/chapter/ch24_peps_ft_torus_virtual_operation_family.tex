@@ -40,8 +40,9 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{def:peps_region_partial_state,
         def:peps_regionComplementBoundaryConfig}
-    Let $P_A(R)$ be the product of the dimensions of the bonds internal to
-    $R$. For every complement configuration $\tau$,
+    Let $P_A(R)=\prod_{e\notin\partial R}D_A(e)$ be the product
+    of the dimensions of all non-boundary bonds, both within $R$ and within
+    $V\setminus R$. For every complement configuration $\tau$,
     \begin{align}
         P_A(R)\psi^\tau_{A,R}
          & =\sum_{\mu\in\partial R}
@@ -59,8 +60,8 @@ correspondence in the proof sketch of the two-dimensional corollary
         \notag
     \end{align}
     Hence the double boundary sum collapses to its diagonal, which gives the
-    sum in~(\ref{eq:peps_partial_state_blocked_expansion}); each bond internal
-    to $R$ contributes its dimension to the factor $P_A(R)$.
+    sum in~(\ref{eq:peps_partial_state_blocked_expansion}); each non-boundary
+    bond contributes its dimension to the factor $P_A(R)$.
 \end{proof}
 
 \begin{definition}[Physical operator of a region insert]%
@@ -367,7 +368,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{def:peps_staircase_O1_physical_operation,
         def:peps_staircase_O3_physical_operation}
-    Let $L,K\geq2$, and choose the displayed non-wrapping horizontal
+    Let $L,K>0$, and choose the displayed non-wrapping horizontal
     staircase coordinates $(a,b)$ with
     \begin{align}
         1    & \leq a,
@@ -539,4 +540,310 @@ correspondence in the proof sketch of the two-dimensional corollary
     with $X$ on the same reference edge: the first boundary orientation
     transposes $X^{\mathsf T}$, while the last fixes $X$.  Translation
     invariance identifies the two non-boundary bond products.
+\end{proof}
+
+\paragraph{The algebra isomorphism on the displayed staircase edge.}
+
+\begin{definition}[Separating one boundary coordinate]%
+    \label{def:peps_boundary_split}
+    \lean{TNLean.PEPS.regionBoundaryConfigSplitAt}
+    \leanok
+    For $f\in\partial R$, identify a boundary configuration $\mu$ with
+    $(\mu_f,\mu|_{\partial R\setminus\{f\}})$. Denote the resulting
+    bijection by $E_f$.
+\end{definition}
+
+\begin{theorem}[A bond insertion in separated coordinates]%
+    \label{thm:peps_bond_insert_split}
+    \lean{TNLean.PEPS.bondInsertedRegionInsert_splitAt}
+    \leanok
+    \uses{def:peps_boundary_split, def:peps_bond_inserted_region_insert}
+    For every exterior configuration $\eta$ and every bond index $j$,
+    \begin{align}
+        I_{A,R,f,M}\bigl(E_f^{-1}(j,\eta)\bigr)
+         & =\sum_i M_{ij}T_{A,R}\bigl(E_f^{-1}(i,\eta)\bigr).
+        \label{eq:peps_bond_insert_split}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    In the defining sum, configurations agreeing away from $f$ have the
+    same exterior coordinate. The sum over that coordinate therefore
+    reduces to $\eta$.
+\end{proof}
+
+\begin{definition}[Identification of physical operations and inserts]%
+    \label{def:peps_region_identification}
+    \lean{TNLean.PEPS.regionPhysicalOperationCongr}
+    \lean{TNLean.PEPS.regionInsertCongr}
+    \leanok
+    An equality $R=S$ identifies their physical and boundary spaces.
+    Write $O|_S$ and $C|_S$ for a physical operation and a boundary-indexed
+    physical tensor under these identifications.
+\end{definition}
+
+\begin{theorem}[Physical realization under region identification]%
+    \label{thm:peps_realization_identification}
+    \lean{TNLean.PEPS.regionInsertOfPhysicalOp_congr}
+    \leanok
+    \uses{def:peps_region_identification,
+        def:peps_region_insert_of_physical_operator}
+    If $R=S$, then $C^O_{A,R}|_S=C^{O|_S}_{A,S}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Identify $R$ with $S$ and evaluate both sides at a boundary configuration.
+\end{proof}
+
+\begin{theorem}[Blocked images of equal states]%
+    \label{thm:peps_common_blocked_image}
+    \lean{TNLean.PEPS.range_regionBlockedTensorMap_eq_span}
+    \lean{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState}
+    \leanok
+    The image of the blocked tensor map on $R$ is
+    $\operatorname{span}\{T_{A,R}(\mu):\mu\text{ a boundary configuration}\}$.
+    If $A$ and $B$ generate the same closed state, both tensors are
+    injective on $V\setminus R$, and their bond dimensions are positive,
+    these two images coincide.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_region_partial_state_same_state}
+    The blocked tensor map sends a coefficient vector to the corresponding
+    linear combination of the tensors $T_{A,R}(\mu)$. Inverting the blocked
+    tensor on the complementary region identifies this image with the
+    span of the partial states of the closed state. Equality of the closed
+    states then identifies the two images.
+\end{proof}
+
+\begin{theorem}[Agreement of physical operations on a common blocked image]%
+    \label{thm:peps_physical_operations_common_image}
+    \lean{TNLean.PEPS.physicalOps_eq_on_blocks_of_sameState}
+    \leanok
+    Under the equal-state, complement-injectivity, and positive-dimension
+    hypotheses of Theorem~\ref{thm:peps_common_blocked_image}, if
+    $OT_{A,R}(\mu)=PT_{A,R}(\mu)$ for every $\mu$, then
+    $OT_{B,R}(\nu)=PT_{B,R}(\nu)$ for every $\nu$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_common_blocked_image}
+    By linearity, $O$ and $P$ agree on the span of the $A$-blocks.
+    Every $B$-block belongs to the same span.
+\end{proof}
+
+\begin{theorem}[Linearity and identity for boundary insertions]%
+    \label{thm:peps_bond_insert_algebra}
+    \lean{TNLean.PEPS.bondInsertedRegionInsert_add}
+    \lean{TNLean.PEPS.bondInsertedRegionInsert_smul}
+    \lean{TNLean.PEPS.bondInsertedRegionInsert_one}
+    \leanok
+    For every $c\in\mathbb C$ and every boundary configuration $\mu$,
+    $I_{A,R,f,M+N}=I_{A,R,f,M}+I_{A,R,f,N}$,
+    $I_{A,R,f,cM}=cI_{A,R,f,M}$, and
+    $I_{A,R,f,1}(\mu)=T_{A,R}(\mu)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_bond_insert_split}
+    Distribute the finite insertion sum over addition and scalar
+    multiplication. For the identity matrix, the sum in
+    (\ref{eq:peps_bond_insert_split}) reduces to its $i=j$ term.
+\end{proof}
+
+\begin{theorem}[Boundary insertions determine the bond matrix]%
+    \label{thm:peps_bond_insert_injective}
+    \lean{TNLean.PEPS.bondInsertedRegionInsert_injective}
+    \leanok
+    If $A$ is injective on $R$ and $V\setminus R$, and its bond
+    dimensions are positive, then $I_{A,R,f,M}=I_{A,R,f,N}$ implies $M=N$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regionInsertedCoeff_injective,
+        thm:peps_deformedRegionState_bondInsertedRegionInsert}
+    Contract the two equal boundary-indexed tensors with the complementary
+    blocked tensor. Their inserted coefficients coincide, so the inserted
+    matrices coincide.
+\end{proof}
+
+\begin{theorem}[Left staircase realization and linearity]%
+    \label{thm:peps_staircase_left_realization}
+    \lean{TNLean.PEPS.staircaseO1PhysicalOp_realizes_insert}
+    \lean{TNLean.PEPS.staircaseO1PhysicalOp_add}
+    \lean{TNLean.PEPS.staircaseO1PhysicalOp_smul}
+    \leanok
+    Let $L,K>0$ and choose the non-wrapping staircase coordinates with
+    $1\leq a$, $a+2L\leq\mathrm{width}$,
+    $b+2K-1\leq\mathrm{height}$, and $2K\leq\mathrm{height}$.
+    Suppose every $L\times K$ window of $A$ is injective.
+    Then $O_1^A(X)T_{A,W_{\mathrm L}}(\mu)=I_{A,W_{\mathrm L},e,X}(\mu)$
+    for every boundary configuration $\mu$, and
+    $O_1^A(X+Y)=O_1^A(X)+O_1^A(Y)$,
+    $O_1^A(cX)=cO_1^A(X)$ for every $c\in\mathbb C$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_staircase_virtual_operation_physical_realization,
+        lem:peps_staircase_virtual_operation_end_inserts,
+        thm:peps_realization_identification, thm:peps_bond_insert_algebra,
+        def:peps_physical_operator_of_region_insert}
+    Identify the last staircase window with $W_{\mathrm L}$ and use its
+    prescribed boundary insertion. The physical operator is the linear
+    combination of that insertion followed by a fixed left inverse, so
+    it preserves addition and scalar multiplication.
+\end{proof}
+
+\begin{theorem}[A global left end relation is a boundary insertion]%
+    \label{thm:peps_global_left_relation_insert}
+    \lean{TNLean.PEPS.leftEnd_regionInsertOfPhysicalOp_eq_bondInserted}
+    \leanok
+    Let $L,K>0$, $1\leq a$, $a+2L\leq\mathrm{width}$, and
+    $b+2K-1\leq\mathrm{height}$. Suppose that
+    $OT_{A,W_{\mathrm L}}(j,\eta)=\sum_i M_{ij}T_{A,W_{\mathrm L}}(i,\eta)$
+    for every $j$ and every exterior boundary configuration $\eta$.
+    Then $C^O_{A,W_{\mathrm L}}=I_{A,W_{\mathrm L},e,M}$.
+    Injectivity of $A$ is not required for this identity.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_bond_insert_split}
+    The staircase boundary bijection differs from $E_e$ only by a
+    bijection on the exterior coordinates. At the coordinates of any
+    fixed boundary configuration, cancel that bijection and apply
+    (\ref{eq:peps_bond_insert_split}).
+\end{proof}
+
+\begin{theorem}[Cross-tensor realization and normalized coefficients]%
+    \label{thm:peps_cross_tensor_realization_coefficients}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_realizes}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_normalized_coeff}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
+    write $F_{AB}(X)=Y_{A\to B}(X)$. For every boundary configuration $\nu$,
+    $O_1^A(X)T_{B,W_{\mathrm L}}(\nu)=I_{B,W_{\mathrm L},e,F_{AB}(X)}(\nu)$.
+    Moreover, for every pair of physical configurations $\sigma,\tau$,
+    \begin{align}
+        P_B(W_{\mathrm L})C_A(W_{\mathrm L},e,X;\sigma,\tau)
+         & =P_A(W_{\mathrm L})C_B(W_{\mathrm L},e,F_{AB}(X);\sigma,\tau).
+        \label{eq:peps_cross_tensor_normalized_coefficients}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_cross_tensor_virtual_operation_of_staircase,
+        thm:peps_global_left_relation_insert, thm:peps_staircase_left_realization,
+        thm:peps_physical_operator_same_state_transfer,
+        thm:peps_deformedRegionState_bondInsertedRegionInsert}
+    The globally quantified left end relation gives the boundary insertion.
+    Apply the same-state physical-operator identity to $O_1^A(X)$ and
+    substitute its two insertion realizations.
+\end{proof}
+
+\begin{theorem}[Injectivity of a single-window complement]%
+    \label{thm:peps_torus_window_complement_injectivity}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowComplement_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.regionBlockedTensorInjective_windowComplement}
+    \leanok
+    Let $L,K>0$, $2L+1\leq\mathrm{width}$, and
+    $2K+1\leq\mathrm{height}$. Suppose every cyclic $L\times K$ window
+    is injective and injectivity is closed under unions of two regions.
+    The complement of any cyclic $L\times K$ window is then injective.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The complement is the union of a full-height band of
+    $\mathrm{width}-L\geq L+1$ columns and an $L$-column band of
+    $\mathrm{height}-K\geq K+1$ rows. Each band is a union of translates
+    of injective $L\times K$ windows; union closure gives the result.
+\end{proof}
+
+\begin{theorem}[The cross-tensor algebraic laws and inverse]%
+    \label{thm:peps_cross_tensor_algebra_laws}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_add}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_smul}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_one}
+    \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_reverse}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
+    the assignment $F_{AB}$ preserves addition, complex scalar
+    multiplication, and the identity. It also satisfies
+    $F_{BA}(F_{AB}(X))=X$ for every $X\in\MN{D_A(e)}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_cross_tensor_realization_coefficients,
+        thm:peps_staircase_left_realization, thm:peps_bond_insert_algebra,
+        thm:peps_bond_insert_injective, thm:peps_physical_operations_common_image,
+        thm:peps_torus_window_complement_injectivity,
+        thm:peps_regionInjectivityUnionClosure_of_overlap,
+        lem:peps_horizontal_staircase_window_injectivity}
+    The realization identities and insertion injectivity give addition
+    and scalar multiplication. The operation $O_1^A(1)$ fixes every
+    $A$-block, hence every $B$-block in their common image; insertion
+    injectivity gives $F_{AB}(1)=1$.
+    For $Y=F_{AB}(X)$, the operations $O_1^B(Y)$ and $O_1^A(X)$ agree on
+    every $B$-block. They therefore agree on every $A$-block. Their two
+    insertion realizations give $F_{BA}(Y)=X$.
+\end{proof}
+
+\begin{definition}[The staircase cross-tensor algebra isomorphism]%
+    \label{def:peps_staircase_cross_tensor_algebra_isomorphism}
+    \lean{TNLean.PEPS.staircaseCrossTensorAlgEquiv}
+    \leanok
+    \uses{thm:peps_cross_tensor_algebra_laws,
+        thm:peps_staircase_cross_tensor_virtual_operation_multiplication}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
+    the algebra isomorphism $\MN{D_A(e)}\to\MN{D_B(e)}$ is $F_{AB}$,
+    and its inverse is $F_{BA}$.
+\end{definition}
+
+\begin{theorem}[Equality of the displayed staircase bond dimensions]%
+    \label{thm:peps_staircase_cross_tensor_bond_dimension}
+    \lean{TNLean.PEPS.staircaseCrossTensor_bondDim_eq}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
+    the displayed horizontal bond satisfies $D_A(e)=D_B(e)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,
+        thm:matrixAlgEquiv_fin_eq}
+    The algebra isomorphism identifies the complex dimensions
+    $D_A(e)^2$ and $D_B(e)^2$. The two nonnegative matrix sizes are
+    therefore equal.
+\end{proof}
+
+\begin{theorem}[The conjugating gauge on the displayed staircase bond]%
+    \label{thm:peps_staircase_cross_tensor_normalized_gauge}
+    \lean{TNLean.PEPS.exists_staircaseWindowConjCoeffIdentity_normalized}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
+    there are an identification $h:D_A(e)=D_B(e)$ and an invertible
+    matrix $Z\in\mathrm{GL}(D_B(e),\mathbb C)$ such that, for every
+    $X\in\MN{D_A(e)}$ and every pair of physical configurations
+    $\sigma,\tau$,
+    \begin{align}
+        P_B(W_{\mathrm L})C_A(W_{\mathrm L},e,X;\sigma,\tau)
+         & =P_A(W_{\mathrm L})
+        C_B(W_{\mathrm L},e,Z\iota_h(X)Z^{-1};\sigma,\tau).
+    \end{align}
+    Here $\iota_h$ identifies the two matrix algebras by $h$, and
+    $P_A(W_{\mathrm L})$ is the product of the dimensions of all bonds
+    outside the window boundary. These products are retained on both
+    sides.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,
+        thm:matrixAlgEquiv_inner_of_fin,
+        thm:peps_cross_tensor_realization_coefficients}
+    Skolem--Noether expresses $F_{AB}(X)$ as $Z\iota_h(X)Z^{-1}$.
+    Substitute this expression into
+    (\ref{eq:peps_cross_tensor_normalized_coefficients}).
 \end{proof}

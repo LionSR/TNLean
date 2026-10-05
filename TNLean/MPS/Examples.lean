@@ -51,6 +51,8 @@ import TNLean.MPS.Examples.MajumdarGhoshLowerBound
 import TNLean.MPS.Examples.MajumdarGhoshTotalSpin
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.PVBS
+import TNLean.MPS.Examples.PVBSCriticalGap
+import TNLean.MPS.Examples.PVBSCriticalMagnon
 import TNLean.MPS.Examples.PVBSEnergyGap
 import TNLean.MPS.Examples.PVBSGapAttainment
 import TNLean.MPS.Examples.PVBSGroundSpace

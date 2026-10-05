@@ -169,7 +169,8 @@ theorem horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq
         (scaledBondInsert (d := d) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
           (regionInteriorBondProd (G := torusGraph width height) B
             (staircaseWindow s L K j)) M₂) := by
-  refine horizontalStaircaseConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj _ _ ?_
+  refine horizontalStaircaseConsecutiveWindow_extend_eq h hUB hpos
+      (by omega) (by omega) hxw hyh s hj _ _ ?_
   funext cfg
   -- The two scaled bond inserts have equal assembled deformed states, by window-independence.
   rw [deformedRegionStateAssembled_scaledBondInsert, deformedRegionStateAssembled_scaledBondInsert]
@@ -221,7 +222,8 @@ theorem verticalStaircaseConsecutiveWindow_bondTransport_extend_eq
         (scaledBondInsert (d := d) B (staircaseWindow s L K (j + 1)) ⟨g, hg⟩
           (regionInteriorBondProd (G := torusGraph width height) B
             (staircaseWindow s L K j)) M₂) := by
-  refine verticalConsecutiveWindow_extend_eq h hUB hpos hL hK hxw hyh s hj hjK _ _ ?_
+  refine verticalConsecutiveWindow_extend_eq h hUB hpos
+      (by omega) (by omega) hxw hyh s hj hjK _ _ ?_
   funext cfg
   rw [deformedRegionStateAssembled_scaledBondInsert, deformedRegionStateAssembled_scaledBondInsert]
   exact bondInserted_windowIndependent (G := torusGraph width height) (staircaseWindow s L K j)
