@@ -1,0 +1,371 @@
+\section{Oriented multiplicity and physical transport}
+\label{sec:peps_oriented_copy_parent_transport}
+
+Let $D=\bigoplus_iD_i$ and
+$D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$, where the $D_i$ are
+representations on $\C^{d_i}$ and $m_i>0$.
+The multiplicities $m_i$ need not equal $d_i$.
+Put $W_m=\bigoplus_i m_i^{1/4}1_{d_i}$,
+$A_m=A^{D,W_m,o}$, and $B_m=A^{D^{(m)},1,o}$.
+The single-copy and repeated endpoint alphabets are
+$X=\coprod_i\{0,\ldots,d_i-1\}$ and
+$Y=\coprod_i(\{0,\ldots,d_i-1\}\times\{0,\ldots,m_i-1\})$.
+Write $\pi(i,a,u)=(i,a)$ and
+$\alpha(y,z)=m_i^{-1/2}$ when $y=(i,a,u),z=(i,b,u)$ share a
+sector and copy, and zero otherwise. The bond map $F_m$ sends a
+matching-sector pair $(i,a;i,b)$ to
+$m_i^{-1/2}\sum_u(i,a,u;i,b,u)$ and vanishes on different-sector
+pairs. These are the copy maps of
+\cite[Section~7]{Schuch2010PEPS}, with arbitrary positive multiplicities.
+
+\subsection{Copy maps on open oriented regions}
+
+\begin{theorem}[Copy restoration with exchanged endpoints]%
+    \label{thm:peps_oriented_copy_transpose}
+    \lean{TNLean.PEPS.fullMultiplicityBondMap_mulVec_sqrt_blockDiagonal_transpose,
+        TNLean.PEPS.fullMultiplicityBondMap_adjoint_mulVec_repeated_transpose}
+    \leanok
+    \uses{thm:peps_full_multiplicity_bond_map}
+    For any matrices $M_i$, set
+    $M=\bigoplus_i\sqrt{m_i}M_i$ and
+    $N=\bigoplus_i(M_i\otimes1_{m_i})$. Then
+    $F_m\operatorname{vec}(M^T)=\operatorname{vec}(N^T)$ and
+    $F_m^\dagger\operatorname{vec}(N^T)=\operatorname{vec}(M^T)$.
+    More generally, the same statements hold for arbitrary finite
+    nonempty copy-label sets of cardinality $m_i$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_full_multiplicity_bond_map}
+    Apply the ordinary restoration and adjoint formulas to $M_i^T$.
+    Transposition commutes with block sums and scalar multiplication,
+    and $(M_i\otimes1_{m_i})^T=M_i^T\otimes1_{m_i}$.
+\end{proof}
+
+\begin{theorem}[Oriented copy transport of open contractions]%
+    \label{thm:peps_oriented_copy_open}
+    \lean{TNLean.PEPS.graphOrientedOpenInternalFactor_copy_adjoint,
+        TNLean.PEPS.graphOrientedOpenBoundaryFactor_copy_adjoint,
+        TNLean.PEPS.graphRegionCopyMatrix_adjoint_oriented_open,
+        TNLean.PEPS.graphOrientedOpenInternalFactor_copy,
+        TNLean.PEPS.graphOrientedOpenBoundaryFactor_copy,
+        TNLean.PEPS.graphRegionCopyMatrix_oriented_open}
+    \leanok
+    \uses{def:peps_oriented_open_coefficients,def:peps_copy_regional_matrix}
+    Write $I_e^A,I_e^B$ and $B_e^A,B_e^B$ for the internal and crossing
+    factors of $A_m,B_m$. On an internal edge,
+    $F_mI_e^A(q)=I_e^B(q)$ and $F_m^\dagger I_e^B(q)=I_e^A(q)$.
+    Let $B_z(y,x)=\alpha(y,z)\delta_{\pi y,x}$ be the one-ended
+    copy matrix for fixed exterior label $z\in Y$, and put
+    $w_y=m_i^{1/4}$ for $y$ in sector $i$. On a crossing edge,
+    \begin{align}
+        B_zB_e^A(q;\theta)
+         & =\sum_{y\in Y}w_y\alpha(y,z)\delta_{\pi y,\theta}
+        B_e^B(q;y),
+        \label{eq:peps_oriented_copy_crossing}               \\
+        B_z^\dagger B_e^B(q;y)
+         & =w_y^{-1}\alpha(y,z)B_e^A(q;\pi y).
+        \label{eq:peps_oriented_copy_crossing_adjoint}
+    \end{align}
+    These formulas hold for either native orientation and either
+    retained endpoint. For exterior crossing labels $\gamma$, set
+    $F_{m,R}(\gamma)=\bigotimes_{e\in\partial E_R}B_{\gamma_e}
+        \otimes\bigotimes_{e\in E_R}F_m$.
+    The complete open vectors satisfy
+    \begin{align}
+        F_{m,R}(\gamma)C_R^A(\theta)
+         & =\sum_{a\in Y^{\partial E_R}}
+        \left(\prod_{e\in\partial E_R}
+        w_{a_e}\alpha(a_e,\gamma_e)\delta_{\pi a_e,\theta_e}\right)
+        C_R^B(a),
+        \label{eq:peps_oriented_copy_open} \\
+        F_{m,R}(\gamma)^\dagger C_R^B(a)
+         & =\left(\prod_{e\in\partial E_R}
+        w_{a_e}^{-1}\alpha(a_e,\gamma_e)\right)
+        C_R^A(\pi a).
+        \label{eq:peps_oriented_copy_open_adjoint}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_copy_transpose,thm:peps_copy_weight_products,
+        thm:peps_parent_support_boundary_factors,
+        thm:peps_parent_support_boundary_adjoints}
+    Since $W_m^2D_g=\bigoplus_i\sqrt{m_i}D_i(g)$, the ordinary
+    bond identities give the internal claim on unreversed edges;
+    Theorem~\ref{thm:peps_oriented_copy_transpose} gives it on
+    reversed edges. On a crossing edge the sparse coefficient
+    $\alpha(y,z)\delta_{\pi y,x}$ retains exactly one factor $w_y$.
+    Taking its adjoint gives the factor $w_y^{-1}\alpha(y,z)$,
+    which proves~(\ref{eq:peps_oriented_copy_crossing}) and
+    (\ref{eq:peps_oriented_copy_crossing_adjoint}).
+    Substitute into~(\ref{eq:peps_oriented_open}) and distribute the
+    independent boundary sums. This gives
+    (\ref{eq:peps_oriented_copy_open}) and
+    (\ref{eq:peps_oriented_copy_open_adjoint}).
+\end{proof}
+
+\begin{theorem}[Copy maps preserve the oriented regional ranges]%
+    \label{thm:peps_oriented_copy_local_ranges}
+    \lean{TNLean.PEPS.graphRegionCopyMatrix_maps_oriented_openBondSpace,
+        TNLean.PEPS.graphRegionCopyMatrix_adjoint_maps_oriented_openBondSpace,
+        TNLean.PEPS.numberedRegionCopyMatrix_maps_oriented_regionGroundSpace,
+        TNLean.PEPS.numberedRegionCopyMatrix_adjoint_maps_oriented_regionGroundSpace}
+    \leanok
+    \uses{def:peps_oriented_open_coefficients,def:peps_copy_regional_matrix}
+    For every $R,\gamma$,
+    $F_{m,R}(\gamma)\mathcal S_R(D,W_m,o)
+        \subseteq\mathcal S_R(D^{(m)},1,o)$ and
+    $F_{m,R}(\gamma)^\dagger\mathcal S_R(D^{(m)},1,o)
+        \subseteq\mathcal S_R(D,W_m,o)$.
+    The corresponding numbered matrices give the same inclusions
+    between the actual regional contraction ranges of $A_m$ and $B_m$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_copy_open,thm:peps_oriented_open_range}
+    Equations~(\ref{eq:peps_oriented_copy_open}) and
+    (\ref{eq:peps_oriented_copy_open_adjoint}) put every image of a
+    boundary column in the required span. Extend by linearity and use
+    the range identification~(\ref{eq:peps_oriented_range}).
+\end{proof}
+
+\begin{theorem}[Supported inverses on the full parent spaces]%
+    \label{thm:peps_oriented_copy_parent_inverses}
+    \lean{TNLean.PEPS.graphNumberedCopyMatrix_maps_oriented_parent,
+        TNLean.PEPS.graphNumberedCopyMatrix_adjoint_maps_oriented_parent,
+        TNLean.PEPS.graphNumberedCopyMatrix_leftInverse_oriented_parent,
+        TNLean.PEPS.graphNumberedCopyMatrix_rightInverse_oriented_parent,
+        TNLean.PEPS.graphNumberedCopyMatrix_injOn_oriented_parent}
+    \leanok
+    \uses{def:peps_oriented_bond_family,def:peps_region_parent_hamiltonian}
+    Let $M_m=M((F_m)_e)$. For any region family $\mathcal R$,
+    $M_m\mathcal P_{\mathcal R}(A_m)\subseteq\mathcal P_{\mathcal R}(B_m)$
+    and $M_m^\dagger\mathcal P_{\mathcal R}(B_m)
+        \subseteq\mathcal P_{\mathcal R}(A_m)$.
+    If each edge is internal to some member of $\mathcal R$, then
+    \begin{align}
+        M_m^\dagger M_m\psi & =\psi
+                            &       & (\psi\in\mathcal P_{\mathcal R}(A_m)),
+        \label{eq:peps_oriented_copy_left_inverse}                           \\
+        M_mM_m^\dagger\phi  & =\phi
+                            &       & (\phi\in\mathcal P_{\mathcal R}(B_m)).
+        \label{eq:peps_oriented_copy_right_inverse}
+    \end{align}
+    In particular, $M_m$ is injective on the source parent space.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_copy_local_ranges,
+        thm:peps_parent_support_copy_blocks,
+        thm:peps_parent_support_block_criterion,
+        thm:peps_oriented_parent_support,thm:peps_parent_support_retractions}
+    Each regional block of $M_m$ is a scalar times the numbered
+    $F_{m,R}(\gamma)$; the adjoint block has the conjugate scalar.
+    The regional inclusions therefore give the two global inclusions.
+    The source factors $\bigoplus_i\sqrt{m_i}D_i(g)$ and their
+    transposes lie in the matching-sector subspace. The target factors
+    $\bigoplus_i(D_i(g)\otimes1_{m_i})$ and their transposes lie in
+    $\operatorname{im}F_m$.
+    Theorem~\ref{thm:peps_oriented_parent_support} derives these product
+    supports for every parent vector from edge coverage.
+    On the source support $F_m^\dagger F_m$ is the identity; on the
+    target support $F_mF_m^\dagger$ is the identity. Taking products
+    proves~(\ref{eq:peps_oriented_copy_left_inverse}) and
+    (\ref{eq:peps_oriented_copy_right_inverse}).
+\end{proof}
+
+\begin{theorem}[Oriented copy equivalence of parent kernels]%
+    \label{thm:peps_oriented_copy_parent}
+    \lean{TNLean.PEPS.map_regionParentGroundSpace_oriented_copy_eq,
+        TNLean.PEPS.finrank_regionParentGroundSpace_oriented_copy_eq,
+        TNLean.PEPS.map_ker_regionParentHamiltonian_oriented_copy_eq}
+    \leanok
+    \uses{def:peps_region_parent_interaction}
+    If $m_i>0$ and $\mathcal R$ contains both endpoints of every edge
+    in some member, then
+    $M_m\mathcal P_{\mathcal R}(A_m)=\mathcal P_{\mathcal R}(B_m)$
+    and these spaces have equal dimension.
+    For a finite region family and positive parent Hamiltonians
+    $H_A,H_B$ with the respective genuine regional kernels,
+    $M_m\ker H_A=\ker H_B$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_copy_parent_inverses,
+        thm:peps_region_parent_common_kernel}
+    For $\phi\in\mathcal P_{\mathcal R}(B_m)$, its preimage
+    $M_m^\dagger\phi$ belongs to the source parent space and satisfies
+    $M_mM_m^\dagger\phi=\phi$. The source identity proves injectivity.
+    The kernel statement follows from positivity and the exact local
+    kernel conditions.
+\end{proof}
+
+\begin{definition}[Oriented copy parent equivalence]%
+    \label{def:peps_oriented_copy_parent_equivalence}
+    \lean{TNLean.PEPS.canonicalOrientedCopyParentEquiv}
+    \leanok
+    \uses{thm:peps_oriented_copy_parent}
+    Define $E_m^o:\mathcal P_{\mathcal R}(A_m)
+        \simeq\mathcal P_{\mathcal R}(B_m)$ as the restriction of $M_m$
+    under the hypotheses of Theorem~\ref{thm:peps_oriented_copy_parent}.
+    Its inverse is $M_m^\dagger$ restricted to the target parent space.
+\end{definition}
+
+\subsection{Removing weights and comparing arbitrary physical tensors}
+
+\begin{theorem}[Positive copy weights as physical filters]%
+    \label{thm:peps_oriented_copy_filter}
+    \lean{TNLean.PEPS.graphOrientedAveragingSite_copy_weight,
+        TNLean.PEPS.numberedGraphOrientedAveragingTensor_copy_weight,
+        TNLean.PEPS.map_regionParentGroundSpace_orientedCopy_weight}
+    \leanok
+    \uses{def:peps_oriented_averaging_tensor,def:peps_copy_physical_filter}
+    For a physical incidence configuration $\sigma$, let $i(\sigma_e)$
+    be its sector and put
+    $S_v(\sigma)=\prod_{e\ni v}m_{i(\sigma_e)}^{1/4}$.
+    Then $A_m(\eta,\sigma)=S_v(\sigma)A^{D,1,o}_v(\eta,\sigma)$.
+    This coefficient identity also holds for zero multiplicities.
+    If every $m_i>0$, the diagonal physical maps $S_v$ are invertible,
+    the numbered tensors satisfy $A_m=S\cdot A^{D,1,o}$, and for
+    every region family
+    \begin{align}
+        \left(\bigotimes_{v\in V}S_v\right)
+        \mathcal P_{\mathcal R}(A^{D,1,o})
+        =\mathcal P_{\mathcal R}(A_m).
+        \label{eq:peps_oriented_filter_parent}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_weight_products,
+        thm:peps_region_parent_ground_space_physical_transport}
+    Each $D_i(g)$ preserves its sector. A diagonal factor $m_i^{1/4}$
+    can therefore be moved to the physical index at either end of an
+    incidence, regardless of $o_e$. Factor the product of these
+    scalars out of the group average. Positive multiplicities make
+    every diagonal entry nonzero. Invertible physical transport gives
+    (\ref{eq:peps_oriented_filter_parent}).
+\end{proof}
+
+\begin{definition}[Changing positive multiplicities]%
+    \label{def:peps_oriented_positive_multiplicity_equivalence}
+    \lean{TNLean.PEPS.canonicalOrientedCopyWeightParentEquiv,
+        TNLean.PEPS.canonicalOrientedPositiveMultiplicityParentEquiv,
+        TNLean.PEPS.canonicalOrientedMultiplicityChangeParentEquiv}
+    \leanok
+    \uses{thm:peps_oriented_copy_filter,
+        def:peps_oriented_copy_parent_equivalence}
+    Restricting $\bigotimes_vS_v$ defines an equivalence $S_m^o$
+    from $\mathcal P_{\mathcal R}(A^{D,1,o})$ to
+    $\mathcal P_{\mathcal R}(A_m)$ for every region family.
+    With edge coverage, put $L_m^o=E_m^oS_m^o$.
+    This is an equivalence from the unweighted single-copy parent space
+    to $\mathcal P_{\mathcal R}(A^{D^{(m)},1,o})$.
+    For two positive multiplicities $m,n$, the equivalence between
+    their parent spaces is $L_n^o(L_m^o)^{-1}$.
+\end{definition}
+
+\begin{theorem}[Arbitrary semi-regular oriented canonical parents]%
+    \label{thm:peps_oriented_semiregular_canonical_parent}
+    \lean{TNLean.PEPS.nonempty_canonicalOrientedSemiRegularParentEquiv,
+        TNLean.PEPS.finrank_regionParentGroundSpace_arbitraryOrientedSemiRegular_eq,
+        TNLean.PEPS.nonempty_ker_regionParentHamiltonian_arbitraryOrientedSemiRegular_equiv}
+    \leanok
+    \uses{def:peps_semiregular,def:peps_oriented_averaging_tensor,
+        def:peps_region_parent_interaction}
+    Let $U$ be an arbitrary unitary semi-regular representation of a
+    finite group, used on every edge. Suppose every vertex has degree
+    $k$, and every edge is internal to some region of $\mathcal R$.
+    Then the oriented canonical parent spaces for $U$ and the left
+    regular representation $L$ are linearly equivalent:
+    \begin{align}
+        \mathcal P_{\mathcal R}(A^{U,1,o})
+        \simeq\mathcal P_{\mathcal R}(A^{L,1,o}).
+        \label{eq:peps_oriented_semiregular_parent}
+    \end{align}
+    In particular they have equal dimension. For a finite region family,
+    any positive parent Hamiltonians with these exact local contraction
+    kernels have linearly equivalent full kernels.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_semiregular_matrix_blocks,
+        thm:peps_semiregular_block_fourier,
+        def:peps_oriented_coordinate_parent_equivalence,
+        def:peps_oriented_positive_multiplicity_equivalence,
+        thm:peps_region_parent_common_kernel}
+    The decomposition theorem supplies inequivalent irreducibles $D_i$,
+    dimensions $d_i>0$, actual multiplicities $m_i>0$, and coordinates
+    $Q$ such that $U_g=QD^{(m)}_gQ^\dagger$, $Q^\dagger Q=1$.
+    Semi-regularity supplies every irreducible sector, so normalized
+    Fourier coordinates give $L_g=FD^{(d)}_gF^\dagger$ with
+    $F^\dagger F=1$. Constant degree supplies physical numberings
+    of all intermediate incidence alphabets. The equivalence is the
+    composition
+    \begin{align}
+        \mathcal P(A^{U,1,o})
+        \xrightarrow{(E_Q^o)^{-1}}
+        \mathcal P(A^{D^{(m)},1,o})
+        \xrightarrow{L_d^o(L_m^o)^{-1}}
+        \mathcal P(A^{D^{(d)},1,o})
+        \xrightarrow{E_F^o}\mathcal P(A^{L,1,o}).
+        \label{eq:peps_oriented_semiregular_composition}
+    \end{align}
+    Here all parent spaces use $\mathcal R$.
+    Dimensions are preserved by each equivalence; the positive-parent
+    common-kernel theorem gives the Hamiltonian assertion.
+\end{proof}
+
+\begin{theorem}[Fixed-representation comparison of physical tensors]%
+    \label{thm:peps_oriented_physical_canonical_parent}
+    \lean{TNLean.PEPS.nonempty_gInjectiveOrientedCanonicalParentEquiv}
+    \leanok
+    \uses{def:peps_oriented_incident_representation,def:peps_g_injective}
+    Let $a_v$ be vertex-dependent physical tensors which are
+    $G$-injective for $\rho_v^o$, expressed in their virtual numbering.
+    If every vertex belongs to some region of $\mathcal R$, then
+    $\mathcal P_{\mathcal R}(a)\simeq
+        \mathcal P_{\mathcal R}(A^{U,1,o})$.
+    The physical dimensions of $a$ and the averaging tensor may differ.
+    Neither semi-regularity nor unitarity of $U$ is required here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_average_g_injective,
+        thm:peps_range_parent_g_comparison,
+        thm:peps_range_parent_equivalence}
+    The averaging tensor is $G$-injective by
+    Theorem~\ref{thm:peps_oriented_average_g_injective}.
+    The two local maps have the same kernel, namely the complement
+    of the invariant subspace killed by the group average.
+    The fixed-representation physical comparison constructs local maps
+    $F_v$ with $a_v=F_vA^{U,1,o}_v$, injective on the local image.
+    Vertex coverage makes their product injective on the parent space
+    and identifies its image with $\mathcal P_{\mathcal R}(a)$.
+    Invert that equivalence.
+\end{proof}
+
+\begin{theorem}[Full oriented semi-regular physical parent equivalence]%
+    \label{thm:peps_oriented_semiregular_physical_parent}
+    \lean{TNLean.PEPS.nonempty_orientedSemiRegularGInjectiveParentEquiv,
+        TNLean.PEPS.finrank_regionParentGroundSpace_orientedSemiRegularGInjective_eq,
+        TNLean.PEPS.nonempty_ker_regionParentHamiltonian_orientedSemiRegularGInjective_equiv}
+    \leanok
+    \uses{def:peps_semiregular,def:peps_g_injective,
+        def:peps_region_parent_interaction}
+    Suppose $U$ is unitary and semi-regular, the graph has constant
+    degree $k$, and $a_v$ is $G$-injective for its oriented incident
+    representation at every vertex. Suppose $\mathcal R$ covers
+    all vertices and contains both endpoints of every edge in some
+    member. Then
+    $\mathcal P_{\mathcal R}(a)\simeq
+        \mathcal P_{\mathcal R}(A^{L,1,o})$, with equal dimensions.
+    For a finite region family, arbitrary positive regional interactions
+    with these genuine local kernels have equivalent full Hamiltonian
+    kernels. The tensors $a_v$ may vary with $v$; the representation
+    $U$ is uniform on the edges.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_physical_canonical_parent,
+        thm:peps_oriented_semiregular_canonical_parent,
+        thm:peps_region_parent_common_kernel}
+    Use vertex coverage to compare $a$ with $A^{U,1,o}$, then use
+    edge coverage and~(\ref{eq:peps_oriented_semiregular_parent}) to
+    compare the latter with $A^{L,1,o}$. Compose the equivalences.
+    The dimension and positive-parent kernel assertions follow.
+    The positive filters $S_v$ need not be unitary, so this assertion
+    concerns ground spaces and kernels, without a spectral comparison.
+\end{proof}

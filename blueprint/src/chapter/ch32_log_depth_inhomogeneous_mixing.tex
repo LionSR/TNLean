@@ -241,7 +241,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact,lem:ldp_log_threshold_error}
     For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
-    $a=(k+1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
+    $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
     $KN^ke^{-rq}\le\varepsilon$. When $q\le N$, the supplied partition
     gives depth $O(q)$; when $q>N$, exact preparation gives depth $O(N)$.
     Both are $O(\log(N/\varepsilon))$, and the one-site case has depth zero.

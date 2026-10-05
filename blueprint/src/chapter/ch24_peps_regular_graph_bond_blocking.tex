@@ -1,0 +1,98 @@
+% Source: Papers/1001.3807/paper_v3.tex, lines 1830--1909.
+% Figures inspected: figs4/renorm-gg-sym.pdf, renorm-g-id-and-split.pdf,
+% renorm-fixedpoint.pdf. This fragment covers the canonical bond-separation
+% step only; it does not mark unrestricted Observations 6.5--6.6 complete.
+
+\begin{definition}[Physical relative coordinates on bundled regular bonds]%
+    \label{def:peps_regular_graph_bond_blocking}
+    \lean{TNLean.PEPS.regularBundleMatrix,
+        TNLean.PEPS.regularGraphBlockingEquiv,
+        TNLean.PEPS.regularGraphBlocking,
+        TNLean.PEPS.regularGraphBlockingIsometry,
+        TNLean.PEPS.regularGraphBlockingIsometry_apply,
+        TNLean.PEPS.regularGraphResidualBell,
+        TNLean.PEPS.regularGraphNormalizedBell}
+    \leanok
+    Let $G$ be a finite group, $K$ a finite set, and $\Gamma$ a finite simple
+    graph. Write $t(e)$ and $h(e)$ for its ordered edge endpoints. Put
+    $X=G\times G^K$, and let $M_g$ simultaneously translate all coordinates
+    of $X$ on the left. At each vertex use the averaging tensor
+    \begin{align}
+        A_v(\eta,\sigma)
+         & =\frac{1}{|G|}\sum_{g\in G}
+        \prod_{e\ni v}
+        \begin{cases}
+            (M_{g^{-1}})_{\eta_e,\sigma_e}, & v=t(e), \\
+            (M_g)_{\sigma_e,\eta_e},        & v=h(e).
+        \end{cases}
+        \label{eq:peps_bundle_average}
+    \end{align}
+    Its state $\Psi_K$ is the sum over one virtual label $\eta_e\in X$
+    per edge of the product of the vertex tensors. Let $\Psi_0$ be the same
+    construction with $X=G$ and $M_g=L_g$.
+
+    On each physical half-edge apply the basis permutation
+    $|(a,(b_k)_k)\rangle\mapsto|a,(a^{-1}b_k)_k\rangle$.
+    Group the distinguished physical coordinates into $\sigma$ and the
+    residual coordinates into $\tau$, and denote the resulting physical
+    unitary by $U$. It is a product of vertex-local operations followed by
+    a rearrangement of tensor factors. For $D=|G^K|$, define
+    \begin{align}
+        B_K(\tau)                             & =\prod_{e\in E(\Gamma)}
+        \delta_{\tau_{h(e),e},\tau_{t(e),e}}, &
+        \Omega_K(\tau)                        & =D^{-|E(\Gamma)|/2}B_K(\tau).
+    \end{align}
+    These are the physical coordinates and discarded factors in the
+    bond-separation construction of \cite[Observations~6.5--6.6]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Physical Bell-pair separation on a finite graph]%
+    \label{thm:peps_regular_graph_bond_blocking}
+    \lean{TNLean.PEPS.regularBundleMatrix_blocking,
+        TNLean.PEPS.regularGraphBlocking_averagingSite,
+        TNLean.PEPS.regularGraphBlocking_dotProduct,
+        TNLean.PEPS.regularGraphResidualBell_eq_prod,
+        TNLean.PEPS.regularGraphResidualBell_dotProduct,
+        TNLean.PEPS.regularGraphNormalizedBell_dotProduct,
+        TNLean.PEPS.regularGraphNormalizedBell_eq_prod_omegaVec,
+        TNLean.PEPS.regularGraphBlocking_averagingSite_normalized}
+    \leanok
+    \uses{def:peps_regular_graph_bond_blocking,
+        thm:peps_graph_weighted_averaging_coherent}
+    For the tensors in (\ref{eq:peps_bundle_average}), the actual contracted
+    state satisfies
+    \begin{align}
+        (U\Psi_K)(\sigma,\tau)
+         & =\Psi_0(\sigma)B_K(\tau)
+        =D^{|E(\Gamma)|/2}\Psi_0(\sigma)\Omega_K(\tau).
+        \label{eq:peps_bundle_factorization}
+    \end{align}
+    The operation $U$ preserves every physical inner product. The vector
+    $\Omega_K$ has norm one and is the product, over the edges, of the
+    normalized maximally entangled vectors on $\mathbb C^{G^K}\otimes
+        \mathbb C^{G^K}$. Before normalization its factors also separate over
+    the individual surplus bonds:
+    $B_K(\tau)=\prod_e\prod_{k\in K}
+        \delta_{\tau_{h(e),e,k},\tau_{t(e),e,k}}$.
+    The statement allows nonabelian groups, disconnected graphs, isolated
+    vertices, empty graphs, and an empty surplus family.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $T(a,b)=(a,ab)$, with multiplication coordinatewise on $b\in G^K$.
+    Cancellation in $G$ gives
+    \begin{align}
+        (M_g)_{T(a,b),T(c,d)}=(L_g)_{a,c}\delta_{b,d}.
+        \label{eq:peps_bundle_entry}
+    \end{align}
+    Expanding the actual graph contraction into vertex group labels gives
+    \begin{align}
+        \Psi_K(x)=|G|^{-|V(\Gamma)|}\sum_q
+        \prod_e(M_{q_{h(e)}q_{t(e)}^{-1}})_{x_{h(e),e},x_{t(e),e}}.
+    \end{align}
+    Substitution of (\ref{eq:peps_bundle_entry}) extracts the Bell factors
+    independently of $q$, proving (\ref{eq:peps_bundle_factorization}).
+    The coordinate map is a permutation, so it preserves inner products.
+    Summing over the two independent endpoint registers on each edge gives
+    $\langle B_K,B_K\rangle=D^{|E(\Gamma)|}$, proving the stated normalization.
+\end{proof}

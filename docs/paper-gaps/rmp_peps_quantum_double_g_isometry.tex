@@ -131,8 +131,9 @@ state normalization is suppressed.\footnote{Result:
 The oriented-bond contraction is defined for all positive rectangular
 periods. For periods at least three it has the same four distinct
 incident bonds as the simple-graph PEPS convention. The smaller periods
-are algebraic extensions. Identification of the four-dimensional span
-with the full parent-Hamiltonian kernel remains a separate assertion.
+are algebraic extensions. For periods at least three the general uniform
+semi-regular parent theorem now supplies the full-kernel classification;
+the smaller-period parent model remains a separate assertion.
 
 \section{Representations}
 The formal notions of $G$-injectivity and $G$-isometry take the
@@ -805,6 +806,20 @@ The identification of the
 fourth-root-weighted site tensor with those bond sums is a further
 statement; it is not assumed in this isometry calculation.
 
+\section{Four-block closure with independent coordinate spaces}
+The four literal boundary-cut ranges in
+\cite[Theorem~5.5]{Schuch2010PEPS} now have their full source equality:
+their intersection is the span of the actual commuting closure networks.\footnote{Result:
+    \leanid{TNLean.PEPS.DependentTorus.fourCutSpace_eq_commutingClosureSpan}.}
+The eight virtual coordinate spaces and four physical spaces may all differ.
+Each bond carries its own matching semi-regular representation, each physical
+site is G-injective, and each boundary is one unrestricted joint tensor.
+Both inclusions are proved without a parent-kernel or supplied spanning
+hypothesis. The algebraic proof does not need unitarity, so the source's unitary
+convention is covered. This resolves the four-block closure statement; it does
+not replace the separate overlapping-region intersection or geometric
+renormalization statements.
+
 \section{Local regular parent constraints and the remaining closure step}
 For connected regions of regular $G$-injective tensors, local inverses expose the actual
 canonical regional coefficients. The original regional ground space
@@ -857,12 +872,24 @@ assumed.
 
 This proves the regular-representation, native-torus specialization of
 \cite[Theorems~5.7 and~5.9]{Schuch2010PEPS} when both periods are at least
-three. The canonical parent-kernel statement for arbitrary semi-regular
-virtual representations remains to be derived. The closed-state bond
-isometry alone does not identify the same-plaquette local parent spaces.
-Smaller-period models also require a graph convention that retains the
-parallel bonds and loops suppressed by the native simple graph. These
-remaining source obligations are tracked in issue~\#8675.
+three. The same full-kernel equality and dimension formula now also hold
+for any uniform unitary semi-regular virtual representation and any one
+$G$-injective site tensor repeated at every vertex.\footnote{Results:
+    \leanid{TNLean.PEPS.IsGInjective.torusParentKernel_eq_commutingClosureSpan_of_isSemiRegular};
+    \leanid{TNLean.PEPS.IsGInjective.finrank_torusParentKernel_of_isSemiRegular}.}
+The representation blocks and their actual multiplicities are derived.
+Exact open-boundary transport identifies the genuine regional parent spaces;
+edge-covering support supplies both inverses of the whole-parent equivalence.
+An explicit native-orientation bridge gives the regular parent dimension.
+Separately, moving commuting seams beyond each plaquette proves membership
+of the actual closure vectors using local invariance alone. Their established
+independence and the matching dimension prove that they exhaust the kernel.
+No local-range identity or ground-state expansion is assumed.
+
+The source's link-dependent representations and arbitrary blocked site tensors
+remain outside this uniform native capstone. Smaller-period models also require
+a convention retaining parallel bonds and loops. These remaining source
+obligations are tracked in issue~\#8675.
 
 \section{Finite torus flux operations}
 The flux detection, motion and creation results of
@@ -1057,8 +1084,23 @@ unitary native boundary transformation and the exact identity
     \mathsf A_v\mathsf C_v=\mathsf K_v E_v^\dagger,
 \]
 where $E_v$ is an isometric inclusion of the four retained boundary bits.
-These are local tensor-map identities. A globally alternating field on an
-odd torus and a globally tiled physical renormalization remain separate.
+These local tensor-map identities now have a global counterpart for the
+untwisted binary checkerboard state on a torus of even periods $2w,2h$,
+with $w,h>0$. Division into $2\times2$ squares gives a disjoint tiling
+compatible with every nearest-neighbor bond, including periodic seams.
+Reindexing all fine bonds into internal and crossing labels and then
+summing the internal labels gives the product of the actual blocked tensors.
+Every surviving crossing pair has equal labels, so the global contraction
+is exactly the color-difference PEPS on the $w\times h$ torus, with no
+extra scalar. A bijective physical regrouping preserves inner products in
+both directions and sends the complete fine state to this coarse state.
+The redundant registers eliminated in this calculation are virtual.
+
+Only identity bond matrices occur: no twisted torus sector is asserted.
+The physical map is regrouping, not an independently constructed physical
+CNOT disentangler. Odd fine periods are outside this tiling. The arbitrary
+regular-$G$ physical reduction to the same coarse tensor and neighboring
+maximally entangled pairs in Observations~6.5--6.6 remains a separate claim.
 
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
@@ -1085,9 +1127,11 @@ The union of the two coordinate-zero width-one stripes supports a physical
 unitary relating any two normalized coherent closure states. For regular
 $G$-injective tensors, two-way local maps give the same boundary rank and
 zero-order R\'enyi entropy, without an isometric hypothesis. The remaining
-restrictions are the smaller-period lattice model and identification with
-the entire two-dimensional parent-Hamiltonian ground space. These and the other
-source results are tracked in issue~\#8271.
+restrictions include the smaller-period lattice model, link-dependent
+representations and nonuniform blocked tensors. For any uniform unitary
+semi-regular representation, one repeated $G$-injective tensor and periods at
+least three, the full parent kernel is identified with the actual commuting-
+closure span. These and the other source results are tracked in issue~\#8271.
 
 \bibliographystyle{alpha}
 \bibliography{references}

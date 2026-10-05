@@ -1,0 +1,315 @@
+% Common-alphabet auxiliaries for SCP10 Theorem 5.5.
+% Source: Papers/1001.3807/paper_v3.tex, Definition 5.1 and lines 1421--1513.
+% The source-labelled closure theorem is owned by the dependent-alphabet entry.
+\subsection{Four cut spaces with common coordinate alphabets}
+\label{sec:peps_four_cut_common_boundaries}
+
+The following constructions give the common-coordinate specialization of the
+four boundary spaces in \cite[Theorem~5.5]{Schuch2010PEPS}, whose full
+statement is Theorem~\ref{thm:peps_four_cut_closure}. Let
+$X=\Z/w\Z\times\Z/\ell\Z$, where $w,\ell>0$, and write
+$e=(1,0)$ and $n=(0,1)$. Horizontal bonds run from $v$ to $v+e$;
+vertical bonds run from $v+n$ to $v$. Let $V$ be a finite virtual alphabet
+and $P$ a physical alphabet. All eight bonds remain distinct when
+$w=\ell=2$. Write $\mathcal N_A(O^{\mathrm h},O^{\mathrm v})$
+for the physical vector obtained from the bond contraction of
+Definition~\ref{def:peps_torus_bond_network}, with independent site tensors
+$A_v:V^4\times P\to\C$.
+
+\begin{definition}[Correlated cut boundaries and their ranges]%
+    \label{def:peps_four_cut_common_boundary}
+    \lean{TNLean.PEPS.TorusCutBoundaryConfig,
+        TNLean.PEPS.torusCutBoundaryRestriction,
+        TNLean.PEPS.torusCutInteriorWeight,
+        TNLean.PEPS.torusCutCoeff,
+        TNLean.PEPS.torusCutMap,
+        TNLean.PEPS.torusCutMap_apply,
+        TNLean.PEPS.torusCutSpace,
+        TNLean.PEPS.mem_torusCutSpace_iff,
+        TNLean.PEPS.fourTorusCutSpace,
+        TNLean.PEPS.mem_fourTorusCutSpace_iff,
+        TNLean.PEPS.card_torusCutBoundaryConfig_two}
+    \leanok
+    \uses{def:peps_torus_bond_network}
+    The boundary configurations for the cut $(c,r)$ form
+    $\mathcal E=(V\times V)^{\Z/\ell\Z}\times
+        (V\times V)^{\Z/w\Z}$. Each pair is ordered tail, head.
+    For independent bond-end labels $\beta:X\to V^4$, put
+    \begin{align}
+        R_{c,r}(\beta)
+                   & =\bigl(y\mapsto(\beta^1_{(c-1,y)},\beta^2_{(c-1,y)}),
+        x\mapsto(\beta^3_{(x,r-1)},\beta^4_{(x,r-1)})\bigr),
+        \label{eq:peps_common_boundary_restriction}                        \\
+        s_v(\beta) & =(\beta_v^4,\beta_v^1,\beta_{v-n}^3,\beta_{v-e}^2),
+        \nonumber                                                          \\
+        W_{c,r}(\beta)
+                   & =\prod_{v\in X}
+        \begin{cases}1,&v_x+1=c,\\\delta_{\beta_v^2,\beta_v^1},&v_x+1\ne c\end{cases}
+        \begin{cases}1,&v_y+1=r,\\\delta_{\beta_v^4,\beta_v^3},&v_y+1\ne r.\end{cases}
+        \nonumber
+    \end{align}
+    For an arbitrary joint boundary tensor $M:\mathcal E\to\C$, define
+    the linear map $\mathcal C^A_{c,r}$ by
+    \begin{align}
+        (\mathcal C^A_{c,r}M)(\sigma)
+         & =\sum_{\beta:X\to V^4}M(R_{c,r}(\beta))W_{c,r}(\beta)
+        \prod_{v\in X}A_v(s_v(\beta);\sigma_v).
+        \label{eq:peps_common_cut_contraction}
+    \end{align}
+    Put $\mathcal S^A_{c,r}=\operatorname{ran}\mathcal C^A_{c,r}$.
+    Thus $\psi\in\mathcal S^A_{c,r}$ precisely when some $M$ satisfies
+    $(\mathcal C^A_{c,r}M)(\sigma)=\psi(\sigma)$ for every $\sigma$.
+    On $X=(\Z/2\Z)^2$, put
+    $\mathcal S^A=\bigcap_{c,r}\mathcal S^A_{c,r}$; membership means
+    that each cut admits such a boundary tensor, which may depend on the cut.
+    Here $|\mathcal E|=|V|^8$.
+\end{definition}
+\begin{proof}\leanok
+    The boundary occurs linearly in (\ref{eq:peps_common_cut_contraction}).
+    The range descriptions follow by equality of all coefficients, and the
+    intersection description follows by imposing all four range conditions.
+    The two rows and two columns each contribute two independent endpoints,
+    giving $|V|^{2\cdot2+2\cdot2}=|V|^8$ configurations.
+\end{proof}
+
+\begin{definition}[Product boundaries and fixed endpoints]%
+    \label{def:peps_four_cut_common_product_boundary}
+    \lean{TNLean.PEPS.torusCutBondBoundary,
+        TNLean.PEPS.torusCutBondBoundary_restriction,
+        TNLean.PEPS.torusCutHorizontalUnit,
+        TNLean.PEPS.torusCutVerticalUnit,
+        TNLean.PEPS.torusCutBondBoundary_units}
+    \leanok
+    \uses{def:peps_four_cut_common_boundary}
+    For bond matrices $O^{\mathrm h}_v,O^{\mathrm v}_v$, define
+    \begin{align}
+        M^{O}_{c,r}(\eta)
+         & =\prod_y O^{\mathrm h}_{(c-1,y)}
+        (\eta^{\mathrm h,2}_y,\eta^{\mathrm h,1}_y)
+        \prod_x O^{\mathrm v}_{(x,r-1)}
+        (\eta^{\mathrm v,2}_x,\eta^{\mathrm v,1}_x).
+        \label{eq:peps_common_product_boundary}
+    \end{align}
+    Its value at $R_{c,r}(\beta)$ is the product of the corresponding
+    $O^{\mathrm h}_v(\beta_v^2,\beta_v^1)$ and
+    $O^{\mathrm v}_v(\beta_v^4,\beta_v^3)$ on cut bonds, with factor one
+    on every other bond. For fixed $\eta\in\mathcal E$, let
+    $E^{\mathrm h}_{\eta,v}=E_{\eta^{\mathrm h,2}_{v_y},
+                \eta^{\mathrm h,1}_{v_y}}$ and
+    $E^{\mathrm v}_{\eta,v}=E_{\eta^{\mathrm v,2}_{v_x},
+                \eta^{\mathrm v,1}_{v_x}}$ be matrix units.
+    Then $M^{E_\eta}_{c,r}(\theta)=\delta_{\eta,\theta}$.
+\end{definition}
+\begin{proof}\leanok
+    Substitution of (\ref{eq:peps_common_boundary_restriction}) selects
+    the designated seam bonds. Every matrix unit fixes its two endpoints;
+    their product is one exactly when all endpoint labels agree with $\eta$.
+\end{proof}
+
+\begin{theorem}[Fixed-boundary expansion of a cut range]%
+    \label{thm:peps_four_cut_common_boundary_span}
+    \lean{TNLean.PEPS.torusCutCoeff_bondBoundary,
+        TNLean.PEPS.torusCutMap_eq_sum_single,
+        TNLean.PEPS.torusCutSpace_eq_span_single,
+        TNLean.PEPS.torusCutMap_single_eq_bondNetwork}
+    \leanok
+    \uses{def:peps_four_cut_common_product_boundary}
+    Write $\widehat O^{\mathrm h,c}_v=O^{\mathrm h}_v$ on
+    $v_x+1=c$ and $\Id$ elsewhere, and define
+    $\widehat O^{\mathrm v,r}$ analogously. Then
+    \begin{align}
+        \mathcal C^A_{c,r}M^O_{c,r}
+         & =\mathcal N_A(\widehat O^{\mathrm h,c},\widehat O^{\mathrm v,r}),
+        \label{eq:peps_common_boundary_network}                              \\
+        \mathcal C^A_{c,r}M
+         & =\sum_{\eta\in\mathcal E}M(\eta)\mathcal C^A_{c,r}\delta_\eta,
+        \nonumber                                                            \\
+        \mathcal S^A_{c,r}
+         & =\spn_{\C}\{\mathcal C^A_{c,r}\delta_\eta:\eta\in\mathcal E\}.
+        \nonumber
+    \end{align}
+    In particular, $\mathcal C^A_{c,r}\delta_\eta$ is the network with
+    $E^{\mathrm h}_{\eta,v}$ and $E^{\mathrm v}_{\eta,v}$ on cut bonds
+    and identities elsewhere.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_four_cut_common_product_boundary}
+    Multiplying the restricted product boundary by $W_{c,r}$ gives exactly
+    the bond weights in (\ref{eq:peps_common_boundary_network}). Expand
+    $M=\sum_\eta M(\eta)\delta_\eta$ and use linearity. Each fixed-boundary
+    vector already belongs to the range, proving the reverse span inclusion.
+    The matrix-unit identity gives the final assertion.
+\end{proof}
+
+\begin{definition}[Matching bond actions and their averaging tensors]%
+    \label{def:peps_four_cut_common_matched_action}
+    \lean{TNLean.PEPS.torusMatchedLegMatrix,
+        TNLean.PEPS.torusMatchedLegRep,
+        TNLean.PEPS.torusMatchedLegRep_apply,
+        TNLean.PEPS.torusMatchedLegRep_const,
+        TNLean.PEPS.IsUnitaryTorusBondFamily,
+        TNLean.PEPS.IsSemiRegularTorusBondFamily,
+        TNLean.PEPS.representationAveragingSite,
+        TNLean.PEPS.siteMap_representationAveragingSite,
+        TNLean.PEPS.representationAveragingSite_torusLegRep,
+        TNLean.PEPS.torusMatchedAveragingSites}
+    \leanok
+    \uses{def:peps_torus_bond_network,def:peps_g_injective,def:peps_semiregular}
+    Let $G$ be a group and assign representations $U^{\mathrm h}_v$ and
+    $U^{\mathrm v}_v$ on $\C^V$ to the individual bonds. Their action on
+    the top, right, down, left coordinates of site $v$ is
+    \begin{align}
+        \rho_v(k)
+         & =U^{\mathrm v}_v(k)\otimes
+        U^{\mathrm h}_v(k^{-1})^{\mathsf T}\otimes
+        U^{\mathrm v}_{v-n}(k^{-1})^{\mathsf T}\otimes
+        U^{\mathrm h}_{v-e}(k).
+        \label{eq:peps_common_matched_action}
+    \end{align}
+    The coefficient action is multiplication by this matrix. The bond
+    family is unitary when every $U^d_v(k)$ is unitary, and, for finite
+    $G$, is semi-regular when every individual representation $U^d_v$
+    is semi-regular. These are separate conditions.
+    For any representation $\rho$ on $\C^{V^4}$ of finite $G$, put
+    $\Pi_\rho=|G|^{-1}\sum_k\rho(k)$ and
+    $A^0_\rho(t,r,b,l;s)=(\Pi_\rho)_{s,(t,r,b,l)}$.
+    Its site map is exactly $\Pi_\rho$. Write $A^0_v=A^0_{\rho_v}$
+    for the matched family. Constant bond representations recover the
+    uniform four-leg action and its averaging tensor.
+    The matching convention is that of
+    \cite[Definition~5.1]{Schuch2010PEPS}: each link carries its own
+    representation, used at both ends.
+\end{definition}
+\begin{proof}\leanok
+    The inverse transpose reverses the order twice, so
+    (\ref{eq:peps_common_matched_action}) is a representation.
+    The stated coefficient action and the site map of $A^0_\rho$
+    follow by reading their matrix entries. Constant bond families
+    give the uniform formulas by substitution.
+\end{proof}
+
+\begin{definition}[Site-dependent matched closures]%
+    \label{def:peps_four_cut_common_closure}
+    \lean{TNLean.PEPS.sitewiseTorusGClosure,
+        TNLean.PEPS.sitewiseTorusGClosure_const,
+        TNLean.PEPS.sitewiseCommutingClosureSpan,
+        TNLean.PEPS.torusMatchedHorizontalClosureAt,
+        TNLean.PEPS.torusMatchedVerticalClosureAt,
+        TNLean.PEPS.matchedTorusGClosure,
+        TNLean.PEPS.matchedTorusGClosure_const,
+        TNLean.PEPS.matchedCommutingClosureSpan}
+    \leanok
+    \uses{def:peps_four_cut_common_matched_action,def:peps_torus_g_closure}
+    For $g,h\in G$, define
+    \begin{align}
+        H^c_v(h)          & =\begin{cases}U^{\mathrm h}_v(h),&v_x+1=c,\\\Id,&v_x+1\ne c,\end{cases}
+        \nonumber                                                                                   \\
+        V^r_v(g)          & =\begin{cases}U^{\mathrm v}_v(g),&v_y+1=r,\\\Id,&v_y+1\ne r,\end{cases}
+        \nonumber                                                                                   \\
+        \mathcal M_A(g,h) & =\mathcal N_A(H^0(h),V^0(g)),
+        \label{eq:peps_common_matched_closure}                                                      \\
+        \mathcal Z_A      & =\spn_{\C}\{\mathcal M_A(g,h):gh=hg\}.
+        \nonumber
+    \end{align}
+    When every bond representation is $U$, these are the site-dependent
+    uniform closures and their span. If also every site tensor equals $A$,
+    the closure is $\mathcal M(A\mid g,h)$ of
+    Definition~\ref{def:peps_torus_g_closure}.
+\end{definition}
+
+\begin{theorem}[Uniform closures belong to every cut range]%
+    \label{thm:peps_four_cut_common_uniform_membership}
+    \lean{TNLean.PEPS.torusBondNetwork_closureAt_eq_sitewiseTorusGClosure,
+        TNLean.PEPS.torusCutMap_closureBoundary,
+        TNLean.PEPS.sitewiseTorusGClosure_mem_torusCutSpace,
+        TNLean.PEPS.sitewiseCommutingClosureSpan_le_fourTorusCutSpace}
+    \leanok
+    \uses{def:peps_four_cut_common_closure,def:peps_four_cut_common_product_boundary}
+    Suppose every bond carries $U$ and each site map obeys
+    $\mathcal P(A_v)\rho(k)=\mathcal P(A_v)$ for every $k\in G$.
+    If $gh=hg$, then for every cut $(c,r)$,
+    \begin{align}
+        \mathcal N_A(H^c(h),V^r(g))
+         & =\mathcal C^A_{c,r}M^{(U(h),U(g))}_{c,r}
+        =\mathcal M_A(g,h)\in\mathcal S^A_{c,r}.
+        \label{eq:peps_common_uniform_membership}
+    \end{align}
+    Consequently $\mathcal Z_A\subseteq\mathcal S^A$ on the two-by-two torus.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_torus_commuting_closure_seams,thm:peps_four_cut_common_boundary_span}
+    Put $B(t,r,b,l;(v,s))=A_v(t,r,b,l;s)$, with $(v,s)$ as its
+    physical label. Its invariance holds separately at each physical label. Apply
+    Theorem~\ref{thm:peps_torus_commuting_closure_seams} to $B$ and the
+    configuration $v\mapsto(v,\sigma_v)$. The product-boundary identity
+    gives the explicit witness in (\ref{eq:peps_common_uniform_membership});
+    taking spans proves the inclusion.
+\end{proof}
+
+\begin{definition}[Cyclic seam changes of basis]%
+    \label{def:peps_four_cut_common_seam_gauge}
+    \lean{TNLean.PEPS.torusSeamGauge}
+    \leanok
+    For $x,c\in\Z/m\Z$, with $m>0$, use representatives
+    $\bar x,\bar c\in\{0,\ldots,m-1\}$ and put
+    $s_{k,c}(x)=k^{-1}$ if $\bar x<\bar c$, and $s_{k,c}(x)=1$ otherwise.
+\end{definition}
+
+\begin{theorem}[Cyclic seam identities]%
+    \label{thm:peps_four_cut_common_seam_gauge}
+    \lean{TNLean.PEPS.torusSeamGauge_horizontal,
+        TNLean.PEPS.torusSeamGauge_vertical,
+        TNLean.PEPS.torusSeamGauge_commute}
+    \leanok
+    \uses{def:peps_four_cut_common_seam_gauge}
+    Write $K^c_k(x)=k$ if $x+1=c$, and $K^c_k(x)=1$ otherwise.
+    For every $k\in G$,
+    \begin{align}
+        K^c_k(x) & =s_{k,c}(x+1)K^0_k(x)s_{k,c}(x)^{-1},
+        \label{eq:peps_common_seam_horizontal}                     \\
+        K^c_k(x) & =s_{k^{-1},c}(x)K^0_k(x)s_{k^{-1},c}(x+1)^{-1}.
+        \label{eq:peps_common_seam_vertical}
+    \end{align}
+    If $kl=lk$, then $s_{k,c}(x)$ commutes with $l$.
+\end{theorem}
+\begin{proof}\leanok
+    Check separately the wrap $x+1=0$, the crossing $x+1=c$, and
+    the two intervals between them. The adjacent factors cancel except
+    at the seam crossings, proving (\ref{eq:peps_common_seam_horizontal}).
+    Invert that formula with $k^{-1}$ in place of $k$ to obtain
+    (\ref{eq:peps_common_seam_vertical}). Each $s_{k,c}(x)$ is either
+    $1$ or $k^{-1}$, proving commutation.
+\end{proof}
+
+\begin{theorem}[Matched commuting closures belong to every cut range]%
+    \label{thm:peps_four_cut_common_matched_membership}
+    \lean{TNLean.PEPS.torusBondNetwork_matchedClosureAt_eq_matchedTorusGClosure,
+        TNLean.PEPS.torusCutMap_matchedClosureBoundary,
+        TNLean.PEPS.matchedTorusGClosure_mem_torusCutSpace,
+        TNLean.PEPS.matchedCommutingClosureSpan_le_fourTorusCutSpace}
+    \leanok
+    \uses{def:peps_four_cut_common_closure,def:peps_four_cut_common_product_boundary}
+    Suppose $\mathcal P(A_v)\rho_v(k)=\mathcal P(A_v)$ for every $v,k$.
+    For $gh=hg$ and every $(c,r)$,
+    \begin{align}
+        \mathcal N_A(H^c(h),V^r(g))
+         & =\mathcal C^A_{c,r}M^{(U^{\mathrm h}(h),U^{\mathrm v}(g))}_{c,r}
+        =\mathcal M_A(g,h)\in\mathcal S^A_{c,r}.
+        \label{eq:peps_common_matched_membership}
+    \end{align}
+    On the two-by-two torus, $\mathcal Z_A\subseteq\mathcal S^A$.
+    This is the first inclusion in the proof of
+    \cite[Theorem~5.5]{Schuch2010PEPS}, with a common coordinate alphabet.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_seam_gauge,
+        thm:peps_four_cut_common_vertex_gauge,thm:peps_four_cut_common_boundary_span}
+    Apply the matched vertex-gauge identity first with
+    $q_v=s_{h,c}(v_x)$ and then with $q_v=s_{g^{-1},r}(v_y)$.
+    Formulas (\ref{eq:peps_common_seam_horizontal}) and
+    (\ref{eq:peps_common_seam_vertical}) move the two seams.
+    Commutation with the transverse closure label leaves its matrices
+    unchanged. Each bond uses its own representation of these group
+    identities. The product boundary gives the stated range witness;
+    linearity then gives the span inclusion.
+\end{proof}

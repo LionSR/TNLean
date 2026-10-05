@@ -282,8 +282,9 @@ def regInput (j p : ℕ) (x : Fin (D * D)) : Cfg d (s + s) :=
   if j = 0 then Fin.append (dig (finProdFinEquiv.symm x).1) (dig (finProdFinEquiv.symm x).2)
   else if p % 2 = 0 then Fin.append (enc x) 0 else Fin.append 0 (enc x)
 
-/-- The two registers written by an isometry `ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}`. -/
-noncomputable def coarseOutput (e : Fin (blockPhysDim (D * D) 2)) : Cfg d (s + s) :=
+/-- The two registers written by an isometry `ℂ^χ → ℂ^χ ⊗ ℂ^χ`. -/
+noncomputable def coarseOutput {χ : ℕ} (enc : Fin χ → Cfg d s)
+    (e : Fin (blockPhysDim χ 2)) : Cfg d (s + s) :=
   Fin.append (enc (decodeBlock _ 2 e 0)) (enc (decodeBlock _ 2 e 1))
 
 /-- The two registers of the finest layer, read as `2s` sites. -/
@@ -313,7 +314,8 @@ private theorem decodeBlock_two_injective {β : ℕ} {e e' : Fin (blockPhysDim �
   · exact h1
 
 omit [NeZero d] in
-theorem coarseOutput_injective (henc : Function.Injective enc) :
+theorem coarseOutput_injective {χ : ℕ} {enc : Fin χ → Cfg d s}
+    (henc : Function.Injective enc) :
     Function.Injective (coarseOutput (s := s) enc) := fun _ _ h =>
   decodeBlock_two_injective (henc (append_injective h).1) (henc (append_injective h).2)
 
