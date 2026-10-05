@@ -141,11 +141,10 @@ theorem twistedTransferIter_phase_adjusted_tendsto
     rw [smul_smul, inv_mul_cancel₀ (pow_ne_zero N hμne), one_smul]
   have hlim := canonical_transfer_pow_tendsto_stationary_trace
     A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm (Vᴴ * Y)
-  have h := ((LinearMap.toContinuousLinearMap (LinearMap.mulLeft ℂ V)).continuous.tendsto
-    (Matrix.trace (Λ * (Vᴴ * Y)) • (1 : Mat))).comp hlim
-  simpa only [Function.comp_apply, LinearMap.coe_toContinuousLinearMap',
-    LinearMap.mulLeft_apply, Matrix.mul_smul, Matrix.mul_one, ← hphase,
-    Matrix.mul_assoc] using h
+  have h : Tendsto (fun N : ℕ => V * (Kraus.transferMap A ^ N) (Vᴴ * Y))
+      atTop (nhds (V * (Matrix.trace (Λ * (Vᴴ * Y)) • (1 : Mat)))) :=
+    ((LinearMap.toContinuousLinearMap (LinearMap.mulLeft ℂ V)).continuous.tendsto _).comp hlim
+  simpa only [Matrix.mul_smul, Matrix.mul_one, ← hphase, Matrix.mul_assoc] using h
 
 /-- The source physical correlator has a phase-retaining asymptotic coefficient.
 The factor `(μ^N)⁻¹` is essential: the complex correlator itself need not converge.
@@ -168,9 +167,13 @@ theorem physicalStringOrderParam_phase_adjusted_tendsto
   have hlim := twistedTransferIter_phase_adjusted_tendsto
     A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm u V μ hV hμ hInter
     (twistedTransferMap A y 1)
-  have h := ((LinearMap.toContinuousLinearMap Φ).continuous.tendsto _).comp hlim
-  simpa [Φ, physicalStringOrderParam, Matrix.mul_smul, Matrix.trace_smul,
-    smul_eq_mul] using h
+  have hΦ (Z : Mat) : Φ Z = Matrix.trace (Λ * twistedTransferMap A x Z) := rfl
+  have h : Tendsto
+      (fun N : ℕ => Φ ((μ ^ N)⁻¹ • twistedTransferIter A u N (twistedTransferMap A y 1)))
+      atTop (nhds (Φ (Matrix.trace (Λ * Vᴴ * twistedTransferMap A y 1) • V))) :=
+    ((LinearMap.toContinuousLinearMap Φ).continuous.tendsto _).comp hlim
+  simp only [map_smul] at h
+  simpa only [hΦ, physicalStringOrderParam, smul_eq_mul] using h
 
 /-- The limiting magnitude of the actual physical string correlator is the
 product of the two endpoint coefficient magnitudes. This retains arbitrary

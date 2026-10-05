@@ -91,3 +91,22 @@ moves, canonical hypotheses, phase scope, D²/all-N endpoint distinctions,
 regression and CI scope, and the inspected diagram. Two blueprint hypothesis
 scoping/dependency issues were corrected before approval. This approval
 does not replace any pending actual-import validation listed above.
+
+## First production-import run and convergence repair
+
+PR CI run `37373964927` at `185c47a3` checked the current algebraic endpoint
+modules, shared spectral/rigidity owners, legacy reexports, and both migrated
+nonscalar physical examples. It found two elaboration errors in the new
+convergence composition: a point-free linear-map composition was not reduced,
+and broad simplification expanded the physical transfer sums asymmetrically.
+The adjacent convergence-repair JSON records each successful module and the
+precise remaining validation boundary.
+
+The repair supplies pointwise intermediate limits and normalizes scalar
+linearity before evaluating the endpoint functional. The same pattern is
+corrected in the blocked endpoint consumer. Exact terminal segments pass a
+strict light probe using the production scopes and matrix alias, with the
+analytic limits as explicit hypotheses. This is not a full analytic-import
+check. CI now builds the two new capstone/counterexample targets before the
+mandatory full root build, retaining failure propagation and both timing logs.
+The original source refutation verdict still awaits final kernel validation.

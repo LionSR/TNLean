@@ -110,9 +110,15 @@ theorem physicalStringBlock_norm_tendsto
   have hlim := twistedTransferIter_phase_adjusted_tendsto
     A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm u V μ hV hμ hInter
     (physicalObservableTransfer A m y 1)
-  have h := (((LinearMap.toContinuousLinearMap Φ).continuous.tendsto _).comp hlim).norm
-  simpa [Φ, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul,
-    norm_mul, norm_inv, norm_pow, hμ] using h
+  have hΦ (Z : Mat) : Φ Z = Matrix.trace (Λ * physicalObservableTransfer A n x Z) := rfl
+  have h : Tendsto
+      (fun N : ℕ => Φ ((μ ^ N)⁻¹ •
+        twistedTransferIter A u N (physicalObservableTransfer A m y 1)))
+      atTop (nhds (Φ (Matrix.trace (Λ * Vᴴ * physicalObservableTransfer A m y 1) • V))) :=
+    ((LinearMap.toContinuousLinearMap Φ).continuous.tendsto _).comp hlim
+  simp only [map_smul] at h
+  simpa only [hΦ, smul_eq_mul, norm_mul, norm_inv, norm_pow, hμ,
+    one_pow, inv_one, one_mul] using h.norm
 
 /-- At every peripheral physical twist, a pure canonical finitely correlated
 state has products of one-site Hermitian endpoint operators on D² sites with
