@@ -126,7 +126,8 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 def endpointCoreEdgeIsometry (D : ℕ) (p : MixedEndpointActiveEdgeSite N) :
     EuclideanSpace ℂ (endpointCoreCfg D (N + 1)) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ
-        (endpointCoreEdgeCfg D (mixedEndpointActiveEdgePosition p) × endpointCoreEdgeSpectator D p) :=
+        (endpointCoreEdgeCfg D (mixedEndpointActiveEdgePosition p) ×
+          endpointCoreEdgeSpectator D p) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (endpointCoreEdgeConfigEquiv D p)
 
 /-- The fixed first/interior/last constraints of the common core.
@@ -155,7 +156,8 @@ def endpointCoreLocalInteraction (A₀ : MPSTensor (D₀ * D₀) D₀)
       EuclideanSpace ℂ (endpointCoreCfg D₀ (N + 1)) :=
   (endpointCoreEdgeIsometry D₀ p).symm.toLinearEquiv.conj
     (rightFiberwiseMap (S := endpointCoreEdgeSpectator D₀ p)
-      (endpointCoreEdgeConstraint A₀ (mixedEndpointActiveEdgePosition p)).toContinuousLinearMap).toLinearMap
+      (endpointCoreEdgeConstraint A₀
+        (mixedEndpointActiveEdgePosition p)).toContinuousLinearMap).toLinearMap
 
 /-- The common-core placement acts on exactly its selected core fiber.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -166,17 +168,22 @@ theorem endpointCoreLocalInteraction_apply
       endpointCoreEdgeConstraint A₀ (mixedEndpointActiveEdgePosition p)
         (endpointCoreEdgeFiber p v (endpointCoreEdgeConfigEquiv D₀ p κ).2)
         (endpointCoreEdgeConfigEquiv D₀ p κ).1 := by
-  simp only [endpointCoreLocalInteraction, LinearEquiv.conj_apply, LinearMap.comp_apply]
-  rw [endpointCoreEdgeIsometry, LinearIsometryEquiv.piLpCongrLeft_symm,
-    LinearIsometryEquiv.piLpCongrLeft_apply]
-  change endpointCoreEdgeConstraint A₀ (mixedEndpointActiveEdgePosition p)
-    (rightFiber (endpointCoreEdgeIsometry D₀ p v) (endpointCoreEdgeConfigEquiv D₀ p κ).2)
-      (endpointCoreEdgeConfigEquiv D₀ p κ).1 = _
-  congr 2
-  apply PiLp.ext
-  intro η
-  simp [rightFiber, endpointCoreEdgeFiber, endpointCoreEdgeIsometry,
-    LinearIsometryEquiv.piLpCongrLeft_apply]
+  have hRF
+      (x : EuclideanSpace ℂ
+        (endpointCoreEdgeCfg D₀ (mixedEndpointActiveEdgePosition p) ×
+          endpointCoreEdgeSpectator D₀ p))
+      (z : endpointCoreEdgeCfg D₀ (mixedEndpointActiveEdgePosition p) ×
+        endpointCoreEdgeSpectator D₀ p) :
+      rightFiberwiseMap (S := endpointCoreEdgeSpectator D₀ p)
+          (endpointCoreEdgeConstraint A₀ (mixedEndpointActiveEdgePosition p)).toContinuousLinearMap
+          x z =
+        endpointCoreEdgeConstraint A₀ (mixedEndpointActiveEdgePosition p)
+          (rightFiber x z.2) z.1 := by
+    rcases z with ⟨η, s⟩
+    exact rightFiberwiseMap_apply_apply _ x η s
+  simp [endpointCoreLocalInteraction, LinearEquiv.conj_apply, endpointCoreEdgeIsometry,
+    LinearIsometryEquiv.piLpCongrLeft_symm, LinearIsometryEquiv.piLpCongrLeft_apply,
+    hRF, rightFiber, endpointCoreEdgeFiber]
 
 /-- The single common-core operator, independent of both exterior dimensions.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -195,9 +202,13 @@ private theorem firstCoreConstraint_apply_exterior
   let U := endpointFirstEdgeSpectatorIsometry ι D₀
   have h := LinearMap.congr_fun (endpointFirstEdgeCoreConstraintES_conj_spectator A₀ ι) (U v)
   have h' : U (endpointFirstEdgeCoreConstraintES A₀ ι v) =
-      rightFiberwiseMap (S := ι) (endpointFirstEdgeCoreConstraintES A₀ PUnit).toContinuousLinearMap
-        (U v) := by
-    simpa only [LinearEquiv.conj_apply, LinearMap.comp_apply, U.symm_apply_apply] using h
+      rightFiberwiseMap (I := endpointFirstEdgeCfg PUnit.{1} D₀) (S := ι)
+        (LinearMap.toContinuousLinearMap (𝕜 := ℂ)
+          (E := EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit.{1} D₀))
+          (F' := EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit.{1} D₀))
+          (endpointFirstEdgeCoreConstraintES A₀ PUnit.{1})) (U v) := by
+    change U (endpointFirstEdgeCoreConstraintES A₀ ι (U.symm (U v))) = _ at h
+    simpa only [U.symm_apply_apply] using h
   simpa [U, endpointFirstEdgeSpectatorIsometry, endpointFirstEdgeSpectatorEquiv,
     LinearIsometryEquiv.piLpCongrLeft_apply, rightFiber] using
     congrArg (fun w => w (((PUnit.unit, b), q), a)) h'
@@ -212,9 +223,13 @@ private theorem lastCoreConstraint_apply_exterior
   let U := endpointLastEdgeSpectatorIsometry ι D₀
   have h := LinearMap.congr_fun (endpointLastEdgeCoreConstraintES_conj_spectator A₀ ι) (U v)
   have h' : U (endpointLastEdgeCoreConstraintES A₀ ι v) =
-      rightFiberwiseMap (S := ι) (endpointLastEdgeCoreConstraintES A₀ PUnit).toContinuousLinearMap
-        (U v) := by
-    simpa only [LinearEquiv.conj_apply, LinearMap.comp_apply, U.symm_apply_apply] using h
+      rightFiberwiseMap (I := endpointLastEdgeCfg PUnit.{1} D₀) (S := ι)
+        (LinearMap.toContinuousLinearMap (𝕜 := ℂ)
+          (E := EuclideanSpace ℂ (endpointLastEdgeCfg PUnit.{1} D₀))
+          (F' := EuclideanSpace ℂ (endpointLastEdgeCfg PUnit.{1} D₀))
+          (endpointLastEdgeCoreConstraintES A₀ PUnit.{1})) (U v) := by
+    change U (endpointLastEdgeCoreConstraintES A₀ ι (U.symm (U v))) = _ at h
+    simpa only [U.symm_apply_apply] using h
   simpa [U, endpointLastEdgeSpectatorIsometry, endpointLastEdgeSpectatorEquiv,
     LinearIsometryEquiv.piLpCongrLeft_apply, rightFiber] using
     congrArg (fun w => w ((q, (c, PUnit.unit)), e)) h'
@@ -236,9 +251,10 @@ theorem mixedEndpointActiveNormalizedLocalInteraction_apply_exteriorFiber
       change endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)
           (mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N) v
             (Fin.tail σ, c, e)) ((a, b), σ 0) = _
-      rw [firstCoreConstraint_apply_exterior]
-      apply congrArg (fun w => endpointFirstEdgeCoreConstraintES A₀ PUnit w
-        ((PUnit.unit, b), σ 0))
+      refine (firstCoreConstraint_apply_exterior A₀
+        (mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N) v
+          (Fin.tail σ, c, e)) a b (σ 0)).trans (congrArg
+        (fun w => endpointFirstEdgeCoreConstraintES A₀ PUnit w ((PUnit.unit, b), σ 0)) ?_)
       apply PiLp.ext
       rintro ⟨⟨⟨⟩, b'⟩, q⟩
       rfl
@@ -248,9 +264,11 @@ theorem mixedEndpointActiveNormalizedLocalInteraction_apply_exteriorFiber
       change endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)
           (mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N) v
             (a, b, Fin.init σ)) (σ (Fin.last N), (c, e)) = _
-      rw [lastCoreConstraint_apply_exterior]
-      apply congrArg (fun w => endpointLastEdgeCoreConstraintES A₀ PUnit w
-        (σ (Fin.last N), (c, PUnit.unit)))
+      refine (lastCoreConstraint_apply_exterior A₀
+        (mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N) v
+          (a, b, Fin.init σ)) (σ (Fin.last N)) c e).trans (congrArg
+        (fun w => endpointLastEdgeCoreConstraintES A₀ PUnit w
+          (σ (Fin.last N), (c, PUnit.unit))) ?_)
       apply PiLp.ext
       rintro ⟨q, c', ⟨⟩⟩
       rfl
@@ -301,12 +319,18 @@ theorem mixedEndpointActiveNormalizedLocalInteraction_conj_coreSpectators
   intro v
   have h := mixedEndpointActiveNormalizedLocalInteraction_intertwines_coreSpectators
     A₀ p (U.symm v)
-  simpa only [LinearEquiv.conj_apply, LinearMap.comp_apply, U.apply_symm_apply] using h
+  change U (mixedEndpointActiveNormalizedLocalInteraction A₀ p (U.symm v)) =
+    rightFiberwiseMap (S := (Fin D₀ ⊕ Fin D₁) × (Fin D₀ ⊕ Fin D₁))
+      (endpointCoreLocalInteraction A₀ p).toContinuousLinearMap v
+  change U (mixedEndpointActiveNormalizedLocalInteraction A₀ p (U.symm v)) =
+    rightFiberwiseMap (S := (Fin D₀ ⊕ Fin D₁) × (Fin D₀ ⊕ Fin D₁))
+      (endpointCoreLocalInteraction A₀ p).toContinuousLinearMap (U (U.symm v)) at h
+  simpa only [U.apply_symm_apply] using h
 
-private theorem euclidean_sum_apply {I J : Type*} [Fintype I] [Fintype J]
+private theorem euclidean_sum_apply {I J : Type*} [Fintype J]
     (v : J → EuclideanSpace ℂ I) (i : I) :
     (∑ j, v j) i = ∑ j, v j i :=
-  map_sum (PiLp.projₗ (𝕜 := ℂ) 2 i) v Finset.univ
+  map_sum (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) i) v Finset.univ
 
 /-- The complete normalized Hamiltonian is the spectator extension of one
 common core operator, with exactly the actually placed interaction sum.
@@ -343,8 +367,9 @@ private theorem norm_gap_iff_of_isometric_conj
     (∀ x ∈ (LinearMap.ker P)ᗮ, δ * ‖x‖ ≤ ‖P x‖) ↔
       ∀ y ∈ (LinearMap.ker Q)ᗮ, δ * ‖y‖ ≤ ‖Q y‖ := by
   have hintertwine (x : E) : U (P x) = Q (U x) := by
-    simpa only [LinearEquiv.conj_apply, LinearMap.comp_apply, U.symm_apply_apply] using
-      LinearMap.congr_fun hPQ (U x)
+    have h := LinearMap.congr_fun hPQ (U x)
+    change U (P (U.symm (U x))) = Q (U x) at h
+    simpa only [U.symm_apply_apply] using h
   have hker (x : E) : x ∈ LinearMap.ker P ↔ U x ∈ LinearMap.ker Q := by
     change P x = 0 ↔ Q (U x) = 0
     rw [← hintertwine]
@@ -352,16 +377,16 @@ private theorem norm_gap_iff_of_isometric_conj
   have horth (x : E) : x ∈ (LinearMap.ker P)ᗮ ↔ U x ∈ (LinearMap.ker Q)ᗮ := by
     constructor
     · intro hx
-      apply Submodule.mem_orthogonal.mpr
+      apply ((LinearMap.ker Q).mem_orthogonal (U x)).mpr
       intro y hy
       obtain ⟨z, rfl⟩ := U.surjective y
       rw [U.inner_map_map]
-      exact (Submodule.mem_orthogonal.mp hx) z ((hker z).mpr hy)
+      exact ((LinearMap.ker P).mem_orthogonal x).mp hx z ((hker z).mpr hy)
     · intro hx
-      apply Submodule.mem_orthogonal.mpr
+      apply ((LinearMap.ker P).mem_orthogonal x).mpr
       intro z hz
       simpa only [U.inner_map_map] using
-        (Submodule.mem_orthogonal.mp hx) (U z) ((hker z).mp hz)
+        ((LinearMap.ker Q).mem_orthogonal (U x)).mp hx (U z) ((hker z).mp hz)
   constructor
   · intro hGap y hy
     obtain ⟨x, rfl⟩ := U.surjective y

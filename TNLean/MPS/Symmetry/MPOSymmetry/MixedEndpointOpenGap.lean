@@ -74,7 +74,7 @@ theorem mixedEndpointActiveNormalizedHamiltonian_norm_gap_of_actual
       mixedEndpointBoundaryForwardBound A₀ hA₀ D₁ ^ 2 =
         mixedEndpointBoundaryCondition A₀ hA₀ D₁ := mul_comm _ _
   rw [hden] at h
-  simpa only [F, activeBoundaryNormalization_symm_deformed_actualLocal_eq_normalized,
+  simpa only [F, activeBoundaryNormalization_symm_deformed_actualLocal_eq_normalized A₀ A₁ hA₀,
     mixedEndpointActiveNormalizedHamiltonian] using h
 
 /-- Conversely the normalized sum's gap gives a gap of the actual active

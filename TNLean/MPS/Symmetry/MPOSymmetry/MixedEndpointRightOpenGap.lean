@@ -45,12 +45,12 @@ theorem exists_uniform_mixedEndpoint_open_one_gap
       K (U x) = U (H x) :=
     mixedEndpoint_openInteractionHamiltonian_one_apply_swap A₀ A₁ N x
   have hperp : U.symm v ∈ (LinearMap.ker H)ᗮ := by
-    apply Submodule.mem_orthogonal.mpr
+    apply ((LinearMap.ker H).mem_orthogonal (U.symm v)).mpr
     intro z hz
     have hz' : U z ∈ LinearMap.ker K := by
       change K (U z) = 0
       rw [hintertwine, LinearMap.mem_ker.mp hz, map_zero]
-    have h := (Submodule.mem_orthogonal.mp hv) (U z) hz'
+    have h := ((LinearMap.ker K).mem_orthogonal v).mp hv (U z) hz'
     rw [← U.inner_map_map z (U.symm v), U.apply_symm_apply]
     exact h
   have h := hGap N hWN (U.symm v) hperp

@@ -153,3 +153,18 @@ commutation proofs and their helpers passed with no diagnostics. A separate
 strict declaration-import check of `GaugeEquiv.blockTensor` also passed.
 These focused checks do not replace full-file, downstream, or guarded
 regression validation on the next published head.
+
+## Spectator-comparison follow-up: 2026-10-05 23:47 UTC
+
+Build job `112026796959` on `c566b343` compiled the complete repaired
+boundary-normalization module in 9.7 seconds. It then reached
+`MixedEndpointCoreHamiltonianSpectators`, exposing explicit-coordinate,
+singleton-universe, sum-evaluation and orthogonal-membership API errors.
+The next repair keeps every public statement unchanged and uses the proved
+fiber-placement identities with explicit Euclidean domains. Two analogous
+explicit-argument uses in the downstream open-gap files are fixed in the
+same batch, using the pinned Mathlib declaration signatures.
+
+The full local spectator check cannot start until its normalization import
+artifact is available. No spectator, open-gap, whole-path or guarded-test
+pass is claimed at this checkpoint. Fresh exact-head CI remains required.
