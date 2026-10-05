@@ -11,8 +11,6 @@ import TNLean.MPS.MPDO.TriangularActionLIdentification
 
 The examples pin all multiplicity orders and the actual normalized-trace
 contractions. The guarded reports reject any additional axiom dependency.
-These checks await the parent build; their expected diagnostics are not a
-claim that elaboration has already succeeded.
 -/
 
 set_option linter.hashCommand false

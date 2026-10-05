@@ -1,9 +1,10 @@
-% Exact coefficient identifications; canonical diagnostics are pending.
+% Exact coefficient identifications.
 % This leaf does not assert the mixed pentagon or its source capstone.
 \section{Identifying the fusion and action comparisons}
 \label{sec:glm_mixed_comparison}
 
 \begin{theorem}[Entries of the two action trees]
+    \leanok
     \label{thm:glm_action_tree_entries}
     \lean{MPOTensor.fusionThenActionSynthesis_apply,
         MPOTensor.sequentialActionAnalysis_apply,
@@ -39,6 +40,7 @@
     Empty intermediate bond spaces give empty sums.
 \end{theorem}
 \begin{proof}
+    \leanok
     Expand each matrix product and separate a product bond into its two
     coordinates. The Kronecker identity fixes the spectator coordinate.
     For the sequential tree, its bond associator sends
@@ -47,6 +49,7 @@
 \end{proof}
 
 \begin{theorem}[Trace formulas for the two fusion comparisons]
+    \leanok
     \label{thm:glm_fusion_comparison_traces}
     \lean{MPOTensor.CompleteZipperFusionFamily.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one,
         MPOTensor.CompleteZipperFusionFamily.printedFMatrix_eq_inv_dim_mul_trace,
@@ -74,6 +77,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpdo_complete_zipper_printed_fmove}
     The fixed-final forward comparison is $P\otimes I_{n_d}$, so its
     $(q,t)$ slice gives the first identity. From
@@ -86,6 +90,7 @@
 \end{proof}
 
 \begin{definition}[Source-oriented fusion coefficients]
+    \leanok
     \label{def:glm_boundary_fusion_f_matrix}
     \lean{MPOTensor.FusionLeftMultiplicity,
         MPOTensor.FusionRightMultiplicity,MPOTensor.fusionFMatrix}
@@ -121,6 +126,7 @@
 \end{definition}
 
 \begin{theorem}[Identification of the source fusion matrix]
+    \leanok
     \label{thm:glm_source_fusion_comparison}
     \lean{MPOTensor.ofBiorthogonal_inversePrintedFMatrix_eq_fusionFMatrix}
     \uses{def:glm_boundary_fusion_f_matrix,def:glm_boundary_zipper_family}
@@ -136,6 +142,7 @@
     $q\in\mathcal I_{\rm R}(a,b,c;d)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_fusion_comparison_traces}
     Use the inverse trace formula in
     (\ref{eq:glm_fusion_comparison_traces}). The constructed family's
@@ -145,6 +152,7 @@
 \end{proof}
 
 \begin{theorem}[Identification of the auxiliary action comparison]
+    \leanok
     \label{thm:glm_auxiliary_action_comparison}
     \lean{MPOTensor.triangular_printedFMatrix_eq_actionLMatrix}
     \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_zipper_family}
@@ -166,6 +174,7 @@
     $(z,i,j)$ and the auxiliary column $(c,\mu,k)$ as $(c,k,\mu)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_fusion_comparison_traces,thm:glm_action_tree_entries}
     The forward trace formula is the contraction of auxiliary right
     analysis with left synthesis. On these operator/state labels,

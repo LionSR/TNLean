@@ -86,14 +86,14 @@ cone. The common-blocking source constructor imports `BoundaryZipperBlocked`
 and its source simultaneous-span cone. These heavier imports are confined to
 the adapters that actually use them.
 
-At the integration checkpoint on 5 October 2026, the exact source files
+At the initial integration checkpoint on 5 October 2026, the exact source files
 `TriangularPhysicalPadding`, `TriangularPaddingDecomposition`,
 `CompleteZipperFusionMixedOrientation`, and `BoundaryActionTreeEntries`
 passed canonical builds. Strict standalone elaboration also passed
 `CompleteZipperFusionTrace`, `CompleteZipperFusionMixedEntries`, and the
-explicitly typed `TriangularBoundaryDecomposition` repair. These checks do
-not establish the remaining capstone dependency chain or the new regression
-files; both remain pending. No `leanok` marker is asserted yet.
+explicitly typed `TriangularBoundaryDecomposition` repair. At that checkpoint, the remaining capstone dependency chain and regressions
+were still pending. The later complete-build evidence below supersedes that
+initial status.
 
 The five ownership leaves cover all 55 public declarations exactly once.
 Their combined nineteen-page PDF was rendered and visually inspected, and
@@ -102,7 +102,7 @@ Source/reverse declaration synchronization, generated imports, module-size,
 proof-token, YAML, formatting and whitespace checks passed. Full exact-head
 repository CI and final review remain required.
 
-The exact checked production hashes are:
+The initially checked production hashes were:
 
 - `TriangularPhysicalPadding`: `6271d149c032e6eb3f183867d495f170aede884e0453fce88a5c727dc954564f`
 - `TriangularPaddingDecomposition`: `c623cf26d708f4517408b65c0bf2ac809a0223e7284203d64f0224426157cf75`
@@ -115,3 +115,20 @@ The exact checked production hashes are:
 All Lean checking uses the one canonical cloud checkout. Source worktrees
 perform no independent cache mutation. The PR remains a draft while the
 source-derived capstone and its guarded axiom reports are unverified.
+
+## Complete production and regression checkpoint
+
+The full build job 111966175533 of run 37368125410 succeeded for head
+`50b5a685f7458061f6bbe037dc57815f30a837e5`. It checked all production
+modules, every configured strict regression (including the five files added
+here), standard-axiom guards, style, compilation timing, and compiled blueprint
+and paper-gap declaration references. The job checked merge commit
+`47c3b0ca75d3ed81133a3eeadab4c5f5e2015a4d`; its tree
+`1aa06e200ad1e0f4f9b7ecec34dea3061559e943` equals the PR head tree.
+
+This documentation update adds checked markers for the 55 source declarations
+and corrects the older scope note. It changes no production theorem statement
+or proof, and removes only stale status prose from one regression module.
+The independent blueprint, inline-layout and module-policy jobs on the preceding
+run were cancelled; they are not reported as successful. Full CI must run again
+on the final documentation head.

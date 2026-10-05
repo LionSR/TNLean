@@ -1,7 +1,6 @@
 % Auxiliary exact fusion family for GLM23, arXiv:2203.12563v3,
 % REsubmission.tex rawrels, eq:F_symbol2, coupledpent, and Appendix A.
 % This isolated leaf follows ch30_mpo_triangular_padding when routed.
-% Verification markers are deferred until the parent confirms each check.
 
 \section{A common fusion family for operators and states}
 \label{sec:glm_triangular_boundary}
@@ -14,6 +13,7 @@ Definition~\ref{def:glm_triangular_padding} puts both kinds of tensors on
 one physical alphabet.
 
 \begin{definition}[The disjoint-union family]
+    \leanok
     \label{def:glm_triangular_boundary_family}
     \lean{MPOTensor.triangularBondDim,
         MPOTensor.triangularTensor,
@@ -40,6 +40,7 @@ one physical alphabet.
 \end{definition}
 
 \begin{theorem}[Exact decompositions of the disjoint-union family]
+    \leanok
     \label{thm:glm_triangular_boundary_exact}
     \lean{MPOTensor.isBiorthogonalDecomposition_triangularTensor}
     \uses{def:glm_triangular_boundary_family, def:glm_boundary_decomposition}
@@ -51,6 +52,7 @@ one physical alphabet.
     multiplicities $\widetilde N_{uv}^w$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_triangular_padding_products, thm:glm_triangular_padding_decomposition}
     On an operator/operator pair, pad the original fusion decomposition
     in the retained corner. On an operator/state pair, pad the original
@@ -61,6 +63,7 @@ one physical alphabet.
 \end{proof}
 
 \begin{theorem}[Blocking with arbitrary finite labels]
+    \leanok
     \label{thm:glm_triangular_boundary_blocking}
     \lean{MPSTensor.IsBiorthogonalDecomposition.blockMPO_fintype}
     \uses{def:glm_boundary_decomposition, def:mpdo_operator_product}
@@ -71,6 +74,7 @@ one physical alphabet.
     rectangular matrices.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_boundary_zipper_blocking}
     Apply the nonempty-word reconstruction identity to each blocked
     physical letter. Physical blocking commutes with the operator
@@ -78,6 +82,7 @@ one physical alphabet.
 \end{proof}
 
 \begin{theorem}[Relabelling the simultaneous inverse]
+    \leanok
     \label{thm:glm_triangular_boundary_inverse_relabel}
     \lean{MPOTensor.exists_blockTensor_leftInverse_of_labelEquiv}
     \uses{def:mpo_tensor, def:gauge_phase_equiv, def:injective, def:normal}
@@ -97,6 +102,7 @@ one physical alphabet.
     virtual coordinates are compared in their common bond space.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpdo_complete_zipper_of_compression_blocked}
     Apply the common-block inverse theorem to the family with ordinal
     labels. Return each row of $K$ to its original label. No label is
@@ -105,6 +111,7 @@ one physical alphabet.
 \end{proof}
 
 \begin{theorem}[The triangular family's simultaneous inverse]
+    \leanok
     \label{thm:glm_triangular_boundary_inverse}
     \lean{MPOTensor.exists_triangular_blockTensor_leftInverse}
     \uses{def:glm_triangular_boundary_family, def:injective, def:gauge_phase_equiv}
@@ -117,6 +124,7 @@ one physical alphabet.
     No simultaneous inverse or joint spanning condition is a premise.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_triangular_padding_injectivity,
         thm:glm_triangular_padding_gauge_restriction,
         thm:glm_triangular_padding_gauge_separation,
@@ -130,6 +138,7 @@ one physical alphabet.
 \end{proof}
 
 \begin{definition}[A common triangular blocking length]
+    \leanok
     \label{def:glm_triangular_boundary_length}
     \lean{MPOTensor.triangularBlockLength, MPOTensor.triangularBlockLength_pos}
     \uses{thm:glm_triangular_boundary_inverse}
@@ -141,6 +150,7 @@ one physical alphabet.
 \end{definition}
 
 \begin{definition}[The blocked triangular complete zipper family]
+    \leanok
     \label{def:glm_triangular_boundary_complete}
     \lean{MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked,
         MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked_tensor,
@@ -169,6 +179,7 @@ one physical alphabet.
     original fusion and action entry survives unchanged.
 \end{definition}
 \begin{proof}
+    \leanok
     \uses{thm:glm_triangular_boundary_exact, thm:glm_triangular_boundary_blocking,
         thm:glm_triangular_boundary_inverse, def:glm_boundary_zipper_family}
     Block the exact disjoint-union pair decompositions at the chosen

@@ -1,8 +1,9 @@
-% Additive mixed-orientation consequence; canonical elaboration is pending.
+% Additive mixed-orientation consequence.
 \section{Mixed orientation of the fusion pentagon}
 \label{sec:glm_mixed_orientation}
 
 \begin{theorem}[Reversing the first edge of the pentagon]
+    \leanok
     \label{thm:glm_mixed_orientation}
     \lean{MPOTensor.CompleteZipperFusionFamily.leftAssocToLeftInner_mul_leftInnerToLeftAssocInverse,
         MPOTensor.CompleteZipperFusionFamily.twoEdgePrintedFMatrix_mul_leftInnerToLeftAssocInverse}
@@ -20,6 +21,7 @@
     when a multiplicity space is zero-dimensional.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpdo_complete_zipper_printed_fmove,
         thm:mpdo_complete_zipper_fusion_pentagon}
     Group the first edge by its spectator label and multiplicity. Each
@@ -31,9 +33,10 @@
 
 % For an operator/operator/operator/state input, identifying the four
 % forward action edges with the actual L matrices and Q with the source F
-% remains a separate typed-coordinate proof, not an extra coherence premise.
+% is derived by the typed-coordinate identifications below, without a coherence premise.
 
 \begin{theorem}[Indexed mixed pentagon]
+    \leanok
     \label{thm:glm_mixed_entries}
     \lean{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mixed_pentagon}
     \uses{def:mpdo_complete_zipper_fusion_family,
@@ -70,6 +73,7 @@
     Empty multiplicity spaces contribute zero to these sums.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_mixed_orientation}
     Evaluate $EDQ=CB$ from (\ref{eq:glm_mixed_orientation}) at the
     right-associated row $(j,i,\gamma,\delta,\kappa)$ and the left-inner
@@ -85,9 +89,9 @@
 % The printed source F factor reverses both multiplicity pairs. The corrected
 % factor is (F_{abc}^{e})_{f,mu nu}^{d,eta chi}, as in that correction note.
 For an operator/operator/operator/state quadruple, the coupled action
-pentagon follows once the auxiliary entries $P$ are identified with the
-action coefficients $L$ and the auxiliary entries $Q$ with the original
-fusion coefficients $F$, as in
+pentagon follows from the identifications of the auxiliary entries $P$
+with the action coefficients $L$ and of the auxiliary entries $Q$ with the
+original fusion coefficients $F$ in
 Theorems~\ref{thm:glm_auxiliary_action_comparison}
 and~\ref{thm:glm_auxiliary_fusion_comparison}.
 The source's coupled pentagon in \cite[Section~3]{GarreRubio2023MPOSym}
