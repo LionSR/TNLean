@@ -401,7 +401,8 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in MixedEndpointComparison MixedEndpointPhase; do
+          for example in MixedEndpointComparison MixedEndpointPhase \
+              MixedEndpointOpenGap MixedEndpointUniformPathGap; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
