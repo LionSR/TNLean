@@ -44,7 +44,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Subtract trace-preparation terms from actual block channels,
   compose the completely positive residuals, and bound their normalized Choi
   traces before reshuffling to the physical Gram matrix.
-- **Seen:** `InhomogeneousPositivePartRate` and `WindowMixing` previously need
+- **Seen:** `InhomogeneousPositivePartRate` and `WindowMixing` previously needed
   the same residual/trace bookkeeping with different reference hypotheses.
 - **Abstraction:**
   `MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination`

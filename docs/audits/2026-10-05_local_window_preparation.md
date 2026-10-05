@@ -45,8 +45,8 @@ The complete new proof bodies and regression declarations passed a strict
 scope-isolated check using already compiled prerequisites, with warnings treated
 as errors. This is provisional exact-body validation, not a complete production
 import-graph build. The guarded capstone kernel-dependency check contains only `propext`,
-`Classical.choice`, and `Quot.sound`. Exact-head repository CI is required before
-merge.
+`Classical.choice`, and `Quot.sound`. The subsequent full repository check
+is recorded below.
 
 The concrete alternating Pauli-X/rank-one-reset regression covers distinct
 singular minorizers, maximal strength, a nonempty remainder, a zero short ring,
@@ -56,3 +56,12 @@ The extended nine-panel diagram regression checks all prior ordered-mixing
 panels and the two-window reference-transport equation. Its open index is a
 Liouville matrix-entry index; the first window acts outermost. Both panels have
 the same typed boundary. The diagram was rendered and visually inspected.
+
+## Full repository validation checkpoint
+
+The complete production-import Lean build and compiled blueprint checks passed
+on remote head `8717875dcd9636007e63f6f67b3128baa0e0ad06` in
+[PR CI run 37294651873](https://github.com/LionSR/TNLean/actions/runs/37294651873).
+This discharges the original full-build condition described above for that
+snapshot. The subsequent main integration and review documentation corrections
+require their own exact-head CI; their result is recorded in the pull request.

@@ -59,6 +59,15 @@ other dependency pins and Lean toolchain match the warm cache.
 
 Blueprint source synchronization passes against the target-pinned QICLean
 sources. Import-aggregator, file-size, numbered-file, proof-integrity,
-tactic-pattern, and whitespace checks pass. The final combined pull-request
-head still requires full CI, including its actual production imports and
-compiled blueprint declaration checks.
+tactic-pattern, and whitespace checks pass. At this local checkpoint, full
+production-import and compiled blueprint checks remained to be run. Their
+subsequent successful result is recorded below.
+
+## Full repository validation checkpoint
+
+The complete production-import Lean build and compiled blueprint checks passed
+on remote head `8717875dcd9636007e63f6f67b3128baa0e0ad06` in
+[PR CI run 37294651873](https://github.com/LionSR/TNLean/actions/runs/37294651873).
+This discharges the original full-build condition described above for that
+snapshot. The subsequent main integration and review documentation corrections
+require their own exact-head CI; their result is recorded in the pull request.

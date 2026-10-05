@@ -47,13 +47,9 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
         \left\|B^\dagger B-F(\rho)^\mathsf T\otimes I\right\|
         \le 2D\prod_j(1-\delta_j).
     \end{align}
-    A further constant depending only on $D$ converts this Gram error
-    into the operator-norm difference of the transfer matrix and the
-    density-reset transfer matrix. This constant is uniform over all
-    positive semidefinite references, including singular ones.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:ldp_chain_transfer_product,thm:ldp_uniform_gram_transfer}
+    \uses{thm:ldp_chain_transfer_product}
     Set $Q_j=F_j-\delta_jR_{\tau_j}$. Choi domination makes each $Q_j$
     completely positive, and it scales trace by $1-\delta_j$. On
     traceless inputs the ordered products of $F_j$ and $Q_j$ agree.
@@ -64,8 +60,6 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
     Both positive Choi matrices on the right have trace
     $\prod_j(1-\delta_j)$, so the triangle inequality gives the factor
     two. The actual Gram--Choi identity supplies the factor $D$.
-    The inverse reshuffling of matrix entries is a bounded linear map
-    on the fixed finite-dimensional space, independently of the reference.
 \end{proof}
 
 \begin{theorem}[Compatible cyclic density references]
