@@ -42,8 +42,11 @@ import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.MPS.Preparation.InhomogeneousApproximationError
 import TNLean.MPS.Preparation.InhomogeneousDoeblin
 import TNLean.MPS.Preparation.InhomogeneousExactPreparation
+import TNLean.MPS.Preparation.InhomogeneousMixingPreparation
+import TNLean.MPS.Preparation.InhomogeneousOverlap
 import TNLean.MPS.Preparation.InhomogeneousPositivePartRate
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InhomogeneousSequence

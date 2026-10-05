@@ -36,6 +36,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
@@ -95,6 +96,7 @@ jobs:
             'blueprint/src/chapter/*.tex' \
             'docs/slides/*.tex'
           python3 scripts/test_tenkz_pic.py
+          python3 scripts/test_tenkz_ordered_mixing.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check

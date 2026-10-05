@@ -236,8 +236,40 @@ insufficient to justify that replacement. The result is restricted to a
 common bond space and a common faithful fixed state. It gives a uniform
 Gram and polar estimate under those additional structural hypotheses, not
 the full source preparation theorem: varying rectangular bond spaces,
-varying fixed states, and the uniform overlap and normalization argument
-remain separate requirements.
+varying fixed states, and passage from qualitative convergence to a uniform
+quantitative hypothesis remain separate requirements.
+
+A second sufficient-condition result now starts with actual ordered transfer
+products on each nonwrapping contiguous interval in the chosen ring cut:
+\[
+    \lVert T_{E_{A_i}\circ\cdots\circ E_{A_{i+\ell-1}}}
+    -T_\sigma\rVert \le K e^{-r\ell},
+\]
+with $K,r>0$ independent of the ring length and interval, in the $L^2$
+operator norm on the transfer matrices. The common limiting state is
+faithful and has trace one. The declarations
+\leanid{MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le} and
+\leanid{MPSPreparation.exists_one_sub_norm_inner_chainPosState_le}
+prove the ordered mixed-overlap and normalized pair estimates: transfer
+error at most $\delta$ on every selected block and on the whole ring
+gives normalized pair error at most $C_\sigma M\delta$. The constants
+are chosen before the tensors, physical dimension, ring, and partition.
+The whole-ring transfer controls the actual normalization
+$c_N^2=\operatorname{Tr}(T_{B_{\mathrm{whole}}})$; the local Gram
+estimates are not used as a substitute for that normalization.
+
+Consequently
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
+in \doclink{TNLean/MPS/Preparation/InhomogeneousMixingPreparation}
+derives pair error at most $C_\sigma KN e^{-rq}$ and physical depth
+$O(\log(N/\varepsilon))$. It assumes nonzero periodic targets at every
+positive ring length, as required to interpret the source's normalized
+quantum states. Mixing alone guarantees nonvanishing only eventually;
+it does not silently remove the finite short-ring condition. Exact
+preparation covers scales longer than the ring. This closes the uniform
+overlap and normalization step under the stated ordered mixing hypothesis.
+It does not derive that hypothesis from qualitative finite correlation,
+and it does not cover varying reference states or rectangular bond spaces.
 
 \bibliographystyle{alpha}
 \bibliography{references}

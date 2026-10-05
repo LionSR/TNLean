@@ -81,6 +81,7 @@ on:
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_ordered_mixing.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -154,6 +155,7 @@ on:
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_ordered_mixing.py'
   workflow_dispatch:
 
 concurrency:
@@ -244,6 +246,7 @@ jobs:
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_tenkz_ordered_mixing.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -333,7 +336,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression; do
+          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression InhomogeneousMixingPreparation; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -705,6 +708,10 @@ jobs:
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_index_routing.py
+
+      - name: Test ordered mixing contraction diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_ordered_mixing.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
