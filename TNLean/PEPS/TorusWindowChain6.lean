@@ -91,7 +91,7 @@ theorem verticalConsecutiveWindow_extend_eq
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K)
     (C₁ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
     (C₂ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K (j + 1)))
@@ -135,7 +135,7 @@ theorem horizontalStaircaseConsecutiveWindow_extend_eq
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : j < L)
     (C₁ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
     (C₂ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K (j + 1)))
@@ -185,7 +185,7 @@ theorem staircaseStep_patch_extend_eq
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hjK : j + 1 < L + K)
     (C₁ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
     (C₂ : RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K (j + 1)))
@@ -239,7 +239,7 @@ theorem staircasePatch_insert_eq_aux
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height)
     (C : ∀ j, RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
     (common : (TorusVertex width height → Fin d) → ℂ)
@@ -275,7 +275,7 @@ theorem staircasePatch_insert_eq
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height)
     (C : ∀ j, RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
     (common : (TorusVertex width height → Fin d) → ℂ)
@@ -367,7 +367,7 @@ theorem staircasePair_insert_eq_open
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height)
     (C : ∀ j, RegionInsert (G := torusGraph width height) (d := d) B (staircaseWindow s L K j))
     (common : (TorusVertex width height → Fin d) → ℂ)

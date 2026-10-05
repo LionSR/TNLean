@@ -24,8 +24,9 @@ This file records a window-region witness.  Every field except the conjugation c
 is supplied at the minimal size by the established window geometry: the reference edge is a boundary
 edge of the left end window, the window is region injective, and its host is injective by
 `regionBlockedTensorInjective_windowComplement`.  The conjugation coefficient identity is the
-single-bond peeling of the staircase end-pair equality (the residual recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1), supplied here as a hypothesis.
+single-bond peeling of the staircase end-pair equality, supplied here as a hypothesis.
+It is derived from the equal-state normal-window hypotheses in
+`TorusWindowCrossTensorTransfer`; see `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
 
 ## References
 
@@ -105,7 +106,7 @@ noncomputable def windowEdgeCoeffIdentityWitness
 /-- **The window-region witness from the window injectivity hypotheses.**
 
 The specialization of `windowEdgeCoeffIdentityWitness` under the one-orientation window injectivity
-hypotheses for `B` and their union closure.  The declaration also assumes `2 ≤ L`, `2 ≤ K`, the
+hypotheses for `B` and their union closure.  The declaration also assumes positive `L` and `K`, the
 placement bounds for the staircase, the minimal torus bounds
 $2L+1\le\mathrm{width}$ and $2K+1\le\mathrm{height}$, positive bond dimensions for `B`, an
 identification `hE` of the reference bond dimensions of `A` and `B`, and the single-bond
@@ -122,7 +123,7 @@ noncomputable def windowEdgeCoeffIdentityWitness_of_hypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (Z : GL (Fin (B.bondDim (horizontalStaircaseReferenceEdge

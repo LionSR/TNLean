@@ -1,7 +1,6 @@
 \begin{theorem}[Translated vertical six-site geometry]
     \label{thm:peps_vertical_two_plaquette_geometry}
     \lean{TNLean.PEPS.verticalTwoPlaquetteTree_isTree,
-        TNLean.PEPS.torusCoordinateSwap,
         TNLean.PEPS.verticalTwoPlaquetteRegion,
         TNLean.PEPS.verticalTwoPlaquetteIso,
         TNLean.PEPS.verticalTwoPlaquetteTree,
@@ -27,6 +26,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:peps_torus_coordinate_swap}
     Coordinate exchange is a graph isomorphism between the two tori. Transport
     the established horizontal induced region, path tree and chords along this
     isomorphism, and evaluate the six vertex coordinates.

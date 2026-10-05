@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TranslatedTwoPlaquetteGeometry
+import TNLean.PEPS.TorusCoordinateSwap
 
 /-!
 # The translated vertical two-plaquette block
@@ -29,15 +30,6 @@ local instance verticalTwoHeightOne : Fact (1 < height) :=
   ⟨by have := Fact.out (p := 3 < height); omega⟩
 local notation "X" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
-
-/-- Coordinate exchange is an actual torus graph isomorphism.
-Source: SCP10, rotated local construction in Theorem 6.16, lines 2271–2305. -/
-def torusCoordinateSwap : torusGraph height width ≃g Γₜ where
-  __ := Equiv.prodComm (ZMod height) (ZMod width)
-  map_rel_iff' := by
-    intro v w
-    change (torusVerticalNeighbor v w ∨ torusHorizontalNeighbor v w) ↔ _
-    exact or_comm
 
 /-- The actual translated two-by-three region, obtained by coordinate exchange.
 Source: SCP10, Theorem 6.16, lines 2271–2305. -/

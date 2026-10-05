@@ -399,6 +399,29 @@ three-plaquette output measurement, and the routed reunion measurement.
   site maps or site inverses. The scalar coefficients come from the
   complementary region; no positivity assumption is involved.
 
+### injectivity under translations of a torus region — promoted
+- **Pattern:** transport blocked-region injectivity along a torus translation,
+  then replace the transported tensor by the original translation-invariant tensor.
+- **Seen:** four uses in `TorusWitnessTranslate.lean`,
+  `TorusTranslatedScalarComparison.lean`, and `TorusWindowGaugeUniqueness.lean`.
+- **Abstraction:** the existing `regionBlockedTensorInjective_translate` now lives in
+  `TorusTranslationInvariant.lean`, so the witness, scalar and uniqueness arguments
+  can use it without importing the later torus Fundamental Theorem.
+- **Notes:** the statement and proof are unchanged. Four duplicated uses are replaced;
+  the move has no line cost, consumer proofs lose five lines, and the necessary
+  `RegionTransport` import adds one line (net Lean line delta: -4).
+
+
+### propagation of two PEPS reference witnesses — promoted
+- **Pattern:** translate horizontal and vertical coefficient witnesses to every edge,
+  absorb their boundary gauges, and prove covariance by composition of translations.
+- **Seen:** the rectangle construction in `PEPS/TorusCovariantAbsorbedFamily.lean`
+  and the normal-window construction in `PEPS/TorusArcWindowGaugeExistence.lean`.
+- **Abstraction:** `exists_torusCovariantAbsorbedGaugeFamily_of_edgeReferenceWitnesses`
+  in `PEPS/TorusReferenceAbsorbedFamily.lean` accepts arbitrary witnessing regions.
+- **Notes:** both constructions use the same proof; the rectangle module loses
+  139 lines while retaining its theorem statement.
+
 ### Integer-cell collar offset decomposition (promoted, 2026-10-02)
 
 - **Pattern:** Split the displacement from an occupied integer center into
@@ -3446,6 +3469,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** these two occurrences have different label maps. The primal
   parameterization is already shared by its weighted sum and fiber count;
   no further abstraction is needed before a third distinct occurrence.
+
+### linearity of a recovered bond operation — candidate
+- **Pattern:** apply injectivity of the boundary-insertion map, rewrite the
+  virtual operations by their physical realizations, and use linearity of the
+  physical operation and boundary insertion.
+- **Seen:** two occurrences in
+  `TNLean/PEPS/TorusWindowCrossTensorAlgebra.lean`, in
+  `staircaseCrossTensorVirtualOperation_add` and
+  `staircaseCrossTensorVirtualOperation_smul` (2026-10-02).
+- **Abstraction:** a linear recovery map from realized physical operations,
+  if a third use in another module needs the same argument.
+- **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
+  and the existing realization identities; no tactic is needed at this count.
 
 ### Remainder-absorbing block lengths — candidate
 - **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
