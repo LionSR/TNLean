@@ -252,7 +252,8 @@ private theorem firstEdge_contiguousReplacement
           (k := k.succ.castSucc.succ)
           (by simp only [Fin.val_succ, Fin.val_castSucc]; omega)]
         simp only [mixedEndpointActivePhysicalCfg, mixedEndpointFirstEdgeConfigEquiv,
-          Fin.cons_succ, Fin.snoc_castSucc, Fin.tail]
+          Fin.cons_succ, Fin.snoc_castSucc]
+        rfl
 
 private theorem lastEdge_contiguousReplacement
     (ξ : endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ (N + 1))

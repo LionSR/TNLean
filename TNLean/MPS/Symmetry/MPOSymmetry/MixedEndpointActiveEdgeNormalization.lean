@@ -53,7 +53,7 @@ private theorem firstEdgeFiber_lastBoundaryMap
           v (σ, r.1, r.2)) (c, e) := by
   apply PiLp.ext
   intro η
-  exact lastBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 η)
+  exact lastBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) η)
     (fun r => mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N)
       v (σ, r.1, r.2)) (c, e)
 
@@ -68,7 +68,7 @@ private theorem lastEdgeFiber_firstBoundaryMap
           v (r.1, r.2, σ)) (a, b) := by
   apply PiLp.ext
   intro η
-  exact firstBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 η)
+  exact firstBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) η)
     (fun r => mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N)
       v (r.1, r.2, σ)) (a, b)
 
@@ -84,7 +84,7 @@ private theorem interiorEdgeFiber_firstBoundaryMap
         (a, b) := by
   apply PiLp.ext
   intro η
-  exact firstBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 η)
+  exact firstBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) η)
     (fun r => mixedEndpointActiveEdgeFiber (.interior i) v (r.1, (r.2, σ, c), e)) (a, b)
 
 private theorem interiorEdgeFiber_lastBoundaryMap
@@ -99,7 +99,7 @@ private theorem interiorEdgeFiber_lastBoundaryMap
         (c, e) := by
   apply PiLp.ext
   intro η
-  exact lastBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 η)
+  exact lastBoundaryCoordinateMap_map F (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) η)
     (fun r => mixedEndpointActiveEdgeFiber (.interior i) v (a, (b, σ, r.1), r.2)) (c, e)
 
 /-- A last-boundary change commutes with every first-edge operator, because
@@ -120,16 +120,17 @@ theorem mixedEndpointActiveFirstEdgePlacement_commute_lastBoundaryMap
         T v (a, (b, σ, r.1), r.2)) (c, e) =
     mixedEndpointActiveEdgePlacement (.first : MixedEndpointActiveEdgeSite N) T
       (mixedEndpointActiveLastBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
-  simp_rw [mixedEndpointActiveEdgePlacement_apply]
   change lastBoundaryCoordinateMap F
       (fun r => T (mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N)
         v (Fin.tail σ, r.1, r.2)) ((a, b), σ 0)) (c, e) =
     T (mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N)
       (mixedEndpointActiveLastBoundaryMapES F (N + 1) v) (Fin.tail σ, c, e)) ((a, b), σ 0)
-  rw [firstEdgeFiber_lastBoundaryMap]
-  exact lastBoundaryCoordinateMap_map F ((PiLp.projₗ (𝕜 := ℂ) 2 ((a, b), σ 0)).comp T)
+  exact (lastBoundaryCoordinateMap_map F
+    ((PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) ((a, b), σ 0)).comp T)
     (fun r => mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N)
-      v (Fin.tail σ, r.1, r.2)) (c, e)
+      v (Fin.tail σ, r.1, r.2)) (c, e)).trans
+    (congrArg (fun w => T w ((a, b), σ 0))
+      (firstEdgeFiber_lastBoundaryMap F v (Fin.tail σ) c e).symm)
 
 /-- A first-boundary change commutes with every last-edge operator. -/
 theorem mixedEndpointActiveLastEdgePlacement_commute_firstBoundaryMap
@@ -148,18 +149,18 @@ theorem mixedEndpointActiveLastEdgePlacement_commute_firstBoundaryMap
         T v (r.1, (r.2, σ, c), e)) (a, b) =
     mixedEndpointActiveEdgePlacement (.last : MixedEndpointActiveEdgeSite N) T
       (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
-  simp_rw [mixedEndpointActiveEdgePlacement_apply]
   change firstBoundaryCoordinateMap F
       (fun r => T (mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N)
         v (r.1, r.2, Fin.init σ)) (σ (Fin.last N), (c, e))) (a, b) =
     T (mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N)
       (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v) (a, b, Fin.init σ))
         (σ (Fin.last N), (c, e))
-  rw [lastEdgeFiber_firstBoundaryMap]
-  exact firstBoundaryCoordinateMap_map F
-    ((PiLp.projₗ (𝕜 := ℂ) 2 (σ (Fin.last N), (c, e))).comp T)
+  exact (firstBoundaryCoordinateMap_map F
+    ((PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) (σ (Fin.last N), (c, e))).comp T)
     (fun r => mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N)
-      v (r.1, r.2, Fin.init σ)) (a, b)
+      v (r.1, r.2, Fin.init σ)) (a, b)).trans
+    (congrArg (fun w => T w (σ (Fin.last N), (c, e)))
+      (lastEdgeFiber_firstBoundaryMap F v a b (Fin.init σ)).symm)
 
 /-- Both boundary changes commute with every interior-edge operator. -/
 theorem mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
@@ -182,17 +183,18 @@ theorem mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
           (r.1, (r.2, σ, c), e)) (a, b) =
       mixedEndpointActiveEdgePlacement (.interior i) T
         (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
-    simp_rw [mixedEndpointActiveEdgePlacement_apply]
     change firstBoundaryCoordinateMap F
         (fun r => T (mixedEndpointActiveEdgeFiber (.interior i)
           v (r.1, (r.2, (f σ).2, c), e)) (f σ).1) (a, b) =
       T (mixedEndpointActiveEdgeFiber (.interior i)
         (mixedEndpointActiveFirstBoundaryMapES F (N + 1) v)
           (a, (b, (f σ).2, c), e)) (f σ).1
-    rw [interiorEdgeFiber_firstBoundaryMap]
-    exact firstBoundaryCoordinateMap_map F ((PiLp.projₗ (𝕜 := ℂ) 2 (f σ).1).comp T)
+    exact (firstBoundaryCoordinateMap_map F
+      ((PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) (f σ).1).comp T)
       (fun r => mixedEndpointActiveEdgeFiber (.interior i)
-        v (r.1, (r.2, (f σ).2, c), e)) (a, b)
+        v (r.1, (r.2, (f σ).2, c), e)) (a, b)).trans
+      (congrArg (fun w => T w (f σ).1)
+        (interiorEdgeFiber_firstBoundaryMap i F v a e b c (f σ).2).symm)
   · apply (commute_iff_eq _ _).mpr
     apply LinearMap.ext
     intro v
@@ -203,17 +205,18 @@ theorem mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
           (a, (b, σ, r.1), r.2)) (c, e) =
       mixedEndpointActiveEdgePlacement (.interior i) T
         (mixedEndpointActiveLastBoundaryMapES F (N + 1) v) (a, (b, σ, c), e)
-    simp_rw [mixedEndpointActiveEdgePlacement_apply]
     change lastBoundaryCoordinateMap F
         (fun r => T (mixedEndpointActiveEdgeFiber (.interior i)
           v (a, (b, (f σ).2, r.1), r.2)) (f σ).1) (c, e) =
       T (mixedEndpointActiveEdgeFiber (.interior i)
         (mixedEndpointActiveLastBoundaryMapES F (N + 1) v)
           (a, (b, (f σ).2, c), e)) (f σ).1
-    rw [interiorEdgeFiber_lastBoundaryMap]
-    exact lastBoundaryCoordinateMap_map F ((PiLp.projₗ (𝕜 := ℂ) 2 (f σ).1).comp T)
+    exact (lastBoundaryCoordinateMap_map F
+      ((PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) (f σ).1).comp T)
       (fun r => mixedEndpointActiveEdgeFiber (.interior i)
-        v (a, (b, (f σ).2, r.1), r.2)) (c, e)
+        v (a, (b, (f σ).2, r.1), r.2)) (c, e)).trans
+      (congrArg (fun w => T w (f σ).1)
+        (interiorEdgeFiber_lastBoundaryMap i F v a e b c (f σ).2).symm)
 
 private theorem firstEdgeFiber_firstBoundaryMap
     (F : Matrix (Fin (D₀ * D₀)) (Fin (D₀ * D₀)) ℂ)
@@ -278,7 +281,8 @@ private theorem mem_map_equiv_iff
   constructor
   · rintro ⟨w, hw, hEq⟩
     have : w = v := e.injective hEq
-    simpa only [this] using hw
+    subst w
+    exact hw
   · intro hv
     exact ⟨v, hv, rfl⟩
 
@@ -332,25 +336,23 @@ private theorem firstEdge_kernel_normalization
       mixedEndpointActiveFirstBoundaryMapES (squarePhysicalCoordinates A₀)⁻¹ (N + 1) v ∈
         LinearMap.ker (mixedEndpointActiveNormalizedLocalInteraction A₀
           (.first : MixedEndpointActiveEdgeSite N)) := by
-  rw [mem_ker_mixedEndpointActiveLocalInteraction_iff_edgeFibers]
-  change (∀ s, mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N) v s ∈
-      mixedEndpointFirstEdgeSupportES A₀ A₁) ↔
-    mixedEndpointActiveFirstBoundaryMapES (squarePhysicalCoordinates A₀)⁻¹ (N + 1) v ∈
-      LinearMap.ker (mixedEndpointActiveEdgePlacement (.first : MixedEndpointActiveEdgeSite N)
-        (endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)))
-  rw [mem_ker_edgePlacement_iff]
+  rw [mem_ker_mixedEndpointActiveLocalInteraction_iff_edgeFibers,
+    mixedEndpointActiveNormalizedLocalInteraction, mem_ker_edgePlacement_iff]
   apply forall_congr'
   intro s
-  rw [firstEdgeFiber_firstBoundaryMap]
-  change mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N) v s ∈
-      mixedEndpointFirstEdgeSupportES A₀ A₁ ↔
-    firstEdgeNormalizationEquivES A₀ hA₀
-        (mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N) v s) ∈
-      LinearMap.ker (endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁))
-  rw [endpointFirstEdgeCoreConstraintES, Submodule.ker_starProjection,
-    Submodule.orthogonal_orthogonal]
-  exact (mem_map_equiv_iff (firstEdgeNormalizationEquivES A₀ hA₀) _ _
-    (map_firstEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀) _).symm
+  let w : EuclideanSpace ℂ (endpointFirstEdgeCfg (Fin D₀ ⊕ Fin D₁) D₀) :=
+    mixedEndpointActiveEdgeFiber (.first : MixedEndpointActiveEdgeSite N) v s
+  have hmem : w ∈ mixedEndpointFirstEdgeSupportES A₀ A₁ ↔
+      firstEdgeNormalizationEquivES A₀ hA₀ w ∈
+        LinearMap.ker (endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)) := by
+    rw [endpointFirstEdgeCoreConstraintES, Submodule.ker_starProjection,
+      Submodule.orthogonal_orthogonal]
+    exact (mem_map_equiv_iff (firstEdgeNormalizationEquivES A₀ hA₀) _ _
+      (map_firstEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀) w).symm
+  exact hmem.trans (Iff.of_eq (congrArg
+    (fun x : EuclideanSpace ℂ (endpointFirstEdgeCfg (Fin D₀ ⊕ Fin D₁) D₀) =>
+      x ∈ LinearMap.ker (endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)))
+    (firstEdgeFiber_firstBoundaryMap (squarePhysicalCoordinates A₀)⁻¹ v s).symm))
 
 private theorem lastEdge_kernel_normalization
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
@@ -360,25 +362,23 @@ private theorem lastEdge_kernel_normalization
       mixedEndpointActiveLastBoundaryMapES (squarePhysicalCoordinates A₀)⁻¹ (N + 1) v ∈
         LinearMap.ker (mixedEndpointActiveNormalizedLocalInteraction A₀
           (.last : MixedEndpointActiveEdgeSite N)) := by
-  rw [mem_ker_mixedEndpointActiveLocalInteraction_iff_edgeFibers]
-  change (∀ s, mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N) v s ∈
-      mixedEndpointLastEdgeSupportES A₀ A₁) ↔
-    mixedEndpointActiveLastBoundaryMapES (squarePhysicalCoordinates A₀)⁻¹ (N + 1) v ∈
-      LinearMap.ker (mixedEndpointActiveEdgePlacement (.last : MixedEndpointActiveEdgeSite N)
-        (endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)))
-  rw [mem_ker_edgePlacement_iff]
+  rw [mem_ker_mixedEndpointActiveLocalInteraction_iff_edgeFibers,
+    mixedEndpointActiveNormalizedLocalInteraction, mem_ker_edgePlacement_iff]
   apply forall_congr'
   intro s
-  rw [lastEdgeFiber_lastBoundaryMap]
-  change mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N) v s ∈
-      mixedEndpointLastEdgeSupportES A₀ A₁ ↔
-    lastEdgeNormalizationEquivES A₀ hA₀
-        (mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N) v s) ∈
-      LinearMap.ker (endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁))
-  rw [endpointLastEdgeCoreConstraintES, Submodule.ker_starProjection,
-    Submodule.orthogonal_orthogonal]
-  exact (mem_map_equiv_iff (lastEdgeNormalizationEquivES A₀ hA₀) _ _
-    (map_lastEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀) _).symm
+  let w : EuclideanSpace ℂ (endpointLastEdgeCfg (Fin D₀ ⊕ Fin D₁) D₀) :=
+    mixedEndpointActiveEdgeFiber (.last : MixedEndpointActiveEdgeSite N) v s
+  have hmem : w ∈ mixedEndpointLastEdgeSupportES A₀ A₁ ↔
+      lastEdgeNormalizationEquivES A₀ hA₀ w ∈
+        LinearMap.ker (endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)) := by
+    rw [endpointLastEdgeCoreConstraintES, Submodule.ker_starProjection,
+      Submodule.orthogonal_orthogonal]
+    exact (mem_map_equiv_iff (lastEdgeNormalizationEquivES A₀ hA₀) _ _
+      (map_lastEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀) w).symm
+  exact hmem.trans (Iff.of_eq (congrArg
+    (fun x : EuclideanSpace ℂ (endpointLastEdgeCfg (Fin D₀ ⊕ Fin D₁) D₀) =>
+      x ∈ LinearMap.ker (endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)))
+    (lastEdgeFiber_lastBoundaryMap (squarePhysicalCoordinates A₀)⁻¹ v s).symm))
 
 /-- The full two-boundary normalization transports each actual local
 kernel to the corresponding placed common-core kernel. Remote boundary
@@ -433,8 +433,8 @@ theorem mem_ker_mixedEndpointActiveLocalInteraction_iff_normalized
     rw [heq]
     have hcomm := mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
       (D₁ := D₁) i (parentInteractionES A₀ 2) F
-    rw [mem_ker_commuting_map_iff _ _ hcomm.1 hFirst,
-      mem_ker_commuting_map_iff _ _ hcomm.2 hLast]
+    exact ((mem_ker_commuting_map_iff _ _ hcomm.1 hFirst _).trans
+      (mem_ker_commuting_map_iff _ _ hcomm.2 hLast v)).symm
 
 private theorem edgeFiber_placement
     (p : MixedEndpointActiveEdgeSite N)
@@ -475,7 +475,7 @@ private theorem edgePlacement_isSymmetricProjection
         (LinearMap.toContinuousLinearMap T)).toLinearMap).mpr
           (LinearMap.nonneg_iff_isPositive.mpr hG.isPositive)
     have hnonneg : 0 ≤ mixedEndpointActiveEdgePlacement p T := by
-      simpa only [map_zero] using hpos
+      simpa only [map_zero, mixedEndpointActiveEdgePlacement] using hpos
     exact (LinearMap.nonneg_iff_isPositive.mp hnonneg).isSymmetric
 
 /-- Every placed normalized core constraint is an orthogonal projection. -/
@@ -527,7 +527,7 @@ theorem activeBoundaryNormalization_symm_deformed_actualLocal_eq_normalized
   change (activeBoundaryNormalizationEquivES A₀ hA₀ (N + 1)).symm v ∈
       LinearMap.ker
         (mixedEndpointActiveLocalInteraction A₀ A₁ (mixedEndpointActiveEdgeStart p)) ↔ _
-  rw [mem_ker_mixedEndpointActiveLocalInteraction_iff_normalized,
+  rw [mem_ker_mixedEndpointActiveLocalInteraction_iff_normalized A₀ A₁ hA₀,
     LinearEquiv.apply_symm_apply]
 
 /-- The reverse canonical deformation recovers the actual compressed
@@ -628,7 +628,7 @@ theorem mixedEndpointActiveHamiltonian_eq_sum_deformed_normalized
       ∑ p : MixedEndpointActiveEdgeSite N,
         (activeBoundaryNormalizationEquivES A₀ hA₀ (N + 1)).deformedConstraintProjection
           (mixedEndpointActiveNormalizedLocalInteraction A₀ p) := by
-  simpa only [activeBoundaryNormalization_deformed_normalizedLocal_eq_actual] using
+  simpa only [activeBoundaryNormalization_deformed_normalizedLocal_eq_actual A₀ A₁ hA₀] using
     mixedEndpointActiveHamiltonian_eq_sum_edges A₀ A₁ N
 
 /-- The normalized sum is positive as a sum of the concrete placed core

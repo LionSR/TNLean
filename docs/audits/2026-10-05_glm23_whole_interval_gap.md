@@ -98,3 +98,31 @@ proof bodies are preserved, and all 378 public owners remain unchanged.
 The draft therefore has 27 production modules: the eight checked hashes
 above and nineteen modules still requiring validation. No compilation
 credit is inferred from this source-only structural split.
+
+## Subsequent compiler checkpoint: 2026-10-05 22:36 UTC
+
+The published `7d39eed` head's workflow did not reach Lean compilation:
+its starting job was cancelled during the GitHub Actions incident. Those
+cancellations are not evidence of a mathematical or compiler failure.
+
+Local validation subsequently compiled the repaired
+`MixedEndpointActiveEdgePlacement` (SHA-256
+`faf560f28f995057a24521a7a527c0e25df5c75c2a16133aa05e935d7392af31`),
+plus `MixedEndpointRightComparison` and `RingEndpointRightComparison`.
+The first full check of `MixedEndpointActiveEdgeNormalization` found
+coordinate-projection argument, definitional-coercion, and explicit-argument
+errors. This batch repairs those proof terms without changing its theorem
+statements. Its strict follow-up check lost the executor connection without
+a terminal result; no compilation pass is credited to that repair.
+The final normalization hash under review is
+`548d6e29cf4de5e0f28e7596c5b5fe322b9daf4be3e2920585254c132bd0079d`.
+The downstream open-gap and whole-path conclusions remain unverified until
+fresh exact-head CI succeeds, including both guarded regression files.
+
+This batch also narrows the imports of `PhysicalGibbsEmbedding` to its
+actual algebraic dependencies and makes `TopologicalPhysicalGibbs` import
+its domain-specific prerequisite explicitly. The former's unchanged body
+passed a strict check and a targeted build. The exposed scalar-inner-product
+proof in `BondProductSpectralGap` is repaired using explicit inner-product
+identities; its statement is unchanged and its strict check and targeted
+build passed. No toolchain or dependency pin changes are included.
