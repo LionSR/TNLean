@@ -96,9 +96,9 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
     have hspec := hK j k x y x' y'
     by_cases hjk : j = k
     · subst k
-      simpa only [dif_pos rfl] using hspec
+      simpa only [dite_eq_left rfl] using hspec
     · have hne' : e.symm j ≠ e.symm k := e.symm.injective.ne hjk
-      simpa only [dif_neg hjk, dif_neg hne'] using hspec
+      simpa only [dite_eq_right hjk, dite_eq_right hne'] using hspec
 
 private theorem gaugePhaseEquiv_of_operatorPhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hD : D₁ = D₂) {O : MPOTensor d D₁} {P : MPOTensor d D₂}

@@ -78,6 +78,7 @@ theorem triangular_printedFMatrix_eq_actionLMatrix
   congr 1
   congr 1
   ext u v
+  change Fin (D y) at u v
   simp only [Matrix.mul_apply]
   refine Fintype.sum_equiv
     ((Equiv.prodCongr (finProdFinEquiv : Fin (χ a) × Fin (χ b) ≃ Fin (χ a * χ b))
@@ -94,6 +95,8 @@ theorem triangular_printedFMatrix_eq_actionLMatrix
         (finProdFinEquiv (finProdFinEquiv (xa, xb), xx)) *
       fusionThenActionSynthesis WF WA a b x ⟨⟨c, mu⟩, y, k⟩
         (finProdFinEquiv (finProdFinEquiv (xa, xb), xx)) v
-  rw [sequentialActionAnalysis_apply, fusionThenActionSynthesis_apply]
+  exact congrArg₂ (· * ·)
+    (sequentialActionAnalysis_apply VA a b x y z i j xa xb xx u).symm
+    (fusionThenActionSynthesis_apply WF WA a b c x y mu k xa xb xx v).symm
 
 end MPOTensor

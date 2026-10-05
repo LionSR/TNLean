@@ -48,13 +48,14 @@ theorem globalPhysicalMap_one :
     LinearMap.id_apply, LinearEquiv.symm_apply_apply]
 
 /-- Composition of global physical maps is pointwise composition of their matrices. -/
-theorem globalPhysicalMap_comp (F L : V → Matrix (Fin d) (Fin d) ℂ) :
+theorem globalPhysicalMap_comp {e f : ℕ}
+    (F : V → Matrix (Fin f) (Fin e) ℂ) (L : V → Matrix (Fin e) (Fin d) ℂ) :
     globalPhysicalMap F ∘ₗ globalPhysicalMap L = globalPhysicalMap (fun v => F v * L v) := by
   apply LinearMap.ext
   intro ψ
-  change (fullRegionPhysicalEquiv d).symm
-    (regionPhysicalMap Finset.univ F ((fullRegionPhysicalEquiv d)
-      ((fullRegionPhysicalEquiv d).symm
+  change (fullRegionPhysicalEquiv f).symm
+    (regionPhysicalMap Finset.univ F ((fullRegionPhysicalEquiv e)
+      ((fullRegionPhysicalEquiv e).symm
         (regionPhysicalMap Finset.univ L (fullRegionPhysicalEquiv d ψ))))) = _
   rw [LinearEquiv.apply_symm_apply, ← LinearMap.comp_apply, regionPhysicalMap_comp]
   rfl

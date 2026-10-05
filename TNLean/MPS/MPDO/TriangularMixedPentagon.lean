@@ -71,6 +71,7 @@ theorem triangular_inversePrintedFMatrix_eq_fusionFMatrix
   rw [(F).inversePrintedFMatrix_eq_inv_dim_mul_trace]
   rfl
 
+include hD hT hVW hK in
 /-- The actual normalized-trace fusion/action coefficients obey the typed
 GLM23 mixed pentagon. Both sides are derived from exact fourfold tree
 comparison; every intermediate index runs over its actual multiplicity

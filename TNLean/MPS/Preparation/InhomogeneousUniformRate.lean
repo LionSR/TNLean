@@ -56,7 +56,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from
   classical
   obtain ⟨Cb, hCb⟩ := exists_isPreparedInDepth_of_isPairApproximable d D
   obtain ⟨Ce, hCe⟩ := exists_isPreparedInDepth_normalizedChainState d D hd
-  let a : ℝ := (k + 1) / r
+  let a : ℝ := max (k : ℝ) 1 / r
   let b : ℝ := max (Real.log K) 0 / r + 3 * D + 1
   have ha : 0 < a := by dsimp [a]; positivity
   have hb : 1 ≤ b := by
@@ -124,22 +124,8 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from
       calc (Cb : ℝ) * (2 * q) ≤ 4 * Cb * Q := by nlinarith
         _ ≤ 4 * Cb * (c₀ * Real.log (N / ε)) := by gcongr
         _ ≤ (4 * Cb * c₀ + Ce * c₀) * Real.log (N / ε) := by nlinarith
-    · apply mul_mul_exp_neg_le_of_log_le hK (pow_pos hNpos' k) hε
-      rw [Real.log_pow]
-      have hrQ : r * Q = (k + 1) * Real.log (N / ε) + max (Real.log K) 0 +
-          r * (3 * D + 1) := by
-        dsimp [Q, a, b]
-        field_simp
-        ring
-      have hlogN : 0 ≤ Real.log (N : ℝ) := Real.log_nonneg (by linarith)
-      have hlogε : Real.log ε ≤ 0 := Real.log_nonpos hε.le hε1
-      have hprod : (k : ℝ) * Real.log ε ≤ 0 :=
-        mul_nonpos_of_nonneg_of_nonpos (Nat.cast_nonneg _) hlogε
-      rw [Real.log_div hNpos'.ne' hε.ne'] at hrQ
-      have hq : r * Q ≤ r * q := mul_le_mul_of_nonneg_left hQq hr.le
-      have hmax := le_max_left (Real.log K) 0
-      have hD0 : (0 : ℝ) ≤ D := Nat.cast_nonneg _
-      nlinarith
+    · exact mul_pow_mul_exp_neg_le_of_le hK hr (by linarith) hε hε1
+        (le_refl a) (by dsimp [b]; have := Nat.cast_nonneg (α := ℝ) D; linarith) hQq
   · obtain ⟨T, hT, hprep⟩ := hCe N (zeroPad (A N)) (by
       rw [← state_eq_chainState]
       exact norm_ne_zero_iff.mp hn)

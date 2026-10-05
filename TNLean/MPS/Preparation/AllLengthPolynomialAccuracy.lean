@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Order.Floor.Semiring
 import TNLean.MPS.Preparation.LogDepthPreparation
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Polynomial accuracy at every sufficiently large chain length
@@ -30,27 +31,6 @@ namespace MPSPreparation
 /-- The logarithmic block length prescribed after Lemma 1 of arXiv:2307.01696. -/
 noncomputable def polynomialBlockLength (ξ η : ℝ) (N : ℕ) : ℕ :=
   ⌈2 * ξ * (1 + η) * Real.log N⌉₊
-
-/-- Absorb the remainder into the final block, as in arXiv:2307.01696,
-Supplemental Material, proof of Theorem 1. -/
-def remainderBlockLengths (q N : ℕ) (k : Fin (N / q)) : ℕ :=
-  if k.val + 1 = N / q then q + N % q else q
-
-/-- The remainder-absorbing blocks partition the chain whenever `0 < q ≤ N`.
-Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1. -/
-theorem sum_remainderBlockLengths {q N : ℕ} (hq : 0 < q) (hqN : q ≤ N) :
-    ∑ k, remainderBlockLengths q N k = N := by
-  obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-    ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq)).symm⟩
-  unfold remainderBlockLengths
-  rw [hm, Fin.sum_univ_castSucc]
-  simp only [Fin.val_castSucc, Fin.val_last]
-  have hcast : ∀ k : Fin m, ¬k.val + 1 = m + 1 := fun k => by omega
-  simp only [hcast, ite_false, ite_true, Finset.sum_const, Finset.card_univ,
-    Fintype.card_fin, smul_eq_mul]
-  have := Nat.div_add_mod N q
-  rw [hm] at this
-  nlinarith
 
 /-- The actual all-length approximation: apply each block's polar partial isometry to the
 fixed-point pairs, or use the exact normalized state when the prescribed block is longer
@@ -178,13 +158,8 @@ theorem exists_isPreparedInDepth_allLengthPolynomialState {d D : ℕ} (A : MPSTe
   · let ℓ := remainderBlockLengths q N
     have hsum := sum_remainderBlockLengths hq0 hqN
     have : NeZero (N / q) := ⟨(Nat.div_pos hqN hq0).ne'⟩
-    have hℓq : ∀ k, q ≤ ℓ k := fun k => by
-      dsimp [ℓ, remainderBlockLengths]
-      split_ifs <;> omega
-    have hℓ2 : ∀ k, ℓ k ≤ 2 * q := fun k => by
-      have := Nat.mod_lt N hq0
-      dsimp [ℓ, remainderBlockLengths]
-      split_ifs <;> omega
+    have hℓq : ∀ k, q ≤ ℓ k := le_remainderBlockLengths q N
+    have hℓ2 : ∀ k, ℓ k ≤ 2 * q := fun k => (remainderBlockLengths_lt_two_mul hq0 k).le
     have hinjℓ : ∀ k, Kraus.IsInjective (blockTensor A (ℓ k)) :=
       fun k => hinj _ (hLq.trans (hℓq k))
     have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by

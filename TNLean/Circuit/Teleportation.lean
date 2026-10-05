@@ -13,3 +13,4 @@ import TNLean.Circuit.Teleportation.Hop
 import TNLean.Circuit.Teleportation.LongRangeGates
 import TNLean.Circuit.Teleportation.RegisterGates
 import TNLean.Circuit.Teleportation.Round
+import TNLean.Circuit.Teleportation.ZeroSubspace

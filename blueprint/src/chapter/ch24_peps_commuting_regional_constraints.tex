@@ -1,0 +1,344 @@
+\subsection{Commuting constraints on overlapping regions}
+
+Let $\Gamma=(V,E)$ be a finite simple graph, with an orientation chosen only to name
+the two ends of each edge, and let $G$ be a finite group. A half-edge
+configuration assigns $\alpha_{v,e}\in G$ to each incident pair $(v,e)$.
+For a region $R\subseteq V$, keep every half-edge at its vertices, including
+those crossing its boundary. Independent vertex and shared-edge translations
+act by
+\begin{align}
+    (L_k\alpha)_{v,e} & =k_v\alpha_{v,e}, &
+    (T_r\alpha)_{v,e} & =\alpha_{v,e}r_e.
+    \label{eq:peps_regional_left_right_actions}
+\end{align}
+Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
+
+\begin{definition}[Translations and regional averages]%
+    \label{def:peps_regional_translation_averages}
+    \lean{TNLean.PEPS.regularRegionHalfEdgeRightEquiv,
+        TNLean.PEPS.regularRegionHalfEdgeRightEquiv_apply,
+        TNLean.PEPS.regularRegionEdgeAverage}
+    \leanok
+    Write $U_k\ket\alpha=\ket{L_k\alpha}$ and
+    $W_r\ket\alpha=\ket{T_r\alpha}$ for the permutation operators.
+    The inverse of $T_r$ is $T_{r^{-1}}$. If $r^{e,g}$ equals $g$ at $e$
+    and $1$ elsewhere, define
+    \begin{align}
+        B_{R,e} & =\frac{1}{|G|}\sum_{g\in G}W_{r^{e,g}}, &
+        P_R     & =\frac{1}{|G|^{|R|}}\sum_{k\in G^R}U_k.
+        \label{eq:peps_regional_translation_averages}
+    \end{align}
+    Here $e$ may be internal, boundary, or disjoint from $R$; in the last
+    case $B_{R,e}=I$. The operator $P_R$ is the tensor product of the
+    local regular invariant projectors $P_v$.
+\end{definition}
+
+\begin{definition}[Flat regional half-edge configurations]%
+    \label{def:peps_regional_half_edge_flat}
+    \lean{TNLean.PEPS.IsRegularRegionHalfEdgeFlat,
+        TNLean.PEPS.regularRegionFlatProjector}
+    \leanok
+    A configuration is flat on $R$ if there are $k_v\in G$ such that
+    $k_v^{-1}\alpha_{v,e}=k_w^{-1}\alpha_{w,e}$ on every internal edge
+    $e=(v,w)$. Write $D_R$ for the diagonal projector onto these configurations.
+    This is the trivial internal holonomy condition in regular coordinates
+    \cite[Section~6]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Commutation of regional translations and flat support]%
+    \label{thm:peps_regional_translation_commutation}
+    \lean{TNLean.PEPS.regularRegionHalfEdgeRightEquiv_commute_gauge,
+        TNLean.PEPS.regularRegionHalfEdgeRightMatrix_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionHalfEdgeRightMatrix_commute_localProjector,
+        TNLean.PEPS.isRegularRegionHalfEdgeFlat_rightMul_iff,
+        TNLean.PEPS.isRegularRegionHalfEdgeFlat_gauge_iff,
+        TNLean.PEPS.regularRegionFlatProjector_commute_right,
+        TNLean.PEPS.regularRegionFlatProjector_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionFlatProjector_commute_localProjector,
+        TNLean.PEPS.regularRegionEdgeAverage_commute_flatProjector,
+        TNLean.PEPS.regularRegionEdgeAverage_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionEdgeAverage_commute_localProjector,
+        TNLean.PEPS.regularRegionEdgeAverage_commute}
+    \leanok
+    \uses{def:peps_regional_translation_averages,def:peps_regional_half_edge_flat}
+    For every $k,r$, the permutations $L_k,T_r$ commute, and flatness of
+    $\alpha$, $L_k\alpha$, and $T_r\alpha$ is equivalent. Consequently
+    $W_r$ commutes with $U_k$ and $P_R$, and $D_R$ commutes with
+    $W_r$, $U_k$, and $P_R$. Each $B_{R,e}$ commutes with $D_R$, $U_k$,
+    $P_R$, and every $B_{R,f}$, without an abelian assumption on $G$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Associativity proves $(k_v\alpha_{v,e})r_e=k_v(\alpha_{v,e}r_e)$.
+    Right cancellation preserves each flatness equality under $T_r$.
+    If $q$ witnesses flatness of $\alpha$, then $kq$ witnesses flatness
+    of $L_k\alpha$; apply the inverse translation for the converse.
+    A diagonal indicator commutes with a permutation preserving its support.
+    Averaging gives the assertions involving $P_R$ and $B_{R,e}$.
+    For $e\ne f$, the right translations act on distinct half-edge
+    coordinates; for $e=f$, the two averages are the same operator.
+\end{proof}
+
+\begin{definition}[Internal quotients and incident references]%
+    \label{def:peps_regional_quotient_coordinates}
+    \lean{TNLean.PEPS.RegularRegionInternalEdge,
+        TNLean.PEPS.regularRegionInternalExtension,
+        TNLean.PEPS.regularRegionHalfEdgesOfBonds,
+        TNLean.PEPS.regularRegionHalfEdgeQuotients,
+        TNLean.PEPS.regularRegionHalfEdgeReferences,
+        TNLean.PEPS.regularRegionHalfEdgesOfBonds_tail,
+        TNLean.PEPS.regularRegionHalfEdgesOfBonds_head,
+        TNLean.PEPS.regularRegionHalfEdgeConfigEquiv,
+        TNLean.PEPS.regularRegionCanonicalReferences,
+        TNLean.PEPS.regularRegionReferenceBoundary}
+    \leanok
+    Let $E_R$ and $\partial E_R$ denote the internal and boundary edges,
+    and let $I_R=E_R\sqcup\partial E_R$. Extend $u\in G^{E_R}$ to
+    $\bar u\in G^E$ by $1$ outside $E_R$. Given $\eta\in G^{I_R}$,
+    define $b(u,\eta)$ on an oriented internal edge $e=(v,w)$ by
+    \begin{align}
+        b(u,\eta)_{v,e} & =\eta_e,    &
+        b(u,\eta)_{w,e} & =u_e\eta_e.
+        \label{eq:peps_regional_quotient_coordinates}
+    \end{align}
+    At the unique regional endpoint of a boundary edge its label is $\eta_e$.
+    This parametrization is a bijection. Its inverse has
+    $u_e=\alpha_{w,e}\alpha_{v,e}^{-1}$ and reference $\eta_e$ at the tail
+    if the tail lies in $R$, and at the head otherwise.
+    For $\theta\in G^{\partial E_R}$, let $\eta^\theta$ equal $1$ internally
+    and $\theta$ on the boundary, and write $b(u,\theta)=b(u,\eta^\theta)$.
+    The boundary restriction of an arbitrary reference is
+    $\theta=\eta|_{\partial E_R}$.
+\end{definition}
+
+\begin{theorem}[Normalization of internal references]%
+    \label{thm:peps_regional_reference_normalization}
+    \lean{TNLean.PEPS.regularRegionHalfEdgesOfBonds_right_normalize,
+        TNLean.PEPS.regularRegionHalfEdgesOfBonds_apply_of_rightInvariant}
+    \leanok
+    \uses{def:peps_regional_quotient_coordinates,def:peps_regional_translation_averages}
+    For $r_e=\eta_e$ on $E_R$ and $r_e=1$ elsewhere,
+    $T_r b(u,\eta|_{\partial E_R})=b(u,\eta)$.
+    Thus, if $f(T_r\alpha)=f(\alpha)$ for all right translations trivial
+    on the boundary, then $f(b(u,\eta))=f(b(u,\eta|_{\partial E_R}))$.
+\end{theorem}
+
+\begin{proof}\leanok
+    On an internal edge the two labels become $1\eta_e$ and $u_e\eta_e$;
+    the boundary labels do not change. Apply the assumed invariance.
+\end{proof}
+
+\begin{theorem}[Expansion in inserted regional columns]%
+    \label{thm:peps_regional_invariant_expansion}
+    \lean{TNLean.PEPS.sum_regularRegionProjectorProduct_eq,
+        TNLean.PEPS.eq_sum_regularProjectorTwistedRegionMatrix_of_invariant}
+    \leanok
+    \uses{def:peps_regional_translation_averages,def:peps_regional_quotient_coordinates}
+    Let $\Gamma_R(u)$ denote the open contraction with internal insertions
+    $u$ and identity insertions elsewhere. If $f$ is left-vertex invariant,
+    then $P_Rf=f$, or, coefficientwise,
+    \begin{align}
+        \sum_\beta f(\beta)\prod_{v\in R}P_v(\alpha_v,\beta_v) & =f(\alpha).
+        \label{eq:peps_regional_left_average_fixed}
+    \end{align}
+    If $f$ is also invariant under right translations trivial on the
+    boundary, then, without any support assumption,
+    \begin{align}
+        f & =\sum_{u\in G^{E_R}}\sum_{\theta\in G^{\partial E_R}}
+        f(b(u,\theta))\,\Gamma_R(u)\ket\theta.
+        \label{eq:peps_regional_supported_orbit_expansion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regional_reference_normalization}
+    Expand $P_R$ as $|G|^{-|R|}\sum_k U_k$.
+    Each summand fixes $f$, proving (\ref{eq:peps_regional_left_average_fixed}).
+    Reindex its sum over $\beta$ by the bijection $(u,\eta)\mapsto b(u,\eta)$.
+    Theorem~\ref{thm:peps_regional_reference_normalization} replaces the
+    coefficient by $f(b(u,\eta|_{\partial E_R}))$.
+    Grouping reference assignments with the same boundary restriction gives
+    exactly the shared-bond sum defining $\Gamma_R(u)\ket\theta$.
+\end{proof}
+
+\begin{theorem}[Removing flat internal insertions]%
+    \label{thm:peps_regional_flat_column_transport}
+    \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_regionGauge,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_eq_open_of_flat,
+        TNLean.PEPS.exists_regularRegionGaugeResidual_eq_one_of_flat}
+    \leanok
+    \uses{def:peps_regional_quotient_coordinates,def:peps_regional_half_edge_flat}
+    Allow an insertion $u_e$ on every edge. For a vertex assignment $k$, set
+    $u^k_e=k_w^{-1}u_ek_v$ on internal edges $e=(v,w)$ and $u^k_e=1$
+    elsewhere. On a boundary edge define
+    \begin{align}
+        (\tau_{k,u}\theta)_e & =
+        \begin{cases}
+            k_v^{-1}\theta_e,    & v\in R,\ w\notin R, \\
+            k_w^{-1}u_e\theta_e, & v\notin R,\ w\in R.
+        \end{cases}
+        \label{eq:peps_regional_column_boundary_transport}
+    \end{align}
+    Writing $\Gamma_R[u]$ for this general inserted contraction gives
+    $\Gamma_R[u]\ket\theta=\Gamma_R[u^k]\ket{\tau_{k,u}\theta}$.
+    If all internal residuals $k_w^{-1}u_ek_v$ are $1$, this is an untwisted
+    column $\Gamma_R\ket{\tau_{k,u}\theta}$.
+    In particular, flatness of $b(u,\theta)$ supplies such a $k$ for $\bar u$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Change the incident bond variable to $k_v^{-1}\eta_e$ when the tail
+    belongs to $R$, and to $k_w^{-1}u_e\eta_e$ otherwise.
+    This is a bijection and restricts to $\tau_{k,u}$ on the boundary.
+    Internally the transformed head label is
+    $(k_w^{-1}u_ek_v)(k_v^{-1}\eta_e)=k_w^{-1}u_e\eta_e$.
+    Left invariance of each local regular projector therefore preserves
+    each product in the bond sum. If the residuals are $1$, all new
+    insertions are $1$. For $b(u,\theta)$, the flatness equations read
+    $k_v^{-1}=k_w^{-1}u_e$, which give $k_w^{-1}u_ek_v=1$.
+\end{proof}
+
+\begin{theorem}[The actual regional range in regular coordinates]%
+    \label{thm:peps_regional_range_invariant_flat}
+    \lean{TNLean.PEPS.mem_regularProjectorOpenRegionRange_iff,
+        TNLean.PEPS.mem_regularProjectorOpenRegionRange_of_invariant_flat,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix_eq_zero_of_not_flat,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix_gauge}
+    \leanok
+    \uses{def:peps_regional_half_edge_flat}
+    Let $\Gamma_R$ be the actual open-region contraction of the local regular
+    averaging projectors, with its original independent boundary labels. A
+    function $f$ on the half-edge configurations belongs to
+    $\operatorname{range}\Gamma_R$ exactly when
+    \begin{enumerate}
+        \item $f(L_k\alpha)=f(\alpha)$ for every vertex assignment $k$ on $R$;
+        \item $f(T_r\alpha)=f(\alpha)$ whenever $r_e=1$ on every boundary edge;
+        \item $f(\alpha)=0$ whenever $\alpha$ is not flat on $R$.
+    \end{enumerate}
+    The region need not be connected.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regional_invariant_expansion,thm:peps_regional_flat_column_transport}
+    Apply the expansion (\ref{eq:peps_regional_supported_orbit_expansion}).
+    If a coefficient is nonzero, flat support supplies a vertex gauge
+    removing its internal insertions. By
+    Theorem~\ref{thm:peps_regional_flat_column_transport}, its column is
+    $\Gamma_R\ket{\theta'}$ for a transported boundary label $\theta'$.
+    Every summand therefore lies in $\operatorname{range}\Gamma_R$.
+
+    Conversely, each original column is left invariant by the local regular
+    average and right invariant by a change of its shared internal bond
+    variables. Its coefficient can be nonzero only if
+    $\alpha_{v,e}=k_v\eta_e$ for some vertex and shared-edge labels. Those
+    labels witness flatness. Linear combinations preserve all three conditions.
+\end{proof}
+
+\begin{definition}[Ambient regional constraints]%
+    \label{def:peps_ambient_regional_constraints}
+    \lean{TNLean.PEPS.regularGlobalVertexAverage,
+        TNLean.PEPS.regularGlobalVertexPermutation,
+        TNLean.PEPS.restrictRegularRegionHalfEdges,
+        TNLean.PEPS.regularGlobalConstraint,
+        TNLean.PEPS.regularGlobalRegionFlatProjector,
+        TNLean.PEPS.regularGlobalRegionConstraint}
+    \leanok
+    \uses{def:peps_regional_half_edge_flat}
+    Work on the half-edge space of the whole graph. Restriction to $R$
+    retains every half-edge at its vertices, including dangling boundary legs.
+    Let $\rho_v(g)$ multiply all labels at $v$ by $g$ on the left;
+    $\rho_v(gh)=\rho_v(g)\rho_v(h)$. Let $A_v$ average these permutation
+    operators, and set $B_e=B_{V,e}$. Let $D_R$ be the diagonal indicator
+    of flatness of the restriction to $R$. Index the three families by
+    $i\in V\sqcup E\sqcup\mathcal P(V)$, writing $C_v=A_v$, $C_e=B_e$,
+    and $C_R=D_R$. Set
+    \begin{align}
+        Q_R=\left(\prod_{v\in R} A_v\right)
+        \left(\prod_{e\subseteq R} B_e\right)D_R.
+        \label{eq:peps_ambient_regional_constraint}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Orthogonal regional constraints]%
+    \label{thm:peps_ambient_regional_constraint_projection}
+    \lean{TNLean.PEPS.regularRegionEdgeAverage_isStarProjection,
+        TNLean.PEPS.regularRegionEdgeAverage_mul_self,
+        TNLean.PEPS.regularRegionEdgeAverage_isHermitian,
+        TNLean.PEPS.regularRegionFlatProjector_isStarProjection,
+        TNLean.PEPS.regularGlobalVertexAverage_isStarProjection,
+        TNLean.PEPS.regularGlobalRegionFlatProjector_isStarProjection,
+        TNLean.PEPS.regularGlobalConstraint_isStarProjection,
+        TNLean.PEPS.regularGlobalConstraint_list_prod_isStarProjection,
+        TNLean.PEPS.regularGlobalConstraint_list_prod_mulVec_eq_self_iff,
+        TNLean.PEPS.regularGlobalRegionConstraint_isStarProjection,
+        TNLean.PEPS.regularGlobalRegionConstraint_mulVec_eq_self_iff}
+    \leanok
+    \uses{def:peps_ambient_regional_constraints}
+    The regional matrices $B_{R,e}$ and $D_R$ are self-adjoint idempotents.
+    On the ambient space, every $C_i$ is an orthogonal projector, as is
+    every finite ordered product $C_{i_1}\cdots C_{i_n}$, allowing repetitions
+    and the empty product. Its fixed space is
+    $\bigcap_{j=1}^n\ker(C_{i_j}-I)$.
+    In particular, $Q_R$ is an orthogonal projector. It fixes exactly the vectors
+    fixed by every $A_v$ with $v\in R$, every $B_e$ with $e\subseteq R$,
+    and $D_R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_ambient_regional_constraint_commute}
+    For a right-edge permutation matrix $M_g$ one has
+    $M_gM_h=M_{hg}$ and $M_g^*=M_{g^{-1}}$. Reindexing $h\mapsto hg$
+    in the double average gives $B_{R,e}^2=B_{R,e}$; reindexing
+    $g\mapsto g^{-1}$ gives $B_{R,e}^*=B_{R,e}$.
+    The vertex average is the finite-group average of the unitary
+    representation $\rho_v$. Each flatness matrix is diagonal with entries
+    $0$ or $1$.
+    Products of commuting orthogonal projections are orthogonal projections.
+    If $P$ and $Q$ are commuting idempotents and $PQx=x$, then
+    $Px=P^2Qx=PQx=x$ and $Qx=PQ^2x=x$. Applying this identity successively
+    gives the stated common fixed space.
+\end{proof}
+
+\begin{theorem}[Commutation for arbitrary overlapping regions]%
+    \label{thm:peps_ambient_regional_constraint_commute}
+    \lean{TNLean.PEPS.regularGlobalConstraint_commute,
+        TNLean.PEPS.regularGlobalRegionFlatProjector_commute_right,
+        TNLean.PEPS.regularGlobalRegionFlatProjector_commute_vertexTranslation,
+        TNLean.PEPS.regularGlobalRegionFlatProjector_commute,
+        TNLean.PEPS.regularGlobalRegionFlatProjector_commute_vertexAverage,
+        TNLean.PEPS.regularGlobalRegionFlatProjector_commute_edgeAverage,
+        TNLean.PEPS.regularGlobalVertexAverage_commute_edgeAverage,
+        TNLean.PEPS.regularGlobalVertexAverage_commute,
+        TNLean.PEPS.regularGlobalConstraint_list_prod_commute,
+        TNLean.PEPS.regularGlobalRegionConstraint_commute}
+    \leanok
+    \uses{def:peps_ambient_regional_constraints}
+    Every ambient $D_R$ commutes with all shared right translations and
+    all left vertex translations, hence with every $B_e$ and $A_v$.
+    The matrices $D_R,D_S$ commute for arbitrary $R,S$, as do $A_v,A_w$
+    and $A_v,B_e$. Thus $C_iC_j=C_jC_i$ for all constraint indices.
+    Any two finite ordered products of these constraints commute.
+    In particular, $Q_RQ_S=Q_SQ_R$ for arbitrary regions $R,S$.
+    This is the regular virtual-coordinate calculation in the proof of
+    \cite[Theorem~6.12]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Different vertex averages act on different coordinates. Different edge
+    averages also act on different coordinates, even when their edges share
+    a vertex. Coincident averages are identical. Every vertex translation
+    commutes with every shared right translation by
+    (\ref{eq:peps_regional_left_right_actions}).
+
+    Flatness on $R$ is preserved by arbitrary shared right translations:
+    both sides of each internal equality acquire the same right factor.
+    It is also preserved by arbitrary vertex translations, by changing its
+    witnessing gauge. Thus $D_R$ commutes with every $A_v$ and every $B_e$,
+    including those outside $R$. Two flatness projectors commute because
+    they are diagonal. Every factor in $Q_R$ therefore commutes with every
+    factor in $Q_S$.
+\end{proof}
+
+% Physical transport of these actual regional range projectors through arbitrary
+% G-isometric site maps remains separate. Do not attach a full Theorem 6.12
+% completion tag here before that transport is proved.

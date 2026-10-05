@@ -6,8 +6,9 @@ This additive source package follows the boundary L-matrix package at published
 head `c708e9119275d0015e7430a92b16a0fa362a9c85`, exact tree
 `4e8d709a172965b110739dc5b4b82087e394899b`. The local source-only worktree starts
 from commit `e6a935cd3049eadec80ebedb0c45e5d019c43e46` with that same tree.
-No existing production theorem, router, workflow, dependency pin, or source
-correction note is changed.
+The integrated package adds production imports, blueprint routing, regression CI
+coverage, and a correction-note status update. Existing production theorem
+statements and dependency pins remain unchanged.
 
 The source is Garre-Rubio--Lootens--Molnár, arXiv:2203.12563v3,
 `REsubmission.tex`: `algcond`, `eq:compatible`, `Fsymbolsdef`, `eq:F_symbol2`,

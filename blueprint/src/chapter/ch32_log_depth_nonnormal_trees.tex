@@ -1,0 +1,188 @@
+\section{Non-normal canonical states in double-logarithmic depth}
+\label{sec:ldp_nonnormal_trees}
+
+The paragraph ``Tree-RG circuit with measurements'' of
+\cite{Malz2024Preparation} gives double-logarithmic depth for short-range
+correlated states. Its paragraph ``Long-range MPS using measurements''
+prepares coherent sector labels before the blocked isometries. Combining
+these constructions on their common virtual support extends the
+measurement-assisted depth bound to the canonical non-normal class below.
+This is an enhancement of those constructions, not a claim that the source
+already proves the all-length statement in this form.
+
+\begin{theorem}[Inequivalence gives the mixed eigenvalue gap]
+    \label{thm:ldp_inequivalent_mixed_gap}
+    \lean{MPSTensor.mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one,
+        MPSTensor.mixedMap_eigenvalue_norm_lt_one_of_normal_inequivalent}
+    \leanok
+    Let $A_j,A_k$ be normal left-canonical blocks of positive bond dimensions.
+    If their dimensions agree, assume they are not gauge-phase equivalent.
+    Every eigenvalue of their mixed transfer map has modulus less than one.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Normality implies irreducibility. The mixed-transfer spectral-radius
+    theorem gives a strict gap, both for inequivalent square blocks and for
+    different bond dimensions. An eigenvalue belongs to the spectrum of
+    the mixed map and hence its modulus is bounded by that spectral radius.
+\end{proof}
+
+\begin{theorem}[Coherent supported block trees from sparse labels]
+    \label{thm:ldp_coherent_supported_blocks}
+    \lean{QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.apply_implementation,
+        MPSPreparation.exists_pairFamilyUnitary,
+        MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported,
+        MPSPreparation.pairLayerOp_mulVec_registerCfg_eq,
+        MPSPreparation.blockLayerOp_pairLayerOp_mulVec_registerCfg,
+        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState,
+        MPSPreparation.exists_supported_block_preparation_constants}
+    \leanok
+    \uses{thm:ldp_sparse_window_ghz, thm:ldp_supported_tree_rounds,
+        lem:ldp_balanced_widths}
+    Fix $d\ge2$, a tensor $B$, a set $S$ of virtual pairs, an eventual
+    support-injectivity threshold $L$, and a bound on the number of sector
+    labels. There are $s\ge\max(2,L)$ and $C$, fixed before the ring and
+    amplitudes, with the following property. Suppose
+    \begin{align*}
+        2^{h+2}s\le\ell_k\le2^{h+1}(8s).
+    \end{align*}
+    Let the pairs $\omega_j$ be orthonormal and $\sum_j|\alpha_j|^2=1$.
+    Assume that, at the actual number $M$ of blocks, each product of the
+    cyclic pairs $\omega_j$ is supported on $S^M$. Then
+    \begin{align*}
+        \sum_j\alpha_j\Bigl(\bigotimes_kV_{\ell_k}\Bigr)
+        \bigotimes_k\ket{\omega_j}_{R_kL_{k+1}}
+    \end{align*}
+    is prepared in quantum depth at most $C(h+1)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The sparse GHZ construction has depth independent of the block lengths.
+    A single bounded-window unitary maps every encoded label $j$ to
+    $\omega_j$, preserving all coherent amplitudes. The bond encodings have
+    a final zero site. Thus their full physical configurations agree exactly
+    with the tree-root windows even when an odd block leaves one terminal
+    site outside the even leaf cutoff. The pair layer leaves all tree
+    interior scratch sites zero, so the supported compiler applies.
+    Compose the actual rounds and add their depths. For a fixed outcome
+    history, its scalar is common to all inputs in the zero-scratch
+    subspace. The endpoint specifies every physical site.
+\end{proof}
+
+\begin{theorem}[All-length compilation of exponential block approximations]
+    \label{thm:ldp_supported_loglog_compilation}
+    \lean{MPSPreparation.exists_log_log_preparation_of_supported_block_approximation,
+        MPSPreparation.natCast_mul_succ_le_mul_log,
+        MPSPreparation.exists_two_pow_le}
+    \leanok
+    \uses{thm:ldp_coherent_supported_blocks, lem:ldp_block_length_threshold_error}
+    Under the fixed tensor, support and eventual support-injectivity
+    assumptions of Theorem~\ref{thm:ldp_coherent_supported_blocks},
+    suppose a normalized target family has coherent supported block
+    approximations of error at most $KM e^{-rq}$ for block lengths
+    $\ell_k\ge q\ge L$, with $K,r>0$ independent of the amplitudes and
+    lengths. Suppose also that every admissible target of length $N\ge L$
+    has an exact normalized one-block supported pair. Then a fixed $c$
+    gives, for every admissible $N\ge2$ and $0<\varepsilon\le1$, a unit
+    approximant of error at most $\varepsilon$ prepared in depth
+    \begin{align*}
+        T\le c\log\bigl(1+\log(N/\varepsilon)\bigr).
+    \end{align*}
+    The one-block support assumption is required only for $M=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Take $q=\lceil a\log(N/\varepsilon)+b\rceil$, where $a=1/r$ and
+    $b\ge\max(\log K,0)/r+4s+1$. If $q\le N$, use $M=\lfloor N/q\rfloor$
+    blocks, the last of length $q+N\bmod q$ and all others of length $q$.
+    Choose $h$ with $2^{h+2}s\le q<2^{h+1}(4s)$. All block lengths satisfy
+    the previous theorem, and $KM e^{-rq}\le KN e^{-rq}\le\varepsilon$.
+
+    If $4s\le N<q$, use a whole-ring supported tree, with $h$ chosen from
+    $N$ rather than from $q$. Its root pair gives the target exactly.
+    In both branches $2^h\le q\le a\log(N/\varepsilon)+b+1$, so the
+    depth $C(h+1)$ has the required bound. For $N<4s$, exact synthesis
+    on finitely many possible lengths is absorbed into the constant,
+    since $\log(1+\log(N/\varepsilon))\ge\log(1+\log2)>0$.
+
+    % Formula: normalized target = Vhat_N eta_N on the one-block support.
+    % Source: supported polar factorization and the exact one-block pair.
+    % Boundary signature on each side: no input and one H_N physical output.
+    % Internal contraction: a chi-dimensional supported root state into Vhat_N.
+    % Vhat_N is the entire bounded-leaf tree, never a free N-site gate.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+                \tn[skin=box, ports={90:physical:$\mathcal H_N$}]{\widehat\phi_N}
+            \end{tenkz}
+            =
+            \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+                \tn[at=(1,1), skin=box, name=tree,
+                    ports={90:physical:$\mathcal H_N$,270:virtual}]{\widehat V_N}
+                \tn[at=(2,1), skin=box, name=root,
+                    ports={90:virtual:$\C^\chi$}]{\eta_N}
+                \tnwire{root.90}{tree.270}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+    Here $\widehat\phi_N=\phi_N/\|\phi_N\|$, and $\eta_N$ is the
+    normalized supported one-block input, including
+    the cyclic ordering of the two virtual legs. The box $\widehat V_N$
+    denotes the entire bounded-leaf tree, not one free $N$-site gate.
+\end{proof}
+
+\begin{theorem}[Non-normal canonical preparation in double-logarithmic depth]
+    \label{thm:ldp_nonnormal_loglog}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum,
+        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log,
+        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log_of_inequivalent}
+    \leanok
+    \uses{thm:ldp_inequivalent_mixed_gap, thm:ldp_supported_loglog_compilation,
+        def:ldp_repeated_block_sum, lem:ldp_common_mixed_gap,
+        lem:ldp_overlapping_block_injectivity, thm:ldp_overlapping_unequal_blocks_error,
+        lem:ldp_overlapping_one_block_chain}
+    Let
+    \begin{align*}
+        A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\ldots,\mu_{j,m_j})
+        \otimes A_j^i
+    \end{align*}
+    be the canonical repeated-block form, with normal inequivalent blocks
+    in the left-canonical gauge, and positive definite transfer fixed points
+    $\sigma_j$ of trace one. The copy weights are arbitrary nonzero complex
+    numbers under the existing convention that zero padding is omitted.
+    There is $c$, fixed before $N$ and $\varepsilon$, such that every
+    $N\ge2$ with $\phi_N(A)\ne0$ and every $0<\varepsilon\le1$ admit
+    a unit vector $\psi$ satisfying
+    \begin{align*}
+        1-|\langle\psi,\phi_N(A)/\|\phi_N(A)\|\rangle|\le\varepsilon,
+        \qquad T\le c\log\bigl(1+\log(N/\varepsilon)\bigr).
+    \end{align*}
+    The protocol prepares $\psi$ in measurement rounds of quantum depth $T$.
+    Finite-block physical ranges may overlap. Individual sums
+    $\beta_j(N)=\sum_k\mu_{j,k}^N$ may vanish.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Work with the unweighted direct sum $B=\bigoplus_jA_j$ and its
+    diagonal sector-pair support. The mixed gap gives eventual support
+    injectivity and the amplitude-uniform overlap estimate. Set
+    $\alpha_j=\beta_j/(\sum_l|\beta_l|^2)^{1/2}$; nonvanishing of the
+    target implies that the coefficient vector is nonzero, without
+    requiring each coefficient to be nonzero. The embedded fixed-point
+    pairs are orthonormal and their cyclic products have the required
+    support. The exact one-block pair supplies the short accuracy branch.
+    Apply Theorem~\ref{thm:ldp_supported_loglog_compilation}.
+
+    The intermediate theorem accepts any supplied identity
+    $\phi_N(A)=\sum_j\beta_j(N)\phi_N(A_j)$, so the coefficients need not
+    be powers for that interface. For the repeated-block form the trace
+    identity gives precisely the power sums above.
+\end{proof}
+
+Only nearest-neighbour unitary layers contribute to $T$. Measurements,
+classical communication and on-site corrections are free, the number of
+rounds may grow with the tree height, and no outcome is postselected.
+The theorem concerns the supplied canonical block class. Transport from
+an arbitrary original tensor, including its periodicity and blocking data,
+is a separate statement.
