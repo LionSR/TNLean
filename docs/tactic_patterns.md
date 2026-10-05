@@ -3435,18 +3435,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   are proved once in `DecayingCorrelations.lean`. The finite-size and clustering
   arguments use the reduction lemma instead of repeating the projection algebra.
 
-### Finite group fibers in local tensor isometries — candidate
-- **Pattern:** parameterize all preimages of a virtual label by one group
-  coordinate, use that coordinate as the inverse in a finite-sum bijection,
-  and evaluate the resulting weighted sum or fiber cardinality.
-- **Seen:** the dual tensor's `siteMap_quantumDoubleDualTensor_apply_spins`
-  argument in `TNLean/PEPS/Examples/QuantumDouble.lean` and the private
-  `primalLabels_fiber_sum` argument in
-  `TNLean/PEPS/Examples/ToricCodePrimal.lean` (2026-10-03).
-- **Notes:** these two occurrences have different label maps. The primal
-  parameterization is already shared by its weighted sum and fiber count;
-  no further abstraction is needed before a third distinct occurrence.
-
 ### Exponential error converted to polynomial accuracy — candidate
 - **Pattern:** bound the number of blocks by the chain length, compare the
   exponential rate using the logarithmic block-length threshold, and use
@@ -3476,6 +3464,18 @@ three-plaquette output measurement, and the routed reunion measurement.
   uses a logarithmic offset and does not cover that lower-bound argument.
   Retain the local proofs until a third occurrence identifies a common
   assertion.
+
+### Finite group fibers in local tensor isometries — candidate
+- **Pattern:** parameterize all preimages of a virtual label by one group
+  coordinate, use that coordinate as the inverse in a finite-sum bijection,
+  and evaluate the resulting weighted sum or fiber cardinality.
+- **Seen:** the dual tensor's `siteMap_quantumDoubleDualTensor_apply_spins`
+  argument in `TNLean/PEPS/Examples/QuantumDouble.lean` and the private
+  `primalLabels_fiber_sum` argument in
+  `TNLean/PEPS/Examples/ToricCodePrimal.lean` (2026-10-03).
+- **Notes:** these two occurrences have different label maps. The primal
+  parameterization is already shared by its weighted sum and fiber count;
+  no further abstraction is needed before a third distinct occurrence.
 
 ### Remainder-absorbing block lengths — candidate
 - **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
