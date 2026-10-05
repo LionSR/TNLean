@@ -11,6 +11,10 @@ import Mathlib.Tactic.Linarith
 
 Partition a positive ring into blocks of length `q`, with the remainder absorbed into the
 last block, as in arXiv:2307.01696, Supplemental Material, proof of Theorem 1.
+
+## References
+
+* [arXiv:2307.01696](https://arxiv.org/abs/2307.01696), Supplemental Material, proof of Theorem 1.
 -/
 
 open scoped BigOperators

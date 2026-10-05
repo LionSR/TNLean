@@ -19,6 +19,12 @@ The normalized target must be nonzero, including in the exact branch.
 This is a quantitative sufficient condition supplementing arXiv:2307.01696's
 "Inhomogeneous short-range correlated MPS" paragraph. Its qualitative convergence assumption
 does not imply the uniform rate used here; see `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* [arXiv:2307.01696](https://arxiv.org/abs/2307.01696),
+  the inhomogeneous short-range correlated MPS discussion.
+  The quantitative rate and explicit-scale theorem here are additional sufficient conditions.
 -/
 
 open Matrix MPSTensor QuantumCircuit VaryingBondChain

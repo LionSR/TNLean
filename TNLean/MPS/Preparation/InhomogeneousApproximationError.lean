@@ -26,6 +26,11 @@ inferred from a bound that only guarantees nonvanishing for sufficiently long ri
 faithful reference state are additional hypotheses, not consequences of the source's
 qualitative finite-correlation definition. See
 `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* arXiv:2307.01696, eq. (5) and paragraph "Inhomogeneous short-range correlated MPS".
+* arXiv:2103.13367, Supplemental Material, proof of Theorem MPS_classification (ordered overlaps).
 -/
 
 open Matrix MPSTensor

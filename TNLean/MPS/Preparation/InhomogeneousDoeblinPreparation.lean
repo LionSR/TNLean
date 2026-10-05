@@ -18,6 +18,11 @@ the existing actual-block Doeblin bound. No contraction proof is repeated here.
 condition, not a consequence of individual sitewise spectral gaps or the qualitative
 finite-correlation definition in arXiv:2307.01696. See
 `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* Wolf, *Quantum Channels & Operations*, Theorem 8.17 (quantum Doeblin).
+* arXiv:2307.01696, eq. (8) and paragraph "Inhomogeneous short-range correlated MPS".
 -/
 
 open Matrix MPSTensor QuantumCircuit

@@ -26,6 +26,11 @@ no assertion at the endpoint `a = ξ/2` or at `t = 0` is made.
 The remainder partition is the one in arXiv:2307.01696, Supplemental Material, proof of
 Theorem 1. The sufficient coefficient `ξ/2` is a project improvement from the quadratic
 overlap estimate, not a claim that the optimal physical circuit depth has been halved.
+
+## References
+
+* [arXiv:2307.01696](https://arxiv.org/abs/2307.01696), Supplemental Material, proof of Theorem 1.
+  The prescribed slope is a refinement using the quadratic overlap estimate.
 -/
 
 open Matrix MPSTensor QuantumCircuit

@@ -29,6 +29,11 @@ does not supply the ordered mixing hypothesis.
 faithful reference state are additional hypotheses, not consequences of the source's
 qualitative finite-correlation definition. See
 `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS" and the logarithmic
+  blocking choice following Lemma 1 in the translation-invariant case.
 -/
 
 open Matrix MPSTensor QuantumCircuit VaryingBondChain

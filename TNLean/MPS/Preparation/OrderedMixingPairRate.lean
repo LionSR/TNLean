@@ -17,6 +17,12 @@ physical dimension, chain, ring length and blocking scale are chosen.
 This is an additional quantitative sufficient condition for arXiv:2307.01696's
 inhomogeneous preparation scheme, not a consequence of its qualitative convergence
 assumption. A nonzero periodic target is required.
+
+## References
+
+* [arXiv:2307.01696](https://arxiv.org/abs/2307.01696),
+  the inhomogeneous short-range correlated MPS discussion.
+  The uniform ordered-mixing estimate is an additional quantitative hypothesis.
 -/
 
 open Matrix MPSTensor QuantumCircuit VaryingBondChain

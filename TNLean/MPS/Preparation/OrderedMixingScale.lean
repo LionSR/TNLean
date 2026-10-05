@@ -17,6 +17,12 @@ length gives the concrete scale `q = ⌈(1/r) log(N/ε) + b⌉` and physical dep
 This supplements arXiv:2307.01696's inhomogeneous scheme with a quantitative sufficient
 condition. It does not assert optimality of the circuit-depth constant or derive mixing
 from qualitative finite correlation. Nonzero targets remain an explicit hypothesis.
+
+## References
+
+* [arXiv:2307.01696](https://arxiv.org/abs/2307.01696),
+  the inhomogeneous short-range correlated MPS discussion.
+  The explicit sufficient coefficient is a quantitative refinement.
 -/
 
 open Matrix MPSTensor QuantumCircuit VaryingBondChain
