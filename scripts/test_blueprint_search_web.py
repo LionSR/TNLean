@@ -95,7 +95,8 @@ def _assert_layout(page: Page) -> None:
       const drawer = document.querySelector('.pagefind-ui__drawer');
       const content = document.querySelector('.content');
       const header = document.querySelector('header').getBoundingClientRect();
-      const title = document.querySelector('#doc_title').getBoundingClientRect();
+      const heading = document.querySelector('#doc_title');
+      const title = heading.getBoundingClientRect();
       const input = document.querySelector('#blueprint-search input').getBoundingClientRect();
       const box = drawer.getBoundingClientRect();
       return {width: root.clientWidth, scrollWidth: root.scrollWidth,
@@ -104,8 +105,12 @@ def _assert_layout(page: Page) -> None:
         overflow: getComputedStyle(drawer).overflowY,
         contentHeight: content.getBoundingClientRect().height,
         contentTop: content.getBoundingClientRect().top, headerBottom: header.bottom,
-        titleBottom: title.bottom, inputTop: input.top};
+        titleBottom: title.bottom, titleWidth: title.width, titleHeight: title.height,
+        titleFont: getComputedStyle(heading).font, inputTop: input.top};
     }''')
+    # A broken browser/font combination can collapse text to a 0x0 box while
+    # the rest of the page still lays out. Diagnose that before overlap checks.
+    assert facts['titleWidth'] > 0 and facts['titleHeight'] > 0, facts
     assert facts['scrollWidth'] <= facts['width'] + 1, facts
     assert facts['drawerBottom'] <= facts['viewportHeight'], facts
     assert facts['contentHeight'] > 100, facts

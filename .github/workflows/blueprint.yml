@@ -234,7 +234,9 @@ jobs:
       # Check the final pages after search has changed their header and layout.
       - name: Test generated blueprint pages and search
         run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          # Match PR CI: Chromium 140 loses text layout boxes with the TeX
+          # font packages installed; Chromium 141 fixes that renderer bug.
+          python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
