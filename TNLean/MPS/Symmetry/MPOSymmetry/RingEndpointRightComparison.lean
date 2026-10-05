@@ -66,13 +66,32 @@ theorem localTermES_mixedEndpointRightTensor_le_three_extended
         ((finRotate N).symm i) +
       periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap
         (finRotate N i) := by
-  have hlocal := periodicLocalInteractionES_mono
-    (parentInteractionES_mixedEndpointRightTensor_le A₀ A₁) i
-  rw [periodicLocalInteractionES_parentInteractionES _ (by decide),
-    periodicLocalInteractionES_add, periodicLocalInteractionES_add] at hlocal
-  exact hlocal.trans (add_le_add
-    (add_le_add_left (periodicLocalInteractionES_outerRowPenalty_one_le_previous A₀ A₁ hN i) _)
-    (periodicLocalInteractionES_outerColumnPenalty_one_le_next A₀ A₁ hN i))
+  let E := EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) N)
+  let K : E →ₗ[ℂ] E := localTermES (mixedEndpointRightTensor A₁ D₀) 2 i
+  let H : E →ₗ[ℂ] E :=
+    periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap i
+  let R : E →ₗ[ℂ] E := periodicLocalInteractionES (mixedEndpointRowSector D₀ D₁ 0) i
+  let C : E →ₗ[ℂ] E := periodicLocalInteractionES (mixedEndpointColumnSector D₀ D₁ 1) i
+  let P : E →ₗ[ℂ] E := periodicLocalInteractionES
+    (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap ((finRotate N).symm i)
+  let Q : E →ₗ[ℂ] E := periodicLocalInteractionES
+    (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap (finRotate N i)
+  have hlocal : K ≤ H + R + C := by
+    simpa only [periodicLocalInteractionES_parentInteractionES
+      (mixedEndpointRightTensor A₁ D₀) (by decide : 0 < 2),
+      periodicLocalInteractionES_add] using
+      periodicLocalInteractionES_mono
+        (parentInteractionES_mixedEndpointRightTensor_le A₀ A₁) i
+  have hR : R ≤ P :=
+    periodicLocalInteractionES_outerRowPenalty_one_le_previous A₀ A₁ hN i
+  have hC : C ≤ Q :=
+    periodicLocalInteractionES_outerColumnPenalty_one_le_next A₀ A₁ hN i
+  change (H + R + C - K).IsPositive at hlocal
+  change (P - R).IsPositive at hR
+  change (Q - C).IsPositive at hC
+  change (H + P + Q - K).IsPositive
+  convert (hlocal.add hR).add hC using 1
+  abel
 
 /-- The actual extended endpoint Hamiltonian and the canonical parent of the
 embedded endpoint satisfy `H′ ≤ K ≤ 3 H′` on every ring of at least two sites.
@@ -87,7 +106,8 @@ theorem mixedEndpoint_periodic_one_comparison
         (3 : ℂ) • periodicInteractionHamiltonianES
           (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N := by
   constructor
-  · simpa only [periodicInteractionHamiltonianES_parentInteractionES _ (by decide)] using
+  · simpa only [periodicInteractionHamiltonianES_parentInteractionES
+      (mixedEndpointRightTensor A₁ D₀) (by decide : 0 < 2)] using
       periodicInteractionHamiltonianES_mono
         (mixedEndpointParentInteraction_one_le_parentInteractionES A₀ A₁) N
   · have h := Finset.sum_le_sum fun (i : Fin N) (_ : i ∈ Finset.univ) =>
@@ -112,7 +132,7 @@ theorem mixedEndpoint_periodic_one_ker_eq
       (parentHamiltonianES_isPositive _ 2 N)
       (a := 1) (b := 1) (c := 3) (by norm_num) (by norm_num) (by norm_num)
       (by simpa only [Complex.ofReal_one, one_smul] using hLower)
-      (by simpa only [Complex.ofReal_one, one_smul] using hUpper)
+      (by simpa only [Complex.ofReal_one, Complex.ofReal_ofNat, one_smul] using hUpper)
 
 /-- A canonical endpoint gap `δ` transfers to the actual extended endpoint
 with gap `δ / 3`. The comparison and common kernel are derived from the
@@ -131,12 +151,13 @@ theorem mixedEndpoint_periodic_one_norm_gap
   obtain ⟨hLower, hUpper⟩ := mixedEndpoint_periodic_one_comparison A₀ A₁ hN
   have hScaled := smul_le_smul_of_nonneg_left hLower (by norm_num : 0 ≤ (3 : ℂ))
   simpa only [one_mul] using
-    (parentHamiltonianES_isPositive (mixedEndpointRightTensor A₁ D₀) 2 N).
-      norm_gap_of_smul_le_of_le_smul
+    LinearMap.IsPositive.norm_gap_of_smul_le_of_le_smul
+      (parentHamiltonianES_isPositive (mixedEndpointRightTensor A₁ D₀) 2 N)
         (periodicInteractionHamiltonianES_isPositive
           (mixedEndpointParentInteraction_isPositive A₀ A₁ 1) N)
         (a := 1) (b := 3) (c := 3) (by norm_num) (by norm_num) (by norm_num) hδ
-        (by simpa only [Complex.ofReal_one, one_smul] using hUpper) hScaled hGap
+        (by simpa only [Complex.ofReal_one, Complex.ofReal_ofNat, one_smul] using hUpper)
+        (by simpa only [Complex.ofReal_ofNat] using hScaled) hGap
 
 /-- At an injective second endpoint, the actual extended periodic Hamiltonian
 has precisely the embedded MPS ground line, for every ring of at least two
@@ -146,9 +167,9 @@ theorem mixedEndpoint_periodic_one_groundSpace_eq [NeZero D₁]
     (hA₁ : Kraus.IsInjective A₁) (hN : 2 ≤ N) :
     LinearMap.ker (periodicInteractionHamiltonianES
       (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N) =
-      Submodule.span ℂ {WithLp.toLp 2
+      Submodule.span ℂ {(WithLp.toLp 2
         (mpv (mixedEndpointRightTensor A₁ D₀) :
-          NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) N)} := by
+          NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) N))} := by
   rw [mixedEndpoint_periodic_one_ker_eq A₀ A₁ hN,
     ← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
     parentHamiltonianGroundSpaceES,
@@ -209,7 +230,8 @@ theorem exists_uniform_mixedEndpoint_periodic_endpoints_gap [NeZero D₀] [NeZer
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
           (mixedEndpointParentInteraction A₀ A₁ p).toLinearMap N v‖ := by
   obtain ⟨δ₀, hδ₀, hGap₀⟩ := exists_uniform_mixedEndpoint_periodic_gap A₀ A₁ hA₀
-  obtain ⟨δ₁, hδ₁, hGap₁⟩ := exists_uniform_mixedEndpoint_periodic_one_gap A₀ A₁ hA₁
+  obtain ⟨δ₁, hδ₁, hGap₁⟩ :=
+    exists_uniform_mixedEndpoint_periodic_one_gap A₀ A₁ hA₁
   refine ⟨min δ₀ δ₁, lt_min hδ₀ hδ₁, ?_⟩
   rintro p (rfl | rfl) N hN v hv
   · exact (mul_le_mul_of_nonneg_right (min_le_left δ₀ δ₁) (norm_nonneg v)).trans

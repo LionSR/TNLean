@@ -95,7 +95,7 @@ theorem parentInteractionES_mixedEndpointRightTensor_le
         mixedEndpointRowSector D₀ D₁ 0 + mixedEndpointColumnSector D₀ D₁ 1 := by
   have h := ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr (parentInteractionES_mixedEndpointLeftTensor_le A₁ A₀)
-  simpa only [map_add, map_sub, map_one, mixedEndpointRowSector_conj_swap,
+  simpa only [map_add, map_sub, LinearEquiv.conj_id, mixedEndpointRowSector_conj_swap,
     mixedEndpointColumnSector_conj_swap, sub_sub_cancel,
     ← mixedEndpointParentInteraction_one_eq_conj_swap,
     ← parentInteractionES_mixedEndpointRightTensor_eq_conj] using h
@@ -109,7 +109,7 @@ theorem mixedEndpoint_columnSector_zero_le_parentInteraction_one
   have h := ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr
       (mixedEndpoint_one_sub_columnSector_zero_le_parentInteraction A₁ A₀)
-  simpa only [map_sub, map_one, mixedEndpointColumnSector_conj_swap, sub_sub_cancel,
+  simpa only [map_sub, LinearEquiv.conj_id, mixedEndpointColumnSector_conj_swap, sub_sub_cancel,
     ← mixedEndpointParentInteraction_one_eq_conj_swap] using h
 
 /-- The second-row first-sector penalty lies below the actual second-endpoint
@@ -121,7 +121,7 @@ theorem mixedEndpoint_rowSector_one_le_parentInteraction_one
   have h := ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr
       (mixedEndpoint_one_sub_rowSector_one_le_parentInteraction A₁ A₀)
-  simpa only [map_sub, map_one, mixedEndpointRowSector_conj_swap, sub_sub_cancel,
+  simpa only [map_sub, LinearEquiv.conj_id, mixedEndpointRowSector_conj_swap, sub_sub_cancel,
     ← mixedEndpointParentInteraction_one_eq_conj_swap] using h
 
 end MPOSymmetry
