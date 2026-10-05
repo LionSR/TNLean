@@ -571,6 +571,28 @@ normalizations.
   Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+#### `TNLean.PEPS.IsToricCodeBondCompatible`
+
+- **Declaration:** `IsToricCodeBondCompatible σ`.
+- **Defined in:** `TNLean/PEPS/Examples/ToricCodeTorusAmplitudes.lean`.
+- **Meaning:** the virtual labels determined by the physical spins match on
+  every oriented horizontal and vertical bond: the left label of the right
+  neighbor equals the current right label, and the bottom label of the upper
+  neighbor equals the current top label.
+- **Source:** the literal primal toric-code tensor in the review,
+  `Papers/2011.12127/TN-Review-main.tex`, lines 2451–2465,
+  equation `eq:app:tcode-rep-primal`, and the torus closure construction of
+  Schuch, Cirac and Pérez-García, arXiv:1001.3807, Theorem 5.9.
+- **Sanctioned bridges:** `toricCodeTorusState_apply` gives the exact support
+  indicator times the seam phases; `toricCodeTorusState_one_one_apply` is
+  the identity-closure indicator; `toricCodeTorusState_ne_zero_iff` identifies
+  this predicate with nonvanishing for each of the four closures.
+- **Caveats:** this is a physical-configuration support condition for the
+  oriented-bond contraction. Its native simple-graph interpretation uses
+  both torus periods at least three; smaller positive periods are algebraic
+  extensions. It does not assert parent-Hamiltonian kernel membership or
+  kernel spanning, and it imposes no additional normalization factor.
+
 #### `TNLean.PEPS.PairConjugacyClass.IsCommuting`
 
 - **Declaration:**
