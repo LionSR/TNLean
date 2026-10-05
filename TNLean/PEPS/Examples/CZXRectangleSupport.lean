@@ -18,8 +18,10 @@ clockwise convention.
 
 **Scope restriction (rectangular region):** both torus periods are at least
 three and the region is a positive proper bounded coordinate rectangle.
-Normalized reduced-density and nonrectangular-region assertions remain open;
-see `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
+The actual reduced-density support and rank, including trace normalization,
+are identified in `CZXRectangleDensity`. Its nonzero spectrum, entropy and
+nonrectangular-region assertions remain open; see
+`docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
 
 ## References
 

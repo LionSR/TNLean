@@ -37,12 +37,18 @@ conflation of `X^N D_N` with `D_N X^N`.
 
 ## Scope retained
 
-The theorem identifies the actual open-region image as a vector space. It
-does not assert a normalized reduced-density formula, isometric normalization
-of the physical boundary map, flatness, entropy, arbitrary-region geometry,
-or parent-Hamiltonian kernel completeness. The corresponding scope note
-remains open for these additional source assertions. No gauging construction
-is changed.
+The theorems identify the actual open-region image and the support and rank
+of the actual reduced density, including after trace normalization. They do
+not assert the source's explicit density formula or nonzero eigenvalues,
+isometric normalization of the physical boundary map, flatness, entropy,
+arbitrary-region geometry, or parent-Hamiltonian kernel completeness. The
+corresponding scope note remains open for these additional source assertions.
+No gauging construction is changed.
+
+The coordinate intervals satisfy `xStart + w ≤ width` and
+`yStart + h ≤ height`. Their endpoints may lie on a coordinate seam, and
+their crossing bonds may wrap through that seam. A region whose coordinate
+interval itself wraps around the torus is outside this statement.
 
 ## Reuse and dependency extraction
 
@@ -68,14 +74,15 @@ non-Mathlib modules through its MPO imports. These are structural closure
 counts, not a claimed controlled timing benchmark. The final printed-MPO
 consumer still uses its existing broad library dependencies.
 
-## Verification
+## Initial verification
 
 - Exact isolated compilation with all four package options passed the
   extracted foundations, native rectangle geometry, actual support,
   witness/image/dimension and physical column-action modules.
 - The physical matrix transport to the exact monomial formula passed a
   narrow proof probe using the existing spin-flip/exponent definitions.
-  The final production MPO import/bridge remains for exact-head full CI.
+  The production MPO import/bridge was subsequently checked by the full CI
+  run recorded below.
 - Strict regression tests pass with warnings-as-errors: one-site image
   dimension 16, a two-site rectangle meeting both seams with dimension 64,
   a forbidden native boundary column, a physical controlled-phase entry
@@ -85,15 +92,13 @@ consumer still uses its existing broad library dependencies.
 - No new axioms, proof holes, heartbeat increases, or Mathlib source builds
   were used. Reused artifacts were source/trace/dependency audited.
 
-The PR must retain explicit pending status for the production MPO bridge
-until its exact-head full-root CI result is known.
-
 The final publication audit checked all 23 open PR file lists successfully,
 including the shared CZX chapter and scope note, with no overlap. After
 merging main `b46e0aab`, every mathematical source in the audited local core
 closure remained unchanged; only four module headers differed.
-The revised standalone note compiles to three pages without undefined
-references or overfull boxes; all pages were visually inspected.
+The initial standalone note compiled to three pages without undefined
+references or overfull boxes; all pages were visually inspected before the
+subsequent reduced-density extension.
 
 ## Actual reduced-density support extension
 
@@ -113,5 +118,30 @@ complement-edge identification, coefficient one (not only proportionality),
 proper rectangle and seam conditions, and the absence of a parent-kernel
 hypothesis. Both source modules pass individual full-option isolated compilation.
 Strict regression tests include actual one-site rank 16, trace-normalized
-seam-crossing rank 64, nonzero trace for a maximal proper rectangle, and guarded
-standard-only axiom audits. No proof heartbeat limit was raised.
+rank 64 for a rectangle meeting both seams, nonzero trace for a maximal proper
+rectangle, and guarded standard-only axiom audits. No proof heartbeat limit
+was raised.
+
+## Independent integration review, 2026-10-05
+
+At head `bdbc87a228ae1a37a90b208bfeb932cdf509ae90`,
+[PR CI 37248153606](https://github.com/LionSR/TNLean/actions/runs/37248153606)
+checked synthetic merge `d33c25632e6a257bc4023298f72d824dfabab77e` against
+main `a639b63df363ff0b9c0db1c17d75424fee97881d`. All feature Lean source
+bytes in that synthetic merge equal the reviewed head. The root build
+completed all 12,133 jobs, including the printed-MPO bridge and migrated
+regular-PEPS consumers. The strict physical tests, declaration checks,
+compilation-time gates and blueprint checks passed. Import completeness and
+the demolition guard passed independently.
+
+The review checked the source boundary discussion, actual incident-label
+uniqueness, all side/corner transitions, coefficient-one selectors, the
+complement-cut argument, trace normalization and the printed operator order.
+No mathematical blocker was found within the explicit rectangle scope.
+
+The author then integrated main `9926c1d0a4ab71aeda7b7d3ea697ee6fc54e8f79`
+in `b2eb48a39819adda95eb75f03275c2aef54f39e3`, preserving both the
+`HalfChainSpectrum` and `CZXRectangleBoundary` strict test entries. The scope
+clarifications following that integration change documentation only; they
+preserve every feature definition and proof. The earlier green run is not
+claimed as exact-head validation of a later commit.

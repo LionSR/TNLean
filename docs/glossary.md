@@ -592,7 +592,9 @@ normalizations.
   trace normalization are `2^(2*w+2*h)`.
 - **Caveats:** torus periods are at least three; both rectangle sides are
   positive, strictly shorter than the periods and bounded within the chosen
-  coordinates. Seam endpoints are allowed. The effective dimension is
+  coordinates. Seam endpoints and crossing bonds through a seam are allowed;
+  a coordinate interval that wraps around the torus is not covered. The
+  effective dimension is
   `2^(2*w+2*h)`, not the full unconstrained virtual dimension `4^(2*w+2*h)`.
   No flat nonzero spectrum, entropy, isometric normalization, nonrectangular
   extension or parent-kernel spanning statement follows merely from these
