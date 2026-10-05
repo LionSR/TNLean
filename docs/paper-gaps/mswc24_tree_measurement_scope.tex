@@ -185,14 +185,35 @@ $N\ge N_0$.
 The bound $c\log(\log(N/\varepsilon)+1)$ is $O(\log\log(N/\varepsilon))$; the
 shift by $1$ keeps it positive for $N/\varepsilon\ge2$.
 
+\section{Supported polar trees}
+For a tensor injective on a common set $S$ of virtual pairs after a fixed
+length, choose a coordinate inclusion $J\colon\mathbb C^\chi\to\mathbb C^{D^2}$
+onto $S$. The restricted factors $\widehat V_n=V_nJ$ are isometries and obey
+$\widehat V_{l+r}=(\widehat V_l\otimes\widehat V_r)\widehat W_{l,r}$, where
+$\widehat W_{l,r}=(J^\dagger\otimes J^\dagger)W_{l,r}J$ satisfies
+$\widehat W_{l,r}^\dagger\widehat W_{l,r}=I$.
+The bounded-leaf tree and its measurement implementation now apply with
+arbitrary virtual dimension $\chi$. They preserve all supported
+superpositions simultaneously. For each fixed measurement history the
+branch scalar is independent of the input on the zero-scratch subspace;
+the final equality specifies every physical site.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isometryTree_matrix_eq_supportedCfgPolarIso} in
+    \doclink{TNLean/MPS/Preparation/SupportedPolarTree}, and
+    \leanid{MPSPreparation.exists_rounds_blockLayerOp_supportedPolarTree} in
+    \doclink{TNLean/MPS/Preparation/SupportedTreePreparation}.}
+This proves the supported-tree step. It does not yet combine the tree with
+a constant-depth sparse GHZ seed, canonical block amplitudes, and the
+all-length double-logarithmic error estimate.
+
 \section{The remaining restriction}
 A two-site gate between distant sites joins sites at odd separation, on pairwise
 disjoint stretches; gates at even separation, or on overlapping stretches, are
 not covered, whereas the paragraph of the source speaks of teleporting spatially
 separated sites in general. Neither the tree of two-site gates nor the trees of
-registers need such gates. Tensors that are not normal, for which the source
-combines the tree with the preparation of a GHZ-type state, are treated without
-the tree in~\cite{gap:mswc24_measurement_preparation_scope} and not here.
+registers need such gates. The full non-normal preparation theorem still requires composing the supported
+trees above with the GHZ-type preparation and the canonical block estimates.
+The completed logarithmic-depth result and its remaining restrictions are
+recorded in~\cite{gap:mswc24_measurement_preparation_scope}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

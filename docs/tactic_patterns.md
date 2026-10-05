@@ -5413,3 +5413,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Weyl monotonicity and CFC square roots are reused from QICLean and
   Mathlib. The local perturbation/padding results compose those public APIs;
   no QICLean implementation is copied into TNLean.
+
+### Coherent GHZ seed and cyclic correction — promoted (2026-10-05)
+
+- **Pattern:** Repeat the prescribed seed-column unitary construction and the
+  cyclic difference-measurement calculation when changing only the routing.
+- **Seen:** `MPS/Preparation/WindowGHZ.lean` and
+  `MPS/Preparation/SparseWindowGHZ.lean`.
+- **Abstraction:** `exists_windowGHZSeedUnitary`,
+  `windowGHZDifference_eq_mulVec`, and `exists_windowGHZCorrectionRound`
+  keep the seed and coherent cyclic algebra in one place. The correction
+  scalar is quantified before the arbitrary label amplitudes.
+- **Notes:** The one-round SWAP protocol and the constant-depth multi-round
+  protocol have different physical resource claims, so neither replaces the
+  other. Both now consume the same algebra instead of copying its proof.
