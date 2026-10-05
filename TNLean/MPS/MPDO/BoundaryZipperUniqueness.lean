@@ -58,8 +58,10 @@ theorem trace_evalWord_eq_sum_multiplicity
     Matrix.trace (Kraus.evalWord B w) =
       ∑ c, (N c : ℂ) * Matrix.trace (Kraus.evalWord (A c) w) := by
   have ht := h.trace_mul_evalWord 1 w hw
-  simpa only [Matrix.one_mul, Matrix.mul_one, h.retract, Fintype.sum_sigma,
-    Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul] using ht
+  simp only [Matrix.one_mul, Matrix.mul_one, h.retract, Fintype.sum_sigma] at ht
+  change Matrix.trace (Kraus.evalWord B w) =
+    ∑ c, ∑ _μ : Fin (N c), Matrix.trace (Kraus.evalWord (A c) w) at ht
+  simpa [nsmul_eq_mul] using ht
 
 /-- Positive-dimensional target blocks with one common positive word span
 have uniquely determined multiplicities in any exact biorthogonal

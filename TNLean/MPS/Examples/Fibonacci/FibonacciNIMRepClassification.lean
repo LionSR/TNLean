@@ -24,8 +24,13 @@ two blocks, transforming as in line 1993.
 
 The unrestricted direct-sum classification and its indecomposable two-block corollary are
 proved in `FibonacciNIMRepDecomposition.lean`. The resolved rank restriction and the
-indecomposable interpretation of the source's uniqueness claim are documented in
+correction to the source's uniqueness claim are documented in
 `docs/paper-gaps/glm23_fibonacci_module_rank_scope.tex`.
+
+**Local fix (missing indecomposability hypothesis):** The source does not state this
+hypothesis. Its literal unrestricted two-block uniqueness claim is false; arbitrary direct sums
+also solve the fusion equations. The corrected nonempty indecomposable corollary is separate
+from the one- and two-block classification in this file; see the paper-gap note above.
 
 ## Main results
 

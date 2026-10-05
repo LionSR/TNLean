@@ -9,7 +9,7 @@
 \date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{false-source}{resolved}
 
 \section{The source claim}
 For a matrix product operator representing the Fibonacci fusion category
@@ -22,11 +22,14 @@ The action multiplicities form a nonnegative integer representation of the
 fusion ring. When the unit acts as the identity, its Fibonacci matrix
 $T=M_\tau$ satisfies $T^2=I+T$.
 
-The two-block uniqueness statement concerns an indecomposable family.
-Direct sums of two or more copies of the displayed action also satisfy
-$T^2=I+T$, so an unrestricted statement that every nonempty family has exactly
-two blocks would be false. This qualification was already recorded in the
-original version of this note.
+The printed two-block uniqueness statement does not assume
+indecomposability. Taken literally without that hypothesis, it is false:
+$F\oplus F$ is a four-block solution whenever $F$ is the displayed regular
+action, since $(F\oplus F)^2=I+(F\oplus F)$.
+The local correction proved here is that every nonempty indecomposable
+family has two blocks. Indecomposability is an added hypothesis correcting
+the source claim, not a condition stated in the cited passage. The
+unrestricted direct-sum theorem below records all decomposable solutions.
 
 \section{The earlier restriction and its removal}
 The earlier classification treated only one or two blocks. The finite-rank

@@ -91,7 +91,8 @@ lines 2264–2286. -/
 theorem fusionProjector_apply (h : G) (p q : Fin n × Fin n) :
     fusionProjector e h (finProdFinEquiv p) (finProdFinEquiv q) =
       if p = q then if p.1 = siteShift e h p.2 then 1 else 0 else 0 := by
-  simp [fusionProjector, Matrix.diagonal_apply]
+  simp only [fusionProjector, Matrix.diagonal_apply, Equiv.symm_apply_apply,
+    EmbeddingLike.apply_eq_iff_eq]
 
 /-- The support selector is idempotent, as asserted at arXiv:2203.12563v3, line 2264. -/
 theorem fusionProjector_mul_self (h : G) :
@@ -148,18 +149,22 @@ theorem fusionW_mul_fusionV (ω : ScalarThreeCochain G) (g h : G) :
   obtain ⟨p, rfl⟩ := finProdFinEquiv.surjective p
   obtain ⟨q, rfl⟩ := finProdFinEquiv.surjective q
   rw [fusionW_mul_apply, fusionProjector_apply]
-  simp only [fusionV, Matrix.of_apply, pairLabel, EmbeddingLike.apply_eq_iff_eq,
-    Prod.mk.injEq]
+  simp only [fusionV, Matrix.of_apply, pairLabel, EmbeddingLike.apply_eq_iff_eq]
+  simp only [show q = (siteShift e h p.2, p.2) ↔
+    q.1 = siteShift e h p.2 ∧ q.2 = p.2 from Prod.ext_iff]
   by_cases hp : p.1 = siteShift e h p.2
   · by_cases hpq : p = q
     · subst hpq
-      simp [hp]
+      simp only [hp, and_self, ↓reduceIte, Units.mul_inv]
     · have hq : ¬ (q.1 = siteShift e h p.2 ∧ q.2 = p.2) := by
         rintro ⟨hq, hq'⟩
         apply hpq
         exact Prod.ext (hp.trans hq.symm) hq'.symm
-      simp [hp, hpq, hq]
-  · by_cases hpq : p = q <;> simp [hp, hpq]
+      simp only [hp, hpq, hq, ↓reduceIte, mul_zero]
+  · by_cases hpq : p = q
+    · subst hpq
+      simp only [hp, ↓reduceIte]
+    · simp only [hp, hpq, ↓reduceIte]
 
 variable (e) in
 /-- The stacked letter has outgoing bond pair `(hj,j)`; its incoming bond is unrestricted.
@@ -176,7 +181,9 @@ theorem mulTensor_tensor_apply (ω : ScalarThreeCochain G) (g h : G) (i j : Fin 
   simp only [mulTensor_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply,
     Matrix.sum_apply, Matrix.kroneckerMap_apply]
   rw [Finset.sum_eq_single (siteShift e h j)
-    (fun k _ hk ↦ by simp [tensor_apply, hk]) (by simp)]
+    (fun k _ hk ↦ by
+      have hk' : k ≠ e (h * e.symm j) := by simpa only [siteShift_apply] using hk
+      simp [tensor_apply, hk']) (by simp)]
   simp [tensor_apply]
 
 variable (e) in

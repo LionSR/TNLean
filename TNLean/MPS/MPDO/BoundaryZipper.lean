@@ -81,6 +81,8 @@ variable {a b : Λ}
     (fun q : (c : Λ) × Fin (N a b c) ↦ (T q.1).toMPSTensor)
     (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
 
+include h
+
 /-- Collecting the separate biorthogonality identities gives a left inverse
 on the full multiplicity coordinate space. -/
 theorem biorthogonalAnalysis_mul_synthesis :
@@ -118,10 +120,11 @@ theorem pairLetter_eq_biorthogonalSynthesis_mul (i k : Fin p) :
     rw [Matrix.mul_apply, Fintype.sum_sigma,
       Finset.sum_eq_single c
         (fun c' _ hc' ↦ Finset.sum_eq_zero fun _ _ ↦ by
-          rw [C, Matrix.blockDiagonal'_apply_ne _ _ _ hc', mul_zero])
+          dsimp only [C]
+          rw [Matrix.blockDiagonal'_apply_ne _ _ _ hc', mul_zero])
         (fun hc ↦ absurd (Finset.mem_univ c) hc)]
     simp [C, S, biorthogonalSynthesis, Matrix.blockDiagonal'_apply_eq,
-      Matrix.kronecker_apply, Matrix.one_apply, Fintype.sum_prod_type]
+      Matrix.one_apply, Fintype.sum_prod_type]
   funext x x'
   have hletter := congrArg
     (fun M ↦ M (finProdFinEquiv x) (finProdFinEquiv x'))
@@ -132,6 +135,8 @@ theorem pairLetter_eq_biorthogonalSynthesis_mul (i k : Fin p) :
   simpa [MPOTensor.toMPSTensor,
     Matrix.sum_apply, Fintype.sum_sigma, Matrix.mul_apply, biorthogonalAnalysis,
     mulTensor_apply, Matrix.submatrix_apply] using hletter
+
+omit h
 
 /-- Exact biorthogonal pairwise decompositions give complete zipper tensors
 when a simultaneous target-letter inverse is supplied. Both zipper identities
