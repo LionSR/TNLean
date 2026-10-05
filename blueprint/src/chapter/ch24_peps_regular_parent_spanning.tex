@@ -30,6 +30,42 @@
 \begin{proof}\leanok
     Every one-site slice of $\Psi$ belongs to $\operatorname{im}A_v$.
     Since $A_v\Pi_v=A_v$, the composition $A_vF_v$ fixes that image.
+    In the following local contraction, one virtual wire carries the
+    full tuple of incident labels at $v$; the physical wire carries one
+    site index. The inverse is used only after $A_v$:
+    % Formula: A_v F_v A_v = A_v Pi_v = A_v, not A_v F_v = I globally.
+    % Source: SCP10 Definition 5.1 and paper_v3.tex:1480--1514 (closure inverse).
+    % Ink-to-index: matrices read right to left; each virtual wire bundles
+    % eta_v in G^{Inc(v)}. A has physical row and virtual column; F the reverse.
+    % Joined physical/virtual indices are summed. The external physical row
+    % and virtual column remain open: every panel has (V,P)=(1,1).
+
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+            \tn[at=(1,1), name=parentInverse0,
+                ports={180:physical:$i$,0:virtual}]{$A_v$}
+            \tn[at=(1,2), name=parentInverse1,
+                ports={180:virtual,0:physical}]{$F_v$}
+            \tn[at=(1,3), name=parentInverse2,
+                ports={180:physical,0:virtual:$\eta_v$}]{$A_v$}
+            \tnwire{parentInverse0.0}{parentInverse1.180}
+            \tnwire{parentInverse1.0}{parentInverse2.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[at=(1,1), name=parentAverage0,
+                ports={180:physical:$i$,0:virtual}]{$A_v$}
+            \tn[at=(1,2), name=parentAverage1,
+                ports={180:virtual,0:virtual:$\eta_v$}]{$\Pi_v$}
+            \tnwire{parentAverage0.0}{parentAverage1.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=parentRetracted0,
+                ports={180:physical:$i$,0:virtual:$\eta_v$}]{$A_v$}
+        \end{tenkz}
+    \end{tenkzequation}
     The product of these independent retractions therefore fixes
     $\Psi$, proving~(\ref{eq:peps_regular_parent_reconstruction}).
     For $\phi=F_{\mathrm{all}}\Psi$, applying $F_{\mathrm{all}}$
@@ -47,6 +83,8 @@
         TNLean.PEPS.globalDependentPhysicalMap_regularInverse_rightMul,
         TNLean.PEPS.globalDependentPhysicalMap_regularInverse_eq_zero_of_holonomy_ne_one,
         TNLean.PEPS.globalDependentPhysicalMap_regularInverse_eq_zero_of_torusPlaquetteHolonomy,
+        TNLean.PEPS.mem_torusPlaquetteRegion_self,
+        TNLean.PEPS.exists_torusPlaquetteRegion_contains_edge,
         TNLean.PEPS.IsGInjective.exists_torusParentCoordinates}
     \leanok
     \uses{thm:peps_regular_parent_reconstruction,
@@ -63,6 +101,8 @@
     reverse-ordered holonomy satisfies $\operatorname{Hol}_{u(\alpha)}(p)\ne1$,
     then $\phi(\alpha)=0$.
 
+    Every native vertex belongs to its own plaquette, and every native
+    edge has both endpoints in some plaquette.
     In particular, for the native four-site plaquette parents on a
     regular $G$-injective torus with periods at least three, the maps
     $F_v$ can be chosen so that reconstruction, both translation
@@ -126,6 +166,49 @@
         =\sum_{u\in\mathcal F}\phi(\alpha^u)\lvert\Psi_u\rangle.
         \label{eq:peps_regular_flat_expansion}
     \end{align}
+    Put $\Omega_u=\sum_{\eta\in G^E}\lvert\alpha(u,\eta)\rangle$,
+    where $\alpha(u,\eta)$ has tail label $\eta_e$ and head label
+    $u_e\eta_e$. This bond vector is unnormalized. With
+    $\Pi_{\mathrm{all}}=\bigotimes_v\Pi_v$, one has
+    $C_u=\Pi_{\mathrm{all}}\Omega_u$ and
+    $A_{\mathrm{all}}\Pi_{\mathrm{all}}=A_{\mathrm{all}}$.
+    Each $\Pi_v$ includes the averaging factor $|G|^{-1}$, so
+    $\Pi_{\mathrm{all}}$ includes $|G|^{-|V|}$.
+    Thus the projector factors in (\ref{eq:peps_regular_flat_expansion})
+    are absorbed site by site:
+    % Formula: sum_{u flat} phi(alpha^u) A_all Pi_all Omega_u
+    %        = sum_{u flat} phi(alpha^u) A_all Omega_u.
+    % Source: SCP10 Theorem 5.7; regular-coordinate proof in
+    % TorusRegularParentSpanning.lean, via RegularInvariantStateSpan.lean.
+    % Ink-to-index: virtual wire bundles ALL half-edge labels, not one bond;
+    % physical wire bundles sigma in the full physical configuration space.
+    % Pi_all includes |G|^{-|V|} sum_{k in G^V} L_k; Omega has no scalar factor.
+    % All virtual labels contract. Each panel has (V,P)=(0,1), the one
+    % physical port denoting the full tuple sigma, not a one-site output.
+
+    \begin{tenkzequation}
+        \tenkzkernel
+        $\displaystyle\sum_{u\in\mathcal F}\phi(\alpha^u)$
+        \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+            \tn[at=(1,1), name=parentFlat0,
+                ports={180:physical:$\sigma$,0:virtual}]{$A_{\mathrm{all}}$}
+            \tn[at=(1,2), name=parentFlat1,
+                ports={180:virtual,0:virtual}]{$\Pi_{\mathrm{all}}$}
+            \tn[at=(1,3), name=parentFlat2,
+                ports={180:virtual}]{$\Omega_u$}
+            \tnwire{parentFlat0.0}{parentFlat1.180}
+            \tnwire{parentFlat1.0}{parentFlat2.180}
+        \end{tenkz}
+        $=$
+        $\displaystyle\sum_{u\in\mathcal F}\phi(\alpha^u)$
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[at=(1,1), name=parentAbsorbed0,
+                ports={180:physical:$\sigma$,0:virtual}]{$A_{\mathrm{all}}$}
+            \tn[at=(1,2), name=parentAbsorbed1,
+                ports={180:virtual}]{$\Omega_u$}
+            \tnwire{parentAbsorbed0.0}{parentAbsorbed1.180}
+        \end{tenkz}
+    \end{tenkzequation}
     Every $u\in\mathcal F$ is gauge equivalent to two commuting
     closure seams. Local regular invariance leaves the physical
     contraction unchanged under this vertex gauge. Thus every

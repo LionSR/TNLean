@@ -1,0 +1,320 @@
+\section{Open contractions with native edge orientations}
+\label{sec:peps_oriented_open_contractions}
+
+Let $\Gamma=(V,E)$ be a finite simple graph with ordered vertices.
+Write an ordered edge as $e=(t,h)$, with $t<h$, and let
+$o:E\to\{0,1\}$ specify its orientation: $o_e=0$ means $t\to h$
+and $o_e=1$ means $h\to t$. The ordering of vertices is used only
+for coordinates. The physical pair on an edge is always ordered as
+$(x_h,x_t)$, even when the native arrow is reversed.
+For $R\subseteq V$, denote its internal, crossing, and exterior edges by
+$E_R$, $\partial E_R$, and $E_{R^c}$.
+For a region family $\mathcal R$, write $\mathcal P_{\mathcal R}(A)$
+for the physical vectors whose every slice on each $R\in\mathcal R$
+belongs to the regional contraction range of $A$.
+These conventions extend the bond transformations of
+\cite[Section~7]{Schuch2010PEPS} to the rightward and downward arrows
+of a torus.
+
+\subsection{Averaging tensors and unrestricted regional boundaries}
+
+\begin{definition}[Native tails]%
+    \label{def:peps_oriented_native_tail}
+    \lean{TNLean.PEPS.graphNativeTail,
+        TNLean.PEPS.graphNativeTail_edgeLeftIncident,
+        TNLean.PEPS.graphNativeTail_edgeRightIncident}
+    \leanok
+    An incidence $(v,e)$ is a native tail when $v=t$ and $o_e=0$,
+    or when $v=h$ and $o_e=1$.
+    Thus the ordered first incidence is a native tail exactly when
+    $o_e=0$, and the ordered second incidence exactly when $o_e=1$.
+\end{definition}
+
+\begin{definition}[Oriented averaging tensor]%
+    \label{def:peps_oriented_averaging_tensor}
+    \lean{TNLean.PEPS.graphOrientedAveragingSite,
+        TNLean.PEPS.graphOrientedAveragingSite_false,
+        TNLean.PEPS.numberedGraphOrientedAveragingTensor,
+        TNLean.PEPS.numberedGraphOrientedAveragingTensor_false}
+    \leanok
+    \uses{def:peps_oriented_native_tail}
+    Let $G$ be finite, $U:G\to\mathrm{GL}(\C^X)$ a representation,
+    and $W$ a matrix on $\C^X$. For virtual and physical incidence labels
+    $\eta,\sigma:\operatorname{Inc}(v)\to X$, set
+    \begin{align}
+        A^{U,W,o}_v(\eta,\sigma)
+        =\frac1{|G|}\sum_{g\in G}
+        \prod_{e\ni v}
+        \begin{cases}
+            (WU_{g^{-1}})_{\eta_e,\sigma_e}, & v\text{ is the native tail}, \\
+            (U_gW)_{\sigma_e,\eta_e},        & v\text{ is the native head}.
+        \end{cases}
+        \label{eq:peps_oriented_site}
+    \end{align}
+    A bijection $e_v:X^{\operatorname{Inc}(v)}\to\{0,\ldots,p-1\}$
+    numbers the physical indices. Its coefficient at $s$ is
+    $A^{U,W,o}_v(\eta,e_v^{-1}(s))$. Fix any numbering of $X$ on the
+    virtual bonds. If every $o_e=0$, this is the ordered
+    dressed averaging tensor. No symmetry of $W$ is required.
+    The normalization is the group-average normalization of
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{definition}[Oriented open bond coefficients]%
+    \label{def:peps_oriented_open_coefficients}
+    \lean{TNLean.PEPS.graphOrientedOpenBoundaryFactor,
+        TNLean.PEPS.graphOrientedOpenInternalFactor,
+        TNLean.PEPS.graphOrientedOpenBondCoordinates,
+        TNLean.PEPS.graphOrientedOpenBondSpace,
+        TNLean.PEPS.graphOrientedOpenBoundaryFactor_false,
+        TNLean.PEPS.graphOrientedOpenInternalFactor_false,
+        TNLean.PEPS.graphOrientedOpenBondCoordinates_false,
+        TNLean.PEPS.graphOrientedOpenBondSpace_false}
+    \leanok
+    \uses{def:peps_oriented_averaging_tensor}
+    Fix $q:R\to G$. On an internal edge $e=(t,h)$ define
+    \begin{align}
+        I_e(q;x_h,x_t) & =
+        \begin{cases}
+            (W^2U_{q_hq_t^{-1}})_{x_h,x_t}, & o_e=0, \\
+            (W^2U_{q_tq_h^{-1}})_{x_t,x_h}, & o_e=1.
+        \end{cases}
+        \label{eq:peps_oriented_internal}
+    \end{align}
+    For a crossing edge, let $v$ be its retained vertex, $\theta$ its
+    virtual boundary label, and $x$ its retained physical label. Put
+    $B_e(q;\theta,x)=(WU_{q_v^{-1}})_{\theta,x}$ when $v$ is the
+    native tail, and $B_e(q;\theta,x)=(U_{q_v}W)_{x,\theta}$ otherwise.
+    For arbitrary $\theta\in X^{\partial E_R}$, define
+    \begin{align}
+        C_R^{U,W,o}(\theta)(x,z)
+         & =|G|^{-|R|}\sum_{q:R\to G}
+        \prod_{e\in\partial E_R}B_e(q;\theta_e,x_e)
+        \prod_{e\in E_R}I_e(q;z_e),
+        \label{eq:peps_oriented_open}                 \\
+        \mathcal S_R(U,W,o)
+         & =\operatorname{span}\{C_R^{U,W,o}(\theta):
+        \theta\in X^{\partial E_R}\}.
+        \label{eq:peps_oriented_open_span}
+    \end{align}
+    Here $z_e=(x_h,x_t)$ and $x$ lists the retained crossing endpoints.
+    Setting $o=0$ recovers each ordered boundary factor, internal factor,
+    open vector, and open span.
+\end{definition}
+
+\begin{theorem}[The complete regional contraction range]%
+    \label{thm:peps_oriented_open_range}
+    \lean{TNLean.PEPS.graphOrientedOpenBondCoordinates_eq_sum_prod,
+        TNLean.PEPS.graphOpenRegionNetwork_orientedAveragingSite_coherent,
+        TNLean.PEPS.graphOpenBondRegrouping_orientedAveragingSite,
+        TNLean.PEPS.openRegionWeight_numberedGraphOrientedAveragingTensor,
+        TNLean.PEPS.regionBondPhysicalEquiv_openRegionWeight_oriented,
+        TNLean.PEPS.map_regionGroundSpace_eq_graphOrientedOpenBondSpace,
+        TNLean.PEPS.regionBondPhysicalEquiv_mem_graphOrientedOpenBondSpace_iff}
+    \leanok
+    \uses{def:peps_oriented_open_coefficients,def:peps_region_ground_space}
+    Assume $WU_g=U_gW$ for every $g$. Let $\mathcal C_R$ be the
+    open contraction of the tensors~(\ref{eq:peps_oriented_site}),
+    and let $J_R$ regroup its physical incidences into crossing labels
+    and ordered internal pairs. Then
+    \begin{align}
+        J_R\mathcal C_R(\theta)          & =C_R^{U,W,o}(\theta),
+        \label{eq:peps_oriented_regroup}                         \\
+        J_R\operatorname{im}\mathcal C_R & =\mathcal S_R(U,W,o).
+        \label{eq:peps_oriented_range}
+    \end{align}
+    These identities hold before or after numbering physical and virtual
+    labels. In particular, $\psi\in\operatorname{im}\mathcal C_R$
+    exactly when $J_R\psi\in\mathcal S_R(U,W,o)$.
+    The boundary coefficients may be arbitrary linear combinations of
+    all $\theta$, including entangled boundary vectors.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the normalized group average separately at every vertex,
+    obtaining the factor $|G|^{-|R|}$ and the sum over $q:R\to G$.
+    Regroup the incidence product by internal and crossing edges.
+    Summation over one internal virtual index gives either
+    $(U_{q_h}W)(WU_{q_t^{-1}})$ or
+    $(U_{q_t}W)(WU_{q_h^{-1}})$ with the physical indices interchanged.
+    Commutation with $W$ gives~(\ref{eq:peps_oriented_internal}).
+    Each crossing edge retains its original $\theta_e$, giving
+    (\ref{eq:peps_oriented_open}); commuting the scalar products also
+    gives the internal-first form of the same sum.
+    The bijections of incidence and numbered labels preserve every finite
+    sum. Finally, the regional range is the span of all its boundary
+    columns, proving~(\ref{eq:peps_oriented_range}).
+\end{proof}
+
+\begin{definition}[Oriented incident representation]%
+    \label{def:peps_oriented_incident_representation}
+    \lean{TNLean.PEPS.graphOrientedIncidentMatrix,
+        TNLean.PEPS.graphOrientedIncidentMatrix_one,
+        TNLean.PEPS.graphOrientedIncidentMatrix_mul,
+        TNLean.PEPS.graphOrientedIncidentRepresentation,
+        TNLean.PEPS.graphOrientedIncidentRepresentation_apply,
+        TNLean.PEPS.graphOrientedNumberedIncidentRepresentation,
+        TNLean.PEPS.graphOrientedNumberedIncidentRepresentation_apply}
+    \leanok
+    \uses{def:peps_oriented_native_tail}
+    On $\C^{X^{\operatorname{Inc}(v)}}$, define
+    \begin{align}
+        \rho_v^o(g)_{\sigma,\eta}
+        =\prod_{e\ni v}
+        \begin{cases}
+            U_{g^{-1}}(\eta_e,\sigma_e), & v\text{ is the native tail}, \\
+            U_g(\sigma_e,\eta_e),        & v\text{ is the native head}.
+        \end{cases}
+        \label{eq:peps_oriented_incident}
+    \end{align}
+    Matrix multiplication gives $\rho_v^o(1)=1$ and
+    $\rho_v^o(gh)=\rho_v^o(g)\rho_v^o(h)$. At a tail this follows
+    from $(U_{(gh)^{-1}})^T=(U_{g^{-1}})^T(U_{h^{-1}})^T$.
+    Thus these matrices act as a representation by multiplication on
+    coefficient vectors. If $E_v$ changes numbered virtual coefficients
+    to incidence coefficients, the numbered representation is
+    $E_v^{-1}\rho_v^o(g)E_v$.
+\end{definition}
+
+\begin{theorem}[$G$-injectivity of the oriented average]%
+    \label{thm:peps_oriented_average_g_injective}
+    \lean{TNLean.PEPS.regularSiteMap_graphOrientedAveragingSite,
+        TNLean.PEPS.isGInjective_graphOrientedAveragingSite,
+        TNLean.PEPS.localTensorMap_numberedGraphOrientedAveragingTensor_one,
+        TNLean.PEPS.isGInjective_numberedGraphOrientedAveragingTensor_one}
+    \leanok
+    \uses{def:peps_oriented_incident_representation,
+        def:peps_oriented_averaging_tensor,def:peps_g_injective}
+    The local coefficient map of $A^{U,1,o}_v$ is
+    $\Pi_v=|G|^{-1}\sum_g\rho_v^o(g)$, and is $G$-injective.
+    With physical numbering $P_v$ and virtual numbering $E_v$, its
+    local map is $P_v\Pi_v E_v$ and is $G$-injective for
+    $E_v^{-1}\rho_v^o E_v$.
+    This assertion needs neither unitarity nor semi-regularity of $U$.
+\end{theorem}
+\begin{proof}\leanok
+    Compare~(\ref{eq:peps_oriented_site}) at $W=1$ with
+    (\ref{eq:peps_oriented_incident}) coefficient by coefficient.
+    The group average satisfies $\Pi_v\rho_v^o(g)=\Pi_v$ and fixes
+    every invariant vector. Hence its restriction to the invariant
+    subspace is injective. The invertible coordinate changes $P_v,E_v$
+    preserve both assertions.
+\end{proof}
+
+\subsection{Internal support and regional blocks}
+
+\begin{theorem}[Oriented internal factors determine parent support]%
+    \label{thm:peps_oriented_parent_support}
+    \lean{TNLean.PEPS.graphOrientedOpenInternalFactor_mem_range_of_factors,
+        TNLean.PEPS.graphRegionInternalBondSlice_orientedAveragingSite,
+        TNLean.PEPS.graphRegionInternalBondSlice_mem_range_of_oriented_factors,
+        TNLean.PEPS.regionInternalBondSlice_mem_range_of_oriented_factors,
+        TNLean.PEPS.regionParentGroundSpace_mem_product_range_of_oriented_factors}
+    \leanok
+    \uses{def:peps_oriented_open_coefficients,
+        def:peps_region_parent_hamiltonian}
+    Let $F:\C^Z\to\C^{X\times X}$. Assume both coefficient vectors
+    of $W^2U_g$ and $(W^2U_g)^T$ belong to $\operatorname{im}F$
+    for every $g$. Then each $I_e(q)$ belongs to $\operatorname{im}F$.
+    Assume also $WU_g=U_gW$. Fixing the physical crossing labels $x$
+    in an open vector leaves
+    \begin{align}
+        |G|^{-|R|}\sum_q
+        \left(\prod_{e\in\partial E_R}B_e(q;\theta_e,x_e)\right)
+        \bigotimes_{e\in E_R}I_e(q)
+        \ \in\operatorname{im}F^{\otimes E_R}.
+        \label{eq:peps_oriented_internal_support}
+    \end{align}
+    This holds for every vector in the regional range after taking its
+    internal physical slice. If a region family $\mathcal R$ contains
+    both endpoints of every edge in some member, every vector in its
+    parent space $\mathcal P_{\mathcal R}(A^{U,W,o})$ lies, after
+    regrouping, in $\operatorname{im}F^{\otimes E}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_open_range,thm:peps_parent_support_product_range}
+    Each orientation selects one of the two assumed matrix orders.
+    Choose a preimage under $F$ for every $I_e(q)$ and take their
+    product, with the scalar coefficient in
+    (\ref{eq:peps_oriented_internal_support}). Its image under
+    $F^{\otimes E_R}$ is the displayed sum.
+    Span closure proves the assertion for every regional vector.
+    For a global parent vector, choose a region containing the endpoints
+    of a prescribed edge. Every one-edge slice then belongs to
+    $\operatorname{im}F$. The product-range criterion gives the
+    full $E$-fold range.
+\end{proof}
+
+\begin{definition}[Products of edge-dependent physical maps]%
+    \label{def:peps_oriented_bond_family}
+    \lean{TNLean.PEPS.graphNumberedBondFamilyMatrix,
+        TNLean.PEPS.graphBoundaryBondFamilyMatrix,
+        TNLean.PEPS.graphExteriorBondFamilyCoefficient,
+        TNLean.PEPS.graphNumberedBondFamilyMatrix_eq_submatrix}
+    \leanok
+    For $F_e:\C^{X\times X}\to\C^{Y\times Y}$, define
+    $M(F)=\bigotimes_{e\in E}F_e$, expressed in the numbered site
+    coordinates through the incidence-to-bond bijections.
+    Thus $M(F)_{\tau,\sigma}=\prod_eF_e((\tau_h,\tau_t),(\sigma_h,\sigma_t))$
+    in bond coordinates. Fix exterior endpoint labels $\gamma_Y,\gamma_X$.
+    On a crossing edge put
+    \begin{align}
+        F_{e,R}^{\gamma_Y,\gamma_X}(y,x)
+        =\begin{cases}
+             F_e((\gamma_{Y,e},y),(\gamma_{X,e},x)), & t\in R, \\
+             F_e((y,\gamma_{Y,e}),(x,\gamma_{X,e})), & h\in R.
+         \end{cases}
+        \label{eq:peps_oriented_crossing_block}
+    \end{align}
+    For fixed exterior physical configurations $\tau,\sigma$, let
+    $c_R(F;\tau,\sigma)$ be the product of their matrix coefficients
+    on all $e\in E_{R^c}$.
+\end{definition}
+
+\begin{theorem}[Regional blocks of an edge-family product]%
+    \label{thm:peps_oriented_bond_family_blocks}
+    \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondFamilyMatrix}
+    \leanok
+    \uses{def:peps_oriented_bond_family}
+    The block obtained by fixing exterior output $\tau$ and input
+    $\sigma$ satisfies
+    \begin{align}
+        M(F)_{R;\tau,\sigma}
+        =c_R(F;\tau,\sigma)\,
+        J_{Y,R}^{-1}\left(
+        \bigotimes_{e\in\partial E_R}F_{e,R}^{\gamma_Y,\gamma_X}
+        \otimes\bigotimes_{e\in E_R}F_e\right)J_{X,R},
+        \label{eq:peps_oriented_family_block}
+    \end{align}
+    where $\gamma_Y,\gamma_X$ are the crossing endpoint labels determined
+    by $\tau,\sigma$, and $J_{X,R},J_{Y,R}$ regroup regional coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    Partition the defining product for $M(F)$ into exterior, crossing,
+    and internal edges. Exterior edges give $c_R$; fixing the outside
+    endpoint of a crossing edge gives
+    (\ref{eq:peps_oriented_crossing_block}). The internal factors are
+    unchanged. The coordinate bijections identify their product with
+    (\ref{eq:peps_oriented_family_block}).
+\end{proof}
+
+\begin{theorem}[Composition and adjoints of edge-family products]%
+    \label{thm:peps_oriented_bond_family_algebra}
+    \lean{TNLean.PEPS.graphNumberedBondFamilyMatrix_conjTranspose,
+        TNLean.PEPS.graphNumberedBondFamilyMatrix_mul,
+        TNLean.PEPS.graphNumberedBondFamilyMatrix_one,
+        TNLean.PEPS.graphNumberedBondFamilyMatrix_mul_eq_one}
+    \leanok
+    \uses{def:peps_oriented_bond_family}
+    With compatible finite endpoint alphabets,
+    $M(F)^\dagger=M(F^\dagger)$,
+    $M(F)M(L)=M((F_eL_e)_e)$, and $M((1)_e)=1$.
+    In particular, $F_eL_e=1$ on every edge implies $M(F)M(L)=1$.
+\end{theorem}
+\begin{proof}\leanok
+    Conjugation distributes over each coefficient product.
+    For composition, the sum over the intermediate site configuration
+    is, under the bond-coordinate bijection, a sum over independent
+    intermediate edge labels. It factors into the products $F_eL_e$.
+    The product of edgewise Kronecker deltas is the delta of the
+    complete configuration, proving the identity assertion.
+\end{proof}

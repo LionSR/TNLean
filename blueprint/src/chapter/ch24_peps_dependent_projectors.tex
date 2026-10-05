@@ -1,0 +1,227 @@
+\subsection{Matched representations and a common local inverse}
+\label{sec:peps_dependent_projectors}
+
+Retain the incidence coordinates of Definition~\ref{def:peps_dependent_incidence}.
+Let $G$ be a finite group and let each bond carry a representation
+$U_e:G\to\operatorname{GL}(\C^{X_e})$. The same $U_e$ occurs at both ends of
+that bond, with the dual action at its tail. This is the matching convention
+of \cite[Definition~5.1]{Schuch2010PEPS}.
+% Source: Papers/1001.3807/paper_v3.tex:1278--1316,
+% eq:2d-ug-sym and eq:2d-linv.
+
+\begin{definition}[The incident representation and local coefficient map]%
+    \label{def:peps_dependent_incident_action}
+    \lean{TNLean.PEPS.DependentBondNetwork.incidentMatrix,
+        TNLean.PEPS.DependentBondNetwork.incidentMatrix_one,
+        TNLean.PEPS.DependentBondNetwork.incidentMatrix_mul,
+        TNLean.PEPS.DependentBondNetwork.incidentRepresentation,
+        TNLean.PEPS.DependentBondNetwork.incidentRepresentation_apply,
+        TNLean.PEPS.DependentBondNetwork.localSiteMap,
+        TNLean.PEPS.DependentBondNetwork.localSiteMap_apply}
+    \leanok
+    \uses{def:peps_dependent_incidence}
+    The representation $\rho_v$ acts by the matrix
+    \begin{align}
+        W_v(g)_{\sigma,\eta}
+        =\prod_{(e,+)\in I_v}U_e(g)_{\sigma_{e,+},\eta_{e,+}}
+        \prod_{(e,-)\in I_v}U_e(g^{-1})_{\eta_{e,-},\sigma_{e,-}}.
+        \label{eq:peps_dependent_incident_action}
+    \end{align}
+    It satisfies $W_v(1)=I$ and $W_v(gh)=W_v(g)W_v(h)$, so
+    $\rho_v(g)x=W_v(g)x$. The local coefficient map is
+    $T_vx(s)=\sum_{\eta\in\mathcal X_v}A_v(\eta,s)x(\eta)$.
+    The identity and multiplication laws follow coordinatewise, since
+    $g\mapsto U_e(g^{-1})^{\mathsf T}$ is also a representation.
+\end{definition}
+
+\begin{definition}[Canonical invariant-projector tensors]%
+    \label{def:peps_dependent_averaging_site}
+    \lean{TNLean.PEPS.DependentBondNetwork.representationAveragingSite,
+        TNLean.PEPS.DependentBondNetwork.representationAveragingSite_apply,
+        TNLean.PEPS.DependentBondNetwork.localSiteMap_representationAveragingSite,
+        TNLean.PEPS.DependentBondNetwork.averagingSite,
+        TNLean.PEPS.DependentBondNetwork.localSiteMap_averagingSite,
+        TNLean.PEPS.DependentBondNetwork.averagingSite_apply}
+    \leanok
+    \uses{def:peps_dependent_incident_action}
+    For any representation $\rho_v$ on $\C^{\mathcal X_v}$, let
+    $P_v=|G|^{-1}\sum_g\rho_v(g)$ and define
+    $A_v^0(\eta,s)=(P_v)_{s,\eta}$. Its local coefficient map is exactly
+    $P_v$. For the incident representation,
+    $A_v^0(\eta,s)=|G|^{-1}\sum_gW_v(g)_{s,\eta}$.
+\end{definition}
+
+\begin{theorem}[Canonical tensors are $G$-injective]%
+    \label{thm:peps_dependent_averaging_injective}
+    \lean{TNLean.PEPS.DependentBondNetwork.isGInjective_representationAveragingSite,
+        TNLean.PEPS.DependentBondNetwork.isGInjective_averagingSite}
+    \leanok
+    \uses{def:peps_dependent_averaging_site, def:peps_g_injective}
+    Every $A_v^0$ is $G$-injective for its representation $\rho_v$.
+    In particular this holds for independently chosen incident bond actions.
+\end{theorem}
+\begin{proof}\leanok
+    Right multiplication by $\rho_v(g)$ permutes the group average, so
+    $P_v\rho_v(g)=P_v$. On the invariant subspace $P_v$ is the identity,
+    hence is injective there.
+\end{proof}
+
+\begin{theorem}[Expansion of the literal canonical contraction]%
+    \label{thm:peps_dependent_projector_expansion}
+    \lean{TNLean.PEPS.DependentBondNetwork.network_sum,
+        TNLean.PEPS.DependentBondNetwork.network_mul,
+        TNLean.PEPS.DependentBondNetwork.network_incidentMatrix,
+        TNLean.PEPS.DependentBondNetwork.network_averagingSite}
+    \leanok
+    \uses{def:peps_dependent_network, def:peps_dependent_averaging_site}
+    Local sums expand independently, and local scalars multiply:
+    $\mathcal N_{\sum_i A^i}(B)=\sum_{q:\mathcal V\to J}
+        \mathcal N_{(A^{q_v}_v)_v}(B)$ and
+    $\mathcal N_{(c_vA_v)_v}(B)=(\prod_vc_v)\mathcal N_A(B)$.
+    For fixed vertex labels $q$, contracting the local matrices $W_v(q_v)$
+    gives the product of the entries of
+    $U_e(q_{h(e)})B_eU_e(q_{t(e)}^{-1})$. Consequently, with $n=|\mathcal V|$,
+    \begin{align}
+        \mathcal N_{A^0}(B)(R\sigma)
+        =|G|^{-n}\sum_{q:\mathcal V\to G}\prod_e
+        [U_e(q_{h(e)})B_eU_e(q_{t(e)}^{-1})]_{
+            \sigma_{e,+},\sigma_{e,-}}.
+        \label{eq:peps_dependent_projector_expansion}
+    \end{align}
+    No semi-regularity or unitarity is required. This is the independent-bond
+    version of the projector contraction in \cite[Theorem~5.9]{Schuch2010PEPS}.
+    % Source: Papers/1001.3807/paper_v3.tex:1582--1621.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_incidence_sums, def:peps_dependent_incident_action}
+    Expand each local average, collecting the factor $|G|^{-n}$. Regroup
+    the incident matrix factors by bonds. The independent sum over the two
+    indices of each bond is the displayed three-matrix product, by
+    (\ref{eq:peps_dependent_incidence_sum}).
+\end{proof}
+
+\begin{theorem}[Vertex gauges preserve canonical networks]%
+    \label{thm:peps_dependent_vertex_gauge}
+    \lean{TNLean.PEPS.DependentBondNetwork.network_averagingSite_bondGauge,
+        TNLean.PEPS.DependentBondNetwork.network_averagingSite_vertexGauge}
+    \leanok
+    \uses{def:peps_dependent_averaging_site}
+    For any $q:\mathcal V\to G$ and arbitrary matrices $B_e$, set
+    $B_e^q=U_e(q_{h(e)})B_eU_e(q_{t(e)}^{-1})$. Then
+    $\mathcal N_{A^0}(B^q)=\mathcal N_{A^0}(B)$.
+    In particular the group-label change
+    $p_e\mapsto q_{h(e)}p_eq_{t(e)}^{-1}$ preserves the canonical network.
+    This is the virtual symmetry of \cite[Definition~5.1]{Schuch2010PEPS}.
+    % Source: eq:2d-ug-sym and eq:2d:move-strings.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_projector_expansion}
+    In (\ref{eq:peps_dependent_projector_expansion}), change the vertex
+    summation variable from $r$ to $rq$. The inverse at a tail reverses
+    the product in precisely the required order.
+\end{proof}
+
+\begin{definition}[Local physical changes]%
+    \label{def:peps_dependent_physical_site}
+    \lean{TNLean.PEPS.DependentBondNetwork.physicalMapSite,
+        TNLean.PEPS.DependentBondNetwork.localSiteMap_physicalMapSite,
+        TNLean.PEPS.DependentBondNetwork.localSiteMap_family_injective}
+    \leanok
+    \uses{def:peps_dependent_incident_action}
+    Given finite $Y_v$ and matrices $F_v:\C^{Y_v}\to\C^{Z_v}$, define
+    $(FA)_v(\eta,s)=\sum_tF_v(s,t)A_v(\eta,t)$.
+    Its local coefficient map is $F_vT_v$. Equality of local coefficient
+    maps at every site implies equality of tensor families, by evaluating
+    those maps on every coordinate vector.
+\end{definition}
+
+\begin{theorem}[Physical changes commute with cut contraction]%
+    \label{thm:peps_dependent_physical_contraction}
+    \lean{TNLean.PEPS.DependentBondNetwork.physicalMap_cutMap,
+        TNLean.PEPS.DependentBondNetwork.physicalMap_network}
+    \leanok
+    \uses{def:peps_dependent_physical_site, def:peps_dependent_physical_product,
+        def:peps_dependent_cut}
+    Let $\mathcal F=\bigotimes_vF_v$. For every joint boundary $M$ and
+    every bond-matrix family $B$,
+    $\mathcal F\mathcal C_{A,C}(M)=\mathcal C_{FA,C}(M)$ and
+    $\mathcal F\mathcal N_A(B)=\mathcal N_{FA}(B)$.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the product physical map, interchange the finite physical and
+    incidence sums, and distribute the product of the local sums.
+    The factors $M(r_C\beta)w_C(\beta)$, or $w_B(\beta)$, remain unchanged.
+\end{proof}
+
+\begin{theorem}[A common inverse preserves every cut boundary]%
+    \label{thm:peps_dependent_common_inverse}
+    \lean{TNLean.PEPS.DependentBondNetwork.exists_physicalMap_to_representationAveragingSite,
+        TNLean.PEPS.DependentBondNetwork.physicalMap_recover_representationAveragingSite,
+        TNLean.PEPS.DependentBondNetwork.exists_cutMap_localInverse,
+        TNLean.PEPS.DependentBondNetwork.cutMap_recover_representationAveragingSite,
+        TNLean.PEPS.DependentBondNetwork.iInf_cutSpace_eq_map_representationAveragingSite}
+    \leanok
+    \uses{def:peps_dependent_physical_site, def:peps_dependent_averaging_site,
+        def:peps_g_injective}
+    Suppose the physical alphabets are finite and every $T_v$ is
+    $G$-injective for a representation $\rho_v$ on its virtual space.
+    There are $L_v$ with $L_vT_v=P_v$; hence $LA=A^0$.
+    Invariance alone gives $T_vP_v=T_v$ and $TA^0=A$.
+    Put $\mathcal L=\bigotimes_vL_v$ and $\mathcal T=\bigotimes_vT_v$.
+    For every cut $C$ and every joint boundary $M$,
+    \begin{align}
+        \mathcal L\mathcal C_{A,C}(M)   & =\mathcal C_{A^0,C}(M),
+        \label{eq:peps_dependent_common_inverse}                         \\
+        \mathcal T\mathcal C_{A^0,C}(M) & =\mathcal C_{A,C}(M).\nonumber
+    \end{align}
+    Therefore, for any nonempty family $(C_i)_{i\in J}$ of cuts,
+    \begin{align}
+        \bigcap_{i\in J}\mathcal S_{A,C_i}
+        =\mathcal T\left(\bigcap_{i\in J}\mathcal S_{A^0,C_i}\right).
+        \label{eq:peps_dependent_cut_transport}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_left_inverse,
+        thm:peps_dependent_physical_contraction}
+    Choose each $L_v$ by the left-inverse characterization of $G$-injectivity.
+    Average the invariance equations to get $T_vP_v=T_v$.
+    The physical-contraction identities yield
+    (\ref{eq:peps_dependent_common_inverse}) with the same $M$.
+    If $\psi$ lies in every original cut range, then $\mathcal L\psi$
+    lies in every canonical range. Choose one cut in the nonempty family
+    to conclude $\mathcal T\mathcal L\psi=\psi$.
+    Conversely, $\mathcal T$ carries each canonical range into the
+    corresponding original range.
+\end{proof}
+
+\begin{definition}[Identity tensors and the product invariant projection]%
+    \label{def:peps_dependent_average_projection}
+    \lean{TNLean.PEPS.DependentBondNetwork.identitySite,
+        TNLean.PEPS.DependentBondNetwork.network_identitySite,
+        TNLean.PEPS.DependentBondNetwork.averagingProjector}
+    \leanok
+    \uses{def:peps_dependent_averaging_site, def:peps_dependent_physical_product}
+    The identity tensor has coefficients $I_v(\eta,s)=\delta_{\eta,s}$,
+    so $\mathcal N_I(B)(\sigma)=w_B(R^{-1}\sigma)$.
+    Define the product invariant projection $\mathcal P=\bigotimes_vP_v$.
+\end{definition}
+
+\begin{theorem}[Projecting a bare product and fixing a canonical cut]%
+    \label{thm:peps_dependent_average_projection}
+    \lean{TNLean.PEPS.DependentBondNetwork.averagingProjector_cutMap,
+        TNLean.PEPS.DependentBondNetwork.averagingProjector_network_identitySite}
+    \leanok
+    \uses{def:peps_dependent_average_projection}
+    For any representations $\rho_v$, any joint cut boundary $M$, and any
+    matrices $B_e$,
+    $\mathcal P\mathcal C_{A^0,C}(M)=\mathcal C_{A^0,C}(M)$ and
+    $\mathcal P\mathcal N_I(B)=\mathcal N_{A^0}(B)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_averaging_injective,
+        thm:peps_dependent_common_inverse, thm:peps_dependent_physical_contraction}
+    For the first equality apply canonical recovery to the $G$-injective
+    tensors $A^0$. For the second, applying $P_v$ to the physical leg of
+    $I_v$ gives exactly $A_v^0$; commute these local changes through the network.
+\end{proof}

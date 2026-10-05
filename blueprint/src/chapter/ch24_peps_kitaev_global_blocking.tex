@@ -1,0 +1,186 @@
+\begin{definition}[Periodic checkerboard tiling]%
+    \label{def:peps_kitaev_periodic_tiling}
+    \lean{TNLean.PEPS.kitaevCornerEquiv,
+        TNLean.PEPS.kitaevDoubleCoordinateEquiv,
+        TNLean.PEPS.kitaevPeriodicTilingEquiv,
+        TNLean.PEPS.kitaevTiledRight, TNLean.PEPS.kitaevTiledUp,
+        TNLean.PEPS.kitaevTiledLeft, TNLean.PEPS.kitaevTiledDown,
+        TNLean.PEPS.kitaevPeriodicTurned,
+        TNLean.PEPS.kitaevPeriodicElementarySite}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_tensor}
+    Let $w,h$ be positive integers. Divide the fine torus
+    $\mathbb Z_{2w}\times\mathbb Z_{2h}$ into the disjoint squares
+    based at $(2x,2y)$, with $(x,y)\in\mathbb Z_w\times\mathbb Z_h$.
+    Number their corners clockwise from the upper right, so that
+    $c_0=(1,1)$, $c_1=(1,0)$, $c_2=(0,0)$ and $c_3=(0,1)$.
+    The site correspondence is $E(v,i)=2v+c_i$.
+    Place $T_1$ at corners $0,2$ and $T_0$ at corners $1,3$.
+    Contract every periodic bond with the identity and denote the resulting
+    untwisted PEPS coefficient by $\Psi_T(\sigma)$.
+    This is the periodic version of the elementary tensor in
+    \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[The tiling respects periodic nearest neighbors]%
+    \label{thm:peps_kitaev_periodic_tiling}
+    \lean{TNLean.PEPS.kitaevDoubleCoordinateEquiv_apply,
+        TNLean.PEPS.kitaevTiledRight_left, TNLean.PEPS.kitaevTiledUp_down,
+        TNLean.PEPS.kitaevPeriodicTilingEquiv_right,
+        TNLean.PEPS.kitaevPeriodicTilingEquiv_up,
+        TNLean.PEPS.kitaevPeriodicTilingEquiv_left,
+        TNLean.PEPS.kitaevPeriodicTilingEquiv_down,
+        TNLean.PEPS.kitaevPeriodicTurned_right,
+        TNLean.PEPS.kitaevPeriodicTurned_up}
+    \leanok
+    \uses{def:peps_kitaev_periodic_tiling}
+    The correspondence $E$ is a bijection and identifies each horizontal
+    or vertical step between tiled corners with the corresponding
+    nearest-neighbor step on the fine torus. The orientation of the
+    elementary tensor changes across every such bond, including bonds
+    crossing a periodic seam.
+\end{theorem}
+
+\begin{proof}\leanok
+    In each coordinate, division by two gives a unique coarse coordinate
+    and a remainder in $\{0,1\}$. Adding one changes remainder $0$ to $1$;
+    from remainder $1$ it advances the coarse coordinate and returns the
+    remainder to $0$. The same rule applies at the periodic seam because
+    the fine period is twice the coarse period. The two possible tensor
+    orientations alternate in both cases.
+\end{proof}
+
+\begin{center}
+    % Source: SCP10 Section 7.1, actual neighboring 2x2 checkerboard blocks.
+    % All eight physical indices are fixed. Every tensor has virtual ports
+    % top/right/bottom/left = 90/0/270/180. Ten internal bonds and twelve
+    % open virtual ports give boundary signature (V,P)=(12,0).
+    % The long horizontal bonds are the two labels crossing between blocks.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire},cols=5,bonds=none]
+        \tn[at=(1,1),skin=box,name=A,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_0}
+        \tn[at=(1,2),skin=box,name=B,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_1}
+        \tn[at=(2,1),skin=box,name=C,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_1}
+        \tn[at=(2,2),skin=box,name=D,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_0}
+        \tn[at=(1,4),skin=box,name=E,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_0}
+        \tn[at=(1,5),skin=box,name=F,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_1}
+        \tn[at=(2,4),skin=box,name=G,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_1}
+        \tn[at=(2,5),skin=box,name=H,ports={0:virtual,90:virtual,180:virtual,270:virtual}]{T_0}
+        \tnwire{A.0}{B.180}
+        \tnwire{C.0}{D.180}
+        \tnwire{A.270}{C.90}
+        \tnwire{B.270}{D.90}
+        \tnwire{E.0}{F.180}
+        \tnwire{G.0}{H.180}
+        \tnwire{E.270}{G.90}
+        \tnwire{F.270}{H.90}
+        \tnwire{B.0}{E.180}
+        \tnwire{D.0}{G.180}
+        \tnwire{open n}{A.90}
+        \tnwire{open n}{B.90}
+        \tnwire{open n}{E.90}
+        \tnwire{open n}{F.90}
+        \tnwire{C.270}{open s}
+        \tnwire{D.270}{open s}
+        \tnwire{G.270}{open s}
+        \tnwire{H.270}{open s}
+        \tnwire{open w}{A.180}
+        \tnwire{open w}{C.180}
+        \tnwire{F.0}{open e}
+        \tnwire{H.0}{open e}
+    \end{tenkz}
+\end{center}
+The eight physical indices are fixed. The two long bonds connect neighboring blocks. Their labels are read
+from top to bottom on the eastern boundary of the left block and from
+bottom to top on the western boundary of the right block. The vertical
+pairs obey the corresponding reversed-order convention.
+
+\begin{definition}[Periodic contraction of the four-site blocks]%
+    \label{def:peps_kitaev_periodic_block_contraction}
+    \lean{TNLean.PEPS.kitaevPeriodicBlockBoundary,
+        TNLean.PEPS.kitaevPeriodicBlockedCoeff,
+        TNLean.PEPS.kitaevPeriodicSiteLegs,
+        TNLean.PEPS.kitaevPeriodicFineCoeff}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_block,def:peps_kitaev_periodic_tiling}
+    Let $H_v,V_v\in\mathbb Z_2^2$ be the horizontal and vertical crossing
+    pairs of a block $v$. Its clockwise boundary is
+    $\alpha_v=(V_v,H_v,\operatorname{swap}V_{v-e_y},
+        \operatorname{swap}H_{v-e_x})$.
+    The periodic blocked coefficient is
+    $\Psi_B(\tau)=\sum_{H,V}\prod_v B(\alpha_v;\tau_v)$.
+    The fine coefficient $\Psi_T$ is the sum over these crossing pairs and
+    the four independent internal bonds of every block, with one factor
+    $T_0$ or $T_1$ for each of the four corners.
+\end{definition}
+
+\begin{theorem}[Global contraction of the elementary checkerboard PEPS]%
+    \label{thm:peps_kitaev_global_blocking}
+    \lean{TNLean.PEPS.kitaevPeriodicFineCoeff_eq_blocked,
+        TNLean.PEPS.kitaevPeriodicFineCoeff_eq_colorNetwork,
+        TNLean.PEPS.kitaevPeriodicBlockedCoeff_eq_colorNetwork,
+        TNLean.PEPS.torusBondNetwork_kitaevPeriodicElementarySite_eq_fineCoeff,
+        TNLean.PEPS.torusBondNetwork_kitaevPeriodicElementarySite_eq_colorNetwork,
+        TNLean.PEPS.torusBondNetwork_kitaevPeriodicElementarySite_eq_quantumDoubleNetwork}
+    \leanok
+    \uses{def:peps_kitaev_periodic_tiling,
+        thm:peps_kitaev_periodic_tiling,
+        def:peps_kitaev_periodic_block_contraction,
+        thm:peps_kitaev_checkerboard_blocking}
+    For every fine physical configuration $\sigma$, put
+    $\sigma_v=(\sigma(E(v,0)),\ldots,\sigma(E(v,3)))$.
+    Let $K(t,r,d,l;\tau)=\delta_{\tau,F(t,r,d,l)}$ be the
+    color-difference tensor. Then
+    \begin{align}
+        \Psi_T(\sigma)
+         & =\sum_{a,b:\,\mathbb Z_w\times\mathbb Z_h\to\mathbb Z_2}
+        \prod_v K(b_v,a_v,b_{v-e_y},a_{v-e_x};\sigma_v).
+        \label{eq:peps_kitaev_global_blocking}
+    \end{align}
+    Thus the full fine-lattice state is the coarse color-difference PEPS
+    under physical regrouping. The tensor $K$ is the dual toric-code tensor
+    with physical order $(\sigma_3,\sigma_0,\sigma_1,\sigma_2)$.
+    There is no additional scalar factor.
+\end{theorem}
+
+\begin{proof}\leanok
+    The fine horizontal and vertical bonds partition into four internal
+    bonds and four crossing bonds per block. Regroup the product by its
+    four corners and distribute the independent internal sums to obtain
+    one factor $B$ per coarse site. Write the horizontal crossing pair
+    as $H_v$ and the vertical crossing pair as $V_v$. The clockwise
+    boundary at $v$ is
+    $(V_v,H_v,\operatorname{swap}V_{v-e_y},
+        \operatorname{swap}H_{v-e_x})$.
+    Theorem~\ref{thm:peps_kitaev_checkerboard_blocking} forces the two
+    labels of every crossing pair to agree. Every pair with unequal
+    labels makes the product zero. The surviving global bond assignments
+    are therefore in bijection with $(a,b)$ through
+    $H_v=(a_v,a_v)$ and $V_v=(b_v,b_v)$.
+    Each contributes exactly the product in
+    (\ref{eq:peps_kitaev_global_blocking}). The local color-difference
+    identity identifies $K$ with the dual toric-code tensor.
+\end{proof}
+
+\begin{theorem}[Unitary physical regrouping of the global checkerboard state]%
+    \label{thm:peps_kitaev_global_physical_blocking}
+    \lean{TNLean.PEPS.kitaevPhysicalBlockingEquiv,
+        TNLean.PEPS.kitaevPhysicalBlockingMatrix,
+        TNLean.PEPS.kitaevPhysicalBlockingMatrix_isIsometry,
+        TNLean.PEPS.kitaevPhysicalBlockingMatrix_conjTranspose_isIsometry,
+        TNLean.PEPS.kitaevPhysicalBlockingMatrix_mulVec_checkerboard}
+    \leanok
+    \uses{thm:peps_kitaev_global_blocking}
+    Let $R\ket{\sigma}=\ket{(\sigma_v)_v}$ be the physical regrouping
+    from single fine spins to four-spin coarse sites. Then
+    $R^\dagger R=1$, $RR^\dagger=1$ and $R\Psi_T=\Psi_K$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The disjoint tiling makes $\sigma\mapsto(\sigma_v)_v$ a bijection
+    of computational bases, so both inner-product identities hold.
+    Each coarse coefficient of $R\Psi_T$ has exactly one contributing
+    fine configuration. Apply (\ref{eq:peps_kitaev_global_blocking}).
+\end{proof}
+% Scope: binary checkerboard tensors on even-period tori. This does not
+% mark SCP10 Observation 6.6 for arbitrary regular G-isometric tensors complete.
