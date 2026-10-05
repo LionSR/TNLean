@@ -89,6 +89,7 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_sector_weight.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -170,6 +171,7 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_sector_weight.py'
   workflow_dispatch:
 
 concurrency:
@@ -268,6 +270,7 @@ jobs:
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
+              - 'scripts/test_tenkz_sector_weight.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -329,6 +332,22 @@ jobs:
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
+      - name: Test GHZ sector-probability obstruction
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/GHZSectorWeight.lean
+
+      - name: Test equal GHZ parents with unequal periodic probabilities
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/GHZSectorParent.lean
+
       - name: Test compatible coherent seed conversion
         timeout-minutes: 2
         run: >
@@ -801,6 +820,11 @@ jobs:
       - name: Test ordered mixing contraction diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_ordered_mixing.py
+
+      - name: Test the GHZ sector-probability contraction
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_tenkz_sector_weight.py
 
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
