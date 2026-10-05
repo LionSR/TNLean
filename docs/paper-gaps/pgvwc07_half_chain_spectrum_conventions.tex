@@ -9,7 +9,7 @@
 \date{2026-10-04}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{Source and index convention}
 Theorem~6 of~\cite{PerezGarcia2007MPSReps}, preceded by the calculation
@@ -79,11 +79,51 @@ operator is asserted.
 The finite-size comparison and normalized spectral convergence are
 \leanid{MPSTensor.halfChainEigenvalues_eq_boundary} and
 \leanid{MPSTensor.tendsto_halfChainEigenvalues}.
-The source-unital statement is
-\leanid{MPSTensor.tendsto_halfChainEigenvalues_unital}; its complementary
-gap follows from normality. The more general explicit-gap theorem allows
-singular nonnegative fixed points. Such points are outside the faithful
-canonical hypotheses of the source and are not asserted to be normal.
+The normal-tensor unital statement is
+\leanid{MPSTensor.tendsto_halfChainEigenvalues_unital}; it assumes
+normality explicitly. Bare uniqueness of the peripheral eigenvalue does
+not imply irreducibility: the identity channel has peripheral spectrum
+$\{1\}$ but a non-scalar fixed-point space.
+
+The source context includes all three one-block canonical conditions from
+Theorem~4, lines 742--759: unitality, a faithful dual fixed point, and
+scalar fixed points. Together with Condition C2 and its spectral-radius-one
+normalization at lines 954--963, these imply normality by
+\leanid{MPSTensor.isNormalTensor_of_pgvwc07_canonical_c2}.
+The explicit source-hypothesis conclusion is
+\leanid{MPSTensor.tendsto_halfChainEigenvalues_of_pgvwc07_canonical_c2}.
+For an explicitly one-block canonical tensor, no irreducibility or
+complementary spectral gap is assumed in addition to the three canonical
+conditions and normalized C2 hypothesis.
+The earlier normal-tensor result is a valid intermediate theorem, not by
+itself the formal statement from those source hypotheses.
+
+The more general explicit-gap theorem allows singular nonnegative fixed
+points. Such points are outside the faithful canonical hypotheses of the
+source and are not asserted to be normal.
+
+\section{Remaining weighted multiblock scope}
+The canonical form in Theorem~4 is a weighted direct sum; the three
+canonical conditions apply separately to its blocks. Condition C2 does
+not alone make the original representation a single faithful unital block.
+For example, let $0<r<1$ and
+$A_0=\operatorname{diag}(1,0)$, $A_1=\operatorname{diag}(0,r)$.
+The transfer spectrum is $\{1,r^2,0,0\}$, with a simple peripheral
+eigenvalue one, but the canonical form has two weighted blocks and the
+ring vector is $|0^N\rangle+r^N|1^N\rangle$.
+The phrase ``just one block'' at source lines 960--963 therefore requires
+an asymptotic dominant-block interpretation rather than literal deletion
+of all subleading weighted blocks at finite length.
+
+The new source-hypothesis corollary treats an explicitly one-block
+canonical tensor. It repairs the previously missing derivation of
+normality in that setting; it does not formalize the reduction from an
+arbitrary weighted canonical representation satisfying C2 to its dominant
+block. That reduction, including the disappearing subleading physical
+contribution and spectral normalization, remains open here. Accordingly,
+the unrestricted source theorem is not marked as completely formalized.
+The boundary-index and decay corrections in the preceding sections remain
+resolved independently of this representation-scope obligation.
 
 \bibliographystyle{alpha}
 \bibliography{references}

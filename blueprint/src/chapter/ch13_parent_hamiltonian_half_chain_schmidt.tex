@@ -506,7 +506,7 @@ conjugate-transposed tensor.
     Apply this identity to the matrix units in the overlap formula.
 \end{proof}
 
-\begin{theorem}[Half-chain interpretation of the dual fixed point]%
+\begin{theorem}[Half-chain limit for normal unital tensors]%
     \label{thm:half_chain_unital_limit}
     \lean{MPSTensor.tendsto_halfChainGram_unital}
     \lean{MPSTensor.tendsto_halfChainSpectralMatrix_unital}
@@ -520,8 +520,9 @@ conjugate-transposed tensor.
     Then $Z_L\to1$ and $Z_L>0$ for all sufficiently large $L$.
     For every $k\in\mathbb N$, the actual physical reduced density obeys
     $s_k(\widehat\rho_L)\to s_k(\Lambda\otimes\Lambda)$.
-    This is the half-chain conclusion of
-    \cite[Theorem~6]{PerezGarcia2007Matrix} in its unital convention.
+    This statement assumes normality explicitly.
+    The source canonical conditions and Condition C2 are treated in
+    Theorem~\ref{thm:half_chain_source_limit}.
     The index and decay conventions are detailed in
     \cite{gap:pgvwc07_half_chain_spectrum_conventions}.
     The intermediate Gram limit is
@@ -544,3 +545,51 @@ conjugate-transposed tensor.
     Theorem~\ref{thm:half_chain_ordered_limit} now apply to the original
     physical reduced matrices.
 \end{proof}
+
+
+\begin{theorem}[Half-chain interpretation from canonical form and Condition C2]%
+    \label{thm:half_chain_source_limit}
+    \lean{MPSTensor.isNormalTensor_of_pgvwc07_canonical_c2}
+    \lean{MPSTensor.tendsto_halfChainEigenvalues_of_pgvwc07_canonical_c2}
+    \leanok
+    Let $A$ satisfy the three one-block canonical conditions of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}: $\sum_i A_iA_i^\dagger=I$,
+    a faithful diagonal dual fixed point $\Lambda=\operatorname{diag}
+        (\lambda_\alpha)>0$, and
+    $\{X:\E_A(X)=X\}=\mathbb C I$.
+    Normalize $\operatorname{tr}\Lambda=1$ and the transfer spectral radius
+    to one. Assume Condition C2: every unit-modulus transfer eigenvalue is one.
+    Then $A$ is normal. For every $k\in\mathbb N$, the ordered physical
+    half-chain eigenvalues, with multiplicities and zero extension, satisfy
+    $s_k(\widehat\rho_L)\to s_k(\Lambda\otimes\Lambda)$.
+    This gives the one-block canonical half-chain conclusion of
+    \cite[Theorem~6]{PerezGarcia2007Matrix} without an additional normality
+    or complementary-gap assumption. The hypothesis that this is a single
+    canonical block is explicit; reduction of a general weighted canonical
+    representation is not asserted here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc07_block_irreducible, thm:half_chain_unital_limit}
+    The faithful dual fixed point and scalar fixed-point condition imply
+    irreducibility: an invariant projection has a positive defect with
+    zero pairing against $\Lambda$, hence is fixed, scalar, and trivial.
+    Unitality supplies the identity eigenvector, while Condition C2 excludes
+    other peripheral eigenvalues. These statements and the spectral-radius
+    normalization give normality. Apply
+    Theorem~\ref{thm:half_chain_unital_limit} to the original tensor.
+\end{proof}
+
+
+\begin{theorem}[General canonical C2 half-chain limit]%
+    \label{thm:half_chain_general_c2_source}
+    \notready
+    For a TI MPS satisfying Condition C2, the source asserts convergence of
+    the half-chain reduced spectrum to the doubled canonical fixed-point
+    spectrum~\cite[Theorem~6]{PerezGarcia2007Matrix}. For a general weighted
+    canonical representation, passing to its dominant block and controlling
+    the subleading physical contribution remains separate from
+    Theorem~\ref{thm:half_chain_source_limit}; see
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}.
+\end{theorem}

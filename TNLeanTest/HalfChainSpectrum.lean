@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.HalfChainCanonicalSpectrum
+import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
 
 /-!
 # Finite-size half-chain spectrum regression tests
@@ -80,6 +80,38 @@ example (k : ℕ) :
       norm_num [resetWeights, Matrix.trace_diagonal, Fin.sum_univ_two]
     simp [heq]
 
+-- The fixed-point clause in the canonical hypotheses is essential:
+-- peripheral uniqueness by itself does not exclude the identity channel.
+example (μ : ℂ) (hμ : Module.End.HasEigenvalue
+    (LinearMap.id : Module.End ℂ (Matrix (Fin 2) (Fin 2) ℂ)) μ) : μ = 1 := by
+  obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
+  have heq : X = μ • X := hX.apply_eq_smul
+  have hz : (1 - μ) • X = 0 := by rw [sub_smul, one_smul, ← heq, sub_self]
+  exact (sub_eq_zero.mp ((smul_eq_zero.mp hz).resolve_right hX.2)).symm
+
+example : ¬(∀ X : Matrix (Fin 2) (Fin 2) ℂ,
+    (LinearMap.id : Module.End ℂ (Matrix (Fin 2) (Fin 2) ℂ)) X = X →
+      ∃ c : ℂ, X = c • 1) := by
+  intro hscalar
+  obtain ⟨c, hc⟩ := hscalar (Matrix.diagonal ![1, 0]) rfl
+  have h0 := congrFun (congrFun hc 0) 0
+  have h1 := congrFun (congrFun hc 1) 1
+  norm_num at h0 h1
+  exact one_ne_zero (h0.trans h1.symm)
+
+example {d D : ℕ} (A : MPSTensor d D) (lam : Fin D → ℝ)
+    (hlam : ∀ a, 0 < lam a) (htr : ∑ a, lam a = 1)
+    (hU : ∑ i, A i * (A i)ᴴ = 1)
+    (hfix : ∑ i, (A i)ᴴ * (Matrix.diagonal fun a => (lam a : ℂ)) * A i =
+      Matrix.diagonal fun a => (lam a : ℂ))
+    (hscalar : ∀ X, Kraus.transferMap A X = X → ∃ c : ℂ, X = c • 1)
+    (hRadius : spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (Kraus.transferMap A)) = 1)
+    (hC2 : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → ‖μ‖ = 1 → μ = 1) :
+    IsNormalTensor A :=
+  isNormalTensor_of_pgvwc07_canonical_c2 A lam hlam htr hU hfix hscalar hRadius hC2
+
 section AxiomChecks
 set_option linter.hashCommand false
 
@@ -102,5 +134,15 @@ set_option linter.hashCommand false
 /-- info: 'MPSTensor.tendsto_halfChainEigenvalues_unital' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
 #print axioms MPSTensor.tendsto_halfChainEigenvalues_unital
+
+/-- info: 'MPSTensor.isNormalTensor_of_pgvwc07_canonical_c2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms MPSTensor.isNormalTensor_of_pgvwc07_canonical_c2
+
+/-- info: 'MPSTensor.tendsto_halfChainEigenvalues_of_pgvwc07_canonical_c2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound] -/
+#guard_msgs in
+#print axioms MPSTensor.tendsto_halfChainEigenvalues_of_pgvwc07_canonical_c2
 
 end AxiomChecks
