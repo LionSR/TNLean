@@ -88,10 +88,7 @@ theorem exists_isPairApproximable_of_ordered_mixing {D : ℕ}
   have hwhole : ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
       transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ δ := by
     have hsingle : ∑ _ : Fin 1, N = N := by simp
-    have hi : ∀ i : Fin N, blockSite hsingle 0 i = i := by
-      intro i
-      apply Fin.ext
-      simp [blockSite, blockOffset]
+    have hi := blockSite_singleton hsingle
     have h := hmix (fun _ : Fin 1 => N) hsingle 0
       (Nat.pos_of_ne_zero (NeZero.ne N))
     simp only [hi] at h
