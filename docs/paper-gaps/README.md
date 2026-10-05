@@ -1000,8 +1000,11 @@ measurements and classical communication (arXiv:2103.13367, Theorem
   `2 * ceil(log_d B)` overhead per native layer, hence total intersite depth
   at most `2 * ceil(log_d B) * T` for a depth-`T` bounded native channel protocol,
   including exact reference preservation, original physical-port
-  input/output and product-zero designated memory reset. It separates the
-  remaining local dilation and source QCcc protocol-block witness conditions.
+  input/output and product-zero designated memory reset. Every such finite
+  physical-port protocol also has an actual unitary realization at the same
+  intersite depth, with fresh local product-zero environments and one final
+  discard. The discarded environments need not reset. Source QCcc block/control
+  and pure-output system--ancilla conditions remain separate.
 
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 

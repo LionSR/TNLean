@@ -21,9 +21,11 @@ states; it can also be tensored with any external reference.
 initialization and physical-port input/output for the
 finite reduced-channel resource comparison. The depth counts only physical-port intersite
 layers; the free onsite-unitary convention is arXiv:2103.13367, main text p. 1.
-An explicit local unitary-dilation/source
-QCcc protocol-block witness is a separate representation layer, not an assumption or
-consequence of this theorem. See `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
+`PhysicalPortUnitaryCompilation.lean` combines this identity with the proved finite
+unitary dilation, using fresh local product-zero environments and one final discard at
+the same intersite depth. Those discarded environments need not reset. Source QCcc
+block/control and pure-output system--ancilla conditions remain separate. See
+`docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
 -/
 
 open Matrix
