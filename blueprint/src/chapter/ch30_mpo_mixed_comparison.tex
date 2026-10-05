@@ -1,0 +1,190 @@
+% Exact coefficient identifications; canonical diagnostics are pending.
+% This leaf does not assert the mixed pentagon or its source capstone.
+\section{Identifying the fusion and action comparisons}
+\label{sec:glm_mixed_comparison}
+
+\begin{theorem}[Entries of the two action trees]
+    \label{thm:glm_action_tree_entries}
+    \lean{MPOTensor.fusionThenActionSynthesis_apply,
+        MPOTensor.sequentialActionAnalysis_apply,
+        MPOTensor.fusionThenActionAnalysis_apply,
+        MPOTensor.sequentialActionSynthesis_apply}
+    \uses{def:glm_boundary_action_trees}
+    Use fusion analysis and synthesis $W,\widehat W$ and action analysis
+    and synthesis $V,\widehat V$, as in
+    Definition~\ref{def:glm_boundary_action_trees}.
+    Write $u=((\alpha,\beta),\xi)$ for the common incoming bond, where
+    $\alpha<\chi_a$, $\beta<\chi_b$, and $\xi<D_x$, and let $z<D_y$.
+    For the paths $(c,\mu;y,k)$ and $(t,j;y,i)$, respectively,
+    \begin{align}
+        S_{\rm fus}^{c,\mu;y,k}[u,z]
+         & =\sum_{v<\chi_c}
+        \widehat W_{ab}^{c,\mu}[(\alpha,\beta),v]
+        \widehat V_{cx}^{y,k}[(v,\xi),z],\notag \\
+        H_{\rm seq}^{t,j;y,i}[z,u]
+         & =\sum_{v<D_t}
+        V_{at}^{y,i}[z,(\alpha,v)]
+        V_{bx}^{t,j}[v,(\beta,\xi)],\notag      \\
+        H_{\rm fus}^{c,\mu;y,k}[z,u]
+         & =\sum_{v<\chi_c}
+        V_{cx}^{y,k}[z,(v,\xi)]
+        W_{ab}^{c,\mu}[v,(\alpha,\beta)],\notag \\
+        S_{\rm seq}^{t,j;y,i}[u,z]
+         & =\sum_{v<D_t}
+        \widehat V_{bx}^{t,j}[(\beta,\xi),v]
+        \widehat V_{at}^{y,i}[(\alpha,v),z].
+        \label{eq:glm_action_tree_entries}
+    \end{align}
+    These formulas hold for arbitrary matrices of the indicated shapes.
+    Empty intermediate bond spaces give empty sums.
+\end{theorem}
+\begin{proof}
+    Expand each matrix product and separate a product bond into its two
+    coordinates. The Kronecker identity fixes the spectator coordinate.
+    For the sequential tree, its bond associator sends
+    $((\alpha,\beta),\xi)$ to $(\alpha,(\beta,\xi))$, giving the same
+    incoming coordinates as the fusion-then-action tree.
+\end{proof}
+
+\begin{theorem}[Trace formulas for the two fusion comparisons]
+    \label{thm:glm_fusion_comparison_traces}
+    \lean{MPOTensor.CompleteZipperFusionFamily.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one,
+        MPOTensor.CompleteZipperFusionFamily.printedFMatrix_eq_inv_dim_mul_trace,
+        MPOTensor.CompleteZipperFusionFamily.leftTripleAnalysis_mul_rightTripleSynthesis_eq_smul_one,
+        MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_eq_inv_dim_mul_trace}
+    \uses{def:mpdo_complete_zipper_fusion_family,
+        thm:mpdo_complete_zipper_printed_fmove}
+    Fix a complete zipper fusion family and final label $d$ with bond
+    dimension $n_d>0$. Let $P_{abc}^{d}$ be its forward comparison and
+    $Q_{abc}^{d}=(P_{abc}^{d})^{-1}$. For a left-tree multiplicity $t$ and
+    a right-tree multiplicity $q$, let $H_{\rm L}^{t},H_{\rm R}^{q}$
+    retain the final bond rows of the corresponding analysis maps, and
+    let $S_{\rm L}^{t},S_{\rm R}^{q}$ retain their synthesis columns.
+    Then
+    \begin{align}
+        H_{\rm R}^{q}S_{\rm L}^{t}
+         & =P_{abc}^{d}[q,t]I_{n_d},\notag                               \\
+        H_{\rm L}^{t}S_{\rm R}^{q}
+         & =Q_{abc}^{d}[t,q]I_{n_d},\notag                               \\
+        P_{abc}^{d}[q,t]
+         & =n_d^{-1}\operatorname{tr}(H_{\rm R}^{q}S_{\rm L}^{t}),\notag \\
+        Q_{abc}^{d}[t,q]
+         & =n_d^{-1}\operatorname{tr}(H_{\rm L}^{t}S_{\rm R}^{q}).
+        \label{eq:glm_fusion_comparison_traces}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpdo_complete_zipper_printed_fmove}
+    The fixed-final forward comparison is $P\otimes I_{n_d}$, so its
+    $(q,t)$ slice gives the first identity. From
+    $S_{\rm R}(P\otimes I)=S_{\rm L}$ and $PQ=I$, obtain
+    $S_{\rm L}(Q\otimes I)=S_{\rm R}$. The fixed-final part of full
+    left-tree biorthogonality gives $H_{\rm L}S_{\rm L}=I$; hence
+    $H_{\rm L}S_{\rm R}=Q\otimes I$. Taking its $(t,q)$ slice gives
+    the second identity. Taking traces and dividing by $n_d$ gives the
+    two coefficient formulas in (\ref{eq:glm_fusion_comparison_traces}).
+\end{proof}
+
+\begin{definition}[Source-oriented fusion coefficients]
+    \label{def:glm_boundary_fusion_f_matrix}
+    \lean{MPOTensor.FusionLeftMultiplicity,
+        MPOTensor.FusionRightMultiplicity,MPOTensor.fusionFMatrix}
+    \uses{def:glm_boundary_decomposition}
+    For fusion multiplicities $N$, define the finite index sets
+    \begin{align}
+        \mathcal I_{\rm L}(a,b,c;d)
+         & =\{(e,\mu,\nu):\mu<N_{ab}^{e},\ \nu<N_{ec}^{d}\},\notag         \\
+        \mathcal I_{\rm R}(a,b,c;d)
+         & =\{(f,\lambda,\sigma):\lambda<N_{bc}^{f},\ \sigma<N_{af}^{d}\}.
+        \notag
+    \end{align}
+    Multiplicity indices are nonnegative integers. For fusion analysis
+    $W$ and synthesis $\widehat W$, form the actual contractions
+    \begin{align}
+        H_{\rm L}^{e,\mu,\nu}[z,((\alpha,\beta),\gamma)]
+         & =\sum_{v<\chi_e}W_{ec}^{d,\nu}[z,(v,\gamma)]
+        W_{ab}^{e,\mu}[v,(\alpha,\beta)],\notag                          \\
+        S_{\rm R}^{f,\lambda,\sigma}[((\alpha,\beta),\gamma),z]
+         & =\sum_{v<\chi_f}\widehat W_{bc}^{f,\lambda}[(\beta,\gamma),v]
+        \widehat W_{af}^{d,\sigma}[(\alpha,v),z].\notag
+    \end{align}
+    The source-oriented matrix has left-tree rows, right-tree columns,
+    and entries
+    \begin{align}
+        F_{abc}^{d}[(e,\mu,\nu),(f,\lambda,\sigma)]
+         & =\chi_d^{-1}\operatorname{tr}
+        (H_{\rm L}^{e,\mu,\nu}S_{\rm R}^{f,\lambda,\sigma}).
+        \label{eq:glm_boundary_fusion_f_matrix}
+    \end{align}
+    This is the analysis direction of
+    \cite[Section~2]{GarreRubio2023MPOSym}.
+\end{definition}
+
+\begin{theorem}[Identification of the source fusion matrix]
+    \label{thm:glm_source_fusion_comparison}
+    \lean{MPOTensor.ofBiorthogonal_inversePrintedFMatrix_eq_fusionFMatrix}
+    \uses{def:glm_boundary_fusion_f_matrix,def:glm_boundary_zipper_family}
+    Suppose the operator blocks have positive bond dimensions, are
+    individually injective, admit the supplied exact fusion decomposition,
+    and their simultaneous one-letter block map has a left inverse.
+    The complete zipper fusion family constructed from these data satisfies
+    \begin{align}
+        Q_{abc}^{d}[t,q] & =F_{abc}^{d}[t,q]
+        \label{eq:glm_source_fusion_comparison}
+    \end{align}
+    for every $t\in\mathcal I_{\rm L}(a,b,c;d)$ and
+    $q\in\mathcal I_{\rm R}(a,b,c;d)$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_fusion_comparison_traces}
+    Use the inverse trace formula in
+    (\ref{eq:glm_fusion_comparison_traces}). The constructed family's
+    left analysis and right synthesis are exactly the two contractions
+    in (\ref{eq:glm_boundary_fusion_f_matrix}), including their bond
+    flattening. Their normalized traces agree.
+\end{proof}
+
+\begin{theorem}[Identification of the auxiliary action comparison]
+    \label{thm:glm_auxiliary_action_comparison}
+    \lean{MPOTensor.triangular_printedFMatrix_eq_actionLMatrix}
+    \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_zipper_family}
+    Label auxiliary operator blocks by $o(a)$ and state blocks by $q(x)$,
+    with bond dimensions $\chi_a$ and $D_x$. Give operator/operator
+    channels the original fusion maps and operator/state channels the
+    original action maps; all other multiplicities are zero. Suppose
+    an auxiliary tensor family with these maps has positive bonds,
+    individual injectivity, exact fusion decompositions, and a simultaneous
+    one-letter block left inverse. Its constructed forward comparison obeys
+    \begin{align}
+         & P_{o(a)o(b)q(x)}^{q(y)}
+        [(q(z),j,i),(o(c),\mu,k)]\notag          \\
+         & \qquad=L_{abx}^{y}[(z,i,j),(c,k,\mu)]
+        \label{eq:glm_auxiliary_action_comparison}
+    \end{align}
+    whenever $i<M_{az}^{y}$, $j<M_{bx}^{z}$, $k<M_{cx}^{y}$, and
+    $\mu<N_{ab}^{c}$. Thus the auxiliary row $(z,j,i)$ is reordered as
+    $(z,i,j)$ and the auxiliary column $(c,\mu,k)$ as $(c,k,\mu)$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_fusion_comparison_traces,thm:glm_action_tree_entries}
+    The forward trace formula is the contraction of auxiliary right
+    analysis with left synthesis. On these operator/state labels,
+    (\ref{eq:glm_action_tree_entries}) identifies those maps with
+    $H_{\rm seq}$ and $S_{\rm fus}$. Reindex the common incoming bond
+    $((\alpha,\beta),\xi)$ by its flattened coordinate. The trace is
+    unchanged and becomes the defining normalized trace of $L$ in
+    Definition~\ref{def:glm_boundary_action_l_matrix}.
+\end{proof}
+
+Only virtual maps occur in these coefficient identifications. They therefore
+apply equally to a commonly blocked auxiliary family with those same maps.
+Theorem~\ref{thm:glm_triangular_boundary_inverse} constructs the common
+blocking needed for the auxiliary family. Its specialization to the
+coupled pentagon is Theorem~\ref{thm:glm_actual_mixed_pentagon}.
+
+% Exact source convention: Papers/2203.12563/REsubmission.tex,
+% Fsymbolsdef, eq:F_symbol2, 1Fsymbol, and coupledpent (lines 554--562).
+% Local correction: docs/paper-gaps/glm23_multiplicity_l_indices.tex.
+% Source F is Q (left analysis times right synthesis), while auxiliary P is L.
+% The corrected coupled-pentagon factor is (F_{abc}^{e})_{f,mu nu}^{d,eta chi};
+% the printed source reverses both multiplicity pairs.

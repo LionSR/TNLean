@@ -1,0 +1,161 @@
+% Source-complete mixed pentagon; canonical elaboration is pending.
+\section{The multiplicity mixed pentagon from the exact source maps}
+\label{sec:glm_source_mixed_pentagon}
+
+\begin{theorem}[The auxiliary inverse operator sector]
+    \label{thm:glm_auxiliary_fusion_comparison}
+    \lean{MPOTensor.triangular_inversePrintedFMatrix_eq_fusionFMatrix}
+    \uses{def:glm_boundary_fusion_f_matrix,
+        def:mpdo_complete_zipper_fusion_family}
+    Let an auxiliary tensor family on the disjoint operator/state labels
+    have positive bond dimensions, individual injectivity, and a simultaneous
+    one-letter block left inverse. Suppose the original fusion and action
+    maps give its exact biorthogonal decompositions on the two populated
+    kinds of channels, with every other multiplicity zero. Construct its
+    complete zipper family from these data. On four operator labels, the
+    inverse comparison is the source-oriented fusion matrix:
+    \begin{align}
+        Q_{abc}^{d}[(e,\mu,\nu),(f,\lambda,\sigma)]
+         & =F_{abc}^{d}[(e,\mu,\nu),(f,\lambda,\sigma)].
+        \label{eq:glm_auxiliary_fusion_comparison}
+    \end{align}
+    Here $Q$ is the inverse of the forward comparison $P$, with left-tree
+    rows and right-tree columns. The auxiliary physical alphabet may
+    already result from a common blocking; the coefficient depends only
+    on the unchanged virtual maps.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_fusion_comparison_traces,
+        def:glm_boundary_fusion_f_matrix}
+    Extract $Q$ by the normalized trace of left analysis followed by right
+    synthesis. On operator labels these are exactly the two original
+    fusion contractions defining $F$. The bond dimension and both virtual
+    maps are unchanged, so the expressions agree entry by entry.
+\end{proof}
+
+\begin{theorem}[Coupled pentagon of the actual coefficients]
+    \label{thm:glm_actual_mixed_pentagon}
+    \lean{MPOTensor.triangular_actionLMatrix_mixed_pentagon}
+    \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix,
+        def:mpdo_complete_zipper_fusion_family,thm:glm_auxiliary_fusion_comparison}
+    Assume the auxiliary tensors, inverse, and exact maps satisfy the
+    hypotheses of Theorem~\ref{thm:glm_auxiliary_fusion_comparison}.
+    Let $a,b,c,e,f$ be operator labels and $x,y,z,t$ state labels.
+    Fix multiplicities
+    \begin{align}
+        i   & \in\{0,\ldots,M_{az}^{y}-1\},       &
+        j   & \in\{0,\ldots,M_{bt}^{z}-1\},       &
+        k   & \in\{0,\ldots,M_{cx}^{t}-1\},\notag   \\
+        m   & \in\{0,\ldots,M_{ex}^{y}-1\},       &
+        \mu & \in\{0,\ldots,N_{bc}^{f}-1\},       &
+        \nu & \in\{0,\ldots,N_{af}^{e}-1\}.\notag
+    \end{align}
+    The normalized-trace matrices of the original maps satisfy
+    \begin{align}
+         & \sum_{d,n,\eta,\chi}
+        L_{ab t}^{y}[(z,i,j),(d,n,\eta)]
+        L_{dc x}^{y}[(t,n,k),(e,m,\chi)]\notag       \\
+         & \hspace{35mm}\cdot
+        F_{abc}^{e}[(d,\eta,\chi),(f,\mu,\nu)]\notag \\
+         & \quad=\sum_l
+        L_{bc x}^{z}[(t,j,k),(f,l,\mu)]
+        L_{af x}^{y}[(z,i,l),(e,m,\nu)].
+        \label{eq:glm_actual_mixed_pentagon}
+    \end{align}
+    The left sum ranges over operator labels $d$ and
+    $n\in\{0,\ldots,M_{dt}^{y}-1\}$,
+    $\eta\in\{0,\ldots,N_{ab}^{d}-1\}$,
+    $\chi\in\{0,\ldots,N_{dc}^{e}-1\}$; the right sum ranges over
+    $l\in\{0,\ldots,M_{fx}^{z}-1\}$. Empty multiplicity spaces are
+    included.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_mixed_entries,thm:glm_auxiliary_action_comparison,
+        thm:glm_auxiliary_fusion_comparison}
+    Apply Theorem~\ref{thm:glm_mixed_entries}, whose matrix identity is
+    $EDQ=CB$, to the auxiliary input
+    $(a,b,c,x)$ and final label $y$. Auxiliary state-left channels are
+    empty, so the remaining intermediate fusion label is an operator.
+    Replace each forward comparison by its actual action matrix, using
+    row $(z,j,i)$ and column $(d,\eta,n)$ in the auxiliary coordinates
+    for source row $(z,i,j)$ and column $(d,n,\eta)$. Replace the inverse
+    operator comparison by $F$ using
+    (\ref{eq:glm_auxiliary_fusion_comparison}). This gives exactly
+    (\ref{eq:glm_actual_mixed_pentagon}).
+\end{proof}
+
+\begin{theorem}[The unblocked maps satisfy the mixed pentagon]
+    \label{thm:glm_unblocked_mixed_pentagon}
+    \lean{MPOTensor.actionLMatrix_mixed_pentagon}
+    \uses{def:glm_boundary_decomposition,def:glm_boundary_action_l_matrix,
+        def:glm_boundary_fusion_f_matrix}
+    Let the operator and state blocks be individually injective, have
+    positive bond dimensions, and have no scalar-gauge duplicates within
+    either family. Any exact biorthogonal fusion and action maps for these
+    blocks satisfy (\ref{eq:glm_actual_mixed_pentagon}) with their original
+    unblocked normalized-trace coefficients.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_actual_mixed_pentagon,thm:glm_triangular_boundary_exact,
+        thm:glm_triangular_boundary_blocking,thm:glm_triangular_boundary_inverse}
+    Pad the physical letters in the upper-left corner and upper-right
+    column. Their disjoint supports give cross-kind scalar-gauge
+    separation, and retained letters preserve individual injectivity.
+    The derived common positive blocking supplies a simultaneous inverse.
+    Exact pairwise reconstruction survives this blocking with the same
+    rectangular maps, so it gives a complete zipper family. Apply
+    Theorem~\ref{thm:glm_actual_mixed_pentagon}. All coefficient contractions are virtual and thus
+    retain their original values. The auxiliary physical dimension is
+    $(d+1)^L$, and no ambient identity-support premise is needed.
+\end{proof}
+
+\begin{theorem}[Boundary closedness and compatibility yield coherent maps]
+    \label{thm:glm_boundary_source_mixed_pentagon}
+    \lean{MPOTensor.IsBoundaryCompatible.exists_exact_mixed_pentagon}
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition,
+        def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix}
+    Let $T=\bigoplus_aO_a$ and $B=\bigoplus_xA_x$ be the unweighted
+    assembled operator and state tensors. Suppose every pair of operator
+    boundaries $X,Y$ admits a single boundary $Z$ such that
+    $O^n_{T,X}O^n_{T,Y}=O^n_{T,Z}$ for every $n>0$. Suppose also that
+    every operator boundary $X$ and state boundary $Y$ admits a single
+    state boundary $Z$ such that $O^n_{T,X}\psi^n_{B,Y}=\psi^n_{B,Z}$
+    for every $n>0$. In both assumptions the output boundary is chosen
+    before the positive length.
+    Assume the individual blocks are injective, their virtual dimensions
+    are positive, and no two distinct blocks within either original
+    family are related by an invertible gauge and a nonzero scalar.
+    Then there exist multiplicities $N,M$ and exact biorthogonal fusion
+    and action maps whose normalized-trace coefficients satisfy
+    (\ref{eq:glm_actual_mixed_pentagon}).
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_boundary_source_decomposition,
+        thm:glm_unblocked_mixed_pentagon}
+    Apply Theorem~\ref{thm:glm_boundary_source_decomposition} to every operator pair
+    and every operator/state pair. It derives the common word span from
+    individual injectivity and scalar-gauge separation. Choose the finite
+    multiplicity families and their analysis/synthesis maps, retain both
+    exact decomposition assertions, and apply
+    Theorem~\ref{thm:glm_unblocked_mixed_pentagon} to these same maps.
+\end{proof}
+
+\paragraph{Source index correction and scope.}
+The coupled pentagon in \cite[Section~3]{GarreRubio2023MPOSym}
+prints both multiplicity pairs of the $F$ factor in reversed order.
+The row $(d,\eta,\chi)$ and column $(f,\mu,\nu)$ in
+(\ref{eq:glm_actual_mixed_pentagon}) have the corrected ranges of
+\cite{gap:glm23_multiplicity_l_indices}. Fusion analysis and synthesis
+are denoted by $W,\widehat W$, and action analysis and synthesis by
+$V,\widehat V$. Thus $F=Q$ has the left-analysis/right-synthesis
+orientation, while the action coefficient satisfies
+\begin{align}
+    H_{\rm seq}^{z,j;y,i}S_{\rm fus}^{c,\mu;y,k}
+     & =L_{abx}^{y}[(z,i,j),(c,k,\mu)]I_{D_y}.\notag
+\end{align}
+The scalar $L$ entry is the normalized trace of this contraction.
+Individual entries may vanish. No unit, duality, gauge-covariance law,
+or group/coset specialization is asserted here.
+% Exact source: Papers/2203.12563/REsubmission.tex, coupledpent, lines 554--562.
+% Source main fusion W/hatW and action V/hatV are analysis/synthesis;
+% the Lean names V/W consistently denote analysis/synthesis.

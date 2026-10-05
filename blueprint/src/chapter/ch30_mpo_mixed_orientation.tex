@@ -1,0 +1,99 @@
+% Additive mixed-orientation consequence; canonical elaboration is pending.
+\section{Mixed orientation of the fusion pentagon}
+\label{sec:glm_mixed_orientation}
+
+\begin{theorem}[Reversing the first edge of the pentagon]
+    \label{thm:glm_mixed_orientation}
+    \lean{MPOTensor.CompleteZipperFusionFamily.leftAssocToLeftInner_mul_leftInnerToLeftAssocInverse,
+        MPOTensor.CompleteZipperFusionFamily.twoEdgePrintedFMatrix_mul_leftInnerToLeftAssocInverse}
+    \uses{def:mpdo_complete_zipper_fusion_family,
+        def:mpdo_complete_zipper_fourfold_fusion_data}
+    For a complete zipper fusion family, let $A,B,C$ be the successive
+    coordinate changes along the three-edge path from the fully left to the
+    fully right associated fourfold fusion tree. Let $D,E$ be the changes
+    along the two-edge path, and let $Q$ be the reverse of $A$. Then
+    \begin{align}
+        AQ & =I, & EDQ & =CB.
+        \label{eq:glm_mixed_orientation}
+    \end{align}
+    These identities hold on the finite multiplicity spaces, including
+    when a multiplicity space is zero-dimensional.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpdo_complete_zipper_printed_fmove,
+        thm:mpdo_complete_zipper_fusion_pentagon}
+    Group the first edge by its spectator label and multiplicity. Each
+    diagonal block of $AQ$ is the product of the corresponding forward
+    and reverse triple comparisons, tensored with the spectator identity,
+    so $AQ=I$. The ordinary pentagon is $CBA=ED$; multiply it by $Q$ on the
+    right and cancel $AQ$ to obtain (\ref{eq:glm_mixed_orientation}).
+\end{proof}
+
+% For an operator/operator/operator/state input, identifying the four
+% forward action edges with the actual L matrices and Q with the source F
+% remains a separate typed-coordinate proof, not an extra coherence premise.
+
+\begin{theorem}[Indexed mixed pentagon]
+    \label{thm:glm_mixed_entries}
+    \lean{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mixed_pentagon}
+    \uses{def:mpdo_complete_zipper_fusion_family,
+        def:mpdo_complete_zipper_fourfold_fusion_data}
+    Let $N_{ab}^{c}$ be the multiplicities of a complete zipper fusion
+    family, let $P_{abc}^{g}$ be its forward triple comparison with
+    right-tree rows and left-tree columns, and put
+    $Q_{abc}^{g}=(P_{abc}^{g})^{-1}$. Superscript tuples denote rows and
+    subscript tuples denote columns. Fix labels $a,b,c,d,e,f,g,j,i$ and
+    multiplicity indices
+    \begin{align}
+        \sigma  & \in\{0,\ldots,N_{bc}^{f}-1\},       &
+        \lambda & \in\{0,\ldots,N_{af}^{g}-1\},       &
+        \rho    & \in\{0,\ldots,N_{gd}^{e}-1\},\notag   \\
+        \gamma  & \in\{0,\ldots,N_{cd}^{j}-1\},       &
+        \delta  & \in\{0,\ldots,N_{bj}^{i}-1\},       &
+        \kappa  & \in\{0,\ldots,N_{ai}^{e}-1\}.\notag
+    \end{align}
+    Then
+    \begin{align}
+         & \sum_{k,\tau,\mu,\nu}
+        (P_{abj}^{e})_{k,\mu\tau}^{i,\delta\kappa}
+        (P_{kcd}^{e})_{g,\nu\rho}^{j,\gamma\tau}
+        (Q_{abc}^{g})_{f,\sigma\lambda}^{k,\mu\nu}\notag \\
+         & \qquad={}
+        \sum_{\omega}
+        (P_{bcd}^{i})_{f,\sigma\omega}^{j,\gamma\delta}
+        (P_{afd}^{e})_{g,\lambda\rho}^{i,\omega\kappa}.
+        \label{eq:glm_mixed_entries}
+    \end{align}
+    Here $k$ runs over the block labels, while $\tau,\mu,\nu,\omega$
+    run respectively over the multiplicity spaces of dimensions
+    $N_{kj}^{e}$, $N_{ab}^{k}$, $N_{kc}^{g}$, and $N_{fd}^{i}$.
+    Empty multiplicity spaces contribute zero to these sums.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_mixed_orientation}
+    Evaluate $EDQ=CB$ from (\ref{eq:glm_mixed_orientation}) at the
+    right-associated row $(j,i,\gamma,\delta,\kappa)$ and the left-inner
+    column $(f,g,\sigma,\lambda,\rho)$. The spectator identities in
+    the five lifted comparisons remove every intermediate index except
+    $k,\mu,\tau,\nu$ on the left and $\omega$ on the right. Interchange
+    the independent finite sums over $\mu$ and $\tau$ to obtain
+    (\ref{eq:glm_mixed_entries}).
+\end{proof}
+
+% Exact source: Papers/2203.12563/REsubmission.tex, coupledpent,
+% lines 554--562. Local fix: docs/paper-gaps/glm23_multiplicity_l_indices.tex.
+% The printed source F factor reverses both multiplicity pairs. The corrected
+% factor is (F_{abc}^{e})_{f,mu nu}^{d,eta chi}, as in that correction note.
+For an operator/operator/operator/state quadruple, the coupled action
+pentagon follows once the auxiliary entries $P$ are identified with the
+action coefficients $L$ and the auxiliary entries $Q$ with the original
+fusion coefficients $F$, as in
+Theorems~\ref{thm:glm_auxiliary_action_comparison}
+and~\ref{thm:glm_auxiliary_fusion_comparison}.
+The source's coupled pentagon in \cite[Section~3]{GarreRubio2023MPOSym}
+reverses both multiplicity pairs of its $F$ factor; the typed factor is
+$(F_{abc}^{e})_{f,\mu\nu}^{d,\eta\chi}$ with
+$\eta\in\{0,\ldots,N_{ab}^{d}-1\}$,
+$\chi\in\{0,\ldots,N_{dc}^{e}-1\}$,
+$\mu\in\{0,\ldots,N_{bc}^{f}-1\}$, and
+$\nu\in\{0,\ldots,N_{af}^{e}-1\}$.

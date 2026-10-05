@@ -1,0 +1,179 @@
+% Auxiliary exact fusion family for GLM23, arXiv:2203.12563v3,
+% REsubmission.tex rawrels, eq:F_symbol2, coupledpent, and Appendix A.
+% This isolated leaf follows ch30_mpo_triangular_padding when routed.
+% Verification markers are deferred until the parent confirms each check.
+
+\section{A common fusion family for operators and states}
+\label{sec:glm_triangular_boundary}
+
+Let $O_a$ have virtual dimension $\chi_a$, and let $A_x$ have virtual
+dimension $D_x$. The operator labels $a$ and state labels $x$ range over
+separate finite sets. Write $o(a)$ and $q(x)$ for their inclusions into the
+disjoint union $\Lambda$. The padding of
+Definition~\ref{def:glm_triangular_padding} puts both kinds of tensors on
+one physical alphabet.
+
+\begin{definition}[The disjoint-union family]
+    \label{def:glm_triangular_boundary_family}
+    \lean{MPOTensor.triangularBondDim,
+        MPOTensor.triangularTensor,
+        MPOTensor.triangularFusionMultiplicity,
+        MPOTensor.triangularFusionAnalysis,
+        MPOTensor.triangularFusionSynthesis}
+    \uses{def:glm_triangular_padding}
+    Set $\Delta_{o(a)}=\chi_a$, $\Delta_{q(x)}=D_x$,
+    $T_{o(a)}=E(O_a)$, and $T_{q(x)}=J(A_x)$.
+    Given original fusion and action multiplicities $N_{ab}^c$ and
+    $M_{ax}^y$, define
+    \begin{align}
+        \widetilde N_{o(a)o(b)}^{o(c)} & =N_{ab}^c,
+        \label{eq:glm_triangular_fusion_multiplicity} \\
+        \widetilde N_{o(a)q(x)}^{q(y)} & =M_{ax}^y.
+        \label{eq:glm_triangular_action_multiplicity}
+    \end{align}
+    Every other multiplicity is zero. The auxiliary analysis and synthesis
+    maps $\widetilde V,\widetilde W$ equal the original fusion maps
+    $W,\widehat W$ on operator/operator channels and the original action
+    maps $V,\widehat V$ on operator/state channels.
+    The other channel spaces are empty. In particular, no zero tensor is
+    added as a label to represent products with a state on the left.
+\end{definition}
+
+\begin{theorem}[Exact decompositions of the disjoint-union family]
+    \label{thm:glm_triangular_boundary_exact}
+    \lean{MPOTensor.isBiorthogonalDecomposition_triangularTensor}
+    \uses{def:glm_triangular_boundary_family, def:glm_boundary_decomposition}
+    Suppose the original matrices are exact biorthogonal decompositions
+    of every $O_aO_b$ into the $O_c$ channels and of every $O_a\cdot A_x$
+    into the $A_y$ channels. For every $u,v\in\Lambda$, the matrices
+    $\widetilde V_{uv}^{w\mu},\widetilde W_{uv}^{w\mu}$ give an exact
+    biorthogonal decomposition of $T_uT_v$ into the $T_w$ channels with
+    multiplicities $\widetilde N_{uv}^w$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_triangular_padding_products, thm:glm_triangular_padding_decomposition}
+    On an operator/operator pair, pad the original fusion decomposition
+    in the retained corner. On an operator/state pair, pad the original
+    action decomposition in the retained column. Retraction and
+    orthogonality are unchanged, and the sum over targets has precisely
+    the original populated channels. A state-left product is zero and
+    its target-copy index set is empty, so reconstruction is the empty sum.
+\end{proof}
+
+\begin{theorem}[Blocking with arbitrary finite labels]
+    \label{thm:glm_triangular_boundary_blocking}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.blockMPO_fintype}
+    \uses{def:glm_boundary_decomposition, def:mpdo_operator_product}
+    Let an operator family have any finite label set, and suppose a
+    pairwise product has an exact biorthogonal decomposition into that
+    family. Blocking the incoming tensors and every target tensor by a
+    common positive length preserves the decomposition and both
+    rectangular matrices.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_boundary_zipper_blocking}
+    Apply the nonempty-word reconstruction identity to each blocked
+    physical letter. Physical blocking commutes with the operator
+    product, and biorthogonality has no physical indices to change.
+\end{proof}
+
+\begin{theorem}[Relabelling the simultaneous inverse]
+    \label{thm:glm_triangular_boundary_inverse_relabel}
+    \lean{MPOTensor.exists_blockTensor_leftInverse_of_labelEquiv}
+    \uses{def:mpo_tensor, def:gauge_phase_equiv, def:injective, def:normal}
+    Let $T_c$ be a finite family of algebraically normal operator tensors
+    with positive dimensions $\Delta_c$. Suppose no two different labels
+    are related by an invertible similarity and a nonzero scalar, and
+    choose a bijection from the label set to a finite ordinal.
+    Some common length $L>0$ makes every $T_c^{[L]}$ injective and admits
+    coefficients $K_{(c,u,v),(i,j)}$ satisfying
+    \begin{align}
+        \sum_{i,j}K_{(c,u,v),(i,j)}
+        (T_b^{[L]})^{ij}_{u'v'}
+         & =\delta_{cb}\delta_{uu'}\delta_{vv'}.
+        \label{eq:glm_triangular_block_inverse}
+    \end{align}
+    The right side is zero for different labels; for equal labels the
+    virtual coordinates are compared in their common bond space.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpdo_complete_zipper_of_compression_blocked}
+    Apply the common-block inverse theorem to the family with ordinal
+    labels. Return each row of $K$ to its original label. No label is
+    summed in (\ref{eq:glm_triangular_block_inverse}), so the inverse
+    identity is unchanged by this bijection.
+\end{proof}
+
+\begin{theorem}[The triangular family's simultaneous inverse]
+    \label{thm:glm_triangular_boundary_inverse}
+    \lean{MPOTensor.exists_triangular_blockTensor_leftInverse}
+    \uses{def:glm_triangular_boundary_family, def:injective, def:gauge_phase_equiv}
+    Suppose every $O_a$ on its doubled physical alphabet and every $A_x$
+    is injective, with $\chi_a,D_x>0$. Exclude scalar-gauge duplicates
+    separately among the operators and among the states.
+    Then the disjoint-union family has a common positive blocking length,
+    individually injective blocked tensors, and a simultaneous inverse
+    satisfying (\ref{eq:glm_triangular_block_inverse}).
+    No simultaneous inverse or joint spanning condition is a premise.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_triangular_padding_injectivity,
+        thm:glm_triangular_padding_gauge_restriction,
+        thm:glm_triangular_padding_gauge_separation,
+        thm:glm_triangular_boundary_inverse_relabel}
+    Padding preserves injectivity and the positive virtual dimensions.
+    A scalar-gauge relation within either kind would restrict to an
+    excluded original relation. A relation between the two kinds is
+    impossible by disjoint physical support. Relabel the union by a
+    finite ordinal and apply
+    Theorem~\ref{thm:glm_triangular_boundary_inverse_relabel}.
+\end{proof}
+
+\begin{definition}[A common triangular blocking length]
+    \label{def:glm_triangular_boundary_length}
+    \lean{MPOTensor.triangularBlockLength, MPOTensor.triangularBlockLength_pos}
+    \uses{thm:glm_triangular_boundary_inverse}
+    Under the hypotheses of
+    Theorem~\ref{thm:glm_triangular_boundary_inverse}, choose one of its
+    lengths $L$. Thus $L>0$, every $T_c^{[L]}$ is injective, and the family
+    has a simultaneous block inverse. Its physical dimension is
+    $(d+1)^L$.
+\end{definition}
+
+\begin{definition}[The blocked triangular complete zipper family]
+    \label{def:glm_triangular_boundary_complete}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked,
+        MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked_tensor,
+        MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked_fusionSynthesis,
+        MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked_fusionAnalysis}
+    \uses{def:glm_triangular_boundary_family, def:glm_triangular_boundary_length,
+        def:mpdo_complete_zipper_fusion_family, def:glm_boundary_decomposition}
+    Assume the individual block hypotheses of
+    Theorem~\ref{thm:glm_triangular_boundary_inverse} and the original
+    exact fusion and action decompositions of
+    Theorem~\ref{thm:glm_triangular_boundary_exact}.
+    Use the chosen $L>0$ to define a complete zipper fusion family on the
+    same disjoint-union label set. Its bond dimensions and multiplicities
+    are $\Delta_c$ and $\widetilde N_{uv}^w$; its tensors are precisely
+    $T_c^{[L]}$. For a product-bond coordinate $\alpha=(i_u,i_v)$ and
+    a final bond coordinate $z$, its collected matrices have entries
+    \begin{align}
+        S_{uv}[\alpha,(w,\mu,z)]
+         & =\widetilde W_{uv}^{w\mu}[\alpha,z],
+        \label{eq:glm_triangular_preserved_synthesis} \\
+        H_{uv}[(w,\mu,z),\alpha]
+         & =\widetilde V_{uv}^{w\mu}[z,\alpha].
+        \label{eq:glm_triangular_preserved_analysis}
+    \end{align}
+    Here $\alpha$ denotes the ordered product-bond coordinate. Thus every
+    original fusion and action entry survives unchanged.
+\end{definition}
+\begin{proof}
+    \uses{thm:glm_triangular_boundary_exact, thm:glm_triangular_boundary_blocking,
+        thm:glm_triangular_boundary_inverse, def:glm_boundary_zipper_family}
+    Block the exact disjoint-union pair decompositions at the chosen
+    length. Their maps and multiplicities are unchanged, and the derived
+    simultaneous inverse supplies the remaining complete-family data.
+    Apply Definition~\ref{def:glm_boundary_zipper_family} with these
+    exact analysis and synthesis matrices.
+\end{proof}
