@@ -1122,6 +1122,27 @@ These are corollaries of the full regular parent classification and existing
 cut results. They do not enlarge the region, period, tensor or entropy-order
 hypotheses.
 
+\section{Independent-dimensional native parent classification}
+For native torus periods at least three, each edge may now carry its own
+finite-dimensional semi-regular representation and each site its own
+$G$-injective tensor. The complete positive microscopic plaquette-parent
+kernel equals the actual commuting-closure span, and its dimension is the
+number of simultaneous conjugacy classes of commuting pairs:
+\leanid{TNLean.PEPS.ker_torusPlaquetteParentHamiltonian_eq_nativeCommutingClosureSpan}
+and
+\leanid{TNLean.PEPS.finrank_ker_torusPlaquetteParentHamiltonian}.
+Independent finite physical alphabets are faithfully zero-extended into the
+existing parent framework. Every ambient kernel vector is reconstructed by
+product restriction; no local-image assumption is imposed.
+\leanid{TNLean.PEPS.nonuniformNativeParentEquiv}
+is the explicit original-closure-span equivalence, with dimension given by
+\leanid{TNLean.PEPS.finrank_ker_nonuniformTorusPlaquetteParentHamiltonian}.
+The proof derives a coherent bond expansion, flatness and seam holonomies
+from microscopic parent membership. It does not assume a four-cut or
+closure expansion. Periods one and two still need a labelled incidence
+model with parallel bonds or loops; that exceptional geometry is not
+covered by a simple-graph theorem.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all
@@ -1147,8 +1168,9 @@ The union of the two coordinate-zero width-one stripes supports a physical
 unitary relating any two normalized coherent closure states. For regular
 $G$-injective tensors, two-way local maps give the same boundary rank and
 zero-order R\'enyi entropy, without an isometric hypothesis. The remaining
-restrictions include the smaller-period lattice model, link-dependent
-representations and nonuniform blocked tensors. For any uniform unitary
+restrictions include the smaller-period lattice model and the stated
+observable/region hypotheses. Link-dependent parent classification and
+nonuniform physical tensors are now covered as described above. For any uniform unitary
 semi-regular representation, one repeated $G$-injective tensor and periods at
 least three, the full parent kernel is identified with the actual commuting-
 closure span. These and the other source results are tracked in issue~\#8271.

@@ -1,0 +1,159 @@
+% SCP10, paper_v3.tex:1526--1566, Theorem 5.7 and its use of Theorems 5.4--5.5.
+% Inspected artwork: figs3/close-out-out.pdf and close-AAAA-ug-uh.pdf.
+% Companion to TorusDependentParentSeamCuts, TorusNonuniformParentSeamCuts,
+% GraphPhysicalPadding and PaddedPhysicalParent. No declaration ownership.
+% Scope: native simple tori w,h >= 3. This is the parent-to-seam implication;
+% the full microscopic commuting-closure classification is not asserted.
+\paragraph{One joint boundary on the original seam.}
+Fix $C=C_{c,r}$ on the native torus with periods $w,h\geq3$.
+For each edge, let $t(e)<h(e)$ be its ordered graph orientation and
+$X_e=\{0,\ldots,D_e-1\}$. Write
+$\alpha^-=(\alpha^-_e)_{e\in C}$ and
+$\alpha^+=(\alpha^+_e)_{e\in C}$, each in $\prod_{e\in C}X_e$.
+These are independent tuples at the tail and head incidences, respectively;
+they are not identified across a cut bond.
+For $z\in\prod_{e\notin C}X_e$, let
+$\eta_v(\alpha^-,\alpha^+,z)$ put $\alpha^-_e$ at $t(e)$ and
+$\alpha^+_e$ at $h(e)$ when $e\in C$, and put the same $z_e$ at
+both incidences when $e\notin C$. Define
+\begin{align}
+    \mathcal K_{A,C}(\alpha^-,\alpha^+;\sigma)
+     & =\sum_z\prod_{v\in V}
+    A_v\bigl(\eta_v(\alpha^-,\alpha^+,z);\sigma_v\bigr), \\
+    \mathcal C_{A,C}(M)(\sigma)
+     & =\sum_{\alpha^-,\alpha^+}M(\alpha^-,\alpha^+)
+    \mathcal K_{A,C}(\alpha^-,\alpha^+;\sigma).
+    \label{eq:peps_dependent_seam_contraction}
+\end{align}
+The box $\mathcal K_{A,C}$ contains every microscopic site and exactly the
+uncut identity contractions. Its one physical leg denotes the entire tuple
+$\sigma=(\sigma_v)_{v\in V}\in\prod_vY_v$.
+% Formula: C_(A,C)(M)(sigma)=sum_(alpha-,alpha+) M(alpha-,alpha+) K_(A,C)(alpha-,alpha+;sigma).
+% Ink: M is ONE joint tensor, not a product of independent bond matrices.
+% Two virtual wires bundle the tail and head cut incidences, respectively.
+% Each bundle has alphabet product_(e in C) X_e; all of its entries are summed.
+% External signature (virtual,physical)=(0,1), with one complete physical tuple.
+\begin{tenkzequation}
+    \tenkzkernel
+    $\mathcal C_{A,C}(M)=$
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=parentSeamM, skin=ring,
+            ports={30:virtual,330:virtual}]{M}
+        \tn[at=2.5 e of parentSeamM, name=parentSeamK, skin=box,
+            ports={150:virtual,210:virtual,0:physical:$\sigma$}]{\mathcal K_{A,C}}
+        \tnwire[name=parentSeamTail]{parentSeamM.30}{parentSeamK.150}
+        \tnwire[name=parentSeamHead]{parentSeamM.330}{parentSeamK.210}
+        \tnmark[form=label, label pos=n]{on parentSeamTail 0.5}{$\alpha^-$}
+        \tnmark[form=label, label pos=s]{on parentSeamHead 0.5}{$\alpha^+$}
+    \end{tenkz}
+\end{tenkzequation}
+For the independently $G$-injective tensors and matching semi-regular bond
+representations of Theorem~\ref{thm:peps_native_parent_seam_boundary},
+every vector in the positive microscopic plaquette-parent kernel equals
+$\mathcal C_{A,C}(M)$ for some such joint $M$, at every choice of $c,r$.
+
+\paragraph{Padding leaves the joint boundary unchanged.}
+Put $d=\sum_v|Y_v|$ and choose the tagged coordinate inclusion
+$\iota_v:Y_v\hookrightarrow\{0,\ldots,d-1\}$.
+Zero extension and restriction have coefficients
+$(E_v)_{j,i}=\delta_{j,\iota_v(i)}$ and
+$(R_v)_{i,j}=\delta_{\iota_v(i),j}$.
+Write $E=\bigotimes_vE_v$, $R=\bigotimes_vR_v$ and $B_v=E_vA_v$.
+The physical tuples below are
+$i=(i_v)\in\prod_vY_v$ and $j=(j_v)\in\{0,\ldots,d-1\}^{V}$.
+For every joint $M$, padding commutes with (\ref{eq:peps_dependent_seam_contraction}).
+% Formula: E C_(A,C)(M)=C_(B,C)(M); same M on the SAME cut alphabet.
+% Ink: both K boxes retain every site and all uncut bonds, as defined above.
+% Virtual wires alpha-/alpha+ are grouped incidence tuples, not single edges.
+% The A output i is summed into E. Both open j legs are full ambient tuples.
+% Both panels have external signature (virtual,physical)=(0,1).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=parentPadM, skin=ring,
+            ports={30:virtual,330:virtual}]{M}
+        \tn[at=2 e of parentPadM, name=parentPadA, skin=box,
+            ports={150:virtual,210:virtual,0:physical}]{\mathcal K_{A,C}}
+        \tn[at=2 e of parentPadA, name=parentPadE, skin=box,
+            ports={180:physical,0:physical:$j$}]{E}
+        \tnwire[name=parentPadTail]{parentPadM.30}{parentPadA.150}
+        \tnwire[name=parentPadHead]{parentPadM.330}{parentPadA.210}
+        \tnwire[name=parentPadPhysical]{parentPadA.0}{parentPadE.180}
+        \tnmark[form=label, label pos=n]{on parentPadTail 0.5}{$\alpha^-$}
+        \tnmark[form=label, label pos=s]{on parentPadHead 0.5}{$\alpha^+$}
+        \tnmark[form=label, label pos=n]{on parentPadPhysical 0.5}{$i$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=parentPadSameM, skin=ring,
+            ports={30:virtual,330:virtual}]{M}
+        \tn[at=2 e of parentPadSameM, name=parentPadB, skin=box,
+            ports={150:virtual,210:virtual,0:physical:$j$}]{\mathcal K_{B,C}}
+        \tnwire[name=parentPadSameTail]{parentPadSameM.30}{parentPadB.150}
+        \tnwire[name=parentPadSameHead]{parentPadSameM.330}{parentPadB.210}
+        \tnmark[form=label, label pos=n]{on parentPadSameTail 0.5}{$\alpha^-$}
+        \tnmark[form=label, label pos=s]{on parentPadSameHead 0.5}{$\alpha^+$}
+    \end{tenkz}
+\end{tenkzequation}
+In particular, $R\mathcal C_{B,C}(M)=\mathcal C_{A,C}(M)$ with
+exactly the same boundary coefficients.
+
+\paragraph{Recovery on the full ambient parent kernel.}
+The identity $R_vE_v=I$ implies $RE\psi=\psi$ for every original
+physical vector $\psi$; thus $E$ is injective.
+% Formula: R E psi=psi, with no parent assumption on psi.
+% Ink order: original state -> product padding E -> product restriction R.
+% Internal i' is an original tuple and j is an ambient tuple; both are summed.
+% Both panels have external signature (virtual,physical)=(0,1), original tuple i.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=parentLeftPsi, skin=box,
+            ports={0:physical}]{\psi}
+        \tn[at=2 e of parentLeftPsi, name=parentLeftE, skin=box,
+            ports={180:physical,0:physical}]{E}
+        \tn[at=2 e of parentLeftE, name=parentLeftR, skin=box,
+            ports={180:physical,0:physical:$i$}]{R}
+        \tnwire[name=parentLeftOriginal]{parentLeftPsi.0}{parentLeftE.180}
+        \tnwire[name=parentLeftAmbient]{parentLeftE.0}{parentLeftR.180}
+        \tnmark[form=label, label pos=n]{on parentLeftOriginal 0.5}{$i'$}
+        \tnmark[form=label, label pos=n]{on parentLeftAmbient 0.5}{$j$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=parentLeftRecovered, skin=box,
+            ports={0:physical:$i$}]{\psi}
+    \end{tenkz}
+\end{tenkzequation}
+Conversely, let $\Psi\in\ker H_B$ for the positive microscopic
+plaquette parent in Theorem~\ref{thm:peps_nonuniform_parent_seam_boundary}.
+The parent constraints imply $ER\Psi=\Psi$ without an assumed
+local-image condition.
+% Formula: E R Psi=Psi for Psi in ker H_B, NOT on the entire ambient space.
+% Ink order: ambient kernel vector -> product restriction R -> product padding E.
+% Internal j' is an ambient tuple and i is an original tuple; both are summed.
+% Both panels have external signature (virtual,physical)=(0,1), ambient tuple j.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=parentKernelPsi, skin=box,
+            ports={0:physical}]{\Psi}
+        \tn[at=2 e of parentKernelPsi, name=parentKernelR, skin=box,
+            ports={180:physical,0:physical}]{R}
+        \tn[at=2 e of parentKernelR, name=parentKernelE, skin=box,
+            ports={180:physical,0:physical:$j$}]{E}
+        \tnwire[name=parentKernelAmbient]{parentKernelPsi.0}{parentKernelR.180}
+        \tnwire[name=parentKernelOriginal]{parentKernelR.0}{parentKernelE.180}
+        \tnmark[form=label, label pos=n]{on parentKernelAmbient 0.5}{$j'$}
+        \tnmark[form=label, label pos=n]{on parentKernelOriginal 0.5}{$i$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=parentKernelRecovered, skin=box,
+            ports={0:physical:$j$}]{\Psi}
+    \end{tenkz}
+\end{tenkzequation}
+Thus the unique original representative is $\psi=R\Psi$, and every native
+seam boundary for $\Psi$ restricts to one for $\psi$.
+The map $ER$ is the coordinate projection onto $\operatorname{ran}E$;
+padding is not assumed surjective onto the ambient physical space.
