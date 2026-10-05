@@ -1,0 +1,78 @@
+\begin{theorem}[Group action determined by the multiplicities]%
+    \label{thm:mpo_symmetry_group_action}
+    \lean{MPOTensor.IsNIMRep.group_mul_apply,
+        MPOTensor.IsNIMRep.groupPerm,
+        MPOTensor.IsNIMRep.groupPerm_spec,
+        MPOTensor.IsNIMRep.groupPerm_apply_eq_iff,
+        MPOTensor.IsNIMRep.groupPerm_one,
+        MPOTensor.IsNIMRep.groupPerm_mul,
+        MPOTensor.IsNIMRep.groupPermHom,
+        MPOTensor.IsNIMRep.toMulAction,
+        MPOTensor.IsNIMRep.toMulAction_spec,
+        MPOTensor.IsNIMRep.groupPerm_eq_of_coefficients,
+        MPOTensor.IsNIMRep.toMulAction_unique,
+        MPOTensor.IsNIMRep.existsUnique_mulAction}
+    \leanok
+    \uses{thm:mpo_invertible_labels}
+    Let $G$ be a finite group and $X$ a finite set of block labels. Suppose
+    the nonnegative integer multiplicities satisfy
+    $M_{gh,x}^y=\sum_z M_{h,x}^zM_{g,z}^y$ and
+    $M_{e,x}^y=\delta_{y,x}$. There is a unique action of $G$ on $X$ such
+    that $M_{g,x}^y=\delta_{y,g\cdot x}$.
+    This is the permutation representation of
+    \cite[Section~4]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563v3, REsubmission.tex, line 683.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_invertible_labels}
+    For each $g$, the nonnegative integer matrices $M_g$ and $M_{g^{-1}}$
+    are mutual inverses, so $M_g$ is a permutation matrix. Write its
+    permutation as $\pi_g$, with $M_{g,x}^y=\delta_{y,\pi_g(x)}$.
+    The unit identity gives $\pi_e(x)=x$. Multiplication gives
+    $M_{gh,x}^{\pi_g(\pi_h(x))}=1$, hence
+    $\pi_{gh}(x)=\pi_g(\pi_h(x))$. These equations define the action.
+    For each $x$, the unique $y$ with $M_{g,x}^y=1$ determines $\pi_g(x)$,
+    so no other action has the same multiplicities.
+\end{proof}
+
+\begin{theorem}[Coherent permutation of symmetric periodic vectors]%
+    \label{thm:mpo_symmetry_group_periodic_action}
+    \lean{MPOTensor.exists_mulAction_mpo_mulVec_eq_of_isMPOSymmetricFamily}
+    \leanok
+    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetry_group_action}
+    Let a finite group of periodic matrix product operators satisfy
+    $O_g^{(N)}O_h^{(N)}=O_{gh}^{(N)}$ for every $N\geq1$.
+    Let $A_x$ be a finite family of normal tensors of positive bond
+    dimension whose periodic vectors are linearly independent at one
+    positive length. Suppose that, for coefficients independent of $N$,
+    \begin{align}
+        O_g^{(N)}\ket{V^{(N)}(A_x)}
+         & =\sum_y M_{g,x}^y\ket{V^{(N)}(A_y)},
+        \label{eq:mpo_group_periodic_coefficients}
+    \end{align}
+    and that $O_e^{(N)}$ fixes every block vector. There is one group
+    action on the block labels such that $M_{g,x}^y=\delta_{y,g\cdot x}$
+    and, for every $g,x$ and $N\geq1$,
+    \begin{align}
+        O_g^{(N)}\ket{V^{(N)}(A_x)}
+         & =\ket{V^{(N)}(A_{g\cdot x})}.
+        \label{eq:mpo_group_periodic_action}
+    \end{align}
+    % Source anchors: arXiv:2203.12563v3, REsubmission.tex,
+    % line 683 and lines 1062--1064. Periodic-boundary statement only.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetry_group_action}
+    The symmetry coefficients are nonnegative integers and satisfy the
+    multiplication law by Theorem~\ref{thm:mpo_symmetric_nimrep}.
+    Comparing the coefficients of the linearly independent block vectors
+    under the identity operator gives $M_{e,x}^y=\delta_{y,x}$.
+    Theorem~\ref{thm:mpo_symmetry_group_action} gives the group action.
+    Substituting its coefficient formula into
+    (\ref{eq:mpo_group_periodic_coefficients}) gives
+    (\ref{eq:mpo_group_periodic_action}).
+\end{proof}

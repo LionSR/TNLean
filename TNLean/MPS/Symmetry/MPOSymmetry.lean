@@ -27,6 +27,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallStringExchange
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
+import TNLean.MPS.Symmetry.MPOSymmetry.GroupAction
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule

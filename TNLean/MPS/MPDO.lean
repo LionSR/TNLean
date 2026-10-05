@@ -76,6 +76,8 @@ import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
 import TNLean.MPS.MPDO.Boundary
+import TNLean.MPS.MPDO.BoundaryClosedness
+import TNLean.MPS.MPDO.BoundaryTransport
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVBlockingChannelAmbientCounterexample

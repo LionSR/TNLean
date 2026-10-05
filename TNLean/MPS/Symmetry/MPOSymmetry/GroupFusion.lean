@@ -20,8 +20,6 @@ Only the operator law is used; normality of the tensors, the other clause of
 * `MPOTensor.GroupFamily.isMPOFusionAlgebra`: the group fusion rules from the operator law.
 * `MPOTensor.GroupFamily.IsNormalRepresentation.isMPOFusionAlgebra`: the same for a normal
   representation.
-* `MPOTensor.GroupFamily.isInvertibleLabel_groupFusion`: every label of the group fusion ring
-  is invertible.
 
 ## References
 
@@ -54,13 +52,5 @@ theorem IsNormalRepresentation.isMPOFusionAlgebra {F : GroupFamily G d}
     (hF : F.IsNormalRepresentation) :
     IsMPOFusionAlgebra F.tensor fun a b c ↦ if c = a * b then 1 else 0 :=
   F.isMPOFusionAlgebra hF.operator_mul
-
-omit [Fintype G] in
-/-- Every label of the group fusion ring is invertible, with inverse `a⁻¹` and unit `1`.
-
-Source: arXiv:2203.12563, line 660. -/
-theorem isInvertibleLabel_groupFusion (a : G) :
-    IsInvertibleLabel (fun a b c : G ↦ if c = a * b then 1 else 0) 1 a :=
-  ⟨a⁻¹, fun c ↦ by simp⟩
 
 end MPOTensor.GroupFamily
