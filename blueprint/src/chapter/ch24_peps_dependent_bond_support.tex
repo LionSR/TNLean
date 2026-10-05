@@ -1,0 +1,201 @@
+\subsection{Coherent coefficients forced by complementary cuts}
+\label{sec:peps_dependent_bond_support}
+
+Use the independent incidence spaces and incident representations of
+Definitions~\ref{def:peps_dependent_incidence} and
+\ref{def:peps_dependent_incident_action}. This section derives a bond-product
+expansion from actual cut membership before extracting its coefficients.
+The trace duality is \cite[Lemma~4.6]{Schuch2010PEPS}; its use in the
+four-block comparison is part of \cite[Theorem~5.5]{Schuch2010PEPS}.
+% Source: lemma:noninj:semireg-trace-ug-delta, paper_v3.tex:1015--1029;
+% thm:2d:closure, eq:2d:close-in-in, paper_v3.tex:1488--1513.
+
+\begin{definition}[Regrouping physical incidences as bond pairs]%
+    \label{def:peps_dependent_bond_product}
+    \lean{TNLean.PEPS.DependentBondNetwork.siteBondEquiv,
+        TNLean.PEPS.DependentBondNetwork.bondRegrouping,
+        TNLean.PEPS.DependentBondNetwork.bondRegrouping_apply,
+        TNLean.PEPS.DependentBondNetwork.matrixBondProduct,
+        TNLean.PEPS.DependentBondNetwork.bondRegrouping_matrixBondProduct,
+        TNLean.PEPS.DependentBondNetwork.representationBondProduct}
+    \leanok
+    \uses{def:peps_dependent_incidence}
+    The bijection $J=SR^{-1}$ sends a site configuration to its head--tail
+    bond pairs. It induces the coefficient permutation
+    $(\mathcal R\psi)(\beta)=\psi(J^{-1}\beta)$.
+    For a matrix family $B$, let
+    $b_B(\sigma)=\prod_eB_e((J\sigma)_e^+,(J\sigma)_e^-)$, so
+    $(\mathcal Rb_B)(\beta)=\prod_eB_e(\beta_e^+,\beta_e^-)$.
+    For group labels $p:\mathcal E\to G$, abbreviate
+    $b_p=b_{(U_e(p_e))_e}$.
+\end{definition}
+
+\begin{definition}[Product functionals and trace-dual coefficients]%
+    \label{def:peps_dependent_bond_coefficient}
+    \lean{TNLean.PEPS.DependentBondNetwork.outputBondPairing,
+        TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction}
+    \leanok
+    \uses{def:peps_dependent_bond_product, thm:peps_torus_projector_extraction}
+    Given linear functionals $K_e$ on the bond matrices, define
+    \begin{align}
+        K(\psi)=\sum_{\beta\in\prod_e(X_e\times X_e)}
+        (\mathcal R\psi)(\beta)\prod_eK_e(E_{\beta_e^+,\beta_e^-}).
+        \label{eq:peps_dependent_bond_pairing}
+    \end{align}
+    With the source's trace-dual functionals
+    $\ell_{e,g}(B)=\tr[U_e(g^{-1})B\Delta_e]$, write
+    $c_p(\psi)=(\bigotimes_e\ell_{e,p_e})(\psi)$ for this product functional.
+\end{definition}
+
+\begin{theorem}[Exact extraction of coherent coefficients]%
+    \label{thm:peps_dependent_coefficient_extraction}
+    \lean{TNLean.PEPS.DependentBondNetwork.outputBondPairing_matrixBondProduct,
+        TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_bondProduct,
+        TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_sum,
+        TNLean.PEPS.DependentBondNetwork.sum_representationBondProduct_eq_iff}
+    \leanok
+    \uses{def:peps_dependent_bond_coefficient, def:peps_semiregular}
+    For arbitrary $K_e$ and $B_e$, $K(b_B)=\prod_eK_e(B_e)$.
+    If every $U_e$ is semi-regular, then
+    \begin{align}
+        c_p(b_q)                      & =\delta_{p,q},
+        \label{eq:peps_dependent_coefficient_delta}    \\
+        c_p\left(\sum_q a_qb_q\right) & =a_p.\nonumber
+    \end{align}
+    Thus two coherent sums in the $b_p$ are equal if and only if their
+    complete coefficient functions are equal.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_torus_projector_extraction}
+    Distribute (\ref{eq:peps_dependent_bond_pairing}) over the bond pairs.
+    The $e$-th sum is $K_e(B_e)$ by expansion in matrix units.
+    Trace duality gives $\ell_{e,p_e}(U_e(q_e))=\delta_{p_e,q_e}$;
+    their product is $\delta_{p,q}$. Apply linearity to the entire coherent
+    sum, then compare each coefficient.
+\end{proof}
+
+\begin{definition}[Bond slices and transformed bond matrices]%
+    \label{def:peps_dependent_bond_slice}
+    \lean{TNLean.PEPS.DependentBondNetwork.bondMatrix,
+        TNLean.PEPS.DependentBondNetwork.representation_mem_bondMatrix_range,
+        TNLean.PEPS.DependentBondNetwork.physicalBondSlice,
+        TNLean.PEPS.DependentBondNetwork.gaugeBondMatrix}
+    \leanok
+    \uses{def:peps_dependent_bond_product}
+    Let $F_e:\C^G\to\C^{X_e\times X_e}$ have columns
+    $F_e((a,b),g)=U_e(g)_{a,b}$. Each representation matrix is therefore
+    a vector in $\operatorname{im}F_e$.
+    The slice at bond $e$ and remaining configuration $\tau$ is
+    $S_{e,\tau}\psi(s)=(\mathcal R\psi)(\tau[e\leftarrow s])$.
+    Put $B_e(q)=U_e(q_{h(e)})B_eU_e(q_{t(e)}^{-1})$.
+\end{definition}
+
+\begin{theorem}[Canonical products, slices, and extracted sums]%
+    \label{thm:peps_dependent_canonical_bond_sum}
+    \lean{TNLean.PEPS.DependentBondNetwork.dependentProduct_coordinateSlice_eq_smul,
+        TNLean.PEPS.DependentBondNetwork.bondRegrouping_network_averagingSite,
+        TNLean.PEPS.DependentBondNetwork.network_averagingSite_eq_sum_matrixBondProduct,
+        TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_network_averagingSite}
+    \leanok
+    \uses{def:peps_dependent_bond_slice, def:peps_dependent_bond_coefficient}
+    A coordinate slice of $\prod_w f_w(\tau_w)$ is
+    $(\prod_{w\ne e}f_w(\tau_w))f_e$.
+    With $n=|\mathcal V|$, the canonical contraction and its regrouping obey
+    \begin{align}
+        \mathcal N_{A^0}(B) & =|G|^{-n}\sum_q b_{B(q)},
+        \label{eq:peps_dependent_canonical_bonds}                                           \\
+        (\mathcal R\mathcal N_{A^0}(B))(\beta)
+                            & =|G|^{-n}\sum_q\prod_e B_e(q)_{\beta_e^+,\beta_e^-},\nonumber \\
+        c_p(\mathcal N_{A^0}(B))
+                            & =|G|^{-n}\sum_q\prod_e\ell_{e,p_e}(B_e(q)).\nonumber
+    \end{align}
+    These identities require neither semi-regularity nor restrictions on $B$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_projector_expansion,
+        thm:peps_dependent_coefficient_extraction}
+    Separate the $e$-th factor for the slice identity. Regroup
+    (\ref{eq:peps_dependent_projector_expansion}) by $J$, obtaining the
+    first two formulas. Apply the product-functional identity to each
+    term to obtain the third formula.
+\end{proof}
+
+\begin{theorem}[An uncut bond forces representation-matrix support]%
+    \label{thm:peps_dependent_uncut_support}
+    \lean{TNLean.PEPS.DependentBondNetwork.physicalBondSlice_network_averagingSite_mem_range,
+        TNLean.PEPS.DependentBondNetwork.physicalBondSlice_mem_range_of_mem_cutSpace}
+    \leanok
+    \uses{def:peps_dependent_bond_slice, def:peps_dependent_cut}
+    If $B_e=I$, then every $S_{e,\tau}\mathcal N_{A^0}(B)$ lies in
+    $\operatorname{im}F_e$. Consequently, if $e\notin C$ and
+    $\psi\in\mathcal S_{A^0,C}$, then
+    $S_{e,\tau}\psi\in\operatorname{im}F_e$ for every $\tau$, even when
+    the cut boundary is arbitrarily correlated.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_canonical_bond_sum, thm:peps_dependent_cut_basis}
+    In a summand of (\ref{eq:peps_dependent_canonical_bonds}), an identity
+    insertion gives $B_e(q)=U_e(q_{h(e)}q_{t(e)}^{-1})$.
+    Every slice is a scalar multiple of this representation matrix; sums
+    retain membership in $\operatorname{im}F_e$.
+    Expand a general boundary in fixed configurations. Each resulting
+    matrix-unit network still has $B_e=I$ when $e\notin C$.
+\end{proof}
+
+\begin{theorem}[Complementary cuts give a coherent bond expansion]%
+    \label{thm:peps_dependent_cut_expansion}
+    \lean{TNLean.PEPS.DependentBondNetwork.bondRegrouping_mem_product_range_of_mem_cutSpaces,
+        TNLean.PEPS.DependentBondNetwork.exists_bondCoefficients_of_mem_cutSpaces,
+        TNLean.PEPS.DependentBondNetwork.eq_sum_extracted_bondProducts_of_mem_cutSpaces}
+    \leanok
+    \uses{def:peps_dependent_cut, def:peps_dependent_bond_coefficient}
+    Let $(C_i)_{i\in J}$ be any family of cuts such that every bond is uncut
+    in at least one $C_i$. If $\psi\in\mathcal S_{A^0,C_i}$ for every $i$,
+    then $\mathcal R\psi\in\operatorname{im}(\bigotimes_eF_e)$.
+    In particular there are coefficients $a_p$ with $\psi=\sum_pa_pb_p$.
+    If all $U_e$ are semi-regular, this becomes
+    \begin{align}
+        \psi=\sum_{p:\mathcal E\to G}c_p(\psi)b_p.
+        \label{eq:peps_dependent_extracted_expansion}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_uncut_support, thm:peps_dependent_product_range,
+        thm:peps_dependent_coefficient_extraction}
+    For each bond, choose a cut leaving it uncut. The preceding theorem
+    places every slice in $\operatorname{im}F_e$. The product-range
+    criterion supplies a preimage under $\bigotimes_eF_e$, whose entries
+    are the coefficients $a_p$. Apply $c_p$ to the whole expansion to
+    identify $a_p=c_p(\psi)$ in the semi-regular case.
+\end{proof}
+
+\begin{theorem}[A nonzero coefficient has compatible uncut labels]%
+    \label{thm:peps_dependent_uncut_coefficients}
+    \lean{TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_network_eq_zero_of_incompatible,
+        TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_eq_zero_of_mem_cutSpace_of_incompatible,
+        TNLean.PEPS.DependentBondNetwork.exists_vertexLabels_of_bondCoefficientExtraction_ne_zero}
+    \leanok
+    \uses{def:peps_dependent_bond_coefficient, def:peps_dependent_cut}
+    Assume every $U_e$ is semi-regular. If $B_e=I$ outside $C$ and no
+    $q:\mathcal V\to G$ satisfies
+    $p_e=q_{h(e)}q_{t(e)}^{-1}$ simultaneously for all $e\notin C$, then
+    $c_p(\mathcal N_{A^0}(B))=0$. The same vanishing holds for every
+    $\psi\in\mathcal S_{A^0,C}$. Equivalently,
+    \begin{align}
+        \psi\in\mathcal S_{A^0,C},\quad c_p(\psi)\ne0
+        \quad\Longrightarrow\quad
+        \exists q:\mathcal V\to G,\quad
+        \forall e\notin C,\quad p_e=q_{h(e)}q_{t(e)}^{-1}.
+        \label{eq:peps_dependent_uncut_coefficients}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_canonical_bond_sum,
+        thm:peps_dependent_coefficient_extraction, thm:peps_dependent_cut_basis}
+    Fix a vertex assignment $q$ in the extracted sum of
+    (\ref{eq:peps_dependent_canonical_bonds}). Incompatibility supplies
+    an uncut bond with $p_e\ne q_{h(e)}q_{t(e)}^{-1}$; its trace-dual
+    factor is zero. Thus every summand vanishes. For an arbitrary boundary,
+    expand into fixed-coordinate columns and use their matrix-unit
+    realization. The implication is the contrapositive of this vanishing.
+\end{proof}

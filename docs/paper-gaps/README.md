@@ -1043,3 +1043,9 @@ For the periodic decomposition in PGVWC07 Theorem 5:
   period and the original-tensor component decomposition. Non-divisible ring
   lengths vanish componentwise; the separate empty-word boundary convention
   remains explicit.
+
+For SCP10, arXiv:1001.3807:
+
+- `scp10_general_group_physical_blocking.tex` records the proved physical
+  support-isometry and normalized Bell separation, and the remaining geometric
+  reblocking and original-coarse-tensor identification.
