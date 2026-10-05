@@ -22,6 +22,31 @@
     representation has multiplicity $m_i=d_i$. Thus $J$ is precisely the
     bond transformation used in the semi-regular bond-dimension reduction
     of \cite[Section~7]{Schuch2010PEPS}.
+    In a fixed block $i$, the four open indices give
+    $J(X_i)_{(k,a),(\ell,b)}=m_i^{-1/2}(X_i)_{k,\ell}\delta_{a,b}$:
+    % Formula: J(X_i)_(k,a),(ell,b)=m_i^(-1/2) (X_i)_(k,ell) delta_(a,b).
+    % Source: Papers/1001.3807/paper_v3.tex:2982--3013, the two bond
+    % transformations figs6/prove-equiv-semireg-reg-left and -right.
+    % Ink-to-index: the upper west/east legs are k,ell in V_i; the lower
+    % west/east legs are a,b in M_i. All four are virtual bond indices.
+    % There is no contraction on either side. The right panel is the tensor
+    % product X_i tensor I_{M_i}, so both signatures are (V,P)=(4,0).
+    % The block label i is fixed, not an additional open leg or a summed index.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+            \tn[name=multiplicityImage, skin=box, label pos=180,
+                ports={135:virtual:$k$, 45:virtual:$\ell$,
+                        225:virtual:$a$, 315:virtual:$b$}]{J(X_i)}
+        \end{tenkz}
+        $=m_i^{-1/2}$
+        \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+            \tn[at=(1,1), skin=box,
+                ports={180:virtual:$k$, 0:virtual:$\ell$}]{X_i}
+            \tn[at=(2,1), skin=box,
+                ports={180:virtual:$a$, 0:virtual:$b$}]{I_{M_i}}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{theorem}[The multiplicity-restoring bond isometry]%

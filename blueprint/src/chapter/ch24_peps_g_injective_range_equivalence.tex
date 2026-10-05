@@ -21,6 +21,27 @@
     In finite dimension, $\dim\operatorname{im}T=\dim\mathcal V^G$.
     These are local consequences of
     \cite[Definition~5.1]{Schuch2010PEPS}.
+    The virtual projector can be inserted before the physical map:
+    % Formula: T P_G = T, the invariant-boundary form of Definition 5.1(i).
+    % Source: Papers/1001.3807/paper_v3.tex:1278--1296, figs3/ug-sym.
+    % Ink-to-index: a west virtual leg is the entire boundary configuration
+    % in V, not one microscopic PEPS bond; the east physical leg is in P.
+    % Contraction: the P_G--T join sums over a basis of V. Both panels have
+    % one open virtual input and one open physical output, hence (V,P)=(1,1).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[name=rangeProjector, skin=box,
+                ports={180:virtual, 0:virtual}]{P_G}
+            \tn[at=(1,2), name=rangeTensor,
+                ports={180:virtual, 0:physical}]{T}
+            \tnwire{rangeProjector.0}{rangeTensor.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[ports={180:virtual, 0:physical}]{T}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{theorem}
 
 \begin{proof}\leanok

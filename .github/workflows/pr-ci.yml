@@ -80,6 +80,7 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -153,6 +154,7 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
   workflow_dispatch:
 
@@ -243,6 +245,7 @@ jobs:
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
+              - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_index_routing.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
@@ -344,7 +347,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ElementaryStates HalfChainSpectrum AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors CZXRectangleBoundary; do
+          for example in ElementaryStates HalfChainSpectrum AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors CZXRectangleBoundary RegularTorusParentGroundSpace; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -693,6 +696,10 @@ jobs:
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_torus.py
+
+      - name: Check PEPS ground-state diagram boundaries
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_groundstate.py
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
