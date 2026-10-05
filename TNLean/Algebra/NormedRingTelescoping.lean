@@ -10,10 +10,12 @@ import Mathlib.Tactic.NoncommRing
 import Mathlib.Tactic.Positivity
 
 /-!
-# Telescoping powers of a perturbed idempotent
+# Telescoping bounds for perturbed ordered products
 
-In a normed ring, if every power of `E` has norm at most `c` and `X_0, X_1, …` are `δ`-close to
-`E`, then `‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c((1 + cδ)^M - 1)`, and in particular
+In a normed ring, uniformly bounded contiguous reference products give a perturbation bound
+for ordered products with varying reference factors. In particular, if every power of `E` has
+norm at most `c` and `X_0, X_1, …` are `δ`-close to `E`, then
+`‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c((1 + cδ)^M - 1)`, and in particular
 `‖X^M - E^M‖ ≤ c((1 + cδ)^M - 1)`. For an idempotent `E` it suffices that `c` bound `‖E‖` and
 `‖1‖`. This is the iteration of
 arXiv:2103.13367, Supplemental Material, eqs. `eq:final_eq` to `eq:finished`. The file also
@@ -22,6 +24,9 @@ the form `C y e^{C y}` into a linear bound.
 
 ## Main declarations
 
+* `prod_range_sub_prod_range_eq_sum_mul_sub_mul` — the telescoping identity for two products.
+* `norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le` — the perturbation bound for
+  uniformly bounded contiguous reference products.
 * `prod_range_sub_pow_eq_sum_mul_sub_mul`, `pow_sub_pow_eq_sum_mul_sub_mul` — the telescoping
   identity, for ordered products and for powers.
 * `norm_prod_range_sub_pow_le_of_forall_norm_pow_le` — the telescoping bound near an element
@@ -30,7 +35,41 @@ the form `C y e^{C y}` into a linear bound.
   the telescoping bound near an idempotent, for ordered products and for powers.
 * `one_add_pow_sub_one_le_mul_exp` — `(1 + y)^M - 1 ≤ M y e^{M y}`.
 * `le_mul_of_le_mul_exp_of_le` — `v ≤ C y e^{C y}` and `v ≤ B` give `v ≤ (C e^C + B) y`.
+
+## References
+
+* arXiv:2103.13367, Supplemental Material, proof of Theorem MPS_classification.
+* arXiv:2307.01696, Supplemental Material, eq. (S9) and Lemma 1'(i).
 -/
+
+/-- The telescoping identity for two ordered products in a ring:
+`X_0 ⋯ X_{n-1} - Y_0 ⋯ Y_{n-1}` is the sum of products with one factor `X_k - Y_k`,
+the preceding factors from `X`, and the following factors from `Y`. -/
+theorem prod_range_sub_prod_range_eq_sum_mul_sub_mul {R : Type*} [Ring R]
+    (X Y : ℕ → R) (n : ℕ) :
+    ((List.range n).map X).prod - ((List.range n).map Y).prod =
+      ∑ k ∈ Finset.range n, ((List.range k).map X).prod * (X k - Y k) *
+        ((List.range (n - 1 - k)).map (fun j => Y (k + 1 + j))).prod := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [Finset.sum_range_succ]
+    simp only [Nat.add_sub_cancel, Nat.sub_self, List.range_zero, List.map_nil,
+      List.prod_nil, mul_one]
+    have h : ∑ k ∈ Finset.range n, ((List.range k).map X).prod * (X k - Y k) *
+          ((List.range (n - k)).map (fun j => Y (k + 1 + j))).prod =
+        (((List.range n).map X).prod - ((List.range n).map Y).prod) * Y n := by
+      rw [ih, Finset.sum_mul]
+      refine Finset.sum_congr rfl fun k hk => ?_
+      have hk := Finset.mem_range.1 hk
+      rw [show n - k = (n - 1 - k) + 1 by omega, List.range_succ, List.map_append,
+        List.prod_append, List.map_singleton, List.prod_singleton]
+      rw [show k + 1 + (n - 1 - k) = n by omega]
+      simp only [mul_assoc]
+    rw [h, List.range_succ, List.map_append, List.prod_append, List.map_singleton,
+      List.prod_singleton, List.map_append, List.prod_append, List.map_singleton,
+      List.prod_singleton]
+    noncomm_ring
 
 /-- The telescoping identity for ordered products:
 `X_0 ⋯ X_{n-1} - E^n = ∑_{k<n} (X_0 ⋯ X_{k-1}) (X_k - E) E^{n-1-k}` in a ring.
@@ -40,21 +79,8 @@ theorem prod_range_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X : ℕ → 
     (n : ℕ) :
     ((List.range n).map X).prod - E ^ n =
       ∑ k ∈ Finset.range n, ((List.range k).map X).prod * (X k - E) * E ^ (n - 1 - k) := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [Finset.sum_range_succ]
-    simp only [Nat.add_sub_cancel, Nat.sub_self, pow_zero, mul_one]
-    have h : ∑ k ∈ Finset.range n, ((List.range k).map X).prod * (X k - E) * E ^ (n - k) =
-        (((List.range n).map X).prod - E ^ n) * E := by
-      rw [ih, Finset.sum_mul]
-      refine Finset.sum_congr rfl fun k hk => ?_
-      have hk := Finset.mem_range.1 hk
-      rw [mul_assoc (((List.range k).map X).prod * (X k - E)), ← pow_succ,
-        show n - 1 - k + 1 = n - k by omega]
-    rw [h, List.range_succ, List.map_append, List.prod_append, List.map_singleton,
-      List.prod_singleton, pow_succ E n]
-    noncomm_ring
+  simpa [List.map_const', List.prod_replicate] using
+    prod_range_sub_prod_range_eq_sum_mul_sub_mul X (fun _ => E) n
 
 /-- The telescoping identity `X^n - E^n = ∑_{k<n} X^k (X - E) E^{n-1-k}` in a ring.
 
@@ -64,17 +90,21 @@ theorem pow_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X E : R) (n : ℕ) 
   simpa [List.map_const', List.prod_replicate] using
     prod_range_sub_pow_eq_sum_mul_sub_mul (fun _ => X) E n
 
-/-- **Telescoping bound for ordered products near a power-bounded element.** In a normed ring,
-let `‖E^k‖ ≤ c` for every `k ≥ 0` and `‖X_k - E‖ ≤ δ` for every `k`. Then
-`‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c ((1 + cδ)^M - 1)`.
+/-- **Telescoping bound for two ordered products.** If every contiguous product of the
+reference factors `Y`, including the empty product, has norm at most `c`, and
+`‖X_k - Y_k‖ ≤ δ` for every `k`, then
+`‖X_0 ⋯ X_{M-1} - Y_0 ⋯ Y_{M-1}‖ ≤ c ((1 + cδ)^M - 1)`.
 
-This is the iteration of arXiv:2103.13367, eqs. `eq:final_eq`, `eq:inequality`,
-`eq:almost_done`, and `eq:finished`, with a different factor at each step:
-`‖X_0 ⋯ X_{k-1}‖ ≤ c + ‖X_0 ⋯ X_{k-1} - E^k‖` feeds the bound back into the telescoping sum. -/
-theorem norm_prod_range_sub_pow_le_of_forall_norm_pow_le {R : Type*} [NormedRing R] {E : R}
-    {X : ℕ → R} {c δ : ℝ} (hEpow : ∀ k : ℕ, ‖E ^ k‖ ≤ c) (hδ : ∀ k, ‖X k - E‖ ≤ δ) (M : ℕ) :
-    ‖((List.range M).map X).prod - E ^ M‖ ≤ c * ((1 + c * δ) ^ M - 1) := by
-  have hc0 : 0 ≤ c := (norm_nonneg _).trans (hEpow 0)
+The proof feeds the prefix bound `‖X_0 ⋯ X_{k-1}‖ ≤ c + ‖X_0 ⋯ X_{k-1} - Y_0 ⋯ Y_{k-1}‖`
+back into the telescoping sum. This extends the constant-reference iteration in
+arXiv:2103.13367, eqs. `eq:final_eq` to `eq:finished`. -/
+theorem norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le {R : Type*} [NormedRing R]
+    {X Y : ℕ → R} {c δ : ℝ}
+    (hY : ∀ a n : ℕ, ‖((List.range n).map (fun j => Y (a + j))).prod‖ ≤ c)
+    (hδ : ∀ k, ‖X k - Y k‖ ≤ δ) (M : ℕ) :
+    ‖((List.range M).map X).prod - ((List.range M).map Y).prod‖ ≤
+      c * ((1 + c * δ) ^ M - 1) := by
+  have hc0 : 0 ≤ c := (norm_nonneg _).trans (hY 0 0)
   have hδ0 : 0 ≤ δ := (norm_nonneg _).trans (hδ 0)
   -- The closed form `b n = c ((1 + cδ)^n - 1)` solves `b n = ∑_{k<n} (c + b k) c δ`.
   have hclosed : ∀ n : ℕ, ∑ k ∈ Finset.range n, (c + c * ((1 + c * δ) ^ k - 1)) * δ * c =
@@ -89,22 +119,39 @@ theorem norm_prod_range_sub_pow_le_of_forall_norm_pow_le {R : Type*} [NormedRing
       _ = c * ((1 + c * δ) ^ n - 1) := by rw [hg]
   induction M using Nat.strong_induction_on with
   | _ M ih =>
-    rw [prod_range_sub_pow_eq_sum_mul_sub_mul, ← hclosed M]
+    rw [prod_range_sub_prod_range_eq_sum_mul_sub_mul, ← hclosed M]
     refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun k hk => ?_)
     have hk := Finset.mem_range.1 hk
     set P := ((List.range k).map X).prod
     have hXk : ‖P‖ ≤ c + c * ((1 + c * δ) ^ k - 1) := by
-      calc ‖P‖ = ‖E ^ k + (P - E ^ k)‖ := by rw [add_sub_cancel]
-        _ ≤ ‖E ^ k‖ + ‖P - E ^ k‖ := norm_add_le _ _
-        _ ≤ c + c * ((1 + c * δ) ^ k - 1) := add_le_add (hEpow k) (ih k hk)
-    calc ‖P * (X k - E) * E ^ (M - 1 - k)‖
-        ≤ ‖P‖ * ‖X k - E‖ * ‖E ^ (M - 1 - k)‖ := by
+      calc ‖P‖ = ‖((List.range k).map Y).prod + (P - ((List.range k).map Y).prod)‖ := by
+            rw [add_sub_cancel]
+        _ ≤ ‖((List.range k).map Y).prod‖ + ‖P - ((List.range k).map Y).prod‖ :=
+            norm_add_le _ _
+        _ ≤ c + c * ((1 + c * δ) ^ k - 1) := add_le_add (by simpa using hY 0 k) (ih k hk)
+    calc ‖P * (X k - Y k) * ((List.range (M - 1 - k)).map (fun j => Y (k + 1 + j))).prod‖
+        ≤ ‖P‖ * ‖X k - Y k‖ *
+            ‖((List.range (M - 1 - k)).map (fun j => Y (k + 1 + j))).prod‖ := by
           refine (norm_mul_le _ _).trans ?_
           gcongr
           exact norm_mul_le _ _
       _ ≤ (c + c * ((1 + c * δ) ^ k - 1)) * δ * c :=
           mul_le_mul (mul_le_mul hXk (hδ k) (norm_nonneg _) ((norm_nonneg _).trans hXk))
-            (hEpow _) (norm_nonneg _) (mul_nonneg ((norm_nonneg _).trans hXk) hδ0)
+            (hY _ _) (norm_nonneg _) (mul_nonneg ((norm_nonneg _).trans hXk) hδ0)
+
+/-- **Telescoping bound for ordered products near a power-bounded element.** In a normed ring,
+let `‖E^k‖ ≤ c` for every `k ≥ 0` and `‖X_k - E‖ ≤ δ` for every `k`. Then
+`‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c ((1 + cδ)^M - 1)`.
+
+This is the constant-reference case of
+`norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le`, and the iteration of
+arXiv:2103.13367, eqs. `eq:final_eq`, `eq:inequality`, `eq:almost_done`, and `eq:finished`. -/
+theorem norm_prod_range_sub_pow_le_of_forall_norm_pow_le {R : Type*} [NormedRing R] {E : R}
+    {X : ℕ → R} {c δ : ℝ} (hEpow : ∀ k : ℕ, ‖E ^ k‖ ≤ c) (hδ : ∀ k, ‖X k - E‖ ≤ δ) (M : ℕ) :
+    ‖((List.range M).map X).prod - E ^ M‖ ≤ c * ((1 + c * δ) ^ M - 1) := by
+  simpa [List.map_const', List.prod_replicate] using
+    norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le (Y := fun _ => E)
+      (fun _ n => by simpa [List.map_const', List.prod_replicate] using hEpow n) hδ M
 
 /-- **Telescoping bound for ordered products near an idempotent.** In a normed ring, let `E` be
 idempotent with `‖E‖ ≤ c` and `‖1‖ ≤ c`, and let `‖X_k - E‖ ≤ δ` for every `k`. Then

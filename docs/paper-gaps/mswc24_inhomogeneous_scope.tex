@@ -236,9 +236,132 @@ insufficient to justify that replacement. The result is restricted to a
 common bond space and a common faithful fixed state. It gives a uniform
 Gram and polar estimate under those additional structural hypotheses, not
 the full source preparation theorem: varying rectangular bond spaces,
-varying fixed states, and the uniform overlap and normalization argument
-remain separate requirements.
+varying fixed states, and passage from qualitative convergence to a uniform
+quantitative hypothesis remain separate requirements.
+
+A second sufficient-condition result now starts with actual ordered transfer
+products on each nonwrapping contiguous interval in the chosen ring cut:
+\[
+    \lVert T_{E_{A_i}\circ\cdots\circ E_{A_{i+\ell-1}}}
+    -T_\sigma\rVert \le K e^{-r\ell},
+\]
+with $K,r>0$ independent of the ring length and interval, in the $L^2$
+operator norm on the transfer matrices. The common limiting state is
+faithful and has trace one. The declarations
+\leanid{MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le} and
+\leanid{MPSPreparation.exists_one_sub_norm_inner_chainPosState_le}
+prove the ordered mixed-overlap and normalized pair estimates: transfer
+error at most $\delta$ on every selected block and on the whole ring
+gives normalized pair error at most $C_\sigma M\delta$. The constants
+are chosen before the tensors, physical dimension, ring, and partition.
+The whole-ring transfer controls the actual normalization
+$c_N^2=\operatorname{Tr}(T_{B_{\mathrm{whole}}})$; the local Gram
+estimates are not used as a substitute for that normalization.
+
+Consequently
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
+in \doclink{TNLean/MPS/Preparation/InhomogeneousMixingPreparation}
+derives pair error at most $C_\sigma KN e^{-rq}$ and physical depth
+$O(\log(N/\varepsilon))$. It assumes nonzero periodic targets at every
+positive ring length, as required to interpret the source's normalized
+quantum states. Mixing alone guarantees nonvanishing only eventually;
+it does not silently remove the finite short-ring condition. Exact
+preparation covers scales longer than the ring. This closes the uniform
+overlap and normalization step under the stated ordered mixing hypothesis.
+It does not derive that hypothesis from qualitative finite correlation,
+and it does not cover varying reference states or rectangular bond spaces.
+
+The direct consumer
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_choi_domination}
+in \doclink{TNLean/MPS/Preparation/InhomogeneousDoeblinPreparation}
+now connects the actual-site sufficient condition above to physical
+preparation. With trace-preserving site maps fixing the same faithful
+$\sigma$, and uniform Choi domination $0<\eta\le1$, inverse Gram
+reshuffling yields ordered-transfer error $K(1-\eta)^{\ell}$ on each
+actual interval. Weakening to $\eta/2$ retains the endpoint $\eta=1$
+while giving the finite positive exponent $-\log(1-\eta/2)$.
+Strict domination itself proves nonvanishing on every positive ring:
+\leanid{MPSPreparation.le_norm_chainState_sq_of_choi_domination}
+gives $\|\phi_N\|^2\ge\eta>0$ by splitting off the first site and
+using nonnegativity of the supertrace of the completely positive residual.
+Thus this concrete corollary needs no additional nonzero-target hypothesis.
+The general ordered-mixing theorem retains that physical normalization
+premise. This is a quantitative sufficient condition, not a replacement
+of ordered mixing by separate sitewise spectral gaps.
+
+\section{Short rings and undersized physical blocks}
+The algebraic pair estimate at a small blocking scale does not assert an
+isometry from $\mathbb C^{D^2}$ into an undersized physical space.
+The physical compiler chooses $q\ge3D$ first. For $d\ge2$, this implies
+$D^2\le d^q$, and it constructs support-preserving isometric extensions
+$W_j\Pi_j=V_j$ even for rank-deficient Gram matrices. For $d\le1$ it
+prepares the normalized target directly in depth zero. When the selected
+$q>N$, exact preparation handles the whole ring; generic synthesis is
+needed only for the fixed finite range $N<3D$.
+
+For example, AKLT dimensions $d=3,D=2$ give $d<D^2$, so no full-input
+one-site block isometry exists. The general ordered-mixing estimate
+permits this; circuit synthesis uses longer blocks or the exact short-ring
+branch. By contrast, strict faithful Choi domination at a microscopic
+site forces Choi rank $D^2$, whereas its Kraus rank is at most $d$.
+The direct actual-site Choi corollary therefore does not apply to unblocked
+AKLT. Such domination may hold after a fixed blocking; it is not supplied
+by separate sitewise eigenvalue gaps.
+
+The usual AKLT transfer spectrum is $1,-1/3,-1/3,-1/3$, giving periodic
+squared norm $1+3(-1/3)^N$. In particular the one-site periodic vector
+vanishes. The all-positive-length normalized theorem correctly keeps its
+explicit nonzero premise. The separate result
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixing}
+removes it from an eventual-length conclusion. Whole-ring convergence
+chooses a uniform $N_0$ with $\|\phi_N\|^2\ge1/2$ for $N\ge N_0$,
+then proves physical preparation for the original family on that range.
+It uses
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from};
+the old all-positive-length rate interface is its $N_0=0$ specialization.
+No finite short-ring replacement is made in this proof. This is an
+application under uniform quantitative ordered mixing, not a derivation
+of that assumption from qualitative finite correlation.
 
 \bibliographystyle{alpha}
+\section{Varying positive semidefinite references on a square bond space}
+A separate sufficient-condition result permits density matrices
+$\sigma_{N,i}$ that vary with the ring and site and may be singular, while
+keeping the common square bond dimension $D$. It assumes the actual ordered
+transfer matrix on every positive nonwrapping interval starting at $a$ is
+within $K e^{-r\ell}$ of $X\mapsto\operatorname{Tr}(X)\sigma_{N,a}$,
+with $K,r>0$ independent of all intervals and rings. There is no separate
+transport or stationarity hypothesis: the global estimate is proved directly
+from these quantitative tensor-product bounds.
+
+The global square-root H\"older bound replaces a reference-dependent
+Lipschitz constant by a dimension-dependent factor and halves the exponential
+rate. Compactness of the set of density matrices makes the mixed-transfer
+constants uniform, including at singular references. Since
+$R_\sigma R_\tau=R_\sigma$ for trace-one references, ordered reference
+products stay bounded. The positive reference tensor of block $j$ contributes
+the pair with coefficient $(\sqrt{\sigma_j})_{r_{j-1},l_j}$, so the outgoing
+pair from block $j$ uses $\sigma_{j+1}$. A two-block regression with distinct
+rank-one references detects this shift.
+
+The resulting normalized pair error is at most $C_D M\sqrt\delta$.
+For exponential transfer error this gives
+$C_D\sqrt K\,N e^{-rq/2}$ and logarithmic physical preparation of the
+original family beyond a uniform ring cutoff. Whole-ring transfer
+convergence derives eventual nonvanishing; no assumption is made on short
+zero rings. The common faithful-reference result retains its sharper
+exponent $r$.
+
+These declarations\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference},
+    \leanid{MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}, and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_reference}.}
+remove the common-reference and faithfulness restrictions from this
+fixed-square-bond sufficient condition. They still do not derive a uniform
+rate from the paper's qualitative finite-correlation definition. Rectangular
+bonds require the corresponding corner-supported reset maps; zero-padded
+rectangular site maps are not generally trace preserving on the full square
+space, so the square-space hypotheses are not silently applied to them.
+
 \bibliography{references}
 \end{document}
