@@ -1,0 +1,25 @@
+\begin{lemma}[Orthogonality of distinct irreducible sectors]%
+    \label{lem:peps_unitary_irreducible_sectors_orthogonal}
+    \lean{Representation.isOrtho_subrepresentation_of_character_ne,
+        Representation.orthogonalFamily_subrepresentation_of_character_injective}
+    \leanok
+    \uses{thm:peps_delta_positive, thm:peps_isotypic_projectors}
+    Let $\rho$ be a unitary representation of a finite group on a
+    finite-dimensional complex inner product space. If $S,T$ are invariant
+    irreducible subspaces with distinct characters, then $S\perp T$.
+    Consequently, a family of invariant irreducible subspaces with pairwise
+    distinct characters is an orthogonal family.
+    This is the orthogonality in the unitary block decomposition of
+    \cite[Lemma~4.4 and Section~7]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    Let $P$ be the character projector associated with $S$. Its action on
+    irreducible subspaces gives $Px=x$ for $x\in S$ and $Py=0$ for $y\in T$.
+    Since $P$ is self-adjoint,
+    \begin{align}
+        \langle x,y\rangle
+         & =\langle Px,y\rangle
+        =\langle x,Py\rangle=0.
+    \end{align}
+    Apply this to each pair of distinct members of the family.
+\end{proof}

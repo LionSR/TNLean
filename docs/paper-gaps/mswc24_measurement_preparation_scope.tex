@@ -5,10 +5,10 @@
 \input{command}
 \title{Long-Range Matrix Product States with Measurements: Scope of the Formal Statement}
 \author{}
-\date{2026-10-02}
+\date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 The paragraph ``Long-range MPS using measurements'' of~\cite{Malz2024Preparation}
@@ -126,30 +126,32 @@ statement counts such a preparation as a vector prepared with measurements in
 depth $T_1$, followed by a local circuit of depth $T_2$ that does not depend on
 the outcomes, of total depth $T_1+T_2$.
 
-\paragraph{The depth of the GHZ-type state.}
-The state $\ket{\chi_{N/q}}$ lives on the $N/q$ blocks. On the chain of $N$
-sites, the label of block $k$ is stored in the last $r_1$ sites of the block,
-and the first $r_1$ sites of the next block serve as the ancilla of Example~1
-of~\cite{Piroli2021LOCC}; this ancilla is $q-r_1$ sites away from the register
-of its own block, and the controlled shift between them is carried out with
-SWAP gates in depth $O(q)$. The formal statement therefore prepares
-$\ket{\chi_{N/q}}$ in depth $O(q)$ rather than in constant depth, a scope
-restriction of this step. Constant depth
-on the chain of $N$ sites would need the controlled shifts between distant
-sites to be implemented with further measurements, for instance by
-teleportation along pairs of neighbouring sites. Since the isometries of the
-blocked tensor already take depth $O(q)$, the total depth $O(\log(N/\varepsilon))$
-is unaffected.
+\paragraph{Constant depth on the physical chain.}
+The one-round construction uses SWAP routing and has depth $O(q)$. With
+additional measurement rounds the GHZ-type state is prepared in constant
+depth on the original chain itself, for arbitrary cyclic block lengths
+$\ell_k\ge3r_1$ and $r_1\ge2$.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState}
+    and \leanid{MPSPreparation.exists_rounds_sparseBlockShift}
+    in \doclink{TNLean/MPS/Preparation/SparseWindowGHZ}.}
+For an odd block, a unitary on its first $r_1+1$ sites moves the first
+register one site to the right, leaving an even scratch gap. The two
+registers are then joined by a teleportation-assisted controlled subtraction
+of depth $4r_1+K+2$, independent of their separation, and the padding rotation
+is undone. All stretches lie inside disjoint blocks, so they run in parallel.
+The same construction covers the singleton cyclic ring and arbitrary parity
+patterns. The original cyclic measurement and corrections finish the GHZ
+state, with an outcome scalar independent of the coherent label amplitudes.
 
-\section{Open}
-The first two restrictions of the first statement are removed by the second
-statement, and the third does not apply to it. What remains open is the depth
-of the GHZ-type state: both statements prepare $\ket{\chi_{N/q}}$ in depth
-$O(q)$ on the chain of $N$ sites, as described above, rather than in constant
-depth. This does not change the total depth $O(\log(N/\varepsilon))$. Constant
-depth needs the controlled shifts between the register of a block and the
-ancilla at the start of the next block to be carried out with further
-measurements, for instance by teleportation along pairs of neighbouring sites.
+\section{Resolution and resource convention}
+The overlapping-block result removes the earlier orthogonality and
+chain-length restrictions. The sparse-register
+construction now removes the remaining GHZ depth restriction. It restores
+all scratch sites and ancillas exactly to $\ket0$, uses no postselection or
+additional physical sites, and counts all quantum layers on neighbouring
+sites. On-site measurements, on-site corrections and global classical
+feedforward are free in the measurement-round model. Neither an arbitrary
+unitary on $q$ sites nor a hidden environment is treated as free.
 
 \bibliographystyle{alpha}
 \bibliography{references}

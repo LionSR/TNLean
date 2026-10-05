@@ -19,12 +19,14 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalSourceNormalization
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalTraceDecomposition
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.ParentHamiltonian.BlockBoundaryTraceDuality
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalNormalization
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalOneSiteSpan
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalProjectorDecay
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceAtInjectivityLength
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceContinuity
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceOverlap
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionBoundaryDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
@@ -64,6 +66,7 @@ import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.CoefficientPairing
 import TNLean.MPS.ParentHamiltonian.CoisometricReconstruction
 import TNLean.MPS.ParentHamiltonian.Commuting
+import TNLean.MPS.ParentHamiltonian.CompactBlockBoundaryInjectivity
 import TNLean.MPS.ParentHamiltonian.CompactBlockParentGap
 import TNLean.MPS.ParentHamiltonian.CompactNormalParentGap
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
@@ -73,6 +76,7 @@ import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
+import TNLean.MPS.ParentHamiltonian.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.ExtendRight
@@ -97,7 +101,11 @@ import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.ParentHamiltonian.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
+import TNLean.MPS.ParentHamiltonian.HalfChainCanonicalSpectrum
 import TNLean.MPS.ParentHamiltonian.HalfChainSchmidt
+import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
+import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
+import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.IsometricDeformation
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
@@ -140,6 +148,9 @@ import TNLean.MPS.ParentHamiltonian.SpectatorOverlap
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
+import TNLean.MPS.ParentHamiltonian.UncleParentLimit
+import TNLean.MPS.ParentHamiltonian.UncleTensor
+import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 import TNLean.MPS.ParentHamiltonian.WrappingWindow

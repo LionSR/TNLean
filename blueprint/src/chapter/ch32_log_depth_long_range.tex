@@ -23,8 +23,10 @@ normal blocks whose $q$-site states are orthogonal and for block lengths
 dividing $N$ \cite{gap:mswc24_measurement_preparation_scope};
 Section~\ref{sec:ldp_overlapping_measurements} removes both restrictions. On the chain of
 $N$ sites the label of each block is stored in the last sites of the block, and
-the GHZ-type state is prepared in depth $O(q)$; the isometries of the blocked
-tensor take depth $O(q)$ as well.
+the one-round construction prepares the GHZ-type state in depth $O(q)$,
+while Theorem~\ref{thm:ldp_sparse_window_ghz} prepares it in constant depth
+using additional measurement rounds. The sequential block isometries take
+depth $O(q)$.
 
 \begin{definition}[Registers and the GHZ-type state on them]
     \label{def:ldp_window_ghz_state}
@@ -143,6 +145,72 @@ tensor take depth $O(q)$ as well.
     $\sum_km_k=0$ and all the registers of $x$ agree. So every outcome with
     $\sum_km_k=0$ gives the GHZ-type state, and every other outcome gives the
     zero vector, which has probability zero.
+\end{proof}
+
+\begin{theorem}[Constant-depth GHZ preparation on sparse registers]
+    \label{thm:ldp_sparse_window_ghz}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState,
+        MPSPreparation.exists_rounds_sparseBlockShift,
+        MPSPreparation.windowCentralSites,
+        MPSPreparation.windowGHZInitial,
+        MPSPreparation.exists_windowGHZSeedUnitary,
+        MPSPreparation.windowGHZDifference,
+        MPSPreparation.windowGHZDifference_eq_mulVec,
+        MPSPreparation.exists_windowGHZCorrectionRound,
+        MPSPreparation.SparseRegister.prefixEmbedding,
+        MPSPreparation.SparseRegister.padding,
+        MPSPreparation.SparseRegister.padding_first,
+        MPSPreparation.SparseRegister.padding_of_ge,
+        MPSPreparation.SparseRegister.exists_isPairProduct_padding,
+        MPSPreparation.SparseRegister.paddingAll,
+        MPSPreparation.SparseRegister.paddingAll_blockSite,
+        MPSPreparation.SparseRegister.paddingAll_symm_blockSite,
+        MPSPreparation.SparseRegister.exists_isCircuitOn_paddingAll,
+        MPSPreparation.SparseRegister.ends,
+        MPSPreparation.SparseRegister.ends_injective,
+        MPSPreparation.SparseRegister.ends_shift_mulVec,
+        MPSPreparation.SparseRegister.gate,
+        MPSPreparation.SparseRegister.gate_span_subset,
+        MPSPreparation.SparseRegister.pairwise_gates,
+        MPSPreparation.SparseRegister.gate_sites,
+        MPSPreparation.SparseRegister.gate_interior,
+        MPSPreparation.SparseRegister.padding_conj_gates}
+    \leanok
+    \uses{thm:ldp_window_ghz_measurement, def:qc_measurement_rounds,
+        thm:qc_register_layer}
+    Fix $d\ge1$ and $r_1\ge2$. There is $C$ such that, for every cyclic
+    partition into $M\ge1$ blocks of lengths $\ell_k\ge3r_1$ and every unit
+    vector $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state of
+    Definition~\ref{def:ldp_window_ghz_state} is prepared by measurement rounds
+    of total quantum depth at most $C$. There is no upper bound on $\ell_k$.
+    Every site outside the specified registers ends in $\ket0$. The statement
+    includes $M=1$ and every combination of even and odd block lengths.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use the seed and copying gates of
+    Theorem~\ref{thm:ldp_window_ghz_measurement}. In a block of length $q$, put
+    $e=q\bmod2$ and $L=\lfloor(q-2r_1)/2\rfloor$, so
+    $2L+2r_1+e=q$. When $e=1$, rotate the first $r_1+1$ sites to send
+    $\ket{a_1\cdots a_{r_1},0}$ to $\ket{0,a_1\cdots a_{r_1}}$; for $e=0$
+    do nothing. The registers now occupy offsets
+    $e,\ldots,e+r_1-1$ and $q-r_1,\ldots,q-1$, separated by $2L$ zero sites.
+    Their teleportation stretches lie inside disjoint blocks. Apply the
+    controlled subtraction by Theorem~\ref{thm:qc_register_layer}, and undo
+    the rotations. The resulting operator is exactly the controlled
+    subtraction between the original end registers, with all central sites
+    fixed. The padding rotations use only $r_1+1$ sites each, so both have
+    constant depth; the register gates have depth $4r_1+K+2$ for a fixed
+    $2r_1$-site gate bound $K$.
+
+    Finally measure and correct the ancillas as in
+    Theorem~\ref{thm:ldp_window_ghz_measurement}. The cyclic consistency
+    condition is $\sum_k m_k=0$; every other outcome has zero probability.
+    The same correction acts on every label amplitude, preserving coherent
+    superpositions. Quantum layers on neighbouring sites are counted;
+    on-site measurements, outcome-dependent on-site corrections, and global
+    classical communication are free. No postselection, additional physical
+    sites, or free unitary on an entire block is used.
 \end{proof}
 
 \begin{lemma}[Sequential factorization on the first inputs]

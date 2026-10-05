@@ -260,12 +260,23 @@ invertible matrix by the Skolem--Noether theorem.
 \begin{proof}
     \leanok
     \uses{thm:asym_unblocked_coefficients, thm:mpoalg_unimodular_power_sum}
-    Theorem~\ref{thm:asym_unblocked_coefficients}, applied to $B$ and the single
-    normal target $A$, gives nonzero $\mu_1,\ldots,\mu_n$ with
-    $\ket{V^{(N)}(B)}=\left(\sum_k\mu_k^N\right)\ket{V^{(N)}(A)}$ for every
-    $N\ge1$. Since $\ket{V^{(N)}(A)}\neq0$, $c_N=\sum_k\mu_k^N$, and
-    Theorem~\ref{thm:mpoalg_unimodular_power_sum} gives $c_N=\lambda^N$ with
-    $|\lambda|=1$. Then $\lambda^{-1}B$ and $A$ generate the same matrix
-    product vectors, and Theorem~\ref{thm:ft_single} gives
-    $\lambda^{-1}B^i=XA^iX^{-1}$.
+    \ifftmpsvolume
+        Expanding the coefficients of $B$ over the single normal target $A$ as a
+        power sum gives nonzero $\mu_1,\ldots,\mu_n$ with
+        $\ket{V^{(N)}(B)}=\left(\sum_k\mu_k^N\right)\ket{V^{(N)}(A)}$ for every
+        $N\ge1$. Since $\ket{V^{(N)}(A)}\neq0$, $c_N=\sum_k\mu_k^N$; a power sum of
+        modulus one at every length reduces to a single unimodular term, so
+        $c_N=\lambda^N$ with $|\lambda|=1$. Then $\lambda^{-1}B$ and $A$ generate
+        the same matrix product vectors, and Theorem~\ref{thm:ft_single} gives
+        $\lambda^{-1}B^i=XA^iX^{-1}$.
+    \else
+        Theorem~\ref{thm:asym_unblocked_coefficients}, applied to $B$ and the single
+        normal target $A$, gives nonzero $\mu_1,\ldots,\mu_n$ with
+        $\ket{V^{(N)}(B)}=\left(\sum_k\mu_k^N\right)\ket{V^{(N)}(A)}$ for every
+        $N\ge1$. Since $\ket{V^{(N)}(A)}\neq0$, $c_N=\sum_k\mu_k^N$, and
+        Theorem~\ref{thm:mpoalg_unimodular_power_sum} gives $c_N=\lambda^N$ with
+        $|\lambda|=1$. Then $\lambda^{-1}B$ and $A$ generate the same matrix
+        product vectors, and Theorem~\ref{thm:ft_single} gives
+        $\lambda^{-1}B^i=XA^iX^{-1}$.
+    \fi
 \end{proof}

@@ -1,0 +1,70 @@
+\begin{definition}[Ordered coefficient of a shared-side insertion]%
+    \label{def:peps_torus_shared_flux_ordered_element}
+    \lean{TNLean.PEPS.torusSharedFluxOrderedElement}
+    \leanok
+    For a plaquette based at $v=(x,y)$, write $k_v(g)=g$ if the shared
+    upward edge from $(x+1,y)$ to $(x+1,y+1)$ agrees with the native
+    endpoint order, and $k_v(g)=g^{-1}$ otherwise. Thus its directed
+    upward transport is always $g$, including the vertical seam.
+\end{definition}
+
+\begin{theorem}[Literal opposite fluxes on adjacent plaquettes]%
+    \label{thm:peps_torus_shared_flux_pair}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusSharedPlaquetteInsertion,
+        TNLean.PEPS.torusSharedPlaquetteInsertion_eq_treeCycleAssignment}
+    \leanok
+    \uses{def:peps_torus_shared_flux_ordered_element,
+        thm:peps_translated_two_plaquette_geometry}
+    On a finite torus of horizontal period at least four and vertical period
+    at least three, insert directed transport $g$ on the shared upward side
+    of the two plaquettes based at $(x,y)$ and $(x+1,y)$, and the identity
+    on every other bond. Their actual counterclockwise holonomies are
+    $(g,g^{-1})$. The ordered insertion is precisely $k_v(g)$ on the
+    derived middle chord of the translated six-site spanning tree.
+    These assertions hold at every position, including both seams.
+\end{theorem}
+\begin{proof}\leanok
+    The shared upward side of the left plaquette is the reversed left side
+    of the right plaquette. The remaining transports are identities.
+    Compare the ordered coefficient with the translated middle chord.
+\end{proof}
+
+\begin{theorem}[Coherent opposite-pair creation on six original spins]%
+    \label{thm:peps_torus_translated_flux_creation}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedPhysicalFluxCreation,
+        TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedGlobalFluxCreation}
+    \leanok
+    \uses{thm:peps_torus_shared_flux_pair,
+        thm:peps_regular_physical_flux_creation,
+        thm:peps_regular_cycle_global_flux_creation}
+    Let the original four-leg tensor be $G$-isometric for the regular
+    action. For every position $v$ and class representative $g$, there is
+    a unitary $W_{v,g}$ on the six original spins surrounding these two
+    plaquettes such that, for every outgoing boundary column $\theta$,
+    \begin{align}
+        W_{v,g}\Psi_R(1,\theta)
+        =\gamma_g\sum_{z\in G}\Psi_R(zgz^{-1},\theta),
+        \qquad \gamma_g=(|G|\,|C_G(g)|)^{-1/2}.
+    \end{align}
+    In each summand the shared upward side has transport $zgz^{-1}$ and
+    every other internal bond has identity transport. There is also a six-spin
+    unitary whose complementary identity extension is globally unitary, with
+    the same coherent-sum action on the actual globally contracted states,
+    for every common exterior and crossing assignment. The unitary is
+    chosen before all boundary and exterior data.
+
+    The literal summands have adjacent flux pairs
+    $(zgz^{-1},zg^{-1}z^{-1})$. This is the normalized regular finite-torus
+    creation operation of \cite[Theorem~6.17]{Schuch2010PEPS} for periods
+    at least four and three. Its parent-Hamiltonian interpretation and
+    unrestricted geometry remain separate; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the actual chosen-cycle creation theorem to the derived middle
+    chord, using the ordered element $k_v(g)$. Inversion commutes with
+    conjugation, so its coherent insertions are the directed insertions
+    displayed above. The centralizers of $g$ and $g^{-1}$ coincide; hence
+    the seam does not change $\gamma_g$. The actual cut transport proves
+    the global statement with the same common exterior operators.
+\end{proof}

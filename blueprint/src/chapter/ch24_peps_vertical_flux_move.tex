@@ -1,0 +1,79 @@
+\begin{theorem}[Translated vertical six-site geometry]
+    \label{thm:peps_vertical_two_plaquette_geometry}
+    \lean{TNLean.PEPS.verticalTwoPlaquetteTree_isTree,
+        TNLean.PEPS.verticalTwoPlaquetteRegion,
+        TNLean.PEPS.verticalTwoPlaquetteIso,
+        TNLean.PEPS.verticalTwoPlaquetteTree,
+        TNLean.PEPS.verticalTwoPlaquetteTreeDecidableAdj,
+        TNLean.PEPS.verticalTwoPlaquetteTree_le,
+        TNLean.PEPS.verticalTwoPlaquetteRegion_card,
+        TNLean.PEPS.verticalTwoPlaquetteCycleBond,
+        TNLean.PEPS.verticalTwoPlaquetteCycleBond_injective,
+        TNLean.PEPS.verticalTwoPlaquetteIso_apply,
+        TNLean.PEPS.verticalTwoPlaquetteCycleBond_eq_right}
+    \leanok
+    \uses{thm:peps_translated_two_plaquette_geometry}
+    On a finite torus of width at least three and height at least four, the
+    translated two-by-three induced region at any vertex $v$ has six distinct
+    vertices. It has a spanning path with relative coordinates
+    \begin{align}
+        (0,0),(0,1),(0,2),(1,2),(1,1),(1,0).
+    \end{align}
+    Its two remaining bonds are the distinct rightward steps at rows zero and
+    one. The assertions include both periodic seams. This is the rotated
+    finite-torus geometry for \cite[Theorem~6.16]{Schuch2010PEPS}, with scope
+    recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_torus_coordinate_swap}
+    Coordinate exchange is a graph isomorphism between the two tori. Transport
+    the established horizontal induced region, path tree and chords along this
+    isomorphism, and evaluate the six vertex coordinates.
+\end{proof}
+
+\begin{theorem}[Vertical movement on the original six spins]
+    \label{thm:peps_torus_vertical_flux_move}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusVerticalFluxMove,
+        TNLean.PEPS.torusVerticalFluxAssignment,
+        TNLean.PEPS.torusVerticalFluxAssignment_eq_treeCycleAssignment,
+        TNLean.PEPS.torusVerticalFluxAssignment_right_transport,
+        TNLean.PEPS.regularWalkHolonomy_torusVerticalFluxAssignment}
+    \leanok
+    \uses{thm:peps_vertical_two_plaquette_geometry,
+        thm:peps_cycle_assignment_support,
+        thm:peps_torus_plaquette_holonomy,
+        thm:peps_regular_cycle_global_permutation}
+    Retain the preceding period bounds, and let the original torus site tensor
+    be $G$-isometric for the regular action of a finite group $G$. Define $u_0(g)$
+    to have directed rightward transport $g$ on the lower chord, and define
+    $u_1(g)$ to have transport $g$ on both chords. All other bonds are trivial.
+    The ordered bond operator is $g^{-1}$ at the horizontal seam. The actual
+    counterclockwise plaquette holonomies, ordered from lower to upper, are
+    \begin{align}
+        (g,1)\quad\longrightarrow\quad(1,g).
+    \end{align}
+    There is one unitary $W$ on these six original spins, chosen before $g$,
+    every boundary configuration $\theta$, and every common exterior and crossing
+    assignment $u$, for which
+    \begin{align}
+        W\Psi_R(u_0(g),\theta)       & =\Psi_R(u_1(g),\theta), \\
+        W^*\Psi_R(u_1(g),\theta)     & =\Psi_R(u_0(g),\theta), \\
+        (W\otimes I)\Psi(u_0(g),u)   & =\Psi(u_1(g),u),        \\
+        (W^*\otimes I)\Psi(u_1(g),u) & =\Psi(u_0(g),u).
+    \end{align}
+    Thus the adjoint gives downward movement. The global identities concern the
+    actual contracted coefficients with internal operators overridden by
+    $u_b(g)$; the displayed holonomies concern the literal identity-background
+    assignments. This finite-torus realization of
+    \cite[Theorem~6.16]{Schuch2010PEPS} has the stated regular-action and period
+    restrictions; see \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Directed transport cancels the sorting inversion. The four native directed
+    steps give the two plaquette holonomies. Recover each literal insertion as
+    the derived cycle assignment, and apply the uniform two-cycle operation to
+    the actual open and closed contractions. Its global extension is unitary.
+    Multiplication by the adjoint gives both reverse identities.
+\end{proof}

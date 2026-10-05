@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.IsoTransport
+import TNLean.PEPS.RegionTransport
 
 /-!
 # Translation-invariant PEPS tensors on the torus
@@ -56,6 +57,17 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
 `Papers/1804.04964/paper_normal.tex`. -/
 def IsTorusTranslationInvariant (A : Tensor (torusGraph width height) d) : Prop :=
   ∀ (a : ZMod width) (b : ZMod height), A.transport (translate a b) = A
+
+/-- Blocked-region injectivity of a translation-invariant tensor transports to every translated
+region. -/
+theorem regionBlockedTensorInjective_translate {T : Tensor (torusGraph width height) d}
+    (hT : IsTorusTranslationInvariant T) (a : ZMod width) (b : ZMod height)
+    (R : Finset (TorusVertex width height))
+    (h : RegionBlockedTensorInjective (G := torusGraph width height) T R) :
+    RegionBlockedTensorInjective (G := torusGraph width height) T
+      (Region.map (translate a b) R) := by
+  have htr := (regionBlockedTensorInjective_transport T (translate a b) R).mpr h
+  rwa [hT a b] at htr
 
 /-- The edge action of the translation `(a, b)` coincides with the edge action of
 the translation automorphism `translate a b`: both push the endpoints through the

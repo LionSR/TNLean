@@ -1,0 +1,66 @@
+\begin{theorem}[Canonical representative of an injective MPU]
+    \label{thm:mpu_injective_cfii_representative}
+    \lean{MPOTensor.IsMPU.exists_cfii_representative_of_isInjective}
+    \leanok
+    \uses{def:mpu, def:injective, def:mpu_canonical_form_ii}
+    Let $d>0$ and let $\mathcal U$ be an injective MPU tensor of bond
+    dimension $D$. There are a canonical-form-II tensor $\mathcal V$ of
+    the same bond dimension and an invertible matrix $X$ such that, for every
+    $N>0$,
+    \begin{align}
+        \mathcal V^{ij} & =X\mathcal U^{ij}X^{-1}, \\
+        V^{(N)}         & =U^{(N)}.
+    \end{align}
+    This combines the canonical replacement in
+    \cite[lines~319--356]{Cirac2017MPU} with the equality case of
+    \cite[Proposition~20]{Molnar2018SemiInjective}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mps_equality_reduction_exists, thm:mps_rectangular_reduction_identities}
+    Choose a reduced canonical representative of bond dimension $E\leq D$.
+    Equality of the positive-length periodic operators identifies the
+    doubled-index matrix product vectors. Since $\mathcal U$ is injective,
+    there are $P\in\C^{D\times E}$ and $Q\in\C^{E\times D}$ with
+    $PQ=I_D$ and $P\mathcal V^{ij}Q=\mathcal U^{ij}$. Thus $D\leq E$,
+    and hence $D=E$. For square matrices, $PQ=I$ also gives $QP=I$.
+    Multiplying the letter identity by $Q$ and $P$ yields
+    $\mathcal V^{ij}=Q\mathcal U^{ij}P$, as required with $X=Q$.
+\end{proof}
+
+\begin{theorem}[Source ranks and index of a simple injective MPU]
+    \label{thm:mpu_simple_injective_source_index}
+    \lean{MPOTensor.IsMPU.rightRank_mul_leftRank_of_isInjective_of_isMPUSimple,
+        MPOTensor.IsMPU.index_eq_logb_of_isInjective_of_isMPUSimple}
+    \leanok
+    \uses{def:mpu, def:injective, def:mpu_simple,
+        def:mpu_reduced_representative_index, def:mpu_right_rank, def:mpu_left_rank}
+    Let $d>0$ and let $\mathcal U$ be a simple injective MPU tensor.
+    Its source-cut ranks $r$ and $\ell$ satisfy
+    \begin{align}
+        r\ell & =d^2,                                    \\
+        \operatorname{ind}(\mathcal U)
+              & =\frac12\bigl(\log_2 r-\log_2\ell\bigr).
+    \end{align}
+    These are the rank-product and index identities of
+    \cite[lines~562--573 and~681--704]{Cirac2017MPU}, for the simple
+    injective tensors considered in
+    \cite[lines~1403--1407]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_injective_cfii_representative,
+        thm:mpu_simple_rectangular_inclusion, thm:mpu_virtual_sandwich_source_ranks,
+        thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_bounded_simple_blocking,
+        thm:mpu_source_ranks_physical_reindexing,
+        ThmFund1, prop:mpu_admissible_index_well_defined}
+    Pass to the same-dimensional canonical representative
+    $\mathcal V^{ij}=X\mathcal U^{ij}X^{-1}$.
+    Simplicity is preserved by this bond similarity, as are both source
+    ranks. The simple canonical tensor therefore has rank product $d^2$.
+    Its one-site blocking only relabels the physical alphabet, so its index
+    is $\frac12(\log_2 r-\log_2\ell)$. Equality of the periodic operators
+    identifies this index with $\operatorname{ind}(\mathcal U)$.
+\end{proof}

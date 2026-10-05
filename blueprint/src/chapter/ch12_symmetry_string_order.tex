@@ -147,8 +147,12 @@ virtual-boundary nondecay and virtual local covariance.
 
 \begin{lemma}[Twisted spectral-radius bound and peripheral rigidity]
     \label{lem:pgwsvc08_twisted_spectral_radius}
-    \notready
-    \uses{def:twisted_transfer_map}
+    \lean{MPSTensor.pureCanonical_twistedTransfer_spectral_lemma}
+    \leanok
+    \uses{lem:canonical_fixed_space_irreducible,
+        thm:irreducible_twisted_spectral_radius,
+        thm:twisted_peripheral_eigendirection_unique,
+        lem:physical_eigenbasis_intertwining}
     This is Lemma~1 of~\cite{PerezGarcia2008StringOrder}.  Let $A$ represent
     a pure finitely correlated state in the canonical gauge
     $\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$, with $\Lambda>0$ and
@@ -834,3 +838,9 @@ virtual-boundary nondecay and virtual local covariance.
 \end{proof}
 
 %% ---------------------------------------------------------
+
+\input{chapter/ch12_symmetry_string_order_spectrum}
+
+\input{chapter/ch12_symmetry_string_order_asymptotics}
+
+\input{chapter/ch12_symmetry_string_order_examples}

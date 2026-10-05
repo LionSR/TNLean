@@ -8,7 +8,12 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit.Measurement
 
+import TNLean.Circuit.Measurement.AdaptiveConversion
+import TNLean.Circuit.Measurement.AdaptiveRound
 import TNLean.Circuit.Measurement.Asymptotic
+import TNLean.Circuit.Measurement.Channel
+import TNLean.Circuit.Measurement.CoherentRounds
 import TNLean.Circuit.Measurement.GHZ
+import TNLean.Circuit.Measurement.PreparedComposition
 import TNLean.Circuit.Measurement.Protocol
 import TNLean.Circuit.Measurement.Rounds

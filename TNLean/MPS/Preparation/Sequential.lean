@@ -198,7 +198,7 @@ theorem exists_hasOBCRep_of_isProbabilisticallyGenerated {ψ : (Fin N → Fin d)
     simp [inv_mul_cancel₀ hne]
   | succ n =>
     obtain ⟨b, Q, r', hb0, hbD, -, hrow, hcol, hiso, -, hprod⟩ :=
-      exists_isometric_chain (n + 1) 1 hD (rowMat (star φF)) (isRowSupportedBelow_rowMat _)
+      exists_isometric_chain (n + 1) 1 hD (rowMat hD (star φF)) (isRowSupportedBelow_rowMat hD _)
         (fun p => A (Fin.rev p)) φI
     obtain ⟨B, hB, -⟩ := OBCChainTensor.exists_of_isometric_chain b hbD hb0 Q hrow hcol hiso r'
     refine ⟨1, one_ne_zero, B, funext fun τ => ?_⟩
@@ -213,7 +213,7 @@ theorem isProbabilisticallyGenerated_of_hasOBCRep {ψ : (Fin N → Fin d) → �
     (hc : c ≠ 0) (h : HasOBCRep D (c • ψ)) : IsProbabilisticallyGenerated D ψ := by
   obtain ⟨B, hB⟩ := h
   have hD := B.bondBound_pos
-  refine ⟨fun k => OBCChainTensor.zeroPad B (Fin.rev k), c⁻¹ • basisVecZero D, basisVecZero D,
+  refine ⟨fun k => OBCChainTensor.zeroPad B (Fin.rev k), c⁻¹ • basisVecZero hD, basisVecZero hD,
     funext fun τ => ?_⟩
   have hτ := congrFun hB τ
   rw [OBCChainTensor.coeff_eq_eval_zeroPad] at hτ
@@ -292,7 +292,7 @@ theorem isDeterministicallyGenerated_of_hasOBCRep [NeZero d] {ψ : (Fin N → Fi
     have hψ' : star (ψ Fin.elim0) * ψ Fin.elim0 = 1 := by
       rw [dotProduct, Fintype.sum_subsingleton _ Fin.elim0] at hψ
       exact hψ
-    refine ⟨fun k => Fin.elim0 k, ψ Fin.elim0 • basisVecZero D, basisVecZero D,
+    refine ⟨fun k => Fin.elim0 k, ψ Fin.elim0 • basisVecZero hD, basisVecZero hD,
       fun k => Fin.elim0 k, ?_,
       star_basisVecZero_dotProduct_self hD, fun τ => ?_⟩
     · rw [star_smul_basisVecZero_dotProduct_self hD]
@@ -308,7 +308,7 @@ theorem isDeterministicallyGenerated_of_hasOBCRep [NeZero d] {ψ : (Fin N → Fi
         ∀ i α β, β.val < b p.succ → U (α, i) (β, 0) = Q p i α β :=
       fun p => exists_unitary_extension (hiso p)
     choose U hU hUQ using hext
-    refine ⟨fun k => U (Fin.rev k), r', basisVecZero D, fun k => hU _,
+    refine ⟨fun k => U (Fin.rev k), r', basisVecZero hD, fun k => hU _,
       by rw [hnorm, hcψ, hψ], star_basisVecZero_dotProduct_self hD, fun τ => ?_⟩
     simp only [jointState, Fin.rev_rev]
     rw [eval_mulVec_congr b Q (fun p => stepMatrix (U p)) hrow

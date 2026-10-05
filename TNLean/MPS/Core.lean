@@ -13,6 +13,7 @@ import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.Core.CanonicalNormalization
+import TNLean.MPS.Core.CommonNormalBlocking
 import TNLean.MPS.Core.CorrelationReduction
 import TNLean.MPS.Core.Correlations
 import TNLean.MPS.Core.CyclicTrace
@@ -23,6 +24,7 @@ import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Core.MultiBlockWord
 import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.Core.PhysicalIndexMixing
+import TNLean.MPS.Core.PhysicalMatrix
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.Core.ProjectionTriangularTrace

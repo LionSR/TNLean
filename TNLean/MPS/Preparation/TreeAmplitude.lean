@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.EmbeddedProduct
 import TNLean.MPS.Preparation.Staircase
-import TNLean.MPS.Preparation.TreeMERA
+import TNLean.MPS.Preparation.BinaryMERA
 
 /-!
 # Amplitudes of binary trees of isometries

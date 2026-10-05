@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Examples.CZX
-import TNLean.PEPS.OnSiteOperator
+import TNLean.PEPS.Examples.CZXBoundaryChain
+import TNLean.PEPS.Examples.CZXRectangleMap
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
 import TNLean.MPS.Examples.CZX.CZXUnitary
 
@@ -34,6 +34,10 @@ on-site `ℤ₂` symmetry, whose virtual action is the CZX matrix product unitar
   unitary `X^{⊗ N} D_N` of `CZXCompression.czxTensor`, which is `(-1)^N` times the review's
   operator `O(A)` of `CZXCompression.reviewCZXTensor`.
 
+* The actual open-region image of a positive proper bounded rectangle has a faithful
+  effective plaquette-spin basis, and its physical symmetry intertwines with the review's
+  printed CZX matrix product operator. The even perimeter removes the ordering sign.
+
 **Local fix (CZX bond orientation):** the PEPS statements (`czxOnSite_mul_czxSiteTensor` on
 the printed site tensor, and the invariance of `czxPEPS`) use the review's tensor with each bond
 identifying the pair `(a, b)` at one end with `(b, a)` at the other; contracted with equal labels
@@ -53,11 +57,11 @@ neighbouring sites are one edge of the simple lattice graph, so the four legs of
 four distinct bonds; the source's torus of `2N × 2M` qubits also allows `N, M ∈ {1, 2}`.
 Documented in `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
-**Scope restriction (boundary chain):** the identification of the boundary action is stated
-for a closed chain of legs subject to the plaquette constraint that the PEPS imposes on the
-legs around a region, not for the boundary of a region of the torus PEPS; that the
-contraction of a region is supported on this subspace is not formalized. Documented in
-`docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
+**Scope restriction (boundary region):** the actual open-region image and its effective
+plaquette-spin action are identified for positive proper bounded coordinate rectangles in
+`CZXRectangleMap`. The actual reduced-density support and rank, including trace normalization,
+are proved in `CZXRectangleDensity`. Its nonzero spectrum and arbitrary nonrectangular regions
+remain outside these results. Documented in `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
 
 ## Main definitions
 
@@ -77,6 +81,9 @@ contraction of a region is supported on this subspace is not formalized. Documen
   `TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review`: the boundary
   action is the CZX matrix product unitary.
 
+* `TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review`: the
+  printed boundary operator acts on the actual faithful rectangle image.
+
 ## References
 
 - [arXiv:1106.4752](https://arxiv.org/abs/1106.4752) -- X. Chen, Z.-X. Liu, X.-G. Wen,
@@ -93,222 +100,11 @@ open Matrix
 namespace TNLean
 namespace PEPS
 
-/-! ### The on-site symmetry -/
-
-/-- The Pauli `X` on each of the four qubits of a site. -/
-def czxSiteFlip : Equiv.Perm (Fin 16) :=
-  czxQubits.permCongr
-    ((Fin.revPerm.prodCongr Fin.revPerm).prodCongr (Fin.revPerm.prodCongr Fin.revPerm))
-
-@[simp] theorem czxTopLeft_czxSiteFlip (s : Fin 16) :
-    czxTopLeft (czxSiteFlip s) = (czxTopLeft s).rev := by
-  simp [czxSiteFlip, czxTopLeft, Equiv.permCongr_apply]
-
-@[simp] theorem czxTopRight_czxSiteFlip (s : Fin 16) :
-    czxTopRight (czxSiteFlip s) = (czxTopRight s).rev := by
-  simp [czxSiteFlip, czxTopRight, Equiv.permCongr_apply]
-
-@[simp] theorem czxBottomRight_czxSiteFlip (s : Fin 16) :
-    czxBottomRight (czxSiteFlip s) = (czxBottomRight s).rev := by
-  simp [czxSiteFlip, czxBottomRight, Equiv.permCongr_apply]
-
-@[simp] theorem czxBottomLeft_czxSiteFlip (s : Fin 16) :
-    czxBottomLeft (czxSiteFlip s) = (czxBottomLeft s).rev := by
-  simp [czxSiteFlip, czxBottomLeft, Equiv.permCongr_apply]
-
-@[simp] theorem czxSiteFlip_czxQubits (i j k l : Fin 2) :
-    czxSiteFlip (czxQubits ((i, j), (k, l))) = czxQubits ((i.rev, j.rev), (k.rev, l.rev)) := by
-  simp [czxSiteFlip, Equiv.permCongr_apply]
-
-theorem czxSiteFlip_czxSiteFlip (s : Fin 16) : czxSiteFlip (czxSiteFlip s) = s := by
-  obtain ⟨⟨⟨i, j⟩, ⟨k, l⟩⟩, rfl⟩ := czxQubits.surjective s
-  simp
-
-theorem czxSiteFlip_symm : czxSiteFlip.symm = czxSiteFlip :=
-  Equiv.ext fun s => by rw [Equiv.symm_apply_eq, czxSiteFlip_czxSiteFlip]
-
-/-- The exponent of the phase of `U_{CZ} = CZ₁₂CZ₂₃CZ₃₄CZ₄₁` on the state `|ijkl⟩` of a site,
-`ij + jk + kl + li`. -/
-def czxCZExponent (s : Fin 16) : ℕ :=
-  (czxTopLeft s).val * (czxTopRight s).val + (czxTopRight s).val * (czxBottomRight s).val +
-    (czxBottomRight s).val * (czxBottomLeft s).val +
-      (czxBottomLeft s).val * (czxTopLeft s).val
-
-/-- Source: arXiv:1106.4752, `References/1106.4752/source/dDSPTmodel.tex` lines 283–294. The
-on-site symmetry `U_{CZX} = U_X U_{CZ}` of a site: first the controlled-`Z` gates on the four
-pairs of neighbouring qubits of the site, then the Pauli `X` on each qubit. -/
-noncomputable def czxOnSite : Matrix (Fin 16) (Fin 16) ℂ :=
-  Matrix.monomial czxSiteFlip 1 * Matrix.diagonal fun s => (-1 : ℂ) ^ czxCZExponent s
-
-/-- `U_{CZX}` is the monomial matrix that flips all four qubits with the controlled-`Z` sign of
-the input. -/
-theorem czxOnSite_eq_monomial :
-    czxOnSite = Matrix.monomial czxSiteFlip fun s => (-1 : ℂ) ^ czxCZExponent s := by
-  ext t s
-  simp [czxOnSite, Matrix.mul_diagonal, Matrix.monomial_apply]
-
-/-! ### Invariance of the CZX PEPS -/
-
-section Torus
-
-variable {width height : ℕ} [NeZero width] [NeZero height]
-
-/-- On a plaquette-constant configuration of the torus, the product of the controlled-`Z` signs
-of all sites is `1`: each pair of neighbouring plaquettes meets at two sites, and their
-controlled-`Z` gates cancel (arXiv:1106.4752, `References/1106.4752/source/dDSPTmodel.tex`
-line 312). -/
-theorem prod_neg_one_pow_czxCZExponent (σ : TorusVertex width height → Fin 16)
-    (h : ∀ v : TorusVertex width height, czxTopRight (σ v) = czxTopLeft (σ (v.1 + 1, v.2)) ∧
-      czxTopRight (σ v) = czxBottomRight (σ (v.1, v.2 + 1)) ∧
-      czxTopRight (σ v) = czxBottomLeft (σ (v.1 + 1, v.2 + 1))) :
-    ∏ v, (-1 : ℂ) ^ czxCZExponent (σ v) = 1 := by
-  set P : TorusVertex width height → ℕ := fun v => (czxTopRight (σ v)).val with hP
-  have htl : ∀ v : TorusVertex width height, (czxTopLeft (σ v)).val = P (v.1 - 1, v.2) := by
-    intro v
-    have := (h (v.1 - 1, v.2)).1
-    simp only [sub_add_cancel] at this
-    simp [hP, this]
-  have hbr : ∀ v : TorusVertex width height, (czxBottomRight (σ v)).val = P (v.1, v.2 - 1) := by
-    intro v
-    have := (h (v.1, v.2 - 1)).2.1
-    simp only [sub_add_cancel] at this
-    simp [hP, this]
-  have hbl : ∀ v : TorusVertex width height,
-      (czxBottomLeft (σ v)).val = P (v.1 - 1, v.2 - 1) := by
-    intro v
-    have := (h (v.1 - 1, v.2 - 1)).2.2
-    simp only [sub_add_cancel] at this
-    simp [hP, this]
-  have hexp : ∀ v : TorusVertex width height, czxCZExponent (σ v) =
-      P (v.1 - 1, v.2) * P v + P v * P (v.1, v.2 - 1) +
-        P (v.1, v.2 - 1) * P (v.1 - 1, v.2 - 1) + P (v.1 - 1, v.2 - 1) * P (v.1 - 1, v.2) := by
-    intro v
-    simp only [czxCZExponent, htl, hbr, hbl]
-    rfl
-  -- the third and fourth sums are the first two, shifted down and to the left
-  have h3 : ∑ v : TorusVertex width height, P (v.1, v.2 - 1) * P (v.1 - 1, v.2 - 1) =
-      ∑ v : TorusVertex width height, P (v.1 - 1, v.2) * P v :=
-    Fintype.sum_equiv ((Equiv.refl _).prodCongr (Equiv.subRight 1)) _ _ fun ⟨x, y⟩ => by
-      simp only [Equiv.prodCongr_apply, Prod.map_apply, Equiv.refl_apply, Equiv.subRight_apply]
-      ring
-  have h4 : ∑ v : TorusVertex width height, P (v.1 - 1, v.2 - 1) * P (v.1 - 1, v.2) =
-      ∑ v : TorusVertex width height, P v * P (v.1, v.2 - 1) :=
-    Fintype.sum_equiv ((Equiv.subRight 1).prodCongr (Equiv.refl _)) _ _ fun ⟨x, y⟩ => by
-      simp only [Equiv.prodCongr_apply, Prod.map_apply, Equiv.refl_apply, Equiv.subRight_apply]
-      ring
-  rw [Finset.prod_pow_eq_pow_sum]
-  simp only [hexp, Finset.sum_add_distrib, h3, h4]
-  rw [show ∀ a b : ℕ, a + b + a + b = 2 * (a + b) from fun a b => by ring, pow_mul]
-  simp
-
-variable [Fact (1 < width)] [Fact (1 < height)] [Fact (2 < width)] [Fact (2 < height)]
-
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2502–2516, and
-arXiv:1106.4752, `References/1106.4752/source/dDSPTmodel.tex` lines 310–312: the CZX PEPS is
-invariant under the on-site symmetry `U_{CZX}` applied at every site. Stated for width and
-height at least three (the module's scope restriction on the torus size). -/
-theorem onSiteOperator_czxOnSite_mulVec_stateCoeff_czxPEPS :
-    onSiteOperator czxOnSite *ᵥ stateCoeff (czxPEPS width height) =
-      stateCoeff (czxPEPS width height) := by
-  rw [czxOnSite_eq_monomial, onSiteOperator_monomial, Matrix.monomial_mulVec]
-  funext σ'
-  set σ := (Equiv.piCongrRight fun _ : TorusVertex width height => czxSiteFlip).symm σ' with hσ
-  have hσ' : σ' = fun v => czxSiteFlip (σ v) := by
-    funext v
-    simp [hσ, czxSiteFlip_symm, Equiv.piCongrRight_symm_apply, czxSiteFlip_czxSiteFlip]
-  rw [hσ', stateCoeff_czxPEPS, stateCoeff_czxPEPS, Finset.prod_boole, Finset.prod_boole]
-  simp only [czxTopLeft_czxSiteFlip, czxTopRight_czxSiteFlip, czxBottomRight_czxSiteFlip,
-    czxBottomLeft_czxSiteFlip, Fin.rev_inj]
-  split_ifs with hc
-  · rw [mul_one]
-    exact prod_neg_one_pow_czxCZExponent σ fun v => hc v (Finset.mem_univ v)
-  · rw [mul_zero]
-
-end Torus
-
-/-! ### Pulling the symmetry through one site tensor -/
-
-/-- The Pauli `X` on both qubits of a bond. -/
-def czxLegFlip : Equiv.Perm (Fin 4) :=
-  czxBond.permCongr (Fin.revPerm.prodCongr Fin.revPerm)
-
-@[simp] theorem czxLegFlip_czxBond (a b : Fin 2) :
-    czxLegFlip (czxBond (a, b)) = czxBond (a.rev, b.rev) := by
-  simp [czxLegFlip, Equiv.permCongr_apply]
-
-/-- The controlled-`Z` sign `(-1)^{ab}` of the bond state `|ab⟩`. -/
-def czxLegPhase (x : Fin 4) : ℂ :=
-  (-1 : ℂ) ^ ((czxBond.symm x).1.val * (czxBond.symm x).2.val)
-
-@[simp] theorem czxLegPhase_czxBond (a b : Fin 2) :
-    czxLegPhase (czxBond (a, b)) = (-1 : ℂ) ^ (a.val * b.val) := by
-  simp [czxLegPhase]
-
-/-- The operator `V = (X ⊗ X) CZ` on the two qubits carried by one virtual leg. -/
-noncomputable def czxLegOperator : Matrix (Fin 4) (Fin 4) ℂ :=
-  Matrix.monomial czxLegFlip czxLegPhase
-
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 1462–1466 (the
-pulling-through of an on-site symmetry to the virtual level) and lines 2513–2516: the on-site
-symmetry `U_{CZX}` applied to the physical index of the CZX tensor equals the operator
-`V = (X ⊗ X) CZ` applied to each of its four virtual legs,
-`∑_s (U_{CZX})_{s' s} A_{t r b l}^{s} = ∑_{t' r' b' l'} A_{t' r' b' l'}^{s'} V_{t' t} V_{r' r}
-V_{b' b} V_{l' l}`, the right side written out for the monomial matrix `V`. -/
-theorem czxOnSite_mul_czxSiteTensor (t r b l : Fin 4) (s' : Fin 16) :
-    ∑ s, czxOnSite s' s * czxSiteTensor t r b l s =
-      czxLegPhase t * czxLegPhase r * czxLegPhase b * czxLegPhase l *
-        czxSiteTensor (czxLegFlip t) (czxLegFlip r) (czxLegFlip b) (czxLegFlip l) s' := by
-  rw [czxOnSite_eq_monomial, Finset.sum_eq_single (czxSiteFlip s')]
-  · obtain ⟨⟨⟨i, j⟩, ⟨k, m⟩⟩, rfl⟩ := czxQubits.surjective s'
-    obtain ⟨⟨t₁, t₂⟩, rfl⟩ := czxBond.surjective t
-    obtain ⟨⟨r₁, r₂⟩, rfl⟩ := czxBond.surjective r
-    obtain ⟨⟨b₁, b₂⟩, rfl⟩ := czxBond.surjective b
-    obtain ⟨⟨l₁, l₂⟩, rfl⟩ := czxBond.surjective l
-    simp only [Matrix.monomial_apply, czxSiteFlip_czxQubits,
-      czxSiteTensor, czxLegFlip_czxBond, czxLegPhase_czxBond, czxCZExponent, czxTopLeft,
-      czxTopRight, czxBottomRight, czxBottomLeft, Equiv.symm_apply_apply,
-      EmbeddingLike.apply_eq_iff_eq, Prod.mk.injEq, Fin.rev_eq_iff, mul_ite, mul_one, mul_zero]
-    by_cases hc : (t₁ = i.rev ∧ t₂ = j.rev) ∧ (r₁ = j.rev ∧ r₂ = k.rev) ∧
-        (b₁ = k.rev ∧ b₂ = m.rev) ∧ l₁ = m.rev ∧ l₂ = i.rev
-    · obtain ⟨⟨rfl, rfl⟩, ⟨rfl, rfl⟩, ⟨rfl, rfl⟩, rfl, rfl⟩ := hc
-      simp only [Fin.rev_rev, and_self, ↓reduceIte, ← pow_add]
-    · simp only [hc, ↓reduceIte]
-  · intro s _ hs
-    have hne : s' ≠ czxSiteFlip s := fun h => hs (by rw [h, czxSiteFlip_czxSiteFlip])
-    simp [Matrix.monomial_apply, hne]
-  · simp
-
 /-! ### The boundary matrix product unitary -/
 
 section Boundary
 
 variable (N : ℕ) [NeZero N]
-
-/-- The closed chain of `N` boundary legs carrying the effective spins `c`: leg `m` carries the
-qubits `(c m, c (m + 1))` of the two plaquettes it touches, so neighbouring legs carry the same
-qubit of their common plaquette (arXiv:1106.4752,
-`References/1106.4752/source/dDSPTmodel.tex` lines 339–341). -/
-def czxBoundaryLegs (c : Fin N → Fin 2) : Fin N → Fin 4 :=
-  fun m => czxBond (c m, c (m + 1))
-
-theorem czxBoundaryLegs_injective : Function.Injective (czxBoundaryLegs N) := by
-  intro c c' h
-  funext m
-  have := congrArg (fun x => (czxBond.symm (x m)).1) h
-  simpa [czxBoundaryLegs] using this
-
-/-- The isometric embedding of the effective spins into the configurations of the boundary
-legs. -/
-def czxBoundaryEmbedding : Matrix (Fin N → Fin 4) (Fin N → Fin 2) ℂ :=
-  Matrix.of fun x c => if x = czxBoundaryLegs N c then 1 else 0
-
-theorem czxBoundaryEmbedding_conjTranspose_mul_self :
-    (czxBoundaryEmbedding N)ᴴ * czxBoundaryEmbedding N = 1 := by
-  ext c c'
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, czxBoundaryEmbedding, Matrix.of_apply,
-    apply_ite star, star_one, star_zero, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq',
-    Finset.mem_univ, ↓reduceIte, Matrix.one_apply]
-  simp [(czxBoundaryLegs_injective N).eq_iff]
 
 /-- Source: arXiv:1106.4752, `References/1106.4752/source/dDSPTmodel.tex` lines 339–345 and
 377–385; arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2582–2587: on the
@@ -355,6 +151,66 @@ theorem onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review :
   simp
 
 end Boundary
+
+section Rectangle
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (2 < width)] [Fact (2 < height)]
+local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
+local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
+variable (xStart yStart w h : ℕ) (hw : 0 < w) (hh : 0 < h)
+variable (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
+variable (hwp : w < width) (hhp : h < height) [NeZero (2 * w + 2 * h)]
+
+private theorem regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_czxTensor :
+    regionPhysicalProductMatrix (torusContiguousRectangle xStart yStart w h)
+        (fun _ => czxOnSite) *
+      czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp =
+    czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp *
+      MPOTensor.mpo CZXCompression.czxTensor (2 * w + 2 * h) := by
+  change @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+    (regionPhysicalProductMatrix (torusContiguousRectangle xStart yStart w h)
+      (fun _ => czxOnSite))
+    (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp) =
+    @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+      (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp)
+      (MPOTensor.mpo CZXCompression.czxTensor (2 * w + 2 * h))
+  rw [regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_monomial,
+    CZXCompression.mpo_czxTensor]
+  apply congrArg (fun M =>
+    czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp * M)
+  change Matrix.monomial (CZXCompression.spinFlip (2 * w + 2 * h)) _ =
+    Matrix.monomial (CZXCompression.spinFlip (2 * w + 2 * h)) _
+  apply congrArg (Matrix.monomial (CZXCompression.spinFlip (2 * w + 2 * h)))
+  funext c
+  simp only [czxBoundaryLegs, czxLegPhase_czxBond, CZXCompression.czExponent,
+    Finset.prod_pow_eq_pow_sum]
+
+/-- The printed CZX matrix product unitary is the physical symmetry on the
+actual rectangle image, in its faithful effective plaquette-spin coordinates.
+The perimeter is even, so the review normalization sign is exactly one.
+Source: CLW11, lines 330–345 and 377–385; review Appendix A, lines 2582–2591. -/
+theorem regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review :
+    regionPhysicalProductMatrix (torusContiguousRectangle xStart yStart w h)
+        (fun _ => czxOnSite) *
+      czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp =
+    czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp *
+      MPOTensor.mpo CZXCompression.reviewCZXTensor (2 * w + 2 * h) := by
+  change @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+    (regionPhysicalProductMatrix (torusContiguousRectangle xStart yStart w h)
+      (fun _ => czxOnSite))
+    (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp) =
+    @HMul.hMul _ _ _ Matrix.instHMulOfFintypeOfMulOfAddCommMonoid
+      (czxRectangleBoundaryMatrix xStart yStart w h hw hh hx hy hwp hhp)
+      (MPOTensor.mpo CZXCompression.reviewCZXTensor (2 * w + 2 * h))
+  rw [CZXCompression.mpo_reviewCZXTensor_eq_smul]
+  have hsign : (-1 : ℂ) ^ (2 * w + 2 * h) = 1 := by
+    simp [pow_add, pow_mul]
+  rw [hsign, one_smul]
+  exact regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_czxTensor
+    xStart yStart w h hw hh hx hy hwp hhp
+
+end Rectangle
 
 end PEPS
 end TNLean

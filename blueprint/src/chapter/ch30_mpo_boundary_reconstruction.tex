@@ -1,0 +1,560 @@
+% Source: Garre-Rubio--Lootens--Molnar, arXiv:2203.12563v3,
+% REsubmission.tex Appendix A, lines 2305--2455.
+% Included after ch30_mpo_boundary_transport.
+
+\section{Reconstruction from arbitrary boundaries}
+\label{sec:glm_boundary_reconstruction}
+
+Write $\mathcal D=\prod_c\MN{D_c}$ and
+$A^w=(A_c^{i_1}\cdots A_c^{i_n})_c$ for a simultaneous word tuple.
+The product and scalar operations on $\mathcal D$ are componentwise.
+
+\begin{theorem}[A common simultaneous spanning length]
+    \label{thm:glm_boundary_spanning}
+    \lean{MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective}
+    \leanok
+    Let $A_c$ be individually injective tensors with $D_c>0$, no two of
+    which are equivalent by an invertible similarity and a nonzero scalar.
+    Then some $L>0$ satisfies $\operatorname{span}\{A^w:|w|=L\}=\mathcal D$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose nonzero scalars $\zeta_c$ and Perron gauges so that
+    $\zeta_cA_c$ are normal with spectral radius one. Similarity and
+    independent nonzero scalings preserve the exclusion of equivalent
+    blocks. The simultaneous block-separation theorem gives a common
+    positive length $L$. At that length the invertible componentwise map
+    $(M_c)_c\mapsto(\zeta_c^L M_c)_c$ removes the scalings.
+\end{proof}
+
+\begin{definition}[Trace dual of a block boundary map]
+    \label{def:glm_boundary_trace_dual}
+    \lean{Matrix.familyTraceAdjoint, Matrix.trace_familyTraceAdjoint_mul}
+    \leanok
+    For a linear map $b:\MN{D}\to\mathcal D$, its bilinear trace dual
+    $\rho:\mathcal D\to\MN{D}$ is characterized by
+    \begin{align}
+        \tr(\rho(M)X) & =\sum_c\tr(M_c b(X)_c).
+        \label{eq:glm_boundary_dual}
+    \end{align}
+    No complex conjugation occurs in this pairing.
+\end{definition}
+
+\begin{theorem}[The boundary map determines a representation]
+    \label{thm:glm_boundary_representation}
+    \lean{MPSTensor.familyTraceAdjoint_wordTuple,
+        MPSTensor.familyTraceAdjoint_map_mul,
+        MPSTensor.boundaryRepresentation,
+        MPSTensor.boundaryRepresentation_letter}
+    \leanok
+    \uses{def:glm_boundary_trace_dual}
+    Suppose $b$ satisfies
+    $\tr(XB^w)=\sum_c\tr(b(X)_cA_c^w)$ for every $X$ and every nonempty
+    word $w$. If $\operatorname{span}\{A^w:|w|=L\}=\mathcal D$ for some
+    $L>0$, its trace dual obeys
+    \begin{align}
+        \rho(A^w)       & =B^w,            &
+        \rho(MN)        & =\rho(M)\rho(N), &
+        \rho((A_c^i)_c) & =B^i.
+        \label{eq:glm_boundary_representation}
+    \end{align}
+    The map $\rho$ need not preserve the ambient identity.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Nondegeneracy of the trace pairing and
+    (\ref{eq:glm_boundary_dual}) give the word identity.
+    For length-$L$ words $u,v$, concatenation gives
+    $\rho(A^uA^v)=B^{uv}=B^uB^v=\rho(A^u)\rho(A^v)$.
+    Bilinearity and simultaneous spanning extend this equality to every
+    $M,N\in\mathcal D$. Length one gives the local-letter identity.
+\end{proof}
+
+\begin{theorem}[Splitting an arbitrary idempotent]
+    \label{thm:glm_boundary_idempotent}
+    \lean{Matrix.exists_rankFactorization_of_idempotent}
+    \leanok
+    Every idempotent $P\in M_D(K)$ over a field factors as $P=WV$,
+    $VW=I_m$, with $m=\operatorname{rank}P$. This includes $m=0$ and
+    imposes no self-adjointness condition.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose a basis of $\operatorname{ran}P$. Let $W$ include these
+    coordinates in $K^D$, and let $V$ take coordinates after applying $P$.
+    The identity $P^2=P$ says that $P$ is the identity on its range, hence
+    $VW=I_m$ and $WV=P$.
+\end{proof}
+
+\begin{theorem}[Biorthogonal matrix-algebra representations]
+    \label{thm:glm_boundary_matrix_blocks}
+    \lean{Matrix.exists_matrixUnitFactorization,
+        Matrix.sum_multiplicityBlocks_mul,
+        Matrix.exists_matrixUnitBlocks,
+        Matrix.exists_multiplicativeLinearMap_blocks,
+        Matrix.exists_multiplicativeLinearMap_blocks_of_fintype,
+        Matrix.biorthogonal_sum_support,
+        Matrix.exists_piMatrix_blocks}
+    \leanok
+    A multiplicative $K$-linear map
+    $\rho:\prod_c M_{D_c}(K)\to M_D(K)$ admits finite multiplicities
+    $m_c$ and matrices $W_{c\mu}:K^{D_c}\to K^D$,
+    $V_{c\mu}:K^D\to K^{D_c}$ such that
+    \begin{align}
+        V_{c\mu}W_{d\nu}
+                & =\delta_{cd}\delta_{\mu\nu}I_{D_c},
+        \label{eq:glm_boundary_matrix_orthogonal}       \\
+        \rho(M) & =\sum_{c,\mu}W_{c\mu}M_cV_{c\mu},   &
+        \rho(1) & =\sum_{c,\mu}W_{c\mu}V_{c\mu}.
+        \label{eq:glm_boundary_matrix_reconstruct}
+    \end{align}
+    Zero-dimensional factors and zero multiplicities are allowed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_idempotent}
+    For a nonzero factor, put $E_{ij}=\rho(e_{c,ij})$ and choose
+    $E_{00}=CH$ with $HC=I$. The identities
+    $E_{ij}E_{kl}=\delta_{jk}E_{il}$ give
+    $(HE_{0i})(E_{j0}C)=\delta_{ij}I$ and
+    $(E_{i0}C)(HE_{0j})=E_{ij}$. Separate the common coordinate into
+    multiplicity indices and expand an arbitrary matrix in matrix units.
+    Distinct factors have annihilating support idempotents, so their
+    rectangular factors are mutually biorthogonal. Summing the factor
+    expansions gives (\ref{eq:glm_boundary_matrix_reconstruct}).
+\end{proof}
+
+\begin{theorem}[Exact reconstruction from boundary transport]
+    \label{thm:glm_boundary_reverse}
+    \lean{MPSTensor.exists_biorthogonalDecomposition_of_nonUnitalAlgHom,
+        MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport,
+        MPSTensor.exists_boundaryRepresentation_of_boundaryMap,
+        Matrix.finSigmaDiagonalBlocks,
+        MPSTensor.mpvWithBoundary_toTensorFromBlocks_one,
+        MPOTensor.IsBoundaryClosed.exists_boundaryRepresentation,
+        MPOTensor.IsBoundaryCompatible.exists_boundaryRepresentation,
+        MPOTensor.IsBoundaryClosed.exists_biorthogonalDecomposition,
+        MPOTensor.IsBoundaryCompatible.exists_biorthogonalDecomposition}
+    \leanok
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition}
+    A length-independent block boundary map with a positive simultaneous
+    spanning length gives an exact biorthogonal decomposition
+    $B^i=\sum_{c,\mu}W_{c\mu}A_c^iV_{c\mu}$.
+    Consequently, arbitrary-boundary closedness gives such a decomposition
+    of $TT$, and arbitrary-boundary compatibility gives one of $T\cdot A$,
+    when the target tensor is the unweighted direct sum of these blocks.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_representation,thm:glm_boundary_matrix_blocks,
+        thm:glm_boundary_linear}
+    Restrict the output boundary to its diagonal blocks. Form its trace
+    dual and split the resulting multiplicative map as in
+    (\ref{eq:glm_boundary_matrix_reconstruct}). The local-letter identity
+    in (\ref{eq:glm_boundary_representation}) gives the exact decomposition.
+\end{proof}
+
+\begin{center}
+    \tenkzkernel
+    % Formula: B^i = sum_{c,mu} W_{c,mu} A_c^i V_{c,mu}.
+    % Ink-to-index map: W and V have no physical leg; A and B each
+    % have one physical index i. West/east external bonds have dimension D.
+    % Internal bonds on the right have dimension D_c.
+    % Boundary signature on each side: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0).
+    \begin{tenkz}[rows={ket}, cols=1, west=open, east=open]
+        \tn[ports={90:physical:$i$}]{B}
+    \end{tenkz}
+    \quad $=\displaystyle\sum_{c,\mu}$ \quad
+    \begin{tenkz}[rows={ket}, cols=3, west=open, east=open]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{W_{c\mu}} &
+        \tn[ports={90:physical:$i$}]{A_c} &
+        \tn[skin=box,ports={180:virtual,0:virtual}]{V_{c\mu}}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Restriction to incoming bond blocks]
+    \label{thm:glm_boundary_incoming_blocks}
+    \lean{MPSTensor.mpvWithBoundary_sandwich_of_intertwiner,
+        MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport_restrict,
+        MPOTensor.stackedBondMap,MPOTensor.stackedBondMap_mul,
+        MPOTensor.stackedBondMap_one,
+        MPOTensor.mulTensor_intertwine_stackedBondMap,
+        MPOTensor.actTensor_intertwine_stackedBondMap,
+        MPOTensor.IsBoundaryClosed.exists_fusionDecomposition_of_retracts,
+        MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition,
+        MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition}
+    \leanok
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition}
+    If $B^iW=WC^i$ and $VW=I$, the boundary $X$ of $C$ is represented
+    by $WXV$ on $B$ at every length. Applying this to the coordinate
+    inclusions of the incoming blocks gives, for each pair $a,b$,
+    exact fusion tensors of $T_aT_b$, and for each pair $a,x$, exact
+    action tensors of $T_a\cdot A_x$, with their respective biorthogonality
+    relations. Only the target block family requires a simultaneous
+    spanning length.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_reverse}
+    The intertwining identity extends to words, and cyclicity of trace
+    gives
+    \begin{align}
+        \tr(WXV B^w) & =\tr(XV B^wW)=\tr(XC^w).
+        \label{eq:glm_boundary_restricted_trace}
+    \end{align}
+    Tensor products of the incoming coordinate inclusions intertwine the
+    stacked or acted-on letters. Compose the original boundary map with
+    $X\mapsto WXV$ and apply exact reconstruction.
+\end{proof}
+
+\begin{theorem}[Fusion and action tensors from source block hypotheses]
+    \label{thm:glm_boundary_source_decomposition}
+    \lean{MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective,
+        MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective}
+    \leanok
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition}
+    For an unweighted block-diagonal MPO with individually injective,
+    positive-dimensional, pairwise gauge-scalar inequivalent blocks,
+    arbitrary-boundary closedness gives exact biorthogonal fusion tensors
+    for every incoming pair $a,b$, with finite multiplicities $N_{ab}^c$:
+    \begin{align}
+        \sum_j T_a^{ij}\otimes T_b^{jk}
+         & =\sum_{c,\mu}W_{ab}^{c\mu}T_c^{ik}V_{ab}^{c\mu},
+        \label{eq:glm_boundary_source_fusion}               \\
+        V_{ab}^{c\mu}W_{ab}^{e\nu}
+         & =\delta_{ce}\delta_{\mu\nu}I_{\chi_c}.
+        \label{eq:glm_boundary_source_fusion_ortho}
+    \end{align}
+    Here $W_{ab}^{c\mu}:\mathbb C^{\chi_c}\to
+        \mathbb C^{\chi_a}\otimes\mathbb C^{\chi_b}$ and $V_{ab}^{c\mu}$ has the
+    reverse direction; when $c\ne e$, the right side of
+    (\ref{eq:glm_boundary_source_fusion_ortho}) is the zero rectangular matrix.
+    For an operator and a state in unweighted
+    block-diagonal form, arbitrary-boundary compatibility gives exact
+    biorthogonal action tensors for every incoming pair $a,x$ if the state
+    blocks satisfy those injectivity, dimension, and separation assumptions.
+    With finite multiplicities $M_{ax}^y$, they obey
+    \begin{align}
+        \sum_j T_a^{ij}\otimes A_x^j
+         & =\sum_{y,\mu}W_{ax}^{y\mu}A_y^iV_{ax}^{y\mu},
+        \label{eq:glm_boundary_source_action}            \\
+        V_{ax}^{y\mu}W_{ax}^{z\nu}
+         & =\delta_{yz}\delta_{\mu\nu}I_{D_y}.
+        \label{eq:glm_boundary_source_action_ortho}
+    \end{align}
+    The maps have the analogous directions, with incoming bond space
+    $\mathbb C^{\chi_a}\otimes\mathbb C^{D_x}$ and outgoing bond space
+    $\mathbb C^{D_y}$.
+    These are the existence and orthogonality assertions of
+    \cite[Appendix~A]{GarreRubio2023MPOSym}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_spanning,thm:glm_boundary_incoming_blocks}
+    Derive a common positive simultaneous spanning length for the target
+    blocks, then restrict the length-independent boundary map to each
+    incoming pair and reconstruct its exact local decomposition.
+\end{proof}
+
+\begin{definition}[Collected fusion coordinates]
+    \leanok
+    \label{def:glm_boundary_zipper_coordinates}
+    \lean{MPOTensor.CompleteZipperFusionFamily.biorthogonalSynthesis,
+        MPOTensor.CompleteZipperFusionFamily.biorthogonalAnalysis}
+    For fixed incoming blocks $a,b$, collect the synthesis matrices
+    $W_{ab}^{c\mu}$ as columns of $S_{ab}$ and the analysis matrices
+    $V_{ab}^{c\mu}$ as rows of $H_{ab}$. Their common coordinate space is
+    $\bigoplus_c(\mathbb C^{N_{ab}^c}\otimes\mathbb C^{\chi_c})$.
+\end{definition}
+
+\begin{theorem}[Zipper identities from exact decomposition]
+    \leanok
+    \label{thm:glm_boundary_zipper_identities}
+    \lean{MPOTensor.CompleteZipperFusionFamily.biorthogonalAnalysis_mul_synthesis,
+        MPOTensor.CompleteZipperFusionFamily.pairLetter_eq_biorthogonalSynthesis_mul}
+    \uses{def:glm_boundary_zipper_coordinates,def:glm_boundary_decomposition}
+    Write $B_{ab}^{ik}=\sum_j T_a^{ij}\otimes T_b^{jk}$ and
+    $C_{ab}^{ik}=\bigoplus_c(I_{N_{ab}^c}\otimes T_c^{ik})$.
+    Exact biorthogonal decomposition implies
+    \begin{align}
+        H_{ab}S_{ab}      & =I,                 & B_{ab}^{ik} & =S_{ab}C_{ab}^{ik}H_{ab},
+        \label{eq:glm_boundary_zipper_reconstruction}                                     \\
+        B_{ab}^{ik}S_{ab} & =S_{ab}C_{ab}^{ik}, &
+        H_{ab}B_{ab}^{ik} & =C_{ab}^{ik}H_{ab}.
+        \label{eq:glm_boundary_zipper_identities}
+    \end{align}
+    The product $S_{ab}H_{ab}$ may be a proper, non-self-adjoint idempotent.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Collect the separate biorthogonality equations and sum the exact letter
+    decompositions. Multiply the second identity in
+    (\ref{eq:glm_boundary_zipper_reconstruction}) by $S_{ab}$ on the right
+    or by $H_{ab}$ on the left, then cancel $H_{ab}S_{ab}=I$.
+\end{proof}
+
+\begin{definition}[Complete fusion family]
+    \leanok
+    \label{def:glm_boundary_zipper_family}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofBiorthogonal}
+    \uses{def:glm_boundary_zipper_coordinates,def:glm_boundary_decomposition,
+        def:mpdo_complete_zipper_fusion_family}
+    For positive-dimensional injective blocks, exact biorthogonal pairwise
+    decompositions and a simultaneous left inverse of the labelled
+    one-site target matrices give a complete zipper fusion family with
+    synthesis $S_{ab}$ and analysis $H_{ab}$.
+\end{definition}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_zipper_identities}
+    The identities (\ref{eq:glm_boundary_zipper_reconstruction}) and
+    (\ref{eq:glm_boundary_zipper_identities}), together with the supplied
+    simultaneous left inverse, give the required family.
+\end{proof}
+
+\begin{theorem}[Blocking preserves the exact fusion maps]
+    \leanok
+    \label{thm:glm_boundary_zipper_blocking}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.ofWords,
+        MPSTensor.IsBiorthogonalDecomposition.blockMPO,
+        MPOTensor.CompleteZipperFusionFamily.ofBiorthogonalBlocked,
+        MPOTensor.CompleteZipperFusionFamily.ofBiorthogonalBlocked_tensor,
+        MPOTensor.CompleteZipperFusionFamily.ofBiorthogonalBlocked_fusionTensor,
+        MPOTensor.CompleteZipperFusionFamily.ofBiorthogonalBlocked_fusionTensorLeftInverse}
+    \uses{def:glm_boundary_zipper_family}
+    Replacing every letter by a common nonempty word preserves an exact
+    biorthogonal decomposition and its rectangular maps. In particular,
+    physical blocking preserves the multiplicities $N_{ab}^c$ and both
+    $V_{ab}^{c\mu}$ and $W_{ab}^{c\mu}$. For positive-dimensional normal
+    blocks with no scalar-gauge duplicates, some common positive blocking
+    gives a complete zipper fusion family with these same maps.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_decomposition,def:glm_boundary_zipper_family,
+        thm:mpdo_complete_zipper_of_compression_blocked}
+    % The last node owns exists_blockTensor_isMPOBlockLeftInverse;
+    % only its simultaneous-left-inverse assertion is used here.
+    Induction on each nonempty word cancels intermediate analysis-synthesis
+    pairs. Physical blocking commutes with stacking the two MPOs.
+    A common simultaneous word span supplies the labelled block left
+    inverse after blocking, and
+    Definition~\ref{def:glm_boundary_zipper_family} applies.
+\end{proof}
+
+\begin{theorem}[Complete fusion family from arbitrary-boundary closedness]
+    \leanok
+    \label{thm:glm_boundary_complete_family}
+    \lean{MPOTensor.IsBoundaryClosed.exists_completeZipperFusionFamily}
+    \uses{def:glm_boundary_closedness,def:glm_boundary_zipper_family}
+    Under the block and arbitrary-boundary closedness assumptions of
+    Theorem~\ref{thm:glm_boundary_source_decomposition}, there are exact
+    unblocked fusion maps, finite multiplicities, and a complete zipper
+    family after one positive physical blocking. Its blocks are precisely
+    the blocked source tensors, and its synthesis, analysis, and
+    multiplicities are the original unblocked ones.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_zipper_blocking}
+    Choose the exact decomposition for each incoming pair and apply
+    Theorem~\ref{thm:glm_boundary_zipper_blocking} at one common length.
+\end{proof}
+
+The fusion-symbol conventions of the two sources differ. In
+\cite[Section~2]{GarreRubio2023MPOSym}, the unhatted fusion matrix is
+analysis (our $V$) and its hatted partner is synthesis (our $W$).
+Writing $S_L,S_R$ and $H_L,H_R$ for the two synthesis and analysis trees,
+the synthesis-oriented matrix $P$ of
+Theorem~\ref{thm:mpdo_complete_zipper_printed_fmove} satisfies
+$S_RP=S_L$. Its inverse $Q$ satisfies $H_L=QH_R$ and is the
+$F$-symbol of \cite{GarreRubio2023MPOSym} when the printed upper indices
+index rows. Thus the inverse-oriented indexed equation in
+Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon} supplies that
+source's pentagon. Under the synthesis-basis gauges of
+Theorem~\ref{thm:mpdo_complete_zipper_fmatrix_gauge},
+$P'=G_R^{-1}PG_L$ and $Q'=G_L^{-1}QG_R$.
+The common final-bond identity factor is suppressed in these formulas.
+
+\begin{definition}[Zipper decomposition of a boundary tensor]
+    \leanok
+    \label{def:glm_boundary_existing_zipper}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.toZipperDecomposition}
+    \uses{def:glm_boundary_decomposition}
+    An exact biorthogonal boundary decomposition is a zipper decomposition
+    $B^i=\sum_{c,\mu}W_{c\mu}A_c^iV_{c\mu}$ with the same analysis and
+    synthesis matrices.
+\end{definition}
+
+\begin{theorem}[Uniqueness of the fusion multiplicities]
+    \leanok
+    \label{thm:glm_boundary_multiplicity_unique}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.trace_evalWord_eq_sum_multiplicity,
+        MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_wordTupleSpanTop,
+        MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective}
+    \uses{def:glm_boundary_decomposition}
+    For separated, positive-dimensional injective targets, two exact
+    biorthogonal decompositions of the same tensor over these targets
+    have identical multiplicities.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_decomposition,thm:glm_boundary_spanning}
+    Every nonempty word satisfies
+    \begin{align}
+        \tr(B^w) & =\sum_cN_c\tr(A_c^w).
+        \label{eq:glm_boundary_trace_multiplicity}
+    \end{align}
+    Subtract (\ref{eq:glm_boundary_trace_multiplicity}) for the two
+    decompositions. A common simultaneous word span and nondegeneracy of
+    the trace pairing give $(N_c-N'_c)I_{D_c}=0$. Since $D_c>0$,
+    $N_c=N'_c$.
+\end{proof}
+
+\begin{theorem}[Unique multiplicity gauge on the letter support]
+    \leanok
+    \label{thm:glm_boundary_multiplicity_gauge}
+    \lean{MPSTensor.rectangularIntertwiner_eq_zero_of_wordTupleSpanTop,
+        MPSTensor.not_isGaugeRelated_of_wordTupleSpanTop,
+        MPSTensor.IsBiorthogonalDecomposition.exists_unique_multiplicityGauge_of_isInjective}
+    \uses{def:glm_boundary_decomposition}
+    Two exact biorthogonal decompositions over the same multiplicities
+    and separated positive-dimensional injective target blocks differ
+    by a unique family $Y_c\in\mathrm{GL}_{N_c}(\mathbb C)$ on the
+    letter support:
+    \begin{align}
+        \widetilde V_{c\mu}B^i
+         & =\sum_\nu(Y_c)_{\mu\nu}V_{c\nu}B^i,         \\
+        B^i\widetilde W_{c\kappa}
+         & =\sum_\nu(Y_c^{-1})_{\nu\kappa}B^iW_{c\nu}.
+        \label{eq:glm_boundary_multiplicity_gauge}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_spanning,def:glm_boundary_existing_zipper,
+        thm:asym_zipper_uniqueness}
+    An intertwiner between distinct blocks intertwines every simultaneous
+    word tuple. By spanning it intertwines a tuple that is the identity
+    in one block and zero in the other, so the intertwiner vanishes.
+    Theorem~\ref{thm:asym_zipper_uniqueness} now gives the unique
+    invertible multiplicity gauges. No adjoint relation or ambient
+    identity is required.
+\end{proof}
+
+\begin{theorem}[Periodic expansions with the exact multiplicities]
+    \leanok
+    \label{thm:glm_boundary_periodic_expansions}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity,
+        MPOTensor.isMPOFusionAlgebra_of_biorthogonalDecompositions,
+        MPOTensor.isMPOSymmetricFamily_of_biorthogonalDecompositions}
+    \uses{def:glm_boundary_decomposition}
+    The multiplicities in exact biorthogonal fusion and action decompositions
+    give, at every positive chain length $n$,
+    \begin{align}
+        O_a^nO_b^n          & =\sum_cN_{ab}^cO_c^n,          \\
+        O_a^n\ket{\psi_x^n} & =\sum_yM_{ax}^y\ket{\psi_y^n}.
+        \label{eq:glm_boundary_periodic_expansions}
+    \end{align}
+    Both identities concern the original, unblocked tensors.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_multiplicity_unique}
+    Apply the nonempty-word trace formula
+    (\ref{eq:glm_boundary_trace_multiplicity}). Stacking MPO tensors
+    multiplies their periodic operators, and the periodic vector of an
+    action tensor is the operator applied to the periodic state.
+\end{proof}
+
+\begin{theorem}[Periodic block independence]
+    \leanok
+    \label{thm:glm_boundary_periodic_independence}
+    \lean{MPSTensor.WordTupleSpanTop.linearIndependent_mpv,
+        MPOTensor.linearIndependent_mpo_of_wordTupleSpanTop}
+    If positive-dimensional target blocks span their product matrix
+    algebra simultaneously at length $L$, their periodic block vectors
+    are linearly independent at $L$. On the doubled physical alphabet,
+    the same conclusion gives independent periodic block operators.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A relation $\sum_c z_c\tr(A_c^w)=0$ for every word of length $L$
+    pairs the tuple $(z_cI_{D_c})_c$ to zero against the whole product
+    matrix algebra. Nondegeneracy gives $z_cI_{D_c}=0$, and $D_c>0$
+    gives $z_c=0$. Vectorizing operator entries preserves these relations.
+\end{proof}
+
+\begin{theorem}[Associativity of the exact fusion multiplicities]
+    \leanok
+    \label{thm:glm_boundary_fusion_associative}
+    \lean{MPOTensor.IsMPOFusionAlgebra.associative_of_linearIndependent,
+        MPOTensor.IsMPOFusionAlgebra.associative_of_isInjective}
+    \uses{def:mpo_fusion_algebra}
+    Suppose the periodic fusion expansion in
+    (\ref{eq:glm_boundary_periodic_expansions}) holds and the operator
+    blocks are separated, positive-dimensional, and injective. Then
+    \begin{align}
+        \sum_eN_{ab}^eN_{ec}^q & =\sum_fN_{bc}^fN_{af}^q.
+        \label{eq:glm_boundary_fusion_associative}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence}
+    Choose a positive length with independent periodic block operators.
+    Expand both sides of $(O_aO_b)O_c=O_a(O_bO_c)$ and compare
+    coefficients of each $O_q$.
+\end{proof}
+
+\begin{theorem}[The exact action multiplicities form a NIM-rep]
+    \leanok
+    \label{thm:glm_boundary_action_nimrep}
+    \lean{MPOTensor.isNIMRep_of_periodic_expansions_of_isInjective}
+    \uses{def:mpo_symmetric_family,def:fusion_character_nimrep}
+    Suppose the two periodic expansions in
+    (\ref{eq:glm_boundary_periodic_expansions}) hold with natural
+    multiplicities and separated positive-dimensional injective state
+    blocks. Then
+    \begin{align}
+        \sum_cN_{ab}^cM_{cx}^y & =\sum_zM_{bx}^zM_{az}^y.
+        \label{eq:glm_boundary_action_nimrep}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence,
+        thm:mpo_symmetric_nimrep}
+    Choose a positive length with independent periodic state blocks.
+    Expand the associativity identity
+    \begin{align*}
+        (O_aO_b)\ket{\psi_x} & =O_a(O_b\ket{\psi_x})
+    \end{align*}
+    and compare the coefficients of each $\ket{\psi_y}$. The equality of complex
+    coefficients is an equality of their natural-number multiplicities.
+\end{proof}
+
+\begin{theorem}[Fusion and action laws from arbitrary boundaries]
+    \leanok
+    \label{thm:glm_boundary_source_multiplicities}
+    \lean{MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible}
+    \uses{def:glm_boundary_closedness,def:mpo_symmetric_family,
+        def:fusion_character_nimrep}
+    For unweighted block assemblies of separated positive-dimensional
+    injective operator and state blocks, arbitrary-boundary closedness
+    and compatibility produce natural multiplicities $N_{ab}^c$ and
+    $M_{ax}^y$ satisfying the periodic expansions
+    (\ref{eq:glm_boundary_periodic_expansions}), fusion associativity
+    (\ref{eq:glm_boundary_fusion_associative}), and the NIM relation
+    (\ref{eq:glm_boundary_action_nimrep}). No unit, duality, or
+    commutativity assumption is needed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_periodic_expansions,
+        thm:glm_boundary_fusion_associative,thm:glm_boundary_action_nimrep}
+    Construct the exact pairwise fusion and action decompositions.
+    Trace them and apply the preceding coefficient comparisons to their
+    actual natural-number multiplicities.
+\end{proof}

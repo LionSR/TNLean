@@ -40,6 +40,7 @@ feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 
 * `MPSTensor.exp_neg_div_correlationLength_le_one` — `e^{-γ/ξ} ≤ 1` for `|λ₂| ≤ 1`.
 * `MPSTensor.exists_norm_transferMap_pow_sub_le` — the transfer-map gap.
+* `MPSTensor.exists_norm_gram_transferMatrix_sub_le` — uniform two-sided Gram/transfer bounds.
 * `MPSTensor.exists_norm_polarPos_blockTensor_sub_le` — the rate of `P_q → P_∞`.
 
 ## References
@@ -240,6 +241,60 @@ theorem transpose_kronecker_one_apply (σ : Matrix (Fin D) (Fin D) ℂ) (a b : F
   by_cases hab : a.2 = b.2
   · simp [Matrix.kroneckerMap_apply, Matrix.one_apply, hab, Matrix.trace_single_eq_same]
   · simp [Matrix.kroneckerMap_apply, hab, Matrix.trace_single_eq_of_ne _ _ _ (Ne.symm hab)]
+
+open scoped Matrix.Norms.L2Operator in
+/-- The physical Gram error and transfer-matrix error bound one another in the `L²`
+operator norm, with one positive constant depending only on the bond dimension. The
+constant is chosen before the physical dimension, tensor, and positive semidefinite
+reference. No trace normalization, fixed-point, or faithfulness hypothesis is needed.
+
+The reshuffling is an involutive linear permutation of entries, as in arXiv:2103.13367,
+Supplemental Material, equations (19) and (21), and arXiv:2307.01696, equation (8).
+Positivity is used only to identify the transfer map of `fixedPointTensor σ` with
+`X ↦ Tr(X) σ`; the reset-map reshuffling itself is an algebraic identity. -/
+theorem exists_norm_gram_transferMatrix_sub_le (D : ℕ) :
+    ∃ K : ℝ, 0 < K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+      (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
+      (‖(physicalMatrix A)ᴴ * physicalMatrix A -
+          σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
+        K * ‖transferMatrix (Kraus.transferMap A) -
+          transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖) ∧
+      (‖transferMatrix (Kraus.transferMap A) -
+          transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤
+        K * ‖(physicalMatrix A)ᴴ * physicalMatrix A -
+          σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖) := by
+  classical
+  let R : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ]
+      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
+    { toFun := fun T a b => T (a.1, b.1) (a.2, b.2)
+      map_add' := fun _ _ => rfl
+      map_smul' := fun _ _ => rfl }
+  let Rc := LinearMap.toContinuousLinearMap R
+  have hbound (T : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+      ‖Rc T‖ ≤ (‖Rc‖ + 1) * ‖T‖ :=
+    (Rc.le_opNorm T).trans (mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg T))
+  refine ⟨‖Rc‖ + 1, by positivity, fun {d} A σ hσ => ?_⟩
+  have hgram : (physicalMatrix A)ᴴ * physicalMatrix A -
+      σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
+      Rc (transferMatrix (Kraus.transferMap A) -
+        transferMatrix (Kraus.transferMap (fixedPointTensor σ))) := by
+    ext a b
+    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply,
+      transpose_kronecker_one_apply]
+    change _ = Kraus.transferMap A (Matrix.single b.2 a.2 1) b.1 a.1 -
+      Kraus.transferMap (fixedPointTensor σ) (Matrix.single b.2 a.2 1) b.1 a.1
+    rw [transferMap_fixedPointTensor_apply hσ]
+  constructor
+  · rw [hgram]
+    exact hbound _
+  · have hinv : transferMatrix (Kraus.transferMap A) -
+        transferMatrix (Kraus.transferMap (fixedPointTensor σ)) =
+        Rc ((physicalMatrix A)ᴴ * physicalMatrix A -
+          σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
+      rw [hgram]
+      rfl
+    rw [hinv]
+    exact hbound _
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Gram matrices.** In the setting of `exists_norm_transferMap_pow_sub_le`, the Gram matrix

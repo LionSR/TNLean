@@ -80,15 +80,18 @@ representation, the tensor is the length-two blocked cluster tensor up to a
 unitary on the physical space.
 
 \section{Formal boundary}
-Only the on-site case is formalized: the actions $\alpha$ and $\beta$ of time
-reversal and reflection on the cocycles are not. The formal construction takes
-a projective representation with factor system $\omega$ as input; for finite groups
+The on-site construction described above takes a projective representation
+with factor system $\omega$ as input; for finite groups
 such a representation, with factor system in the class of $\omega$, is supplied by
 the twisted regular representation, as recorded in
 \cite{gap:rmp_spt_fixed_point_supplied_representation}. The formal construction is
 \leanid{MPSTensor.sptFixedPointTensor} with the action
 \leanid{MPSTensor.sptFixedPointAction}; the cluster comparison is
 \leanid{MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor}.
+The mixed-symmetry extension now includes time reversal and reflection,
+with phase action $\beta=t$ and virtual action $\alpha=t+r$, while retaining
+the same corrected dimer tensor
+\cite{gap:rmp_spt_fixed_point_onsite_scope}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

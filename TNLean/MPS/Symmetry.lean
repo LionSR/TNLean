@@ -24,6 +24,7 @@ import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
 import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CanonicalInjectiveGroundPath
+import TNLean.MPS.Symmetry.Character
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalCanonicalGroundPath
@@ -35,6 +36,7 @@ import TNLean.MPS.Symmetry.CommonPhysicalFixedPointGroundPath
 import TNLean.MPS.Symmetry.CommonPhysicalFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
+import TNLean.MPS.Symmetry.CompactMinimalClassStability
 import TNLean.MPS.Symmetry.CompactSupportVirtualTransport
 import TNLean.MPS.Symmetry.CompactSupportedSequenceClass
 import TNLean.MPS.Symmetry.CompactUnitalTensors
@@ -48,6 +50,7 @@ import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath
 import TNLean.MPS.Symmetry.EntanglementSpectrum
+import TNLean.MPS.Symmetry.ExactGroundPathTransferClass
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
@@ -74,6 +77,8 @@ import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.LocalVirtualGauge
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
+import TNLean.MPS.Symmetry.MixedSPTFixedPoint
+import TNLean.MPS.Symmetry.MixedSymmetry
 import TNLean.MPS.Symmetry.MpvRayLimit
 import TNLean.MPS.Symmetry.NearbyInjectiveAdjointActions
 import TNLean.MPS.Symmetry.NormalizedBondLocalSymmetry
@@ -90,6 +95,9 @@ import TNLean.MPS.Symmetry.PhysicalSchmidtSupport
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondExtension
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondTransport
 import TNLean.MPS.Symmetry.PhysicalSpectatorCoordinates
+import TNLean.MPS.Symmetry.PhysicalStringAsymptotics
+import TNLean.MPS.Symmetry.PhysicalStringEndpoints
+import TNLean.MPS.Symmetry.PhysicalStringSelectionRule
 import TNLean.MPS.Symmetry.PointwiseInvariantCompression
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap
@@ -106,6 +114,7 @@ import TNLean.MPS.Symmetry.ProjectiveGaugeTransport
 import TNLean.MPS.Symmetry.ProjectiveHomConjugation
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
+import TNLean.MPS.Symmetry.PureTwistedSpectrum
 import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
 import TNLean.MPS.Symmetry.ScalarIdentityAmbientObstruction

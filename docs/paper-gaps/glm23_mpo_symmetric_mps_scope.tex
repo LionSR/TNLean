@@ -53,63 +53,216 @@ of both conditions, in which the boundaries are proportional to the identity
 in each block.\footnote{Source traceability: lines 994--1000 and 1062--1064.}
 
 \section{What is formalized}
-The formal layer records only periodic-boundary data, for arbitrary finite
-fusion rules. The fusion hypothesis is (\ref{eq:glm23_fusion}) at every
-positive length. The symmetry hypothesis on a family of tensors $A_x$ is
-(\ref{eq:glm23_periodic_symmetry}) at every positive length, with complex
-coefficients independent of the length. The source derives
-(\ref{eq:glm23_periodic_symmetry}) from its definition, so the formal
-hypothesis is weaker than the source's. From it the formal results derive, for
-normal blocks, that each $M_{a,x}^y$ is a nonnegative integer and that
-(\ref{eq:glm23_nimrep}) holds; the source takes integrality from the action
-tensors instead.\footnote{Formal definitions:
+
+The formalization has several layers. They have different hypotheses and
+must not be conflated with the arbitrary-boundary existence theorem.
+
+\paragraph{Length-independent arbitrary-boundary transport.}
+The closedness and compatibility predicates have the order
+$\forall X,Y\,\exists Z\,\forall N\geq1$; one output boundary works for
+all lengths. Stacking sends $(X,Y)$ to $X\otimes Y$.
+Choosing output boundaries on the matrix-unit basis and extending linearly
+proves that each predicate is equivalent to one linear boundary map on
+the entire stacked matrix space, independent of the positive length.
+This proves the first assertion of Appendix A without assuming linearity
+of an arbitrary choice of output boundary.\footnote{
+    \leanid{MPOTensor.IsBoundaryClosed},
+    \leanid{MPOTensor.IsBoundaryCompatible},
+    \leanid{MPOTensor.isBoundaryClosed_iff_exists_linearMap}, and
+    \leanid{MPOTensor.isBoundaryCompatible_iff_exists_linearMap}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryClosedness}.}
+For supplied exact decompositions
+$B^i=\sum_cW_cA_c^iV_c$ with $V_cW_b=\delta_{cb}1$, the transported
+boundaries are $V_cXW_c$ at every positive length. The empty-word identity
+additionally requires $\sum_cW_cV_c=1$ on the ambient bond space.
+These forward formulas do not construct the decomposition from
+closedness.\footnote{\leanid{MPSTensor.IsBiorthogonalDecomposition.mpvWithBoundary}
+    and \leanid{MPSTensor.IsBiorthogonalDecomposition.evalWord_of_complete}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryTransport}.}
+
+\paragraph{Periodic fusion and action.}
+The periodic fusion hypothesis is (\ref{eq:glm23_fusion}) at every positive
+length. The periodic symmetry hypothesis is
+(\ref{eq:glm23_periodic_symmetry}), initially with complex coefficients
+independent of length. For normal state blocks whose periodic vectors are
+linearly independent at one positive length, the formalization proves that
+these coefficients are nonnegative integers and satisfy
+(\ref{eq:glm23_nimrep}). The source obtains integrality instead from its
+exact action tensors. Its standing assumption that distinct blocks become
+orthogonal in the thermodynamic limit supplies eventual linear
+independence; it is not to be replaced by a new unrelated independence
+assumption in the source theorem.\footnote{Formal declarations:
     \leanid{MPOTensor.IsMPOFusionAlgebra},
-    \leanid{MPOTensor.IsMPOSymmetricFamily}, \leanid{MPOTensor.IsMPOSymmetric}.
-    Results: \leanid{MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily} and
+    \leanid{MPOTensor.IsMPOSymmetricFamily},
+    \leanid{MPOTensor.IsMPOSymmetric}, and
+    \leanid{MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily}.
+    The integer-coefficient action of an invertible label permutes the blocks,
+    as expressed by
     \leanid{MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel}.}
+The predicate for a single symmetric block does not itself require that
+all its action coefficients are one; that extra clause is essential to
+the source's single-block obstruction at line 610.
 
-The source's standing assumption that the blocks are injective and
-orthogonal to each other in the thermodynamic limit (line 317) is used in
-the form that the periodic vectors of the blocks are linearly independent at
-one positive length. Asymptotic orthogonality implies this at every
-sufficiently large length. It is the same reading as the eventual linear
-independence clause of the formal basis of normal tensors.
-
-\section{Boundary}
-Not formalized: the arbitrary-boundary algebra $\mathcal A_T^n$, the
-subspace $\mathcal S_A^n$ and the invariance $\mathcal A_T\cdot\mathcal
-S_A\subset\mathcal S_A$; the exact fusion and action tensors that the source
-obtains from the closedness condition; the $F$- and $L$-symbols and the
-pentagon equations; and the gauge of the fusion tensors by invertible matrices
-on the multiplicity spaces (line 416). Formalized instead are fusion and action
-tensors for periodic boundaries, derived from the fusion rules and from
-(\ref{eq:glm23_periodic_symmetry}) through the multi-block compression theorem.
-They carry one block per copy of each channel, are mutually biorthogonal, and
-decompose the stacked tensor up to a nilpotent remainder.\footnote{Results:
+\paragraph{Fusion and action reductions with multiplicity.}
+The periodic identities produce mutually biorthogonal fusion and action
+reductions, one pair for every copy of each output channel. They reconstruct
+the stacked tensor only up to a nilpotent remainder.\footnote{
     \leanid{MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum} and
-    \leanid{MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum}.} With only a
-nilpotent remainder the gauge is not a multiplicity-space transformation.
-Conjugating the block coordinates by a unipotent block upper triangular matrix
-adds to one copy's fusion tensor a multiple of another's. Uniqueness up to a
-scalar is formalized only when the whole stacked tensor reduces onto a single
-block.\footnote{Result:
-    \leanid{MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq}.} Consequently the single-block
-obstruction of the source's subsection ``Injective MPSs cannot be invariant
-under non-trivial MPOs'', which shows that the $F$-symbols
-are trivial for an injective invariant state without
-multiplicity, $M_{a,x}^x=1$,\footnote{Source traceability: lines 610--636 and line 738.}
-is not formalized. What is formalized is a different, fusion-ring
-obstruction: a single normal symmetric block on
-which the unit acts trivially gives a ring homomorphism from the fusion ring to
-$\mathbb Z$ that is nonnegative on the labels. This excludes the Fibonacci
-algebra, but it does not exclude group-like algebras with a nontrivial
-three-cocycle.
+    \leanid{MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum}, in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors}.}
+This is not the source's exact letterwise decomposition from
+arbitrary-boundary closedness and invariance. For a single normal target,
+two reductions are proportional after multiplication by sufficiently long
+words. For several targets, periodic data alone does not force a pure
+change of basis in the multiplicity spaces: upper-triangular changes can
+mix the chosen maps with residual directions.
 
-Elimination plan: define the arbitrary-boundary algebra and subspace,
-prove that the source's invariance implies
-(\ref{eq:glm23_periodic_symmetry}), and state the cohomological single-block
-obstruction through the action tensors of the multi-block compression
-theorem.
+When an exact biorthogonal zipper decomposition is supplied, uniqueness up
+to an invertible matrix on each multiplicity space is proved.\footnote{
+    \leanid{MPOTensor.exists_unique_zipperFusionGauge} and
+    \leanid{MPOTensor.exists_unique_zipperActionGauge}, in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness}.}
+Thus multiplicity-space uniqueness is available in the exact setting; it
+is not an assertion about unrestricted periodic reductions.
+
+\paragraph{Multiplicity F-symbols for complete zipper families.}
+Complete zipper fusion families carry independently specified synthesis
+and analysis maps, their biorthogonality and exact reconstruction
+identities, and a simultaneous inverse separating the labelled block
+letters. Their support projector need not be the identity on the full
+product bond space. For such a family the formalization constructs the
+invertible F-matrix, proves the F-move and pentagon, and proves covariance
+under the full multiplicity gauge.\footnote{
+    \leanid{MPOTensor.CompleteZipperFusionFamily},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.printedFMatrix},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.rightTripleSynthesis_mul_printedFMatrix},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}, and
+    \leanid{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge}, in
+    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionDefs},
+    \doclink{TNLean/MPS/MPDO/CompleteZipperFusion},
+    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionPentagon}, and
+    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionGauge}.}
+The printed F-matrix and its inverse have opposite orientations; the
+pentagon must use the stated orientation. Constructions from a compression
+with zero remainder and from a star-closed word algebra are also available.
+Neither construction proves that the arbitrary-boundary hypotheses of
+Ref.~\cite{GarreRubio2023MPOSym} produce the required exact data.
+Star closure is not a standing hypothesis of the source's Sections 2--3.
+
+\paragraph{Group cocycles, L-symbols, and the group obstruction.}
+For a normal periodic group representation, the two fusion trees define a
+nonzero boundary-dressed associator scalar. It is a three-cocycle; changing
+the fusion tensors changes it by a coboundary. Its class is expressed in
+Mathlib's third group cohomology.\footnote{
+    \leanid{MPOTensor.GroupFamily.FusionData.omega},
+    \leanid{MPOTensor.GroupFamily.FusionData.isCocycle_omega},
+    \leanid{MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge}, and
+    \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass}, in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Associator} and
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/AssociatorCohomology}.}
+For an action permuting normal state blocks, the fusion and action
+reductions similarly construct scalar L-symbols and prove their coupled
+pentagon with that associator. Restriction to a fixed block trivializes
+the anomaly on its stabilizer. In particular, a nontrivial group anomaly
+excludes an invariant normal single-block state with action multiplicity
+one. This group cohomological obstruction is already formalized; it must
+not be described as absent.\footnote{
+    \leanid{MPOTensor.GroupFamily.BlockActionData.lSymbol},
+    \leanid{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol},
+    \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed},
+    and
+    \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks} and
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction}.}
+The scalar gauge operation and its preservation of compatibility are
+proved. Deriving the full L-symbol gauge law from every change of
+fusion and action tensors remains distinct from these scalar identities.
+
+For a fixed transitive group action, the scalar reconstruction formula and
+the torsor of action-gauge solution classes under
+$H^2(H,\mathbb C^\times)$ are proved. The formula is first used in a fusion
+gauge in which the anomaly is identically one on the stabilizer and then
+transported back; the required gauge exists whenever the restricted class
+is trivial. The correction is recorded in
+\cite{gap:glm23_eq20_fusion_gauge}. This is an algebraic classification of
+scalar solutions with the fusion gauge held fixed, not the physical
+Hamiltonian-path classification.
+
+The source's lemma that exact closed fusion and $U_e=\mathbb 1$ force an
+injective group representation to be on-site, with trivial anomaly, is
+also proved from the exact fusion identities. The equivalence of those
+identities with the original arbitrary-boundary closedness still needs
+its own construction.\footnote{
+    \leanid{MPOTensor.GroupFamily.isOnSite_of_closed_fusion} and
+    \leanid{MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion}, in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion}.}
+
+\paragraph{Other periodic consequences.}
+The fusion-ring obstruction to a single normal symmetric block is also
+proved: its eigenvalues define a nonnegative integer fusion character.
+This excludes Fibonacci, but it is not the general F-symbol obstruction
+of source lines 610--636. Separately, for a fusion ring and a unital
+nonnegative integer representation, a strictly positive common eigenvector
+produces the symmetric boundary state of source lines 1795--1805.
+That construction requires neither commutativity of the fusion ring nor
+indecomposability of the action.\footnote{
+    \leanid{MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter} and
+    \leanid{MPOTensor.exists_pos_symmetric_boundary_state}, in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Character} and
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary}.}
+
+\section{Remaining boundary}
+
+The elementary arbitrary-boundary contractions themselves are already
+available as \leanid{MPOTensor.mpoWithBoundary} and
+\leanid{MPSTensor.groundSpaceMap}, with
+\leanid{MPSTensor.groundSpace} their state range. Length-independent arbitrary-boundary closedness and compatibility are
+now stated directly. The remaining implication is from these source
+hypotheses to exact fusion and action decompositions. Merely closing the operators
+separately at each length, with an output boundary that depends on the
+length, would not be the source's condition.
+
+In particular, the following claims remain open here:
+\begin{enumerate}
+    \item The minimal two-sided matrix decomposition of the Appendix A
+          boundary map, deriving the exact
+          fusion and action tensors and their orthogonality from the source's
+          closedness and invariance, without a star-closure or zero-remainder
+          hypothesis.
+    \item General L-symbols with fusion and action multiplicities, their
+          invertible change-of-basis construction, full coupled pentagon and joint
+          multiplicity gauge law, derived from those exact tensors.
+    \item The source's general single-block, multiplicity-one obstruction
+          that trivializes the F-symbols, beyond the already proved scalar group
+          case and the different fusion-ring obstruction.
+\end{enumerate}
+These are tracked by issues \#7968 and \#8045. Once the constructions are
+proved, the periodic predicates remain useful as explicitly weaker
+hypotheses; they need not be renamed as the arbitrary-boundary ones.
+
+The rest of the paper has further independent work: tensor-derived time
+reversal constraints; the general physical phase classification of
+Section 5, including non-fixed-point and varying-bond paths; and the
+remaining exact constructions and completeness claims in Section 6.
+Their status must not be inferred from the algebraic scalar classification.
+The printed time-reversal L relation is subject to the resolved correction
+in \path{docs/paper-gaps/glm23_time_reversal_l_symbol.tex}.
+
+\section{Elimination plan}
+
+Starting from the proved linear boundary map, derive its minimal
+two-sided matrix decomposition and the exact fusion decomposition of
+Appendix A, using the source's simultaneous block injectivity. Apply
+the same finite-dimensional argument to the state action. Derive the
+existing periodic fusion and symmetry formulas by taking identity
+boundaries. Instantiate the existing complete zipper F theory from the
+constructed exact fusion data; do not add its conclusions as hypotheses.
+Then construct multiplicity L-symbols from the two action-tree bases,
+prove their coupled pentagon and gauges, and derive the general
+multiplicity-one obstruction. Keep the group and conditional F results
+above as reusable proved ingredients while these source-level implications
+remain open.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

@@ -332,6 +332,29 @@ physical adjunction reverses its sign
 rectangular reduction preserves the two source-cut ranks of the unreduced
 tensor itself, or identify this representative definition with the printed
 unrestricted source-cut formula without further argument.
+
+For a one-site injective tensor, that further argument is now available.
+The reduced canonical representative has bond dimension $E\leq D$.
+Equality of the positive-length periodic operators and injectivity give a
+rectangular reduction back to the original tensor, with $PQ=I_D$; hence
+$D\leq E$. Thus $D=E$, the reduction is an invertible bond similarity, and
+it preserves both source-cut ranks and simplicity
+(\leanid{MPOTensor.IsMPU.exists_cfii_representative_of_isInjective}).
+Consequently a simple injective tensor satisfies $r\ell=d^2$ and its
+representative index equals the logarithmic expression in its own source
+cuts
+(\leanid{MPOTensor.IsMPU.rightRank_mul_leftRank_of_isInjective_of_isMPUSimple},
+\leanid{MPOTensor.IsMPU.index_eq_logb_of_isInjective_of_isMPUSimple}).
+For the simple injective finite-group representations of
+\cite[lines~1403--1407 and~1547]{FrancoRubio2025MPUGauging}, finite order
+therefore gives $d_r(g)=d_l(g)=d$ without assuming a canonical presentation
+of the original tensors
+(\leanid{MPOTensor.GroupFamily.IsRawRepresentation.index_eq_zero},
+\leanid{MPOTensor.GroupFamily.IsRepresentation.sourceRanks_eq_physDim}).
+The comparison uses one-site injectivity; reduction of a general ambient
+tensor retains the separate source-cut and source-factor questions described
+above.
+
 For two canonical-form-II representatives, tensor-product additivity follows without
 separately supplied data at a common blocking length. Their independent
 tensor product is again in canonical form II; all three tensors become simple

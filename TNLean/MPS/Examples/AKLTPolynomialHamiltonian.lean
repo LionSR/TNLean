@@ -42,8 +42,10 @@ in `TNLean.MPS.Examples.SpinOne`.
 **Scope restriction (periodic chains, \(N\ge3\)):** the source fixes no boundary
 condition or chain length; the ground-state theorems here are proved on periodic
 chains of \(N\ge3\) sites, the range of the existing two-site uniqueness theorem
-`aklt_chainGroundSpace_two_eq_mpvSubmodule`, and the open-boundary edge-mode
-degeneracy is not formalized. Documented in
+`aklt_chainGroundSpace_two_eq_mpvSubmodule`. The open-chain polynomial ground
+energy and fourfold ground space are proved in `AKLTOpenPolynomialHamiltonian`;
+`AKLTSpinSectors` identifies the one-dimensional singlet and three-dimensional
+triplet for every \(N\ge2\). See
 `docs/paper-gaps/rmp_example_parent_hamiltonian_scope.tex`.
 
 ## Main definitions

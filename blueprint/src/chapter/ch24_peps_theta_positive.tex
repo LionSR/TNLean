@@ -1,0 +1,20 @@
+\begin{theorem}[Positive fourth-root representation weight]
+    \label{thm:peps_representation_theta_positive}
+    \lean{Representation.isUnit_thetaOperator,
+        Representation.isPositive_thetaOperator_of_unitary,
+        Representation.posDef_toMatrix_thetaOperator_of_unitary}
+    \leanok
+    \uses{thm:peps_representation_theta_power, thm:peps_delta_inverse,
+        thm:peps_delta_positive}
+    Let $\rho$ be a finite-dimensional complex representation of a finite
+    group. The fourth-root weight $\Theta$ of \cite[Section~7]{Schuch2010PEPS}
+    is invertible. If $\rho$ is unitary, then $\Theta$ is positive and its
+    matrix in every orthonormal basis is positive definite.
+\end{theorem}
+\begin{proof}\leanok
+    The identity $\Theta^4=|G|\Delta$ makes its fourth power invertible,
+    and therefore makes $\Theta$ invertible. For unitary representations,
+    each occurring character projector is an orthogonal projection and
+    each fourth-root coefficient is nonnegative. Their weighted sum is
+    positive. Its invertibility implies positive definiteness.
+\end{proof}

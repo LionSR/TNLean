@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Physical bond separation and the remaining regular PEPS blocking step}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and proved network statement}
+The source is Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807}{arXiv:1001.3807},
+Observations 6.5--6.6, local source lines 1818--1915. The three figures
+\path{renorm-gg-sym.pdf}, \path{renorm-g-id-and-split.pdf}, and
+\path{renorm-fixedpoint.pdf} distinguish the adjacent bond separation
+from the full $2\times2$ renormalization step.
+
+Fix any finite group $G$, finite surplus index set $K$, and finite simple
+graph $\Gamma$. Put $X=G\times G^K$. The local canonical averaging tensor
+has one physical $X$ coordinate on every incident half-edge and one virtual
+$X$ coordinate on every edge. Its group action translates all coordinates
+simultaneously. The actual state sums the product of local tensors over
+one virtual $X$ label per edge, with the group average divided by $|G|$
+at every vertex.
+
+The physical basis change $(a,b)\mapsto(a,a^{-1}b)$ is applied separately
+to every half-edge at each vertex. If $D=|G^K|$, its exact output is
+\begin{align}
+ U\Psi_K=\Psi_0\otimes B_K
+       =(\sqrt D)^{|E(\Gamma)|}\Psi_0\otimes\Omega_K,
+ \qquad \|\Omega_K\|^2=1.
+\end{align}
+Here $\Psi_0$ is the actual single-regular-bond averaging network, and
+$B_K$ is the product of endpoint equality vectors on all surplus bonds.
+Every physical index and the full scalar are retained. In particular,
+$K$ a singleton is the two-parallel-bond step in the source.
+
+The proof expands the genuine tensor contraction, uses the explicit
+regular relative-coordinate identity at each physical endpoint, and
+extracts the equality factors from the group-label sum. It does not
+assume the resulting global factorization. The map is a full-domain
+physical isometry, and all physical overlaps are preserved.
+
+\section{Exact restrictions and remaining work}
+The canonical theorem has now been transported to arbitrary given physical
+$G$-isometric site tensors on the bundled graph. The physical spaces and site
+tensors may vary with the vertex. Local $G$-isometry gives positive factors
+$c_v$ and the explicit normalized adjoints $J_v=c_v^{-1/2}T_v^*$.
+They are isometric on the actual local physical ranges. Their product,
+followed by the relative-coordinate unitary, restricts to a Hilbert-space
+isometry $I$ on the product physical range, and the actual state is proved
+to belong to that range. The exact state identity is
+\begin{align}
+ I\Psi_a=\left(\prod_v\sqrt{c_v}\right)
+    (\sqrt D)^{|E(\Gamma)|}\Psi_0\otimes\Omega_K.
+\end{align}
+No surjectivity onto the original ambient physical spaces, supplied state
+support, or supplied global equality is needed. Thus the physical-support
+composition of Observation 6.4 is proved, with every local normalization
+factor retained.
+
+There is one uniform finite surplus set $K$ on every graph edge. The group
+may be nonabelian. The graph need not be connected and may have isolated
+vertices or be empty. Bundles are encoded by the product edge alphabet $X$;
+no theorem about an arbitrary multigraph presentation or independently
+varying edge bundle sizes is asserted. Inserted closure operators are not
+part of this theorem.
+
+The additional geometric step for Observation 6.6 is now derived on
+untwisted doubled tori with coarse periods at least three. The actual
+$2\times2$ contraction, including seams, gives the bundled coarse network;
+its local G-isometry follows from the four fine-site hypotheses. The
+surviving tensor is identified with the same original coarse tensor, and
+both states are proved nonzero before normalization. Every positive scalar
+is retained. See
+\path{scp10_two_by_two_regular_fixed_point.tex} and
+\leanid{TNLean.PEPS.exists_regularTwoByTwoOriginalTensorIsometry}.
+The present bond-separation theorem alone still does not imply that
+composition. Tiny-period physical Bell separation, inserted closures,
+and other boundary conditions remain outside its scope, tracked in
+\href{https://github.com/LionSR/TNLean/issues/8676}{issue 8676}.
+
+\section{Declarations}
+The production module is
+\path{TNLean/PEPS/RegularGraphBondBlocking.lean}.
+Its exact unnormalized and normalized contraction identities are
+\leanid{TNLean.PEPS.regularGraphBlocking_averagingSite} and
+\leanid{TNLean.PEPS.regularGraphBlocking_averagingSite_normalized}.
+The physical isometry and its coefficient identity are
+\leanid{TNLean.PEPS.regularGraphBlockingIsometry} and
+\leanid{TNLean.PEPS.regularGraphBlockingIsometry_apply}.
+
+The arbitrary-site extension is
+\path{TNLean/PEPS/RegularGraphPhysicalBlocking.lean}. Its capstones are
+\leanid{TNLean.PEPS.exists_regularGraphPhysicalDisentangler} and
+\leanid{TNLean.PEPS.exists_regularGraphPhysicalSupportIsometry}.
+The latter evaluates the actual Hilbert-space isometry on the original
+state, using derived physical-range membership.
+\end{document}

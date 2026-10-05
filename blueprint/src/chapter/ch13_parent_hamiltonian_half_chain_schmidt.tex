@@ -282,9 +282,8 @@ conjugate-transposed tensor.
     Theorem~\ref{thm:half_chain_charpoly}, the nonzero spectrum of the
     half-chain reduced density matrix on the ring of $2L$ sites is that of a
     $D^2\times D^2$ matrix converging entrywise, geometrically in $L$, to
-    $\Lambda\otimes\Lambda/\tr(\Lambda)^2$. The remaining passage to the
-    convergence of the eigenvalues themselves is the continuity of the
-    spectrum of a matrix in its entries and is not part of this section.
+    $\Lambda\otimes\Lambda/\tr(\Lambda)^2$. Theorem~\ref{thm:half_chain_ordered_limit}
+    proves convergence of the normalized physical eigenvalues.
 \end{theorem}
 
 \begin{proof}
@@ -299,3 +298,298 @@ conjugate-transposed tensor.
     $r^{L}$, with constant $D^2\bigl(C(B+C)+BC\bigr)+1$ for an entry bound
     $B$ on the limits.
 \end{proof}
+
+\subsection{Ordered eigenvalues and finite-size normalization}
+
+\begin{definition}[Zero-extended ordered spectrum]%
+    \label{def:half_chain_ordered_spectrum}
+    \lean{Matrix.IsHermitian.paddedEigenvalues}
+    \lean{Matrix.IsHermitian.paddedEigenvalues_fin}
+    \lean{Matrix.IsHermitian.paddedEigenvalues_eq_zero}
+    \lean{Matrix.PosSemidef.eigenvalues₀_nonneg}
+    \leanok
+    For a Hermitian matrix $M$ of size $n$, let $s_k(M)$ be its $k$th
+    largest eigenvalue, counted with multiplicity, for $0\leq k<n$, and
+    set $s_k(M)=0$ for $k\geq n$. If $M\geq0$, all these values are
+    nonnegative.
+\end{definition}
+
+\begin{theorem}[Ordered functional calculus and perturbations]%
+    \label{thm:half_chain_weyl}
+    \lean{Matrix.IsHermitian.eigenvalues₀_cfc_monotone}
+    \lean{Matrix.IsHermitian.eigenvalues₀_add_algebraMap}
+    \lean{Matrix.IsHermitian.eigenvalues₀_smul}
+    \lean{Matrix.IsHermitian.abs_eigenvalues₀_sub_le}
+    \lean{Matrix.IsHermitian.eigenvalues₀_tendsto}
+    \lean{Matrix.IsHermitian.paddedEigenvalues_smul}
+    \lean{Matrix.IsHermitian.paddedEigenvalues_tendsto}
+    \leanok
+    An increasing real function acts termwise on the ordered eigenvalues
+    of a Hermitian matrix. In particular, adding $tI$ adds $t$ to each
+    eigenvalue, and multiplication by $t\geq0$ multiplies each eigenvalue
+    by $t$. If $M$ and $N$ are Hermitian matrices of the same size, then
+    $|s_k(M)-s_k(N)|\leq\lVert M-N\rVert_{\mathrm{op}}$ for every $k$.
+    Consequently, convergence of Hermitian matrices of fixed size implies
+    convergence of every zero-extended ordered eigenvalue.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the scalar function to the spectral decomposition and sort the
+    characteristic roots in decreasing order. For the perturbation bound,
+    use $-\lVert M-N\rVert I\leq M-N\leq\lVert M-N\rVert I$, Weyl
+    monotonicity, and the scalar-translation identity. The resulting bound
+    implies convergence.
+\end{proof}
+
+\begin{theorem}[Characteristic roots with zero padding]%
+    \label{thm:half_chain_padded_charpoly}
+    \lean{Matrix.PosSemidef.paddedEigenvalues_eq_of_charpoly}
+    \leanok
+    \uses{def:half_chain_ordered_spectrum}
+    Let $M\geq0$ have size $n$ and $N\geq0$ have size $m$.
+    If $X^m\chi_M(X)=X^n\chi_N(X)$, then $s_k(M)=s_k(N)$ for every
+    $k\geq0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Sort the real characteristic roots. Positivity places the additional
+    $m$ and $n$ zeros at the ends of the respective ordered lists. Extending
+    either list by further zeros therefore gives the same sequence.
+\end{proof}
+
+\begin{definition}[Positive boundary density and ring normalization]%
+    \label{def:half_chain_positive_density}
+    \lean{MPSTensor.halfChainSpectralMatrix}
+    \lean{MPSTensor.halfChainNormSq}
+    \lean{MPSTensor.normalizedHalfChainReducedMatrix}
+    \lean{MPSTensor.normalizedHalfChainSpectralMatrix}
+    \lean{MPSTensor.halfChainEigenvalues}
+    \leanok
+    \uses{def:half_chain_reduced, def:half_chain_gram, def:half_chain_ordered_spectrum}
+    Write $W_L=\Phi_L\Phi_L^\dagger=SG_L^{\mathsf T}S$ and define
+    \begin{align}
+        H_L            & = \sqrt{G_L}\,W_L\sqrt{G_L},
+                       & Z_L                          & = \operatorname{tr}\rho_L,
+        \label{eq:half_chain_positive_density}                                     \\
+        \widehat\rho_L & = Z_L^{-1}\rho_L,
+                       & \widehat H_L                 & = Z_L^{-1}H_L.
+        \label{eq:half_chain_normalized_density}
+    \end{align}
+    Here $\rho_L$ is the actual unnormalized physical reduced matrix.
+    Both normalized matrices are defined as zero when $Z_L=0$.
+    The physical entanglement spectrum is $s_k(\widehat\rho_L)$.
+\end{definition}
+
+\begin{theorem}[Exact physical spectral comparison]%
+    \label{thm:half_chain_positive_comparison}
+    \lean{MPSTensor.posSemidef_halfChainSpectralMatrix}
+    \lean{MPSTensor.charpoly_halfChainSpectralMatrix}
+    \lean{MPSTensor.halfChainNormSq_eq_sum}
+    \lean{MPSTensor.halfChainNormSq_nonneg}
+    \lean{MPSTensor.trace_halfChainSpectralMatrix}
+    \lean{MPSTensor.posSemidef_normalizedHalfChainReducedMatrix}
+    \lean{MPSTensor.posSemidef_normalizedHalfChainSpectralMatrix}
+    \lean{MPSTensor.charpoly_normalizedHalfChainSpectralMatrix}
+    \lean{MPSTensor.trace_normalizedHalfChainReducedMatrix}
+    \lean{MPSTensor.halfChainEigenvalues_eq_boundary}
+    \lean{MPSTensor.halfChainEigenvalues_eq_zero}
+    \leanok
+    \uses{def:half_chain_positive_density}
+    For every finite half-chain length $L$, $H_L\geq0$ and
+    \begin{align}
+        Z_L & = \sum_{\sigma,\tau}
+        |V^{(2L)}(A)_{\sigma\tau}|^2
+        =\operatorname{tr}H_L\geq0,
+        \label{eq:half_chain_actual_norm}     \\
+        X^{D^2}\chi_{\widehat\rho_L}(X)
+            & =X^{d^L}\chi_{\widehat H_L}(X).
+        \label{eq:half_chain_normalized_charpoly}
+    \end{align}
+    The same characteristic-polynomial identity holds before normalization.
+    Both normalized matrices are positive semidefinite, and
+    $s_k(\widehat\rho_L)=s_k(\widehat H_L)$ for every $k$.
+    In particular, the physical spectrum vanishes for $k\geq D^2$.
+    These statements include $d^L<D^2$, singular Gram matrices, and
+    zero-norm lengths. If $Z_L>0$, then
+    $\operatorname{tr}\widehat\rho_L=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:half_chain_charpoly, thm:half_chain_padded_charpoly}
+    The matrix $H_L$ is a positive congruence of $W_L$.
+    Cyclicity of trace and $\sqrt{G_L}\sqrt{G_L}=G_L$ give
+    (\ref{eq:half_chain_actual_norm}). Apply the rectangular-product
+    characteristic-polynomial identity to
+    $\rho_L=\Psi_L W_L\Psi_L^\dagger$ and then the square-product identity
+    to $H_L$. Insert the same scalar $Z_L^{-1}$ into both products to obtain
+    (\ref{eq:half_chain_normalized_charpoly}), and apply
+    Theorem~\ref{thm:half_chain_padded_charpoly}.
+\end{proof}
+
+\begin{definition}[Two-boundary limiting density]%
+    \label{def:half_chain_limiting_density}
+    \lean{MPSTensor.halfChainGramLimit}
+    \lean{MPSTensor.halfChainSpectrumLimit}
+    \lean{MPSTensor.halfChainSpectrumLimit_eq_kronecker}
+    \lean{MPSTensor.posSemidef_halfChainSpectrumLimit}
+    \lean{MPSTensor.trace_halfChainSpectrumLimit}
+    \leanok
+    For $\lambda_\alpha\geq0$ with $\sum_\alpha\lambda_\alpha=1$, let
+    $\Lambda=\operatorname{diag}(\lambda_\alpha)$,
+    $G_\infty=\operatorname{diag}_{\alpha\beta}(\lambda_\alpha)$, and
+    $H_\infty=\Lambda\otimes\Lambda
+        =\operatorname{diag}_{\alpha\beta}(\lambda_\alpha\lambda_\beta)$.
+    The matrix $H_\infty$ is positive semidefinite and has trace one.
+\end{definition}
+
+\begin{theorem}[Normalized physical eigenvalue convergence]%
+    \label{thm:half_chain_ordered_limit}
+    \lean{MPSTensor.tendsto_halfChainGram}
+    \lean{MPSTensor.tendsto_halfChainSpectralMatrix_of_diagonal}
+    \lean{MPSTensor.tendsto_halfChainSpectralMatrix}
+    \lean{MPSTensor.tendsto_halfChainNormSq}
+    \lean{MPSTensor.eventually_halfChainNormSq_pos}
+    \lean{MPSTensor.tendsto_normalizedHalfChainSpectralMatrix}
+    \lean{MPSTensor.tendsto_halfChainEigenvalues_of_spectralMatrix}
+    \lean{MPSTensor.tendsto_halfChainEigenvalues}
+    \leanok
+    \uses{def:half_chain_positive_density, def:half_chain_limiting_density}
+    Suppose $\E_A$ is trace preserving, fixes $\Lambda$, and satisfies
+    (\ref{eq:half_chain_c2_gap}). Then $Z_L\to1$, so $Z_L>0$ for all
+    sufficiently large $L$. The actual normalized physical eigenvalues obey
+    \begin{align}
+        \lim_{L\to\infty}s_k(\widehat\rho_L)
+         & =s_k(\Lambda\otimes\Lambda)
+        .
+        \label{eq:half_chain_ordered_limit}
+    \end{align}
+    Repeated eigenvalues are counted with multiplicity, and both lists use
+    the zero-extension convention of Definition~\ref{def:half_chain_ordered_spectrum}.
+    No invertibility of $\Lambda$ or finite-length normalization is assumed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:half_chain_gram_geometric, thm:half_chain_positive_comparison,
+        thm:half_chain_weyl}
+    The geometric transfer estimate $Cr^L$ gives $G_L\to G_\infty$.
+    More generally, if $G_L\to\operatorname{diag}(g_p)$ with $g_p\geq0$,
+    continuity of the positive square root gives
+    $H_L\to\operatorname{diag}(g_p g_{p^{\mathrm{swap}}})$.
+    Apply this with $g_{\alpha\beta}=\lambda_\alpha$ to obtain
+    $H_L\to\Lambda\otimes\Lambda$.
+    Taking traces gives $Z_L\to1$, hence
+    $\widehat H_L\to\Lambda\otimes\Lambda$.
+    Weyl's bound and the exact physical comparison yield
+    (\ref{eq:half_chain_ordered_limit}). This use of square-root continuity
+    asserts convergence, not a sharper quantitative spectral rate.
+\end{proof}
+
+\subsection{The unital canonical convention}
+
+\begin{theorem}[Half-chain Gram matrices under adjoints]%
+    \label{thm:half_chain_adjoint_gram}
+    \lean{MPSTensor.halfChainGram_conjTranspose}
+    \leanok
+    For $B_i=A_i^\dagger$, the half-chain Gram matrices satisfy
+    $G_L(B)_{(\beta',\alpha'),(\beta,\alpha)}
+        =G_L(A)_{(\alpha,\beta),(\alpha',\beta')}$ at every length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The transfer map of $B$ is the trace-pairing adjoint of that of $A$.
+    The adjoint of a power is the corresponding power of the adjoint.
+    Apply this identity to the matrix units in the overlap formula.
+\end{proof}
+
+\begin{theorem}[Half-chain limit for normal unital tensors]%
+    \label{thm:half_chain_unital_limit}
+    \lean{MPSTensor.tendsto_halfChainGram_unital}
+    \lean{MPSTensor.tendsto_halfChainSpectralMatrix_unital}
+    \lean{MPSTensor.tendsto_halfChainEigenvalues_unital}
+    \lean{MPSTensor.halfChainNormSq_unital}
+    \leanok
+    Let $A$ be a normal tensor in the unital canonical convention,
+    $\sum_i A_iA_i^\dagger=I$, and let
+    $\Lambda=\operatorname{diag}(\lambda_\alpha)\geq0$ have trace one and
+    satisfy $\sum_i A_i^\dagger\Lambda A_i=\Lambda$.
+    Then $Z_L\to1$ and $Z_L>0$ for all sufficiently large $L$.
+    For every $k\in\mathbb N$, the actual physical reduced density obeys
+    $s_k(\widehat\rho_L)\to s_k(\Lambda\otimes\Lambda)$.
+    This statement assumes normality explicitly.
+    The source canonical conditions and Condition C2 are treated in
+    Theorem~\ref{thm:half_chain_source_limit}.
+    The index and decay conventions are detailed in
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}.
+    The intermediate Gram limit is
+    $\operatorname{diag}_{\alpha\beta}(\lambda_\beta)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:half_chain_adjoint_gram, thm:half_chain_ordered_limit}
+    Normality gives irreducibility and a unique peripheral eigenvalue.
+    The dual channel has the same eigenvalues under the trace pairing;
+    irreducibility also passes to the adjoint family. Its complementary
+    fixed-point map therefore has spectral radius strictly below one.
+    Apply the geometric Gram estimate to $B_i=A_i^\dagger$ and use
+    Theorem~\ref{thm:half_chain_adjoint_gram} to return to the original
+    tensor $A$. With $g_{\alpha\beta}=\lambda_\beta$, the positive boundary
+    limit has entries $g_{\alpha\beta}g_{\beta\alpha}
+        =\lambda_\alpha\lambda_\beta$.
+    The norm and ordered-eigenvalue arguments of
+    Theorem~\ref{thm:half_chain_ordered_limit} now apply to the original
+    physical reduced matrices.
+\end{proof}
+
+
+\begin{theorem}[Half-chain interpretation from canonical form and Condition C2]%
+    \label{thm:half_chain_source_limit}
+    \lean{MPSTensor.isNormalTensor_of_pgvwc07_canonical_c2}
+    \lean{MPSTensor.tendsto_halfChainEigenvalues_of_pgvwc07_canonical_c2}
+    \leanok
+    Let $A$ satisfy the three one-block canonical conditions of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}: $\sum_i A_iA_i^\dagger=I$,
+    a faithful diagonal dual fixed point $\Lambda=\operatorname{diag}
+        (\lambda_\alpha)>0$, and
+    $\{X:\E_A(X)=X\}=\mathbb C I$.
+    Normalize $\operatorname{tr}\Lambda=1$ and the transfer spectral radius
+    to one. Assume Condition C2: every unit-modulus transfer eigenvalue is one.
+    Then $A$ is normal. For every $k\in\mathbb N$, the ordered physical
+    half-chain eigenvalues, with multiplicities and zero extension, satisfy
+    $s_k(\widehat\rho_L)\to s_k(\Lambda\otimes\Lambda)$.
+    This gives the one-block canonical half-chain conclusion of
+    \cite[Theorem~6]{PerezGarcia2007Matrix} without an additional normality
+    or complementary-gap assumption. The hypothesis that this is a single
+    canonical block is explicit; reduction of a general weighted canonical
+    representation is not asserted here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc07_block_irreducible, thm:half_chain_unital_limit}
+    The faithful dual fixed point and scalar fixed-point condition imply
+    irreducibility: an invariant projection has a positive defect with
+    zero pairing against $\Lambda$, hence is fixed, scalar, and trivial.
+    Unitality supplies the identity eigenvector, while Condition C2 excludes
+    other peripheral eigenvalues. These statements and the spectral-radius
+    normalization give normality. Apply
+    Theorem~\ref{thm:half_chain_unital_limit} to the original tensor.
+\end{proof}
+
+
+\begin{theorem}[General canonical C2 half-chain limit]%
+    \label{thm:half_chain_general_c2_source}
+    \notready
+    For a TI MPS satisfying Condition C2, the source asserts convergence of
+    the half-chain reduced spectrum to the doubled canonical fixed-point
+    spectrum~\cite[Theorem~6]{PerezGarcia2007Matrix}. For a general weighted
+    canonical representation, passing to its dominant block and controlling
+    the subleading physical contribution remains separate from
+    Theorem~\ref{thm:half_chain_source_limit}; see
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}.
+\end{theorem}

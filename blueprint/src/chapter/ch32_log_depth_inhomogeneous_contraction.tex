@@ -1,0 +1,114 @@
+\section{Uniform contraction of contiguous blocks}
+\label{sec:ldp_inhomogeneous_contraction}
+
+A quantitative condition on the transfer maps of actual contiguous blocks
+provides a uniform positive-part rate. The condition below is Choi domination,
+which gives the quantum Doeblin contraction of~\cite[Theorem~8.17]{Wolf2012Quantum}.
+It is an additional structural hypothesis; it is not inferred from the
+inhomogeneous finite-correlation definition of~\cite{Malz2024Preparation}.
+In particular, separate spectral gaps of the microscopic site maps do not
+control ordered products of different maps.
+
+\begin{theorem}[Transfer map of an inhomogeneous block]
+    \label{thm:ldp_chain_transfer_product}
+    \lean{MPSChainTensor.prod_transferMap_apply,
+        MPSChainTensor.transferMap_blockTensor,
+        MPSChainTensor.trace_transferMap_blockTensor}
+    \leanok
+    \uses{def:ldp_chain_block_tensor}
+    For a chain $A_0,\dots,A_{n-1}$ with common bond dimension $D$, let $B$
+    be its blocked tensor. Then
+    \begin{align}
+        E_B(X)
+         & =\sum_{i_0,\dots,i_{n-1}}
+        A_0^{i_0}\cdots A_{n-1}^{i_{n-1}}X
+        (A_0^{i_0}\cdots A_{n-1}^{i_{n-1}})^\dagger
+        \notag                                        \\
+         & =(E_{A_0}\circ\cdots\circ E_{A_{n-1}})(X).
+    \end{align}
+    The first site's map is outermost. If every site map preserves trace,
+    so does $E_B$.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the Kraus sum, split off the first physical index, and proceed
+    by induction on $n$. The two adjacent matrix products have the same
+    order as the composition; the adjoints appear in the reverse order.
+    Trace preservation follows by applying it to the outermost map at
+    each step.
+\end{proof}
+
+\begin{theorem}[Uniform Doeblin contraction along a chain]
+    \label{thm:ldp_chain_doeblin}
+    \lean{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination}
+    \leanok
+    \uses{thm:ldp_chain_transfer_product}
+    Let $\sigma$ be a density matrix and $0\le\eta\le1$. Suppose every
+    site's transfer map preserves trace and its normalized Choi matrix
+    satisfies $J(E_{A_i})\ge(\eta/D)(\sigma\otimes I)$. For the blocked
+    tensor $B$ and any two density matrices $\rho_1,\rho_2$,
+    \begin{align}
+        \lVert E_B(\rho_1)-E_B(\rho_2)\rVert_1
+         & \le(1-\eta)^n\lVert\rho_1-\rho_2\rVert_1.
+    \end{align}
+    The sites may themselves be contiguous blocks, provided the hypothesis
+    is imposed on their actual transfer maps.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the Choi-dominated quantum Doeblin theorem to the first map and
+    the two density matrices produced by the remaining maps. Induction
+    gives one factor $1-\eta$ for each actual map in the ordered product.
+\end{proof}
+
+\begin{theorem}[Uniform Gram and positive-part bounds]
+    \label{thm:ldp_chain_positive_part_rate}
+    \lean{MPSPreparation.gram_eq_smul_choi_transpose,
+        MPSPreparation.exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination}
+    \leanok
+    \uses{thm:ldp_chain_transfer_product, def:ldp_chain_block_tensor}
+    Fix $\sigma>0$ with $\operatorname{Tr}\sigma=1$. There is $K$, depending
+    only on $D$ and $\sigma$, such that the following holds. Partition a chain
+    of $N$ sites into contiguous blocks of lengths $\ell_j\le s$, with
+    $s\ge1$, and let $F_j$ be their transfer maps. Suppose each $F_j$ preserves
+    trace, fixes $\sigma$, and satisfies
+    $J(F_j)\ge(\eta/D)(\sigma\otimes I)$ for one $0\le\eta\le1$.
+    For the physical matrix $B$ of the whole chain and its positive polar
+    factor $P_B$, the operator-norm bounds are
+    \begin{align}
+        \lVert B^\dagger B-\sigma^\mathsf{T}\otimes I\rVert
+         & \le 2D(1-\eta)^{\lfloor N/s\rfloor},\notag \\
+        \lVert P_B-(\sqrt\sigma)^\mathsf{T}\otimes I\rVert
+         & \le K(1-\eta)^{\lfloor N/s\rfloor}.
+    \end{align}
+    The constants are independent of the site tensors, the physical
+    dimension, the chain length, and the partition. For fixed $s$ and
+    $0<\eta<1$, these are uniform exponential bounds in physical length.
+\end{theorem}
+\begin{proof}\leanok
+    Put $P_\sigma(X)=\operatorname{Tr}(X)\sigma$ and
+    $R_j=F_j-\eta P_\sigma$. Choi domination makes every $R_j$ completely
+    positive. Its trace is scaled by $1-\eta$. The common fixed state and
+    trace preservation give, for $m$ contiguous blocks,
+    \begin{align}
+        F_0\circ\cdots\circ F_{m-1}
+         & =[1-(1-\eta)^m]P_\sigma+R_0\circ\cdots\circ R_{m-1}.
+    \end{align}
+    The normalized Choi matrix of the residual product is positive and
+    has trace $(1-\eta)^m$. A positive matrix has operator norm at most its
+    trace. Also $J(P_\sigma)$ is a density matrix. Since
+    $B^\dagger B=D J(E_B)^\mathsf{T}$, the triangle inequality gives the Gram
+    bound $2D(1-\eta)^m$. The partition implies $N\le ms$, hence
+    $m\ge\lfloor N/s\rfloor$.
+
+    The limiting Gram matrix $\sigma^\mathsf{T}\otimes I$ is positive
+    definite. Apply the square-root Lipschitz estimate at that fixed
+    matrix, with constant $L_\sigma$, and take $K=2DL_\sigma$.
+\end{proof}
+
+These results do not by themselves prove the uniform pair-approximation
+hypothesis for general inhomogeneous chains. A common faithful fixed state
+and quantitative domination on actual contiguous blocks are assumed here.
+Varying rectangular bond spaces and varying fixed states require additional
+arguments. Section~\ref{sec:ldp_inhomogeneous_mixing} proves the overlap and
+normalization bounds under a uniform ordered-transfer mixing hypothesis;
+qualitative finite correlation alone still does not supply that hypothesis
+\cite{gap:mswc24_inhomogeneous_scope}.

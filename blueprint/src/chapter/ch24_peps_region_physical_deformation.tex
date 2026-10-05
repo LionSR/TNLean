@@ -1,0 +1,88 @@
+\section{Physical changes of coordinates and regional ground spaces}%
+\label{sec:peps_region_physical_deformation}
+
+\begin{definition}[Physical deformation]%
+    \label{def:peps_physical_deformation}
+    \lean{TNLean.PEPS.physicalDeform,TNLean.PEPS.regionPhysicalEquiv}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    Let $A$ be a tensor family on a finite graph and let
+    $F_v:\C^d\to\C^e$ be a linear map at every vertex.
+    Its physical deformation $A^F$ keeps the virtual bond dimensions
+    and has components
+    \begin{align}
+        (A^F)_v(\eta,t)=\sum_{s=0}^{d-1}(F_v)_{ts}A_v(\eta,s).
+    \end{align}
+    For a region $R$, write $F_R=\bigotimes_{v\in R}F_v$.
+    When every $F_v$ is invertible, $F_R$ is invertible with inverse
+    $\bigotimes_{v\in R}F_v^{-1}$.
+\end{definition}
+
+\begin{theorem}[Covariance of regional ground spaces]%
+    \label{thm:peps_region_physical_deformation}
+    \lean{TNLean.PEPS.openRegionWeight_physicalDeform,
+        TNLean.PEPS.openRegionMap_physicalDeform,
+        TNLean.PEPS.regionGroundSpace_physicalDeform,
+        TNLean.PEPS.regionGroundSpacePhysicalEquiv,
+        TNLean.PEPS.regionGroundSpacePhysicalEquiv_apply,
+        TNLean.PEPS.regionPhysicalEquiv_mem_regionGroundSpace_iff,
+        TNLean.PEPS.ker_openRegionMap_physicalDeform,
+        TNLean.PEPS.finrank_regionGroundSpace_physicalDeform}
+    \leanok
+    \uses{def:peps_physical_deformation,def:peps_region_ground_space}
+    Let $\Gamma_R^A$ denote the open-region map and
+    $\mathcal G_R(A)=\operatorname{im}\Gamma_R^A$.
+    Then $\Gamma_R^{A^F}=F_R\Gamma_R^A$ and
+    $\mathcal G_R(A^F)=F_R\mathcal G_R(A)$.
+    If every $F_v$ is invertible, restriction of $F_R$ gives an
+    isomorphism $\mathcal G_R(A)\cong\mathcal G_R(A^F)$,
+    and $\ker\Gamma_R^{A^F}=\ker\Gamma_R^A$.
+    In particular the regional ground spaces have equal dimensions.
+    No injectivity assumption on $A$ is required.
+    The physical changes of coordinates in
+    \cite[\S6.1, accessible virtual coordinates]{Schuch2010PEPS}
+    satisfy these identities.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_physical_maps}
+    Each physical map acts independently of every internal virtual
+    summation. Distributing the products over the finite physical sums
+    gives $\Gamma_R^{A^F}=F_R\Gamma_R^A$ on each boundary basis vector,
+    hence on every boundary vector by linearity. Taking images gives
+    the regional-space identity. The composition rule for product maps
+    gives $F_RF_R^{-1}=F_R^{-1}F_R=\Id$.
+    The restriction is therefore a linear isomorphism. Injectivity of
+    $F_R$ gives equality of the virtual kernels.
+\end{proof}
+
+\begin{definition}[Transported regional interaction]%
+    \label{def:peps_deformed_region_interaction}
+    \lean{TNLean.PEPS.deformedRegionInteraction}
+    \leanok
+    \uses{def:peps_physical_deformation,def:peps_region_parent_interaction}
+    If the physical maps are invertible, the transport of a regional
+    interaction $h_R$ is $h_R^F=(F_R^{-1})^\dagger h_RF_R^{-1}$.
+\end{definition}
+
+\begin{theorem}[Transport of parent interactions]%
+    \label{thm:peps_deformed_region_interaction}
+    \lean{TNLean.PEPS.deformedRegionInteraction_posSemidef,
+        TNLean.PEPS.deformedRegionInteraction_mulVec_eq_zero_iff,
+        TNLean.PEPS.IsRegionParentInteraction.physicalDeform}
+    \leanok
+    \uses{def:peps_deformed_region_interaction}
+    If $h_R\geq0$ and $\ker h_R=\mathcal G_R(A)$, then
+    $h_R^F\geq0$ and $\ker h_R^F=\mathcal G_R(A^F)$.
+    The original interaction may be any positive semidefinite operator
+    with the prescribed kernel.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_physical_deformation}
+    Congruence preserves positive semidefiniteness. Since
+    $(F_R^{-1})^\dagger$ is invertible,
+    $h_R^F\psi=0$ is equivalent to $h_RF_R^{-1}\psi=0$.
+    Thus $\ker h_R^F=F_R\ker h_R
+        =F_R\mathcal G_R(A)=\mathcal G_R(A^F)$.
+\end{proof}

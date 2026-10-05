@@ -1,570 +1,24 @@
-\section{Examples of PEPS on the torus}\label{sec:peps_examples}
+%% =========================================================
+%% Chapter: G-injective PEPS and quantum double models
+%% =========================================================
 
-Two-dimensional PEPS on the discrete torus are defined by a four-leg tensor
-$A^i_{\alpha\beta\gamma\delta}$ placed at every site of a square lattice, with
-virtual indices ordered top, right, down, left
-\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix}. On a torus, the
-four legs of site $v=(x,y)$ correspond to the edges from $v$ to $(x,y+1)$
-(top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$ (down), and from
-$(x-1,y)$ to $v$ (left).
+\chapter{G-injective PEPS and quantum double models}%
+\label{ch:peps_quantum_double}
 
-\begin{definition}[Torus PEPS of a four-leg tensor]%
-    \label{def:peps_torus_site_tensor}
-    \lean{TNLean.PEPS.torusDownEdge, TNLean.PEPS.torusLeftEdge,
-        TNLean.PEPS.torusTopLeg, TNLean.PEPS.torusRightLeg,
-        TNLean.PEPS.torusDownLeg, TNLean.PEPS.torusLeftLeg,
-        TNLean.PEPS.torusLeftEdge_add_one, TNLean.PEPS.torusDownEdge_add_one,
-        TNLean.PEPS.torusSiteTensor}
-    \leanok
-    \uses{def:peps_tensor, def:peps_torus_uniform_bond_dim}
-    Let $a^i_{\alpha\beta\gamma\delta}$ be a tensor with physical dimension
-    $d$ and bond dimension $D$. Its torus PEPS on the torus of width $w$ and
-    height $h$ has bond dimension $D$ on every edge and, at every site $v$,
-    the local tensor $a$ with its four virtual indices read on the top,
-    right, down and left legs of $v$
-    \cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix}. The right
-    leg of $v$ is the left leg of $v+(1,0)$, and the top leg of $v$ is the
-    down leg of $v+(0,1)$.
-\end{definition}
+Let a finite group $G$ act on the virtual space of a tensor. If the invariant
+subspace is proper, an invariant tensor is not injective on the full virtual
+space. $G$-injectivity requires injectivity on the invariant subspace.
+Such tensors describe the quantum double models of
+\cite{Kitaev2003FaultTolerant}, whose simplest instance, for
+$G=\mathbb{Z}_2$, is the toric code. This chapter develops them on the torus
+PEPS of Section~\ref{sec:peps_torus_site_tensor}: the closure of
+$G$-injectivity under contraction of regions, the ground spaces of regular
+$G$-injective regions, and the reduced densities and entropies of their
+physical cuts. The last two sections compare the physical ranges of
+$G$-injective tensors with the invariant virtual spaces that produce them.
 
-\begin{lemma}[Shift-invariant functions on the torus are constant]%
-    \label{lem:peps_torus_shift_const}
-    \lean{TNLean.PEPS.torusVertex_apply_eq_apply_zero_of_shift}
-    \leanok
-    \uses{def:peps_torus_geometry_translation}
-    If a function $f$ on the sites of the torus satisfies $f(x+1,y)=f(x,y)$
-    and $f(x,y+1)=f(x,y)$ for all $(x,y)$, then $f$ is constant.
-\end{lemma}
-
-\begin{proof}\leanok
-    Induction on the representatives $0,\ldots,w-1$ of the first coordinate
-    and $0,\ldots,h-1$ of the second.
-\end{proof}
-
-\begin{lemma}[Contraction of a torus PEPS]%
-    \label{lem:peps_torus_site_tensor_contraction}
-    \lean{TNLean.PEPS.stateCoeff_torusSiteTensor_eq_sum_edge,
-        TNLean.PEPS.isHorizontalTorusEdge_torusRightEdge,
-        TNLean.PEPS.isVerticalTorusEdge_torusUpEdge,
-        TNLean.PEPS.torusRightEdge_injective, TNLean.PEPS.torusUpEdge_injective,
-        TNLean.PEPS.torusRightEdge_ne_torusUpEdge, TNLean.PEPS.torusEdgeEquiv,
-        TNLean.PEPS.stateCoeff_torusSiteTensor}
-    \leanok
-    \uses{def:peps_torus_site_tensor, def:peps_stateCoeff}
-    Let $w,h\ge 3$. The right edges and the up edges of the sites are
-    pairwise distinct and exhaust the edges of the torus, and the coefficient
-    of the torus PEPS of $a$ is
-    \begin{align}
-        \Coeff(\sigma)=\sum_{h_\bullet,v_\bullet}\ \prod_{(x,y)}
-        a^{\sigma(x,y)}_{v_{(x,y)}\,h_{(x,y)}\,v_{(x,y-1)}\,h_{(x-1,y)}},
-        \notag
-    \end{align}
-    the sum running over all assignments of bond indices $h_{(x,y)}$ to the
-    horizontal edges from $(x,y)$ to $(x+1,y)$ and $v_{(x,y)}$ to the
-    vertical edges from $(x,y)$ to $(x,y+1)$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Every edge is horizontal or vertical, and every horizontal edge is the
-    right edge of one of its endpoints and every vertical edge the up edge
-    of one of its endpoints. For $w\ge 3$ the right edges of distinct sites
-    are distinct: otherwise $p=q+(1,0)$ and $q=p+(1,0)$, so $2=0$ in the
-    horizontal coordinate. The same holds vertically for $h\ge 3$. A
-    horizontal edge is never vertical. Reindexing the sum over edge
-    labellings along this bijection gives the formula.
-\end{proof}
-
-On a torus of width two the right and left neighbours of a site coincide and
-the two edges joining them are one edge of the lattice graph, so the four
-legs of a site are not four distinct bonds. The contraction formula, and the
-cluster, CZX, AKLT, RVB and classical-model statements below, therefore require
-$w,h\ge 3$; the
-source constructions are local and apply to every torus
-\cite{gap:rmp_peps_examples_small_torus}.
-
-A virtual string on a torus PEPS acts on the bonds it crosses, diagonally in
-the bond basis: a bond carrying the index $\alpha$ contributes an element
-$X_\alpha$ of a monoid $M$, and the contributions are multiplied in the order
-in which the string crosses the bonds. For a matrix algebra $M$ this is a
-matrix product operator on the virtual level.
-
-\begin{lemma}[Pulling a virtual string through a rectangle]%
-    \label{lem:peps_torus_string_pull_through}
-    \lean{TNLean.PEPS.gridPath_column_prod_eq, TNLean.PEPS.gridPath_prod_eq,
-        TNLean.PEPS.torusWestSouthString, TNLean.PEPS.torusNorthEastString,
-        TNLean.PEPS.torusWestSouthString_eq_torusNorthEastString,
-        TNLean.PEPS.sum_smul_torusWestSouthString_eq}
-    \leanok
-    \uses{def:peps_torus_site_tensor}
-    Let $a$ be a four-leg tensor and $\alpha\mapsto X_\alpha$ a map from the
-    bond indices to a monoid $M$ with $X_tX_r=X_lX_b$ whenever
-    $a^{s}_{trbl}\neq0$. Fix a rectangle of $m$ columns and $n$ rows of sites
-    of the torus. Consider the string from its upper left to its lower right
-    corner that crosses the left legs of the leftmost column, from top to
-    bottom, and then the down legs of the bottom row, from left to right, and
-    the string that crosses the top legs of the top row and then the right
-    legs of the rightmost column. On every labelling of the bonds whose term
-    in the contraction of the torus PEPS of $a$ is nonzero the two strings
-    have the same product, and so, for a semiring $M$ with a $\C$-module structure, the
-    contracted network with the first string inserted equals the contracted
-    network with the second string inserted. This is the pulling-through
-    equation of a matrix product operator symmetry
-    \cite[Section~``MPO and PEPO'']{Cirac2021Matrix} for strings that are
-    diagonal in the bond basis.
-\end{lemma}
-
-\begin{proof}\leanok
-    Write $P_{ij}$ for the contribution of the left leg of the site in
-    column $i$ and row $j$ of the rectangle, counted from its upper left
-    site, and $Q_{ij}$ for that of its top leg. The right leg of that site is
-    the left leg of the site in column $i+1$, and its down leg is the top leg
-    of the site in row $j+1$, so the hypothesis at a site with nonzero entry
-    reads $Q_{ij}P_{i+1,j}=P_{ij}Q_{i,j+1}$. Induction on $n$ gives
-    $P_{i0}\cdots P_{i,n-1}\,Q_{in}=Q_{i0}\,P_{i+1,0}\cdots P_{i+1,n-1}$
-    for one column, and induction on $m$, moving one column at a time, gives
-    the identity for the rectangle. A nonzero term of the contraction has a
-    nonzero entry at every site, and the terms that vanish contribute zero
-    to both sides.
-\end{proof}
-
-\subsection{The GHZ state}
-
-The two-dimensional GHZ state is a superposition of the $d$ constant
-spin configurations \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
-All bonds are contracted periodically. Separate horizontal and vertical
-assignments of bond indices retain the self-loops and parallel bonds at small lattice sizes.
-The simple-graph representation requires $w,h\ge2$
-\cite{gap:rmp_peps_examples_small_torus}.
-
-\begin{definition}[Two-dimensional GHZ tensor]%
-    \label{def:peps_ghz_tensor}
-    \lean{TNLean.PEPS.ghzSiteTensor, TNLean.PEPS.ghzPEPS}
-    \leanok
-    \uses{def:peps_torus_site_tensor}
-    The GHZ tensor has $D=d$ and
-    $A^i_{\alpha\beta\gamma\delta}=\delta_{i=\alpha=\beta=\gamma=\delta}$
-    \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
-\end{definition}
-
-\begin{theorem}[The GHZ PEPS is the GHZ state]%
-    \label{thm:peps_ghz_state}
-    \lean{TNLean.PEPS.sum_prod_ghzSiteTensor, TNLean.PEPS.stateCoeff_ghzPEPS}
-    \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff,
-        lem:peps_torus_site_tensor_contraction}
-    On every torus with $w,h\ge1$, the GHZ tensor generates the unnormalized
-    state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$
-    \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
-    With horizontal and vertical assignments of bond indices $h_{(x,y)},v_{(x,y)}$ as in
-    Lemma~\ref{lem:peps_torus_site_tensor_contraction}, its coefficient is
-    \begin{align}
-        \sum_{h,v}\prod_{(x,y)}
-        A^{\sigma(x,y)}_{v_{(x,y)},h_{(x,y)},v_{(x,y-1)},h_{(x-1,y)}}
-         & = \sum_i\prod_{(x,y)}\delta_{\sigma(x,y),i}.
-        \label{eq:peps_ghz_periodic_contraction}
-    \end{align}
-    For $w,h\ge2$, the simple-graph GHZ PEPS has the same coefficients.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_torus_shift_const}
-    A virtual configuration contributes only if every leg of every site
-    carries the physical index of that site. The right leg of $v$ is the left
-    leg of $v+(1,0)$ and the top leg of $v$ is the down leg of $v+(0,1)$, so
-    $\sigma$ is invariant under both unit shifts and is constant by
-    Lemma~\ref{lem:peps_torus_shift_const}. Every edge is then labelled by
-    that constant, so exactly one virtual configuration contributes when
-    $\sigma$ is constant and none otherwise.
-\end{proof}
-
-\begin{theorem}[Non-injectivity of the GHZ PEPS]
-    \label{thm:peps_ghz_not_injective}
-    \lean{TNLean.PEPS.ghzSiteTensor_not_linearIndependent,
-        TNLean.PEPS.ghzPEPS_not_isVertexInjective}
-    \leanok
-    \uses{def:peps_ghz_tensor, def:IsVertexInjective}
-    For $d\ge2$, the four-leg GHZ tensor is not injective.
-    For $d\ge2$ and $w,h\ge2$, the simple-graph GHZ PEPS is not vertex-injective.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_torus_site_tensor_contraction}
-    The four-leg basis vector with labels $(0,1,0,0)$ has zero image.
-    In the simple graph, give the right bond at one vertex label $1$
-    and every other incident bond label $0$. The top and right bonds are distinct,
-    so no physical label can agree with both. This virtual basis
-    vector is mapped to zero.
-\end{proof}
-
-\begin{theorem}[On-site permutations and their virtual action]
-    \label{thm:peps_ghz_permutation}
-    \lean{TNLean.PEPS.ghzSiteTensor_perm, TNLean.PEPS.ghzSiteTensor_add,
-        TNLean.PEPS.sum_prod_ghzSiteTensor_perm,
-        TNLean.PEPS.stateCoeff_ghzPEPS_perm, TNLean.PEPS.stateCoeff_ghzPEPS_add}
-    \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff, thm:peps_ghz_state}
-    Every permutation $\pi$ of the $d$ labels acts on the GHZ site tensor by
-    \begin{align}
-        A^{\pi(i)}_{\pi(\alpha)\pi(\beta)\pi(\gamma)\pi(\delta)}
-         & = A^i_{\alpha\beta\gamma\delta}.
-    \end{align}
-    For every positive $w,h$, the contraction in
-    (\ref{eq:peps_ghz_periodic_contraction}) is unchanged when $\sigma$
-    is replaced by $\pi\circ\sigma$. For $w,h\ge2$, the simple-graph
-    GHZ PEPS therefore satisfies $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$.
-    In particular, for $d\ge1$ the on-site $\Z_d$ shift is a symmetry,
-    and its virtual action is the same shift on every bond.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:peps_ghz_state}
-    A permutation preserves equality of the five labels in the site
-    tensor. Reindexing the sum over constant configurations in
-    Theorem~\ref{thm:peps_ghz_state} proves the state identity.
-    Take $\pi(i)=i+g$ for the cyclic shift.
-\end{proof}
-
-\subsection{The cluster state}
-
-\begin{definition}[Two-dimensional cluster tensor]%
-    \label{def:peps_cluster_tensor}
-    \lean{TNLean.PEPS.clusterSiteTensor, TNLean.PEPS.clusterPEPS}
-    \leanok
-    \uses{def:peps_torus_site_tensor}
-    The cluster tensor is $A=\ket{0}(00{+}{+}|+\ket{1}(11{-}{-}|$ with
-    $(\pm|=[(0|\pm(1|]/\sqrt{2}$: the top and right legs copy the physical
-    index $s$, and the down and left legs carry
-    $(-1)^{sb}/\sqrt{2}$ at bond index $b$
-    \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
-\end{definition}
-
-\begin{theorem}[The cluster PEPS]%
-    \label{thm:peps_cluster_state}
-    \lean{TNLean.PEPS.stateCoeff_clusterPEPS}
-    \leanok
-    \uses{def:peps_cluster_tensor, def:peps_stateCoeff}
-    On a torus with $w,h\ge 3$ and $N=wh$ sites the cluster PEPS has
-    coefficient
-    \begin{align}
-        \Coeff(\sigma)=2^{-N}\prod_{v}(-1)^{\sigma_v\sigma_{v+(1,0)}
-                +\sigma_v\sigma_{v+(0,1)}}.
-        \notag
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_torus_site_tensor_contraction}
-    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the top and right
-    legs force every bond index to equal the physical index of the site
-    below or to the left of it. The remaining factor at $v$ is
-    $\tfrac12(-1)^{\sigma_v\sigma_{v-(0,1)}+\sigma_v\sigma_{v-(1,0)}}$;
-    shifting the product over $v$ by one site in each direction gives the
-    formula.
-\end{proof}
-
-\begin{definition}[Graph-state circuit and stabilizers]
-    \label{def:peps_graph_stabilizers}
-    \lean{TNLean.PEPS.graphCircuitSign, TNLean.PEPS.graphFlip,
-        TNLean.PEPS.graphNeighborSign, TNLean.PEPS.graphStabilizer,
-        TNLean.PEPS.clusterBondTarget, TNLean.PEPS.clusterCircuitState,
-        TNLean.PEPS.clusterStabilizer}
-    \leanok
-    \uses{def:peps_torus_geometry_translation}
-    Let a finite set of bonds have distinct endpoints $a(e),b(e)$ in a finite
-    vertex set $V$. Parallel bonds are counted with multiplicity. The product
-    of controlled-$Z$ gates has diagonal coefficient
-    $g(\sigma)=\prod_e(-1)^{\sigma_{a(e)}\sigma_{b(e)}}$.
-    The stabilizer $K_v$ flips the qubit at $v$ and applies $Z$ at the opposite
-    endpoint of every incident bond. Thus
-    \begin{align}
-        (K_v\psi)(\sigma)
-         & =\prod_{e:a(e)=v}(-1)^{\sigma_{b(e)}}
-        \prod_{e:b(e)=v}(-1)^{\sigma_{a(e)}}
-        \psi(\sigma\mathbin{\oplus}\mathbf{1}_v).
-    \end{align}
-    On the square torus, take the horizontal and vertical positive bonds;
-    the normalized circuit state has coefficients $2^{-N/2}g(\sigma)$
-    \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
-\end{definition}
-
-\begin{theorem}[Common graph-stabilizer eigenspace]
-    \label{thm:peps_graph_stabilizer_line}
-    \lean{TNLean.PEPS.graphStabilizer_graphCircuitSign,
-        TNLean.PEPS.graphStabilizer_fixed_iff}
-    \leanok
-    \uses{def:peps_graph_stabilizers}
-    For the loop-free bond family of Definition~\ref{def:peps_graph_stabilizers},
-    $K_v\psi=\psi$ for every $v$ if and only if $\psi=cg$ for some $c\in\C$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Flipping $v$ multiplies $g$ by the product of the neighbouring $Z$ signs:
-    \begin{align}
-        g(\sigma\mathbin{\oplus}\mathbf{1}_v)=s_v(\sigma)g(\sigma),
-        \qquad
-        s_v(\sigma)=\prod_{e:a(e)=v}(-1)^{\sigma_{b(e)}}
-        \prod_{e:b(e)=v}(-1)^{\sigma_{a(e)}}.
-    \end{align}
-    Since $s_v(\sigma)^2=1$, this gives $K_vg=g$. Conversely,
-    $K_v\psi=\psi$ reads $\psi(\sigma)=s_v(\sigma)\psi(\sigma\mathbin{\oplus}\mathbf{1}_v)$,
-    so
-    \begin{align}
-        g(\sigma\mathbin{\oplus}\mathbf{1}_v)\psi(\sigma\mathbin{\oplus}\mathbf{1}_v)
-        =g(\sigma)\psi(\sigma)
-    \end{align}
-    for every site $v$. Changing the sites one at a time reduces every
-    configuration to the all-zero configuration. Hence
-    $g(\sigma)\psi(\sigma)=\psi(0)$ and $\psi(\sigma)=\psi(0)g(\sigma)$.
-\end{proof}
-
-\begin{theorem}[Square-torus cluster circuit and uniqueness]
-    \label{thm:peps_cluster_stabilizer_line}
-    \lean{TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_graphCircuitSign,
-        TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_clusterCircuitState,
-        TNLean.PEPS.clusterStabilizer_apply,
-        TNLean.PEPS.clusterStabilizer_fixed_iff,
-        TNLean.PEPS.stateCoeff_clusterPEPS_ne_zero}
-    \leanok
-    \uses{def:peps_cluster_tensor, def:peps_graph_stabilizers}
-    On a torus with $w,h\ge3$ and $N=wh$, the printed cluster PEPS is
-    $2^{-N/2}$ times the normalized controlled-$Z$ circuit state and is nonzero.
-    Its span is precisely the common $+1$ eigenspace of
-    \begin{align}
-        K_v=X_v Z_{v+(1,0)}Z_{v-(1,0)}Z_{v+(0,1)}Z_{v-(0,1)}.
-        \label{eq:peps_cluster_stabilizer_pauli}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:peps_cluster_state, thm:peps_graph_stabilizer_line}
-    Theorem~\ref{thm:peps_cluster_state} identifies the coefficient with
-    $2^{-N}g(\sigma)$, and its all-zero coefficient is $2^{-N}\ne0$.
-    Each site has one incoming and one outgoing bond in each coordinate
-    direction, giving (\ref{eq:peps_cluster_stabilizer_pauli}). Apply
-    Theorem~\ref{thm:peps_graph_stabilizer_line} and absorb the nonzero scalar.
-\end{proof}
-
-\subsection{The CZX model}
-
-In the CZX model of \cite{ChenLiuWen2011CZX} every site of the square lattice
-carries four qubits, one at each corner, and the ground state on a closed
-surface is the product over plaquettes of the states $\ket{0000}+\ket{1111}$
-on the four qubits around each plaquette. Blocking the four qubits of a site,
-\cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix} writes this state as a
-PEPS of bond dimension four.
-
-\begin{definition}[CZX tensor]%
-    \label{def:peps_czx_tensor}
-    \lean{TNLean.PEPS.czxBond, TNLean.PEPS.czxQubits, TNLean.PEPS.czxTopLeft,
-        TNLean.PEPS.czxTopRight, TNLean.PEPS.czxBottomRight,
-        TNLean.PEPS.czxBottomLeft, TNLean.PEPS.czxSiteTensor,
-        TNLean.PEPS.czxBondSwap, TNLean.PEPS.czxBondSwap_czxBond,
-        TNLean.PEPS.czxPEPS}
-    \leanok
-    \uses{def:peps_torus_site_tensor}
-    Label the four qubits of a site $\ket{ijkl}$, with $i$ at the top left,
-    $j$ at the top right, $k$ at the bottom right and $l$ at the bottom left,
-    and label the four basis vectors of a bond by pairs of qubits. The CZX
-    tensor is
-    \begin{align}
-        \sum_{i,j,k,l=0}^{1}\ket{ijkl}\bigl((i,j),(j,k),(k,l),(l,i)\bigr|,
-        \notag
-    \end{align}
-    so each leg carries the pair of corner qubits on its side, listed
-    clockwise around the site
-    \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. The CZX PEPS
-    places this tensor at every site with its down and left labels read in
-    reverse, so that each bond identifies the pair $(a,b)$ at one end with
-    the pair $(b,a)$ at the other.
-\end{definition}
-
-The reversal corrects the printed formula. The review contracts every bond
-with equal labels at its two ends
-\cite[Section~``MPS and PEPS'']{Cirac2021Matrix}. Contracted in this way,
-the printed tensor sets the top-right qubit of a site equal to the
-bottom-left qubits of its right and upper neighbours, and the resulting state
-is a product of GHZ states on diagonal loops that wind around the torus, not
-the plaquette state. Two neighbouring sites list the qubits of their common
-side in opposite orders, and the plaquette state is obtained by identifying
-the pair $(a,b)$ at one end of a bond with $(b,a)$ at the other
-\cite{gap:rmp_peps_czx_bond_orientation}.
-
-\begin{theorem}[The CZX PEPS is a product of plaquette GHZ states]%
-    \label{thm:peps_czx_plaquette_product}
-    \lean{TNLean.PEPS.czx_bond_iff_plaquette, TNLean.PEPS.stateCoeff_czxPEPS}
-    \leanok
-    \uses{def:peps_czx_tensor, def:peps_stateCoeff}
-    On a torus with $w,h\ge 3$ the CZX PEPS has coefficient
-    \begin{align}
-        \Coeff(\sigma)=\prod_{v}\delta\bigl[j_v=i_{v+(1,0)}=k_{v+(0,1)}
-            =l_{v+(1,1)}\bigr],
-        \notag
-    \end{align}
-    where $(i_v,j_v,k_v,l_v)$ are the four qubits of $\sigma(v)$ and the
-    factor at $v$ is the coefficient of $\ket{0000}+\ket{1111}$ on the four
-    qubits around the plaquette at the upper right corner of $v$
-    \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix},
-    \cite{ChenLiuWen2011CZX}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_torus_site_tensor_contraction}
-    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the top and right
-    legs force the vertical bond above $v$ to carry $(i_v,j_v)$ and the
-    horizontal bond to its right to carry $(j_v,k_v)$. The down and left legs
-    then require $(i_{v-(0,1)},j_{v-(0,1)})=(l_v,k_v)$ and
-    $(j_{v-(1,0)},k_{v-(1,0)})=(i_v,l_v)$ at every site, and these
-    conditions, shifted by one site, are equivalent to the plaquette
-    conditions.
-\end{proof}
-
-The on-site $\mathbb{Z}_2$ symmetry of the CZX model is generated by
-$U_{CZX}=U_XU_{CZ}$, where $U_X=X_1X_2X_3X_4$ flips the four qubits of a site
-and $U_{CZ}=CZ_{12}CZ_{23}CZ_{34}CZ_{41}$ applies controlled-$Z$ gates to its
-four pairs of neighbouring qubits \cite{ChenLiuWen2011CZX}. On the state
-$\ket{ijkl}$ it acts by
-$U_{CZX}\ket{ijkl}=(-1)^{ij+jk+kl+li}\ket{\bar\imath\bar\jmath\bar k\bar l}$.
-
-\begin{definition}[CZX on-site symmetry]%
-    \label{def:peps_czx_on_site}
-    \lean{TNLean.PEPS.onSiteOperator, TNLean.PEPS.onSiteOperator_apply,
-        TNLean.PEPS.onSiteOperator_monomial, TNLean.PEPS.czxSiteFlip,
-        TNLean.PEPS.czxTopLeft_czxSiteFlip, TNLean.PEPS.czxTopRight_czxSiteFlip,
-        TNLean.PEPS.czxBottomRight_czxSiteFlip,
-        TNLean.PEPS.czxBottomLeft_czxSiteFlip, TNLean.PEPS.czxSiteFlip_czxQubits,
-        TNLean.PEPS.czxSiteFlip_czxSiteFlip, TNLean.PEPS.czxSiteFlip_symm,
-        TNLean.PEPS.czxCZExponent, TNLean.PEPS.czxOnSite,
-        TNLean.PEPS.czxOnSite_eq_monomial}
-    \leanok
-    \uses{def:peps_czx_tensor}
-    The operator $U_{CZX}=U_XU_{CZ}$ on the sixteen states of a site, and
-    its product $U_{CZX}^{\otimes V}$ over the sites $V$ of the lattice, whose
-    entry at $(\sigma',\sigma)$ is $\prod_v(U_{CZX})_{\sigma'_v\sigma_v}$
-    \cite{ChenLiuWen2011CZX}.
-\end{definition}
-
-\begin{theorem}[The CZX PEPS is invariant under the on-site symmetry]%
-    \label{thm:peps_czx_invariant}
-    \lean{TNLean.PEPS.prod_neg_one_pow_czxCZExponent,
-        TNLean.PEPS.onSiteOperator_czxOnSite_mulVec_stateCoeff_czxPEPS}
-    \leanok
-    \uses{def:peps_czx_on_site, thm:peps_czx_plaquette_product}
-    On a torus with $w,h\ge 3$ the CZX PEPS is invariant under
-    $U_{CZX}^{\otimes V}$
-    \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix},
-    \cite{ChenLiuWen2011CZX}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:peps_czx_plaquette_product}
-    Flipping every qubit preserves the plaquette constraints of
-    Theorem~\ref{thm:peps_czx_plaquette_product}. On a configuration
-    satisfying them, let $P_v$ be the value of the plaquette at the upper
-    right corner of $v$. The sign of $U_{CZX}$ at $v$ is
-    $(-1)^{e_v}$ with
-    $e_v=P_{v-(1,0)}P_v+P_vP_{v-(0,1)}+P_{v-(0,1)}P_{v-(1,1)}
-        +P_{v-(1,1)}P_{v-(1,0)}$. Shifting the summation variable, the sums
-    over $v$ of the third and fourth terms equal those of the first and
-    second, so $\sum_ve_v$ is even: each controlled-$Z$ gate between two
-    neighbouring plaquettes appears twice.
-\end{proof}
-
-\begin{definition}[CZX leg operator]%
-    \label{def:peps_czx_leg_operator}
-    \lean{TNLean.PEPS.czxLegFlip, TNLean.PEPS.czxLegFlip_czxBond,
-        TNLean.PEPS.czxLegPhase, TNLean.PEPS.czxLegPhase_czxBond,
-        TNLean.PEPS.czxLegOperator}
-    \leanok
-    \uses{def:peps_czx_tensor}
-    A virtual leg carries two qubits $(a,b)$. The operator
-    $V=(X\otimes X)\,CZ$ acts on a leg by
-    $V\ket{ab}=(-1)^{ab}\ket{\bar a\bar b}$.
-\end{definition}
-
-\begin{theorem}[Pulling the symmetry through a site]%
-    \label{thm:peps_czx_pull_through}
-    \lean{TNLean.PEPS.czxOnSite_mul_czxSiteTensor}
-    \leanok
-    \uses{def:peps_czx_on_site, def:peps_czx_leg_operator}
-    Applying $U_{CZX}$ to the physical index of the CZX tensor equals applying
-    $V$ to each of its four virtual legs
-    \cite[Section~III.B, ``Non-injective PEPS: SPT phases'']{Cirac2021Matrix}:
-    writing $A^s_{trbl}$ for the entry of the CZX tensor with physical index $s$
-    and top, right, bottom and left legs $t,r,b,l$,
-    \begin{align}
-        \sum_s(U_{CZX})_{s's}\,A^s_{trbl}
-         & =\sum_{t',r',b',l'}A^{s'}_{t'r'b'l'}\,V_{t't}V_{r'r}V_{b'b}V_{l'l}.
-        \label{eq:peps_czx_pull_through}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Both sides are supported on the flipped legs of the flipped qubits, and
-    the sign $(-1)^{ij+jk+kl+li}$ of $U_{CZX}$ is the product of the signs
-    of $V$ on the four legs $(i,j)$, $(j,k)$, $(k,l)$, $(l,i)$.
-\end{proof}
-
-On the boundary of a region, neighbouring boundary legs carry the same qubit
-of their common plaquette, one effective spin per boundary plaquette
-\cite{ChenLiuWen2011CZX}.
-
-\begin{definition}[Boundary legs of the CZX tensor network]%
-    \label{def:peps_czx_boundary_embedding}
-    \lean{TNLean.PEPS.czxBoundaryLegs, TNLean.PEPS.czxBoundaryEmbedding}
-    \leanok
-    \uses{def:peps_czx_tensor}
-    For $N>0$ and effective spins $c\in\{0,1\}^N$, the closed chain of $N$
-    boundary legs carrying $c$ has the pair $(c_m,c_{m+1})$ on leg $m$, indices
-    modulo $N$. The map $\iota$ from $N$ effective spins into the legs is
-    \begin{align}
-        \iota\ket{c} & =\ket{(c_0,c_1),(c_1,c_2),\dots,(c_{N-1},c_0)}.
-        \label{eq:peps_czx_boundary_embedding}
-    \end{align}
-\end{definition}
-
-\begin{theorem}[The boundary action is the CZX matrix product unitary]%
-    \label{thm:peps_czx_boundary_mpu}
-    \lean{TNLean.PEPS.czxBoundaryLegs_injective,
-        TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_self,
-        TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding,
-        TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_onSiteOperator_mul,
-        TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review}
-    \leanok
-    \uses{def:peps_czx_leg_operator, def:peps_czx_boundary_embedding,
-        thm:asymex_czx_kernel, def:asymex_czx_review_tensor}
-    For every $N>0$, the chain of boundary legs determines $c$, so $\iota$ is an
-    isometry, $\iota^\dagger\iota=\Id$. It satisfies $V^{\otimes N}\iota=\iota\,U_N$ and
-    $\iota^\dagger V^{\otimes N}\iota=U_N$, where
-    $U_N\ket{c}=(-1)^{\sum_mc_mc_{m+1}}\ket{\bar c}$ is the CZX matrix product
-    unitary of Theorem~\ref{thm:asymex_czx_kernel}; in terms of the
-    review's operator $O(A)$ with the printed matrices,
-    $V^{\otimes N}\iota=(-1)^N\iota\,O(A)$
-    \cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix},
-    \cite{ChenLiuWen2011CZX}. The identification of the contraction of a
-    region of the torus with a vector in the range of $\iota$ is not
-    formalized \cite{gap:rmp_peps_czx_boundary_chain}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:asymex_czx_kernel, thm:asymex_czx_review_kernel}
-    $V^{\otimes N}$ maps the legs of $c$ to the legs of $\bar c$ with the sign
-    $\prod_m(-1)^{c_mc_{m+1}}$, which is the kernel of
-    Theorem~\ref{thm:asymex_czx_kernel}; the relation to $O(A)$ is
-    Theorem~\ref{thm:asymex_czx_review_kernel}.
-\end{proof}
-
-The review states that the CZX model lies in the non-trivial
-symmetry-protected sector of its on-site $\mathbb{Z}_2$ symmetry
-\cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. This classification is
-not formalized for the two-dimensional state. Its boundary symmetry is a
-matrix product unitary; the three-cocycle attached to a group of matrix
-product unitaries is constructed in
-Theorems~\ref{thm:mpug_anomaly_three_cocycle}
-and~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and for the CZX boundary
-representation its class is computed and shown to be non-trivial in
-Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
-
-\subsection{The toric code and quantum double models}
+\section{The toric code and quantum double models}%
+\label{sec:peps_quantum_double}
 
 Let $G$ be a finite group. The quantum double model of $G$
 \cite{Kitaev2003FaultTolerant} carries a spin with basis
@@ -592,6 +46,45 @@ from the virtual to the physical system
     isometry, $\langle\mathcal{P}(A)x,\mathcal{P}(A)y\rangle
         =c\,\langle x,y\rangle$ for invariant $x,y$ and one constant $c>0$
     \cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+    When the virtual action factors as
+    $U_g=U_g^{\ell}\otimes U_g^r\otimes U_g^t\otimes U_g^b$,
+    the invariance of a four-leg tensor reads
+    % Formula: P(A)(U_g^ell tensor U_g^r tensor U_g^t tensor U_g^b)=P(A).
+    % Source: Papers/1001.3807/paper_v3.tex:1278--1288, figs3/ug-sym.
+    % Ink-to-index: each of the four cardinal rays is one virtual leg;
+    % its inserted matrix is the representation acting on that leg, including
+    % its contragredient when dictated by the bond orientation. The northeast
+    % ray is the physical index i. No physical index is suppressed.
+    % Contraction: each U matrix contracts its inward port with A and exposes
+    % its outward port. Both sides have (V,P)=(4,1).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+            \tn[at=(2,2), name=symmetricSite, label pos=225,
+                ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
+                        45:physical:$i$}]{A}
+            \tn[at=(2,1), name=symmetryLeft, skin=ring, label pos=270,
+                ports={180:virtual, 0:virtual}]{U_g^{\ell}}
+            \tn[at=(2,3), name=symmetryRight, skin=ring, label pos=270,
+                ports={180:virtual, 0:virtual}]{U_g^r}
+            \tn[at=(1,2), name=symmetryTop, skin=ring, label pos=180,
+                ports={90:virtual, 270:virtual}]{U_g^t}
+            \tn[at=(3,2), name=symmetryBottom, skin=ring, label pos=0,
+                ports={90:virtual, 270:virtual}]{U_g^b}
+            \tnwire{symmetryLeft.0}{symmetricSite.180}
+            \tnwire{symmetryRight.180}{symmetricSite.0}
+            \tnwire{symmetryTop.270}{symmetricSite.90}
+            \tnwire{symmetryBottom.90}{symmetricSite.270}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[label pos=225,
+                ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
+                        45:physical:$i$}]{A}
+        \end{tenkz}
+    \end{tenkzequation}
+    The four factors include the contragredient actions required by the
+    orientations of the virtual bonds.
 \end{definition}
 
 \begin{theorem}[Left-inverse form of $G$-injectivity]%
@@ -1512,64 +1005,6 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     vectors, on which $\Pi_\rho$ is the identity.
 \end{proof}
 
-\begin{theorem}[Isometry under contraction of one regular bond]%
-    \label{thm:peps_g_isometric_concatenation}
-    \lean{TNLean.PEPS.linkVector_eq_sum, TNLean.PEPS.toMatrix_linkContraction,
-        TNLean.PEPS.toMatrix_innerContraction_map,
-        TNLean.PEPS.basisAdjoint_linkContraction,
-        TNLean.PEPS.basisAdjoint_linkContraction_comp,
-        TNLean.PEPS.IsGIsometric.linkContraction_basis,
-        TNLean.PEPS.IsGIsometric.linkContraction_fourLeg}
-    \leanok
-    \uses{def:peps_g_injective, thm:peps_g_injective_concatenation, thm:peps_isometric_adjoint}
-    Let $A$ and $B$ be $G$-isometric four-leg PEPS tensors with regular
-    virtual legs. Contract the right leg of $A$ with the left leg of $B$,
-    leaving the other six virtual legs open. The resulting tensor $C$ is
-    $G$-isometric and satisfies
-    $\mathcal P(C)^\dagger\mathcal P(C)=c_Ac_B\Pi$.
-    This is the elementary concatenation step in
-    \cite[Lemma~6.2]{Schuch2010PEPS}; the factors $c_A,c_B$
-    record the tensor normalization convention
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
-    More generally, the same conclusion holds for unitary representations
-    on the remaining virtual spaces and a regular representation on the
-    contracted link.
-
-    \begin{center}
-        % Source: SCP10 Lemma 6.2; coefficient C_(i,j),(a,b)=sum_k A_i,(a,k)B_j,(k,b).
-        % Right virtual leg of A pairs with the left virtual leg of B.
-        % Six virtual legs remain open; physical labels i,j are fixed.
-        % Boundary signature: (V,P)=(6,0).
-        \tenkzkernel
-        \begin{tenkz}[rows={wire},cols=2,bonds=none]
-            \tn[at=(1,1),skin=box,name=A,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{A^i}
-            \tn[at=(1,2),skin=box,name=B,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{B^j}
-            \tnwire{open w}{A.180}
-            \tnwire{A.0}{B.180}
-            \tnwire{B.0}{open e}
-            \tnwire{open n}{A.90}
-            \tnwire{open n}{B.90}
-            \tnwire{A.270}{open s}
-            \tnwire{B.270}{open s}
-        \end{tenkz}
-    \end{center}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_regular_left_inverse}
-    In the product bases,
-    $C_{(i,j),(a,b)}=\sum_k A_{i,(a,k)}B_{j,(k,b)}$.
-    Complex conjugation proves that $\mathcal P(C)^\dagger$ applies
-    $\mathcal P(A)^\dagger\otimes\mathcal P(B)^\dagger$ and pairs the inner
-    legs. By Theorem~\ref{thm:peps_isometric_adjoint} the two left inverses
-    are $c_A^{-1}\mathcal P(A)^\dagger$ and
-    $c_B^{-1}\mathcal P(B)^\dagger$. Lemma~\ref{lem:peps_regular_left_inverse}
-    therefore identifies the contracted left inverse with
-    $(c_Ac_B)^{-1}\mathcal P(C)^\dagger$.
-    Theorem~\ref{thm:peps_g_injective_concatenation} proves both invariance
-    and the left-inverse equation, giving the assertion.
-\end{proof}
-
 \begin{theorem}[Regular representations in relative coordinates]%
     \label{thm:peps_regular_blocking_coordinates}
     \lean{Matrix.permMatrixHom_prodCongr,
@@ -1604,6 +1039,15 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     the matrix of a product permutation is the Kronecker product of the
     factor matrices.
 \end{proof}
+
+\input{chapter/ch24_peps_regular_graph_bond_blocking}
+\input{chapter/ch24_peps_regular_graph_physical_blocking}
+\input{chapter/ch24_peps_two_by_two_geometric_blocking}
+\input{chapter/ch24_peps_two_by_two_tensor_isometry}
+\input{chapter/ch24_peps_two_by_two_physical_blocking}
+\input{chapter/ch24_peps_regular_graph_surplus_site}
+\input{chapter/ch24_peps_two_by_two_original_tensor}
+\input{chapter/ch24_peps_regular_reblocking_diagrams}
 
 In two dimensions the concatenation contracts the right leg of a tensor $A$,
 with virtual system $W_{A}\otimes\mathbb{C}[G]^{*}$, with the left leg of a
@@ -1643,9 +1087,15 @@ dual basis.
         TNLean.PEPS.linkLeftCoord_comp_kroneckerRep,
         TNLean.PEPS.linkRightCoord_comp_kroneckerRep,
         TNLean.PEPS.pairCoord_comp_kroneckerRep,
-        TNLean.PEPS.IsGIsometric.linkContraction}
+        TNLean.PEPS.IsGIsometric.linkContraction,
+        TNLean.PEPS.linkVector_eq_sum, TNLean.PEPS.toMatrix_linkContraction,
+        TNLean.PEPS.toMatrix_innerContraction_map,
+        TNLean.PEPS.basisAdjoint_linkContraction,
+        TNLean.PEPS.basisAdjoint_linkContraction_comp,
+        TNLean.PEPS.IsGIsometric.linkContraction_basis,
+        TNLean.PEPS.IsGIsometric.linkContraction_fourLeg}
     \leanok
-    \uses{def:peps_g_injective, thm:peps_g_injective_concatenation}
+    \uses{def:peps_g_injective}
     Let $\sigma_{A}$ and $\sigma_{B}$ be unitary representations on the remaining
     legs of $A$ and $B$, and let the contracted link carry the left-regular
     representation. If $A$ is $G$-isometric for $\sigma_{A}\otimes L$ with
@@ -1658,9 +1108,33 @@ dual basis.
     $\sigma_{A}$ and $\sigma_{B}$ follows from its hypotheses
     \cite[Lemma~6.2]{Schuch2010PEPS},
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    In particular, contracting the right leg of one four-leg regular PEPS
+    tensor with the left leg of another preserves $G$-isometry with
+    constant $c_Ac_B$, leaving the other six virtual legs open.
+
+    \begin{center}
+        % Source: SCP10 Lemma 6.2; coefficient C_(i,j),(a,b)=sum_k A_i,(a,k)B_j,(k,b).
+        % Right virtual leg of A pairs with the left virtual leg of B.
+        % Six virtual legs remain open; physical labels i,j are fixed.
+        % Boundary signature: (V,P)=(6,0).
+        \tenkzkernel
+        \begin{tenkz}[rows={wire},cols=2,bonds=none]
+            \tn[at=(1,1),skin=box,name=A,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{A^i}
+            \tn[at=(1,2),skin=box,name=B,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{B^j}
+            \tnwire{open w}{A.180}
+            \tnwire{A.0}{B.180}
+            \tnwire{B.0}{open e}
+            \tnwire{open n}{A.90}
+            \tnwire{open n}{B.90}
+            \tnwire{A.270}{open s}
+            \tnwire{B.270}{open s}
+        \end{tenkz}
+    \end{center}
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_g_injective_concatenation, thm:peps_isometric_adjoint,
+        lem:peps_regular_left_inverse}
     For a unitary representation, $G$-isometry with constant $c$ means
     $\mathcal{P}(A)^{\dagger}\mathcal{P}(A)=c\,\Pi$, since $\mathcal{P}(A)$ is
     invariant and $\Pi$ is self-adjoint. The Gram matrix of $C$ is
@@ -1682,6 +1156,13 @@ dual basis.
         =\sum_{g}\mathcal{P}(A)^{\dagger}_{(a,g),k}\mathcal{P}(B)^{\dagger}_{(g,b),l}$,
     so $\mathcal{P}(C)^{\dagger}$ is the contraction of the adjoints. Invariance of $C$ holds because the actions on the contracted
     link cancel, as in Theorem~\ref{thm:peps_g_injective_concatenation}.
+    Equivalently, Theorem~\ref{thm:peps_isometric_adjoint} gives the
+    left inverses $c_A^{-1}\mathcal P(A)^\dagger$ and
+    $c_B^{-1}\mathcal P(B)^\dagger$.
+    Lemma~\ref{lem:peps_regular_left_inverse} identifies their
+    contraction with $(c_Ac_B)^{-1}\mathcal P(C)^\dagger$, and
+    Theorem~\ref{thm:peps_g_injective_concatenation} supplies its
+    left-inverse equation.
 \end{proof}
 
 The source shows next that for a $G$-isometric tensor the virtual level,
@@ -1837,8 +1318,9 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     last two, in either order, both equal $c\,P_{3}$ for some $c>0$. Hence on
     every ring of $N\geq 3$ sites the two-site terms of the parent Hamiltonian
     commute. The source states this theorem for PEPS and writes its proof for
-    matrix product states; only the matrix product case is formalized, and
-    rings of two sites are not covered
+    matrix product states. The general finite-simple-graph PEPS result is
+    proved in Theorem~\ref{thm:peps_isometric_regional_parents_commute};
+    this matrix product statement does not cover rings of two sites
     \cite[Theorem~6.12]{Schuch2010PEPS},
     \cite{gap:scp10_g_isometric_commuting_parent_hamiltonian}.
 \end{theorem}
@@ -1875,6 +1357,12 @@ left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its
 color-shift representation, and the constant $c$ absorbs the
 normalization of the tensor \cite{gap:rmp_peps_quantum_double_g_isometry}.
+
+\input{chapter/ch24_peps_commuting_regional_constraints}
+\input{chapter/ch24_peps_g_isometric_regional_parents}
+\input{chapter/ch24_peps_regular_region_intersection}
+
+\subsection{Group actions on torus bonds}
 
 The invariance of a $G$-injective tensor lets a string of $U_g$'s on the
 virtual bonds be deformed across the sites of a network
@@ -1990,7 +1478,7 @@ operators.
 
 
 
-\begin{definition}[The genuine open tensor of a finite region]%
+\begin{definition}[The open tensor of a finite region]%
     \label{def:peps_open_region_contraction}
     \lean{TNLean.PEPS.RegionIncidentConfig, TNLean.PEPS.regionIncidentBoundaryLabel,
         TNLean.PEPS.isRegionIncidentEdge_of_regionVertex, TNLean.PEPS.regionIncidentWeight,
@@ -2058,7 +1546,7 @@ operators.
     \leanok
     \uses{def:peps_open_region_contraction}
     Express every bond in a group basis, and enumerate the $b=n+1$
-    crossing bonds. Let $A$ and $B$ be the genuine open tensors of the
+    crossing bonds. Let $A$ and $B$ be the open tensors of the
     region and its complement, with their columns indexed by $G^b$ in
     the same crossing-bond order. Let $K$ be the matrix of physical
     PEPS coefficients on these two systems. These are the actual cut
@@ -2082,7 +1570,7 @@ operators.
     \uses{def:peps_regular_physical_cut, def:peps_regular_boundary_state}
     Suppose the coefficient tensor at every site is invariant under
     simultaneous left translation of all its virtual group labels.
-    Then the genuine open tensor of every region is invariant under
+    Then the open tensor of every region is invariant under
     simultaneous left translation of its crossing labels. Consequently
     $AP=A$ and the physical cut satisfies
     \begin{align}
@@ -2386,7 +1874,7 @@ operators.
     Let $R$ induce a nonempty connected graph, with $V_R$ vertices
     and $I_R$ internal edges. Suppose the local Gram kernels are
     $A_v^\dagger A_v=c_vP_v$. For unnormalized regular bonds and
-    no inserted bond operators, the genuine open-region tensor satisfies
+    no inserted bond operators, the open-region tensor satisfies
     \begin{align}
         T_R^\dagger T_R=\kappa_R P_{\partial R},\qquad
         \kappa_R=\left(\prod_{v\in R}c_v\right)
@@ -2559,7 +2047,7 @@ operators.
     \leanok
     \uses{thm:peps_connected_regular_region_gram}
     Let every site be regular $G$-isometric, and let $R$ induce a nonempty
-    connected graph. The genuine open-region map $T_R$ is $G$-isometric for
+    connected graph. The open-region map $T_R$ is $G$-isometric for
     simultaneous regular translation on the crossing bonds. Its derived
     positive factor is
     \begin{align}
@@ -2765,7 +2253,7 @@ operators.
     thus satisfy the exact integer unit-step equations.
 \end{proof}
 
-\begin{theorem}[The genuine planar lift of the closed-cell region]%
+\begin{theorem}[The planar lift of the closed-cell region]%
     \label{thm:peps_torus_region_planar_lift}
     \lean{TNLean.PEPS.continuousLift_torusClosedUnitCell,
         TNLean.PEPS.continuousLift_torusRegionRealization_isClosedEmbedding,
@@ -2904,7 +2392,7 @@ operators.
     connected and $o\in R$, there exist integer coordinates $L$ which
     preserve every native internal unit step and for which all missing
     cell components of the planar realization $P_L$ are infinite.
-    Here $P_L=P_A$ for $A=L(R)$, so the conclusion concerns the genuine
+    Here $P_L=P_A$ for $A=L(R)$, so the conclusion concerns the
     image of the torus covering lift. This is an auxiliary no-hole
     theorem for \cite[Theorem~6.9]{Schuch2010PEPS}. The contour
     argument below strengthens it to paths in the exterior collar.
@@ -2942,7 +2430,7 @@ operators.
     \leanok
     \uses{thm:peps_integer_cell_no_holes}
     Let $A\subset\mathbb Z^2$ be finite, with occupied closed-cell union
-    $P_A$. Its genuine exterior collar is
+    $P_A$. Its exterior collar is
     \begin{align}
         E_A=\bigl(P_A+[-3/4,3/4]^2\bigr)\setminus P_A.
     \end{align}
@@ -2984,7 +2472,7 @@ operators.
     \uses{def:peps_integer_exterior_collar_graph}
     Every edge of the safe exterior graph has its entire straight
     segment inside $E_A$. Hence any graph walk between two band centers
-    gives a genuine continuous path between them contained in $E_A$.
+    gives a continuous path between them contained in $E_A$.
     This is an auxiliary geometric assertion for
     \cite[proof of Theorem~6.9]{Schuch2010PEPS}. The contour theorem below derives connectivity of the safe graph
     from simple connectedness of the occupied closed-cell union.
@@ -3072,7 +2560,7 @@ operators.
     walks avoiding the box. Every missing-cell component is infinite
     by the preceding no-hole theorem, and hence contains a vertex
     outside the box. Each component therefore meets the same exterior
-    component, proving connectedness. The genuine torus lift supplied
+    component, proving connectedness. The torus lift supplied
     by the no-hole theorem has the same infinitude property, so the
     argument applies to its integer centers as well.
 \end{proof}
@@ -3088,7 +2576,7 @@ operators.
     \uses{thm:peps_torus_region_period_separation,
         thm:peps_torus_region_realization,
         thm:peps_torus_region_planar_lift}
-    Let $w,H>0$, and let a genuine continuous lift of the actual
+    Let $w,H>0$, and let a continuous lift of the actual
     closed-cell region $X_R$ have planar image
     $P=\bigcup_{v\in R}(L(v)+[-1/2,1/2]^2)$ with integer centers.
     Put $E=[-3/4,3/4]^2$, and let $P_j=P+(wj_1,Hj_2)$ be its period
@@ -4386,7 +3874,7 @@ operators.
           & UP                      & =PU.
         \label{eq:peps_controlled_local_projector}
     \end{align}
-    In particular $U$ maps the genuine local invariant support
+    In particular $U$ maps the local invariant support
     $\operatorname{range}P$ into itself.
 
     If the original local physical maps $A_v$ are regular $G$-isometric,
@@ -5534,7 +5022,8 @@ operators.
     $\sum_sF_{q,s}A^s_{t,r,b,l}$.
 \end{proof}
 
-\begin{theorem}\label{thm:peps_torus_nonseam_connectivity}
+\begin{theorem}[Constancy of labels away from the torus seams]%
+    \label{thm:peps_torus_nonseam_connectivity}
     \lean{TNLean.PEPS.IsTorusNonseamCompatible.eq_origin,
         TNLean.PEPS.IsTorusNonseamCompatible}
     \leanok
@@ -5551,7 +5040,8 @@ operators.
     a closure seam. The same argument includes a circumference of one.
 \end{proof}
 
-\begin{theorem}\label{thm:peps_torus_projector_expansion}
+\begin{theorem}[Group-average expansion of the torus projector contraction]%
+    \label{thm:peps_torus_projector_expansion}
     \lean{TNLean.PEPS.torusBondNetwork_single,
         TNLean.PEPS.torusBondSiteLabelsEquiv,
         TNLean.PEPS.torusBondNetwork_sum,
@@ -5939,7 +5429,7 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram}
-    Expand both genuine open contractions and sum the physical indices
+    Expand both open contractions and sum the physical indices
     independently. Substitute each original local Gram identity at its
     two transformed virtual configurations.
 \end{proof}
@@ -6120,7 +5610,7 @@ operators.
     Let $\psi_s$ be the actual physical PEPS across the cut with
     assignment $u^{(s)}$.
 
-    There is one $c_R>0$ such that the genuine untwisted region map
+    There is one $c_R>0$ such that the untwisted region map
     satisfies $T_R^\dagger T_R=c_RP$. Every nonzero superposition
     $\sum_s\lambda_s\psi_s$ has a positive normalization whose reduced
     density on $R$ is the same operator
@@ -6507,6 +5997,14 @@ around the two non-contractible cycles must be trivial.
     two transport rules also where the representatives wrap around.
 \end{proof}
 
+\input{chapter/ch24_peps_regular_invariant_state_span}
+
+\input{chapter/ch24_peps_torus_flat_connection_gauge}
+
+\input{chapter/ch24_peps_regular_parent_spanning}
+
+\input{chapter/ch24_peps_regular_parent_ground_space}
+
 \begin{theorem}[The dual quantum-double network is the Gauss-law superposition]%
     \label{thm:peps_quantum_double_dual_gauss_law}
     \lean{TNLean.PEPS.quantumDoubleDualSiteTensor,
@@ -6629,349 +6127,168 @@ around the two non-contractible cycles must be trivial.
     Lemma~\ref{lem:peps_torus_string_pull_through} for $X_g=\pi(g)$.
 \end{proof}
 
+\input{chapter/ch24_peps_toric_code_primal}
+\input{chapter/ch24_peps_toric_code_torus_sectors}
 
 \input{chapter/ch24_peps_semiregular_bond_isometry}
 \input{chapter/ch24_peps_pair_centralizer_count}
 \input{chapter/ch24_peps_regular_site_symmetry_recovery}
 
-\subsection{The AKLT state}
+\input{chapter/ch24_peps_g_injective_range_equivalence}
+\input{chapter/ch24_peps_g_injective_virtual_comparison}
+\input{chapter/ch24_peps_g_injective_cut_range}
 
-The two-dimensional AKLT state places singlets on the edges of the lattice and
-projects the four spin-$\tfrac12$ at each site onto their symmetric subspace
-\cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}. Label the basis of
-four spin-$\tfrac12$ by $s=(s_0,s_1,s_2,s_3)\in\{0,1\}^4$, write $|s|$ for the
-number of entries equal to $1$, and let $P_{\pi}$ be the permutation of the four
-factors by $\pi\in S_4$.
+\input{chapter/ch24_peps_g_injective_cut_compatibility}
 
-\begin{definition}[Symmetric projector on four spin-$\tfrac12$]%
-    \label{def:peps_aklt_sym_projector}
-    \lean{TNLean.PEPS.legKronecker, TNLean.PEPS.legPermMatrix,
-        TNLean.PEPS.symProjector}
-    \leanok
-    The projector onto the symmetric subspace of $(\C^2)^{\otimes 4}$ is
-    $\Pi_{\mathrm{sym}}=\frac{1}{24}\sum_{\pi\in S_4}P_{\pi}$.
-\end{definition}
+\input{chapter/ch24_peps_g_injective_physical_map}
 
-\begin{lemma}[The symmetric subspace has dimension five]%
-    \label{lem:peps_aklt_sym_projector}
-    \lean{TNLean.PEPS.legKronecker_mul, TNLean.PEPS.legKronecker_one,
-        TNLean.PEPS.legKronecker_transpose,
-        TNLean.PEPS.legPermMatrix_mul, TNLean.PEPS.legPermMatrix_conjTranspose,
-        TNLean.PEPS.legPermMatrix_mul_legKronecker,
-        TNLean.PEPS.symProjector_mul_self, TNLean.PEPS.symProjector_conjTranspose,
-        TNLean.PEPS.symProjector_mul_legKronecker, TNLean.PEPS.legWeight,
-        TNLean.PEPS.card_perm_comp_eq, TNLean.PEPS.symProjector_apply,
-        TNLean.PEPS.choose_legWeight_dvd, TNLean.PEPS.sum_div_choose_legWeight,
-        TNLean.PEPS.trace_symProjector, TNLean.PEPS.finrank_range_symProjector}
-    \leanok
-    \uses{def:peps_aklt_sym_projector}
-    $\Pi_{\mathrm{sym}}$ is a Hermitian idempotent commuting with $U^{\otimes 4}$
-    for every $2\times 2$ matrix $U$. Its entries are
-    $(\Pi_{\mathrm{sym}})_{s,t}=\binom{4}{|s|}^{-1}$ if $|s|=|t|$ and $0$
-    otherwise, and its range, the spin-$2$ subspace, has dimension five.
-\end{lemma}
+\input{chapter/ch24_peps_g_injective_physical_equivalence}
 
-\begin{proof}\leanok
-    $P_{\pi}P_{\rho}=P_{\rho\pi}$ and $P_{\pi}^{\dagger}=P_{\pi^{-1}}$, so the average
-    over $S_4$ is a Hermitian idempotent, and
-    $P_{\pi} U^{\otimes 4}=U^{\otimes 4}P_{\pi}$ by reordering the tensor
-    factors. The number of $\pi$ with
-    $s=t\circ\pi$ is $24/\binom{4}{|t|}$ when $|s|=|t|$ and $0$ otherwise, by
-    a finite check. The dimension of the range of an idempotent is its trace,
-    $\sum_{s}\binom{4}{|s|}^{-1}=\sum_{k=0}^{4}\binom4k\binom4k^{-1}=5$.
-\end{proof}
+\input{chapter/ch24_peps_g_injective_physical_normal_form}
 
-\begin{definition}[AKLT tensor]%
-    \label{def:peps_aklt_tensor}
-    \lean{TNLean.PEPS.akltLegs,
-        TNLean.PEPS.akltSiteTensorFun, TNLean.PEPS.akltSiteTensor,
-        TNLean.PEPS.akltPEPS}
-    \leanok
-    \uses{def:peps_aklt_sym_projector, def:peps_torus_site_tensor,
-        def:aklt_tensor_review}
-    With the singlet matrix
-    $Y=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$, the AKLT
-    tensor on the square lattice is
-    $A=\Pi_{\mathrm{sym}}(\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y)$,
-    with physical index $s\in\{0,1\}^4$ (physical dimension $16$) and virtual
-    indices ordered top, right, down, left
-    \cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}.
-\end{definition}
+\input{chapter/ch24_peps_regular_boundary_local_algebra}
 
-\begin{lemma}[Entries and physical span of the AKLT tensor]%
-    \label{lem:peps_aklt_entries}
-    \lean{Matrix.singletY_apply, Matrix.singletY_mul_transpose,
-        TNLean.PEPS.akltLegs_apply,
-        TNLean.PEPS.legWeight_vec, TNLean.PEPS.akltSiteTensorFun_apply,
-        TNLean.PEPS.akltLegs_mul_transpose, TNLean.PEPS.span_akltSiteTensorFun}
-    \leanok
-    \uses{def:peps_aklt_tensor, lem:peps_aklt_sym_projector}
-    The entries of the AKLT tensor are
-    \begin{align}
-        A^{s}_{\alpha\beta\gamma\delta}=
-        \frac{(-1)^{\gamma+\delta}}{\binom{4}{k}}\,\delta_{|s|,k},\qquad
-        k=\alpha+\beta+(1-\gamma)+(1-\delta),
-        \notag
-    \end{align}
-    and the span of the vectors $s\mapsto A^s_{\alpha\beta\gamma\delta}$ over
-    all virtual indices is the range of $\Pi_{\mathrm{sym}}$.
-\end{lemma}
+\input{chapter/ch24_peps_regular_boundary_supported_gram}
 
-\begin{proof}\leanok
-    $Y\ket{0}=\ket{1}$ and $Y\ket{1}=-\ket{0}$, so the column
-    $(\alpha,\beta,\gamma,\delta)$ of $\mathbb{1}\otimes\mathbb{1}\otimes
-        Y\otimes Y$ is $(-1)^{\gamma+\delta}$ times the basis vector
-    $(\alpha,\beta,1-\gamma,1-\delta)$. The matrix
-    $L=\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y$ satisfies $LL^{T}=\mathbb{1}$,
-    so the columns of $\Pi_{\mathrm{sym}}L$ span the range of
-    $\Pi_{\mathrm{sym}}$.
-\end{proof}
+\input{chapter/ch24_peps_conjugacy_class_invariance}
 
-\begin{theorem}[$SU(2)$ covariance of the AKLT tensor]%
-    \label{thm:peps_aklt_su2}
-    \lean{Matrix.mul_singletY, TNLean.PEPS.akltSiteTensor_covariant,
-        Matrix.adjugate_eq_star_of_mem_specialUnitaryGroup,
-        TNLean.PEPS.akltSiteTensor_su2_covariant}
-    \leanok
-    \uses{def:peps_aklt_tensor, lem:peps_aklt_sym_projector}
-    Regard $A$ as the map from the virtual space $(\C^2)^{\otimes 4}$ to the
-    physical space. For every $U\in SU(2)$,
-    \begin{align}
-        U^{\otimes 4}A=A\,(U\otimes U\otimes\bar U\otimes\bar U).
-        \notag
-    \end{align}
-    For an arbitrary $2\times 2$ matrix $U$ the same identity holds with $\bar U$ replaced by
-    $(\operatorname{adj}U)^{T}$.
-\end{theorem}
+\input{chapter/ch24_peps_cycle_assignment_support}
 
-\begin{proof}\leanok
-    For a $2\times2$ matrix, $UY=Y(\operatorname{adj}U)^{T}$ by direct
-    computation. Since $\Pi_{\mathrm{sym}}$ commutes with $U^{\otimes 4}$,
-    $U^{\otimes4}\Pi_{\mathrm{sym}}L=\Pi_{\mathrm{sym}}(U\otimes U\otimes
-        UY\otimes UY)=\Pi_{\mathrm{sym}}L\,(U\otimes U\otimes V\otimes V)$ with
-    $V=(\operatorname{adj}U)^{T}$. For $U\in SU(2)$, $U^{\dagger}U=\mathbb{1}$
-    and $U\operatorname{adj}U=(\det U)\mathbb{1}=\mathbb{1}$, so
-    $\operatorname{adj}U=U^{\dagger}U\operatorname{adj}U=U^{\dagger}$ and
-    $V=\bar U$.
-\end{proof}
+\input{chapter/ch24_peps_cycle_flux_measurement}
 
-\begin{theorem}[The AKLT PEPS as projected singlets]%
-    \label{thm:peps_aklt_state}
-    \lean{TNLean.PEPS.akltLegs_vec, TNLean.PEPS.stateCoeff_akltPEPS}
-    \leanok
-    \uses{def:peps_aklt_tensor, lem:peps_torus_site_tensor_contraction}
-    On a torus with $w,h\ge 3$ the AKLT PEPS has coefficient
-    \begin{align}
-        \Coeff(\sigma)=\sum_{\tau}\prod_{v}(\Pi_{\mathrm{sym}})_{\sigma_v,\tau_v}
-        \prod_{v}Y_{\tau_{v+(1,0),3},\,\tau_{v,1}}\,Y_{\tau_{v+(0,1),2},\,\tau_{v,0}},
-        \notag
-    \end{align}
-    the sum running over the spin-$\tfrac12$ labels $\tau_v\in\{0,1\}^4$ of the
-    four legs of every site. The factor $Y_{b,a}$ is the coefficient of
-    $\ket{a}\ket{b}$ in the singlet $\ket{01}-\ket{10}$, so the state is
-    $\bigotimes_v\Pi_{\mathrm{sym}}$ applied to a singlet on every edge.
-\end{theorem}
+\input{chapter/ch24_peps_joint_flux_measurement}
 
-\begin{proof}\leanok
-    \uses{lem:peps_torus_site_tensor_contraction}
-    Expand each $A=\Pi_{\mathrm{sym}}L$ as a sum over the intermediate label
-    $\tau_v$. The identity factors of $L$ force the bond index on the top edge
-    of $v$ to be $\tau_{v,0}$ and on the right edge to be $\tau_{v,1}$, and the
-    $Y$ factors on the down and left legs then give
-    $Y_{\tau_{v,2},\tau_{v-(0,1),0}}Y_{\tau_{v,3},\tau_{v-(1,0),1}}$; shifting
-    the product by one site gives the formula.
-\end{proof}
+\input{chapter/ch24_peps_three_plaquette_geometry}
 
-The tensor $A$ takes values in $(\C^2)^{\otimes 4}$ with physical support on
-the five-dimensional symmetric subspace, on which the physical action
-$U^{\otimes 4}$ acts as the irreducible spin-$2$ representation
-\cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}.
+\input{chapter/ch24_peps_torus_plaquette_flux_measurement}
 
-\subsection{The RVB state}
+\input{chapter/ch24_peps_torus_plaquette_holonomy}
 
-The nearest-neighbour resonating valence bond state is the superposition of
-all coverings of the lattice by nearest-neighbour singlets. Its PEPS of bond
-dimension three combines, at each site, the projector
-\begin{align}
-    P=\ket{0}\bigl[(0222|+(2022|+(2202|+(2220|\bigr]
-    +\ket{1}\bigl[(1222|+(2122|+(2212|+(2221|\bigr]
-    \notag
-\end{align}
-with singlet matrices on the edges; on the square lattice with a
-translation-invariant orientation of the singlets the tensor is
-$A=P(\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y)$
-\cite[Appendix~A, ``The RVB state'']{Cirac2021Matrix}. On the bond of
-dimension three the matrix $Y$ acts on the spin states $0,1$ and is extended by
-$1$ on the vacuum state $2$, so that the bond state is
-$\ket{01}-\ket{10}+\ket{22}$. The extension by $0$ would make every entry of
-$A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state
-\cite{gap:rmp_peps_rvb_bond_vacuum}.
+\input{chapter/ch24_peps_g_injective_strip_intersection}
 
-\begin{definition}[RVB tensor]%
-    \label{def:peps_rvb_tensor}
-    \lean{TNLean.PEPS.rvbSingletY, TNLean.PEPS.rvbProjector,
-        TNLean.PEPS.rvbSiteTensorInt, TNLean.PEPS.rvbSiteTensor,
-        TNLean.PEPS.rvbPEPS}
-    \leanok
-    \uses{def:peps_torus_site_tensor}
-    The RVB tensor is $A=P(\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y)$ with
-    $Y=\left(\begin{smallmatrix}0&-1&0\\1&0&0\\0&0&1\end{smallmatrix}\right)$,
-    virtual indices ordered top, right, down, left.
-\end{definition}
+\input{chapter/ch24_peps_g_injective_strip_parent_ground_space}
 
-\begin{lemma}[Local dimer constraint]%
-    \label{lem:peps_rvb_local}
-    \lean{TNLean.PEPS.rvbFlip, TNLean.PEPS.rvbSiteTensorInt_eq,
-        TNLean.PEPS.rvbSiteTensor_apply, TNLean.PEPS.rvbSiteTensor_ne_zero_iff,
-        TNLean.PEPS.rvbBondLabel, TNLean.PEPS.rvbBondLabel_ne_two_iff,
-        TNLean.PEPS.rvbSiteTensorInt_ne_zero,
-        TNLean.PEPS.rvbSiteTensorInt_bondLabel}
-    \leanok
-    \uses{def:peps_rvb_tensor}
-    $A^{s}_{urdl}\neq 0$ if and only if exactly one of $u,r,d,l$ differs from
-    $2$, that index being $s$ if it is $u$ or $r$ and $1-s$ if it is $d$ or
-    $l$. The nonzero entries equal $-1$ when the down or left index is $1$ and
-    $+1$ otherwise.
-\end{lemma}
-
-\begin{proof}\leanok
-    $Y$ maps the bond index $d$ to $1-d$ on the spin states, with sign $-1$
-    at $d=1$, and fixes the vacuum. The statement is a finite check over the
-    $162$ entries.
-\end{proof}
-
-\begin{theorem}[The RVB PEPS is the superposition of singlet coverings]%
-    \label{thm:peps_rvb_state}
-    \lean{TNLean.PEPS.IsTorusDimerCovering, TNLean.PEPS.rvbCoveringBonds,
-        TNLean.PEPS.stateCoeff_rvbPEPS}
-    \leanok
-    \uses{def:peps_rvb_tensor, def:peps_stateCoeff}
-    Let $w,h\ge3$. A dimer covering of the torus is a set $c$ of edges such
-    that every site lies on exactly one edge of $c$. The RVB PEPS has
-    coefficient
-    \begin{align}
-        \Coeff(\sigma)=\sum_{c}\ \prod_{(v,v+e)\in c}Y_{\sigma_{v+e},\sigma_v},
-        \notag
-    \end{align}
-    the sum running over all dimer coverings, and each edge of $c$ written as
-    $(v,v+e)$ with $e\in\{(1,0),(0,1)\}$. The factor $Y_{\sigma_{v+e},\sigma_v}$
-    is the coefficient of the singlet $\ket{01}-\ket{10}$ on the two sites, so
-    the state is the superposition of all nearest-neighbour singlet coverings
-    with the translation-invariant orientation.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_torus_site_tensor_contraction, lem:peps_rvb_local}
-    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the coefficient is a
-    sum over bond indices $h_v$, $v_v$ on the right and up edges. By
-    Lemma~\ref{lem:peps_rvb_local} a configuration contributes only if the
-    edges carrying a non-vacuum index form a dimer covering and the index on
-    each such edge is the physical index of the site below or to the left of
-    it. Conversely every dimer covering determines one such configuration,
-    and its term is the product over sites of the singlet factors on the down
-    and left legs; shifting the product by one site gives the formula.
-\end{proof}
-
-\subsection{PEPS from classical models}
-
-Let $q\ge 1$, let $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$ be a
-nearest-neighbour interaction and $\beta\in\mathbb{R}$ an inverse temperature.
-
-\begin{definition}[Classical energy]%
-    \label{def:peps_classical_energy}
-    \lean{TNLean.PEPS.classicalEnergy}
-    \leanok
-    On the torus a configuration $\sigma$ has energy
-    \begin{align}
-        H(\sigma)=\sum_{v}\bigl(h(\sigma_{v},\sigma_{v-(1,0)})
-        +h(\sigma_{v},\sigma_{v-(0,1)})\bigr),
-        \notag
-    \end{align}
-    each nearest-neighbour bond counted once. For symmetric $h$ this is the
-    sum of $h$ over unordered bonds.
-\end{definition}
-
-\begin{definition}[Classical-model tensor]%
-    \label{def:peps_classical_tensor}
-    \lean{TNLean.PEPS.classicalBondMatrix, TNLean.PEPS.classicalSiteTensor,
-        TNLean.PEPS.classicalPEPS}
-    \leanok
-    \uses{def:peps_torus_site_tensor}
-    Let $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$. The classical-model tensor is
-    \begin{align}
-        A=\Bigl[\sum_{i}\ket{i}(i\,i\,i\,i|\Bigr]
-        (\mathbb{1}\otimes\mathbb{1}\otimes M\otimes M):
-        \notag
-    \end{align}
-    the top and right legs copy the physical index $s$, and the down and left
-    legs carry $M_{sb}$ and $M_{sl}$ at bond indices $b$ and $l$
-    \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}. The
-    classical-model PEPS places this tensor at every site of the torus.
-\end{definition}
-
-\begin{theorem}[Coefficients of the classical-model PEPS]%
-    \label{thm:peps_classical_coeff}
-    \lean{TNLean.PEPS.stateCoeff_classicalPEPS,
-        TNLean.PEPS.conj_mul_stateCoeff_classicalPEPS,
-        TNLean.PEPS.normSq_stateCoeff_classicalPEPS}
-    \leanok
-    \uses{def:peps_classical_tensor, def:peps_classical_energy,
-        def:peps_stateCoeff}
-    On a torus of width and height at least three the classical-model PEPS
-    has coefficient
-    $\Coeff(\sigma)=e^{-\beta H(\sigma)/2}$, so
-    $|\Coeff(\sigma)|^{2}=e^{-\beta H(\sigma)}$ is the Gibbs weight of
-    $\sigma$ \cite{gap:rmp_peps_examples_small_torus}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peps_torus_site_tensor_contraction}
-    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the top and right
-    legs force every bond index to equal the physical index of the site
-    below or to the left of it. The remaining factor at $v$ is
-    $M_{\sigma_{v}\sigma_{v-(0,1)}}M_{\sigma_{v}\sigma_{v-(1,0)}}$, one factor
-    $e^{-\beta h/2}$ for each bond at $v$ read towards its lower and left
-    neighbours, and the product over $v$ is $e^{-\beta H(\sigma)/2}$. The
-    coefficient is real, so its squared modulus is $e^{-\beta H(\sigma)}$.
-\end{proof}
-
-No bond carries a product of two copies of $M$: the entry
-$e^{-\beta h/2}$ is not a square root of a transfer matrix, and no symmetry
-of $h$ is used.
-
-\begin{theorem}[Diagonal expectation values are Gibbs averages]%
-    \label{thm:peps_classical_expectation}
-    \lean{TNLean.PEPS.expectation_classicalPEPS}
-    \leanok
-    \uses{def:peps_classical_tensor, def:peps_classical_energy,
-        def:peps_stateCoeff}
-    Let the torus have width and height at least three and let
-    $O=\sum_{\sigma}O(\sigma)\ket{\sigma}\bra{\sigma}$ be a diagonal observable.
-    For the classical-model PEPS state
-    $\ket{\psi}=\sum_{\sigma}\Coeff(\sigma)\ket{\sigma}$,
-    \begin{align}
-        \frac{\sum_{\sigma}\overline{\Coeff(\sigma)}\,O(\sigma)\Coeff(\sigma)}
-        {\sum_{\sigma}\overline{\Coeff(\sigma)}\Coeff(\sigma)}
-        =\frac{\sum_{\sigma}O(\sigma)e^{-\beta H(\sigma)}}
-        {\sum_{\sigma}e^{-\beta H(\sigma)}},
-        \notag
-    \end{align}
-    that is, $\bra{\psi}O\ket{\psi}/\braket{\psi}{\psi}$ is the expectation
-    value of $O$ in the Gibbs state $e^{-\beta H}/Z$
-    \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:peps_classical_coeff}
-    Replace $\overline{\Coeff(\sigma)}\Coeff(\sigma)$ by
-    $e^{-\beta H(\sigma)}$ in both sums, by
-    Theorem~\ref{thm:peps_classical_coeff}.
-\end{proof}
-
-In particular, classical correlation functions are expectation values of
-the PEPS. The review adds that at the critical inverse temperature
-$\beta_{c}$ the PEPS has correlations decaying as a power law, so its parent
-Hamiltonian must be gapless
-\cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}, since a
-gapped local Hamiltonian has exponentially decaying correlations
-\cite{Hastings2006Spectral,Nachtergaele2006LiebRobinson}.
+\input{chapter/ch24_peps_zmod_small_difference}
+\input{chapter/ch24_peps_unitary_vector_swap}
+\input{chapter/ch24_peps_permutation_matrix_commutation}
+\input{chapter/ch24_peps_regular_cycle_physical_flux_creation}
+\input{chapter/ch24_peps_irreducible_ext}
+\input{chapter/ch24_peps_delta_inverse}
+\input{chapter/ch24_peps_orthogonal_sectors}
+\input{chapter/ch24_peps_representation_theta}
+\input{chapter/ch24_peps_theta_positive}
+\input{chapter/ch24_peps_theta_squared}
+\input{chapter/ch24_peps_theta_bond_state}
+\input{chapter/ch24_peps_theta_bond_orthonormal_coordinates}
+\input{chapter/ch24_peps_semiregular_bond_state}
+\input{chapter/ch24_peps_semiregular_bond_support}
+\input{chapter/ch24_peps_semiregular_bond_product_isometry}
+\input{chapter/ch24_peps_semiregular_bond_isometry_extension}
+\input{chapter/ch24_peps_physical_bond_regrouping}
+\input{chapter/ch24_peps_physical_coherent_transport}
+\input{chapter/ch24_peps_coherent_multiplicity_transport}
+\input{chapter/ch24_peps_torus_multiplicity_bond_state}
+\input{chapter/ch24_peps_bond_coordinate_transport}
+\input{chapter/ch24_peps_torus_block_multiplicity_state}
+\input{chapter/ch24_peps_torus_semiregular_equivalence}
+\input{chapter/ch24_peps_torus_semiregular_state_norm}
+\input{chapter/ch24_peps_semiregular_bond_dimension}
+\input{chapter/ch24_peps_fourier_commutativity}
+\input{chapter/ch24_peps_regular_matrix_commutativity}
+\input{chapter/ch24_peps_regular_order_six_dimension}
+\input{chapter/ch24_peps_unitary_character_adjoint}
+\input{chapter/ch24_peps_translated_character_orthogonality}
+\input{chapter/ch24_peps_monoid_hom_commuting_weight}
+\input{chapter/ch24_peps_finite_group_commutant}
+\input{chapter/ch24_peps_unitary_representation_algebra}
+\input{chapter/ch24_peps_unitary_representation_blocks}
+\input{chapter/ch24_peps_regular_fourier}
+\input{chapter/ch24_peps_regular_minimal_representation}
+\input{chapter/ch24_peps_regular_fourier_matrix}
+\input{chapter/ch24_peps_semiregular_dimension}
+\input{chapter/ch24_peps_twisted_state_nonzero}
+\input{chapter/ch24_peps_regular_coherent_global_transport}
+\input{chapter/ch24_peps_theta_bond_coordinates}
+\input{chapter/ch24_peps_torus_weighted_site_g_injective}
+\input{chapter/ch24_peps_graph_averaging_bonds}
+\input{chapter/ch24_peps_graph_inserted_bond_state}
+\input{chapter/ch24_peps_graph_regular_state_nonzero}
+\input{chapter/ch24_peps_graph_semiregular_equivalence}
+\input{chapter/ch24_peps_graph_inserted_semiregular_equivalence}
+\input{chapter/ch24_peps_graph_inserted_semiregular_factory}
+\input{chapter/ch24_peps_physical_support}
+\input{chapter/ch24_peps_two_plaquette_geometry}
+\input{chapter/ch24_peps_regular_two_cycle_flux_move}
+\input{chapter/ch24_peps_regular_cycle_permutation}
+\input{chapter/ch24_peps_regular_two_cycle_conjugation}
+\input{chapter/ch24_peps_regular_two_cycle_physical_flux_move}
+\input{chapter/ch24_peps_regular_two_cycle_global_flux_move}
+\input{chapter/ch24_peps_regular_cycle_global_permutation}
+\input{chapter/ch24_peps_torus_two_plaquette_flux_holonomy}
+\input{chapter/ch24_peps_torus_two_plaquette_physical_flux_move}
+\input{chapter/ch24_peps_torus_two_plaquette_global_flux_move}
+\input{chapter/ch24_peps_translated_two_plaquette_geometry}
+\input{chapter/ch24_peps_torus_three_plaquette_flux_geometry}
+\input{chapter/ch24_peps_regular_three_plaquette_double_exchange}
+\input{chapter/ch24_peps_torus_three_plaquette_double_exchange}
+\input{chapter/ch24_peps_torus_three_plaquette_output_measurement}
+\input{chapter/ch24_peps_regular_inserted_walk_holonomy}
+\input{chapter/ch24_peps_torus_translated_flux_move}
+\input{chapter/ch24_peps_regular_flux_creation_state}
+\input{chapter/ch24_peps_regular_cycle_global_flux_creation}
+\input{chapter/ch24_peps_torus_translated_flux_creation}
+\input{chapter/ch24_peps_regular_connector_holonomy}
+\input{chapter/ch24_peps_regular_gauged_cycle_permutation}
+\input{chapter/ch24_peps_internal_gauge_transport}
+\input{chapter/ch24_peps_actual_cycle_physical_permutation}
+\input{chapter/ch24_peps_tree_gauge_transport}
+\input{chapter/ch24_peps_actual_horizontal_flux_move}
+\input{chapter/ch24_peps_vertical_flux_move}
+\input{chapter/ch24_peps_gauged_vertical_flux_move}
+\input{chapter/ch24_peps_gauged_horizontal_flux_move}
+\input{chapter/ch24_peps_two_plaquette_transport_table}
+\input{chapter/ch24_peps_gauged_route_step}
+\input{chapter/ch24_peps_torus_swept_patch_endpoint_geometry}
+\input{chapter/ch24_peps_regular_swept_patch_deformation}
+\input{chapter/ch24_peps_torus_swept_string_deformation}
+\input{chapter/ch24_peps_torus_swept_string_endpoint_holonomy}
+\input{chapter/ch24_peps_torus_swept_patch_connector_holonomy}
+\input{chapter/ch24_peps_torus_swept_physical_endpoint_route}
+\input{chapter/ch24_peps_initial_string_right_step}
+\input{chapter/ch24_peps_first_string_physical_crossing}
+\input{chapter/ch24_peps_second_string_physical_crossing}
+\input{chapter/ch24_peps_two_step_string_physical_route}
+\input{chapter/ch24_peps_two_step_string_route_holonomy}
+\input{chapter/ch24_peps_torus_directed_bond_update}
+\input{chapter/ch24_peps_torus_swept_route_bond_assignments}
+\input{chapter/ch24_peps_actual_route_flux_move}
+\input{chapter/ch24_peps_torus_swept_physical_route_composition}
+\input{chapter/ch24_peps_torus_swept_route_joint_flux_measurement}
+\input{chapter/ch24_peps_torus_swept_physical_route_measurement}
+\input{chapter/ch24_peps_regular_charge_coordinates}
+\input{chapter/ch24_peps_regular_charge_subspace}
+\input{chapter/ch24_peps_regular_charge_detector_matrix}
+\input{chapter/ch24_peps_regular_charge_bond_contraction}
+\input{chapter/ch24_peps_regular_charge_pair}
+\input{chapter/ch24_peps_regular_charge_pair_preparation}
+\input{chapter/ch24_peps_regular_charge_labels}
+\input{chapter/ch24_peps_regular_two_site_charge_measurement}
+\input{chapter/ch24_peps_regular_charge_complete_measurement}
+\input{chapter/ch24_peps_regular_edge_charge_contraction}
+\input{chapter/ch24_peps_regular_edge_physical_charge_measurement}
+\input{chapter/ch24_peps_torus_edge_physical_charge_measurement}
+\input{chapter/ch24_peps_regular_physical_charge_pair_creation}
+\input{chapter/ch24_peps_regular_charge_pair_sectors}
+\input{chapter/ch24_peps_regular_charge_pair_readout}
+\input{chapter/ch24_peps_regular_charge_flux_physical_transport}
+\input{chapter/ch24_peps_regular_charge_pair_interference}
+\input{chapter/ch24_peps_regular_physical_charge_motion}
+\input{chapter/ch24_peps_torus_physical_charge_motion}
+\input{chapter/ch24_peps_charge_string_deformation}
+\input{chapter/ch24_peps_kitaev_checkerboard_blocking}
+\input{chapter/ch24_peps_two_column_charge_motion}
+\input{chapter/ch24_peps_torus_charge_flux_crossing}
+\input{chapter/ch24_peps_torus_correlated_charge_flux_crossing}
+\input{chapter/ch24_peps_kitaev_native_checkerboard_blocking}
+\input{chapter/ch24_peps_kitaev_native_boundary_cnot}
+\input{chapter/ch24_peps_kitaev_global_blocking}

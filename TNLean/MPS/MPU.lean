@@ -57,15 +57,19 @@ import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FinalCircuitRegisters
 import TNLean.MPS.MPU.FiniteAlphabetRows
 import TNLean.MPS.MPU.FiniteChainConjugation
+import TNLean.MPS.MPU.FiniteGroupSourceRanks
 import TNLean.MPS.MPU.GroupCocycleMPO
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionTensors
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
+import TNLean.MPS.MPU.GroupIndex
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
 import TNLean.MPS.MPU.Index
 import TNLean.MPS.MPU.IndexContinuity
 import TNLean.MPS.MPU.InitializedEncodingCoordinates
+import TNLean.MPS.MPU.InjectiveCanonicalRepresentative
+import TNLean.MPS.MPU.InjectiveSourceIndex
 import TNLean.MPS.MPU.IntervalChildComposition
 import TNLean.MPS.MPU.IntervalColumnEncoding
 import TNLean.MPS.MPU.IntervalInitializationBounds
@@ -186,6 +190,7 @@ import TNLean.MPS.MPU.TensorProductCanonicalForm
 import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormInsertion
 import TNLean.MPS.MPU.ThreeFormSpan
+import TNLean.MPS.MPU.TimeReversalTraceGauge
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
