@@ -1,0 +1,135 @@
+% SCP10, source lines 1818--1915, figs4/renorm-fixedpoint.pdf.
+% Exact untwisted geometric blocking, including coarse periods one and two.
+
+\begin{definition}[Four-site contraction with paired boundary legs]%
+    \label{def:peps_two_by_two_tensor}
+    \lean{TNLean.PEPS.twoByTwoBoundaryEquiv,
+        TNLean.PEPS.twoByTwoSiteLegs,
+        TNLean.PEPS.twoByTwoTensor,
+        TNLean.PEPS.twoByTwoPeriodicBoundary}
+    \leanok
+    Let $X$ and $P$ be finite virtual and physical alphabets. Number the four
+    corners clockwise from the upper right by $0,1,2,3$. Write
+    $\alpha=(t,r,b,l)\in(X^2)^4$, with top and bottom pairs ordered left to
+    right and right and left pairs ordered top to bottom. For
+    $x=(x_0,x_1,x_2,x_3)\in X^4$, define the four fine leg configurations by
+    \begin{align}
+        \lambda_0(\alpha,x) & =(t_1,r_0,x_1,x_0),       &
+        \lambda_1(\alpha,x) & =(x_1,r_1,b_1,x_2),\notag   \\
+        \lambda_2(\alpha,x) & =(x_3,x_2,b_0,l_1),       &
+        \lambda_3(\alpha,x) & =(t_0,x_0,x_3,l_0).
+    \end{align}
+    The eight separate boundary labels are indexed by
+    $\{0,1,2,3\}\times\{0,1\}$. For tensors
+    $a_i:X^4\times P\to\mathbb C$, their actual blocked tensor is
+    \begin{align}
+        B(\alpha,\sigma)=\sum_{x\in X^4}\prod_{i=0}^3
+        a_i(\lambda_i(\alpha,x),\sigma_i).
+    \end{align}
+    On a periodic coarse lattice, with horizontal and vertical paired bond
+    assignments $h,v$, the boundary at $z$ is
+    $(v_z,h_z,v_{z-\hat y},h_{z-\hat x})$.
+    This is the four-site grouping in
+    \cite[Observation~6.6]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{definition}[The actual periodic bond bijection]%
+    \label{def:peps_two_by_two_bond_bijection}
+    \lean{TNLean.PEPS.twoByTwoTiledBondEquiv,
+        TNLean.PEPS.twoByTwoSiteLegs_periodic}
+    \leanok
+    \uses{def:peps_two_by_two_tensor}
+    Let $C=\mathbb Z_w\times\mathbb Z_h$ with $w,h>0$, and identify the fine
+    torus $\mathbb Z_{2w}\times\mathbb Z_{2h}$ with $C\times\{0,1,2,3\}$
+    by its disjoint four-site tiling. The paired crossing bonds $h_z,v_z$
+    and the four internal bonds $x_{z,i}$ give the fine outgoing bonds by
+    \begin{align}
+        H_z & =((h_z)_0,(h_z)_1,x_{z,2},x_{z,0}), \\
+        V_z & =((v_z)_1,x_{z,1},x_{z,3},(v_z)_0).
+    \end{align}
+    This is a bijection. Reading the top, right, bottom, and left fine
+    bonds gives exactly $\lambda_i(\alpha_z,x_z)$, including periodic seams.
+    There is one horizontal and one vertical bond per site even when a
+    coarse period is one or two.
+\end{definition}
+
+\begin{theorem}[Exact periodic four-site reblocking]%
+    \label{thm:peps_two_by_two_geometric_blocking}
+    \lean{TNLean.PEPS.torusBondNetwork_eq_twoByTwoTiledSum,
+        TNLean.PEPS.torusBondNetwork_eq_twoByTwoBlocked}
+    \leanok
+    \uses{def:peps_two_by_two_bond_bijection}
+    Place arbitrary, possibly different tensors $a_z$ on the fine torus,
+    and let $B_v$ be their actual four-site contractions. With identity
+    operators on every bond, the original fine state satisfies
+    $\Psi_a(\sigma)=\Psi_B(\tau)$, where
+    $\tau_{v,i}=\sigma_{(v,i)}$. Both sides sum over all their bonds.
+    The equality has scalar factor one and holds for every $w,h>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_two_by_two_bond_bijection}
+    Reindex the fine horizontal and vertical sums by the displayed
+    bijection. The remaining internal sum separates as
+    $\sum_{x:C\to X^4}\prod_v f_v(x_v)=\prod_v\sum_{x_v\in X^4}f_v(x_v)$.
+    Its factor at $v$ is precisely $B_v(\alpha_v,\tau_v)$.
+\end{proof}
+
+\begin{definition}[Physical four-site regrouping]%
+    \label{def:peps_two_by_two_physical_grouping}
+    \lean{TNLean.PEPS.twoByTwoPhysicalEquiv,
+        TNLean.PEPS.twoByTwoPhysicalMatrix}
+    \leanok
+    The disjoint tiling identifies fine physical configurations $\sigma$
+    with block configurations $\tau_{v,i}=\sigma_{(v,i)}$.
+    Let $W$ be its permutation matrix on the complete physical spaces.
+\end{definition}
+
+\begin{theorem}[Unitary physical regrouping of the fine state]%
+    \label{thm:peps_two_by_two_physical_grouping}
+    \lean{TNLean.PEPS.twoByTwoPhysicalMatrix_isIsometry,
+        TNLean.PEPS.twoByTwoPhysicalMatrix_conjTranspose_isIsometry,
+        TNLean.PEPS.twoByTwoPhysicalMatrix_mulVec_network}
+    \leanok
+    \uses{def:peps_two_by_two_physical_grouping,
+        thm:peps_two_by_two_geometric_blocking}
+    Both $W$ and $W^*$ are isometries, and $W\Psi_a=\Psi_B$.
+    All four physical registers per block, including unused directions,
+    belong to this unitary identification.
+\end{theorem}
+
+\begin{proof}\leanok
+    The physical label map is bijective, so its matrix and the inverse
+    permutation matrix preserve inner products. Evaluating its action on
+    each coefficient gives the exact reblocking equality.
+\end{proof}
+
+\begin{definition}[Incident coordinates of the coarse block]%
+    \label{def:peps_two_by_two_graph_site}
+    \lean{TNLean.PEPS.torusIncidentFamily,
+        TNLean.PEPS.twoByTwoGraphSite}
+    \leanok
+    \uses{def:peps_two_by_two_tensor}
+    Suppose $w,h\geq3$, so the four incident edges at every coarse vertex
+    are distinct. A four-leg tensor is expressed on incident labels by
+    reading its top, right, bottom, and left edges. Applying this change
+    to $B_v$ defines its coarse graph tensor, with physical alphabet $P^4$.
+\end{definition}
+
+\begin{theorem}[Equality with the actual coarse graph contraction]%
+    \label{thm:peps_two_by_two_graph_contraction}
+    \lean{TNLean.PEPS.graphBondNetwork_torusIncidentFamily,
+        TNLean.PEPS.torusBondNetwork_eq_twoByTwoGraphSite}
+    \leanok
+    \uses{def:peps_two_by_two_graph_site,thm:peps_two_by_two_geometric_blocking}
+    For $w,h\geq3$, the bond-indexed contraction equals the incident-edge
+    graph contraction, for arbitrary site-dependent tensors and physical
+    alphabets. In particular $W\Psi_a$ is the actual graph state of the
+    paired four-site tensors.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every coarse graph edge is uniquely a horizontal or vertical outgoing
+    edge. Reindexing its label sum yields the bond-indexed contraction.
+    Apply the exact fine-to-coarse reblocking equality.
+\end{proof}

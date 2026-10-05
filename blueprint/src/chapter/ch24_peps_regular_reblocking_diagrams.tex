@@ -1,0 +1,179 @@
+% SCP10, paper_v3.tex:1830--1909, Observations 6.5--6.6.
+% Sources inspected: figs4/renorm-gg-sym.pdf,
+% figs4/renorm-g-id-and-split.pdf, figs4/renorm-fixedpoint.pdf.
+% Diagram-only companion: declaration ownership stays in the five
+% geometric reblocking fragments. No unrestricted source label is promoted.
+\paragraph{The four-site block and its boundary.}
+Number the corners clockwise from the upper right by $0,1,2,3$.
+The block in \cite[Observation~6.6]{Schuch2010PEPS} has four internal
+bonds $x_0,x_1,x_2,x_3$ and eight separate boundary bonds.
+Top and bottom pairs are ordered left to right; left and right pairs
+are ordered top to bottom. Each diagonal leg is an open physical index.
+The defining contraction of
+Definition~\ref{def:peps_two_by_two_tensor} is
+% Formula: B(alpha;sigma)=sum_x product_i A_i(lambda_i(alpha,x);sigma_i).
+% Ink-to-index: upper left=3, upper right=0, lower right=1, lower left=2.
+% Internal incidences: x0=(3.right,0.left), x1=(0.bottom,1.top),
+% x2=(2.right,1.left), x3=(3.bottom,2.top).
+% Boundary signature: (virtual,physical)=(8,4). Internal bonds are summed;
+% the eight virtual boundary legs and four physical legs remain open.
+\begin{tenkzequation}
+    \tenkzkernel
+    $B(\alpha;\sigma)=$
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+        \tn[at=(1,1), name=reblock3, skin=box,
+            ports={90:virtual:$t_0$,0:virtual,270:virtual,180:virtual:$l_0$,
+                    135:physical:$\sigma_3$}]{A_3}
+        \tn[at=3 e of reblock3, name=reblock0, skin=box,
+            ports={90:virtual:$t_1$,0:virtual:$r_0$,270:virtual,180:virtual,
+                    45:physical:$\sigma_0$}]{A_0}
+        \tn[at=3 s of reblock0, name=reblock1, skin=box,
+            ports={90:virtual,0:virtual:$r_1$,270:virtual:$b_1$,180:virtual,
+                    315:physical:$\sigma_1$}]{A_1}
+        \tn[at=3 s of reblock3, name=reblock2, skin=box,
+            ports={90:virtual,0:virtual,270:virtual:$b_0$,180:virtual:$l_1$,
+                    225:physical:$\sigma_2$}]{A_2}
+        \tnwire[name=reblockPhysical3, via={1 nw of reblock3}]{reblock3.135}{open nw}
+        \tnwire[name=reblockX0]{reblock3.0}{reblock0.180}
+        \tnwire[name=reblockX1]{reblock0.270}{reblock1.90}
+        \tnwire[name=reblockX2]{reblock2.0}{reblock1.180}
+        \tnwire[name=reblockX3]{reblock3.270}{reblock2.90}
+        \tnmark[form=label, label pos=n]{on reblockX0 0.5}{$x_0$}
+        \tnmark[form=label, label pos=e]{on reblockX1 0.5}{$x_1$}
+        \tnmark[form=label, label pos=s]{on reblockX2 0.5}{$x_2$}
+        \tnmark[form=label, label pos=w]{on reblockX3 0.5}{$x_3$}
+    \end{tenkz}
+\end{tenkzequation}
+For arbitrary fine tensors, contracting these blocks around the torus gives
+$W\Psi_f=\Psi_B$ with scalar factor one, for every positive coarse period.
+Here $W$ only regroups the four physical registers per block.
+For regular $G$-isometric fine tensors with local factors $c_i>0$,
+Theorem~\ref{thm:peps_two_by_two_gram} instead concerns the Gram operator:
+$B^*B=c_BP_8$, with $c_B=|G|\prod_i c_i$.
+The internal cycle contributes the factor $|G|$; it does not alter the
+exact geometric contraction equality.
+
+\paragraph{Relative coordinates separate the second bond.}
+For any finite group, put $d=|G|$ and
+$E|a,b\rangle=|a,a^{-1}b\rangle$. Its inverse is the source map
+$T|a,r\rangle=|a,ar\rangle$.
+For $q\in G$, cancellation gives
+$E(L_q\otimes L_q)E^{-1}=L_q\otimes1$.
+The following two-bond coefficient diagram is the relative-coordinate
+step in \cite[Observation~6.5]{Schuch2010PEPS}, after identifying the
+local physical supports with invariant coordinates.
+The paired endpoints $(a,b)$ and $(c,d')$ are replaced by
+$(a,r)$ and $(c,s)$, respectively.
+% Source: renorm-gg-sym and renorm-g-id-and-split, with all other
+% incident indices grouped outside the displayed pair. Fixing neighboring
+% averaging labels fixes the common regular matrix L_q on the two bonds.
+% Formula: (L_q)_(a,c) (L_q)_(b,d') becomes (L_q)_(a,c) delta_(r,s).
+% All four exterior indices in each panel are PHYSICAL accessible coordinates.
+% The lower right virtual contraction sums z: delta_(r,z) delta_(s,z).
+% Boundaries on both sides are (virtual,physical)=(0,4).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=relativeUpper, skin=box,
+            ports={180:physical:$a$,0:physical:$c$}]{L_q}
+        \tn[at=2 s of relativeUpper, name=relativeLower, skin=box,
+            ports={180:physical:$b$,0:physical:$d'$}]{L_q}
+    \end{tenkz}
+    $\xrightarrow{\ E\text{ at both ends}\ }$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=relativeCoarse, skin=box,
+            ports={180:physical:$a$,0:physical:$c$}]{L_q}
+        \tn[at=2 s of relativeCoarse, name=relativeIdentityLeft, skin=box,
+            ports={180:physical:$r$,0:virtual}]{1}
+        \tn[at=3 e of relativeIdentityLeft, name=relativeIdentityRight, skin=box,
+            ports={180:virtual,0:physical:$s$}]{1}
+        \tnwire[name=relativeBellBond]{relativeIdentityLeft.0}{relativeIdentityRight.180}
+    \end{tenkz}
+\end{tenkzequation}
+The lower contraction is the unnormalized equality vector
+$\sum_{r\in G}|r,r\rangle=\sqrt d\,\omega$, where
+$\omega=d^{-1/2}\sum_{r\in G}|r,r\rangle$ has norm one.
+The two endpoint registers remain distinct physical systems.
+No commutativity of $G$ is used.
+
+\paragraph{The original tensor and the four surplus registers.}
+Let every fine site carry the same regular $G$-isometric tensor $A$.
+After taking relative coordinates on each paired boundary, write
+$\eta_j=(u_j,u_jr_j)$ for $j=t,r,b,l$.
+The target tensor $C$ has coefficients
+$C(\eta;(s,\tau))=A(u;s)\prod_j\delta_{\tau_j,r_j}$.
+Here $E$ acts on all four paired legs.
+Thus the local factorization in the source fixed-point figure is
+% Source: renorm-fixedpoint, right-hand side, original A and four I tensors.
+% The displayed boundary coordinates are E eta=(u,r), not eta itself.
+% Eight separate virtual legs (u_t,u_r,u_b,u_l,r_t,r_r,r_b,r_l);
+% five physical legs (s,tau_t,tau_r,tau_b,tau_l). No internal contraction.
+% Formula: C E^{-1}= A tensor 1 tensor 1 tensor 1 tensor 1.
+\begin{tenkzequation}
+    \tenkzkernel
+    $CE^{-1}=$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+        \tn[at=(2,1), name=originalCoarseA, skin=box,
+            ports={90:virtual:$u_t$,0:virtual:$u_r$,270:virtual:$u_b$,
+                    180:virtual:$u_l$,135:physical:$s$}]{A}
+        \tnwire[name=originalCoarsePhysical, via={1 nw of originalCoarseA}]{originalCoarseA.135}{open nw}
+        \tn[at=4 e of 1 n of originalCoarseA, name=surplusTop, skin=box,
+            ports={90:virtual:$r_t$,270:physical:$\tau_t$}]{1}
+        \tn[at=3 e of surplusTop, name=surplusRight, skin=box,
+            ports={90:virtual:$r_r$,270:physical:$\tau_r$}]{1}
+        \tn[at=3 s of surplusTop, name=surplusBottom, skin=box,
+            ports={90:virtual:$r_b$,270:physical:$\tau_b$}]{1}
+        \tn[at=3 s of surplusRight, name=surplusLeft, skin=box,
+            ports={90:virtual:$r_l$,270:physical:$\tau_l$}]{1}
+    \end{tenkz}
+\end{tenkzequation}
+The local physical map $F_v$ obeys
+$F_vB_v=\sqrt{c_{B,v}/c_{A,v}}\,C_v$ and preserves inner products
+on $\operatorname{ran}B_v$.
+The factor $c_{A,v}$ is the unchanged isometry factor of the original
+coarse tensor with its surplus registers, as in
+Theorem~\ref{thm:peps_regular_graph_surplus_isometry}.
+Each surplus virtual edge joins two identity tensors and becomes the
+physical equality pair in the preceding diagram.
+
+\paragraph{The normalized fixed-point state.}
+Suppose the coarse torus has periods $w,h\geq3$, the fine torus has
+periods $2w,2h$, and every bond is untwisted.
+Let $S_f=W^{-1}\operatorname{ran}(\bigotimes_v B_v)$ and let $Q$ regroup
+the original and surplus output registers. Then
+$I=Q(\bigotimes_vF_v)W|_{S_f}$ is a physical support isometry.
+For $\Omega=\bigotimes_{e\in E(\Gamma)}\omega_e$, put
+$R=(\prod_v\sqrt{c_{B,v}/c_{A,v}})d^{|E(\Gamma)|/2}>0$.
+The actual state identity is $I\Psi_f=R\Psi_c\otimes\Omega$.
+Both original PEPS states are nonzero, and $\|\Omega\|=1$, so normalization
+gives the following identity from
+Theorem~\ref{thm:peps_two_by_two_original_normalized}.
+% Source: renorm-fixedpoint, global untwisted periodic specialization.
+% A state box has no virtual boundary; its entire physical alphabet is bundled.
+% Left: the one fine physical port is contracted into the support map I.
+% Right: two independent state boxes, same-original-A coarse PEPS and Bell product.
+% Both panels have boundary (virtual,physical)=(0,2), labelled sigma,tau.
+% These are aggregated complete physical registers, not microscopic site legs.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=fixedFine, skin=box,
+            ports={0:physical}]{\widehat\Psi_f}
+        \tn[at=3 e of fixedFine, name=fixedSupport, skin=box,
+            ports={180:physical,45:physical:$\sigma$,315:physical:$\tau$}]{I}
+        \tnwire[name=fixedSupportInput]{fixedFine.0}{fixedSupport.180}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=fixedCoarse, skin=box,
+            ports={0:physical:$\sigma$}]{\widehat\Psi_c}
+        \tn[at=2 s of fixedCoarse, name=fixedBell, skin=box,
+            ports={0:physical:$\tau$}]{\Omega}
+    \end{tenkz}
+\end{tenkzequation}
+The coarse state uses the same original tensor $A$.
+The displayed map is an isometry on the derived physical support;
+no surjectivity onto either ambient physical space is assumed.
+The scalar-one geometric reblocking also covers coarse periods one and two.
+The Bell-separation and normalized-state assertions here retain the
+untwisted, $w,h\geq3$ hypotheses.

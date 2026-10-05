@@ -22,7 +22,7 @@ accuracy scale exceeds the ring, the exact fixed-width whole-encoder constructio
 
 * Malz, Styliaris, Wei, and Cirac, arXiv:2307.01696, equation (25), the paragraph
   "Long-range MPS using measurements", and discussion and outlook. This whole-encoding
-  theorem makes a precise enhancement and does not introduce a phase-equivalence predicate.
+  result makes a precise enhancement and does not introduce a phase-equivalence predicate.
 -/
 
 open Matrix MPSTensor QuantumCircuit
