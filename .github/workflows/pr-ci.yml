@@ -396,6 +396,17 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
 
+      - name: Test mixed endpoint parent interactions
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in MixedEndpointComparison MixedEndpointPhase; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Check changed Lean compilation times
         id: compilation-time
         if: github.event_name == 'pull_request'

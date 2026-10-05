@@ -1,0 +1,150 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1687--1692.
+% Extended finite-window supports and exact open-chain kernels.
+
+\subsection{Extended boundary spaces on open intervals}
+
+\begin{definition}[Extended boundary maps at arbitrary length]
+    \label{def:mpo_mixed_extended_boundary}
+    \lean{MPSTensor.MPOSymmetry.insertedEvalWord,
+        MPSTensor.MPOSymmetry.insertedEvalWord_nil,
+        MPSTensor.MPOSymmetry.insertedEvalWord_singleton,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_apply,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_one,
+        MPSTensor.MPOSymmetry.insertedBoundaryMap,
+        MPSTensor.MPOSymmetry.insertedBoundaryMap_apply,
+        MPSTensor.MPOSymmetry.insertedBoundaryMap_two,
+        MPSTensor.MPOSymmetry.mem_range_insertedBoundaryMap_iff,
+        MPSTensor.MPOSymmetry.insertedGroundSpace}
+    \uses{def:mpo_mixed_extended_support}
+    For $N\geq1$, put
+    \begin{align}
+        B_W^{i_1\cdots i_N} & =A^{i_1}WA^{i_2}W\cdots WA^{i_N},
+                            & \Gamma'_{W,N}(X)_{i_1\cdots i_N}  & =\tr(B_W^{i_1\cdots i_N}X),
+                            & \mathcal S'_{W,N}                 & =\operatorname{range}\Gamma'_{W,N}.
+    \end{align}
+    The empty product is $I$. For $N=2$, this agrees with
+    (\ref{eq:mpo_inserted_boundary}).
+\end{definition}
+
+\begin{theorem}[Full rank and continuous extended boundary spaces]
+    \label{thm:mpo_mixed_extended_boundary_rank}
+    \lean{MPSTensor.MPOSymmetry.span_range_mul_nonzero_mul_of_span_eq_top,
+        MPSTensor.MPOSymmetry.span_range_insertedEvalWord_eq_top,
+        MPSTensor.MPOSymmetry.eq_zero_of_inserted_word_trace_eq_zero,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_injective,
+        MPSTensor.MPOSymmetry.insertedBoundaryMap_injective,
+        MPSTensor.MPOSymmetry.finrank_range_insertedBoundaryMap,
+        MPSTensor.MPOSymmetry.continuous_insertedEvalWord_family,
+        MPSTensor.MPOSymmetry.continuous_insertedBoundaryMap_family,
+        MPSTensor.MPOSymmetry.continuous_range_insertedBoundaryMap_starProjection,
+        MPSTensor.MPOSymmetry.mixedEndpoint_insertedBoundaryMap_injective,
+        MPSTensor.MPOSymmetry.finrank_mixedEndpoint_extendedBoundarySupport,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpoint_insertedBoundaryMap,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpoint_extendedBoundarySupport_starProjection}
+    \uses{def:mpo_mixed_extended_boundary,thm:mpo_mixed_interior}
+    If $A$ is injective and $W\neq0$, then the extended products span
+    the full matrix algebra at every $N\geq1$. Consequently
+    $\Gamma'_{W,N}$ is injective and $\dim\mathcal S'_{W,N}=D^2$.
+    Continuous families of injective $A$ and nonzero $W$ give continuous
+    boundary maps and orthogonal support projections.
+    In particular, for the actual mixed tensor and insertion $W(\gamma)$,
+    the dimension is $(D_0+D_1)^2$ and the projections are continuous
+    through both endpoints, at every fixed positive length.
+\end{theorem}
+\begin{proof}
+    The one-letter assertion is injectivity of $A$. If the length-$N$
+    extended products span all matrices, then their products on the left
+    by $A^iW$ span all $RWS$. A nonzero entry $W_{ab}$ yields every
+    matrix unit through
+    $|i\rangle\langle a|W|b\rangle\langle j|=W_{ab}|i\rangle\langle j|$.
+    Induction proves the span assertion even if $W$ is singular or nilpotent.
+    The nondegenerate trace pairing proves injectivity and the dimension.
+    Entries of the boundary map are continuous finite products; its
+    inverse-Gram formula gives continuity of its orthogonal range projector.
+\end{proof}
+
+\begin{theorem}[Exact intersection of extended supports]
+    \label{thm:mpo_mixed_extended_intersection}
+    \lean{MPSTensor.span_range_insertedLetters_eq_top,
+        MPSTensor.exists_leftInverse_insertedLetters,
+        MPSTensor.MPOSymmetry.insertedEvalWord_cons_of_ne_nil,
+        MPSTensor.MPOSymmetry.insertedEvalWord_append_singleton,
+        MPSTensor.MPOSymmetry.insertedEvalWord_ofFn_cons,
+        MPSTensor.MPOSymmetry.insertedEvalWord_ofFn_snoc,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_cons,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_snoc,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_restrictLast,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_restrictFirst,
+        MPSTensor.MPOSymmetry.insertedGroundSpaceMap_mul_eq_of_restrict,
+        MPSTensor.MPOSymmetry.mem_insertedGroundSpace_succ_of_intertwine,
+        MPSTensor.MPOSymmetry.insertedGroundSpace_intersection,
+        MPSTensor.MPOSymmetry.insertedGroundSpace_iff_left_right}
+    \uses{thm:mpo_mixed_extended_boundary_rank}
+    Suppose $A$ is injective and $W\neq0$. For $L\geq2$,
+    \begin{align}
+        (\mathcal S'_{W,L}\otimes\C^d)
+        \cap(\C^d\otimes\mathcal S'_{W,L})
+        =\mathcal S'_{W,L+1}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Fixing the last or first letter changes the boundary to $WA^jX$
+    or $XA^iW$, respectively, proving one inclusion.
+    For the converse, write the right and left restrictions of a vector
+    as $\Gamma'_{W,L}(Y_i)$ and $\Gamma'_{W,L}(Z_j)$.
+    On the common interior, injectivity gives
+    \begin{align}
+        WA^jY_i=Z_jA^iW.
+    \end{align}
+    The two-sided span supplies matrices $R_j$ satisfying
+    $\sum_jR_jWA^j=I$. Thus
+    $Y_i=XA^iW$, where $X=\sum_jR_jZ_j$.
+    The first-site recursion reconstructs the vector as
+    $\Gamma'_{W,L+1}(X)$. No inverse of $W$ is used.
+\end{proof}
+
+\begin{theorem}[The extended open-chain kernel]
+    \label{thm:mpo_mixed_extended_open_kernel}
+    \lean{MPSTensor.contiguousRestrictₗ_mem_of_restriction_closed,
+        MPSTensor.MPOSymmetry.restrictLast_insertedGroundSpace_mem,
+        MPSTensor.MPOSymmetry.restrictFirst_insertedGroundSpace_mem,
+        MPSTensor.MPOSymmetry.contiguousRestrictₗ_insertedGroundSpace_mem,
+        MPSTensor.cyclicCfg_eq_join_cyclicActiveBlock,
+        MPSTensor.cyclicRestrictES_eq_rightFiber,
+        MPSTensor.mem_ker_periodicLocalInteractionES_iff,
+        MPSTensor.periodicLocalInteractionES_zero,
+        MPSTensor.periodicLocalInteractionES_isPositive,
+        MPSTensor.openInteractionHamiltonianES,
+        MPSTensor.mem_ker_openInteractionHamiltonianES_iff,
+        MPSTensor.MPOSymmetry.mem_ker_insertedParentInteraction_iff,
+        MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_inserted_eq,
+        MPSTensor.MPOSymmetry.finrank_ker_openInteractionHamiltonianES_inserted,
+        MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_inserted_starProjection,
+        MPSTensor.MPOSymmetry.mixedEndpoint_open_ker_eq,
+        MPSTensor.MPOSymmetry.mixedEndpoint_open_ker_finrank,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpoint_open_ker_starProjection}
+    \uses{thm:mpo_mixed_extended_intersection,thm:mpo_mixed_extended_boundary_rank}
+    Let $h'_W=I-\Pi_{\mathcal S'_{W,2}}$ and let
+    $H'^{\mathrm{open}}_{W,N}=\sum_{i=1}^{N-1}h'_{W,i,i+1}$.
+    If $A$ is injective, $W\neq0$, and $N\geq2$, then
+    \begin{align}
+        \ker H'^{\mathrm{open}}_{W,N}=\mathcal S'_{W,N},
+        \qquad \dim\ker H'^{\mathrm{open}}_{W,N}=D^2.
+    \end{align}
+    For the mixed interpolation these open kernels have dimension
+    $(D_0+D_1)^2$, and their orthogonal projections are continuous at
+    every fixed $N\geq2$, including at $\gamma=0,1$.
+\end{theorem}
+\begin{proof}
+    Each summand is positive, so zero total energy is equivalent to
+    membership in every local kernel. In coordinates, extending a local
+    interaction by the identity means applying it to every exterior
+    configuration fiber. Thus the kernel conditions are exactly that all
+    two-site contiguous restrictions lie in $\mathcal S'_{W,2}$.
+    Iterating the previous intersection theorem gives $\mathcal S'_{W,N}$.
+    Conversely, the first-site and last-site recursions show that every
+    contiguous restriction of an extended boundary vector belongs to its
+    corresponding extended support. The rank and continuity statements
+    follow from the boundary-map theorem.
+\end{proof}
