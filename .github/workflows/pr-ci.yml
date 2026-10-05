@@ -332,7 +332,8 @@ jobs:
         timeout-minutes: 3
         run: |
           set -e
-          for example in MeasurementBranchCoherence SupportedPolarTree SparseWindowGHZ; do
+          for example in MeasurementBranchCoherence SupportedPolarTree SparseWindowGHZ \
+            CoherentBlockTreePreparation NonNormalLogLogPreparation; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \

@@ -24,6 +24,7 @@ import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.CircuitEquivalence
+import TNLean.MPS.Preparation.CoherentBlockTreePreparation
 import TNLean.MPS.Preparation.CompatibleSeedCircuitEquivalence
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
@@ -64,6 +65,7 @@ import TNLean.MPS.Preparation.IsometricExtension
 import TNLean.MPS.Preparation.IsometryTree
 import TNLean.MPS.Preparation.IsometryTreePreparation
 import TNLean.MPS.Preparation.LogDepthPreparation
+import TNLean.MPS.Preparation.LogLogDepthBound
 import TNLean.MPS.Preparation.LogLogDepthEveryLength
 import TNLean.MPS.Preparation.LogLogDepthPreparation
 import TNLean.MPS.Preparation.MatrixPolar
@@ -95,6 +97,7 @@ import TNLean.MPS.Preparation.OverlappingBlockGram
 import TNLean.MPS.Preparation.OverlappingBlockInjectivity
 import TNLean.MPS.Preparation.OverlappingBlockOverlap
 import TNLean.MPS.Preparation.OverlappingBlockStates
+import TNLean.MPS.Preparation.OverlappingLogLogPreparation
 import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
@@ -130,6 +133,7 @@ import TNLean.MPS.Preparation.SparseWindowGHZ
 import TNLean.MPS.Preparation.Staircase
 import TNLean.MPS.Preparation.StaircasePreparation
 import TNLean.MPS.Preparation.StateApproximationError
+import TNLean.MPS.Preparation.SupportedLogLogPreparation
 import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.MPS.Preparation.SupportedPolarTree
 import TNLean.MPS.Preparation.SupportedTreePreparation
