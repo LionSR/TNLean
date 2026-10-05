@@ -139,6 +139,8 @@ import TNLean.MPS.Preparation.UnequalTreeMERA
 import TNLean.MPS.Preparation.UnequalTreePreparation
 import TNLean.MPS.Preparation.VarianceOfAverages
 import TNLean.MPS.Preparation.VaryingBondBlocks
+import TNLean.MPS.Preparation.VaryingReferenceOverlap
+import TNLean.MPS.Preparation.VaryingReferencePreparation
 import TNLean.MPS.Preparation.WindowClustering
 import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Preparation.WindowGHZ

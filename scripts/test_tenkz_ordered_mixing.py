@@ -27,8 +27,18 @@ EXPECTED_PANELS = [
     ("open:e, open:w, phys:n, phys:n", 2, 5),
     ("", 6, 9),
     ("phys:n, phys:n, phys:n", 10, 13),
+    ("phys:n, phys:n, phys:n, phys:n", 6, 10),
+    ("phys:n, phys:n, phys:n, phys:n", 2, 4),
 ]
 EXPECTED_WIRES = {
+    "VARYING": {
+        ("vpzero.0", "vpone.180"),
+        ("vpzero.180", "vleft.0"),
+        ("vleft.270", "vleftbottom.90"),
+        ("vleftbottom.0", "vrightbottom.180"),
+        ("vrightbottom.90", "vright.270"),
+        ("vright.180", "vpone.0"),
+    },
     "BLOCK": {("iso.270", "pos.90")},
     "OVERLAP": {
         ("pzero.270", "fzero.90"),
@@ -56,7 +66,12 @@ def main() -> int:
         raise SystemExit("FAIL: xelatex is required")
     chapter = CHAPTER.read_text(encoding="utf-8")
     bodies = []
-    for name, expected in EXPECTED_WIRES.items():
+    chapter += (ROOT / "blueprint/src/chapter/ch32_log_depth_varying_reference.tex").read_text(
+        encoding="utf-8"
+    )
+    order = ["BLOCK", "OVERLAP", "PREPARATION", "VARYING"]
+    for name in order:
+        expected = EXPECTED_WIRES[name]
         tag = f"TENKZ-ORDERED-MIXING-{name}"
         begin, end = f"% {tag}-BEGIN", f"% {tag}-END"
         assert chapter.count(begin) == chapter.count(end) == 1
@@ -65,9 +80,15 @@ def main() -> int:
             r"\\tnwire(?:\[[^]]*\])?\s*\{([^}]+)\}\s*\{([^}]+)\}", body
         )
         assert len(wires) == len(expected) and set(wires) == expected, name
-        if name == "BLOCK":
+        if name in {"BLOCK", "VARYING"}:
             assert r"\begin{tenkzequation}" in body
             assert r"\begin{tenkzeq}" not in body
+        if name == "VARYING":
+            assert body.count("skin=none") == 4
+            assert r"{\sqrt{\sigma_1}}" in body
+            assert r"{\sqrt{\sigma_0}}" in body
+            assert r"90@1:physical:$r_0$, 90@2:physical:$l_1$" in body
+            assert r"90@1:physical:$r_1$, 90@2:physical:$l_0$" in body
         if name == "OVERLAP":
             assert body.count(r"{\overline{P_\infty}}") == 3
             assert "boundary=periodic" in body
@@ -118,7 +139,7 @@ def main() -> int:
                             if w.attrs.get("origin") == "port-open"] == ["I_0", "I_1", "I_2"]
                 atoms, wires = [], []
         assert panels == EXPECTED_PANELS, panels
-    print("PASS: five panels retain block indices, conjugated overlap, and one reference ring")
+    print("PASS: seven panels retain block indices, overlap, and the varying-reference cyclic shift")
     return 0
 
 

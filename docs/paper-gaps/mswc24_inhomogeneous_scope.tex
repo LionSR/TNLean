@@ -324,5 +324,44 @@ application under uniform quantitative ordered mixing, not a derivation
 of that assumption from qualitative finite correlation.
 
 \bibliographystyle{alpha}
+\section{Varying positive semidefinite references on a square bond space}
+A separate sufficient-condition result permits density matrices
+$\sigma_{N,i}$ that vary with the ring and site and may be singular, while
+keeping the common square bond dimension $D$. It assumes the actual ordered
+transfer matrix on every positive nonwrapping interval starting at $a$ is
+within $K e^{-r\ell}$ of $X\mapsto\operatorname{Tr}(X)\sigma_{N,a}$,
+with $K,r>0$ independent of all intervals and rings. There is no separate
+transport or stationarity hypothesis: the global estimate is proved directly
+from these quantitative tensor-product bounds.
+
+The global square-root H\"older bound replaces a reference-dependent
+Lipschitz constant by a dimension-dependent factor and halves the exponential
+rate. Compactness of the set of density matrices makes the mixed-transfer
+constants uniform, including at singular references. Since
+$R_\sigma R_\tau=R_\sigma$ for trace-one references, ordered reference
+products stay bounded. The positive reference tensor of block $j$ contributes
+the pair with coefficient $(\sqrt{\sigma_j})_{r_{j-1},l_j}$, so the outgoing
+pair from block $j$ uses $\sigma_{j+1}$. A two-block regression with distinct
+rank-one references detects this shift.
+
+The resulting normalized pair error is at most $C_D M\sqrt\delta$.
+For exponential transfer error this gives
+$C_D\sqrt K\,N e^{-rq/2}$ and logarithmic physical preparation of the
+original family beyond a uniform ring cutoff. Whole-ring transfer
+convergence derives eventual nonvanishing; no assumption is made on short
+zero rings. The common faithful-reference result retains its sharper
+exponent $r$.
+
+These declarations\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference},
+    \leanid{MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}, and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_reference}.}
+remove the common-reference and faithfulness restrictions from this
+fixed-square-bond sufficient condition. They still do not derive a uniform
+rate from the paper's qualitative finite-correlation definition. Rectangular
+bonds require the corresponding corner-supported reset maps; zero-padded
+rectangular site maps are not generally trace preserving on the full square
+space, so the square-space hypotheses are not silently applied to them.
+
 \bibliography{references}
 \end{document}
