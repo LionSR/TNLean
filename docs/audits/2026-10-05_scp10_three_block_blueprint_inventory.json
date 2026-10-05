@@ -1,0 +1,1357 @@
+{
+  "source_theorem": "SCP10 Theorem 5.4",
+  "modules": [
+    "TNLean.PEPS.DependentPartialAverageSupport",
+    "TNLean.PEPS.DependentOpenBondSupport",
+    "TNLean.PEPS.DependentOpenCutIntersection",
+    "TNLean.PEPS.DependentLiftedCut",
+    "TNLean.PEPS.DependentLiftedCutReconstruction",
+    "TNLean.PEPS.DependentLiftedCutIntersection",
+    "TNLean.PEPS.ParentHamiltonian.ThreeBlockDependentCutIntersection",
+    "TNLean.PEPS.ParentHamiltonian.ThreeBlockPhysicalExtension",
+    "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryLocalization",
+    "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryContraction",
+    "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryRegional",
+    "TNLean.PEPS.ParentHamiltonian.ThreeBlockGInjectiveIntersection"
+  ],
+  "sources": [
+    {
+      "module": "TNLean.PEPS.DependentPartialAverageSupport",
+      "sha256": "0b29b17e87e4fbeff37b2ab2073550922e9d92a93506c8c0f958e84367967058"
+    },
+    {
+      "module": "TNLean.PEPS.DependentOpenBondSupport",
+      "sha256": "0dbbe7ac147892246d60e6f4432c2df44c01f60a1508677c7e5093ac34f15615"
+    },
+    {
+      "module": "TNLean.PEPS.DependentOpenCutIntersection",
+      "sha256": "49350d4fbe6681b1b01c227c14381f27a3f79b8a529dacc795a33ec9098cbd81"
+    },
+    {
+      "module": "TNLean.PEPS.DependentLiftedCut",
+      "sha256": "17a386117e6e65ef533ba74e3da225ce2977011f5e94d2dab67ca2188314ad7a"
+    },
+    {
+      "module": "TNLean.PEPS.DependentLiftedCutReconstruction",
+      "sha256": "cc0d081ecb1b6ff620f613240ed32602a5986e2eebd5b8d224bf6d4a2e5c9b29"
+    },
+    {
+      "module": "TNLean.PEPS.DependentLiftedCutIntersection",
+      "sha256": "a735ef119e0ecfb9c5de9f2684a326ce7f677cc743798e2b7474db87817664f4"
+    },
+    {
+      "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockDependentCutIntersection",
+      "sha256": "ad6b4a8ee476252c05e3c6c785aeb980f12f01de21cef76ae7c6e97a50a0344a"
+    },
+    {
+      "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockPhysicalExtension",
+      "sha256": "4f985341a560fbad0f39d650b5f150199f7ce83ca41a70ba87bcaca65aa4dd2e"
+    },
+    {
+      "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryLocalization",
+      "sha256": "4cf80aecc32df887d34126987a65c9fd024dacf16c422991a3be473dbf95f28f"
+    },
+    {
+      "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryContraction",
+      "sha256": "110bb8e5f8853b4d1ab13e68b455033397b6fd7736401bf8653ac30f6ec56362"
+    },
+    {
+      "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryRegional",
+      "sha256": "ba996f8b0ce8b251a06d00d6b5d0deb310d15519da19af57b5e3f9df6ca10cc5"
+    },
+    {
+      "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockGInjectiveIntersection",
+      "sha256": "ddfcb56cde82769d3543cdbc6ca5992b341e34d46d5ccd199d017aca06d0d20f"
+    }
+  ],
+  "declarations": [
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 35,
+      "owner": "def:peps_partial_incident_representation",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_apply",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 43,
+      "owner": "def:peps_partial_incident_representation",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_of_eq_id",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 51,
+      "owner": "def:peps_partial_incident_representation",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_of_eq_one",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 59,
+      "owner": "def:peps_partial_incident_representation",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 70,
+      "owner": "def:peps_partial_averaging_site",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.localSiteMap_partialAveragingSite",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 78,
+      "owner": "def:peps_partial_averaging_site",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.isGInjective_partialAveragingSite",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 86,
+      "owner": "thm:peps_partial_averaging_injective",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite_of_eq_id",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 94,
+      "owner": "def:peps_partial_averaging_site",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.localSiteMap_partialAveragingSite_of_eq_one",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 103,
+      "owner": "def:peps_partial_averaging_site",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite_of_eq_one",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 117,
+      "owner": "def:peps_partial_averaging_site",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite_apply",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 130,
+      "owner": "def:peps_partial_averaging_site",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 144,
+      "owner": "thm:peps_partial_network_expansion",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_bondGauge",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 169,
+      "owner": "thm:peps_partial_vertex_gauge",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_vertexGauge",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 186,
+      "owner": "thm:peps_partial_vertex_gauge",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.bondRegrouping_network_partialAveragingSite",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 197,
+      "owner": "thm:peps_partial_network_expansion",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_eq_sum_matrixBondProduct",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 211,
+      "owner": "thm:peps_partial_network_expansion",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.physicalBondSlice_network_partialAveragingSite_mem_range",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 225,
+      "owner": "thm:peps_partial_uncut_support",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.physicalBondSlice_mem_range_of_mem_partialCutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
+      "line": 261,
+      "owner": "thm:peps_partial_uncut_support",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.OpenBondLabel",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
+      "line": 27,
+      "owner": "def:peps_open_bond_generators",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.openBondGenerator",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
+      "line": 30,
+      "owner": "def:peps_open_bond_generators",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.openBondMatrix",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
+      "line": 37,
+      "owner": "def:peps_open_bond_generators",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.bondMatrix_range_le_openBondMatrix_range",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
+      "line": 43,
+      "owner": "thm:peps_open_bond_ranges",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.openBondMatrix_range_eq_top",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
+      "line": 56,
+      "owner": "thm:peps_open_bond_ranges",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.exists_openBondCoefficients_of_slices",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
+      "line": 70,
+      "owner": "thm:peps_open_bond_expansion",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.network_mem_cutSpace_of_eq_one",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
+      "line": 34,
+      "owner": "thm:peps_network_in_open_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_mono",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
+      "line": 48,
+      "owner": "thm:peps_cut_space_mono",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.map_cutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
+      "line": 64,
+      "owner": "thm:peps_cut_space_physical_image",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.averagingProjector_matrixBondProduct",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
+      "line": 78,
+      "owner": "thm:peps_average_bond_product",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.averagingProjector_openBondProduct_mem_cutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
+      "line": 92,
+      "owner": "thm:peps_open_product_in_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_partialCutSpace_eq_of_remove_labels",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
+      "line": 112,
+      "owner": "thm:peps_partial_open_cut_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_cutSpace_eq_of_remove_labels",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
+      "line": 143,
+      "owner": "thm:peps_open_cut_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.OutsidePhysicalConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 30,
+      "owner": "def:peps_outside_physical_config",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.outsidePhysicalRestriction",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 34,
+      "owner": "def:peps_outside_physical_config",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutCoeff",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 44,
+      "owner": "def:peps_lifted_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutMap",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 55,
+      "owner": "def:peps_lifted_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutMap_apply",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 70,
+      "owner": "def:peps_lifted_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 78,
+      "owner": "def:peps_lifted_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.outsidePhysicalRestriction_update",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 88,
+      "owner": "def:peps_outside_physical_config",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutMap_slice_mem_range",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 102,
+      "owner": "thm:peps_lifted_cut_local_slice",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.slice_mem_range_of_mem_liftedCutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 139,
+      "owner": "thm:peps_lifted_cut_local_slice",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_le_range_product",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 151,
+      "owner": "thm:peps_lifted_cover_support",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.outsideCutLocalConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 173,
+      "owner": "def:peps_outside_cut_config",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.outsideCutLocalConfig_restriction",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 182,
+      "owner": "def:peps_outside_cut_config",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_le_liftedCutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 191,
+      "owner": "thm:peps_full_cut_in_lifted_support",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_le_range_product",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCut.lean",
+      "line": 213,
+      "owner": "thm:peps_full_cut_in_lifted_support",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.cutReplaceOutside",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 31,
+      "owner": "def:peps_cut_replace_outside",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.replaceOutsidePhysical",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 100,
+      "owner": "def:peps_replace_outside_physical",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.outsidePhysicalRestriction_replaceOutsidePhysical",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 107,
+      "owner": "def:peps_replace_outside_physical",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.replaceOutsidePhysical_restriction",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 115,
+      "owner": "def:peps_replace_outside_physical",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.reconstructedCutBoundary",
+      "kind": "def",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 161,
+      "owner": "def:peps_reconstructed_cut_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.cutMap_reconstructedCutBoundary",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 173,
+      "owner": "thm:peps_reconstructed_boundary_contraction",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace_inf_range_product_le_cutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 248,
+      "owner": "thm:peps_lifted_cut_reconstruction",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_eq_liftedCutSpace_inf_range_product",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
+      "line": 297,
+      "owner": "thm:peps_lifted_cut_reconstruction",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_eq_iInf_cutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
+      "line": 32,
+      "owner": "thm:peps_lifted_cut_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace_eq_cutSpace_of_cover_or_surjective",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
+      "line": 50,
+      "owner": "thm:peps_lifted_cut_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace_inf_eq_cutSpace_inf",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
+      "line": 67,
+      "owner": "thm:peps_lifted_cut_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_eq_map_representationAveragingSite",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
+      "line": 97,
+      "owner": "thm:peps_lifted_canonical_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.DependentBondNetwork.exists_liftedCutSpace_common_localInverse",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
+      "line": 114,
+      "owner": "thm:peps_lifted_common_inverse",
+      "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.Vertex",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 30,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.Bond",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 33,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.tail",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 36,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.head",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 39,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exteriorBonds",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 42,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.leftCut",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 45,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.rightCut",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 48,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreVertices",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 51,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.core_degree",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 54,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exteriorBonds_card",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 60,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreAction",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 65,
+      "owner": "def:peps_three_block_core_action",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exists_remove_internal_labels",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 69,
+      "owner": "thm:peps_three_block_remove_labels",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.LocalConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 84,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.localRepresentation",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 87,
+      "owner": "def:peps_three_block_core_action",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.cutSpace_left_inf_right",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockDependentCutIntersection.lean",
+      "line": 94,
+      "owner": "thm:peps_three_block_cut_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.Core",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 28,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.ExtendedPhys",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 33,
+      "owner": "def:peps_three_block_identity_extension",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.extendedTensor",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 47,
+      "owner": "def:peps_three_block_identity_extension",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreOutputEquiv",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 55,
+      "owner": "def:peps_three_block_identity_extension",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exteriorOutputEquiv",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 60,
+      "owner": "def:peps_three_block_identity_extension",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.localSiteMap_extendedTensor_core",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 65,
+      "owner": "def:peps_three_block_identity_extension",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.localSiteMap_extendedTensor_exterior",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 78,
+      "owner": "def:peps_three_block_identity_extension",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.localSiteMap_extendedTensor_exterior_range",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 92,
+      "owner": "def:peps_three_block_identity_extension",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.isGInjective_extendedTensor",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 102,
+      "owner": "thm:peps_three_block_extended_injectivity",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.nonempty_of_isSemiRegular",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 125,
+      "owner": "thm:peps_semiregular_alphabet_nonempty",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.nonempty_bonds_of_isSemiRegular",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+      "line": 135,
+      "owner": "thm:peps_semiregular_alphabet_nonempty",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.CoreVertex",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 26,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.CorePhysicalConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 29,
+      "owner": "def:peps_three_core_physical_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.OutsideCorePhysicalConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 32,
+      "owner": "def:peps_three_core_physical_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.corePhysicalRestriction",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 36,
+      "owner": "def:peps_three_core_physical_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 40,
+      "owner": "def:peps_three_core_physical_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.assembleCorePhysicalConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 47,
+      "owner": "def:peps_three_core_physical_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.corePhysicalRestriction_assemble",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 53,
+      "owner": "def:peps_three_core_physical_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension_injective",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 60,
+      "owner": "thm:peps_three_core_extension_injective",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutCoeff",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 73,
+      "owner": "def:peps_three_core_lifted_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 84,
+      "owner": "def:peps_three_core_lifted_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 98,
+      "owner": "def:peps_three_core_lifted_cut",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension_coreLiftedCutMap",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 106,
+      "owner": "thm:peps_three_core_localization",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_boundary_slice",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 125,
+      "owner": "thm:peps_three_core_localization",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.comap_liftedCutSpace_eq_coreLiftedCutSpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryLocalization.lean",
+      "line": 149,
+      "owner": "thm:peps_three_core_localization",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.CoreEndpoint",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 25,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.ExteriorEndpoint",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 28,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.OpenBoundaryConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 31,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.CoreEndpointConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 34,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.ExteriorEndpointConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 37,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.tail_mem_core",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 40,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.head_mem_core_iff",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 45,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exteriorEndpoint_mem_exterior",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 50,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreEndpoint_card",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 56,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exteriorEndpoint_card",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 59,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.assembleCoreEndpointConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 64,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.openBoundaryRestriction",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 69,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreEndpointLocalConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 73,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.assembleExteriorCutConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 79,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exteriorCutRestriction",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 89,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.cutRestriction_assembleCoreEndpointConfig",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 93,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.exteriorCutRestriction_assemble",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 107,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreInteriorWeight",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 120,
+      "owner": "def:peps_three_block_open_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.cutInteriorWeight_assembleCoreEndpointConfig",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 127,
+      "owner": "def:peps_three_block_open_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.endpointSiteEquiv_assembleCoreEndpointConfig",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 148,
+      "owner": "def:peps_three_block_endpoint_split",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.openBoundaryCoeff",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 160,
+      "owner": "def:peps_three_block_open_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.openBoundaryMap",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 168,
+      "owner": "def:peps_three_block_open_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.openBoundarySpace",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 180,
+      "owner": "def:peps_three_block_open_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.emptyOutsideCorePhysicalConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 184,
+      "owner": "def:peps_three_block_boundary_marginal",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.openBoundaryMarginal",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 188,
+      "owner": "def:peps_three_block_boundary_marginal",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_core_exterior",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 196,
+      "owner": "thm:peps_three_block_open_boundary_exact",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_openBoundaryMap",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 206,
+      "owner": "thm:peps_three_block_open_boundary_exact",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.fixedExteriorCutBoundary",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 225,
+      "owner": "def:peps_three_block_boundary_marginal",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.openBoundaryMarginal_fixedExteriorCutBoundary",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 234,
+      "owner": "def:peps_three_block_boundary_marginal",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_openBoundarySpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryContraction.lean",
+      "line": 244,
+      "owner": "thm:peps_three_block_open_boundary_exact",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.RegionEndpoint",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 26,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.OutsideRegionEndpoint",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 30,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.RegionBoundaryEndpoint",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 34,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.RegionEndpointConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 38,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.OutsideRegionEndpointConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 42,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.RegionBoundaryConfig",
+      "kind": "abbrev",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 46,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.left_regionBoundary_card",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 50,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.right_regionBoundary_card",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 54,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.assembleRegionEndpointConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 60,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionBoundaryRestriction",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 66,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionEndpointLocalConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 71,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.assembleRegionalCutConfig",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 77,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalCutBoundaryRestriction",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 84,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.outsideRegionalCutRestriction",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 89,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.cutRestriction_assembleRegionEndpointConfig",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 97,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalCutBoundaryRestriction_assemble",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 106,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.outsideRegionalCutRestriction_assemble",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 114,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.endpointSiteEquiv_assembleRegionEndpointConfig",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 123,
+      "owner": "def:peps_three_block_regional_coordinates",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionInteriorWeight",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 135,
+      "owner": "def:peps_three_block_regional_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.cutInteriorWeight_assembleRegionEndpointConfig",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 143,
+      "owner": "def:peps_three_block_regional_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalBoundaryCoeff",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 167,
+      "owner": "def:peps_three_block_regional_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalBoundaryMap",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 180,
+      "owner": "def:peps_three_block_regional_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalBoundarySpace",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 195,
+      "owner": "def:peps_three_block_regional_boundary",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalBoundaryMarginal",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 203,
+      "owner": "def:peps_three_block_regional_marginal",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_region_outside",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 210,
+      "owner": "thm:peps_three_block_regional_boundary_exact",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_regionalBoundaryMap",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 220,
+      "owner": "thm:peps_three_block_regional_boundary_exact",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.fixedOutsideRegionalBoundary",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 237,
+      "owner": "def:peps_three_block_regional_marginal",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalBoundaryMarginal_fixedOutsideRegionalBoundary",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 248,
+      "owner": "def:peps_three_block_regional_marginal",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_regionalBoundarySpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockOpenBoundaryRegional.lean",
+      "line": 259,
+      "owner": "thm:peps_three_block_regional_boundary_exact",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.leftVertices",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean",
+      "line": 30,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.rightVertices",
+      "kind": "def",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean",
+      "line": 33,
+      "owner": "def:peps_general_three_block_geometry",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_inf_eq_openBoundarySpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean",
+      "line": 43,
+      "owner": "thm:peps_three_block_core_lifted_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    },
+    {
+      "declaration": "TNLean.PEPS.ThreeBlockDependent.regionalBoundarySpace_inf_eq_openBoundarySpace",
+      "kind": "theorem",
+      "source": "TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean",
+      "line": 97,
+      "owner": "thm:peps_general_three_block_intersection",
+      "blueprint": "blueprint/src/chapter/ch24_peps_general_three_block_intersection.tex"
+    }
+  ]
+}
