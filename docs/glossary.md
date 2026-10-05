@@ -571,6 +571,37 @@ normalizations.
   Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+#### Actual CZX rectangle boundary coordinates
+
+- **Declarations:** `TNLean.PEPS.czxRectangleCoordinatesEquiv`,
+  `czxRectangleEffectiveBoundaryConfig`, and `czxRectangleBoundaryMatrix`.
+- **Defined in:** `TNLean/PEPS/Examples/CZXRectangleMap.lean`, using the explicit
+  clockwise `torusRectanglePerimeterEquiv` in `CZXRectangleBoundary.lean`.
+- **Meaning:** clockwise crossing-bond coordinates reverse the native
+  bottom/left pairs. Effective bits `c` impose the adjacent-pair constraint
+  `(c_i,c_(i+1))`; the matrix column is the actual incident-only open-region
+  contraction at that native boundary assignment, without an extra scalar.
+- **Source:** Chen, Liu and Wen, arXiv:1106.4752, Section IV, boundary discussion
+  lines 330–345 and 377–385; arXiv:2011.12127, Appendix A, printed CZX tensors.
+- **Sanctioned bridges:** `range_openRegionMap_czxRectangle` identifies the
+  exact span of the effective columns, and
+  `regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review` identifies
+  the physical symmetry with the printed boundary operator. The actual
+  reduced-density support equals this image by
+  `range_regionReducedDensity_czxRectangle`; its rank and the rank after
+  trace normalization are `2^(2*w+2*h)`.
+- **Caveats:** torus periods are at least three; both rectangle sides are
+  positive, strictly shorter than the periods and bounded within the chosen
+  coordinates. Seam endpoints and crossing bonds through a seam are allowed;
+  a coordinate interval that wraps around the torus is not covered. The
+  effective dimension is
+  `2^(2*w+2*h)`, not the full unconstrained virtual dimension `4^(2*w+2*h)`.
+  No flat nonzero spectrum, entropy, isometric normalization, nonrectangular
+  extension or parent-kernel spanning statement follows merely from these
+  support theorems. The printed operator's ordering sign disappears because
+  the rectangle perimeter is even; normalized bra-ket factors are not silently
+  substituted. See `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
+
 #### `TNLean.PEPS.IsToricCodeBondCompatible`
 
 - **Declaration:** `IsToricCodeBondCompatible σ`.
