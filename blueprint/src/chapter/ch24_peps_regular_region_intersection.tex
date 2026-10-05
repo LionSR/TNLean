@@ -161,7 +161,8 @@ boundary data. The two horizontal internal labels are summed.
 \begin{tenkzequation}
     \tenkzkernel
     $\Gamma_T^0=$
-    \begin{tenkz}[lattice={1x3}, frame=plane, physical=up]
+    % Tenkz lattice dimensions are literal DSL tokens, not printed products.
+    \begin{tenkz}[lattice={1x3}, frame=plane, physical=up] % chktex 29
         \tn[at=(1,1), name=intersectionCore0, skin=box,
             ports={180:virtual:$\ell$,0:virtual,90:virtual:$t_0$,270:virtual:$b_0$}, label pos=se]{$\Pi_G$}
         \tn[at=(1,2), name=intersectionCore1, skin=box,

@@ -85,7 +85,8 @@
         \tenkzkernel
         $\displaystyle\lvert A;(g,h)\rangle=
             \sum_{\ell,r,b,t\in G^3}B_{g,h}(\ell,r,b,t)$
-        \begin{tenkz}[lattice={3x3}, frame=plane, physical=up]
+        % Tenkz lattice dimensions are literal DSL tokens, not printed products.
+        \begin{tenkz}[lattice={3x3}, frame=plane, physical=up] % chktex 29
             \tn[at=(1,1), name=parentSeam,
                 ports={180:virtual:$\ell_2$,0:virtual,90:virtual:$t_0$,270:virtual}, label pos=sw]{}
             \tn[at=(1,2), name=seam12,

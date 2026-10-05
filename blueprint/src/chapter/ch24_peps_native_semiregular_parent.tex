@@ -321,7 +321,8 @@ allows vertex-dependent physical tensors.
         \tenkzkernel
         $\displaystyle\lvert a;(g,h)\rangle(\,\cdot\,,\tau)
             =\sum_\theta c_\tau(\theta)$
-        \begin{tenkz}[lattice={2x2}, frame=plane, physical=up]
+        % Tenkz lattice dimensions are literal DSL tokens, not printed products.
+        \begin{tenkz}[lattice={2x2}, frame=plane, physical=up] % chktex 29
             \tn[at=(1,1), name=nativePlaquette11,
                 ports={180:virtual:$\theta_{l,1}$,0:virtual,
                         90:virtual:$\theta_{t,0}$,270:virtual}, label pos=sw]{}
