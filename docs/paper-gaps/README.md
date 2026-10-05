@@ -1051,3 +1051,9 @@ For SCP10, arXiv:1001.3807:
 - `scp10_general_group_physical_blocking.tex` records the proved physical
   support-isometry and normalized Bell separation, and the remaining geometric
   reblocking and original-coarse-tensor identification.
+
+### SCP10: two-by-two regular fixed point
+
+[scp10_two_by_two_regular_fixed_point.tex](scp10_two_by_two_regular_fixed_point.tex)
+records the proved normalized original-tensor reblocking on untwisted coarse
+tori of periods at least three, and the remaining tiny-period/twisted scope.

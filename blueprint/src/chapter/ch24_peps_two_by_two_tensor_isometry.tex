@@ -1,0 +1,160 @@
+% SCP10, Lemma 6.2 and Observations 6.5--6.6, source lines 1704--1716 and 1825--1920.
+% Bonds are unnormalized; one internal cycle contributes one factor of |G|.
+
+\begin{theorem}[G-isometry under coordinate permutations]%
+    \label{thm:peps_g_isometry_coordinate_equiv}
+    \lean{TNLean.PEPS.IsGIsometric.of_coordinateEquiv}
+    \leanok
+    Let $T:\mathbb C^I\to\mathbb C^J$ be $G$-isometric for a
+    representation $\rho$. Let $e:I'\to I$ and $f:J'\to J$ be bijections,
+    and let $E:\mathbb C^{I'}\to\mathbb C^I$ and
+    $F:\mathbb C^{J'}\to\mathbb C^J$ be their coordinate permutation
+    maps. Suppose $E\rho'(g)=\rho(g)E$ for every $g$ and $FT'=TE$.
+    Then $T'$ is $G$-isometric for $\rho'$, with the same positive
+    isometry factor as $T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The map $E$ carries invariant vectors to invariant vectors.
+    The identity $FT'=TE$ transfers invariance and injectivity on the
+    invariant subspace. Since $E$ and $F$ permute orthonormal bases,
+    $\langle T'x,T'y\rangle=\langle TEx,TEy\rangle
+        =c\langle Ex,Ey\rangle=c\langle x,y\rangle$ for invariant $x,y$.
+\end{proof}
+
+\begin{theorem}[Translation constraints around the internal square]%
+    \label{thm:peps_two_by_two_translation_compatibility}
+    \lean{TNLean.PEPS.twoByTwoSiteLegs_smul,
+        TNLean.PEPS.twoByTwoSiteLegs_compatible_iff,
+        TNLean.PEPS.sum_twoByTwoSiteLegs_compatible}
+    \leanok
+    \uses{def:peps_two_by_two_tensor}
+    Let $G$ be a group. Write $\ell_i(\alpha,x)\in G^4$ for the
+    four fine-leg configurations of Definition~\ref{def:peps_two_by_two_tensor},
+    with corners indexed clockwise from the upper right. For paired boundary
+    configurations $\alpha,\beta\in(G\times G)^4$ and internal labels
+    $x,y,q\in G^4$, the equations
+    $\ell_i(\alpha,x)=q_i\ell_i(\beta,y)$ at every corner hold precisely
+    when $q_i=q_0$ at every corner, $\alpha=q_0\beta$, and $x=q_0y$.
+    If $G$ is finite, then
+    \begin{align}
+        \sum_{x,y,q\in G^4}
+        \prod_{i=0}^3\delta_{\ell_i(\alpha,x),q_i\ell_i(\beta,y)}
+        =|G|^4\sum_{g\in G}\delta_{\alpha,g\beta}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The internal bond shared by corners $0$ and $1$ gives
+    $q_0y_1=x_1=q_1y_1$, hence $q_0=q_1$ by right cancellation.
+    The bonds shared by corners $1,2$ and $2,3$ similarly give
+    $q_1=q_2=q_3$. With this common translation, the sixteen fine-leg
+    entries determine exactly the eight boundary labels and four internal
+    labels. The converse follows by simultaneous translation of every label.
+    For each $y\in G^4$ and each $g$ with $\alpha=g\beta$, the unique
+    remaining assignment is $x=gy$ and $q_i=g$. There are $|G|^4$ choices
+    of $y$.
+\end{proof}
+
+\begin{theorem}[Gram operator of the contracted four-site tensor]%
+    \label{thm:peps_two_by_two_gram}
+    \lean{TNLean.PEPS.twoByTwoTensor_gram_expansion,
+        TNLean.PEPS.exists_twoByTwoTensor_gram}
+    \leanok
+    \uses{def:peps_two_by_two_tensor,thm:peps_regular_site_gram,
+        thm:peps_two_by_two_translation_compatibility}
+    Let $G$ and the physical alphabet $P$ be finite. Let the four tensors
+    $a_i:G^4\times P\to\mathbb C$ be $G$-isometric for simultaneous
+    regular translation. Denote their actual four-internal-bond contraction
+    by $B(\alpha;\sigma)$, with $\alpha\in(G\times G)^4$ and
+    $\sigma\in P^4$. There exist positive real numbers $c_i$ such that
+    \begin{align}
+        \sum_{\sigma\in P^4}
+        \overline{B(\alpha;\sigma)}B(\beta;\sigma)
+        =\left(\prod_{i=0}^3c_i\right)
+        \sum_{g\in G}\delta_{\alpha,g\beta}.
+        \label{eq:peps_two_by_two_gram}
+    \end{align}
+    Thus $B^*B=c_B P_8$, where $P_8$ averages simultaneous regular
+    translation of the eight boundary bonds and
+    $c_B=|G|\prod_i c_i>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The local isometries give
+    $\sum_s\overline{a_i(\eta;s)}a_i(\theta;s)
+        =(c_i/|G|)\sum_g\delta_{\eta,g\theta}$.
+    Expanding both internal contractions and summing the four independent
+    physical indices gives
+    \begin{align}
+        (B^*B)_{\alpha,\beta}
+         & =\sum_{x,y\in G^4}\prod_{i=0}^3
+        \sum_{s\in P}
+        \overline{a_i(\ell_i(\alpha,x);s)}
+        a_i(\ell_i(\beta,y);s)             \\
+         & =\frac{\prod_i c_i}{|G|^4}
+        \sum_{x,y,q\in G^4}
+        \prod_{i=0}^3
+        \delta_{\ell_i(\alpha,x),q_i\ell_i(\beta,y)}.
+    \end{align}
+    The translation-counting theorem cancels the factor $|G|^{-4}$ and
+    gives (\ref{eq:peps_two_by_two_gram}). Since
+    $(P_8)_{\alpha,\beta}=|G|^{-1}\sum_g\delta_{\alpha,g\beta}$,
+    the block factor is $|G|\prod_i c_i$. The extra factor $|G|$ is
+    contributed by the internal cycle with unnormalized bonds. This retains
+    the scalar omitted from the diagrams in
+    \cite[Lemma~6.2 and Observations~6.5--6.6]{Schuch2010PEPS}.
+\end{proof}
+
+\begin{theorem}[G-isometry of the explicit two-by-two contraction]%
+    \label{thm:peps_two_by_two_isometry}
+    \lean{TNLean.PEPS.twoByTwoTensor_translation,
+        TNLean.PEPS.twoByTwoSeparatedTensor,
+        TNLean.PEPS.isGIsometric_twoByTwoSeparatedTensor}
+    \leanok
+    \uses{thm:peps_two_by_two_gram,def:peps_two_by_two_tensor}
+    Under the hypotheses of Theorem~\ref{thm:peps_two_by_two_gram},
+    the literal contracted map $B:\mathbb C^{G^8}\to\mathbb C^{P^4}$
+    is $G$-isometric for simultaneous regular translation of the eight
+    boundary labels. The eight separate labels may equivalently be ordered
+    as four paired legs. All four physical registers are retained, and
+    surjectivity onto their ambient tensor product is not required.
+\end{theorem}
+
+\begin{proof}\leanok
+    Translate all four internal summation variables by $g$.
+    Local virtual invariance then gives $B(g\alpha;\sigma)=B(\alpha;\sigma)$.
+    The Gram identity is $B^*B=c_BP_8$ with $c_B>0$, so
+    $c_B^{-1}B^*$ is a left inverse on the invariant boundary subspace.
+    For invariant $x,y$, it also gives
+    $\langle Bx,By\rangle=c_B\langle x,y\rangle$.
+    Separating each paired leg merely reindexes these formulas.
+\end{proof}
+
+\begin{theorem}[Nonvanishing of the original fine and coarse states]%
+    \label{thm:peps_two_by_two_nonzero}
+    \lean{TNLean.PEPS.IsGIsometric.torusBondNetwork_one_ne_zero,
+        TNLean.PEPS.IsGIsometric.twoByTwoFineState_ne_zero,
+        TNLean.PEPS.IsGIsometric.graphBondNetwork_torusIncidentFamily_ne_zero}
+    \leanok
+    \uses{thm:peps_g_isometry_coordinate_equiv,
+        thm:peps_regular_torus_closure_independence}
+    Let $a:G^4\times P\to\mathbb C$ be a regular $G$-isometric tensor,
+    with $G$ and $P$ finite. Its homogeneous identity-closure state is
+    nonzero on every torus with positive periods. In particular, the fine
+    state on a $2w\times2h$ torus is nonzero. If $w,h\geq3$, the actual
+    coarse graph state obtained by placing the same original tensor $a$
+    at every coarse vertex is also nonzero. Neither conclusion requires
+    surjectivity onto the ambient physical space.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindex the four regular labels as an ordered quadruple. The coordinate
+    bijection intertwines simultaneous translation, so it preserves
+    $G$-isometry. The closure-sector nonvanishing theorem applies to this
+    same tensor with identity closures. Its squared norm is positive because
+    the common centralizer contains the identity. Identity closures put
+    the identity matrix on every seam, giving the asserted native bond
+    contraction. For $w,h\geq3$, its coefficient equals the incident-graph
+    contraction coefficient under the four-leg enumeration.
+\end{proof}

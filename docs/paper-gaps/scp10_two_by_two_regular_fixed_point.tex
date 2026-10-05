@@ -1,0 +1,103 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Two-by-two regular PEPS renormalization with the original tensor}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and exact result}
+The source is Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807}{arXiv:1001.3807},
+Observations 6.5--6.6, local source lines 1818--1915 and the three diagrams
+\path{figs4/renorm-gg-sym.pdf},
+\path{figs4/renorm-g-id-and-split.pdf}, and
+\path{figs4/renorm-fixedpoint.pdf}.
+
+Let $G$ be any finite group, not necessarily abelian, and let $A$ be a
+four-leg regular G-isometric tensor with any finite physical alphabet $P$.
+On an untwisted doubled torus with coarse periods $w,h\geq3$, let $\Psi_f$
+be the actual fine state and $\Psi_c$ the actual coarse state defined by
+the same original tensor $A$. Both states are proved nonzero. There is an
+isometry on the derived fine physical support, given by physical four-site
+grouping, a product of local physical maps, and regrouping of output
+registers, such that
+\begin{align}
+    I\Psi_f & =R\,\Psi_c\otimes\Omega,                 \\
+    I\left(\frac{\Psi_f}{\|\Psi_f\|}\right)
+            & =\frac{\Psi_c}{\|\Psi_c\|}\otimes\Omega,
+    \qquad \|\Omega\|=1.
+\end{align}
+The exact positive scalar is
+\begin{align}
+    R=\left(\prod_{v\in\mathbb Z_w\times\mathbb Z_h}
+    \frac{\sqrt{c_{B,v}}}{\sqrt{c_{C,v}}}\right)
+    (\sqrt{|G|})^{|E(\Gamma)|}.
+\end{align}
+Here $c_{B,v}>0$ is the actual blocked tensor's isometry factor and
+$c_{C,v}>0$ is the isometry factor of the original coarse tensor with its
+surplus identity registers. All factors are derived from the local
+G-isometry assumptions. The four-site Gram calculation separately gives
+$c_{B,v}=|G|\prod_{i=0}^3c_{v,i}$ for the fine-site factors used in that
+calculation; the group-order factor records the internal cycle.
+
+\section{Geometric and physical content}
+The fine torus is bijectively tiled by four-site blocks. An explicit
+bijection identifies every fine horizontal and vertical bond with four
+internal bonds and four paired crossing bonds per block. The eight separate
+boundary labels are retained as the two labels on each coarse leg.
+This derives the global fine-to-coarse contraction identity, without a
+supplied factorization, Gram matrix, support condition, or nonzero-state
+hypothesis.
+
+The target is not merely a canonical tensor. Its local coefficient is the
+original tensor on the reference labels times the equality indicator for
+all relative surplus labels. Its G-isometry follows from the original
+local Gram identity, and its graph contraction factors by an explicit
+edge-label bijection. Thus the original-tensor comparison is a derived
+physical operation. A separate theorem also gives an isometric equivalence
+between the original tensor's full physical support and the canonical
+averaging tensor's physical support.
+
+All four original physical registers of each block are retained. The
+physical maps act on the actual product of block ranges, pulled back to
+the fine physical space by the full grouping unitary. The actual fine
+state is proved to lie in this support. Unused ambient physical directions
+are permitted, and neither ambient surjectivity nor an unspecified
+extension to a unitary on those unused directions is assumed.
+
+\section{Exact remaining scope}
+The geometric bond-indexed reblocking is proved for every pair of positive
+coarse periods, including one and two. The global Bell separation and
+original-tensor normalized comparison use a simple coarse graph, so they
+require both coarse periods at least three. Extending that physical
+support argument to a bond-indexed graph with parallel bonds and loops is
+still required for the smaller periods; no simple-graph theorem is applied
+to them here.
+
+Every bond is the identity. Inserted closure operators and twisted sectors
+are outside this packet. The common physical alphabet may be arbitrary,
+and fine tensors may vary in the geometric and canonical-coarse results.
+The normalized same-original-tensor statement assumes one homogeneous
+four-leg tensor, as in the source's fixed-point assertion. No claim about
+non-regular representations, approximate schemes, or unrestricted boundary
+conditions is made. These limits keep the unrestricted source claim
+separate from this proved periodic specialization.
+
+\section{Declarations}
+The exact geometric identity is
+\leanid{TNLean.PEPS.torusBondNetwork_eq_twoByTwoBlocked}.
+The derived four-site isometry is
+\leanid{TNLean.PEPS.isGIsometric_twoByTwoSeparatedTensor}.
+The canonical-coarse global support isometry is
+\leanid{TNLean.PEPS.exists_regularTwoByTwoPhysicalSupportIsometry}.
+The final original-tensor, scalar-correct and normalized statement is
+\leanid{TNLean.PEPS.exists_regularTwoByTwoOriginalTensorIsometry}.
+Nonvanishing is derived by the original identity closure sector, and the
+factorization of the augmented original tensor is
+\leanid{TNLean.PEPS.graphBondNetwork_regularGraphSurplusSite}.
+\end{document}

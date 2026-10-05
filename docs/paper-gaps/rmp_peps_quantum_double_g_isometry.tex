@@ -1102,6 +1102,26 @@ CNOT disentangler. Odd fine periods are outside this tiling. The arbitrary
 regular-$G$ physical reduction to the same coarse tensor and neighboring
 maximally entangled pairs in Observations~6.5--6.6 remains a separate claim.
 
+\section{Observables of arbitrary parent ground vectors}
+Within the uniform regular native-torus setting with both periods at least
+three, the full positive parent kernel now supplies the finite commuting
+closure coefficients for every ground vector. The direct kernel statements
+therefore give common reduced density, boundary rank, flat spectrum,
+von Neumann entropy and all finite real-order R\'enyi entropies with
+$\alpha\geq0$ for each nonzero ground vector on connected regions whose
+closed-cell realization is simply connected. They also give equal local
+expectations and complementary unitaries, including the two width-one
+stripes. Regular G-injective tensors retain the rank and zero-order entropy
+conclusions only; flatness is not transported through arbitrary inverses.
+The relevant declarations include
+\leanid{TNLean.PEPS.IsGInjective.exists_torusGClosure_sum_of_mem_parentKernel},
+\leanid{TNLean.PEPS.IsGIsometric.exists_torusParentKernel_common_density_of_isSimplyConnected},
+and
+\leanid{TNLean.PEPS.IsGInjective.torusParentKernel_rank_zeroEntropy_of_isSimplyConnected}.
+These are corollaries of the full regular parent classification and existing
+cut results. They do not enlarge the region, period, tensor or entropy-order
+hypotheses.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all
