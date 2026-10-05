@@ -116,7 +116,10 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
     ).read_text(encoding="utf-8")
     action_bodies = _tenkzequation_bodies(action_source)
     assert len(action_bodies) == 1, len(action_bodies)
-    assert r"\let\tenkzeq\relax" in action_bodies[0]
+    assert r"\ifdefined\ifplastex" in action_bodies[0]
+    assert r"\def\tenkzeq{}" in action_bodies[0]
+    for fallback in (r"\newif", r"\plastexfalse", r"\relax"):
+        assert fallback not in action_bodies[0], fallback
     assert action_bodies[0].count(r"\begin{tenkz}") == 2
     for anchor in (
         r"{V^{i}}", r"{V^{j}}", r"{V^{k}}", r"{W^{\mu}}",
