@@ -87,6 +87,7 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_quantum_double_local_terms.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -174,6 +175,7 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_quantum_double_local_terms.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -278,6 +280,7 @@ jobs:
               - 'scripts/test_tenkz_peps_three_block.py'
               - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
+              - 'scripts/test_tenkz_quantum_double_local_terms.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
               - 'scripts/check_peps_four_cut_blueprint.py'
@@ -434,6 +437,17 @@ jobs:
         run: |
           set -e
           for example in DependentPhysicalProductRangeSupport PEPS/DependentBondCut PEPS/DependentBondProjectors PEPS/DependentCutBondSupport PEPS/DependentTorusClosure PEPS/FourTorusCut PEPS/FourTorusCutClosure PEPS/MatchedTorusProjectors PEPS/TorusBondClosureSeamMovement PhysicalProductFamilyRangeSupport RegularGraphBondBlocking RegularGraphPhysicalBlocking TorusBondFlatConnection ThreeBlockBoundaryOrientation ThreeBlockDependentCutIntersection ThreeBlockGInjectiveIntersection ThreeBlockNonabelianIntersection TorusTwoByTwoBlocking TwoByTwoTensorIsometry TorusParentGroundStateObservables PEPS/DependentTorusClosureDimension NonabelianParentSeamCuts NonuniformParentSeamCuts RegularTwoByTwoTwistedTensor NonuniformNativeParentClassification PEPS/NativeTorusClosureDimension; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
+      - name: Test PEPS dual flux paths and quantum-double local terms
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -805,6 +819,10 @@ jobs:
       - name: Smoke-test tenkz picture pipeline
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
+
+      - name: Test quantum-double local-term diagrams and nonabelian formulas
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_quantum_double_local_terms.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'
