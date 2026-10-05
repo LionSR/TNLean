@@ -11,6 +11,8 @@ SOURCE = ROOT / "blueprint/src/chapter/ch32_log_depth_sector_encoders.tex"
 class SectorEncoderDiagramTests(unittest.TestCase):
     def setUp(self):
         self.source = SOURCE.read_text()
+        self.assertIn(r"\begin{tenkzequation}", self.source)
+        self.assertIn(r"\end{tenkzequation}", self.source)
         self.diagram = self.source.split(r"\begin{tenkzequation}", 1)[1].split(
             r"\end{tenkzequation}", 1
         )[0]
@@ -43,6 +45,8 @@ class SectorEncoderDiagramTests(unittest.TestCase):
 class ExactSectorEncoderDiagramTests(unittest.TestCase):
     def setUp(self):
         self.source = (ROOT / "blueprint/src/chapter/ch32_log_depth_exact_sector_encoder.tex").read_text()
+        self.assertIn(r"\begin{tenkzequation}", self.source)
+        self.assertIn(r"\end{tenkzequation}", self.source)
         self.diagram = self.source.split(r"\begin{tenkzequation}", 1)[1].split(
             r"\end{tenkzequation}", 1
         )[0]

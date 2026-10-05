@@ -26,7 +26,7 @@ accuracy scale exceeds the ring, the exact fixed-width whole-encoder constructio
 -/
 
 open Matrix MPSTensor QuantumCircuit
-open scoped BigOperators InnerProductSpace Kronecker Matrix.Norms.L2Operator
+open scoped BigOperators ComplexOrder InnerProductSpace Kronecker Matrix.Norms.L2Operator
 
 namespace MPSPreparation
 

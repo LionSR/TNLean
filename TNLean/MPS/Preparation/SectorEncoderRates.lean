@@ -21,7 +21,7 @@ or an external reference.
 -/
 
 open Matrix QuantumCircuit
-open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
+open scoped BigOperators ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
@@ -58,7 +58,7 @@ theorem exists_norm_gram_sectorColumnMatrix_sub_one_le
         ← RCLike.ofReal_sub, RCLike.norm_ofReal]
       exact h N
     · obtain ⟨K, hK, h⟩ := exists_norm_mpvOverlap_le_of_mixedMapLM (A j) (A i) hl
-        (hmix j i hij.symm) hγ0 hγ
+        (hmix j i (Ne.symm hij)) hγ0 hγ
       refine ⟨K, hK, fun N => ?_⟩
       simpa [Matrix.sub_apply, Matrix.one_apply, hij, gram_sectorColumnMatrix_apply,
         mpvOverlap, PiLp.inner_apply, RCLike.inner_apply, mpvState_apply, mul_comm] using h N
