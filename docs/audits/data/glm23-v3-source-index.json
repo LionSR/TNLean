@@ -1,0 +1,6195 @@
+{
+  "source": "arXiv:2203.12563v3",
+  "file": "Papers/2203.12563/REsubmission.tex",
+  "sha256": "c820b20187584d441c1a40ef80fdccbc8a2aad819ac6673464c6b913c28fa58c",
+  "snapshot": "f3d3bade1f56b87f88fc8a87314bf451591483b7",
+  "audit_date": "2026-10-05",
+  "rows": [
+    {
+      "id": "B01",
+      "source_lines": [
+        304,
+        315
+      ],
+      "kind": "definitions",
+      "claim": "MPS tensor, arbitrary and periodic boundaries, and S_A^n",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+          "declaration": "MPSTensor.groundSpaceMap",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+          "declaration": "MPSTensor.groundSpace",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Defs.lean",
+          "declaration": "MPSTensor.mpv",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "The source trace tr(X A^w) equals groundSpaceMap via trace cyclicity. Do not duplicate these definitions.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "MPSssubs"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+          "line": 19,
+          "labels": [
+            "def:ground_space_map"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+          "line": 215,
+          "labels": [
+            "def:ground_space_parent"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch02_mps.tex",
+          "line": 133,
+          "labels": [
+            "def:mpv",
+            "eq:mps_mpv_state",
+            "eq:mps_mpv_component"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "B02",
+      "source_lines": [
+        312,
+        317
+      ],
+      "kind": "background claims",
+      "claim": "Boundary dimension, block-injective normal form, finite blocking and asymptotic block separation",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+          "declaration": "MPSTensor.groundSpace",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/BNT/Basic.lean",
+          "declaration": "MPSTensor.IsBNT",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Shared foundational background; the exact packaged implication from the paper’s direct-sum standing assumptions to all hypotheses used here must be stated. “Any MPS becomes injective after blocking” is not literal without periodic/block qualifications; use existing canonical/periodic APIs. This is not GLM23-specific coverage credit.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "MPSssubs"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+          "line": 215,
+          "labels": [
+            "def:ground_space_parent"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch10_bnt_definitions_and_characterization.tex",
+          "line": 3,
+          "labels": [
+            "def:bnt"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "B03",
+      "source_lines": [
+        319,
+        319
+      ],
+      "kind": "background theorem and example",
+      "claim": "Gapped frustration-free parent; PBC block-count and OBC sum-of-squared-bonds degeneracy; GHZ spin-flip example",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/ParentHamiltonian/Defs.lean",
+          "declaration": "MPSTensor.parentInteraction",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+          "declaration": "MPSTensor.groundSpace",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        190
+      ],
+      "boundary": "Reuse parent-Hamiltonian and GHZ developments; source shorthand suppresses sufficient chain/block lengths. No blanket GLM23 theorem established by these references.",
+      "leaf": "PH1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+          "line": 3188,
+          "labels": [
+            "def:parent_interaction"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+          "line": 215,
+          "labels": [
+            "def:ground_space_parent"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 190,
+          "title": "shared dependency; see GitHub",
+          "state": "not verified in this inventory",
+          "url": "https://github.com/LionSR/TNLean/issues/190"
+        }
+      ]
+    },
+    {
+      "id": "B04",
+      "source_lines": [
+        321,
+        323
+      ],
+      "kind": "definition",
+      "claim": "MPO with arbitrary boundary and distinct injective blocks",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPDO/Boundary.lean",
+          "declaration": "MPOTensor.mpoWithBoundary",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/Boundary.lean",
+          "declaration": "MPOTensor.mpoWithBoundary_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Definition permits all boundaries even though Boundary.lean also studies commuting boundaries.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch20_mpdo_symmetry.tex",
+          "line": 10,
+          "labels": [
+            "def:mpdo_commuting_boundary",
+            "eq:mpdo_boundary_operator"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "A01",
+      "source_lines": [
+        325,
+        358
+      ],
+      "kind": "definition",
+      "claim": "Length-independent arbitrary-boundary closedness: for X,Y there is one Z working for every n (algcond)",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        7968
+      ],
+      "boundary": "Keep quantifier order ∀X,Y ∃Z ∀n; pointwise closure with Z depending on n is strictly weaker. Periodic IsMPOFusionAlgebra is not this definition.",
+      "leaf": "AB1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "algcond"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "source_lines": [
+        361,
+        381
+      ],
+      "kind": "existence theorem",
+      "claim": "Closedness produces exact fusion tensors, natural-number multiplicities and letterwise reconstruction (fusiontensors)",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+          "declaration": "MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionOfCompression.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.ofCompression",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "Merged periodic compression has nilpotent remainder. Exact reconstruction requires proving remainder=0 from source closedness; supplied zero remainder or star closure is insufficient.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "fusiontensors"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 247,
+          "labels": [
+            "cor:asym_fusion_action_multiplicity"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex",
+          "line": 182,
+          "labels": [
+            "thm:mpdo_complete_zipper_of_compression"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "A03",
+      "source_lines": [
+        361,
+        391
+      ],
+      "kind": "orthogonality theorem",
+      "claim": "Fusion tensors are biorthogonal; multiplicities count independent channels (eq:orthoW)",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+          "declaration": "MPSTensor.exists_multiplicityReductions_of_isNormal",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionDefs.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "Biorthogonality of periodic reductions is merged; the source’s exact construction from arbitrary boundaries is missing.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "fusiontensors",
+        "eq:orthoW"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 221,
+          "labels": [
+            "thm:asym_multiplicity_reductions"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex",
+          "line": 1,
+          "labels": [
+            "def:mpdo_complete_zipper_fusion_family",
+            "eq:rfp_fusion_biorthogonality",
+            "eq:rfp_fusion_reconstruction",
+            "eq:rfp_zipper_synthesis",
+            "eq:rfp_zipper_analysis"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "A04",
+      "source_lines": [
+        361,
+        361
+      ],
+      "kind": "consequence",
+      "claim": "Periodic operators obey O_a O_b = sum_c N_ab^c O_c",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean",
+          "declaration": "MPOTensor.IsMPOFusionAlgebra",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean",
+          "declaration": "MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "The periodic predicate and compression⇒periodic theorem exist; source closedness⇒the canonical integer coefficients remains dependent on AB2.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 293,
+          "labels": [
+            "def:mpo_fusion_algebra",
+            "eq:mpo_fusion_algebra"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 188,
+          "labels": [
+            "cor:asym_compression_periodic"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "F01",
+      "source_lines": [
+        392,
+        409
+      ],
+      "kind": "definition and existence",
+      "claim": "Associativity gives invertible multiplicity F change-of-basis (Fsymbolsdef)",
+      "status": [
+        "conditional"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusion.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.printedFMatrix",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusion.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.rightTripleSynthesis_mul_printedFMatrix",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionInverse.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mul_inversePrintedFMatrix",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "Complete-zipper hypotheses and simultaneous left inverse are supplied. This is valid reusable conditional F theory, not closedness⇒F. Orientation is source-specific: printed F and its inverse must not be conflated.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "Fsymbolsdef"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex",
+          "line": 347,
+          "labels": [
+            "thm:mpdo_complete_zipper_printed_fmove",
+            "eq:rfp_printed_fmove"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "source_lines": [
+        410,
+        414
+      ],
+      "kind": "theorem",
+      "claim": "Multiplicity F pentagon (pentagon0F)",
+      "status": [
+        "conditional"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "Merged pentagon for complete zipper families; source-faithful constructor missing.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "pentagon0F"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex",
+          "line": 634,
+          "labels": [
+            "thm:mpdo_complete_zipper_fusion_pentagon",
+            "eq:rfp_fusion_pentagon"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "source_lines": [
+        416,
+        424
+      ],
+      "kind": "gauge theorem and equivalence",
+      "claim": "Fusion GL-multiplicity gauge, F covariance, quotient by gauge",
+      "status": [
+        "conditional"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.regauge_fusionTensor",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean",
+          "declaration": "MPOTensor.exists_unique_zipperFusionGauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968,
+        8088
+      ],
+      "boundary": "Row convention repaired in audit 2026-09-29; raw periodic multi-target compression does not have this uniqueness. An equivalence class object/classification still needs the multiplicity-symbol layer.",
+      "leaf": "FL1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex",
+          "line": 447,
+          "labels": [
+            "thm:mpdo_complete_zipper_fmatrix_gauge",
+            "eq:rfp_fmatrix_gauge"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_splitting.tex",
+          "line": 273,
+          "labels": [
+            "cor:asym_zipper_fusion_uniqueness"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        },
+        {
+          "number": 8088,
+          "title": "Verify Y^c_{ab} row/column convention in regauge_fusionTensor against arXiv:1511.08090 lines 164-166",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8088"
+        }
+      ]
+    },
+    {
+      "id": "F04",
+      "source_lines": [
+        426,
+        426
+      ],
+      "kind": "scope claim",
+      "claim": "Finite injective blocks plus closedness suffice for F pentagon, without unit, duality or pivotal assumptions",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        7968
+      ],
+      "boundary": "Do not replace the paper’s §2–3 theorem by a fusion-category/WHA or star-closed specialization.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "A05",
+      "source_lines": [
+        431,
+        458
+      ],
+      "kind": "definition",
+      "claim": "Arbitrary-boundary MPO-symmetric MPS, one output boundary independent of n (eq:compatible)",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean",
+          "declaration": "MPOTensor.IsMPOSymmetricFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/ParentHamiltonian/GroundSpace.lean",
+          "declaration": "MPSTensor.groundSpaceMap",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "IsMPOSymmetricFamily is only the periodic consequence. Use ∀B,X ∃Y ∀n, not merely finite-length subspace invariance.",
+      "leaf": "AB1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "eq:compatible"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 595,
+          "labels": [
+            "def:mpo_symmetric_family",
+            "eq:mpo_symmetric_family"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+          "line": 19,
+          "labels": [
+            "def:ground_space_map"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "A06",
+      "source_lines": [
+        459,
+        480
+      ],
+      "kind": "existence theorem",
+      "claim": "Arbitrary-boundary invariance produces exact multiplicity action tensors (fusiontensors2)",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+          "declaration": "MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/ActionTensor.lean",
+          "declaration": "MPOTensor.actTensor",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/ActionTensorReduction.lean",
+          "declaration": "MPSTensor.IsReduction.actTensor_idKron",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968,
+        8045
+      ],
+      "boundary": "Merged periodic reductions do not eliminate their remainder or construct the exact action decomposition.",
+      "leaf": "AB3",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "fusiontensors2"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 247,
+          "labels": [
+            "cor:asym_fusion_action_multiplicity"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4608,
+          "labels": [
+            "def:mpug_action_tensor",
+            "eq:mpug_action_tensor"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4684,
+          "labels": [
+            "thm:mpug_action_tensor_reductions"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "A07",
+      "source_lines": [
+        481,
+        490
+      ],
+      "kind": "orthogonality theorem",
+      "claim": "Biorthogonal action tensors (eq:orthoV)",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean",
+          "declaration": "MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean",
+          "declaration": "MPOTensor.exists_unique_zipperActionGauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "Same distinction between periodic reduction and source exact action.",
+      "leaf": "AB3",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "eq:orthoV"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 247,
+          "labels": [
+            "cor:asym_fusion_action_multiplicity"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_splitting.tex",
+          "line": 297,
+          "labels": [
+            "cor:asym_zipper_action_uniqueness"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "L01",
+      "source_lines": [
+        491,
+        550
+      ],
+      "kind": "definition and existence",
+      "claim": "Two action trees, invertible multiplicity L-symbol comparison, and contraction formula (rawrels, eq:F_symbol2, 1Fsymbol)",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPDO/ActionTensorReduction.lean",
+          "declaration": "MPOTensor.actTensor_mulTensor",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8045
+      ],
+      "boundary": "Scalar group L-symbols are not an implementation of multiplicity L-symbols. The word “non-zero constants” must mean invertible change of basis, not every matrix entry nonzero.",
+      "leaf": "FL1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "rawrels",
+        "eq:F_symbol2",
+        "1Fsymbol"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4684,
+          "labels": [
+            "thm:mpug_action_tensor_reductions"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "L02",
+      "source_lines": [
+        552,
+        562
+      ],
+      "kind": "theorem",
+      "claim": "Full coupled pentagon with all channel indices (coupledpent)",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8045
+      ],
+      "boundary": "Do not assume a coupled-pentagon field and label it derived from tensors.",
+      "leaf": "FL2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "coupledpent"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "L03",
+      "source_lines": [
+        564,
+        565
+      ],
+      "kind": "theorem",
+      "claim": "NIM-rep associativity identity for M and N",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean",
+          "declaration": "MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean",
+          "declaration": "MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Proved from weaker periodic data plus normal blocks and a faithful block-independence hypothesis. Source arbitrary-boundary bridge still A05/A06.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 828,
+          "labels": [
+            "thm:mpo_symmetric_nimrep"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "L04",
+      "source_lines": [
+        567,
+        591
+      ],
+      "kind": "consequence",
+      "claim": "Periodic action O_a ψ_x = sum_y M_ax^y ψ_y",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean",
+          "declaration": "MPOTensor.IsMPOSymmetricFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean",
+          "declaration": "MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968
+      ],
+      "boundary": "Existing predicate alone does not derive this from arbitrary-boundary symmetry.",
+      "leaf": "AB3",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 595,
+          "labels": [
+            "def:mpo_symmetric_family",
+            "eq:mpo_symmetric_family"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 188,
+          "labels": [
+            "cor:asym_compression_periodic"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "L05",
+      "source_lines": [
+        593,
+        602
+      ],
+      "kind": "gauge and classification definition",
+      "claim": "Action GL-multiplicity gauges and joint F/L covariance; quotient of coupled-pentagon solutions",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean",
+          "declaration": "MPOTensor.exists_unique_zipperActionGauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8045
+      ],
+      "boundary": "Uniqueness for supplied exact zipper decompositions exists; full L covariance/equivalence construction missing.",
+      "leaf": "FL2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_splitting.tex",
+          "line": 297,
+          "labels": [
+            "cor:asym_zipper_action_uniqueness"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "L06",
+      "source_lines": [
+        604,
+        604
+      ],
+      "kind": "existence example",
+      "claim": "Regular module M=N with L=F, as many state as operator blocks; maximal degeneracy claim",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8045,
+        8053
+      ],
+      "boundary": "Needs actual action/module data and coherent L, not only NIMRep N N. “Maximally degenerate” needs indecomposable scope; arbitrary direct sums are not excluded by bare NIM-rep axioms.",
+      "leaf": "FL3",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        },
+        {
+          "number": 8053,
+          "title": "MPO-symmetry examples: the Fibonacci regular module is the only realization and its L-symbol equals F",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8053"
+        }
+      ]
+    },
+    {
+      "id": "O01",
+      "source_lines": [
+        607,
+        634
+      ],
+      "kind": "no-go theorem",
+      "claim": "Single injective block with every action multiplicity one forces F gauge-trivial via λ",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean",
+          "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Character.lean",
+          "declaration": "MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968,
+        8045
+      ],
+      "boundary": "Group scalar cohomological case merged; fusion-ring obstruction is different; general multiplicity F obstruction not yet implemented. Retain M_ax^x=1.",
+      "leaf": "FL3",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "nonuniqueGS"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4948,
+          "labels": [
+            "thm:mpug_anomaly_obstruction"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 879,
+          "labels": [
+            "cor:mpo_symmetric_no_go"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "O02",
+      "source_lines": [
+        636,
+        636
+      ],
+      "kind": "physical consequence",
+      "claim": "Nontrivial MPO algebra excludes unique gapped MPS ground state without action multiplicity",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean",
+          "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968,
+        8050
+      ],
+      "boundary": "Needs general O01 and faithful bridge between ground-space degeneracy, normal blocks, and symmetry.",
+      "leaf": "PH7",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4948,
+          "labels": [
+            "thm:mpug_anomaly_obstruction"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        },
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "G01",
+      "source_lines": [
+        638,
+        660
+      ],
+      "kind": "specialization and consequence",
+      "claim": "Group labels, exact group fusion, projector identity O_e and representation on its range",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/GroupFusion.lean",
+          "declaration": "MPOTensor.GroupFamily.isMPOFusionAlgebra",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+          "declaration": "MPOTensor.GroupFamily.FusionData.IsClosed",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7968,
+        8054
+      ],
+      "boundary": "General operator multiplicativity is present; arbitrary-boundary projector representation and exact source construction remain separate. Do not force O_e=identity outside §4.4.",
+      "leaf": "GX1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "groupcase",
+        "fusiontensorG"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 188,
+          "labels": [
+            "thm:mpug_group_fusion_rules",
+            "eq:mpug_group_fusion_rules"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 195,
+          "labels": [
+            "thm:mposym_closed_fusion_onsite"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        },
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "G02",
+      "source_lines": [
+        662,
+        681
+      ],
+      "kind": "definition and theorem",
+      "claim": "Group F=ω, three-cocycle condition, coboundary gauge and H³ class",
+      "status": [
+        "merged",
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+          "declaration": "MPOTensor.GroupFamily.FusionData.omega",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+          "declaration": "MPOTensor.GroupFamily.FusionData.isCocycle_omega",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+          "declaration": "MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/AssociatorCohomology.lean",
+          "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleGroupCohomology.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.anomalyClass",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Construction uses boundary-dressed comparison valid for normal periodic representations; source exact case needs the AB bridge. Mathlib cohomology comparison already exists; #8319 tracks migration, not absence.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "3cocygroup"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4357,
+          "labels": [
+            "def:mpug_anomaly_three_cochain"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4492,
+          "labels": [
+            "thm:mpug_anomaly_three_cocycle",
+            "eq:mpug_anomaly_three_cocycle"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4542,
+          "labels": [
+            "thm:mpug_anomaly_three_cocycle_gauge"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4574,
+          "labels": [
+            "def:mpug_anomaly_class"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 7499,
+          "labels": [
+            "def:mpug_h3_group_cohomology",
+            "eq:mpug_h3_class"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "G03",
+      "source_lines": [
+        683,
+        702
+      ],
+      "kind": "theorem and definition",
+      "claim": "Nonnegative integer group action with identity is a permutation action on blocks",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Character.lean",
+          "declaration": "MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean",
+          "declaration": "MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Group action law/coherence must be retained when assembling chosen label permutations, not just existence of independent equivalences.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "MPOsymG"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 898,
+          "labels": [
+            "thm:mpo_invertible_labels"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 828,
+          "labels": [
+            "thm:mpo_symmetric_nimrep"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "G04",
+      "source_lines": [
+        703,
+        719
+      ],
+      "kind": "definition and theorem",
+      "claim": "Scalar L from action/fusion tensors and pentagongroups compatibility",
+      "status": [
+        "merged",
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+          "declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+          "declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/LSymbol.lean",
+          "declaration": "TNLean.Algebra.LSymbol.IsCompatible",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Merged scalar construction is boundary-dressed. Full exact GLM23 symbols require AB3; multiplicity generalization remains L01/L02.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "F1group",
+        "pentagongroups"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4986,
+          "labels": [
+            "def:mpug_permuted_block_l_symbol"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 5039,
+          "labels": [
+            "thm:mpug_permuted_block_l_compatibility"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 7790,
+          "labels": [
+            "def:mpug_l_symbols",
+            "eq:mpug_l_compatibility"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "G05",
+      "source_lines": [
+        720,
+        726
+      ],
+      "kind": "gauge theorem",
+      "claim": "Reciprocal scalar action/fusion gauges induce gdgroup",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/LSymbol.lean",
+          "declaration": "TNLean.Algebra.LSymbol.gauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/LSymbol.lean",
+          "declaration": "TNLean.Algebra.LSymbol.IsCompatible.gauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+          "declaration": "MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7331
+      ],
+      "boundary": "Scalar gauge algebra and tensor-derived ω gauge are merged. Tensor-derived L gauge law/exhaustiveness for arbitrary choices is not supplied by scalar compatibility; coordinate with owner of #7331. Library convention is reciprocal to GLM23.",
+      "leaf": "PB3",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "gdgroup"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 7812,
+          "labels": [
+            "def:mpug_l_gauge",
+            "eq:mpug_l_gauge"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 7922,
+          "labels": [
+            "thm:mpug_l_gauge_preservation",
+            "eq:mpug_l_gauge_right",
+            "eq:mpug_l_gauge_left"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4542,
+          "labels": [
+            "thm:mpug_anomaly_three_cocycle_gauge"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7331,
+          "title": "Derive boundary-dressed tensor-level L-symbols from MPU fusion and action tensors",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7331"
+        }
+      ]
+    },
+    {
+      "id": "G06",
+      "source_lines": [
+        728,
+        728
+      ],
+      "kind": "normalization theorem",
+      "claim": "Normalize all identity-component L symbols by action gauge",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/LSymbol.lean",
+          "declaration": "TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/LSymbol.lean",
+          "declaration": "TNLean.Algebra.LSymbol.IsCompatible.apply_right_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/LSymbol.lean",
+          "declaration": "TNLean.Algebra.LSymbol.IsCompatible.apply_left_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Normalized anomaly hypothesis is explicit where needed, with scalar normalization API available.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1257,
+          "labels": [
+            "thm:asymex_l_symbol_normalization"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8677,
+          "labels": [
+            "thm:mpug_block_factorization",
+            "eq:mpug_block_factor",
+            "eq:mpug_corrected_block_factorization"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8718,
+          "labels": [
+            "thm:mpug_relative_block_character",
+            "eq:mpug_relative_block_character",
+            "eq:mpug_relative_block_transport",
+            "eq:mpug_relative_block_multiplicative"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "G07",
+      "source_lines": [
+        734,
+        738
+      ],
+      "kind": "classification and degeneracy",
+      "claim": "Transitive action, stabilizer H, orbit G/H, basepoint conjugacy, anomaly-protected lower degeneracy",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleCyclicInvariant.lean",
+          "declaration": "TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7332
+      ],
+      "boundary": "Fixed transitive G-set scalar classification exists. Assemble classification across actions/subgroup conjugacy, exact degeneracy and robustness argument; do not assume H normal. Use Mathlib orbitEquivQuotientStabilizer.",
+      "leaf": "GC1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9207,
+          "labels": [
+            "thm:mpug_stabilizer_torsor"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8154,
+          "labels": [
+            "thm:mpug_fixed_block_trivializes"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7332,
+          "title": "Classify finite-group MPU-symmetric phases by stabilizer data (H, ψ)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7332"
+        }
+      ]
+    },
+    {
+      "id": "G08",
+      "source_lines": [
+        740,
+        749
+      ],
+      "kind": "theorem",
+      "claim": "Restriction to stabilizer trivializes ω; after fusion gauge ψ=L/β is a 2-cocycle modulo action gauge",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleCyclicInvariant.lean",
+          "declaration": "TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.LSymbol.IsCompatible.isCocycle_restrict",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Already merged; source statement concerns stabilizer of one block, not kernel of the full action.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8154,
+          "labels": [
+            "thm:mpug_fixed_block_trivializes"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9207,
+          "labels": [
+            "thm:mpug_stabilizer_torsor"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9138,
+          "labels": [
+            "thm:mpug_stabilizer_reconstruction",
+            "eq:mpug_stabilizer_reconstruction"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "G09",
+      "source_lines": [
+        752,
+        759
+      ],
+      "kind": "reconstruction theorem",
+      "claim": "Coset transition elements and Eq. (20) Lexpre reconstruct all L entries",
+      "status": [
+        "corrected-source"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_isCompatible",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_gauge_eq_reconstructedLSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8046
+      ],
+      "boundary": "Merged correction glm23_eq20_fusion_gauge: printed formula first in a fusion gauge trivial on H, then transport back. Merely ω|H=dβ is insufficient for the uncorrected formula.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "Lexpre"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9138,
+          "labels": [
+            "thm:mpug_stabilizer_reconstruction",
+            "eq:mpug_stabilizer_reconstruction"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9207,
+          "labels": [
+            "thm:mpug_stabilizer_torsor"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8046,
+          "title": "Group MPO symmetries: the reconstruction formula for arbitrary three-cocycles and the H² torsor of solutions",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8046"
+        }
+      ]
+    },
+    {
+      "id": "G10",
+      "source_lines": [
+        761,
+        761
+      ],
+      "kind": "torsor theorem",
+      "claim": "For fixed fusion gauge, action-gauge solution classes form an H²(H,C×) torsor",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.solutionSetoid",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.solutionAddAction",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.existsUnique_vadd_eq",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8046
+      ],
+      "boundary": "Fixed fusion gauge matters: quotienting also by all fusion cocycles changes the classification. Uses Mathlib H², not just a raw cocycle set.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9207,
+          "labels": [
+            "thm:mpug_stabilizer_torsor"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8046,
+          "title": "Group MPO symmetries: the reconstruction formula for arbitrary three-cocycles and the H² torsor of solutions",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8046"
+        }
+      ]
+    },
+    {
+      "id": "G11",
+      "source_lines": [
+        763,
+        814
+      ],
+      "kind": "tensor decomposition theorem",
+      "claim": "gxdecomp: factor virtual action through coset representatives and internal stabilizer action; inverse action-tensor identity",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        7332
+      ],
+      "boundary": "Scalar transition/reconstruction is not a proof of the displayed tensor factorization. This is a separate leaf, reusable by induced-representation interpretation.",
+      "leaf": "GC2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "gxdecomp"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 7332,
+          "title": "Classify finite-group MPU-symmetric phases by stabilizer data (H, ψ)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7332"
+        }
+      ]
+    },
+    {
+      "id": "G12",
+      "source_lines": [
+        816,
+        836
+      ],
+      "kind": "definition and theorems",
+      "claim": "odot product, projective law intactens, ω-associativity nonasso, global linearity vs boundary associator",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+          "declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7332
+      ],
+      "boundary": "Dressed scalar compatibility supplies an ingredient, not the source’s defined tensor product and its laws. Stabilizer statement must use the stabilizer of the chosen block, not fixed H on arbitrary x.",
+      "leaf": "GC2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "defodot",
+        "intactens",
+        "nonasso"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 5039,
+          "labels": [
+            "thm:mpug_permuted_block_l_compatibility"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7332,
+          "title": "Classify finite-group MPU-symmetric phases by stabilizer data (H, ψ)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7332"
+        }
+      ]
+    },
+    {
+      "id": "G13",
+      "source_lines": [
+        840,
+        856
+      ],
+      "kind": "on-site specialization",
+      "claim": "On-site F trivial; virtual projective representation; singleton classes H²(G,U(1))",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleLSymbol.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/CocycleCoboundary.lean",
+          "declaration": "MPSTensor.cohomologousTo_of_isInjective",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7332
+      ],
+      "boundary": "Extensive on-site symmetry/SPT library exists, but exact GLM23 reduction theorem and coefficient comparison should be assembled instead of relabelling fixed-point-only results.",
+      "leaf": "GC1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "Lgroupdef",
+        "coupengroup"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8986,
+          "labels": [
+            "thm:mpug_stabilizer_cocycle_l_symbol",
+            "eq:mpug_induced_stabilizer_l_symbol",
+            "eq:mpug_induced_stabilizer_base",
+            "eq:mpug_induced_cohomology_iff",
+            "eq:mpug_stabilizer_cocycle_gauge",
+            "eq:mpug_induced_action_gauge"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch12_symmetry_virtual_and_cohomology.tex",
+          "line": 517,
+          "labels": [
+            "thm:cocycle_gauge_independence"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7332,
+          "title": "Classify finite-group MPU-symmetric phases by stabilizer data (H, ψ)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7332"
+        }
+      ]
+    },
+    {
+      "id": "G14",
+      "source_lines": [
+        858,
+        863
+      ],
+      "kind": "on-site multiblock theorem",
+      "claim": "Recover induced-representation classification for degenerate on-site ground spaces",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleLSymbol.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/StabilizerCocycleReconstruction.lean",
+          "declaration": "TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_inducedLSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7332,
+        7360
+      ],
+      "boundary": "Scalar fixed-action result is merged; tensor/physical induced representation and across-action classification remain separate.",
+      "leaf": "GC1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8986,
+          "labels": [
+            "thm:mpug_stabilizer_cocycle_l_symbol",
+            "eq:mpug_induced_stabilizer_l_symbol",
+            "eq:mpug_induced_stabilizer_base",
+            "eq:mpug_induced_cohomology_iff",
+            "eq:mpug_stabilizer_cocycle_gauge",
+            "eq:mpug_induced_action_gauge"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9207,
+          "labels": [
+            "thm:mpug_stabilizer_torsor"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7332,
+          "title": "Classify finite-group MPU-symmetric phases by stabilizer data (H, ψ)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7332"
+        },
+        {
+          "number": 7360,
+          "title": "Put nonanomalous L-symbols in stabilizer-cocycle form",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7360"
+        }
+      ]
+    },
+    {
+      "id": "T01",
+      "source_lines": [
+        865,
+        871
+      ],
+      "kind": "definitions and tensor theorem",
+      "claim": "Block-preserving antiunitary TRS, signs S_x conjugate(S_x)=±I; commuting MPO gives q_g",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8048
+      ],
+      "boundary": "Existing unrelated time-reversal/on-site APIs do not establish this tensor bridge for general MPOs. Preserve source assumption that TRS does not permute blocks.",
+      "leaf": "TR1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "sec:TRS"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8048,
+          "title": "Group MPO symmetries: time reversal makes the anomaly real and the L-symbol modulus a coboundary",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8048"
+        }
+      ]
+    },
+    {
+      "id": "T02",
+      "source_lines": [
+        872,
+        891
+      ],
+      "kind": "tensor-to-scalar theorem",
+      "claim": "TRS gives fusion β; anomaly cohomologous to a real cocycle",
+      "status": [
+        "conditional"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleTimeReversal.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_star_eq_self",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8048
+      ],
+      "boundary": "Scalar reality theorem is merged conditional on conjugate anomaly gauge relation. Derive β and this relation from q_g/antiunitary symmetry.",
+      "leaf": "TR1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8024,
+          "labels": [
+            "thm:mpug_time_reversal_real_anomaly"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8048,
+          "title": "Group MPO symmetries: time reversal makes the anomaly real and the L-symbol modulus a coboundary",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8048"
+        }
+      ]
+    },
+    {
+      "id": "T03",
+      "source_lines": [
+        894,
+        957
+      ],
+      "kind": "tensor-to-scalar theorem",
+      "claim": "TRS action comparison gives γ and TRSF1group",
+      "status": [
+        "corrected-source"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleTimeReversal.lean",
+          "declaration": "TNLean.Algebra.LSymbol.star_apply_eq_gauge_one_apply",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleTimeReversal.lean",
+          "declaration": "TNLean.Algebra.LSymbol.phase_sq_eq_of_gauge_eq_star",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8048
+      ],
+      "boundary": "Printed |L|² equation is false. Correct ratio conjugate(L)/L, equivalently squared phase gauge-trivial; scalar cancellation merged, tensor β/γ bridge missing. glm23_time_reversal_l_symbol.",
+      "leaf": "TR1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "TRSF1group"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 8105,
+          "labels": [
+            "thm:mpug_time_reversal_l_symbol_relation",
+            "eq:mpug_time_reversal_l_symbol"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8048,
+          "title": "Group MPO symmetries: time reversal makes the anomaly real and the L-symbol modulus a coboundary",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8048"
+        }
+      ]
+    },
+    {
+      "id": "T04",
+      "source_lines": [
+        959,
+        991
+      ],
+      "kind": "generalization",
+      "claim": "General non-group F real and multiplicity L squared gauge-trivial under TRS",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8048,
+        8045
+      ],
+      "boundary": "Do not infer from scalar joint-real theorem. Requires multiplicity TRS tensors and conjugation/gauge convention audit.",
+      "leaf": "TR2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8048,
+          "title": "Group MPO symmetries: time reversal makes the anomaly real and the L-symbol modulus a coboundary",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8048"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "P01",
+      "source_lines": [
+        994,
+        998
+      ],
+      "kind": "definition",
+      "claim": "Weaker PBC group representation with U_e=I and permuted normal/injective state blocks",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPU/GroupRepresentation.lean",
+          "declaration": "MPOTensor.GroupFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean",
+          "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+          "declaration": "MPOTensor.GroupFamily.CarriesMPV",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "IsNormalRepresentation permits projector unit; add the separate U_e=I equation when matching §4.4. IsRepresentation additionally carries MPU/simple assumptions and is not the only source-faithful entry point.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "sec:PBC"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 110,
+          "labels": [
+            "def:mpug_group_representation",
+            "eq:mpug_rep_identity",
+            "eq:mpug_rep_multiplication"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4357,
+          "labels": [
+            "def:mpug_anomaly_three_cochain"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4986,
+          "labels": [
+            "def:mpug_permuted_block_l_symbol"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "P02",
+      "source_lines": [
+        1001,
+        1026
+      ],
+      "kind": "existence theorem",
+      "claim": "PBC fusion reductions for every interior word, including n=0 orthogonality (fusiontensorG2)",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean",
+          "declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7330
+      ],
+      "boundary": "General normal representation route, not just unitary representations.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "fusiontensorG2"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 105,
+          "labels": [
+            "cor:asym_fusion_tensors_group"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7330,
+          "title": "Construct action tensors for a transitive MPU action on injective MPS blocks",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7330"
+        }
+      ]
+    },
+    {
+      "id": "P03",
+      "source_lines": [
+        1028,
+        1060
+      ],
+      "kind": "nilpotence and associator theorem",
+      "claim": "Nilpotent residual tails and anomaly comparison after long words",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Core/ReductionResidualComposition.lean",
+          "declaration": "MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+          "declaration": "MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_left",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean",
+          "declaration": "MPOTensor.GroupFamily.FusionData.isCocycle_omega",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "Residual nilpotence does not imply every off-diagonal letter vanishes after the naive blocking. Use proved dressed/exterior length bounds.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_algebras.tex",
+          "line": 451,
+          "labels": [
+            "thm:mpoalg_composite_reduction"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4492,
+          "labels": [
+            "thm:mpug_anomaly_three_cocycle",
+            "eq:mpug_anomaly_three_cocycle"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "P04",
+      "source_lines": [
+        1062,
+        1090
+      ],
+      "kind": "existence theorem",
+      "claim": "PBC action reduction (mpoMPSsten)",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean",
+          "declaration": "MPOTensor.exists_isReduction_actTensor_of_isNormal",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+          "declaration": "MPOTensor.GroupFamily.nonempty_blockActionData",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7330
+      ],
+      "boundary": "The target equality is source-faithful; operational common blocking and all exterior identities are separate coordination items.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "mpoMPSsten"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 134,
+          "labels": [
+            "cor:asym_action_tensors"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 5011,
+          "labels": [
+            "thm:mpug_permuted_block_l_symbol_spec"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7330,
+          "title": "Construct action tensors for a transitive MPU action on injective MPS blocks",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7330"
+        }
+      ]
+    },
+    {
+      "id": "P05",
+      "source_lines": [
+        1091,
+        1129
+      ],
+      "kind": "definition and theorem",
+      "claim": "Dressed scalar L and coupled pentagon for PBC group action",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+          "declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean",
+          "declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7331
+      ],
+      "boundary": "Compatibility is merged; complete tensor-choice gauge invariance remains G05/PB3.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 4986,
+          "labels": [
+            "def:mpug_permuted_block_l_symbol"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 5039,
+          "labels": [
+            "thm:mpug_permuted_block_l_compatibility"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7331,
+          "title": "Derive boundary-dressed tensor-level L-symbols from MPU fusion and action tensors",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7331"
+        }
+      ]
+    },
+    {
+      "id": "P06",
+      "source_lines": [
+        1131,
+        1207
+      ],
+      "kind": "theorems",
+      "claim": "Exterior-buffer identities oPBCMPO/oPBCMPSs and equivalence to periodic operator/action equality",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Core/ReductionBlocking.lean",
+          "declaration": "MPSTensor.IsReductionExteriorBufferLength",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean",
+          "declaration": "MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7330,
+        7331
+      ],
+      "boundary": "Generic reduction/exterior and trace-converse ingredients exist. Package both directions at one justified common finite block, avoiding claims that all residual letters vanish.",
+      "leaf": "PB1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "oPBCMPO",
+        "oPBCMPSs"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_reductions.tex",
+          "line": 1018,
+          "labels": [
+            "def:mps_reduction_exterior_buffer_length",
+            "eq:mps_reduction_exterior_buffer_length"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex",
+          "line": 188,
+          "labels": [
+            "cor:asym_compression_periodic"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7330,
+          "title": "Construct action tensors for a transitive MPU action on injective MPS blocks",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7330"
+        },
+        {
+          "number": 7331,
+          "title": "Derive boundary-dressed tensor-level L-symbols from MPU fusion and action tensors",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7331"
+        }
+      ]
+    },
+    {
+      "id": "P07",
+      "source_lines": [
+        1209,
+        1216
+      ],
+      "kind": "unnumbered Lemma and consequence",
+      "claim": "Injective group representation with U_e=I and exact closed fusion is on-site; anomaly trivial; anomalous U_e=I excludes arbitrary-boundary closure",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+          "declaration": "MPOTensor.GroupFamily.isOnSite_of_closed_fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+          "declaration": "MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean",
+          "declaration": "MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8047,
+        8143,
+        7968
+      ],
+      "boundary": "Closed-fusion⇒on-site/triviality merged and faithful. The advertised equivalence with arbitrary-boundary closedness awaits AB2.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 195,
+          "labels": [
+            "thm:mposym_closed_fusion_onsite"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8047,
+          "title": "Group MPO symmetries: arbitrary-boundary closedness forces an on-site representation with trivial anomaly",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8047"
+        },
+        {
+          "number": 8143,
+          "title": "Formalize the on-site criterion for closed-fusion group MPO representations",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8143"
+        },
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "C01",
+      "source_lines": [
+        1219,
+        1231
+      ],
+      "kind": "main theorem",
+      "claim": "MPO-symmetric exact-MPS Hamiltonians are in same symmetric phase iff L classes agree",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050
+      ],
+      "boundary": "No full GLM23 capstone in Lean. Algebraic H² classification or on-site/fixed-point path theorem does not settle this.",
+      "leaf": "PH7",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "sec:classif"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "source_lines": [
+        1234,
+        1248
+      ],
+      "kind": "definitions and structural claims",
+      "claim": "Physical fusion-category/WHA symmetry; Def. 1 defsym; same F class allows different MPO/WHA representations",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionCoproduct.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.coproduct",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionCoassoc.lean",
+          "declaration": "MPOTensor.CompleteZipperFusionFamily.coproduct_coassoc",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050,
+        8315
+      ],
+      "boundary": "A multiplicative coassociative map is not a C*-WHA or module-category equivalence; require actual unit/counit/antipode/*/integral data and Mathlib reuse.",
+      "leaf": "PH0",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "sec:fixsym",
+        "defsym"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_algebras.tex",
+          "line": 908,
+          "labels": [
+            "thm:mpoalg_fusion_coproduct",
+            "eq:mpoalg_fusion_coproduct",
+            "eq:mpoalg_fusion_coproduct_letter"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_algebras.tex",
+          "line": 964,
+          "labels": [
+            "thm:mpoalg_fusion_coproduct_coassoc"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        },
+        {
+          "number": 8315,
+          "title": "Tracking: group cohomology, fusion rings and Hopf structures on Mathlib",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8315"
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "source_lines": [
+        1250,
+        1265
+      ],
+      "kind": "Definition 2 and scope",
+      "claim": "defphase: common embedding, local continuous uniformly gapped PBC path commuting with fixed direct-sum MPO representation",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/GappedInteractionPath.lean",
+          "declaration": "MPSTensor.SymmetricGappedInteractionPath",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "Existing path type fixes an on-site group action. Source allows non-on-site comparison, endpoint physical/bond spaces and representation changes via embedding. Do not define phase as L equivalence.",
+      "leaf": "PH0",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "defphase"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch12_symmetry_spt.tex",
+          "line": 4904,
+          "labels": [
+            "def:spt_common_space_gapped_path"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "source_lines": [
+        1267,
+        1272
+      ],
+      "kind": "scope and assumptions",
+      "claim": "Exact MPS ground spaces with local action tensors throughout interpolation; no claim for paths beyond exact MPS",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/ExactMPSGappedPhase.lean",
+          "declaration": "MPSTensor.ExactMPSGroundPath",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "Adapt shared exact-ground-path mechanics, retaining independent physical gap and all source multiblock data. This is source restriction, not an extra formalization assumption.",
+      "leaf": "PH0",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch12_symmetry_spt.tex",
+          "line": 4927,
+          "labels": [
+            "def:spt_exact_mps_gapped_phase"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "source_lines": [
+        1274,
+        1320
+      ],
+      "kind": "symmetrization theorem",
+      "claim": "Parent-Hamiltonian local projector; group average and C*-WHA canonical-left-integral symmetrization; commutation, Hermiticity and nonzero term",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/ParentHamiltonianSymmetry.lean",
+          "declaration": "MPSTensor.parentInteractionES_commute_onSiteTensorPow",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "On-site parent symmetry ingredients exist. WHA averaging and Appendix B proof missing; ensure kernel/ground-space preservation and gap bound, not only nonzero trace.",
+      "leaf": "PH1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch12_symmetry_spt.tex",
+          "line": 5062,
+          "labels": [
+            "thm:spt_parent_hamiltonian_symmetry"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "source_lines": [
+        1322,
+        1326
+      ],
+      "kind": "embedding lemma",
+      "claim": "Fixed-representation path embeds into defphase using one-qubit path and O_a⊗I",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050
+      ],
+      "boundary": "Explicit physical embedding and uniform gap need proof.",
+      "leaf": "PH2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "sec:parentHrestric"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "source_lines": [
+        1328,
+        1330
+      ],
+      "kind": "reduction lemma",
+      "claim": "A symmetric gapped Hamiltonian with exact MPS ground space is in same phase as symmetric parent via convex interpolation; reduce to parent paths",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/CommonKernelSpectralGap.lean",
+          "declaration": "Matrix.spectrum_gap_interpolation_of_le",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "Reuse common-kernel gap inequalities, but must establish the exact shared ground subspace and GLM23 embedding/symmetry.",
+      "leaf": "PH2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap_continuity.tex",
+          "line": 251,
+          "labels": [
+            "thm:common_kernel_spectral_gap_interpolation"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "source_lines": [
+        1332,
+        1350
+      ],
+      "kind": "left inverse construction",
+      "claim": "A simultaneous block-separating left inverse (leftinv)",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPDO/CompleteZipperFusionBlocked.lean",
+          "declaration": "MPOTensor.exists_blockTensor_isMPOBlockLeftInverse",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "MPO simultaneous inverse after finite blocking is merged. Need MPS analogue/source faithful block-injectivity and continuous choices for paths.",
+      "leaf": "PH3",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "leftinv"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex",
+          "line": 229,
+          "labels": [
+            "thm:mpdo_complete_zipper_of_compression_blocked"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "source_lines": [
+        1352,
+        1387
+      ],
+      "kind": "continuity theorem",
+      "claim": "Gapped exact-MPS parent path induces continuous block tensors; locally continuous left inverses and action bases",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/CanonicalInjectiveGappedPath.lean",
+          "declaration": "MPSTensor.continuous_parentInteraction_matrix_family",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "Forward tensor⇒continuous parent machinery does not prove reverse gapped path⇒continuous canonical/tensor action choices. Source cites SCP11.",
+      "leaf": "PH3",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch12_symmetry_spt.tex",
+          "line": 151,
+          "labels": [
+            "thm:spt_canonical_injective_gapped_path"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "source_lines": [
+        1388,
+        1551
+      ],
+      "kind": "deformation theorem",
+      "claim": "Differentiable action-tensor deformation produces infinitesimal gauge variation of L (eq:F_symbol3)",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050,
+        8045
+      ],
+      "boundary": "Must prove actual finite/local gauge equivalence, not store derivative-gauge conclusion as an input.",
+      "leaf": "PH4",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "eq:F_symbol3"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "C11",
+      "source_lines": [
+        1551,
+        1577
+      ],
+      "kind": "extension theorem",
+      "claim": "Continuous non-differentiable and changing-bond paths; extension to long-word PBC action",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050
+      ],
+      "boundary": "Explicit source includes bond-dimension changes. Fixed dimension or differentiability-only theorem remains restricted.",
+      "leaf": "PH4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C12",
+      "source_lines": [
+        1580,
+        1598
+      ],
+      "kind": "construction",
+      "claim": "A(γ)=A W(γ) with mixed matrix units, D=D0+D1 (defAgamma)",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/EmbeddedFixedPointTensor.lean",
+          "declaration": "",
+          "module_exists": true,
+          "declaration_text_found": false,
+          "related_only": true
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "Existing fixed-point interpolation is reuse only: endpoints in source need not be fixed points or zero correlation length.",
+      "leaf": "PH5",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "defAgamma"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C13",
+      "source_lines": [
+        1600,
+        1685
+      ],
+      "kind": "construction and theorem",
+      "claim": "Mixed MPO/action tensors; Agammasym and exact F,L coherence of enlarged representation",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050,
+        8045
+      ],
+      "boundary": "Requires same symbols after genuine gauge alignment, mixed-sector fusion and full tensor identities.",
+      "leaf": "PH5",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "Agammasym"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "C14",
+      "source_lines": [
+        1687,
+        1691
+      ],
+      "kind": "injectivity and gap theorem",
+      "claim": "Enlarged MPO injectivity, interior A(γ) injectivity, unique gapped parent",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/CanonicalInjectiveGappedPath.lean",
+          "declaration": "MPSTensor.canonicalInjectiveGappedPath",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "The existing on-site path constructor is not the MPO proof. Interior pointwise gaps do not alone establish a uniform full-path gap.",
+      "leaf": "PH6",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch12_symmetry_spt.tex",
+          "line": 151,
+          "labels": [
+            "thm:spt_canonical_injective_gapped_path"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C15",
+      "source_lines": [
+        1692,
+        1692
+      ],
+      "kind": "endpoint convergence and gap theorem",
+      "claim": "Continuous extended local supports S′γ, Gram–Schmidt projector limits, endpoint ground states and gaps",
+      "status": [
+        "missing"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/ParentHamiltonian/CompactParentGap.lean",
+          "declaration": "",
+          "module_exists": true,
+          "declaration_text_found": false,
+          "related_only": true
+        }
+      ],
+      "issues": [
+        8050,
+        190
+      ],
+      "boundary": "Must verify the asserted endpoint ground spaces and uniform gap through rank-changing bonds. Merely continuous projectors/interior gap is insufficient.",
+      "leaf": "PH6",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        },
+        {
+          "number": 190,
+          "title": "shared dependency; see GitHub",
+          "state": "not verified in this inventory",
+          "url": "https://github.com/LionSR/TNLean/issues/190"
+        }
+      ]
+    },
+    {
+      "id": "C16",
+      "source_lines": [
+        1695,
+        1777
+      ],
+      "kind": "multiblock interpolation theorem",
+      "claim": "Degenerate-block path, matching labels/multiplicities, mixed-sector MPO, exact ground-space and full-path gap",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050
+      ],
+      "boundary": "Cannot close capstone with singleton-only interpolation.",
+      "leaf": "PH7",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C17",
+      "source_lines": [
+        1782,
+        1793
+      ],
+      "kind": "boundary interpretation",
+      "claim": "MPS boundary of MPO-injective PEPS compatible with virtual symmetry; fusion-module boundary classification",
+      "status": [
+        "restricted"
+      ],
+      "lean": [],
+      "issues": [
+        8050
+      ],
+      "boundary": "Record mathematical interface only; PEPS implementation belongs to other dot and must not be duplicated or modified. Exact bulk-boundary theorem not supplied by symmetric-state eigenvector.",
+      "leaf": "PEPS-interface",
+      "leaf_kind": "external_interface",
+      "leaf_reason": "The PEPS implementation is owned separately; this audit records only the required mathematical interface and does not assign it an internal implementation leaf.",
+      "source_labels": [
+        "fig:bound",
+        "sketch"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "C18",
+      "source_lines": [
+        1795,
+        1805
+      ],
+      "kind": "positive-boundary theorem",
+      "claim": "Positive common NIM-rep eigenvector yields symmetric boundary state (symboundary), spectral radii=FP dimensions",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean",
+          "declaration": "MPOTensor.IsNIMRep.exists_pos_left_eigenvector",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean",
+          "declaration": "MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean",
+          "declaration": "MPOTensor.exists_pos_symmetric_boundary_state",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8049,
+        8142
+      ],
+      "boundary": "Proof uses a fusion ring with duality and unital NIM-rep; requires neither commutativity nor indecomposability, contrary to speculative old issue text. Source categorical→ring interface remains C02.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [
+        "symboundary"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1221,
+          "labels": [
+            "thm:mposym_nimrep_pos_eigenvector",
+            "eq:mposym_nimrep_eigenvector"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1254,
+          "labels": [
+            "thm:mposym_symmetric_boundary_state"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8049,
+          "title": "MPO symmetries: a positive common eigenvector of the NIM-rep action gives a symmetric boundary state",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8049"
+        },
+        {
+          "number": 8142,
+          "title": "Formalize Perron–Frobenius fusion dimensions for MPO fusion algebras",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8142"
+        }
+      ]
+    },
+    {
+      "id": "C19",
+      "source_lines": [
+        1805,
+        1808
+      ],
+      "kind": "specializations and scope",
+      "claim": "Group eigenvalue 1; regular action quantum dimension; arbitrary-PBC groups lie outside WHA boundary framework",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Examples/Fibonacci/FibonacciBoundary.lean",
+          "declaration": "FibonacciCompression.mpo_fibTau_mulVec_boundary",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/FusionRing.lean",
+          "declaration": "MPOTensor.IsFusionRing.perronFrobeniusDim_pos",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8049
+      ],
+      "boundary": "Fibonacci regular case is explicit. General group/regular-module corollaries and categorical scope should remain visible.",
+      "leaf": "FL3",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1289,
+          "labels": [
+            "ex:mposym_fibonacci_boundary_state"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1188,
+          "labels": [
+            "thm:mposym_fusion_ring_regular"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8049,
+          "title": "MPO symmetries: a positive common eigenvector of the NIM-rep action gives a symmetric boundary state",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8049"
+        }
+      ]
+    },
+    {
+      "id": "Z01",
+      "source_lines": [
+        1819,
+        1821
+      ],
+      "kind": "cohomology classification",
+      "claim": "H³(Z₂,U(1))=Z₂",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleCyclicTwo.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_sigma_generator_eq_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleCyclicClass.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.nat_card_groupCohomology_three_cyclic",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8051
+      ],
+      "boundary": "Merged C× cocycle classification; exact degree-three circle comparison is not the existing H² comparison.",
+      "leaf": "EX1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 9917,
+          "labels": [
+            "thm:mpug_z2_trivial_scalar_class",
+            "eq:mpug_z2_trivial_sigma"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 663,
+          "labels": [
+            "thm:asymex_group_cocycle_cyclic_classes"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8051,
+          "title": "MPO-symmetry examples: the ℤ₂×ℤ₂ cocycle table and the printed controlled-Z realization",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8051"
+        }
+      ]
+    },
+    {
+      "id": "Z02",
+      "source_lines": [
+        1823,
+        1831
+      ],
+      "kind": "phase classification and realization",
+      "claim": "Trivial Z₂ anomaly: one- and two-block phases, normalized L equality, transverse-field Ising realization",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/LSymbol.lean",
+          "declaration": "TNLean.Algebra.LSymbol.IsCompatible.apply_involution",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/LSymbolFreeAction.lean",
+          "declaration": "TNLean.Algebra.LSymbol.actionGaugeEquiv_of_bijective_smul",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7332
+      ],
+      "boundary": "Scalar compatibility ingredients merged. Exhaustive phase count and physical parameter-range/gap realization are not obtained merely by these identities.",
+      "leaf": "EX1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1257,
+          "labels": [
+            "thm:asymex_l_symbol_normalization"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1196,
+          "labels": [
+            "thm:asymex_free_action_l_symbols"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7332,
+          "title": "Classify finite-group MPU-symmetric phases by stabilizer data (H, ψ)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7332"
+        }
+      ]
+    },
+    {
+      "id": "Z03",
+      "source_lines": [
+        1833,
+        1841
+      ],
+      "kind": "phase classification",
+      "claim": "Nontrivial Z₂ anomaly forces two blocks; opposite L signs; regular solution L=ω",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/CZXPermutedBlocks.lean",
+          "declaration": "CZXCompression.czx_lSymbol_ratio_eq_neg_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/LSymbolFreeAction.lean",
+          "declaration": "TNLean.Algebra.LSymbol.isCompatible_regular",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/ScalarThreeCocycleCyclicTwo.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        7332
+      ],
+      "boundary": "Regular/free-action scalar gauge uniqueness merged. Bridge to source exhaustive physical phases still missing.",
+      "leaf": "EX1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_czx.tex",
+          "line": 843,
+          "labels": [
+            "thm:asymex_czx_product_state_l_symbols"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1196,
+          "labels": [
+            "thm:asymex_free_action_l_symbols"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+          "line": 10030,
+          "labels": [
+            "thm:mpug_z2_nontrivial_scalar_class",
+            "eq:mpug_z2_nontrivial_sigma"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 7332,
+          "title": "Classify finite-group MPU-symmetric phases by stabilizer data (H, ψ)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7332"
+        }
+      ]
+    },
+    {
+      "id": "Z04",
+      "source_lines": [
+        1843,
+        1843
+      ],
+      "kind": "physical example",
+      "claim": "Roose cluster-like Hamiltonian, decorated CZX symmetry, ordered/translation-broken parameter regions",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Examples/CZX/ClusterIsingSymmetry.lean",
+          "declaration": "MPOTensor.GroupCocycle.rooseHamiltonian",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Examples/CZX/ClusterIsingSymmetry.lean",
+          "declaration": "MPOTensor.GroupCocycle.czxDecorated_mul_rooseHamiltonian",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "Commutation merged. Spectral phase/gap assertions for μ>0 and μ<0 are separate, not inferred from commutation.",
+      "leaf": "EX1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 419,
+          "labels": [
+            "def:asymex_group_cocycle_z2_hamiltonians"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 435,
+          "labels": [
+            "thm:asymex_group_cocycle_z2_hamiltonians"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "K01",
+      "source_lines": [
+        1845,
+        1848
+      ],
+      "kind": "cohomology classification",
+      "claim": "Eight Klein three-cocycles, generators and H³(Z₂×Z₂,U(1))=Z₂³",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/KleinCocycleTable.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/KleinCocycleCompleteness.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.existsUnique_cohomologousTo_kleinCocycleFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/KleinCocycleCompleteness.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinH3Equiv",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8051
+      ],
+      "boundary": "C× classification complete; U(1) comparison is explicitly open in glm23_klein_h3_circle_coefficients.",
+      "leaf": "EX2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1088,
+          "labels": [
+            "def:asymex_klein_cocycle_family"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1522,
+          "labels": [
+            "thm:asymex_klein_complete_classification",
+            "eq:asymex_klein_complete_detectors"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8051,
+          "title": "MPO-symmetry examples: the ℤ₂×ℤ₂ cocycle table and the printed controlled-Z realization",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8051"
+        }
+      ]
+    },
+    {
+      "id": "K02",
+      "source_lines": [
+        1850,
+        1873
+      ],
+      "kind": "subgroup and invariant table",
+      "claim": "Diagonal/cyclic invariants separate classes; all trivializing subgroups match printed eight-row table",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/KleinCocycleTable.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_signs",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/KleinCocycleTable.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/KleinCocycleCompleteness.lean",
+          "declaration": "TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_klein_three_cyclicInvariants",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8051
+      ],
+      "boundary": "Use cyclic invariant for unnormalized representatives; raw diagonal alone is gauge-invariant only under required normalization.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1102,
+          "labels": [
+            "thm:asymex_klein_cocycle_restrictions"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1313,
+          "labels": [
+            "thm:asymex_klein_subgroup_table"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1522,
+          "labels": [
+            "thm:asymex_klein_complete_classification",
+            "eq:asymex_klein_complete_detectors"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8051,
+          "title": "MPO-symmetry examples: the ℤ₂×ℤ₂ cocycle table and the printed controlled-Z realization",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8051"
+        }
+      ]
+    },
+    {
+      "id": "K03",
+      "source_lines": [
+        1875,
+        1888
+      ],
+      "kind": "phase counting",
+      "claim": "Trivial anomaly six phases; seven anomalous classes grouped by stabilizers; (1,1,1) unique four-block regular phase",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/Algebra/KleinCocyclePhase.lean",
+          "declaration": "TNLean.Algebra.LSymbol.exists_regular_actionGaugeEquiv_of_kleinCocycleFamily_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/KleinCocycleTable.lean",
+          "declaration": "TNLean.Algebra.LSymbol.card_of_kleinCocycleFamily_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8051
+      ],
+      "boundary": "(1,1,1) scalar/free action and table are proved. Exhaustive phase counts need subgroup H² and physical classification bridges; fully broken H_e phase must not disappear in prose that counts only two-block phases.",
+      "leaf": "EX2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1230,
+          "labels": [
+            "thm:asymex_klein_four_block_uniqueness"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1172,
+          "labels": [
+            "thm:asymex_klein_four_blocks"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8051,
+          "title": "MPO-symmetry examples: the ℤ₂×ℤ₂ cocycle table and the printed controlled-Z realization",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8051"
+        }
+      ]
+    },
+    {
+      "id": "K04",
+      "source_lines": [
+        1884,
+        1886
+      ],
+      "kind": "explicit operator and invariant-state example",
+      "claim": "Printed one-qubit Klein generators, representation and the two invariant subspaces",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Examples/KleinSymmetry.lean",
+          "declaration": "KleinSymmetry.operator_mul",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Examples/KleinSymmetry.lean",
+          "declaration": "KleinSymmetry.generators_preserve_constantSpinSpace",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Examples/KleinSymmetry.lean",
+          "declaration": "KleinSymmetry.generators_preserve_clusterPairSpace",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8051
+      ],
+      "boundary": "",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1381,
+          "labels": [
+            "thm:asymex_klein_spin_representation"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1427,
+          "labels": [
+            "thm:asymex_klein_spin_spaces",
+            "eq:asymex_klein_spin_actions"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8051,
+          "title": "MPO-symmetry examples: the ℤ₂×ℤ₂ cocycle table and the printed controlled-Z realization",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8051"
+        }
+      ]
+    },
+    {
+      "id": "K05",
+      "source_lines": [
+        1884,
+        1886
+      ],
+      "kind": "anomaly and L signs",
+      "claim": "Printed realization carries class (0,0,1), diagonal signs (+,+,−), and displayed L ratios",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Examples/KleinSymmetryAnomaly.lean",
+          "declaration": "KleinSymmetry.cyclicInvariant_omega_printedFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Examples/KleinSymmetryAnomaly.lean",
+          "declaration": "KleinSymmetry.not_isTrivialGaugeClass_omega_printedFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/Algebra/KleinCocyclePhase.lean",
+          "declaration": "TNLean.Algebra.LSymbol.apply_self_of_kleinCocycleFamily",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8480,
+        8051
+      ],
+      "boundary": "Only ab sign and nontriviality are proved for this realization. Need a,b signs and full class, then tensor-derived L signs. Do not substitute the two-qubit condensation realization (#8041) or four-level generic construction. “Only nontrivial element” in source is safely the three diagonal entries, not all cocycle entries.",
+      "leaf": "EX3",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1580,
+          "labels": [
+            "thm:asymex_klein_printed_anomaly",
+            "eq:asymex_klein_printed_anomaly"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex",
+          "line": 1286,
+          "labels": [
+            "thm:asymex_klein_l_symbol_signs",
+            "eq:asymex_klein_l_sign"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8480,
+          "title": "Identify the three-cocycle class of the printed Klein-four qubit realization",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8480"
+        },
+        {
+          "number": 8051,
+          "title": "MPO-symmetry examples: the ℤ₂×ℤ₂ cocycle table and the printed controlled-Z realization",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8051"
+        }
+      ]
+    },
+    {
+      "id": "S01",
+      "source_lines": [
+        1890,
+        1905
+      ],
+      "kind": "fusion-table example",
+      "claim": "su(2)₄ five-label fusion table and unit",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24Fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isFusionUnit_su24Fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isNIMRep_su24Fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8052
+      ],
+      "boundary": "",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1024,
+          "labels": [
+            "def:mposym_su24_reps3"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1040,
+          "labels": [
+            "thm:mposym_su24_reps3_units"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8052,
+          "title": "MPO-symmetry examples: the Rep(S₃) and su(2)₄ module categories",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8052"
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "source_lines": [
+        1906,
+        1911
+      ],
+      "kind": "categorical classification",
+      "claim": "Exactly regular five-block and TY four-block phases; positive-Frobenius-Schur F data",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24TY",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isNIMRep_su24TY",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8348,
+        8045
+      ],
+      "boundary": "Concrete NIM-reps exist; explicit F/L and categorical completeness do not. Rank/duality plus categorifiability must be justified.",
+      "leaf": "EX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8348,
+          "title": "Classify NIM-reps of Rep(S₃) and su(2)₄ beyond one block via module-category duality",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8348"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "S03",
+      "source_lines": [
+        1911,
+        1925
+      ],
+      "kind": "NIM-rep table",
+      "claim": "TY module table including multiplicity 2 on s",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24TY",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isNIMRep_su24TY",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8052
+      ],
+      "boundary": "",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8052,
+          "title": "MPO-symmetry examples: the Rep(S₃) and su(2)₄ module categories",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8052"
+        }
+      ]
+    },
+    {
+      "id": "S04",
+      "source_lines": [
+        1927,
+        1929
+      ],
+      "kind": "restriction and physical interpretation",
+      "claim": "Integer subcategory leaves xyz and s separately; whole symmetry disallows integer-sector-only threefold/onefold phases",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24TY_repS3ToSU24_castSucc",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24TY_repS3ToSU24_last",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24TY_repS3ToSU24_mix",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8348
+      ],
+      "boundary": "Table restriction merged; interpretation/exhaustiveness relies on category and Hamiltonian classification.",
+      "leaf": "EX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1102,
+          "labels": [
+            "thm:mposym_reps3_in_su24"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8348,
+          "title": "Classify NIM-reps of Rep(S₃) and su(2)₄ beyond one block via module-category duality",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8348"
+        }
+      ]
+    },
+    {
+      "id": "R01",
+      "source_lines": [
+        1933,
+        1936
+      ],
+      "kind": "fusion and categorical claims",
+      "claim": "Rep(S₃) fusion, inclusion into integer su(2)₄; Wigner 6j F data; phases indexed by subgroups with trivial H²",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.repS3Fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24Fusion_repS3ToSU24",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8348,
+        8045
+      ],
+      "boundary": "Ring inclusion merged. Tensor/category inclusion and 6j/cohomology classification are not established by the table.",
+      "leaf": "EX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1024,
+          "labels": [
+            "def:mposym_su24_reps3"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1040,
+          "labels": [
+            "thm:mposym_su24_reps3_units"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8348,
+          "title": "Classify NIM-reps of Rep(S₃) and su(2)₄ beyond one block via module-category duality",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8348"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "source_lines": [
+        1938,
+        1940
+      ],
+      "kind": "one-block example",
+      "claim": "H=1 gives one block with π multiplicity 2, no conflict with multiplicity-one obstruction; L from TY restriction",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.repS3Z1",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isFusionCharacter_repS3Fusion_iff",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8045
+      ],
+      "boundary": "One-block NIM-rep classification merged; actual L/TY restriction absent.",
+      "leaf": "EX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1126,
+          "labels": [
+            "thm:mposym_su24_reps3_one_block"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "source_lines": [
+        1943,
+        1957
+      ],
+      "kind": "two-block example",
+      "claim": "H=Z₂ NIM-rep table; L restriction from regular su(2)₄ half-integer sector",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.repS3Z2",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isNIMRep_repS3Z2",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.su24Fusion_repS3ToSU24_half",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8348,
+        8045
+      ],
+      "boundary": "NIM-rep table/restriction merged; multiplicity L realization and exhaustiveness missing.",
+      "leaf": "EX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1102,
+          "labels": [
+            "thm:mposym_reps3_in_su24"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8348,
+          "title": "Classify NIM-reps of Rep(S₃) and su(2)₄ beyond one block via module-category duality",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8348"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "R04",
+      "source_lines": [
+        1959,
+        1972
+      ],
+      "kind": "three-block example with source error",
+      "claim": "H=Z₃ table and TY restriction",
+      "status": [
+        "corrected-source"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.repS3Z3",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isNIMRep_repS3Z3",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.not_isNIMRep_repS3Z3Printed",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8052,
+        8348
+      ],
+      "boundary": "Printed ψ swaps y,z and violates fusion; corrected ψ=I. Counterexample + corrected NIM-rep merged; L-symbol restriction still missing. glm23_reps3_z3_table.",
+      "leaf": "EX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8052,
+          "title": "MPO-symmetry examples: the Rep(S₃) and su(2)₄ module categories",
+          "state": "closed",
+          "url": "https://github.com/LionSR/TNLean/issues/8052"
+        },
+        {
+          "number": 8348,
+          "title": "Classify NIM-reps of Rep(S₃) and su(2)₄ beyond one block via module-category duality",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8348"
+        }
+      ]
+    },
+    {
+      "id": "R05",
+      "source_lines": [
+        1974,
+        1987
+      ],
+      "kind": "regular-module example",
+      "claim": "H=S₃ regular table and L=F",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean",
+          "declaration": "MPOTensor.isNIMRep_repS3Fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8045,
+        8348
+      ],
+      "boundary": "Fusion/NIM-rep table merged; actual L=F and exhaustive category list remain.",
+      "leaf": "EX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        },
+        {
+          "number": 8348,
+          "title": "Classify NIM-reps of Rep(S₃) and su(2)₄ beyond one block via module-category duality",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8348"
+        }
+      ]
+    },
+    {
+      "id": "FIB",
+      "source_lines": [
+        1991,
+        1993
+      ],
+      "kind": "classification example",
+      "claim": "Fibonacci unique indecomposable regular two-block module and L=F",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Examples/Fibonacci/FibonacciNIMRepClassification.lean",
+          "declaration": "FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/Examples/Fibonacci/FibonacciNIMRepClassification.lean",
+          "declaration": "FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8053
+      ],
+      "boundary": "Only rank ≤2 classification merged; arbitrary-rank indecomposable classification and L=F missing. Direct sums show uniqueness needs indecomposable scope; gap note records it.",
+      "leaf": "EX5",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "line": 949,
+          "labels": [
+            "thm:mpo_symmetry_fibonacci_rank_two"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8053,
+          "title": "MPO-symmetry examples: the Fibonacci regular module is the only realization and its L-symbol equals F",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8053"
+        }
+      ]
+    },
+    {
+      "id": "X01",
+      "source_lines": [
+        2003,
+        2024
+      ],
+      "kind": "explicit construction",
+      "claim": "Arbitrary-boundary group tensors on C[G]⊗C[G], bond |G| per label, entries ω(g,l,l⁻¹k)",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8054
+      ],
+      "boundary": "Do not count GroupCocycle.tensor: that is the compressed PBC construction.",
+      "leaf": "GX1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X02",
+      "source_lines": [
+        2024,
+        2044
+      ],
+      "kind": "fusion and anomaly computation",
+      "claim": "ftexam explicit fusion entries ω(g,h,k)⁻¹; exact fusion and inverse anomaly",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+          "declaration": "MPOTensor.GroupCocycle.fusionV",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+          "declaration": "MPOTensor.GroupCocycle.fusionData_omega",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8054
+      ],
+      "boundary": "PBC fusion maps/inverse anomaly present; arbitrary-boundary tensor verification is missing.",
+      "leaf": "GX1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "ftexam"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 272,
+          "labels": [
+            "def:asymex_group_cocycle_fusion_tensors"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 314,
+          "labels": [
+            "thm:asymex_group_cocycle_inverse_cocycle"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X03",
+      "source_lines": [
+        2046,
+        2070
+      ],
+      "kind": "gate definitions and example",
+      "claim": "W_g diagonal cocycle gate, L_g regular shift, W_e=I; Z₂ CZ(I⊗Z) example",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+          "declaration": "MPOTensor.GroupCocycle.wGate",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+          "declaration": "MPOTensor.GroupCocycle.leftShift",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+          "declaration": "MPOTensor.GroupCocycle.wGate_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO/Instances.lean",
+          "declaration": "MPOTensor.GroupCocycle.wGate_cyclicTwo",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [],
+      "boundary": "",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 32,
+          "labels": [
+            "def:asymex_group_cocycle_tensor",
+            "eq:asymex_group_cocycle_tensor",
+            "eq:asymex_group_cocycle_phase"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 220,
+          "labels": [
+            "thm:asymex_group_cocycle_one"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 375,
+          "labels": [
+            "thm:asymex_group_cocycle_z2"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": []
+    },
+    {
+      "id": "X04",
+      "source_lines": [
+        2073,
+        2096
+      ],
+      "kind": "explicit operator theorem",
+      "claim": "O_e=product of equality projectors; O_g group law and adjoint inverse on projected subspace",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8054
+      ],
+      "boundary": "Adjoint requires unit-modulus cocycle. Arbitrary-boundary projected family is not the existing PBC U_e=I family.",
+      "leaf": "GX1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X05",
+      "source_lines": [
+        2098,
+        2116
+      ],
+      "kind": "state construction",
+      "claim": "Coset MPS blocks and tensor entries inverse L; claimed bond |G/H| per block",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8054
+      ],
+      "boundary": "Audit printed diagram/group versus coset indexing before selecting dimension. Need injectivity/normality and distinctness, not only an entry table.",
+      "leaf": "GX2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X06",
+      "source_lines": [
+        2117,
+        2200
+      ],
+      "kind": "action construction and verification",
+      "claim": "Explicit action entries inverse L and exact MPOsymG local identity",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8054
+      ],
+      "boundary": "Requires X01–X05 and reconstructed compatible L; verify reciprocal convention and multiplicity spaces.",
+      "leaf": "GX2",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X07",
+      "source_lines": [
+        2202,
+        2205
+      ],
+      "kind": "compression construction",
+      "claim": "Neighboring-half isometry Γ maps projected arbitrary-boundary family to PBC family with U_e=I",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8054
+      ],
+      "boundary": "The PBC operator exists but Γ circuit/intertwining from X04 does not. Audit source depth-n sentence separately from mathematical contraction.",
+      "leaf": "GX3",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X08",
+      "source_lines": [
+        2205,
+        2224
+      ],
+      "kind": "PBC operator construction and example",
+      "claim": "PBC tensor, group law and Z₂ decorated CZX realization",
+      "status": [
+        "corrected-source"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+          "declaration": "MPOTensor.GroupCocycle.tensor",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+          "declaration": "MPOTensor.GroupCocycle.mpo_tensor_mul",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO.lean",
+          "declaration": "MPOTensor.GroupCocycle.mpo_tensor_one",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO/Instances.lean",
+          "declaration": "MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8054
+      ],
+      "boundary": "Merged one-shift-per-site correction. Generic identity tensor is not normal for nontrivial G, so do not instantiate IsNormalRepresentation from its operator laws. glm23_pbc_group_mpo_single_shift.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 32,
+          "labels": [
+            "def:asymex_group_cocycle_tensor",
+            "eq:asymex_group_cocycle_tensor",
+            "eq:asymex_group_cocycle_phase"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 193,
+          "labels": [
+            "thm:asymex_group_cocycle_mul"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 220,
+          "labels": [
+            "thm:asymex_group_cocycle_one"
+          ],
+          "leanok": true,
+          "notready": false
+        },
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 375,
+          "labels": [
+            "thm:asymex_group_cocycle_z2"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X09",
+      "source_lines": [
+        2224,
+        2242
+      ],
+      "kind": "fusion and zipper theorem",
+      "claim": "Explicit PBC tensors obey fusion reduction and left zipper",
+      "status": [
+        "merged"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+          "declaration": "MPOTensor.GroupCocycle.fusionV_mul_mulTensor",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        },
+        {
+          "module": "TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean",
+          "declaration": "MPOTensor.GroupCocycle.isReduction_fusion",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8054
+      ],
+      "boundary": "Source-corrected tensor and explicit fusion maps. Generic family is not a normal representation; explicit nonvanishing comparison proves its computed anomaly.",
+      "leaf": "",
+      "leaf_kind": "none",
+      "source_labels": [],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex",
+          "line": 285,
+          "labels": [
+            "thm:asymex_group_cocycle_fusion"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "X10",
+      "source_lines": [
+        2243,
+        2287
+      ],
+      "kind": "projector/right-zipper theorem",
+      "claim": "Right zipper fails; exact reconstruction requires P_g,h; projector acts identically on PBC-supported virtual configurations",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8054
+      ],
+      "boundary": "This full source tail is absent from tracker’s 2224–2233 range. Need explicit projector, idempotence, corrected identity, positive witness to failure, and closure identity.",
+      "leaf": "GX4",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8054,
+          "title": "Group MPO symmetries: the arbitrary-boundary construction and the failure of the right zipper",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8054"
+        }
+      ]
+    },
+    {
+      "id": "OUT",
+      "source_lines": [
+        2289,
+        2299
+      ],
+      "kind": "summary and outlook",
+      "claim": "Restatement of classification; bulk detection and TRS/anyon-condensation/MBQC research proposals",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050
+      ],
+      "boundary": "Classification restatement is C01; proposals are not proved theorems and are explicitly excluded from closure checklist. PEPS extension coordinated only.",
+      "leaf": "PH7",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "sec:outlook"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "AA1",
+      "source_lines": [
+        2305,
+        2309
+      ],
+      "kind": "Appendix A linearization",
+      "claim": "Length-independent boundary product factors through a linear boundary map B; minimal-rank two-sided matrix decomposition",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        7968
+      ],
+      "boundary": "Prove linearity/factorization rather than assume B as extra data. Reduce to diagonal block boundary spaces to quotient invisible boundaries.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "ap:proofs"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "AA2",
+      "source_lines": [
+        2311,
+        2359
+      ],
+      "kind": "Appendix A existence proof",
+      "claim": "Project B into block channels, choose minimal independent fusion maps, derive all-word decompopen and exact one-letter fusion",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        7968
+      ],
+      "boundary": "Keep same B across all lengths and show finite linear rank factorization. Existing trace-only compression is not this argument.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "decompopen"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "AA3",
+      "source_lines": [
+        2360,
+        2453
+      ],
+      "kind": "Appendix A orthogonality proof",
+      "claim": "Compare n=1 and n=2; block-separating inverse and minimal linear independence force eq:ortho",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        7968
+      ],
+      "boundary": "Use simultaneous block inverse (or derived faithful blocking), not independent inverses that fail to isolate labels. Must derive exact splitting without unproved semisimplicity assumption.",
+      "leaf": "AB2",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "eq:ortho"
+      ],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        }
+      ]
+    },
+    {
+      "id": "AA4",
+      "source_lines": [
+        2455,
+        2455
+      ],
+      "kind": "Appendix A action analogue",
+      "claim": "Repeat boundary-map argument for action tensors and orthogonality",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        7968,
+        8045
+      ],
+      "boundary": "Separate action map from multiplication; same reusable algebraic theorem may cover both.",
+      "leaf": "AB3",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 7968,
+          "title": "Formalize the arbitrary-boundary MPO symmetry algebra and the cohomological single-block obstruction (GLM23)",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/7968"
+        },
+        {
+          "number": 8045,
+          "title": "MPO symmetries: L-symbols with multiplicity, the coupled pentagon, and their gauge freedom",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8045"
+        }
+      ]
+    },
+    {
+      "id": "AB1",
+      "source_lines": [
+        2457,
+        2463
+      ],
+      "kind": "Appendix B on-site proof",
+      "claim": "Averaged local complement is nonzero projector onto S⊥",
+      "status": [
+        "restricted"
+      ],
+      "lean": [
+        {
+          "module": "TNLean/MPS/Symmetry/ParentHamiltonianSymmetry.lean",
+          "declaration": "MPSTensor.parentInteractionES_commute_onSiteTensorPow",
+          "module_exists": true,
+          "declaration_text_found": true,
+          "related_only": false
+        }
+      ],
+      "issues": [
+        8050
+      ],
+      "boundary": "Source uses nonzero trace of Π_S but that alone does not prove I−Π_S nonzero. Need proper support/nontrivial interaction condition or a documented source correction. For unitary invariant S, averaged Π_S=Π_S is direct.",
+      "leaf": "PH1",
+      "leaf_kind": "implementation",
+      "source_labels": [
+        "app:sumnonull"
+      ],
+      "blueprint": [
+        {
+          "file": "blueprint/src/chapter/ch12_symmetry_spt.tex",
+          "line": 5062,
+          "labels": [
+            "thm:spt_parent_hamiltonian_symmetry"
+          ],
+          "leanok": true,
+          "notready": false
+        }
+      ],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        }
+      ]
+    },
+    {
+      "id": "AB2",
+      "source_lines": [
+        2466,
+        2466
+      ],
+      "kind": "Appendix B WHA proof",
+      "claim": "Canonical-integral averaging is Hermitian, preserves trace against Δ(1), projects onto S; nonzero complement",
+      "status": [
+        "missing"
+      ],
+      "lean": [],
+      "issues": [
+        8050,
+        8315
+      ],
+      "boundary": "Formalize cited weak-Hopf identities and support hypotheses, positivity/rank/kernel and gap preservation. Do not turn these conclusions into structure fields and claim derivation.",
+      "leaf": "PH1",
+      "leaf_kind": "implementation",
+      "source_labels": [],
+      "blueprint": [],
+      "issue_status": [
+        {
+          "number": 8050,
+          "title": "MPO symmetries: phases of MPS under a fusion-category symmetry are classified by L-symbol classes",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8050"
+        },
+        {
+          "number": 8315,
+          "title": "Tracking: group cohomology, fusion rings and Hopf structures on Mathlib",
+          "state": "open",
+          "url": "https://github.com/LionSR/TNLean/issues/8315"
+        }
+      ]
+    }
+  ],
+  "source_labels": [
+    {
+      "label": "sec:data",
+      "line": 302,
+      "rows": [
+        "B01"
+      ]
+    },
+    {
+      "label": "MPSssubs",
+      "line": 313,
+      "rows": [
+        "B01",
+        "B02"
+      ]
+    },
+    {
+      "label": "algcond",
+      "line": 329,
+      "rows": [
+        "A01"
+      ]
+    },
+    {
+      "label": "fusiontensors",
+      "line": 362,
+      "rows": [
+        "A02",
+        "A03"
+      ]
+    },
+    {
+      "label": "eq:orthoW",
+      "line": 384,
+      "rows": [
+        "A03"
+      ]
+    },
+    {
+      "label": "Fsymbolsdef",
+      "line": 393,
+      "rows": [
+        "F01"
+      ]
+    },
+    {
+      "label": "pentagon0F",
+      "line": 411,
+      "rows": [
+        "F02"
+      ]
+    },
+    {
+      "label": "sec:inter",
+      "line": 429,
+      "rows": [
+        "A05"
+      ]
+    },
+    {
+      "label": "eq:compatible",
+      "line": 434,
+      "rows": [
+        "A05"
+      ]
+    },
+    {
+      "label": "fusiontensors2",
+      "line": 461,
+      "rows": [
+        "A06"
+      ]
+    },
+    {
+      "label": "eq:orthoV",
+      "line": 483,
+      "rows": [
+        "A07"
+      ]
+    },
+    {
+      "label": "rawrels",
+      "line": 492,
+      "rows": [
+        "L01"
+      ]
+    },
+    {
+      "label": "eq:F_symbol2",
+      "line": 517,
+      "rows": [
+        "L01"
+      ]
+    },
+    {
+      "label": "1Fsymbol",
+      "line": 535,
+      "rows": [
+        "L01"
+      ]
+    },
+    {
+      "label": "coupledpent",
+      "line": 554,
+      "rows": [
+        "L02"
+      ]
+    },
+    {
+      "label": "nonuniqueGS",
+      "line": 607,
+      "rows": [
+        "O01"
+      ]
+    },
+    {
+      "label": "groupcase",
+      "line": 638,
+      "rows": [
+        "G01"
+      ]
+    },
+    {
+      "label": "fusiontensorG",
+      "line": 641,
+      "rows": [
+        "G01"
+      ]
+    },
+    {
+      "label": "3cocygroup",
+      "line": 664,
+      "rows": [
+        "G02"
+      ]
+    },
+    {
+      "label": "MPOsymG",
+      "line": 684,
+      "rows": [
+        "G03"
+      ]
+    },
+    {
+      "label": "F1group",
+      "line": 703,
+      "rows": [
+        "G04"
+      ]
+    },
+    {
+      "label": "pentagongroups",
+      "line": 716,
+      "rows": [
+        "G04"
+      ]
+    },
+    {
+      "label": "gdgroup",
+      "line": 722,
+      "rows": [
+        "G05"
+      ]
+    },
+    {
+      "label": "physym",
+      "line": 731,
+      "rows": [
+        "G07"
+      ]
+    },
+    {
+      "label": "Lexpre",
+      "line": 755,
+      "rows": [
+        "G09"
+      ]
+    },
+    {
+      "label": "gxdecomp",
+      "line": 764,
+      "rows": [
+        "G11"
+      ]
+    },
+    {
+      "label": "defodot",
+      "line": 817,
+      "rows": [
+        "G12"
+      ]
+    },
+    {
+      "label": "intactens",
+      "line": 831,
+      "rows": [
+        "G12"
+      ]
+    },
+    {
+      "label": "nonasso",
+      "line": 833,
+      "rows": [
+        "G12"
+      ]
+    },
+    {
+      "label": "Lgroupdef",
+      "line": 843,
+      "rows": [
+        "G13"
+      ]
+    },
+    {
+      "label": "coupengroup",
+      "line": 848,
+      "rows": [
+        "G13"
+      ]
+    },
+    {
+      "label": "sec:TRS",
+      "line": 865,
+      "rows": [
+        "T01"
+      ]
+    },
+    {
+      "label": "TRSF1group",
+      "line": 954,
+      "rows": [
+        "T03"
+      ]
+    },
+    {
+      "label": "sec:PBC",
+      "line": 994,
+      "rows": [
+        "P01"
+      ]
+    },
+    {
+      "label": "fusiontensorG2",
+      "line": 1002,
+      "rows": [
+        "P02"
+      ]
+    },
+    {
+      "label": "mpoMPSsten",
+      "line": 1066,
+      "rows": [
+        "P04"
+      ]
+    },
+    {
+      "label": "oPBCMPO",
+      "line": 1132,
+      "rows": [
+        "P06"
+      ]
+    },
+    {
+      "label": "oPBCMPSs",
+      "line": 1170,
+      "rows": [
+        "P06"
+      ]
+    },
+    {
+      "label": "sec:classif",
+      "line": 1219,
+      "rows": [
+        "C01"
+      ]
+    },
+    {
+      "label": "sec:fixsym",
+      "line": 1234,
+      "rows": [
+        "C02"
+      ]
+    },
+    {
+      "label": "defsym",
+      "line": 1241,
+      "rows": [
+        "C02"
+      ]
+    },
+    {
+      "label": "defphase",
+      "line": 1255,
+      "rows": [
+        "C03"
+      ]
+    },
+    {
+      "label": "sec:parentHrestric",
+      "line": 1322,
+      "rows": [
+        "C06"
+      ]
+    },
+    {
+      "label": "leftinv",
+      "line": 1334,
+      "rows": [
+        "C08"
+      ]
+    },
+    {
+      "label": "eq:F_symbol3",
+      "line": 1423,
+      "rows": [
+        "C10"
+      ]
+    },
+    {
+      "label": "defAgamma",
+      "line": 1586,
+      "rows": [
+        "C12"
+      ]
+    },
+    {
+      "label": "Agammasym",
+      "line": 1633,
+      "rows": [
+        "C13"
+      ]
+    },
+    {
+      "label": "fig:bound",
+      "line": 1791,
+      "rows": [
+        "C17"
+      ]
+    },
+    {
+      "label": "sketch",
+      "line": 1792,
+      "rows": [
+        "C17"
+      ]
+    },
+    {
+      "label": "symboundary",
+      "line": 1796,
+      "rows": [
+        "C18"
+      ]
+    },
+    {
+      "label": "sec:examples",
+      "line": 1811,
+      "rows": [
+        "Z01"
+      ]
+    },
+    {
+      "label": "sec:expexam",
+      "line": 1997,
+      "rows": [
+        "X01"
+      ]
+    },
+    {
+      "label": "ftexam",
+      "line": 2025,
+      "rows": [
+        "X02"
+      ]
+    },
+    {
+      "label": "sec:outlook",
+      "line": 2289,
+      "rows": [
+        "OUT"
+      ]
+    },
+    {
+      "label": "ap:proofs",
+      "line": 2305,
+      "rows": [
+        "AA1"
+      ]
+    },
+    {
+      "label": "decompopen",
+      "line": 2313,
+      "rows": [
+        "AA2"
+      ]
+    },
+    {
+      "label": "eq:ortho",
+      "line": 2440,
+      "rows": [
+        "AA3"
+      ]
+    },
+    {
+      "label": "app:sumnonull",
+      "line": 2457,
+      "rows": [
+        "AB1"
+      ]
+    }
+  ]
+}

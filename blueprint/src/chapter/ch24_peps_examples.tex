@@ -1309,8 +1309,9 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     last two, in either order, both equal $c\,P_{3}$ for some $c>0$. Hence on
     every ring of $N\geq 3$ sites the two-site terms of the parent Hamiltonian
     commute. The source states this theorem for PEPS and writes its proof for
-    matrix product states; only the matrix product case is formalized, and
-    rings of two sites are not covered
+    matrix product states. The general finite-simple-graph PEPS result is
+    proved in Theorem~\ref{thm:peps_isometric_regional_parents_commute};
+    this matrix product statement does not cover rings of two sites
     \cite[Theorem~6.12]{Schuch2010PEPS},
     \cite{gap:scp10_g_isometric_commuting_parent_hamiltonian}.
 \end{theorem}
@@ -1347,6 +1348,12 @@ left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its
 color-shift representation, and the constant $c$ absorbs the
 normalization of the tensor \cite{gap:rmp_peps_quantum_double_g_isometry}.
+
+\input{chapter/ch24_peps_commuting_regional_constraints}
+\input{chapter/ch24_peps_g_isometric_regional_parents}
+\input{chapter/ch24_peps_regular_region_intersection}
+
+\subsection{Group actions on torus bonds}
 
 The invariance of a $G$-injective tensor lets a string of $U_g$'s on the
 virtual bonds be deformed across the sites of a network
@@ -6275,3 +6282,4 @@ around the two non-contractible cycles must be trivial.
 \input{chapter/ch24_peps_torus_correlated_charge_flux_crossing}
 \input{chapter/ch24_peps_kitaev_native_checkerboard_blocking}
 \input{chapter/ch24_peps_kitaev_native_boundary_cnot}
+\input{chapter/ch24_peps_kitaev_global_blocking}
