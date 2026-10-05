@@ -54,13 +54,14 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 #   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 # Run after lake build succeeds.
 python3 scripts/fetch_tenkz.py
-cd blueprint && leanblueprint checkdecls
+(cd blueprint && leanblueprint checkdecls)
 
 # Blueprint web/PDF generation
-cd blueprint && leanblueprint web
+(cd blueprint && leanblueprint web)
 # Add client-side search to the web pages (run from repo root after the web build)
+python3 -m pip install 'pagefind[extended]==1.5.2'
 python3 scripts/add_blueprint_search.py --web-root blueprint/web
-cd blueprint && leanblueprint pdf
+(cd blueprint && leanblueprint pdf)
 ```
 
 ## Lean Toolchain & Dependencies

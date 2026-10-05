@@ -128,12 +128,14 @@ div.content-wrapper {
  * find any phrase in the blueprint from any page. Pagefind ships its own
  * component styles -- these rules only size and place the box within the page
  * header and tint it with the blueprint accent colour. */
-header {
+body > header {
 	flex-wrap: wrap;
+	flex-shrink: 0;
 }
 
 #blueprint-search {
 	flex-basis: 100%;
+	min-width: 0;
 	margin: .4rem 0 0;
 	max-width: 100%;
 	box-sizing: border-box;
@@ -150,4 +152,12 @@ header {
 	--pagefind-ui-primary: #0969da;
 	--pagefind-ui-font: inherit;
 	--pagefind-ui-border-radius: 6px;
+}
+
+/* The theme locks the body to the viewport. Keep a long result list inside
+ * its own scroller so it cannot push the reading column off-screen. */
+#blueprint-search .pagefind-ui__drawer {
+	max-height: 45vh;
+	overflow-y: auto;
+	overscroll-behavior: contain;
 }

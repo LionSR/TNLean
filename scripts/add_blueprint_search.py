@@ -6,8 +6,8 @@ that appear in the table of contents, not to an arbitrary phrase in the prose.
 This step layers Pagefind (https://pagefind.app) onto the already-built pages
 so that any word in the blueprint can be found from any page.
 
-Run it against the generated tree after ``leanblueprint web`` (and after the
-reader-facing render regression):
+Run it against the generated tree after ``leanblueprint web`` and before the
+reader-facing render regression:
 
     python3 scripts/add_blueprint_search.py --web-root blueprint/web
 
@@ -21,11 +21,11 @@ The step is offline once Pagefind is installed; it
    stylesheet/script links that drive it.
 
 The injected markup is bracketed by HTML comment markers, so re-running the
-script on an already-processed tree is a no-op.
+script does not duplicate the markup. The search index is rebuilt each time.
 
 Pagefind is located automatically: the ``pagefind`` Python module
-(``pip install 'pagefind[extended]'``), a ``pagefind`` executable on ``PATH``,
-or ``npx pagefind`` are tried in that order.
+(``pip install 'pagefind[extended]==1.5.2'``) and a ``pagefind`` executable on
+``PATH`` are tried in that order. This script never downloads executables.
 """
 
 from __future__ import annotations
@@ -49,11 +49,9 @@ BOX_SNIPPET = (
     f"<!-- {MARKER}:end -->"
 )
 
-# Pagefind records page URLs relative to the site root it indexes (a leading
-# ``/``). The blueprint is published under a sub-path, not the domain root, so
-# the leading slash is stripped and the link resolved relative to the current
-# page instead; every page lives flat in one directory, so this is correct
-# wherever the site is deployed.
+# Pagefind detects the deployed base URL from its own script's location.
+# Keep its root-relative result URLs, including their deployment prefix;
+# stripping the slash would repeat that prefix when the browser resolves them.
 SCRIPT_SNIPPET = (
     f"<!-- {MARKER}:begin -->"
     '<script src="pagefind/pagefind-ui.js"></script>'
@@ -64,17 +62,6 @@ SCRIPT_SNIPPET = (
     '    element: "#blueprint-search",'
     "    showSubResults: true,"
     "    showImages: false,"
-    "    processResult: function (result) {"
-    '      if (result && typeof result.url === "string") {'
-    '        result.url = result.url.replace(/^\\//, "");'
-    "      }"
-    "      if (result && result.sub_results) {"
-    "        result.sub_results.forEach(function (sub) {"
-    '          if (typeof sub.url === "string") sub.url = sub.url.replace(/^\\//, "");'
-    "        });"
-    "      }"
-    "      return result;"
-    "    }"
     "  });"
     "});"
     "</script>"
@@ -87,7 +74,6 @@ def _pagefind_command() -> list[str]:
     candidates = [
         [sys.executable, "-m", "pagefind"],
         ["pagefind"],
-        ["npx", "-y", "pagefind@1"],
     ]
     for cmd in candidates:
         try:
@@ -102,7 +88,7 @@ def _pagefind_command() -> list[str]:
             return cmd
     raise SystemExit(
         "Pagefind not found. Install it with "
-        "`pip install 'pagefind[extended]'` or make `npx` available."
+        "`pip install 'pagefind[extended]==1.5.2'`."
     )
 
 
@@ -110,14 +96,16 @@ def _tag_search_body(html: str) -> str:
     """Mark the chapter prose as the only indexed region of the page.
 
     With a search body present on the content pages, Pagefind excludes the
-    pages that have none (the title and dependency-graph pages) and ignores the
+    pages that have none and ignores the
     repeated table of contents on the pages that do.
     """
     needle = '<div class="main-text">'
     if needle in html and "data-pagefind-body" not in html:
         html = html.replace(
             needle, '<div class="main-text" data-pagefind-body>', 1)
-    return html
+    # The theme's first h1 is the shared site heading. Use the document title
+    # so result labels identify chapters rather than repeating the site name.
+    return html.replace('<title>', '<title data-pagefind-meta="title">', 1)
 
 
 def _process(html: str) -> tuple[str, bool]:
@@ -142,9 +130,9 @@ def _run_pagefind(root: Path) -> None:
     cmd = _pagefind_command() + ["--site", str(root)]
     print("==> Indexing:", " ".join(cmd))
     subprocess.run(cmd, check=True)
-    if not (root / "pagefind" / "pagefind-ui.js").is_file():
-        raise SystemExit(
-            f"Pagefind ran but produced no UI bundle under {root / 'pagefind'}")
+    for asset in ("pagefind.js", "pagefind-ui.js", "pagefind-ui.css", "pagefind-entry.json"):
+        if not (root / "pagefind" / asset).is_file():
+            raise SystemExit(f"Pagefind ran but produced no {asset} under {root / 'pagefind'}")
 
 
 def main() -> int:
