@@ -36,24 +36,20 @@ open scoped BigOperators InnerProductSpace
 
 namespace MPSPreparation
 
-/-- **Depth `O(log(N/ε))` under a uniform exponential pair-approximation rate.**
-Suppose at every scale `1 ≤ q ≤ N` one family of inhomogeneous chains has a partition
-with block lengths between `q` and `2q` and pair-approximation error at most
-`K N^k exp(-r q)`, where `K,r > 0` and `k` are independent of the ring length. Then every
-normalized target state has an approximation of error at most `ε` prepared in depth at most
-`C log(N/ε)`, for one
-constant `C` and all positive ring lengths and `0 < ε ≤ 1`.
+/-- A uniform pair-approximation rate on the original family for lengths `N ≥ N₀`
+gives physical depth `O(log(N/ε))` on that same range. Short blocking scales still use
+the exact preparation branch, without altering any member of the family.
 
-The uniform rate is an additional hypothesis, not a consequence proved here of the source's
-finite-correlation assumption. See the scope restriction in the module docstring. -/
-theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
+The rate is an additional quantitative hypothesis in arXiv:2307.01696's inhomogeneous
+setting; see `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. -/
+theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from
     (d D : ℕ) (hd : 0 < d) (A : ∀ N, VaryingBondChain d D N)
-    (K r : ℝ) (k : ℕ) (hK : 0 < K) (hr : 0 < r)
-    (hrate : ∀ (N : ℕ) [NeZero N] (q : ℕ), 0 < q → q ≤ N →
+    (K r : ℝ) (k : ℕ) (hK : 0 < K) (hr : 0 < r) (N₀ : ℕ)
+    (hrate : ∀ (N : ℕ) [NeZero N] (q : ℕ), 0 < q → q ≤ N → N₀ ≤ N →
       ∃ (M : ℕ) (_ : 0 < M) (ℓ : Fin M → ℕ) (hN : ∑ j, ℓ j = N),
         (∀ j, q ≤ ℓ j) ∧ (∀ j, ℓ j ≤ 2 * q) ∧
         IsPairApproximable (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
-    ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N],
+    ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
         IsPreparedInDepth T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
@@ -71,11 +67,11 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
   let c₀ := a + b / Real.log 2
   have hc₀ : 0 ≤ c₀ := by dsimp [c₀]; positivity
   have hc : 0 ≤ 4 * Cb * c₀ + Ce * c₀ := by positivity
-  refine ⟨4 * Cb * c₀ + Ce * c₀, fun ε hε hε1 N _ => ?_⟩
+  refine ⟨4 * Cb * c₀ + Ce * c₀, fun ε hε hε1 N _ hN₀ => ?_⟩
   have hNpos : 0 < N := Nat.pos_of_ne_zero (NeZero.ne N)
   have hNpos' : (0 : ℝ) < N := by exact_mod_cast hNpos
   have hn : ‖state (A N)‖ ≠ 0 := by
-    obtain ⟨M, _, ℓ, hsum, _, _, hA⟩ := hrate N N hNpos le_rfl
+    obtain ⟨M, _, ℓ, hsum, _, _, hA⟩ := hrate N N hNpos le_rfl hN₀
     rw [state_eq_chainState, norm_chainState_eq _ hsum]
     exact norm_ne_zero_iff.mpr hA.1
   have hu : ‖(‖state (A N)‖ : ℂ)⁻¹ • state (A N)‖ = 1 := by
@@ -109,8 +105,8 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
   have hqQ : (q : ℝ) < Q + 1 := Nat.ceil_lt_add_one (by linarith)
   have hq0 : 0 < q := by exact_mod_cast (show (0 : ℝ) < q by linarith)
   by_cases hqN : q ≤ N
-  · obtain ⟨M, hM, ℓ, hsum, hℓq, hℓ2q, happ⟩ := hrate N q hq0 hqN
-    letI : NeZero M := ⟨hM.ne'⟩
+  · obtain ⟨M, hM, ℓ, hsum, hℓq, hℓ2q, happ⟩ := hrate N q hq0 hqN hN₀
+    let : NeZero M := ⟨hM.ne'⟩
     have h3Dq : 3 * D ≤ q := by
       have hbD : (3 * D : ℝ) ≤ b := by
         have : 0 ≤ max (Real.log K) 0 / r := by positivity
@@ -157,5 +153,30 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
         _ ≤ Ce * (c₀ * Real.log (N / ε)) := by gcongr
         _ ≤ (4 * Cb * c₀ + Ce * c₀) * Real.log (N / ε) := by nlinarith
     · simpa only [← state_eq_chainState] using hprep
+
+/-- **Depth `O(log(N/ε))` under a uniform exponential pair-approximation rate.**
+Suppose at every scale `1 ≤ q ≤ N` one family of inhomogeneous chains has a partition
+with block lengths between `q` and `2q` and pair-approximation error at most
+`K N^k exp(-r q)`, where `K,r > 0` and `k` are independent of the ring length. Then every
+normalized target state has an approximation of error at most `ε` prepared in depth at most
+`C log(N/ε)`, for one
+constant `C` and all positive ring lengths and `0 < ε ≤ 1`.
+
+The uniform rate is an additional hypothesis, not a consequence proved here of the source's
+finite-correlation assumption. See the scope restriction in the module docstring. -/
+theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
+    (d D : ℕ) (hd : 0 < d) (A : ∀ N, VaryingBondChain d D N)
+    (K r : ℝ) (k : ℕ) (hK : 0 < K) (hr : 0 < r)
+    (hrate : ∀ (N : ℕ) [NeZero N] (q : ℕ), 0 < q → q ≤ N →
+      ∃ (M : ℕ) (_ : 0 < M) (ℓ : Fin M → ℕ) (hN : ∑ j, ℓ j = N),
+        (∀ j, q ≤ ℓ j) ∧ (∀ j, ℓ j ≤ 2 * q) ∧
+        IsPairApproximable (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
+    ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N],
+      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
+        IsPreparedInDepth T (fun s => ψ s) ∧
+        1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
+  obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from
+    d D hd A K r k hK hr 0 (fun N _ q hq hqN _ => hrate N q hq hqN)
+  exact ⟨C, fun ε hε hε1 N _ => hC ε hε hε1 N (Nat.zero_le N)⟩
 
 end MPSPreparation

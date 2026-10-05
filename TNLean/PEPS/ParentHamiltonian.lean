@@ -27,6 +27,8 @@ import TNLean.PEPS.ParentHamiltonian.RegionPhysicalGroundSpaceTransport
 import TNLean.PEPS.ParentHamiltonian.RegionPhysicalHamiltonianTransport
 import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
 import TNLean.PEPS.ParentHamiltonian.RegionVertexImageSupport
+import TNLean.PEPS.ParentHamiltonian.RegularGlobalParentCoordinates
+import TNLean.PEPS.ParentHamiltonian.RegularInvariantStateSpan
 import TNLean.PEPS.ParentHamiltonian.RegularRegionBondRightInvariance
 import TNLean.PEPS.ParentHamiltonian.RegularRegionEntropyBound
 import TNLean.PEPS.ParentHamiltonian.RegularRegionFlatness
@@ -39,6 +41,10 @@ import TNLean.PEPS.ParentHamiltonian.TorusClosureParentConstraint
 import TNLean.PEPS.ParentHamiltonian.TorusEntanglementBound
 import TNLean.PEPS.ParentHamiltonian.TorusNativeGInjectiveSupport
 import TNLean.PEPS.ParentHamiltonian.TorusParentFlatness
+import TNLean.PEPS.ParentHamiltonian.TorusPlaquetteParentSupport
+import TNLean.PEPS.ParentHamiltonian.TorusRegularParentCoordinates
+import TNLean.PEPS.ParentHamiltonian.TorusRegularParentGroundSpace
+import TNLean.PEPS.ParentHamiltonian.TorusRegularParentSpanning
 import TNLean.PEPS.ParentHamiltonian.TorusRegularRegionSupport
 import TNLean.PEPS.ParentHamiltonian.TorusSectorLocalGroundSpace
 import TNLean.PEPS.ParentHamiltonian.TorusSectorSupport

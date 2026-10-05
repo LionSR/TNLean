@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.ConfigurationLayers
-import TNLean.MPS.Preparation.DepthUpperBound
+import TNLean.MPS.Preparation.BlockStatePreparation
 
 /-!
 # The layers of the depth count act by configuration maps
 
-The block layer and the layer on the pair windows of `TNLean.MPS.Preparation.DepthUpperBound`,
+The block layer and the layer on the pair windows of `TNLean.MPS.Preparation.BlockStatePreparation`,
 built from gates acting by configuration maps, act by the configuration map changing each block
 (`MPSPreparation.blockLayerOp_mulVec_eq_comp`) or each pair window
 (`MPSPreparation.pairLayerOp_mulVec_eq_comp`) by its gate. Both are cases of

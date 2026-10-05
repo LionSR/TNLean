@@ -1,0 +1,121 @@
+\begin{definition}[Regular half-edge coordinates and closed coefficients]%
+    \label{def:peps_regular_half_edge_closed}
+    \lean{TNLean.PEPS.RegularHalfEdgeConfig,
+        TNLean.PEPS.regularHalfEdgeLeftMul,
+        TNLean.PEPS.regularHalfEdgeRightMul,
+        TNLean.PEPS.regularHalfEdgeOperators,
+        TNLean.PEPS.regularHalfEdgeOfBonds,
+        TNLean.PEPS.regularHalfEdgeOfOperators,
+        TNLean.PEPS.regularHalfEdgeConfigEquivOperatorsBonds,
+        TNLean.PEPS.fullRegionHalfEdgeConfigEquiv,
+        TNLean.PEPS.regularProjectorClosedState,
+        TNLean.PEPS.regularHalfEdgeOfBonds_tail,
+        TNLean.PEPS.regularHalfEdgeOfBonds_head,
+        TNLean.PEPS.regularHalfEdgeOperators_ofBonds,
+        TNLean.PEPS.regularHalfEdgeOperators_ofOperators,
+        TNLean.PEPS.regularHalfEdgeOperators_rightMul,
+        TNLean.PEPS.regularHalfEdgeOperators_leftMul,
+        TNLean.PEPS.regularHalfEdgeOfBonds_eq_rightMul}
+    \leanok
+    \uses{def:peps_regular_projector_twisted_region}
+    Let $G$ be a finite group and let $\Gamma=(V,E)$ be a finite
+    simple graph, with each edge oriented from $s(e)$ to $t(e)$.
+    A half-edge configuration assigns $\alpha_{v,e}\in G$ to
+    every incident vertex-edge pair. Vertex and bond translations are
+    $(k\alpha)_{v,e}=k_v\alpha_{v,e}$ and
+    $(\alpha r)_{v,e}=\alpha_{v,e}r_e$, respectively.
+    Define the operator quotient
+    $u(\alpha)_e=\alpha_{t(e),e}\alpha_{s(e),e}^{-1}$.
+    For $u,\eta\in G^E$, let $\alpha(u,\eta)$ have tail labels
+    $\eta_e$ and head labels $u_e\eta_e$. The map
+    $(u,\eta)\mapsto\alpha(u,\eta)$ is a bijection, with inverse
+    $\alpha\mapsto(u(\alpha),(\alpha_{s(e),e})_e)$.
+    Write $\alpha(u)=\alpha(u,1)$. Then
+    $\alpha(u,\eta)=\alpha(u)\eta$,
+    $u(\alpha r)=u(\alpha)$, and
+    $u(k\alpha)_e=k_{t(e)}u(\alpha)_ek_{s(e)}^{-1}$.
+
+    With $P_v$ the regular averaging projector, the canonical closed
+    coefficient vector with inserted operators $u$ is
+    \begin{align}
+        C_u(\alpha)
+        =\sum_{\eta\in G^E}\prod_{v\in V}
+        P_v\bigl(\alpha_v,\alpha(u,\eta)_v\bigr).
+        \label{eq:peps_half_edge_closed}
+    \end{align}
+    These are the full-region contractions of
+    Definition~\ref{def:peps_regular_projector_twisted_region}.
+\end{definition}
+
+\begin{theorem}[Supported expansion of invariant half-edge functions]%
+    \label{thm:peps_regular_invariant_state_span}
+    \lean{TNLean.PEPS.eq_sum_regularProjectorClosedState_of_invariant,
+        TNLean.PEPS.eq_sum_supported_regularProjectorClosedState_of_invariant,
+        TNLean.PEPS.mem_span_supported_regularProjectorClosedState_of_invariant,
+        TNLean.PEPS.regularProjectorClosedState_eq_zero_of_not_support}
+    \leanok
+    \uses{def:peps_regular_half_edge_closed}
+    Suppose $f(k\alpha)=f(\alpha r)=f(\alpha)$ for every vertex
+    translation $k$, bond translation $r$, and half-edge configuration
+    $\alpha$. Let $\mathcal P\subseteq G^E$ satisfy
+    $u(\alpha)\notin\mathcal P\Rightarrow f(\alpha)=0$. Then
+    \begin{align}
+        f=\sum_{u\in\mathcal P} f\bigl(\alpha(u)\bigr)C_u.
+        \label{eq:peps_supported_orbit_expansion}
+    \end{align}
+    If $\mathcal P$ is preserved by the endpoint gauges
+    $u_e\mapsto k_{t(e)}^{-1}u_ek_{s(e)}$, then every $C_u$ with
+    $u\in\mathcal P$ also vanishes when $u(\alpha)\notin\mathcal P$.
+    This is the finite regular-coordinate calculation associated with
+    the closure argument of \cite[Theorem~5.5]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_regular_half_edge_closed}
+    Put $\kappa=|G|$. The independent vertex projectors have kernel
+    \begin{align}
+        \prod_vP_v(\alpha_v,\beta_v)
+        =\kappa^{-|V|}\sum_{k\in G^V}
+        \mathbf1_{\{\alpha=k\beta\}}.
+        \label{eq:peps_half_edge_average}
+    \end{align}
+    Summing $f(\beta)$ against (\ref{eq:peps_half_edge_average}) gives
+    $\kappa^{-|V|}\sum_k f(k^{-1}\alpha)=f(\alpha)$.
+    Reindex $\beta$ by the bijection $(u,\eta)\mapsto\alpha(u,\eta)$.
+    Since $\alpha(u,\eta)=\alpha(u)\eta$, right invariance replaces
+    $f(\alpha(u,\eta))$ by $f(\alpha(u))$. Summing over $\eta$ gives
+    (\ref{eq:peps_half_edge_closed}). If $u\notin\mathcal P$,
+    the coefficient $f(\alpha(u))$ is zero because
+    $u(\alpha(u))=u$. Removing these zero coefficients gives
+    (\ref{eq:peps_supported_orbit_expansion}).
+
+    A nonzero indicator in (\ref{eq:peps_half_edge_average}), with
+    $\beta=\alpha(u,\eta)$, implies
+    $u(\alpha)_e=k_{t(e)}u_ek_{s(e)}^{-1}$.
+    Gauge invariance of $\mathcal P$ therefore forces every indicator
+    to vanish outside its prescribed support.
+\end{proof}
+
+\begin{theorem}[Physical contraction of the regular closed coefficients]%
+    \label{thm:peps_regular_closed_physical_contraction}
+    \lean{TNLean.PEPS.regularProjectorClosedState_eq_twistedRegionMatrix,
+        TNLean.PEPS.sum_regularProjectorClosedState_eq_stateCoeff}
+    \leanok
+    \uses{def:peps_regular_half_edge_closed,
+        thm:peps_regular_twisted_region_accessibility}
+    Let the site maps $A_v$ be regular $G$-injective. For each physical
+    configuration $\sigma$, the inserted physical PEPS coefficient is
+    \begin{align}
+        \sum_\alpha\left(\prod_v A_{v,\sigma_v}(\alpha_v)\right)C_u(\alpha)
+        =\sum_{\eta\in G^E}\prod_v
+        A_{v,\sigma_v}\bigl(\alpha(u,\eta)_v\bigr).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_open_region_accessibility}
+    Expand (\ref{eq:peps_half_edge_closed}), exchange the two finite sums,
+    and factor the sum over independent half-edge labels into one sum
+    per vertex. At each vertex use $A_vP_v=A_v$. The remaining sum
+    over the shared labels $\eta$ is the actual inserted contraction.
+\end{proof}

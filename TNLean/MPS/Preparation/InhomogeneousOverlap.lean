@@ -17,6 +17,11 @@ reference state, before the physical dimensions, tensors, and number of blocks a
 These are quantitative sufficient conditions for the pair approximation used in
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS". They are not deduced
 from individual sitewise spectral gaps or from qualitative convergence of the pair error.
+
+**Scope restriction (ordered mixing):** the quantitative ordered-product bounds and common
+faithful reference state are additional hypotheses, not consequences of the source's
+qualitative finite-correlation definition. See
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 -/
 
 open Matrix MPSTensor

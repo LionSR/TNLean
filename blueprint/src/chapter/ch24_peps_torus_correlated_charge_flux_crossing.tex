@@ -1,19 +1,19 @@
-\begin{definition}[The actual correlated charge state]
+\begin{definition}[The correlated charge state]
     \label{def:peps_regular_correlated_charge_state}
     \lean{TNLean.PEPS.regularCorrelatedChargeState}
     \leanok
     \uses{def:peps_regular_edge_charge_contraction}
-    Let $e_0,e_1$ be ordered edges of a finite graph, and let $u$ be an
-    actual bond assignment. Resolve the remote label $q$ by inserting
+    Let $e_0,e_1$ be ordered edges of a finite graph, and let $u$ be a
+    bond assignment. Resolve the remote label $q$ by inserting
     $\mathbf1_{\eta_{e_1}=q}$ on $e_1$, and put
-    $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$. Sum the resulting actual
+    $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$. Sum the resulting
     closed tensor states over $q$. Denote this correlated state by
     $\Psi_z(u;\chi,p)$. This definition retains the same original
     site coefficients in every summand. It is auxiliary to the literal
     charge-pair formula in \cite{Schuch2010PEPS}, lines 2505--2535.
 \end{definition}
 
-\begin{theorem}[Correlated weights in the actual physical cut]
+\begin{theorem}[Correlated weights in the physical cut]
     \label{thm:peps_regular_correlated_charge_cut}
     \lean{TNLean.PEPS.openRegionWeight_regularEdgeCharacterSite_eq_weighted,
         TNLean.PEPS.regularCorrelatedChargeState_apply,
@@ -22,7 +22,7 @@
     \uses{def:peps_regular_correlated_charge_state,
         def:peps_regular_weighted_open_contraction,
         thm:peps_regular_coherent_global_transport}
-    The preceding actual closed state has coefficient
+    The preceding closed state has coefficient
     \[
         \Psi_z(u;\chi,p)(\sigma)
         =\sum_{\eta:E\to G}\chi(p\eta_{e_1}^{-1}z\eta_{e_0})
@@ -91,7 +91,7 @@
         \chi(p\eta_1^{-1}\eta_0)
         \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
     \]
-    The remote label is summed in the genuine original-spin contraction.
+    The remote label is summed in the original-spin contraction.
     No tree gauge, factorization, Gram identity or state-action premise is
     supplied. This remains an auxiliary local crossing consequence:
     the identification of the complete prescribed geometric braid and

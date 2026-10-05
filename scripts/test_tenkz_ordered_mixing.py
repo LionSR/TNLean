@@ -65,6 +65,9 @@ def main() -> int:
             r"\\tnwire(?:\[[^]]*\])?\s*\{([^}]+)\}\s*\{([^}]+)\}", body
         )
         assert len(wires) == len(expected) and set(wires) == expected, name
+        if name == "BLOCK":
+            assert r"\begin{tenkzequation}" in body
+            assert r"\begin{tenkzeq}" not in body
         if name == "OVERLAP":
             assert body.count(r"{\overline{P_\infty}}") == 3
             assert "boundary=periodic" in body
@@ -72,6 +75,11 @@ def main() -> int:
             assert "bonds=none" in body and "boundary=periodic" not in body
             assert body.count("skin=none") == 4
             assert body.count(r"{P_\infty}") == 3
+        # The web renderer supports the presentational wrapper. The standalone
+        # regression additionally runs the native hard equation-signature check.
+        body = body.replace(r"\begin{tenkzequation}", r"\begin{tenkzeq}[check={signature}]")
+        body = body.replace(r"\end{tenkzequation}", r"\end{tenkzeq}")
+        body = re.sub(r"(?m)^(\s*)\$=\$(\s*)$", r"\1=\2", body)
         bodies.append(body)
     source = (
         "\\documentclass{article}\n\\usepackage{amsmath,amssymb}\n"

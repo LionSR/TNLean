@@ -21,6 +21,11 @@ This supplies a quantitative sufficient condition for the pair approximation in
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS". A nonzero target is
 needed when interpreting its normalization as a physical unit vector. It is not silently
 inferred from a bound that only guarantees nonvanishing for sufficiently long rings.
+
+**Scope restriction (ordered mixing):** the quantitative ordered-product bounds and common
+faithful reference state are additional hypotheses, not consequences of the source's
+qualitative finite-correlation definition. See
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 -/
 
 open Matrix MPSTensor

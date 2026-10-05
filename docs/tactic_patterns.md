@@ -5241,6 +5241,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
 
+### one-site MPO blocking as a physical reindexing — candidate
+- **Pattern:** prove that blocking one physical site is reindexing by
+  `Kraus.singleBlockEquiv`, by matrix extensionality and simplification of
+  `wordOfBlock` at length one.
+- **Seen:** two private helper proofs in
+  `TNLean/MPS/MPU/IdentityIndex.lean` and
+  `TNLean/MPS/MPU/InjectiveSourceIndex.lean` (2026-10-02).
+- **Abstraction:** promote `blockTensor_one_eq_reindexPhysical` to
+  `TNLean/MPS/MPDO/PhysicalBlocking.lean` if a third proof is needed.
+- **Notes:** both uses identify source ranks after one-site blocking; no
+  custom tactic is required.
+
 ### Normalization of finite character coefficient vectors — candidate
 
 - **Pattern:** Write the finite squared norm as a dot product, move the
