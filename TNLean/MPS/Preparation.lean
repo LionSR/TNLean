@@ -42,7 +42,10 @@ import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.MPS.Preparation.InhomogeneousExactPreparation
 import TNLean.MPS.Preparation.InhomogeneousPreparation
+import TNLean.MPS.Preparation.InhomogeneousSequence
+import TNLean.MPS.Preparation.InhomogeneousUniformRate
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.IsometricExtension
