@@ -116,7 +116,9 @@ jobs:
       # check runs here too and not only where a pull request is reviewed.
       - name: Test generated blueprint pages
         run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          # Keep Chromium aligned with PR CI and Blueprint publication; 140
+          # collapses text boxes when the TeX font packages are installed.
+          python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
