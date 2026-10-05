@@ -61,6 +61,8 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
   have : NeZero b := ⟨hb.ne'⟩
   have hDA : ∀ j, NeZero (DA j) := fun j => Matrix.neZero_of_trace_eq_one (htrA j)
   have hDB : ∀ j, NeZero (DB j) := fun j => Matrix.neZero_of_trace_eq_one (htrB j)
+  have hDApos : ∀ j, 0 < DA j := fun j => Nat.pos_of_ne_zero (hDA j).out
+  have hDBpos : ∀ j, 0 < DB j := fun j => Nat.pos_of_ne_zero (hDB j).out
   obtain ⟨tA, htA0, htA1, hlamA, hmixleA⟩ := exists_forall_eigenvalue_norm_le_of_mixed hAN hAL
     hDA (fun i j hij μ hμ => mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one
       (A i) (A j) (hmixA i j hij) hμ)
@@ -85,9 +87,9 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
   have hιB : ∀ j, Function.Injective (ιB j) := fun j => flatCoord_injective j
   have hdisjA : ∀ i j, i ≠ j → ∀ a c, ιA i a ≠ ιA j c := fun i j h => flatCoord_ne h
   have hdisjB : ∀ i j, i ≠ j → ∀ a c, ιB i a ≠ ιB j c := fun i j h => flatCoord_ne h
-  have hDAs : 0 < ∑ j, DA j := Finset.sum_pos (fun j _ => @NeZero.pos _ (hDA j))
+  have hDAs : 0 < ∑ j, DA j := Finset.sum_pos (fun j _ => hDApos j)
     ⟨0, Finset.mem_univ _⟩
-  have hDBs : 0 < ∑ j, DB j := Finset.sum_pos (fun j _ => @NeZero.pos _ (hDB j))
+  have hDBs : 0 < ∑ j, DB j := Finset.sum_pos (fun j _ => hDBpos j)
     ⟨0, Finset.mem_univ _⟩
   obtain ⟨LA, hinjA⟩ := exists_isInjectiveOn_blockTensor_blockSum hιA hdisjA hAN hAL hσA htrA
     hfixA (lam₂ := (t : ℂ)) (by rwa [hnorm]) hAlam hAμ
@@ -108,10 +110,10 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
   have hLA : LA ≤ L := by have := le_max_left LA LB; omega
   have hLB : LB ≤ L := by have := le_max_right LA LB; omega
   obtain ⟨CA, KA, hKA, hAp, hAe⟩ := exists_sectorEncoder_preparation_bounds A ιA hιA hdisjA
-    (fun j => @NeZero.pos _ (hDA j)) hDAs hAN hAL hσA htrA hfixA ht0 ht1 hAlam hAμ
+    hDApos hDAs hAN hAL hσA htrA hfixA ht0 ht1 hAlam hAμ
     hr₀ digA.injective dig₀.injective L hL (fun n hn => hinjA n (hLA.trans hn))
   obtain ⟨CB, KB, hKB, hBp, hBe⟩ := exists_sectorEncoder_preparation_bounds B ιB hιB hdisjB
-    (fun j => @NeZero.pos _ (hDB j)) hDBs hBN hBL hσB htrB hfixB ht0 ht1 hBlam hBμ
+    hDBpos hDBs hBN hBL hσB htrB hfixB ht0 ht1 hBlam hBμ
     hr₀ digB.injective dig₀.injective L hL (fun n hn => hinjB n (hLB.trans hn))
   set r := -(1 / 2 * Real.log t)
   have hr : 0 < r := by have := Real.log_neg ht0 ht1; dsimp [r]; linarith
@@ -152,18 +154,18 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
     obtain ⟨UA, TA, hUA, hTA, heA⟩ := hAe N hLN
     obtain ⟨UB, TB, hUB, hTB, heB⟩ := hBe N hLN
     refine ⟨UB * UAᴴ, TA + TB, hUA.star.mul hUB, by nlinarith, ?_⟩
-    rw [← heA, Matrix.mul_assoc, ← Matrix.mul_assoc UAᴴ,
-      (show UAᴴ * UA = 1 from Unitary.star_mul_self_of_mem hUA.mem_unitary), Matrix.one_mul]
+    rw [← heA, ← Matrix.mul_assoc, Matrix.mul_assoc UB UAᴴ UA,
+      (show UAᴴ * UA = 1 from Unitary.star_mul_self_of_mem hUA.mem_unitary), Matrix.mul_one]
     exact heB
   obtain ⟨c, hc, hconv⟩ := exists_log_depth_sectorEncoder_conversion_of_block_approximation
     A B L L (CA + CB) hL2 (KA + KB) r (by linarith) hr happ hexact
   refine ⟨L, c, hL2, hc, fun N _ hLN => ⟨?_, ?_, fun ε hε hε1 => ?_⟩⟩
   · exact isIsometry_sectorEncoder A N
       (injective_sectorColumnMatrix_of_isInjectiveOn A ιA hιA hdisjA
-        (fun j => @NeZero.pos _ (hDA j)) (NeZero.ne N) (hinjA N (hLA.trans hLN)))
+        hDApos (NeZero.ne N) (hinjA N (hLA.trans hLN)))
   · exact isIsometry_sectorEncoder B N
       (injective_sectorColumnMatrix_of_isInjectiveOn B ιB hιB hdisjB
-        (fun j => @NeZero.pos _ (hDB j)) (NeZero.ne N) (hinjB N (hLB.trans hLN)))
+        hDBpos (NeZero.ne N) (hinjB N (hLB.trans hLN)))
   · obtain ⟨U, T, hU, hT, herr⟩ := hconv ε hε hε1 N hLN
     exact ⟨U, T, hU, hT, herr, fun κ _ _ ξ =>
       Matrix.norm_encoder_conversion_reference_le U (sectorEncoder A N) (sectorEncoder B N) herr ξ⟩
