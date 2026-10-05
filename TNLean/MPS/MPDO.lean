@@ -67,6 +67,7 @@ import TNLean.MPS.MPDO.BNTTripleFusionComparison
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BinaryConfigurationSign
+import TNLean.MPS.MPDO.BlockBoundarySelector
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.BondOneOperator
@@ -83,6 +84,7 @@ import TNLean.MPS.MPDO.BoundaryBiorthogonal
 import TNLean.MPS.MPDO.BoundaryBlockAction
 import TNLean.MPS.MPDO.BoundaryBlockFusion
 import TNLean.MPS.MPDO.BoundaryClosedness
+import TNLean.MPS.MPDO.BoundaryCut
 import TNLean.MPS.MPDO.BoundaryDecompositionComparison
 import TNLean.MPS.MPDO.BoundaryDecompositionCoordinates
 import TNLean.MPS.MPDO.BoundaryDecompositionIntertwining

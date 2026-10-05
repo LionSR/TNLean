@@ -1,0 +1,421 @@
+% Source: Garre-Rubio--Lootens--Molnar, arXiv:2203.12563v3,
+% REsubmission.tex compatibility, lines 431--469; Section 5, lines 1236--1320;
+% Appendix B, lines 2457--2466.
+% The parent-symmetry statements explicitly assume adjoint closure of the
+% assembled boundary range; they do not construct the source's weak-Hopf
+% realization or integral. See the companion restriction note
+% docs/paper-gaps/glm23_wha_parent_completion.tex before integrating this source.
+% Checked modules: BoundaryCut, BlockBoundarySelector, NonzeroInteraction,
+% BoundaryParentCommutation, BoundaryParentHamiltonian,
+% BlockBoundaryParentHamiltonian, BoundaryUnitSupport, BoundaryProjectionAverage.
+% All eight production modules have compiled; the WHA realization remains open.
+
+\section{Canonical parents for adjoint-closed boundary ranges}
+\label{sec:glm_boundary_parent}
+
+For an operator tensor $T$ of bond dimension $\chi$, write
+$\mathcal R_L(T)=\{O^L_{T,X}:X\in\MN{\chi}\}$ and
+$\mathcal C(T)=\{X:XT^{ij}=T^{ij}X\text{ for every }i,j\}$.
+The coefficient convention is
+\begin{align}
+    O^L_{T,X}(\sigma,\tau)
+     & =\tr(XT^{\sigma_0\tau_0}\cdots T^{\sigma_{L-1}\tau_{L-1}}),
+    \notag
+\end{align}
+where the empty product is the virtual identity.
+For a state tensor $A$ of bond dimension $D$, let $P_L$ be the
+orthogonal projection onto $\mathcal S_A^L$ and put $h_L=I-P_L$.
+The periodic parent Hamiltonian is $H_{L,N}=\sum_{i=0}^{N-1}h_L^{(i)}$,
+where each local term acts on a cyclic window of length $L\leq N$.
+These are the canonical parent terms considered in
+\cite[Section~5 and Appendix~B]{GarreRubio2023MPOSym}.
+
+\begin{theorem}[Finite boundary cuts]
+    \label{thm:glm_boundary_cut}
+    \lean{MPOTensor.mpoWithBoundary_reindex_blockSplit,
+        MPOTensor.trace_mul_evalWord_rotate,
+        MPOTensor.mpoWithBoundary_reindex_windowComplement}
+    \leanok
+    \uses{def:mpdo_commuting_boundary, def:mpdo_cyclic_window_complement_coordinates}
+    In prefix--suffix coordinates of lengths $L,K$, every virtual boundary $X$
+    satisfies
+    \begin{align}
+        O^{L+K}_{T,X}
+         & =\sum_{a,b=0}^{\chi-1}O^L_{T,E_{ba}X}\otimes O^K_{T,E_{ab}}.
+        \label{eq:glm_parent_cut}
+    \end{align}
+    Empty prefixes and suffixes are allowed. If $X\in\mathcal C(T)$,
+    simultaneous cyclic rotation of two equal-length physical words leaves
+    their boundary-weighted trace unchanged. Hence, for $0\leq L\leq N$
+    and $i\in\{0,\ldots,N-1\}$, the same cut formula holds in the coordinates
+    of the cyclic window starting at $i$ and its ordered complement,
+    with $K=N-L$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:mpo_eval_word_append}
+    If $U,V$ are the virtual word matrices on the two intervals, then
+    \begin{align}
+        \tr(XUV)
+         & =\sum_{a,b}(XU)_{ab}V_{ba}
+        =\sum_{a,b}\tr(E_{ba}XU)\tr(E_{ab}V).
+        \label{eq:glm_parent_trace_cut}
+    \end{align}
+    Word evaluation factors over concatenation, giving
+    (\ref{eq:glm_parent_cut}). For a one-site cyclic rotation, let
+    $B$ be the first tensor letter and $V$ the remaining word matrix.
+    Then $\tr(XVB)=\tr(BXV)=\tr(XBV)$, since $BX=XB$.
+    Induction on the number of rotations places any cyclic window first,
+    including one that wraps around the end of the chain, and the same
+    matrix-unit expansion applies.
+\end{proof}
+
+\begin{center}
+    \tenkzkernel
+    % Formula: (\ref{eq:glm_parent_trace_cut}), coefficientwise in the
+    % grouped physical indices (sigma_W,sigma_C;tau_W,tau_C).
+    % Ink-to-index map: a box M has west virtual row index p and east
+    % virtual column index q, hence coefficient M_{pq}. Adjacent east/west
+    % legs are contracted; the periodic closure contracts the final east
+    % leg with the first west leg. Thus left-to-right X,U,V gives tr(XUV).
+    % U=T^{sigma_W,tau_W} and V=T^{sigma_C,tau_C} are ordered products.
+    % North physical legs are output/row configurations sigma; south legs
+    % are input/column configurations tau. Each grouped leg has dimension
+    % d^L or d^K. The boundary boxes have virtual legs only.
+    % On the right, tr(E_{ba}XU)=(XU)_{ab} and tr(E_{ab}V)=V_{ba}.
+    % The two separate periodic rows are tensor factors, not composition.
+    % Boundary signature on both sides, with grouped physical indices:
+    % physical-north=2, physical-south=2, virtual-west=0, virtual-east=0.
+    \begin{tenkz}[rows={op}, cols=3, boundary=periodic]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{X} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,90:physical:$\sigma_W$,270:physical:$\tau_W$}]{U} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,90:physical:$\sigma_C$,270:physical:$\tau_C$}]{V}
+    \end{tenkz}
+    \quad $=\displaystyle\sum_{a,b=0}^{\chi-1}$ \quad
+    \begin{tenkz}[rows={op}, cols=2, boundary=periodic]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{E_{ba}X} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,90:physical:$\sigma_W$,270:physical:$\tau_W$}]{U}
+    \end{tenkz}
+    \quad $\otimes$ \quad
+    \begin{tenkz}[rows={op}, cols=2, boundary=periodic]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{E_{ab}} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,90:physical:$\sigma_C$,270:physical:$\tau_C$}]{V}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Commutation from an invariant star algebra]
+    \label{thm:glm_parent_invariant_star_algebra}
+    \lean{MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant}
+    \leanok
+    \uses{def:parent_interaction}
+    Let $\mathcal B$ be a unital $*$-subalgebra of operators on the
+    $L$-site physical space, and suppose that $\mathcal S_A^L$ is invariant
+    under $\mathcal B$. Then $[h_L,B]=0$ for every $B\in\mathcal B$.
+    This statement also holds at $L=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $v\in(\mathcal S_A^L)^\perp$ and $w\in\mathcal S_A^L$,
+    $\langle w,Bv\rangle=\langle B^*w,v\rangle=0$, because
+    $B^*\in\mathcal B$. Thus the orthogonal complement is invariant too,
+    and its orthogonal projection satisfies $h_LBv=Bh_Lv$ for every $v$.
+\end{proof}
+
+\begin{theorem}[Local commutation from an adjoint-closed range]
+    \label{thm:glm_boundary_parent_local}
+    \lean{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary,
+        MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule,
+        MPOTensor.IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra,
+        MPOTensor.IsBoundaryCompatible.parentInteraction_mpoWithBoundary_mulVec,
+        MPOTensor.IsBoundaryCompatible.parentInteraction_commute_mpoWithBoundary,
+        MPOTensor.IsBoundaryCompatible.parentInteraction_matrix_commute_mpoWithBoundary,
+        MPOTensor.IsBoundaryCompatible.groundSpaceES_starProjection_commute_mpoWithBoundary}
+    \leanok
+    \uses{def:glm_boundary_closedness, def:mpdo_commuting_boundary,
+        def:parent_interaction}
+    Suppose $T$ and $A$ are compatible in the length-independent sense of
+    Definition~\ref{def:glm_boundary_closedness}, and fix $L>0$.
+    Then $\mathcal R_L(T)$ preserves $\mathcal S_A^L$. If in addition
+    $\mathcal R_L(T)^*=\mathcal R_L(T)$, the unital $*$-algebra generated
+    by this range preserves $\mathcal S_A^L$, and
+    $[h_L,O^L_{T,Y}]=[P_L,O^L_{T,Y}]=0$ for every virtual boundary $Y$.
+    Equivalently, $h_L(O^L_{T,Y}v)=O^L_{T,Y}(h_Lv)$ for every physical
+    vector $v$, in either the configuration or orthonormal coordinates.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_boundary_closedness, thm:glm_parent_invariant_star_algebra}
+    Compatibility gives $O^L_{T,Y}\mathcal S_A^L\subseteq\mathcal S_A^L$.
+    Adjoint closure gives the same invariance for every adjoint generator.
+    Sums, products, and scalar multiples of the identity preserve this
+    invariant subspace, so the generated unital $*$-algebra preserves it.
+    Apply Theorem~\ref{thm:glm_parent_invariant_star_algebra} to obtain
+    $h_LO^L_{T,Y}=O^L_{T,Y}h_L$. The same orthogonal reduction gives
+    $P_LO^L_{T,Y}=O^L_{T,Y}P_L$. The canonical identification with
+    the Hilbert space of configurations gives the stated coordinate forms.
+    Adjoining the ambient identity does not require a represented support
+    projection to equal the ambient identity.
+\end{proof}
+
+\begin{theorem}[A boundary unit from one injective length]
+    \label{thm:glm_boundary_unit_support}
+    \lean{MPOTensor.IsBoundaryCompatible.mpoWithBoundary_mulVec_eq_of_one_length_eq_one,
+        MPOTensor.IsBoundaryCompatible.mpoWithBoundary_mulVec_eq_of_one_site_eq_one,
+        MPOTensor.IsBoundaryCompatible.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one,
+        MPOTensor.IsBoundaryCompatible.toEuclideanLin_comp_groundSpaceES_starProjection,
+        MPOTensor.IsBoundaryCompatible.toEuclideanLin_comp_groundSpaceES_starProjection_of_one_site}
+    \leanok
+    \uses{def:glm_boundary_closedness, def:l_blk_injective,
+        def:ground_space_map, def:parent_interaction}
+    Suppose $T$ and $A$ are length-independently compatible, $L_0>0$,
+    and $A$ is $L_0$-block injective. Let $U\in\MN{\chi}$ satisfy
+    $O^{L_0}_{T,U}=I$. For every $n>0$, put $Q_n=O^n_{T,U}$.
+    Then $Q_n\psi^n_{A,X}=\psi^n_{A,X}$ for every $X\in\MN{D}$,
+    $Q_nv=v$ for every $v\in\mathcal S_A^n$, and $Q_nP_n=P_n$.
+    In particular, one-site injectivity and $O^1_{T,U}=I$ suffice.
+    There is no comparison between $n$ and $L_0$, and no adjoint-closure
+    assumption is needed. This is a sufficient unit-support criterion for
+    the normalization used in \cite[Appendix~B]{GarreRubio2023MPOSym}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_boundary_closedness, thm:ground_space_map_injective_blk}
+    Write $\Gamma_k(X)=\psi^k_{A,X}$. Compatibility chooses a single
+    state boundary $Z$ such that $O^k_{T,U}\Gamma_k(X)=\Gamma_k(Z)$
+    for every $k>0$. At $k=L_0$ this gives
+    $\Gamma_{L_0}(Z)=O^{L_0}_{T,U}\Gamma_{L_0}(X)=\Gamma_{L_0}(X)$.
+    Theorem~\ref{thm:ground_space_map_injective_blk} implies $Z=X$.
+    The same equality therefore holds at every positive $n$.
+    Since $\mathcal S_A^n=\operatorname{ran}\Gamma_n$, the operator
+    $Q_n$ fixes the whole support, including every vector $P_nv$.
+    The one-site case takes $L_0=1$.
+\end{proof}
+
+\begin{theorem}[Periodic placement of a commuting local operator]
+    \label{thm:glm_boundary_embed_commutation}
+    \lean{MPOTensor.embedLocalOperator_commute_mpoWithBoundary}
+    \leanok
+    \uses{def:mpdo_commuting_boundary, def:mpdo_cyclic_window_complement_coordinates}
+    Let $0\leq L\leq N$ and $i\in\{0,\ldots,N-1\}$. Suppose an
+    $L$-site operator $B$ satisfies $[B,O^L_{T,Y}]=0$ for every virtual
+    boundary $Y$. Its placement $B^{(i)}$ on the cyclic window starting
+    at $i$ satisfies $[B^{(i)},O^N_{T,X}]=0$ for every
+    $X\in\mathcal C(T)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_cut, thm:mpdo_cyclic_local_embedding_reindex}
+    In window--complement coordinates, $B^{(i)}=B\otimes I$ by
+    Theorem~\ref{thm:mpdo_cyclic_local_embedding_reindex}. Each summand
+    of (\ref{eq:glm_parent_cut}) satisfies
+    \begin{align}
+        (B\otimes I)(O^L_{T,E_{ba}X}\otimes O^{N-L}_{T,E_{ab}})
+         & =(BO^L_{T,E_{ba}X})\otimes O^{N-L}_{T,E_{ab}} \notag      \\
+         & =(O^L_{T,E_{ba}X}B)\otimes O^{N-L}_{T,E_{ab}} \notag      \\
+         & =(O^L_{T,E_{ba}X}\otimes O^{N-L}_{T,E_{ab}})(B\otimes I).
+        \notag
+    \end{align}
+    Sum over the two virtual indices and return to the chain coordinates.
+    No commutation condition is required of the local boundaries $E_{ba}X$.
+\end{proof}
+
+\begin{theorem}[Periodic commutation]
+    \label{thm:glm_boundary_parent_periodic}
+    \lean{MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_mpoWithBoundary,
+        MPOTensor.IsBoundaryCompatible.localTermES_commute_mpoWithBoundary,
+        MPOTensor.IsBoundaryCompatible.parentHamiltonian_commute_mpoWithBoundary}
+    \leanok
+    \uses{def:glm_boundary_closedness, def:mpdo_commuting_boundary,
+        def:parent_hamiltonian}
+    Suppose $T$ and $A$ are compatible, $0<L\leq N$, and
+    $\mathcal R_L(T)^*=\mathcal R_L(T)$. Then, for every cyclic
+    placement $i$ and every $X\in\mathcal C(T)$, one has
+    $[h_L^{(i)},O^N_{T,X}]=0$ and $[H_{L,N},O^N_{T,X}]=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_parent_local, thm:glm_boundary_embed_commutation,
+        lem:local_term_es_average, def:parent_hamiltonian}
+    Theorem~\ref{thm:glm_boundary_parent_local} gives
+    $[h_L,O^L_{T,Y}]=0$ for every $Y$. Apply
+    Theorem~\ref{thm:glm_boundary_embed_commutation} with $B=h_L$ to
+    each cyclic placement. Finally,
+    $[H_{L,N},O^N_{T,X}]=\sum_{i=0}^{N-1}[h_L^{(i)},O^N_{T,X}]=0$.
+\end{proof}
+
+\begin{definition}[Direct sums and summand boundary projections]
+    \label{def:glm_boundary_block_sum}
+    \lean{MPOTensor.blockSum, MPOTensor.blockBoundarySelector,
+        MPOTensor.blockSum_toMPSTensor}
+    \leanok
+    \uses{def:mpo_to_mps, def:block_diagonal_tensor}
+    For operator tensors $T_a$ of bond dimensions $\chi_a$, indexed by
+    $a\in\{0,\ldots,r-1\}$, define $T^{ij}=\bigoplus_aT_a^{ij}$ on
+    $\bigoplus_a\C^{\chi_a}$. Write $J_a$ for the inclusion of the
+    $a$th summand and $Q_a=J_aJ_a^*$ for its coordinate projection.
+    Pairing the two physical indices identifies this operator tensor
+    with the unweighted direct sum of the corresponding state tensors.
+\end{definition}
+
+\begin{theorem}[Selection of a periodic block]
+    \label{thm:glm_boundary_block_selector}
+    \lean{MPOTensor.mpoWithBoundary_blockSum_blockBoundarySelector,
+        MPOTensor.evalWord_blockSum,
+        MPOTensor.blockBoundarySelector_mem_commutingBoundaryAlgebra}
+    \leanok
+    \uses{def:glm_boundary_block_sum, def:mpdo_commuting_boundary}
+    For $T=\bigoplus_aT_a$, every word matrix is the direct sum of the
+    component word matrices. Each $Q_a$ commutes with every letter
+    $T^{ij}$, so $Q_a\in\mathcal C(T)$, and
+    $O^N_{T,Q_a}=O^N_{T_a,I}$ for every $N\geq0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_boundary_block_sum, lem:eval_word_block_diagonal_tensor}
+    Evaluation of a word in block-diagonal matrices gives
+    $T^{\sigma,\tau}=\bigoplus_bT_b^{\sigma,\tau}$, including the
+    empty word. Also $Q_aT^{ij}=T^{ij}Q_a=J_aT_a^{ij}J_a^*$.
+    Since $J_a^*J_a=I$, cyclicity of trace gives
+    \begin{align}
+        \tr(Q_aT^{\sigma,\tau})
+         & =\tr(J_a^*T^{\sigma,\tau}J_a)
+        =\tr(T_a^{\sigma,\tau}).
+        \notag
+    \end{align}
+    The asserted selector identity follows coefficientwise.
+\end{proof}
+
+\begin{theorem}[Individual periodic block symmetries]
+    \label{thm:glm_boundary_parent_blocks}
+    \lean{MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_mpo_block}
+    \leanok
+    \uses{def:glm_boundary_block_sum, def:glm_boundary_closedness,
+        def:parent_hamiltonian}
+    Let $T=\bigoplus_a T_a$ be an unweighted finite direct sum compatible
+    with $A$. If $0<L\leq N$ and $\mathcal R_L(T)^*=\mathcal R_L(T)$,
+    then $[H_{L,N},O^N_{T_a,I}]=0$ for every $a$.
+    Adjoint closure is required only of the entire assembled boundary range;
+    taking adjoints may exchange labels.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_block_selector, thm:glm_boundary_parent_periodic}
+    By Theorem~\ref{thm:glm_boundary_block_selector},
+    $Q_a\in\mathcal C(T)$ and $O^N_{T,Q_a}=O^N_{T_a,I}$.
+    Apply Theorem~\ref{thm:glm_boundary_parent_periodic} with $X=Q_a$.
+\end{proof}
+
+\begin{theorem}[Nonzero canonical interaction]
+    \label{thm:glm_boundary_parent_nonzero}
+    \lean{MPSTensor.parentInteractionES_ne_zero,
+        MPSTensor.parentInteraction_ne_zero,
+        MPOTensor.IsBoundaryCompatible.nonzero_parentInteractionES_and_parentHamiltonianES_commute}
+    \leanok
+    \uses{def:parent_interaction, def:parent_hamiltonian,
+        def:glm_boundary_closedness, def:mpdo_commuting_boundary}
+    For every $L\geq0$, the inequality $d^L>D^2$ implies $h_L\ne0$.
+    If also $T$ and $A$ are compatible, $0<L\leq N$, and
+    $\mathcal R_L(T)^*=\mathcal R_L(T)$, this nonzero canonical
+    interaction defines a periodic parent commuting with every
+    $O^N_{T,X}$ for $X\in\mathcal C(T)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_ne_top, lem:parent_interaction_es_kernel,
+        thm:glm_boundary_parent_periodic}
+    The boundary parametrization gives $\dim\mathcal S_A^L\leq D^2<d^L$,
+    so $\mathcal S_A^L$ is a proper subspace by
+    Lemma~\ref{lem:ground_space_ne_top}. If $h_L=0$, its kernel
+    would be the entire physical space, contradicting
+    $\ker h_L=\mathcal S_A^L$ from
+    Lemma~\ref{lem:parent_interaction_es_kernel}. This nonzero property
+    is unchanged by the canonical identification of the two coordinate
+    spaces. The commutation assertion is
+    Theorem~\ref{thm:glm_boundary_parent_periodic}.
+\end{proof}
+
+\begin{theorem}[Normalized boundary averages of the support]
+    \label{thm:glm_boundary_projection_average}
+    \lean{MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_groundSpaceES_starProjection,
+        MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_parentInteractionES,
+        MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection}
+    \leanok
+    \uses{def:glm_boundary_closedness, def:l_blk_injective, def:parent_interaction}
+    Suppose $T$ and $A$ are length-independently compatible, $L_0,n>0$,
+    $A$ is $L_0$-block injective, and $O^{L_0}_{T,U}=I$ for a fixed
+    $U\in\MN{\chi}$. Suppose also
+    $\mathcal R_n(T)^*=\mathcal R_n(T)$, and put $Q_n=O^n_{T,U}$.
+    Let $(X_j,Y_j)_{j\in J}$ be a finite family of pairs of virtual
+    boundaries satisfying
+    \begin{align}
+        \sum_{j\in J}O^n_{T,X_j}O^n_{T,Y_j} & =Q_n.
+        \label{eq:glm_boundary_average_unit}
+    \end{align}
+    Define $E_n(B)=\sum_{j\in J}O^n_{T,X_j}BO^n_{T,Y_j}$.
+    Then
+    \begin{align}
+        E_n(P_n)   & =P_n, \label{eq:glm_boundary_support_average}    \\
+        E_n(h_n)   & =Q_n-P_n, \label{eq:glm_boundary_parent_average} \\
+        I-E_n(P_n) & =h_n. \label{eq:glm_boundary_ambient_complement}
+    \end{align}
+    The set $J$ may be empty, and the physical and virtual dimensions
+    may be zero, when the stated hypotheses hold. No identity $Q_n=I$ or relation
+    $O^n_{T,Y_j}=(O^n_{T,X_j})^*$ is required.
+    These are consequences of the product normalization in
+    \cite[Appendix~B]{GarreRubio2023MPOSym} for actual boundary operators.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_parent_local, thm:glm_boundary_unit_support}
+    Theorem~\ref{thm:glm_boundary_parent_local} gives
+    $P_nO^n_{T,Y_j}=O^n_{T,Y_j}P_n$, while
+    Theorem~\ref{thm:glm_boundary_unit_support} gives $Q_nP_n=P_n$.
+    Thus (\ref{eq:glm_boundary_average_unit}) implies
+    \begin{align}
+        E_n(P_n)
+         & =\sum_{j\in J}(O^n_{T,X_j}O^n_{T,Y_j})P_n
+        =Q_nP_n=P_n. \notag
+    \end{align}
+    Linearity and $h_n=I-P_n$ now give
+    $E_n(h_n)=E_n(I)-E_n(P_n)=Q_n-P_n$, whereas
+    $I-E_n(P_n)=I-P_n=h_n$.
+\end{proof}
+
+\begin{theorem}[Nonzero ambient complement of the averaged support]
+    \label{thm:glm_boundary_average_nonzero}
+    \lean{MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection_ne_zero}
+    \leanok
+    \uses{thm:glm_boundary_projection_average}
+    Under the hypotheses of
+    Theorem~\ref{thm:glm_boundary_projection_average}, if $d^n>D^2$,
+    then $I-E_n(P_n)\ne0$. This asserts no nonzeroness of $E_n(h_n)$:
+    if $Q_n=P_n$, then $E_n(h_n)=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_projection_average, thm:glm_boundary_parent_nonzero}
+    By (\ref{eq:glm_boundary_ambient_complement}), the ambient complement
+    is $h_n$. Theorem~\ref{thm:glm_boundary_parent_nonzero} gives
+    $h_n\ne0$ from $d^n>D^2$. The final assertion follows from
+    (\ref{eq:glm_boundary_parent_average}) when $Q_n=P_n$.
+\end{proof}
+
+For the two-site weak-Hopf average $E$ of
+\cite[Appendix~B]{GarreRubio2023MPOSym}, write
+$\rho=(\phi\otimes\phi)\circ\Delta$ and $Q=\rho(1)$.
+Its normalization is $E(I)=Q$, so for the two-site support projection $P_2$,
+\begin{align}
+    E(I-P_2) & =Q-E(P_2),
+    \label{eq:glm_parent_wha_average} \\
+    I-E(P_2) & =E(I-P_2)+(I-Q).
+    \label{eq:glm_parent_wha_complement}
+\end{align}
+Theorem~\ref{thm:glm_boundary_projection_average} gives $E(P_2)=P_2$
+when its positive-length identity, injectivity, adjoint closure, and
+finite-family normalization hypotheses hold for this representation.
+The ambient complement then equals $h_2$, whereas the literal averaged
+parent is $Q-P_2$. The dimension inequality proves that $I-P_2$ is nonzero;
+it does not prove that $Q-P_2$ is nonzero. Compatibility alone gives
+invariance of $\mathcal S_A^2$. The additional identity and normalization
+hypotheses must be established for the represented weak-Hopf unit and
+canonical integral; they are not consequences of invariance alone.

@@ -430,6 +430,13 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
+          for example in BoundaryParentHamiltonian BlockBoundaryParentHamiltonian \
+              BoundaryUnitSupport BoundaryProjectionAverage; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
 
       - name: Test algebraic preparation import boundary
         timeout-minutes: 2
