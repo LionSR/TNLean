@@ -37,6 +37,7 @@ the block of `2^{k+1}` sites.
   rectangular physical map, acting on length-`L` blocks.
 * `MPSTensor.blockTensor_rotatePhysical` (from `TNLean.MPS.Core.Blocking`) — blocking commutes
   with physical maps: `(W · C)` blocked `L` times is `W^{⊗L}` applied to `C` blocked `L` times.
+* `MPSTensor.pairPosTensor`, `MPSTensor.treeLayers` — positive-part iteration and its layers.
 * `MPSTensor.treeTensor`, `MPSTensor.treePosTensor`, `MPSTensor.treeIsoMatrix` — the chain
   `Tⱼ`, the last positive part `P_{k+1}`, and the product of the layers.
 * `MPSTensor.blockTensor_eq_rotatePhysical_treeIsoMatrix`,
@@ -58,6 +59,21 @@ open scoped Matrix ComplexOrder
 namespace MPSTensor
 
 variable {n m D : ℕ}
+
+/-- The positive-part tensor `T₁` of the two-site blocked tensor of `A`, the tensor whose
+two-site blocks are decomposed in the next layer of eq. (16) of arXiv:2307.01696. -/
+noncomputable def pairPosTensor (A : MPSTensor n D) : MPSTensor (D * D) D :=
+  polarPosTensor (blockTensor A 2)
+
+/-- The coarse layers `V⁽²⁾, …, V⁽ᵏ⁺¹⁾` of the tree-RG circuit for a block of `2^{k+1}` sites:
+`V⁽ʲ⁺²⁾` is the isometric factor of the two-site blocked tensor of `T_{j+1}`.
+
+arXiv:2307.01696, eq. (16). -/
+noncomputable def treeLayers (k : ℕ) (A : MPSTensor n D) :
+    Fin k → Matrix (Fin (blockPhysDim (D * D) 2)) (Fin (D * D)) ℂ :=
+  fun j => polarIsoMatrix
+    (blockTensor ((pairPosTensor : MPSTensor (D * D) D → MPSTensor (D * D) D)^[j]
+      (pairPosTensor A)) 2)
 
 /-! ### Regrouping a block of `2^{k+2}` sites into pairs -/
 

@@ -83,7 +83,11 @@ on:
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
+      - 'scripts/test_tenkz_peps_four_cut.py'
+      - 'scripts/check_peps_four_cut_blueprint.py'
+      - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -160,7 +164,11 @@ on:
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
+      - 'scripts/test_tenkz_peps_four_cut.py'
+      - 'scripts/check_peps_four_cut_blueprint.py'
+      - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
   workflow_dispatch:
 
@@ -254,7 +262,11 @@ jobs:
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
+              - 'scripts/test_tenkz_peps_four_cut.py'
+              - 'scripts/check_peps_four_cut_blueprint.py'
+              - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
@@ -325,6 +337,18 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/CompatibleSeedCircuitEquivalence.lean
 
+      - name: Test supported trees and coherent measurement branches
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in MeasurementBranchCoherence SupportedPolarTree SparseWindowGHZ \
+            CoherentBlockTreePreparation NonNormalLogLogPreparation; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
         run: >
@@ -353,7 +377,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression InhomogeneousMixingPreparation VaryingReferencePreparation ExplicitPreparationScale; do
+          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression InhomogeneousMixingPreparation VaryingReferencePreparation WindowMixingPreparation ExplicitPreparationScale; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -365,6 +389,17 @@ jobs:
         run: |
           set -e
           for example in ElementaryStates HalfChainSpectrum AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors CZXRectangleBoundary RegularTorusParentGroundSpace GInjectiveParentTransport GIsometricRegionParentHamiltonian SemiRegularCanonicalParentTransport GraphOpenBondCoordinateTransport ArbitrarySemiRegularParentTransport PositiveMultiplicityParentTransport KitaevGlobalCheckerboardBlocking NonregularSemiRegularParentTransport OrientedSemiRegularParentTransport TorusSemiRegularParentDimension TorusSemiRegularParentGroundSpace RegularRegionIntersection; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
+      - name: Test dependent four-cut closure and physical Bell separation
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in DependentPhysicalProductRangeSupport PEPS/DependentBondCut PEPS/DependentBondProjectors PEPS/DependentCutBondSupport PEPS/DependentTorusClosure PEPS/FourTorusCut PEPS/FourTorusCutClosure PEPS/MatchedTorusProjectors PEPS/TorusBondClosureSeamMovement PhysicalProductFamilyRangeSupport RegularGraphBondBlocking RegularGraphPhysicalBlocking TorusBondFlatConnection; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -639,6 +674,13 @@ jobs:
       - name: Test tenkz render-cache pruning
         run: python3 scripts/test_prune_tenkz_render_cache.py
 
+      # Run on Lean-only changes as well: these checks exercise the supported
+      # polar-merge algebra in addition to its typed diagram boundaries.
+      - name: Test supported polar trees and diagram boundaries
+        run: |
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5
+          python3 scripts/test_supported_polar_tree.py
+
       - name: Test blueprint search preparation
         run: python3 scripts/test_add_blueprint_search.py
 
@@ -745,6 +787,12 @@ jobs:
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_native_semiregular.py
+
+      - name: Check source four-cut diagrams and declaration coverage
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 scripts/test_tenkz_peps_four_cut.py
+          python3 scripts/check_peps_four_cut_blueprint.py
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'

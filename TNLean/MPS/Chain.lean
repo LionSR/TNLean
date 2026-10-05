@@ -16,6 +16,7 @@ import TNLean.MPS.Chain.CrossProductRigidity
 import TNLean.MPS.Chain.CyclicBlockAverage
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.FundamentalTheorem
+import TNLean.MPS.Chain.Interval
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Chain.SiteIndependent
 import TNLean.MPS.Chain.TensorEquality

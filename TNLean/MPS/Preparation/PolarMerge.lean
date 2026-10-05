@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Preparation.BlockedPolar
-import TNLean.MPS.Preparation.TreeMERA
+import TNLean.MPS.Preparation.TreeFactorization
 
 /-!
 # The partial isometry of a block of unequal halves

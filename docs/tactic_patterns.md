@@ -24,6 +24,35 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Uniform Gram/transfer reshuffling — promoted (2026-10-05)
+
+- **Pattern:** Reshuffle the transfer-matrix error into the physical Gram
+  error, bound the reshuffling by its operator norm, and reverse the same
+  involution when starting from a Gram estimate.
+- **Seen:** `InhomogeneousOverlap`, `VaryingReferenceOverlap`, and
+  `InhomogeneousChoiResidual` repeated this fixed-dimensional argument.
+- **Abstraction:** `MPSTensor.exists_norm_gram_transferMatrix_sub_le` in
+  `PositivePartRate` proves both directions with one constant chosen before
+  the physical dimension, tensor, and positive semidefinite reference.
+- **Notes:** Both polar estimates and the actual-site/window Choi consumers
+  use the same comparison; the fixed-reference inverse wrapper is removed.
+  No generic channel definition or new import is introduced.
+
+
+### Transported-reference Choi residual estimate — promoted (2026-10-05)
+
+- **Pattern:** Subtract trace-preparation terms from actual block channels,
+  compose the completely positive residuals, and bound their normalized Choi
+  traces before reshuffling to the physical Gram matrix.
+- **Seen:** `InhomogeneousPositivePartRate` and `WindowMixing` previously needed
+  the same residual/trace bookkeeping with different reference hypotheses.
+- **Abstraction:**
+  `MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination`
+  in `InhomogeneousChoiResidual` handles varying strengths and minorizers.
+- **Notes:** This is a substantive transported-reference estimate, not a new
+  tactic. The common faithful theorem preserves its signature and exponent;
+  the new fixed-window consumer supplies its own compatible references.
+
 ### Simultaneous permutation invariance of matrix entries — promoted (2026-10-03)
 
 - **Pattern:** Convert simultaneous invariance of matrix entries into commutation
@@ -5416,6 +5445,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Weyl monotonicity and CFC square roots are reused from QICLean and
   Mathlib. The local perturbation/padding results compose those public APIs;
   no QICLean implementation is copied into TNLean.
+
+### Coherent GHZ seed and cyclic correction — promoted (2026-10-05)
+
+- **Pattern:** Repeat the prescribed seed-column unitary construction and the
+  cyclic difference-measurement calculation when changing only the routing.
+- **Seen:** `MPS/Preparation/WindowGHZ.lean` and
+  `MPS/Preparation/SparseWindowGHZ.lean`.
+- **Abstraction:** `exists_windowGHZSeedUnitary`,
+  `windowGHZDifference_eq_mulVec`, and `exists_windowGHZCorrectionRound`
+  keep the seed and coherent cyclic algebra in one place. The correction
+  scalar is quantified before the arbitrary label amplitudes.
+- **Notes:** The one-round SWAP protocol and the constant-depth multi-round
+  protocol have different physical resource claims, so neither replaces the
+  other. Both now consume the same algebra instead of copying its proof.
 
 ### Remainder-absorbing preparation blocks — promoted (2026-10-05)
 

@@ -42,16 +42,27 @@ namespace IsometryTree
 
 variable {d χ R h n n₁ n₂ : ℕ}
 
-private noncomputable def pairIndexEquiv (χ : ℕ) :
+/-- Read a two-site virtual configuration as an ordered pair of virtual indices. -/
+noncomputable def pairIndexEquiv (χ : ℕ) :
     Fin (blockPhysDim χ 2) ≃ Fin χ × Fin χ :=
   (decodeBlockEquiv χ 2).trans (piFinTwoEquiv fun _ => Fin χ)
 
-private noncomputable def joinMatrix (L : Matrix ((Fin n₁ → Fin d)) (Fin χ) ℂ)
+/-- The tensor product of the physical maps of two descendants, in chain order. -/
+noncomputable def joinMatrix (L : Matrix ((Fin n₁ → Fin d)) (Fin χ) ℂ)
     (R : Matrix ((Fin n₂ → Fin d)) (Fin χ) ℂ) :
     Matrix ((Fin (n₁ + n₂) → Fin d)) (Fin (blockPhysDim χ 2)) ℂ :=
   Matrix.reindex (Fin.appendEquiv n₁ n₂) (pairIndexEquiv χ).symm (L ⊗ₖ R)
 
-private theorem isIsometry_joinMatrix {L : Matrix ((Fin n₁ → Fin d)) (Fin χ) ℂ}
+/-- Entries of the tensor product are products of the two descendant amplitudes. -/
+theorem joinMatrix_apply (L : Matrix ((Fin n₁ → Fin d)) (Fin χ) ℂ)
+    (R : Matrix ((Fin n₂ → Fin d)) (Fin χ) ℂ) (τ : Fin (n₁ + n₂) → Fin d)
+    (t : Fin (blockPhysDim χ 2)) :
+    joinMatrix L R τ t =
+      L (fun i => τ (Fin.castAdd n₂ i)) (decodeBlock χ 2 t 0) *
+        R (fun i => τ (Fin.natAdd n₁ i)) (decodeBlock χ 2 t 1) := rfl
+
+/-- Tensoring the maps of two isometric descendants preserves isometry. -/
+theorem isIsometry_joinMatrix {L : Matrix ((Fin n₁ → Fin d)) (Fin χ) ℂ}
     {R : Matrix ((Fin n₂ → Fin d)) (Fin χ) ℂ} (hL : L.IsIsometry) (hR : R.IsIsometry) :
     (joinMatrix L R).IsIsometry :=
   Matrix.IsIsometry.reindex _ (Matrix.IsIsometry.kronecker L R hL hR)

@@ -1,0 +1,177 @@
+\section{Preparation from local window mixing}
+\label{sec:ldp_window_mixing}
+
+We retain a fixed square bond space of dimension $D$. The transfer maps
+are those of the actual site tensors, and their ordered product acts
+right to left. Write $R_\rho(X)=\operatorname{Tr}(X)\rho$ and use the
+output-first normalized Choi matrix $J(E)$. The local criterion below
+is a quantitative sufficient condition for the inhomogeneous discussion
+of~\cite{Malz2024Preparation}, not a consequence of qualitative finite
+correlation~\cite{gap:mswc24_inhomogeneous_scope}.
+
+\begin{definition}[Actual nonwrapping interval]
+    \label{def:ldp_actual_interval}
+    \lean{MPSChainTensor.interval}
+    \leanok
+    For $a+n\le N$, the interval tensor family is
+    $A[a,a+n)_j=A_{a+j}$, for $0\le j<n$.
+\end{definition}
+
+\begin{theorem}[Ordered interval composition]
+    \label{thm:ldp_actual_interval_transfer}
+    \lean{MPSChainTensor.interval_interval,MPSChainTensor.transferMap_interval}
+    \leanok
+    \uses{def:ldp_actual_interval}
+    Taking an interval inside an interval adds their starting positions.
+    The blocked interval has transfer map
+    $E_{[a,a+n)}=E_a\circ\cdots\circ E_{a+n-1}$, in the original order.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_chain_transfer_product}
+    Expand the actual restricted family and its ordered transfer product.
+\end{proof}
+
+\begin{theorem}[Residual product relative to a transported density]
+    \label{thm:ldp_transported_choi_residual}
+    \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination}
+    \leanok
+    Partition an actual chain into blocks with trace-preserving transfer
+    maps $F_j$. Let $\tau_j$ have trace one, let $\delta_j\in\mathbb R$,
+    and suppose
+    \begin{align}
+        J(F_j)\ge\frac{\delta_j}{D}(\tau_j\otimes I).
+    \end{align}
+    For every density matrix $\rho$, with $F=F_0\circ\cdots\circ F_{M-1}$
+    and whole-chain physical matrix $B$, one has
+    \begin{align}
+        \left\|B^\dagger B-F(\rho)^\mathsf T\otimes I\right\|
+        \le 2D\prod_j(1-\delta_j).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_chain_transfer_product}
+    Set $Q_j=F_j-\delta_jR_{\tau_j}$. Choi domination makes each $Q_j$
+    completely positive, and it scales trace by $1-\delta_j$. On
+    traceless inputs the ordered products of $F_j$ and $Q_j$ agree.
+    If $Q=Q_0\circ\cdots\circ Q_{M-1}$, this gives the map identity
+    \begin{align}
+        F-R_{F(\rho)}=Q-R_{Q(\rho)}.
+    \end{align}
+    Both positive Choi matrices on the right have trace
+    $\prod_j(1-\delta_j)$, so the triangle inequality gives the factor
+    two. The actual Gram--Choi identity supplies the factor $D$.
+\end{proof}
+
+\begin{theorem}[Compatible cyclic density references]
+    \label{thm:ldp_compatible_cyclic_densities}
+    \lean{MPSPreparation.exists_compatible_density_family}
+    \leanok
+    \uses{def:ldp_actual_interval}
+    Every trace-preserving actual tensor chain with $D>0$ admits density
+    matrices $\sigma_a$ with $\sigma_N=\sigma_0$ such that
+    \begin{align}
+        E_{[a,a+n)}(\sigma_{a+n})=\sigma_a
+        \qquad(a+n\le N).
+    \end{align}
+    No common or faithful stationary density is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_actual_interval_transfer}
+    Choose a density fixed point $\theta$ of the whole-ring channel and
+    set $\sigma_a=(E_a\circ\cdots\circ E_{N-1})(\theta)$. Complete
+    positivity and trace preservation retain the density conditions.
+    The fixed-point equation closes the cut, and the ordered suffix
+    identity proves every displayed transport equation.
+\end{proof}
+
+The diagram shows two consecutive windows of length $s$, with $a+2s\le N$
+and $F_a=E_{[a,a+s)}$. The right-hand
+density is acted on by the right window first. The sole open index $x$
+on each side is a matrix-entry index of dimension $D^2$, not a physical
+spin index. The reference at the left is derived by transport; it is
+not identified with either window's Choi minorizer.
+% TENKZ-WINDOW-MIXING-TRANSPORT-BEGIN
+\begin{center}
+    \tenkzkernel
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={wire}, cols=5, bonds=none]
+            \tn[at=(1,1), name=wa, skin=box,
+                ports={180:virtual:$x$, 0:virtual}]{F_a}
+            \tn[at=(1,2), name=wb, skin=box, wide=2,
+                ports={180:virtual, 0:virtual}]{F_{a+s}}
+            \tn[at=(1,4), name=wrho, skin=box, wide=2,
+                ports={180:virtual}]{\sigma_{a+2s}}
+            \tnwire{wa.0}{wb.180}
+            \tnwire{wb.0}{wrho.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=wout, skin=box,
+                ports={180:virtual:$x$}]{\sigma_a}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{center}
+% TENKZ-WINDOW-MIXING-TRANSPORT-END
+
+\begin{theorem}[Mixing from fixed-width local minorization]
+    \label{thm:ldp_window_mixing_rate}
+    \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_window_domination,
+        MPSPreparation.exists_norm_transferMatrix_interval_sub_le_of_window_domination}
+    \leanok
+    \uses{def:ldp_actual_interval}
+    Fix $D>0$ and $s\ge1$, and suppose every site map preserves trace. Assume each
+    actual nonwrapping window of length $s$ admits a density matrix
+    $\tau_a$, possibly singular and depending on the window, with
+    $J(E_{[a,a+s)})\ge(\eta/D)(\tau_a\otimes I)$.
+    There is $K_D>0$, chosen before the chain, $s$, and $\eta$. Each
+    such chain admits compatible references as above, and every actual interval satisfies
+    \begin{align}
+        \|T_{E_{[a,a+n)}}-T_{R_{\sigma_a}}\|
+        \le K_D(1-\eta)^{\lfloor n/s\rfloor}.
+    \end{align}
+    The corresponding Gram bound is
+    $2D(1-\eta)^{\lfloor n/s\rfloor}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_transported_choi_residual,thm:ldp_compatible_cyclic_densities,
+        thm:ldp_actual_interval_transfer}
+    Partition the interval into complete $s$-windows and one shorter
+    remainder. Assign minorization strength zero to the remainder; its
+    map is still completely positive and trace preserving. Apply the
+    residual product bound to input $\sigma_{a+n}$ and use transport.
+\end{proof}
+
+\begin{theorem}[Physical preparation from the local window criterion]
+    \label{thm:ldp_window_mixing_preparation}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domination}
+    \leanok
+    Let $d>0$ and fix $D$, $s\ge1$, and $\eta>0$. Suppose a family of
+    actual chains has trace-preserving site maps and satisfies the
+    preceding local Choi condition at every available $s$-window, with
+    the same $s,\eta$ for every ring. Then there are $N_0\ge s$ and $C$,
+    chosen before $N,\varepsilon$, such that for every $N\ge N_0$ and
+    $0<\varepsilon\le1$ there is a unit vector prepared in physical depth at most
+    $C\log(N/\varepsilon)$ with normalized overlap error at most
+    $\varepsilon$ against the original periodic state.
+    Global mixing, a reference family, and short-ring nonvanishing are
+    not hypotheses.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_window_mixing_rate,thm:ldp_varying_reference_preparation}
+    The actual window at ring length $s$ forces $\eta\le1$. Weaken
+    domination to $\eta/2$, so $\rho=1-\eta/2\in[1/2,1)$, including
+    the original endpoint $\eta=1$. The floor bound gives
+    $\rho^{\lfloor n/s\rfloor}\le2e^{-rn}$ with
+    $r=-\log(\rho)/s>0$. Apply varying-reference preparation and enlarge
+    its uniform cutoff to at least $s$. Whole-ring convergence derives
+    eventual nonvanishing without replacing any short-chain tensor.
+\end{proof}
+
+\paragraph{Scope and boundary example.}
+Alternating a Pauli $X$ channel with a rank-one reset on a two-dimensional
+bond space has distinct singular minorizers for the two orientations of
+length-two windows, at $\eta=1$. A three-site ring retains a nonempty
+remainder. The one-site periodic vector is zero and has no length-two
+window; the eventual conclusion correctly leaves that ring unchanged.
+Rectangular varying bonds and derivation from qualitative finite
+correlation remain separate questions.
