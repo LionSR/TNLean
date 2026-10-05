@@ -31,6 +31,11 @@ private theorem bondInterpolationWeight_zero_swap (i : Fin (D₀ + D₁)) :
   simp only [Equiv.trans_apply]
   cases h : finSumFinEquiv.symm i <;> simp [bondInterpolationWeight, h]
 
+private theorem mixedEndpoint_swap_conj_one :
+    (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).toLinearEquiv.conj
+      (1 : Module.End ℂ (EuclideanSpace ℂ (Cfg ((D₁ + D₀) * (D₁ + D₀)) 2))) = 1 :=
+  LinearEquiv.conj_id _
+
 /-- The first-sector row projection in the reversed pair is the second-sector
 row projection in the original pair. Source: arXiv:2203.12563, Section 5,
 lines 1586–1601 and 1690–1692. -/
@@ -95,7 +100,7 @@ theorem parentInteractionES_mixedEndpointRightTensor_le
         mixedEndpointRowSector D₀ D₁ 0 + mixedEndpointColumnSector D₀ D₁ 1 := by
   have h := ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr (parentInteractionES_mixedEndpointLeftTensor_le A₁ A₀)
-  simpa only [map_add, map_sub, LinearEquiv.conj_id, mixedEndpointRowSector_conj_swap,
+  simpa only [map_add, map_sub, mixedEndpoint_swap_conj_one, mixedEndpointRowSector_conj_swap,
     mixedEndpointColumnSector_conj_swap, sub_sub_cancel,
     ← mixedEndpointParentInteraction_one_eq_conj_swap,
     ← parentInteractionES_mixedEndpointRightTensor_eq_conj] using h
@@ -109,7 +114,7 @@ theorem mixedEndpoint_columnSector_zero_le_parentInteraction_one
   have h := ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr
       (mixedEndpoint_one_sub_columnSector_zero_le_parentInteraction A₁ A₀)
-  simpa only [map_sub, LinearEquiv.conj_id, mixedEndpointColumnSector_conj_swap, sub_sub_cancel,
+  simpa only [map_sub, mixedEndpoint_swap_conj_one, mixedEndpointColumnSector_conj_swap, sub_sub_cancel,
     ← mixedEndpointParentInteraction_one_eq_conj_swap] using h
 
 /-- The second-row first-sector penalty lies below the actual second-endpoint
@@ -121,7 +126,7 @@ theorem mixedEndpoint_rowSector_one_le_parentInteraction_one
   have h := ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr
       (mixedEndpoint_one_sub_rowSector_one_le_parentInteraction A₁ A₀)
-  simpa only [map_sub, LinearEquiv.conj_id, mixedEndpointRowSector_conj_swap, sub_sub_cancel,
+  simpa only [map_sub, mixedEndpoint_swap_conj_one, mixedEndpointRowSector_conj_swap, sub_sub_cancel,
     ← mixedEndpointParentInteraction_one_eq_conj_swap] using h
 
 end MPOSymmetry

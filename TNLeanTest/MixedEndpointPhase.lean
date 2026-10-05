@@ -75,6 +75,21 @@ example (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
       (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N)).starProjection :=
   continuous_mixedEndpoint_open_ker_starProjection A₀ A₁ h₀ h₁ hD₀ hD₁ hN
 
+/--
+info: 'MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_endpoints_gap'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_endpoints_gap
+/--
+info: 'MPSTensor.MPOSymmetry.mixedEndpoint_open_ker_eq'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.MPOSymmetry.mixedEndpoint_open_ker_eq
+/--
+info: 'MPSTensor.MPOSymmetry.continuous_mixedEndpoint_open_ker_starProjection'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.MPOSymmetry.continuous_mixedEndpoint_open_ker_starProjection

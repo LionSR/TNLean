@@ -38,8 +38,12 @@ theorem cyclicCfg_eq_join_cyclicActiveBlock
   let x := (cyclicWindowIndexEquiv R N hRN i).symm k
   have hk : cyclicWindowIndexEquiv R N hRN i x = k := by simp [x]
   rcases x with r | r
-  · rw [← hk, cyclicWindowIndexEquiv_inl,
-      cyclicCfg_cyclicForwardSite_apply (Fin.pos i) hRN,
+  · rw [← hk, cyclicWindowIndexEquiv_inl]
+    change cyclicCfg (Fin.pos i) R i ω τ (cyclicForwardSite i r.val) =
+      (cyclicActiveBlockConfigEquiv d R hRN i).symm
+        (ω, (cyclicActiveBlockConfigEquiv d R hRN i τ).2)
+        (cyclicForwardSite i r.val)
+    rw [cyclicCfg_cyclicForwardSite_apply (Fin.pos i) hRN,
       cyclicActiveBlockConfigEquiv_symm_apply_window]
   · rw [← hk, cyclicWindowIndexEquiv_inr]
     have hsite :
@@ -51,7 +55,7 @@ theorem cyclicCfg_eq_join_cyclicActiveBlock
     have hoff :
         ((cyclicForwardSite i (R + r.val)).val + N - i.val) % N = R + r.val := by
       simpa [cyclicForwardSite] using offset_mod_eq i.isLt (by omega : R + r.val < N)
-    rw [cyclicCfg, dif_neg (by rw [hoff]; omega)]
+    rw [cyclicCfg, dite_eq_right (by rw [hoff]; omega)]
     have h := cyclicActiveBlockConfigEquiv_symm_apply_spectator hRN i
       (cyclicActiveBlockConfigEquiv d R hRN i τ).1
       (cyclicActiveBlockConfigEquiv d R hRN i τ).2 r
@@ -87,7 +91,7 @@ theorem mem_ker_periodicLocalInteractionES_iff [NeZero d]
   have hconj : v ∈ LinearMap.ker (periodicLocalInteractionES h i) ↔
       U v ∈ LinearMap.ker G.toLinearMap := by
     simp only [LinearMap.mem_ker]
-    rw [periodicLocalInteractionES, dif_pos hRN]
+    rw [periodicLocalInteractionES, dite_eq_left hRN]
     change U.symm (G (U v)) = 0 ↔ G (U v) = 0
     constructor
     · intro hv
@@ -185,7 +189,7 @@ theorem ker_openInteractionHamiltonianES_inserted_eq
       rw [hA]
       exact Submodule.mem_top
     exact hW (by simpa only [hrange, Submodule.span_empty, Submodule.mem_bot] using hmem)
-  letI : NeZero d := ⟨hd⟩
+  let : NeZero d := ⟨hd⟩
   have hpos : (1 - (insertedTwoSiteMap A W).range.starProjection).toLinearMap.IsPositive := by
     simpa only [Submodule.starProjection_orthogonal'] using
       (Submodule.isSymmetricProjection_starProjection
@@ -235,7 +239,8 @@ theorem continuous_ker_openInteractionHamiltonianES_inserted_starProjection
     (W : X → Matrix (Fin D) (Fin D) ℂ) (hW : Continuous W)
     (hInj : ∀ x, Kraus.IsInjective (A x)) (hne : ∀ x, W x ≠ 0) (hN : 2 ≤ N) :
     Continuous fun x => (LinearMap.ker (openInteractionHamiltonianES
-      (1 - (insertedTwoSiteMap (A x) (W x)).range.starProjection).toLinearMap N)).starProjection := by
+      (1 - (insertedTwoSiteMap (A x) (W x)).range.starProjection).toLinearMap
+        N)).starProjection := by
   simp_rw [ker_openInteractionHamiltonianES_inserted_eq _ (hInj _) _ (hne _) hN]
   exact continuous_range_insertedBoundaryMap_starProjection A hA W hW hInj hne (by omega)
 
