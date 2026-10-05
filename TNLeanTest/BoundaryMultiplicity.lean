@@ -52,8 +52,23 @@ example {d r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   hT.exists_isNIMRep_of_isBoundaryCompatible hB O A hOp hState
     hInjOp hχ hneOp hInjState hD hneState
 
+/--
+info: 'MPSTensor.WordTupleSpanTop.linearIndependent_mpv'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.WordTupleSpanTop.linearIndependent_mpv
+/--
+info: 'MPOTensor.IsMPOFusionAlgebra.associative_of_isInjective'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPOTensor.IsMPOFusionAlgebra.associative_of_isInjective
+/--
+info: 'MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible
 
 end BoundaryMultiplicityTest

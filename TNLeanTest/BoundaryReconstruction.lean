@@ -157,14 +157,59 @@ example (Y : (F).FusionGauge) (a b c d : Fin g) :
 
 end BlockedCoherence
 
+/--
+info: 'Matrix.exists_rankFactorization_of_idempotent'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms Matrix.exists_rankFactorization_of_idempotent
+/--
+info: 'Matrix.exists_piMatrix_blocks'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms Matrix.exists_piMatrix_blocks
+/--
+info: 'MPSTensor.familyTraceAdjoint_map_mul'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.familyTraceAdjoint_map_mul
+/--
+info: 'MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective
+/--
+info: 'MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective
+/--
+info: 'MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective
+/--
+info: 'MPOTensor.IsBoundaryClosed.exists_completeZipperFusionFamily'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPOTensor.IsBoundaryClosed.exists_completeZipperFusionFamily
+/--
+info: 'MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective
+/--
+info: 'MPSTensor.IsBiorthogonalDecomposition.exists_unique_multiplicityGauge_of_isInjective'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.IsBiorthogonalDecomposition.exists_unique_multiplicityGauge_of_isInjective
 
 end BoundaryReconstructionTest
