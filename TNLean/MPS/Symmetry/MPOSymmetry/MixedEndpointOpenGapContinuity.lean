@@ -47,9 +47,8 @@ theorem continuous_periodicLocalInteractionES_family
     change Continuous fun x => U.symm
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R)) (h x) (U v))
     exact U.symm.continuous.comp hfiber
-  · simpa only [periodicLocalInteractionES, dite_eq_right hRN] using
-      (continuous_const : Continuous fun _ : X =>
-        (0 : EuclideanSpace ℂ (Cfg d N) →L[ℂ] EuclideanSpace ℂ (Cfg d N)))
+  · simp only [periodicLocalInteractionES, dite_eq_right hRN]
+    exact continuous_const
 
 /-- The nonwrapping sum of a continuous local interaction family is
 continuous at every fixed volume. -/

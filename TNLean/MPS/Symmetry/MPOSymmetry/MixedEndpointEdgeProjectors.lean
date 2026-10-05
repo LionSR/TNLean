@@ -40,10 +40,12 @@ Source context: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem firstEdgePhysicalMap_one :
     firstEdgePhysicalMap (D₁ := D₁)
       (1 : Matrix (Fin (D₀ * D₀)) (Fin (D₀ * D₀)) ℂ) = LinearMap.id := by
-  ext ψ ⟨p, q⟩
-  change firstBoundaryCoordinateMap 1 (fun r => ψ (r, q)) p = _
-  rw [firstBoundaryCoordinateMap_one]
-  rfl
+  apply LinearMap.ext
+  intro ψ
+  funext x
+  rcases x with ⟨p, q⟩
+  change firstBoundaryCoordinateMap 1 (fun r => ψ (r, q)) p = ψ (p, q)
+  simp only [firstBoundaryCoordinateMap_one, LinearMap.id_apply]
 
 /-- The identity last-edge physical matrix gives the identity map.
 Source context: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -51,10 +53,12 @@ Source context: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem lastEdgePhysicalMap_one :
     lastEdgePhysicalMap (D₁ := D₁)
       (1 : Matrix (Fin (D₀ * D₀)) (Fin (D₀ * D₀)) ℂ) = LinearMap.id := by
-  ext ψ ⟨q, p⟩
-  change lastBoundaryCoordinateMap 1 (fun r => ψ (q, r)) p = _
-  rw [lastBoundaryCoordinateMap_one]
-  rfl
+  apply LinearMap.ext
+  intro ψ
+  funext x
+  rcases x with ⟨q, p⟩
+  change lastBoundaryCoordinateMap 1 (fun r => ψ (q, r)) p = ψ (q, p)
+  simp only [lastBoundaryCoordinateMap_one, LinearMap.id_apply]
 
 /-- First-edge physical maps compose by the local matrix product.
 Source context: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -62,11 +66,13 @@ theorem firstEdgePhysicalMap_mul
     (F G : Matrix (Fin (D₀ * D₀)) (Fin (D₀ * D₀)) ℂ) :
     firstEdgePhysicalMap (D₁ := D₁) (F * G) =
       (firstEdgePhysicalMap F).comp (firstEdgePhysicalMap G) := by
-  ext ψ ⟨p, q⟩
+  apply LinearMap.ext
+  intro ψ
+  funext x
+  rcases x with ⟨p, q⟩
   change firstBoundaryCoordinateMap (F * G) (fun r => ψ (r, q)) p =
     firstBoundaryCoordinateMap F (firstBoundaryCoordinateMap G (fun r => ψ (r, q))) p
-  rw [firstBoundaryCoordinateMap_mul]
-  rfl
+  simp only [firstBoundaryCoordinateMap_mul, LinearMap.comp_apply]
 
 /-- Last-edge physical maps compose by the local matrix product.
 Source context: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -74,11 +80,13 @@ theorem lastEdgePhysicalMap_mul
     (F G : Matrix (Fin (D₀ * D₀)) (Fin (D₀ * D₀)) ℂ) :
     lastEdgePhysicalMap (D₁ := D₁) (F * G) =
       (lastEdgePhysicalMap F).comp (lastEdgePhysicalMap G) := by
-  ext ψ ⟨q, p⟩
+  apply LinearMap.ext
+  intro ψ
+  funext x
+  rcases x with ⟨q, p⟩
   change lastBoundaryCoordinateMap (F * G) (fun r => ψ (q, r)) p =
     lastBoundaryCoordinateMap F (lastBoundaryCoordinateMap G (fun r => ψ (q, r))) p
-  rw [lastBoundaryCoordinateMap_mul]
-  rfl
+  simp only [lastBoundaryCoordinateMap_mul, LinearMap.comp_apply]
 
 /-- An explicit invertible first-edge physical change.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -326,7 +334,9 @@ private theorem deformed_complementProjections_of_map_eq
     constructor
     · rintro ⟨w, hw, heq⟩
       have hwv : w = v := e.injective heq
-      simpa only [hwv] using hw
+      change w ∈ S at hw
+      change v ∈ S
+      exact hwv ▸ hw
     · intro hv
       exact ⟨v, hv, rfl⟩
   constructor
@@ -411,8 +421,10 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointInteriorEdgeConstraintES_eq_parentInteractionES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     mixedEndpointInteriorEdgeConstraintES A₀ A₁ = parentInteractionES A₀ 2 := by
-  unfold mixedEndpointInteriorEdgeConstraintES parentInteractionES
-  rw [mixedEndpointInteriorEdgeSupportES_eq_groundSpaceES]
+  exact congrArg
+    (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) =>
+      Sᗮ.starProjection.toLinearMap)
+    (mixedEndpointInteriorEdgeSupportES_eq_groundSpaceES A₀ A₁)
 
 end
 

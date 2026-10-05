@@ -107,8 +107,8 @@ theorem norm_activeFirstBoundaryNormalizationEquivES_symm_apply_le
     (A₀ : MPSTensor (D₀ * D₀) D₀) (hA₀ : Kraus.IsInjective A₀)
     (v : EuclideanSpace ℂ (endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ N)) :
     ‖(activeFirstBoundaryNormalizationEquivES A₀ hA₀ N).symm v‖ ≤
-      ‖(firstBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap
-        .toContinuousLinearMap‖ * ‖v‖ := by
+      ‖LinearMap.toContinuousLinearMap
+        (firstBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap‖ * ‖v‖ := by
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (activeFirstBoundaryConfigEquiv D₀ D₁ N)
   let e := firstBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀
@@ -135,8 +135,8 @@ theorem norm_activeLastBoundaryNormalizationEquivES_symm_apply_le
     (A₀ : MPSTensor (D₀ * D₀) D₀) (hA₀ : Kraus.IsInjective A₀)
     (v : EuclideanSpace ℂ (endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ N)) :
     ‖(activeLastBoundaryNormalizationEquivES A₀ hA₀ N).symm v‖ ≤
-      ‖(lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap
-        .toContinuousLinearMap‖ * ‖v‖ := by
+      ‖LinearMap.toContinuousLinearMap
+        (lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap‖ * ‖v‖ := by
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (activeLastBoundaryConfigEquiv D₀ D₁ N)
   let e := lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀
@@ -153,10 +153,10 @@ def mixedEndpointBoundaryForwardBound
 /-- A positive inverse bound determined by only the two boundary spaces. -/
 def mixedEndpointBoundaryInverseBound
     (A₀ : MPSTensor (D₀ * D₀) D₀) (hA₀ : Kraus.IsInjective A₀) (D₁ : ℕ) : ℝ :=
-  max 1 ‖(firstBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap
-    .toContinuousLinearMap‖ *
-  max 1 ‖(lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap
-    .toContinuousLinearMap‖
+  max 1 ‖LinearMap.toContinuousLinearMap
+    (firstBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap‖ *
+  max 1 ‖LinearMap.toContinuousLinearMap
+    (lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap‖
 
 /-- The forward boundary bound is positive even for zero-dimensional spaces. -/
 theorem mixedEndpointBoundaryForwardBound_pos
@@ -202,10 +202,10 @@ theorem norm_activeBoundaryNormalizationEquivES_symm_apply_le
     ‖(activeBoundaryNormalizationEquivES A₀ hA₀ N).symm v‖ ≤
       mixedEndpointBoundaryInverseBound A₀ hA₀ D₁ * ‖v‖ := by
   rw [activeBoundaryNormalizationEquivES_eq_trans]
-  let f : ℝ := ‖(firstBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap
-    .toContinuousLinearMap‖
-  let g : ℝ := ‖(lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap
-    .toContinuousLinearMap‖
+  let f : ℝ := ‖LinearMap.toContinuousLinearMap
+    (firstBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap‖
+  let g : ℝ := ‖LinearMap.toContinuousLinearMap
+    (lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap‖
   have hg0 : 0 ≤ g := norm_nonneg
     (lastBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.toLinearMap.toContinuousLinearMap
   have hg : ‖(activeLastBoundaryNormalizationEquivES A₀ hA₀ N).symm

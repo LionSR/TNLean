@@ -63,7 +63,7 @@ private theorem localInteraction_apply_cyclicRestriction
   change h (WithLp.toLp 2 fun ω => v
     ((cyclicActiveBlockConfigEquiv d R hRN i).symm
       (ω, (cyclicActiveBlockConfigEquiv d R hRN i σ).2))) (extractWindow R i σ) = _
-  congr 1
+  apply congrArg (fun w : EuclideanSpace ℂ (Cfg d R) => h w (extractWindow R i σ))
   apply PiLp.ext
   intro ω
   change v ((cyclicActiveBlockConfigEquiv d R hRN i).symm
@@ -94,6 +94,7 @@ theorem periodicLocalInteractionES_physicalReindex_apply
     rw [LinearIsometryEquiv.symm_apply_apply,
       physicalReindexLinearIsometryEquiv_apply_apply,
       localInteraction_apply_cyclicRestriction _ hRN]
+    rfl
   · simp [periodicLocalInteractionES, hRN]
 
 /-- Physical alphabet reindexing conjugates the actual translated local

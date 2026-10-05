@@ -140,8 +140,9 @@ private theorem localExtension_isSymmetricProjection {d R L : ℕ}
   have hfiber : (WithLp.toLp 2 fun ω =>
       periodicLocalInteractionES h i v (e.symm (ω, (e σ).2))) = h w := by
     ext ω
-    simp only [periodicLocalInteractionES_apply_fiber h hRL, Equiv.apply_symm_apply]
-    rfl
+    change periodicLocalInteractionES h i v (e.symm (ω, (e σ).2)) = h w ω
+    simpa only [e, w, Equiv.apply_symm_apply] using
+      (periodicLocalInteractionES_apply_fiber h hRL i v (e.symm (ω, (e σ).2)))
   change periodicLocalInteractionES h i (periodicLocalInteractionES h i v) σ =
     periodicLocalInteractionES h i v σ
   rw [periodicLocalInteractionES_apply_fiber h hRL]
@@ -451,7 +452,7 @@ theorem mixedEndpointOpenActiveProjection_eq_self_of_mem_kernel
     (v - Q v) hQz
   change (1 / 2 : ℝ) * ‖v - Q v‖ ^ 2 ≤ (inner ℂ (v - Q v) (H (v - Q v))).re
     at henergy
-  rw [hHz, inner_zero_right] at henergy
+  rw [hHz, inner_zero_right, Complex.zero_re] at henergy
   have hz : v - Q v = 0 := norm_eq_zero.mp (by nlinarith [norm_nonneg (v - Q v)])
   exact (sub_eq_zero.mp hz).symm
 
@@ -523,7 +524,7 @@ theorem mem_ker_mixedEndpointActiveLocalInteraction_iff_fibers
     have h := congrArg (fun w => w (e.symm (ω, s))) hv
     rw [periodicLocalInteractionES_apply_fiber _ (by omega)] at h
     simpa only [e, Equiv.apply_symm_apply, PiLp.zero_apply,
-      mixedEndpointActiveWindowFiber] using h
+      mixedEndpointActiveWindowFiber, mixedEndpointParentInteraction] using h
   · intro hv
     apply PiLp.ext
     intro σ

@@ -1,0 +1,202 @@
+% SCP10 paper_v3.tex:1424--1474, thm:2d:closure,
+% eq:2d:closure-intersection; artwork figs3/close-out-out, close-in-out,
+% close-out-in, close-in-in. Each picture retains the labelled multigraph.
+% No declaration ownership is assigned by this diagram fragment.
+\paragraph{The four boundary contractions.}
+Put $A=(0,1)$, $B=(1,1)$, $C=(0,0)$ and $D=(1,0)$.
+Write $H_{xy}=((x,y),\mathrm H)$ and $V_{xy}=((x,y),\mathrm V)$.
+The four contractions in \cite[Theorem~5.5]{Schuch2010PEPS} are
+$\alpha(M)=\mathcal C_{0,0}(M)$, $\beta(N)=\mathcal C_{1,0}(N)$,
+$\gamma(P)=\mathcal C_{0,1}(P)$ and $\delta(Q)=\mathcal C_{1,1}(Q)$.
+Each central tensor below is one arbitrary joint tensor on eight endpoints;
+the four outer wires are the four uncut identity pairings.
+A superscript $+$ identifies a head endpoint, and $-$ a tail endpoint.
+Thus two wires bearing the same bond label but different superscripts are
+independent arguments of the boundary tensor, not an identity pairing.
+The uncontracted physical legs are $i_A,i_B,i_C,i_D$.
+The drawings move the boundary tensor to the centre without changing any
+incidence. Their displayed geometry does not identify parallel bonds.
+
+\noindent\begin{minipage}{\linewidth}
+    \paragraph{$\alpha(M)=\mathcal C_{0,0}(M)$.}
+    % Cut (0,0); four uncut bonds, eight distinct boundary incidences.
+    % Typed external boundary: (virtual, physical)=(0,4).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+            \tn[at=(2,2), name=fourCutMA, skin=box,
+                ports={0:virtual,270:virtual,330:virtual,300:virtual,135:physical:$i_A$}]{A}
+            \tn[at=4 e of fourCutMA, name=fourCutMB, skin=box,
+                ports={180:virtual,270:virtual,210:virtual,240:virtual,45:physical:$i_B$}]{B}
+            \tn[at=4 s of fourCutMA, name=fourCutMC, skin=box,
+                ports={0:virtual,90:virtual,30:virtual,60:virtual,225:physical:$i_C$}]{C}
+            \tn[at=4 e of fourCutMC, name=fourCutMD, skin=box,
+                ports={180:virtual,90:virtual,150:virtual,120:virtual,315:physical:$i_D$}]{D}
+            \tn[at=2 e of 2 s of fourCutMA, name=fourCutMBoundary, skin=ring,
+                ports={30:virtual,60:virtual,120:virtual,150:virtual,210:virtual,240:virtual,300:virtual,330:virtual}]{M}
+            \tnwire[name=fourCutMAphysical, via={1 nw of fourCutMA}]{fourCutMA.135}{open nw}
+            \tnwire[name=fourCutMAHend]{fourCutMA.330}{fourCutMBoundary.120}
+            \tnmark[form=label, label pos=n]{on fourCutMAHend 0.55}{$H_{11}^{+}$}
+            \tnwire[name=fourCutMAVend]{fourCutMA.300}{fourCutMBoundary.150}
+            \tnmark[form=label, label pos=s]{on fourCutMAVend 0.55}{$V_{01}^{+}$}
+            \tnwire[name=fourCutMBHend]{fourCutMB.210}{fourCutMBoundary.60}
+            \tnmark[form=label, label pos=n]{on fourCutMBHend 0.55}{$H_{11}^{-}$}
+            \tnwire[name=fourCutMBVend]{fourCutMB.240}{fourCutMBoundary.30}
+            \tnmark[form=label, label pos=s]{on fourCutMBVend 0.55}{$V_{11}^{+}$}
+            \tnwire[name=fourCutMCHend]{fourCutMC.30}{fourCutMBoundary.240}
+            \tnmark[form=label, label pos=s]{on fourCutMCHend 0.55}{$H_{10}^{+}$}
+            \tnwire[name=fourCutMCVend]{fourCutMC.60}{fourCutMBoundary.210}
+            \tnmark[form=label, label pos=n]{on fourCutMCVend 0.55}{$V_{01}^{-}$}
+            \tnwire[name=fourCutMDHend]{fourCutMD.150}{fourCutMBoundary.300}
+            \tnmark[form=label, label pos=s]{on fourCutMDHend 0.55}{$H_{10}^{-}$}
+            \tnwire[name=fourCutMDVend]{fourCutMD.120}{fourCutMBoundary.330}
+            \tnmark[form=label, label pos=n]{on fourCutMDVend 0.55}{$V_{11}^{-}$}
+            \tnwire[name=fourCutMUncut0]{fourCutMA.0}{fourCutMB.180}
+            \tnmark[form=label, label pos=n]{on fourCutMUncut0 0.5}{$H_{01}$}
+            \tnwire[name=fourCutMUncut1]{fourCutMC.0}{fourCutMD.180}
+            \tnmark[form=label, label pos=s]{on fourCutMUncut1 0.5}{$H_{00}$}
+            \tnwire[name=fourCutMUncut2]{fourCutMA.270}{fourCutMC.90}
+            \tnmark[form=label, label pos=w]{on fourCutMUncut2 0.5}{$V_{00}$}
+            \tnwire[name=fourCutMUncut3]{fourCutMB.270}{fourCutMD.90}
+            \tnmark[form=label, label pos=e]{on fourCutMUncut3 0.5}{$V_{10}$}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+    \paragraph{$\beta(N)=\mathcal C_{1,0}(N)$.}
+    % Cut (1,0); four uncut bonds, eight distinct boundary incidences.
+    % Typed external boundary: (virtual, physical)=(0,4).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+            \tn[at=(2,2), name=fourCutNA, skin=box,
+                ports={0:virtual,270:virtual,330:virtual,300:virtual,135:physical:$i_A$}]{A}
+            \tn[at=4 e of fourCutNA, name=fourCutNB, skin=box,
+                ports={180:virtual,270:virtual,210:virtual,240:virtual,45:physical:$i_B$}]{B}
+            \tn[at=4 s of fourCutNA, name=fourCutNC, skin=box,
+                ports={0:virtual,90:virtual,30:virtual,60:virtual,225:physical:$i_C$}]{C}
+            \tn[at=4 e of fourCutNC, name=fourCutND, skin=box,
+                ports={180:virtual,90:virtual,150:virtual,120:virtual,315:physical:$i_D$}]{D}
+            \tn[at=2 e of 2 s of fourCutNA, name=fourCutNBoundary, skin=ring,
+                ports={30:virtual,60:virtual,120:virtual,150:virtual,210:virtual,240:virtual,300:virtual,330:virtual}]{N}
+            \tnwire[name=fourCutNAphysical, via={1 nw of fourCutNA}]{fourCutNA.135}{open nw}
+            \tnwire[name=fourCutNAHend]{fourCutNA.330}{fourCutNBoundary.120}
+            \tnmark[form=label, label pos=n]{on fourCutNAHend 0.55}{$H_{01}^{-}$}
+            \tnwire[name=fourCutNAVend]{fourCutNA.300}{fourCutNBoundary.150}
+            \tnmark[form=label, label pos=s]{on fourCutNAVend 0.55}{$V_{01}^{+}$}
+            \tnwire[name=fourCutNBHend]{fourCutNB.210}{fourCutNBoundary.60}
+            \tnmark[form=label, label pos=n]{on fourCutNBHend 0.55}{$H_{01}^{+}$}
+            \tnwire[name=fourCutNBVend]{fourCutNB.240}{fourCutNBoundary.30}
+            \tnmark[form=label, label pos=s]{on fourCutNBVend 0.55}{$V_{11}^{+}$}
+            \tnwire[name=fourCutNCHend]{fourCutNC.30}{fourCutNBoundary.240}
+            \tnmark[form=label, label pos=s]{on fourCutNCHend 0.55}{$H_{00}^{-}$}
+            \tnwire[name=fourCutNCVend]{fourCutNC.60}{fourCutNBoundary.210}
+            \tnmark[form=label, label pos=n]{on fourCutNCVend 0.55}{$V_{01}^{-}$}
+            \tnwire[name=fourCutNDHend]{fourCutND.150}{fourCutNBoundary.300}
+            \tnmark[form=label, label pos=s]{on fourCutNDHend 0.55}{$H_{00}^{+}$}
+            \tnwire[name=fourCutNDVend]{fourCutND.120}{fourCutNBoundary.330}
+            \tnmark[form=label, label pos=n]{on fourCutNDVend 0.55}{$V_{11}^{-}$}
+            \tnwire[name=fourCutNUncut0]{fourCutNA.0}{fourCutNB.180}
+            \tnmark[form=label, label pos=n]{on fourCutNUncut0 0.5}{$H_{11}$}
+            \tnwire[name=fourCutNUncut1]{fourCutNC.0}{fourCutND.180}
+            \tnmark[form=label, label pos=s]{on fourCutNUncut1 0.5}{$H_{10}$}
+            \tnwire[name=fourCutNUncut2]{fourCutNA.270}{fourCutNC.90}
+            \tnmark[form=label, label pos=w]{on fourCutNUncut2 0.5}{$V_{00}$}
+            \tnwire[name=fourCutNUncut3]{fourCutNB.270}{fourCutND.90}
+            \tnmark[form=label, label pos=e]{on fourCutNUncut3 0.5}{$V_{10}$}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+    \paragraph{$\gamma(P)=\mathcal C_{0,1}(P)$.}
+    % Cut (0,1); four uncut bonds, eight distinct boundary incidences.
+    % Typed external boundary: (virtual, physical)=(0,4).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+            \tn[at=(2,2), name=fourCutPA, skin=box,
+                ports={0:virtual,270:virtual,330:virtual,300:virtual,135:physical:$i_A$}]{A}
+            \tn[at=4 e of fourCutPA, name=fourCutPB, skin=box,
+                ports={180:virtual,270:virtual,210:virtual,240:virtual,45:physical:$i_B$}]{B}
+            \tn[at=4 s of fourCutPA, name=fourCutPC, skin=box,
+                ports={0:virtual,90:virtual,30:virtual,60:virtual,225:physical:$i_C$}]{C}
+            \tn[at=4 e of fourCutPC, name=fourCutPD, skin=box,
+                ports={180:virtual,90:virtual,150:virtual,120:virtual,315:physical:$i_D$}]{D}
+            \tn[at=2 e of 2 s of fourCutPA, name=fourCutPBoundary, skin=ring,
+                ports={30:virtual,60:virtual,120:virtual,150:virtual,210:virtual,240:virtual,300:virtual,330:virtual}]{P}
+            \tnwire[name=fourCutPAphysical, via={1 nw of fourCutPA}]{fourCutPA.135}{open nw}
+            \tnwire[name=fourCutPAHend]{fourCutPA.330}{fourCutPBoundary.120}
+            \tnmark[form=label, label pos=n]{on fourCutPAHend 0.55}{$H_{11}^{+}$}
+            \tnwire[name=fourCutPAVend]{fourCutPA.300}{fourCutPBoundary.150}
+            \tnmark[form=label, label pos=s]{on fourCutPAVend 0.55}{$V_{00}^{-}$}
+            \tnwire[name=fourCutPBHend]{fourCutPB.210}{fourCutPBoundary.60}
+            \tnmark[form=label, label pos=n]{on fourCutPBHend 0.55}{$H_{11}^{-}$}
+            \tnwire[name=fourCutPBVend]{fourCutPB.240}{fourCutPBoundary.30}
+            \tnmark[form=label, label pos=s]{on fourCutPBVend 0.55}{$V_{10}^{-}$}
+            \tnwire[name=fourCutPCHend]{fourCutPC.30}{fourCutPBoundary.240}
+            \tnmark[form=label, label pos=s]{on fourCutPCHend 0.55}{$H_{10}^{+}$}
+            \tnwire[name=fourCutPCVend]{fourCutPC.60}{fourCutPBoundary.210}
+            \tnmark[form=label, label pos=n]{on fourCutPCVend 0.55}{$V_{00}^{+}$}
+            \tnwire[name=fourCutPDHend]{fourCutPD.150}{fourCutPBoundary.300}
+            \tnmark[form=label, label pos=s]{on fourCutPDHend 0.55}{$H_{10}^{-}$}
+            \tnwire[name=fourCutPDVend]{fourCutPD.120}{fourCutPBoundary.330}
+            \tnmark[form=label, label pos=n]{on fourCutPDVend 0.55}{$V_{10}^{+}$}
+            \tnwire[name=fourCutPUncut0]{fourCutPA.0}{fourCutPB.180}
+            \tnmark[form=label, label pos=n]{on fourCutPUncut0 0.5}{$H_{01}$}
+            \tnwire[name=fourCutPUncut1]{fourCutPC.0}{fourCutPD.180}
+            \tnmark[form=label, label pos=s]{on fourCutPUncut1 0.5}{$H_{00}$}
+            \tnwire[name=fourCutPUncut2]{fourCutPA.270}{fourCutPC.90}
+            \tnmark[form=label, label pos=w]{on fourCutPUncut2 0.5}{$V_{01}$}
+            \tnwire[name=fourCutPUncut3]{fourCutPB.270}{fourCutPD.90}
+            \tnmark[form=label, label pos=e]{on fourCutPUncut3 0.5}{$V_{11}$}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+    \paragraph{$\delta(Q)=\mathcal C_{1,1}(Q)$.}
+    % Cut (1,1); four uncut bonds, eight distinct boundary incidences.
+    % Typed external boundary: (virtual, physical)=(0,4).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+            \tn[at=(2,2), name=fourCutQA, skin=box,
+                ports={0:virtual,270:virtual,330:virtual,300:virtual,135:physical:$i_A$}]{A}
+            \tn[at=4 e of fourCutQA, name=fourCutQB, skin=box,
+                ports={180:virtual,270:virtual,210:virtual,240:virtual,45:physical:$i_B$}]{B}
+            \tn[at=4 s of fourCutQA, name=fourCutQC, skin=box,
+                ports={0:virtual,90:virtual,30:virtual,60:virtual,225:physical:$i_C$}]{C}
+            \tn[at=4 e of fourCutQC, name=fourCutQD, skin=box,
+                ports={180:virtual,90:virtual,150:virtual,120:virtual,315:physical:$i_D$}]{D}
+            \tn[at=2 e of 2 s of fourCutQA, name=fourCutQBoundary, skin=ring,
+                ports={30:virtual,60:virtual,120:virtual,150:virtual,210:virtual,240:virtual,300:virtual,330:virtual}]{Q}
+            \tnwire[name=fourCutQAphysical, via={1 nw of fourCutQA}]{fourCutQA.135}{open nw}
+            \tnwire[name=fourCutQAHend]{fourCutQA.330}{fourCutQBoundary.120}
+            \tnmark[form=label, label pos=n]{on fourCutQAHend 0.55}{$H_{01}^{-}$}
+            \tnwire[name=fourCutQAVend]{fourCutQA.300}{fourCutQBoundary.150}
+            \tnmark[form=label, label pos=s]{on fourCutQAVend 0.55}{$V_{00}^{-}$}
+            \tnwire[name=fourCutQBHend]{fourCutQB.210}{fourCutQBoundary.60}
+            \tnmark[form=label, label pos=n]{on fourCutQBHend 0.55}{$H_{01}^{+}$}
+            \tnwire[name=fourCutQBVend]{fourCutQB.240}{fourCutQBoundary.30}
+            \tnmark[form=label, label pos=s]{on fourCutQBVend 0.55}{$V_{10}^{-}$}
+            \tnwire[name=fourCutQCHend]{fourCutQC.30}{fourCutQBoundary.240}
+            \tnmark[form=label, label pos=s]{on fourCutQCHend 0.55}{$H_{00}^{-}$}
+            \tnwire[name=fourCutQCVend]{fourCutQC.60}{fourCutQBoundary.210}
+            \tnmark[form=label, label pos=n]{on fourCutQCVend 0.55}{$V_{00}^{+}$}
+            \tnwire[name=fourCutQDHend]{fourCutQD.150}{fourCutQBoundary.300}
+            \tnmark[form=label, label pos=s]{on fourCutQDHend 0.55}{$H_{00}^{+}$}
+            \tnwire[name=fourCutQDVend]{fourCutQD.120}{fourCutQBoundary.330}
+            \tnmark[form=label, label pos=n]{on fourCutQDVend 0.55}{$V_{10}^{+}$}
+            \tnwire[name=fourCutQUncut0]{fourCutQA.0}{fourCutQB.180}
+            \tnmark[form=label, label pos=n]{on fourCutQUncut0 0.5}{$H_{11}$}
+            \tnwire[name=fourCutQUncut1]{fourCutQC.0}{fourCutQD.180}
+            \tnmark[form=label, label pos=s]{on fourCutQUncut1 0.5}{$H_{10}$}
+            \tnwire[name=fourCutQUncut2]{fourCutQA.270}{fourCutQC.90}
+            \tnmark[form=label, label pos=w]{on fourCutQUncut2 0.5}{$V_{01}$}
+            \tnwire[name=fourCutQUncut3]{fourCutQB.270}{fourCutQD.90}
+            \tnmark[form=label, label pos=e]{on fourCutQUncut3 0.5}{$V_{11}$}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{minipage}\par\medskip

@@ -51,6 +51,7 @@ theorem norm_sq_eq_sum_norm_sq_rightFiber (x : EuclideanSpace ℂ (I × S)) :
   rw [EuclideanSpace.norm_sq_eq]
   rfl
 
+omit [Fintype I] [Fintype S] in
 /-- Taking a fiber of a vector supported at one spectator coordinate gives
 the original vector at that coordinate and zero elsewhere. -/
 @[simp] theorem rightFiber_singleRightFiber [DecidableEq S]

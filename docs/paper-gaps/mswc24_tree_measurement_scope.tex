@@ -5,7 +5,7 @@
 \input{command}
 \title{The Tree Circuit with Measurements: Rounds, Registers, and Chain Length}
 \author{}
-\date{2026-10-01; chain length resolved 2026-10-02}
+\date{2026-10-01; chain length resolved 2026-10-02; canonical extension 2026-10-05}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -185,14 +185,68 @@ $N\ge N_0$.
 The bound $c\log(\log(N/\varepsilon)+1)$ is $O(\log\log(N/\varepsilon))$; the
 shift by $1$ keeps it positive for $N/\varepsilon\ge2$.
 
+\section{Supported polar trees}
+For a tensor injective on a common set $S$ of virtual pairs after a fixed
+length, choose a coordinate inclusion $J\colon\mathbb C^\chi\to\mathbb C^{D^2}$
+onto $S$. The restricted factors $\widehat V_n=V_nJ$ are isometries and obey
+$\widehat V_{l+r}=(\widehat V_l\otimes\widehat V_r)\widehat W_{l,r}$, where
+$\widehat W_{l,r}=(J^\dagger\otimes J^\dagger)W_{l,r}J$ satisfies
+$\widehat W_{l,r}^\dagger\widehat W_{l,r}=I$.
+The bounded-leaf tree and its measurement implementation now apply with
+arbitrary virtual dimension $\chi$. They preserve all supported
+superpositions simultaneously. For each fixed measurement history the
+branch scalar is independent of the input on the zero-scratch subspace;
+the final equality specifies every physical site.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isometryTree_matrix_eq_supportedCfgPolarIso} in
+    \doclink{TNLean/MPS/Preparation/SupportedPolarTree}, and
+    \leanid{MPSPreparation.exists_rounds_blockLayerOp_supportedPolarTree} in
+    \doclink{TNLean/MPS/Preparation/SupportedTreePreparation}.}
+The supported trees now compose with the constant-depth sparse GHZ seed
+and one simultaneous pair-window unitary. The bond encodings end in a zero
+site, and an equality of full physical configurations aligns them with the
+even tree-root cutoff also for odd block lengths.
+
+\section{Canonical non-normal resolution}
+The all-length bound now holds for the supplied canonical repeated-block
+class with normal inequivalent left-canonical blocks and positive definite
+trace-one transfer fixed points.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_supported_block_preparation_constants} in
+    \doclink{TNLean/MPS/Preparation/CoherentBlockTreePreparation},
+    \leanid{MPSPreparation.exists_log_log_preparation_of_supported_block_approximation} in
+    \doclink{TNLean/MPS/Preparation/SupportedLogLogPreparation}, and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log_of_inequivalent}
+    in \doclink{TNLean/MPS/Preparation/OverlappingLogLogPreparation}.}
+The same constant precedes $N$ and $\varepsilon$. It covers every $N\ge2$
+with nonzero periodic vector and $0<\varepsilon\le1$, finite-block overlap,
+complex copy phases, repetitions, and vanishing individual sector sums.
+The approximation uses the unweighted direct sum, and its common rate
+bounds the mixed maps as well as the individual maps, as in the inherited
+corrections of~\cite{gap:mswc24_block_form_mixed_overlap}.
+
+For $q=\lceil a\log(N/\varepsilon)+b\rceil\le N$, use the unequal
+blocks and the amplitude-uniform exponential error estimate. If $N<q$
+and $N\ge4s$, use a whole-ring supported tree of height $O(\log N)$.
+The exact one-block pair is required to have support only at $M=1$;
+it need not have that support at other ring sizes. Only the finitely many
+lengths $N<4s$ use bounded exact synthesis. Thus no accuracy-dependent
+linear-depth fallback or free $N$-site gate is hidden in the bound.
+
+Nearest-neighbour unitary layers are counted. Measurement, classical
+communication and on-site correction are free, and the number of rounds
+may grow with the tree height. Every nonzero-probability history gives the
+target up to a scalar, with no postselection or discarded environment.
+The original-to-canonical transport for arbitrary tensors and their
+periodicity data is not asserted here.
+
 \section{The remaining restriction}
 A two-site gate between distant sites joins sites at odd separation, on pairwise
 disjoint stretches; gates at even separation, or on overlapping stretches, are
 not covered, whereas the paragraph of the source speaks of teleporting spatially
 separated sites in general. Neither the tree of two-site gates nor the trees of
-registers need such gates. Tensors that are not normal, for which the source
-combines the tree with the preparation of a GHZ-type state, are treated without
-the tree in~\cite{gap:mswc24_measurement_preparation_scope} and not here.
+registers need such gates. This geometric limitation does not restrict the
+canonical non-normal construction just described. The earlier
+logarithmic-depth construction and its corrections are recorded
+in~\cite{gap:mswc24_measurement_preparation_scope}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -148,7 +148,7 @@ theorem firstEdgePhysicalMap_actual_apply
   change Matrix.trace (Matrix.single a b (1 : ℂ) *
       (1 : Matrix (Fin D₀) (Fin D₀) ℂ) * R * X) =
     (A₀ q * X.submatrix Sum.inl id) b a
-  simp only [Matrix.mul_one, Matrix.mul_assoc, Matrix.trace_single_mul, one_mul]
+  simp only [Matrix.mul_one, Matrix.mul_assoc, Matrix.trace_single_mul]
   simp [R, Matrix.mul_apply, Fintype.sum_sum_type, Matrix.submatrix_apply]
 
 /-- Normalizing the last site of the actual last edge produces the common
