@@ -1,0 +1,61 @@
+\begin{theorem}[Topology of native plaquettes]%
+    \label{thm:peps_torus_plaquette_realization}
+    \lean{TNLean.PEPS.torusVertexPoint_add,
+        TNLean.PEPS.torusRegionRealization_image_add,
+        TNLean.PEPS.connected_torusPlaquetteRegion,
+        TNLean.PEPS.torusPlaquetteRegion_eq_image_add,
+        TNLean.PEPS.torusPlaquetteRegion_zero_eq_rectangle,
+        TNLean.PEPS.isSimplyConnected_torusRegionRealization_plaquette}
+    \leanok
+    \uses{thm:peps_torus_rectangle_realization}
+    On a discrete torus of periods $m,n\ge3$, let
+    $R_v=v+\{(0,0),(1,0),(1,1),(0,1)\}$.
+    The graph induced on $R_v$ is connected, and the union of its
+    closed unit cells in $\mathbb R^2/(m\mathbb Z\times n\mathbb Z)$
+    is simply connected, including when $R_v$ crosses a periodic seam.
+\end{theorem}
+\begin{proof}\leanok
+    The four-step plaquette walk has support $R_v$, so its induced graph
+    is connected. Translation by $v$ carries the closed-cell realization
+    of $R_0$ homeomorphically onto that of $R_v$.
+    The realization of $R_0$ is the image of
+    $[-\tfrac12,\tfrac32]^2$ under the quotient map.
+    Since $2<m,n$, this restriction of the quotient map is injective.
+    The compact rectangle is therefore homeomorphic to its image;
+    its convexity gives simple connectedness.
+\end{proof}
+
+\begin{theorem}[Full regular torus parent ground space]%
+    \label{thm:peps_regular_torus_parent_ground_space}
+    \lean{TNLean.PEPS.IsGInjective.commutingClosureSpan_le_torusParentKernel,
+        TNLean.PEPS.IsGInjective.torusParentKernel_eq_commutingClosureSpan,
+        TNLean.PEPS.IsGInjective.finrank_torusParentKernel}
+    \leanok
+    \uses{thm:peps_torus_plaquette_realization,
+        thm:peps_regular_closure_parent_constraint,
+        thm:peps_regular_torus_parent_spanning,
+        thm:peps_g_injective_closure_dimension}
+    Let $A$ be regular $G$-injective on a native torus with both
+    periods at least three. For each native plaquette $R_v$, let
+    $P_v\ge0$ have kernel equal to the image of the regional PEPS map,
+    and let $H=\sum_v(P_v\otimes\mathbf1_{R_v^c})$. Then
+    \begin{align}
+        \ker H     & =\operatorname{span}\{\lvert A;(g,h)\rangle:gh=hg\},
+        \label{eq:peps_regular_parent_kernel}                             \\
+        \dim\ker H & =\#\bigl(\{(g,h):gh=hg\}/G\bigr).
+        \label{eq:peps_regular_parent_dimension}
+    \end{align}
+    where $G$ acts by simultaneous conjugation.
+    This specializes \cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}
+    to the regular representation and the indicated torus periods.
+\end{theorem}
+\begin{proof}\leanok
+    Each plaquette is connected with simply connected realization,
+    so every commuting closure is annihilated by every $P_v$.
+    Conversely, reconstruction from regular inverse coordinates and
+    flat-connection reduction express every vector in $\ker H$
+    as a linear combination of commuting closures.
+    Closures in the same simultaneous conjugacy class coincide,
+    and one closure per commuting class forms a linearly independent
+    family. These statements give both the equality and its dimension.
+\end{proof}

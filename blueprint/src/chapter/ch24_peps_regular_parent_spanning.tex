@@ -1,0 +1,134 @@
+\begin{theorem}[Reconstruction from regular inverse coordinates]%
+    \label{thm:peps_regular_parent_reconstruction}
+    \lean{TNLean.PEPS.globalRegularTensorMap,
+        TNLean.PEPS.regularSiteRetraction_eq_self_of_mem_range,
+        TNLean.PEPS.globalRegularTensorMap_inverse_eq_self_of_mem_vertexImage,
+        TNLean.PEPS.globalRegularTensorMap_inverse_eq_self_of_mem_parent,
+        TNLean.PEPS.globalDependentPhysicalMap_regularInverse_leftMul}
+    \leanok
+    \uses{thm:peps_region_vertex_image_support,
+        def:peps_vertex_image_ground_space}
+    Let $A_v$ be regular $G$-injective site maps on a finite graph,
+    and let $F_vA_v=\Pi_v$, where $\Pi_v$ averages simultaneous
+    left translation of the incident group labels. Set
+    $A_{\mathrm{all}}=\bigotimes_v A_v$ and
+    $F_{\mathrm{all}}=\bigotimes_v F_v$.
+    If a collection of parent regions covers every vertex and
+    $\Psi$ satisfies each regional parent condition, then
+    \begin{align}
+        A_{\mathrm{all}}F_{\mathrm{all}}\Psi & =\Psi,
+        \label{eq:peps_regular_parent_reconstruction}                           \\
+        (F_{\mathrm{all}}\Psi)(k\cdot\alpha)
+                                             & =(F_{\mathrm{all}}\Psi)(\alpha).
+        \label{eq:peps_regular_parent_left_invariance}
+    \end{align}
+    Here $k\in G^V$ and $(k\cdot\alpha)_{v,e}=k_v\alpha_{v,e}$.
+    This uses the restricted inverse in
+    \cite[Definition~5.1]{Schuch2010PEPS}, with no injectivity
+    requirement outside the invariant virtual subspace.
+\end{theorem}
+\begin{proof}\leanok
+    Every one-site slice of $\Psi$ belongs to $\operatorname{im}A_v$.
+    Since $A_v\Pi_v=A_v$, the composition $A_vF_v$ fixes that image.
+    The product of these independent retractions therefore fixes
+    $\Psi$, proving~(\ref{eq:peps_regular_parent_reconstruction}).
+    For $\phi=F_{\mathrm{all}}\Psi$, applying $F_{\mathrm{all}}$
+    to~(\ref{eq:peps_regular_parent_reconstruction}) gives
+    $\phi=(\bigotimes_v\Pi_v)\phi$. The rows of each $\Pi_v$
+    are invariant under left translation, which gives
+    (\ref{eq:peps_regular_parent_left_invariance}).
+\end{proof}
+
+\begin{theorem}[Shared-edge invariance and flat support of parent coordinates]%
+    \label{thm:peps_regular_parent_coordinate_support}
+    \lean{TNLean.PEPS.dependentRegionSlice_regularInverse_halfEdgeRightMul,
+        TNLean.PEPS.dependentRegionSlice_regularInverse_apply_eq_zero_of_cycle_ne_one,
+        TNLean.PEPS.globalDependentPhysicalMap_regularInverse_singleEdgeRightMul,
+        TNLean.PEPS.globalDependentPhysicalMap_regularInverse_rightMul,
+        TNLean.PEPS.globalDependentPhysicalMap_regularInverse_eq_zero_of_holonomy_ne_one,
+        TNLean.PEPS.globalDependentPhysicalMap_regularInverse_eq_zero_of_torusPlaquetteHolonomy,
+        TNLean.PEPS.IsGInjective.exists_torusParentCoordinates}
+    \leanok
+    \uses{thm:peps_regular_parent_reconstruction,
+        lem:peps_regular_region_bond_right_invariance,
+        thm:peps_regular_region_parent_flatness}
+    In the preceding setting, suppose each edge has both endpoints in
+    some parent region. Then $\phi=F_{\mathrm{all}}\Psi$ satisfies
+    $\phi(\alpha\cdot r)=\phi(\alpha)$ for every $r\in G^E$, where
+    $(\alpha\cdot r)_{v,e}=\alpha_{v,e}r_e$.
+    Orient each edge from its smaller to its larger endpoint and define
+    $u_e(\alpha)=\alpha_{\mathrm{head}(e),e}
+        \alpha_{\mathrm{tail}(e),e}^{-1}$.
+    If a closed walk $p$ lies in a connected parent region and its
+    reverse-ordered holonomy satisfies $\operatorname{Hol}_{u(\alpha)}(p)\ne1$,
+    then $\phi(\alpha)=0$.
+
+    In particular, for the native four-site plaquette parents on a
+    regular $G$-injective torus with periods at least three, the maps
+    $F_v$ can be chosen so that reconstruction, both translation
+    invariances, and support on identity plaquette holonomies hold
+    for every physical parent ground vector.
+\end{theorem}
+\begin{proof}\leanok
+    Fix the exposed labels outside a region $R$. Its slice is a
+    linear combination of the original physical slices after applying
+    $\bigotimes_{v\in R}F_v$; the coefficients are products of the
+    exterior inverse coefficients. Each transformed physical slice
+    has shared internal-edge right invariance and vanishes at
+    nonidentity cycle coordinates. Both properties pass to the
+    linear combination. A single-edge right translation can therefore
+    be performed in any parent region containing its endpoints.
+    Successively translating the finitely many edges gives arbitrary $r$.
+
+    If all cycle coordinates of a regional label are the identity,
+    its internal quotient has the form $u_e=q_{\mathrm{head}(e)}
+        q_{\mathrm{tail}(e)}^{-1}$. Its closed-walk holonomies telescope to
+    $1$. Hence nonidentity holonomy implies a nonidentity cycle
+    coordinate and forces the coefficient to vanish. Native plaquettes
+    cover every vertex and every edge, and each plaquette is connected.
+    The local inverses exist by regular $G$-injectivity.
+\end{proof}
+
+\begin{theorem}[Global spanning of the regular torus parent kernel]%
+    \label{thm:peps_regular_torus_parent_spanning}
+    \lean{TNLean.PEPS.globalRegularTensorMap_regularProjectorClosedState,
+        TNLean.PEPS.IsGInjective.stateCoeff_mem_commutingClosureSpan_of_flat,
+        TNLean.PEPS.IsGInjective.torusParentKernel_le_commutingClosureSpan}
+    \leanok
+    \uses{thm:peps_regular_parent_coordinate_support,
+        thm:peps_regular_invariant_state_span,
+        thm:peps_regular_closed_physical_contraction,
+        thm:peps_flat_insertion_closure_state}
+    Let $A$ be regular $G$-injective on a native torus whose two
+    periods are at least three. For each native plaquette $R_v$,
+    let $h_v\ge0$ have kernel equal to the open-region ground space
+    on $R_v$, and let $H=\sum_v h_v\otimes I_{R_v^c}$. Then
+    \begin{align}
+        \ker H\subseteq
+        \operatorname{span}\{\lvert\Psi_{g,h}\rangle:gh=hg\}.
+        \label{eq:peps_regular_global_spanning}
+    \end{align}
+    This is the global spanning direction of
+    \cite[Theorem~5.7]{Schuch2010PEPS} for regular virtual
+    representations. No membership in a closure span is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    Positivity of the local terms implies that each annihilates any
+    $\Psi\in\ker H$. Choose inverse coordinates $\phi=F_{\mathrm{all}}\Psi$.
+    Let $\mathcal F$ be the set of edge assignments with identity
+    holonomy on every native plaquette, let $\alpha^u$ have tail label
+    $1$ and head label $u_e$, and let $C_u$ be the closed contraction
+    of regular averaging projectors with insertion $u$.
+    The supported orbit expansion and reconstruction give
+    \begin{align}
+        \Psi=A_{\mathrm{all}}\phi
+         & =\sum_{u\in\mathcal F}\phi(\alpha^u)A_{\mathrm{all}}C_u
+        =\sum_{u\in\mathcal F}\phi(\alpha^u)\lvert\Psi_u\rangle.
+        \label{eq:peps_regular_flat_expansion}
+    \end{align}
+    Every $u\in\mathcal F$ is gauge equivalent to two commuting
+    closure seams. Local regular invariance leaves the physical
+    contraction unchanged under this vertex gauge. Thus every
+    summand in~(\ref{eq:peps_regular_flat_expansion}) belongs to the
+    right-hand side of~(\ref{eq:peps_regular_global_spanning}).
+\end{proof}

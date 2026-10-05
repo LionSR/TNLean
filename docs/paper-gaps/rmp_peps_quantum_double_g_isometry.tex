@@ -835,13 +835,34 @@ The dimension of this intersection is the number of commuting
 pair-conjugacy classes. No $G$-isometry is required, and the linear
 filter is not asserted to be Hermitian.
 
-This establishes the final commuting-label constraint within the
-closure span in \cite[Theorems~5.5 and~5.9]{Schuch2010PEPS}.
-The remaining step is to prove that every vector in the original
-parent kernel belongs to $\mathcal C_{\mathrm{all}}$. Neither
-plaquette flatness for inserted states nor the local bond invariance
-identity supplies that spanning theorem. The complete source
-identification of the torus parent kernel remains unformalized.
+For the complete native plaquette family, the arbitrary-kernel spanning
+step is now proved for regular virtual representations. Apply local left
+inverses to a physical parent ground vector. The resulting half-edge
+function is invariant under vertex left translations and simultaneous
+right translations on each bond, and vanishes outside flat plaquette
+connections. Its explicit finite orbit expansion contains only flat
+insertions. Applying the original site maps reconstructs the physical
+vector, and a tree gauge reduces each flat insertion to two commuting
+seam holonomies. Thus
+\begin{align}
+    \ker H=\mathcal C_{\mathrm{com}},\qquad
+    \dim\ker H=\#\bigl(\{(g,h):gh=hg\}/G\bigr),
+\end{align}
+where the quotient is by simultaneous conjugation. The reverse inclusion
+uses the connected, simply connected realization of every native
+plaquette; translation includes plaquettes crossing either seam.
+The interactions may be any positive operators with exactly the regional
+PEPS spaces as their kernels. No isometry or prior closure expansion is
+assumed.
+
+This proves the regular-representation, native-torus specialization of
+\cite[Theorems~5.7 and~5.9]{Schuch2010PEPS} when both periods are at least
+three. The canonical parent-kernel statement for arbitrary semi-regular
+virtual representations remains to be derived. The closed-state bond
+isometry alone does not identify the same-plaquette local parent spaces.
+Smaller-period models also require a graph convention that retains the
+parallel bonds and loops suppressed by the native simple graph. These
+remaining source obligations are tracked in issue~\#8675.
 
 \section{Finite torus flux operations}
 The flux detection, motion and creation results of
