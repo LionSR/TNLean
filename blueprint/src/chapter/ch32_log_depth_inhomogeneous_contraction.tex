@@ -14,7 +14,7 @@ control ordered products of different maps.
     \lean{MPSChainTensor.prod_transferMap_apply,
         MPSChainTensor.transferMap_blockTensor,
         MPSChainTensor.trace_transferMap_blockTensor}
-    \notready
+    \leanok
     \uses{def:ldp_chain_block_tensor}
     For a chain $A_0,\dots,A_{n-1}$ with common bond dimension $D$, let $B$
     be its blocked tensor. Then
@@ -29,7 +29,7 @@ control ordered products of different maps.
     The first site's map is outermost. If every site map preserves trace,
     so does $E_B$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Expand the Kraus sum, split off the first physical index, and proceed
     by induction on $n$. The two adjacent matrix products have the same
     order as the composition; the adjoints appear in the reverse order.
@@ -40,7 +40,7 @@ control ordered products of different maps.
 \begin{theorem}[Uniform Doeblin contraction along a chain]
     \label{thm:ldp_chain_doeblin}
     \lean{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination}
-    \notready
+    \leanok
     \uses{thm:ldp_chain_transfer_product}
     Let $\sigma$ be a density matrix and $0\le\eta\le1$. Suppose every
     site's transfer map preserves trace and its normalized Choi matrix
@@ -53,7 +53,7 @@ control ordered products of different maps.
     The sites may themselves be contiguous blocks, provided the hypothesis
     is imposed on their actual transfer maps.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Apply the Choi-dominated quantum Doeblin theorem to the first map and
     the two density matrices produced by the remaining maps. Induction
     gives one factor $1-\eta$ for each actual map in the ordered product.
@@ -63,7 +63,7 @@ control ordered products of different maps.
     \label{thm:ldp_chain_positive_part_rate}
     \lean{MPSPreparation.gram_eq_smul_choi_transpose,
         MPSPreparation.exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination}
-    \notready
+    \leanok
     \uses{thm:ldp_chain_transfer_product, def:ldp_chain_block_tensor}
     Fix $\sigma>0$ with $\operatorname{Tr}\sigma=1$. There is $K$, depending
     only on $D$ and $\sigma$, such that the following holds. Partition a chain
@@ -83,7 +83,7 @@ control ordered products of different maps.
     dimension, the chain length, and the partition. For fixed $s$ and
     $0<\eta<1$, these are uniform exponential bounds in physical length.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Put $P_\sigma(X)=\operatorname{Tr}(X)\sigma$ and
     $R_j=F_j-\eta P_\sigma$. Choi domination makes every $R_j$ completely
     positive. Its trace is scaled by $1-\eta$. The common fixed state and
