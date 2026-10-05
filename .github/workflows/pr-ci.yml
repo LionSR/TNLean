@@ -305,6 +305,14 @@ jobs:
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
+      - name: Test compatible coherent seed conversion
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CompatibleSeedCircuitEquivalence.lean
+
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
         run: >
@@ -697,6 +705,9 @@ jobs:
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_index_routing.py
+
+      - name: Check compatible-seed diagram conventions
+        run: python3 scripts/test_compatible_seed_diagram.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'

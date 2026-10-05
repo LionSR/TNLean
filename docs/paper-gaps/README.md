@@ -969,6 +969,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   over `s` sites injective, cover every normal tensor for the chain lengths
   `N = M s 2^{k+1}`; open: trees on leaves of unequal widths for every chain
   length.
+- `mswc24_same_phase_compatible_seed.tex` records the sufficient coherent
+  seed condition for the non-normal chosen-vector conversion in #8469.
+  It gives a mathematical (not Lean-checked) covariance obstruction to
+  replacing that condition by equality of parent groundspaces. The informal
+  paper remark is not declared unconditionally false; its general phase
+  interpretation remains open.
 - `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
