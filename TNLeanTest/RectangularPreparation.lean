@@ -1,4 +1,16 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.MPS.Preparation.RectangularPreparation
+
+/-!
+# Rectangular preparation regression
+
+A singular-reference ring with bond dimensions `1,2,1` exercises the actual rectangular
+site transfers, product padding, cyclic normalization and input-corner reset convention.
+-/
 
 open Matrix MPSTensor VaryingBondChain MPSPreparation
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
