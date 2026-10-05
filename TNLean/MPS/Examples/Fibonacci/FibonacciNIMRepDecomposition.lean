@@ -14,9 +14,14 @@ Every finite matrix with natural entries satisfying `T² = I + T` is a direct su
 The summands are indexed by the diagonal-zero entries.
 
 **Source.** Garre-Rubio, Lootens and Molnár, arXiv:2203.12563, Section `sec:examples`,
-`Papers/2203.12563/REsubmission.tex` lines 1991–1993. The two-block uniqueness statement is
-understood for an indecomposable invariant family. Without indecomposability, arbitrary direct
-sums of the displayed two-block action are possible, and are classified here explicitly.
+`Papers/2203.12563/REsubmission.tex` lines 1991–1993.
+
+**Local fix (missing indecomposability hypothesis):** The printed two-block uniqueness claim
+omits indecomposability and is false without that hypothesis: two regular summands give a
+four-block solution. Here the unrestricted direct sums are classified, and two-block uniqueness
+is proved only for nonempty indecomposable families. This corrects the literal source claim;
+it is not an assumption stated in the paper. See
+`docs/paper-gaps/glm23_fibonacci_module_rank_scope.tex`.
 -/
 
 open MPSTensor MPOTensor
