@@ -1199,11 +1199,10 @@ The introduction’s historical/literature statements (lines 266–300), future-
 
 ## Machine-readable companions and verification
 
-- `glm23-source-index.json`: all 103 claims, source line/label ownership, Lean paths/declaration evidence, blueprint nodes and issue links.
-- `glm23-dependency-leaves.json`: 29 concrete leaves and dependency edges.
-- `glm23-pr-status.json`: live normalized PR snapshots for the eleven stale items.
-- `glm23-issue-details.json` and `glm23-more-issue-details.json`: live issue snapshots.
-- `glm23-lean-declarations.json` and `glm23-all-blueprint-nodes.json`: inspectable declaration/tag indices.
+- [`data/glm23-v3-source-index.json`](data/glm23-v3-source-index.json): all 103 claims, source line/label ownership, Lean paths/declaration evidence, blueprint nodes and issue links.
+- [`data/glm23-v3-dependency-leaves.json`](data/glm23-v3-dependency-leaves.json): 29 concrete leaves and dependency edges.
+- [`data/glm23-v3-validation.json`](data/glm23-v3-validation.json): exact declaration evidence, source-label counts, dependency validation, and the baseline-qualified blueprint ownership reconciliation.
+- Historical PR status and issue scope are recorded in the linked rows of this report. Temporary retrieval snapshots are not repository companions and are not required to interpret this audit.
 - The Lean proof-body scanner found no new proof placeholders in the principal modules examined; this is a source inspection only. No build, checkdecls or CI result is claimed here.
 
 ## Independent review repair and final QA
@@ -1214,4 +1213,4 @@ The removal log was reconciled independently against the same immutable baseline
 
 Every internal row destination now resolves to one of the 29 dependency leaves. B03 points to PH1 for its shared parent-Hamiltonian dependency; O02, C01, and OUT point to PH7 for the physical capstone. C17 is an explicitly external PEPS interface, with the separately owned implementation excluded from the internal DAG.
 
-Final source inspection: 166 exact qualified declaration references in 62 existing Lean modules; all 58 source labels assigned; 29 leaf nodes and every row-to-leaf destination checked; no unresolved declaration, ownership, or dependency errors. Source categories and claim statements are unchanged. Some declarations lack a declaration-owning blueprint tag, as listed in `glm23-blueprint-qa.json`; these are coverage gaps, not guessed matches. No Lean build, blueprint checkdecls, or CI result is asserted by this audit.
+Final source inspection: 166 exact qualified declaration references in 62 existing Lean modules; all 58 source labels assigned; 29 leaf nodes and every row-to-leaf destination checked; no unresolved declaration, ownership, or dependency errors. Source categories and claim statements are unchanged. Some declarations lack a declaration-owning blueprint tag, as listed in the `blueprint_qa.declarations_without_exact_blueprint_owner` field of `data/glm23-v3-validation.json`; these are coverage gaps, not guessed matches. No Lean build, blueprint checkdecls, or CI result is asserted by this audit.
