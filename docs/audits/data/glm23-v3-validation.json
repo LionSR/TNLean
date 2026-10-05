@@ -1022,7 +1022,13 @@
           "thm:asymex_group_cocycle_defect"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.isMPOFusionAlgebra",
+            "blueprint_declaration": "MPOTensor.GroupCocycle.isMPOFusionAlgebra"
+          }
+        ]
       },
       {
         "row": "G02",
@@ -1032,7 +1038,13 @@
           "def:mpdo_eta_omega"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.FusionData.omega",
+            "blueprint_declaration": "MPOTensor.ExplicitEtaOperators.omega"
+          }
+        ]
       },
       {
         "row": "G04",
@@ -1042,7 +1054,13 @@
           "def:mpug_single_block_l_symbol"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.lSymbol"
+          }
+        ]
       },
       {
         "row": "G04",
@@ -1052,7 +1070,13 @@
           "thm:mpug_single_block_l_compatibility"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol"
+          }
+        ]
       },
       {
         "row": "G05",
@@ -1062,7 +1086,17 @@
           "def:mpdo_bond_two_singleton_deformation"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "TNLean.Algebra.LSymbol.gauge",
+            "blueprint_declaration": "MPOTensor.BondTwoSingletonGramBoundary.gauge"
+          },
+          {
+            "referenced_declaration": "TNLean.Algebra.LSymbol.IsCompatible.gauge",
+            "blueprint_declaration": "MPOTensor.BondTwoSingletonGramBoundary.gauge"
+          }
+        ]
       },
       {
         "row": "G06",
@@ -1073,7 +1107,13 @@
           "eq:mpug_restricted_gauge_action"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge",
+            "blueprint_declaration": "TNLean.Algebra.RestrictedScalarGauge.isNormalized_gauge"
+          }
+        ]
       },
       {
         "row": "G12",
@@ -1083,7 +1123,13 @@
           "thm:mpug_single_block_l_compatibility"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol"
+          }
+        ]
       },
       {
         "row": "P02",
@@ -1093,7 +1139,13 @@
           "cor:asym_fusion_action_multiplicity"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors",
+            "blueprint_declaration": "MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors"
+          }
+        ]
       },
       {
         "row": "P05",
@@ -1103,7 +1155,13 @@
           "def:mpug_single_block_l_symbol"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.lSymbol"
+          }
+        ]
       },
       {
         "row": "P05",
@@ -1113,198 +1171,13 @@
           "thm:mpug_single_block_l_compatibility"
         ],
         "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "C18",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1223,
-        "labels": [
-          "thm:mposym_nimrep_pos_eigenvector",
-          "eq:mposym_nimrep_eigenvector"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "C18",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1256,
-        "labels": [
-          "thm:mposym_symmetric_boundary_state"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "C19",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1291,
-        "labels": [
-          "ex:mposym_fibonacci_boundary_state"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "C19",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1190,
-        "labels": [
-          "thm:mposym_fusion_ring_regular"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "S01",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1026,
-        "labels": [
-          "def:mposym_su24_reps3"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "S01",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1042,
-        "labels": [
-          "thm:mposym_su24_reps3_units"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "S01",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1062,
-        "labels": [
-          "thm:mposym_su24_reps3_nimreps"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "S02",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1062,
-        "labels": [
-          "thm:mposym_su24_reps3_nimreps"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "S03",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1062,
-        "labels": [
-          "thm:mposym_su24_reps3_nimreps"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "S04",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1104,
-        "labels": [
-          "thm:mposym_reps3_in_su24"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R01",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1026,
-        "labels": [
-          "def:mposym_su24_reps3"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R01",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1042,
-        "labels": [
-          "thm:mposym_su24_reps3_units"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R02",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1062,
-        "labels": [
-          "thm:mposym_su24_reps3_nimreps"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R02",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1128,
-        "labels": [
-          "thm:mposym_su24_reps3_one_block"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R03",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1062,
-        "labels": [
-          "thm:mposym_su24_reps3_nimreps"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R03",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1104,
-        "labels": [
-          "thm:mposym_reps3_in_su24"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R04",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1062,
-        "labels": [
-          "thm:mposym_su24_reps3_nimreps"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "R05",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 1062,
-        "labels": [
-          "thm:mposym_su24_reps3_nimreps"
-        ],
-        "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "FIB",
-        "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
-        "line": 951,
-        "labels": [
-          "thm:mpo_symmetry_fibonacci_rank_two"
-        ],
-        "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol",
+            "blueprint_declaration": "MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol"
+          }
+        ]
       },
       {
         "row": "X02",
@@ -1314,17 +1187,13 @@
           "def:mpug_czx_fusion_caps"
         ],
         "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "X08",
-        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
-        "line": 10492,
-        "labels": [
-          "def:mpug_czx_exact_tensor"
-        ],
-        "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.fusionV",
+            "blueprint_declaration": "MPOTensor.CZX.fusionV"
+          }
+        ]
       },
       {
         "row": "X08",
@@ -1334,17 +1203,13 @@
           "thm:kato_deformed_mpdo_fixed_tensor_obstruction"
         ],
         "leanok": true,
-        "notready": false
-      },
-      {
-        "row": "X08",
-        "file": "blueprint/src/chapter/ch25_asymmetric_examples_elementary_states.tex",
-        "line": 473,
-        "labels": [
-          "def:asymex_jordan"
-        ],
-        "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPOTensor.KatoDeformedRFPObstruction.tensor"
+          }
+        ]
       },
       {
         "row": "X08",
@@ -1355,7 +1220,45 @@
           "eq:cpsv_fib_support"
         ],
         "leanok": true,
-        "notready": false
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPSTensor.FibonacciBoundary.tensor"
+          }
+        ]
+      },
+      {
+        "row": "X08",
+        "file": "blueprint/src/chapter/ch25_asymmetric_examples_elementary_states.tex",
+        "line": 473,
+        "labels": [
+          "def:asymex_jordan"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPSTensor.JordanBoundary.tensor"
+          }
+        ]
+      },
+      {
+        "row": "X08",
+        "file": "blueprint/src/chapter/ch29_mpu_gauging.tex",
+        "line": 10492,
+        "labels": [
+          "def:mpug_czx_exact_tensor"
+        ],
+        "leanok": true,
+        "notready": false,
+        "terminal_name_matches": [
+          {
+            "referenced_declaration": "MPOTensor.GroupCocycle.tensor",
+            "blueprint_declaration": "MPOTensor.CZX.tensor"
+          }
+        ]
       }
     ],
     "rows_newly_without_owner": [],
@@ -1376,6 +1279,271 @@
       }
     ],
     "errors": [],
-    "no_build_run": true
+    "no_build_run": true,
+    "owner_matching_reconciliation": {
+      "baseline": "f3d3bade1f56b87f88fc8a87314bf451591483b7",
+      "association_identity": [
+        "row",
+        "file",
+        "line"
+      ],
+      "before_stage": "Terminal-name candidate matching recomputed from the baseline Git objects.",
+      "after_stage": "Exact fully qualified declaration-tag equality recomputed from the same baseline Git objects.",
+      "previous_log_entries": 34,
+      "genuine_removed_associations": 15,
+      "retained_associations_with_changed_recorded_lines": 19,
+      "cause": "The previous removal log compared earlier working-tree line coordinates with baseline coordinates. It classified 19 retained exact owners as removals solely because their recorded lines differed. These are coordinate corrections, not additional owner removals.",
+      "retained_owner_line_relocations": [
+        {
+          "row": "C18",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1223,
+          "baseline_line": 1221,
+          "labels": [
+            "thm:mposym_nimrep_pos_eigenvector",
+            "eq:mposym_nimrep_eigenvector"
+          ],
+          "matched_declarations": [
+            "MPOTensor.IsNIMRep.exists_pos_left_eigenvector",
+            "MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim"
+          ]
+        },
+        {
+          "row": "C18",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1256,
+          "baseline_line": 1254,
+          "labels": [
+            "thm:mposym_symmetric_boundary_state"
+          ],
+          "matched_declarations": [
+            "MPOTensor.exists_pos_symmetric_boundary_state"
+          ]
+        },
+        {
+          "row": "C19",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1291,
+          "baseline_line": 1289,
+          "labels": [
+            "ex:mposym_fibonacci_boundary_state"
+          ],
+          "matched_declarations": [
+            "FibonacciCompression.mpo_fibTau_mulVec_boundary"
+          ]
+        },
+        {
+          "row": "C19",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1190,
+          "baseline_line": 1188,
+          "labels": [
+            "thm:mposym_fusion_ring_regular"
+          ],
+          "matched_declarations": [
+            "MPOTensor.IsFusionRing.perronFrobeniusDim_pos"
+          ]
+        },
+        {
+          "row": "S01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1026,
+          "baseline_line": 1024,
+          "labels": [
+            "def:mposym_su24_reps3"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24Fusion"
+          ]
+        },
+        {
+          "row": "S01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1042,
+          "baseline_line": 1040,
+          "labels": [
+            "thm:mposym_su24_reps3_units"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isFusionUnit_su24Fusion"
+          ]
+        },
+        {
+          "row": "S01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isNIMRep_su24Fusion"
+          ]
+        },
+        {
+          "row": "S02",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24TY",
+            "MPOTensor.isNIMRep_su24TY"
+          ]
+        },
+        {
+          "row": "S03",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24TY",
+            "MPOTensor.isNIMRep_su24TY"
+          ]
+        },
+        {
+          "row": "S04",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1104,
+          "baseline_line": 1102,
+          "labels": [
+            "thm:mposym_reps3_in_su24"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24TY_repS3ToSU24_castSucc",
+            "MPOTensor.su24TY_repS3ToSU24_last",
+            "MPOTensor.su24TY_repS3ToSU24_mix"
+          ]
+        },
+        {
+          "row": "R01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1026,
+          "baseline_line": 1024,
+          "labels": [
+            "def:mposym_su24_reps3"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Fusion"
+          ]
+        },
+        {
+          "row": "R01",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1042,
+          "baseline_line": 1040,
+          "labels": [
+            "thm:mposym_su24_reps3_units"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24Fusion_repS3ToSU24"
+          ]
+        },
+        {
+          "row": "R02",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Z1"
+          ]
+        },
+        {
+          "row": "R02",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1128,
+          "baseline_line": 1126,
+          "labels": [
+            "thm:mposym_su24_reps3_one_block"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isFusionCharacter_repS3Fusion_iff"
+          ]
+        },
+        {
+          "row": "R03",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Z2",
+            "MPOTensor.isNIMRep_repS3Z2"
+          ]
+        },
+        {
+          "row": "R03",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1104,
+          "baseline_line": 1102,
+          "labels": [
+            "thm:mposym_reps3_in_su24"
+          ],
+          "matched_declarations": [
+            "MPOTensor.su24Fusion_repS3ToSU24_half"
+          ]
+        },
+        {
+          "row": "R04",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.repS3Z3",
+            "MPOTensor.isNIMRep_repS3Z3",
+            "MPOTensor.not_isNIMRep_repS3Z3Printed"
+          ]
+        },
+        {
+          "row": "R05",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 1062,
+          "baseline_line": 1060,
+          "labels": [
+            "thm:mposym_su24_reps3_nimreps"
+          ],
+          "matched_declarations": [
+            "MPOTensor.isNIMRep_repS3Fusion"
+          ]
+        },
+        {
+          "row": "FIB",
+          "file": "blueprint/src/chapter/ch30_mpo_symmetry_basics.tex",
+          "previous_record_line": 951,
+          "baseline_line": 949,
+          "labels": [
+            "thm:mpo_symmetry_fibonacci_rank_two"
+          ],
+          "matched_declarations": [
+            "FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock",
+            "FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two"
+          ]
+        }
+      ],
+      "checks": {
+        "before_minus_after_equals_removal_count": true,
+        "removed_and_retained_are_disjoint": true,
+        "retained_matches_source_index": true,
+        "all_removed_have_terminal_name_but_no_exact_match": true,
+        "all_relocated_have_exact_qualified_matches": true,
+        "c18_owners_retained_at_baseline_lines": [
+          1221,
+          1254
+        ]
+      }
+    }
   }
 }

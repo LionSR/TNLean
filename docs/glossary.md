@@ -2799,3 +2799,69 @@ involve no boundary.
 - **Caveat:** minimal bases, metrics, and child implementations occur only
   in intermediate statements; the final existence theorem does not assume
   them as additional witnesses.
+
+## Arbitrary-boundary MPO algebras and actions
+
+### `MPOTensor.IsBoundaryClosed`
+
+- **Declaration:** `MPOTensor.IsBoundaryClosed T`.
+- **Defined in:** `TNLean/MPS/MPDO/BoundaryClosedness.lean`.
+- **Meaning:** for every pair of boundary matrices `X,Y`, there is one
+  boundary matrix `Z` such that the product of the corresponding closed
+  operators equals the operator with boundary `Z` at every positive length.
+  The order is `∀ X Y, ∃ Z, ∀ L > 0`; `Z` cannot depend on `L`.
+- **Source:** arXiv:2203.12563v3, `algcond`,
+  `Papers/2203.12563/REsubmission.tex:321-330`, and Appendix A, lines 2307-2309.
+- **Sanctioned bridges:** `isBoundaryClosed_iff_exists_linearMap` derives
+  one linear boundary map on the full stacked matrix space, valid at all
+  positive lengths; `mpoWithBoundary_eq_physCloseN` identifies the existing
+  physical closure; `IsBoundaryClosed.mul_mem_range` gives closure of its
+  range at each positive length. Exact biorthogonal data imply the predicate
+  through `isBoundaryClosed_of_biorthogonalDecomposition`.
+- **Caveat:** closure at each length alone does not supply a common boundary
+  choice. No converse from independent lengthwise range closure is asserted.
+  Construction of exact fusion decompositions from this predicate and the
+  paper's injective block hypotheses remains a separate Appendix A obligation.
+
+### `MPOTensor.IsBoundaryCompatible`
+
+- **Declaration:** `MPOTensor.IsBoundaryCompatible T A`.
+- **Defined in:** `TNLean/MPS/MPDO/BoundaryClosedness.lean`.
+- **Meaning:** every operator boundary and state boundary admit one output
+  state boundary realizing their action at all positive chain lengths.
+  Again the existential boundary precedes the universal positive length.
+- **Source:** arXiv:2203.12563v3, `eq:compatible`,
+  `Papers/2203.12563/REsubmission.tex:431-469`, and Appendix A.
+- **Sanctioned bridges:** `isBoundaryCompatible_iff_exists_linearMap`
+  supplies a length-independent linear map on the complete product boundary
+  matrix space. `MPSTensor.mpvWithBoundary_eq_groundSpaceMap` and
+  `IsBoundaryCompatible.mulVec_mem_groundSpace` identify the boundary state
+  map and prove ground-space invariance. Exact action data give compatibility
+  through `isBoundaryCompatible_of_biorthogonalDecomposition`.
+- **Caveat:** separate ground-space invariance at each length does not assert
+  a common boundary transport. Construction of exact biorthogonal action
+  tensors from compatibility and the source block hypotheses is separate;
+  this predicate does not assume such tensors or their multiplicity laws.
+
+### `MPSTensor.IsBiorthogonalDecomposition`
+
+- **Declaration:** `MPSTensor.IsBiorthogonalDecomposition B A V W`.
+- **Defined in:** `TNLean/MPS/MPDO/BoundaryTransport.lean`.
+- **Meaning:** each letter satisfies `B i = ∑ c, W c * A c i * V c`,
+  with `V c * W c = 1` and `V c * W e = 0` for distinct labels.
+  The rectangular synthesis maps `W` and analysis maps `V` need not be
+  adjoints; ambient completeness `∑ c, W c * V c = 1` is not a field.
+- **Source:** the exact fusion/action and orthogonality equations
+  `fusiontensors`, `eq:orthoW`, `fusiontensors2`, `eq:orthoV` in
+  arXiv:2203.12563v3, and its Appendix A.
+- **Sanctioned bridges:** the predicate's `evalWord`,
+  `trace_mul_evalWord`, and `mpvWithBoundary` theorems transport every
+  nonempty word and its arbitrary boundary exactly. `evalWord_of_complete`
+  extends this to the empty word under the explicit ambient-completeness
+  identity. The MPO product/action constructors in `BoundaryClosedness.lean`
+  turn suitable data into arbitrary-boundary closedness/compatibility.
+- **Caveat:** this is exact local reconstruction, stronger than a periodic
+  trace reduction with a nilpotent remainder. Neither periodic equality nor
+  nilpotent-remainder reduction supplies this predicate automatically.
+  Empty-word transport without ambient completeness is not claimed, nor is
+  reconstruction from closedness/compatibility without further block hypotheses.
