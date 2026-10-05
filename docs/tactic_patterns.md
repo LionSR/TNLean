@@ -5387,3 +5387,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** expose the existing fixed-eigenvalue lemma; the compact
   sequence proof uses it without repeating the Jordan-block argument.
 - **Notes:** a theorem suffices; no additional tactic is required.
+
+### Positive half-chain spectral comparison — candidate (2026-10-04)
+
+- **Pattern:** Rewrite a positive matrix characteristic polynomial as the product
+  over its eigenvalues, sort the real roots in decreasing order, and compare
+  finite eigenvalue lists after appending zeros.
+- **Seen:** `HalfChainSpectralComparison.lean`, ordered monotone functional
+  calculus and padded characteristic-polynomial comparison (two occurrences).
+- **Abstraction:** Existing Mathlib characteristic-root and sorted-list APIs do
+  most of the work. `paddedEigenvalues_eq_of_charpoly` is the physical consumer's
+  common statement; no additional tactic is warranted below the rule of three.
+- **Notes:** Weyl monotonicity and CFC square roots are reused from QICLean and
+  Mathlib. The local perturbation/padding results compose those public APIs;
+  no QICLean implementation is copied into TNLean.

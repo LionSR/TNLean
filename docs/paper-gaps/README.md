@@ -1011,3 +1011,8 @@ For the finite-round extension of arXiv:2103.13367:
   number of composed `QCcc` blocks required by the asymptotic source relation.
   One source block may already contain sequential measurements at many sites;
   the adaptive tree does not record the required source-block decomposition.
+
+- `pgvwc07_half_chain_spectrum_conventions.tex` records the boundary-index
+  convention in the half-chain calculation, normalization by the actual
+  finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
+  transfer-error estimate used for ordered physical eigenvalue convergence.

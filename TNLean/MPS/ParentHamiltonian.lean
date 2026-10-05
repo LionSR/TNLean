@@ -101,7 +101,10 @@ import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.ParentHamiltonian.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
+import TNLean.MPS.ParentHamiltonian.HalfChainCanonicalSpectrum
 import TNLean.MPS.ParentHamiltonian.HalfChainSchmidt
+import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
+import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.IsometricDeformation
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
