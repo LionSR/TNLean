@@ -211,9 +211,9 @@ theorem mixedEndpointActiveLinearIsometry_comp_adjoint :
   · obtain ⟨ξ, rfl⟩ := (mem_range_mixedEndpointActivePhysicalCfg_iff σ).mpr hσ
     rw [mixedEndpointActiveInclusion_apply_active,
       mixedEndpointActiveLinearIsometry_adjoint_apply,
-      mixedEndpointOpenActiveProjection_apply, if_pos hσ]
+      mixedEndpointOpenActiveProjection_apply, ite_eq_left hσ]
   · rw [mixedEndpointActiveInclusion_apply_inactive _ _ hσ,
-      mixedEndpointOpenActiveProjection_apply, if_neg hσ]
+      mixedEndpointOpenActiveProjection_apply, ite_eq_right hσ]
 
 /-- The actual active projection fixes the concrete inclusion pointwise. -/
 theorem mixedEndpointOpenActiveProjection_activeLinearIsometry

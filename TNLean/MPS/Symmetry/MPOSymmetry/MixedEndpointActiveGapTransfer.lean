@@ -66,7 +66,10 @@ theorem mixedEndpoint_open_norm_gap_of_active_norm_gap
     rw [map_sub, hleft]
     exact sub_self x
   have horth (z : mixedEndpointActiveSpace D₀ D₁ N) : ⟪U z, y⟫_ℂ = 0 := by
-    rw [← LinearMap.adjoint_inner_right, hadj, inner_zero_right]
+    calc
+      ⟪U z, y⟫_ℂ = ⟪z, U.toLinearMap.adjoint y⟫_ℂ :=
+        (LinearMap.adjoint_inner_right U.toLinearMap z y).symm
+      _ = 0 := by rw [hadj, inner_zero_right]
   have hx : x ∈ (LinearMap.ker K)ᗮ := by
     rw [Submodule.mem_orthogonal]
     intro z hz
@@ -101,7 +104,8 @@ theorem mixedEndpoint_open_norm_gap_of_active_norm_gap
     apply add_le_add
     · exact (mul_le_mul_of_nonneg_right (min_le_left _ _) (sq_nonneg _)).trans hactive
     · have hi : (1 / 2 : ℝ) * ‖y‖ ^ 2 ≤ (⟪H y, y⟫_ℂ).re := by
-        simpa only [inner_re_symm] using hinactive
+        rw [inner_re_symm]
+        exact hinactive
       exact (mul_le_mul_of_nonneg_right (min_le_right _ _) (sq_nonneg _)).trans hi
   have hbound := hquadratic.trans (re_inner_le_norm (𝕜 := ℂ) (H v) v)
   by_cases hv0 : v = 0

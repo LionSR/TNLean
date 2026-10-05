@@ -41,8 +41,7 @@ def emptyEndpointTensor : MPSTensor (0 * 0) 0 := fun p => Fin.elim0 p
 
 private theorem finSumFinEquiv_symm_zeroSector (i : Fin D₀) :
     (finSumFinEquiv : Fin D₀ ⊕ Fin 0 ≃ Fin (D₀ + 0)).symm i = Sum.inl i := by
-  change finSumFinEquiv.symm (Fin.castAdd 0 i) = Sum.inl i
-  simp
+  exact finSumFinEquiv_symm_apply_castAdd (n := 0) i
 
 /-- With no second sector, the actual unweighted mixed tensor is `A₀`.
 Source: arXiv:2203.12563, Section 5, `defAgamma`, lines 1586–1601. -/
@@ -52,6 +51,8 @@ theorem mixedEndpointBase_emptyEndpointTensor
   ext p i j
   simp [mixedEndpointBase, Matrix.reindex_apply, Matrix.submatrix_apply,
     finSumFinEquiv_symm_zeroSector, mixedEndpointLetter, Matrix.fromBlocks]
+  exact congrArg (fun q : Fin (D₀ * D₀) => A₀ q i j)
+    (finProdFinEquiv.apply_symm_apply p)
 
 /-- Every zero-parameter bond weight is one when the second sector is empty.
 Source: arXiv:2203.12563, Section 5, `defAgamma`, lines 1586–1601. -/
@@ -75,12 +76,16 @@ theorem mixedEndpointParentInteraction_zeroSector_eq_parentInteractionES
     (A₀ : MPSTensor (D₀ * D₀) D₀) :
     (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0).toLinearMap =
       parentInteractionES A₀ 2 := by
-  have hsupport : (insertedTwoSiteMap A₀ (1 : Matrix (Fin D₀) (Fin D₀) ℂ)).range =
-      groundSpaceES A₀ 2 := by
+  have hsupport :
+      (insertedTwoSiteMap (mixedEndpointBase A₀ emptyEndpointTensor)
+        (bondInterpolationMatrix D₀ 0 0)).range = groundSpaceES A₀ 2 := by
+    rw [mixedEndpointBase_emptyEndpointTensor, bondInterpolationMatrix_zeroSector]
     simpa only [Matrix.mul_one] using
       range_insertedTwoSiteMap_eq_groundSpaceES A₀ (1 : Matrix (Fin D₀) (Fin D₀) ℂ) isUnit_one
-  unfold mixedEndpointParentInteraction
-  rw [mixedEndpointBase_emptyEndpointTensor, bondInterpolationMatrix_zeroSector, hsupport]
+  have hproj := congrArg
+    (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) => S.starProjection)
+    hsupport
+  rw [mixedEndpointParentInteraction, hproj]
   simp only [parentInteractionES, Submodule.starProjection_orthogonal']
 
 /-- The full actual nonwrapping sum is the ordinary open parent Hamiltonian
@@ -128,7 +133,8 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 def mixedEndpointZeroSectorActiveEquiv (D₀ N : ℕ) :
     mixedEndpointActiveSpace D₀ 0 N ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (Cfg (D₀ * D₀) (N + 1 + 1)) where
-  __ := LinearEquiv.ofLinearMap
+  toLinearEquiv := LinearEquiv.ofLinearMap (σ₁₂ := RingHom.id ℂ) (σ₂₁ := RingHom.id ℂ)
+    (re₁₂ := inferInstance) (re₂₁ := inferInstance)
     (mixedEndpointActiveLinearIsometry D₀ 0 N).toLinearMap
     (mixedEndpointActiveLinearIsometry D₀ 0 N).toLinearMap.adjoint
     (by rw [mixedEndpointActiveLinearIsometry_comp_adjoint,
@@ -162,9 +168,9 @@ theorem mixedEndpointActiveHamiltonian_zeroSector_eq_conjugate_openParent
       (mixedEndpointZeroSectorActiveEquiv D₀ N).toLinearEquiv.toLinearMap.adjoint ∘ₗ
         openParentHamiltonianES A₀ 2 (N + 1 + 1) ∘ₗ
           (mixedEndpointZeroSectorActiveEquiv D₀ N).toLinearEquiv.toLinearMap := by
-  rw [mixedEndpointActiveHamiltonian_eq_compression,
-    openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES]
-  rfl
+  simp only [mixedEndpointActiveHamiltonian_eq_compression,
+    openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES,
+    mixedEndpointZeroSectorActiveEquiv_toLinearMap, mixedEndpointActiveCompression]
 
 /-- The actual zero-second-sector active Hamiltonians have an intrinsic
 positive gap uniformly in sufficiently long chains, derived solely from
@@ -187,19 +193,21 @@ theorem exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap
       rintro ⟨a, κ, e⟩
       exact isEmptyElim a
     simp [hv]
-  · letI : NeZero D₀ := ⟨hD₀⟩
+  · let : NeZero D₀ := ⟨hD₀⟩
     obtain ⟨W, hW, δ, hδ, hGap⟩ :=
       exists_openParentHamiltonianES_two_uniform_gap_of_isInjective A₀ hA₀
     refine ⟨W, hW, δ, hδ, ?_⟩
     intro N hWN v hv
-    let U := mixedEndpointActiveLinearIsometry D₀ 0 N
+    let U : mixedEndpointActiveSpace D₀ 0 N →ₗᵢ[ℂ]
+        EuclideanSpace ℂ (Cfg (D₀ * D₀) (N + 1 + 1)) :=
+      mixedEndpointActiveLinearIsometry D₀ 0 N
     have hker : LinearMap.ker (openParentHamiltonianES A₀ 2 (N + 1 + 1)) =
         groundSpaceES A₀ (N + 1 + 1) :=
       ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
         (Kraus.isNBlkInjective_one_of_isInjective hA₀) (by norm_num) (by omega)
     have hUv : U v ∈ (groundSpaceES A₀ (N + 1 + 1))ᗮ := by
       rw [← hker]
-      apply Submodule.mem_orthogonal.mpr
+      apply (Submodule.mem_orthogonal _ _).mpr
       intro w hw
       obtain ⟨u, rfl⟩ := mixedEndpointActiveLinearIsometry_zeroSector_surjective D₀ N w
       have hu : u ∈ LinearMap.ker (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N) := by
@@ -207,7 +215,7 @@ theorem exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap
           openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES]
         exact hw
       simpa only [U, LinearIsometry.inner_map_map] using
-        (Submodule.mem_orthogonal.mp hv) u hu
+        (Submodule.mem_orthogonal _ _).mp hv u hu
     have h := hGap (N + 1 + 1) hWN (U v) hUv
     rw [← mixedEndpointActiveHamiltonian_zeroSector_intertwines A₀ N v] at h
     simpa only [U, LinearIsometry.norm_map] using h

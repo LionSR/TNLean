@@ -144,7 +144,7 @@ private theorem conj_projection_eq_fiberwise_of_ker_iff
       change U (P (U.symm y)) = 0 ↔ P (U.symm y) = 0
       exact U.map_eq_zero_iff
     rw [hconj, mem_ker_rightFiberwiseMap_iff, hker]
-    simp only [U.apply_symm_apply]
+    simp only [U.apply_symm_apply, LinearMap.coe_toContinuousLinearMap]
   apply LinearMap.IsSymmetricProjection.ext hL hR
   have hrL : LinearMap.range L = (LinearMap.ker L)ᗮ := by
     rw [← hL.isSymmetric.orthogonal_range, Submodule.orthogonal_orthogonal]
@@ -161,7 +161,11 @@ theorem endpointFirstEdgeCoreConstraintES_conj_spectator
         (endpointFirstEdgeCoreConstraintES A ι) =
       (rightFiberwiseMap (S := ι)
         (endpointFirstEdgeCoreConstraintES A PUnit).toContinuousLinearMap).toLinearMap := by
-  apply conj_projection_eq_fiberwise_of_ker_iff _ _ _
+  apply conj_projection_eq_fiberwise_of_ker_iff
+    (E := EuclideanSpace ℂ (endpointFirstEdgeCfg ι D))
+    (I := endpointFirstEdgeCfg PUnit D) (S := ι)
+    (endpointFirstEdgeSpectatorIsometry ι D)
+    (endpointFirstEdgeCoreConstraintES A ι) (endpointFirstEdgeCoreConstraintES A PUnit)
     (endpointFirstEdgeCoreConstraintES_isSymmetricProjection A ι)
     (endpointFirstEdgeCoreConstraintES_isSymmetricProjection A PUnit)
   intro v
@@ -176,7 +180,11 @@ theorem endpointLastEdgeCoreConstraintES_conj_spectator
         (endpointLastEdgeCoreConstraintES A ι) =
       (rightFiberwiseMap (S := ι)
         (endpointLastEdgeCoreConstraintES A PUnit).toContinuousLinearMap).toLinearMap := by
-  apply conj_projection_eq_fiberwise_of_ker_iff _ _ _
+  apply conj_projection_eq_fiberwise_of_ker_iff
+    (E := EuclideanSpace ℂ (endpointLastEdgeCfg ι D))
+    (I := endpointLastEdgeCfg PUnit D) (S := ι)
+    (endpointLastEdgeSpectatorIsometry ι D)
+    (endpointLastEdgeCoreConstraintES A ι) (endpointLastEdgeCoreConstraintES A PUnit)
     (endpointLastEdgeCoreConstraintES_isSymmetricProjection A ι)
     (endpointLastEdgeCoreConstraintES_isSymmetricProjection A PUnit)
   intro v

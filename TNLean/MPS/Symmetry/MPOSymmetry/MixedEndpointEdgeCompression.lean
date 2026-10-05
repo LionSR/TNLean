@@ -149,6 +149,7 @@ private def coordinateIsometry {ι κ : Type*} [Fintype ι] [Fintype κ] (f : ι
     rw [← LinearMap.adjoint_inner_right, ← LinearMap.comp_apply,
       coordinateLin_adjoint_comp, LinearMap.id_apply]
 
+open Classical in
 private theorem coordinateLin_projection_apply {ι κ : Type*} [Fintype ι] [Fintype κ]
     (f : ι ↪ κ) (v : EuclideanSpace ℂ κ) (j : κ) :
     (coordinateLin f ∘ₗ (coordinateLin f).adjoint) v j =
@@ -299,11 +300,13 @@ theorem mixedEndpointEdgeSectorProjection_commute_actualInteraction
   have hinner := (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁ 0).mul_left
     (mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁ 1)
   cases k with
-  | first => exact hinner.mul_left (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁ 1)
+  | first =>
+      exact hinner.mul_left (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁ 1)
   | last => exact hinner.mul_left (mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁ 0)
-  | interior => exact hinner.mul_left
-      ((mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁ 0).mul_left
-        (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁ 1))
+  | interior =>
+      exact hinner.mul_left
+        ((mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁ 0).mul_left
+          (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁ 1))
 
 /-- The three already derived smaller boundary maps, uniformly indexed by
 edge position. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -339,16 +342,15 @@ def mixedEndpointEdgeConstraintES
 private def twoSiteBoundaryMapSum
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     Matrix (Fin D₀ ⊕ Fin D₁) (Fin D₀ ⊕ Fin D₁) ℂ →ₗ[ℂ]
-      EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) where
-  toFun X := insertedTwoSiteMap (mixedEndpointBase A₀ A₁) (bondInterpolationMatrix D₀ D₁ 0)
-    (WithLp.toLp 2 (fun p => (Matrix.reindex finSumFinEquiv finSumFinEquiv X) p.1 p.2))
-  map_add' X Y := by
-    exact map_add (insertedTwoSiteMap (mixedEndpointBase A₀ A₁) (bondInterpolationMatrix D₀ D₁ 0))
-      (WithLp.toLp 2 (fun p => (Matrix.reindex finSumFinEquiv finSumFinEquiv X) p.1 p.2))
-      (WithLp.toLp 2 (fun p => (Matrix.reindex finSumFinEquiv finSumFinEquiv Y) p.1 p.2))
-  map_smul' z X := by
-    exact map_smul (insertedTwoSiteMap (mixedEndpointBase A₀ A₁) (bondInterpolationMatrix D₀ D₁ 0)) z
-      (WithLp.toLp 2 (fun p => (Matrix.reindex finSumFinEquiv finSumFinEquiv X) p.1 p.2))
+      EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) := by
+  let V : Matrix (Fin D₀ ⊕ Fin D₁) (Fin D₀ ⊕ Fin D₁) ℂ →ₗ[ℂ]
+      EuclideanSpace ℂ (Fin (D₀ + D₁) × Fin (D₀ + D₁)) :=
+    { toFun X := WithLp.toLp 2 fun p =>
+        (Matrix.reindex finSumFinEquiv finSumFinEquiv X) p.1 p.2
+      map_add' _ _ := rfl
+      map_smul' _ _ := rfl }
+  exact (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
+    (bondInterpolationMatrix D₀ D₁ 0)).toLinearMap.comp V
 
 private theorem range_twoSiteBoundaryMapSum
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
@@ -390,16 +392,16 @@ private theorem edgePhysicalCfg_eq_activeCfg (k : MixedEndpointEdgePosition)
       rcases ξ with ⟨⟨a, b⟩, q⟩
       funext i
       fin_cases i <;> simp [mixedEndpointEdgePhysicalCfg, mixedEndpointActivePhysicalCfg,
-        edgeActiveCfg, mixedEndpointFirstPhysicalIndex]
+        edgeActiveCfg, mixedEndpointFirstPhysicalIndex, Fin.snoc_zero]
   | interior =>
       funext i
       fin_cases i <;> simp [mixedEndpointEdgePhysicalCfg, mixedEndpointActivePhysicalCfg,
-        edgeActiveCfg, mixedEndpointFirstPhysicalIndex]
+        edgeActiveCfg, mixedEndpointFirstPhysicalIndex, Fin.snoc_zero]
   | last =>
       rcases ξ with ⟨q, ⟨c, e⟩⟩
       funext i
       fin_cases i <;> simp [mixedEndpointEdgePhysicalCfg, mixedEndpointActivePhysicalCfg,
-        edgeActiveCfg, mixedEndpointFirstPhysicalIndex]
+        edgeActiveCfg, mixedEndpointFirstPhysicalIndex, Fin.snoc_zero]
 
 private theorem twoSiteBoundaryMapSum_apply_activeCfg
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
@@ -410,7 +412,7 @@ private theorem twoSiteBoundaryMapSum_apply_activeCfg
   rcases ξ with ⟨a, ⟨b, σ, c⟩, e⟩
   simp [twoSiteBoundaryMapSum, mixedEndpointActiveBoundaryMap, mixedEndpointActivePhysicalCfg,
     insertedTwoSiteMap_apply, insertedGroundSpaceMap_apply, insertedEvalWord,
-    List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
+    List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc, Fin.snoc_zero]
 
 private theorem edgeAdjoint_comp_twoSiteBoundaryMapSum
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
@@ -419,7 +421,10 @@ private theorem edgeAdjoint_comp_twoSiteBoundaryMapSum
         (twoSiteBoundaryMapSum A₀ A₁) =
       (WithLp.linearEquiv 2 ℂ (mixedEndpointEdgeCfg D₀ D₁ k → ℂ)).symm.toLinearMap.comp
         (mixedEndpointEdgeBoundaryMap A₀ A₁ k) := by
-  ext X ξ
+  apply LinearMap.ext
+  intro X
+  apply PiLp.ext
+  intro ξ
   rw [LinearMap.comp_apply, mixedEndpointEdgeLinearIsometry_adjoint_apply,
     edgePhysicalCfg_eq_activeCfg, twoSiteBoundaryMapSum_apply_activeCfg]
   cases k <;> rfl
@@ -457,9 +462,10 @@ theorem mixedEndpointEdgeSectorProjection_invariant_actualSupport
   rintro _ ⟨v, hv, rfl⟩
   have hc := congrArg (fun T => T v)
     (mixedEndpointEdgeSectorProjection_commute_actualInteraction A₀ A₁ k).eq.symm
-  change (mixedEndpointParentInteraction A₀ A₁ 0)
+  change (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap
       (mixedEndpointEdgeSectorProjection D₀ D₁ k v) =
-    mixedEndpointEdgeSectorProjection D₀ D₁ k ((mixedEndpointParentInteraction A₀ A₁ 0) v) at hc
+    mixedEndpointEdgeSectorProjection D₀ D₁ k
+      ((mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap v) at hc
   rw [LinearMap.mem_ker.mp hv, map_zero] at hc
   exact hc
 
@@ -525,14 +531,16 @@ theorem mixedEndpointEdgeCompression_intertwines
     rw [← mixedEndpointEdgeLinearIsometry_comp_adjoint]
     change J ((J.adjoint ∘ₗ J) v) = J v
     rw [mixedEndpointEdgeLinearIsometry_adjoint_comp, LinearMap.id_apply]
-  change (J ∘ₗ J.adjoint) ((mixedEndpointParentInteraction A₀ A₁ 0) (J v)) = _
+  change (J ∘ₗ J.adjoint) ((mixedEndpointParentInteraction A₀ A₁ 0) (J v)) =
+    (mixedEndpointParentInteraction A₀ A₁ 0) (J v)
   rw [mixedEndpointEdgeLinearIsometry_comp_adjoint]
   have hc := congrArg (fun T => T (J v))
     (mixedEndpointEdgeSectorProjection_commute_actualInteraction A₀ A₁ k).eq
   change mixedEndpointEdgeSectorProjection D₀ D₁ k
       ((mixedEndpointParentInteraction A₀ A₁ 0) (J v)) =
     (mixedEndpointParentInteraction A₀ A₁ 0) (mixedEndpointEdgeSectorProjection D₀ D₁ k (J v)) at hc
-  simpa only [hfix] using hc
+  rw [hfix] at hc
+  exact hc
 
 /-- The actual compressed smaller-edge interaction is a symmetric projection.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -549,7 +557,8 @@ theorem mixedEndpointEdgeCompression_isSymmetricProjection
     apply (mixedEndpointEdgeLinearIsometry D₀ D₁ k).injective
     simp only [Module.End.mul_apply, mixedEndpointEdgeCompression_intertwines]
     exact LinearMap.congr_fun hP.isIdempotentElem.eq (mixedEndpointEdgeLinearIsometry D₀ D₁ k v)
-  · exact (hP.isPositive.adjoint_conj (mixedEndpointEdgeLinearIsometry D₀ D₁ k).toLinearMap).isSymmetric
+  · exact (hP.isPositive.adjoint_conj
+      (mixedEndpointEdgeLinearIsometry D₀ D₁ k).toLinearMap).isSymmetric
 
 /-- The actual compressed kernel is the proved smaller boundary support.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
