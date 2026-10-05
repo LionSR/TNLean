@@ -20,12 +20,15 @@ from pathlib import Path
 from playwright.sync_api import Page, Route, sync_playwright
 
 
-EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3]
-PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
+EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3] + [2]
+PAGES = (
+    "ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html", "ch-mpo_symmetry_basics.html"
+)
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 8,
     "ch-mpdo.html": 4,
     "ch-mpdo_rfp.html": 7,
+    "ch-mpo_symmetry_basics.html": 1,
 }
 
 
@@ -106,6 +109,21 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
         assert anchor in body, anchor
         assert body.count(r"\begin{tenkz}") == 3, anchor
         assert body.count(r"\xrightarrow") == 2, anchor
+
+
+    action_source = (
+        source_root / "chapter/ch30_mpo_boundary_comparison.tex"
+    ).read_text(encoding="utf-8")
+    action_bodies = _tenkzequation_bodies(action_source)
+    assert len(action_bodies) == 1, len(action_bodies)
+    assert r"\let\tenkzeq\relax" in action_bodies[0]
+    assert action_bodies[0].count(r"\begin{tenkz}") == 2
+    for anchor in (
+        r"{V^{i}}", r"{V^{j}}", r"{V^{k}}", r"{W^{\mu}}",
+        r"(L_{abx}^{y})_{c,k\mu}^{z,ij}",
+    ):
+        assert anchor in action_bodies[0], anchor
+    assert r"\label{eq:glm_boundary_action_l_diagram}" in action_source
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
