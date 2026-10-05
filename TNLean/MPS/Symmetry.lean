@@ -86,6 +86,7 @@ import TNLean.MPS.Symmetry.MixedSPTFixedPoint
 import TNLean.MPS.Symmetry.MixedSymmetry
 import TNLean.MPS.Symmetry.MpvRayLimit
 import TNLean.MPS.Symmetry.NearbyInjectiveAdjointActions
+import TNLean.MPS.Symmetry.NormalBlockBoundaryParentHamiltonian
 import TNLean.MPS.Symmetry.NormalizedBondLocalSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.OrderedGappedInteractionPath

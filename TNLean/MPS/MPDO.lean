@@ -68,6 +68,7 @@ import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.BlockBoundarySelector
+import TNLean.MPS.MPDO.BlockSumAdjointBoundary
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.BondOneOperator
@@ -80,6 +81,7 @@ import TNLean.MPS.MPDO.Boundary
 import TNLean.MPS.MPDO.BoundaryActionComparison
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
 import TNLean.MPS.MPDO.BoundaryActionTrees
+import TNLean.MPS.MPDO.BoundaryAdjointCounterexample
 import TNLean.MPS.MPDO.BoundaryBiorthogonal
 import TNLean.MPS.MPDO.BoundaryBlockAction
 import TNLean.MPS.MPDO.BoundaryBlockFusion
@@ -243,6 +245,7 @@ import TNLean.MPS.MPDO.NonCartesianActiveSectorCandidate
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCounterexample
 import TNLean.MPS.MPDO.NonCartesianActiveSectorObstruction
 import TNLean.MPS.MPDO.NonCartesianActiveSectorRigidity
+import TNLean.MPS.MPDO.NormalAdjointBoundary
 import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.NormalizedMPOProportionality
