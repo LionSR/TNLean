@@ -100,6 +100,40 @@ below.\footnote{Source traceability:
     \leanid{TNLean.PEPS.toricCodePrimalMatrix_conjTranspose_mul_self},
     and \leanid{TNLean.PEPS.isGIsometric_toricCodePrimalTensor}.}
 
+\section{The four primal toric-code torus vectors}
+The one-bond character representation is now explicit:
+$U_g=\operatorname{diag}_{a\in\mathbb Z_2}(-1)^{ga}$, so $U_0=I$ and
+$U_1=Z$. Its oriented four-leg action is exactly the parity action above.
+The matrices $I,Z$ are linearly independent, hence the representation
+is semi-regular. Applying the general closure-independence theorem to
+the literal primal tensor gives four independent contracted vectors
+$\Psi_{g,h}$ and
+\begin{align}
+    \dim_{\mathbb C}\operatorname{span}\{\Psi_{g,h}:g,h\in\mathbb Z_2\}=4.
+\end{align}
+This conclusion concerns actual seam insertions in the tensor network,
+not four abstract labels.\footnote{Results:
+    \leanid{TNLean.PEPS.torusLegRep_toricCodeBondRep},
+    \leanid{TNLean.PEPS.isSemiRegular_toricCodeBondRep},
+    \leanid{TNLean.PEPS.linearIndependent_toricCodeTorusState},
+    \leanid{TNLean.PEPS.finrank_span_toricCodeTorusState}.}
+
+For a physical configuration, let $(t_v,r_v,b_v,l_v)$ be its uniquely
+specified virtual labels. The amplitude vanishes unless
+$l_{v+(1,0)}=r_v$ and $b_{v+(0,1)}=t_v$ at every site. When these
+conditions hold, it equals the product of $(-1)^{h r_v}$ over the
+horizontal seam and $(-1)^{g t_v}$ over the vertical seam. Thus the
+untwisted amplitude is exactly one, and all four vectors have the same
+configuration support, with different relative signs. No tensor or
+state normalization is suppressed.\footnote{Result:
+    \leanid{TNLean.PEPS.toricCodeTorusState_apply}.}
+
+The oriented-bond contraction is defined for all positive rectangular
+periods. For periods at least three it has the same four distinct
+incident bonds as the simple-graph PEPS convention. The smaller periods
+are algebraic extensions. Identification of the four-dimensional span
+with the full parent-Hamiltonian kernel remains a separate assertion.
+
 \section{Representations}
 The formal notions of $G$-injectivity and $G$-isometry take the
 representation as a parameter and do not require it to be semi-regular
