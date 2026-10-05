@@ -2820,8 +2820,10 @@ involve no boundary.
   through `isBoundaryClosed_of_biorthogonalDecomposition`.
 - **Caveat:** closure at each length alone does not supply a common boundary
   choice. No converse from independent lengthwise range closure is asserted.
-  Construction of exact fusion decompositions from this predicate and the
-  paper's injective block hypotheses remains a separate Appendix A obligation.
+  `IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective` now
+  constructs exact fusion decompositions from an unweighted block presentation
+  with positive-dimensional, individually injective, gauge-scalar-separated
+  blocks. The common positive spanning length is derived, not assumed.
 
 ### `MPOTensor.IsBoundaryCompatible`
 
@@ -2839,9 +2841,12 @@ involve no boundary.
   map and prove ground-space invariance. Exact action data give compatibility
   through `isBoundaryCompatible_of_biorthogonalDecomposition`.
 - **Caveat:** separate ground-space invariance at each length does not assert
-  a common boundary transport. Construction of exact biorthogonal action
-  tensors from compatibility and the source block hypotheses is separate;
-  this predicate does not assume such tensors or their multiplicity laws.
+  a common boundary transport.
+  `IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective`
+  constructs exact action tensors from unweighted operator/state block
+  presentations and positive-dimensional, individually injective,
+  gauge-scalar-separated target state blocks. Operator-block injectivity is
+  unnecessary. The predicate itself does not assume those data or their laws.
 
 ### `MPSTensor.IsBiorthogonalDecomposition`
 
@@ -2865,3 +2870,8 @@ involve no boundary.
   nilpotent-remainder reduction supplies this predicate automatically.
   Empty-word transport without ambient completeness is not claimed, nor is
   reconstruction from closedness/compatibility without further block hypotheses.
+  The source-block construction is in `BoundarySourceDecomposition.lean`;
+  `BoundaryZipperBlocked.lean` retains its exact unblocked maps and packages
+  the same maps into a complete zipper family after a derived common blocking.
+  `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
+  of multiplicities under positive dimensions and injective block separation.

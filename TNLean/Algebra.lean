@@ -95,11 +95,13 @@ import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
+import TNLean.Algebra.MatrixIdempotentFactorization
 import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MatrixSylvesterBound
 import TNLean.Algebra.MatrixTensorPower
+import TNLean.Algebra.MatrixUnitFactorization
 import TNLean.Algebra.MonoidHomCommutingWeight
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
@@ -118,6 +120,7 @@ import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PermutationMatrixCommutation
 import TNLean.Algebra.PermutationMatrixUnitary
+import TNLean.Algebra.PiMatrixRepresentation
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle

@@ -32,6 +32,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
+import TNLean.MPS.Symmetry.MPOSymmetry.PBCGroupProjector
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.Similarity
