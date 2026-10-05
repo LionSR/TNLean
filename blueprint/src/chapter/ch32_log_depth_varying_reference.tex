@@ -1,0 +1,170 @@
+\section{Varying density-matrix references}
+\label{sec:ldp_varying_reference}
+
+The reference state can vary with the ring and the site and can be singular.
+We keep a fixed square bond space of dimension $D$. All reference matrices
+$\sigma$ are positive semidefinite with trace one, and
+$R_\sigma(X)=\operatorname{Tr}(X)\sigma$.
+The ordered exponential estimates below are sufficient hypotheses; the
+qualitative convergence definition in the inhomogeneous paragraph
+of~\cite{Malz2024Preparation} does not supply them.
+Rectangular bond spaces remain outside this statement
+(\cite{gap:mswc24_inhomogeneous_scope}).
+
+\begin{lemma}[Ordered perturbations of varying references]
+    \label{lem:ldp_varying_reference_products}
+    \lean{prod_range_sub_prod_range_eq_sum_mul_sub_mul,
+        norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le}
+    \leanok
+    Let $X_j,Y_j$ lie in a normed ring. Suppose every contiguous product of
+    the $Y_j$, including the empty product, has norm at most $c$, and
+    $\|X_j-Y_j\|\le\eta$. Then
+    \[
+        \left\|\prod_{j=0}^{M-1}X_j-\prod_{j=0}^{M-1}Y_j\right\|
+        \le c\bigl((1+c\eta)^M-1\bigr).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Telescope the difference by taking an initial segment from $X$, one
+    difference $X_j-Y_j$, and the remaining segment from $Y$. Bound each
+    initial segment recursively by its reference product plus its error.
+    The resulting geometric sum gives the assertion.
+\end{proof}
+
+\begin{lemma}[The reference on an outgoing pair]
+    \label{lem:ldp_varying_reference_pairs}
+    \lean{MPSPreparation.mpvFamily_fixedPointTensor,
+        MPSPreparation.sum_mpvFamily_mul_star_mpvFamily}
+    \leanok
+    Write $F_j^{l,r}=\sqrt{\sigma_j}\,|l\rangle\langle r|$.
+    For a periodic family of $M\ge1$ such tensors,
+    \[
+        \operatorname{Tr}(F_0^{l_0,r_0}\cdots F_{M-1}^{l_{M-1},r_{M-1}})
+        =\prod_{j=0}^{M-1}(\sqrt{\sigma_{j+1}})_{r_j,l_{j+1}},
+    \]
+    with cyclic subscripts. In particular the pair leaving block $j$
+    uses the reference of block $j+1$. The overlap of two periodic tensor
+    families is the trace of their ordered mixed-transfer product.
+\end{lemma}
+\begin{proof}\leanok
+    Expand the cyclic virtual contraction in matrix units. Each right
+    index fixes the incoming virtual index of the next tensor. Expanding
+    both layers in the same way proves the mixed-transfer identity.
+\end{proof}
+
+The following two-block equality displays all four physical indices.
+The lower path on the left closes only the virtual ring. On the right
+there is no contraction between the two pair matrices: their coefficients
+multiply. The matrix marked $\sqrt{\sigma_1}$ has row $r_0$ and column $l_1$;
+the other has row $r_1$ and column $l_0$. Each pair has squared norm
+$\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
+% TENKZ-ORDERED-MIXING-VARYING-BEGIN
+% Formula: Tr(F0^(l0,r0) F1^(l1,r1)) = sqrt(sigma1)_(r0,l1) sqrt(sigma0)_(r1,l0).
+% Boundary: l0,r0,l1,r1, each a physical index of dimension D.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none]
+            \tn[at=(1,2), name=vpzero, skin=box, wide=2,
+                ports={180:virtual, 0:virtual,
+                        90@1:physical:$l_0$, 90@2:physical:$r_0$}]{F_0}
+            \tn[at=(1,4), name=vpone, skin=box, wide=2,
+                ports={180:virtual, 0:virtual,
+                        90@1:physical:$l_1$, 90@2:physical:$r_1$}]{F_1}
+            \tn[at=(1,1), name=vleft, skin=none, ports={0:virtual, 270:virtual}]{}
+            \tn[at=(2,1), name=vleftbottom, skin=none, ports={90:virtual, 0:virtual}]{}
+            \tn[at=(2,6), name=vrightbottom, skin=none, ports={180:virtual, 90:virtual}]{}
+            \tn[at=(1,6), name=vright, skin=none, ports={180:virtual, 270:virtual}]{}
+            \tnwire{vpzero.0}{vpone.180}
+            \tnwire{vpzero.180}{vleft.0}
+            \tnwire{vleft.270}{vleftbottom.90}
+            \tnwire{vleftbottom.0}{vrightbottom.180}
+            \tnwire{vrightbottom.90}{vright.270}
+            \tnwire{vright.180}{vpone.0}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+            \tn[at=(1,1), name=vpairone, skin=box, wide=2,
+                ports={90@1:physical:$r_0$, 90@2:physical:$l_1$}]{\sqrt{\sigma_1}}
+            \tn[at=(1,3), name=vpairzero, skin=box, wide=2,
+                ports={90@1:physical:$r_1$, 90@2:physical:$l_0$}]{\sqrt{\sigma_0}}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{center}
+% TENKZ-ORDERED-MIXING-VARYING-END
+
+\begin{theorem}[Uniform error with singular varying references]
+    \label{thm:ldp_varying_reference_error}
+    \lean{MPSPreparation.exists_norm_polarPos_sub_le_sqrt_transferMatrix,
+        MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference,
+        MPSPreparation.exists_abs_norm_chainState_sq_sub_one_le_uniform_reference,
+        MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}
+    \leanok
+    \uses{lem:ldp_varying_reference_products,lem:ldp_varying_reference_pairs,
+        thm:ldp_inhomogeneous_normalized_pairs}
+    There are constants depending only on $D$ such that, if each actual
+    block transfer matrix differs from its reset reference by at most
+    $\delta$, its positive polar factor differs from
+    $(\sqrt{\sigma_j})^\mathsf T\otimes I$ by at most $K_D\sqrt\delta$.
+    The complex overlap of the positive-part state with the shifted pair
+    family differs from one by at most
+    $C_DM\sqrt\delta\exp(C_DM\sqrt\delta)$.
+    If the whole-ring transfer matrix also differs from a density reset
+    by at most $\delta$, the normalized pair error is at most
+    $C'_DM\sqrt\delta$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the global square-root H\"older bound to the reshuffled Gram
+    matrices. Density matrices form a compact set, so the reset matrices
+    and the linear maps defining mixed transfers have uniform bounds.
+    Since $R_\sigma R_\tau=R_\sigma$, every nonempty reference product has
+    the same bound as one reset matrix and has trace one. Apply ordered
+    telescoping, then use the whole-ring trace for the target norm.
+    For $M\sqrt\delta\le1$ one has $\delta\le\sqrt\delta$ and the
+    exponential is uniformly bounded. For the complementary range the
+    normalized error is at most one.
+\end{proof}
+
+\begin{theorem}[Eventual preparation from varying-reference mixing]
+    \label{thm:ldp_varying_reference_preparation}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_reference}
+    \leanok
+    \uses{thm:ldp_varying_reference_error,thm:ldp_inhomogeneous_uniform_rate_from}
+    Fix $d,D$ with $d>0$, and $K,r>0$. For every positive ring length let
+    $A_{N,i}$ be actual tensors and $\sigma_{N,i}$ density matrices on
+    the common bond space. Suppose every positive nonwrapping interval
+    starting at $a$ and of length $\ell$ satisfies
+    \[
+        \|T_{A_{N,a}\cdots A_{N,a+\ell-1}}-R_{\sigma_{N,a}}\|
+        \le K e^{-r\ell}.
+    \]
+    There exist a uniform cutoff $N_0$ and $C$ such that the normalized
+    original state at every $N\ge N_0$ and $0<\varepsilon\le1$ has a
+    physical unit-state approximation of error at most $\varepsilon$
+    prepared in depth $C\log(N/\varepsilon)$.
+\end{theorem}
+\begin{proof}\leanok
+    The whole-ring estimate bounds the squared-norm deviation from one
+    by $K_nK e^{-rN}$, uniformly over the density references. Choose the
+    cutoff so this is at most $1/2$. On blocks of lengths between $q$ and
+    $2q$ the preceding theorem gives error
+    $C_D\sqrt K\,N e^{-rq/2}$. Apply the uniform-rate preparation theorem
+    with exponent $r/2$, including its exact short-ring branch.
+\end{proof}
+
+\paragraph{Discussion and outlook.}
+The constants now remain controlled for a family whose reference spectra
+approach zero as the ring grows. Exact reset tensors, including different
+rank-one references on neighboring blocks, satisfy the product hypothesis
+with zero transfer error. This separates the dimension required by the
+physical circuit from the rank of a reference density matrix. Faithfulness
+is useful for the sharper linear square-root perturbation estimate, but
+is not required for logarithmic preparation under the stated product bound.
+
+The factor two lost in the exponential rate is a consequence of using a
+global H\"older estimate, not a lower bound on preparation complexity.
+A sharper estimate on supported sectors could improve it. Extending the
+argument to rectangular bonds requires compatible corner-supported reset
+maps and the corresponding pair supports. Deriving the uniform ordered
+rate from a more intrinsic physical condition remains distinct from these
+norm and normalization estimates.
