@@ -684,6 +684,11 @@ note.
 
 For the matrix product operator symmetries of arXiv:2203.12563:
 
+- `glm23_multiplicity_l_indices.tex` records the reversed fusion multiplicity
+  pairs in the printed coupled pentagon, the missing summed primed fusion
+  indices in the gauge display, and the analysis/synthesis convention. The
+  general coupled pentagon and multiplicity gauge law remain proof obligations.
+
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
   trivial action of `ψ` is forced by the source's identification of that phase

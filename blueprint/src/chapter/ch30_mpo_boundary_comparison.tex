@@ -1,0 +1,353 @@
+% Actual multiplicity L-symbol construction from exact action trees.
+% All six precursor modules, including the full action comparison, have elaborated.
+% The fixed-final L extraction and its regression checks remain pending.
+\section{Comparing exact decomposition coordinates}
+\label{sec:glm_boundary_comparison}
+
+\begin{theorem}[The reconstructed block-algebra map is unique]
+    \label{thm:glm_boundary_representation_unique}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.sum_sandwich_eq_of_wordTupleSpanTop,
+        MPSTensor.IsBiorthogonalDecomposition.support_eq_of_wordTupleSpanTop}
+    \leanok
+    \uses{def:glm_boundary_decomposition,
+        def:blockwise_product_word_span}
+    Let $B$ have two exact biorthogonal decompositions over a target family
+    $(A_c)_c$, with repetitions indexed by maps $f:I\to C$ and $g:J\to C$.
+    Suppose the simultaneous target word tuples span the product matrix
+    algebra at one positive length. For every tuple of matrices $(M_c)_c$,
+    \begin{align}
+        \sum_{i\in I}W_iM_{f(i)}V_i
+         & =\sum_{j\in J}\widetilde W_jM_{g(j)}\widetilde V_j,
+        \label{eq:glm_boundary_representation_unique}          \\
+        \sum_{i\in I}W_iV_i
+         & =\sum_{j\in J}\widetilde W_j\widetilde V_j.
+        \label{eq:glm_boundary_support_unique}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_decomposition}
+    At a simultaneous word tuple, both sides of
+    (\ref{eq:glm_boundary_representation_unique}) equal the corresponding
+    nonempty word of $B$. Linearity and spanning give equality on every
+    tuple. Taking $M_c=I$ gives (\ref{eq:glm_boundary_support_unique}).
+\end{proof}
+
+\begin{theorem}[Coordinate changes on a common support]
+    \label{thm:glm_boundary_support_comparison}
+    \lean{Matrix.comparison_of_common_support}
+    \leanok
+    Suppose $HS=I$, $\widetilde H\widetilde S=I$, and
+    $SH=\widetilde S\widetilde H$. Then
+    $C=\widetilde HS$ and $D=H\widetilde S$ obey
+    \begin{align}
+        CD            & =I, & DC & =I,            \\
+        \widetilde SC & =S, & SD & =\widetilde S.
+        \label{eq:glm_boundary_support_comparison}
+    \end{align}
+    The common support need not be the ambient identity or self-adjoint.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Substitute $SH=\widetilde S\widetilde H$ in
+    $\widetilde S\widetilde HS$ and $SH\widetilde S$, then cancel the
+    coordinate identities. Left multiplication by the corresponding
+    analysis matrix gives the two inverse identities.
+\end{proof}
+
+\begin{theorem}[Composition and action of exact decompositions]
+    \label{thm:glm_boundary_decomposition_operations}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.comp,
+        MPSTensor.IsBiorthogonalDecomposition.sandwich,
+        MPSTensor.IsBiorthogonalDecomposition.actTensor_idKron,
+        MPSTensor.IsBiorthogonalDecomposition.actTensor_kronId}
+    \leanok
+    \uses{def:glm_boundary_decomposition}
+    Exact biorthogonal decompositions compose along finite two-stage paths:
+    if the intermediate and final maps are $(V_i,W_i)$ and
+    $(V'_{ij},W'_{ij})$, the composite maps are
+    $V'_{ij}V_i$ and $W_iW'_{ij}$. Replacing $B^a$ by $PB^aQ$ with
+    $QP=I$ replaces its maps by $V_iQ$ and $PW_i$.
+    Acting with a fixed MPO replaces state maps by $I\otimes V_i$ and
+    $I\otimes W_i$; acting on a fixed state replaces operator maps by
+    $V_i\otimes I$ and $W_i\otimes I$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Cancel the intermediate analysis-synthesis pairs in each product.
+    Substitute the exact reconstruction formulas and distribute the
+    finite sums. Multiplicativity of Kronecker products gives the two
+    action identities.
+\end{proof}
+
+\begin{definition}[Full decomposition coordinates]
+    \label{def:glm_boundary_full_coordinates}
+    \lean{MPSTensor.decompositionSynthesis,MPSTensor.decompositionAnalysis}
+    \leanok
+    Collect the columns of all $W_i$ into $S$ and the rows of all $V_i$
+    into $H$, with coordinate space $\bigoplus_i\mathbb C^{D_i}$.
+\end{definition}
+
+\begin{theorem}[Full coordinate comparison]
+    \label{thm:glm_boundary_full_comparison}
+    \lean{MPSTensor.decompositionSynthesis_mul_analysis,
+        MPSTensor.IsBiorthogonalDecomposition.analysis_mul_synthesis,
+        MPSTensor.IsBiorthogonalDecomposition.fullComparison}
+    \leanok
+    \uses{def:glm_boundary_full_coordinates,
+        def:glm_boundary_decomposition,
+        def:blockwise_product_word_span}
+    The collected maps obey $HS=I$ and $SH=\sum_iW_iV_i$.
+    For two exact decompositions over simultaneously spanning target blocks,
+    $\widetilde HS$ and $H\widetilde S$ are inverse full coordinate changes,
+    and each carries the other synthesis matrix to its own.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_representation_unique,
+        thm:glm_boundary_support_comparison}
+    Sum the separate biorthogonality identities and apply
+    Theorems~\ref{thm:glm_boundary_representation_unique}
+    and~\ref{thm:glm_boundary_support_comparison}.
+\end{proof}
+
+\begin{theorem}[Target intertwiners and reindexing]
+    \label{thm:glm_boundary_target_intertwiners}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.analysis_mul_letter,
+        MPSTensor.IsBiorthogonalDecomposition.letter_mul_synthesis,
+        MPSTensor.IsBiorthogonalDecomposition.cross_intertwines,
+        MPSTensor.IsBiorthogonalDecomposition.reindex}
+    \leanok
+    \uses{def:glm_boundary_decomposition}
+    Exact biorthogonal decomposition implies
+    $V_iB^a=A_i^aV_i$ and $B^aW_i=W_iA_i^a$.
+    Consequently $V_i\widetilde W_j$ intertwines $A_i$ with
+    $\widetilde A_j$. A bijective reindexing of the finite target copies
+    preserves every decomposition identity.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Multiply the reconstruction formula by the selected analysis or
+    synthesis map and cancel all other copies. Compose the two resulting
+    intertwiners. Reindex the finite reconstruction sum for the last assertion.
+\end{proof}
+
+\begin{definition}[The two exact action trees]
+    \label{def:glm_boundary_action_trees}
+    \lean{MPOTensor.FusionActionPath,MPOTensor.SequentialActionPath,
+        MPOTensor.fusionThenActionAnalysis,MPOTensor.fusionThenActionSynthesis,
+        MPOTensor.sequentialActionAnalysis,MPOTensor.sequentialActionSynthesis}
+    \leanok
+    \uses{def:glm_boundary_decomposition}
+    Use the source's fusion analysis and synthesis $W,\widehat W$, and
+    action analysis and synthesis $V,\widehat V$. The first paths are
+    $(c,\mu;y,k)$ with $\mu<N_{ab}^c$ and $k<M_{cx}^y$; the second are
+    $(z,j;y,i)$ with $j<M_{bx}^z$ and $i<M_{az}^y$.
+    Let $\alpha$ identify the incoming right bracketing with the left.
+    The tree maps are
+    \begin{align}
+        H_{\rm fus}^{c\mu;yk} & =V_{cx}^{y,k}(W_{ab}^{c,\mu}\otimes I),                      \\
+        S_{\rm fus}^{c\mu;yk} & =(\widehat W_{ab}^{c,\mu}\otimes I)\widehat V_{cx}^{y,k},
+        \label{eq:glm_boundary_fusion_action_maps}                                           \\
+        H_{\rm seq}^{zj;yi}   & =V_{az}^{y,i}(I\otimes V_{bx}^{z,j})\alpha^{-1},             \\
+        S_{\rm seq}^{zj;yi}   & =\alpha(I\otimes\widehat V_{bx}^{z,j})\widehat V_{az}^{y,i}.
+        \label{eq:glm_boundary_sequential_action_maps}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The two trees reconstruct the same action]
+    \label{thm:glm_boundary_exact_action_trees}
+    \lean{MPOTensor.fusionThenAction_isBiorthogonal,
+        MPOTensor.sequentialAction_isBiorthogonal,
+        MPOTensor.fusionThenAction_support_eq_sequentialAction}
+    \leanok
+    \uses{def:glm_boundary_action_trees,
+        def:blockwise_product_word_span}
+    If the pairwise fusion and action maps are exact and biorthogonal,
+    both trees give exact biorthogonal decompositions of $(T_aT_b)\cdot A_x$.
+    Their ambient support idempotents agree whenever the final state blocks
+    have a simultaneous positive word span.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_decomposition_operations,
+        thm:glm_boundary_representation_unique}
+    Lift each first-stage decomposition through the other action factor,
+    then compose with the second-stage decomposition. The bond associator
+    puts both trees on the same incoming space. Apply
+    Theorem~\ref{thm:glm_boundary_representation_unique} to their supports.
+\end{proof}
+
+\begin{definition}[The full action comparison]
+    \label{def:glm_boundary_action_comparison}
+    \lean{MPOTensor.FusionActionCoordinate,MPOTensor.SequentialActionCoordinate,
+        MPOTensor.fusionToSequentialComparison,MPOTensor.sequentialToFusionComparison}
+    \leanok
+    \uses{def:glm_boundary_action_trees,
+        def:glm_boundary_full_coordinates}
+    Retaining the final bond coordinate, set
+    $C=H_{\rm seq}S_{\rm fus}$ and $D=H_{\rm fus}S_{\rm seq}$.
+    The source's printed L orientation is that of $C$.
+\end{definition}
+
+\begin{theorem}[Inverse full action comparisons]
+    \label{thm:glm_boundary_action_comparison}
+    \lean{MPOTensor.fullActionComparison_spec,
+        MPOTensor.fusionToSequentialComparison_mul_analysis}
+    \leanok
+    \uses{def:glm_boundary_action_comparison,
+        def:blockwise_product_word_span}
+    Under the exact-tree and spanning assumptions,
+    \begin{align}
+        CD           & =I,           & DC           & =I,           \\
+        S_{\rm seq}C & =S_{\rm fus}, & S_{\rm fus}D & =S_{\rm seq}, \\
+        CH_{\rm fus} & =H_{\rm seq}.
+        \label{eq:glm_boundary_action_comparison}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_exact_action_trees,
+        thm:glm_boundary_full_comparison}
+    The common-support comparison gives both inverses and both synthesis
+    equations. For the analysis equation, substitute
+    $S_{\rm fus}H_{\rm fus}=S_{\rm seq}H_{\rm seq}$ into
+    $H_{\rm seq}S_{\rm fus}H_{\rm fus}$ and cancel
+    $H_{\rm seq}S_{\rm seq}=I$.
+\end{proof}
+
+\begin{definition}[Actual multiplicity L matrices]
+    \label{def:glm_boundary_action_l_matrix}
+    \lean{MPOTensor.FusionActionMultiplicity,MPOTensor.SequentialActionMultiplicity,
+        MPOTensor.fusionActionPathEquiv,MPOTensor.sequentialActionPathEquiv,
+        MPOTensor.fusionActionCoordinateEquiv,MPOTensor.sequentialActionCoordinateEquiv,
+        MPOTensor.actionLMatrix,MPOTensor.inverseActionLMatrix}
+    \uses{def:glm_boundary_action_comparison}
+    For fixed $a,b,x,y$, the row and column spaces of $L$ have indices
+    $(z,i,j)$ and $(c,k,\mu)$, respectively. Group the full coordinates
+    by the final state label and define
+    \begin{align}
+        L_{abx}^{y}[z,i,j;c,k,\mu]
+         & =D_y^{-1}\tr\bigl(H_{\rm seq}^{zj;yi}S_{\rm fus}^{c\mu;yk}\bigr).
+        \label{eq:glm_boundary_action_l_entries}
+    \end{align}
+    Define $K_{abx}^y$ by the normalized trace of the reverse contraction.
+    Individual entries may vanish.
+\end{definition}
+
+\begin{theorem}[Separation of the final bond factor]
+    \label{thm:glm_boundary_action_l_factor}
+    \lean{MPOTensor.actionLMatrix_cross,MPOTensor.inverseActionLMatrix_cross,
+        MPOTensor.fusionToSequentialComparison_eq_blockDiagonal,
+        MPOTensor.sequentialToFusionComparison_eq_blockDiagonal}
+    \uses{def:glm_boundary_action_l_matrix,
+        def:blockwise_product_word_span}
+    Assume the pairwise fusion and action maps are exact and biorthogonal.
+    Suppose the state blocks are normal and positive-dimensional, and
+    their word tuples span the product algebra at one length. In grouped
+    final-block coordinates,
+    \begin{align}
+        C & =\bigoplus_y(L_{abx}^y\otimes I_{D_y}), &
+        D & =\bigoplus_y(K_{abx}^y\otimes I_{D_y}).
+        \label{eq:glm_boundary_action_l_factor}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_boundary_exact_action_trees,
+        thm:glm_boundary_target_intertwiners,
+        thm:glm_boundary_multiplicity_gauge}
+    Each cross contraction intertwines its final blocks. Distinct final
+    blocks are separated by the simultaneous word span. Within one normal
+    block, the commutant is scalar; its normalized trace gives
+    (\ref{eq:glm_boundary_action_l_entries}).
+\end{proof}
+
+\begin{theorem}[Invertible L matrices and their defining action equation]
+    \label{thm:glm_boundary_action_l_exists}
+    \lean{MPOTensor.actionLMatrix_inverse,
+        MPOTensor.actionLMatrix_inverse_of_isInjective,
+        MPOTensor.actionLMatrix_analysis}
+    \uses{def:glm_boundary_action_l_matrix}
+    Assume exact biorthogonal fusion and action maps are given, and the
+    state blocks are injective, positive-dimensional, and pairwise
+    inequivalent under a virtual gauge and a nonzero scalar. The matrices
+    constructed from these maps satisfy
+    \begin{align}
+        L_{abx}^yK_{abx}^y & =I,                                                           & K_{abx}^yL_{abx}^y & =I, \\
+        H_{\rm seq}        & =\left(\bigoplus_yL_{abx}^y\otimes I_{D_y}\right)H_{\rm fus}.
+        \label{eq:glm_boundary_action_l_defining}
+    \end{align}
+    Zero multiplicity spaces are allowed. In the source index order,
+    (\ref{eq:glm_boundary_action_l_defining}) is the analysis-tree relation
+    of \cite[Section~3]{GarreRubio2023MPOSym}. Read the following trees from
+    right to left: red legs have dimensions $\chi_a,\chi_b,\chi_c$ and
+    black legs have dimensions $D_x,D_y,D_z$. The node indices are
+    multiplicity labels, with row order $(z,i,j)$ and column order $(c,k,\mu)$.
+    Both sides map $\C^{\chi_a}\otimes\C^{\chi_b}\otimes\C^{D_x}$ to
+    $\C^{D_y}$, using the canonical identification of bracketings.
+    \begin{align}
+        % Source: GLM23 v3, eq:F_symbol2 (REsubmission.tex:517--534).
+        % Formula: H_seq[z,i,j] = sum_{c,k,mu} L[(z,i,j),(c,k,mu)] H_fus[c,k,mu].
+        % Ink/index map: red bonds a,b,c are operator virtual spaces chi_a,chi_b,chi_c;
+        % black bonds x,y,z are state virtual spaces D_x,D_y,D_z. All ports are virtual.
+        % Main-text V is action analysis; W is fusion analysis. No hats or adjoints.
+        % Sequential contraction: V_az^{y,i} (I_chi_a tensor V_bx^{z,j}).
+        % Fusion contraction: V_cx^{y,k} (W_ab^{c,mu} tensor I_Dx).
+        % Only z is contracted in the left tree; only c is contracted in each right tree.
+        % Open legs on both sides: final y on the west; inputs a,b,x top-to-bottom east.
+        % Boundary signature on each side: (virtual-west=1 | virtual-east=3 |
+        % physical-up=0 | physical-down=0). Parenthesization is identified canonically.
+        % The sum over c,k,mu is scalar linear combination, not extra bond contraction.
+        \begingroup
+        \tenkzkernel
+        \tndeclare{species}{glm-operator}{hue=source:red!70!black}
+        \tndeclare{species}{glm-state}{hue=source:black}
+        \begin{tenkzeq}[check=signature]
+            \begin{tenkz}[rows=3,cols=2,bonds=none]
+                \tn[at=(1,1),name=outer,skin=box,wires=2,
+                    ports={180:virtual:$y$,0@1:virtual:$a$,0@2:virtual}]{V^{i}}
+                \tn[at=(2,2),name=inner,skin=box,wires=2,
+                    ports={180:virtual,0@1:virtual:$b$,0@2:virtual:$x$}]{V^{j}}
+                \tn[at=(1,2),void=sealed,skin=none]{}
+                \tnwire[species=glm-state]{outer.180}{open w}
+                \tnwire[species=glm-operator]{outer.0@1}{open e}
+                \tnwire[species=glm-state,route=arc,name=middle-state]{outer.0@2}{inner.180}
+                \tnmark[form=label,label pos=90]{on middle-state 0.5}{$z$}
+                \tnwire[species=glm-operator]{inner.0@1}{open e}
+                \tnwire[species=glm-state]{inner.0@2}{open e}
+            \end{tenkz}
+            = \sum_{c,k,\mu} (L_{abx}^{y})_{c,k\mu}^{z,ij}
+            \begin{tenkz}[rows=3,cols=2,bonds=none]
+                \tn[at=(2,1),name=action,skin=box,wires=2,
+                    ports={180:virtual:$y$,0@1:virtual,0@2:virtual:$x$}]{V^{k}}
+                \tn[at=(1,2),name=fusion,skin=box,wires=2,
+                    ports={180:virtual,0@1:virtual:$a$,0@2:virtual:$b$}]{W^{\mu}}
+                \tn[at=(1,1),void=sealed,skin=none]{}
+                \tnwire[species=glm-state]{action.180}{open w}
+                \tnwire[species=glm-operator,route=arc,name=middle-operator]{action.0@1}{fusion.180}
+                \tnmark[form=label,label pos=270]{on middle-operator 0.5}{$c$}
+                \tnwire[species=glm-state]{action.0@2}{open e}
+                \tnwire[species=glm-operator]{fusion.0@1}{open e}
+                \tnwire[species=glm-operator]{fusion.0@2}{open e}
+            \end{tenkz}
+        \end{tenkzeq}
+        \endgroup
+        \label{eq:glm_boundary_action_l_diagram}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_boundary_action_l_factor,
+        thm:glm_boundary_action_comparison,
+        thm:glm_boundary_spanning}
+    Derive a common positive word span. Substitute
+    (\ref{eq:glm_boundary_action_l_factor}) in the full inverse and analysis
+    equations. Take each final block and cancel its nonzero identity
+    factor to obtain (\ref{eq:glm_boundary_action_l_defining}).
+\end{proof}
+
+\paragraph{Source index convention.}
+The coupled pentagon printed in the source reverses both multiplicity pairs
+in its fusion factor. The typed correction and the analysis-gauge convention
+are recorded in \cite{gap:glm23_multiplicity_l_indices}. The present construction
+proves the invertible action comparison; the corrected coupled pentagon and
+its general multiplicity-gauge law remain separate proof obligations.

@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+
+\title{Typed Multiplicity Indices for the Coupled Pentagon}
+\author{}
+\date{2026-10-05}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{wip}
+
+The action map of Ref.~\cite{GarreRubio2023MPOSym} has type
+$V_{ax}^{y,i}:\mathbb C^{\chi_a}\otimes\mathbb C^{D_x}
+    \to\mathbb C^{D_y}$, while $\widehat V$ is its synthesis partner.
+Consequently the displayed change of action trees is
+$H_{\rm seq}=L H_{\rm fus}$ and its coefficient contraction is
+$L\otimes I=H_{\rm seq}S_{\rm fus}$. The fusion change uses the opposite
+tree direction, $H_{\rm left}=F H_{\rm right}$. These orientations follow
+from the typed maps and the diagram legs, without adjoints or transposes.%
+\footnote{Source traceability:
+    \path{Papers/2203.12563/REsubmission.tex}, action-map type at line 459,
+    diagram definitions at lines 97--159, and labels
+    \texttt{Fsymbolsdef}, \texttt{eq:F\_symbol2}, and \texttt{1Fsymbol}.}
+
+In the coupled pentagon, the surrounding action factors fix the ranges
+\begin{align}
+    \eta & \in\{1,\ldots,N_{ab}^{d}\}, &
+    \chi & \in\{1,\ldots,N_{dc}^{e}\},   \\
+    \mu  & \in\{1,\ldots,N_{bc}^{f}\}, &
+    \nu  & \in\{1,\ldots,N_{af}^{e}\}.
+    \label{eq:glm_l_index_ranges}
+\end{align}
+The printed factor
+$(F_{abc}^{e})_{f,\nu\mu}^{d,\chi\eta}$ reverses both pairs.
+It need not be well typed when these multiplicities differ. The typed
+coupled pentagon is
+\begin{align}
+    \sum_{d,n,\eta,\chi}
+    (L_{abt}^{y})_{d,n\eta}^{z,ij}
+    (L_{dcx}^{y})_{e,m\chi}^{t,nk}
+    (F_{abc}^{e})_{f,\mu\nu}^{d,\eta\chi}
+     & ={}
+    \sum_l
+    (L_{bcx}^{z})_{f,l\mu}^{t,jk}
+    (L_{afx}^{y})_{e,m\nu}^{z,il}.
+    \label{eq:glm_l_typed_pentagon}
+\end{align}
+Only the two index orders in the F factor differ from the source's
+\texttt{coupledpent}, at lines 554--562.
+
+In the following fusion gauge formula, use fresh labels: $a,b,c$ for the
+three input blocks, $d$ for the final block, and $e,f$ for the intermediate
+blocks. For analysis-basis gauges $H'_{\rm left}=Y_{\rm left}H_{\rm left}$ and
+$H'_{\rm right}=Y_{\rm right}H_{\rm right}$, the fusion law is
+\begin{align}
+    F' & =Y_{\rm left}F Y_{\rm right}^{-1}, &
+    L' & =X_{\rm seq}L X_{\rm fus}^{-1}.
+    \label{eq:glm_l_gauge_matrices}
+\end{align}
+Thus an inverse gauge on the right has its old coordinate as row and its
+new coordinate as column. The component display at lines 417--422 also
+needs primed indices on the F entry being summed. Its well-typed entry is
+\begin{align}
+    (F')_{f,\chi\eta}^{e,\mu\nu}
+    ={} & \sum_{\mu',\nu',\chi',\eta'}
+    (Y_{ab}^{e})_{\mu\mu'}(Y_{ec}^{d})_{\nu\nu'}
+    F_{f,\chi'\eta'}^{e,\mu'\nu'}
+    (Y_{bc}^{f})^{-1}_{\chi'\chi}
+    (Y_{af}^{d})^{-1}_{\eta'\eta}.
+    \label{eq:glm_l_typed_f_gauge}
+\end{align}
+These are ordinary inverse matrices acting on dual coordinate positions,
+not adjoints. The source's phrase ``non-zero constants'' means an
+invertible change of basis; individual matrix entries may be zero.
+
+The index correction follows from the displayed domains. A formal
+construction of the multiplicity L matrices and a proof of
+(\ref{eq:glm_l_typed_pentagon}) remain separate obligations; neither is
+assumed by this correction note.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
