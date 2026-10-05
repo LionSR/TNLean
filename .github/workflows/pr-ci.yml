@@ -82,6 +82,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_supported_polar_tree.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -156,6 +157,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_supported_polar_tree.py'
   workflow_dispatch:
 
 concurrency:
@@ -247,6 +249,7 @@ jobs:
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_supported_polar_tree.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -628,6 +631,13 @@ jobs:
 
       - name: Test tenkz render-cache pruning
         run: python3 scripts/test_prune_tenkz_render_cache.py
+
+      # Run on Lean-only changes as well: these checks exercise the supported
+      # polar-merge algebra in addition to its typed diagram boundaries.
+      - name: Test supported polar trees and diagram boundaries
+        run: |
+          python3 -m pip install --disable-pip-version-check numpy==2.3.5
+          python3 scripts/test_supported_polar_tree.py
 
       - name: Test blueprint search preparation
         run: python3 scripts/test_add_blueprint_search.py
