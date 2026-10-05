@@ -935,8 +935,16 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   least `3D` sites, against the source's requirement `d^q ≥ D²`, which for
   such blocks implies the hypothesis `D² ≤ d^{3D}` of the exact error
   identity, with the finite-correlation assumption
-  stated for one ring with error `δ`; open: the block-length bound and the
-  sequence-level statement.
+  stated for one ring with error `δ`. For sequences with the explicit lower
+  bound `c log N ≤ ℓ_k`, `c > 0`, finite exceptional rings are now prepared
+  exactly and their depths absorbed into one constant: `T_N ≤ C L_N` for
+  every positive ring length. If `L_N = O(log N)` and `δ_N → 0`, the prepared
+  states have logarithmic depth and vanishing error. Open: removing the
+  additional positive lower-growth hypothesis and deriving the
+  uniform accuracy rate needed for `O(log(N/ε))`. The conditional theorem
+  assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
+  with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
+  when the selected block length exceeds the ring length.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes
