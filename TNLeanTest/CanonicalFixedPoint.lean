@@ -48,7 +48,8 @@ example {q : ℕ} (hq : q ≠ 0) (M : ℕ) :
 
 example (j : Fin P.basisCount) (hj : ∀ k : Fin (P.copies j), k = κ j) (q M : ℕ) :
     oneCopyWeight P.copyWeights κ q M j = ((‖P.weight j (κ j)‖ ^ (q * M) : ℝ) : ℂ) := by
-  simpa only [Nat.mul_comm] using oneCopyWeight_of_subsingleton P.copyWeights κ hj q M
+  simpa only [SectorDecomposition.copyWeights, Nat.mul_comm] using
+    oneCopyWeight_of_subsingleton P.copyWeights κ hj q M
 
 private def phaseWeights : CopyWeights 1 (fun _ => 1) where
   weight := fun _ _ => Complex.I
