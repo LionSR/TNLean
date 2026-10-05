@@ -8,6 +8,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isome
 import QICLean.Analysis.CfcConjugation
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.Core.PhysicalMatrix
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.FixedPointPairs
@@ -55,29 +56,6 @@ namespace MPSTensor
 /-! ### The Gram matrix of a tensor as a rearranged transfer map -/
 
 variable {d n D : ℕ}
-
-/-- The mixed Gram matrix `Xᴴ Y` of the physical matrices of two tensors is a rearrangement of
-their mixed transfer map: `(Xᴴ Y)_{(α,β),(α',β')} = E_{YX}(|β'⟩⟨β|)_{α' α}`. -/
-theorem conjTranspose_physicalMatrix_mul_physicalMatrix_apply {n D₁ D₂ : ℕ}
-    (X : MPSTensor n D₁) (Y : MPSTensor n D₂) (a : Fin D₁ × Fin D₁) (b : Fin D₂ × Fin D₂) :
-    ((physicalMatrix X)ᴴ * physicalMatrix Y) a b =
-      Kraus.mixedMapLM Y X (Matrix.single b.2 a.2 1) b.1 a.1 := by
-  rw [Kraus.mixedMapLM_apply, Matrix.sum_apply, Matrix.mul_apply]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Matrix.mul_apply, Finset.sum_eq_single a.2]
-  · simp [physicalMatrix, Matrix.mul_apply, Matrix.single_apply, mul_comm]
-  · intro y _ hy
-    simp [Matrix.mul_apply, Ne.symm hy]
-  · simp
-
-/-- The Gram matrix `Bᴴ B` of the physical matrix of a tensor is a rearrangement of its transfer
-map: `(Bᴴ B)_{(α,β),(α',β')} = E_B(|β'⟩⟨β|)_{α' α}`.
-
-arXiv:2307.01696, eq. (8): `E_B` is `P† P = B† B` with legs regrouped. -/
-theorem conjTranspose_physicalMatrix_mul_apply (B : MPSTensor n D) (a b : Fin D × Fin D) :
-    ((physicalMatrix B)ᴴ * physicalMatrix B) a b =
-      Kraus.transferMap B (Matrix.single b.2 a.2 1) b.1 a.1 := by
-  rw [conjTranspose_physicalMatrix_mul_physicalMatrix_apply, Kraus.mixedMapLM_self]
 
 /-- If the transfer maps of a family of tensors converge to `X ↦ Tr(X) σ`, their Gram matrices
 converge to `σᵀ ⊗ 1`.
