@@ -158,7 +158,7 @@ virtual-boundary nondecay and virtual local covariance.
         MPSTensor.physicalStringOrderParam_scalar_twist,
         MPSTensor.exists_nonidentity_physicalStringOrderWith_of_unital,
         MPSTensor.scalar_twist_eq_one_of_nonzero_fixed}
-    \notready
+    \leanok
     \uses{def:physical_string_order_param}
     Scalar rephasing obeys
     \begin{align}
@@ -241,6 +241,7 @@ virtual-boundary nondecay and virtual local covariance.
 
 \begin{theorem}[Printed physical endpoint criterion for string order]
     \label{thm:pgwsvc08_physical_string_order}
+    % False as printed: this is a source quotation, not a future proof target.
     \notready
     \uses{def:has_physical_string_order, lem:pgwsvc08_twisted_spectral_radius}
     Theorem~1 of~\cite{PerezGarcia2008StringOrder} states the following with
@@ -255,9 +256,13 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     This printed assertion is distinct from the explicitly projective
     convention in Definition~\ref{def:has_physical_string_order}.
+    The literal assertion is false: Example~\ref{ex:string_order_scalar_phase_tensor}
+    satisfies its string-order condition but has no nonidentity fixed twist.
+    The scalar-phase obstruction and the explicit counterexample are recorded
+    in~\cite{gap:pgwsvc08_string_order_scalar_phase}.
 \end{theorem}
 
-\begin{proof}[The phase-removal calculation]
+\begin{remark}[The failure of phase removal]
     Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius} shows that a nonzero
     limit requires a unique peripheral eigenvalue $e^{i\theta}$.  If $V$ and
     $Y$ are the corresponding right and left eigenmatrices, then
@@ -290,12 +295,12 @@ virtual-boundary nondecay and virtual local covariance.
     Thus this calculation does not establish the printed nonidentity
     conclusion. The projective correction below states the stable
     nontriviality condition explicitly.
-\end{proof}
+\end{remark}
 
 \begin{theorem}[Projective physical endpoint criterion]
     \label{thm:projective_physical_string_order}
     \lean{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}
-    \notready
+    \leanok
     \uses{def:has_physical_string_order,
         thm:physical_string_peripheral_letter_criterion}
     Let $A$ have the faithful normalized canonical density and the
@@ -312,7 +317,7 @@ virtual-boundary nondecay and virtual local covariance.
     This is the explicitly corrected criterion, rather than the
     unchanged printed assertion above.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     At a fixed unitary $u$, physical endpoints have positive limiting
     string magnitude exactly when there are $V$, $|\mu|=1$, and $n,m$
     with $\E_u(V)=\mu V$ and a nonzero displayed trace coefficient.

@@ -1,0 +1,178 @@
+{
+  "head": "4e22a416bd2275bea14c6d15753e605cae17a481",
+  "tree": "386eff8ecaadc52eff7954ba156916d1835d46d4",
+  "run": "https://github.com/LionSR/TNLean/actions/runs/37385801777",
+  "job_id": 112019128398,
+  "step": 5,
+  "name": "Build physical string-order capstones and capture timings",
+  "conclusion": "success",
+  "targets": [
+    "TNLean.MPS.Symmetry.PhysicalStringBlockOrder",
+    "TNLean.MPS.Examples.StringOrderScalarPhase"
+  ],
+  "source_sha256": {
+    "TNLean/MPS/Symmetry/PhysicalStringPhase.lean": "408d3d1668cdbcb781cb492b120211675d1c0e304b14b525430fbca5cd547129",
+    "TNLean/MPS/Symmetry/PhysicalStringBlockOrder.lean": "731dee08674cd0a080deaed2797541740c71989bd5b27ec56bc82b56fde0665d",
+    "TNLean/MPS/Examples/StringOrderScalarPhase.lean": "6972290480c1ec589e34971008ae16683197b4b3f1c64f1282c4dc6c6949d0f7"
+  },
+  "counterexample_declarations": [
+    "MPSTensor.stringPhaseTensor_linearIndependent",
+    "MPSTensor.stringPhaseTensor_isInjective",
+    "MPSTensor.stringPhaseTensor_canonical",
+    "MPSTensor.stringPhaseTensor_pure",
+    "MPSTensor.stringPhaseTensor_twist_eq_one_of_nonzero_fixed",
+    "MPSTensor.stringPhaseTensor_literal_criterion_counterexample",
+    "MPSTensor.stringPhaseTensor_not_hasPhysicalStringOrder"
+  ],
+  "source_comparison": "The literal printed existential criterion is refuted on its original canonical/pure hypotheses. The proved projective replacement has a separate label and explicitly different nontriviality convention.",
+  "still_required_before_merge": [
+    "full root build",
+    "actual regression file",
+    "reverse-consumer checks",
+    "compiled blueprint and paper-gap declaration checks"
+  ],
+  "publication": "Approved consolidated post-code update; the new exact-head full required CI and actual regression/axiom gates remain mandatory.",
+  "raw_step_evidence": {
+    "path": "/workspace/shared/string-phase-publication/counterexample-capstones-passed-jobs.json",
+    "sha256": "fdbaec5dff2ba1d12c3c36a94b8dcc0637624b4e25c4ae6d0fa5af1c21658833"
+  },
+  "source_blob_sha": {
+    "TNLean/MPS/Symmetry/PhysicalStringPhase.lean": "c529439a9680fc42930635a1e8bcc9e856ddc68d",
+    "TNLean/MPS/Symmetry/PhysicalStringBlockOrder.lean": "ca0fcadcd212927e5c3e2018fc1ba14a796305f8",
+    "TNLean/MPS/Examples/StringOrderScalarPhase.lean": "7bb996d52a04ad7a854647fded067dfc5cdd573a"
+  },
+  "local_source_reconciliation": {
+    "proof_sources_changed": false,
+    "source_false_note": "docs/paper-gaps/pgwsvc08_string_order_scalar_phase.tex",
+    "new_note_pdf_sha256": "49b13e9c22e3704545e709ce428829af9f900531de2bcb7a758d4b55244fe7c7",
+    "comparison_note_pdf_sha256": "c2022b6cc28c9351061b1c508353a5dc6a78f7eebe9dac8bd6c85108f85410df",
+    "render_warnings": [],
+    "blueprint_source_sync": "pass, including duplicate-tag guard",
+    "gap_identifier_extraction": "pass; compiled checkdecls remains a full-build gate",
+    "original_printed_assertion": "Explicitly false; no leanok or Lean declaration attached to the source-labelled quotation.",
+    "old_comparison_gap_status": "Kept open only for the separately tracked physical reduced-state assertion; endpoint comparison itself is proved."
+  },
+  "queued_regression_header_fix": {
+    "change": "Explicitly open ComplexOrder for the \u039b.PosDef binder.",
+    "tests": [
+      {
+        "scope": "Regression header and PosDef binder only, with matched lightweight definition imports; not the full regression-import closure.",
+        "name": "StringPhaseRegressionHeaderProbe",
+        "start": "2026-10-05T23:31:19.884301+00:00",
+        "end": "2026-10-05T23:31:38.223483+00:00",
+        "exit_code": 1,
+        "command": [
+          "timeout",
+          "-k",
+          "5s",
+          "60s",
+          "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+          "-j",
+          "1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "StringPhaseRegressionHeaderProbe.lean",
+          "-o",
+          "StringPhaseRegressionHeaderProbe.olean"
+        ],
+        "source_sha256": "543bc680ee0b16f06d5d4087af52115fc95f0763ddf0cf201ad77cb429fad0a5",
+        "log_sha256": "796e828cb455b294ecce4cb871ff845d054132718c4209385b8b631b6e00b16d"
+      },
+      {
+        "scope": "Regression header and PosDef binder only, with matched lightweight definition imports; not the full regression-import closure.",
+        "name": "StringPhaseRegressionHeaderFixedProbe",
+        "start": "2026-10-05T23:31:38.226925+00:00",
+        "end": "2026-10-05T23:31:55.860722+00:00",
+        "exit_code": 0,
+        "command": [
+          "timeout",
+          "-k",
+          "5s",
+          "60s",
+          "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+          "-j",
+          "1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "StringPhaseRegressionHeaderFixedProbe.lean",
+          "-o",
+          "StringPhaseRegressionHeaderFixedProbe.olean"
+        ],
+        "source_sha256": "f1fed8e2077500feb5e39e13fed5d12d4ca4d4e26e1febffc6f0dbbcf4e8457d",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "artifact_sha256": "713fe22731e8506e7ca3c74d8b41ee031c6081e9cb08454d5966594d7ac41e6e"
+      },
+      {
+        "scope": "Tests whether later use of a theorem with fixed Complex.partialOrder can infer the order missing from the regression header.",
+        "name": "StringPhaseRegressionHeaderInferenceProbe",
+        "start": "2026-10-05T23:33:24.825154+00:00",
+        "end": "2026-10-05T23:33:42.403705+00:00",
+        "exit_code": 1,
+        "command": [
+          "timeout",
+          "-k",
+          "5s",
+          "60s",
+          "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+          "-j",
+          "1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "StringPhaseRegressionHeaderInferenceProbe.lean",
+          "-o",
+          "StringPhaseRegressionHeaderInferenceProbe.olean"
+        ],
+        "source_sha256": "3c83f73349aeb0978b3ecfe635c87a8a2bb3ee492b564907ebd7d838aad2e8e9",
+        "log_sha256": "fb5953d06a921a8e5e48ba4b1070fd90505266b71c75bceeb805355fb4b9848a"
+      }
+    ],
+    "scope": "Light header/typeclass checks only. The actual full regression-import check remains pending.",
+    "publication": "Held for the consolidated post-code update, preserving the current production build."
+  },
+  "queued_axiom_guards": {
+    "declarations": [
+      "MPSTensor.stringPhaseTensor_literal_criterion_counterexample",
+      "MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter",
+      "MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder"
+    ],
+    "expected_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "pattern": "Existing test-only AxiomChecks / #guard_msgs (whitespace := lax) / #print axioms pattern; hash-command presentation lint scoped off inside the audit section.",
+    "compiler_flags": "Unchanged strict CI flags, including warningAsError and the standard linter set.",
+    "status": "Prepared locally; these complete proof-closure assertions still require the actual regression CI check."
+  },
+  "historical_full_build": {
+    "head": "4e22a416bd2275bea14c6d15753e605cae17a481",
+    "run": "https://github.com/LionSR/TNLean/actions/runs/37385801777",
+    "job_id": 112019128398,
+    "production_build": {
+      "conclusion": "success",
+      "jobs": 12421,
+      "completed_at": "2026-10-05T23:39:08.4311954Z"
+    },
+    "lint_style_target_build": {
+      "conclusion": "success",
+      "jobs": 143,
+      "completed_at": "2026-10-05T23:39:19.6980279Z"
+    },
+    "regression": "Failed only at scripts/string_order_phase_regression.lean:95:44: PartialOrder \u2102 missing; the held ComplexOrder scope fix addresses this exact error.",
+    "text_style_linter_and_compiled_checkdecls": "Not reached after the regression failure; still mandatory on the new exact head.",
+    "raw_log": "/workspace/shared/string-phase-publication/failed-build-112019128398.log",
+    "raw_log_sha256": "6407cf3f9e778317d82679db114fc7bbc71f85d62f6cedcb7f3aadd4c33a4366"
+  }
+}

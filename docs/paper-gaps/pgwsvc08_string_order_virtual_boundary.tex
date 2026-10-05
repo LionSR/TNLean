@@ -395,8 +395,9 @@ For a fixed twist the phase-retaining selection criterion is
 Under the corrected nonscalar convention, $u_0=\mu^{-1}u$ remains nonscalar
 and has a fixed eigenmatrix. Thus the projective global criterion and the
 printed literal assertion have different nontriviality conventions.
-Neither the original source-labelled theorem nor the new analytic statements
-is marked complete pending its full validation.
+The corrected projective and phase-retaining criteria are proved. The
+literal printed assertion is false, as the explicit nondegenerate
+counterexample in \path{pgwsvc08_string_order_scalar_phase.tex} shows.
 
 \section{Dimension-bounded physical endpoints}
 
@@ -425,8 +426,8 @@ Neither the endpoint operators nor their support depend on $N$.
 \leanid{MPSTensor.exists_physicalObservableTransfer_eq_at_stationary},
 \leanid{MPSTensor.exists_physicalStringBlockEndpoints}, and
 \leanid{MPSTensor.exists_isHermitian_physicalStringProductEndpoints}
-have been checked directly. Their module headers subsequently gained
-reference sections without proof changes.}
+and their final module headers have been checked in the production import
+graph.}
 
 When only nonvanishing of an endpoint coefficient is needed, its linearity
 first selects a tensor product of one-site matrix units. Multilinearity and
@@ -439,27 +440,27 @@ statement is separate from exact realization.
 \section{Verdict and remaining scope}
 
 The projective convention is explicit in the physical definition and in its
-corrected criterion. The literal printed assertion is not a future proof
-target for that correction: removing a scalar peripheral phase can lose its
-required nonidentity condition. The four-letter nondegenerate example is
-prepared to test the full literal assertion; its elementary canonical and
-Pauli-centralizer calculations are checked, while its final primitivity and
-fixed-twist assembly still await full validation. No source-theorem
-completion or false-source verdict is claimed at this stage.
+corrected criterion. The printed existential Theorem~1, read with its literal
+nonidentity condition, is false. The four-letter injective canonical example
+satisfies the source's full spectral-purity hypotheses and the literal
+string-order condition, but admits no nonidentity unitary with a nonzero
+fixed twisted eigenmatrix. The separate false-source note
+\path{pgwsvc08_string_order_scalar_phase.tex} records the full argument.
+This is a refutation of the printed assertion, not a proof of it under an
+unstated nonscalar hypothesis.
 
-For normal tensors, the dimension-bounded endpoint realization and the
-Hermitian product-coefficient results above are now available without
-one-site injectivity. The source-canonical reduction from purity to
-normality, the demodulated transfer limit, and the resulting positive
-physical string-magnitude limit are written as separate source-canonical
-statements; their combined actual-import validation remains open.
-\footnote{Pending analytic declarations include
+The dimension-bounded endpoint comparison is proved without one-site
+injectivity. Source canonical purity supplies normality; every pair of
+virtual boundaries is realized exactly on $D^2$ physical sites at each end,
+for every individual middle length. A separate nonvanishing selection gives
+literal Hermitian one-site products with positive limiting string magnitude.
+\footnote{The production declarations include
 \leanid{MPSTensor.isNormal_of_pureCanonical},
 \leanid{MPSTensor.pureCanonical_exists_physicalStringBlockEndpoints},
 \leanid{MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder},
 \leanid{MPSTensor.pureCanonical_exists_physicalStringOrderWith_iff_peripheral_letter},
 and \leanid{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}.
-The explicit test is
+The explicit counterexample is
 \leanid{MPSTensor.stringPhaseTensor_literal_criterion_counterexample}.}
 
 The fixed-twist virtual-boundary predicate remains unchanged and includes

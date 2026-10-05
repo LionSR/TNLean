@@ -200,7 +200,7 @@ theorems.
         MPSTensor.stringPhaseTensor_twist_eq_one_of_nonzero_fixed,
         MPSTensor.stringPhaseTensor_literal_criterion_counterexample,
         MPSTensor.stringPhaseTensor_not_hasPhysicalStringOrder}
-    \notready
+    \leanok
     \uses{lem:physical_string_scalar_phases, thm:projective_physical_string_order}
     Take $D=2$, $d=4$, $\Lambda=\Id/2$, and
     \begin{align}
@@ -225,8 +225,11 @@ theorems.
     orthogonal Pauli matrix $R$ commuting with $T$ and $T^{\mathsf T}$,
     forcing $R=c\Id$. Preservation of
     $\sigma_x\sigma_y=i\sigma_z$ forces $c=1$.
-    This nondegenerate tensor separates the literal scalar-phase test from
-    projective nontriviality.
-    % The final fixed-twist and source-counterexample conclusions remain
-    % pending full actual-import validation.
+    Every unitary physical twist with a nonzero fixed eigenmatrix is therefore
+    the identity. Yet $x=y=\Id$ and $u=-\Id$ give $S_N=(-1)^N$.
+    The nonzero letter-trace condition forces its eigenmatrix to be nonzero,
+    so this tensor refutes the full existential criterion printed in
+    Theorem~1 of~\cite{PerezGarcia2008StringOrder}. It has no physical
+    string order under the explicit projective convention.
+    See~\cite{gap:pgwsvc08_string_order_scalar_phase}.
 \end{example}

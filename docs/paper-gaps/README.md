@@ -11,6 +11,16 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For string order in arXiv:0802.0447:
+
+- `pgwsvc08_string_order_scalar_phase.tex` (false source claim, resolved)
+  gives a nondegenerate canonical counterexample to the literal existential
+  Theorem 1, and states the explicit projective and phase-retaining corrections.
+- `pgwsvc08_string_order_virtual_boundary.tex` records the physical versus
+  virtual endpoint comparison, now including exact D²-site realization and
+  Hermitian product endpoints for every individual middle length. The physical
+  reduced-state symmetry assertion is tracked separately.
+
 For the Fibonacci string-net example of arXiv:1511.08090:
 
 - `bmwshv17_fibonacci_block_entries_provenance.tex` records that the source
