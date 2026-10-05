@@ -24,29 +24,31 @@ The additive dependency cone consists of seven modules, in dependency order:
    of actual multiplicity matrices, both inverse identities, and the printed
    analysis-tree equation.
 
-As of the 2026-10-05 integration documentation review, the canonical builder
-has reported successful Lean elaboration of all six precursor modules
-(17, 80, 48, 10, 233, and 258 seconds, respectively). The final
-`BoundaryActionLMatrix` module and its regression remain uncompiled while
-the shared cold dependency build clears. The strict
-`TNLeanTest/BoundaryDecompositionComparison.lean` regression has passed,
-including both guarded reports of exactly `propext`, `Classical.choice`, and
-`Quot.sound` (canonical log `glm23-l-comparison-regression-second.log`, exit 0).
-No Lean build was run in this integration documentation review. The first four modules have also
-passed the strict standard-axiom audit; no broader axiom-audit result is
-claimed here. No success is claimed for the pending L capstone or its tests.
+The initial targeted checkpoint checked the six precursor modules
+(17, 80, 48, 10, 233, and 258 seconds, respectively) and the strict
+support-comparison regression. At commit
+`26dc420aa85fa47afc94708729b8f92502c93b7e`, the complete Lean build and
+both strict regression files passed in
+[run 37317689145, job 111788687059](https://github.com/LionSR/TNLean/actions/runs/37317689145/job/111788687059).
+All seven production modules are checked, including the actual L-matrix
+capstone. All eight guarded reports enforce exactly `propext`,
+`Classical.choice`, and `Quot.sound`. This is an immutable, commit-specific
+production/regression checkpoint; later documentation or integration trees
+must pass their own full CI and review gates. The live PR records those
+results rather than attributing this success to a later tree.
 
 Regression files are `TNLeanTest/BoundaryDecompositionComparison.lean` and
 `TNLeanTest/BoundaryActionLMatrix.lean`. The latter directly guards both the
 source-state inverse theorem and the actual printed-direction analysis
 relation. The separate blueprint leaf is
 `blueprint/src/chapter/ch30_mpo_boundary_comparison.tex`; all public
-construction declarations have owners there. Only confirmed elaborated
-precursors carry `\leanok`. All 46 public declarations have exactly matching
+construction declarations have owners there. All compiled statements and
+proofs carry `\leanok`. All 46 public declarations have exactly matching
 fully qualified owners. Statement dependency edges refer to the objects and
 premises used to state each result; reconstruction, support comparison,
 intertwiner separation, and common-span theorems occur on the proof edges.
-Routers and publication remain with integration.
+The generated import router and existing boundary-regression CI list expose
+and test this construction without a separate bespoke build job.
 
 The source-oriented analysis-tree diagram is now embedded natively in this
 leaf. It is the separately rendered fragment

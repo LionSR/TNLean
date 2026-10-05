@@ -76,10 +76,16 @@ These are ordinary inverse matrices acting on dual coordinate positions,
 not adjoints. The source's phrase ``non-zero constants'' means an
 invertible change of basis; individual matrix entries may be zero.
 
-The index correction follows from the displayed domains. A formal
-construction of the multiplicity L matrices and a proof of
-(\ref{eq:glm_l_typed_pentagon}) remain separate obligations; neither is
-assumed by this correction note.
+The index correction follows from the displayed domains. The multiplicity
+L matrices, their inverse identities, and their defining analysis-tree
+equation are formalized.\footnote{Formal declarations:
+    \leanid{MPOTensor.actionLMatrix_cross},
+    \leanid{MPOTensor.actionLMatrix_inverse_of_isInjective}, and
+    \leanid{MPOTensor.actionLMatrix_analysis}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrix}.}
+The corrected coupled pentagon (\ref{eq:glm_l_typed_pentagon}) and the
+general multiplicity-gauge law remain separate proof obligations; they are
+not assumed by the matrix construction.
 
 \bibliographystyle{alpha}
 \bibliography{references}

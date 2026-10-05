@@ -217,6 +217,7 @@
 \end{proof}
 
 \begin{definition}[Actual multiplicity L matrices]
+    \leanok
     \label{def:glm_boundary_action_l_matrix}
     \lean{MPOTensor.FusionActionMultiplicity,MPOTensor.SequentialActionMultiplicity,
         MPOTensor.fusionActionPathEquiv,MPOTensor.sequentialActionPathEquiv,
@@ -236,6 +237,7 @@
 \end{definition}
 
 \begin{theorem}[Separation of the final bond factor]
+    \leanok
     \label{thm:glm_boundary_action_l_factor}
     \lean{MPOTensor.actionLMatrix_cross,MPOTensor.inverseActionLMatrix_cross,
         MPOTensor.fusionToSequentialComparison_eq_blockDiagonal,
@@ -253,6 +255,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_boundary_exact_action_trees,
         thm:glm_boundary_target_intertwiners,
         thm:glm_boundary_multiplicity_gauge}
@@ -263,6 +266,7 @@
 \end{proof}
 
 \begin{theorem}[Invertible L matrices and their defining action equation]
+    \leanok
     \label{thm:glm_boundary_action_l_exists}
     \lean{MPOTensor.actionLMatrix_inverse,
         MPOTensor.actionLMatrix_inverse_of_isInjective,
@@ -299,36 +303,38 @@
         % physical-up=0 | physical-down=0). Parenthesization is identified canonically.
         % The sum over c,k,mu is scalar linear combination, not extra bond contraction.
         \begingroup
-        \tenkzkernel
-        \tndeclare{species}{glm-operator}{hue=source:red!70!black}
-        \tndeclare{species}{glm-state}{hue=source:black}
         \begin{tenkzeq}[check=signature]
+            % Keep setup inside the standalone equation extraction.
+            % The built-in operator/neutral species distinguish operator/state bonds.
+            \tenkzkernel
+            \colorlet{tenkzOperator}{red!70!black}
+            \colorlet{tenkzInk}{black}
             \begin{tenkz}[rows=3,cols=2,bonds=none]
                 \tn[at=(1,1),name=outer,skin=box,wires=2,
                     ports={180:virtual:$y$,0@1:virtual:$a$,0@2:virtual}]{V^{i}}
                 \tn[at=(2,2),name=inner,skin=box,wires=2,
                     ports={180:virtual,0@1:virtual:$b$,0@2:virtual:$x$}]{V^{j}}
                 \tn[at=(1,2),void=sealed,skin=none]{}
-                \tnwire[species=glm-state]{outer.180}{open w}
-                \tnwire[species=glm-operator]{outer.0@1}{open e}
-                \tnwire[species=glm-state,route=arc,name=middle-state]{outer.0@2}{inner.180}
+                \tnwire[species=neutral]{outer.180}{open w}
+                \tnwire[species=operator]{outer.0@1}{open e}
+                \tnwire[species=neutral,route=arc,name=middle-state]{outer.0@2}{inner.180}
                 \tnmark[form=label,label pos=90]{on middle-state 0.5}{$z$}
-                \tnwire[species=glm-operator]{inner.0@1}{open e}
-                \tnwire[species=glm-state]{inner.0@2}{open e}
+                \tnwire[species=operator]{inner.0@1}{open e}
+                \tnwire[species=neutral]{inner.0@2}{open e}
             \end{tenkz}
-            = \sum_{c,k,\mu} (L_{abx}^{y})_{c,k\mu}^{z,ij}
+            = \ensuremath{\displaystyle\sum_{c,k,\mu} (L_{abx}^{y})_{c,k\mu}^{z,ij}}
             \begin{tenkz}[rows=3,cols=2,bonds=none]
                 \tn[at=(2,1),name=action,skin=box,wires=2,
                     ports={180:virtual:$y$,0@1:virtual,0@2:virtual:$x$}]{V^{k}}
                 \tn[at=(1,2),name=fusion,skin=box,wires=2,
                     ports={180:virtual,0@1:virtual:$a$,0@2:virtual:$b$}]{W^{\mu}}
                 \tn[at=(1,1),void=sealed,skin=none]{}
-                \tnwire[species=glm-state]{action.180}{open w}
-                \tnwire[species=glm-operator,route=arc,name=middle-operator]{action.0@1}{fusion.180}
+                \tnwire[species=neutral]{action.180}{open w}
+                \tnwire[species=operator,route=arc,name=middle-operator]{action.0@1}{fusion.180}
                 \tnmark[form=label,label pos=270]{on middle-operator 0.5}{$c$}
-                \tnwire[species=glm-state]{action.0@2}{open e}
-                \tnwire[species=glm-operator]{fusion.0@1}{open e}
-                \tnwire[species=glm-operator]{fusion.0@2}{open e}
+                \tnwire[species=neutral]{action.0@2}{open e}
+                \tnwire[species=operator]{fusion.0@1}{open e}
+                \tnwire[species=operator]{fusion.0@2}{open e}
             \end{tenkz}
         \end{tenkzeq}
         \endgroup
@@ -336,6 +342,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_boundary_action_l_factor,
         thm:glm_boundary_action_comparison,
         thm:glm_boundary_spanning}
