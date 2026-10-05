@@ -96,7 +96,6 @@ The product and scalar operations on $\mathcal D$ are componentwise.
         Matrix.biorthogonal_sum_support,
         Matrix.exists_piMatrix_blocks}
     \leanok
-    \uses{thm:glm_boundary_idempotent}
     A multiplicative $K$-linear map
     $\rho:\prod_c M_{D_c}(K)\to M_D(K)$ admits finite multiplicities
     $m_c$ and matrices $W_{c\mu}:K^{D_c}\to K^D$,
@@ -137,8 +136,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
         MPOTensor.IsBoundaryClosed.exists_biorthogonalDecomposition,
         MPOTensor.IsBoundaryCompatible.exists_biorthogonalDecomposition}
     \leanok
-    \uses{thm:glm_boundary_representation,thm:glm_boundary_matrix_blocks,
-        def:glm_boundary_decomposition,thm:glm_boundary_linear}
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition}
     A length-independent block boundary map with a positive simultaneous
     spanning length gives an exact biorthogonal decomposition
     $B^i=\sum_{c,\mu}W_{c\mu}A_c^iV_{c\mu}$.
@@ -187,7 +185,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
         MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition,
         MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition}
     \leanok
-    \uses{thm:glm_boundary_reverse}
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition}
     If $B^iW=WC^i$ and $VW=I$, the boundary $X$ of $C$ is represented
     by $WXV$ on $B$ at every length. Applying this to the coordinate
     inclusions of the incoming blocks gives, for each pair $a,b$,
@@ -215,7 +213,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     \lean{MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective,
         MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective}
     \leanok
-    \uses{thm:glm_boundary_spanning,thm:glm_boundary_incoming_blocks}
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition}
     For an unweighted block-diagonal MPO with individually injective,
     positive-dimensional, pairwise gauge-scalar inequivalent blocks,
     arbitrary-boundary closedness gives exact biorthogonal fusion tensors
@@ -300,12 +298,20 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     \leanok
     \label{def:glm_boundary_zipper_family}
     \lean{MPOTensor.CompleteZipperFusionFamily.ofBiorthogonal}
-    \uses{thm:glm_boundary_zipper_identities}
+    \uses{def:glm_boundary_zipper_coordinates,def:glm_boundary_decomposition,
+        def:mpdo_complete_zipper_fusion_family}
     For positive-dimensional injective blocks, exact biorthogonal pairwise
     decompositions and a simultaneous left inverse of the labelled
     one-site target matrices give a complete zipper fusion family with
     synthesis $S_{ab}$ and analysis $H_{ab}$.
 \end{definition}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_zipper_identities}
+    The identities (\ref{eq:glm_boundary_zipper_reconstruction}) and
+    (\ref{eq:glm_boundary_zipper_identities}), together with the supplied
+    simultaneous left inverse, give the required family.
+\end{proof}
 
 \begin{theorem}[Blocking preserves the exact fusion maps]
     \leanok
@@ -316,7 +322,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
         MPOTensor.CompleteZipperFusionFamily.ofBiorthogonalBlocked_tensor,
         MPOTensor.CompleteZipperFusionFamily.ofBiorthogonalBlocked_fusionTensor,
         MPOTensor.CompleteZipperFusionFamily.ofBiorthogonalBlocked_fusionTensorLeftInverse}
-    \uses{def:glm_boundary_zipper_family,thm:mpdo_complete_zipper_of_compression_blocked}
+    \uses{def:glm_boundary_zipper_family}
     Replacing every letter by a common nonempty word preserves an exact
     biorthogonal decomposition and its rectangular maps. In particular,
     physical blocking preserves the multiplicities $N_{ab}^c$ and both
@@ -326,6 +332,10 @@ The product and scalar operations on $\mathcal D$ are componentwise.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_decomposition,def:glm_boundary_zipper_family,
+        thm:mpdo_complete_zipper_of_compression_blocked}
+    % The last node owns exists_blockTensor_isMPOBlockLeftInverse;
+    % only its simultaneous-left-inverse assertion is used here.
     Induction on each nonempty word cancels intermediate analysis-synthesis
     pairs. Physical blocking commutes with stacking the two MPOs.
     A common simultaneous word span supplies the labelled block left
@@ -337,7 +347,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     \leanok
     \label{thm:glm_boundary_complete_family}
     \lean{MPOTensor.IsBoundaryClosed.exists_completeZipperFusionFamily}
-    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_zipper_blocking}
+    \uses{def:glm_boundary_closedness,def:glm_boundary_zipper_family}
     Under the block and arbitrary-boundary closedness assumptions of
     Theorem~\ref{thm:glm_boundary_source_decomposition}, there are exact
     unblocked fusion maps, finite multiplicities, and a complete zipper
@@ -347,6 +357,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_zipper_blocking}
     Choose the exact decomposition for each incoming pair and apply
     Theorem~\ref{thm:glm_boundary_zipper_blocking} at one common length.
 \end{proof}
@@ -370,6 +381,7 @@ The common final-bond identity factor is suppressed in these formulas.
     \leanok
     \label{def:glm_boundary_existing_zipper}
     \lean{MPSTensor.IsBiorthogonalDecomposition.toZipperDecomposition}
+    \uses{def:glm_boundary_decomposition}
     An exact biorthogonal boundary decomposition is a zipper decomposition
     $B^i=\sum_{c,\mu}W_{c\mu}A_c^iV_{c\mu}$ with the same analysis and
     synthesis matrices.
@@ -381,13 +393,14 @@ The common final-bond identity factor is suppressed in these formulas.
     \lean{MPSTensor.IsBiorthogonalDecomposition.trace_evalWord_eq_sum_multiplicity,
         MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_wordTupleSpanTop,
         MPSTensor.IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective}
-    \uses{thm:glm_boundary_spanning,def:glm_boundary_decomposition}
+    \uses{def:glm_boundary_decomposition}
     For separated, positive-dimensional injective targets, two exact
     biorthogonal decompositions of the same tensor over these targets
     have identical multiplicities.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_decomposition,thm:glm_boundary_spanning}
     Every nonempty word satisfies
     \begin{align}
         \tr(B^w) & =\sum_cN_c\tr(A_c^w).
@@ -405,8 +418,7 @@ The common final-bond identity factor is suppressed in these formulas.
     \lean{MPSTensor.rectangularIntertwiner_eq_zero_of_wordTupleSpanTop,
         MPSTensor.not_isGaugeRelated_of_wordTupleSpanTop,
         MPSTensor.IsBiorthogonalDecomposition.exists_unique_multiplicityGauge_of_isInjective}
-    \uses{thm:glm_boundary_spanning,def:glm_boundary_existing_zipper,
-        thm:asym_zipper_uniqueness}
+    \uses{def:glm_boundary_decomposition}
     Two exact biorthogonal decompositions over the same multiplicities
     and separated positive-dimensional injective target blocks differ
     by a unique family $Y_c\in\mathrm{GL}_{N_c}(\mathbb C)$ on the
@@ -421,6 +433,8 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_spanning,def:glm_boundary_existing_zipper,
+        thm:asym_zipper_uniqueness}
     An intertwiner between distinct blocks intertwines every simultaneous
     word tuple. By spanning it intertwines a tuple that is the identity
     in one block and zero in the other, so the intertwiner vanishes.
@@ -435,7 +449,7 @@ The common final-bond identity factor is suppressed in these formulas.
     \lean{MPSTensor.IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity,
         MPOTensor.isMPOFusionAlgebra_of_biorthogonalDecompositions,
         MPOTensor.isMPOSymmetricFamily_of_biorthogonalDecompositions}
-    \uses{thm:glm_boundary_multiplicity_unique}
+    \uses{def:glm_boundary_decomposition}
     The multiplicities in exact biorthogonal fusion and action decompositions
     give, at every positive chain length $n$,
     \begin{align}
@@ -447,6 +461,7 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_multiplicity_unique}
     Apply the nonempty-word trace formula
     (\ref{eq:glm_boundary_trace_multiplicity}). Stacking MPO tensors
     multiplies their periodic operators, and the periodic vector of an
@@ -476,7 +491,7 @@ The common final-bond identity factor is suppressed in these formulas.
     \label{thm:glm_boundary_fusion_associative}
     \lean{MPOTensor.IsMPOFusionAlgebra.associative_of_linearIndependent,
         MPOTensor.IsMPOFusionAlgebra.associative_of_isInjective}
-    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence}
+    \uses{def:mpo_fusion_algebra}
     Suppose the periodic fusion expansion in
     (\ref{eq:glm_boundary_periodic_expansions}) holds and the operator
     blocks are separated, positive-dimensional, and injective. Then
@@ -487,6 +502,7 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence}
     Choose a positive length with independent periodic block operators.
     Expand both sides of $(O_aO_b)O_c=O_a(O_bO_c)$ and compare
     coefficients of each $O_q$.
@@ -496,8 +512,7 @@ The common final-bond identity factor is suppressed in these formulas.
     \leanok
     \label{thm:glm_boundary_action_nimrep}
     \lean{MPOTensor.isNIMRep_of_periodic_expansions_of_isInjective}
-    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence,
-        thm:mpo_symmetric_nimrep}
+    \uses{def:mpo_symmetric_family,def:fusion_character_nimrep}
     Suppose the two periodic expansions in
     (\ref{eq:glm_boundary_periodic_expansions}) hold with natural
     multiplicities and separated positive-dimensional injective state
@@ -509,6 +524,8 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence,
+        thm:mpo_symmetric_nimrep}
     Choose a positive length with independent periodic state blocks.
     Expand the associativity identity
     \begin{align*}
@@ -522,8 +539,8 @@ The common final-bond identity factor is suppressed in these formulas.
     \leanok
     \label{thm:glm_boundary_source_multiplicities}
     \lean{MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible}
-    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_periodic_expansions,
-        thm:glm_boundary_fusion_associative,thm:glm_boundary_action_nimrep}
+    \uses{def:glm_boundary_closedness,def:mpo_symmetric_family,
+        def:fusion_character_nimrep}
     For unweighted block assemblies of separated positive-dimensional
     injective operator and state blocks, arbitrary-boundary closedness
     and compatibility produce natural multiplicities $N_{ab}^c$ and
@@ -535,6 +552,8 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_periodic_expansions,
+        thm:glm_boundary_fusion_associative,thm:glm_boundary_action_nimrep}
     Construct the exact pairwise fusion and action decompositions.
     Trace them and apply the preceding coefficient comparisons to their
     actual natural-number multiplicities.

@@ -117,11 +117,30 @@ retains its original baseline and is not relabelled as completed coverage.
 
 ## Verification
 
-Canonical targeted builds passed for the three new algebra modules and
-the six representation/restriction/fusion/action modules with the pinned
-Lean and dependency versions. The two final source modules, the additive
-zipper/uniqueness modules, and expanded regressions remain pending canonical
-verification. No full-repository build success is claimed for this candidate.
+### Initial checkpoint (historical)
+
+At the initial checkpoint, canonical targeted builds had passed for the three
+new algebra modules and the six representation/restriction/fusion/action
+modules with the pinned Lean and dependency versions. The two final source
+modules, the additive zipper/uniqueness modules, and expanded regressions were
+then pending canonical verification. That checkpoint is superseded by the
+production and regression results below; it did not establish a full-repository
+build.
+
+### Current production and regression verification
+
+At commit `f3576fcd2f06c776fc48b2a81ac00f20d3716a2c`, all sixteen production
+modules in this batch and all strict regression tests, including the twelve
+new axiom guards, passed in
+[validation run 37306213156, build job 111750432147](https://github.com/LionSR/TNLean/actions/runs/37306213156/job/111750432147).
+The source, zipper, uniqueness, and multiplicity-law blueprint statements and
+proofs now carry their checked tags.
+
+The complete PR CI run at `f3576fcd` also passed, including blueprint, web,
+Tenkz, and browser checks. This is a verified checkpoint, following the earlier
+all-checks-passing commit `2ed9a393`. The forthcoming documentation-only head
+containing these dependency and status corrections requires CI and review at
+its own exact commit; the `f3576fcd` result does not certify that later head.
 
 `TNLeanTest/PiMatrixRepresentation.lean` covers a proper non-self-adjoint
 support representation, a zero representation with positive-dimensional
@@ -136,8 +155,9 @@ regressions; they do not claim that a blanket full-repository build passed.
 
 The new modules `BoundaryZipper`, `BoundaryZipperBlocked`, and
 `BoundaryZipperUniqueness` are isolated from the frozen source existence
-modules and remain pending canonical elaboration. Their blueprint nodes have
-declaration tags but intentionally no `leanok` until that verification.
+modules. They were pending canonical elaboration at the initial checkpoint;
+they now belong to the verified production batch above, and their blueprint
+statements and proofs carry `leanok`.
 
 - `ofBiorthogonal` collects exact W/V data into the existing
   `CompleteZipperFusionFamily`. Analysis times synthesis is the coordinate
@@ -192,11 +212,12 @@ remaining work. Their source index conventions must be checked independently.
 
 `BoundaryMultiplicity.lean` and its separate regression
 `TNLeanTest/BoundaryMultiplicity.lean` extend the batch without modifying the
-existence/zipper proof modules. All sixteen production modules in this batch
-passed full Lean compilation in the remote validation run at commit
-`250210d89cb53370084922a7c063346b57b610f6`. Their blueprint statements and
-proofs are marked checked. Strict regression validation continues separately;
-production compilation does not certify unelaborated regression examples.
+existence/zipper proof modules. All sixteen production modules had passed
+full Lean compilation in the remote validation run at commit
+`250210d89cb53370084922a7c063346b57b610f6`. The current production and strict
+regression results, including the multiplicity regressions, are recorded
+separately in the verification section above. Their blueprint statements and
+proofs are marked checked.
 
 The trace formula gives `IsMPOFusionAlgebra` and `IsMPOSymmetricFamily` for the
 exact natural multiplicities obtained from W/V. A simultaneous word span
