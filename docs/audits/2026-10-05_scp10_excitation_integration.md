@@ -64,6 +64,24 @@ whole-book kernel `checkdecls`, complete blueprint PDF/web build, and remote CI
 are not claimed by this audit. The registered CI checks retain those aggregate
 gates. Publication and merging are separate actions.
 
+## CI regression import correction
+
+The initial private verification overlay emitted regression objects, whereas
+PR CI originally ran the three files without writing objects.
+`TorusDualFluxParent` imports fixtures from `TorusDualFluxString`, so CI failed
+with an unknown `TNLeanTest` module prefix after the first regression passed.
+
+The corrected step retains the same three files, ordering, strict options, and
+three-minute timeout. It emits their objects into a fresh temporary
+`TNLeanTest` directory on `LEAN_PATH`, then removes that directory on exit.
+No test is added to the production library or persisted build cache, and no
+production or regression Lean source is changed.
+
+The original workflow commands reproduce the failure under actual `lake env`
+with no `TNLeanTest` objects anywhere on the initial import path. The corrected
+workflow commands pass twice from that same clean initial condition, with all
+three regressions checked and no test objects left after either run.
+
 ## Mathematical boundaries retained
 
 Flux deformation is proved for finite generated homotopies on positive-period

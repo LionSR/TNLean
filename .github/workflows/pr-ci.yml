@@ -447,10 +447,17 @@ jobs:
         timeout-minutes: 3
         run: |
           set -e
+          # TorusDualFluxParent imports the preceding test's fixtures. Keep
+          # their objects in a fresh overlay outside the production cache.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
           for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" \
               "TNLeanTest/$example.lean"
           done
 
