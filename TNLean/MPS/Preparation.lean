@@ -46,6 +46,8 @@ import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.MPS.Preparation.GHZSectorObstruction
+import TNLean.MPS.Preparation.GHZSectorParent
 import TNLean.MPS.Preparation.GHZSeedCircuit
 import TNLean.MPS.Preparation.GHZSeedRegisters
 import TNLean.MPS.Preparation.InhomogeneousApproximationError
