@@ -43,6 +43,18 @@ class SupportedPolarTreeTests(unittest.TestCase):
         self.assertNotIn(r"\begin{tenkzeq}", source)
         self.assertIn("entire subtrees, not free gates", source)
 
+    def test_exact_whole_ring_boundary(self):
+        source = (ROOT / "blueprint/src/chapter/ch32_log_depth_nonnormal_trees.tex").read_text()
+        diagram = source.split(r"\begin{tenkzequation}", 1)[1].split(
+            r"\end{tenkzequation}", 1)[0]
+        self.assertEqual(diagram.count(r"\begin{tenkz}"), 2)
+        self.assertEqual(diagram.count(r"$\mathcal H_N$"), 2)
+        self.assertEqual(diagram.count(r"$\C^\chi$"), 1)
+        self.assertEqual(re.findall(r"\\tnwire\{([^}]+)\}\{([^}]+)\}", diagram),
+                         [("root.90", "tree.270")])
+        self.assertIn("entire bounded-leaf tree, not one free", source)
+        self.assertNotIn(r"\begin{tenkzeq}", source)
+
     def test_nonsquare_support_and_overlapping_sectors(self):
         # Three inequivalent one-dimensional normal sectors with overlapping
         # physical ranges; chi = 3 is deliberately not a square.
