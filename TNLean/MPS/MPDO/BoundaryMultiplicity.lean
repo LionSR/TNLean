@@ -84,9 +84,13 @@ theorem isMPOFusionAlgebra_of_biorthogonalDecompositions
   intro a b L hL
   rw [← mpo_mulTensor]
   ext σ τ
-  have hh := (h a b).mpv_eq_sum_multiplicity hL
+  have hh := MPSTensor.IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity
+    (ι := Fin r) (D := χ) (N := N a b)
+    (B := (mulTensor (O a) (O b)).toMPSTensor)
+    (A := fun c ↦ (O c).toMPSTensor) (V := V a b) (W := W a b) (h a b) hL
     (fun n ↦ finProdFinEquiv (σ n, τ n))
-  simpa [mpv_toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+  simpa [mpv_toMPSTensor, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
+    MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat, Matrix.sum_apply, Matrix.smul_apply,
     smul_eq_mul] using hh
 
@@ -132,8 +136,8 @@ theorem linearIndependent_mpo_of_wordTupleSpanTop
   funext w
   have hw := congrArg
     (fun X ↦ X (fun n ↦ (w n).divNat) (fun n ↦ (w n).modNat)) hz
-  simpa [mpv_toMPSTensor, Finset.sum_apply, Matrix.sum_apply, Matrix.smul_apply,
-    smul_eq_mul] using hw
+  simpa [mpv_toMPSTensor, mpoMatrixEntry, evalWord_toMPSTensor_ofFn,
+    Finset.sum_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using hw
 
 /-- Associativity of physical operators implies associativity of their
 fusion coefficients at any positive length where the operators are linearly
