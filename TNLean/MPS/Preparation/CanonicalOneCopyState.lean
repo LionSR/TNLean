@@ -106,8 +106,9 @@ theorem nonNormalApproxOverlap_oneCopyFixedPoint (h : IsBNTCanonicalForm P)
       copyApproxOverlap P.toTensor q M (ghzAmplitude (P.coeff (q * M)))
         (copyIsometry P.copyCoord P.copyWeights q) h.basisFixedPoint := by
   rw [P.toTensor_eq_repeatedBlockSum]
-  simpa only [basisFixedPointPair, SectorDecomposition.embeddedFixedPointPair,
-    SectorDecomposition.bntWeight_copyWeights, Nat.mul_comm] using
+  change nonNormalApproxOverlap _ _ _ _
+    (fun j => embedPair (P.copyCoord j (κ j)) (fixedPointPair (h.basisFixedPoint j))) = _
+  simpa only [SectorDecomposition.bntWeight_copyWeights, Nat.mul_comm] using
     nonNormalApproxOverlap_repeatedBlockSum_oneCopy P.copyCoord_injective
       P.copyCoord_disjoint P.copyWeights hq κ h.basisFixedPoint M
 

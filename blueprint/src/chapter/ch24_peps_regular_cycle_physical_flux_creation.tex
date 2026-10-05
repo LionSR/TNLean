@@ -1,9 +1,9 @@
-\begin{lemma}[A commutation criterion for the actual local projector]%
+\begin{lemma}[A commutation criterion for the local projector]%
     \label{lem:peps_regular_projector_commutation}
     \lean{TNLean.PEPS.commute_regionLocalProjector_of_vertexTranslation}
     \leanok
     \uses{thm:peps_cycle_controlled_local_support}
-    An operator on the actual regional half-edge space which commutes with
+    An operator on the regional half-edge space which commutes with
     every independent vertex translation commutes with the product of the
     local regular invariant projectors.
 \end{lemma}
@@ -12,7 +12,7 @@
     translations. Commutation passes through that finite sum and its scalar.
 \end{proof}
 
-\begin{definition}[Creation on one actual cycle coordinate]%
+\begin{definition}[Creation on one cycle coordinate]%
     \label{def:peps_regular_region_flux_creation}
     \lean{TNLean.PEPS.regularRegionFluxCreationMatrix}
     \leanok
@@ -20,11 +20,11 @@
     Let $R$ be a nonempty finite region with a spanning tree $T$, root $o$,
     and an internal bond $e$ outside $T$. In the actual coordinates $(y,a,r,z)$,
     apply the class creation unitary $U_g$ to $z_e$ and the identity to every
-    other coordinate. Transport this operator through the actual coordinate
+    other coordinate. Transport this operator through the coordinate
     bijection and denote the resulting half-edge operator by $Q_{g,e}$.
 \end{definition}
 
-\begin{theorem}[Creation preserves the genuine locally invariant support]%
+\begin{theorem}[Creation preserves the locally invariant support]%
     \label{thm:peps_regular_region_flux_creation_support}
     \lean{TNLean.PEPS.regularRegionFluxCreationMatrix_mem_unitaryGroup,
         TNLean.PEPS.regularRegionFluxCreationMatrix_commute_vertexTranslation,
@@ -56,11 +56,11 @@
         =(\kappa c_g)^{-1/2}\sum_{z\in G}
         \Psi_R^{\mathrm{can}}(u_e(zgz^{-1}),\theta).
     \end{align}
-    Both sides are actual contracted canonical tensors. No column identity
-    is assumed.
+    Both sides are contractions of the canonical tensors; the column identity
+    follows from the coordinate expansion.
 \end{theorem}
 \begin{proof}\leanok
-    Isolate the selected cycle coordinate using the actual tree bijection.
+    Isolate the selected cycle coordinate using the tree bijection.
     The identity assignment gives its identity basis vector, multiplied by one
     common boundary and ancillary coefficient. The creation operator replaces
     this basis vector by the normalized conjugacy sum. In the inserted columns,

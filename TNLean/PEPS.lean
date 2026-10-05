@@ -314,6 +314,7 @@ import TNLean.PEPS.TorusEdgeGauge
 import TNLean.PEPS.TorusEdgeGaugeCovariance
 import TNLean.PEPS.TorusEdgePhysicalChargeMeasurement
 import TNLean.PEPS.TorusExteriorPathApproximation
+import TNLean.PEPS.TorusFlatConnectionGauge
 import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.TorusGaugeUniqueness
@@ -341,6 +342,7 @@ import TNLean.PEPS.TorusPhysicalCutDensity
 import TNLean.PEPS.TorusPhysicalLocalEquivalence
 import TNLean.PEPS.TorusPhysicalMap
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
+import TNLean.PEPS.TorusPlaquetteRealization
 import TNLean.PEPS.TorusProjectorExpansion
 import TNLean.PEPS.TorusProjectorExtraction
 import TNLean.PEPS.TorusRectangleBoundaryCard

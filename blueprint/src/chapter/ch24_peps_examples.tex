@@ -5,9 +5,10 @@
 \chapter{G-injective PEPS and quantum double models}%
 \label{ch:peps_quantum_double}
 
-A tensor that is invariant under a representation of a finite group $G$ on its
-virtual legs cannot be injective; at best it is injective on the invariant
-subspace. Such $G$-injective tensors describe the quantum double models of
+Let a finite group $G$ act on the virtual space of a tensor. If the invariant
+subspace is proper, an invariant tensor is not injective on the full virtual
+space. $G$-injectivity requires injectivity on the invariant subspace.
+Such tensors describe the quantum double models of
 \cite{Kitaev2003FaultTolerant}, whose simplest instance, for
 $G=\mathbb{Z}_2$, is the toric code. This chapter develops them on the torus
 PEPS of Section~\ref{sec:peps_torus_site_tensor}: the closure of
@@ -45,6 +46,45 @@ from the virtual to the physical system
     isometry, $\langle\mathcal{P}(A)x,\mathcal{P}(A)y\rangle
         =c\,\langle x,y\rangle$ for invariant $x,y$ and one constant $c>0$
     \cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+    When the virtual action factors as
+    $U_g=U_g^{\ell}\otimes U_g^r\otimes U_g^t\otimes U_g^b$,
+    the invariance of a four-leg tensor reads
+    % Formula: P(A)(U_g^ell tensor U_g^r tensor U_g^t tensor U_g^b)=P(A).
+    % Source: Papers/1001.3807/paper_v3.tex:1278--1288, figs3/ug-sym.
+    % Ink-to-index: each of the four cardinal rays is one virtual leg;
+    % its inserted matrix is the representation acting on that leg, including
+    % its contragredient when dictated by the bond orientation. The northeast
+    % ray is the physical index i. No physical index is suppressed.
+    % Contraction: each U matrix contracts its inward port with A and exposes
+    % its outward port. Both sides have (V,P)=(4,1).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+            \tn[at=(2,2), name=symmetricSite, label pos=225,
+                ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
+                        45:physical:$i$}]{A}
+            \tn[at=(2,1), name=symmetryLeft, skin=ring, label pos=270,
+                ports={180:virtual, 0:virtual}]{U_g^{\ell}}
+            \tn[at=(2,3), name=symmetryRight, skin=ring, label pos=270,
+                ports={180:virtual, 0:virtual}]{U_g^r}
+            \tn[at=(1,2), name=symmetryTop, skin=ring, label pos=180,
+                ports={90:virtual, 270:virtual}]{U_g^t}
+            \tn[at=(3,2), name=symmetryBottom, skin=ring, label pos=0,
+                ports={90:virtual, 270:virtual}]{U_g^b}
+            \tnwire{symmetryLeft.0}{symmetricSite.180}
+            \tnwire{symmetryRight.180}{symmetricSite.0}
+            \tnwire{symmetryTop.270}{symmetricSite.90}
+            \tnwire{symmetryBottom.90}{symmetricSite.270}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[label pos=225,
+                ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
+                        45:physical:$i$}]{A}
+        \end{tenkz}
+    \end{tenkzequation}
+    The four factors include the contragredient actions required by the
+    orientations of the virtual bonds.
 \end{definition}
 
 \begin{theorem}[Left-inverse form of $G$-injectivity]%
@@ -1422,7 +1462,7 @@ operators.
 
 
 
-\begin{definition}[The genuine open tensor of a finite region]%
+\begin{definition}[The open tensor of a finite region]%
     \label{def:peps_open_region_contraction}
     \lean{TNLean.PEPS.RegionIncidentConfig, TNLean.PEPS.regionIncidentBoundaryLabel,
         TNLean.PEPS.isRegionIncidentEdge_of_regionVertex, TNLean.PEPS.regionIncidentWeight,
@@ -1490,7 +1530,7 @@ operators.
     \leanok
     \uses{def:peps_open_region_contraction}
     Express every bond in a group basis, and enumerate the $b=n+1$
-    crossing bonds. Let $A$ and $B$ be the genuine open tensors of the
+    crossing bonds. Let $A$ and $B$ be the open tensors of the
     region and its complement, with their columns indexed by $G^b$ in
     the same crossing-bond order. Let $K$ be the matrix of physical
     PEPS coefficients on these two systems. These are the actual cut
@@ -1514,7 +1554,7 @@ operators.
     \uses{def:peps_regular_physical_cut, def:peps_regular_boundary_state}
     Suppose the coefficient tensor at every site is invariant under
     simultaneous left translation of all its virtual group labels.
-    Then the genuine open tensor of every region is invariant under
+    Then the open tensor of every region is invariant under
     simultaneous left translation of its crossing labels. Consequently
     $AP=A$ and the physical cut satisfies
     \begin{align}
@@ -1818,7 +1858,7 @@ operators.
     Let $R$ induce a nonempty connected graph, with $V_R$ vertices
     and $I_R$ internal edges. Suppose the local Gram kernels are
     $A_v^\dagger A_v=c_vP_v$. For unnormalized regular bonds and
-    no inserted bond operators, the genuine open-region tensor satisfies
+    no inserted bond operators, the open-region tensor satisfies
     \begin{align}
         T_R^\dagger T_R=\kappa_R P_{\partial R},\qquad
         \kappa_R=\left(\prod_{v\in R}c_v\right)
@@ -1991,7 +2031,7 @@ operators.
     \leanok
     \uses{thm:peps_connected_regular_region_gram}
     Let every site be regular $G$-isometric, and let $R$ induce a nonempty
-    connected graph. The genuine open-region map $T_R$ is $G$-isometric for
+    connected graph. The open-region map $T_R$ is $G$-isometric for
     simultaneous regular translation on the crossing bonds. Its derived
     positive factor is
     \begin{align}
@@ -2197,7 +2237,7 @@ operators.
     thus satisfy the exact integer unit-step equations.
 \end{proof}
 
-\begin{theorem}[The genuine planar lift of the closed-cell region]%
+\begin{theorem}[The planar lift of the closed-cell region]%
     \label{thm:peps_torus_region_planar_lift}
     \lean{TNLean.PEPS.continuousLift_torusClosedUnitCell,
         TNLean.PEPS.continuousLift_torusRegionRealization_isClosedEmbedding,
@@ -2336,7 +2376,7 @@ operators.
     connected and $o\in R$, there exist integer coordinates $L$ which
     preserve every native internal unit step and for which all missing
     cell components of the planar realization $P_L$ are infinite.
-    Here $P_L=P_A$ for $A=L(R)$, so the conclusion concerns the genuine
+    Here $P_L=P_A$ for $A=L(R)$, so the conclusion concerns the
     image of the torus covering lift. This is an auxiliary no-hole
     theorem for \cite[Theorem~6.9]{Schuch2010PEPS}. The contour
     argument below strengthens it to paths in the exterior collar.
@@ -2374,7 +2414,7 @@ operators.
     \leanok
     \uses{thm:peps_integer_cell_no_holes}
     Let $A\subset\mathbb Z^2$ be finite, with occupied closed-cell union
-    $P_A$. Its genuine exterior collar is
+    $P_A$. Its exterior collar is
     \begin{align}
         E_A=\bigl(P_A+[-3/4,3/4]^2\bigr)\setminus P_A.
     \end{align}
@@ -2416,7 +2456,7 @@ operators.
     \uses{def:peps_integer_exterior_collar_graph}
     Every edge of the safe exterior graph has its entire straight
     segment inside $E_A$. Hence any graph walk between two band centers
-    gives a genuine continuous path between them contained in $E_A$.
+    gives a continuous path between them contained in $E_A$.
     This is an auxiliary geometric assertion for
     \cite[proof of Theorem~6.9]{Schuch2010PEPS}. The contour theorem below derives connectivity of the safe graph
     from simple connectedness of the occupied closed-cell union.
@@ -2504,7 +2544,7 @@ operators.
     walks avoiding the box. Every missing-cell component is infinite
     by the preceding no-hole theorem, and hence contains a vertex
     outside the box. Each component therefore meets the same exterior
-    component, proving connectedness. The genuine torus lift supplied
+    component, proving connectedness. The torus lift supplied
     by the no-hole theorem has the same infinitude property, so the
     argument applies to its integer centers as well.
 \end{proof}
@@ -2520,7 +2560,7 @@ operators.
     \uses{thm:peps_torus_region_period_separation,
         thm:peps_torus_region_realization,
         thm:peps_torus_region_planar_lift}
-    Let $w,H>0$, and let a genuine continuous lift of the actual
+    Let $w,H>0$, and let a continuous lift of the actual
     closed-cell region $X_R$ have planar image
     $P=\bigcup_{v\in R}(L(v)+[-1/2,1/2]^2)$ with integer centers.
     Put $E=[-3/4,3/4]^2$, and let $P_j=P+(wj_1,Hj_2)$ be its period
@@ -3818,7 +3858,7 @@ operators.
           & UP                      & =PU.
         \label{eq:peps_controlled_local_projector}
     \end{align}
-    In particular $U$ maps the genuine local invariant support
+    In particular $U$ maps the local invariant support
     $\operatorname{range}P$ into itself.
 
     If the original local physical maps $A_v$ are regular $G$-isometric,
@@ -5373,7 +5413,7 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram}
-    Expand both genuine open contractions and sum the physical indices
+    Expand both open contractions and sum the physical indices
     independently. Substitute each original local Gram identity at its
     two transformed virtual configurations.
 \end{proof}
@@ -5554,7 +5594,7 @@ operators.
     Let $\psi_s$ be the actual physical PEPS across the cut with
     assignment $u^{(s)}$.
 
-    There is one $c_R>0$ such that the genuine untwisted region map
+    There is one $c_R>0$ such that the untwisted region map
     satisfies $T_R^\dagger T_R=c_RP$. Every nonzero superposition
     $\sum_s\lambda_s\psi_s$ has a positive normalization whose reduced
     density on $R$ is the same operator
@@ -5940,6 +5980,14 @@ around the two non-contractible cycles must be trivial.
     trivial; this and the trivial product around the bottom row give the
     two transport rules also where the representatives wrap around.
 \end{proof}
+
+\input{chapter/ch24_peps_regular_invariant_state_span}
+
+\input{chapter/ch24_peps_torus_flat_connection_gauge}
+
+\input{chapter/ch24_peps_regular_parent_spanning}
+
+\input{chapter/ch24_peps_regular_parent_ground_space}
 
 \begin{theorem}[The dual quantum-double network is the Gauss-law superposition]%
     \label{thm:peps_quantum_double_dual_gauss_law}

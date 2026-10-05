@@ -69,7 +69,13 @@ modules retain their public declarations and import the lower interfaces.
 They add the spectral convergence, normal-state approximation, or uniform-state
 identification that needs the higher theory. See the
 [dependency audit](audits/2026-10-04_preparation_algebra_dependency_extraction.md)
-for the preserved API and the consumer migration that remains open.
+for the initial extraction. `InhomogeneousPreparation` and `ShortChainPreparation`
+import `BlockStatePreparation` directly; their partial-isometry, sequence and
+exact-preparation consumers therefore avoid normal-gauge construction as well.
+`MPS.Overlap.Basic` owns `normalizedMPVState` and its unit-norm theorem alongside
+`mpvState`; `ApproximationError` uses and re-exports them. No normalization
+assumption is needed merely to define the vector. See the
+[consumer audit](audits/2026-10-05_inhomogeneous_preparation_imports.md).
 
 ## Archive exclusion
 

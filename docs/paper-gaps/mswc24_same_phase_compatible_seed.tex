@@ -1,0 +1,109 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Compatible Coherent Seeds and Non-Normal State Conversion}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The unresolved interpretation}
+The discussion of~\cite{Malz2024Preparation} states that MPS in the same
+phase can be transformed into each other with a logarithmic-depth circuit.
+It does not specify a non-normal phase predicate or how a selected vector
+in a degenerate groundspace is transported. Issue
+\href{https://github.com/LionSR/TNLean/issues/8469}{8469} asks for a circuit
+between normalized periodic vectors, without a compatibility condition on
+their sector amplitudes. The obstruction below concerns the interpretation
+that equality of parent groundspaces suffices for this chosen-vector claim.
+It does not refute every interpretation of the paper's informal remark.
+
+\section{A quantitative obstruction}
+Consider the tensors
+\begin{align}
+    A^0 & =\operatorname{diag}(1,1,0), & A^1 & =\operatorname{diag}(0,0,1), \\
+    B^0 & =\operatorname{diag}(1,0),   & B^1 & =\operatorname{diag}(0,1).
+\end{align}
+For every positive length their normalized periodic vectors are
+\begin{align}
+    \psi_N & =(2|0^N\rangle+|1^N\rangle)/\sqrt5, &
+    \phi_N & =(|0^N\rangle+|1^N\rangle)/\sqrt2.
+\end{align}
+Both have local parent support
+$\operatorname{span}\{|00\rangle,|11\rangle\}$ and the same ferromagnetic
+parent groundspace. All copy weights are nonzero. The first tensor and its
+periodic-vector formula already occur in
+\doclink{TNLean/MPS/Preparation/RepeatedBlockCounterexample}; no claim about
+its previously corrected polar approximation is needed here.
+
+Let $U$ be a depth-$T$ nearest-neighbor unitary circuit on the ring, and
+assume $N>4T+4$. Choose two sites whose backward light cones are disjoint
+and whose union leaves at least one site unobserved. The pulled-back Pauli
+observables $X=U^\dagger Z_iU$ and $Y=U^\dagger Z_jU$ have norm one and
+are supported in those respective cones. Their cross terms between
+$|0^N\rangle$ and $|1^N\rangle$ vanish, as do those of $XY$, because of
+the unobserved site. Expectations of $XY$ factor within each product
+branch. Writing $p=4/5$, $a_k=\langle k^N|X|k^N\rangle$ and
+$b_k=\langle k^N|Y|k^N\rangle$, with $a_k,b_k\in[-1,1]$, gives
+\begin{align}
+    \operatorname{Cov}_{U\psi_N}(Z_i,Z_j)
+     & =p(1-p)(a_0-a_1)(b_0-b_1)\leq 16/25.
+\end{align}
+The covariance in $\phi_N$ equals one. With the convention
+$D(\rho,\sigma)=\tfrac12\|\rho-\sigma\|_1$, every norm-one observable
+has expectation difference at most $2D$. The covariance difference is
+therefore at most $6D$, so $D\geq3/50$. For pure states, putting
+$F=|\langle\phi_N|U\psi_N\rangle|$, one obtains
+\begin{align}
+    D^2=1-F^2\leq2(1-F),\qquad 1-F\geq9/5000.
+\end{align}
+Fixing an accuracy below this bound contradicts any depth
+$T\leq c\log(N/\varepsilon)$ for all sufficiently large $N$.
+Local product ancillas do not remove the product-branch factorization;
+measurements with nonlocal classical feedforward are a different resource.
+
+\paragraph{Proof status.}
+The covariance obstruction in this section is a mathematical argument,
+not a Lean-checked theorem. The remaining formalization is tracked by
+issue~8469. In particular, the existing multiplicity counterexample does
+not itself prove this circuit lower bound.
+
+\section{The sufficient statement}
+Suppose normalized vectors $a,b$ are approximated by $U_A\chi_A,U_B\chi_B$
+with errors $\varepsilon_A,\varepsilon_B$, where both seeds are normalized
+and $R\chi_A=\chi_B$. Require $U_A,U_B,R$ to be actual circuits on one
+common physical ring, of depths $T_A,T_B,T_R$. Then
+\begin{align}
+    U                       & =U_BRU_A^\dagger,                   & T_U & \leq T_A+T_R+T_B, \\
+    1-|\langle Ua|b\rangle| & \leq2(\varepsilon_A+\varepsilon_B).
+\end{align}
+The common-seed case has $R=I$, $T_R=0$. Taking endpoint errors at most
+$\varepsilon/4$ and uniform depth bounds yields $O(\log(N/\varepsilon))$.
+The constants must precede both $N$ and $\varepsilon$ in the quantifiers.
+No symmetry constraint is imposed, and no constant-depth or exact target
+conversion is claimed. Any auxiliary registers must be included with their
+specified reset vectors; reduced-state equality is insufficient to invert
+a preparation.
+
+The coherent circuit extracted from the non-normal preparation implements
+all encoded sector basis vectors simultaneously; its choice does not depend
+on their amplitudes. Its input includes zero-valued unused sites and its
+output is the full block-isometry vector. Its depth is at most $CL$ for
+physical block lengths bounded by $L$. An arbitrary growing-block unitary
+must not be counted as a free matching gate.
+
+For GHZ seeds a permutation of sector labels and matching amplitude
+magnitudes allow relative phases to be corrected on a single encoded
+register. This observation is not used as an unproved circuit assumption:
+the conversion theorem requires the actual circuit $R$ and counts its
+physical-site depth. General canonical data do not imply that matching.
+Complex weights, multiplicities and length dependence must be retained;
+when using the corrected one-copy construction, its corrected input
+amplitudes must be used, not silently replaced by the printed coefficients.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

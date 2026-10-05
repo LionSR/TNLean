@@ -80,6 +80,8 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_canonical_pairs.py'
+      - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -153,6 +155,8 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_canonical_pairs.py'
+      - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
   workflow_dispatch:
 
@@ -243,6 +247,8 @@ jobs:
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
+              - 'scripts/test_tenkz_canonical_pairs.py'
+              - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_index_routing.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
@@ -305,6 +311,14 @@ jobs:
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
+      - name: Test compatible coherent seed conversion
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CompatibleSeedCircuitEquivalence.lean
+
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
         run: >
@@ -352,7 +366,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ElementaryStates HalfChainSpectrum AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors CZXRectangleBoundary; do
+          for example in ElementaryStates HalfChainSpectrum AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors CZXRectangleBoundary RegularTorusParentGroundSpace; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -370,6 +384,14 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
+
+      - name: Test algebraic preparation import boundary
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PreparationAlgebraBoundary.lean
 
       - name: Check changed Lean compilation times
         id: compilation-time
@@ -702,9 +724,16 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_torus.py
 
+      - name: Check PEPS ground-state diagram boundaries
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_groundstate.py
+
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_index_routing.py
+
+      - name: Check compatible-seed diagram conventions
+        run: python3 scripts/test_compatible_seed_diagram.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
@@ -761,6 +790,10 @@ jobs:
       - name: Prune unused tenkz pictures
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/prune_tenkz_render_cache.py
+
+      - name: Test canonical fixed-point diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_canonical_pairs.py
 
       - name: Test tenkz blueprint sweep unit selection
         if: env.TEX_CHANGED == 'true'

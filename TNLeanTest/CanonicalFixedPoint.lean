@@ -50,6 +50,19 @@ example (j : Fin P.basisCount) (hj : ∀ k : Fin (P.copies j), k = κ j) (q M : 
     oneCopyWeight P.copyWeights κ q M j = ((‖P.weight j (κ j)‖ ^ (q * M) : ℝ) : ℂ) := by
   simpa only [Nat.mul_comm] using oneCopyWeight_of_subsingleton P.copyWeights κ hj q M
 
+private def phaseWeights : CopyWeights 1 (fun _ => 1) where
+  weight := fun _ _ => Complex.I
+  mult_pos := fun _ => Nat.zero_lt_succ 0
+  weight_ne_zero := fun _ _ => Complex.I_ne_zero
+
+example : bntWeight phaseWeights 1 0 = Complex.I := by
+  simp [bntWeight, phaseWeights]
+
+example : oneCopyWeight phaseWeights (fun _ => 0) 1 1 0 = 1 := by
+  rw [oneCopyWeight_of_subsingleton phaseWeights (fun _ => 0)
+    (fun _ => Subsingleton.elim _ _)]
+  simp [phaseWeights]
+
 section AxiomChecks
 set_option linter.hashCommand false
 

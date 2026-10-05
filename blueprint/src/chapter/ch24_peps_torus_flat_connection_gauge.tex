@@ -1,0 +1,89 @@
+\begin{theorem}[Flat torus connections and commuting seams]%
+    \label{thm:peps_torus_flat_connection_gauge}
+    \lean{TNLean.PEPS.zmodTransport_step,
+        TNLean.PEPS.IsTorusFlat.zmodTransport_rectangle,
+        TNLean.PEPS.IsTorusFlat.commute_holonomies,
+        TNLean.PEPS.torusTreeGauge,
+        TNLean.PEPS.IsTorusFlat.torusTreeGauge_right,
+        TNLean.PEPS.IsTorusFlat.torusTreeGauge_up,
+        TNLean.PEPS.torusNativeRightTransport,
+        TNLean.PEPS.torusNativeUpTransport,
+        TNLean.PEPS.torusNativeRightTransport_closure,
+        TNLean.PEPS.torusNativeUpTransport_closure,
+        TNLean.PEPS.torusEdgeAssignment_ext,
+        TNLean.PEPS.exists_regularVertexGauge_eq_torusClosure}
+    \leanok
+    \uses{lem:peps_torus_parallel_section,
+        thm:peps_regular_torus_closure_cut_identification}
+    Let $G$ be a group and let $a_{x,y},b_{x,y}\in G$ be rightward
+    and upward transports on $\mathbb Z_w\times\mathbb Z_h$, where
+    $w,h>0$. Suppose the connection is flat:
+    $b_{x+1,y}a_{x,y}=a_{x,y+1}b_{x,y}$.
+    Write $A_m=a_{m-1,0}\cdots a_{0,0}$ and
+    $B_{x,n}=b_{x,n-1}\cdots b_{x,0}$, with empty products equal to
+    the identity. The holonomies $A_w$ and $B_{0,h}$ commute.
+    For the least nonnegative representatives of $x,y$, set
+    $k_{x,y}=B_{x,y}A_x$. Then
+    \begin{align}
+        k_{x+1,y}^{-1}a_{x,y}k_{x,y}
+         & =\begin{cases}A_w&x+1=0,\\1&x+1\ne0,\end{cases}
+        \label{eq:peps_flat_horizontal_seam}                   \\
+        k_{x,y+1}^{-1}b_{x,y}k_{x,y}
+         & =\begin{cases}B_{0,h}&y+1=0,\\1&y+1\ne0.\end{cases}
+        \label{eq:peps_flat_vertical_seam}
+    \end{align}
+    If $w,h\ge3$ and the transports come from operators $u_e$ on
+    the ordered edges of the torus graph, the same gauge transforms
+    $u_e$ into the closure assignment with $g=B_{0,h}^{-1}$ and
+    horizontal closure element $A_w$. No trivial-holonomy
+    assumption is made. This is the group-valued seam deformation
+    of \cite[Section~5]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induction across a rectangle gives
+    \begin{align}
+        B_{m,n}A_m
+         & =(a_{m-1,n}\cdots a_{0,n})B_{0,n}.
+        \label{eq:peps_flat_rectangle_transport}
+    \end{align}
+    Taking $m=w,n=h$ in
+    (\ref{eq:peps_flat_rectangle_transport}) gives
+    $B_{0,h}A_w=A_wB_{0,h}$. Before a coordinate wraps, the
+    transport to its successor adds one factor on the left;
+    at the wrap it leaves the full cycle holonomy.
+    Applying these two cases to $k$ proves
+    (\ref{eq:peps_flat_horizontal_seam}) and
+    (\ref{eq:peps_flat_vertical_seam}).
+    On an ordered seam edge the native orientation is reversed.
+    Thus its ordered horizontal operator is $A_w^{-1}$ and its
+    ordered vertical operator is $B_{0,h}^{-1}$, exactly the
+    claimed closure assignment.
+\end{proof}
+
+\begin{theorem}[Flat insertions give commuting closure states]%
+    \label{thm:peps_flat_insertion_closure_state}
+    \lean{TNLean.PEPS.exists_sameState_torusClosure_of_isTorusFlat,
+        TNLean.PEPS.exists_stateCoeff_eq_torusGClosure_of_isTorusFlat}
+    \leanok
+    \uses{thm:peps_torus_flat_connection_gauge,
+        thm:peps_regular_closed_gauge,
+        thm:peps_regular_torus_closure_cut_identification}
+    Let $G$ be finite and let the torus periods be at least three.
+    Suppose the site coefficients are invariant under simultaneous
+    left translation of their incident group labels. Every flat
+    inserted-bond network has the same physical state as a network
+    with two commuting closure seams. For a single four-leg tensor,
+    this is the actual closure vector $\psi_{g,h}$ of
+    \cite[Section~5]{Schuch2010PEPS}. Neither injectivity nor
+    isometry is needed for this equality.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:peps_torus_flat_connection_gauge}.
+    Vertex gauges leave the closed contraction unchanged by
+    Theorem~\ref{thm:peps_regular_closed_gauge}.
+    Theorem~\ref{thm:peps_regular_torus_closure_cut_identification}
+    identifies the resulting ordered-edge contraction with the
+    four-leg closure vector.
+\end{proof}

@@ -11,21 +11,24 @@ each open debt attached as a native sub-issue.
 
 ## Preparation algebra dependency separation (#8637)
 
-- **Status**: partial core extraction; the remaining consumer migration and
-  controlled capstone benchmarks stay open in [#8637](https://github.com/LionSR/TNLean/issues/8637).
-- **Evidence**: `BlockIsometryState` imported normal-gauge convergence for its
-  finite-configuration Gram identities and cyclic pair states. Its non-Mathlib
-  closure drops from 319 to 90 modules; the new `BlockStatePreparation` boundary
-  has 113, with no Gametheory or whole-Mathlib import path.
-- **Preserved**: 52 public declarations and two private helpers move with unchanged
-  statements/proofs and namespaces. Original owner imports retain the public API.
-  No new generic `Algebra` interface is introduced.
-- **Remaining**: `InhomogeneousPreparation` is unchanged, so
-  `PartialIsometryPreparation` retains the broad route. Post-change compile times
-  are observations, not a controlled speedup claim.
-- **Verification**: both core modules and the nine-module block-circuit closure
-  pass full-option isolated compilation; published full-root checks remain the
-  integration gate. See the [audit](audits/2026-10-04_preparation_algebra_dependency_extraction.md).
+- **Status**: core extraction and generic consumer migration implemented;
+  controlled before/after capstone benchmarks remain open in
+  [#8637](https://github.com/LionSR/TNLean/issues/8637).
+- **Evidence**: after the earlier core extraction, `BlockIsometryState` has 91
+  non-Mathlib dependencies including itself. Relative to `680b30da6`,
+  `PartialIsometryPreparation` drops from 360 to 120 and
+  `InhomogeneousExactPreparation` from 363 to 123; neither reaches normal-gauge
+  construction or Gametheory.
+- **Preserved**: the existing normalization definition and unit-norm theorem move
+  unchanged to `MPS.Overlap.Basic`; two generic consumers use the existing
+  `BlockStatePreparation` interface. No new production module, hypothesis or
+  forwarding declaration is introduced.
+- **Remaining**: controlled broad-baseline timings are unavailable locally;
+  structural counts and observed focused timings are reported separately.
+- **Verification**: the compiled-environment regression checks the exact
+  inhomogeneous endpoint and rejects convergence/Gametheory dependencies.
+  Exact-head full-root CI remains the integration gate. See the
+  [consumer audit](audits/2026-10-05_inhomogeneous_preparation_imports.md).
 
 ## Appendix B physical-pair extraction retirement (#7774)
 

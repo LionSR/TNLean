@@ -29,8 +29,45 @@
     There is a linear map $L$ with $LS=P_G$. Since
     $P_G^{\mathsf T}=P_G$
     (Theorem~\ref{thm:peps_regular_boundary_density}) and $TP_G=T$,
-    one has $CL^{\mathsf T}=T$. Thus $\operatorname{im}T\subseteq
-        \operatorname{im}C$, while $C=TS^{\mathsf T}$ gives the reverse
+    one has $CL^{\mathsf T}=T$. The two contractions are
+    % Formula: C_{p,q}=sum_x T_{p,x} S_{q,x};
+    % sum_q C_{p,q} L_{x,q}=T_{p,x}.
+    % Source: regular boundary cut in the proof of Theorem 6.9,
+    % Papers/1001.3807/paper_v3.tex:1927--1984; this is the matrix
+    % factorization used here, not a claim to reproduce the lattice geometry.
+    % Ink-to-index: the T--S bond bundles all b crossing group labels into x.
+    % C has physical indices p and q. L converts q back to virtual x.
+    % Boundary signatures: the first row has (V,P)=(0,2), the second (1,1).
+    % T and S share a virtual basis without conjugation: the factor is S^T.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[skin=box, ports={180:physical, 0:physical}]{C}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[name=cutLeft, ports={180:physical, 0:virtual}]{T}
+            \tn[at=(1,2), name=cutRight,
+                ports={180:virtual, 0:physical}]{S}
+            \tnwire{cutLeft.0}{cutRight.180}
+        \end{tenkz}
+    \end{tenkzequation}
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[name=cutCoefficient, skin=box,
+                ports={180:physical, 0:physical}]{C}
+            \tn[at=(1,2), name=cutInverse, skin=box,
+                ports={180:physical, 0:virtual}]{L}
+            \tnwire{cutCoefficient.0}{cutInverse.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[ports={180:physical, 0:virtual}]{T}
+        \end{tenkz}
+    \end{tenkzequation}
+    Thus $\operatorname{im}T\subseteq\operatorname{im}C$,
+    while $C=TS^{\mathsf T}$ gives the reverse
     inclusion. The rank follows from the dimension $|G|^{b-1}$ of the
     invariant boundary space
     (Theorem~\ref{thm:peps_regular_boundary_invariants}). Applying the
