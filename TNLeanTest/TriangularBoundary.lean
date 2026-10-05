@@ -114,7 +114,7 @@ local notation "F" =>
 
 -- This construction has no joint-span, joint-inverse, or coherence input.
 include hF hAct in
-example : CompleteZipperFusionFamily (Fin r ⊕ Fin s)
+noncomputable example : CompleteZipperFusionFamily (Fin r ⊕ Fin s)
     (MPSTensor.blockPhysDim (d + 1)
       (triangularBlockLength O A hInjO hInjA hχ hD hneO hneA)) := F
 
