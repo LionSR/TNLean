@@ -1,0 +1,210 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{Weak-Hopf Parent Terms: Support Averaging and Ambient Completion}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source and the distinction}
+Garre-Rubio, Lootens and Moln\'ar define the canonical local parent term
+as $h=I-P$, where $P$ is the orthogonal projector onto the local
+arbitrary-boundary matrix product state support. They average $h$ for a
+group representation, then describe a weak-Hopf extension. Appendix B
+explicitly specifies the weak-Hopf construction on $P$:
+\[
+    E(P)=\sum\rho(\Omega_{(1)})P\rho(T(\Omega_{(2)})),
+    \qquad \rho=(\phi\otimes\phi)\circ\Delta.
+\]
+The normalization stated there is $E(I)=Q:=\rho(1)$, rather than
+$E(I)=I$.\footnote{Exact source:
+    \href{https://arxiv.org/abs/2203.12563v3}{arXiv:2203.12563v3},
+    \path{Papers/2203.12563/REsubmission.tex}, lines 1276--1320 and 2463--2466.
+    The canonical pulling-through objects are described in
+    \href{https://arxiv.org/abs/2204.05940v1}{arXiv:2204.05940v1},
+    Section 5.5, Theorem 5.4, and Section 6, equations (6.1)--(6.4).}
+Consequently
+\[
+    E(I-P)=Q-E(P),\qquad I-E(P)=E(I-P)+(I-Q).
+\]
+The literal average of the parent and the ambient complement of the
+averaged support are different constructions. If $E(P)$ is the
+orthogonal projector onto the original support, as Appendix B states,
+then $E(P)=P$ and the latter construction is the original parent term.
+The nonzeroness of this complement additionally needs $P\ne I$.
+
+\section{An elementary fusion-compatible test}
+The following example is a mathematical derivation, independently checked
+at the level of the displayed formulas; it is not a Lean weak-Hopf
+algebra instance or a formal certificate of the complete weak-Hopf axioms.
+Fix $r\ge2$, put $K=\mathbb C^r$, $V=K\otimes K$ and
+$\mathcal A=\operatorname{End}(V)$. For matrix units
+$e_{ij,kl}=|i,j\rangle\langle k,l|$, define
+\[
+    \Delta(e_{ij,kl})=\frac1r\sum_{a,b}e_{ia,kb}\otimes e_{aj,bl},\quad
+    \epsilon(e_{ij,kl})=r\delta_{ij}\delta_{kl},\quad
+    S(e_{ij,kl})=e_{lk,ji}.
+\]
+These formulas define a finite-dimensional $C^*$-weak Hopf algebra.
+Indeed, with
+\[
+    W_2|i,j\rangle=\frac1{\sqrt r}\sum_a|i,a\rangle|a,j\rangle,
+    \qquad |\Phi\rangle=\frac1{\sqrt r}\sum_a|a,a\rangle,
+\]
+one has $W_2^*W_2=I$ and $\Delta(x)=W_2xW_2^*$. Coassociativity
+inserts the same two Bell pairs in either order. The weak-unit identity
+is the equality of the product of the two disjoint Bell projections
+with $\Delta^2(1)$. The counit and weak-counit identities follow by
+contracting their Kronecker deltas. The counital maps are
+\[
+    \epsilon_t(e_{ij,kl})=\delta_{kl}(E_{ij}\otimes I),\qquad
+    \epsilon_s(e_{ij,kl})=\delta_{ij}(I\otimes E_{kl}),
+\]
+and direct multiplication gives all three antipode identities.
+
+The positive normalized integral and its pulling-through map are
+\[
+    \Omega=\frac1r\sum_{i,k}e_{ii,kk}=|\Phi\rangle\langle\Phi|,
+    \qquad T=S.
+\]
+In particular, $\Delta(\Omega)=r^{-2}\sum_{i,k,a,b}
+    e_{ia,kb}\otimes e_{ai,bk}$ is cocommutative and nondegenerate, and
+$(1\otimes x)\Delta(\Omega)=(S(x)\otimes1)\Delta(\Omega)$.
+The dual is again this weak Hopf algebra: for the dual basis,
+$f_{ij,kl}\mapsto r^{-1}e_{ik,jl}$ is a star-preserving weak-Hopf
+isomorphism. Its target counital subalgebra is the irreducible defining
+module, and $W_2$ identifies its weak tensor square with itself. Thus
+both representation categories are equivalent to $\mathrm{Vec}$, with
+one simple tensor unit, rather than merely to a multifusion category.
+The unique dual character equals $\Omega$, so the canonical character
+construction gives exactly the displayed normalization.
+
+Consider the injective matrix product state and operator tensors
+\[
+    A^{ij}=E_{ij}/\sqrt r,\qquad
+    T^{ij,kl}=(E_{ij}\otimes E_{kl})/r.
+\]
+Their matrices span their respective full bond matrix algebras. Define
+$W_n:V\to V^{\otimes n}$ by inserting $n-1$ normalized Bell pairs.
+The arbitrary-boundary state support is $\operatorname{ran}W_n$.
+For an operator boundary $B$, set
+\[
+    x(B)_{(i,j),(k,l)}=r^{-1}B_{(j,l),(i,k)}.
+\]
+The corresponding operator is $O^n_{T,B}=W_nx(B)W_n^*$ at every positive
+length. This length-independent bijection of boundaries proves
+arbitrary-boundary closedness. Its action on state boundary vectors
+proves the length-independent compatibility condition as well.
+For $B=I$, $x(B)=\Omega$ and the periodic operator is the rank-one
+projection onto the periodic state. The fusion and action reductions
+insert one normalized Bell pair; their associativity coefficients can
+be chosen $F=L=1$.
+
+At two sites the support is
+\[
+    P=Q=\Delta(1)=I_K\otimes|\Phi\rangle\langle\Phi|\otimes I_K.
+\]
+Writing $Y=W_2^*XW_2$ yields
+\[
+    E(X)=W_2\left(\frac1{r^2}\sum_{i,a,k,b}
+    e_{ia,kb}Y e_{kb,ia}\right)W_2^*
+    =\frac{\operatorname{Tr}(QX)}{r^2}Q.
+\]
+Thus $E(P)=P$, while $E(I-P)=0$ and
+$\operatorname{rank}(I-P)=r^4-r^2>0$. This disproves unconditional
+nonzeroness for the \emph{uncompleted average}. It is fully consistent
+with Appendix B read as choosing the parent $I-E(P)$. No counterexample
+to the phase-classification theorem is asserted.
+
+\section[The local theorem and the remaining formalization scope]
+ {The local theorem and the remaining\\formalization scope}
+Let $\mathcal B$ be a star-closed family of matrices preserving a
+subspace $G$. For $v\in G^\perp$ and $w\in G$,
+\[
+    \langle w,Bv\rangle=\langle B^*w,v\rangle=0.
+\]
+Hence both $G$ and $G^\perp$ are invariant, and their orthogonal
+projections commute with every member of $\mathcal B$. Adjoining the
+ambient identity does not change invariance.
+
+The local parent theorem derives invariance from the source's
+arbitrary-boundary compatibility, requires adjoint closure of the
+local boundary range explicitly, and applies this orthogonal-reduction
+argument to the canonical complementary projection.\footnote{
+    \leanid{MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule},
+    \leanid{MPOTensor.IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra},
+    \leanid{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary},
+    and
+    \leanid{MPOTensor.IsBoundaryCompatible.parentInteraction_commute_mpoWithBoundary},
+    in \doclink{TNLean/MPS/Symmetry/BoundaryParentCommutation}.}
+It does not assume the desired commutation, nor does it identify a
+nonunital weak-Hopf average with an ambient complementary projection.
+
+\section[Unit support and normalized boundary averages]
+ {Unit support and normalized\\boundary averages}
+There is a sufficient positive-length criterion for the missing identity
+$Q_nP_n=P_n$. Let $T$ be an operator tensor and $A$ a state tensor,
+compatible with one output state boundary chosen for all positive lengths.
+Assume that $A$ is injective after blocking $L_0>0$ sites and that a fixed
+operator boundary $U$ satisfies $O^{L_0}_{T,U}=I$. Write
+$\Gamma_k(X)=\psi^k_{A,X}$ and $Q_n=O^n_{T,U}$. Compatibility gives
+one state boundary $Z$ with
+\[
+    O^k_{T,U}\Gamma_k(X)=\Gamma_k(Z)
+\]
+for all $k>0$. At $k=L_0$ this becomes
+$\Gamma_{L_0}(Z)=\Gamma_{L_0}(X)$, so injectivity forces $Z=X$.
+Consequently $Q_n$ fixes every vector of $\mathcal S_A^n$ and
+$Q_nP_n=P_n$ for every $n>0$. The target length can be smaller than
+$L_0$, and no adjoint closure is needed for this one-sided identity.
+One-site injectivity and $O^1_{T,U}=I$ are a special case.\footnote{
+    The boundary-vector, whole-support, and canonical-projection versions,
+    including one-site specializations, are proved in
+    \doclink{TNLean/MPS/Symmetry/BoundaryUnitSupport}.}
+
+Now also assume adjoint closure of the entire boundary range at the
+chosen target length $n>0$. Orthogonal reduction gives
+$P_nO^n_{T,Y}=O^n_{T,Y}P_n$ for every boundary $Y$. Let
+$(X_j,Y_j)_{j\in J}$ be finite actual boundary families with
+\[
+    \sum_{j\in J}O^n_{T,X_j}O^n_{T,Y_j}=Q_n,
+    \qquad E_n(B)=\sum_{j\in J}O^n_{T,X_j}BO^n_{T,Y_j}.
+\]
+This is the product normalization used in Appendix B. The derived
+commutation and unit-support identities imply
+\[
+    E_n(P_n)=\sum_{j\in J}(O^n_{T,X_j}O^n_{T,Y_j})P_n=Q_nP_n=P_n.
+\]
+It follows that
+\[
+    E_n(I-P_n)=Q_n-P_n,\qquad I-E_n(P_n)=I-P_n.
+\]
+The ambient complement is nonzero whenever $d^n>D^2$, by the dimension
+bound $\dim\mathcal S_A^n\leq D^2$. The literal parent average can
+still vanish when $Q_n=P_n$. The finite index set may be empty and the dimensions may be zero
+whenever the displayed assumptions hold. No reverse product
+normalization, paired-adjoint identity, or assumed value of $E_n(P_n)$
+is required.\footnote{
+    The commutation, support-average, literal parent-average, ambient
+    complement, and nonzero-complement results are proved in
+    \doclink{TNLean/MPS/Symmetry/BoundaryProjectionAverage}.}
+
+\section{Remaining weak-Hopf construction}
+The source-labelled weak-Hopf assertion remains separate. Its proof requires
+the $C^*$-weak-Hopf representation, its boundary adjoint closure, a represented
+unit satisfying the unit-support condition, and normalized finite boundary
+families from the canonical integral. The positive injectivity and identity
+hypotheses above are not derived from general boundary compatibility.
+
+The periodic-parent results supply tensor cuts and cyclic-window transport
+under explicit local adjoint closure. Wrapping windows require the global
+boundary to commute with each tensor letter. Summand selectors of assembled
+block tensors satisfy this condition and extract the labelled periodic
+operators. These results supply neither the missing weak-Hopf realization
+nor its integral normalization.
+\end{document}

@@ -118,6 +118,7 @@ import TNLean.MPS.ParentHamiltonian.MatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.MixedBoundaryGram
 import TNLean.MPS.ParentHamiltonian.MixedGram
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
+import TNLean.MPS.ParentHamiltonian.NonzeroInteraction
 import TNLean.MPS.ParentHamiltonian.NormalBlockC1Normalization
 import TNLean.MPS.ParentHamiltonian.NormalBlockPrimitiveGauges
 import TNLean.MPS.ParentHamiltonian.OpenGapContinuity
