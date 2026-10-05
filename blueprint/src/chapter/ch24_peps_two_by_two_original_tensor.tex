@@ -1,0 +1,147 @@
+% SCP10, Observation 6.6, source lines 1888--1909.
+% Original-tensor normalized corollary for untwisted coarse periods at least three.
+
+\begin{theorem}[Transport between physical realizations of one symmetry]%
+    \label{thm:peps_g_isometric_physical_transport}
+    \lean{TNLean.PEPS.IsGIsometric.exists_physicalSupportTransport,
+        TNLean.PEPS.exists_graphGIsometricPhysicalSupportTransport}
+    \leanok
+    \uses{thm:peps_g_isometric_support_coordinates,
+        thm:peps_graph_physical_support_transport}
+    Let $A,B$ be G-isometric physical maps for the same finite-dimensional
+    unitary representation of a finite group. There are $c_A,c_B>0$ and a
+    physical map $F$ such that $FA=\sqrt{c_A/c_B}\,B$, and $F$ preserves
+    inner products on $\operatorname{ran}A$. For finite graph tensors with
+    this property at every vertex, the product of the local maps restricts
+    to an isometry $I$ on the actual product physical range, with
+    \begin{align}
+        I\Psi_A=\left(\prod_v\sqrt{c_{A,v}/c_{B,v}}\right)\Psi_B.
+    \end{align}
+    The graph states are their actual bond contractions. All local physical
+    alphabets may vary with the vertex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $J_A=c_A^{-1/2}A^*$ be the normalized adjoint and set
+    $F=c_B^{-1/2}BJ_A$. On the range of $A$, the vector $J_Ax$ is invariant,
+    so G-isometry of $B$ and isometry of $J_A$ imply
+    $\langle Fx,Fy\rangle=\langle x,y\rangle$. Moreover,
+    $FA=\sqrt{c_A/c_B}\,BP_\rho=\sqrt{c_A/c_B}\,B$.
+    The local column Gram equalities imply the same inner-product equality
+    for the product physical map on the product range. Expanding its action
+    on the graph contraction gives the displayed state equality.
+\end{proof}
+
+\begin{definition}[Physical tensor product of coefficient vectors]%
+    \label{def:peps_physical_state_product}
+    \lean{TNLean.PEPS.physicalStateProduct}
+    \leanok
+    For physical coefficient vectors $\psi\in\mathbb C^P$ and
+    $\omega\in\mathbb C^Q$, their tensor product has complete pair-indexed
+    coefficients $(\psi\otimes\omega)(p,q)=\psi(p)\omega(q)$.
+\end{definition}
+
+\begin{theorem}[Normalization of a physical tensor-product identity]%
+    \label{thm:peps_physical_state_normalization}
+    \lean{TNLean.PEPS.norm_physicalStateProduct,
+        TNLean.PEPS.norm_normalized_physicalState,
+        TNLean.PEPS.LinearIsometry.normalized_physicalStateProduct}
+    \leanok
+    \uses{def:peps_physical_state_product}
+    The physical tensor product satisfies
+    $\|\psi\otimes\omega\|=\|\psi\|\|\omega\|$.
+    Every nonzero vector $\psi$ has normalized vector
+    $\widehat\psi=\|\psi\|^{-1}\psi$ of unit norm.
+    If an isometry satisfies $Ix=r\,\psi\otimes\omega$ with $r>0$ and
+    $\|\omega\|=1$, then $I\widehat x=\widehat\psi\otimes\omega$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The squared norm of the pair-indexed coefficients is the product of
+    the two finite sums of squared absolute values. Thus
+    $\|x\|=\|Ix\|=r\|\psi\|$, and the positive scalar cancels in the
+    normalized equality.
+\end{proof}
+
+\begin{definition}[Original coarse physical registers and scale]%
+    \label{def:peps_two_by_two_original_output}
+    \lean{TNLean.PEPS.twoByTwoOriginalOutputRegrouping,
+        TNLean.PEPS.twoByTwoOriginalScale}
+    \leanok
+    Let $\Gamma$ be the coarse torus graph. At each coarse vertex, retain
+    the original physical label $s_v$ and every relative surplus half-edge
+    label $r_{v,e}$. Their full physical space is identified unitarily with
+    the tensor product of the original coarse physical space and the surplus
+    space. For positive site factors $c_{A,v},c_{B,v}$ put
+    \begin{align}
+        R=\left(\prod_v\frac{\sqrt{c_{A,v}}}{\sqrt{c_{B,v}}}\right)
+        (\sqrt{|G|})^{|E(\Gamma)|}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Positivity and Bell normalization]%
+    \label{thm:peps_two_by_two_original_scale}
+    \lean{TNLean.PEPS.norm_regularGraphNormalizedBell,
+        TNLean.PEPS.twoByTwoOriginalScale_pos}
+    \leanok
+    \uses{def:peps_two_by_two_original_output}
+    The scale $R$ is strictly positive. The residual graph Bell product
+    $\Omega$ has Hilbert norm one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every square root and every denominator is positive. Each surplus
+    equality vector has its inverse-square-root dimension normalization,
+    so their product has squared norm one and hence norm one.
+\end{proof}
+
+\begin{theorem}[Normalized renormalization with the original tensor]%
+    \label{thm:peps_two_by_two_original_normalized}
+    \lean{TNLean.PEPS.exists_regularTwoByTwoOriginalTensorIsometry}
+    \leanok
+    \uses{thm:peps_g_isometric_physical_transport,
+        thm:peps_two_by_two_bundled_isometry,
+        thm:peps_two_by_two_fine_support,
+        thm:peps_physical_state_normalization,
+        thm:peps_two_by_two_original_scale,
+        thm:peps_regular_graph_surplus_isometry,
+        thm:peps_regular_graph_surplus_factorization,
+        thm:peps_two_by_two_nonzero}
+    Let $A$ be a regular G-isometric four-leg tensor for any finite group
+    and any finite physical alphabet. Suppose the two coarse periods are
+    at least three and every torus bond is untwisted. Let $\Psi_f$ be its
+    actual state on the doubled fine torus and $\Psi_c$ its actual state
+    with the same original tensor on the coarse torus. Both states are
+    nonzero. There are positive block and target site factors, local
+    physical maps $F_v$, and an isometry $I$ on the derived fine physical
+    support such that
+    \begin{align}
+        I\Psi_f         & =R\,\Psi_c\otimes\Omega,      \\
+        I\widehat\Psi_f & =\widehat\Psi_c\otimes\Omega.
+    \end{align}
+    The complete physical operation consists of four-site physical
+    grouping, the product of the maps $F_v$, and regrouping of the original
+    and surplus output registers. The Bell state has norm one, and no
+    ambient physical surjectivity is assumed. This is the untwisted
+    periodic specialization of
+    \cite[Observation~6.6]{Schuch2010PEPS}, with the original coarse tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    The actual four-site block tensors are G-isometric from fine-site
+    isometry. The target is the original tensor with its surplus identity
+    registers, which is G-isometric for the same bundled representation.
+    Physical support transport gives the first equality, with one ratio
+    of local positive factors per block. The target graph contraction
+    factors into the original coarse contraction and surplus equality
+    vectors. Normalizing the latter contributes the Bell factor in $R$.
+    The identity closure sector proves nonvanishing of both original
+    states. Their exact isometric norm relation then gives the second
+    equality.
+\end{proof}
+
+The physical fixed-point statement uses untwisted coarse tori with both
+periods at least three. The bond-indexed geometric regrouping has a separate
+all-positive-period statement; it does not remove the physical theorem's
+period or closure assumptions. The exact scope is recorded in
+\cite{gap:scp10_two_by_two_regular_fixed_point}.

@@ -52,24 +52,34 @@ $b_k=\langle k^N|Y|k^N\rangle$, with $a_k,b_k\in[-1,1]$, gives
     \operatorname{Cov}_{U\psi_N}(Z_i,Z_j)
      & =p(1-p)(a_0-a_1)(b_0-b_1)\leq 16/25.
 \end{align}
-The covariance in $\phi_N$ equals one. With the convention
-$D(\rho,\sigma)=\tfrac12\|\rho-\sigma\|_1$, every norm-one observable
-has expectation difference at most $2D$. The covariance difference is
-therefore at most $6D$, so $D\geq3/50$. For pure states, putting
-$F=|\langle\phi_N|U\psi_N\rangle|$, one obtains
+The covariance in $\phi_N$ equals one. Choose a scalar $|c|=1$ minimizing
+$\eta=\|U\psi_N-c\phi_N\|$. Every unitary observable has expectation
+difference at most $2\eta$, by expanding the difference into two inner
+products and applying Cauchy--Schwarz. The covariance difference is at
+most $6\eta$, so $\eta\geq3/50$. Phase alignment gives
 \begin{align}
-    D^2=1-F^2\leq2(1-F),\qquad 1-F\geq9/5000.
+    \eta^2=2(1-|\langle U\psi_N|\phi_N\rangle|),\qquad
+    1-|\langle U\psi_N|\phi_N\rangle|\geq9/5000.
 \end{align}
-Fixing an accuracy below this bound contradicts any depth
+Thus overlap error strictly below $9/5000$ requires $N\leq4T+4$.
+Fixing an accuracy below this bound excludes any depth
 $T\leq c\log(N/\varepsilon)$ for all sufficiently large $N$.
-Local product ancillas do not remove the product-branch factorization;
-measurements with nonlocal classical feedforward are a different resource.
+The model is a closed nearest-neighbor unitary circuit on the physical ring;
+measurements and nonlocal classical feedforward are different resources.
 
-\paragraph{Proof status.}
-The covariance obstruction in this section is a mathematical argument,
-not a Lean-checked theorem. The remaining formalization is tracked by
-issue~8469. In particular, the existing multiplicity counterexample does
-not itself prove this circuit lower bound.
+\paragraph{Formal statements.}
+The explicit-vector lower bound is
+\leanid{MPSPreparation.ghz_sector_weight_infidelity_lower_bound} in
+\doclink{TNLean/MPS/Preparation/GHZSectorObstruction}. The state formulas
+and equality of all local parent spaces, hence the canonical parent
+Hamiltonians, are proved in
+\doclink{TNLean/MPS/Preparation/GHZSectorParent}.
+The sector coefficient two comes from two identical virtual copies, each
+with scalar weight one; it is a trace multiplicity independent of $N$.
+The existing polar-approximation counterexample is not used to infer a
+circuit lower bound. The same-phase scope question remains attached to
+issue~8469 because this obstruction concerns selected vectors with
+incompatible sector probabilities, rather than every phase definition.
 
 \section{The sufficient statement}
 Suppose normalized vectors $a,b$ are approximated by $U_A\chi_A,U_B\chi_B$

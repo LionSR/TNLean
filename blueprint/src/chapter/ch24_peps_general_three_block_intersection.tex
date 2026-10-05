@@ -1,0 +1,514 @@
+\subsection{The open intersection for three four-legged tensors}
+\label{sec:peps_general_three_block_intersection}
+
+\begin{definition}[The labelled three-block path]%
+    \label{def:peps_general_three_block_geometry}
+    \lean{TNLean.PEPS.ThreeBlockDependent.Vertex,TNLean.PEPS.ThreeBlockDependent.Bond,TNLean.PEPS.ThreeBlockDependent.tail,TNLean.PEPS.ThreeBlockDependent.head,TNLean.PEPS.ThreeBlockDependent.exteriorBonds,
+        TNLean.PEPS.ThreeBlockDependent.leftCut,TNLean.PEPS.ThreeBlockDependent.rightCut,TNLean.PEPS.ThreeBlockDependent.coreVertices,TNLean.PEPS.ThreeBlockDependent.leftVertices,TNLean.PEPS.ThreeBlockDependent.rightVertices,
+        TNLean.PEPS.ThreeBlockDependent.Core,TNLean.PEPS.ThreeBlockDependent.CoreVertex,TNLean.PEPS.ThreeBlockDependent.LocalConfig,TNLean.PEPS.ThreeBlockDependent.core_degree,TNLean.PEPS.ThreeBlockDependent.exteriorBonds_card}
+    \leanok
+    Let $V=\{0,\ldots,10\}$ and $E=\{0,\ldots,9\}$, with directed edges
+    \begin{align}
+        (t(e),h(e))_{e=0}^{9}
+        =((0,1),(1,2),(0,3),(0,4),(0,5),
+        (1,6),(1,7),(2,8),(2,9),(2,10)).
+        \label{eq:peps_general_three_edges}
+    \end{align}
+    Put $T=\{0,1,2\}$, $R=\{0,1\}$, $S=\{1,2\}$,
+    $C_0=E\setminus\{0,1\}$, $C_L=E\setminus\{0\}$ and
+    $C_R=E\setminus\{1\}$. Each $v\in T$ has four incidences and
+    $|C_0|=8$. Give each edge its own finite alphabet $X_e$ and write
+    $\mathcal X_v=\prod_{p\in I_v}X_{e(p)}$ for its local virtual
+    configurations. No equality between different $X_e$ is imposed.
+\end{definition}
+
+\begin{definition}[Core actions and trivial exterior actions]%
+    \label{def:peps_three_block_core_action}
+    \lean{TNLean.PEPS.ThreeBlockDependent.coreAction,TNLean.PEPS.ThreeBlockDependent.localRepresentation}
+    \leanok
+    \uses{def:peps_general_three_block_geometry,def:peps_partial_incident_representation}
+    For representations $U_e:G\to\operatorname{GL}(\C^{X_e})$, put
+    $f_v(g)=g$ on $T$ and $f_v(g)=1$ outside $T$. The local action is
+    $\rho_v^f(g)=\rho_v(f_v(g))$, where $\rho_v$ is the incident
+    representation. Thus an edge acts by $U_e(g)$ at its head and
+    $U_e(g^{-1})^{\mathsf T}$ at its tail; exterior vertices act trivially.
+    An incoming exterior action $U_e(g)$ is equivalently outgoing for
+    $U_e^\vee(g)=U_e(g^{-1})^{\mathsf T}$, since
+    $U_e^\vee(g^{-1})^{\mathsf T}=U_e(g)$. Semi-regularity is preserved
+    by this change of orientation, by Theorem~\ref{thm:peps_semiregular_dual}.
+\end{definition}
+
+\begin{theorem}[Removal of both internal group labels]%
+    \label{thm:peps_three_block_remove_labels}
+    \lean{TNLean.PEPS.ThreeBlockDependent.exists_remove_internal_labels}
+    \leanok
+    \uses{def:peps_three_block_core_action}
+    Every $p:E\to G$ admits $q:V\to G$ such that
+    $f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1}=1$ for $e\notin C_0$.
+\end{theorem}
+\begin{proof}\leanok
+    Take $q_0=1$, $q_1=p_0^{-1}$, $q_2=p_0^{-1}p_1^{-1}$ and
+    $q_v=1$ at the exterior vertices. The only identities required are
+    $p_0^{-1}p_0=1$ and $p_0^{-1}p_1^{-1}p_1p_0=1$.
+\end{proof}
+
+\begin{theorem}[Intersection of the full graph cuts]%
+    \label{thm:peps_three_block_cut_intersection}
+    \lean{TNLean.PEPS.ThreeBlockDependent.cutSpace_left_inf_right}
+    \leanok
+    \uses{def:peps_three_block_core_action,def:peps_g_injective}
+    Let $G$ be finite and let $A_v:\mathcal X_v\times Y_v\to\C$
+    have finite physical alphabets. If each coefficient map $T_v$ is
+    $G$-injective for $\rho_v^f$, then
+    \begin{align}
+        \mathcal S_{A,C_L}\cap\mathcal S_{A,C_R}=\mathcal S_{A,C_0}.
+        \label{eq:peps_three_block_cut_intersection}
+    \end{align}
+    This assertion does not require semi-regularity or unitarity of $U_e$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_open_cut_intersection,thm:peps_three_block_remove_labels}
+    Both cuts contain $C_0$; edge $0$ is uncut in $C_L$ and edge $1$
+    in $C_R$. Theorem~\ref{thm:peps_three_block_remove_labels} supplies
+    the vertex labels required by Theorem~\ref{thm:peps_open_cut_intersection}.
+\end{proof}
+
+\begin{definition}[Identity tensors at the exterior endpoints]%
+    \label{def:peps_three_block_identity_extension}
+    \lean{TNLean.PEPS.ThreeBlockDependent.ExtendedPhys,TNLean.PEPS.ThreeBlockDependent.extendedTensor,TNLean.PEPS.ThreeBlockDependent.coreOutputEquiv,
+        TNLean.PEPS.ThreeBlockDependent.exteriorOutputEquiv,TNLean.PEPS.ThreeBlockDependent.localSiteMap_extendedTensor_core,
+        TNLean.PEPS.ThreeBlockDependent.localSiteMap_extendedTensor_exterior,TNLean.PEPS.ThreeBlockDependent.localSiteMap_extendedTensor_exterior_range}
+    \leanok
+    \uses{def:peps_general_three_block_geometry}
+    Given physical alphabets $Y_v$ and tensors $A_v$ only for $v\in T$,
+    extend them to $V$ by
+    \begin{align}
+        \widetilde Y_v & =
+        \begin{cases}Y_v&v\in T,\\\mathcal X_v&v\notin T,\end{cases}
+                       & \widetilde A_v(\eta,s) & =
+        \begin{cases}A_v(\eta,s)&v\in T,\\\delta_{\eta,s}&v\notin T.\end{cases}
+        \label{eq:peps_three_block_identity_extension}
+    \end{align}
+    The corresponding coordinate identifications give
+    $\widetilde T_v=T_v$ at core vertices and
+    $\widetilde T_v=I_{\C^{\mathcal X_v}}$ outside the core.
+    In particular every exterior local map is surjective.
+\end{definition}
+
+\begin{theorem}[Extension of core injectivity]%
+    \label{thm:peps_three_block_extended_injectivity}
+    \lean{TNLean.PEPS.ThreeBlockDependent.isGInjective_extendedTensor}
+    \leanok
+    \uses{def:peps_three_block_identity_extension,def:peps_three_block_core_action}
+    If the three $T_v$, $v\in T$, are $G$-injective for $\rho_v$,
+    all eleven $\widetilde T_v$ are $G$-injective for $\rho_v^f$.
+\end{theorem}
+\begin{proof}\leanok
+    At a core vertex the representation and coefficient map are unchanged,
+    up to the coordinate identifications in
+    Definition~\ref{def:peps_three_block_identity_extension}.
+    At an exterior vertex the representation is trivial and the coefficient
+    map is the identity, which is injective on the entire virtual space.
+\end{proof}
+
+\begin{theorem}[Nonempty alphabets of semi-regular representations]%
+    \label{thm:peps_semiregular_alphabet_nonempty}
+    \lean{TNLean.PEPS.ThreeBlockDependent.nonempty_of_isSemiRegular,TNLean.PEPS.ThreeBlockDependent.nonempty_bonds_of_isSemiRegular}
+    \leanok
+    \uses{def:peps_semiregular}
+    A semi-regular matrix representation on $\C^X$, for finite $X$,
+    has $X\ne\varnothing$. Hence independently semi-regular $U_e$
+    supply a choice of one coordinate in each $X_e$.
+\end{theorem}
+\begin{proof}\leanok
+    Semi-regularity includes the trivial irreducible representation, so
+    there is a nonzero invariant vector. If $X$ were empty, $\C^X$ would
+    be the zero vector space. Apply this argument to each edge.
+\end{proof}
+
+\begin{definition}[Restriction to the three physical factors]%
+    \label{def:peps_three_core_physical_coordinates}
+    \lean{TNLean.PEPS.ThreeBlockDependent.CorePhysicalConfig,TNLean.PEPS.ThreeBlockDependent.OutsideCorePhysicalConfig,
+        TNLean.PEPS.ThreeBlockDependent.corePhysicalRestriction,TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension,
+        TNLean.PEPS.ThreeBlockDependent.assembleCorePhysicalConfig,TNLean.PEPS.ThreeBlockDependent.corePhysicalRestriction_assemble}
+    \leanok
+    \uses{def:peps_general_three_block_geometry}
+    For any alphabets $Y_v$ on $V$, write
+    $\Sigma_T=\prod_{v\in T}Y_v$ and
+    $\Sigma_{T\setminus Q}=\prod_{v\in T\setminus Q}Y_v$.
+    Restriction is $r_T(\sigma)=\sigma|_T$; constant extension of vectors is
+    $J_T\psi(\sigma)=\psi(r_T\sigma)$.
+    For $\tau\in\prod_{v\notin T}Y_v$, let $a_T(s,\tau)$ equal $s$
+    on $T$ and $\tau$ elsewhere. Then $r_Ta_T(s,\tau)=s$.
+\end{definition}
+
+\begin{theorem}[Recovery after constant physical extension]%
+    \label{thm:peps_three_core_extension_injective}
+    \lean{TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension_injective}
+    \leanok
+    \uses{def:peps_three_core_physical_coordinates}
+    If an exterior physical configuration $\tau$ exists, $J_T$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Evaluate $J_T\psi=J_T\chi$ at $a_T(s,\tau)$ to obtain $\psi(s)=\chi(s)$.
+\end{proof}
+
+\begin{definition}[Lifted contractions on the core physical space]%
+    \label{def:peps_three_core_lifted_cut}
+    \lean{TNLean.PEPS.ThreeBlockDependent.coreLiftedCutCoeff,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace}
+    \leanok
+    \uses{def:peps_three_core_physical_coordinates}
+    Let $Q\subseteq T$ and $C\subseteq E$. With endpoint coordinates
+    $\beta\in\prod_{p\in E\times\{-,+\}}X_{e(p)}$, define
+    \begin{align}
+        K_{A,Q,C}(M)(s)
+         & =\sum_\beta M(r_C\beta,s|_{T\setminus Q})w_C(\beta)
+        \prod_{v\in Q}A_v(\beta|_{I_v},s_v).
+        \label{eq:peps_three_core_lifted_cut}
+    \end{align}
+    Set $\mathcal K_{A,Q,C}=\operatorname{range}K_{A,Q,C}$.
+    Here $r_C$ retains both endpoint coordinates of each cut edge and
+    $w_C(\beta)=\prod_{e\notin C}\delta_{\beta_{e,+},\beta_{e,-}}$.
+    The arbitrary function $M$ may correlate the whole doubled cut
+    with every omitted core physical coordinate.
+\end{definition}
+
+\begin{theorem}[Localization of lifted graph contractions]%
+    \label{thm:peps_three_core_localization}
+    \lean{TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension_coreLiftedCutMap,
+        TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_boundary_slice,TNLean.PEPS.ThreeBlockDependent.comap_liftedCutSpace_eq_coreLiftedCutSpace}
+    \leanok
+    \uses{def:peps_three_core_lifted_cut,def:peps_lifted_cut}
+    Extend a boundary $M$ constantly in the exterior physical coordinates,
+    obtaining $M^\uparrow$. Then
+    $J_TK_{A,Q,C}(M)=\widehat\Gamma_{A,Q,C}(M^\uparrow)$.
+    Conversely, fix an exterior configuration $\tau$ and restrict a graph
+    boundary $N$ to $\tau$, obtaining $N_\tau$. Then
+    \begin{align}
+        K_{A,Q,C}(N_\tau)(s)
+                                               & =\widehat\Gamma_{A,Q,C}(N)(a_T(s,\tau)),\nonumber \\
+        J_T^{-1}(\widehat{\mathcal S}_{A,Q,C}) & =\mathcal K_{A,Q,C}.
+        \label{eq:peps_three_core_localization}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Each contraction uses tensors only in $Q\subseteq T$.
+    Inserting $M^\uparrow$ or fixing $\tau$ therefore changes only the
+    outside argument of the boundary, term by term in
+    (\ref{eq:peps_three_core_lifted_cut}). These two constructions give
+    the opposite range inclusions.
+\end{proof}
+
+\begin{definition}[Core and exterior endpoint coordinates]%
+    \label{def:peps_three_block_endpoint_split}
+    \lean{TNLean.PEPS.ThreeBlockDependent.CoreEndpoint,TNLean.PEPS.ThreeBlockDependent.ExteriorEndpoint,TNLean.PEPS.ThreeBlockDependent.OpenBoundaryConfig,
+        TNLean.PEPS.ThreeBlockDependent.CoreEndpointConfig,TNLean.PEPS.ThreeBlockDependent.ExteriorEndpointConfig,TNLean.PEPS.ThreeBlockDependent.tail_mem_core,
+        TNLean.PEPS.ThreeBlockDependent.head_mem_core_iff,TNLean.PEPS.ThreeBlockDependent.exteriorEndpoint_mem_exterior,
+        TNLean.PEPS.ThreeBlockDependent.coreEndpoint_card,TNLean.PEPS.ThreeBlockDependent.exteriorEndpoint_card,
+        TNLean.PEPS.ThreeBlockDependent.assembleCoreEndpointConfig,TNLean.PEPS.ThreeBlockDependent.openBoundaryRestriction,
+        TNLean.PEPS.ThreeBlockDependent.coreEndpointLocalConfig,TNLean.PEPS.ThreeBlockDependent.assembleExteriorCutConfig,
+        TNLean.PEPS.ThreeBlockDependent.exteriorCutRestriction,TNLean.PEPS.ThreeBlockDependent.cutRestriction_assembleCoreEndpointConfig,
+        TNLean.PEPS.ThreeBlockDependent.exteriorCutRestriction_assemble,TNLean.PEPS.ThreeBlockDependent.endpointSiteEquiv_assembleCoreEndpointConfig}
+    \leanok
+    \uses{def:peps_general_three_block_geometry}
+    Partition the endpoints as $I_T\sqcup I_{V\setminus T}$ according to
+    their incident vertex. There are twelve core and eight exterior
+    endpoints. Every tail belongs to $T$; a head belongs to $T$ exactly
+    on edges $0,1$. Write $\eta$ and $\xi$ for configurations on these
+    two endpoint sets, and $a(\eta,\xi)$ for their union.
+    The actual open boundary is
+    $\Theta=\prod_{e\in C_0}X_e$, with
+    $r_0\eta=(\eta_{e,-})_{e\in C_0}$.
+    A doubled exterior cut is assembled by
+    $b(\theta,\xi)_{e,-}=\theta_e$ and
+    $b(\theta,\xi)_{e,+}=\xi_{e,+}$.
+    Thus $r_{C_0}a(\eta,\xi)=b(r_0\eta,\xi)$, its exterior restriction
+    recovers $\xi$, and its local core configurations are $\eta|_{I_v}$.
+\end{definition}
+
+\begin{definition}[The eight-leg open contraction]%
+    \label{def:peps_three_block_open_boundary}
+    \lean{TNLean.PEPS.ThreeBlockDependent.coreInteriorWeight,TNLean.PEPS.ThreeBlockDependent.cutInteriorWeight_assembleCoreEndpointConfig,
+        TNLean.PEPS.ThreeBlockDependent.openBoundaryCoeff,TNLean.PEPS.ThreeBlockDependent.openBoundaryMap,TNLean.PEPS.ThreeBlockDependent.openBoundarySpace}
+    \leanok
+    \uses{def:peps_three_block_endpoint_split}
+    Put $w_0(\eta)=\delta_{\eta_{0,+},\eta_{0,-}}
+        \delta_{\eta_{1,+},\eta_{1,-}}$.
+    It equals $w_{C_0}(a(\eta,\xi))$ for every exterior configuration.
+    For an arbitrary joint boundary $X:\Theta\to\C$, define
+    \begin{align}
+        \zeta_A(X)(s) & =\sum_\eta X(r_0\eta)w_0(\eta)
+        \prod_{v\in T}A_v(\eta|_{I_v},s_v).
+        \label{eq:peps_three_block_open_boundary}
+    \end{align}
+    Set $\mathcal O_A=\operatorname{range}\zeta_A$.
+    The domain of $X$ has precisely eight virtual factors; the output
+    has precisely the three physical factors $\C^{Y_0}\otimes
+        \C^{Y_1}\otimes\C^{Y_2}$.
+\end{definition}
+
+\begin{definition}[Summation and fixation of exterior coordinates]%
+    \label{def:peps_three_block_boundary_marginal}
+    \lean{TNLean.PEPS.ThreeBlockDependent.emptyOutsideCorePhysicalConfig,TNLean.PEPS.ThreeBlockDependent.openBoundaryMarginal,
+        TNLean.PEPS.ThreeBlockDependent.fixedExteriorCutBoundary,
+        TNLean.PEPS.ThreeBlockDependent.openBoundaryMarginal_fixedExteriorCutBoundary}
+    \leanok
+    \uses{def:peps_three_block_endpoint_split}
+    The product of omitted core physical alphabets for $Q=T$ has its
+    unique empty configuration $*$. For a doubled-cut boundary $M$, set
+    $m(M)(\theta)=\sum_\xi M(b(\theta,\xi),*)$.
+    Given one exterior configuration $\xi_0$, embed an arbitrary $X$ by
+    $j_{\xi_0}(X)(\kappa,*)=X((\kappa_{e,-})_{e\in C_0})
+        \delta_{\kappa|_{I_{V\setminus T}},\xi_0}$.
+    Then $m(j_{\xi_0}X)=X$.
+\end{definition}
+
+\begin{theorem}[Elimination of auxiliary exterior endpoints]%
+    \label{thm:peps_three_block_open_boundary_exact}
+    \lean{TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_core_exterior,
+        TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_openBoundaryMap,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_openBoundarySpace}
+    \leanok
+    \uses{def:peps_three_core_lifted_cut,def:peps_three_block_open_boundary,
+        def:peps_three_block_boundary_marginal}
+    Endpoint summation separates as
+    $\sum_\beta F(\beta)=\sum_\eta\sum_\xi F(a(\eta,\xi))$.
+    Consequently $K_{A,T,C_0}(M)=\zeta_A(m(M))$.
+    If an exterior configuration $\xi_0$ exists, then
+    $\mathcal K_{A,T,C_0}=\mathcal O_A$.
+\end{theorem}
+\begin{proof}\leanok
+    Split the independent endpoint product into its core and exterior
+    factors. Only $M$ depends on $\xi$, so its sum is $m(M)$; the internal
+    weight and all three tensors retain precisely the factors in
+    (\ref{eq:peps_three_block_open_boundary}). Conversely use
+    $j_{\xi_0}X$, whose marginal is $X$.
+\end{proof}
+
+\begin{definition}[Minimal regional endpoint coordinates]%
+    \label{def:peps_three_block_regional_coordinates}
+    \lean{TNLean.PEPS.ThreeBlockDependent.RegionEndpoint,TNLean.PEPS.ThreeBlockDependent.OutsideRegionEndpoint,TNLean.PEPS.ThreeBlockDependent.RegionBoundaryEndpoint,
+        TNLean.PEPS.ThreeBlockDependent.RegionEndpointConfig,TNLean.PEPS.ThreeBlockDependent.OutsideRegionEndpointConfig,
+        TNLean.PEPS.ThreeBlockDependent.RegionBoundaryConfig,TNLean.PEPS.ThreeBlockDependent.left_regionBoundary_card,TNLean.PEPS.ThreeBlockDependent.right_regionBoundary_card,
+        TNLean.PEPS.ThreeBlockDependent.assembleRegionEndpointConfig,TNLean.PEPS.ThreeBlockDependent.regionBoundaryRestriction,
+        TNLean.PEPS.ThreeBlockDependent.regionEndpointLocalConfig,TNLean.PEPS.ThreeBlockDependent.assembleRegionalCutConfig,
+        TNLean.PEPS.ThreeBlockDependent.regionalCutBoundaryRestriction,TNLean.PEPS.ThreeBlockDependent.outsideRegionalCutRestriction,
+        TNLean.PEPS.ThreeBlockDependent.cutRestriction_assembleRegionEndpointConfig,
+        TNLean.PEPS.ThreeBlockDependent.regionalCutBoundaryRestriction_assemble,TNLean.PEPS.ThreeBlockDependent.outsideRegionalCutRestriction_assemble,
+        TNLean.PEPS.ThreeBlockDependent.endpointSiteEquiv_assembleRegionEndpointConfig}
+    \leanok
+    \uses{def:peps_general_three_block_geometry}
+    For $Q\subseteq T$ put $I_Q=\{p:v(p)\in Q\}$ and
+    $B_{Q,C}=\{p\in I_Q:e(p)\in C\}$.
+    Regional configurations lie in $\prod_{p\in I_Q}X_{e(p)}$ and their
+    minimal boundary is $\Theta_{Q,C}=\prod_{p\in B_{Q,C}}X_{e(p)}$.
+    Denote restriction to $B_{Q,C}$ by $r_{Q,C}$ and restriction to
+    $I_v$ by $\eta\mapsto\eta_v$.
+    The two relevant boundary incidence sets satisfy
+    $|B_{R,C_L}|=|B_{S,C_R}|=6$.
+
+    Assemble regional labels $\eta$ with complementary labels $\xi$
+    into $a_Q(\eta,\xi)$. Assemble a doubled cut $b_{Q,C}(\theta,\xi)$
+    by taking $\theta$ at its regional endpoints and $\xi$ elsewhere.
+    Then $r_Ca_Q(\eta,\xi)=b_{Q,C}(r_{Q,C}\eta,\xi)$; restriction
+    recovers $\theta$, and local configurations in $Q$ recover $\eta_v$.
+    If every uncut edge has both endpoints in $Q$, all complementary
+    endpoint labels are on the cut, and their restriction recovers $\xi$.
+\end{definition}
+
+\begin{definition}[Regional contraction with one correlated physical boundary]%
+    \label{def:peps_three_block_regional_boundary}
+    \lean{TNLean.PEPS.ThreeBlockDependent.regionInteriorWeight,TNLean.PEPS.ThreeBlockDependent.cutInteriorWeight_assembleRegionEndpointConfig,
+        TNLean.PEPS.ThreeBlockDependent.regionalBoundaryCoeff,TNLean.PEPS.ThreeBlockDependent.regionalBoundaryMap,TNLean.PEPS.ThreeBlockDependent.regionalBoundarySpace}
+    \leanok
+    \uses{def:peps_three_block_regional_coordinates,def:peps_three_core_physical_coordinates}
+    Assume $Q\subseteq T$ and every uncut edge has both endpoints in $Q$.
+    For $\eta\in\prod_{p\in I_Q}X_{e(p)}$ let
+    $w_{Q,C}(\eta)=\prod_{e\notin C}\delta_{\eta_{e,+},\eta_{e,-}}$.
+    This equals $w_C(a_Q(\eta,\xi))$, independently of $\xi$.
+    For an arbitrary $M:\Theta_{Q,C}\times\Sigma_{T\setminus Q}\to\C$, put
+    \begin{align}
+        \Gamma_{A,Q,C}(M)(s)
+         & =\sum_\eta M(r_{Q,C}\eta,s|_{T\setminus Q})w_{Q,C}(\eta)
+        \prod_{v\in Q}A_v(\eta_v,s_v).
+        \label{eq:peps_three_block_regional_boundary}
+    \end{align}
+    Set $\mathcal G_{A,Q,C}=\operatorname{range}\Gamma_{A,Q,C}$.
+    For $Q=R,S$, the boundary has six virtual legs and one omitted
+    physical leg, all of which may be correlated.
+\end{definition}
+
+\begin{definition}[Regional boundary marginals]%
+    \label{def:peps_three_block_regional_marginal}
+    \lean{TNLean.PEPS.ThreeBlockDependent.regionalBoundaryMarginal,TNLean.PEPS.ThreeBlockDependent.fixedOutsideRegionalBoundary,
+        TNLean.PEPS.ThreeBlockDependent.regionalBoundaryMarginal_fixedOutsideRegionalBoundary}
+    \leanok
+    \uses{def:peps_three_block_regional_coordinates}
+    Under the same condition on uncut edges, define
+    \begin{align}
+        m_{Q,C}(N)(\theta,u)   & =\sum_\xi N(b_{Q,C}(\theta,\xi),u),
+        \label{eq:peps_three_block_regional_marginal}                \\
+        j_{\xi_0}(M)(\kappa,u) & =M(\kappa|_{B_{Q,C}},u)
+        \delta_{\kappa|_{I_{V\setminus Q}},\xi_0}.\nonumber
+    \end{align}
+    Any fixed complementary configuration $\xi_0$ gives
+    $m_{Q,C}(j_{\xi_0}M)=M$, preserving all virtual--physical correlations.
+\end{definition}
+
+\begin{theorem}[Exact minimal regional contraction ranges]%
+    \label{thm:peps_three_block_regional_boundary_exact}
+    \lean{TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_region_outside,
+        TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_regionalBoundaryMap,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_regionalBoundarySpace}
+    \leanok
+    \uses{def:peps_three_core_lifted_cut,def:peps_three_block_regional_boundary,
+        def:peps_three_block_regional_marginal}
+    For $Q\subseteq T$ with all uncut edges internal,
+    \begin{align}
+        \sum_\beta F(\beta) & =\sum_\eta\sum_\xi F(a_Q(\eta,\xi)),\nonumber \\
+        K_{A,Q,C}(N)        & =\Gamma_{A,Q,C}(m_{Q,C}(N)).\nonumber
+    \end{align}
+    If a complementary configuration $\xi_0$ exists, then
+    $\mathcal K_{A,Q,C}=\mathcal G_{A,Q,C}$.
+\end{theorem}
+\begin{proof}\leanok
+    Split the endpoint sum according to membership in $I_Q$.
+    All tensor factors and uncut identity pairings depend only on $\eta$;
+    summing $\xi$ gives (\ref{eq:peps_three_block_regional_marginal}).
+    Every minimal boundary is recovered by its embedding $j_{\xi_0}$.
+\end{proof}
+
+\begin{theorem}[Core-localized intersection of the doubled cuts]%
+    \label{thm:peps_three_block_core_lifted_intersection}
+    \lean{TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_inf_eq_openBoundarySpace}
+    \leanok
+    \uses{def:peps_three_block_identity_extension,def:peps_three_core_lifted_cut,
+        def:peps_three_block_open_boundary}
+    Let $G$ be finite, let every $U_e$ be semi-regular, and let the three
+    maps $T_v:\C^{\mathcal X_v}\to\C^{Y_v}$ be $G$-injective for their
+    incident representations, with finite, independently chosen $Y_v$.
+    Then
+    \begin{align}
+        \mathcal K_{\widetilde A,R,C_L}\cap
+        \mathcal K_{\widetilde A,S,C_R}=\mathcal O_{\widetilde A}.
+        \label{eq:peps_three_block_core_lifted_intersection}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_semiregular_alphabet_nonempty,thm:peps_three_core_localization,
+        thm:peps_lifted_cut_intersection,thm:peps_three_block_cut_intersection,
+        thm:peps_three_block_extended_injectivity,thm:peps_three_block_open_boundary_exact}
+    Choose exterior virtual and physical configurations using
+    Theorem~\ref{thm:peps_semiregular_alphabet_nonempty}. Identity exterior
+    tensors are surjective, and $R\cup S=T$. Thus the lifted reconstruction
+    theorem and (\ref{eq:peps_three_block_cut_intersection}) give
+    \begin{align}
+        \widehat{\mathcal S}_{\widetilde A,R,C_L}\cap
+        \widehat{\mathcal S}_{\widetilde A,S,C_R}
+         & =\mathcal S_{\widetilde A,C_L}\cap\mathcal S_{\widetilde A,C_R}
+        =\mathcal S_{\widetilde A,C_0}
+        =\widehat{\mathcal S}_{\widetilde A,T,C_0}.
+        \label{eq:peps_three_block_lifted_reduction}
+    \end{align}
+    Inverse images under $J_T$ preserve intersections. Apply
+    (\ref{eq:peps_three_core_localization}) to all three terms, then
+    Theorem~\ref{thm:peps_three_block_open_boundary_exact} to the whole core.
+\end{proof}
+
+\begin{theorem}[Open-boundary intersection for $G$-injective tensors]%
+    \label{thm:peps_general_three_block_intersection}
+    \lean{TNLean.PEPS.ThreeBlockDependent.regionalBoundarySpace_inf_eq_openBoundarySpace}
+    \leanok
+    \uses{def:peps_three_block_regional_boundary,def:peps_three_block_open_boundary,
+        def:peps_three_block_core_action,def:peps_g_injective,def:peps_semiregular}
+    Let $G$ be finite. Give the ten bonds independently chosen finite
+    virtual alphabets and matched semi-regular representations $U_e$.
+    Let $A_0,A_1,A_2$ be $G$-injective four-legged tensors for the incident
+    actions, with independently chosen finite physical alphabets. Write
+    $\mathbf x=(x_2,x_3,x_4)$, $\mathbf y=(x_5,x_6)$ and
+    $\mathbf z=(x_7,x_8,x_9)$. Then
+    \begin{align}
+        \{\alpha(M):M\}\cap\{\beta(N):N\}
+         & =\{\zeta(X):X\},
+        \label{eq:peps_general_three_block_intersection} \\
+        \alpha(M)_{ijk}
+         & =\sum_{a,b,\mathbf x,\mathbf y}
+        A_0^i(a,\mathbf x)A_1^j(a,b,\mathbf y)
+        M(b,\mathbf x,\mathbf y,k),\nonumber             \\
+        \beta(N)_{ijk}
+         & =\sum_{a,b,\mathbf y,\mathbf z}
+        N(i,a,\mathbf y,\mathbf z)A_1^j(a,b,\mathbf y)
+        A_2^k(b,\mathbf z),\nonumber                     \\
+        \zeta(X)_{ijk}
+         & =\sum_{a,b,\mathbf x,\mathbf y,\mathbf z}
+        A_0^i(a,\mathbf x)A_1^j(a,b,\mathbf y)
+        A_2^k(b,\mathbf z)X(\mathbf x,\mathbf y,\mathbf z).\nonumber
+    \end{align}
+    Here $a\in X_0$, $b\in X_1$, and $x_e\in X_e$.
+    The functions $M,N,X$ are arbitrary joint tensors on their displayed
+    arguments. The equality is in the three-factor physical space; neither
+    an auxiliary physical factor nor a factorization of a boundary is assumed.
+    This is the intersection property of
+    \cite[Theorem~5.4]{Schuch2010PEPS}, allowing the endpoint tensors to
+    differ as well. Its displayed $A$--$B$--$A$ case is obtained by
+    identifying the two endpoint tensors and their alphabets.
+    In the incidence diagram for $\zeta(X)$, the eight legs carry
+    $x_2,\ldots,x_9$ in clockwise order along the upper boundary of $X$,
+    starting at its left horizontal leg.
+    % Formula: zeta(X)_{ijk}=sum A0^i(a,x2,x3,x4) A1^j(a,b,x5,x6)
+    % A2^k(b,x7,x8,x9) X(x2,...,x9).
+    % Source: SCP10 figs3/grow-intersect, paper_v3.tex:1373--1420.
+    % Ink-to-index: horizontal joins carry a,b; the other eight joins
+    % carry x2,...,x9 clockwise around the upper boundary of X,
+    % starting at its 180-degree port and ending at its 0-degree port.
+    % A0,A1,A2 have four virtual and one physical incidence each;
+    % X has eight virtual incidences. External signature: (virtual,physical)=(0,3).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+            \tn[at=1 e of (1,1), name=generalThreeA, skin=box,
+                ports={0:virtual,180:virtual,240:virtual,300:virtual,90:physical}]{A_0}
+            \tn[at=3 e of generalThreeA, name=generalThreeB, skin=box,
+                ports={180:virtual,0:virtual,240:virtual,300:virtual,90:physical}]{A_1}
+            \tn[at=3 e of generalThreeB, name=generalThreeC, skin=box,
+                ports={180:virtual,0:virtual,240:virtual,300:virtual,90:physical}]{A_2}
+            \tn[at=3 s of generalThreeB, name=generalThreeX, skin=ring,
+                ports={180:virtual,150:virtual,120:virtual,105:virtual,
+                        75:virtual,60:virtual,30:virtual,0:virtual}]{X}
+            \tnwire[name=generalThreePhysicalA]{generalThreeA.90}{open n}
+            \tnmark[form=label, label pos=e]{on generalThreePhysicalA 0.6}{$i$}
+            \tnwire[name=generalThreePhysicalB]{generalThreeB.90}{open n}
+            \tnmark[form=label, label pos=e]{on generalThreePhysicalB 0.6}{$j$}
+            \tnwire[name=generalThreePhysicalC]{generalThreeC.90}{open n}
+            \tnmark[form=label, label pos=e]{on generalThreePhysicalC 0.6}{$k$}
+            \tnwire[name=generalThreeInternalA]{generalThreeA.0}{generalThreeB.180}
+            \tnmark[form=label, label pos=n]{on generalThreeInternalA 0.5}{$a$}
+            \tnwire[name=generalThreeInternalB]{generalThreeB.0}{generalThreeC.180}
+            \tnmark[form=label, label pos=n]{on generalThreeInternalB 0.5}{$b$}
+            \tnwire[name=generalThreeXtwo, route=arc]{generalThreeA.180}{generalThreeX.180}
+            \tnwire[name=generalThreeXthree]{generalThreeA.240}{generalThreeX.150}
+            \tnwire[name=generalThreeXfour]{generalThreeA.300}{generalThreeX.120}
+            \tnwire[name=generalThreeXfive]{generalThreeB.240}{generalThreeX.105}
+            \tnwire[name=generalThreeXsix]{generalThreeB.300}{generalThreeX.75}
+            \tnwire[name=generalThreeXseven]{generalThreeC.240}{generalThreeX.60}
+            \tnwire[name=generalThreeXeight]{generalThreeC.300}{generalThreeX.30}
+            \tnwire[name=generalThreeXnine, route=arc]{generalThreeC.0}{generalThreeX.0}
+        \end{tenkz}
+    \end{tenkzequation}
+    % Source: Papers/1001.3807/paper_v3.tex:1373--1420,
+    % figs3/grow-N, figs3/grow-M, figs3/grow-intersect, figs3/prove-grow.
+    % The source's incoming exterior arrows are expressed by the
+    % contragredient representation when an exterior edge is oriented outward.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_semiregular_alphabet_nonempty,
+        thm:peps_three_block_regional_boundary_exact,
+        thm:peps_three_block_core_lifted_intersection}
+    Semi-regularity supplies one complementary virtual configuration for
+    each region. Theorem~\ref{thm:peps_three_block_regional_boundary_exact}
+    therefore identifies the two six-leg ranges with
+    $\mathcal K_{\widetilde A,R,C_L}$ and
+    $\mathcal K_{\widetilde A,S,C_R}$, without restricting their joint
+    boundaries. Apply (\ref{eq:peps_three_block_core_lifted_intersection}).
+    The resulting range is the exact eight-leg map in
+    (\ref{eq:peps_three_block_open_boundary}), whose coordinate expansion
+    is $\zeta(X)$ in (\ref{eq:peps_general_three_block_intersection}).
+\end{proof}

@@ -1,0 +1,121 @@
+\begin{theorem}[Commuting-closure coefficients of every parent ground vector]%
+    \label{thm:peps_parent_ground_vector_coefficients}
+    \lean{TNLean.PEPS.IsGInjective.exists_torusGClosure_sum_of_mem_parentKernel}
+    \leanok
+    Let $A$ be regular $G$-injective on a native torus with both periods
+    at least three, with the same tensor repeated at every site.
+    For each native plaquette $R_v$, let $P_v\geq0$
+    have kernel equal to the image of the regional PEPS map, and put
+    $H=\sum_v(P_v\otimes\mathbf1_{R_v^c})$.
+    Every vector $\psi\in\ker H$, including zero, admits coefficients
+    $\mu_{g,h}\in\mathbb C$ such that
+    \begin{align}
+        \psi & =\sum_{gh=hg}\mu_{g,h}\lvert A;(g,h)\rangle.
+        \label{eq:peps_parent_vector_coefficients}
+    \end{align}
+    This is the coefficient form of \cite[Theorem~5.7]{Schuch2010PEPS}
+    in the stated finite regular-torus setting.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_torus_parent_ground_space}
+    The parent kernel equals the span of the commuting closures.
+    Since the indexing set of commuting pairs is finite, membership
+    in this span gives (\ref{eq:peps_parent_vector_coefficients}).
+\end{proof}
+
+\begin{theorem}[Common local density and entropy of all parent ground states]%
+    \label{thm:peps_parent_ground_state_density}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusParentKernel_common_density_of_isSimplyConnected}
+    \leanok
+    \uses{def:peps_renyi_entropy}
+    Under the hypotheses of \ref{thm:peps_parent_ground_vector_coefficients},
+    suppose $A$ is $G$-isometric. Let $R$ have connected occupied
+    nearest-neighbour graph and simply connected closed-cell realization,
+    and let $b$ count its crossing bonds. For $\psi\in\ker H\setminus\{0\}$,
+    let $M_\psi(\sigma,\tau)=\psi(\sigma\cup\tau)$ be its physical
+    coefficient matrix across $R\mid R^c$.
+    There is one density matrix $\rho_R$, independent of $\psi$, such that
+    $\operatorname{tr}(M_\psi M_\psi^\dagger)>0$ and
+    \begin{align}
+        \rho_R                    & =\frac{M_\psi M_\psi^\dagger}
+        {\operatorname{tr}(M_\psi M_\psi^\dagger)},
+                                  & \operatorname{tr}\rho_R       & =1,
+                                  & \rho_R                        & \geq0,               \\
+        \operatorname{rank}\rho_R & =|G|^{b-1},
+                                  & \rho_R^2                      & =|G|^{-(b-1)}\rho_R, \\
+        S(\rho_R)                 & =(b-1)\log|G|,
+                                  & S_\alpha(\rho_R)              & =(b-1)\log|G|.
+    \end{align}
+    The R\'enyi equality holds for every finite real $\alpha\geq0$.
+    This is \cite[Theorem~6.9]{Schuch2010PEPS} for all actual parent
+    ground states in the stated geometry.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_parent_ground_vector_coefficients,
+        thm:peps_torus_simply_connected_physical_density}
+    Insert (\ref{eq:peps_parent_vector_coefficients}) into $M_\psi$.
+    Restricting an arbitrary global configuration to $R$ and $R^c$
+    and reassembling it recovers that configuration, so $M_\psi=0$
+    would imply $\psi=0$. The common-density theorem for nonzero
+    commuting-closure superpositions therefore applies.
+\end{proof}
+
+\begin{theorem}[Local indistinguishability and stripe unitaries in the parent kernel]%
+    \label{thm:peps_parent_ground_state_local_equivalence}
+    \lean{TNLean.PEPS.IsGIsometric.torusParentKernel_local_equivalence_of_isSimplyConnected,
+        TNLean.PEPS.IsGIsometric.torusParentKernel_stripe_local_equivalence}
+    \leanok
+    \uses{def:peps_normalized_pure_cut_matrix}
+    Under the hypotheses of \ref{thm:peps_parent_ground_state_density},
+    let $\psi,\phi\in\ker H\setminus\{0\}$. Write $\widehat M_\psi$
+    and $\widehat M_\phi$ for their normalized physical coefficient
+    matrices. Every operator $O$ on $R$ has equal normalized expectation,
+    and some physical unitary $U$ on $R^c$ satisfies
+    \begin{align}
+        \operatorname{tr}(O\widehat M_\phi\widehat M_\phi^\dagger)
+                        & =\operatorname{tr}(O\widehat M_\psi\widehat M_\psi^\dagger), \\
+        \widehat M_\phi & =\widehat M_\psi U^{\mathsf T}.
+    \end{align}
+    In particular, the complement of the nonwrapping rectangle of sites
+    with both coordinates nonzero is $\{(x,y):x=0\lor y=0\}$.
+    A unitary on these two width-one stripes relates any two normalized
+    nonzero parent ground states. These are the conclusions of
+    \cite[Theorem~6.7 and Corollary~6.8]{Schuch2010PEPS} in the stated scope.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_parent_ground_vector_coefficients,
+        thm:peps_torus_simply_connected_physical_local_equivalence,
+        thm:peps_torus_stripe_local_equivalence}
+    Expand both ground vectors using
+    (\ref{eq:peps_parent_vector_coefficients}). Their cuts are nonzero
+    by restriction and reassembly. Apply the local-equivalence and
+    stripe-unitary theorems to these derived expansions.
+\end{proof}
+
+\begin{theorem}[Boundary rank and zero-order entropy of every regular parent ground state]%
+    \label{thm:peps_parent_ground_state_zero_entropy}
+    \lean{TNLean.PEPS.IsGInjective.torusParentKernel_rank_zeroEntropy_of_isSimplyConnected}
+    \leanok
+    \uses{def:peps_renyi_entropy}
+    Under the hypotheses of \ref{thm:peps_parent_ground_vector_coefficients},
+    let $R$ have connected occupied graph and simply connected closed-cell
+    realization. Let $b$ count its crossing bonds and let
+    $\psi\in\ker H\setminus\{0\}$. Its normalized reduced density
+    $\rho_R=M_\psi M_\psi^\dagger/\operatorname{tr}(M_\psi M_\psi^\dagger)$
+    has positive denominator, is positive semidefinite with trace one,
+    and satisfies
+    \begin{align}
+        \operatorname{rank}\rho_R & =|G|^{b-1},
+                                  & S_0(\rho_R) & =\log\operatorname{rank}\rho_R=(b-1)\log|G|.
+    \end{align}
+    Only $G$-injectivity is required. This is
+    \cite[Corollary~6.10]{Schuch2010PEPS} for all actual parent ground
+    states in the stated regular native-torus scope.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_parent_ground_vector_coefficients,
+        thm:peps_regular_ginjective_simply_connected_entropy}
+    Substitute (\ref{eq:peps_parent_vector_coefficients}) into the
+    physical coefficient matrix and apply the rank and zero-order
+    entropy theorem to the resulting nonzero closure superposition.
+\end{proof}

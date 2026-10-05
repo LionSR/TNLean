@@ -1,0 +1,92 @@
+% SCP10, Observations 6.5--6.6, source lines 1825--1909.
+
+\begin{definition}[Original physical tensor with surplus registers]%
+    \label{def:peps_regular_graph_surplus_site}
+    \lean{TNLean.PEPS.regularSurplusCoordinates,
+        TNLean.PEPS.regularSurplusCoordinates_smul,
+        TNLean.PEPS.regularGraphSurplusSite}
+    \leanok
+    Let $G$ be a group, let $K$ be a set of surplus indices, and let
+    $\Gamma$ be a finite simple graph. For a bundled incident configuration
+    $\eta_f=(u_f,z_f)\in G\times G^K$, define
+    $E_v\eta=(u,r)$ with $r_f=u_f^{-1}z_f$. Its inverse is
+    $(u,r)\mapsto(u_f,u_fr_f)_f$, and
+    $E_v(g\eta)=(gu,r)$.
+    Given original physical coefficients $a_v(u;s)$ with physical alphabet
+    $P_v$, define the augmented tensor by
+    \begin{align}
+        C_v(\eta;(s,t))=a_v(u;s)\,\delta_{t,r},
+        \qquad (u,r)=E_v\eta.
+    \end{align}
+    The physical alphabet of $C_v$ is $P_v\times(G^K)^{\operatorname{Inc}(v)}$.
+    Thus its first factor is the original physical system and its second
+    factor records the relative surplus labels. For $K$ a singleton, this
+    is the identity-tensor factor in
+    \cite[Observation~6.6]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[G-isometry with explicit surplus registers]%
+    \label{thm:peps_regular_graph_surplus_isometry}
+    \lean{TNLean.PEPS.isGIsometric_regularGraphSurplusSite}
+    \leanok
+    \uses{def:peps_regular_graph_surplus_site,thm:peps_regular_site_gram}
+    Suppose $G$, $K$, and every $P_v$ are finite. If every original tensor
+    $a_v$ is $G$-isometric for simultaneous regular translation of its
+    incident labels, then $C_v$ is $G$-isometric for simultaneous regular
+    translation of its bundled labels. The positive local isometry factor
+    is unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    Translation changes $u$ to $gu$ and leaves $r$ fixed, so invariance
+    follows from the original tensor. Write $E_v\eta=(u,r)$ and
+    $E_v\theta=(u',r')$. Summing the original and surplus physical indices
+    separately gives
+    \begin{align}
+        \sum_{s,t}\overline{C_v(\eta;(s,t))}C_v(\theta;(s,t))
+         & =\left(\sum_s\overline{a_v(u;s)}a_v(u';s)\right)
+        \delta_{r,r'}                                       \\
+         & =\frac{c_v}{|G|}\sum_{g\in G}
+        \delta_{u,gu'}\delta_{r,r'}
+        =\frac{c_v}{|G|}\sum_{g\in G}\delta_{\eta,g\theta}.
+    \end{align}
+    The last equality uses the bijection $E_v$ and its translation rule.
+    This is the averaging-projector Gram identity with factor $c_v>0$,
+    and hence proves the assertion on the invariant subspace.
+\end{proof}
+
+\begin{theorem}[Original graph state and surplus Bell product]%
+    \label{thm:peps_regular_graph_surplus_factorization}
+    \lean{TNLean.PEPS.graphBondNetwork_regularGraphSurplusSite}
+    \leanok
+    \uses{def:peps_regular_graph_surplus_site,def:peps_regular_graph_bond_blocking}
+    Let $G$ and $K$ be finite and let the original tensors $a_v$ be
+    arbitrary. For original physical labels $\sigma=(\sigma_v)_v$ and
+    surplus physical labels $\tau=(\tau_{v,e})_{v,e}$, the actual
+    contractions satisfy
+    \begin{align}
+        \Psi_C((\sigma_v,\tau_v)_v)
+        =\Psi_a(\sigma)
+        \prod_{e=\{v,w\}\in E(\Gamma)}
+        \delta_{\tau_{v,e},\tau_{w,e}}.
+    \end{align}
+    The second factor is one unnormalized maximally entangled vector on
+    $G^K$ per edge. No property of a canonical averaging tensor is required
+    for this equality.
+\end{theorem}
+
+\begin{proof}\leanok
+    On each virtual edge, make the bijective substitution
+    $(u_e,z_e)=(u_e,u_er_e)$. The actual contraction then separates as
+    \begin{align}
+        \sum_{u,r}\prod_v
+        a_v((u_e)_{e\ni v};\sigma_v)
+        \delta_{\tau_v,(r_e)_{e\ni v}}
+        =\Psi_a(\sigma)
+        \sum_r\prod_v\delta_{\tau_v,(r_e)_{e\ni v}}.
+    \end{align}
+    Split each vertex indicator into its individual incidences and regroup
+    them by edges. The sum over $r_e$ is
+    $\sum_{r_e}\delta_{\tau_{v,e},r_e}\delta_{\tau_{w,e},r_e}
+        =\delta_{\tau_{v,e},\tau_{w,e}}$ independently at every edge.
+\end{proof}
