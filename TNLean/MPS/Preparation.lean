@@ -45,8 +45,12 @@ import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.GHZSeedCircuit
 import TNLean.MPS.Preparation.GHZSeedRegisters
+import TNLean.MPS.Preparation.InhomogeneousApproximationError
 import TNLean.MPS.Preparation.InhomogeneousDoeblin
+import TNLean.MPS.Preparation.InhomogeneousDoeblinPreparation
 import TNLean.MPS.Preparation.InhomogeneousExactPreparation
+import TNLean.MPS.Preparation.InhomogeneousMixingPreparation
+import TNLean.MPS.Preparation.InhomogeneousOverlap
 import TNLean.MPS.Preparation.InhomogeneousPositivePartRate
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InhomogeneousSequence

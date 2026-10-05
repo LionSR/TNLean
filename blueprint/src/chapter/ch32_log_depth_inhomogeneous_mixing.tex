@@ -1,0 +1,304 @@
+\section{Normalized preparation from ordered mixing}
+\label{sec:ldp_inhomogeneous_mixing}
+
+Fix a faithful density matrix $\sigma$ on the common bond space
+$\mathbb C^D$, and write $P_\infty=(\sqrt\sigma)^\mathsf T\otimes I$.
+Let $T_\sigma$ be the transfer matrix of the map
+$X\mapsto\operatorname{Tr}(X)\sigma$. Every matrix norm in this section
+is the $L^2$ operator norm. A quantitative bound on actual ordered
+transfer products is an additional sufficient condition for the
+inhomogeneous preparation of~\cite{Malz2024Preparation}; separate
+sitewise spectral gaps do not imply that bound.
+
+For an actual two-site interval, the first equality below contracts the
+intermediate bond, and the second is the polar decomposition of its
+physical matrix. The physical indices remain $i_0,i_1$ on all three
+panels; the internal index $u$ has dimension $D^2$.
+% TENKZ-ORDERED-MIXING-BLOCK-BEGIN
+% Formula: B^{i0 i1}_{alpha beta} = sum_g A_a^{i0}_{alpha g}
+% A_{a+1}^{i1}_{g beta} = sum_u V_{(i0,i1),u} P^u_{alpha beta}.
+% Boundary: alpha west, beta east, i0 and i1 up. Contractions: g and u.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={wire}, cols=2]
+            \tn[at=(1,1), name=aa, skin=box,
+                ports={180:virtual:$\alpha$, 0:virtual, 90:physical:$i_0$}]{A_a}
+            \tn[at=(1,2), name=ab, skin=box,
+                ports={180:virtual, 0:virtual:$\beta$, 90:physical:$i_1$}]{A_{a+1}}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[at=(1,1), name=block, skin=box, wide=2,
+                ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                        90@1:physical:$i_0$, 90@2:physical:$i_1$}]{B}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, align=2]
+            \tn[at=(1,1), name=iso, skin=pill, wide=2,
+                ports={90@1:physical:$i_0$, 90@2:physical:$i_1$, 270:physical}]{V}
+            \tn[at=(2,1), name=pos, skin=box, wide=2,
+                ports={180:virtual:$\alpha$, 0:virtual:$\beta$, 90:physical}]{P}
+            \tnwire{iso.270}{pos.90}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{center}
+% TENKZ-ORDERED-MIXING-BLOCK-END
+
+\begin{theorem}[Uniform ordered mixed-transfer overlap]
+    \label{thm:ldp_inhomogeneous_mixed_overlap}
+    \lean{MPSPreparation.exists_norm_polarPos_sub_le_transferMatrix,
+        MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le}
+    \leanok
+    There is $C_0>0$, depending only on $D$ and $\sigma$, with the following
+    property. Let $B_j$ be any family of tensors with common bond dimension
+    $D$, let $P_j$ be their positive polar factors, and suppose
+    $\|T_{B_j}-T_\sigma\|\le\delta$ for every $j$, where $\delta\ge0$.
+    For $M\ge1$, set
+    $\tau_j=T_{P_j,P_\infty}=\sum_u\overline{P_\infty^u}\otimes P_j^u$.
+    Then
+    \begin{align}
+        \left|\operatorname{Tr}(\tau_0\cdots\tau_{M-1})-1\right|
+        \le C_0M\delta\exp(C_0M\delta).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_sqrt_lipschitz_constant,thm:ldp_ordered_telescoping_bound}
+    The entries of $B_j^\dagger B_j$ are a fixed reshuffling of $T_{B_j}$.
+    That linear reshuffling has bounded norm on the fixed $D^2$-dimensional
+    matrix space. Since $\sigma^\mathsf T\otimes I$ is positive definite,
+    the square-root Lipschitz estimate gives
+    $\|P_j-P_\infty\|\le K_\sigma\delta$.
+    The mixed transfer matrix is linear in $P_j$, so
+    $\|\tau_j-T_\sigma\|\le K'\delta$.
+    The identities $T_\sigma^2=T_\sigma$ and
+    $\operatorname{Tr}(T_\sigma^M)=1$ permit ordered-product telescoping.
+    Finally $(1+x)^M-1\le Mx\exp(Mx)$ gives the stated estimate.
+\end{proof}
+
+For three blocks, the next closed network is the complex overlap
+$z_3=\langle\Omega,\phi_{\mathrm{pos}}\rangle
+    =\operatorname{Tr}(\tau_0\tau_1\tau_2)$.
+The lower row is entrywise conjugated, without reversing its cyclic
+order. Each vertical wire sums the same physical index $u_j$ in the two
+rows. In column-stacking order a doubled bond is indexed by
+$(\hbox{lower bond},\hbox{upper bond})$.
+% TENKZ-ORDERED-MIXING-OVERLAP-BEGIN
+% Formula: z_3 = sum_u Tr(P0^u0 P1^u1 P2^u2)
+% conjugate(Tr(Pinf^u0 Pinf^u1 Pinf^u2)). No normalization factor here.
+% Contractions: both virtual rings and the three physical vertical wires.
+% Boundary: scalar, no open indices.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=3, boundary=periodic]
+        \tn[at=(1,1), name=pzero, skin=box,
+            ports={180:virtual, 0:virtual, 270:physical}]{P_0}
+        \tn[at=(1,2), name=pone, skin=box,
+            ports={180:virtual, 0:virtual, 270:physical}]{P_1}
+        \tn[at=(1,3), name=ptwo, skin=box,
+            ports={180:virtual, 0:virtual, 270:physical}]{P_2}
+        \tn[at=(2,1), name=fzero, skin=box,
+            ports={180:virtual, 0:virtual, 90:physical}]{\overline{P_\infty}}
+        \tn[at=(2,2), name=fone, skin=box,
+            ports={180:virtual, 0:virtual, 90:physical}]{\overline{P_\infty}}
+        \tn[at=(2,3), name=ftwo, skin=box,
+            ports={180:virtual, 0:virtual, 90:physical}]{\overline{P_\infty}}
+        \tnwire{pzero.270}{fzero.90}
+        \tnwire{pone.270}{fone.90}
+        \tnwire{ptwo.270}{ftwo.90}
+    \end{tenkz}
+\end{center}
+% TENKZ-ORDERED-MIXING-OVERLAP-END
+
+\begin{theorem}[Uniform normalized pair approximation]
+    \label{thm:ldp_inhomogeneous_normalized_pairs}
+    \lean{MPSPreparation.ofReal_norm_chainState_sq,
+        MPSPreparation.inner_pairFamilyVector_chainPosState,
+        MPSPreparation.exists_abs_norm_chainState_sq_sub_one_le,
+        MPSPreparation.exists_one_sub_norm_inner_chainPosState_le}
+    \leanok
+    There is $C_1>0$, depending only on $D,\sigma$, such that the following
+    holds. Partition an inhomogeneous ring into $M\ge1$ actual contiguous
+    blocks. Suppose the transfer matrices of each block and of the whole
+    ring differ from $T_\sigma$ by at most $\delta\ge0$. With
+    $\Omega=\bigotimes_j\omega_\sigma$ and
+    $c_N=\|\phi_N\|=\|\phi_{\mathrm{pos}}\|$, one has
+    \begin{align}
+        1-\left|\left\langle\Omega,
+        c_N^{-1}\phi_{\mathrm{pos}}\right\rangle\right|
+        \le C_1M\delta.
+    \end{align}
+    The algebraic convention is $0^{-1}=0$; a normalized quantum state
+    requires $c_N>0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous_mixed_overlap,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner,lem:ldp_block_isometry_state_overlap}
+    The actual whole-ring transfer matrix satisfies
+    $c_N^2=\operatorname{Tr}(T_{B_{\mathrm{whole}}})$, hence
+    $|c_N^2-1|\le K_D\delta$. The preceding theorem bounds
+    $|z_M-1|$, where $z_M=\langle\Omega,\phi_{\mathrm{pos}}\rangle$.
+    The normalization inequality is
+    $1-|z_M|/c_N\le|1-|z_M||+|c_N^2-1|$.
+    For $M\delta\le1$, the exponential factor is bounded by a constant.
+    For $M\delta>1$, use the universal upper bound $1$ on the error.
+\end{proof}
+
+For the circuit blocks of length at least $3D$ and $d\ge2$, the next
+network is the prepared unit vector
+$\psi=(\bigotimes_j W_j)\Omega$ for three blocks. Here $W_j$ is an
+isometric extension of the polar factor, with $W_jP_j=B_j$;
+$P_\infty$ generates the normalized pairs
+$(\omega_\sigma)_{r,l}=(\sqrt\sigma)_{r,l}$.
+The open index $I_j$ is the physical word of block $j$.
+Replacing each $P_\infty$ by $P_j$ gives the unnormalized target, so
+normalization divides that target by $c_N$, not the pair product.
+The condition $D^2\le d^{3D}$ supplies space for the isometric extensions
+even when the Gram matrices are rank deficient. Smaller rings use exact
+preparation, and $d\le1$ is prepared directly in depth zero.
+% TENKZ-ORDERED-MIXING-PREPARATION-BEGIN
+% Formula: psi_I = sum_u prod_j Wj_{Ij,uj} Tr(prod_j Pinf^uj).
+% Each Wj is an isometry; every reference pair has norm one.
+% Contractions: one virtual ring and three physical input wires.
+% Boundary: exactly I0,I1,I2 physical indices up; no virtual boundary.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none]
+        \tn[at=(1,2), name=wzero, skin=box,
+            ports={90:physical:$I_0$, 270:physical}]{W_0}
+        \tn[at=(1,3), name=wone, skin=box,
+            ports={90:physical:$I_1$, 270:physical}]{W_1}
+        \tn[at=(1,4), name=wtwo, skin=box,
+            ports={90:physical:$I_2$, 270:physical}]{W_2}
+        \tn[at=(2,2), name=refzero, skin=box,
+            ports={180:virtual, 0:virtual, 90:physical}]{P_\infty}
+        \tn[at=(2,3), name=refone, skin=box,
+            ports={180:virtual, 0:virtual, 90:physical}]{P_\infty}
+        \tn[at=(2,4), name=reftwo, skin=box,
+            ports={180:virtual, 0:virtual, 90:physical}]{P_\infty}
+        \tnwire{wzero.270}{refzero.90}
+        \tnwire{wone.270}{refone.90}
+        \tnwire{wtwo.270}{reftwo.90}
+        \tnwire{refzero.0}{refone.180}
+        \tnwire{refone.0}{reftwo.180}
+        \tn[at=(2,1), name=leftturn, skin=none,
+            ports={0:virtual, 270:virtual}]{}
+        \tn[at=(3,1), name=leftbottom, skin=none,
+            ports={90:virtual, 0:virtual}]{}
+        \tn[at=(3,5), name=rightbottom, skin=none,
+            ports={180:virtual, 90:virtual}]{}
+        \tn[at=(2,5), name=rightturn, skin=none,
+            ports={270:virtual, 180:virtual}]{}
+        \tnwire{refzero.180}{leftturn.0}
+        \tnwire{leftturn.270}{leftbottom.90}
+        \tnwire{leftbottom.0}{rightbottom.180}
+        \tnwire{rightbottom.90}{rightturn.270}
+        \tnwire{rightturn.180}{reftwo.0}
+    \end{tenkz}
+\end{center}
+% TENKZ-ORDERED-MIXING-PREPARATION-END
+
+\begin{theorem}[Logarithmic preparation from ordered mixing]
+    \label{thm:ldp_inhomogeneous_ordered_mixing_preparation}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
+    \leanok
+    Fix $d,D\ge1$, $K,r>0$, and $\sigma>0$ of trace one. Let $A_N$ be a
+    family of inhomogeneous chains with nonzero periodic states. Suppose
+    every positive contiguous interval $I$ in the ordering $0,\ldots,N-1$ satisfies
+    \begin{align}
+        \left\|T_{E_{A_i}\circ\cdots\circ E_{A_{i+|I|-1}}}
+        -T_\sigma\right\|\le K e^{-r|I|}.
+    \end{align}
+    There is $C$ such that for every $N\ge1$ and $0<\varepsilon\le1$
+    a unit vector $\psi$ can be prepared by physical local gates in depth
+    at most $C\log(N/\varepsilon)$, with
+    $1-|\langle\psi,\phi_N/\|\phi_N\|\rangle|\le\varepsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product}
+    For $1\le q\le N$, partition the ring with
+    $q\le\ell_j\le2q$, putting the remainder into the last block.
+    Both the block and whole-ring transfer errors are at most
+    $\delta=Ke^{-rq}$. The preceding theorem gives pair error at most
+    $C_1KM e^{-rq}\le C_1KN e^{-rq}$. Apply the uniform-rate preparation
+    theorem. If the accuracy-dependent choice of $q$ exceeds $N$, use
+    exact linear-depth preparation. Nonvanishing is required for these
+    short rings as well as for the asymptotic family.
+\end{proof}
+
+
+\begin{theorem}[Uniform preparation above a ring-length cutoff]
+    \label{thm:ldp_inhomogeneous_uniform_rate_from}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from}
+    \leanok
+    \uses{def:ldp_pair_approximable}
+    Fix $N_0\ge0$. Suppose a family of nonzero targets at lengths
+    $N\ge\max(1,N_0)$ has pair error at most $KN^ke^{-rq}$ at every
+    blocking scale $1\le q\le N$, on some partition with
+    $q\le\ell_j\le2q$. Here $K,r>0$ and $k\ge0$ are uniform in $N,q$.
+    Then its normalized states at these same lengths can be approximated
+    to error $0<\varepsilon\le1$ in depth $C\log(N/\varepsilon)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact,lem:ldp_log_threshold_error}
+    For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
+    $a=(k+1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
+    $KN^ke^{-rq}\le\varepsilon$. When $q\le N$, the supplied partition
+    gives depth $O(q)$; when $q>N$, exact preparation gives depth $O(N)$.
+    Both are $O(\log(N/\varepsilon))$, and the one-site case has depth zero.
+    The argument invokes the rate hypothesis only at the current ring
+    length, so restricting it to $N\ge N_0$ changes no physical state.
+\end{proof}
+
+\begin{theorem}[Eventual preparation from ordered mixing]
+    \label{thm:ldp_inhomogeneous_eventual_mixing_preparation}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixing}
+    \leanok
+    Under the uniform ordered-mixing hypothesis of
+    Theorem~\ref{thm:ldp_inhomogeneous_ordered_mixing_preparation}, but
+    without a nonzero-target assumption, there exist $N_0$ and $C$ such
+    that for every $N\ge\max(1,N_0)$ and $0<\varepsilon\le1$, the
+    original normalized periodic state has error at most $\varepsilon$
+    against a unit vector prepared in depth at most $C\log(N/\varepsilon)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product,lem:ldp_log_threshold_error}
+    The whole-ring estimate gives
+    $|\|\phi_N\|^2-1|\le K_DK e^{-rN}$.
+    Choose $N_0$ so that this is at most $1/2$ for $N\ge N_0$.
+    Then $\|\phi_N\|^2\ge1/2$, uniformly before $N$ and $\varepsilon$
+    are chosen. Apply the cutoff version of the rate-to-preparation
+    theorem. No member of the physical family is replaced on short rings.
+\end{proof}
+
+\begin{theorem}[Physical preparation from uniform Choi domination]
+    \label{thm:ldp_inhomogeneous_doeblin_preparation}
+    \lean{MPSPreparation.exists_norm_transferMatrix_sub_le_gram,
+        MPSPreparation.exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination,
+        MPSPreparation.le_norm_chainState_sq_of_choi_domination,
+        MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_choi_domination}
+    \leanok
+    Fix $d,D\ge1$, a faithful density matrix $\sigma$, and $0<\eta\le1$.
+    Suppose every site map of every chain in a family preserves trace,
+    fixes $\sigma$, and satisfies the normalized Choi bound
+    $J(E_{A_i})\ge(\eta/D)(\sigma\otimes I)$.
+    Every positive-length periodic target satisfies $\|\phi_N\|^2\ge\eta>0$.
+    Physical preparation to error
+    $0<\varepsilon\le1$ has depth at most $C\log(N/\varepsilon)$,
+    with one constant for the family.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_chain_positive_part_rate,thm:ldp_inhomogeneous_ordered_mixing_preparation,thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_chain_transfer_product}
+    Split the first map as $E_0=\eta R_\sigma+Q$, with $Q$ completely
+    positive, and let $S$ be the remaining ordered product. Trace preservation
+    gives $R_\sigma S=R_\sigma$. Since a completely positive map has
+    nonnegative supertrace, $\|\phi_N\|^2=\operatorname{Tr}(QS)+\eta\ge\eta$.
+    The inverse Gram reshuffling is a bounded linear permutation of matrix
+    entries. Apply Theorem~\ref{thm:ldp_chain_positive_part_rate} to the
+    actual sites, regarded as blocks of length one. This gives
+    $\|T_{B_I}-T_\sigma\|\le K(1-\eta)^{|I|}$, uniformly in every
+    actual interval. To keep a finite positive logarithmic decay parameter
+    also at $\eta=1$, weaken domination to $\eta/2$ and set
+    $r=-\log(1-\eta/2)>0$. The preceding theorem applies.
+    The transfer bound itself includes both $\eta=0$ and $\eta=1$;
+    preparation with exponential accuracy requires $\eta>0$.
+\end{proof}
