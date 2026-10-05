@@ -111,3 +111,30 @@ theorem mul_mul_exp_neg_div_le_of_le {K M q a b ε : ℝ} (hK : 0 < K) (hM : 1 �
   have hKm : a * Real.log K ≤ a * max (Real.log K) 0 :=
     mul_le_mul_of_nonneg_left (le_max_left _ _) ha.le
   nlinarith
+
+/-- A polynomial-exponential error `K N^k exp(-r q)` is at most `ε` at every
+`N ≥ 1`, `0 < ε ≤ 1`, once `q ≥ a log(N/ε) + b`, with
+`a ≥ max(k,1)/r` and `b ≥ max(log K,0)/r`.
+
+This scalar estimate makes the sufficient block coefficient explicit in the conditional
+inhomogeneous preparation theorem associated with arXiv:2307.01696. In particular `k = 1`
+requires `a ≥ 1/r`; this is a sufficient block coefficient, not an optimal circuit depth. -/
+theorem mul_pow_mul_exp_neg_le_of_le {K r N ε a b q : ℝ} {k : ℕ}
+    (hK : 0 < K) (hr : 0 < r) (hN : 1 ≤ N) (hε : 0 < ε) (hε1 : ε ≤ 1)
+    (ha : max (k : ℝ) 1 / r ≤ a) (hb : max (Real.log K) 0 / r ≤ b)
+    (hq : a * Real.log (N / ε) + b ≤ q) :
+    K * (N ^ k * Real.exp (-(r * q))) ≤ ε := by
+  have hN0 : 0 < N := zero_lt_one.trans_le hN
+  apply mul_mul_exp_neg_le_of_log_le hK (pow_pos hN0 k) hε
+  rw [Real.log_pow]
+  have hra : max (k : ℝ) 1 ≤ r * a := by
+    simpa only [mul_comm] using (div_le_iff₀ hr).mp ha
+  have hrb : Real.log K ≤ r * b :=
+    (le_max_left _ _).trans (by simpa only [mul_comm] using (div_le_iff₀ hr).mp hb)
+  have hlN := Real.log_nonneg hN
+  have hlε := Real.log_nonpos hε.le hε1
+  have hNmul := mul_le_mul_of_nonneg_right ((le_max_left _ _).trans hra) hlN
+  have hεmul := mul_le_mul_of_nonneg_right ((le_max_right _ _).trans hra) (neg_nonneg.mpr hlε)
+  have hrq := mul_le_mul_of_nonneg_left hq hr.le
+  rw [Real.log_div hN0.ne' hε.ne'] at hrq
+  nlinarith only [hrb, hNmul, hεmul, hrq]

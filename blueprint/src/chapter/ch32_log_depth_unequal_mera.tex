@@ -9,6 +9,8 @@ independent of the chain length and the requested accuracy.
 \begin{definition}[Isometry trees with bounded leaves]
     \label{def:ldp_bounded_isometry_tree}
     \lean{MPSPreparation.IsometryTree, MPSPreparation.IsometryTree.matrix,
+        MPSPreparation.IsometryTree.pairIndexEquiv,
+        MPSPreparation.IsometryTree.joinMatrix, MPSPreparation.IsometryTree.joinMatrix_apply,
         MPSPreparation.IsometryTree.matrix_fork_apply,
         MPSPreparation.IsometryTree.cast, MPSPreparation.IsometryTree.matrix_cast}
     \leanok
@@ -31,7 +33,8 @@ independent of the chain length and the requested accuracy.
 
 \begin{theorem}[Isometric contraction of a tree]
     \label{thm:ldp_bounded_tree_isometry}
-    \lean{MPSPreparation.IsometryTree.isIsometry_matrix}
+    \lean{MPSPreparation.IsometryTree.isIsometry_matrix,
+        MPSPreparation.IsometryTree.isIsometry_joinMatrix}
     \leanok
     \uses{def:ldp_bounded_isometry_tree}
     Every tree contraction $T$ satisfies $T^\dagger T=\Id$.
@@ -64,6 +67,83 @@ independent of the chain length and the requested accuracy.
     Injectivity makes $W_{n_1,n_2}$ an isometry. Induction gives the
     two descendants, and at depth zero the polar isometry is itself
     the bounded leaf.
+\end{proof}
+
+\begin{theorem}[Polar trees on a common supported space]
+    \label{thm:ldp_supported_polar_tree}
+    \lean{MPSPreparation.supportedCfgPolarIso,
+        MPSPreparation.isIsometry_supportedCfgPolarIso,
+        MPSPreparation.supportedMergeIso,
+        MPSPreparation.supportedCfgPolarIso_append,
+        MPSPreparation.supportedCfgPolarIso_split,
+        MPSPreparation.supportedCfgPolarIso_eq_joinMatrix_mul,
+        MPSPreparation.isIsometry_supportedMergeIso,
+        MPSPreparation.exists_isometryTree_matrix_eq_supportedCfgPolarIso}
+    \leanok
+    \uses{def:ldp_bounded_isometry_tree, def:ldpolar_injective_on}
+    Let $S$ be a set of bond pairs and let $J\colon\C^\chi\to\C^{D^2}$
+    be an injective coordinate inclusion with range $\C^S$.
+    Suppose that for every $m\ge s\ge1$, the matrices of $A^{[m]}$
+    vanish outside $S$ and span every matrix unit indexed by $S$.
+    Write $A^{[m]}=V_mP_m$ and $\widehat V_m=V_mJ$.
+    Then $\widehat V_m^\dagger\widehat V_m=I_\chi$.
+    For $l,r\ge s$, the polar merge $W_{l,r}$ restricts to
+    $\widehat W_{l,r}=(J^\dagger\otimes J^\dagger)W_{l,r}J$, and
+    \begin{align}
+        \widehat V_{l+r}
+         & =(\widehat V_l\otimes\widehat V_r)\widehat W_{l,r},
+         & \widehat W_{l,r}^\dagger\widehat W_{l,r}            & =I_\chi.
+        \label{eq:ldp_supported_polar_merge}
+    \end{align}
+    Consequently, if $2^h s\le n\le2^h c$, then $\widehat V_n$
+    is a tree of coarse depth $h$ with at most $c$ sites per physical leaf.
+    The same maps act on every superposition of the pairs in $S$.
+    This is the supported-space form of the tree in
+    \cite[eq.~(16), Long-range MPS using measurements]{Malz2024Preparation}.
+
+    % Formula: Vhat_(l+r) = (Vhat_l tensor Vhat_r) What_(l,r).
+    % Source: MSWC24 eq. (16), restricted to the common support S.
+    % Ink-to-index map: virtual wires have dimension chi, not D^2.
+    % Boundary signature on both sides: one C^chi input and ordered H_l,H_r outputs.
+    % Internal contractions: the two C^chi outputs of What and the inputs of Vhat_l,Vhat_r.
+    % No projection, normalization scalar, discarded environment or postselection is suppressed.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+                \tn[skin=box, ports={135:physical:$\mathcal H_l$,
+                            45:physical:$\mathcal H_r$,270:virtual:$\C^\chi$}]{\widehat V_{l+r}}
+            \end{tenkz}
+            =
+            \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+                \tn[at=(1,1), skin=box, name=vl,
+                    ports={90:physical:$\mathcal H_l$,270:virtual}]{\widehat V_l}
+                \tn[at=(1,3), skin=box, name=vr,
+                    ports={90:physical:$\mathcal H_r$,270:virtual}]{\widehat V_r}
+                \tn[at=(2,2), skin=box, name=w,
+                    ports={135:virtual,45:virtual,270:virtual:$\C^\chi$}]{\widehat W_{l,r}}
+                \tnwire{w.135}{vl.270}
+                \tnwire{w.45}{vr.270}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+    Here $\mathcal H_m=(\C^d)^{\otimes m}$.
+    The boxes $\widehat V_m$ denote entire subtrees, not free gates on $m$ sites.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_tensor_injective_on, lem:ldp_polar_merge}
+    The polar support is the coordinate projection $JJ^\dagger$.
+    Thus $V_m$ vanishes outside the selected columns and
+    $J^\dagger V_m^\dagger V_mJ=I_\chi$.
+    Restrict the polar-merge sum to those columns in each child to obtain
+    (\ref{eq:ldp_supported_polar_merge}). With
+    $L=\widehat V_l\otimes\widehat V_r$, this also proves that the
+    image of $\widehat V_{l+r}$ is contained in the image of $L$.
+    Since $L^\dagger L=I$, the restricted merge satisfies
+    $\widehat W^\dagger\widehat W
+        =\widehat V_{l+r}^\dagger\widehat V_{l+r}=I_\chi$.
+    Repeated floor/ceiling splits give the bounded-leaf tree.
 \end{proof}
 
 \begin{definition}[Finite-range networks on unequal blocks]

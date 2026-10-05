@@ -1,0 +1,408 @@
+% Public declaration owners for TorusLabelledBondGeometry,
+% TorusBondFlatConnection and TorusBondClosureSeamMovement.
+% Source: SCP10 paper_v3.tex:1421--1513, thm:2d:closure and
+% eq:2d:closure-intersection; seam deformation eq:2d:move-strings.
+% Existing owners of torusTreeGauge/zmodTransport/IsTorusFlat remain frozen.
+
+\subsection{Labelled bonds and the four cuts}
+
+\begin{definition}[Labelled torus bonds]%
+    \label{def:peps_labelled_bonds}
+    \lean{TNLean.PEPS.TorusLabelledBond,
+        TNLean.PEPS.torusLabelledBondTail,
+        TNLean.PEPS.torusLabelledBondHead}
+    \leanok
+    Let $w,\ell\ge0$ and $\Lambda=\mathbb Z_w\times\mathbb Z_\ell$. A bond is a pair
+    $e=(v,d)$ with $d\in\{\mathrm H,\mathrm V\}$. Its tail $s(e)$
+    and head $t(e)$ are
+    \begin{align}
+        s((x,y),\mathrm H) & =(x,y),   & t((x,y),\mathrm H) & =(x+1,y),\nonumber \\
+        s((x,y),\mathrm V) & =(x,y+1), & t((x,y),\mathrm V) & =(x,y).
+        \label{eq:peps_labelled_endpoints}
+    \end{align}
+    The direction is part of the bond label. At period two, the two bonds
+    connecting the same vertices are distinct; at period one, the head and
+    tail incidences of a loop are distinct.
+\end{definition}
+
+\begin{definition}[Cuts along two seams]%
+    \label{def:peps_labelled_cut}
+    \lean{TNLean.PEPS.torusSeamCutBonds,
+        TNLean.PEPS.mem_torusSeamCutBonds_horizontal,
+        TNLean.PEPS.mem_torusSeamCutBonds_vertical}
+    \leanok
+    \uses{def:peps_labelled_bonds}
+    Suppose $w,\ell>0$. For $c\in\mathbb Z_w$ and $r\in\mathbb Z_\ell$, set
+    \begin{align}
+        E_{c,r}
+         & =\{((x,y),\mathrm H):x+1=c\}
+        \cup\{((x,y),\mathrm V):y+1=r\}.
+        \label{eq:peps_labelled_cut}
+    \end{align}
+    A cut endpoint is a pair $(e,\varepsilon)$ with $e\in E_{c,r}$
+    and $\varepsilon\in\{-,+\}$, recording the tail or the head.
+\end{definition}
+
+\begin{theorem}[The four cuts retain every labelled bond]%
+    \label{thm:peps_labelled_cut_card}
+    \lean{TNLean.PEPS.card_torusLabelledBond_two,
+        TNLean.PEPS.card_torusSeamCutBonds_two,
+        TNLean.PEPS.card_torusCutEndpoint_two,
+        TNLean.PEPS.torusLabelledBond_not_mem_own_cut}
+    \leanok
+    \uses{def:peps_labelled_cut}
+    When $w=\ell=2$, there are eight labelled bonds. Each $E_{c,r}$
+    contains four bonds and has eight distinct endpoints. Every bond
+    $e=((x,y),d)$ is uncut in $E_{x,y}$.
+\end{theorem}
+\begin{proof}\leanok
+    The bond set has $2\cdot2\cdot2=8$ elements. For each of the four
+    choices of $(c,r)$, exactly two horizontal and two vertical bonds
+    satisfy (\ref{eq:peps_labelled_cut}). Each has two endpoints.
+    A bond anchored at $(x,y)$ is outside $E_{x,y}$ because
+    $x+1\ne x$ and $y+1\ne y$ in $\mathbb Z_2$.
+\end{proof}
+
+\begin{definition}[The four incidences at a vertex]%
+    \label{def:peps_labelled_incidence}
+    \lean{TNLean.PEPS.torusIncidentEndpoint,
+        TNLean.PEPS.torusIncidentEndpointEquiv,
+        TNLean.PEPS.card_torusIncidentEndpoint}
+    \leanok
+    \uses{def:peps_labelled_bonds}
+    For $w,\ell>0$, the incidences at $v=(x,y)$ are in bijection with
+    $\{\mathrm H,\mathrm V\}\times\{-,+\}$. The inverse bijection is
+    \begin{align}
+        (\mathrm H,-) & \longmapsto(((x,y),\mathrm H),-),            &
+        (\mathrm H,+) & \longmapsto(((x-1,y),\mathrm H),+),\nonumber   \\
+        (\mathrm V,-) & \longmapsto(((x,y-1),\mathrm V),-),          &
+        (\mathrm V,+) & \longmapsto(((x,y),\mathrm V),+).
+        \label{eq:peps_labelled_incidence}
+    \end{align}
+    Thus every vertex has four incident endpoint indices, including when
+    a period equals one.
+\end{definition}
+
+\subsection{Flat group labels on the actual bonds}
+
+\begin{definition}[Horizontal and vertical bond labels]%
+    \label{def:peps_labelled_pair}
+    \lean{TNLean.PEPS.torusLabelledBondPair}
+    \leanok
+    \uses{def:peps_labelled_bonds}
+    For a group $G$, an assignment $p:E\to G$ has horizontal and vertical
+    components $a_{x,y}=p((x,y),\mathrm H)$ and
+    $b_{x,y}=p((x,y),\mathrm V)$. We write $p=(a,b)$ for these components.
+\end{definition}
+
+\begin{definition}[Vertex gauges on bond labels]%
+    \label{def:peps_bond_gauge}
+    \lean{TNLean.PEPS.torusBondGauge,
+        TNLean.PEPS.torusBondGauge_one,
+        TNLean.PEPS.torusBondGauge_mul,
+        TNLean.PEPS.torusBondGauge_inv}
+    \leanok
+    \uses{def:peps_labelled_pair}
+    A vertex assignment $q:\Lambda\to G$ acts by
+    \begin{align}
+        (q\cdot p)_e     & =q_{t(e)}p_eq_{s(e)}^{-1},\nonumber   \\
+        (q\cdot a)_{x,y} & =q_{x+1,y}a_{x,y}q_{x,y}^{-1},      &
+        (q\cdot b)_{x,y} & =q_{x,y}b_{x,y}q_{x,y+1}^{-1}.
+        \label{eq:peps_bond_gauge}
+    \end{align}
+    Pointwise multiplication of vertex assignments satisfies
+    $1\cdot p=p$, $q\cdot(r\cdot p)=(qr)\cdot p$, and
+    $q^{-1}\cdot(q\cdot p)=p$.
+\end{definition}
+
+\begin{definition}[Flatness in the bond orientation]%
+    \label{def:peps_bond_flat}
+    \lean{TNLean.PEPS.IsTorusBondFlat}
+    \leanok
+    \uses{def:peps_labelled_pair}
+    The assignment $p=(a,b)$ is flat if every plaquette satisfies
+    \begin{align}
+        b_{x+1,y}a_{x,y+1} & =a_{x,y}b_{x,y}.
+        \label{eq:peps_bond_flat}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Gauge invariance of flatness]%
+    \label{thm:peps_bond_flat_gauge}
+    \lean{TNLean.PEPS.IsTorusBondFlat.torusBondGauge,
+        TNLean.PEPS.isTorusBondFlat_torusBondGauge_iff}
+    \leanok
+    \uses{def:peps_bond_gauge,def:peps_bond_flat}
+    For every $q$, the assignment $q\cdot p$ is flat if and only if $p$ is flat.
+\end{theorem}
+\begin{proof}\leanok
+    Multiply (\ref{eq:peps_bond_flat}) on the left by $q_{x+1,y}$
+    and on the right by $q_{x,y+1}^{-1}$. Substitution of
+    (\ref{eq:peps_bond_gauge}) cancels the two intermediate vertex factors
+    on each side. Apply the same calculation with $q^{-1}$ for the converse.
+\end{proof}
+
+\begin{theorem}[Comparison with upward parallel transport]%
+    \label{thm:peps_bond_flat_transport}
+    \lean{TNLean.PEPS.isTorusBondFlat_iff_isTorusFlat}
+    \leanok
+    \uses{def:peps_bond_flat,lem:peps_torus_parallel_section}
+    Bond flatness of $(a,b)$ is equivalent to flatness of the rightward
+    and upward transports $(a,b^{-1})$:
+    $b_{x+1,y}^{-1}a_{x,y}=a_{x,y+1}b_{x,y}^{-1}$.
+\end{theorem}
+\begin{proof}\leanok
+    Multiply (\ref{eq:peps_bond_flat}) on the left by $b_{x+1,y}^{-1}$
+    and on the right by $b_{x,y}^{-1}$, and reverse the resulting equality.
+    Multiplication by the inverse factors gives the converse.
+\end{proof}
+
+\begin{definition}[Standard closure labels]%
+    \label{def:peps_bond_closure}
+    \lean{TNLean.PEPS.torusBondClosureLabels}
+    \leanok
+    \uses{def:peps_labelled_pair}
+    Given $g,h\in G$, the standard closure assignment $\kappa(g,h)$ is
+    \begin{align}
+        \kappa(g,h)^{\mathrm H}_{x,y}
+         & =\begin{cases}h&x+1=0,\\1&x+1\ne0,\end{cases} &
+        \kappa(g,h)^{\mathrm V}_{x,y}
+         & =\begin{cases}g&y+1=0,\\1&y+1\ne0.\end{cases}
+        \label{eq:peps_bond_closure}
+    \end{align}
+    These are the group labels of the two closures in
+    \cite[Theorem~5.5 and Definition~5.6]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Flatness of closure labels]%
+    \label{thm:peps_bond_closure_flat}
+    \lean{TNLean.PEPS.isTorusBondFlat_closure_iff}
+    \leanok
+    \uses{def:peps_bond_flat,def:peps_bond_closure}
+    The assignment $\kappa(g,h)$ is flat if and only if $gh=hg$.
+\end{theorem}
+\begin{proof}\leanok
+    The plaquette at $(-1,-1)$ gives $gh=hg$. Conversely, substituting
+    (\ref{eq:peps_bond_closure}) into (\ref{eq:peps_bond_flat}) gives
+    either $gh=hg$ or an equality with an identity factor.
+\end{proof}
+
+\begin{definition}[Relative bond labels]%
+    \label{def:peps_bond_relative}
+    \lean{TNLean.PEPS.torusBondRelativeLabels,
+        TNLean.PEPS.isTorusBondFlat_relativeLabels}
+    \leanok
+    \uses{def:peps_bond_gauge,thm:peps_bond_flat_gauge}
+    The relative labels of $q$ are $q\cdot1$, namely
+    $p_e=q_{t(e)}q_{s(e)}^{-1}$. They are flat, since the identity
+    assignment is flat and vertex gauges preserve flatness.
+\end{definition}
+
+\begin{definition}[Inverse rooted transport]%
+    \label{def:peps_bond_tree_gauge}
+    \lean{TNLean.PEPS.torusBondTreeGauge}
+    \leanok
+    \uses{thm:peps_torus_flat_connection_gauge}
+    Suppose $w,\ell>0$. For $0\le x<w$ and $0\le y<\ell$, put
+    $A_x=a_{x-1,0}\cdots a_{0,0}$ and
+    $B_{x,y}=b_{x,y-1}^{-1}\cdots b_{x,0}^{-1}$, with empty products
+    equal to $1$. Define $q_{x,y}=(B_{x,y}A_x)^{-1}$.
+\end{definition}
+
+\begin{theorem}[Reduction to the two based holonomies]%
+    \label{thm:peps_bond_tree_closure}
+    \lean{TNLean.PEPS.IsTorusBondFlat.torusBondGauge_tree}
+    \leanok
+    \uses{def:peps_bond_tree_gauge,def:peps_bond_flat,def:peps_bond_closure}
+    If $p$ is flat, then the inverse rooted transport satisfies
+    $q\cdot p=\kappa(B_{0,\ell}^{-1},A_w)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge}
+    Apply the two rooted-transport identities of
+    Theorem~\ref{thm:peps_torus_flat_connection_gauge} to $(a,b^{-1})$.
+    The horizontal identity is the claimed horizontal component.
+    Invert the vertical identity to obtain the downward component.
+\end{proof}
+
+\begin{theorem}[Classification of flat labelled-bond assignments]%
+    \label{thm:peps_bond_flat_classification}
+    \lean{TNLean.PEPS.exists_torusBondGauge_eq_closure,
+        TNLean.PEPS.isTorusBondFlat_iff_exists_eq_gauge_closure}
+    \leanok
+    \uses{def:peps_bond_flat,def:peps_bond_closure,def:peps_bond_gauge}
+    For every $w,\ell>0$, a bond assignment is flat if and only if
+    $p=q\cdot\kappa(g,h)$ for some vertex assignment $q$ and commuting
+    $g,h$. Equivalently, a flat assignment admits $q$ with
+    $q\cdot p=\kappa(g,h)$. This includes periods one and two.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge,
+        thm:peps_bond_tree_closure,thm:peps_bond_closure_flat,
+        thm:peps_bond_flat_gauge,def:peps_bond_gauge}
+    The based holonomies $B_{0,\ell}$ and $A_w$ commute, hence so do
+    $g=B_{0,\ell}^{-1}$ and $h=A_w$. Theorem~\ref{thm:peps_bond_tree_closure} gives $q\cdot p=\kappa(g,h)$; applying $q^{-1}$ gives
+    the other form. Conversely, commuting closure labels are flat and
+    remain flat under a vertex gauge.
+\end{proof}
+
+\begin{theorem}[Gauge invariance of a finite orbit sum]%
+    \label{thm:peps_bond_gauge_average}
+    \lean{TNLean.PEPS.sum_torusBondGauge}
+    \leanok
+    \uses{def:peps_bond_gauge}
+    Suppose $G$ is finite and $w,\ell>0$. For any function $f$ on bond
+    assignments with values in a commutative additive monoid,
+    $\sum_r f(r\cdot(q\cdot p))=\sum_r f(r\cdot p)$.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute $r\cdot(q\cdot p)=(rq)\cdot p$ and reindex the sum
+    by the bijection $r\mapsto rq$ of vertex assignments.
+\end{proof}
+
+\subsection{Moving the commuting seams}
+
+\begin{definition}[Closure labels on arbitrary seams]%
+    \label{def:peps_bond_closure_at}
+    \lean{TNLean.PEPS.torusBondClosureLabelsAt,
+        TNLean.PEPS.torusBondClosureLabelsAt_zero}
+    \leanok
+    \uses{def:peps_bond_closure}
+    Define $\kappa_{c,r}(g,h)$ by replacing $x+1=0$ and $y+1=0$
+    in (\ref{eq:peps_bond_closure}) by $x+1=c$ and $y+1=r$.
+    In particular, $\kappa_{0,0}(g,h)=\kappa(g,h)$.
+\end{definition}
+
+\begin{definition}[Gauge moving both seams]%
+    \label{def:peps_bond_seam_gauge}
+    \lean{TNLean.PEPS.torusBondClosureSeamGauge}
+    \leanok
+    \uses{def:peps_four_cut_common_seam_gauge}
+    For $w,\ell>0$, write $s_{k,c}(x)=k^{-1}$ when the least
+    nonnegative representatives satisfy $x<c$, and $s_{k,c}(x)=1$
+    otherwise. Set $q_{c,r}(x,y)=s_{g^{-1},r}(y)s_{h,c}(x)$.
+\end{definition}
+
+\begin{theorem}[Commuting closure seams can be moved]%
+    \label{thm:peps_bond_seam_movement}
+    \lean{TNLean.PEPS.torusBondGauge_horizontalClosureAt,
+        TNLean.PEPS.torusBondGauge_verticalClosureAt,
+        TNLean.PEPS.torusBondGauge_closureSeamGauge,
+        TNLean.PEPS.exists_torusBondGauge_eq_closureAt}
+    \leanok
+    \uses{def:peps_bond_seam_gauge,def:peps_bond_closure_at,
+        def:peps_bond_gauge}
+    If $gh=hg$ and $w,\ell>0$, then
+    \begin{align}
+        s_{h,c}\cdot\kappa_{0,r}(g,h)      & =\kappa_{c,r}(g,h),\nonumber \\
+        s_{g^{-1},r}\cdot\kappa_{c,0}(g,h) & =\kappa_{c,r}(g,h),\nonumber \\
+        q_{c,r}\cdot\kappa(g,h)            & =\kappa_{c,r}(g,h).
+        \label{eq:peps_bond_move_seams}
+    \end{align}
+    In the first two lines, a one-coordinate function denotes its pullback
+    to $\Lambda$. The first line needs only $w>0$ and the second only
+    $\ell>0$. The last line in particular supplies a vertex gauge taking
+    the standard closure to any chosen pair of seams. It is the
+    group-valued form of the string movement in
+    \cite[Section~5]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_seam_gauge,def:peps_bond_gauge}
+    The one-dimensional seam identity gives the changed horizontal
+    component. Every value of $s_{h,c}$ commutes with $g$, so conjugation
+    leaves the vertical component fixed. The inverse-label seam identity
+    gives the vertical movement, while commutation fixes the horizontal
+    component. Compose the horizontal gauge and then the vertical gauge;
+    their pointwise product is $q_{c,r}$.
+\end{proof}
+
+\begin{theorem}[The orbit sum is independent of the seams]%
+    \label{thm:peps_bond_seam_average}
+    \lean{TNLean.PEPS.sum_torusBondGauge_closureAt}
+    \leanok
+    \uses{def:peps_bond_closure_at,def:peps_bond_gauge}
+    For finite $G$, positive periods, commuting $g,h$, and any function
+    $f$ into a commutative additive monoid,
+    $\sum_q f(q\cdot\kappa_{c,r}(g,h))
+        =\sum_q f(q\cdot\kappa(g,h))$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_bond_seam_movement,thm:peps_bond_gauge_average}
+    Replace $\kappa_{c,r}(g,h)$ using (\ref{eq:peps_bond_move_seams})
+    and reindex the orbit sum by multiplication with $q_{c,r}$.
+\end{proof}
+
+\begin{definition}[Closure assignments indexed by individual bonds]%
+    \label{def:peps_labelled_closure}
+    \lean{TNLean.PEPS.torusLabelledClosure,
+        TNLean.PEPS.torusLabelledClosureAt}
+    \leanok
+    \uses{def:peps_labelled_pair,def:peps_bond_closure_at}
+    On individual bonds, write $\kappa_e(g,h)$ and
+    $\kappa_{c,r;e}(g,h)$ for the assignments whose horizontal and
+    vertical components are $\kappa(g,h)$ and $\kappa_{c,r}(g,h)$.
+\end{definition}
+
+\begin{theorem}[Shifted closure support]%
+    \label{thm:peps_labelled_closure_support}
+    \lean{TNLean.PEPS.torusLabelledClosureAt_eq_one_of_not_mem}
+    \leanok
+    \uses{def:peps_labelled_closure,def:peps_labelled_cut}
+    If $e\notin E_{c,r}$, then $\kappa_{c,r;e}(g,h)=1$.
+\end{theorem}
+\begin{proof}\leanok
+    In each direction, being outside the cut makes the seam condition false.
+\end{proof}
+
+\begin{theorem}[Seam movement on individual bonds]%
+    \label{thm:peps_labelled_closure_gauge}
+    \lean{TNLean.PEPS.exists_torusLabelledClosureGauge}
+    \leanok
+    \uses{def:peps_labelled_closure,def:peps_labelled_bonds}
+    For positive periods and commuting $g,h$, there exists $q:\Lambda\to G$
+    such that $q_{t(e)}\kappa_e(g,h)q_{s(e)}^{-1}
+        =\kappa_{c,r;e}(g,h)$ for every bond $e$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_bond_seam_movement}
+    Take the gauge of Theorem~\ref{thm:peps_bond_seam_movement} and
+    read its horizontal or vertical equality according to the direction of $e$.
+\end{proof}
+
+\begin{theorem}[Flatness classification on individual bonds]%
+    \label{thm:peps_labelled_flat_classification}
+    \lean{TNLean.PEPS.exists_torusLabelledBondGauge_eq_closure}
+    \leanok
+    \uses{def:peps_labelled_pair,def:peps_bond_flat,def:peps_labelled_closure}
+    For positive periods, every flat assignment $p:E\to G$ admits a
+    vertex assignment $q$ and commuting $g,h$ with
+    $q_{t(e)}p_eq_{s(e)}^{-1}=\kappa_e(g,h)$ for every $e$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_bond_flat_classification}
+    Classify the horizontal and vertical components, then evaluate the
+    resulting pair of equalities in the direction of each bond.
+\end{proof}
+
+\begin{theorem}[Relative labels on the four uncut bonds]%
+    \label{thm:peps_labelled_uncut_flat}
+    \lean{TNLean.PEPS.torusPlaquette_flat_of_uncut_relative}
+    \leanok
+    \uses{def:peps_labelled_cut,def:peps_labelled_pair}
+    Let $w=\ell=2$. Suppose $p_e=q_{t(e)}q_{s(e)}^{-1}$ for every
+    $e\notin E_{c,r}$. Then
+    $b_{c+1,r}a_{c,r+1}=a_{c,r}b_{c,r}$.
+\end{theorem}
+\begin{proof}\leanok
+    The four bonds in this equality are uncut. Substitution gives
+    \begin{align}
+        b_{c+1,r}a_{c,r+1}
+         & =q_{c+1,r}q_{c+1,r+1}^{-1}
+        q_{c+1,r+1}q_{c,r+1}^{-1}
+        =q_{c+1,r}q_{c,r+1}^{-1},\nonumber             \\
+        a_{c,r}b_{c,r}
+         & =q_{c+1,r}q_{c,r}^{-1}q_{c,r}q_{c,r+1}^{-1}
+        =q_{c+1,r}q_{c,r+1}^{-1}.
+        \label{eq:peps_labelled_uncut_flat}
+    \end{align}
+\end{proof}

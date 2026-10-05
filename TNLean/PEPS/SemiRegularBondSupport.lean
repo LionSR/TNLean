@@ -40,16 +40,45 @@ theorem endpointEmbeddingMatrix_isIsometry {α β : Type*}
     simp [hri]
   · simp
 
-private theorem endpointEmbeddingMatrix_mulVec_image {α β : Type*}
+/-- An endpoint inclusion recovers each original coordinate at its image. -/
+theorem endpointEmbeddingMatrix_mulVec_image {α β : Type*}
     [Fintype β] [DecidableEq α] (e : β ↪ α) (x : β → ℂ) (i : β) :
     (endpointEmbeddingMatrix e *ᵥ x) (e i) = x i := by
   classical
   simp [Matrix.mulVec, dotProduct, endpointEmbeddingMatrix, e.injective.eq_iff]
 
+/-- An endpoint inclusion vanishes outside the embedded coordinate set. -/
+theorem endpointEmbeddingMatrix_mulVec_eq_zero_of_notMem_range {α β : Type*}
+    [Fintype β] [DecidableEq α] (e : β ↪ α) (x : β → ℂ) (a : α)
+    (ha : a ∉ Set.range e) : (endpointEmbeddingMatrix e *ᵥ x) a = 0 := by
+  apply Finset.sum_eq_zero
+  intro b _
+  have hne : a ≠ e b := fun h => ha ⟨b, h.symm⟩
+  simp only [endpointEmbeddingMatrix, hne, ↓reduceIte, zero_mul]
+
+/-- The range of a coordinate inclusion consists precisely of vectors
+vanishing off the included coordinates. -/
+theorem mem_range_endpointEmbeddingMatrix_iff {α β : Type*}
+    [Fintype β] [DecidableEq α] (e : β ↪ α) (ψ : α → ℂ) :
+    ψ ∈ (Matrix.mulVecLin (endpointEmbeddingMatrix e)).range ↔
+      ∀ a, a ∉ Set.range e → ψ a = 0 := by
+  constructor
+  · rintro ⟨χ, rfl⟩ a ha
+    exact endpointEmbeddingMatrix_mulVec_eq_zero_of_notMem_range e χ a ha
+  · intro hψ
+    refine ⟨fun b => ψ (e b), ?_⟩
+    funext a
+    by_cases ha : a ∈ Set.range e
+    · obtain ⟨b, rfl⟩ := ha
+      exact endpointEmbeddingMatrix_mulVec_image e _ b
+    · exact (endpointEmbeddingMatrix_mulVec_eq_zero_of_notMem_range e _ a ha).trans
+        (hψ a ha).symm
+
 variable {I : Type*} [Fintype I] [DecidableEq I]
 variable (ν : I → Type*) [∀ i, Fintype (ν i)] [∀ i, DecidableEq (ν i)]
 
-private def matchingEndpointEmbedding :
+/-- Regard two coordinates in the same block as a pair of full endpoint coordinates. -/
+def matchingEndpointEmbedding :
     (Σ i, ν i × ν i) ↪ ((Σ i, ν i) × (Σ i, ν i)) where
   toFun c := (⟨c.1, c.2.1⟩, ⟨c.1, c.2.2⟩)
   inj' := by

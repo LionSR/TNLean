@@ -5,7 +5,7 @@
 \input{command}
 \title{Commuting Parent Hamiltonians of $G$-Isometric Tensors: the Projector and the Scope}
 \author{}
-\date{2026-10-01}
+\date{2026-10-05}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -124,34 +124,71 @@ $c$ times the three-site operator of the same form. The two translated terms
 on any three consecutive sites of a ring commute, and terms with disjoint
 supports commute trivially.
 
-\section{Scope}
-The formalization proves the theorem for matrix product states, the case in
-which the source writes the proof, on every ring of $N\ge 3$ sites. Two
-restrictions remain.
-\begin{enumerate}
-    \item \emph{Two dimensions.} The source states the theorem for PEPS. The
-    two-dimensional parent Hamiltonian, with local terms on $2\times2$
-    plaquettes, and the operator $P$ for a plaquette are not formalized. The
-    stability of $G$-isometry under the contraction of one link of two PEPS
-    tensors, which the plaquette operator would use, is formalized
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
-    \item \emph{Rings of two sites.} On a ring of two sites the two
-    translated terms act on the same pair of sites in opposite orders, and
-    the three-site argument does not apply. The source does not discuss this
-    case.
-\end{enumerate}
+\section{Two-dimensional regional projectors}
+For a finite simple graph, assign a group label $\alpha_{v,e}$ to each
+half-edge. The actual canonical regular open-region range consists exactly
+of functions invariant under independent left multiplication at the region
+vertices and simultaneous right multiplication at the ends of each internal
+edge, and vanishing unless there is a vertex assignment $k$ with
+$k_v^{-1}\alpha_{v,e}=k_w^{-1}\alpha_{w,e}$ on every internal edge $e=(v,w)$.
+This equality is proved from the original open-region contraction, including
+all independent dangling boundary labels; neither a rank formula nor
+connectedness is assumed.
 
-\section{Verdict and elimination plan}
-The note is a scope restriction: the commutation theorem, stated for PEPS,
-is formalized for matrix product states on rings of at least three sites;
-the lemma on the form of the local terms, stated for matrix product states,
-is formalized as stated, with the local fix that its operator is $1-h_i$.
-Elimination: formalize the two-dimensional parent Hamiltonian on plaquettes,
-build the plaquette operator from the contraction of the four tensors of a
-plaquette, which is $G$-isometric, and run the same computation with the two-site operator replaced by the plaquette
-operator; for the ring of two sites, compute the product of the two terms
-with the transfer identity
-$\sum_b(A^b)^\dagger YA^b=c\,|G|^{-1}\sum_h\operatorname{tr}[L_h^{-1}Y]L_h$.
+Let $A_v$ average the left action at vertex $v$, $B_e$ average the shared
+right action on edge $e$, and $D_R$ be the diagonal indicator of this flat
+locus on a region $R$. The extended actual regional range projector is
+\[
+  Q_R=\left(\prod_{v\in R}A_v\right)
+       \left(\prod_{e\subseteq R}B_e\right)D_R.
+\]
+Left and right multiplication commute. Averages on distinct vertices or
+edges act on distinct half-edge coordinates; coincident averages are
+identical. Flatness is invariant under every left vertex action and shared
+right edge action, and the $D_R$ are diagonal. Thus $Q_RQ_S=Q_SQ_R$ for
+arbitrary overlapping regions.
+
+For the original physical site maps, local $G$-isometry gives
+$A^\dagger A=cE$ with $c>0$ and $E$ the regular invariant projector.
+A supported orthogonal projector $Q$ is transported to
+$c^{-1}AQA^\dagger$, whose range is exactly the original physical regional
+range. Its intertwining relation is $PA=AQ$.
+No surjectivity onto the ambient physical space is imposed. The normalized
+local adjoints give nonzero physical site-image projectors $J_v$; nonzero
+follows from the constant vector in the regular invariant subspace.
+
+The physical regional projectors commute with every product of site-image
+projectors. For regions $R,S$, their commutator is supported on $R\cup S$
+and absorbs the product of site-image projectors there. Its product with
+the full product of site maps is zero by the virtual commutation. Multiplying
+by the product of normalized adjoints and canceling the nonzero complementary
+site-image factor therefore makes the commutator zero on the entire physical
+space, including unused local physical directions. The parent interactions
+are the complements of these range projectors and consequently commute.\footnote{
+The source-facing statement is
+\texttt{regularIsometric\_canonicalRegionParentInteractions\_commute} in
+\path{TNLean/PEPS/ParentHamiltonian/GIsometricRegionParentHamiltonian.lean}.
+Its hypotheses are local regular $G$-isometry; all support, nonzero-image,
+and regional intertwining identities are derived.}
+
+\section{Scope and verdict}
+The two-dimensional commutation assertion is now proved for the original
+canonical physical parent interactions on every finite simple graph and
+arbitrary overlapping regions. In particular, it covers plaquette terms on
+ordinary square tori represented by this graph convention. The source's
+projector-complement error is corrected as in
+\eqref{eq:scp10_local_term}.
+
+A residual indexing restriction remains: the simple-graph description does
+not encode self-loops or parallel bonds in degenerate periodic presentations.
+The older matrix-product theorem still states $N\geq3$ and does not by itself
+cover the two-site periodic double-bond convention. Square tori with both
+periods at least three have no such issue. No assertion about those smaller
+periodic presentations is inferred from the finite-simple-graph theorem.
+Eliminating this last restriction requires an incidence description retaining
+multiple half-edge occurrences, or a direct proof for the exceptional
+periodic contractions; it does not require another two-dimensional range or
+physical-transport hypothesis.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -1,0 +1,221 @@
+\subsection{Contractions with independently sized bonds}
+\label{sec:peps_dependent_networks}
+
+Let $\mathcal V$ and $\mathcal E$ be finite sets of vertices and labelled
+oriented bonds, with tail and head maps $t,h:\mathcal E\to\mathcal V$.
+Each bond $e$ has its own finite alphabet $X_e$, and each vertex $v$ has its
+own physical alphabet $Y_v$. Parallel bonds remain distinct; a bond with
+$t(e)=h(e)$ has two distinct incidences. These conventions express the
+linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
+% Source: Papers/1001.3807/paper_v3.tex:1310--1316; the generic finite
+% multigraph notation below is auxiliary to thm:2d:closure.
+
+\begin{definition}[Independent incidence coordinates]%
+    \label{def:peps_dependent_incidence}
+    \lean{TNLean.PEPS.DependentBondNetwork.Endpoint,
+        TNLean.PEPS.DependentBondNetwork.endpointVertex,
+        TNLean.PEPS.DependentBondNetwork.IncidentEndpoint,
+        TNLean.PEPS.DependentBondNetwork.EndpointConfig,
+        TNLean.PEPS.DependentBondNetwork.LocalConfig,
+        TNLean.PEPS.DependentBondNetwork.endpointSiteEquiv,
+        TNLean.PEPS.DependentBondNetwork.endpointSiteEquiv_apply,
+        TNLean.PEPS.DependentBondNetwork.endpointSiteEquiv_symm_apply,
+        TNLean.PEPS.DependentBondNetwork.endpointPairEquiv,
+        TNLean.PEPS.DependentBondNetwork.endpointPairEquiv_apply}
+    \leanok
+    The incidence set is $\mathcal E\times\{-,+\}$, where $-$ is the tail
+    and $+$ the head. Put $I_v=\{(e,\epsilon):v(e,\epsilon)=v\}$ and
+    $\mathcal X_v=\prod_{(e,\epsilon)\in I_v}X_e$.
+    An incidence configuration $\beta$ assigns $\beta_{e,\epsilon}\in X_e$
+    independently. Restriction to $I_v$ defines a bijection
+    $R:\prod_{e,\epsilon}X_e\to\prod_v\mathcal X_v$ with
+    $(R\beta)_v(e,\epsilon)=\beta_{e,\epsilon}$; its inverse reads the
+    coordinate in the unique incident vertex. The bond-pair bijection is
+    $S\beta=(\beta_{e,+},\beta_{e,-})_{e\in\mathcal E}$.
+\end{definition}
+
+\begin{theorem}[Incidence products and sums]%
+    \label{thm:peps_dependent_incidence_sums}
+    \lean{TNLean.PEPS.DependentBondNetwork.prod_incident_eq_prod_endpoint,
+        TNLean.PEPS.DependentBondNetwork.prod_endpoint_eq_prod_edge,
+        TNLean.PEPS.DependentBondNetwork.prod_incident_eq_prod_edge,
+        TNLean.PEPS.DependentBondNetwork.sum_endpoint_prod_eq_prod_sum}
+    \leanok
+    \uses{def:peps_dependent_incidence}
+    For factors in any commutative monoid,
+    $\prod_v\prod_{p\in I_v}f(p)=\prod_p f(p)
+        =\prod_e f(e,-)f(e,+)$. For functions $f_e:X_e^2\to R$ into a
+    commutative semiring,
+    \begin{align}
+        \sum_\beta\prod_e f_e(\beta_{e,+},\beta_{e,-})
+        =\prod_e\sum_{a,b\in X_e}f_e(a,b).
+        \label{eq:peps_dependent_incidence_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The sets $I_v$ partition the incidence set. Regroup first by this
+    partition and then by the two signs of each bond. For the sum, change
+    coordinates by $S$ and apply finite distributivity.
+\end{proof}
+
+\begin{definition}[Contraction and arbitrary cut boundary]%
+    \label{def:peps_dependent_network}
+    \lean{TNLean.PEPS.DependentBondNetwork.bondWeight,
+        TNLean.PEPS.DependentBondNetwork.network,
+        TNLean.PEPS.DependentBondNetwork.network_eq_sum_site}
+    \leanok
+    \uses{def:peps_dependent_incidence}
+    Let $A_v(\eta,s)$ be the coefficient of a tensor with virtual
+    configuration $\eta\in\mathcal X_v$ and physical index $s\in Y_v$.
+    For matrices $B_e\in\operatorname{Mat}_{X_e}(\C)$ define
+    $w_B(\beta)=\prod_e B_e(\beta_{e,+},\beta_{e,-})$ and
+    \begin{align}
+        \mathcal N_A(B)(\sigma)
+         & =\sum_\beta w_B(\beta)\prod_v A_v((R\beta)_v,\sigma_v)
+        \label{eq:peps_dependent_network}                         \\
+         & =\sum_{\eta\in\prod_v\mathcal X_v}
+        w_B(R^{-1}\eta)\prod_v A_v(\eta_v,\sigma_v).\nonumber
+    \end{align}
+    Thus every matrix has its head index as row and tail index as column.
+    The second expression is the change of coordinates by $R$.
+\end{definition}
+
+\begin{definition}[The full cut range]%
+    \label{def:peps_dependent_cut}
+    \lean{TNLean.PEPS.DependentBondNetwork.CutEndpoint,
+        TNLean.PEPS.DependentBondNetwork.CutConfig,
+        TNLean.PEPS.DependentBondNetwork.cutRestriction,
+        TNLean.PEPS.DependentBondNetwork.cutInteriorWeight,
+        TNLean.PEPS.DependentBondNetwork.cutCoeff,
+        TNLean.PEPS.DependentBondNetwork.cutMap,
+        TNLean.PEPS.DependentBondNetwork.cutMap_apply,
+        TNLean.PEPS.DependentBondNetwork.cutSpace,
+        TNLean.PEPS.DependentBondNetwork.mem_cutSpace_iff}
+    \leanok
+    \uses{def:peps_dependent_network}
+    For $C\subseteq\mathcal E$, let $\partial C=C\times\{-,+\}$ and
+    $\mathcal X_{\partial C}=\prod_{(e,\epsilon)\in\partial C}X_e$.
+    Write $r_C\beta=\beta|_{\partial C}$ and
+    $w_C(\beta)=\prod_{e\notin C}\delta_{\beta_{e,+},\beta_{e,-}}$.
+    The linear cut map is
+    \begin{align}
+        \mathcal C_{A,C}(M)(\sigma)
+        =\sum_\beta M(r_C\beta)w_C(\beta)
+        \prod_v A_v((R\beta)_v,\sigma_v),
+        \qquad M\in\C^{\mathcal X_{\partial C}}.
+        \label{eq:peps_dependent_cut}
+    \end{align}
+    Its range is $\mathcal S_{A,C}=\operatorname{im}\mathcal C_{A,C}$.
+    Equivalently, $\psi\in\mathcal S_{A,C}$ if and only if one $M$ satisfies
+    $\mathcal C_{A,C}(M)(\sigma)=\psi(\sigma)$ for every $\sigma$.
+    The function $M$ may correlate all cut indices.
+\end{definition}
+
+\begin{theorem}[Fixed cut configurations and bond matrices]%
+    \label{thm:peps_dependent_cut_basis}
+    \lean{TNLean.PEPS.DependentBondNetwork.cutMap_eq_sum_single,
+        TNLean.PEPS.DependentBondNetwork.cutSpace_eq_span_single,
+        TNLean.PEPS.DependentBondNetwork.cutBondBoundary,
+        TNLean.PEPS.DependentBondNetwork.cutBondBoundary_restriction,
+        TNLean.PEPS.DependentBondNetwork.cutCoeff_bondBoundary,
+        TNLean.PEPS.DependentBondNetwork.cutBondUnits,
+        TNLean.PEPS.DependentBondNetwork.cutBondBoundary_units,
+        TNLean.PEPS.DependentBondNetwork.cutMap_single_eq_network}
+    \leanok
+    \uses{def:peps_dependent_cut}
+    Let $\delta_\eta$ denote a coordinate vector on $\mathcal X_{\partial C}$.
+    Then
+    \begin{align}
+        \mathcal C_{A,C}(M) & =\sum_\eta M(\eta)\mathcal C_{A,C}(\delta_\eta),
+        \label{eq:peps_dependent_cut_basis}                                     \\
+        \mathcal S_{A,C}    & =\spn_{\C}\{\mathcal C_{A,C}(\delta_\eta):\eta\}.
+        \nonumber
+    \end{align}
+    A matrix family determines the particular boundary
+    $M_B(\eta)=\prod_{e\in C}B_e(\eta_{e,+},\eta_{e,-})$.
+    Its value at $r_C\beta$ is the product of these same cut-bond factors,
+    and $\mathcal C_{A,C}(M_B)=\mathcal N_A(B^C)$, where $B^C_e=B_e$ on
+    $C$ and $B^C_e=I$ elsewhere. Define $E^\eta_e$ to be the matrix unit
+    $|\eta_{e,+}\rangle\langle\eta_{e,-}|$ on $C$, and $I$ elsewhere.
+    Then $M_{E^\eta}=\delta_\eta$ and
+    $\mathcal C_{A,C}(\delta_\eta)=\mathcal N_A(E^\eta)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_dependent_cut, def:peps_dependent_network}
+    Expand $M=\sum_\eta M(\eta)\delta_\eta$ and use linearity.
+    In the contraction with $M_B$, the factors on $C$ are the entries of
+    $B_e$, and the remaining factors are identity entries. Products of
+    matrix-unit entries equal one exactly when all cut coordinates equal
+    $\eta$, proving the last assertions without factoring a general $M$.
+\end{proof}
+
+\begin{definition}[Products of independently sized physical maps]%
+    \label{def:peps_dependent_physical_product}
+    \lean{TNLean.PEPS.dependentPhysicalProductFamilyMatrix,
+        TNLean.PEPS.dependentPhysicalProductFamilyMap,
+        TNLean.PEPS.dependentPhysicalProductFamilyMap_apply}
+    \leanok
+    For finite input alphabets $J_v$, arbitrary output alphabets $K_v$, and
+    matrices $F_v: \C^{J_v}\to\C^{K_v}$, put
+    $(\bigotimes_v F_v)_{\tau,\sigma}=\prod_v F_v(\tau_v,\sigma_v)$.
+    The associated linear map $\mathcal F$ satisfies
+    \begin{align}
+        \mathcal F\psi(\tau)=\sum_\sigma\prod_vF_v(\tau_v,\sigma_v)\psi(\sigma).
+        \label{eq:peps_dependent_physical_product}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Products, single-coordinate actions, and fixed slices]%
+    \label{thm:peps_dependent_product_calculus}
+    \lean{TNLean.PEPS.dependentPhysicalProductFamilyMatrix_mul,
+        TNLean.PEPS.dependentPhysicalProductFamilyMap_comp,
+        TNLean.PEPS.dependentPhysicalProductFamilyMatrix_one,
+        TNLean.PEPS.dependentPhysicalProductFamilyMap_one,
+        TNLean.PEPS.dependentPhysicalProductFamilyMap_oneCoordinate_apply,
+        TNLean.PEPS.dependentPhysicalProductFamilyMap_fixed_of_slices_fixed}
+    \leanok
+    \uses{def:peps_dependent_physical_product}
+    Products compose coordinatewise: $(\bigotimes_vF_v)(\bigotimes_vL_v)
+        =\bigotimes_v(F_vL_v)$, at both the matrix and linear-map levels.
+    Products of identities are identities. The product with $P_v$ at one
+    coordinate and identities elsewhere acts by
+    $\psi(\tau)\mapsto\sum_sP_v(\tau_v,s)\psi(\tau[v\leftarrow s])$.
+    If each $P_v$ fixes every slice $s\mapsto\psi(\tau[v\leftarrow s])$,
+    then $\bigotimes_vP_v$ fixes $\psi$; the $P_v$ need not be projections.
+\end{theorem}
+\begin{proof}\leanok
+    Finite distributivity separates the intermediate sum in a matrix product
+    into one sum at each coordinate. Identity entries force equality of
+    the remaining coordinates. For the fixed-vector assertion, induct on
+    the finite set of coordinates at which $P_v$ replaces the identity,
+    using the one-coordinate formula and coordinatewise composition.
+\end{proof}
+
+\begin{theorem}[A product range is determined by its slices]%
+    \label{thm:peps_dependent_product_range}
+    \lean{TNLean.PEPS.dependentPhysicalProductFamilyMap_slice_mem_range,
+        TNLean.PEPS.mem_range_dependentPhysicalProductFamilyMap_iff}
+    \leanok
+    \uses{def:peps_dependent_physical_product}
+    Every one-coordinate slice of $\mathcal F\chi$ lies in
+    $\operatorname{im}F_v$. If all input and output alphabets are finite,
+    the converse holds:
+    \begin{align}
+        \psi\in\operatorname{im}\mathcal F
+        \quad\Longleftrightarrow\quad
+        \forall v,\tau,\quad
+        \bigl(s\mapsto\psi(\tau[v\leftarrow s])\bigr)\in\operatorname{im}F_v.
+        \label{eq:peps_dependent_product_range}
+    \end{align}
+    Empty alphabets, an empty vertex set, zero matrices, and different local
+    ranks are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_product_calculus}
+    For the forward implication, expand a slice as a sum of columns of
+    $F_v$, with coefficients obtained by contracting all other coordinates.
+    For each $v$, choose a linear right inverse on $\operatorname{im}F_v$
+    and extend it to a map $L_v$ on the output space. Thus $F_vL_v$ fixes
+    every slice. The preceding theorem gives
+    $(\bigotimes_vF_vL_v)\psi=\psi$, so $(\bigotimes_vL_v)\psi$ is a preimage.
+\end{proof}
