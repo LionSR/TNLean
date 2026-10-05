@@ -84,13 +84,22 @@ theorem toTensor_eq_repeatedBlockSum (P : SectorDecomposition d) :
   funext i
   rw [toTensor, toTensorFromBlocks_eq_sum_blockInclusion]
   unfold repeatedBlockSum
-  rw [← Fintype.sum_sigma, ← Equiv.sum_comp P.flatIndexEquiv.symm]
+  rw [← Fintype.sum_sigma', ← Equiv.sum_comp P.flatIndexEquiv.symm]
   refine Finset.sum_congr rfl fun s _ => ?_
   have hι :
       coordEmbedding (P.copyCoord (P.flatIndexEquiv.symm s).1
         (P.flatIndexEquiv.symm s).2) = blockInclusion P.flatDim s := by
     ext x a
-    simp [coordEmbedding, copyCoord, blockInclusion_apply]
+    have hs : P.flatIndexEquiv
+        ⟨(P.flatIndexEquiv.symm s).1, (P.flatIndexEquiv.symm s).2⟩ = s :=
+      P.flatIndexEquiv.apply_symm_apply s
+    have hc : P.copyCoord (P.flatIndexEquiv.symm s).1
+        (P.flatIndexEquiv.symm s).2 a = finSigmaFinEquiv ⟨s, a⟩ := by
+      unfold copyCoord
+      apply congrArg finSigmaFinEquiv
+      exact Sigma.ext hs ((Fin.heq_ext_iff (congrArg P.flatDim hs)).2 rfl)
+    rw [blockInclusion_apply P.flatDim s x a]
+    simp only [coordEmbedding, Matrix.of_apply, hc]
   rw [hι]
   rfl
 
