@@ -56,5 +56,10 @@ traversal's root module.
   `Core.PhysicalMatrix`, `Preparation.BlockedPolar`, `FixedPointPairState`,
   `SupportedPolar`, and `BlockIsometryState`. Reused dependencies were checked
   against source and build-trace hashes; affected dependencies were rebuilt.
-- Full-root remote CI remains required for the broader `ApproximatingState`,
-  `PositivePartRate`, and `OverlappingBlockGram` consumers.
+- Full-root remote Lean CI passed at published code head
+  `bd0428cc7fa283c6109a8e628488899451dbe1d8` in
+  [run 37244311889](https://github.com/LionSR/TNLean/actions/runs/37244311889).
+  This includes the broader `ApproximatingState`, `PositivePartRate`, and
+  `OverlappingBlockGram` consumers. The same run passed regression tests,
+  style/declaration checks, blueprint rendering, module policy, and compilation
+  timing. No Lean source changed when this completed result was recorded.
