@@ -83,9 +83,17 @@ equation are formalized.\footnote{Formal declarations:
     \leanid{MPOTensor.actionLMatrix_inverse_of_isInjective}, and
     \leanid{MPOTensor.actionLMatrix_analysis}, in
     \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrix}.}
-The corrected coupled pentagon (\ref{eq:glm_l_typed_pentagon}) and the
-general multiplicity-gauge law remain separate proof obligations; they are
-not assumed by the matrix construction.
+A proof implementation of the corrected coupled pentagon
+(\ref{eq:glm_l_typed_pentagon}) now derives it from the exact fusion and
+action maps by triangular physical padding and a common positive blocking.
+Its coefficients are those of the original unblocked maps, and no
+coherence equation is a premise.\footnote{New proof implementations:
+    \leanid{MPOTensor.actionLMatrix_mixed_pentagon} and
+    \leanid{MPOTensor.IsBoundaryCompatible.exists_exact_mixed_pentagon}, in
+    \doclink{TNLean/MPS/MPDO/BoundarySourceMixedPentagon}.}
+Validation of the new capstone and its regression checks is still pending.
+The general multiplicity-gauge law remains a separate proof obligation;
+it is not assumed by either matrix construction.
 
 \bibliographystyle{alpha}
 \bibliography{references}
