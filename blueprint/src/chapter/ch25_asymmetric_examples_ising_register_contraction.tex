@@ -1,0 +1,77 @@
+\subsection{Contraction of a matrix-unit factor}
+
+The following identities contract a finite matrix-unit factor before any
+fusion decomposition of the remaining matrices. They apply to every
+physical letter; no selection of matrix entries is required.
+
+\begin{theorem}[Reconstruction from matrix blocks]
+    \label{thm:asymex_matrix_unit_register_reconstruction}
+    \lean{Matrix.sum_single_kronecker_submatrix}
+    \leanok
+    Let $R$ be a commutative semiring, let $I$ be a finite index set,
+    and let $K$ be an index set. For a matrix $Z$ indexed by
+    $I\times K$, write $Z_{ab}$ for its block with entries
+    ${(Z_{ab})}_{ij}=Z_{(a,i),(b,j)}$. If $E_{ab}$ denotes the matrix
+    unit indexed by $I$, then
+    \begin{align}
+        \sum_{a,b\in I}E_{ab}\otimes Z_{ab} & =Z.
+        \label{eq:asymex_matrix_unit_register_reconstruction}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    At the entry indexed by $((c,i),(d,j))$, the matrix unit
+    $E_{ab}$ vanishes unless $a=c$ and $b=d$. The sum therefore
+    reduces to ${(Z_{cd})}_{ij}=Z_{(c,i),(d,j)}$.
+\end{proof}
+
+\begin{definition}[Reassociation of the two matrix-unit factors]
+    \label{def:asymex_matrix_unit_register_reassociation}
+    \lean{MPOTensor.registerFusionEquiv}
+    \leanok
+    For index sets $V,I,K$, let
+    \begin{align}
+        e:(V\times I)\times(K\times I)
+                       & \longrightarrow (V\times(I\times K))\times I, \notag \\
+        e((v,a),(i,b)) & =((v,(a,i)),b).
+        \label{eq:asymex_matrix_unit_register_reassociation}
+    \end{align}
+    This is a bijection. For a matrix on the first index set, denote
+    its simultaneous row and column transport along $e$ by $\mathcal R$.
+\end{definition}
+
+\begin{theorem}[Contraction in a stacked product]
+    \label{thm:asymex_matrix_unit_register_contraction}
+    \lean{MPOTensor.registerFusion_contraction}
+    \leanok
+    \uses{def:asymex_matrix_unit_register_reassociation}
+    Let $R$ be a commutative semiring, let $H,I$ be finite index
+    sets, and let $V,K$ be index sets. For each $h\in H$, let $X_h$
+    be a matrix indexed by $V$ and let $Z_h$ be a matrix indexed by
+    $I\times K$. For every $c,d\in I$,
+    \begin{align}
+        \mathcal R\left(
+        \sum_{h\in H}\sum_{a,b\in I}
+            (X_h\otimes E_{ab})\otimes({(Z_h)}_{ab}\otimes E_{cd})
+        \right)
+         & =\left(\sum_{h\in H}X_h\otimes Z_h\right)\otimes E_{cd}.
+        \label{eq:asymex_matrix_unit_register_contraction}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:asymex_matrix_unit_register_reassociation}
+    Evaluate the left-hand side at
+    $(((v,(a,i)),c'),((w,(b,j)),d'))$. The intermediate matrix unit
+    leaves precisely
+    \begin{align}
+        \sum_{h\in H}X_h(v,w)Z_h((a,i),(b,j))E_{cd}(c',d'),
+        \notag
+    \end{align}
+    which is the corresponding entry of the right-hand side.
+\end{proof}
+
+Taking $|V|=|K|=16$ and $|I|=4$ gives stacked bond dimension
+$4096$, while the matrix remaining after this contraction has dimension
+$1024$ and is tensored with a $4$-dimensional matrix unit. A fusion
+decomposition of that remaining matrix is a separate assertion.

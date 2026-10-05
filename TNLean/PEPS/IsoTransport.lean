@@ -59,6 +59,16 @@ theorem Edge.map_endpoints (φ : G ≃g G') (e : Edge G) :
   Edge.ofAdj_endpoints ((φ.map_rel_iff').mpr e.2.2)
 
 omit [Fintype V] [Fintype W] in
+/-- Successive graph isomorphisms transport an edge by their composition. -/
+theorem Edge.map_trans {Z : Type*} [LinearOrder Z] {G'' : SimpleGraph Z}
+    (φ : G ≃g G') (ψ : G' ≃g G'') (e : Edge G) :
+    Edge.map ψ (Edge.map φ e) = Edge.map (φ.trans ψ) e := by
+  apply Edge.ofAdj_eq_ofAdj
+  rcases Edge.map_endpoints φ e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+  · exact Or.inl ⟨by rw [h₁]; rfl, by rw [h₂]; rfl⟩
+  · exact Or.inr ⟨by rw [h₁]; rfl, by rw [h₂]; rfl⟩
+
+omit [Fintype V] [Fintype W] in
 /-- Pushing an edge through `φ` and then through `φ.symm` recovers the original
 edge.  The two passes return to the original unordered endpoint pair, and
 `Edge.ofAdj` re-imposes the same `<`-order, so the round trip is the identity. -/
@@ -182,6 +192,50 @@ omit [Fintype V] [Fintype W] in
 @[simp] theorem Tensor.transport_bondDim (A : Tensor G d) (φ : G ≃g G') (e' : Edge G') :
     (A.transport φ).bondDim e' = A.bondDim (Edge.map φ.symm e') :=
   rfl
+
+omit [Fintype V] [Fintype W] in
+/-- Successive transports of a tensor agree with transport by the composite graph
+isomorphism. The incident-edge indices and their bond-dimension casts compose as well.
+
+Source: arXiv:1804.04964, the geometric relabelling in the proof of Theorem 3,
+lines 1407--1572 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem Tensor.transport_trans {Z : Type*} [LinearOrder Z] {G'' : SimpleGraph Z}
+    [DecidableRel G''.Adj] (A : Tensor G d) (φ : G ≃g G') (ψ : G' ≃g G'') :
+    (A.transport φ).transport ψ = A.transport (φ.trans ψ) := by
+  have hmap (e : Edge G'') : Edge.map (φ.trans ψ).symm e =
+      Edge.map φ.symm (Edge.map ψ.symm e) :=
+    (Edge.map_trans ψ.symm φ.symm e).symm
+  have hFamily (z : Z) :
+      (fun ie : IncidentEdge G'' z => Fin (A.bondDim (Edge.map φ.symm (Edge.map ψ.symm ie.1)))) =
+      (fun ie : IncidentEdge G'' z => Fin (A.bondDim (Edge.map (φ.trans ψ).symm ie.1))) := by
+    funext ie
+    exact congrArg (fun e => Fin (A.bondDim e)) (hmap ie.1).symm
+  unfold Tensor.transport
+  rw [Tensor.mk.injEq]
+  constructor
+  · funext e
+    exact congrArg A.bondDim (Edge.map_trans ψ.symm φ.symm e)
+  · congr! 3
+    all_goals subst_vars
+    · rename_i z
+      exact congrArg (fun F : IncidentEdge G'' z → Type => ∀ ie, F ie) (hFamily z)
+    · rename_i z η₂ p η₁ hη
+      have hApp {F H : IncidentEdge G'' z → Type} (hFH : F = H)
+          {f : ∀ i, F i} {g : ∀ i, H i} (hfg : HEq f g) (i : IncidentEdge G'' z) :
+          HEq (f i) (g i) := by
+        subst H
+        exact heq_of_eq (congrFun (eq_of_heq hfg) i)
+      change A.component (φ.symm (ψ.symm z)) _ p = A.component (φ.symm (ψ.symm z)) _ p
+      congr 1
+      funext ie
+      apply Fin.ext
+      simp only [finCongr_apply, Fin.val_cast]
+      have hIE : IncidentEdge.toSymm ψ z (IncidentEdge.toSymm φ (ψ.symm z) ie) =
+          IncidentEdge.toSymm (φ.trans ψ) z ie := by
+        apply Subtype.ext
+        exact Edge.map_trans φ ψ ie.1
+      rw [hIE]
+      exact Fin.val_eq_val_of_heq (hApp (hFamily z) (f := η₁) (g := η₂) hη _)
 
 omit [Fintype V] [Fintype W] in
 /-- Pull a virtual configuration incident to `w` back to the incident edges at

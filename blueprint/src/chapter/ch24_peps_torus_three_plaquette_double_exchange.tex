@@ -1,0 +1,75 @@
+\begin{definition}[Literal directed transports after a double exchange]%
+    \label{def:peps_torus_three_plaquette_double_exchange_transports}
+    \lean{TNLean.PEPS.torusThreePlaquetteDoubleExchangeTransports}
+    \leanok
+    \uses{def:peps_torus_three_plaquette_flux_assignment,
+        def:peps_regular_three_plaquette_double_exchange}
+    For directed transports $t=(t_0,t_1,t_2)$, define
+    \begin{align}
+        t'=(t_0,\ t_2t_0^{-1}t_1t_2^{-1}t_0,\ t_2).
+    \end{align}
+    If $C(t)=(a,b,c)$ denotes the three plaquette holonomies, then
+    $t'=C^{-1}H^2C(t)$, with $H(a,b)=(aba^{-1},a)$ acting on the first
+    two plaquettes. The same ordered-bond orientation correction applies
+    to both literal assignments.
+\end{definition}
+
+\begin{theorem}[Actual holonomies of the literal double-exchange output]%
+    \label{thm:peps_torus_three_plaquette_double_exchange_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusThreePlaquetteDoubleExchange}
+    \leanok
+    \uses{def:peps_torus_three_plaquette_double_exchange_transports,
+        thm:peps_torus_three_plaquette_flux_holonomy}
+    At every translated position, the literal output has plaquette
+    holonomies
+    \begin{align}
+        (a',b',c')=((ab)a(ab)^{-1},\ aba^{-1},\ c).
+    \end{align}
+    The outer middle-right walk has holonomy $b'c'=aba^{-1}c$.
+    In particular, at $(a,b,c)=(g,h,h^{-1})$ this surrounding holonomy
+    is $ghg^{-1}h^{-1}$.
+    The original period bounds, at least five horizontally and three
+    vertically, suffice also at both seams.
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitute $t'$ into the actual directed-walk formulas.
+    Group cancellation gives the displayed plaquette and outer holonomies.
+\end{proof}
+
+\begin{theorem}[One original-spin double exchange on the translated strip]%
+    \label{thm:peps_torus_three_plaquette_double_exchange_physical}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusThreePlaquetteDoubleExchange}
+    \leanok
+    \uses{thm:peps_three_plaquette_geometry,
+        thm:peps_torus_three_plaquette_double_exchange_holonomy,
+        thm:peps_regular_three_plaquette_double_exchange_physical}
+    Let $G$ be finite, and suppose the native four-leg tensor is
+    $G$-isometric for the regular torus-leg representation.
+    For every position $v$, there is one unitary $W$ on the eight original
+    spins of $R_v$, chosen before every directed transport triple $t$,
+    boundary configuration $\theta$, and common exterior and crossing
+    assignment $u$, such that
+    \begin{align}
+        W\Psi_{R_v}(t,\theta)         & =\Psi_{R_v}(t',\theta), \\
+        (W\otimes I_{R_v^c})\Psi(t,u) & =\Psi(t',u).
+    \end{align}
+    Both are actual original-spin contractions with the literal assignments
+    just defined; the identity extension is unitary.
+    The region, spanning tree, root, three chords and their orientation are
+    derived from the translated strip geometry.
+    This is an auxiliary finite realization of the double-exchange
+    algebra in \cite[braiding passage]{Schuch2010PEPS}; it does not identify
+    the operation with the prescribed physical string crossing or assert
+    parent-Hamiltonian membership.
+\end{theorem}
+
+\begin{proof}\leanok
+    The native four-leg hypothesis implies incident-edge $G$-isometry.
+    Apply the common physical double-exchange theorem to the derived tree,
+    root and three chords, using the common seam-orientation flag.
+    The actual literal-to-tree-cycle identity identifies the input columns.
+    The sparse residual calculation identifies the output with the literal
+    transport triple $t'$. Both the local and global identities therefore
+    use the same supplied unitary.
+\end{proof}

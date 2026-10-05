@@ -3,57 +3,84 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{SPT Fixed Points for On-Site Symmetries Only}
+\title{SPT Fixed Points with Time Reversal and Reflection}
 \author{}
-\date{2026-09-27}
+\date{2026-10-04}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
-In the paragraph ``Symmetry protected topological order'' of
-\cite{Cirac2021Matrix}, the symmetry group $\mathcal G$ may combine on-site,
-time-reversal and reflection symmetries. An element $x$ acts on the tensor by
-$S_x(A^i)=e^{i\phi(x)}X_x^\dagger A^iX_x$, and the associated map on the bond
-space is $X\mapsto X_xX$ or $X\mapsto X_x\bar X$, ``dependent on whether
-time-reversal and/or reflection invariance is involved''. The cocycles lie in
-the twisted cohomology groups $H^2_\alpha(\mathcal G,U(1))$ and
-$H^1_\beta(\mathcal G,U(1))$. The zero-correlation-length representative is
-constructed for every such pair of cocycles, with the twists $\alpha$ and
-$\beta$ entering its phases.\footnote{Source traceability:
-    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1142--1157.}
+The symmetry group in Section III.A of \cite{Cirac2021Matrix} may combine
+on-site, time-reversal and reflection symmetries. Write $t,r:G\to\mathbb Z_2$
+for the latter two parities and let $C_p$ be complex conjugation at odd
+parity and the identity at even parity. The local symmetry is
+$S_g(A)^i=\phi(g)X_g^\dagger A^iX_g$. Its phase is a one-cocycle for
+$\beta=t$, whereas its virtual factor system is a two-cocycle for
+$\alpha=t+r$. The source asserts that every such pair has a
+zero-correlation-length representative.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1120--1130 and 1147--1157.}
 
-\section{What is formalized}
-Only on-site symmetries are formalized. For a projective representation $\rho$
-of $G$ on $\mathbb C^D$ with an ordinary (untwisted) factor system $\omega$, a
-character $\phi$ of $G$ and $W_g=\rho(g^{-1})$, the group acts on the physical
-space $\mathbb C^D\otimes\mathbb C^D$ of the dimer fixed point
-$A^{(a,b)}=D^{-1/2}\ket{a}\bra{b}$ by the linear representation
-$U(g)=\phi(g)\,W_g^{T}\otimes W_g^{-1}$, and
+\section{The resolved scope}
+The earlier formalization handled linear on-site symmetries only.
+\leanid{MPSTensor.mixedTensorAction} now conjugates tensor letters for time
+reversal and transposes them for reflection. The ordered-product theorem
+\leanid{TNLean.Algebra.symmetryLetter_list_prod} and
+\leanid{MPSTensor.mpv_mixedTensorAction} show that reflection reverses the
+actual finite-chain site order. Both effects are included simultaneously.
+
+The coefficient group is the existing unitary scalar group, literally
+$\mathrm U(1)$, with its conjugation action. The classes
+\leanid{TNLean.Algebra.parityUnitaryH1Class} and
+\leanid{TNLean.Algebra.parityUnitaryH2Class} use Mathlib's group cohomology;
+they are not a second hand-built quotient or a relabeling of all complex
+units. The equations are
 \begin{align}
-    \sum_jU(g)_{ij}A^j & =\phi(g)\,W_gA^iW_g^{-1}
+    \phi(gh) & =\phi(g)C_{t(g)}(\phi(h)),               \\
+    \omega(gh,k)\omega(g,h)
+             & =C_{t(g)+r(g)}(\omega(h,k))\omega(g,hk).
+\end{align}
+The two parities are deliberately distinct: reflection conjugates the
+virtual gauge through transposition, but does not conjugate a scalar phase.
+
+For finite $G$, the unitary regular matrices
+$L_g(x,y)=\omega(g,y)\delta_{x,gy}$ realize the chosen factor system exactly.
+\leanid{TNLean.Algebra.conjugateRegularUnitaryRepresentation} does not assume
+that the cocycle representative is normalized. The cocycle equation itself
+gives $L_gC_{t(g)+r(g)}(L_h)=\omega(g,h)L_{gh}$.
+
+Using these virtual matrices, the dimer letters
+$A^{(a,b)}=D^{-1/2}\ket a\bra b$, $D=|G|$, carry the physical action
+\begin{align}
+    U(g) & =\phi(g)(\overline{X_g}\otimes X_g)P^{r(g)}, \\
+    \sum_j U(g)_{ij}T_{t(g),r(g)}(A^j)
+         & =\phi(g)X_g^\dagger A^iX_g,
     \label{eq:rmp_spt_onsite_scope_twist}
 \end{align}
-involves no complex conjugation of $A^i$ and no reversal of the order of the
-sites. Time reversal, which conjugates the tensor, and reflection, which
-transposes it, are not represented, and neither are the twists $\alpha$ and
-$\beta$.
+where $P$ swaps the two dimer factors and $T_{t,r}$ is entrywise conjugation
+followed by transpose when the corresponding parity is odd.
+\leanid{MPSTensor.exists_mixed_spt_fixedPoint} proves injectivity, the
+rank-one idempotent transfer map, physical unitarity, the semilinear group
+law and the prescribed tensor symmetry. The physical matrices satisfy
+$U(gh)=U(g)C_{t(g)}(U(h))$; conjugation is applied separately when the
+symmetry is antiunitary. The finite-chain vector has phase $\phi(g)^N$, as
+proved by \leanid{MPSTensor.mixedSptAction_mpv}.
 
-\section{Elimination plan}
-Introduce symmetry actions on tensors in which a time-reversing element
-conjugates the letters, $A^i\mapsto\sum_jU(x)_{ij}\bar A^j$, and a reflection
-also reverses the order of the sites and transposes the letters. State the
-cocycle conditions twisted by $\alpha$ and $\beta$ for the corresponding
-bond-space maps $X\mapsto X_xX$ and $X\mapsto X_x\bar X$, construct the dimer
-fixed point from a projective representation with a twisted factor system, and
-prove the analogue of (\ref{eq:rmp_spt_onsite_scope_twist}) and of the class
-statements for it. The on-site results are the special case in which $\alpha$ and $\beta$ are
-trivial.\footnote{Affected formal declarations:
-    \leanid{MPSTensor.sptFixedPointAction},
-    \leanid{MPSTensor.twistedTensor_sptFixedPointTensor},
-    \leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetric},
-    \leanid{MPSTensor.cohomologousTo_of_sptFixedPointTensor} and
-    \leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}.}
+\leanid{MPSTensor.parityUnitaryH2Class_eq_of_mixedSptSymmetry} proves that
+any other unitary virtual realization of the same physical symmetry and
+character has the same $\mathrm U(1)$ cohomology class. Injectivity gives
+pointwise scalar gauge equivalence, unitarity forces unit-modulus scalars,
+and their ratio is the twisted coboundary.
+
+\section{Conventions and remaining boundaries}
+At $t=r=0$ the local action and cocycle equations specialize to the on-site
+ones. The existing arbitrary-character on-site theorems remain available.
+The construction retains the corrected dimer tensor: it does not reinstate
+the erroneous printed tensor discussed in
+\cite{gap:rmp_spt_fixed_point_tensor}. Its bond space is nonzero because
+$D=|G|$ for a finite group. The result is the fixed-point realization and its
+class independence; it does not by itself prove a new mixed-symmetry gapped
+interpolation theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}

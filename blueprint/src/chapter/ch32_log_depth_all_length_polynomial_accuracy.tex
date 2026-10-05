@@ -1,0 +1,105 @@
+\subsection{Polynomial accuracy at every sufficiently large length}
+\label{subsec:ldp_all_length_polynomial_accuracy}
+
+\begin{definition}[The prescribed remainder-absorbing construction]%
+    \label{def:ldp_all_length_polynomial_state}
+    \lean{MPSPreparation.polynomialBlockLength,
+        MPSPreparation.remainderBlockLengths,
+        MPSPreparation.allLengthPolynomialState}
+    \leanok
+    \uses{def:ldp_block_isometry_state, def:prep_pair_product_state}
+    Let $A$ be a tensor with a positive definite transfer fixed matrix
+    $\rho$ of trace one, and let $\xi,\eta>0$. For $N\geq2$, put
+    \begin{align}
+        q=\left\lceil2\xi(1+\eta)\log N\right\rceil.
+        \label{eq:ldp_all_length_polynomial_block}
+    \end{align}
+    If $q\leq N$, put $M=\lfloor N/q\rfloor$ and take $M-1$ blocks of
+    length $q$ and one block of length $q'=q+(N\bmod q)$.
+    Let $V_k$ be the partial isometry in the polar decomposition of
+    the tensor on the $k$th block,
+    and let $\omega_\rho$ be the fixed-point pair. Define
+    \begin{align}
+        \psi_{N,\eta}=\left(\bigotimes_{k=1}^{M}V_k\right)
+        \left(\bigotimes_{k=1}^{M}\omega_\rho\right).
+        \label{eq:ldp_all_length_polynomial_state}
+    \end{align}
+    If $q>N$, let $\psi_{N,\eta}$ be the normalized periodic state itself.
+    The block prescription is the one used in
+    \cite[Supplemental Material, proof of Theorem~1]{Malz2024Preparation}.
+    The exact-state branch extends that prescription using the
+    one-block preparation theorem.
+\end{definition}
+
+\begin{lemma}[The blocks partition the chain]%
+    \label{lem:ldp_remainder_blocks_partition}
+    \lean{MPSPreparation.sum_remainderBlockLengths}
+    \leanok
+    If $0<q\leq N$, the block lengths in
+    Definition~\ref{def:ldp_all_length_polynomial_state} sum to $N$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:ldp_all_length_polynomial_state}
+    Write $N=Mq+r$ with $0\leq r<q$ and $M\geq1$.
+    Then $(M-1)q+(q+r)=N$, and the final block satisfies $q\leq q'<2q$.
+\end{proof}
+
+\begin{theorem}[All-length polynomial accuracy and logarithmic depth]%
+    \label{thm:ldp_all_length_polynomial_accuracy}
+    \lean{MPSPreparation.exists_isPreparedInDepth_allLengthPolynomialState}
+    \leanok
+    Let $A$ be a normal tensor satisfying
+    $\sum_i(A^i)^\dagger A^i=\Id$. Let $\rho>0$ satisfy
+    $\E_A(\rho)=\rho$ and $\Tr\rho=1$.
+    Suppose $|\lambda_2|$ bounds the moduli of the transfer eigenvalues
+    other than $1$, and $\xi=-1/\log|\lambda_2|>0$.
+    There are constants $C,c>0$ and $N_0\geq2$, depending on these
+    tensor data, such that for every $\eta>0$ and every $N\geq N_0$,
+    the periodic state is nonzero and the vector
+    $\psi_{N,\eta}$ in Definition~\ref{def:ldp_all_length_polynomial_state}
+    is a unit vector prepared from a product state by a local circuit
+    of depth $T$ satisfying
+    \begin{align}
+        1-\left|\langle\psi_{N,\eta}\mid\phi_N\rangle\right|
+          & \leq C N^{-\eta},\label{eq:ldp_all_length_polynomial_error} \\
+        T & \leq c(1+\eta)\log N.
+        \label{eq:ldp_all_length_polynomial_depth}
+    \end{align}
+    The constants and threshold are chosen before $\eta$ and $N$.
+    This is the case $\xi>0$ of the polynomial accuracy asserted after
+    Lemma~1 of \cite{Malz2024Preparation}, without a divisibility
+    restriction; zero correlation length remains outside this construction
+    \cite{gap:mswc24_polynomial_accuracy_uniform_blocks}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:ldp_all_length_polynomial_state,
+        lem:ldp_remainder_blocks_partition, thm:ldp_block_approximation_error,
+        thm:ldp_approximating_state_depth, thm:ldp_short_chain_preparation,
+        lem:ldp_periodic_state_nonzero,
+        lem:ldp_block_isometry_state_overlap, thm:prep_pair_norm,
+        thm:wordspan_blk_inj_succ,
+        lem:isNBlkInjective_iff_blockTensor_isInjective}
+    Normality gives a length $L$ beyond which all blocks are injective.
+    Put $R=L+3D$. Choose $N_0$ beyond the nonvanishing threshold and
+    at least $R$, $2$, and $\lceil e^{R/(2\xi)}\rceil$.
+    Then $2\xi\log N\geq R$, so $q\geq R$ uniformly for $\eta>0$.
+
+    If $q\leq N$, every block has length between $q$ and $2q$.
+    The second-order unequal-block estimate at rate $\gamma=1/4$ gives
+    \begin{align*}
+        1-|\langle\psi_{N,\eta}\mid\phi_N\rangle|
+         & \leq C M e^{-q/(2\xi)}
+        \leq C N e^{-(1+\eta)\log N}=C N^{-\eta}.
+    \end{align*}
+    The state has unit norm, and its preparation depth is at most
+    $2C_bq$. Since $q\leq2\xi(1+\eta)\log N+1$ and
+    $(1+\eta)\log N\geq\log2$, this is bounded by a constant times
+    $(1+\eta)\log N$.
+
+    If $q>N$, exact preparation gives zero error and depth at most
+    $C_eN\leq C_eq$. The same ceiling estimate supplies the depth bound.
+    Thus one choice
+    $c=(2C_b+C_e+1)(2\xi+1/\log2)$ works in both cases.
+\end{proof}

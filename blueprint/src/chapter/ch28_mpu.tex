@@ -9917,28 +9917,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Gauge invariance of the time-reversal sign]
     \label{lem:mpu_sigma_gauge_invariant}
-    \notready
-    \discussion{5714}
-    \uses{eq:sigma-from-trace}
-    Under the hypotheses of Lemma~\ref{eq:sigma-from-trace}, let $x$ and $y$ be
-    unitaries and change the standard-form gauge by
+    \lean{MPOTensor.timeReversalTrace_gauge}
+    \leanok
+    Let $u,v\in\operatorname{End}(\C^d\otimes\C^d)$ and let
+    $x,y\in U(d)$. Set
     \begin{align}
         u' & =(x\otimes y)u,                 &
         v' & =v(y^\dagger\otimes x^\dagger).
     \end{align}
-    Then the trace formula has the same value for $(u',v')$ as for $(u,v)$.
-    Consequently the sign $\sigma$ is independent of the standard-form gauge.
+    The four-site trace is unchanged:
+    \begin{align}
+        \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
+         & =\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right].
+    \end{align}
+    In particular, the trace expression in~(\ref{eq:sigma-from-trace}) is
+    invariant under the standard-form gauge.
     % Source proof: paper_v2.tex 1624--1630.
 \end{lemma}
 
-\begin{proof}
-    \uses{eq:sigma-from-trace, thm:matrix_swap_kronecker_intertwine}
+\begin{proof}\leanok
+    \uses{thm:matrix_swap_kronecker_intertwine}
     Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
     $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
     $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
-    Substitution into Lemma~\ref{eq:sigma-from-trace}, cancellation on the
-    middle legs, and
-    $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ give
+    Cancellation of $y_2^\dagger y_2$ and $x_3^\dagger x_3$ gives
+    $v'_{23}u'_{12}u'_{34}v'_{23}
+        =x_1y_4v_{23}u_{12}u_{34}v_{23}y_2^\dagger x_3^\dagger$,
+    since the outer-leg operators commute with $v_{23}$. The identity
+    $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ then gives
     \begin{align}
         \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
          & =\tr\!\left[x_3y_2\mathbb S_{12,34}

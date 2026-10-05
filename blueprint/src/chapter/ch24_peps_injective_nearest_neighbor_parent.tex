@@ -1,0 +1,89 @@
+\section{Nearest-neighbor parents of injective PEPS}%
+\label{sec:peps_injective_nearest_neighbor_parent}
+
+\begin{definition}[Edge and isolated-site parent regions]%
+    \label{def:peps_injective_nearest_neighbor_regions}
+    \lean{TNLean.PEPS.edgePairRegion,TNLean.PEPS.edgeAndIsolatedRegion}
+    \leanok
+    For each edge $e=\{u,v\}$ of a finite graph, use the endpoint
+    region $R_e=\{u,v\}$. The augmented family additionally contains
+    the singleton $\{v\}$ for each isolated vertex $v$.
+    All regional spaces are the images of the actual open-boundary
+    contractions. Isolated-site conditions are needed to exclude
+    unused physical directions at vertices absent from every edge;
+    see \cite{gap:cpgsv21_injective_parent_reconstruction}.
+\end{definition}
+
+\begin{lemma}[Coverage by the nearest-neighbor regions]%
+    \label{lem:peps_injective_nearest_neighbor_cover}
+    \lean{TNLean.PEPS.edgePairRegion_covers_edges,
+        TNLean.PEPS.mem_edgePairRegion_of_adj,
+        TNLean.PEPS.edgePairRegion_covers_vertices,
+        TNLean.PEPS.edgeAndIsolatedRegion_covers_vertices,
+        TNLean.PEPS.edgeAndIsolatedRegion_covers_edges}
+    \leanok
+    \uses{def:peps_injective_nearest_neighbor_regions}
+    Every edge is contained in its endpoint region. If every vertex
+    has a neighbor, the endpoint regions also cover every vertex.
+    On an arbitrary finite graph, the augmented family covers every
+    vertex and every edge.
+\end{lemma}
+
+\begin{proof}\leanok
+    A vertex with a neighbor belongs to the region of their edge.
+    An isolated vertex belongs to its singleton region.
+\end{proof}
+
+\begin{theorem}[The nearest-neighbor parent space]%
+    \label{thm:peps_injective_nearest_neighbor_parent_space}
+    \lean{TNLean.PEPS.regionParentGroundSpace_edgePairs_eq_span,
+        TNLean.PEPS.regionParentGroundSpace_edgeAndIsolated_eq_span,
+        TNLean.PEPS.finrank_regionParentGroundSpace_edgePairs_eq_one,
+        TNLean.PEPS.finrank_regionParentGroundSpace_edgeAndIsolated_eq_one}
+    \leanok
+    \uses{lem:peps_injective_nearest_neighbor_cover,
+        thm:peps_injective_covering_parent_ground_space}
+    Suppose every site tensor is injective.
+    If every vertex has a neighbor, the common space for the
+    edge-pair regions is exactly the span of the closed PEPS vector.
+    For an arbitrary finite graph, the same conclusion holds for the
+    augmented edge and isolated-site family.
+    If every bond dimension is positive, each of these spaces is
+    one-dimensional.
+    These are the nearest-neighbor and isolated-site forms of the
+    virtual-pair argument in
+    \cite[Section~IV.C.1]{Cirac2021Matrix}.
+    Without positive bond dimensions the span equality still holds,
+    and the PEPS span may be zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the covering-region theorem to the two coverage statements.
+    Positive bond dimensions make the virtual Bell product nonzero;
+    injectivity preserves this property in the physical PEPS vector.
+\end{proof}
+
+\begin{corollary}[Exact-kernel nearest-neighbor Hamiltonians]%
+    \label{cor:peps_injective_nearest_neighbor_parent_kernel}
+    \lean{TNLean.PEPS.ker_regionParentHamiltonian_edgePairs_eq_span,
+        TNLean.PEPS.ker_regionParentHamiltonian_edgeAndIsolated_eq_span,
+        TNLean.PEPS.finrank_ker_regionParentHamiltonian_edgePairs_eq_one,
+        TNLean.PEPS.finrank_ker_regionParentHamiltonian_edgeAndIsolated_eq_one}
+    \leanok
+    \uses{thm:peps_injective_nearest_neighbor_parent_space}
+    Choose any positive semidefinite interaction on each region,
+    with kernel exactly its actual regional PEPS space, and sum
+    their extensions to the full physical graph.
+    Under the corresponding hypotheses of the preceding theorem,
+    the Hamiltonian kernel is exactly the closed PEPS span.
+    Positive bond dimensions make this kernel one-dimensional.
+    The edge-only conclusion requires that every vertex have a
+    neighbor; the augmented conclusion includes the isolated-site
+    singleton interactions explicitly.
+\end{corollary}
+
+\begin{proof}\leanok
+    The kernel of a finite sum of positive interactions is the
+    intersection of their kernels, which is precisely the common
+    regional parent space.
+\end{proof}

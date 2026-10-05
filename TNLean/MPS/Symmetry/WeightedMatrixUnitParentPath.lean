@@ -86,8 +86,9 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     exact interactionHamiltonian_commute_onSiteTensorPow
       (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) _ hN
         (parentInteraction_matrix_commute_onSiteTensorPow _ _
-          (sptFixedPointAction_mem_unitaryGroup _
-            (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g)) g) (hCov g) 2)
+          (sptFixedPointAction_mem_unitaryGroup _ 1
+            (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g))
+            (fun _ => by simp) g) (hCov g) 2)
   case refine_3 =>
     intro N hN g
     have : NeZero N := ⟨by omega⟩

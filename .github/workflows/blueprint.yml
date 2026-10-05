@@ -37,6 +37,9 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/add_blueprint_search.py'
+      - 'scripts/test_add_blueprint_search.py'
+      - 'scripts/test_blueprint_search_web.py'
   workflow_dispatch:
 
 # Rapid pushes to main only need the newest build; actual Pages deployments
@@ -222,13 +225,18 @@ jobs:
             exit 1
           fi
 
-      # A zero exit status says the build ran, not that the pages read. The
-      # site is published from here, so the reader-facing check runs here too
-      # and not only where a pull request is reviewed.
-      - name: Test generated blueprint pages
+      - name: Add client-side search to blueprint web pages
+        run: |
+          python3 -m pip install --disable-pip-version-check 'pagefind[extended]==1.5.2'
+          python3 scripts/test_add_blueprint_search.py
+          python3 scripts/add_blueprint_search.py --web-root blueprint/web
+
+      # Check the final pages after search has changed their header and layout.
+      - name: Test generated blueprint pages and search
         run: |
           python3 -m pip install --disable-pip-version-check playwright==1.55.0
           python3 -m playwright install --with-deps chromium
+          python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       # Drop pictures no page references any more, so neither the published

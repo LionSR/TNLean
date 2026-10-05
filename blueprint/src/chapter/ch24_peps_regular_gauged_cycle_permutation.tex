@@ -1,0 +1,48 @@
+\begin{theorem}[Physical cycle operations with a common tree background]
+    \label{thm:peps_regular_gauged_cycle_permutation}
+    \lean{TNLean.PEPS.exists_unitary_regularGaugedCyclePhysicalPermutation,
+        TNLean.PEPS.regularGaugedTreeCycleAssignment,
+        TNLean.PEPS.openRegionWeight_regularGaugedTreeCycleBondExtension}
+    \leanok
+    \uses{thm:peps_regular_cycle_permutation_physical,
+        thm:peps_regular_region_gauge_contraction,
+        thm:peps_regular_coherent_global_transport}
+    Let $R$ be a finite region of a finite simple graph, equipped with a
+    spanning tree and a root. Let the original site tensors at every
+    vertex be $G$-isometric for the regular action. Write $A_\omega$ for the
+    assignment equal to the cycle labels $\omega$ off the tree and to
+    the identity elsewhere. For a vertex gauge $k$, reconstruct the
+    internal edge operators as
+    \begin{align}
+        s_{k,\omega}(e)
+        =k_{\mathrm{head}(e)}A_\omega(e)k_{\mathrm{tail}(e)}^{-1}.
+    \end{align}
+    Let $\phi$ be a permutation of the cycle-label configurations
+    commuting with simultaneous conjugation. There is one unitary $W$
+    on the original spins of $R$, chosen before $k,\omega,u,\theta$,
+    such that
+    \begin{align}
+        W\Psi_R(s_{k,\omega},u,\theta)
+         & =\Psi_R(s_{k,\phi\omega},u,\theta), \\
+        (W\otimes I_{R^c})\Psi(s_{k,\omega},u)
+         & =\Psi(s_{k,\phi\omega},u).
+    \end{align}
+    Both sides retain the same gauge $k$ and the same literal exterior
+    and crossing operators $u$. Their actual open coefficients reduce
+    to the tree-trivial coefficients at the same boundary transport
+    determined by $k,u$. The identity extension is unitary.
+    This is an auxiliary background-normalization statement for
+    \cite[accessible systems and Theorem~6.16]{Schuch2010PEPS}. It does
+    not identify a prescribed four-endpoint braid or compare two
+    different crossing presentations.
+\end{theorem}
+
+\begin{proof}\leanok
+    The inverse endpoint gauge cancels the two reconstructing factors
+    on every internal edge. On crossing edges the common assignment
+    $u$ gives the same boundary equivalence, independently of the cycle
+    labels. Normalize both actual columns by this gauge, apply the
+    existing uniform cycle-permutation unitary, and undo the same
+    normalization. The site tensors agree outside $R$, so the actual
+    cut expansion gives the global identity.
+\end{proof}

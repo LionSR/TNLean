@@ -21,6 +21,25 @@
     and site-dependent tensors.
 \end{definition}
 
+\begin{lemma}[Subspace property of the regional contraction]%
+    \label{lem:peps_region_ground_space_le}
+    \lean{TNLean.PEPS.regionGroundSpace_le_iff}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    For any linear subspace $S$ of the physical space on $R$,
+    \[
+        \mathcal G_R\subseteq S
+        \quad\Longleftrightarrow\quad
+        T_R(\mu;\cdot)\in S\text{ for every crossing configuration }\mu.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The regional ground space is the linear span of these contraction
+    columns. A linear subspace contains that span exactly when it
+    contains every column.
+\end{proof}
+
 \begin{theorem}[Boundary dimension bound]%
     \label{thm:peps_region_ground_space_dimension}
     \lean{TNLean.PEPS.finrank_regionGroundSpace_le}

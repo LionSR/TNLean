@@ -1,0 +1,130 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{Half-Chain Spectrum: Canonical Orientation, Normalization, and Decay}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and index convention}
+Theorem~6 of~\cite{PerezGarcia2007MPSReps}, preceded by the calculation
+at lines 970--985 of \path{Papers/quant-ph_0608197/MPSarchive.tex}, identifies
+the limiting half-chain reduced spectrum with that of
+$\Lambda\otimes\Lambda$. The canonical convention is
+$\mathcal E_A(I)=I$ and $\mathcal E_A^*(\Lambda)=\Lambda$, where
+$\Lambda=\operatorname{diag}(\lambda_\alpha)>0$ and
+$\operatorname{tr}\Lambda=1$.
+
+For $\mathcal E_A^L(X)\to\operatorname{tr}(\Lambda X)I$, the source's
+matrix element gives
+\begin{align}
+    \langle\alpha'|\mathcal E_A^L(|\beta'\rangle\langle\beta|)|\alpha\rangle
+     & \longrightarrow
+    \lambda_\beta\delta_{\alpha\alpha'}\delta_{\beta\beta'}.
+    \label{eq:halfchain_note_unital_gram}
+\end{align}
+The printed display at line 979 instead places the weight on $\alpha$.
+That placement is correct for the trace-preserving convention
+$\mathcal E_A^L(X)\to\operatorname{tr}(X)\Lambda$.
+Taking adjoints of every Kraus matrix exchanges the conventions and swaps
+and transposes the Gram matrix. In both cases the limiting two-boundary
+product is $\lambda_\alpha\lambda_\beta$.
+The final unital theorem concerns the original tensor and its actual ring
+state; it does not replace the physical state by the adjoint-family state.
+
+\section{Finite-size normalization and zero eigenvalues}
+Let $\Psi_L$ be the half-chain boundary family, $G_L=\Psi_L^\dagger\Psi_L$,
+and $W_L=SG_L^{\mathsf T}S$. The physical unnormalized reduced density is
+$\rho_L=\Psi_LW_L\Psi_L^\dagger$. The positive representative
+$H_L=\sqrt{G_L}W_L\sqrt{G_L}$ satisfies
+\begin{align}
+    X^{D^2}\chi_{\rho_L}(X) & =X^{d^L}\chi_{H_L}(X),
+    \label{eq:halfchain_note_charpoly}               \\
+    Z_L:=\operatorname{tr}\rho_L
+                            & =\operatorname{tr}H_L
+    =\sum_{\sigma,\tau}|V^{(2L)}(A)_{\sigma\tau}|^2.
+    \label{eq:halfchain_note_norm}
+\end{align}
+Normalize both matrices by this actual $Z_L$, rather than assuming it is
+one at finite length. Convergence $H_L\to\Lambda\otimes\Lambda$ gives
+$Z_L\to1$, hence eventual strict positivity. At a zero-norm length the
+normalized matrices are defined as zero.
+
+List eigenvalues in decreasing order with multiplicity, then append zeros.
+Identity~(\ref{eq:halfchain_note_charpoly}) identifies the two resulting
+sequences at every finite length, including $d^L<D^2$. The physical list
+is zero beyond its dimension and beyond $D^2$.
+
+\section{Decay statement}
+The source states corrections of order $|\nu_2|^L$. Without semisimplicity
+at the subleading eigenvalues, powers of the complementary transfer map
+can carry polynomial factors from Jordan blocks. The geometric estimate
+used here chooses a radius strictly above the complementary spectral
+radius and below one, and bounds all Gram entries by $Cr^L$.
+This suffices for the stated spectral convergence.
+
+Continuity of the positive square root applies on the entire positive
+cone, including singular limits. Weyl's inequality then gives convergence
+of each ordered eigenvalue of $H_L/Z_L$; the exact characteristic-polynomial
+identity transfers it to $\rho_L/Z_L$. No sharp quantitative rate for the
+square-root step, entropy convergence, or infinite-dimensional reduced
+operator is asserted.
+
+\section{Formal statements}
+The finite-size comparison and normalized spectral convergence are
+\leanid{MPSTensor.halfChainEigenvalues_eq_boundary} and
+\leanid{MPSTensor.tendsto_halfChainEigenvalues}.
+The normal-tensor unital statement is
+\leanid{MPSTensor.tendsto_halfChainEigenvalues_unital}; it assumes
+normality explicitly. Bare uniqueness of the peripheral eigenvalue does
+not imply irreducibility: the identity channel has peripheral spectrum
+$\{1\}$ but a non-scalar fixed-point space.
+
+The source context includes all three one-block canonical conditions from
+Theorem~4, lines 742--759: unitality, a faithful dual fixed point, and
+scalar fixed points. Together with Condition C2 and its spectral-radius-one
+normalization at lines 954--963, these imply normality by
+\leanid{MPSTensor.isNormalTensor_of_pgvwc07_canonical_c2}.
+The explicit source-hypothesis conclusion is
+\leanid{MPSTensor.tendsto_halfChainEigenvalues_of_pgvwc07_canonical_c2}.
+For an explicitly one-block canonical tensor, no irreducibility or
+complementary spectral gap is assumed in addition to the three canonical
+conditions and normalized C2 hypothesis.
+The earlier normal-tensor result is a valid intermediate theorem, not by
+itself the formal statement from those source hypotheses.
+
+The more general explicit-gap theorem allows singular nonnegative fixed
+points. Such points are outside the faithful canonical hypotheses of the
+source and are not asserted to be normal.
+
+\section{Remaining weighted multiblock scope}
+The canonical form in Theorem~4 is a weighted direct sum; the three
+canonical conditions apply separately to its blocks. Condition C2 does
+not alone make the original representation a single faithful unital block.
+For example, let $0<r<1$ and
+$A_0=\operatorname{diag}(1,0)$, $A_1=\operatorname{diag}(0,r)$.
+The transfer spectrum is $\{1,r^2,0,0\}$, with a simple peripheral
+eigenvalue one, but the canonical form has two weighted blocks and the
+ring vector is $|0^N\rangle+r^N|1^N\rangle$.
+The phrase ``just one block'' at source lines 960--963 therefore requires
+an asymptotic dominant-block interpretation rather than literal deletion
+of all subleading weighted blocks at finite length.
+
+The new source-hypothesis corollary treats an explicitly one-block
+canonical tensor. It repairs the previously missing derivation of
+normality in that setting; it does not formalize the reduction from an
+arbitrary weighted canonical representation satisfying C2 to its dominant
+block. That reduction, including the disappearing subleading physical
+contribution and spectral normalization, remains open here. Accordingly,
+the unrestricted source theorem is not marked as completely formalized.
+The boundary-index and decay corrections in the preceding sections remain
+resolved independently of this representation-scope obligation.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

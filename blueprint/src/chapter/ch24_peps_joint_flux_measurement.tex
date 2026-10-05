@@ -1,0 +1,106 @@
+\begin{theorem}[A uniform boundary-column action passes to the actual cut]%
+    \label{thm:peps_physical_cut_column_action}
+    \lean{TNLean.PEPS.mul_regularPhysicalCutMatrix_eq_smul_of_openRegion_eigen,
+        TNLean.PEPS.mul_regularPhysicalCutMatrix_eq_ite_of_openRegion_eigen}
+    \leanok
+    \uses{thm:peps_regular_open_region_projector}
+    Let $B_R$ be the actual open-region coefficient matrix of a finite regular
+    tensor network, and let $K_R=B_R B_{R^c}^{\mathsf T}$ be its physical cut
+    matrix. If a physical matrix $Q$ satisfies
+    $Q\Psi_R(\theta)=z\Psi_R(\theta)$ for every crossing configuration $\theta$,
+    then $QK_R=zK_R$. In particular, if one condition $P$ selects every
+    actual group-labelled column or annihilates every such column, the same
+    condition selects $K_R$ or annihilates it.
+    This is the contraction step used in the local measurements of
+    \cite[Theorem~6.15]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The column identities give $QB_R=zB_R$. Therefore
+    $QK_R=(QB_R)B_{R^c}^{\mathsf T}=zK_R$.
+    For the conditional statement, reindex the finite group labels and take
+    $z=\mathbf1_P$.
+\end{proof}
+
+\begin{definition}[The outer walk and routed joint-flux assignment]%
+    \label{def:peps_torus_joint_flux_geometry}
+    \lean{TNLean.PEPS.torusTwoPlaquetteOuterWalk,
+        TNLean.PEPS.torusTwoPlaquetteOuterWalk_support,
+        TNLean.PEPS.torusJointFluxAssignment,
+        TNLean.PEPS.regularDirectedTransport_torusJointFluxAssignment_up}
+    \leanok
+    \uses{thm:peps_translated_two_plaquette_geometry}
+    On a torus of horizontal period at least four and vertical period at least
+    three, let $R_v$ be the six-site block of two adjacent plaquettes based at
+    $v=(x,y)$. Its counterclockwise outer walk makes two rightward steps, one
+    upward step, two leftward steps, and one downward step. Its visited sites
+    are exactly $R_v$.
+
+    For $a,b\in G$, define the routed assignment $u_{a,b}$ by giving upward
+    transport $(ab)^{-1}$ to the left vertical bond and $b^{-1}$ to the middle
+    vertical bond. Every other transport is the identity. Each ordered bond
+    receives the specified element when its ordering agrees with the upward
+    direction, and its inverse otherwise. Thus this definition also applies
+    at the vertical seam. This is the routed geometry of the joint flux
+    measurement in \cite[braiding passage]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[The actual individual and joint holonomies]%
+    \label{thm:peps_torus_joint_flux_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusJointFluxAssignment}
+    \leanok
+    \uses{def:peps_torus_joint_flux_geometry,
+        def:peps_torus_plaquette_flux_geometry}
+    The counterclockwise left, right, and outer walks have respective
+    holonomies $a$, $b$, and $ab$. The formulas hold at every translated
+    position, including both periodic seams.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the reverse-ordered holonomy convention the left loop gives
+    $(ab)b^{-1}=a$, the right loop gives $b$, and the outer loop gives $ab$.
+    All horizontal transports and the rightmost vertical transport are the
+    identity. The ordered-edge inversion preserves these directed values
+    at the seams.
+\end{proof}
+
+\begin{theorem}[One physical measurement detects the joint flux]%
+    \label{thm:peps_torus_joint_flux_physical_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusJointFlux_physicalMeasurement}
+    \leanok
+    \uses{thm:peps_translated_two_plaquette_geometry,
+        thm:peps_torus_joint_flux_holonomy,
+        thm:peps_closed_walk_class_physical_measurement,
+        thm:peps_physical_cut_column_action}
+    Let the original four-leg tensor be $G$-isometric for the regular action.
+    Under the stated period bounds, for every position $v$ there is a complete
+    projective measurement $(Q_C)_C$ on the six original spins of $R_v$.
+    Its outcomes are the conjugacy classes of $G$ and one additional outcome
+    for the unused physical subspace. Each $Q_C$ is positive and Hermitian,
+    $\sum_C Q_C=I$, and $Q_CQ_D=\delta_{C,D}Q_C$.
+
+    This one measurement is chosen before $a,b$, every crossing configuration
+    $\theta$, and every common exterior and crossing assignment $u$. For the
+    actual routed open column and actual global cut matrix, it satisfies
+    \begin{align}
+        Q_C\Psi_{R_v}(u_{a,b};u,\theta)
+         & =\mathbf 1_{C=C[ab]}\Psi_{R_v}(u_{a,b};u,\theta), \\
+        Q_CK_{R_v}(u_{a,b};u)
+         & =\mathbf 1_{C=C[ab]}K_{R_v}(u_{a,b};u).
+    \end{align}
+    Here the internal bonds carry $u_{a,b}$, whereas all exterior and crossing
+    bonds retain $u$. This proves the regular finite-torus joint measurement
+    step described in \cite[braiding passage]{Schuch2010PEPS}.
+    No braiding transformation, energy, or parent-Hamiltonian membership is
+    asserted; the broader source scope remains separate as recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The outer walk induces a closed walk in the actual connected six-site
+    block. Native four-leg $G$-isometry gives incident-edge $G$-isometry at each
+    of its sites. Apply the closed-walk class measurement to this walk.
+    The proved outer holonomy is $ab$, independently of all exterior and
+    crossing assignments. The column identity then passes to the actual
+    cut matrix by the uniform boundary-column theorem.
+\end{proof}

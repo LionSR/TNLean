@@ -140,9 +140,8 @@ theorem IsGInjective.intersection_property [Finite G] [FiniteDimensional ℂ V] 
   have := Fintype.ofFinite G
   have := Fintype.ofFinite ι
   have := Fintype.ofFinite κ
-  obtain ⟨hAi, LA, hLA⟩ := (isGInjective_iff_exists_leftInverse _ _).1 hA
-  obtain ⟨hBi, LB, hLB⟩ := (isGInjective_iff_exists_leftInverse _ _).1 hB
-  rw [mpsSiteMap_comp_linHom_eq_iff] at hAi hBi
+  obtain ⟨hAi, LA, hLA⟩ := hA.exists_mpsLeftInverse
+  obtain ⟨hBi, LB, hLB⟩ := hB.exists_mpsLeftInverse
   ext ψ
   constructor
   · rintro ⟨⟨M, hM⟩, ⟨N, hN⟩⟩
@@ -193,9 +192,8 @@ theorem IsGInjective.eq_sum_of_closure [Fintype G] [FiniteDimensional ℂ V] [Fi
   classical
   have := Fintype.ofFinite ι
   have := Fintype.ofFinite κ
-  obtain ⟨hAi, LA, hLA⟩ := (isGInjective_iff_exists_leftInverse _ _).1 hA
-  obtain ⟨hBi, LB, hLB⟩ := (isGInjective_iff_exists_leftInverse _ _).1 hB
-  rw [mpsSiteMap_comp_linHom_eq_iff] at hAi hBi
+  obtain ⟨hAi, LA, hLA⟩ := hA.exists_mpsLeftInverse
+  obtain ⟨hBi, LB, hLB⟩ := hB.exists_mpsLeftInverse
   set σN := (linHom ρ ρ).averageMap N with hσN
   -- `σ(N)` commutes with the representation.
   have hσNc : ∀ g, ρ g * σN = σN * ρ g := fun g => by
