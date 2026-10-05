@@ -16,6 +16,7 @@
         MPSTensor.MPOSymmetry.insertedBoundaryMap_two,
         MPSTensor.MPOSymmetry.mem_range_insertedBoundaryMap_iff,
         MPSTensor.MPOSymmetry.insertedGroundSpace}
+    \leanok
     \uses{def:mpo_mixed_extended_support}
     For $N\geq1$, put
     \begin{align}
@@ -42,17 +43,23 @@
         MPSTensor.MPOSymmetry.finrank_mixedEndpoint_extendedBoundarySupport,
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_insertedBoundaryMap,
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_extendedBoundarySupport_starProjection}
-    \uses{def:mpo_mixed_extended_boundary,thm:mpo_mixed_interior}
+    \leanok
+    \uses{def:mpo_mixed_extended_boundary,def:injective}
     If $A$ is injective and $W\neq0$, then the extended products span
     the full matrix algebra at every $N\geq1$. Consequently
     $\Gamma'_{W,N}$ is injective and $\dim\mathcal S'_{W,N}=D^2$.
     Continuous families of injective $A$ and nonzero $W$ give continuous
     boundary maps and orthogonal support projections.
-    In particular, for the actual mixed tensor and insertion $W(\gamma)$,
-    the dimension is $(D_0+D_1)^2$ and the projections are continuous
+    If both endpoint tensors are injective and $D_0,D_1>0$, then for the
+    actual mixed tensor and insertion $W(\gamma)$, the dimension is
+    $(D_0+D_1)^2$ and the projections are continuous
     through both endpoints, at every fixed positive length.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{lem:one_block_injective_of_injective,
+        lem:block_injective_two_sided_word_span,thm:mpo_mixed_interior,
+        thm:spt_normalized_bond_interpolation,lem:uncle_local_projector_continuity}
     The one-letter assertion is injectivity of $A$. If the length-$N$
     extended products span all matrices, then their products on the left
     by $A^iW$ span all $RWS$. A nonzero entry $W_{ab}$ yields every
@@ -62,6 +69,8 @@
     The nondegenerate trace pairing proves injectivity and the dimension.
     Entries of the boundary map are continuous finite products; its
     inverse-Gram formula gives continuity of its orthogonal range projector.
+    For the mixed family, the mixed-letter span and nonvanishing of
+    $W(\gamma)$ give the required hypotheses.
 \end{proof}
 
 \begin{theorem}[Exact intersection of extended supports]
@@ -80,7 +89,8 @@
         MPSTensor.MPOSymmetry.mem_insertedGroundSpace_succ_of_intertwine,
         MPSTensor.MPOSymmetry.insertedGroundSpace_intersection,
         MPSTensor.MPOSymmetry.insertedGroundSpace_iff_left_right}
-    \uses{thm:mpo_mixed_extended_boundary_rank}
+    \leanok
+    \uses{def:mpo_mixed_extended_boundary,def:injective}
     Suppose $A$ is injective and $W\neq0$. For $L\geq2$,
     \begin{align}
         (\mathcal S'_{W,L}\otimes\C^d)
@@ -89,6 +99,8 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_extended_boundary_rank}
     Fixing the last or first letter changes the boundary to $WA^jX$
     or $XA^iW$, respectively, proving one inclusion.
     For the converse, write the right and left restrictions of a vector
@@ -124,7 +136,8 @@
         MPSTensor.MPOSymmetry.mixedEndpoint_open_ker_eq,
         MPSTensor.MPOSymmetry.mixedEndpoint_open_ker_finrank,
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_open_ker_starProjection}
-    \uses{thm:mpo_mixed_extended_intersection,thm:mpo_mixed_extended_boundary_rank}
+    \leanok
+    \uses{def:mpo_mixed_extended_boundary,def:injective}
     Let $h'_W=I-\Pi_{\mathcal S'_{W,2}}$ and let
     $H'^{\mathrm{open}}_{W,N}=\sum_{i=1}^{N-1}h'_{W,i,i+1}$.
     If $A$ is injective, $W\neq0$, and $N\geq2$, then
@@ -132,11 +145,15 @@
         \ker H'^{\mathrm{open}}_{W,N}=\mathcal S'_{W,N},
         \qquad \dim\ker H'^{\mathrm{open}}_{W,N}=D^2.
     \end{align}
-    For the mixed interpolation these open kernels have dimension
-    $(D_0+D_1)^2$, and their orthogonal projections are continuous at
+    If both endpoint tensors are injective and $D_0,D_1>0$, the mixed
+    interpolation has open kernels of dimension $(D_0+D_1)^2$, and their
+    orthogonal projections are continuous at
     every fixed $N\geq2$, including at $\gamma=0,1$.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_extended_intersection,
+        thm:mpo_mixed_extended_boundary_rank}
     Each summand is positive, so zero total energy is equivalent to
     membership in every local kernel. In coordinates, extending a local
     interaction by the identity means applying it to every exterior

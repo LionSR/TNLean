@@ -74,15 +74,24 @@ with an explicit physical pair index and one internal virtual contraction.
 
 ## Validation ledger
 
-As of 5 October 2026, the frozen source cone has an independent mathematical
-review, exact source/reverse-blueprint coverage, a rendered and visually
-inspected Tenkz diagram, and clean changed-prose and whitespace checks.
-Thirteen of the seventeen production modules have passed targeted Lean
-elaboration: interpolation, support, embeddings, sector reduction, corner
-support, left local comparison, physical reindexing, endpoint swapping,
-inserted left inverses, extended boundary rank/continuity, intersection, and
-contiguous restriction. The final restriction source also removes four
-unused-binder warnings and awaits rechecking. Right local comparison, both
-periodic endpoint modules, the open-kernel capstone, and both strict regressions
-still require validation before this candidate is treated as verified. Full
-exact-head CI and final review remain required before integration.
+At PR #8691 head `991b083e`, the full Lean build job passed on 5 October
+2026. All 17 production modules compile, including the right local
+comparison, both periodic endpoint gap modules, and the exact open-kernel
+capstone. Both regression files passed with the strict CI option set, and
+all three guarded standard-axiom reports passed. The warning-only contiguous
+restriction cleanup is included in this successful validation.
+
+The source cone also has an independent mathematical review, exact
+source/reverse-blueprint declaration coverage, a rendered and visually
+inspected Tenkz diagram, and changed-prose and whitespace checks. The three
+blueprint leaves now mark the compiled statements and proofs accordingly.
+Their dependency edges distinguish definitions needed to state each claim
+from results used in its proof.
+
+The full blueprint web workflow also passed at `991b083e`, including the
+Tenkz and browser checks. This subsequent documentation-only dependency
+repair requires fresh exact-head CI and final review. These
+successful checks do not establish the separate, unpublished endpoint
+open-gap continuation, a uniform gap across the whole parameter interval,
+or the full classification theorem. No merge-readiness claim is made while
+the remaining checks are unfinished.

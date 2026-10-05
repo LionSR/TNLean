@@ -18,6 +18,7 @@ original endpoint tensors in the two diagonal sectors of $V\otimes V$.
         MPSTensor.MPOSymmetry.mixedEndpointBase,
         MPSTensor.MPOSymmetry.mixedEndpointInterpolation}
     \leanok
+    \uses{def:mps_tensor}
     Embed each endpoint matrix into its diagonal block of $\End(V)$ and put
     \begin{align}
         A^{ij}    & =
@@ -67,12 +68,14 @@ $W_\gamma$ denotes $W(\gamma)$.
         MPSTensor.MPOSymmetry.isUnit_bondInterpolationMatrix_of_mem_Ioo,
         MPSTensor.MPOSymmetry.isInjective_mixedEndpointInterpolation}
     \leanok
-    \uses{def:mpo_mixed_endpoint_tensor}
+    \uses{def:mpo_mixed_endpoint_tensor,def:injective}
     The unweighted letters span $\End(V)$. The tensor $A(\gamma)$ depends
     continuously on $\gamma\in\R$ and is injective for $0<\gamma<1$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:mpo_mixed_endpoint_tensor,def:injective,
+        thm:spt_normalized_bond_interpolation}
     Endpoint injectivity supplies every matrix in each diagonal block.
     The mixed letters supply every off-diagonal matrix unit, so all matrix
     units belong to the span. Right multiplication in
@@ -105,14 +108,19 @@ $W_\gamma$ denotes $W(\gamma)$.
         MPSTensor.MPOSymmetry.insertedTwoSiteMap_injective,
         MPSTensor.MPOSymmetry.finrank_range_insertedTwoSiteMap}
     \leanok
-    \uses{def:mpo_mixed_extended_support}
+    \uses{def:mpo_mixed_extended_support,def:injective}
     If $B$ is injective and $W\neq0$, then $\Gamma_{B,W}$ is injective
     and $\dim\mathcal S'_{B,W}=D^2$. Invertibility of $W$ is unnecessary.
 \end{theorem}
 \begin{proof}
     \leanok
-    The products $B^iWB^j$ span the full matrix algebra: endpoint
-    injectivity extends their span to every $RWS$, and if $W_{ab}\neq0$,
+    \uses{lem:one_block_injective_of_injective,
+        lem:block_injective_two_sided_word_span,def:mpo_mixed_extended_support,
+        def:eval_word}
+    The products $B^iWB^j$ span the full matrix algebra by
+    Lemmas~\ref{lem:one_block_injective_of_injective}
+    and~\ref{lem:block_injective_two_sided_word_span}:
+    injectivity of $B$ extends their span to every $RWS$, and if $W_{ab}\neq0$,
     then $|i\rangle\langle a|W|b\rangle\langle j|
         =W_{ab}|i\rangle\langle j|$ supplies every matrix unit.
     If $\Gamma_{B,W}(X)=0$, the linear functional $Y\mapsto\tr(YX)$
@@ -132,8 +140,8 @@ $W_\gamma$ denotes $W(\gamma)$.
         MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_eq_parentInteractionES,
         MPSTensor.MPOSymmetry.tendsto_mixedEndpoint_parentInteractionES}
     \leanok
-    \uses{thm:mpo_mixed_interior,thm:mpo_inserted_boundary_injective,
-        def:mpo_mixed_extended_support}
+    \uses{def:mpo_mixed_extended_support,def:ground_space_es,
+        def:parent_interaction}
     The spaces $\mathcal S'_\gamma$ have dimension $D^2$ for every real
     $\gamma$, and their orthogonal projectors are continuous.
     For $0<\gamma<1$, the space $\mathcal S'_\gamma$ equals the canonical
@@ -144,16 +152,24 @@ $W_\gamma$ denotes $W(\gamma)$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:mpo_mixed_interior,thm:mpo_inserted_boundary_injective,
+        thm:spt_normalized_bond_interpolation,lem:uncle_local_projector_continuity,
+        lem:mem_ground_space_es,lem:ground_space_map_apply,
+        def:mpo_mixed_extended_support,def:eval_word,
+        rem:euclidean_local_projector_ingredients}
     Since both endpoint bond dimensions are positive,
     $W(\gamma)\neq0$ for every real $\gamma$.
-    The previous theorem gives injectivity of $\Gamma_\gamma$.
+    Theorems~\ref{thm:mpo_mixed_interior}
+    and~\ref{thm:mpo_inserted_boundary_injective} give injectivity of
+    $\Gamma_\gamma$.
     Its entries are continuous, and the inverse-Gram expression
     \begin{align}
         \Pi_{\mathcal S'_\gamma}
          & =\Gamma_\gamma(\Gamma_\gamma^*\Gamma_\gamma)^{-1}
         \Gamma_\gamma^*
     \end{align}
-    is continuous. In the open interval, $W(\gamma)$ is invertible.
+    is continuous by Lemma~\ref{lem:uncle_local_projector_continuity}.
+    In the open interval, $W(\gamma)$ is invertible.
     The boundary substitution $X\mapsto W(\gamma)X$ identifies
     $\tr(A^iW(\gamma)A^jW(\gamma)X)$ with
     (\ref{eq:mpo_inserted_boundary}), giving the equality of supports.
@@ -194,6 +210,8 @@ $W_\gamma$ denotes $W(\gamma)$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:mpo_mixed_interior,def:mpo_mixed_endpoint_tensor,
+        def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     Left multiplication by $P_0$ selects the physical row sector of each
     letter, while right multiplication selects its column sector.
     Move the former insertion around the trace:
@@ -207,12 +225,13 @@ $W_\gamma$ denotes $W(\gamma)$.
     \lean{MPSTensor.MPOSymmetry.mixedEndpointColumnSector_zero_insertedTwoSiteMap,
         MPSTensor.MPOSymmetry.mixedEndpointRowSector_one_insertedTwoSiteMap}
     \leanok
-    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,
-        thm:mpo_mixed_outer_sectors}
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     Every $v\in\mathcal S'_0$ satisfies $C_0v=v$ and $R_1v=v$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:mpo_mixed_interior,thm:mpo_mixed_outer_sectors,
+        def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     In $\tr(A^iP_0A^jX)$, a first letter with column in $I_1$ satisfies
     $A^iP_0=0$, and a second letter with row in $I_1$ satisfies
     $P_0A^j=0$. All such physical coefficients vanish.
@@ -225,12 +244,13 @@ $W_\gamma$ denotes $W(\gamma)$.
         MPSTensor.MPOSymmetry.mixedEndpointRowSector_commute_extendedSupport_starProjection,
         MPSTensor.MPOSymmetry.mixedEndpointColumnSector_commute_extendedSupport_starProjection}
     \leanok
-    \uses{thm:mpo_mixed_outer_sectors,def:mpo_mixed_physical_sectors}
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     The maps $R_0,C_1$ are self-adjoint and commute with
     $\Pi_{\mathcal S'_{A,W}}$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:mpo_mixed_outer_sectors,def:mpo_mixed_physical_sectors}
     Their diagonal entries are zero or one, so they are self-adjoint.
     If a self-adjoint map $Q$ preserves a subspace $S$, it also preserves
     $S^\perp$: $\langle Qv,w\rangle=\langle v,Qw\rangle=0$ for
@@ -257,7 +277,8 @@ $W_\gamma$ denotes $W(\gamma)$.
         MPSTensor.MPOSymmetry.insertedTwoSiteMap_first_boundary,
         MPSTensor.MPOSymmetry.groundSpaceES_mixedEndpointLeftTensor_le_extendedSupport}
     \leanok
-    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_extended_support}
+    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_extended_support,
+        def:ground_space_es,def:injective}
     The tensor $B_0$ is injective whenever $A_0$ is injective, and
     $V_0V_0^*=P_0$, $V_0^*A^iV_0=B_0^i$.
     For every endpoint boundary matrix $X$,
@@ -269,6 +290,9 @@ $W_\gamma$ denotes $W(\gamma)$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_endpoint_tensor,
+        def:mpo_mixed_extended_support,def:spt_coordinate_inclusions,def:injective,
+        def:ground_space_es,lem:ground_space_map_apply,def:eval_word}
     Every letter of $A_0$ occurs in $B_0$, so its span remains full.
     Coordinate compression selects the first diagonal virtual block.
     Substituting $P_0=V_0V_0^*$ and moving the last factor around the
@@ -286,11 +310,14 @@ $W_\gamma$ denotes $W(\gamma)$.
     \label{thm:mpo_mixed_corner_support}
     \lean{MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES}
     \leanok
-    \uses{thm:mpo_mixed_outer_sectors,thm:mpo_mixed_first_support}
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,
+        def:mpo_mixed_first_endpoint,def:ground_space_es}
     The image of $\mathcal S'_0$ under $R_0C_1$ is exactly $G_2(B_0)$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:mpo_mixed_outer_sectors,thm:mpo_mixed_first_support,
+        def:ground_space_es}
     Applying both outer projections replaces $X$ by $P_0XP_0$.
     Since $P_0=V_0V_0^*$, this boundary equals
     $V_0(V_0^*XV_0)V_0^*$ and (\ref{eq:mpo_mixed_corner_boundary})
