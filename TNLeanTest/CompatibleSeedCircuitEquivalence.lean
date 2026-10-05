@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.CompatibleSeedCircuitEquivalence
 import TNLean.MPS.Preparation.GHZSeedCircuit
 
+/-! Regression examples for full-vector compatible coherent seed conversion. -/
+
 open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped InnerProductSpace
 

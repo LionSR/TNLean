@@ -97,7 +97,7 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn
       ⟨fun j => windowInput (dig₀ j), windowInput_injective.comp hdig₀⟩
     obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
     exact ⟨W, hW, fun u j => hWV u j⟩
-  -- The circuit after the measurement.
+  -- The coherent circuit.
   have hcirc : IsCircuitOn Set.univ (KW + Cb * L)
       (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) :=
     (isCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu).mul
