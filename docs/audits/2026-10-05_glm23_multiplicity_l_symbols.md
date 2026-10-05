@@ -195,3 +195,16 @@ actions. Its composite map must use fusion synthesis:
 provide that exact closed-action bridge. For the source's stabilizer formulas,
 require `H = stabilizer(x)` or specialize to `x = x0`; individual inverse-action
 V/W maps carry reciprocal L factors that cancel only in their paired sandwich.
+
+## Independent source review checkpoint
+
+On 5 October 2026 an independent review found no mathematical blocker in
+the seven-module construction: both trees reconstruct the same unblocked
+tensor, common support is derived without ambient completeness, fixed-final
+normality gives scalar factors, and both inverse identities allow empty
+multiplicity spaces. It confirmed the printed analysis direction and the
+state-block injectivity, dimension, and scalar-gauge separation hypotheses.
+The review caught a missing word-length qualification in one intermediate
+blueprint statement; it now explicitly requires a positive simultaneous
+spanning length, as the Lean theorem already did. Compiler and exact-head
+CI results are separate from this mathematical checkpoint.

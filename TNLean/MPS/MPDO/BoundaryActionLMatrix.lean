@@ -177,7 +177,8 @@ theorem fusionToSequentialComparison_eq_blockDiagonal (a b : Fin r) (x : Fin s)
   by_cases hyz : y = z
   · subst z
     rw [actionLMatrix_cross VF WF VA WA hF hA hNormal hD]
-    exact (Matrix.blockDiagonal'_apply_eq _ y (p, u) (q, v)).symm
+    rw [Matrix.blockDiagonal'_apply_eq]
+    rfl
   · have hzero := MPSTensor.rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
       hSpan y z hyz
       (sequentialActionAnalysis VA a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) *
@@ -205,7 +206,8 @@ theorem sequentialToFusionComparison_eq_blockDiagonal (a b : Fin r) (x : Fin s)
   by_cases hyz : y = z
   · subst z
     rw [inverseActionLMatrix_cross VF WF VA WA hF hA hNormal hD]
-    exact (Matrix.blockDiagonal'_apply_eq _ y (p, u) (q, v)).symm
+    rw [Matrix.blockDiagonal'_apply_eq]
+    rfl
   · have hzero := MPSTensor.rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
       hSpan y z hyz
       (fusionThenActionAnalysis VF VA a b x (fusionActionPathEquiv a b x ⟨y, p⟩) *
