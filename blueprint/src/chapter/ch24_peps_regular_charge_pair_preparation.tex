@@ -1,0 +1,61 @@
+\begin{definition}[The literal four-register charge-pair vector]
+    \label{def:peps_regular_charge_four_register}
+    \lean{TNLean.PEPS.normalizedRegularChargeFourRegister}
+    \leanok
+    \uses{def:peps_regular_charge_pair}
+    Let $G$ be a finite group and $\chi:G\to\mathbb C$.
+    The normalized vectorization of the diagonal charge-pair operator is
+    \[
+        \Phi_{\chi,p}(a,b,c,d)
+        =|G|^{-1}\mathbf1_{a=c}\mathbf1_{b=d}\chi(pb^{-1}a).
+    \]
+    The initial vector in the accessible creation diagram is
+    $\Omega=\Phi_{1,1}$: the two uniform diagonal pairs $a=c$ and $b=d$.
+    These are the actual four registers of
+    \cite[charge-pair creation]{Schuch2010PEPS}, lines 2534--2558.
+    A comparison with the original six-spin contraction remains separate.
+\end{definition}
+
+\begin{theorem}[The diagonal embedding preserves the charge-pair inner product]
+    \label{thm:peps_regular_charge_four_register_inner}
+    \lean{TNLean.PEPS.normalizedRegularChargeFourRegister_inner,
+        TNLean.PEPS.normalizedRegularChargeFourRegister_normSq}
+    \leanok
+    \uses{def:peps_regular_charge_four_register,
+        thm:peps_regular_charge_pair_normalization}
+    For all coefficient functions $\chi,\psi$ and translations $p,q$,
+    \[
+        \langle\Phi_{\chi,p},\Phi_{\psi,q}\rangle
+        =\langle\widehat v_{\chi,p},\widehat v_{\psi,q}\rangle.
+    \]
+    In particular, a unitary irreducible character gives
+    $\|\Phi_{\chi,p}\|=1$. A nontrivial irreducible character gives
+    $\langle\Omega,\Phi_{\chi,p}\rangle=0$.
+\end{theorem}
+\begin{proof}\leanok
+    Only the diagonal configurations $a=c$ and $b=d$ contribute.
+    The remaining sum is the proved two-register inner product.
+\end{proof}
+
+\begin{theorem}[An actual unitary preparation in the four accessible registers]
+    \label{thm:peps_regular_charge_pair_preparation}
+    \lean{TNLean.PEPS.exists_unitary_regularChargePairPreparation}
+    \leanok
+    \uses{thm:peps_regular_charge_four_register_inner,
+        lem:peps_unitary_vector_swap}
+    Let $\chi$ be a unitary irreducible character and $p\in G$.
+    There is a unitary $Q$ on the four group registers such that
+    $Q\Omega=\Phi_{\chi,p}$.
+    This is an auxiliary accessible-register preparation for
+    \cite[charge-pair creation]{Schuch2010PEPS}, lines 2534--2558;
+    it does not assert an original six-spin creation operation.
+\end{theorem}
+\begin{proof}\leanok
+    For the trivial character, choose the identity, since the target is
+    $\Omega$. Otherwise the two vectors are orthogonal unit vectors.
+    Choose the reflection
+    \[
+        Q=I-(\Omega-\Phi_{\chi,p})(\Omega-\Phi_{\chi,p})^*.
+    \]
+    It is unitary and exchanges the two vectors.
+\end{proof}

@@ -8,6 +8,30 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit.Channel
 
+import TNLean.Circuit.Channel.ApproximateConversion
+import TNLean.Circuit.Channel.AsymptoticConversion
 import TNLean.Circuit.Channel.Conversion
+import TNLean.Circuit.Channel.DataInitialization
+import TNLean.Circuit.Channel.DimensionBoundedConversion
+import TNLean.Circuit.Channel.EncodedChannelLayer
+import TNLean.Circuit.Channel.EncodedChannelPlacement
+import TNLean.Circuit.Channel.EncodedChannelProtocol
 import TNLean.Circuit.Channel.Feedforward
 import TNLean.Circuit.Channel.Layer
+import TNLean.Circuit.Channel.NativePortLayer
+import TNLean.Circuit.Channel.NativeRegisterWires
+import TNLean.Circuit.Channel.OnsiteChannelProduct
+import TNLean.Circuit.Channel.OnsiteRegisterEncoding
+import TNLean.Circuit.Channel.PhysicalPort
+import TNLean.Circuit.Channel.PhysicalPortCodes
+import TNLean.Circuit.Channel.PhysicalPortIO
+import TNLean.Circuit.Channel.PhysicalProtocolCompilation
+import TNLean.Circuit.Channel.PhysicalRegisterEncoding
+import TNLean.Circuit.Channel.PortChannelRouting
+import TNLean.Circuit.Channel.PortMatching
+import TNLean.Circuit.Channel.PortRegisters
+import TNLean.Circuit.Channel.PortRouting
+import TNLean.Circuit.Channel.PortSimulation
+import TNLean.Circuit.Channel.RegisterChannelLift
+import TNLean.Circuit.Channel.RegisterEncoding
+import TNLean.Circuit.Channel.WholeSiteChannels

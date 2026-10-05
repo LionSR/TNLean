@@ -1,0 +1,38 @@
+\begin{theorem}[A six-spin operation moving one plaquette flux]%
+    \label{thm:peps_torus_two_plaquette_physical_flux_move}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTwoPlaquettePhysicalFluxMove}
+    \leanok
+    \uses{thm:peps_two_plaquette_torus_geometry,
+        thm:peps_torus_two_plaquette_flux_holonomy,
+        thm:peps_regular_two_cycle_physical_flux_move}
+    Let the horizontal and vertical torus periods be at least four and three,
+    respectively. Let the original four-leg tensor be $G$-isometric for the
+    regular virtual action. In the actual six-site region
+    $R=\{0,1,2\}\times\{0,1\}$, let $u_g$ insert $g$ on the upward bond at
+    horizontal coordinate zero, with the identity on every other bond.
+    Let $u'_g$ insert $g$ on both upward bonds at horizontal coordinates zero
+    and one, again leaving every other bond unchanged.
+    There exists one unitary $W$ on the six original physical spins such that
+    \begin{align}
+        W\Psi_R(u_g,\theta)=\Psi_R(u'_g,\theta)
+    \end{align}
+    for every $g\in G$ and every crossing configuration $\theta$.
+    Here both vectors are open-region contractions of the original tensor.
+    The same unitary works for every $g$ and $\theta$.
+    The left and right plaquette holonomies change from $(g^{-1},1)$ to
+    $(1,g^{-1})$.
+    This is the regular-representation six-site specialization of the local
+    construction in \cite[Theorem~6.16]{Schuch2010PEPS}. It makes no
+    parent-Hamiltonian ground-space assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Four-leg $G$-isometry gives the same local isometry in incident-edge
+    coordinates. The fixed five-edge path through the six sites is a spanning
+    tree; its two missing bonds are exactly the leftmost and middle upward
+    vertical bonds. Apply the physical two-cycle operation to this fixed tree,
+    its fixed root, and these two distinct bonds. Identifying its assignments
+    with the literal bond insertions gives the asserted identity on every
+    crossing column. The actual plaquette holonomy calculation gives the
+    stated movement of the flux.
+\end{proof}

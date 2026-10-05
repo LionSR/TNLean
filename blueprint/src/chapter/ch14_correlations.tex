@@ -140,51 +140,7 @@ spectral decomposition, and quantitative decay bounds.
     which is the definition of $C(X,Y;n)$.
 \end{proof}
 
-\section{Spectral expansion and exponential decay}
-% **Scope restriction (diagonalizable correlator expansion):** the source's
-% pure-exponential expansion and rate |lambda_2| are false as printed for a
-% defective transfer map; they are stated here under diagonalizability of the
-% transfer map on the traceless matrices; see
-% docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex.
-
-\begin{theorem}[Sum of exponentials under diagonalizability]%
-    \label{thm:correlator_sum_exponentials}
-    \uses{def:connected_correlator}
-    Let $\E_A$ be trace-preserving, with fixed point $\rho$
-    satisfying $\tr\rho=1$. Suppose its restriction to the traceless matrices
-    is diagonalizable, with eigenvalues $\lambda_1,\ldots,\lambda_{D^2-1}$,
-    counted with multiplicity. For every $X,Y$, there are coefficients
-    $c_j\in\C$ such that, for all $n\ge0$,
-    \begin{align}
-        C(X,Y;n)
-         & = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n.
-        \label{eq:correlations_spectral_expansion}
-    \end{align}
-    This is the diagonalizable case of the expansion in
-    \cite[Section~II.B.3]{Cirac2021Matrix}. Without diagonalizability,
-    Jordan blocks can contribute polynomial factors multiplying the
-    exponential terms, so the source's unqualified pure-exponential form
-    needs this hypothesis \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
-\end{theorem}
-
-\begin{proof}
-    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part}
-    The matrix $Z_\rho(X)=X\rho-\tr(X\rho)\rho$ is traceless. Expanding it
-    in an eigenbasis $(v_j)$ of the traceless subspace,
-    \begin{align}
-        Z_\rho(X)   & =\sum_{j=1}^{D^2-1}\gamma_j(X)\,v_j,
-        \\
-        \E_A^n(v_j) & =\lambda_j^n v_j .
-    \end{align}
-    By Theorem~\ref{thm:connected_correlator_traceless_reduction},
-    \begin{align}
-        C(X,Y;n)
-         & =\tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right)
-        =\sum_{j=1}^{D^2-1}\gamma_j(X)\,\tr(Y v_j)\,\lambda_j^n,
-    \end{align}
-    so $c_j=\gamma_j(X)\tr(Yv_j)$.
-    % The eigenbasis construction is tracked in Issue~\#1447.
-\end{proof}
+\section{Physical correlations and exponential decay}
 
 \begin{definition}[Physical connected fixed-point correlator]
     \label{def:physical_connected_correlator}
@@ -255,7 +211,7 @@ spectral decomposition, and quantitative decay bounds.
     \uses{def:physical_connected_correlator, def:nt_cpsv}
     For any tensor $A$ and matrix $\rho$ of nonzero trace, every rate
     $r>\rho_{\spec}(\E_A-P)$ and every pair of physical operators on independent
-    finite supports admit a constant $C_{XY}>0$ such that, for all $n\geq0$,
+    finite supports have a constant $C_{XY}>0$ such that, for all $n\geq0$,
     \begin{align}
         |C_{\mathrm{phys}}(X,Y;n)|\leq C_{XY}r^n.
         \label{eq:correlations_decay_bound}
@@ -580,3 +536,6 @@ for the transfer map $\E_A$.
     centered fixed-point correlator, (\ref{eq:correlations_gauge_invariance})
     transports the bound to $A$ at every separation, including $n=0$.
 \end{proof}
+
+\section{Jordan spectral expansions}
+\input{chapter/ch14_correlations_jordan}

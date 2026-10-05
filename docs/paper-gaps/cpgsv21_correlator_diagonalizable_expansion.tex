@@ -9,7 +9,7 @@
 
 \title{Pure-Exponential Correlator Expansion and Jordan Blocks in CPGSV21}
 \author{}
-\date{2026-10-01}
+\date{2026-10-04}
 
 \begin{document}
 \maketitle
@@ -28,7 +28,7 @@ It then states that a connected correlator at distance $n$ has the form
 \end{align}
 a sum of $D^2-1$ pure exponentials, with decay rate set by
 $|\lambda_2|$.\footnote{Source location:
-\path{Papers/2011.12127/TN-Review-main.tex}:433--440.}
+    \path{Papers/2011.12127/TN-Review-main.tex}:433--440.}
 
 \section{The deviation}
 
@@ -50,21 +50,21 @@ by the Gelfand formula.
 \paragraph{Explicit Hermitian physical example.}
 Let
 \[
- P=\frac1{16}\begin{pmatrix}9&5&2\\3&7&6\\4&4&8\end{pmatrix},
- \qquad u=\begin{pmatrix}1\\-1\\0\end{pmatrix},
- \qquad v=\begin{pmatrix}1\\1\\-2\end{pmatrix}.
+    P=\frac1{16}\begin{pmatrix}9&5&2\\3&7&6\\4&4&8\end{pmatrix},
+    \qquad u=\begin{pmatrix}1\\-1\\0\end{pmatrix},
+    \qquad v=\begin{pmatrix}1\\1\\-2\end{pmatrix}.
 \]
 Every entry of $P$ is strictly positive, and every row and column sums to one.
 Put $Q=\frac13\boldsymbol 1\boldsymbol 1^{\mathsf T}$ and
 $N=uv^{\mathsf T}/16$. Direct calculation gives
 \[
- P=Q+\tfrac14(I-Q)+N,\qquad QN=NQ=N^2=0.
+    P=Q+\tfrac14(I-Q)+N,\qquad QN=NQ=N^2=0.
 \]
 Here $u^{\mathsf T}v=0$, $u^{\mathsf T}u=2$, and $v^{\mathsf T}v=6$.
 Consequently, for every $n\geq0$,
 \[
- P^n v=4^{-n}\bigl(v+\tfrac32 n u\bigr),\qquad
- \tfrac13u^{\mathsf T}P^n v=n4^{-n}.
+    P^n v=4^{-n}\bigl(v+\tfrac32 n u\bigr),\qquad
+    \tfrac13u^{\mathsf T}P^n v=n4^{-n}.
 \]
 The channel on $3\times3$ matrices with Kraus operators
 $A^{(a,b)}=\sqrt{P_{ab}}\,|a\rangle\langle b|$ is trace preserving and unital,
@@ -78,20 +78,20 @@ $\{1,\tfrac14,0\}$, with a size-two Jordan block at $\tfrac14$.
 
 Define physical observables on the nine-dimensional one-site space by
 \[
- X_{(a,b),(a,b)}=u_b,\qquad Y_{(a,b),(a,b)}=v_a,
+    X_{(a,b),(a,b)}=u_b,\qquad Y_{(a,b),(a,b)}=v_a,
 \]
 with all off-diagonal entries zero. These are Hermitian. Writing
 $\Phi_O(Z)=\sum_{a,b}P_{ab}O_{(a,b),(a,b)}Z_{bb}|a\rangle\langle a|$
 for the insertion map of a diagonal observable, bistochasticity gives
 \[
- \Phi_Y(\rho)=\tfrac13\operatorname{diag}(v),\qquad
- \tr\Phi_X(\operatorname{diag}(z))=u^{\mathsf T}z.
+    \Phi_Y(\rho)=\tfrac13\operatorname{diag}(v),\qquad
+    \tr\Phi_X(\operatorname{diag}(z))=u^{\mathsf T}z.
 \]
 Both one-point expectations vanish. The fixed-point infinite-chain connected
 correlator with $n$ unobserved intermediate sites therefore is exactly
 \[
- \tr\!\bigl(\Phi_X(E^n(\Phi_Y(\rho)))\bigr)
- -\tr\Phi_X(\rho)\,\tr\Phi_Y(\rho)=n4^{-n}.
+    \tr\!\bigl(\Phi_X(E^n(\Phi_Y(\rho)))\bigr)
+    -\tr\Phi_X(\rho)\,\tr\Phi_Y(\rho)=n4^{-n}.
 \]
 The physical spacing of the one-site observables is $n+1$. This sequence
 cannot be a finite linear combination of pure exponentials with the
@@ -112,13 +112,29 @@ finite nilpotent transient.
 
 \section{Corrected statements}
 
-The blueprint chapter on correlations states the expansion under the explicit
-hypothesis that the restriction of the transfer map to the traceless matrices
-is diagonalizable. It states the decay bound at every rate $r$ with
-$\operatorname{spr}(E-P)<r<1$, where $P$ is the projection onto the fixed state.
-Normality and trace preservation imply this complementary spectral gap; no
-gap certificate or diagonalizability hypothesis is supplied separately.
-The eigenbasis expansion remains unformalized.
+The all-separation binomial expansion is now formalized by
+\leanid{MPSTensor.physicalConnectedCorrelator_exists_binomial_expansion}.
+Mathlib's generalized-eigenspace decomposition supplies actual complementary
+transfer eigenvalues and coefficients, with no assumed expansion or
+diagonalizability certificate. For each eigenvalue, the cutoff is the least
+index at which its generalized eigenspace stabilizes, equivalently its
+maximal Jordan-block size.
+
+The theorem
+\leanid{MPSTensor.physicalConnectedCorrelator_exists_jordan_expansion}
+rewrites only the nonzero eigenvalues as polynomial-times-exponential terms.
+The zero-eigenvalue contribution is retained as a finite transient.
+For a normal tensor, the complete arbitrary-gauge physical statement is
+\leanid{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion}:
+the nonzero frequencies are genuine eigenvalues of the original transfer
+map, all have modulus below one, and the transient vanishes by separation
+$D^2$. A common trace-preserving representative supplies the exact Jordan
+indices and works for all finite supports. The formula includes adjacent
+blocks, $n=0$.
+
+The separately proved decay bound still uses every rate $r$ satisfying
+$\operatorname{spr}(E-P)<r<1$. Polynomial factors need not be bounded by a
+constant at the spectral radius itself.
 
 \paragraph{Gauge covariance.}
 Physical insertions and the connected left-right contraction are now gauge
@@ -133,22 +149,15 @@ $\tr(\rho^L\rho^R)=1$. The theorem
 proves exponential decay in the original representation on independent
 finite supports at all separations, including adjacent blocks.
 
-\paragraph{Remaining normality scope.}
-The source also considers tensors whose unique eigenvalue of largest modulus
-is algebraically simple and whose fixed matrices may be singular. The
-arbitrary-gauge decay theorem is presently proved for normal tensors, with
-leading eigenvalue one. Extending it to singular fixed matrices requires the
-complementary spectral projection directly, rather than an invertible
-Perron gauge.
+\section{Remaining source scope}
 
-\section{Elimination plan}
-
-Formalize the diagonalizable eigenbasis expansion and the corrected Jordan
-expansion, including finite nilpotent transients. The latter replaces the
-source's false pure-exponential formula. For the broader class with a unique,
-algebraically simple eigenvalue of largest modulus, construct the left-right
-spectral projection and prove decay on its complement without an invertible
-Perron gauge.
+The corrected Jordan expansion, including finite nilpotent transients, is
+proved for normal tensors. The open verdict concerns the source's broader
+class with a unique algebraically simple dominant eigenvalue and possibly
+singular fixed matrices. Extending the physical theorem to that class needs
+the left-right spectral projection directly, rather than an invertible
+Perron gauge. The original unqualified pure-exponential formula remains
+false; the proved binomial and polynomial-plus-transient formulas replace it.
 
 \begin{thebibliography}{1}
     \bibitem{Cirac2021Matrix}

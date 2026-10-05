@@ -209,7 +209,10 @@ private def halfEdgeIndexEquiv (R : Finset V) :
   left_inv := halfEdgeIndex_left_inv R
   right_inv := halfEdgeIndex_right_inv R
 
-private def halfEdgeLabelEquiv (R : Finset V) :
+/-- The native region incidences regroup as boundary registers, internal tail
+registers, and internal head registers. Source: SCP10, regional coordinates,
+lines 1765–1920, and the bond-endpoint argument in Section 7, lines 2977–3019. -/
+def regionHalfEdgeLabelEquiv (R : Finset V) :
     ((v : {v // v ∈ R}) → IncidentEdge Γ v.1 → G) ≃
       (Boundary (Γ := Γ) R → G) ×
         (Internal (Γ := Γ) R → G) × (Internal (Γ := Γ) R → G) :=
@@ -217,6 +220,66 @@ private def halfEdgeLabelEquiv (R : Finset V) :
     ((halfEdgeIndexEquiv R).symm.arrowCongr (Equiv.refl G))).trans
     ((Equiv.sumArrowEquivProdArrow _ _ G).trans
       (Equiv.prodCongr (Equiv.refl _) (Equiv.sumArrowEquivProdArrow _ _ G)))
+
+omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] in
+/-- The first internal register is the actual tail incidence. Source: SCP10,
+regional coordinates, lines 1765–1920, and Section 7, lines 2977–3019. -/
+@[simp] theorem regionHalfEdgeLabelEquiv_apply_internal_tail (R : Finset V)
+    (α : (v : {v : V // v ∈ R}) → IncidentEdge Γ v.1 → G)
+    (e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}) :
+    (regionHalfEdgeLabelEquiv R α).2.1 e =
+      α ⟨e.1.1.1, e.2.1⟩ (edgeLeftIncident e.1) := rfl
+
+omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] in
+/-- The second internal register is the actual head incidence. Source: SCP10,
+regional coordinates, lines 1765–1920, and Section 7, lines 2977–3019. -/
+@[simp] theorem regionHalfEdgeLabelEquiv_apply_internal_head (R : Finset V)
+    (α : (v : {v : V // v ∈ R}) → IncidentEdge Γ v.1 → G)
+    (e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}) :
+    (regionHalfEdgeLabelEquiv R α).2.2 e =
+      α ⟨e.1.1.2, e.2.2⟩ (edgeRightIncident e.1) := rfl
+
+omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] in
+/-- A crossing bond leaving the region reads its tail physical register.
+Source: SCP10, regional coordinates, lines 1765–1920, and Section 7, lines 2977–3019. -/
+@[simp] theorem regionHalfEdgeLabelEquiv_apply_boundary_tail (R : Finset V)
+    (α : (v : {v : V // v ∈ R}) → IncidentEdge Γ v.1 → G)
+    (e : {e : Edge Γ // IsRegionBoundaryEdge R e}) (ht : e.1.1.1 ∈ R) :
+    (regionHalfEdgeLabelEquiv R α).1 e =
+      α ⟨e.1.1.1, ht⟩ (edgeLeftIncident e.1) := by
+  change Sigma.uncurry α (boundaryHalfEdge R e) =
+    Sigma.uncurry α ⟨⟨e.1.1.1, ht⟩, edgeLeftIncident e.1⟩
+  apply congrArg (Sigma.uncurry α)
+  have hv : boundaryVertex R e = ⟨e.1.1.1, ht⟩ := by
+    unfold boundaryVertex
+    rw [dite_eq_left ht]
+  apply Sigma.ext hv
+  exact (Subtype.heq_iff_coe_eq (fun f => by
+    change (f.1.1 = (boundaryVertex R e).1 ∨ f.1.2 = (boundaryVertex R e).1) ↔ _
+    rw [hv])).mpr rfl
+
+omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] in
+/-- A crossing bond entering the region reads its head physical register.
+Source: SCP10, regional coordinates, lines 1765–1920, and Section 7, lines 2977–3019. -/
+@[simp] theorem regionHalfEdgeLabelEquiv_apply_boundary_head (R : Finset V)
+    (α : (v : {v : V // v ∈ R}) → IncidentEdge Γ v.1 → G)
+    (e : {e : Edge Γ // IsRegionBoundaryEdge R e}) (hh : e.1.1.2 ∈ R) :
+    (regionHalfEdgeLabelEquiv R α).1 e =
+      α ⟨e.1.1.2, hh⟩ (edgeRightIncident e.1) := by
+  have ht : e.1.1.1 ∉ R := by
+    rcases e.2 with h | h
+    · exact False.elim (h.2 hh)
+    · exact h.1
+  change Sigma.uncurry α (boundaryHalfEdge R e) =
+    Sigma.uncurry α ⟨⟨e.1.1.2, hh⟩, edgeRightIncident e.1⟩
+  apply congrArg (Sigma.uncurry α)
+  have hv : boundaryVertex R e = ⟨e.1.1.2, hh⟩ := by
+    unfold boundaryVertex
+    rw [dite_eq_right ht]
+  apply Sigma.ext hv
+  exact (Subtype.heq_iff_coe_eq (fun f => by
+    change (f.1.1 = (boundaryVertex R e).1 ∨ f.1.2 = (boundaryVertex R e).1) ↔ _
+    rw [hv])).mpr rfl
 
 private def regionTreeEdgeEquiv (R : Finset V) (T : SimpleGraph {v : V // v ∈ R})
     (hT : T ≤ Γ.induce (R : Set V)) :
@@ -349,36 +412,36 @@ noncomputable def regularRegionCoordinatesEquiv (R : Finset V)
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v // v ∈ R}) :
     ((v : {v : V // v ∈ R}) → IncidentEdge Γ v.1 → G) ≃
       RegularRegionCoordinates (Γ := Γ) (G := G) R T o :=
-  (halfEdgeLabelEquiv R).trans
+  (regionHalfEdgeLabelEquiv R).trans
     { toFun := decodeCoordinates R T hT htree o
       invFun := encodeCoordinates R T o
       left_inv := encode_decodeCoordinates R T hT htree o
       right_inv := decode_encodeCoordinates R T hT htree o }
 
 omit [Group G] [Fintype G] [Fintype V] [DecidableRel Γ.Adj] in
-private theorem halfEdgeLabelEquiv_symm_tail (R : Finset V)
+private theorem regionHalfEdgeLabelEquiv_symm_tail (R : Finset V)
     (β : (Boundary (Γ := Γ) R → G) ×
       (Internal (Γ := Γ) R → G) × (Internal (Γ := Γ) R → G))
     (e : Internal (Γ := Γ) R) :
-    (halfEdgeLabelEquiv R).symm β (internalTail R e) ⟨e.1, Or.inl rfl⟩ = β.2.1 e :=
-  congrArg (fun γ => γ.2.1 e) ((halfEdgeLabelEquiv R).apply_symm_apply β)
+    (regionHalfEdgeLabelEquiv R).symm β (internalTail R e) ⟨e.1, Or.inl rfl⟩ = β.2.1 e :=
+  congrArg (fun γ => γ.2.1 e) ((regionHalfEdgeLabelEquiv R).apply_symm_apply β)
 
 omit [Group G] [Fintype G] [Fintype V] [DecidableRel Γ.Adj] in
-private theorem halfEdgeLabelEquiv_symm_head (R : Finset V)
+private theorem regionHalfEdgeLabelEquiv_symm_head (R : Finset V)
     (β : (Boundary (Γ := Γ) R → G) ×
       (Internal (Γ := Γ) R → G) × (Internal (Γ := Γ) R → G))
     (e : Internal (Γ := Γ) R) :
-    (halfEdgeLabelEquiv R).symm β (internalHead R e) ⟨e.1, Or.inr rfl⟩ = β.2.2 e :=
-  congrArg (fun γ => γ.2.2 e) ((halfEdgeLabelEquiv R).apply_symm_apply β)
+    (regionHalfEdgeLabelEquiv R).symm β (internalHead R e) ⟨e.1, Or.inr rfl⟩ = β.2.2 e :=
+  congrArg (fun γ => γ.2.2 e) ((regionHalfEdgeLabelEquiv R).apply_symm_apply β)
 
 omit [Group G] [Fintype G] [Fintype V] [DecidableRel Γ.Adj] in
-private theorem halfEdgeLabelEquiv_symm_boundary (R : Finset V)
+private theorem regionHalfEdgeLabelEquiv_symm_boundary (R : Finset V)
     (β : (Boundary (Γ := Γ) R → G) ×
       (Internal (Γ := Γ) R → G) × (Internal (Γ := Γ) R → G))
     (e : Boundary (Γ := Γ) R) :
-    (halfEdgeLabelEquiv R).symm β (boundaryHalfEdge R e).1 (boundaryHalfEdge R e).2 =
+    (regionHalfEdgeLabelEquiv R).symm β (boundaryHalfEdge R e).1 (boundaryHalfEdge R e).2 =
       β.1 e :=
-  congrArg (fun γ => γ.1 e) ((halfEdgeLabelEquiv R).apply_symm_apply β)
+  congrArg (fun γ => γ.1 e) ((regionHalfEdgeLabelEquiv R).apply_symm_apply β)
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- Reconstruction at the smaller endpoint of an internal edge. -/
@@ -390,7 +453,7 @@ theorem regularRegionCoordinatesEquiv_symm_internal_tail (R : Finset V)
     (regularRegionCoordinatesEquiv R T hT htree o).symm c
         ⟨e.1.1.1, e.2.1⟩ ⟨e.1, Or.inl rfl⟩ =
       c.2.2.1.1 ⟨e.1.1.1, e.2.1⟩ * c.2.1 e :=
-  halfEdgeLabelEquiv_symm_tail R (encodeCoordinates R T o c) e
+  regionHalfEdgeLabelEquiv_symm_tail R (encodeCoordinates R T o c) e
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- Reconstruction at the larger endpoint of an internal edge. Tree edges have
@@ -405,7 +468,7 @@ theorem regularRegionCoordinatesEquiv_symm_internal_head (R : Finset V)
       c.2.2.1.1 ⟨e.1.1.2, e.2.2⟩ *
         (if h : T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩ then 1 else c.2.2.2 ⟨e, h⟩) *
         c.2.1 e :=
-  halfEdgeLabelEquiv_symm_head R (encodeCoordinates R T o c) e
+  regionHalfEdgeLabelEquiv_symm_head R (encodeCoordinates R T o c) e
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- Reconstruction on a boundary edge whose smaller endpoint lies in the region. -/
@@ -417,7 +480,7 @@ theorem regularRegionCoordinatesEquiv_symm_boundary_tail (R : Finset V)
     (regularRegionCoordinatesEquiv R T hT htree o).symm c
         ⟨e.1.1, ht⟩ ⟨e, Or.inl rfl⟩ =
       c.2.2.1.1 ⟨e.1.1, ht⟩ * c.1 ⟨e, Or.inl ⟨ht, hh⟩⟩ := by
-  have h := halfEdgeLabelEquiv_symm_boundary R (encodeCoordinates R T o c)
+  have h := regionHalfEdgeLabelEquiv_symm_boundary R (encodeCoordinates R T o c)
     ⟨e, Or.inl ⟨ht, hh⟩⟩
   have hv : boundaryVertex R ⟨e, Or.inl ⟨ht, hh⟩⟩ = ⟨e.1.1, ht⟩ := by
     unfold boundaryVertex
@@ -428,7 +491,7 @@ theorem regularRegionCoordinatesEquiv_symm_boundary_tail (R : Finset V)
     exact (Subtype.heq_iff_coe_eq (fun f => by
       simp only [boundaryHalfEdge]
       rw [hv])).mpr rfl
-  have hval := congrArg (fun s => (halfEdgeLabelEquiv R).symm
+  have hval := congrArg (fun s => (regionHalfEdgeLabelEquiv R).symm
     (encodeCoordinates R T o c) s.1 s.2) hs
   calc
     _ = _ := hval.symm
@@ -445,7 +508,7 @@ theorem regularRegionCoordinatesEquiv_symm_boundary_head (R : Finset V)
     (regularRegionCoordinatesEquiv R T hT htree o).symm c
         ⟨e.1.2, hh⟩ ⟨e, Or.inr rfl⟩ =
       c.2.2.1.1 ⟨e.1.2, hh⟩ * c.1 ⟨e, Or.inr ⟨ht, hh⟩⟩ := by
-  have h := halfEdgeLabelEquiv_symm_boundary R (encodeCoordinates R T o c)
+  have h := regionHalfEdgeLabelEquiv_symm_boundary R (encodeCoordinates R T o c)
     ⟨e, Or.inr ⟨ht, hh⟩⟩
   have hv : boundaryVertex R ⟨e, Or.inr ⟨ht, hh⟩⟩ = ⟨e.1.2, hh⟩ := by
     unfold boundaryVertex
@@ -456,7 +519,7 @@ theorem regularRegionCoordinatesEquiv_symm_boundary_head (R : Finset V)
     exact (Subtype.heq_iff_coe_eq (fun f => by
       simp only [boundaryHalfEdge]
       rw [hv])).mpr rfl
-  have hval := congrArg (fun s => (halfEdgeLabelEquiv R).symm
+  have hval := congrArg (fun s => (regionHalfEdgeLabelEquiv R).symm
     (encodeCoordinates R T o c) s.1 s.2) hs
   calc
     _ = _ := hval.symm

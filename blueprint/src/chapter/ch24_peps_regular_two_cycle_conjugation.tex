@@ -1,0 +1,55 @@
+\begin{definition}[Controlled conjugation of two retained cycle labels]%
+    \label{def:peps_regular_two_cycle_conjugation}
+    \lean{TNLean.PEPS.regularTwoCycleConjugation}
+    \leanok
+    For distinct indices $e_0,e_1$ in a family of group labels $z$, let
+    $\Phi$ retain every label except $z_{e_1}$ and replace that label by
+    $z_{e_0}z_{e_1}z_{e_0}^{-1}$. Its inverse replaces $z_{e_1}$ by
+    $z_{e_0}^{-1}z_{e_1}z_{e_0}$.
+\end{definition}
+
+\begin{theorem}[Controlled conjugation is equivariant]%
+    \label{thm:peps_regular_two_cycle_conjugation}
+    \lean{TNLean.PEPS.regularTwoCycleConjugation_apply_selected,
+        TNLean.PEPS.regularTwoCycleConjugation_apply_other,
+        TNLean.PEPS.regularTwoCycleConjugation_conjugation}
+    \leanok
+    \uses{def:peps_regular_two_cycle_conjugation}
+    The permutation $\Phi$ sends $(g,h)$ at the selected coordinates to
+    $(g,ghg^{-1})$, retains every other coordinate, and satisfies
+    $\Phi(xzx^{-1})=x\Phi(z)x^{-1}$ for every common conjugating element $x$.
+    This is the algebraic conjugation appearing in
+    \cite[Section 6.6, fluxon braiding]{Schuch2010PEPS}; it is not yet an
+    identification of a prescribed lattice string crossing.
+\end{theorem}
+\begin{proof}\leanok
+    The controlling coordinate is unchanged because $e_0\ne e_1$.
+    The two displayed conjugations are therefore inverse maps.
+    At the selected coordinate,
+    $(xgx^{-1})(xhx^{-1})(xgx^{-1})^{-1}=xghg^{-1}x^{-1}$;
+    at every other coordinate equivariance is immediate.
+\end{proof}
+
+\begin{theorem}[A fixed original-spin controlled conjugation]%
+    \label{thm:peps_regular_two_cycle_conjugation_physical}
+    \lean{TNLean.PEPS.exists_unitary_regularTwoCyclePhysicalConjugation}
+    \leanok
+    \uses{thm:peps_regular_two_cycle_conjugation,
+        thm:peps_regular_cycle_permutation_physical}
+    Let $R$ be a finite graph region with a chosen spanning tree and root, and
+    choose distinct internal bonds $e_0,e_1$ outside the tree. Suppose the
+    original site tensors are locally $G$-isometric for the regular action.
+    There is one unitary $W$ on the original spins of $R$, chosen before all
+    cycle assignments $\omega$ and boundary configurations $\theta$, such that
+    \begin{align}
+        W\Psi_R(u_\omega,\theta)=\Psi_R(u_{\Phi\omega},\theta).
+    \end{align}
+    All other cycle operators and all boundary data are retained. These are
+    actual contractions; the prescribed native string crossing, inverse partner
+    and surrounding measurement loop of the braid remain separate.
+\end{theorem}
+\begin{proof}\leanok
+    Controlled conjugation is equivariant under the common root conjugation.
+    The general physical cycle-permutation theorem therefore applies to the
+    same $\Phi$ for every residual assignment and boundary column.
+\end{proof}

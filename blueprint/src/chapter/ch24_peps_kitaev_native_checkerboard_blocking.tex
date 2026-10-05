@@ -1,0 +1,59 @@
+\begin{definition}[A locally oriented native checkerboard block]%
+    \label{def:peps_kitaev_native_checkerboard_block}
+    \lean{TNLean.PEPS.kitaevNativeBlockVertexEquiv,
+        TNLean.PEPS.kitaevNativeCheckerboardSite,
+        TNLean.PEPS.kitaevNativeBlockBoundary}
+    \leanok
+    \uses{def:peps_kitaev_checkerboard_tensor,def:peps_torus_plaquette_flux_geometry}
+    Let the two torus periods be at least three. At an arbitrary site
+    $v=(x,y)$, take the actual four-site plaquette with corners
+    $(x,y)$, $(x+1,y)$, $(x+1,y+1)$ and $(x,y+1)$.
+    Order the physical sites clockwise from the upper right.
+    Place $T_1$ at the upper-right and lower-left corners, and $T_0$
+    at the other two corners, with virtual legs in the order top, right,
+    bottom, left. These are the local orientations in the blocking diagram
+    of \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}.
+
+    Read an actual crossing-bond assignment as four boundary pairs
+    $N=(N_0,N_1)$, $E=(E_0,E_1)$, $S=(S_0,S_1)$ and $W=(W_0,W_1)$,
+    ordered north, east, south, west, clockwise along each side.
+    All coordinates are cyclic, so this definition also applies to a
+    plaquette meeting either seam. The orientations are prescribed on this
+    one block; no globally alternating tensor field on an odd torus is
+    asserted.
+\end{definition}
+
+\begin{theorem}[Identification of the actual native checkerboard contraction]%
+    \label{thm:peps_kitaev_native_checkerboard_identification}
+    \lean{TNLean.PEPS.graphOpenRegionNetwork_kitaevNativeCheckerboardSite,
+        TNLean.PEPS.graphOpenRegionNetwork_kitaevNativeCheckerboardSite_apply}
+    \leanok
+    \uses{def:peps_kitaev_native_checkerboard_block,
+        def:peps_kitaev_checkerboard_block,
+        thm:peps_kitaev_checkerboard_blocking,thm:peps_graph_open_region_contraction}
+    For every actual crossing-bond assignment and every configuration of the
+    four original physical spins, the open contraction on this native
+    torus plaquette is exactly $B(N,E,S,W;\sigma)$ of
+    Definition~\ref{def:peps_kitaev_checkerboard_block}. In particular,
+    \begin{align}
+        \mathcal A_v(N,E,S,W;\sigma)
+         & =\delta_{N_1,N_0}\delta_{E_1,E_0}
+        \delta_{S_1,S_0}\delta_{W_1,W_0}
+        \delta_{\sigma,F(N_0,E_0,S_0,W_0)}.
+    \end{align}
+    This is an equality of actual open coefficients, with every original
+    boundary label retained. It asserts neither a native boundary CNOT
+    operator nor a globally tiled blocking identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    The four sites are distinct. Their internal edges are precisely the
+    upper and lower horizontal bonds and the left and right vertical bonds.
+    The period bounds exclude an additional internal bond across a seam.
+    Split the incident labels into their internal and prescribed crossing
+    labels, and enumerate the four internal bonds in clockwise order.
+    The sixteen native leg reads give the four tensor factors in the
+    definition of $B$. Reindexing the finite sum and product therefore gives
+    the asserted equality. The coefficient formula follows from
+    Theorem~\ref{thm:peps_kitaev_checkerboard_blocking}.
+\end{proof}

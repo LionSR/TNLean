@@ -1,0 +1,15 @@
+\begin{theorem}[Integer coordinates below a cyclic modulus]%
+    \label{thm:peps_zmod_small_difference}
+    \lean{ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt}
+    \leanok
+    Let $n\in\N$ and $a,b\in\Z$ satisfy $|b-a|<n$.
+    Their images in $\Z/n\Z$ are equal if and only if $a=b$.
+    This is auxiliary coordinate arithmetic; it is not a theorem of
+    \cite{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Equality of the images is equivalent to $n\mid b-a$.
+    A nonzero multiple of $n$ has absolute value at least $n$,
+    so the strict bound forces $b-a=0$. The converse is immediate.
+\end{proof}

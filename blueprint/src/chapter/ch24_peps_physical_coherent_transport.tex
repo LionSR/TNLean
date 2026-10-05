@@ -1,0 +1,21 @@
+\begin{lemma}[Transport of coherent product vectors]%
+    \label{lem:peps_physical_coherent_transport}
+    \lean{TNLean.PEPS.physicalProductMap_sum_prod_eq,
+        TNLean.PEPS.physicalProductMap_eq_on_inclusion_range}
+    \leanok
+    Let $E$ and $Q$ be finite sets, let $F$ be a rectangular physical matrix,
+    and suppose $Fx_{e,q}=y_{e,q}$ for every $e\in E$ and $q\in Q$.
+    For arbitrary complex weights $w_q$,
+    \begin{align}
+        F^{\otimes E}\sum_{q\in Q}w_q\bigotimes_{e\in E}x_{e,q}
+        =\sum_{q\in Q}w_q\bigotimes_{e\in E}y_{e,q}.
+    \end{align}
+    If $T\iota=F\iota$ for a bond inclusion $\iota$, then
+    $T^{\otimes E}$ and $F^{\otimes E}$ agree on the range of
+    $\iota^{\otimes E}$.
+\end{lemma}
+\begin{proof}\leanok
+    Distribute the finite sums and apply the single-factor identities.
+    The second assertion follows from
+    $T^{\otimes E}\iota^{\otimes E}=(T\iota)^{\otimes E}$.
+\end{proof}
