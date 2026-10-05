@@ -90,12 +90,58 @@ theorem triangular_actionLMatrix_mixed_pentagon
         actionLMatrix WF VA WA b c x z ⟨t, j, k⟩ ⟨f, l, mu⟩ *
           actionLMatrix WF VA WA a f x y ⟨z, i, l⟩ ⟨e, m, nu⟩ := by
   classical
-  have h := (F).printedFMatrix_mixed_pentagon
-    (.inl a) (.inl b) (.inl c) (.inr x) (.inr y)
-    (.inl f) (.inl e) (.inr t) (.inr z) mu nu m k j i
-  simpa only [Fintype.sum_sum_type, triangularFusionMultiplicity,
-    Finset.univ_eq_empty, Finset.sum_empty, add_zero,
-    triangular_printedFMatrix_eq_actionLMatrix,
-    triangular_inversePrintedFMatrix_eq_fusionFMatrix] using h
+  have hP := triangular_printedFMatrix_eq_actionLMatrix VF WF VA WA hD hT hVW K hK
+  have hQ := triangular_inversePrintedFMatrix_eq_fusionFMatrix VF WF VA WA hD hT hVW K hK
+  let G (v : Fin r ⊕ Fin s) : ℂ :=
+    ∑ n : Fin ((F).fusionMultiplicity v (.inr t) (.inr y)),
+      ∑ eta : Fin ((F).fusionMultiplicity (.inl a) (.inl b) v),
+      ∑ chi : Fin ((F).fusionMultiplicity v (.inl c) (.inl e)),
+        (F).printedFMatrix (.inl a) (.inl b) (.inr t) (.inr y)
+            ⟨.inr z, j, i⟩ ⟨v, eta, n⟩ *
+          (F).printedFMatrix v (.inl c) (.inr x) (.inr y)
+            ⟨.inr t, k, n⟩ ⟨.inl e, chi, m⟩ *
+          (F).inversePrintedFMatrix (.inl a) (.inl b) (.inl c) (.inl e)
+            ⟨v, eta, chi⟩ ⟨.inl f, mu, nu⟩
+  let R (l : Fin (M f x z)) : ℂ :=
+    (F).printedFMatrix (.inl b) (.inl c) (.inr x) (.inr z)
+        ⟨.inr t, k, j⟩ ⟨.inl f, mu, l⟩ *
+      (F).printedFMatrix (.inl a) (.inl f) (.inr x) (.inr y)
+        ⟨.inr z, l, i⟩ ⟨.inl e, nu, m⟩
+  have h : (∑ v : Fin r ⊕ Fin s, G v) = ∑ l : Fin (M f x z), R l :=
+    (F).printedFMatrix_mixed_pentagon
+      (.inl a) (.inl b) (.inl c) (.inr x) (.inr y)
+      (.inl f) (.inl e) (.inr t) (.inr z) mu nu m k j i
+  have hState (v : Fin s) : G (.inr v) = 0 := by
+    dsimp only [G]
+    exact Finset.sum_eq_zero fun n _ ↦ Fin.elim0 n
+  have hOperator (v : Fin r) : G (.inl v) =
+      ∑ n : Fin (M v t y), ∑ eta : Fin (N a b v), ∑ chi : Fin (N v c e),
+        actionLMatrix WF VA WA a b t y ⟨z, i, j⟩ ⟨v, n, eta⟩ *
+          actionLMatrix WF VA WA v c x y ⟨t, n, k⟩ ⟨e, m, chi⟩ *
+          fusionFMatrix VF WF a b c e ⟨v, eta, chi⟩ ⟨f, mu, nu⟩ := by
+    change (∑ n : Fin (M v t y), ∑ eta : Fin (N a b v), ∑ chi : Fin (N v c e),
+      (F).printedFMatrix (.inl a) (.inl b) (.inr t) (.inr y)
+          ⟨.inr z, j, i⟩ ⟨.inl v, eta, n⟩ *
+        (F).printedFMatrix (.inl v) (.inl c) (.inr x) (.inr y)
+          ⟨.inr t, k, n⟩ ⟨.inl e, chi, m⟩ *
+        (F).inversePrintedFMatrix (.inl a) (.inl b) (.inl c) (.inl e)
+          ⟨.inl v, eta, chi⟩ ⟨.inl f, mu, nu⟩) = _
+    refine Finset.sum_congr rfl fun n _ ↦ Finset.sum_congr rfl fun eta _ ↦
+      Finset.sum_congr rfl fun chi _ ↦ ?_
+    exact congrArg₂ (· * ·)
+      (congrArg₂ (· * ·) (hP a b v t y z i j n eta) (hP v c e x y t n k m chi))
+      (hQ a b c e v f eta chi mu nu)
+  have hRight (l : Fin (M f x z)) : R l =
+      actionLMatrix WF VA WA b c x z ⟨t, j, k⟩ ⟨f, l, mu⟩ *
+        actionLMatrix WF VA WA a f x y ⟨z, i, l⟩ ⟨e, m, nu⟩ :=
+    congrArg₂ (· * ·) (hP b c f x z t j k l mu) (hP a f e x y z i l m nu)
+  calc
+    _ = ∑ v : Fin r, G (.inl v) :=
+      Finset.sum_congr rfl fun v _ ↦ (hOperator v).symm
+    _ = ∑ v : Fin r ⊕ Fin s, G v := by
+      rw [Fintype.sum_sum_type]
+      simp only [hState, Finset.sum_const_zero, add_zero]
+    _ = ∑ l : Fin (M f x z), R l := h
+    _ = _ := Finset.sum_congr rfl fun l _ ↦ hRight l
 
 end MPOTensor
