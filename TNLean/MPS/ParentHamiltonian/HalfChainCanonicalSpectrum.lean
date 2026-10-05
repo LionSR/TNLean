@@ -122,12 +122,13 @@ theorem tendsto_halfChainSpectralMatrix_unital
     (tendsto_halfChainGram_unital A hA lam hlam htr hU hfix)
   simpa only [Prod.snd_swap, mul_comm, halfChainSpectrumLimit] using h
 
-/-- The half-chain interpretation of the dual fixed point, in the source's
-unital canonical convention and for the original physical ring vector.
+/-- The normal-tensor form of the half-chain interpretation of the dual fixed
+point, in unital convention and for the original physical ring vector.
 Every decreasing ordered eigenvalue of the actual normalized reduced density
 converges to that of \(\Lambda\otimes\Lambda\), with multiplicities and zero
 padding after each finite dimension. Normality derives the complementary gap;
-the ring norm is not assumed to be one at finite length.
+the ring norm is not assumed to be one at finite length. The source canonical
+conditions and Condition C2 are treated separately in HalfChainSourceSpectrum.
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 6, lines 987–993. -/
 theorem tendsto_halfChainEigenvalues_unital
     (A : MPSTensor d D) (hA : IsNormalTensor A)
