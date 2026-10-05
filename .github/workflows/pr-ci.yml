@@ -81,6 +81,8 @@ on:
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
+      - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
   pull_request:
@@ -156,6 +158,8 @@ on:
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
+      - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
   workflow_dispatch:
@@ -248,6 +252,8 @@ jobs:
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
+              - 'scripts/test_tenkz_peps_parent_spanning.py'
+              - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
             # Everything the paper-gap reference check reads: the notes,
@@ -358,7 +364,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ElementaryStates HalfChainSpectrum AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors CZXRectangleBoundary RegularTorusParentGroundSpace; do
+          for example in ElementaryStates HalfChainSpectrum AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator ToricCodeTorusSectors CZXRectangleBoundary RegularTorusParentGroundSpace GInjectiveParentTransport GIsometricRegionParentHamiltonian SemiRegularCanonicalParentTransport GraphOpenBondCoordinateTransport ArbitrarySemiRegularParentTransport PositiveMultiplicityParentTransport KitaevGlobalCheckerboardBlocking NonregularSemiRegularParentTransport OrientedSemiRegularParentTransport TorusSemiRegularParentDimension TorusSemiRegularParentGroundSpace RegularRegionIntersection; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -731,6 +737,14 @@ jobs:
       - name: Check PEPS ground-state diagram boundaries
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_groundstate.py
+
+      - name: Check regular parent and intersection diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_parent_spanning.py
+
+      - name: Check native semi-regular parent diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_native_semiregular.py
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'

@@ -34,6 +34,18 @@ theorem physicalProductMatrix_mul {Site In Mid Out : Type*}
   simp only [physicalProductMatrix, Matrix.mul_apply, ← Finset.prod_mul_distrib]
   exact (Fintype.prod_sum (fun (v : Site) (j : Mid) => F (τ v) j * L j (σ v))).symm
 
+/-- A product of coordinate inclusions includes precisely the coordinatewise
+embedded configurations. -/
+theorem physicalProductMatrix_endpointEmbeddingMatrix {Site In Out : Type*}
+    [Fintype Site] [DecidableEq Out] (e : In ↪ Out) :
+    physicalProductMatrix Site (endpointEmbeddingMatrix e) =
+      endpointEmbeddingMatrix (Function.Embedding.piCongrRight fun _ : Site => e) := by
+  classical
+  ext τ σ
+  simp only [physicalProductMatrix, endpointEmbeddingMatrix, Fintype.prod_boole,
+    ← funext_iff]
+  rfl
+
 private theorem productMatrix_conjTranspose {Site In Out : Type*} [Fintype Site]
     (F : Matrix Out In ℂ) :
     (physicalProductMatrix Site F).conjTranspose = physicalProductMatrix Site F.conjTranspose := by

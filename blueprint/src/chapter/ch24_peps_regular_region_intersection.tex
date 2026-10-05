@@ -1,0 +1,198 @@
+\subsection{Regular intersection at one shared vertex}
+
+Let $\Gamma=(V,E)$ be a finite simple graph and let $G$ be a finite group.
+For $R\subseteq V$, write $\widehat{\mathcal S}_R^0$ for the actual regular
+regional range on the ambient half-edge space: every complementary slice
+belongs to the open-region range $\mathcal S_R^0$. All half-edges crossing
+$\partial R$ are retained. The result below gives the regular-coordinate
+intersection step in the geometry of
+\cite[Theorem~5.4]{Schuch2010PEPS}.
+% This regular-coordinate result does not complete Theorem 5.4 for arbitrary
+% semi-regular representations or arbitrary G-injective physical site maps.
+
+\begin{theorem}[Restriction and gluing of flat configurations]%
+    \label{thm:peps_regular_flat_union}
+    \lean{TNLean.PEPS.IsRegularRegionHalfEdgeFlat.of_subset,
+        TNLean.PEPS.internalEdge_union_of_no_cross,
+        TNLean.PEPS.isRegularRegionHalfEdgeFlat_union_iff}
+    \leanok
+    \uses{def:peps_regional_half_edge_flat}
+    Flatness restricts to subregions. Suppose $R\cap S=\{b\}$ and no edge
+    joins $R\setminus S$ to $S\setminus R$. Every internal edge of $R\cup S$
+    is then internal to $R$ or to $S$, and a half-edge configuration is flat
+    on $R\cup S$ if and only if it is flat on both $R$ and $S$.
+\end{theorem}
+\begin{proof}\leanok
+    Restrict a flatness potential to obtain flatness on a subregion.
+    Conversely, let $k_R,k_S$ witness flatness on $R,S$. Set
+    $t=k_S(b)^{-1}k_R(b)$ and replace $k_S(v)$ by $k_S(v)t$.
+    The new potentials agree at $b$, and for each internal edge $e=(v,w)$
+    of $S$ one has
+    \begin{align}
+        (k_S(v)t)^{-1}\alpha_{v,e}
+         & =t^{-1}k_S(v)^{-1}\alpha_{v,e}
+        =t^{-1}k_S(w)^{-1}\alpha_{w,e}
+        =(k_S(w)t)^{-1}\alpha_{w,e}.
+        \label{eq:peps_flat_potential_gluing}
+    \end{align}
+    Thus the potentials define one potential on $R\cup S$.
+    An edge internal to neither region would join their disjoint parts,
+    contrary to the hypothesis, so every required equality holds.
+\end{proof}
+
+\begin{theorem}[Atomic characterization and nesting of regular ranges]%
+    \label{thm:peps_regular_range_nested}
+    \lean{TNLean.PEPS.mem_regularGlobalRegionRange_iff_fixed_flat,
+        TNLean.PEPS.regularGlobalRegionRange_antitone}
+    \leanok
+    \uses{def:peps_ambient_regular_range,def:peps_ambient_regional_constraints}
+    A vector $x$ lies in $\widehat{\mathcal S}_R^0$ exactly when
+    $A_vx=x$ for every $v\in R$, $B_ex=x$ for every internal edge $e$ of $R$,
+    and $x(\alpha)=0$ whenever $\alpha|_R$ is not flat.
+    Consequently $R\subseteq S$ implies
+    $\widehat{\mathcal S}_S^0\subseteq\widehat{\mathcal S}_R^0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_actual_projector,thm:peps_regular_constraint_fixed_spaces,
+        thm:peps_regular_flat_union}
+    Replace simultaneous vertex and edge invariance in the actual range
+    characterization by the corresponding individual fixedness conditions.
+    For $R\subseteq S$, every vertex and internal edge of $R$ belongs to $S$,
+    and flatness on $S$ implies flatness on $R$.
+\end{proof}
+
+\begin{theorem}[Intersection of regular regional ranges]%
+    \label{thm:peps_regular_region_intersection}
+    \lean{TNLean.PEPS.regularGlobalRegionRange_inf_eq_union}
+    \leanok
+    \uses{def:peps_ambient_regular_range}
+    If $R\cap S=\{b\}$ and no edge joins $R\setminus S$ to $S\setminus R$, then
+    \begin{align}
+        \widehat{\mathcal S}_R^0\cap\widehat{\mathcal S}_S^0
+         & =\widehat{\mathcal S}_{R\cup S}^0.
+        \label{eq:peps_regular_region_intersection}
+    \end{align}
+    The group need not be abelian, and no conditions are imposed on
+    complementary half-edge coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_range_nested,thm:peps_regular_flat_union}
+    A vector in both ranges is fixed by all vertex averages on $R\cup S$.
+    Every internal edge belongs to one of the two regions, so all required
+    edge averages also fix it. A nonzero coefficient must be flat on both
+    regions and hence, by Theorem~\ref{thm:peps_regular_flat_union}, on their
+    union. The atomic characterization gives membership in the union range.
+    The reverse inclusion follows from nesting.
+\end{proof}
+
+\begin{definition}[Regional conditions on the core physical space]%
+    \label{def:peps_regular_core_slice_range}
+    \lean{TNLean.PEPS.regularSubregionSlice,
+        TNLean.PEPS.regularRegionRangeWithin,
+        TNLean.PEPS.regularRegionConstantExtension}
+    \leanok
+    \uses{def:peps_ambient_regular_range}
+    For $R\subseteq T$, let $\mathcal S_{R;T}^0$ consist of vectors on the
+    physical half-edge factors of $T$ whose every slice at fixed coordinates
+    on $T\setminus R$ lies in $\mathcal S_R^0$.
+    Define $J_Tx$ on the whole graph by
+    $(J_Tx)(\alpha)=x(\alpha|_T)$, so it is constant in exterior physical
+    coordinates. The space $\mathcal S_{R;T}^0$ itself has physical factors
+    only at the vertices of $T$.
+\end{definition}
+
+\begin{theorem}[Intersection on only the core physical factors]%
+    \label{thm:peps_regular_core_intersection}
+    \lean{TNLean.PEPS.regularRegionRangeWithin_eq_comap,
+        TNLean.PEPS.regularRegionRangeWithin_self,
+        TNLean.PEPS.regularRegionRangeWithin_inf_eq_range}
+    \leanok
+    \uses{def:peps_regular_core_slice_range}
+    One has $\mathcal S_{R;T}^0=J_T^{-1}(\widehat{\mathcal S}_R^0)$ and
+    $\mathcal S_{T;T}^0=\mathcal S_T^0=\operatorname{range}\Gamma_T$.
+    Suppose $R\cap S=\{b\}$, no edge joins $R\setminus S$ to $S\setminus R$,
+    and $T=R\cup S$. Then
+    \begin{align}
+        \mathcal S_{R;T}^0\cap\mathcal S_{S;T}^0
+         & =\operatorname{range}\Gamma_T.
+        \label{eq:peps_regular_core_intersection}
+    \end{align}
+    The vector space has no exterior physical factors, while $\Gamma_T$
+    still takes an arbitrary correlated tensor on every boundary virtual leg.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_intersection}
+    A complementary slice of $J_Tx$ depends only on its labels in
+    $T\setminus R$, and every assignment of those labels extends to the
+    whole complement by setting exterior labels to the group identity.
+    This proves the pullback formula. For $R=T$ each slice is simply $x$.
+    Taking the inverse image of (\ref{eq:peps_regular_region_intersection})
+    under $J_T$ and using that inverse images preserve intersections gives
+    (\ref{eq:peps_regular_core_intersection}).
+\end{proof}
+
+\begin{definition}[Three four-legged blocks]%
+    \label{def:peps_regular_three_block_geometry}
+    \lean{TNLean.PEPS.threeBlockFourLegGraph,
+        TNLean.PEPS.threeBlockLeftRegion,TNLean.PEPS.threeBlockRightRegion,
+        TNLean.PEPS.threeBlockRegion}
+    \leanok
+    Take vertices $0,\ldots,10$ and the unordered edges
+    \begin{align}
+        E & =\{\{0,j\}:j\in\{1,3,4,5\}\}\cup
+        \{\{1,j\}:j\in\{2,6,7\}\}\cup
+        \{\{2,j\}:j\in\{8,9,10\}\}.
+        \label{eq:peps_three_block_edges}
+    \end{align}
+    Set $R=\{0,1\}$, $S=\{1,2\}$ and $T=\{0,1,2\}$.
+    The core is the path $0$--$1$--$2$. Its end vertices each have three
+    exterior legs and its middle vertex has two. The eight remaining
+    vertices are distinct exterior endpoints, so an arbitrary boundary
+    tensor may correlate all eight open legs of $T$.
+\end{definition}
+
+The regular open-region map on the three core factors is the following
+contraction. Each physical leg carries the four-label coordinate space at
+one core vertex; the eight virtual legs carry arbitrary, jointly correlated
+boundary data. The two horizontal internal labels are summed.
+% Source: SCP10 Theorem 5.4, paper_v3.tex:1373--1403, figs3/grow-intersect.
+% This panel is the regular-coordinate specialization, not arbitrary A,B.
+% Exact open boundary signature: (virtual,physical)=(8,3).
+\begin{tenkzequation}
+    \tenkzkernel
+    $\Gamma_T^0=$
+    \begin{tenkz}[lattice={1x3}, frame=plane, physical=up]
+        \tn[at=(1,1), name=intersectionCore0, skin=box,
+            ports={180:virtual:$\ell$,0:virtual,90:virtual:$t_0$,270:virtual:$b_0$}, label pos=se]{$\Pi_G$}
+        \tn[at=(1,2), name=intersectionCore1, skin=box,
+            ports={180:virtual,0:virtual,90:virtual:$t_1$,270:virtual:$b_1$}, label pos=se]{$\Pi_G$}
+        \tn[at=(1,3), name=intersectionCore2, skin=box,
+            ports={180:virtual,0:virtual:$r$,90:virtual:$t_2$,270:virtual:$b_2$}, label pos=se]{$\Pi_G$}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[Four-legged regular intersection]%
+    \label{thm:peps_regular_three_block_intersection}
+    \lean{TNLean.PEPS.threeBlockFourLegGraph_core_degree,
+        TNLean.PEPS.threeBlockFourLegGraph_boundary_card,
+        TNLean.PEPS.threeBlock_regularGlobalRegionRange_intersection,
+        TNLean.PEPS.threeBlock_regularRegionRange_intersection}
+    \leanok
+    \uses{def:peps_regular_three_block_geometry,def:peps_regular_core_slice_range}
+    Each core vertex has four incident edges, and $T$ has eight distinct
+    boundary edges. For every finite group,
+    $\widehat{\mathcal S}_R^0\cap\widehat{\mathcal S}_S^0
+        =\widehat{\mathcal S}_T^0$ on the full eleven-vertex space, and
+    $\mathcal S_{R;T}^0\cap\mathcal S_{S;T}^0
+        =\operatorname{range}\Gamma_T$ on exactly the three core physical
+    factors. The latter open-region map retains all eight independent
+    virtual boundary labels.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_intersection,thm:peps_regular_core_intersection}
+    Count the edges in (\ref{eq:peps_three_block_edges}). The overlap is
+    $\{1\}$, the union is $T$, and the only possible edge between the
+    disjoint parts would be $02$, which is absent. Apply
+    Theorems~\ref{thm:peps_regular_region_intersection}
+    and~\ref{thm:peps_regular_core_intersection}.
+\end{proof}

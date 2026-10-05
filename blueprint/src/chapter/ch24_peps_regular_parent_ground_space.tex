@@ -55,6 +55,57 @@
     Conversely, reconstruction from regular inverse coordinates and
     flat-connection reduction express every vector in $\ker H$
     as a linear combination of commuting closures.
+    Every site carries $A$. Cut the two seams of the illustrative $3\times3$ torus.
+    The coordinate $x$ increases rightward and $y$ increases toward
+    the top of the square. Write $\ell_y,r_y$ for the left and right boundary indices and
+    $b_x,t_x$ for the bottom and top indices. For $x,y\in\{0,1,2\}$,
+    define
+    \begin{align}
+        B_{g,h}(\ell,r,b,t)
+         & =\prod_{y=0}^2 L_h(\ell_y,r_y)
+        \prod_{x=0}^2 L_{g^{-1}}(b_x,t_x),
+        \label{eq:peps_regular_seam_coefficients}
+    \end{align}
+    where $L_q(\beta,\alpha)=\mathbf1_{\{\beta=q\alpha\}}$.
+    The horizontal native transport is $h$ and the upward native
+    transport is $g^{-1}$. Reversing the seam edges to the ordered-edge
+    convention gives $h^{-1}$ and $g$, respectively. The closure is
+    % Formula: |A;(g,h)> = sum_{ell,r,b,t} B_{g,h}(ell,r,b,t)
+    % times the open 3x3 patch; gh=hg. Every sum runs independently over G^3.
+    % Source: SCP10 paper_v3.tex:1515--1525 (close-AAAA-ug-uh), 1623--1655;
+    % TorusFlatConnectionGauge.lean, native right/up closure transport lemmas.
+    % Ink-to-index: column x increases rightward, row y increases up the plane;
+    % the displayed top row is y=2, bottom row y=0. The left/right/top/bottom
+    % exposed virtual legs are ell_y/r_y/t_x/b_x. The nine transverse legs
+    % are the physical indices. Unmarked internal bonds contract by identity.
+    % Patch boundary signature: (V,P)=(12,9). The four explicit G^3 sums
+    % contract all twelve virtual indices against B, giving the full state
+    % with (V,P)=(0,9). No normalization or unshown seam contraction is used.
+    \begin{tenkzequation}
+        \tenkzkernel
+        $\displaystyle\lvert A;(g,h)\rangle=
+            \sum_{\ell,r,b,t\in G^3}B_{g,h}(\ell,r,b,t)$
+        \begin{tenkz}[lattice={3x3}, frame=plane, physical=up]
+            \tn[at=(1,1), name=parentSeam,
+                ports={180:virtual:$\ell_2$,0:virtual,90:virtual:$t_0$,270:virtual}, label pos=sw]{}
+            \tn[at=(1,2), name=seam12,
+                ports={180:virtual,0:virtual,90:virtual:$t_1$,270:virtual}, label pos=sw]{}
+            \tn[at=(1,3), name=seam13,
+                ports={180:virtual,0:virtual:$r_2$,90:virtual:$t_2$,270:virtual}, label pos=sw]{}
+            \tn[at=(2,1), name=seam21,
+                ports={180:virtual:$\ell_1$,0:virtual,90:virtual,270:virtual}, label pos=sw]{}
+            \tn[at=(2,2), name=seam22,
+                ports={180:virtual,0:virtual,90:virtual,270:virtual}, label pos=sw]{}
+            \tn[at=(2,3), name=seam23,
+                ports={180:virtual,0:virtual:$r_1$,90:virtual,270:virtual}, label pos=sw]{}
+            \tn[at=(3,1), name=seam31,
+                ports={180:virtual:$\ell_0$,0:virtual,90:virtual,270:virtual:$b_0$}, label pos=sw]{}
+            \tn[at=(3,2), name=seam32,
+                ports={180:virtual,0:virtual,90:virtual,270:virtual:$b_1$}, label pos=sw]{}
+            \tn[at=(3,3), name=seam33,
+                ports={180:virtual,0:virtual:$r_0$,90:virtual,270:virtual:$b_2$}, label pos=sw]{}
+        \end{tenkz}
+    \end{tenkzequation}
     Closures in the same simultaneous conjugacy class coincide,
     and one closure per commuting class forms a linearly independent
     family. These statements give both the equality and its dimension.
