@@ -79,7 +79,7 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
       ‖Matrix.polarPos (physicalMatrix (MPSChainTensor.blockTensor A)) -
           (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤ K * (1 - ε) ^ (N / s) := by
   classical
-  haveI := Matrix.neZero_of_trace_eq_one htr
+  have := Matrix.neZero_of_trace_eq_one htr
   have hpd : (σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)).PosDef :=
     (Matrix.PosDef.transpose_iff.2 hσ).kronecker Matrix.PosDef.one
   obtain ⟨L, hL, hlip⟩ := hpd.isStrictlyPositive.exists_norm_sqrt_sub_sqrt_le
@@ -98,11 +98,11 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
   let R (B : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) := B - (ε : ℂ) • P
   have hPtr : ∀ X, (P X).trace = X.trace := by
     intro X
-    simp [P, Matrix.tracePrepareMap_trace, htr]
+    simp [P, htr]
   have hRtr (B : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) (hB : IsTracePreservingMap B)
       (X : Matrix (Fin D) (Fin D) ℂ) : (R B X).trace = (r : ℂ) * X.trace := by
     simp only [R, LinearMap.sub_apply, LinearMap.smul_apply, Matrix.trace_sub,
-      Matrix.trace_smul, smul_eq_mul, hB, hPtr]
+      Matrix.trace_smul, smul_eq_mul, hB X, hPtr]
     simp only [r, Complex.ofReal_sub, Complex.ofReal_one]
     ring
   have hRprodtr : ∀ m (B : Fin m → Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
@@ -147,9 +147,14 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
     have hC : ChoiRectangular.choiMatrix (R (E i)) =
         ChoiRectangular.choiMatrix (E i) -
           ((ε : ℂ) / D) • (σ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-      rw [show R (E i) = E i - (ε : ℂ) • P from rfl,
-        (ChoiRectangular.choiMatrixLinearMap (d := D) (d' := D)).map_sub,
-        ChoiRectangular.choiMatrix_smul, P, Matrix.choiMatrix_tracePrepareMap, smul_smul]
+      have hsub : ChoiRectangular.choiMatrix (E i - (ε : ℂ) • P) =
+          ChoiRectangular.choiMatrix (E i) -
+            ChoiRectangular.choiMatrix ((ε : ℂ) • P) :=
+        (ChoiRectangular.choiMatrixLinearMap (d := D) (d' := D)).map_sub (E i) ((ε : ℂ) • P)
+      rw [show R (E i) = E i - (ε : ℂ) • P from rfl, hsub,
+        ChoiRectangular.choiMatrix_smul]
+      dsimp only [P]
+      rw [Matrix.choiMatrix_tracePrepareMap, smul_smul]
       congr 2
       ring
     rw [hC]
@@ -179,7 +184,8 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
   have hPctr : (ChoiRectangular.choiMatrix P).trace = 1 :=
     htc P 1 (fun X => by simpa using hPtr X)
   have hPcpos : (ChoiRectangular.choiMatrix P).PosSemidef := by
-    rw [P, Matrix.choiMatrix_tracePrepareMap]
+    dsimp only [P]
+    rw [Matrix.choiMatrix_tracePrepareMap]
     exact (hσ.posSemidef.kronecker Matrix.PosSemidef.one).smul (by positivity)
   have hQcpos : (ChoiRectangular.choiMatrix Q).PosSemidef :=
     (ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef Q).1 hQcp
@@ -208,10 +214,12 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
       ((1 - r ^ M : ℝ) : ℂ) • P + Q := by
     rw [hwhole]
     ext X : 1
-    exact hdec M E hA hfix X
+    simpa only [LinearMap.add_apply, LinearMap.smul_apply, P, Matrix.tracePrepareMap_apply]
+      using hdec M E hA hfix X
   have hlim : (D : ℂ) • (ChoiRectangular.choiMatrix P).transpose =
       σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    rw [P, Matrix.choiMatrix_tracePrepareMap, Matrix.transpose_smul,
+    dsimp only [P]
+    rw [Matrix.choiMatrix_tracePrepareMap, Matrix.transpose_smul,
       ← Matrix.kroneckerMap_transpose, Matrix.transpose_one, smul_smul]
     simp [NeZero.ne D]
   have hgram : (physicalMatrix (MPSChainTensor.blockTensor A))ᴴ *
@@ -243,7 +251,7 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
     calc N / s ≤ (M * s) / s := Nat.div_le_div_right hNs
       _ = M := Nat.mul_div_left M hs
   have hpow : r ^ M ≤ r ^ (N / s) :=
-    pow_le_pow_of_le_one (sub_nonneg.mpr hε1) (by dsimp [r]; linarith) hcount
+    pow_le_pow_of_le_one (sub_nonneg.mpr hε1) (sub_le_self 1 hε) hcount
   have hfinal := hbound.trans (mul_le_mul_of_nonneg_left hpow (by positivity))
   refine ⟨hfinal, ?_⟩
   have hsqrt := hlip _
