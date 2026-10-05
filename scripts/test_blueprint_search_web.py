@@ -26,7 +26,7 @@ SCRIPTS = Path(__file__).resolve().parent
 def _fixture(root: Path, web_root: Path) -> None:
     root.mkdir(parents=True)
     (root / 'styles').mkdir()
-    for name in ('theme-white.css', 'extra_styles.css'):
+    for name in ('theme-white.css', 'dep_graph.css', 'extra_styles.css'):
         shutil.copy2(web_root / 'styles' / name, root / 'styles' / name)
     for i in range(8):
         (root / f'chapter-{i}.html').write_text(
@@ -44,6 +44,15 @@ def _fixture(root: Path, web_root: Path) -> None:
     (root / 'index.html').write_text(
         '<!doctype html><html lang="en"><head><title>Graphs</title></head>'
         '<body>Graphonlyword</body></html>', encoding='utf-8')
+    (root / 'graph.html').write_text(
+        '<!doctype html><html lang="en"><head><title>Dependency graph</title>'
+        '<meta name="viewport" content="width=device-width">'
+        '<link rel="stylesheet" href="styles/theme-white.css">'
+        '<link rel="stylesheet" href="styles/dep_graph.css">'
+        '<link rel="stylesheet" href="styles/extra_styles.css"></head><body>'
+        '<header><a href="index.html">Home</a><h1 id="doc_title">Dependencies</h1></header>'
+        '<div class="wrapper"><div class="content"><div id="graph">'
+        'Graphonlyword</div></div></div></body></html>', encoding='utf-8')
     command = [sys.executable, str(SCRIPTS / 'add_blueprint_search.py'), '--web-root', str(root)]
     subprocess.run(command, check=True)
     first = {p.name: p.read_bytes() for p in root.glob('*.html')}
@@ -85,16 +94,24 @@ def _assert_layout(page: Page) -> None:
       const root = document.documentElement;
       const drawer = document.querySelector('.pagefind-ui__drawer');
       const content = document.querySelector('.content');
+      const header = document.querySelector('header').getBoundingClientRect();
+      const title = document.querySelector('#doc_title').getBoundingClientRect();
+      const input = document.querySelector('#blueprint-search input').getBoundingClientRect();
       const box = drawer.getBoundingClientRect();
       return {width: root.clientWidth, scrollWidth: root.scrollWidth,
         drawerBottom: box.bottom, viewportHeight: innerHeight,
         drawerHeight: drawer.clientHeight, drawerScroll: drawer.scrollHeight,
         overflow: getComputedStyle(drawer).overflowY,
-        contentHeight: content.getBoundingClientRect().height};
+        contentHeight: content.getBoundingClientRect().height,
+        contentTop: content.getBoundingClientRect().top, headerBottom: header.bottom,
+        titleBottom: title.bottom, inputTop: input.top};
     }''')
     assert facts['scrollWidth'] <= facts['width'] + 1, facts
     assert facts['drawerBottom'] <= facts['viewportHeight'], facts
     assert facts['contentHeight'] > 100, facts
+    assert facts['drawerBottom'] <= facts['headerBottom'] + 1, facts
+    assert facts['contentTop'] >= facts['headerBottom'] - 1, facts
+    assert facts['titleBottom'] <= facts['inputTop'] + 1, facts
     assert facts['drawerHeight'] < facts['drawerScroll'], facts
     assert facts['overflow'] in ('auto', 'scroll'), facts
 
@@ -122,6 +139,10 @@ def _fixture_browser(browser, site_url: str) -> None:
         # Search remains available on unindexed, headerless utility pages.
         page.goto(site_url + '/index.html')
         _search(page, 'sharedneedle')
+        # Graph pages use a different fixed-height, absolutely-positioned header.
+        page.goto(site_url + '/graph.html')
+        _search(page, 'sharedneedle')
+        _assert_layout(page)
         assert not errors, errors
         page.close()
 
@@ -139,12 +160,16 @@ def _generated_browser(browser, web_root: Path) -> None:
             if url not in assets:
                 assets[url] = _cdn_fetch(url)
             body, content_type = assets[url]
-            route.fulfill(body=body, content_type=content_type)
+            route.fulfill(body=body, content_type=content_type,
+                          headers={'Access-Control-Allow-Origin': '*'})
 
         page.route('https://cdn.jsdelivr.net/**', external)
         page.goto(site_url + '/ch-mps.html', wait_until='domcontentloaded', timeout=120_000)
         _search(page, 'injective')
         _assert_links(page, site_url)
+        page.goto(site_url + '/dep_graph_chapter_2.html', wait_until='domcontentloaded', timeout=120_000)
+        _search(page, 'injective')
+        _assert_layout(page)
         page.close()
 
 
