@@ -88,7 +88,7 @@ example {p g : ℕ} {D : Fin g → ℕ}
     (hne : MPSTensor.BlocksNotGaugePhaseEquiv (fun c ↦ (A c).toMPSTensor)) :
     ∃ L : ℕ, 0 < L ∧
       ∃ F : MPOTensor.CompleteZipperFusionFamily (Fin g) (MPSTensor.blockPhysDim p L),
-        F.bondDim = D ∧ HEq F.tensor (fun c ↦ MPOTensor.blockTensor (A c) L) := by
+        (F).bondDim = D ∧ HEq (F).tensor (fun c ↦ MPOTensor.blockTensor (A c) L) := by
   obtain ⟨N, V, W, hVW, L, hL, F, hFD, hFN, hFT, hFW, hFV⟩ :=
     h.exists_completeZipperFusionFamily A hBlocks hInj hD hne
   exact ⟨L, hL, F, hFD, hFT⟩
@@ -128,32 +128,32 @@ local notation "F" =>
 
 example (a b c : Fin g) (μ : Fin (N a b c))
     (x : Fin (D a) × Fin (D b)) (z : Fin (D c)) :
-    F.fusionTensor a b c μ x z = W a b c μ (finProdFinEquiv x) z := rfl
+    (F).fusionTensor a b c μ x z = W a b c μ (finProdFinEquiv x) z := rfl
 
 example (a b c : Fin g) (μ : Fin (N a b c))
     (z : Fin (D c)) (x : Fin (D a) × Fin (D b)) :
-    F.fusionTensorLeftInverse a b c μ z x = V a b c μ z (finProdFinEquiv x) := rfl
+    (F).fusionTensorLeftInverse a b c μ z x = V a b c μ z (finProdFinEquiv x) := rfl
 
 -- Existing coherence results apply directly to the constructed family.
 example (a b c d : Fin g) :
-    F.rightTripleSynthesis a b c d *
-      (F.printedFMatrix a b c d ⊗ₖ (1 : Matrix (Fin (D d)) (Fin (D d)) ℂ)) =
-        F.leftTripleSynthesis a b c d :=
-  F.rightTripleSynthesis_mul_printedFMatrix a b c d
+    (F).rightTripleSynthesis a b c d *
+      ((F).printedFMatrix a b c d ⊗ₖ (1 : Matrix (Fin (D d)) (Fin (D d)) ℂ)) =
+        (F).leftTripleSynthesis a b c d :=
+  (F).rightTripleSynthesis_mul_printedFMatrix a b c d
 
 example (a b c d : Fin g) :
-    F.printedFMatrix a b c d * F.inversePrintedFMatrix a b c d = 1 :=
-  F.printedFMatrix_mul_inversePrintedFMatrix a b c d
+    (F).printedFMatrix a b c d * (F).inversePrintedFMatrix a b c d = 1 :=
+  (F).printedFMatrix_mul_inversePrintedFMatrix a b c d
 
 example (a b c d e : Fin g) :
-    F.threeEdgePrintedFMatrix a b c d e = F.twoEdgePrintedFMatrix a b c d e :=
-  F.threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix a b c d e
+    (F).threeEdgePrintedFMatrix a b c d e = (F).twoEdgePrintedFMatrix a b c d e :=
+  (F).threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix a b c d e
 
-example (Y : F.FusionGauge) (a b c d : Fin g) :
-    (F.regauge Y).printedFMatrix a b c d =
-      F.rightTreeGaugeInv Y a b c d * F.printedFMatrix a b c d *
-        F.leftTreeGauge Y a b c d :=
-  F.printedFMatrix_regauge Y a b c d
+example (Y : (F).FusionGauge) (a b c d : Fin g) :
+    ((F).regauge Y).printedFMatrix a b c d =
+      (F).rightTreeGaugeInv Y a b c d * (F).printedFMatrix a b c d *
+        (F).leftTreeGauge Y a b c d :=
+  (F).printedFMatrix_regauge Y a b c d
 
 end BlockedCoherence
 
