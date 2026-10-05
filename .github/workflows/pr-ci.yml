@@ -82,6 +82,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_ordered_mixing.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -156,6 +157,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_ordered_mixing.py'
   workflow_dispatch:
 
 concurrency:
@@ -247,6 +249,7 @@ jobs:
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_tenkz_ordered_mixing.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -306,6 +309,66 @@ jobs:
             lake build lint_style
           } 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
 
+      # Temporary dependency-only export for the cloud validation checkout.
+      # Remove before the final validation head; never export repository outputs.
+      - name: Prepare pinned dependency cache export (temporary)
+        if: github.event_name == 'pull_request' && github.event.pull_request.number == 8689
+        timeout-minutes: 5
+        run: |
+          python3 - <<'PYEXPORT'
+          import hashlib, json, os, pathlib, subprocess, tarfile
+          root = pathlib.Path.cwd()
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'glm23-dependency-export'
+          out.mkdir()
+          def git(*args, cwd=root):
+              return subprocess.check_output(['git', *args], cwd=cwd, text=True).strip()
+          def sha(path):
+              h = hashlib.sha256()
+              with open(path, 'rb') as stream:
+                  for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+                      h.update(chunk)
+              return h.hexdigest()
+          manifest = json.loads((root / 'lake-manifest.json').read_text())
+          pins = {p['name']: p['rev'] for p in manifest['packages']}
+          selected = ['qiclean', 'Gametheory', 'checkdecls']
+          record = {'source_commit': git('rev-parse', 'HEAD'),
+                    'files': {p: sha(root / p) for p in
+                              ['lean-toolchain', 'lake-manifest.json', 'lakefile.toml']},
+                    'dependencies': {}, 'archives': {}}
+          for name in selected:
+              dep = root / '.lake/packages' / name
+              if not dep.exists():
+                  continue
+              revision = git('rev-parse', 'HEAD', cwd=dep)
+              assert revision == pins[name], (name, revision, pins[name])
+              assert not git('status', '--porcelain', '--untracked-files=no', cwd=dep), name
+              record['dependencies'][name] = revision
+              build = dep / '.lake/build'
+              if not build.is_dir():
+                  continue
+              archive = out / (name + '.tar.gz')
+              with tarfile.open(archive, 'w:gz') as tar:
+                  for item in sorted(build.rglob('*')):
+                      # Include only regular compiled build files, never links or .git.
+                      assert not item.is_symlink(), str(item)
+                      if item.is_file():
+                          tar.add(item, arcname=str(item.relative_to(root)), recursive=False)
+              assert archive.stat().st_size <= 256 * 1024 * 1024, name
+              record['archives'][archive.name] = sha(archive)
+          assert sum(p.stat().st_size for p in out.iterdir()) <= 384 * 1024 * 1024
+          (out / 'manifest.json').write_text(json.dumps(record, indent=2) + '\n')
+          PYEXPORT
+
+      - name: Upload pinned dependency cache export (temporary)
+        if: github.event_name == 'pull_request' && github.event.pull_request.number == 8689
+        uses: actions/upload-artifact@v7
+        with:
+          name: glm23-pinned-dependencies-${{ github.sha }}
+          path: ${{ runner.temp }}/glm23-dependency-export/
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
       - name: Test compatible coherent seed conversion
@@ -344,7 +407,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression; do
+          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary FiniteWordCompression InhomogeneousMixingPreparation VaryingReferencePreparation; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -732,6 +795,10 @@ jobs:
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_index_routing.py
+
+      - name: Test ordered mixing contraction diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_ordered_mixing.py
 
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py

@@ -14,6 +14,9 @@ multiplicities. A non-symmetric idempotent checks that the range factorization
 requires no orthogonal-projection hypothesis.
 -/
 
+-- These regressions intentionally inspect declaration and kernel-dependency reports.
+set_option linter.hashCommand false
+
 open scoped Matrix
 
 namespace PiMatrixRepresentationTest
@@ -43,7 +46,7 @@ private theorem obliqueRepresentation_mul (M N : Matrix (Fin 1) (Fin 1) ℚ) :
     obliqueRepresentation (M * N) = obliqueRepresentation M * obliqueRepresentation N := by
   change (M * N) 0 0 • oblique = (M 0 0 • oblique) * (N 0 0 • oblique)
   rw [Matrix.smul_mul, Matrix.mul_smul, oblique_idempotent, smul_smul]
-  simp [Matrix.mul_apply, Fin.sum_univ_one]
+  simp [Matrix.mul_apply]
 
 example : obliqueRepresentation 1 ≠ 1 := by
   intro h
@@ -99,11 +102,26 @@ example :
       (∀ M : Fin 0 → Matrix (Fin 1) (Fin 1) ℚ,
         (0 : Matrix (Fin 2) (Fin 2) ℚ) = ∑ c, ∑ μ, W c μ * M c * V c μ) ∧
       (0 : Matrix (Fin 2) (Fin 2) ℚ) = ∑ c, ∑ μ, W c μ * V c μ := by
-  simpa using Matrix.exists_piMatrix_blocks (K := ℚ) (D := 2) (fun _ : Fin 0 => 1)
+  exact Matrix.exists_piMatrix_blocks (K := ℚ) (D := 2) (fun _ : Fin 0 => 1)
     0 (by simp)
 
+/--
+info: 'Matrix.exists_rankFactorization_of_idempotent' depends on axioms:
+[propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms Matrix.exists_rankFactorization_of_idempotent
+/--
+info: 'Matrix.exists_matrixUnitBlocks' depends on axioms:
+[propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms Matrix.exists_matrixUnitBlocks
+/--
+info: 'Matrix.exists_piMatrix_blocks' depends on axioms:
+[propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms Matrix.exists_piMatrix_blocks
 
 end PiMatrixRepresentationTest

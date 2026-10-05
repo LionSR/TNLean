@@ -12,6 +12,9 @@ These signatures use the original physical alphabet. Neither an independent
 length, a fusion law, nor a NIM relation is an input to the final source test.
 -/
 
+-- These regressions intentionally inspect declaration and kernel-dependency reports.
+set_option linter.hashCommand false
+
 open scoped Matrix BigOperators
 
 namespace BoundaryMultiplicityTest

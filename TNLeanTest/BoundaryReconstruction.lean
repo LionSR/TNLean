@@ -16,6 +16,9 @@ incoming-block indices. Algebraic support and empty-factor tests are in
 `PiMatrixRepresentation.lean`.
 -/
 
+-- These regressions intentionally inspect declaration and kernel-dependency reports.
+set_option linter.hashCommand false
+
 open scoped Matrix BigOperators Kronecker
 
 namespace BoundaryReconstructionTest

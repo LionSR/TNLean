@@ -17,6 +17,9 @@ component over the nontrivial group Z₂ where the unprojected zipper is false.
 noncomputable section
 
 open TNLean.Algebra MPOTensor MPOTensor.GroupCocycle
+-- These regressions intentionally inspect declaration and kernel-dependency reports.
+set_option linter.hashCommand false
+
 open scoped Matrix
 
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
