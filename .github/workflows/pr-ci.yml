@@ -28,11 +28,17 @@ on:
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
+      - 'scripts/coherent_tn_prerequisites.json'
+      - 'scripts/export_coherent_tn_prerequisites.py'
+      - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
+      - 'scripts/ci_compatible_cache.py'
+      - 'scripts/test_ci_compatible_cache.py'
+      - 'scripts/test_ci_cache_lake_invalidation.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -118,11 +124,17 @@ on:
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
+      - 'scripts/coherent_tn_prerequisites.json'
+      - 'scripts/export_coherent_tn_prerequisites.py'
+      - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
+      - 'scripts/ci_compatible_cache.py'
+      - 'scripts/test_ci_compatible_cache.py'
+      - 'scripts/test_ci_cache_lake_invalidation.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -227,13 +239,26 @@ jobs:
               - 'scripts/coherent_qic_prerequisites.json'
               - 'scripts/export_coherent_qic_prerequisites.py'
               - 'scripts/test_export_coherent_qic_prerequisites.py'
+              - 'scripts/coherent_tn_prerequisites.json'
+              - 'scripts/export_coherent_tn_prerequisites.py'
+              - 'scripts/test_export_coherent_tn_prerequisites.py'
+              - 'scripts/ci_compatible_cache.py'
+              - 'scripts/test_ci_compatible_cache.py'
+              - 'scripts/test_ci_cache_lake_invalidation.py'
             coherent_prerequisites:
               - 'TNLean/MPS/Preparation/ExactSectorEncoder.lean'
               - 'TNLean/MPS/Preparation/SectorEncoderRates.lean'
               - 'TNLean/MPS/Preparation/CoherentGroundspaceConversion.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderCompilation.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderPreparation.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderGroundspace.lean'
+              - 'TNLean/MPS/Preparation/SectorSpectralGap.lean'
               - 'scripts/coherent_qic_prerequisites.json'
               - 'scripts/export_coherent_qic_prerequisites.py'
               - 'scripts/test_export_coherent_qic_prerequisites.py'
+              - 'scripts/coherent_tn_prerequisites.json'
+              - 'scripts/export_coherent_tn_prerequisites.py'
+              - 'scripts/test_export_coherent_tn_prerequisites.py'
             module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
@@ -244,11 +269,17 @@ jobs:
               - 'scripts/coherent_qic_prerequisites.json'
               - 'scripts/export_coherent_qic_prerequisites.py'
               - 'scripts/test_export_coherent_qic_prerequisites.py'
+              - 'scripts/coherent_tn_prerequisites.json'
+              - 'scripts/export_coherent_tn_prerequisites.py'
+              - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/lake_build_locked.sh'
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
+              - 'scripts/ci_compatible_cache.py'
+              - 'scripts/test_ci_compatible_cache.py'
+              - 'scripts/test_ci_cache_lake_invalidation.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
             blueprint:
@@ -327,6 +358,7 @@ jobs:
           fetch-depth: 0
 
       - name: Restore Lean build cache
+        id: build-cache
         uses: actions/cache/restore@v6
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
@@ -334,10 +366,86 @@ jobs:
           restore-keys: |
             tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
 
+      - name: Report exact-input cache lookup
+        env:
+          PRIMARY_KEY: ${{ steps.build-cache.outputs.cache-primary-key }}
+          MATCHED_KEY: ${{ steps.build-cache.outputs.cache-matched-key }}
+        run: |
+          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
+
+      # cache-hit=false also means a successful restore-prefix hit. Only an
+      # EMPTY matched key is a miss; never overwrite an ordinary restored cache.
+      - name: Select compatible main cache configuration
+        id: compatible-config
+        if: steps.build-cache.outputs.cache-matched-key == ''
+        continue-on-error: true
+        timeout-minutes: 3
+        run: |
+          python3 scripts/ci_compatible_cache.py prepare \
+            --state "$RUNNER_TEMP/compatible-cache.json" \
+            --inputs .ci-cache-baseline \
+            --qic "$RUNNER_TEMP/compatible-cache-qic.git"
+
+      - name: Look up compatible main cache without restoring
+        id: compatible-lookup
+        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-config.outputs.eligible == 'true'
+        continue-on-error: true
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.BUILD_CACHE_PATHS }}
+          # hashFiles computes the baseline's complete original three-file hash.
+          key: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-${{ steps.compatible-config.outputs.baseline }}
+          restore-keys: |
+            tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
+          lookup-only: true
+
+      - name: Validate immutable compatible cache provenance
+        id: compatible-cache
+        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-lookup.outputs.cache-matched-key != ''
+        continue-on-error: true
+        timeout-minutes: 3
+        env:
+          PREFIX: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
+          MATCHED_KEY: ${{ steps.compatible-lookup.outputs.cache-matched-key }}
+          PRIMARY_KEY: ${{ steps.compatible-lookup.outputs.cache-primary-key }}
+        run: |
+          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
+          python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
+          python3 scripts/ci_compatible_cache.py validate \
+            --state "$RUNNER_TEMP/compatible-cache.json" \
+            --prefix "$PREFIX" --matched "$MATCHED_KEY"
+
       - uses: leanprover/lean-action@v1
         with:
           build: false
           use-github-cache: false
+
+      # Setup/Mathlib prebuilt retrieval happens before this separate seed;
+      # no seeded artifact is available to a Lean command until pruning passes.
+      - name: Restore validated compatible cache by exact key
+        id: compatible-restore
+        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-cache.outputs.key != ''
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.BUILD_CACHE_PATHS }}
+          key: ${{ steps.compatible-cache.outputs.key }}
+          fail-on-cache-miss: true
+
+      - name: Discard unvalidated cross-commit artifacts
+        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-cache.outputs.key != ''
+        env:
+          PRIMARY_KEY: ${{ steps.compatible-restore.outputs.cache-primary-key }}
+          MATCHED_KEY: ${{ steps.compatible-restore.outputs.cache-matched-key }}
+          VERIFIED_KEY: ${{ steps.compatible-cache.outputs.key }}
+          PREFIX: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
+        run: |
+          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
+          test "$MATCHED_KEY" = "$VERIFIED_KEY"
+          # Check scope again after restore; refuse a shadow/replacement race.
+          python3 scripts/ci_compatible_cache.py validate \
+            --state "$RUNNER_TEMP/compatible-cache.json" \
+            --prefix "$PREFIX" --matched "$MATCHED_KEY"
+          python3 scripts/ci_compatible_cache.py prune
 
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
@@ -361,13 +469,52 @@ jobs:
           retention-days: 1
           compression-level: 9
 
+      # The selected TN sources and their TN import closure are unchanged from
+      # an explicit baseline. Source/dependency verification precedes collection.
+      - name: Prepare verified coherent TN prerequisites
+        id: coherent-tn-prerequisites
+        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
+        continue-on-error: true
+        run: |
+          set -eo pipefail
+          python3 scripts/export_coherent_tn_prerequisites.py --build --root . \
+            --output "$RUNNER_TEMP/coherent-tn-prerequisites" \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Export coherent TN prerequisites
+        if: success() && steps.coherent-tn-prerequisites.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: coherent-tn-prerequisites-${{ github.sha }}
+          path: ${{ runner.temp }}/coherent-tn-prerequisites
+          if-no-files-found: ignore
+          retention-days: 1
+          compression-level: 9
+
+      # Fail on the new theorem targets before building unrelated TN modules.
+      # Keep their timings in the same log consumed by the changed-file gate.
+      - name: Check coherent sector conversion targets
+        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
+        run: |
+          set -eo pipefail
+          lake --fail-fast build \
+            +TNLean.MPS.Preparation.ExactSectorEncoder:olean \
+            +TNLean.MPS.Preparation.SectorEncoderRates:olean \
+            +TNLean.MPS.Preparation.SectorSpectralGap:olean \
+            +TNLean.MPS.Preparation.SectorEncoderPreparation:olean \
+            +TNLean.MPS.Preparation.SectorEncoderCompilation:olean \
+            +TNLean.MPS.Preparation.CoherentGroundspaceConversion:olean \
+            +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
           {
             lake build
             lake build lint_style
-          } 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
+          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
@@ -618,7 +765,15 @@ jobs:
         run: python3 scripts/test_lake_build_hotspots.py
 
       - name: Test bounded coherent prerequisite export
-        run: python3 scripts/test_export_coherent_qic_prerequisites.py
+        run: |
+          python3 scripts/test_export_coherent_qic_prerequisites.py
+          python3 scripts/test_export_coherent_tn_prerequisites.py
+
+      - name: Test compatible CI cache guards
+        run: |
+          python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
+          python3 scripts/test_ci_compatible_cache.py
+          python3 -m py_compile scripts/test_ci_cache_lake_invalidation.py
 
       - name: Check local cache-seeding shell syntax
         run: |
