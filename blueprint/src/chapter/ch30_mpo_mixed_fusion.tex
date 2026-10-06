@@ -1,7 +1,7 @@
 % Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1667--1685;
 % rawrels, eq:F_symbol2, and 1Fsymbol, lines 491--552.
-% Proof status: declarations below await the final exact-source Lean pass.
-% Do not add checked markers from source inspection or diagram tests alone.
+% Proof status: declarations and proofs checked by the exact-source Lean build.
+% Diagram regressions are supplementary checks.
 
 \subsection{Fusion of the mixed operator family}
 \label{sec:mpo_mixed_fusion}
@@ -68,6 +68,7 @@ change of basis.
         MPOTensor.crossEndpoint_actionTree_contraction_of_actionLMatrix_eq,
         MPOTensor.crossEndpoint_actionTree_contraction_apply_of_actionLMatrix_eq,
         MPOTensor.crossEndpoint_fusion_entry_of_actionLMatrix_eq}
+    \leanok
     \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_decomposition}
     Under (\ref{eq:mpo_mix_fusion_input}) and
     (\ref{eq:mpo_mix_fusion_action}), the individual comparison relations are
@@ -85,6 +86,7 @@ change of basis.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_boundary_action_comparison,thm:glm_boundary_action_l_factor}
     Injectivity and $D_p>0$ give a positive simultaneous word span
     for the single target block $A_p$. The two exact action
@@ -144,6 +146,7 @@ change of basis.
         MPSTensor.MPOSymmetry.mixedEndpointFusionSynthesis,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusionAnalysis,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusionSynthesis}
+    \leanok
     Set $K_a=K_{0,a}\oplus K_{1,a}$ for every label $a$.
     Define $\widetilde V_{ab;c\mu}:K_a\otimes K_b\to K_c$ by
     $V^F_{p,ab;c\mu}$ on $K_{p,a}\otimes K_{p,b}$, with output in
@@ -161,6 +164,7 @@ change of basis.
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusionAnalysis_mul_synthesis,
         MPSTensor.MPOSymmetry.mixedEndpointFusion_sandwich_apply,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_sandwich}
+    \leanok
     \uses{def:mpo_mixed_fusion_maps}
     For arbitrary outgoing labels $c,d$ and copies $\mu,\nu$,
     \begin{align}
@@ -178,6 +182,7 @@ change of basis.
     In particular the mixed maps inherit biorthogonality.
 \end{theorem}
 \begin{proof}
+    \leanok
     Expand over the direct-sum coordinates. A nonzero factor forces
     the two incoming sectors and its outgoing sector to agree.
     The product therefore retains precisely the two diagonal products
@@ -190,6 +195,7 @@ change of basis.
     \label{thm:mpo_mixed_fusion_exact}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOLetter_fusion,
         MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_mixedEndpointMPO}
+    \leanok
     \uses{def:mpo_mixed_action_tensor,def:mpo_mixed_fusion_maps}
     Let $T_a$ be the fixed mixed operator of
     Definition~\ref{def:mpo_mixed_action_tensor}, using the action maps
@@ -208,6 +214,7 @@ change of basis.
     the original multiplicities $N_{ab}^c$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_fusion_cross,thm:mpo_mixed_fusion_maps}
     Write $\rho=(r,s)$ and $\sigma=(k,l)$. When all four physical
     indices belong to $E_p$, (\ref{eq:mpo_mix_fusion_input}) gives
@@ -270,6 +277,7 @@ change of basis.
 \begin{theorem}[Length-independent boundaries for the labelled family]
     \label{thm:mpo_mixed_fusion_boundary}
     \lean{MPSTensor.MPOSymmetry.mpoWithBoundary_mixedEndpointMPO_mul}
+    \leanok
     \uses{thm:mpo_mixed_fusion_exact}
     Under the same hypotheses for $a,b$, fix arbitrary
     $X\in\End(K_a)$ and $Y\in\End(K_b)$. For each channel $(c,\mu)$ set
@@ -290,6 +298,7 @@ change of basis.
     the target tensors for different labels.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_boundary_decomposition,thm:glm_boundary_stack}
     In a nonempty product of (\ref{eq:mpo_mix_fusion_exact}), every
     adjacent analysis-synthesis pair removes unequal channels. Thus
@@ -337,6 +346,7 @@ change of basis.
 \begin{theorem}[Periodic mixed fusion with the original multiplicities]
     \label{thm:mpo_mixed_fusion_periodic}
     \lean{MPSTensor.MPOSymmetry.isMPOFusionAlgebra_mixedEndpointMPO}
+    \leanok
     \uses{thm:mpo_mixed_fusion_exact}
     If $L_0=L_1$ for every pair $a,b$, then the fixed mixed family
     satisfies, for every $n>0$,
@@ -347,6 +357,7 @@ change of basis.
     Zero multiplicities are allowed.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_fusion_boundary,thm:mpo_mixed_fusion_maps}
     Take identity boundaries. Biorthogonality gives
     $Z_{c\mu}(\Id,\Id)=\Id_{K_c}$, so the $N_{ab}^c$ copies of

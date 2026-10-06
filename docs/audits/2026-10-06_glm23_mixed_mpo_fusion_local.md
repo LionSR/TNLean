@@ -1,6 +1,45 @@
 # GLM23 actual mixed-MPO fusion: local source audit
 
-## Dependency scope
+## Verified proof checkpoint: 2026-10-06 01:45 UTC
+
+PR #8714 head `fb82cd637cc7ee7103f71e155a0ca49aa5fd4322` passes the full
+Lean build, all three separate strict regression files and all thirteen
+standard-axiom guards. Timing, style and declaration checks pass unchanged.
+The four new modules compiled in 13, 6.2, 3.3 and 19 seconds, respectively.
+No limit was increased and no proof premise was added.
+
+Run [37399568281](https://github.com/LionSR/TNLean/actions/runs/37399568281),
+build job `112063499239`, tested merge
+`a5fb93eea498aaa5f8e0c10361741d38825a4699`. Its tree
+`7b3762a052d5eead02b06d133664fafe087e699b` exactly matches the proof head
+and local integration commit `da6414aafb5b87080335434d1b15640be9c89b1e`.
+The earlier combined-probe failures below are historical; this separate-module
+CI run establishes the repaired assembly and all remaining guarded results.
+Only `propext`, `Classical.choice` and `Quot.sound` occur in those guards.
+
+The complete blueprint/browser job is still running at this checkpoint.
+Six statement-owner markers and five proof markers now record the Lean
+verification for all seventeen declarations. The marked ten-page PDF and
+strict focused web were rerendered; all six Tenkz panels and affected pages
+were visually inspected, with no final PDF warnings or unresolved references.
+Native signature and exact coefficient/mutation tests pass unchanged.
+The existing vector fallback produced the web SVGs. The local browser gate
+fails closed because Playwright is absent; no dynamic-browser pass is claimed.
+The final documentation head requires fresh exact-head CI.
+
+Checked production and regression source hashes:
+
+| File | SHA-256 |
+| --- | --- |
+| `TNLean/MPS/MPDO/BoundaryActionCrossTransport.lean` | `cd02c5f12494247cb1ca38eea66275c64a758c30885a41d1660710324b5dce47` |
+| `TNLean/MPS/MPDO/BoundaryActionCrossFusionEntries.lean` | `d316e3d16cd269d406d082b85c787f55b1cae4d848f39b7c2534b6bf9de22d21` |
+| `TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPOFusionMaps.lean` | `8b459b2e2b41c88071cae06f817956393f3e633f0ca6577334bee93ad7ad3a4d` |
+| `TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPOFusion.lean` | `6ea175994b2934a48327feb0833d7447ba8c20152785adbd0ea87fc7b1c4869d` |
+| `TNLeanTest/BoundaryActionCrossTransport.lean` | `4e86bd233bffc3651402a9a3c021abf67fb687b49c29a07dcda11d1c257a0210` |
+| `TNLeanTest/MixedEndpointMPOFusionMaps.lean` | `60e51d9e12c66b0f46b4c0b3d343fe162c3d3ecc94df17d96d390f2d80f28033` |
+| `TNLeanTest/MixedEndpointMPOFusion.lean` | `29503d926f34f6251249c7981fa3883dc2f1310bec6e1287a0a61527c734765c` |
+
+## Initial dependency scope
 
 This work starts from the local merge of mixed-action commit
 `313fb03e2661aa26696cd20c83d9d7ff9400e6bb` and cross-transport commit
