@@ -61,6 +61,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockOpenGapAllLengths
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockUniformGap
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 import TNLean.MPS.ParentHamiltonian.Martingale.QuadraticFormGap
+import TNLean.MPS.ParentHamiltonian.Martingale.ReducingProjectionGap
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
