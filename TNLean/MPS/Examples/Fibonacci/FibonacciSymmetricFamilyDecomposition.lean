@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.Fibonacci.FibonacciNIMRepDecomposition
 
-/-!+# Unrestricted Fibonacci actions on families of normal states
+/-!
+# Unrestricted Fibonacci actions on families of normal states
 
 The multiplicities of a finite normal family invariant under a Fibonacci MPO algebra
 are a direct sum of regular two-label actions, provided the unit fixes the family.
@@ -78,7 +79,8 @@ theorem exists_equiv_prod_of_isMPOSymmetricFamily_fibNim
   intro a x y
   change M a x y = if e (σ x).1 = e (σ y).1 then
     (fibNim a (σ x).2 (σ y).2 : ℂ) else 0
-  rw [e.injective.eq_iff, hMM', hσ]
-  split_ifs <;> simp
+  have hcoeff := (hMM' a x y).trans
+    (congrArg (fun n : ℕ ↦ (n : ℂ)) (hσ a x y))
+  simpa only [Nat.cast_ite, Nat.cast_zero, e.injective.eq_iff] using! hcoeff
 
 end FibonacciCompression

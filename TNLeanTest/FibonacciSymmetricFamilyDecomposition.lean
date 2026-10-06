@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.Fibonacci.FibonacciSymmetricFamilyDecomposition
 
-/-!+# Regressions for unrestricted physical Fibonacci actions
+/-!
+# Regressions for unrestricted physical Fibonacci actions
 
 The concrete Fibonacci MPO consumer has no bound on the number of state blocks.
 The three-block test is excluded by parity, the empty family remains admissible,

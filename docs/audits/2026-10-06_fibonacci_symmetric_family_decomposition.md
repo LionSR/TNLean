@@ -128,13 +128,23 @@ The generated `TNLean/MPS/Examples/Fibonacci.lean` aggregator now imports
 the physical consumer. Its regression runs in the existing strict
 `Test boundary transport and fusion actions` loop in `pr-ci.yml`; the
 Fibonacci change adds no job, dependency pin, or timeout. The packet contains one new public
-theorem in 84 production lines and five examples plus a guarded
-logical-dependency report in 85 regression lines.
+theorem in 86 production lines and five examples plus a guarded
+logical-dependency report in 86 regression lines.
 
 The new theorem and proof deliberately have no `\leanok` markers pending
 native validation. Previously checked decomposition entries are unchanged.
 No actual-import Lean, Lake, or compiled declaration check has passed for
 this packet, and no Lean or Lake command was run during integration.
+
+The first published checkpoint `ead8307519e4f5f59dca88978d9a3c8fb43c0db3`
+was checked by GitHub CI run `37438244286`, build job `112185315154`.
+The production module reached its final coefficient transport but failed
+because rewriting the equality of subtype representatives produced an
+ill-typed dependent decidability motive. The repair casts the already
+proved natural coefficient equality and uses the simplifier's congruence
+rule for the conditional. It changes no hypothesis or conclusion. Both
+module-documentation headings were normalized in the same repair batch.
+The repaired production proof and strict regression remain unvalidated.
 
 Source checks passed: generated-import coverage (71 aggregators, 2765
 production modules), the existing strict-loop YAML and regression entry,
