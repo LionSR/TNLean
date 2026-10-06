@@ -10,6 +10,7 @@ precise enhancement of the discussion and outlook of
 \begin{theorem}[Decay of the logical Gram matrix]
     \label{thm:ldp_sector_gram_rate}
     \lean{MPSTensor.exists_norm_gram_sectorColumnMatrix_sub_one_le}
+    \leanok
     \uses{def:ldp_sector_encoder, def:correlation_length}
     Let $A_j$ be finitely many normal left-canonical sectors with faithful
     stationary densities $\sigma_j$ of trace one. Suppose $|\lambda_2|<1$
@@ -21,7 +22,7 @@ precise enhancement of the discussion and outlook of
         \|V_{A,N}^\dagger V_{A,N}-I_b\|\le K_G x^N.
     \end{align*}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:ldp_approximation_error_normal, lem:ldp_mixed_transfer_decay,
         thm:ldp_sector_gram_cross_entries}
     The diagonal entries are the squared sector norms minus one; the
@@ -34,6 +35,7 @@ precise enhancement of the discussion and outlook of
 \begin{theorem}[Decay of the complex cross matrix]
     \label{thm:ldp_sector_cross_rate}
     \lean{MPSTensor.exists_norm_cross_blockIsometryEncoder_sectorColumnMatrix_sub_one_le}
+    \leanok
     \uses{def:ldp_sector_encoder, def:ldp_embedded_sectors}
     Under the preceding canonical and common-spectrum hypotheses, embed
     the sectors with injective coordinate maps of disjoint ranges. Let
@@ -47,7 +49,7 @@ precise enhancement of the discussion and outlook of
     The cross matrix is complex, so this estimate retains relative
     logical phases.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_block_overlaps_limit,
         thm:ldp_sector_gram_cross_entries}
     The exact cross-overlap identity identifies each entry with the
@@ -61,6 +63,7 @@ precise enhancement of the discussion and outlook of
 \begin{theorem}[A square-root exponential encoder estimate]
     \label{thm:ldp_sector_sqrt_rate}
     \lean{MPSTensor.norm_sectorEncoder_sub_blockIsometryEncoder_le_of_rates}
+    \leanok
     \uses{def:ldp_sector_encoder}
     Suppose $V_{A,N}$ is injective, $W$ is an isometric block encoder,
     and for $K_G,K_Z,r\ge0$,
@@ -74,7 +77,7 @@ precise enhancement of the discussion and outlook of
         \le\bigl(\sqrt{K_G+2K_Ze^{K_Z}}+K_G\bigr)\sqrt z.
     \end{align*}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:ldp_polar_frame_bound}
     Both defects are bounded respectively by $K_Gz$ and $K_Zze^{K_Z}$.
     Apply the polar-frame estimate and use $0\le z\le\sqrt z$ for
@@ -84,6 +87,7 @@ precise enhancement of the discussion and outlook of
 \begin{theorem}[Uniform approximate and exact encoding from fixed registers]
     \label{thm:ldp_uniform_sector_encoding}
     \lean{MPSPreparation.exists_sectorEncoder_preparation_bounds}
+    \leanok
     \uses{def:ldp_sector_encoder, def:ldp_embedded_sectors, def:qc_local_circuit}
     Fix the embedded canonical family, a common spectral bound $0<t<1$,
     and injective bond and logical encodings in $r_0\ge2$ sites. Suppose
@@ -99,7 +103,7 @@ precise enhancement of the discussion and outlook of
     For every $N\ge L$, a genuine local unitary of depth at most $CN$
     satisfies $UJ_N=F_{A,N}$ exactly for the one-block register encoder.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:ldp_sector_gram_rate, thm:ldp_sector_cross_rate,
         thm:ldp_sector_sqrt_rate, thm:ldp_supported_sector_independence,
         thm:ldp_coherent_sector_circuit, thm:ldp_exact_whole_encoder_circuit}
@@ -114,6 +118,7 @@ precise enhancement of the discussion and outlook of
 \begin{theorem}[All-accuracy block-length choice for whole encoders]
     \label{thm:ldp_sector_all_accuracy_compilation}
     \lean{MPSPreparation.exists_log_depth_sectorEncoder_conversion_of_block_approximation}
+    \leanok
     \uses{def:ldp_sector_encoder, def:qc_local_circuit}
     Fix two endpoint families, $N_0\ge2$, $L,C\in\mathbb N$, $K\ge1$,
     and $r>0$. Suppose that at every $N\ge N_0$ and $L\le q\le N$ with
@@ -125,7 +130,7 @@ precise enhancement of the discussion and outlook of
     one conversion has depth at most $c\log(N/\varepsilon)$ and
     operator-norm error at most $\varepsilon$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Take $q=\lceil a\log(N/\varepsilon)+b\rceil$, with $a=2/r$ and
     $b=\max(\log K,0)/(r/2)+L+1$. Set $u=Ne^{-(r/2)q}$.
     The logarithmic threshold gives $Ku\le\varepsilon$, while
@@ -139,6 +144,7 @@ precise enhancement of the discussion and outlook of
 \begin{theorem}[Coherent conversion of matched canonical sector spaces]
     \label{thm:ldp_coherent_groundspace_conversion}
     \lean{MPSPreparation.exists_log_depth_coherent_sectorEncoder_conversion}
+    \leanok
     \uses{def:ldp_sector_encoder, def:qc_local_circuit}
     Fix two explicitly matched families $(A_j)_{j=1}^b$ and
     $(B_j)_{j=1}^b$ of normal sectors with $b>0$ and common physical
@@ -161,7 +167,7 @@ precise enhancement of the discussion and outlook of
     \end{align*}
     The endpoints depend only on the labelled families and $N$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:ldp_uniform_sector_encoding, thm:ldp_sector_all_accuracy_compilation,
         lem:ldp_common_mixed_gap, lem:ldp_overlapping_block_injectivity,
         thm:ldp_common_encoder_conversion}
@@ -179,6 +185,7 @@ precise enhancement of the discussion and outlook of
 \begin{theorem}[The encoder range is a canonical parent kernel]
     \label{thm:ldp_sector_encoder_parent_kernel}
     \lean{MPSTensor.CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian}
+    \leanok
     \uses{def:ldp_sector_encoder}
     Let canonical data for a tensor of physical and bond dimensions
     $d,D\ge1$ supply its retained normal representatives. For
@@ -186,7 +193,7 @@ precise enhancement of the discussion and outlook of
     representatives equals the kernel of the range-$L$ parent Hamiltonian.
     No further gauge or column rescaling is identified implicitly.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:ldp_sector_encoder_range, thm:canonical_bounded_range_ground_space}
     The polar encoder has exactly the periodic-sector span. The canonical
     bounded-range parent theorem identifies this span with the kernel

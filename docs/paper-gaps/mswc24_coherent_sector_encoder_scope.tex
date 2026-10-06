@@ -8,7 +8,7 @@
 \date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{Source and precise interpretation}
 The discussion and outlook of~\cite{Malz2024Preparation} proposes
@@ -17,14 +17,14 @@ Equation (25) and the paragraph ``Long-range MPS using measurements''
 provide the simultaneous sector construction relevant to that claim.
 They do not specify a canonical logical basis of the whole sector span,
 an operator-norm conversion bound, or an external-reference statement.
-The definitions and finite-length estimates here are a precise enhancement
-of that discussion, not a formalization of a new phase predicate.
+The operator-norm and all-accuracy results here give a precise whole-encoding
+enhancement of that discussion, not a formalization of a new phase predicate.
 
 For an explicitly labelled family of $b$ retained sectors, define the actual
 column matrix and its fixed polar encoder by
 \begin{align}
-    V_{A,N}e_j&=|\phi_N(A_j)\rangle,&
-    F_{A,N}&=V_{A,N}(V_{A,N}^\dagger V_{A,N})^{-1/2}.
+    V_{A,N}e_j & =|\phi_N(A_j)\rangle,                     &
+    F_{A,N}    & =V_{A,N}(V_{A,N}^\dagger V_{A,N})^{-1/2}.
 \end{align}
 The inverse is taken on the support. The endpoint depends on the family and
 ring length, and is independent of the requested accuracy or the partition
@@ -49,7 +49,7 @@ length. The same chosen circuit acts on all logical amplitudes. For two
 such physical unitaries, $U=U_BU_A^\dagger$ has depth $T_A+T_B$ and
 \begin{align}
     \|UF_{A,N}-F_{B,N}\|
-    &\le\|F_{A,N}-W_A\|+\|F_{B,N}-W_B\|.
+     & \le\|F_{A,N}-W_A\|+\|F_{B,N}-W_B\|.
 \end{align}
 There is no cost for producing the common seed from a product state: it
 cancels algebraically. A measurement protocol is never inverted.
@@ -84,35 +84,51 @@ and has depth at most $CN$. Pair support is needed only at the actual
 single block. The whole logical encoder is transported; the construction
 uses fixed-width pair synthesis and sequential blocked-polar unitaries.
 
-\section{Uniform logarithmic-depth target}
-The intended extension fixes two explicitly matched families of $b>0$
-distinct normal sectors with physical dimension $d\ge2$. Each sector is
-left canonical and has a faithful stationary density of trace one;
-mixed-transfer spectral radii within each family are strictly less than
-one. The desired quantifier order fixes $C>0$ and $N_0\ge2$ before the ring
-length and accuracy. For every $N\ge N_0$ and every
-$\varepsilon\in(0,1]$, it then chooses one circuit $U$ satisfying
+\section{Proved uniform logarithmic-depth conversion}
+Fix two explicitly matched families of $b>0$ distinct normal sectors with
+common physical dimension $d\ge2$. Each sector is left canonical and has
+a faithful stationary density of trace one; mixed-transfer spectral radii
+within each family are strictly less than one. The formal theorem chooses
+$C>0$ and $N_0\ge2$ before the ring length and accuracy. For every
+$N\ge N_0$, the fixed encoders are isometries, and for every
+$\varepsilon\in(0,1]$ one genuine nearest-neighbor circuit $U$ satisfies
 \begin{align}
-    \operatorname{depth}(U)&\le C\log(N/\varepsilon),\\
-    \|UF_{A,N}-F_{B,N}\|&\le\varepsilon.
+    \operatorname{depth}(U) & \le C\log(N/\varepsilon), \\
+    \|UF_{A,N}-F_{B,N}\|    & \le\varepsilon.
 \end{align}
-This all-accuracy statement is not yet supplied by the finite-length
-results above. The remaining work is:
-\begin{enumerate}
-    \item Derive the Gram and complex cross-matrix estimates for one common
-          partition, using the existing transfer-matrix rates. Logical
-          dimension is fixed before $N$ and $\varepsilon$.
-    \item Choose the common block length for squared accuracy, so the square
-          root in the encoder estimate still gives error $\varepsilon$.
-    \item When the chosen block length exceeds $N$, use the exact construction
-          above and absorb its linear depth into the same logarithmic budget.
-    \item Choose an eventual cutoff for injectivity and register fit. Identify
-          parent kernels only at a valid interaction range using the existing
-          periodic-span theorem.
-\end{enumerate}
-The exact short-partition construction needs pair support at the actual
-number of blocks. Its unitary construction is independent of the
-measurement-assisted preparation theorem.
+The same chosen $U$ satisfies, for every finite reference space $\mathcal R$
+and every logical-reference vector $\xi$,
+\begin{align}
+    \|[(UF_{A,N}-F_{B,N})\otimes I_{\mathcal R}]\xi\|
+    \le\varepsilon\|\xi\|.
+\end{align}
+The endpoints remain independent of accuracy and of the selected partition.
+\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_log_depth_coherent_sectorEncoder_conversion}.}
+
+The proof first obtains Gram and complex cross-matrix estimates with sums
+over the fixed logical dimension. One common decay rate, register width
+and eventual support-injectivity cutoff serve both families. If the common
+block scale $q$ fits inside the ring, one partition has block lengths between
+$q$ and $2q$. The two genuine encoders share its logical seed, so their
+relative unitary has the sum of their depths and endpoint errors.
+The choice $q=\lceil(2/r)\log(N/\varepsilon)+c_0\rceil$ accounts for the
+square root in the endpoint estimate. If $q>N$, the exact fixed-width
+whole-encoder construction above has depth $O(N)\le O(q)$ and gives the
+same logarithmic bound. No product-state preparation of the logical seed
+is charged, and no measurement protocol is inverted.
+
+\section{Parent kernels at a valid interaction range}
+For supplied canonical data of a tensor with physical and bond dimensions
+$d,D\ge1$, the encoder of its retained normal representatives has range
+exactly equal to the kernel of the range-$L$ parent Hamiltonian whenever
+$3D^5\le L\le N$, including $N=L$.
+\footnote{Formal declaration:
+    \leanid{MPSTensor.CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian}.}
+This is an identity of the actual periodic-sector span. Applying the
+conversion theorem to such representatives still requires its explicit
+canonical hypotheses and a matching of the labels; no additional gauge
+substitution or column rescaling is implicit.
 
 \section{Chosen vectors and boundaries}
 Transporting a fixed logical basis does not equate the normalized periodic

@@ -243,6 +243,47 @@ theorem transpose_kronecker_one_apply (σ : Matrix (Fin D) (Fin D) ℂ) (a b : F
   · simp [Matrix.kroneckerMap_apply, hab, Matrix.trace_single_eq_of_ne _ _ _ (Ne.symm hab)]
 
 open scoped Matrix.Norms.L2Operator in
+/-- The Gram and transfer errors are uniformly equivalent whenever their reference entries
+are related by the same reshuffling as the actual tensor. The constant depends only on the
+bond dimension and is chosen before the tensor, reference map, and reference matrix.
+Both matrix norms are `L²` operator norms. The entry identity is the regrouping in
+arXiv:2307.01696, eq. (8), and arXiv:2103.13367, Supplemental Material, eqs. (19) and (21). -/
+theorem exists_norm_gram_transferMatrix_sub_le_of_entries (D : ℕ) :
+    ∃ K : ℝ, 0 < K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+      (T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
+      (G : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ),
+      (∀ a b, G a b = T (Matrix.single b.2 a.2 1) b.1 a.1) →
+      (‖(physicalMatrix A)ᴴ * physicalMatrix A - G‖ ≤
+        K * ‖transferMatrix (Kraus.transferMap A) - transferMatrix T‖) ∧
+      (‖transferMatrix (Kraus.transferMap A) - transferMatrix T‖ ≤
+        K * ‖(physicalMatrix A)ᴴ * physicalMatrix A - G‖) := by
+  classical
+  let R : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ]
+      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
+    { toFun := fun T a b => T (a.1, b.1) (a.2, b.2)
+      map_add' := fun _ _ => rfl
+      map_smul' := fun _ _ => rfl }
+  let Rc := LinearMap.toContinuousLinearMap R
+  have hbound (X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+      ‖Rc X‖ ≤ (‖Rc‖ + 1) * ‖X‖ :=
+    (Rc.le_opNorm X).trans (mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg X))
+  refine ⟨‖Rc‖ + 1, by positivity, fun {d} A T G hG => ?_⟩
+  have hgram : (physicalMatrix A)ᴴ * physicalMatrix A - G =
+      Rc (transferMatrix (Kraus.transferMap A) - transferMatrix T) := by
+    ext a b
+    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply, hG]
+    rfl
+  constructor
+  · rw [hgram]
+    exact hbound _
+  · have hinv : transferMatrix (Kraus.transferMap A) - transferMatrix T =
+        Rc ((physicalMatrix A)ᴴ * physicalMatrix A - G) := by
+      rw [hgram]
+      rfl
+    rw [hinv]
+    exact hbound _
+
+open scoped Matrix.Norms.L2Operator in
 /-- The physical Gram error and transfer-matrix error bound one another in the `L²`
 operator norm, with one positive constant depending only on the bond dimension. The
 constant is chosen before the physical dimension, tensor, and positive semidefinite
@@ -263,38 +304,9 @@ theorem exists_norm_gram_transferMatrix_sub_le (D : ℕ) :
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤
         K * ‖(physicalMatrix A)ᴴ * physicalMatrix A -
           σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖) := by
-  classical
-  let R : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ]
-      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
-    { toFun := fun T a b => T (a.1, b.1) (a.2, b.2)
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl }
-  let Rc := LinearMap.toContinuousLinearMap R
-  have hbound (T : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
-      ‖Rc T‖ ≤ (‖Rc‖ + 1) * ‖T‖ :=
-    (Rc.le_opNorm T).trans (mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg T))
-  refine ⟨‖Rc‖ + 1, by positivity, fun {d} A σ hσ => ?_⟩
-  have hgram : (physicalMatrix A)ᴴ * physicalMatrix A -
-      σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-      Rc (transferMatrix (Kraus.transferMap A) -
-        transferMatrix (Kraus.transferMap (fixedPointTensor σ))) := by
-    ext a b
-    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply,
-      transpose_kronecker_one_apply]
-    change _ = Kraus.transferMap A (Matrix.single b.2 a.2 1) b.1 a.1 -
-      Kraus.transferMap (fixedPointTensor σ) (Matrix.single b.2 a.2 1) b.1 a.1
-    rw [transferMap_fixedPointTensor_apply hσ]
-  constructor
-  · rw [hgram]
-    exact hbound _
-  · have hinv : transferMatrix (Kraus.transferMap A) -
-        transferMatrix (Kraus.transferMap (fixedPointTensor σ)) =
-        Rc ((physicalMatrix A)ᴴ * physicalMatrix A -
-          σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-      rw [hgram]
-      rfl
-    rw [hinv]
-    exact hbound _
+  obtain ⟨K, hK, h⟩ := exists_norm_gram_transferMatrix_sub_le_of_entries D
+  refine ⟨K, hK, fun {d} A σ hσ => h A _ _ fun a b => ?_⟩
+  rw [transpose_kronecker_one_apply, transferMap_fixedPointTensor_apply hσ]
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Gram matrices.** In the setting of `exists_norm_transferMap_pow_sub_le`, the Gram matrix

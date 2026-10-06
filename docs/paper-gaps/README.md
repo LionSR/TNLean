@@ -1057,3 +1057,10 @@ For SCP10, arXiv:1001.3807:
 [scp10_two_by_two_regular_fixed_point.tex](scp10_two_by_two_regular_fixed_point.tex)
 records the proved normalized original-tensor reblocking on untwisted coarse
 tori of periods at least three, and the remaining tiny-period/twisted scope.
+
+### SCP10: coherent twisted regular fixed point
+
+[scp10_twisted_two_by_two_regular_fixed_point.tex](scp10_twisted_two_by_two_regular_fixed_point.tex)
+records the single block-local map for every native closure and coherent
+sum, with the same original coarse tensor and normalized Bell factors.
+Coarse periods at least three and the stated boundary/support scope remain.
