@@ -1,0 +1,126 @@
+% Separate-module validation is pending; keep all owners in this leaf unchecked.
+\section{Adjoint boundaries from star-compatible coalgebras}
+\label{sec:glm_coalgebra_adjoint}
+
+Let $H$ be a complex coalgebra with a conjugate-linear involution such that
+$\Delta(x^*)=(*\otimes*)\Delta(x)$. This is the coproduct compatibility
+in the definition of a $C^*$-weak Hopf algebra in
+\cite[Definition~5.8]{Molnar2022MPOAlgebrasI}.
+The construction below uses only this coalgebra, a physical linear map,
+and a dual representation; it requires neither an antipode nor an integral.
+The involution $\kappa$ below preserves convolution order and differs from
+the dual $C^*$-algebra involution, which also involves the antipode
+\cite[Equation~(5.38)]{Molnar2022MPOAlgebrasI}.
+
+\begin{theorem}[Same-order involution of the convolution dual]
+    \label{thm:glm_coalgebra_dual_star}
+    \lean{Coalgebra.dualStar_mul,Coalgebra.dualStarMulEquiv,
+        Coalgebra.dualStar_one}
+    For $f\in H^*$, define $\kappa(f)(x)=\overline{f(x^*)}$.
+    Then $\kappa$ is conjugate-linear, involutive, and satisfies
+    \begin{align}
+        \kappa(fg) & =\kappa(f)\kappa(g), \notag \\
+        \kappa(1)  & =1.
+        \label{eq:glm_dual_star_product}
+    \end{align}
+    Here multiplication is convolution, and $1$ is the counit.
+\end{theorem}
+\begin{proof}
+    On a pure tensor, complex conjugation sends
+    $f(x^*)g(y^*)$ to $\kappa(f)(x)\kappa(g)(y)$.
+    Extend this identity additively to $\Delta(x)$ and use the
+    coproduct compatibility. Involutivity makes $\kappa$ a bijective
+    multiplicative map, so it fixes the unit.
+\end{proof}
+
+\begin{definition}[Tensor from physical coefficients]
+    \label{def:glm_dual_representation_tensor}
+    \lean{MPOTensor.dualCoefficient,MPOTensor.ofDualRepresentation}
+    Let $\phi:H\to M_d(\mathbb C)$ be linear and let
+    $\psi:H^*\to M_D(\mathbb C)$ be a unital algebra representation.
+    Define $f_{ij}(x)=\phi(x)_{ij}$ and $T^{ij}=\psi(f_{ij})$.
+\end{definition}
+
+\begin{theorem}[Ordered coefficient products]
+    \label{thm:glm_dual_representation_words}
+    \lean{MPOTensor.evalWord_ofDualRepresentation,
+        MPOTensor.star_dualCoefficient,MPOTensor.star_dualCoefficient_prod}
+    \uses{def:glm_dual_representation_tensor}
+    Suppose $\phi(x^*)=\phi(x)^\dagger$. For every pair of physical
+    configurations $\sigma,\tau$ of length $N\geq0$, put
+    $f_{\sigma,\tau}=f_{\sigma_0\tau_0}\cdots f_{\sigma_{N-1}\tau_{N-1}}$,
+    with the empty product equal to $1$. Then
+    \begin{align}
+        T^{\sigma_0\tau_0}\cdots T^{\sigma_{N-1}\tau_{N-1}}
+                                & =\psi(f_{\sigma,\tau}), \notag \\
+        \kappa(f_{\sigma,\tau}) & =f_{\tau,\sigma}.
+        \label{eq:glm_dual_representation_words}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_coalgebra_dual_star}
+    Star compatibility gives $\kappa(f_{ij})=f_{ji}$.
+    Induction on $N$, using multiplicativity and unitality of $\psi$
+    and (\ref{eq:glm_dual_star_product}), proves both identities.
+\end{proof}
+
+\begin{theorem}[One adjoint boundary at every length]
+    \label{thm:glm_coalgebra_adjoint_boundary}
+    \lean{MPOTensor.exists_boundary_trace_dualStar,
+        MPOTensor.exists_adjointBoundary_of_dualRepresentation,
+        MPOTensor.isBoundaryAdjointClosed_of_dualRepresentation}
+    \uses{def:glm_dual_representation_tensor,def:glm_boundary_adjoint_closed}
+    Suppose $\phi$ preserves the involution and $\psi$ is injective.
+    For every $X\in M_D(\mathbb C)$ there exists one
+    $Y\in M_D(\mathbb C)$ such that
+    \begin{align}
+        (O^N_{T,X})^\dagger & =O^N_{T,Y}
+        \label{eq:glm_coalgebra_adjoint_boundary}
+    \end{align}
+    for every $N\geq0$. In particular, $T$ is boundary adjoint closed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_dual_representation_words}
+    The functional
+    $\ell_X(f)=\overline{\operatorname{tr}(X\psi(\kappa(f)))}$
+    is complex linear. Injectivity of $\psi$ allows it to extend to a
+    linear functional $\theta$ on $M_D(\mathbb C)$. The nondegenerate
+    trace pairing provides $Y$ with $\theta(M)=\operatorname{tr}(YM)$.
+    Consequently
+    \begin{align*}
+        \operatorname{tr}(Y\psi(f_{\sigma,\tau}))
+         & =\overline{\operatorname{tr}
+        (X\psi(\kappa(f_{\sigma,\tau})))}
+        =\overline{\operatorname{tr}(X\psi(f_{\tau,\sigma}))}.
+    \end{align*}
+    This proves (\ref{eq:glm_coalgebra_adjoint_boundary}) entrywise.
+    The boundary $Y$ was chosen before $N$. At $N=0$, the identity is
+    $\operatorname{tr}(Y)=\overline{\operatorname{tr}(X)}$.
+\end{proof}
+
+\begin{theorem}[Canonical parent symmetry of a dual representation]
+    \label{thm:glm_dual_representation_parent}
+    \lean{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_of_dualRepresentation,
+        MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_of_dualRepresentation}
+    \uses{def:glm_dual_representation_tensor,def:glm_boundary_closedness,
+        def:parent_interaction,def:parent_hamiltonian,def:mpdo_commuting_boundary}
+    Under the hypotheses of Theorem~\ref{thm:glm_coalgebra_adjoint_boundary},
+    suppose $T$ is arbitrary-boundary compatible with a state tensor $A$.
+    For $L>0$, the canonical local parent commutes with $O^L_{T,X}$
+    for every $X$. For $N\geq L$, the periodic canonical parent
+    commutes with $O^N_{T,X}$ whenever $X$ commutes with every tensor
+    letter $T^{ij}$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:glm_coalgebra_adjoint_boundary,thm:glm_boundary_parent_local,
+        thm:glm_boundary_parent_periodic}
+    Compatibility makes the local state support invariant. Its
+    orthogonal complement is invariant as well, since the entire boundary
+    family is adjoint closed. The complementary orthogonal projector
+    therefore satisfies $[h_L,O^L_{T,X}]=0$ by
+    Theorem~\ref{thm:glm_boundary_parent_local}. The
+    tensor-letter commutation condition transports this equality through
+    cyclic windows, including those crossing the periodic boundary;
+    Theorem~\ref{thm:glm_boundary_parent_periodic} then gives
+    $[H_{L,N},O^N_{T,X}]=0$.
+\end{proof}
