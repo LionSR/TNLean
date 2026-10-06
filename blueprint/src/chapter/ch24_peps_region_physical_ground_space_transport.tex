@@ -1,0 +1,98 @@
+\section{Physical transport of the common parent ground space}%
+\label{sec:peps_region_physical_ground_space_transport}
+
+\begin{definition}[Product physical map on the full graph]%
+    \label{def:peps_global_physical_map}
+    \lean{TNLean.PEPS.fullRegionConfigEquiv,
+        TNLean.PEPS.fullRegionPhysicalEquiv,TNLean.PEPS.globalPhysicalMap,
+        TNLean.PEPS.globalPhysicalMap_apply,TNLean.PEPS.globalPhysicalEquiv,
+        TNLean.PEPS.globalPhysicalEquiv_apply}
+    \leanok
+    \uses{def:peps_physical_deformation}
+    For physical maps $F_v:\C^d\to\C^e$ at the vertices of a finite
+    graph, their product map $F_V=\bigotimes_{v\in V}F_v$ acts by
+    \begin{align}
+        (F_V\psi)(\tau)=\sum_{\sigma:V\to\{0,\ldots,d-1\}}
+            \left(\prod_{v\in V}(F_v)_{\tau_v\sigma_v}\right)\psi(\sigma).
+    \end{align}
+    If each $F_v$ is invertible, then $F_V$ is a linear isomorphism.
+\end{definition}
+
+\begin{theorem}[Physical deformation of the closed PEPS vector]%
+    \label{thm:peps_physical_deformation_closed_state}
+    \lean{TNLean.PEPS.stateCoeff_physicalDeform}
+    \leanok
+    \uses{def:peps_global_physical_map,def:peps_physical_deformation}
+    The closed PEPS vectors satisfy
+    $\ket{\Psi(A^F)}=F_V\ket{\Psi(A)}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both coefficients as finite sums over virtual labels and
+    physical configurations. Interchange the two sums and distribute
+    the product of physical coefficients at the vertices. This gives
+    the defining local physical sums of $A^F$.
+\end{proof}
+
+\begin{theorem}[Slices under a product physical map]%
+    \label{thm:peps_global_physical_map_slice}
+    \lean{TNLean.PEPS.physicalProduct_assembleRegion,
+        TNLean.PEPS.regionSliceMap_globalPhysicalMap}
+    \leanok
+    \uses{def:peps_global_physical_map}
+    Fix a region $R\subseteq V$ and write $R^c=V\setminus R$.
+    For a complementary physical configuration $\beta$, let
+    $\psi_\beta(\alpha)=\psi(\alpha,\beta)$.
+    Every complementary output configuration $\tau$ satisfies
+    \begin{align}
+        (F_V\psi)_\tau
+        =\sum_\beta\left(\prod_{v\in R^c}(F_v)_{\tau_v\beta_v}\right)
+            F_R\psi_\beta.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Split each input configuration into its restrictions to $R$ and
+    $R^c$. The coefficient product factors over these two sets.
+    Interchanging the two finite sums gives the stated identity.
+\end{proof}
+
+\begin{theorem}[Transport of the common parent ground space]%
+    \label{thm:peps_region_parent_ground_space_physical_transport}
+    \lean{TNLean.PEPS.mem_regionParentGroundSpace_iff,
+        TNLean.PEPS.globalPhysicalMap_mem_regionParentGroundSpace,
+        TNLean.PEPS.globalPhysicalEquiv_mem_regionParentGroundSpace_iff,
+        TNLean.PEPS.map_regionParentGroundSpace_physicalDeform,
+        TNLean.PEPS.regionParentGroundSpacePhysicalEquiv,
+        TNLean.PEPS.finrank_regionParentGroundSpace_physicalDeform,
+        TNLean.PEPS.map_ker_regionParentHamiltonian_physicalDeform}
+    \leanok
+    \uses{def:peps_global_physical_map,def:peps_region_parent_hamiltonian}
+    Let $\{R_i\}_{i\in I}$ be any family of regions, and let
+    $\mathcal G(A)$ be the space of full physical vectors whose slices
+    on every $R_i$ belong to $\mathcal G_{R_i}(A)$.
+    If each $F_v$ is invertible, then
+    $\mathcal G(A^F)=F_V\mathcal G(A)$.
+    Restriction of $F_V$ is a linear isomorphism between these common
+    ground spaces, so their dimensions agree.
+    For a finite family of positive parent interactions $h_i$,
+    define $h_i^F=(F_{R_i}^{-1})^\dagger h_iF_{R_i}^{-1}$.
+    The corresponding full parent Hamiltonians satisfy
+    $\ker H^F=F_V\ker H$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_global_physical_map_slice,
+        thm:peps_region_physical_deformation,
+        thm:peps_deformed_region_interaction,
+        thm:peps_region_parent_common_kernel}
+    If every slice $\psi_\beta$ lies in $\mathcal G_{R_i}(A)$,
+    then $F_{R_i}\psi_\beta$ lies in
+    $\mathcal G_{R_i}(A^F)$. The slice identity and closure under
+    finite linear combinations give $F_V\mathcal G(A)\subseteq
+    \mathcal G(A^F)$. Applying the inverse physical maps gives the
+    reverse inclusion. Restriction of $F_V$ is therefore a linear
+    isomorphism. The full Hamiltonian kernel is the common regional
+    ground space for every choice of positive interactions with the
+    specified local kernels, giving the final identity.
+\end{proof}

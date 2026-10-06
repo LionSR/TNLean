@@ -49,7 +49,6 @@ into it by a gauge transformation and a rescaling
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
-open QuantumCircuit
 
 namespace MPSPreparation
 

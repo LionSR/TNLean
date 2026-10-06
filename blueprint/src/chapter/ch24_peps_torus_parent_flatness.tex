@@ -1,0 +1,49 @@
+\begin{theorem}[Regular torus parent constraints force plaquette flatness]%
+    \label{thm:peps_regular_torus_parent_flatness}
+    \lean{TNLean.PEPS.IsGInjective.torusPlaquetteHolonomy_eq_one_of_parent_annihilates,
+        TNLean.PEPS.IsGInjective.regionParent_not_annihilates_torusPlaquetteFlux,
+        TNLean.PEPS.IsGInjective.torusPlaquetteHolonomy_eq_one_of_parentHamiltonian_annihilates,
+        TNLean.PEPS.torusPlaquetteHolonomy_eq_one_iff_squareTransport,
+        TNLean.PEPS.IsGInjective.isTorusFlat_of_parentHamiltonian_annihilates_twistedState}
+    \leanok
+    \uses{thm:peps_regular_region_parent_flatness,
+        def:peps_region_parent_hamiltonian}
+    Let a native four-leg regular $G$-injective tensor be placed on
+    a square torus with both periods at least three. Insert arbitrary
+    regular group operators on its ordered bonds, and suppose that
+    the resulting physical PEPS vector is nonzero. If an original
+    plaquette parent term annihilates this vector, the holonomy
+    around that plaquette is the identity.
+
+    If the sum of all original plaquette parent terms annihilates
+    it, every elementary plaquette has identity holonomy. Equivalently,
+    writing $A_v$ for transport to the right and $B_v$ for transport
+    upward, one has
+    \[
+        B_{v+(1,0)}A_v=A_{v+(0,1)}B_v
+    \]
+    at every vertex. In particular, a nonzero one-bond flux state
+    with nonidentity flux is not annihilated by the original parent
+    term surrounding its endpoint.
+
+    No $G$-isometry is assumed. This is a necessary local step in
+    \cite[Theorem~5.5]{Schuch2010PEPS}; it does not claim that
+    arbitrary parent-kernel vectors have inserted-bond descriptions,
+    or that flatness alone gives the full torus ground-space classification.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each native plaquette is the support of a four-step closed walk,
+    so its induced graph is connected. Apply local regular parent
+    flatness to the induced walk and then identify its holonomy with
+    the original native plaquette holonomy. Positivity of every
+    regional parent term implies that a vector killed by their sum
+    is killed by each term separately.
+
+    The ordered plaquette holonomy is
+    $B_v^{-1}A_{v+(0,1)}^{-1}B_{v+(1,0)}A_v$.
+    It is the identity exactly when the two elementary square
+    transports agree. The explicit one-bond insertion has its
+    prescribed group element as holonomy, giving the exclusion of
+    nonidentity flux.
+\end{proof}

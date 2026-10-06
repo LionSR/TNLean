@@ -24,6 +24,374 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Empty physical alphabet under trace-preserving normalization — promoted
+
+- **Pattern:** Positive bond dimension and trace-preserving normalization exclude
+  an empty physical alphabet.
+- **Seen:** `MPS/Periodic/PhysicalDimension.lean`,
+  `MPS/ParentHamiltonian/LocalDensitySupport.lean`, and
+  `MPS/Core/PhysicalDimension.lean`.
+- **Abstraction:** `MPSTensor.IsLeftCanonical.physDim_ne_zero` in
+  `MPS/Core/PhysicalDimension.lean` supplies the common argument.
+- **Refactor:** The periodic and finite-density consumers now use the helper,
+  as do the faithful-generator gap and finite quasi-local support theorem.
+
+### Simultaneous permutation invariance of matrix entries — promoted (2026-10-03)
+
+- **Pattern:** Convert simultaneous invariance of matrix entries into commutation
+  with the associated permutation matrix.
+- **Seen:** Regular cycle flux creation, two-site charge-projector commutation,
+  and regional charge-reference preparation.
+- **Abstraction:** `Matrix.commute_permMatrix_of_entry_invariant` in
+  `TNLean/Algebra/PermutationMatrixCommutation.lean`, over an arbitrary semiring.
+- **Refactor:** The old private theorem is removed, and all three consumers
+  use the shared entry argument.
+
+
+### Induced walks after extension by exterior operators (promoted, 2026-10-03)
+
+`regularRegionInternalOperators_bondExtension` restricts an extended assignment
+back to its original internal operators. `regularWalkHolonomy_induced_bondExtension`
+then evaluates an induced-region walk directly with the original assignment.
+They are defined in `TNLean/PEPS/RegularInsertedWalkHolonomy.lean` and replace
+repeated restriction proofs in the two-plaquette joint measurement, the
+three-plaquette output measurement, and the routed reunion measurement.
+
+
+### Full logical unitary implementation in an initialized packet — promoted (2026-10-02)
+
+- **Pattern:** Include a complete logical unitary in prescribed physical basis
+  coordinates, extend its orthonormal columns to a physical unitary, synthesize
+  that unitary, and retain the equality on every logical input.
+- **Seen:** `MPU/LeafIntervalCircuit.lean`, `MPU/BondDilationCircuit.lean`, and
+  `MPU/CompatibleBondDilationCircuit.lean`.
+- **Abstraction:**
+  `MPSPreparation.exists_isPairProduct_isCleanImplementation` in
+  `Preparation/CleanUnitaryImplementation.lean` derives the actual circuit and
+  its full logical-space clean identity. `IsCleanImplementation.embedOp` in
+  `Preparation/CleanImplementationPlacement.lean` places this identity into a
+  larger shared scratch pool.
+- **Notes:** All three local constructions use the common existence theorem.
+  Cleanup on selected physical-input columns alone is insufficient for an
+  inverse call; the full logical identity is retained. The synthesis bound is
+  polynomial in the packet Hilbert dimension and is used only on packets of
+  logarithmic width in the bond bound.
+
+### Compact norm lower bounds on a common tail — promoted (2026-10-02)
+
+- **Pattern:** Instantiate compact local-bound uniformization with a norm
+  inequality, prove monotonicity under decreasing the lower bound and increasing
+  the length threshold, then provide the local spectral estimate.
+- **Seen:** `CompactParentGap.lean`, `CompactNormalParentGap.lean`, and
+  `CompactBlockParentGap.lean`.
+- **Abstraction:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` in
+  `TNLean/Algebra/CompactGapBounds.lean` specializes the existing finite-cover
+  lemma to varying normed spaces and admissible sets of vectors.
+- **Notes:** All three consumers now provide only the operator family, vector
+  set, and local estimate. No predicate or broader compactness theorem is added;
+  the mathematical statements and local spectral proofs are unchanged.
+
+### Inclusion of a block ground space in the weighted joint space — promoted (2026-10-02)
+
+- **Pattern:** Rewrite the joint ground space as the supremum of the block
+  ground spaces, then use the inclusion of one summand.
+- **Seen:** `LocalCommutatorExpectation.lean`,
+  `LocalParentExpectationFromOpenKernel.lean`, and
+  `QuasiLocalParentGroundStateFace.lean`.
+- **Abstraction:** `MPSTensor.groundSpaceES_block_le_toTensorFromBlocks` in
+  `TNLean/MPS/ParentHamiltonian/BlockSumIntervalSpaces.lean`.
+- **Notes:** All three consumers use the helper. It adds no hypothesis beyond
+  the nonzero coefficients needed for the joint-space identity.
+
+### Local projector commutation from independent vertex translations — promoted (2026-10-02)
+
+- **Pattern:** Express the product of local regular averaging projectors as the
+  scalar average of independent vertex translations, then move commutation
+  through the finite sum and scalar action.
+- **Seen:** `RegularCycleControlledSupport.lean`,
+  `RegularTwoCyclePhysicalFluxMove.lean`, and
+  `RegularCyclePhysicalFluxCreation.lean`.
+- **Abstraction:** `commute_regionLocalProjector_of_vertexTranslation` in
+  `TNLean/PEPS/RegularCycleControlledSupport.lean` gives the mathematical
+  commutation criterion for the actual regional projector.
+- **Notes:** All three consumers retain their derived translation commutation.
+  The helper adds no state or Gram assumption, and all public signatures remain
+  unchanged.
+
+### Regional PEPS subspace inclusion by open contraction columns — promoted (2026-10-02)
+
+- **Pattern:** Rewrite the regional ground space as the span of its actual
+  open contraction columns, apply `Submodule.span_le`, and extract each
+  crossing configuration from the generator range.
+- **Seen:** Twice in `PEPS/ParentHamiltonian/RegularRegionFlatness.lean`
+  (exposure into canonical coordinates and recovery through the inverse),
+  and once in `RegularRegionBondRightInvariance.lean`
+  (exposed shared-bond right invariance).
+- **Abstraction:** `TNLean.PEPS.regionGroundSpace_le_iff` in
+  `TNLean/PEPS/ParentHamiltonian/RegionGroundSpace.lean` gives the universal
+  subspace property of the actual regional contraction.
+- **Notes:** All three consumers use this mathematical equivalence. It
+  composes Mathlib's `Submodule.span_le` and `Set.range_subset_iff`, adds no
+  hypotheses, and leaves the consumer theorem signatures unchanged.
+
+### Bounded simultaneous injective blocking of normal blocks — promoted (2026-10-02)
+
+- **Pattern:** Extract a positive length with the dimension bound from the
+  simultaneous word-span theorem, then turn its length-`L` span into a
+  one-site span of the blocked family.
+- **Seen:** `IsometricDeformation.lean` in
+  `exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor`, and
+  `OpenIsometricDeformationGap.lean` in both
+  `exists_blocked_isometricDeformation_open_parent_gap_of_isNormalTensor`
+  and `exists_blocked_isometricDeformation_open_interaction_gap_of_isNormalTensor`.
+- **Abstraction:**
+  `MPSTensor.exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor`
+  in `TNLean/MPS/ParentHamiltonian/NormalBlockInjectiveBlocking.lean`.
+- **Notes:** All three consumers now use the mathematical helper. The bound
+  remains `L + 1 ≤ 3 * (max (∑ j, dim j) 1) ^ 5`; positive block dimensions
+  follow from normality, and no simultaneous injectivity hypothesis is added.
+
+### Averaged left inverse of a G-injective MPS tensor (promoted, 2026-10-02)
+
+- **Pattern:** Extract the invariant tensor and its averaged left inverse from
+  general G-injectivity, then rewrite map invariance as conjugation invariance
+  of every physical tensor coefficient.
+- **Seen:** The concatenation proof in `PEPS/GInjectiveMPS.lean`, both original
+  intersection and closure proofs in `PEPS/GInjectiveMPSIntersection.lean`,
+  and the inhomogeneous intersection proof in
+  `PEPS/GInjectiveStripIntersection.lean`.
+- **Abstraction:** `IsGInjective.exists_mpsLeftInverse` in
+  `TNLean/PEPS/GInjectiveMPS.lean` combines the existing general left-inverse
+  theorem with the conjugation-invariance characterization.
+- **Notes:** All four consumers use this mathematical helper. The repeated
+  conjugation rewrite is removed; the helper adds no mathematical hypothesis
+  and does not require a finite physical alphabet.
+
+### Adjoint of dependent block diagonals (promoted, 2026-10-02)
+
+- **Pattern:** Expand dependent block-diagonal entries to move conjugate
+  transpose through the block construction.
+- **Occurrences:** `Algebra/FiniteGroupCommutant.lean`,
+  `QICLean/Algebra/ScalarCommutant.lean`, and
+  `QICLean/Algebra/DependentBlockDiagonal.lean`.
+- **Promotion:** Reuse Mathlib's `Matrix.blockDiagonal'_conjTranspose`.
+  The finite-group commutant proof removes its private entrywise copy and
+  rewrites directly with this theorem; the companion-library consumers
+  already use it.
+- **Notes:** No new helper or tactic is needed.
+
+### Weighted isotypic scalar action (promoted, 2026-10-02)
+
+- **Pattern:** Expand a weighted character-projector sum on an irreducible
+  summand, replace each projector by its character-equality indicator,
+  and retain the weight of that summand.
+- **Occurrences:** `RepresentationDelta.deltaOperator_apply_of_mem`,
+  `CharacterProjectorTwirl.averageMap_linHom_rep`, and the reciprocal
+  coefficient in `RepresentationDeltaInverse.deltaOperatorInverse_apply_of_mem`.
+- **Promotion:** `Representation.sum_smul_charProjector_apply_of_mem` in
+  `TNLean/Algebra/CharacterProjectorWeighted.lean`. All three calculations
+  use this mathematical helper. The same module proves that every such
+  isotypic scalar operator commutes with the group action.
+- **Notes:** The helper imports only the character-projector foundation,
+  so the weighted trace operator and its inverse share it without an
+  import cycle. The two earlier calculations lose their indicator-sum proofs.
+
+
+### Integer-cell collar offset decomposition (promoted, 2026-10-02)
+
+- **Pattern:** Split the displacement from an occupied integer center into
+  two equal offsets; use one in the closed unit cell and one in the
+  radius-three-quarters enlargement.
+- **Occurrences:** `PEPS/IntegerCellExteriorCollar.lean` and
+  `PEPS/TorusRegionBoundaryLift.lean`, formerly the private
+  `unitStep_mem_collar` placement proof. Actual edge and boundary-endpoint
+  geometry both need the same numerical placement.
+- **Promotion:** `mem_integerClosedCell_add_of_abs_le_one` in
+  `TNLean/PEPS/IntegerCellExteriorCollar.lean`. The generic theorem already
+  serves edge-segment containment and the integer-center collar
+  characterization; the torus boundary-lift consumer uses it after reducing
+  its unit-step hypothesis to coordinate distance at most one.
+- **Notes:** The scanner does not identify this mathematical repetition:
+  one proof begins with absolute coordinate bounds and the other with
+  unit-step cases. The shared theorem avoids repeating the offset split.
+
+
+### continuous argument along slit-plane paths — promoted (2026-10-02)
+
+- **Pattern:** Reduce continuity of a principal-argument path to continuity at
+  each point, use `Complex.continuousAt_arg`, and compose with the path.
+- **Seen:** three angular-branch constructions in `PEPS/IntegerCellNoHoles.lean`.
+- **Abstraction:** Mathlib's `Complex.continuousOn_arg.comp_continuous`.
+- **Notes:** all three constructions now use the existing composition theorem
+  directly. No new helper or tactic is introduced.
+
+
+### Flat spectral entropy reduction (promoted, 2026-10-02)
+
+- **Pattern:** Apply a quadratic matrix identity to a nonzero eigenvector,
+  cancel the vector coefficient, and conclude that each eigenvalue is zero
+  or the reciprocal flatness parameter.
+- **Occurrences:** The von Neumann calculation in `Algebra/FlatDensityEntropy`
+  and the spectral real-power trace calculation in
+  `Algebra/FlatDensityRenyiEntropy`; the same spectral argument would otherwise
+  precede each Rényi order and each boundary-density specialization.
+- **Promotion:**
+  `Matrix.IsHermitian.eigenvalues_eq_zero_or_inv_of_mul_self_eq_inv_smul` in
+  `TNLean/Algebra/FlatDensityEntropy.lean`. Both entropy calculations consume
+  this lemma, with no repeated eigenvector cancellation proof.
+
+
+### finite compact cell quotients — promoted (2026-10-02)
+
+- **Pattern:** Map a finite disjoint union of compact locally path connected
+  cells continuously onto its realized union, use compactness and the Hausdorff
+  property to obtain a closed quotient map, and pass local path connectedness
+  to the quotient.
+- **Seen:** the original torus-cell proof in
+  `PEPS/TorusRegionRealization.lean` and the planar integer-cell construction in
+  `PEPS/IntegerCellNoHoles.lean`.
+- **Abstraction:** `locallyPathConnectedSpace_iUnion_range` in
+  `PEPS/FiniteCellTopology.lean`. Both geometric instances now use the shared
+  theorem; the torus instance no longer repeats the quotient argument.
+- **Notes:** the hypothesis is a genuine finite family of compact continuous
+  cell images, not a collar connectivity or disk hypothesis. No tactic is added.
+
+
+### Integer unit-step seam arithmetic (promoted, 2026-10-02)
+
+- **Pattern:** Split an integer unit step into its four orientations; apply
+  Euclidean division at a seam, and negate the crossing pair for reverse steps.
+- **Occurrences:** Exterior walk approximation in
+  `PEPS/TorusExteriorPathApproximation.lean` and boundary endpoint lifting in
+  `PEPS/TorusRegionBoundaryLift.lean`; the four-case argument is shared by
+  exterior walks and native boundary crossings.
+- **Promotion:** `torusIntegerDeckCoordinate` and
+  `torusDirectedWinding_eq_of_integerUnitStep` in
+  `PEPS/TorusIntegerStepWinding.lean`. The exterior approximation now uses
+  this lemma, and the boundary endpoint theorem uses the same arithmetic.
+  No region or path assumption enters the shared step identity.
+
+### Fixed complementary walk control (promoted, 2026-10-02)
+
+- **Pattern:** Reread each crossing edge from the complementary side, evaluate
+  the cycle word of its fixed native walk, and conjugate the resulting boundary
+  permutation into the original physical half-edge basis.
+- **Occurrences:** `RegularCycleControlledBoundary`,
+  `RegularControlledBoundaryFactor`, `TorusComplementDisentangling`, and
+  `TorusControlledBoundaryFactor`; the same construction appeared in matrix
+  definitions, native contraction identities, and sector-independent unitary
+  witnesses.
+- **Promotion:** `regularComplementWalkControlMatrix` and
+  `regularComplementWalkControlMatrix_mem_unitaryGroup` in
+  `TNLean/PEPS/RegularCycleControlledBoundary.lean`. The matrix depends only on
+  the fixed trees and actual walks, before any bond assignment or closure label.
+  Known consumers use this definition directly; there is no compatibility alias.
+
+### integer fibers and affine lifts of additive circles — promoted
+- **Pattern:** extract an integer fiber from `AddCircle.coe_eq_zero_iff`,
+  or compare a continuous lift of a projected affine interval path with
+  the affine lift by `IsCoveringMap.eq_of_comp_eq`.
+- **Seen:** the two coordinate constructions in
+  `PEPS/TorusRegionRealization.lean` and
+  `PEPS/TorusRegionLiftRealization.lean` (2026-10-02); the integer-fiber
+  proofs were identical, and the affine-lift proofs differed only in
+  their final use of function extensionality.
+- **Abstraction:** `exists_intCast_eq_of_addCircle_eq_zmod_val` and
+  `eq_affine_of_addCircle_eq` in `PEPS/TorusRegionRealization.lean`.
+- **Notes:** both modules now use the shared mathematical lemmas. The
+  integer statement uses the explicit standard residue representative;
+  the affine statement allows any real period and is available to
+  subsequent plane-path lifting arguments. No tactic is introduced.
+
+### products of finite indicator sums — promoted
+- **Pattern:** after separating scalar factors, expand a product of sums by
+  `Fintype.prod_sum` and collapse each product of zero-one indicators by
+  `Fintype.prod_boole`.
+- **Seen:** `regularProjectorOpenRegionMatrix_apply`,
+  `regularProjectorTwistedRegionMatrix_apply`, and
+  `prod_torusSiteGram_eq_sum_translation` in the corresponding three PEPS
+  modules (2026-10-02).
+- **Abstraction:** `Fintype.prod_sum_boole` in
+  `TNLean/Algebra/FiniteIndicatorSum.lean`, for dependent finite choice types
+  over an arbitrary commutative semiring.
+- **Notes:** all three proofs now use the combined counting identity. The
+  abstraction is a lemma rather than a tactic or a new simplification rule.
+
+### equality of labels under a boundary numbering — promoted
+- **Pattern:** prove equality of two functions on a numbered boundary by
+  evaluating an equality of their pullbacks at the inverse numbering, and
+  prove the converse by function extensionality.
+- **Seen:** three occurrences in
+  `PEPS/RegularRegionGram.lean`, `PEPS/RegularTwistedRegionGram.lean`, and
+  the private projector-numbering lemma in
+  `PEPS/RegularRegionInjectivity.lean` (2026-10-02).
+- **Abstraction:** Mathlib's `Function.Surjective.right_cancellable`,
+  applied to the surjective boundary equivalence.
+- **Notes:** all three proofs now use this equivalence directly, with
+  `Function.comp_def`, `Pi.smul_apply`, and `smul_eq_mul` identifying
+  precomposition and simultaneous regular translation. No additional
+  theorem or tactic is required.
+
+### recovering site coefficients from a composed site map — promoted
+- **Pattern:** apply `LinearMap.toMatrix'` to a composition identity, expand
+  the matrix of the four-leg site map, and read one physical and virtual entry.
+- **Seen:** the former forward local inverse and reverse projector action in
+  `PEPS/RegularGInjectiveTorus.lean`, and their generalization to arbitrary
+  virtual representations in `PEPS/GInjectiveTorusProjector.lean`
+  (2026-10-02).
+- **Abstraction:** `siteMap_injective` and
+  `physicalMapSite_eq_iff_siteMap_comp` in
+  `PEPS/GInjectiveTorusProjector.lean` recover coefficient equality from
+  equality or physical composition of site maps.
+- **Notes:** both general physical-map identities now use the composition
+  equivalence and the existing `siteMap_physicalMapSite`; the repeated
+  coefficient-extraction proofs in the regular module were removed.
+
+### equality of boundary functions under incident-edge indexing — promoted
+- **Pattern:** compare boundary functions after pulling them back to the
+  boundary subtype of incident edges, then recover their equality by
+  function extensionality at the canonical incident-edge inclusion.
+- **Seen:** four occurrences in `PEPS/RegularRegionCounting.lean` and
+  `PEPS/RegularTwistedRegionCounting.lean`, detected by the tactic pattern
+  scan on 2026-10-02.
+- **Abstraction:** `regionBoundaryLabel_eq_iff` in
+  `PEPS/RegularRegionCounting.lean`.
+- **Notes:** both the fixed-boundary condition and the translated-boundary
+  condition now use the same equality lemma; all four copies were removed.
+
+### finite sums supported on constant functions — promoted
+- **Pattern:** when a summand indexed by vertex labels vanishes unless the
+  label function is constant, replace the sum by a sum over its common value.
+- **Seen:** `sum_regionLabelCompatible_eq_sum_translation` in
+  `PEPS/RegularRegionConnectivity.lean`,
+  `sum_torusClosureCompatible_eq_sum_intertwiner` in
+  `PEPS/RegularTorusCompatibility.lean`, and
+  `sum_twistedRegionLabelCompatible_eq_sum_translation` in
+  `PEPS/RegularTwistedRegionConnectivity.lean` (2026-10-02).
+- **Abstraction:** Mathlib's `Fintype.sum_of_injective`, applied to the
+  constant-function injection. All three proofs already use it.
+- **Notes:** nonemptiness of the vertex set makes the injection faithful;
+  no uniqueness from an incident edge is required, so isolated singletons
+  remain covered. No additional tactic or local sum theorem is needed.
+
+### compact finite-volume kernel gaps — promoted
+- **Pattern:** obtain a positive lower norm bound on a finite-dimensional
+  kernel complement at each parameter, preserve half of it in a neighborhood
+  using continuity of the operator and its kernel projection, and pass to a
+  finite subcover of a compact parameter set.
+- **Seen:** the finite-volume argument in
+  `TNLean/MPS/ParentHamiltonian/PeriodicShortGapContinuity.lean` and the
+  fixed-injectivity-length extension in
+  `TNLean/MPS/ParentHamiltonian/CompactNormalParentGap.lean`, the multiblock
+  fixed-volume theorem in `BlockPeriodicGroundSpaceContinuity.lean`, and the
+  local positive-interaction comparison in `CompactParentInteractionGap.lean`
+  (2026-10-02).
+- **Abstraction:**
+  `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
+  `TNLean/Algebra/CompactKernelGap.lean`.
+- **Notes:** the bound follows from finite dimensionality; positivity,
+  self-adjointness, and a supplied pointwise gap are unnecessary.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -77,12 +445,12 @@ abstracted — record why, so it is not re-proposed).
   `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
-  and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
+  and `expect_productVector_mul` in `TNLean/MPS/Preparation/LocalCircuit.lean`,
+  `trace_finKronecker_mul_mul` in `TNLean/MPS/Preparation/LocalChannelCircuit.lean`,
   and `OnsiteChannel.dual_mul` in
-  `TNLean/Circuit/Channel/Conversion.lean`.
-- **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
-  `TNLean/Circuit/LocalCircuit.lean`: two bilinear maps
+  `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+- **Abstraction:** `MPSPreparation.eq_of_mem_supportedOperators₂` in
+  `TNLean/MPS/Preparation/LocalCircuit.lean`: two bilinear maps
   `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
   generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
   maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
@@ -341,6 +709,13 @@ abstracted — record why, so it is not re-proposed).
   proof lines. No new helper, tactic, import, or public statement is needed.
 
 ### nested finite-sum congruence under two binders — promoted
+- **Additional MPU consumers (2026-10-02):** the prefix sandwich identity in
+  `MPS/MPU/AffineGramHull.lean` and the prefix--suffix trace pairing in
+  `MPS/MPU/PrefixGramNormalizer.lean` use `Finset.sum_congr₂` directly.
+- **Additional consumers (2026-10-02):** the regional coefficient comparisons in
+  `PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean`,
+  `VertexInverseRegionSlice.lean`, and `VertexVirtualParentTransport.lean` use
+  `Finset.sum_congr₂` directly, including the heterogeneous virtual indices.
 - **Pattern:** two successive `apply Finset.sum_congr rfl` steps, each
   followed by an index and membership introduction.
 - **Seen:** the 2026-09-05 scan at `00ff0ec40` reports 11 literal
@@ -2430,6 +2805,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Unitary invariance and canonical parent projections — candidate (2026-10-02)
+
+- **Pattern:** Prove that a unitary and its adjoint preserve a boundary
+  subspace, then commute the unitary through its orthogonal projection and
+  the complementary parent projection.
+- **Seen:** `MPS/Symmetry/ParentHamiltonianSymmetry.lean` in
+  `parentInteractionES_commute_onSiteTensorPow`, and
+  `MPS/ParentHamiltonian/IsometricDeformationSymmetry.lean` in
+  `parentInteractionES_commute_onSiteTensorPow_of_invariant`.
+- **Abstraction:** Consider a generic unitary-invariant-subspace lemma for
+  commuting with the complementary orthogonal projection.
+- **Notes:** Two occurrences in two files; below the promotion threshold.
+
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
   the original ket-bra alphabet, then transport the physical-trace contraction
@@ -2445,6 +2833,106 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the generic form also avoids unfolding the concrete four-level
   matrix-unit tensor during alphabet comparison. The count remains below
   the rule-of-three threshold.
+
+### positive interaction subfamilies — candidate (2026-10-02)
+
+- **Pattern:** Express an interval interaction sum as a filtered sum, then
+  apply `Finset.sum_le_sum_of_subset_of_nonneg` and
+  `LinearMap.nonneg_iff_isPositive` to bound it by the full interaction sum.
+- **Seen:** two instances in
+  `ParentHamiltonian/Martingale/OverlappingIntervalGap.lean`, for the prefix
+  and terminal interval Hamiltonians.
+- **Abstraction:** Mathlib already supplies the finite-sum comparison. If
+  more interval shapes require this argument, isolate the common positive
+  subfamily comparison rather than repeating the filter conversion.
+- **Notes:** Both occurrences are in one module; no new tactic is needed.
+
+### adjoints of left polar identities — candidate (2026-10-02)
+
+- **Pattern:** Apply `congrArg Matrix.conjTranspose` to a matrix product
+  identity, then simplify `conjTranspose_mul` and the Hermitian factors.
+- **Seen:** four instances in `ParentHamiltonian/LeftPolar.lean`: the
+  support factorization used for positivity, the support action on the
+  partial isometry, and the two identities identifying the physical range.
+- **Abstraction:** The existing `Matrix.conjTranspose_mul` supplies the
+  algebraic operation. A more specific reusable lemma would need to remove
+  repeated Hermitian-factor arguments in a second module.
+- **Notes:** These instances occur in one module and prove distinct polar
+  identities. No additional tactic or matrix predicate is introduced.
+
+### native endpoint equations in spanning-tree coordinates — candidate
+- **Pattern:** specialize a half-edge compatibility identity at both endpoints
+  of one internal edge, then rewrite the two inverse coordinate formulas.
+- **Seen:** two occurrences in
+  `PEPS/RegularRegionProjectorCoordinates.lean:118` and
+  `PEPS/RegularTwistedRegionProjectorCoordinates.lean:53`, found by the
+  deduplicated changed-module scan with `--min-window 5 --min-count 2`
+  (2026-10-02).
+- **Abstraction:** the mathematical synchronization is already shared through
+  `regularRegionCoordinates_rootLabels_of_tree_compatibility`; the endpoint
+  identities themselves use the public tail and head reconstruction lemmas.
+- **Notes:** below the three-occurrence threshold. No third endpoint
+  specialization is currently identified. The untwisted and twisted
+  compatibility hypotheses differ, and combining the existing endpoint
+  lemmas into a conjunction would only shorten the specialization step.
+  Keep this candidate until another independent application needs the same
+  derived endpoint statement.
+
+### dependent boundary half-edge identification — candidate
+- **Pattern:** identify the boundary vertex, prove equality of the associated
+  dependent half-edge pair using `Sigma.ext` and `Subtype.heq_iff_coe_eq`,
+  then transport the reconstructed coefficient through that equality.
+- **Seen:** the tail and head boundary reconstruction proofs in
+  `PEPS/RegularRegionCoordinates.lean:422` and `:450`, detected by the
+  same scan (2026-10-02).
+- **Abstraction:** if another application appears, consider a native
+  boundary-half-edge equality lemma, preserving the dependence of the
+  incident-edge type on its vertex.
+- **Notes:** two occurrences in one file, with no further use currently
+  identified. The scanner's fifth line starts the subsequent coefficient
+  transport, so its five-line window is not one uniform mathematical step.
+  No additional helper is introduced at this stage.
+
+### incident vertices from an unordered endpoint equation — candidate
+- **Pattern:** combine the two possible endpoint orientations of an edge
+  with its two possible incidences to conclude that the incident vertex
+  is one of the original ordered endpoints.
+- **Seen:** horizontal and vertical cases in
+  `PEPS/RegularTorusEntropy.lean:49` and `:66`, detected by the same
+  changed-module scan (2026-10-02).
+- **Abstraction:** if further applications appear, first look for an
+  existing incidence characterization for `Edge.ofAdj`; otherwise use a
+  graph-theoretic endpoint lemma rather than a tactic.
+- **Notes:** two occurrences in one file. No additional occurrence is
+  currently expected, so the promotion criteria are not met.
+
+### semi-regularity through an injective intertwiner — candidate
+- **Pattern:** compose each nonzero irreducible intertwiner with an injective
+  intertwining map, then use injectivity to preserve nonvanishing.
+- **Seen:** `IsSemiRegular.of_equiv` in
+  `Algebra/SemiRegularEquiv.lean` and `IsSemiRegular.tprod_of_mem_invariants`
+  in `Algebra/RepresentationTensorProduct.lean` (2026-10-02). The latter
+  proves injectivity of the fixed-factor tensor inclusion by a dual pairing.
+- **Abstraction:** if another occurrence arises, a semi-regularity transport
+  theorem for injective intertwining maps would include equivalences and
+  invariant tensor inclusions in one statement.
+- **Notes:** the equivalence case is already centralized in
+  `IsSemiRegular.of_equiv`; the native regular coordinate bridge uses it
+  directly, so it adds no repeated occurrence proof.
+
+### normalization from the physical boundary density trace — candidate
+- **Pattern:** rewrite the squared norm of a physical bipartite boundary
+  vector as the trace of its Schmidt coefficient matrix times its adjoint,
+  identify the reduced density, and use its unit trace.
+- **Seen:** the positive cut normalization in
+  `PEPS/RegularRegionEntropy.lean` and the superposition normalization in
+  `PEPS/RegularClosureSuperposition.lean` (2026-10-02).
+- **Abstraction:** a physical-boundary norm lemma taking the two invariant
+  Gram identities would remove the two identical reductions if another
+  direct use appears.
+- **Notes:** both proofs already use Mathlib's
+  `Matrix.star_dotProduct_eq_trace_conjTranspose_mul`; the candidate is
+  the subsequent identification with the physical boundary density.
 
 ### Gram products of vertically stacked matrices — candidate
 - **Pattern:** reduce the Gram product of a matrix formed by `Matrix.fromRows`
@@ -3742,7 +4230,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   outcome-consistency lemma, the corrections by outcomes and partial sums, and
   the product-state bookkeeping.
 - **Seen:** two occurrences (2026-10-01):
-  `TNLean/Circuit/Measurement/GHZ.lean` (interleaved single qudits of
+  `TNLean/MPS/Preparation/GHZMeasurement.lean` (interleaved single qudits of
   an open chain, `forall_succ_eq_iff`, `forall_add_ghzCorrection_eq_iff`) and
   `TNLean/MPS/Preparation/WindowGHZ.lean` (registers of `r₁` sites inside
   blocks of a ring, `forall_cyclic_eq_zero_iff`).
@@ -3771,6 +4259,38 @@ spectral split → block extraction → MPV calculation → strict bounds
   dependent dimensions before rewriting the trace expressions.
 
 ## Rejected
+
+### Elementary set and finite-sum proof structure — rejected (2026-10-02)
+
+- **Pattern:** The three-line sequences `ext x; constructor; intro hx` and
+  `rw [Finset.sum_comm]; apply Finset.sum_congr rfl; intro θ _`.
+- **Seen:** Three occurrences of each in the completed PEPS geometry and
+  physical-density batch, across `IntegerCellNoHoles`, `TorusRegionRealization`,
+  `RegularPhysicalCutTransfer`, and `TorusControlledBoundaryDensity`.
+- **Reason:** Set extensionality, sum exchange, and elementwise sum equality
+  are already expressed by the standard tactics and Mathlib lemmas. The
+  subsequent arguments have different mathematical hypotheses and conclusions.
+  Bundling these elementary steps would hide proof structure without sharing
+  a mathematical assertion. The longer geometry and spectral arguments have
+  separate promoted lemmas recorded above.
+- **Creation-inclusive review:** a fresh 126-file scan also finds nested
+  `Prod.ext` with reflexive unchanged coordinates in
+  `RegularCyclePhysicalFluxCreation` and `RegularTwoCyclePhysicalFluxMove`,
+  and `unfold openRegionWeight; apply Finset.sum_congr rfl; intro η _`
+  in the coherent global transport, twisted recovery, and global flux move.
+  These use existing product extensionality and finite-sum congruence; their
+  subsequent mathematical identities differ. No further wrapper is needed.
+- **Joint-measurement check:** the fresh 131-file scan at window three,
+  count three found only the already covered set-extensionality and finite-sum
+  congruence patterns. The actual uniform-column-to-cut implication has its
+  own promoted mathematical theorem; no further wrapper is needed.
+- **Three-plaquette review:** the fresh 140-file mirror at window three,
+  count three contains the same set and finite-sum patterns, the already
+  resolved encoded boundary comparison, and extensionality followed by a
+  single selected-coordinate case split. The subsequent identities differ;
+  no further mathematical abstraction is justified. The repeated sorted
+  non-tree certificate is separately promoted as `Edge.comap_adj_map_iff`.
+
 
 ### scalar-unit equality by coercion and field cancellation — rejected
 - **Pattern:** reduce an equality in `Units ℂ` to an equality in `ℂ` with
@@ -3912,6 +4432,19 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 
 
+### encoded boundary conditions inside region sums — resolved
+- **Pattern:** apply `Finset.sum_congr`, introduce the incident configuration,
+  and replace its encoded boundary condition by the corresponding group-label
+  condition.
+- **Seen:** three occurrences in `RegularProjectorOpenRegion.lean` and
+  `RegularProjectorTwistedRegion.lean` (2026-10-02): forward physical access,
+  reverse physical recovery, and twisted forward access.
+- **Reuse:** all three use `regionIncidentBoundaryLabel_regularGroup_iff`,
+  which already contains the common mathematical argument. The remaining
+  `Finset.sum_congr` steps compare the different local products required by
+  their respective identities. A further wrapper would merely combine this
+  existing lemma with the generic finite-sum congruence theorem.
+
 ## Retired
 
 ### block_words — retired
@@ -3925,3 +4458,617 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+
+### Orthogonal projection in matrix coordinates — candidate (2026-10-02)
+
+- **Pattern:** Transport a finite-dimensional invariant subspace to Euclidean
+  coordinates, represent its orthogonal projection by `Matrix.toEuclideanLin.symm`,
+  and prove matrix Hermiticity, idempotence and invariant-range identities.
+- **Seen:** two constructions: QICLean `Kraus/IrreducibleAction.lean`
+  (`isIrreducibleAction_of_isIrreducibleFamily`) and TNLean
+  `MPS/FundamentalTheorem/Reduction/StationarySplitting.lean`
+  (`isSemisimpleModule_wordModule_of_hasInvariantProjectorClosure`).
+- **Abstraction:** a matrix-coordinate orthogonal-projection helper with
+  invariant-range equivalence, preferably in QICLean's projection algebra.
+- **Notes:** below the three-occurrence promotion threshold. The new construction
+  reuses Mathlib's star-projection facts; no custom tactic is needed.
+
+
+### Finite contour winding gradients — promoted (2026-10-02)
+
+- **Pattern:** Sum a finite signed vertical edge flow along a horizontal ray,
+  then compute its east and north increments by finite telescoping.
+- **Occurrences:** `PEPS/IntegerContourRayPotential.lean` and the actual exposed
+  orbit flow in `PEPS/IntegerCellBoundaryContour.lean`. The contour proof's
+  former specialized horizontal and vertical contribution calculations have
+  been removed.
+- **Promotion:** `integerContourRayPotential_east` and
+  `integerContourRayPotential_north`; the actual contour constructs its finite
+  horizontal and vertical flows, proves conservation from successor endpoint
+  continuity, and applies these shared mathematical identities.
+- **Notes:** The shared statements concern finite integer flows. They do not
+  assume contour connectivity or a geometric boundary relation.
+
+### Functions constant on graph edges — promoted (2026-10-02)
+
+- **Pattern:** Induct on a graph walk to propagate equality of a function at
+  adjacent vertices. Two such inductions occurred for occupied and missing
+  cells in the exposed-contour proof.
+- **Promotion:** Mathlib's
+  `Relation.reflTransGen_le_of_equivalence_of_le`, applied to the kernel
+  equivalence of the function, together with
+  `SimpleGraph.reachable_iff_reflTransGen`. The contour module has one private
+  application of these existing results, reused for both cell graphs.
+- **Notes:** No new public graph API or tactic is introduced; the two walk
+  inductions were removed.
+
+### Positivity of weighted character projectors (promoted, 2026-10-02)
+
+- **Pattern:** Express a weighted sum through occurring irreducible characters,
+  obtain the corresponding subrepresentation, inherit unitarity there, and
+  sum its positive character projectors with nonnegative coefficients.
+- **Occurrences:** `RepresentationDeltaPositive.isPositive_deltaOperator_of_unitary`
+  and `RepresentationThetaPositive.isPositive_thetaOperator_of_unitary`.
+  Positive representation weights require the same argument in subsequent
+  bond constructions.
+- **Promotion:** `Representation.isPositive_sum_smul_charProjector_of_nonneg`
+  in `TNLean/Algebra/RepresentationDeltaPositive.lean`. Both calculations use
+  this lemma and retain only their scalar nonnegativity arguments.
+- **Notes:** This is a mathematical positivity statement, not a tactic wrapping
+  finite-sum induction; the orthogonal character-projector argument is proved once.
+
+### Equality on irreducible summands (promoted, 2026-10-02)
+
+- **Pattern:** Choose Maschke's internal direct sum, compare endomorphisms
+  on each summand, and install its irreducibility instance from the atom witness.
+- **Occurrences:** `CharacterProjector.sum_charProjector_irreducibleCharacters`,
+  `CharacterProjectorWeighted.sum_smul_charProjector_commute` and
+  `charProjector_mul_self`, `CharacterProjectorTwirl.averageMap_linHom_rep`,
+  `RepresentationDeltaInverse.deltaOperatorInverse_mul`,
+  `SemiRegularGroupAlgebra.isSemiRegular_of_linearIndependent`, and
+  `RepresentationTheta.thetaOperator_pow_four`.
+- **Promotion:** `Representation.linearMap_ext_on_irreducible` in
+  `TNLean/Algebra/CharacterProjector.lean`; the listed calculations use this
+  finite-dimensional mathematical extensionality lemma.
+- **Notes:** The chosen-decomposition calculation in
+  `exists_mem_character_eq_of_mem_irreducibleCharacters` remains on the existing
+  `DirectSum.IsInternal.linearMap_ext`: its hypothesis concerns that specific
+  family, not every irreducible subrepresentation. Replacing it by the stronger
+  quantified criterion would require the character-occurrence theorem being proved.
+
+### Equality of maps to physical coefficient spaces (resolved, 2026-10-02)
+
+- **Pattern:** Apply linear-map extensionality, introduce a physical vector,
+  and apply function extensionality at a physical configuration.
+- **Occurrences:** `regionSliceMap_univ`,
+  `regionSliceMap_eq_subregionSliceMap_comp`, and
+  `regionLocalTerm_commute_of_disjoint`.
+- **Resolution:** Compose Mathlib's `LinearMap.ext` and `funext` in one
+  refinement. These existing extensionality principles remove the repeated
+  three-step tactic sequence without adding a helper or tactic.
+
+### CZY integer intertwining tables — promoted (2026-10-02)
+
+- **Pattern:** Close a finite matrix identity over integers by moving all finite
+  physical indices into the proposition and using kernel reduction.
+- **Seen:** `CZYFusion.lean`: the three private two-layer intertwining certificates
+  and the public three-layer physical-image relation.
+- **Abstraction:** The existing promoted `revert_decide_kernel` tactic in
+  `TNLean/Algebra/GeneralizeDecide.lean` handles all four certificates.
+- **Notes:** The complex statements follow by scalar normalization or integer
+  coercion. No new tactic is needed. The scanner was run on 2 October 2026;
+  these calculations do not duplicate an unabstracted tactic block.
+
+### Simultaneous weighted sector coordinates — candidate (2026-10-02)
+
+- **Sites:** `ThetaBondCoordinates` and `ThetaBondOrthonormalCoordinates`.
+- **Pattern:** restrict the family containing both ρ(g) and Θ²ρ(g) to the
+  irreducible summands, then collect the sector coordinates simultaneously.
+- **Current reuse:** the direct-sum matrix and collected-orthonormal-basis
+  theorems are Mathlib results; only the scalar restriction calculation is
+  repeated between the linear and orthonormal versions.
+- **Promotion trigger:** a third occurrence should extract that scalar
+  restriction identity, preserving the distinction between linear and
+  orthonormal coordinates.
+
+### Product maps on coherent finite sums — promoted (2026-10-02)
+
+- **Helper:** `TNLean.PEPS.physicalProductMap_sum_prod` in
+  `TNLean/PEPS/TorusPhysicalCoherentMap.lean`.
+- **Use:** apply one rectangular coefficient matrix independently to the
+  factors of a finite coherent sum. Interchange the configuration sum and
+  coherent-label sum, then use Mathlib `Fintype.prod_sum` once.
+- **Consumers:** actual multiplicity restoration of the weighted torus state
+  and transport of coherent bond coefficients between orthonormal coordinates.
+
+### Transport of coherent bond products — promoted (2026-10-02)
+
+- **Pattern:** Rewrite the coherent contraction, transform every one-bond
+  vector, and reconstruct the finite sum of bond products.
+- **Seen:** Six coefficient calculations across
+  `PEPS/TorusMultiplicityBondState.lean`,
+  `PEPS/GraphMultiplicityBondState.lean`,
+  `PEPS/TorusBondCoordinateTransport.lean`, and
+  `PEPS/GraphBondCoordinateTransport.lean`.
+- **Abstraction:** `physicalProductMap_sum_prod_eq` in
+  `PEPS/PhysicalCoherentTransport.lean` reduces each consumer directly to its
+  mathematical single-bond vector identity. It reuses
+  `physicalProductMap_sum_prod` and replaces the repeated product congruence.
+- **Related helper:** `physicalProductMap_eq_on_inclusion_range` in the same
+  module extends equality after one inclusion to the product inclusion range.
+  The torus and general-graph full-domain isometry proofs use this shared lemma.
+- **Notes:** No custom tactic is needed. The remaining coefficient-level
+  congruences outside transport use Mathlib's `congr!` where appropriate.
+
+### Coherent two-sector block multiplication — candidate (2026-10-02)
+
+- **Pattern:** Expand a sector encoder or a flag Hadamard into four matrix
+  blocks, use idempotency and complement orthogonality, and collect scalar
+  factors with `module`.
+- **Seen:** the encoder, Hadamard extraction, and final-factor cancellation
+  identities in `MPS/MPU/TwoSectorMerging.lean`.
+- **Abstraction:** `Matrix.twoSectorEncoder_merge` and
+  `Matrix.flagHadamard_mul_diagonal_mul` already give the reusable
+  mathematical identities; the Kronecker and cancellation results use them.
+- **Notes:** the remaining coordinate calculations occur in one file. No
+  additional tactic is needed. A second application should use these
+  general identities rather than repeat the block multiplication.
+
+### Closure of unitary generators under adjoints — candidate (2026-10-02)
+
+- **Sites:** invariant-subspace and restricted-intertwiner correspondences in
+  `Algebra/UnitaryRepresentationAlgebra.lean`.
+- **Pattern:** use `Algebra.adjoin_induction` on the generators together with
+  their adjoints; replace an adjoint generator by the inverse group element.
+- **Current reuse:** Mathlib supplies the algebra induction, while the common
+  inverse-adjoint identity is proved once in the same module. The product step
+  uses invariance in different ways for vectors and intertwiners.
+- **Promotion trigger:** a third use in another file should first seek a
+  common generated-algebra statement. Two distinct inductions in one file do
+  not justify a new tactic.
+
+### Orthonormal rows as subrepresentation bases — candidate (2026-10-02)
+
+- **Sites:** `Algebra/UnitaryRepresentationBlocks.lean` and
+  `PEPS/RegularFourier.lean`.
+- **Pattern:** use `Basis.span` on an orthonormal subfamily, transport it to a
+  named invariant subspace with `LinearEquiv.ofEq`, and identify the underlying
+  row vectors.
+- **Current reuse:** the basis construction and transport are existing Mathlib
+  abstractions. The Fourier calculation additionally inherits orthonormality
+  and uses `Basis.toOrthonormalBasis`; the multiplicity calculation only needs
+  the linear basis.
+- **Promotion trigger:** another use requiring the same transported
+  orthonormal basis should extract a mathematical basis construction, rather
+  than a tactic wrapping these existing operations. The four new Fourier
+  modules have no repeated tactic blocks at window five, count two.
+
+### Weighted blocks and actual torus multiplicity restoration — promoted (2026-10-02)
+
+- **Pattern:** rewrite the coherent dressed-state expansion, reconstruct weighted
+  diagonal blocks with matching-sector inclusion, and apply the multiplicity map
+  to each factor of every vertex-label summand.
+- **Sites:** the orthonormal-sector and explicit fourth-root block constructions
+  in `PEPS/TorusMultiplicityBondState.lean` and
+  `PEPS/TorusBlockMultiplicityState.lean` contained four repeated congruence blocks.
+- **Promotion:** `torusBondRegrouping_dressedAveragingSite_of_weightedBlocks`
+  proves support and the actual state equality from the single-bond matrix identity.
+  Both constructions derive that identity and commutation before using the helper;
+  their duplicated coherent-state arguments have been removed.
+
+### Expanding a controlled cycle contraction — candidate (2026-10-02)
+
+- **Pattern:** expand the actual region projector as a sum of vertex translations,
+  distribute the two surrounding matrices over that sum, and compare each term.
+- **Sites:** `RegularCycleControlledSupport.lean` and
+  `RegularCycleFluxMeasurement.lean`, with two occurrences at window five in
+  the combined 103-module PEPS scan.
+- **Current reuse:** both use
+  `regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation`
+  and Mathlib's finite-sum congruence. Their termwise conclusions differ.
+- **Promotion trigger:** a third use should extract the shared contraction
+  identity if it eliminates the termwise calculation; a wrapper around the
+  existing sum expansion alone is not needed.
+
+### Finite linear combinations in a supported subspace — promoted (2026-10-02)
+
+- **Pattern:** prove membership of a sum by `Submodule.sum_mem`, then prove
+  each scalar multiple belongs by `Submodule.smul_mem`.
+- **Seen:** regional support transport in
+  `PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean`,
+  `VertexInverseRegionSlice.lean`, and `VertexVirtualParentTransport.lean`.
+- **Abstraction:** existing Mathlib `Submodule.sum_smul_mem`; all three
+  consumers now apply it directly. No new lemma or tactic is needed.
+- **Notes:** the summands are actual regional slices, transformed by regional
+  site maps or site inverses. The scalar coefficients come from the
+  complementary region; no positivity assumption is involved.
+
+### Literal one- and two-bond assignment specialization — resolved (2026-10-02)
+
+- **Pattern:** specialize the literal-to-tree-cycle assignment identity at
+  `false` and `true`, normalize the Boolean conditions, and rewrite both
+  actual contractions with the resulting assignments.
+- **Seen:** the local and global consumers in
+  `PEPS/TorusTranslatedFluxMove.lean`,
+  `PEPS/TorusTwoPlaquettePhysicalFluxMove.lean`, and
+  `PEPS/TorusTwoPlaquetteGlobalFluxMove.lean`; four occurrences in the
+  124-file PEPS scan at window three, count three.
+- **Reuse:** the existing literal-to-tree-cycle assignment theorems contain
+  the common mathematical identity. All four consumers now normalize both
+  specialized equalities in one `simp only` step, then rewrite the actual
+  contractions with those equalities. Public statements are unchanged.
+- **Notes:** simplification stays on the assignment equalities: simplifying
+  the entire dependent contraction exceeds the default heartbeat allowance.
+  A new helper wrapping Boolean simplification would not add a mathematical
+  assertion. The repeated two-step normalization block is removed.
+
+### Common bond operators outside a region — promoted (2026-10-02)
+
+- **Pattern:** show an incident edge at an exterior vertex is not internal,
+  derive equality of exterior twisted site tensors, and apply the identity
+  vertex gauge to obtain one common crossing-boundary transport.
+- **Seen:** the global movement and coherent global creation arguments in
+  `PEPS/RegularTwoCycleGlobalFluxMove.lean` and
+  `PEPS/RegularCycleGlobalFluxCreation.lean`; four incident-edge exclusions
+  and three twisted-site expansions in the 130-file PEPS scan.
+- **Abstraction:**
+  `regularTwistedSite_regularRegionBondExtension_eq_outside` and
+  `openRegionWeight_regularTreeCycleBondExtension` in the global movement
+  module. Both movement and creation consumers apply these shared identities;
+  their public statements are unchanged.
+- **Notes:** the boundary transport is independent of the internal cycle
+  assignment. It is derived from the actual crossing operators, rather than
+  supplied as a contraction hypothesis. No new tactic is needed.
+
+
+### Uniform open-column action on an actual cut — promoted (2026-10-02)
+
+- **Pattern:** obtain the same scalar action on every boundary column, assemble
+  the open-region matrix identity, and multiply by the complementary matrix.
+- **Seen:** the private plaquette measurement argument in
+  `PEPS/TorusPlaquetteFluxMeasurement.lean` and the joint-flux measurement in
+  `PEPS/TorusJointFluxMeasurement.lean`; the cycle-permutation global consumer
+  requires the same actual cut implication.
+- **Abstraction:**
+  `mul_regularPhysicalCutMatrix_eq_smul_of_openRegion_eigen` in
+  `PEPS/RegularPhysicalCutColumnAction.lean` proves the implication from the
+  actual cut factorization. Both measurement consumers now use it.
+- **Notes:** this is a mathematical statement about all actual boundary columns,
+  not an assumed global eigenstate identity. No unitarity hypothesis is needed.
+
+### Combining commuting representation weights — promoted (2026-10-02)
+
+- **Pattern:** move a power of a commuting weight past a representation factor,
+  then combine the two representation factors.
+- **Seen:** `PEPS/TorusThetaBondState.lean`, `PEPS/GraphAveragingBondState.lean`,
+  and `PEPS/GraphOpenAveragingBondState.lean`.
+- **Abstraction:** `MonoidHom.mul_commuting_pow_mul` and its adjacent-weight
+  specialization `MonoidHom.mul_weight_mul_weight_mul` in
+  `Algebra/MonoidHomCommutingWeight.lean`; all three callers use these results.
+- **Notes:** the proof uses the existing commutation and homomorphism laws.
+  No additional representation or contraction hypothesis is introduced.
+
+### Conjugation leaves the conjugacy-class quotient unchanged — promoted (2026-10-02)
+
+- **Pattern:** exhibit the conjugating element, use symmetry of conjugacy,
+  and conclude equality in the conjugacy-class quotient.
+- **Seen:** the former private class calculation in
+  `PEPS/RegularCycleFluxMeasurement.lean` and the two component class
+  calculations in `PEPS/RegularThreePlaquetteDoubleExchange.lean`.
+- **Abstraction:** `ConjClasses.mk_conjugate` in
+  `Algebra/ConjClassesConjugation.lean` proves the group identity once.
+  The measurement module uses it at both former call sites; the exchange
+  module uses it on the two derived conjugate component formulas.
+- **Notes:** the result requires only a group, with no finiteness or
+  representation hypothesis. The former private helper is removed.
+
+### Ordered non-tree bonds under graph isomorphisms — promoted (2026-10-02)
+
+- **Pattern:** split the two possible sorted endpoint orders, cancel the
+  graph isomorphism, and contradict adjacency in the original tree.
+- **Seen:** the native chord constructions in
+  `PEPS/TwoPlaquetteGeometry.lean`,
+  `PEPS/TranslatedTwoPlaquetteGeometry.lean`, and
+  `PEPS/ThreePlaquetteGeometry.lean`.
+- **Abstraction:** `Edge.comap_adj_map_iff` in
+  `PEPS/EdgeMapSubgraph.lean` proves the adjacency equivalence for any
+  transported graph. All three certificate proofs now use its negation.
+- **Notes:** the result requires only the ordered vertex sets and the graph
+  isomorphism, with no finiteness or tree hypothesis. The endpoint sorting
+  argument is removed from every known caller; no auxiliary tactic is needed.
+
+### Orthogonal projections are Hermitian — promoted (2026-10-02)
+
+- **Pattern:** obtain the Hermitian matrix identity from an orthogonal projection.
+- **Seen:** the two projected-Gram arguments in
+  `MPS/MPU/UniformPostselection.lean` and the flag projection in
+  `MPS/MPU/UniformSuccessAttenuation.lean`.
+- **Abstraction:** the existing Mathlib results `IsSelfAdjoint.isHermitian`
+  and `Matrix.IsHermitian.eq` give the identity directly.
+- **Result:** all three arguments use `hP.isSelfAdjoint.isHermitian.eq`;
+  the repeated conversion of the matrix star is removed. No new tactic or
+  additional mathematical hypothesis is needed.
+
+### Conditional group-column action on the actual cut — promoted (2026-10-02)
+
+- **Pattern:** encode group-valued boundary configurations, introduce the common
+  indicator scalar, and transport a conditional column identity to the cut.
+- **Seen:** `PEPS/TorusPlaquetteFluxMeasurement.lean`,
+  `PEPS/TorusJointFluxMeasurement.lean`, and
+  `PEPS/TorusThreePlaquetteOutputMeasurement.lean`.
+- **Abstraction:** `mul_regularPhysicalCutMatrix_eq_ite_of_openRegion_eigen` in
+  `PEPS/RegularPhysicalCutColumnAction.lean` derives the numbering and scalar
+  internally from the existing uniform scalar action theorem. All three
+  consumers now apply the conditional implication directly.
+- **Notes:** the condition is uniform over actual group-valued boundary labels.
+  Neither unitarity nor a nonzero global-state assumption is needed. Public
+  measurement statements are unchanged; their repeated numbering and scalar
+  calculations are removed.
+
+### Coherent weighted-block multiplicity restoration (promoted, 2026-10-02)
+
+- Pattern: derive matching-sector support and multiplicity restoration from a
+  coherent product of square-root weighted diagonal matrix blocks.
+- Promotion: `coherentWeightedBlocks_support_restore` and
+  `exists_isometric_coherentWeightedBlocks` in
+  `TNLean/PEPS/CoherentMultiplicityTransport.lean`.
+- Consumers: the actual graph and torus weighted-state support theorems, and
+  the actual group-inserted closed-graph isometry theorem. The ordinary matrix
+  hypothesis remains distinct from an assumed contraction identity; every
+  actual-state consumer derives its coherent expansion.
+
+### Zero-energy face from an exact blocked primitive presentation — candidate (2026-10-02)
+
+- **Pattern:** Derive the primitive sector states and their normalization after
+  blocking, compose the eventual-kernel characterization of zero local energy
+  with the exact blocked support classification, and infer the pure face from
+  the corresponding pure-support characterization.
+- **Seen:** Two consumers: `PeriodicQuasiLocalGroundStates.lean` and
+  `PeriodicBlockFamilyGroundStates.lean`.
+- **Abstraction:** A theorem classifying the zero-energy face of a positive
+  interaction from an exact blocked primitive representation and its eventual
+  original open-chain kernel identity, in `BlockedQuasiLocalFace.lean`.
+- **Notes:** No translation invariance of the competing state is needed.
+  Both current consumers first derive the representation from periodicity;
+  the proposed theorem would preserve this distinction and allow empty
+  primitive families. Promote when a third consumer uses this composition.
+
+### Native plaquette transport — promoted (2026-10-02)
+
+- **Pattern:** unfold the four actual plaquette steps, reverse the top and left
+  transports, and evaluate the resulting ordered group product.
+- **Seen:** `PEPS/TorusPlaquetteFluxMeasurement.lean`,
+  `PEPS/TorusTwoPlaquetteFluxHolonomy.lean`,
+  `PEPS/TorusJointFluxGeometry.lean`, and
+  `PEPS/TorusThreePlaquetteFluxGeometry.lean`; both orientations are also
+  required by the four-endpoint string calculation.
+- **Abstraction:** `regularWalkHolonomy_torusPlaquetteWalk` and
+  `regularWalkHolonomy_torusPlaquetteWalk_reverse` beside the defining walk
+  in the measurement module. The native consumers use the common formulas.
+- **Notes:** each directed edge is retained, including seam reversals. The
+  formulas require a group, with no finite-group, physical-state, or supplied
+  holonomy hypothesis. The outer six-step walks still have their own ordered
+  products. No tactic or separate compatibility module is needed.
+
+### Sorted-edge endpoint comparison — promoted (2026-10-02)
+
+- **Pattern:** compare the two endpoint orders of native sorted edges, or
+  distinguish them by a coordinate constant on one pair of endpoints.
+- **Seen:** repeated plaquette and translated-movement edge inequalities in
+  `PEPS/TorusPlaquetteFluxMeasurement.lean` and
+  `PEPS/TorusTranslatedFluxMove.lean`; the vertical movement needs the same
+  endpoint comparison.
+- **Abstraction:** `Edge.ofAdj_eq_iff_endpoints` and
+  `Edge.ofAdj_ne_of_endpoint_coordinates` in `PEPS/EdgeMapSubgraph.lean`.
+  Both former private coordinate helpers are removed and their callers use
+  the common result.
+- **Notes:** the coordinate function is arbitrary. The argument does not
+  impose a lattice orientation or a finite vertex set.
+
+### Sparse cycle assignments — promoted (2026-10-02)
+
+- **Pattern:** reconstruct an internal assignment from identity on a spanning
+  tree and a small explicit list of non-tree bonds.
+- **Seen:** the two private horizontal support proofs in
+  `PEPS/TorusTranslatedFluxMove.lean` and
+  `PEPS/TorusTwoPlaquetteFluxHolonomy.lean`, and the vertical movement proof.
+- **Abstraction:** `regularTreeCycleAssignment_eq_of_support` and its
+  two-bond specialization `regularTreeCycleAssignment_twoSupport`, beside
+  the defining assignment in `PEPS/RegularTwoCycleFluxMove.lean`.
+- **Notes:** the support conditions concern the actual bond assignment,
+  rather than a supplied contraction identity. The single-flux consequence
+  `regularTwoCycleMove_single` is also public in the defining module and is
+  used by horizontal and common-gauge vertical movement. Its former private
+  name is removed; no compatibility alias is retained.
+
+### Bond-dimension transport of sector separation — promoted (2026-10-02)
+
+- **Pattern:** Reverse the ordered sector labels and rewrite the matrix type
+  identification from a cast to equality transport when applying pairwise
+  gauge-phase inequivalence.
+- **Seen:** `PeriodicQuasiLocalGroundStates.lean`,
+  `PeriodicBlockFamilyGroundStates.lean`, `BlockedFiniteGapTransport.lean`,
+  and `PeriodicBlockFamilyGap.lean`.
+- **Abstraction:** `MPSTensor.BlocksNotGaugePhaseEquiv.forall_ne_transport`
+  in `TNLean/MPS/ParentHamiltonian/GaugePhaseSeparationTransport.lean`.
+- **Notes:** The helper only reformulates the existing separation condition.
+  It adds no positivity, nonempty-family, or normalization assumption.
+  The support and finite-gap consumers apply the transported form directly.
+
+The three native support, endpoint, and plaquette refactor families above reduce
+nonblank proof-body lines from 193 to 90 (−103), measured against the earlier
+checked versions. Their contributions are 64 to 30 for support, 26 to 4 for
+endpoint comparison, and 103 to 56 for translated and origin plaquette
+transport, including the obsolete origin-order helper. This measurement
+excludes docstrings, signatures, and the additional joint and three-plaquette
+callers.
+
+### Pure-state commutator gap from an exact blocked presentation — promoted (2026-10-03)
+
+- **Pattern:** Transfer the eventual original kernel to a positive grouped
+  interaction, obtain one primitive-sector gap, classify each pure original
+  zero-energy state by its transported sector, and transfer the literal
+  commutator inequality by positive comparison.
+- **Seen:** `PeriodicQuasiLocalGroundStateGap.lean` and
+  `PeriodicBlockFamilyQuasiLocalGap.lean`.
+- **Abstraction:**
+  `MPSTensor.exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family`
+  in `TNLean/MPS/ParentHamiltonian/BlockedPrimitiveQuasiLocalGap.lean`.
+- **Notes:** The shared mathematical theorem was extracted before duplicating
+  the second composition. Its representation hypothesis is explicit; both
+  periodic consumers derive that representation. The constant is quantified
+  before all states, observables, and exhaustions. No translation invariance
+  or nonempty-sector assumption is added.
+
+### Faithful primitive witnesses from period one — promoted (2026-10-03)
+
+- **Pattern:** Convert period one into irreducibility, trace preservation,
+  and peripheral primitivity; choose a primitive invariant matrix and use
+  irreducibility to prove that it is positive definite.
+- **Seen:** `PeriodicPrimitiveGroundSpace.lean`,
+  `PeriodicResidualProjectionSum.lean`, and `ResidualBoundaryGram.lean`.
+- **Abstraction:** `MPSTensor.exists_isPrimitiveMPS_of_isPeriodic_one`,
+  now public in `TNLean/MPS/ParentHamiltonian/PeriodicPrimitiveGroundSpace.lean`.
+- **Notes:** The projection-sum proof constructs the period-one assertion
+  from its already-derived cyclic-sector data and then calls the helper.
+  Residual Gram and cyclic word-span consumers use the same public witness
+  theorem. No supplied invariant matrix or separation assumption is added.
+
+
+### Native seven-edge transport reconstruction — promoted (2026-10-03)
+
+- **Pattern:** compare the seven directed transports of a two-plaquette
+  induced graph, then recover its ordered bond coefficients.
+- **Seen:** the first rightward physical string step and the two upward
+  physical crossing steps in `TorusInitialStringRightPhysicalStep.lean`,
+  `TorusInitialStringPhysicalCrossing.lean`, and
+  `TorusSecondStringPhysicalCrossing.lean`.
+- **Abstraction:** `twoPlaquette_internal_eq_of_edgeTransports` compares
+  the abstract seven-edge graph once. Its horizontal and vertical
+  corollaries use the actual induced-graph isomorphisms. The helpers in
+  `RegularInternalGaugeTransport.lean` recover coefficients from directed
+  transports and extend equality across one actual regional cut.
+- **Refactor:** all three consumers supply only their seven scalar
+  transport equalities. The two upward reconstruction proofs lose 175
+  and 185 lines; the rightward module loses 27 lines. The geometry and
+  the actual group coefficients remain explicit.
+- **Validation:** the shared table and all three consumers pass the
+  package Lean options at the default heartbeat limit. Their theorem
+  audits use only the ordinary logical axioms.
+
+
+### Six-site vertex-label evaluations — candidate (2026-10-03)
+
+- **Pattern:** unfold the vertex-label assignment, distinguish its two
+  rows, and evaluate a fixed local column.
+- **Seen:** seven short occurrences in
+  `TorusInitialStringRightPhysicalStep.lean`; the pattern scan identifies
+  their common three-line opening.
+- **Current treatment:** the coordinate calculations remain in one file.
+  Their dependent edge enumeration has already been replaced by the
+  shared seven-edge transport theorem.
+- **Promotion trigger:** reuse of the same vertex-label family in another
+  module. Prefer pointwise value lemmas for that family.
+
+### Canonical parent interaction matrix
+
+- **Pattern:** Express the orthogonal projection onto the complement of a local
+  MPS boundary space as a configuration-basis matrix, identify its Euclidean
+  operator, and obtain positive semidefiniteness.
+- **Seen:** `PrimitiveGroundStateInteractionExistence.lean`,
+  `MultiblockLocalCommutatorGap.lean`, `PrimitiveLocalCommutatorGap.lean`,
+  and the periodic original-chain interaction construction.
+- **Abstraction:** `canonicalParentInteractionMatrix`,
+  `toEuclideanLin_canonicalParentInteractionMatrix`, and
+  `canonicalParentInteractionMatrix_posSemidef`, in
+  `CanonicalParentInteractionMatrix.lean`.
+- **Notes:** The existing theorem statements retain their explicit projection
+  expressions; their proofs use this common matrix choice. This removes the
+  repeated conversion without adding an interaction hypothesis.
+
+### Contiguous restrictions from a positive open-chain sum (candidate)
+
+- **Pattern:** A vector in the kernel of a positive open sum lies in the kernel
+  of every local term; each nonwrapping restriction therefore belongs to its
+  local MPS space. The shared subspace-intersection iteration then closes the
+  global boundary representation.
+- **Seen:** `BlockOpenGroundSpace.ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES`
+  and `PeriodicOriginalIntersection.IsPeriodic.exists_ker_openParentHamiltonianES_eq_groundSpaceES`.
+- **Existing abstraction:** `contiguous_mem_of_restriction_intersection_submodules`
+  already carries out the general intersection iteration.
+- **Status:** Two occurrences; consider a helper for extracting all contiguous
+  constraints if a third use appears.
+
+### Relative angles under finite orthogonal decompositions — candidate (2026-10-03)
+
+- **Pattern:** Expand an inner product over finitely many orthogonal fibers,
+  apply a relative-angle estimate in each fiber, and bound the resulting sum
+  by Cauchy--Schwarz.
+- **Seen:** Two structural occurrences in
+  `ResidualBoundaryOverlap.lean` (`norm_inner_le_of_residualPrefixFiber_bound`)
+  and `ResidualWindowCrossOverlap.lean`
+  (`norm_inner_le_of_windowMiddleFiber_bound`).
+- **Abstraction:** A generic relative-angle lemma for a finite orthogonal
+  decomposition; double fibers are treated by a product index.
+- **Notes:** These two occurrences remain below the promotion threshold.
+  A third occurrence should reuse a common mathematical lemma.
+
+### Positive physical dimension of a normalized periodic tensor
+
+- **Pattern:** Obtain nonzero bond dimension from the peripheral eigenvalue
+  $1$, then exclude an empty physical alphabet using the left-canonical sum.
+- **Seen:** The original-chain kernel construction, the original-chain
+  infinite-volume gap, and the all-length finite-gap construction.
+- **Abstraction:** `IsPeriodic.physDim_ne_zero`, in
+  `MPS/Periodic/PhysicalDimension.lean`.
+- **Notes:** The tensor's periodicity supplies this dimension fact. The
+  parent-Hamiltonian theorems do not require a separate dimension hypothesis.
+
+
+### phase-class representative selection with exact support — candidate
+- **Pattern:** prove injectivity of the phase-class representative map from
+  pairwise gauge-phase separation; inherit the selected tensor witnesses;
+  upgrade each enumeration phase relation to a gauge cover and exact joint support.
+- **Seen:** 2 occurrences: `MPS/ParentHamiltonian/PrimitiveSectorRepresentatives.lean`
+  (`exists_primitive_sector_representatives`) and
+  `MPS/ParentHamiltonian/PeriodicSectorRepresentatives.lean`
+  (`exists_periodic_sector_representatives`).
+- **Abstraction:** a generic phase-class representative injectivity lemma,
+  followed by support transport from a supplied all-length phase-class support identity.
+- **Notes:** below the rule-of-three threshold. Primitivity and periodicity
+  require different gauge-recovery arguments; those arguments should remain separate.
+
+### Reverse-oriented cyclic word Gram — candidate (2026-10-03)
+
+- **Pattern:** Replace cyclic projections by `P' j = P (-j)`, convert
+  `P (j + 1) * A i = A i * P j` into the forward shift, and apply the
+  existing word Gram identity to obtain the row support at `j - r`.
+- **Seen:** `PeriodicResidualProjectionSum.lean`,
+  `ResidualWindowJointProjectionDecay.lean`, and
+  `PeriodicGroundSpaceIndependence.lean`.
+- **Abstraction:** A generic reverse-oriented cyclic word Gram theorem,
+  obtained once by the index change `j ↦ -j`, can replace the repeated
+  relabelling blocks.
+- **Notes:** Preserve the literal original word order. The reverse shift
+  changes only sector labels; it does not transpose or reverse words.
+  Refactoring the already audited consumers is deferred until their current
+  locked build completes.
+
+
+### Canonical positive interaction from exact open kernels — promoted (2026-10-03)
+
+- **Pattern:** Choose the canonical orthogonal-complement projection matrix,
+  prove positivity, and convert exact canonical open kernels into exact
+  interaction kernels. Retain equality to the literal canonical matrix.
+- **Seen:** `PrimitiveFamilyIntersection.exists_positive_parent_interaction_of_primitive_overlap`,
+  `PeriodicFamilyInteractionCriterion.exists_positive_parent_interaction_of_periodic_family_independence`,
+  and `PeriodicBlockFamilyParentInteractionGap.exists_positive_parent_interaction_of_periodic_family`.
+- **Abstraction:** `MPSTensor.exists_positive_canonical_parent_interaction_of_exact_open_kernels`
+  in `MPS/ParentHamiltonian/CanonicalParentInteractionExistence.lean`.
+- **Application status:** The helper and the new combined periodic-family
+  finite/infinite gap consumer are complete and strictly checked. The three
+  existing consumers have an exact prepared refactor; application is pending
+  completion of their locked build and source freeze. Their mathematical
+  statements are unchanged. The prepared patch is held by the integration
+  agent and must be applied when the freeze is released.

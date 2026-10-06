@@ -182,38 +182,6 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     (\ref{eq:varying_bond_obc_coeff}).
 \end{definition}
 
-\begin{definition}[Scaling one site]
-    \label{def:seqanc_smul_site}
-    \lean{OBCChainTensor.smulSite}
-    \leanok
-    \uses{def:varying_bond_obc_chain}
-    For a varying-bond open chain $A$ of length $N$, a site $q$ and $c\in\C$,
-    the chain obtained by scaling the site $q$ by $c$ has the bond dimensions of
-    $A$, the site matrices $c\,A_q^i$ at the site $q$, and the site matrices
-    $A_p^i$ at every other site $p$.
-\end{definition}
-
-\begin{theorem}[Open-boundary states form a cone]
-    \label{thm:seqanc_obc_cone}
-    \lean{OBCChainTensor.coeff_smulSite, MPSPreparation.HasOBCRep.smul,
-        MPSPreparation.hasOBCRep_zero}
-    \leanok
-    \uses{def:seqanc_smul_site, def:seqanc_obc_rep, def:varying_bond_obc_coeff}
-    Scaling one site of a varying-bond open chain by $c$ multiplies its
-    coefficient by $c$. Consequently, for $N\ge 1$, if $\psi$ has an
-    open-boundary representation with bond dimension at most $D$, then so has
-    $c\,\psi$ for every $c\in\C$, and for $N\ge 1$ and $D\ge 1$ the zero vector
-    has an open-boundary representation with bond dimension at most $D$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    The coefficient is a sum over virtual paths of products over the sites, and
-    exactly one factor of each product is multiplied by $c$. For $c\,\psi$
-    scale the first site. For the zero vector take all bond dimensions equal to
-    one and all site matrices zero: every product has a zero factor, since
-    $N\ge 1$.
-\end{proof}
-
 \section{Isometric decompositions}
 
 \begin{definition}[Isometry on a bond block]
@@ -639,15 +607,11 @@ decompositions counted from the end at which they start, has dimension
 $2\min[D,2^k]\times\min[D,2^{k+1}]$. According to \cite[Section~5.1]{PerezGarcia2007Matrix},
 the proof of the characterization by open-boundary representations also
 provides a recipe for the generation of any given state with minimal resources.
-The entries of this section give upper bounds on the bond dimensions of the
-representation produced by the decompositions of a given representation. The
-printed size is not minimal for low-rank states, since a product state has a
-representation with all bond dimensions one, although unused virtual
-directions can always be added to reach the printed size; the minimal
-bond dimensions are the cut ranks of Section~\ref{sec:seqanc_cut_ranks}
-\cite{gap:ssvcw05_sequential_bond_upper_bound_scope}. In the present labelling
-the decompositions start at site $0$, and the bound concerns the bond $k$
-between the sites $k-1$ and $k$.
+The entries below give only the upper bounds on the bond dimensions; the
+equality of each bond dimension with the Schmidt rank across the
+corresponding cut is not formalized
+\cite{gap:ssvcw05_sequential_bond_upper_bound_scope}. In the present labelling the decompositions start at site $0$, and the
+bound concerns the bond $k$ between the sites $k-1$ and $k$.
 
 \begin{theorem}[Rank bound for one isometric site]
     \label{thm:seqanc_rank_bound}
@@ -747,136 +711,6 @@ between the sites $k-1$ and $k$.
     decompositions start.
 \end{proof}
 
-\section{Cut ranks}
-\label{sec:seqanc_cut_ranks}
-
-For a configuration $\sigma$ of the first $k$ sites and a configuration $\tau$
-of the remaining $N-k$ sites, write $\sigma\tau$ for the configuration of $N$
-sites that agrees with $\sigma$ on the sites $p<k$ and with $\tau$ on the sites
-$p\ge k$, the site $p$ carrying $\tau_{p-k}$. Following
-\cite[Section~3.1]{PerezGarcia2007Matrix}, the bond dimensions of an
-open-boundary representation are bounded below by the ranks of the reduced
-density operators of the first $k$ sites, and successive Schmidt decompositions
-of the state attain these ranks.
-
-\begin{definition}[Cut matrix and cut rank]
-    \label{def:seqanc_cut_matrix}
-    \lean{MPSPreparation.cutConfig, MPSPreparation.cutMatrix,
-        MPSPreparation.cutRank}
-    \leanok
-    For $\psi\in(\C^d)^{\otimes N}$ and $k\ge 0$, the \emph{cut matrix} of
-    $\psi$ at $k$ is the matrix with rows indexed by the configurations
-    $\sigma$ of $k$ sites, columns indexed by the configurations $\tau$ of
-    $N-k$ sites, and entries $\psi(\sigma\tau)$; for $k>N$ only the first $N$
-    letters of $\sigma$ enter. The \emph{cut rank} $\operatorname{rank}_k\psi$
-    is its rank. For $k\le N$ it is the rank of the reduced density operator
-    of the first $k$ sites.
-\end{definition}
-
-\begin{theorem}[Splitting a configuration at a cut]
-    \label{thm:seqanc_cut_split}
-    \lean{MPSPreparation.eval_cutConfig, MPSPreparation.cutConfig_restrict}
-    \leanok
-    \uses{def:seqanc_cut_matrix}
-    Let $k\le N$. For square matrices $M_0,\dots,M_{N-1}$ indexed by the
-    physical index, $M^{\sigma\tau}=(M_0^{\sigma_0}\cdots
-        M_{k-1}^{\sigma_{k-1}})(M_k^{\tau_0}\cdots M_{N-1}^{\tau_{N-k-1}})$.
-    Every configuration $c$ of $N$ sites is $\sigma\tau$ with
-    $\sigma=(c_0,\dots,c_{k-1})$ and $\tau=(c_k,\dots,c_{N-1})$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Split the ordered product after its first $k$ factors; the second claim
-    holds site by site.
-\end{proof}
-
-\begin{theorem}[Elementary bounds on cut ranks]
-    \label{thm:seqanc_cut_rank_bounds}
-    \lean{MPSPreparation.cutRank_le_pow, MPSPreparation.cutRank_le_pow_sub,
-        MPSPreparation.cutRank_le_pow_half, MPSPreparation.cutRank_pos,
-        MPSPreparation.cutRank_zero_eq_one, MPSPreparation.cutRank_self_eq_one}
-    \leanok
-    \uses{def:seqanc_cut_matrix}
-    For every $k$, $\operatorname{rank}_k\psi\le d^k$ and
-    $\operatorname{rank}_k\psi\le d^{N-k}$; if $d\ge 1$, then
-    $\operatorname{rank}_k\psi\le d^{\lfloor N/2\rfloor}$. If $\psi\ne 0$, then
-    $\operatorname{rank}_k\psi\ge 1$ for every $k\le N$, and
-    $\operatorname{rank}_0\psi=\operatorname{rank}_N\psi=1$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_cut_split}
-    The rank is at most the number of rows, $d^k$, and of columns, $d^{N-k}$.
-    If $k\le\lfloor N/2\rfloor$ use $d^k$, and otherwise $N-k\le\lfloor
-        N/2\rfloor$. If $\psi(c)\ne 0$, the entry of the cut matrix at the
-    restrictions of $c$ is nonzero by Theorem~\ref{thm:seqanc_cut_split}, so
-    the rank is positive. The cut matrices at $0$ and $N$ have one row and one
-    column, respectively.
-\end{proof}
-
-\begin{theorem}[Cut ranks bound the bond dimensions]
-    \label{thm:seqanc_cut_rank_lower}
-    \lean{OBCChainTensor.cutRank_coeff_le}
-    \leanok
-    \uses{def:seqanc_cut_matrix, def:varying_bond_obc_coeff}
-    Every varying-bond open chain $A$ of length $N$ satisfies
-    $\operatorname{rank}_k c_A\le D_k$ for every $k\le N$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_cut_split, thm:seqanc_coeff_corner}
-    By Theorem~\ref{thm:seqanc_coeff_corner} and
-    Theorem~\ref{thm:seqanc_cut_split},
-    $c_A(\sigma\tau)=\sum_{\gamma}(L^\sigma)_{0\gamma}(R^\tau)_{\gamma 0}$, where
-    $L^\sigma$ and $R^\tau$ are the products of the square paddings of the
-    sites before and after the cut. The first factor of $R^\tau$ vanishes on
-    the rows $\gamma\ge D_k$, and for $k=N$ the empty product $R^\tau=\Id$
-    vanishes off the diagonal while $D_N=1$. So the cut matrix is the product
-    of a matrix with $D_k$ columns and a matrix with $D_k$ rows.
-\end{proof}
-
-\begin{theorem}[Representation with the cut ranks as bond dimensions]
-    \label{thm:seqanc_cut_rank_attained}
-    \lean{OBCChainTensor.exists_coeff_eq_of_cutRank_le}
-    \leanok
-    \uses{def:seqanc_cut_matrix, def:varying_bond_obc_coeff}
-    Let $N\ge 1$, let $\psi\ne 0$, and let $\operatorname{rank}_k\psi\le D$ for
-    every $k\le N$. Then $\psi=c_A$ for a varying-bond open chain $A$ with
-    common bound $D$ and $D_k=\operatorname{rank}_k\psi$ for every $k\le N$,
-    such that $\sum_i(A_p^i)^\dagger A_p^i=\Id$ for every site $p<N-1$. If
-    moreover $\sum_\sigma|\psi(\sigma)|^2=1$, this holds at the site $N-1$ as
-    well.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_cut_rank_bounds, def:seqanc_smul_site, thm:seqanc_obc_cone,
-        thm:seqanc_coeff_corner}
-    This is the construction by successive Schmidt decompositions
-    \cite[Section~3.1]{PerezGarcia2007Matrix}. Let $W_k$ be the column space
-    of the cut matrix at $k$, a subspace of $(\C^d)^{\otimes k}$ of dimension
-    $\operatorname{rank}_k\psi$, and let $e^{(k)}_\beta$ be an orthonormal
-    basis of $W_k$. A column of the cut matrix at $k+1$, with the last of its
-    $k+1$ sites fixed to $i$, is the column of the cut matrix at $k$ at the
-    configuration $i\tau$; hence $w\in W_{k+1}$ implies
-    $w(\,\cdot\,i)\in W_k$. Put
-    $(A_k^i)_{\beta\beta'}=\langle e^{(k)}_\beta,e^{(k+1)}_{\beta'}(\,\cdot\,i)\rangle$,
-    so that
-    \begin{align}
-        e^{(k+1)}_{\beta'}(\sigma i)
-         & =\sum_\beta e^{(k)}_\beta(\sigma)\,(A_k^i)_{\beta\beta'}.
-        \notag
-    \end{align}
-    Parseval's identity in $W_k$ and the orthonormality of $e^{(k+1)}$ give
-    $\sum_i(A_k^i)^\dagger A_k^i=\Id$. By induction on $k$, the first row of
-    the product of the padded sites before the cut $k$ is
-    $\overline{u}\,e^{(k)}_\beta(\sigma)$, where $u$ is the value of the unit
-    vector $e^{(0)}_0$ of the one-dimensional space $W_0$, so $|u|=1$. Since
-    $W_N$ is spanned by $\psi$, $\psi=c_0\,e^{(N)}_0$ with
-    $c_0=\langle e^{(N)}_0,\psi\rangle$; scaling the last site by $u\,c_0$
-    gives $\psi$ by Theorem~\ref{thm:seqanc_obc_cone}. If $\psi$ is
-    normalized, $|u\,c_0|=\|\psi\|=1$, and the last site remains isometric.
-\end{proof}
-
 \section{Sequential generation with an ancilla}
 
 \begin{theorem}[Generated states are open-boundary states]
@@ -922,32 +756,17 @@ of the state attain these ranks.
     \lean{MPSPreparation.isProbabilisticallyGenerated_iff}
     \leanok
     \uses{def:seqanc_probabilistic, def:seqanc_obc_rep}
-    Let $N\ge 1$ and $D\ge 1$. A vector $\psi$ is probabilistically generated
-    with a $D$-dimensional ancilla if and only if it has an open-boundary
-    representation with bond dimension at most $D$~\cite[Section~5,
+    A nonzero vector $\psi$ is probabilistically generated with a
+    $D$-dimensional ancilla if and only if $c\,\psi$ has an open-boundary
+    representation with bond dimension at most $D$ for some $c\ne 0$~\cite[Section~5,
         Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_generated_obc, thm:seqanc_obc_generated,
-        thm:seqanc_obc_cone}
-    The zero vector has a representation by Theorem~\ref{thm:seqanc_obc_cone}.
-    If $\psi\ne 0$, Theorem~\ref{thm:seqanc_generated_obc} gives a
-    representation of $c\,\psi$ for some $c\ne 0$, and
-    Theorem~\ref{thm:seqanc_obc_cone} one of $\psi=c^{-1}(c\,\psi)$. The
-    converse is Theorem~\ref{thm:seqanc_obc_generated} with $c=1$.
+    \uses{thm:seqanc_generated_obc, thm:seqanc_obc_generated}
+    Theorems~\ref{thm:seqanc_generated_obc}
+    and~\ref{thm:seqanc_obc_generated}.
 \end{proof}
-
-\begin{remark}
-    For $N=0$ the only coefficient of a varying-bond open chain is the empty
-    product $1$, and Theorems~\ref{thm:seqanc_generated_obc}
-    and~\ref{thm:seqanc_obc_generated} hold up to the scalar $c$. An ancilla
-    of dimension $D=0$ generates only the zero vector, which has no
-    open-boundary representation with bond dimension at most $0$. The
-    equalities of sets are therefore stated for $N\ge1$, and for the
-    probabilistic scheme also for
-    $D\ge1$~\cite{gap:pgvwc07_sequential_with_ancilla_positive_length}.
-\end{remark}
 
 \begin{theorem}[Unitaries induce isometric operations]
     \label{thm:seqanc_step_isometry}
@@ -1055,25 +874,23 @@ of the state attain these ranks.
     \lean{MPSPreparation.isDeterministicallyGenerated_iff}
     \leanok
     \uses{def:seqanc_deterministic, def:seqanc_obc_rep}
-    Let $d\ge 1$ and $N\ge 1$. A vector $\psi$ is deterministically generated
-    with a $D$-dimensional ancilla if and only if $\sum_\sigma|\psi(\sigma)|^2=1$
-    and $\psi$ has an open-boundary representation with bond dimension at
-    most $D$~\cite[Section~5,
+    Let $d\ge 1$. A vector $\psi$ is deterministically generated with a
+    $D$-dimensional ancilla if and only if $\sum_\sigma|\psi(\sigma)|^2=1$
+    and $c\,\psi$ has an open-boundary representation with bond dimension at
+    most $D$ for some $c\ne 0$~\cite[Section~5,
         Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:seqanc_deterministic_norm,
         thm:seqanc_deterministic_probabilistic, thm:seqanc_generated_obc,
-        thm:seqanc_obc_deterministic, thm:seqanc_obc_cone}
+        thm:seqanc_obc_deterministic}
     For the forward direction, $\psi$ is normalized by
     Theorem~\ref{thm:seqanc_deterministic_norm}, hence nonzero, and
     probabilistically generated by
-    Theorem~\ref{thm:seqanc_deterministic_probabilistic};
-    Theorem~\ref{thm:seqanc_generated_obc} gives a representation of
-    $c\,\psi$ for some $c\ne 0$, and Theorem~\ref{thm:seqanc_obc_cone} one of
-    $\psi$. The converse is Theorem~\ref{thm:seqanc_obc_deterministic} with
-    $c=1$.
+    Theorem~\ref{thm:seqanc_deterministic_probabilistic}; apply
+    Theorem~\ref{thm:seqanc_generated_obc}. The converse is
+    Theorem~\ref{thm:seqanc_obc_deterministic}.
 \end{proof}
 
 \begin{theorem}[Both schemes agree on normalized states]
@@ -1087,77 +904,49 @@ of the state attain these ranks.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_deterministic_probabilistic, thm:seqanc_generated_obc,
-        thm:seqanc_obc_deterministic}
-    One direction is Theorem~\ref{thm:seqanc_deterministic_probabilistic}.
-    Conversely, $\psi$ is normalized, hence nonzero, so
-    Theorem~\ref{thm:seqanc_generated_obc} gives a representation of
-    $c\,\psi$ for some $c\ne 0$, and
-    Theorem~\ref{thm:seqanc_obc_deterministic} applies.
+    \uses{thm:seqanc_probabilistic, thm:seqanc_deterministic}
+    Theorems~\ref{thm:seqanc_probabilistic}
+    and~\ref{thm:seqanc_deterministic}.
 \end{proof}
 
 \section{The deterministic transition scheme}
 
 \begin{definition}[Deterministic transition scheme]
     \label{def:seqanc_transition}
-    \lean{MPSPreparation.ancillaTagSiteVec,
-        MPSPreparation.IsTransitionInteraction,
-        MPSPreparation.transitionStep, MPSPreparation.transitionJointState,
-        MPSPreparation.IsTransitionGenerated}
+    \lean{MPSPreparation.IsTransitionInteraction,
+        MPSPreparation.transitionStep, MPSPreparation.IsTransitionGenerated}
     \leanok
     \uses{def:seqanc_deterministic}
-    Let $d\ge 1$ and let the ancilla be $\C^D\otimes\C^d$, the second factor
-    being a tag, started in a unit vector $\ket{\varphi_I}$. In every step an
+    Let $d=2$ and let the ancilla be $\C^D\otimes\C^2$, started in a unit
+    vector $\ket{\varphi_I}$. In every step an
     arbitrary unitary $W^{[k]}$ acts on the ancilla, followed by the fixed
-    interaction $T$ of the ancilla with the current site, which interchanges
-    the tag with the site on site inputs $\ket{0}$:
+    interaction $T$ of the ancilla with the current site
     \begin{align}
-        \ket{\varphi}\ket{t}\ket{0}
-         & \mapsto\ket{\varphi}\ket{0}\ket{t},
-         & t                                   & =0,\dots,d-1,
+        \ket{\varphi}\ket{1}\ket{0}
+         & \mapsto\ket{\varphi}\ket{0}\ket{1},
+         &
+        \ket{\varphi}\ket{0}\ket{0}
+         & \mapsto\ket{\varphi}\ket{0}\ket{0},
         \label{eq:seqanc_transition}
     \end{align}
     and the ancilla decouples after the last step, that is, the final joint
-    state is $\ket{\varphi_F}\otimes\ket{\psi}$ for a unit vector
-    $\ket{\varphi_F}\in\C^D\otimes\C^d$. For $d=2$ this is the third scheme
-    of~\cite[Section~5.1]{PerezGarcia2007Matrix}; the extension to sites
-    $\C^d$ is the remark of~\cite{Schoen2005Sequential} that the ideas and
-    proofs apply to any multi-qudit state. The step with ancilla unitary $W$
-    leaving the site in $\ket{i}$ is the matrix $S_i(W)$ on $\C^D\otimes\C^d$
-    with entries
+    state is $\ket{\varphi_F}\otimes\ket{\psi}$ for a unit
+    vector $\ket{\varphi_F}\in\C^D\otimes\C^2$~\cite[Section~5.1]{PerezGarcia2007Matrix}.
+    The step with ancilla unitary $W$ leaving the site in $\ket{i}$ is the matrix
+    $S_i(W)$ on $\C^D\otimes\C^2$ with entries
     \begin{align}
         S_i(W)_{x,y}=\delta_{x_2,0}\,W_{(x_1,i),y}.
         \label{eq:seqanc_transition_step}
     \end{align}
-    After the steps with unitaries $W^{[1]},\dots,W^{[N]}$, the ancilla
-    component of the joint state at the configuration $i_N\cdots i_1$ is
-    $S_{i_N}(W^{[N]})\cdots S_{i_1}(W^{[1]})\ket{\varphi_I}$.
 \end{definition}
-
-\begin{theorem}[The interaction for qubits]
-    \label{thm:seqanc_transition_qubit}
-    \lean{MPSPreparation.isTransitionInteraction_two_iff}
-    \leanok
-    \uses{def:seqanc_transition}
-    For $d=2$, an interaction $T$ satisfies (\ref{eq:seqanc_transition}) if
-    and only if
-    $T\ket{\varphi}\ket{1}\ket{0}=\ket{\varphi}\ket{0}\ket{1}$ and
-    $T\ket{\varphi}\ket{0}\ket{0}=\ket{\varphi}\ket{0}\ket{0}$ for every
-    $\ket{\varphi}\in\C^D$, the interaction
-    of~\cite[Section~5.1]{PerezGarcia2007Matrix}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    The two relations are the cases $t=1$ and $t=0$.
-\end{proof}
 
 \begin{theorem}[A transition step on a site in $\ket{0}$]
     \label{thm:seqanc_transition_step}
     \lean{MPSPreparation.transitionStep_eq_of_isTransitionInteraction}
     \leanok
     \uses{def:seqanc_transition}
-    Let $T$ be an interaction on $\C^D\otimes\C^d\otimes\C^d$ satisfying
-    (\ref{eq:seqanc_transition}), and let $W$ be a matrix on $\C^D\otimes\C^d$.
+    Let $T$ be an interaction on $\C^D\otimes\C^2\otimes\C^2$ satisfying
+    (\ref{eq:seqanc_transition}), and let $W$ be a matrix on $\C^D\otimes\C^2$.
     Then for all $x,y$ and $i$,
     \begin{align*}
         \bra{x,i}T(W\otimes\Id)\ket{y,0}=S_i(W)_{x,y}.
@@ -1166,8 +955,7 @@ of the state attain these ranks.
 \begin{proof}
     \leanok
     For $z=(z_1,z_2)$, the relations (\ref{eq:seqanc_transition}) applied to
-    $\ket{\varphi}=\ket{z_1}$ and $t=z_2$ give
-    $T\ket{z_1,z_2,0}=\ket{z_1,0,z_2}$, so
+    $\ket{\varphi}=\ket{z_1}$ give $T\ket{z_1,z_2,0}=\ket{z_1,0,z_2}$, so
     \begin{align*}
         \bra{x,i}T\ket{z,0}=\delta_{x_2,0}\,\delta_{x_1,z_1}\,\delta_{i,z_2}.
     \end{align*}
@@ -1180,174 +968,44 @@ of the state attain these ranks.
     \end{align*}
 \end{proof}
 
-\begin{theorem}[Transition and deterministic schemes agree]
-    \label{thm:seqanc_transition_deterministic}
-    \lean{MPSPreparation.isTransitionGenerated_iff_isDeterministicallyGenerated,
-        MPSPreparation.isDeterministicallyGenerated_of_isTransitionGenerated,
-        MPSPreparation.isTransitionGenerated_of_isDeterministicallyGenerated}
-    \leanok
-    \uses{def:seqanc_transition, def:seqanc_deterministic}
-    Let $d\ge 1$. A vector is generated by a deterministic transition scheme
-    with ancilla $\C^D\otimes\C^d$ if and only if it is deterministically
-    generated with a $D$-dimensional ancilla.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_unitary_extension, thm:seqanc_step_isometry,
-        thm:seqanc_norm}
-    A step of the transition scheme factors as $E R_i$, where
-    $E\ket{\varphi}=\ket{\varphi}\ket{0}$ and $(R_i)_{\alpha,y}=W_{(\alpha,i),y}$,
-    and $R_iE$ is the operation $\bra{\alpha,i}W\ket{\beta,0}$ of the unitary
-    $W$ on ancilla $\otimes$ site. Given a deterministic scheme with unitaries
-    $U^{[k]}$, take $W^{[k]}=U^{[k]}$ and the initial and final ancilla states
-    $E\ket{\varphi_I}$ and $E\ket{\varphi_F}$; the ancilla components are then
-    $E$ applied to those of the deterministic scheme.
-
-    Conversely, after the first step the tag is $\ket{0}$, so the ancilla
-    component at $\sigma$ is $E$ applied to the product of the matrices $R_iE$
-    acting on $v_i=R_i\ket{\varphi_I}$, where $R_i$ comes from the first
-    ancilla unitary. Since $\sum_i\|v_i\|^2=\|\varphi_I\|^2=1$, the vectors
-    $v_i$ are the first column of a unitary on $\C^D\otimes\C^d$ by
-    Theorem~\ref{thm:seqanc_unitary_extension}, and the scheme becomes a
-    deterministic scheme with ancilla $\C^D$ started in $\ket{0}$. The final
-    state is $\psi(\sigma)$ times the tag-zero part of $\varphi_F$. The total
-    squared norm is $1$ by Theorem~\ref{thm:seqanc_norm}, so some
-    $\psi(\sigma)$ is nonzero, the parts of $\varphi_F$ with a nonzero tag
-    vanish, and the tag-zero part is normalized.
-\end{proof}
-
 \begin{theorem}[Transition schemes generate the open-boundary states]
     \label{thm:seqanc_transition}
     \lean{MPSPreparation.isTransitionGenerated_iff}
     \leanok
     \uses{def:seqanc_transition, def:seqanc_obc_rep}
-    Let $d\ge 1$ and $N\ge 1$. A vector $\psi$ is generated by a deterministic
-    transition scheme with ancilla $\C^D\otimes\C^d$ if and only if
-    $\sum_\sigma|\psi(\sigma)|^2=1$ and $\psi$ has an open-boundary
-    representation with bond dimension at most $D$. For $d=2$ this is the
-    statement of~\cite[Section~5, Theorem ``Sequential generation with
-        ancilla'']{PerezGarcia2007Matrix} for the third scheme.
+    Let $d=2$. A vector $\psi$ is generated by a deterministic transition
+    scheme with ancilla $\C^D\otimes\C^2$ if and only if
+    $\sum_\sigma|\psi(\sigma)|^2=1$ and $c\,\psi$ has an open-boundary
+    representation with bond dimension at most $D$ for some $c\ne 0$~\cite[Section~5,
+        Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_transition_deterministic, thm:seqanc_deterministic}
-    Theorems~\ref{thm:seqanc_transition_deterministic}
-    and~\ref{thm:seqanc_deterministic}.
+    \uses{thm:seqanc_deterministic, thm:seqanc_unitary_extension,
+        thm:seqanc_step_isometry, thm:seqanc_norm}
+    By Theorem~\ref{thm:seqanc_deterministic} it suffices to show that the
+    transition scheme and the deterministic scheme with ancilla $\C^D$
+    generate the same vectors. A step of the transition scheme factors as
+    $E R_i$, where $E\ket{\varphi}=\ket{\varphi}\ket{0}$ and
+    $(R_i)_{\alpha,y}=W_{(\alpha,i),y}$, and $R_iE$ is the operation
+    $\bra{\alpha,i}W\ket{\beta,0}$ of the unitary $W$ on ancilla $\otimes$
+    site. Given a deterministic scheme with unitaries $U^{[k]}$, take
+    $W^{[k]}=U^{[k]}$ and the initial and final ancilla states
+    $E\ket{\varphi_I}$ and $E\ket{\varphi_F}$; the ancilla components are then
+    $E$ applied to those of the deterministic scheme.
+
+    Conversely, after the first step the tag qubit is $\ket{0}$, so the
+    ancilla component at $\sigma$ is $E$ applied to the product of the
+    matrices $R_iE$ acting on $v_i=R_i\ket{\varphi_I}$, where $R_i$ comes from
+    the first ancilla unitary. Since $\sum_i\|v_i\|^2=\|\varphi_I\|^2=1$, the
+    vectors $v_i$ are the first column of a unitary on $\C^D\otimes\C^2$ by
+    Theorem~\ref{thm:seqanc_unitary_extension}, and the scheme becomes a
+    deterministic scheme with ancilla $\C^D$ started in $\ket{0}$. The final
+    state is $\psi(\sigma)$ times the tag-zero part of $\varphi_F$. The total
+    squared norm is $1$ by Theorem~\ref{thm:seqanc_norm}, so some
+    $\psi(\sigma)$ is nonzero, the tag-one part of $\varphi_F$ vanishes, and the
+    tag-zero part is normalized.
 \end{proof}
-
-\section{Minimal resources}
-
-By \cite[Section~5.1]{PerezGarcia2007Matrix}, the proof of the
-characterization by open-boundary representations provides a recipe for the
-generation of any given state with minimal resources, and
-by~\cite{Schoen2005Sequential}, since every state has a matrix product
-representation, it is a general recipe for its sequential generation.
-
-\begin{theorem}[Open-boundary representations from cut ranks]
-    \label{thm:seqanc_obc_cut_rank}
-    \lean{MPSPreparation.hasOBCRep_iff_cutRank_le}
-    \leanok
-    \uses{def:seqanc_obc_rep, def:seqanc_cut_matrix}
-    Let $N\ge 1$ and $D\ge 1$. A vector $\psi$ has an open-boundary
-    representation with bond dimension at most $D$ if and only if
-    $\operatorname{rank}_k\psi\le D$ for every $k\le N$. The backward
-    direction is the statement that any state for which
-    $\max_m\operatorname{rank}(\rho_m)\le D$ can be written as a matrix
-    product state of bond dimension $D$~\cite[Section~3.1]{PerezGarcia2007Matrix}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_cut_rank_lower, thm:seqanc_cut_rank_attained,
-        thm:seqanc_obc_cone}
-    The forward direction is Theorem~\ref{thm:seqanc_cut_rank_lower}. For the
-    backward direction, the zero vector is covered by
-    Theorem~\ref{thm:seqanc_obc_cone} and every other vector by
-    Theorem~\ref{thm:seqanc_cut_rank_attained}.
-\end{proof}
-
-\begin{theorem}[Sequential generation from cut ranks]
-    \label{thm:seqanc_generated_cut_rank}
-    \lean{MPSPreparation.isProbabilisticallyGenerated_iff_cutRank_le,
-        MPSPreparation.isDeterministicallyGenerated_iff_cutRank_le}
-    \leanok
-    \uses{def:seqanc_probabilistic, def:seqanc_deterministic,
-        def:seqanc_cut_matrix}
-    Let $N\ge 1$. A vector $\psi$ is probabilistically generated with a
-    $D$-dimensional ancilla if and only if $\operatorname{rank}_k\psi\le D$
-    for every $k\le N$. If $d\ge 1$, it is deterministically generated with a
-    $D$-dimensional ancilla if and only if moreover
-    $\sum_\sigma|\psi(\sigma)|^2=1$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_probabilistic, thm:seqanc_obc_cut_rank,
-        thm:seqanc_cut_rank_bounds, thm:seqanc_det_iff_prob,
-        thm:seqanc_deterministic_norm, thm:seqanc_deterministic_probabilistic}
-    For $D\ge 1$ combine Theorems~\ref{thm:seqanc_probabilistic}
-    and~\ref{thm:seqanc_obc_cut_rank}. For $D=0$ both sides say $\psi=0$: the
-    generated vector is a pairing in $\C^0$, and a nonzero vector has
-    $\operatorname{rank}_0\psi=1$ by Theorem~\ref{thm:seqanc_cut_rank_bounds}.
-    The deterministic case follows by
-    Theorems~\ref{thm:seqanc_det_iff_prob},
-    \ref{thm:seqanc_deterministic_norm}
-    and~\ref{thm:seqanc_deterministic_probabilistic}.
-\end{proof}
-
-\begin{theorem}[Minimal ancilla dimension]
-    \label{thm:seqanc_minimal_resources}
-    \lean{MPSPreparation.isLeast_isProbabilisticallyGenerated,
-        MPSPreparation.isLeast_isDeterministicallyGenerated}
-    \leanok
-    \uses{def:seqanc_probabilistic, def:seqanc_deterministic,
-        def:seqanc_cut_matrix}
-    Let $N\ge 1$. The least dimension of an ancilla that probabilistically
-    generates $\psi$ is $\max_{k\le N}\operatorname{rank}_k\psi$. If $d\ge 1$
-    and $\sum_\sigma|\psi(\sigma)|^2=1$, the least dimension of an ancilla
-    that deterministically generates $\psi$ is the same number.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_generated_cut_rank}
-    By Theorem~\ref{thm:seqanc_generated_cut_rank} the dimensions that work
-    are exactly those at least every cut rank.
-\end{proof}
-
-\begin{theorem}[Every state is sequentially generated]
-    \label{thm:seqanc_every_state}
-    \lean{MPSPreparation.hasOBCRep_pow_half,
-        MPSPreparation.isProbabilisticallyGenerated_pow_half,
-        MPSPreparation.isDeterministicallyGenerated_pow_half,
-        MPSPreparation.isTransitionGenerated_pow_half}
-    \leanok
-    \uses{def:seqanc_obc_rep, def:seqanc_probabilistic,
-        def:seqanc_deterministic, def:seqanc_transition}
-    Let $d\ge 1$ and $N\ge 1$. Every $\psi\in(\C^d)^{\otimes N}$ has an
-    open-boundary representation with bond dimension at most
-    $d^{\lfloor N/2\rfloor}$, and is probabilistically generated with an
-    ancilla of dimension $d^{\lfloor N/2\rfloor}$. If moreover
-    $\sum_\sigma|\psi(\sigma)|^2=1$, then $\psi$ is deterministically generated
-    with an ancilla of dimension $d^{\lfloor N/2\rfloor}$ and generated by a
-    deterministic transition scheme with ancilla
-    $\C^{d^{\lfloor N/2\rfloor}}\otimes\C^d$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_cut_rank_bounds, thm:seqanc_obc_cut_rank,
-        thm:seqanc_generated_cut_rank, thm:seqanc_transition_deterministic}
-    Every cut rank is at most $d^{\lfloor N/2\rfloor}$ by
-    Theorem~\ref{thm:seqanc_cut_rank_bounds}; apply
-    Theorems~\ref{thm:seqanc_obc_cut_rank},
-    \ref{thm:seqanc_generated_cut_rank}
-    and~\ref{thm:seqanc_transition_deterministic}.
-\end{proof}
-
-\begin{remark}
-    The existence statement of Theorem~\ref{thm:seqanc_every_state} is the
-    existence part of the completeness theorem
-    of~\cite[Section~3.1]{PerezGarcia2007Matrix}; its gauge conditions on the
-    site matrices are not part of the statement
-    \cite{gap:ssvcw05_sequential_bond_upper_bound_scope}.
-\end{remark}
 
 \section{Sequential generation without an ancilla}
 
@@ -1418,99 +1076,11 @@ representation, it is a general recipe for its sequential generation.
     state after $U^{[k]}$ is $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$.
 \end{remark}
 
-\begin{theorem}[The scheme without an ancilla uses the next site as ancilla]
-    \label{thm:seqanc_no_ancilla_joint}
-    \lean{MPSPreparation.swapRows, MPSPreparation.swapRows_swapRows,
-        MPSPreparation.swapRows_mem_unitaryGroup,
-        MPSPreparation.noAncillaState_eq_jointState}
-    \leanok
-    \uses{def:seqanc_no_ancilla, def:seqanc_step}
-    Let $d\ge 1$ and $N\ge 2$, and let $\widehat U$ be the operation $U$ on
-    $\C^d\otimes\C^d$ followed by the interchange of its two output factors;
-    $\widehat{\widehat U}=U$, and $\widehat U$ is unitary if $U$ is. The state
-    generated by $U^{[1]},\dots,U^{[N-1]}$ without an ancilla is the joint
-    state of the scheme with an ancilla $\C^d$ for the unitaries
-    $\widehat U^{[k]}$, started in $\ket{0}$, read out as the site at ket
-    position $0$:
-    \begin{align*}
-        \psi(\sigma)=\bigl(A_0^{\sigma_1}\cdots A_{N-2}^{\sigma_{N-1}}\ket{0}
-        \bigr)_{\sigma_0},
-    \end{align*}
-    with $A_p$ induced by $\widehat U^{[N-1-p]}$, so
-    $(A_p^i)_{\beta\alpha}=\bra{i,\beta}U^{[N-1-p]}\ket{\alpha,0}$
-    \cite[Section~5.2]{PerezGarcia2007Matrix}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Interchanging the outputs twice is the identity and permutes the rows of a
-    unitary. The identity of states follows by induction on $N$ from the
-    recursion for $\chi_k$, since $\bra{\beta,i}\widehat U\ket{\alpha,0}
-        =\bra{i,\beta}U\ket{\alpha,0}$.
-\end{proof}
-
-\begin{theorem}[An ancilla read out as a site]
-    \label{thm:seqanc_readout}
-    \lean{MPSPreparation.hasOBCRep_of_eq_eval,
-        MPSPreparation.star_dotProduct_self_of_eq,
-        MPSPreparation.exists_isometric_chain_of_hasOBCRep,
-        MPSPreparation.hasOBCRep_iff_exists_eq_jointState,
-        MPSPreparation.hasOBCRep_and_norm_iff_exists_unitary_eq_jointState}
-    \leanok
-    \uses{def:seqanc_step, def:seqanc_obc_rep}
-    Let $d\ge 1$ and $N=n+2$. The vectors
-    $\psi(\sigma)=\bigl(A_0^{\sigma_1}\cdots A_n^{\sigma_{n+1}}
-        \ket{\varphi_I}\bigr)_{\sigma_0}$, where $A_p$ is induced by an operation
-    $U_{n-p}$ on $\C^d\otimes\C^d$ and $\ket{\varphi_I}\in\C^d$, are exactly
-    the vectors with an open-boundary representation of bond dimension at most
-    $d$. With unitary operations and a unit vector $\ket{\varphi_I}$ they are
-    exactly the normalized such vectors.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_sweep, thm:seqanc_assemble, thm:seqanc_coeff_corner,
-        thm:seqanc_norm, thm:seqanc_block_congr, thm:seqanc_unitary_extension,
-        thm:seqanc_step_isometry, thm:seqanc_bond_bound_pos,
-        thm:seqanc_boundary_coords}
-    Such a vector is $\bigl(\ket{0}\bra{e_{\sigma_0}}\bigr)A^{\sigma'}
-        \ket{\varphi_I}$ read at the first coordinate, an open-boundary state by
-    Theorems~\ref{thm:seqanc_sweep} and~\ref{thm:seqanc_assemble}; for unitary
-    operations it is normalized by Theorems~\ref{thm:seqanc_step_isometry}
-    and~\ref{thm:seqanc_norm}. Conversely, write an open-boundary state as
-    $\psi(\sigma)=\bigl(R\,P_1^{\sigma_1}\cdots P_{N-1}^{\sigma_{N-1}}
-        \ket{0}\bigr)_{\sigma_0}$ with $R_{j\gamma}$ the entries of the first
-    site (Theorem~\ref{thm:seqanc_coeff_corner}), and run the successive
-    decompositions of Theorem~\ref{thm:seqanc_sweep} starting from $R$: this
-    gives $\psi(\sigma)=\bigl(Q_1^{\sigma_1}\cdots Q_{N-1}^{\sigma_{N-1}}
-        r'\bigr)_{\sigma_0}$ with every $Q_p$ isometric on its bond block, and
-    $\|r'\|=1$ when $\psi$ is normalized. Take $\ket{\varphi_I}=r'$ and
-    operations inducing $Q_p$, which in the unitary case are unitary
-    extensions by Theorem~\ref{thm:seqanc_unitary_extension}; then
-    Theorem~\ref{thm:seqanc_block_congr} identifies the state.
-\end{proof}
-
-\begin{theorem}[Starting the ancilla in $\ket{0}$]
-    \label{thm:seqanc_absorb_initial}
-    \lean{MPSPreparation.stepMatrix_mul_kronecker_one,
-        MPSPreparation.jointState_update_zero}
-    \leanok
-    \uses{def:seqanc_step}
-    If $U$ is an operation on $\C^D\otimes\C^d$ and $W$ a matrix on $\C^D$, the
-    matrices induced by $U(W\otimes\Id)$ are $A^iW$, where $A^i$ are those
-    induced by $U$. Consequently, replacing the first operation $U_0$ by
-    $U_0(W\otimes\Id)$ turns the ancilla component of the joint state started
-    in $\ket{\varphi}$ into the one started in $W\ket{\varphi}$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    $\bra{\alpha,i}U(W\otimes\Id)\ket{\beta,0}
-        =\sum_\gamma\bra{\alpha,i}U\ket{\gamma,0}W_{\gamma\beta}$, and the
-    first operation acts last in the ordered product.
-\end{proof}
-
 \begin{theorem}[Sequential generation without an ancilla]
     \label{thm:seqanc_no_ancilla}
     \lean{MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff,
-        MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff}
+        MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff,
+        MPSPreparation.noAncillaState_eq_eval}
     \leanok
     \uses{def:seqanc_no_ancilla, def:seqanc_obc_rep}
     Let $d\ge 1$ and $N\ge 2$. The states generated by sequential schemes without an
@@ -1524,17 +1094,31 @@ representation, it is a general recipe for its sequential generation.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_no_ancilla_joint, thm:seqanc_readout,
-        thm:seqanc_absorb_initial}
-    As in the source, the site $k+1$ serves as the ancilla of the $k$-th step.
-    By Theorem~\ref{thm:seqanc_no_ancilla_joint}, a generated state is a
-    vector of Theorem~\ref{thm:seqanc_readout} with $\ket{\varphi_I}=\ket{0}$,
-    hence an open-boundary state of bond dimension at most $d$, normalized in
-    the deterministic case. Conversely, Theorem~\ref{thm:seqanc_readout}
-    writes an open-boundary state as such a vector for some
-    $\ket{\varphi_I}$. Choose $W$ with $W\ket{0}=\ket{\varphi_I}$, the matrix
-    with first column $\ket{\varphi_I}$ in the probabilistic case and a
-    unitary in the deterministic case, absorb it into the first operation by
-    Theorem~\ref{thm:seqanc_absorb_initial}, and interchange the outputs of
-    every operation by Theorem~\ref{thm:seqanc_no_ancilla_joint}.
+    \uses{thm:seqanc_sweep, thm:seqanc_assemble, thm:seqanc_coeff_corner,
+        thm:seqanc_norm, thm:seqanc_block_congr, thm:seqanc_unitary_extension,
+        thm:seqanc_bond_bound_pos, thm:seqanc_boundary_coords,
+        thm:seqanc_eval_last}
+    With $A^{[k]}_{i,\beta\alpha}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$ the
+    recursion for $\chi_k$ gives
+    $\psi(\sigma)=\bigl(A^{[N-1]}_{\sigma_1}\cdots
+        A^{[1]}_{\sigma_{N-1}}\ket{0}\bigr)_{\sigma_0}$ in ket positions, an
+    open-boundary representation with bond dimension at most $d$ by
+    Theorems~\ref{thm:seqanc_sweep} and~\ref{thm:seqanc_assemble}. For unitary operations each
+    $A^{[k]}$ satisfies $\sum_iA_i^\dagger A_i=\Id$, so the state is
+    normalized by Theorem~\ref{thm:seqanc_norm}.
+
+    Conversely, write an open-boundary state as
+    $\psi(\sigma)=\bigl(R\,P_1^{\sigma_1}\cdots P_{N-1}^{\sigma_{N-1}}
+        \ket{0}\bigr)_{\sigma_0}$ with $R_{j\gamma}$ the entries of the first
+    site (Theorem~\ref{thm:seqanc_coeff_corner}), and run the successive
+    decompositions of
+    Theorem~\ref{thm:seqanc_sweep} starting from $R$: this gives
+    $\psi(\sigma)=\bigl(Q_1^{\sigma_1}\cdots Q_{N-1}^{\sigma_{N-1}}
+        r'\bigr)_{\sigma_0}$ with every $Q_p$ isometric on its bond block, and
+    $\|r'\|=1$ when $\psi$ is normalized. Take $U^{[1]}$ with
+    $\bra{i,\beta}U^{[1]}\ket{0,0}=(Q_{N-1}^ir')_\beta$ and, for $k\ge 2$,
+    $U^{[k]}$ with $\bra{i,\beta}U^{[k]}\ket{\alpha,0}=(Q_{N-k}^i)_{\beta\alpha}$
+    on the used columns; in the deterministic case these are unitary
+    extensions by Theorem~\ref{thm:seqanc_unitary_extension}, and
+    Theorem~\ref{thm:seqanc_block_congr} identifies the generated state.
 \end{proof}

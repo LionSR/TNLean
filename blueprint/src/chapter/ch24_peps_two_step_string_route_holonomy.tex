@@ -1,0 +1,34 @@
+\begin{definition}[The three plaquettes along the two-step route]
+    \label{def:peps_two_step_string_plaquettes}
+    \lean{TNLean.PEPS.torusTwoStepStringPlaquette}
+    \leanok
+    Relative to the four-endpoint patch based at $v$, the successive plaquette
+    bases are $v+(1,1)$, $v+(2,1)$, and $v+(2,2)$.
+\end{definition}
+\begin{theorem}[Literal transports and clockwise fluxes along the route]
+    \label{thm:peps_two_step_string_route_holonomy}
+    \lean{TNLean.PEPS.torusSecondStringCrossingOutput_up_transport,TNLean.PEPS.torusSecondStringCrossingOutput_right_transport,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_initial,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_intermediate,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_final,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_partners}
+    \leanok
+    For $w\ge8$, $H\ge7$, the three actual clockwise fluxes are
+    \begin{align}
+        (h,1,1)&\longrightarrow(1,h,1)
+        \longrightarrow(1,1,ghg^{-1}).
+    \end{align}
+    In the second step all upward transports remain those of the intermediate
+    assignment; only the rightward transport based at $v+(2,2)$ is changed,
+    to $gh^{-1}g^{-1}$. All native sorting inversions at torus seams are
+    included. At both intermediate and final stages, the two first-string
+    endpoint loops and the distant second-string partner have respectively
+    the unchanged clockwise fluxes $g^{-1},g,h^{-1}$.
+    These are actual bond-assignment calculations auxiliary to
+    \cite[Section~6.6]{Schuch2010PEPS}; they do not identify the two-step
+    operation with the prescribed complete braid.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_two_step_string_plaquettes,thm:peps_second_string_physical_crossing,thm:peps_initial_string_right_physical_step,thm:peps_torus_plaquette_holonomy,thm:peps_torus_swept_string_endpoint_holonomy}
+    The second operation changes exactly its selected middle horizontal bond.
+    The native directed tables therefore determine every factor of each
+    clockwise plaquette loop. Multiplying those four factors in their actual
+    order gives the displayed values and the three retained partner fluxes.
+\end{proof}

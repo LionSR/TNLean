@@ -1,0 +1,45 @@
+\begin{theorem}[Dimension bound for distinct irreducibles]
+    \label{thm:peps_semiregular_dimension_bound}
+    \lean{Representation.sum_finrank_le_of_distinct_irreducibles_of_isSemiRegular}
+    \lean{TNLean.PEPS.finrank_blockMatrixRepresentation_le_of_isSemiRegular}
+    \leanok
+    \uses{def:peps_semiregular}
+    Let $\sigma$ be a finite-dimensional complex semi-regular representation
+    of a finite group $G$. For any finite family $(D_i)_{i\in I}$ of
+    irreducible representations with distinct characters,
+    $\sum_{i\in I}\dim D_i\leq\dim\sigma$.
+    No unitarity assumption on $\sigma$ is required.
+    This is the dimension comparison underlying the smallest representation
+    in \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Write $\sigma=\bigoplus_{T\in\mathcal A}T$ as a finite internal sum of
+    irreducible subrepresentations. Semi-regularity ensures that for each
+    $i$ some $T_i\in\mathcal A$ has character $\chi_{D_i}$.
+    The distinct characters make $i\mapsto T_i$ injective.
+    Equal irreducible characters give equivalent representations, hence
+    $\dim T_i=\dim D_i$.
+    Taking dimensions in the internal sum gives
+    $\sum_i\dim D_i=\sum_i\dim T_i\leq
+    \sum_{T\in\mathcal A}\dim T=\dim\sigma$.
+\end{proof}
+
+\begin{theorem}[Smallest semi-regular representation]
+    \label{thm:peps_smallest_semiregular_representation}
+    \lean{TNLean.PEPS.exists_smallestSemiRegular_matrixRepresentation}
+    \leanok
+    \uses{thm:peps_regular_minimal_representation,
+        thm:peps_semiregular_dimension_bound}
+    Every finite group admits a unitary semi-regular representation
+    $U_{\min}=\bigoplus_iD_i$ with distinct irreducible characters and
+    multiplicity one. For every finite-dimensional complex semi-regular
+    representation $\sigma$, one has $\dim U_{\min}\leq\dim\sigma$.
+    Thus the representation in \cite[Section~7]{Schuch2010PEPS} is
+    smallest in dimension, including among representations without
+    a specified invariant inner product.
+\end{theorem}
+\begin{proof}\leanok
+    Choose the multiplicity-one representation from the regular Fourier
+    decomposition. The dimension bound for its distinct irreducible
+    sectors gives $\dim U_{\min}=\sum_i\dim D_i\leq\dim\sigma$.
+\end{proof}

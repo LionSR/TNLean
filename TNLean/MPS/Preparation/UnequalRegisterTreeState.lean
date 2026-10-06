@@ -47,7 +47,6 @@ the isometries `V_{ℓ_{j,p}}` of these nodes (`MPSPreparation.treeLevelsOp_appl
 
 open Matrix MPSTensor
 open scoped BigOperators
-open QuantumCircuit
 
 namespace MPSPreparation
 

@@ -219,7 +219,7 @@ theorem exists_norm_sub_inner_smul_add_le_div_sqrt [NeZero D] {A : MPSTensor d D
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     (hlt1 : ‖lam₂‖ < 1) :
     ∃ S : ℝ, 0 ≤ S ∧ ∀ (T w Δ n N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
-      QuantumCircuit.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → 0 < w → w < Δ →
+      MPSPreparation.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → 0 < w → w < Δ →
       w + 2 * T ≤ Δ → n * Δ ≤ N → 0 < n → mpvState A N ≠ 0 →
       ∀ X : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ, X.IsHermitian →
         ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) X‖ ≤ 4 →
@@ -270,7 +270,7 @@ This is the right-hand inequality of eq. `eq:ldp_depth_contradiction` in the cha
 `thm:ldp_depth_lower_bound` (the chapter's version of arXiv:2307.01696, Theorem 1). -/
 theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
     (hS : ∀ (T w Δ n N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
-      QuantumCircuit.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → 0 < w → w < Δ →
+      MPSPreparation.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → 0 < w → w < Δ →
       w + 2 * T ≤ Δ → n * Δ ≤ N → 0 < n → mpvState A N ≠ 0 →
       ∀ X : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ, X.IsHermitian →
         ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) X‖ ≤ 4 →
@@ -290,7 +290,7 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
                   Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
                   (WithLp.toLp 2 ψ)⟫_ℂ • (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ ≤
             S / Real.sqrt n)
-    {T N L s' : ℕ} [NeZero N] {ψ : Cfg d N → ℂ} (hψ : QuantumCircuit.IsPreparedInDepth T ψ)
+    {T N L s' : ℕ} [NeZero N] {ψ : Cfg d N → ℂ} (hψ : MPSPreparation.IsPreparedInDepth T ψ)
     (hψ1 : star ψ ⬝ᵥ ψ = 1) (hne : mpvState A N ≠ 0)
     {O O' : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ} (hOh : O.IsHermitian)
     (hO'h : O'.IsHermitian) (hOn : ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O‖ = 1)
@@ -340,7 +340,7 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
   obtain ⟨W, hW_def⟩ : ∃ W : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ,
       W = chainWindowOperator w 0 X * chainWindowOperator w (s' - 1) Y := ⟨_, rfl⟩
   have hcomm : Commute (chainWindowOperator w 0 X) (chainWindowOperator w (s' - 1) Y) := by
-    refine QuantumCircuit.commute_of_mem_supportedOperators ?_
+    refine MPSPreparation.commute_of_mem_supportedOperators ?_
       (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) X)
       (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) Y)
     rw [Set.disjoint_left]
@@ -422,10 +422,10 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
           ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) χ⟫_ℂ *
             ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ + (s' - 1)) Y) χ⟫_ℂ := by
       intro k
-      have hsep : QuantumCircuit.IsSeparatedBy (MPSPreparation.window N (k.val * Δ) L)
+      have hsep : MPSPreparation.IsSeparatedBy (MPSPreparation.window N (k.val * Δ) L)
           (MPSPreparation.window N (k.val * Δ + (s' - 1)) L) (2 * T) :=
         MPSPreparation.isSeparatedBy_window (by omega) (by have := hwinW k; omega)
-      have h := QuantumCircuit.expect_mul_eq_of_isPreparedInDepth hψ hψ1 hsep
+      have h := MPSPreparation.expect_mul_eq_of_isPreparedInDepth hψ hψ1 hsep
         (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (hwinL k).1
           (hwinL k).2 X)
         (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (hQwin k).1

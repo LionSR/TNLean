@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.CyclicTrace
-import TNLean.Circuit.ProductVector
+import TNLean.MPS.Core.ProductVector
 import TNLean.MPS.OpenBoundary
 
 /-!
@@ -45,7 +45,6 @@ states of the one-site tensor are the same product vector.
 
 open scoped Matrix BigOperators
 open Matrix
-open QuantumCircuit
 
 namespace MPSTensor
 

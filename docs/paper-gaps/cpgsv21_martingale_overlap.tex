@@ -15,7 +15,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The source assertion}
 
@@ -2110,8 +2110,47 @@ parent Hamiltonian. Consequently
 \leanid{MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal}
 gives the uniform gap at a suitable range $L=l+1$ for every $N$,
 without a normalization hypothesis on the tensor. The resulting constant
-need not equal the explicit Knabe coefficient. The block-injective gap
-assertion remains separate from this normal-tensor result.
+need not equal the explicit Knabe coefficient.
+
+The block-injective assertion is also proved at its prescribed admissible
+range. Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions,
+let every $\mu_j$ be nonzero, and set $B=\bigoplus_j\mu_j A^j$. Suppose that
+$S>0$ and the simultaneous length-$S$ word tuples span the product matrix
+algebra. Then, for every $R\geq S+1$, there is $\gamma_R>0$ such that
+\begin{align}
+    \gamma_R\lVert v\rVert
+      &\leq\lVert H_{N,R}^{\mathrm{ES}}(B)v\rVert
+    \label{eq:cpgsv21_martingale_overlap_block_prescribed_gap}
+\end{align}
+for every $N\in\mathbb N$ and every
+$v\perp\ker H_{N,R}^{\mathrm{ES}}(B)$. No normalization or separate
+inequivalence hypothesis is imposed on the original blocks. The declaration is
+\leanid{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}.
+Independent primitive normalization preserves $S$ and all local spaces;
+the grouped open-chain estimate and positive comparison between periodic
+interaction ranges give the gap at the original range $R$. The local
+interaction convention and this comparison are documented in
+\path{docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex}.
+
+For a canonical tensor $A$ of positive bond dimension $D$ and positive
+physical dimension, the representatives admit $S>0$ with $S+1\leq3D^5$.
+Consequently every $R\geq3D^5$ satisfies
+(\ref{eq:cpgsv21_martingale_overlap_block_prescribed_gap}) for the original
+canonical tensor, with no supplied simultaneous span. This is
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_parentHamiltonianES_uniform_gap_of_three_bondDim_pow_five_le}.
+For every fixed positive interaction $h$ on $R$ sites with $\ker h=G_R(A)$,
+there is likewise $\gamma_h>0$ such that
+\begin{align}
+    \gamma_h\lVert v\rVert
+      &\leq\lVert H_N(h)v\rVert
+    \label{eq:cpgsv21_martingale_overlap_canonical_positive_gap}
+\end{align}
+for every $N\in\mathbb N$ and every $v\perp\ker H_N(h)$. This is
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_parentInteraction_uniform_gap_of_three_bondDim_pow_five_le}.
+The constants may depend on the tensor, range, and fixed interaction, but not
+on $N$. The dimension bound is sufficient and need not be optimal. Neither
+statement removes the admissible-range condition from a claim about an
+arbitrary shorter interaction.
 
 The conditional norm-compression and operator-product branch has been
 removed.  It consisted of

@@ -158,17 +158,13 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
 /-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
 equivalent.
 
-Mathematically, a gauge-phase equivalence would identify the two compressed MPV traces.
-Through `IsCyclicSectorDecomp`, those traces are
-`tr(P u · Kraus.evalWord(blockTensor A m) w)` and
-`tr(P v · Kraus.evalWord(blockTensor A m) w)`.  The projections in a cyclic
-decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
-be related by an invertible gauge and nonzero scalar.
-
-The cyclic-sector decomposition supplies the trace formula and projection data. The
-key mathematical input is orthogonal-corner rigidity: distinct cyclic corners cannot
-be related by an invertible gauge and a nonzero scalar. -/
-private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
+Source: DCCSP17, arXiv:1708.00029, Lemma `bdcf`, lines 404--423.
+A hypothetical gauge-phase equivalence produces a nonzero peripheral
+eigenvector supported between two distinct cyclic corners. Periodicity of
+the original irreducible tensor forces this eigenvector to vanish.
+The periodicity hypothesis is essential: orthogonality of the corners alone
+does not exclude gauge-phase equivalent sectors. -/
+lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}

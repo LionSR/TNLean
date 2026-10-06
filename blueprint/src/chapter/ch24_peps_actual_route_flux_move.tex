@@ -1,0 +1,124 @@
+\begin{theorem}[Actual cycle operations and their inverses]
+\label{thm:peps_actual_bidirectional_cycle_operation}
+\lean{TNLean.PEPS.regularActualCycleDirectionalPermutation,
+TNLean.PEPS.exists_unitary_regularActualCycleBidirectionalPermutation,
+TNLean.PEPS.regularDirectedTransport_treeGauge_cycleResidual,
+TNLean.PEPS.regularActualCycleDirectionalPermutation_directedTransport,
+TNLean.PEPS.regularTreeCycleAssignment_directedTransport,
+TNLean.PEPS.regularActualTwoChordPermutation_eq_of_ne}
+\leanok
+\uses{thm:peps_actual_cycle_physical_permutation}
+In a chosen finite region with an actual spanning tree and root, a cycle
+permutation commuting with simultaneous conjugation has one original-spin
+unitary for the regular virtual action and $G$-isometric site maps. It acts on
+the coordinates derived from every actual input. Its adjoint implements the
+inverse permutation, with the same derived tree background and the literal
+exterior retained. Both statements hold on all outgoing boundary columns
+and on the actual closed contraction. A controlled two-chord permutation,
+or its inverse, retains every ordered bond other than its selected second chord.
+This auxiliary statement uses SCP10, lines 1765--1920 and Theorem~6.16,
+lines 2271--2305; the chosen tree and cycle permutation remain explicit.
+\end{theorem}
+\begin{proof}\leanok
+Recover the input from its derived gauge and residuals. Apply the uniform
+operation, and use its adjoint for the inverse action.
+Endpoint reconstruction gives the actual directed transports. The controlled
+permutation changes only the second residual.
+\end{proof}
+
+\begin{theorem}[Two-chord transport from actual vacancy]
+\label{thm:peps_actual_two_chord_transport}
+\lean{TNLean.PEPS.regularActualTwoChord_forwardTransport,
+TNLean.PEPS.regularActualTwoChord_reverseTransport}
+\leanok
+\uses{thm:peps_tree_gauge_transport,thm:peps_actual_bidirectional_cycle_operation}
+Let a five-edge spanning path have successive vertices $v_0,\ldots,v_5$,
+with remaining chords $v_0v_5$ and $v_1v_4$ having the same ordered orientation.
+Write $D_{ij}$ for the original transport from $v_i$ to $v_j$.
+If the actual loop $v_1v_2v_3v_4v_1$ is vacant, the forward operation replaces
+$D_{14}$ by $D_{45}^{-1}D_{05}D_{01}^{-1}$.
+If the actual loop $v_0v_1v_4v_5v_0$ is vacant, the inverse operation replaces
+$D_{14}$ by $D_{34}D_{23}D_{12}$.
+No gauge, residual, coefficient or state equality is assumed.
+These auxiliary calculations underlie SCP10, Theorem~6.16, lines 2271--2305.
+\end{theorem}
+\begin{proof}\leanok
+Vacancy determines the residual relation after normalization by the actual
+tree gauge. The controlled permutation then determines the middle residual.
+Reconstructing the directed coefficient and cancelling the tree gradients
+produces the stated three-transport formulas.
+\end{proof}
+
+\begin{theorem}[Fixed native operations in both axes and both directions]
+\label{thm:peps_actual_route_flux_operation}
+\lean{TNLean.PEPS.torusActualRouteFluxMove,
+TNLean.PEPS.torusActualRouteFluxReplacement,
+TNLean.PEPS.torusActualRouteFluxUpdate,
+TNLean.PEPS.torusActualRouteFluxUpdate_formula,
+TNLean.PEPS.torusActualRouteVacancy_iff,
+TNLean.PEPS.torusActualRouteFluxMove_transport_of_vacancy,
+TNLean.PEPS.torusActualRouteFluxMove_eq_update_of_vacancy,
+TNLean.PEPS.IsGIsometric.exists_unitary_torusActualRouteFluxMove,
+TNLean.PEPS.IsGIsometric.exists_unitary_torusActualRouteFluxUpdate}
+\leanok
+\uses{thm:peps_actual_two_chord_transport}
+On a finite torus with both periods at least four, choose any position and
+axis. The actual translated six-site tile supplies its spanning path, root
+and two chords. One original-spin unitary is chosen before every actual
+bond assignment, direction, boundary configuration and target-vacancy proof.
+Its forward action and adjoint action implement the actual cycle permutation
+and its inverse. If the target plaquette is vacant, these operations are
+exactly the literal shared-bond updates
+\[
+\begin{array}{c|c|c}
+\text{direction}&\text{shared bond}&\text{new transport}\\\hline
+\text{right}&\text{right upward side}&T L B^{-1}\\
+\text{up}&\text{top rightward side}&V B L^{-1}\\
+\text{left}&\text{left upward side}&T^{-1} V B\\
+\text{down}&\text{bottom rightward side}&V^{-1} T L
+\end{array}
+\]
+Here $B,V,T,L$ are the original bottom rightward, right upward,
+top rightward and left upward transports of the source plaquette.
+Every other ordered coefficient, including each exterior and crossing bond,
+is retained. Both periodic seams are included, and the ordered coefficient
+is inverted precisely when the native positive step reverses the sorted edge.
+The action holds on the actual open contraction and closed state.
+This is a finite-torus specialization of the elementary physical movement
+in SCP10, Theorem~6.16, lines 2271--2305, not the complete four-endpoint braid
+\cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+Transport the fixed six-vertex path to the actual induced tile, in either axis.
+The two parallel chords have the same sorting comparison at a seam.
+Apply the shared two-chord calculation, identify its vacancy loop with the
+actual target plaquette, and retain every unselected coefficient.
+The actual directed middle transport determines its sorted coefficient.
+Apply the original-spin cycle unitary and its adjoint to the derived input
+coordinates; the resulting assignment is therefore the literal update.
+\end{proof}
+
+\begin{theorem}[Four numbered vacant-target physical moves]
+\label{thm:peps_vacant_plaquette_physical_move}
+\lean{TNLean.PEPS.torusVacantPlaquetteMoveRegion,
+TNLean.PEPS.torusVacantPlaquetteMoveTarget,
+TNLean.PEPS.IsGIsometric.exists_unitary_torusVacantPlaquetteMove}
+\leanok
+\uses{thm:peps_actual_route_flux_operation}
+For the finite-torus route of width at least eight and height at least seven,
+number right, up, left and down by $0,1,2,3$. At every source position and
+direction there is a fixed six-spin operation implementing the literal
+update above whenever the actual clockwise target holonomy is the identity.
+The selected global operator is unitary and is the identity extension of
+the regional operation or its adjoint. It is chosen before the actual input,
+all exterior and crossing operators, every boundary configuration and the
+vacancy proof. This is the elementary-operation consequence used in SCP10,
+Section~6.6, lines 2340--2423; no complete braid is asserted here
+\cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+For leftward and downward motion, take the tile to the left or below the
+source and use the adjoint operation. Reverse the actual vacancy loop and
+substitute the literal three-transport update. Unitarity is preserved by
+adjoints and by identity extension outside the six sites.
+\end{proof}

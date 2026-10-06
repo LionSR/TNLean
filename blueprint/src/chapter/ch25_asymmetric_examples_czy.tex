@@ -13,7 +13,9 @@ periodic chains. This section reads these statements through the
 multi-block asymmetric compression theorem
 (Theorem~\ref{thm:asym_multiblock}). The associator of the fusion
 tensors, $\omega(1,1,1)=-1$ in~\cite[Section~II]{Liu2025Bialgebraic},
-is not treated here.
+is proved below. The unrestricted scalar relation on the full virtual
+space is corrected to a relation on the physical images, as explained
+in~\cite{gap:lmsvkl25_czy_associator}.
 
 The first physical index is the output and the second the input, as in
 the source. For a word $w$ in the index pairs, $B^w$ denotes the product
@@ -356,10 +358,6 @@ on every ring of $N\geq1$ sites, to the identity:
     not closed under conjugate transposition, and in particular it is a
     proper subalgebra of the $3\times3$ matrices. In particular $A_0$ is
     not injective, as stated in~\cite[Section~II]{Liu2025Bialgebraic}.
-    The further statement there that $A_0$ does not decompose into a
-    direct sum of injective matrix product operators concerns arbitrary
-    decompositions; the assertions above exclude only compressions onto
-    $\delta$ with zero remainder.
 \end{theorem}
 
 \begin{proof}
@@ -370,6 +368,37 @@ on every ring of $N\geq1$ sites, to the identity:
     The remaining assertions follow as in
     Theorem~\ref{thm:asymex_czy_no_intertwiner}; the full matrix algebra is
     closed under conjugate transposition.
+\end{proof}
+
+
+\begin{theorem}[Indecomposability of the reduced virtual space]
+    \label{thm:asymex_czy_reduced_indecomposable}
+    \lean{CZYCompression.czyReduced_commutant_form,
+        CZYCompression.czyReduced_commuting_idempotent,
+        CZYCompression.czyReduced_invariant_isCompl}
+    \leanok
+    \uses{def:asymex_czy_reduced, thm:asymex_czy_reduced_nonsplit}
+    Every matrix commuting with $A_0^{00}$ and $A_0^{11}$ has the form
+    $aI+bE_{13}$. The only idempotents in this commutant are $0$ and $I$.
+    Consequently, if $\mathbb C^3=V\oplus W$ and both summands are invariant
+    under the letters of $A_0$, then $V=0$ or $W=0$.
+    In particular, no simultaneous bond similarity decomposes $A_0$ into
+    a direct sum of injective matrix product operators, as asserted
+    in~\cite[Section~II]{Liu2025Bialgebraic}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Comparing the entries of $PA_0^{00}=A_0^{00}P$ and
+    $PA_0^{11}=A_0^{11}P$ gives $P=aI+bE_{13}$.
+    Since $E_{13}^2=0$, the equation $P^2=P$ gives $a^2=a$ and $2ab=b$.
+    Thus $a\in\{0,1\}$ and $b=0$.
+    For an invariant decomposition $V\oplus W$, the projection onto $V$
+    along $W$ commutes with every letter and is idempotent. Its range is
+    therefore zero or the whole space.
+    Any nontrivial direct sum of injective blocks would give such an
+    invariant decomposition; a single injective block is excluded by
+    Theorem~\ref{thm:asymex_czy_reduced_nonsplit}.
 \end{proof}
 
 \begin{theorem}[A one-sided fusion identity]
@@ -431,3 +460,76 @@ west of two stacked copies of $A_0$ to the east of one copy:
         \tnwire{Y.0@1}{open e} \tnwire{Y.0@2}{open e}
     \end{tenkz}
 \end{center}
+
+
+\begin{definition}[Printed fusion maps for the nontrivial element]
+    \label{def:asymex_czy_printed_fusions}
+    \lean{CZYCompression.czyY11, CZYCompression.czyY01, CZYCompression.czyY10,
+        CZYCompression.czyY11_eq_submatrix}
+    \leanok
+    \uses{def:asymex_czy_reduced, thm:asymex_czy_printed_reduction}
+    As in~\cite[Appendix~B]{Liu2025Bialgebraic}, $Y_{1,1}$ is the first
+    three rows of $X_{1,1}$, and
+    \begin{align}
+        Y_{0,1}&=\begin{pmatrix}0&0&1&0&0&-1\\0&0&0&1&-1&0\end{pmatrix},&
+        Y_{1,0}&=\begin{pmatrix}0&1&0&0&0&1\\0&0&1&0&1&0\end{pmatrix}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Local fusion and the nontrivial triple]
+    \label{thm:asymex_czy_nontrivial_associator}
+    \lean{CZYCompression.czyY01_fusion, CZYCompression.czyY10_fusion,
+        CZYCompression.czyY11_fusion, CZYCompression.czyFusion_nontrivial_triple}
+    \leanok
+    \uses{def:asymex_czy_printed_fusions}
+    The printed maps satisfy
+    $Y_{a,b}\sum_j A_a^{ij}\otimes A_b^{jk}=A_{a+b}^{ik}Y_{a,b}$
+    for $(a,b)=(0,1),(1,0),(1,1)$.
+    At the nontrivial triple,
+    $Y_{0,1}(Y_{1,1}\otimes I_2)=-Y_{1,0}(I_2\otimes Y_{1,1})$,
+    with the normalization of~\cite[Section~II]{Liu2025Bialgebraic}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Substitute the displayed matrices and the letters of $A_0,A_1$.
+    Each equality is a finite matrix identity; the common factor
+    $1/\sqrt2$ cancels from the triple comparison.
+\end{proof}
+
+\begin{theorem}[Associativity on the physical images]
+    \label{thm:asymex_czy_supported_associativity}
+    \lean{CZYCompression.czyDim, CZYCompression.czyFamilyInt,
+        CZYCompression.czyFusionInt, CZYCompression.czyTripleInt,
+        CZYCompression.czyLeftInt, CZYCompression.czyRightInt,
+        CZYCompression.czyFusion_supported_associativity_int,
+        CZYCompression.czyFusion_supported_associativity,
+        CZYCompression.czyFusion_supported_associativity_word,
+        CZYCompression.czyFusion_printed_neutral_no_scalar}
+    \leanok
+    \uses{thm:asymex_czy_nontrivial_associator, thm:asymex_czy_fusion}
+    Put $F_{0,0}=Y_{0,0}$, $F_{0,1}=2Y_{0,1}$,
+    $F_{1,0}=2Y_{1,0}$ and $F_{1,1}=2\sqrt2Y_{1,1}$.
+    For $a,b,c\in\mathbb Z_2$, define
+    $T^{ik}=\sum_{j,l}A_a^{ij}\otimes A_b^{jl}\otimes A_c^{lk}$,
+    $L=F_{a+b,c}(F_{a,b}\otimes I_c)$ and
+    $R=F_{a,b+c}(I_a\otimes F_{b,c})$, identifying both bond orders.
+    Then $LT^{ik}=(-1)^{abc}RT^{ik}$ for every physical pair $(i,k)$.
+    More generally, $LT^{p_1}\cdots T^{p_n}=(-1)^{abc}RT^{p_1}\cdots T^{p_n}$
+    for every nonempty physical word.
+    This is the corrected relation on the physical images
+    of~\cite{gap:lmsvkl25_czy_associator}.
+    On the full virtual space the printed neutral fusions admit no
+    scalar comparison: the entry in row one and column $(3,3,1)$ is two
+    on the left and zero on the right.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For the chosen normalization all matrices are integral. Direct
+    multiplication proves the identity for the eight group triples and
+    the four physical pairs. Multiplication on the right by the
+    remaining letters gives the nonempty-word identity.
+    The specified entry proves the full-space obstruction.
+\end{proof}

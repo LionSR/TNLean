@@ -65,7 +65,6 @@ and the leaves of all the blocks by one local circuit
 
 open Matrix MPSTensor
 open scoped BigOperators
-open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -678,6 +677,33 @@ theorem exists_rounds_blockLayerOp_treeLevelsOp [NeZero d] {K : ℕ}
   obtain ⟨m, hm, hm1, hm2, rfl⟩ := mem_interior_treeRegGate hj p.isLt hx
   have := nodeStop_le (h := h) (w := w b) (by omega : j ≤ h + 1) p.isLt
   exact ⟨b, _, by simp only; omega, by simp only; omega, rfl⟩
+
+omit [NeZero s] in
+/-- A product of pair products placed on pairwise disjoint windows of consecutive sites is a
+local circuit of depth `K`. -/
+theorem isCircuitOn_list_prod_embedOp {ι : Type*} {m : ι → ℕ} {K : ℕ}
+    (e : ∀ i, Fin (m i) → Fin N) (Y : ∀ i, Matrix (Cfg d (m i)) (Cfg d (m i)) ℂ)
+    (he : ∀ i, Function.Injective (e i))
+    (hsucc : ∀ i (a a' : Fin (m i)), a'.val = a.val + 1 → e i a' = e i a + 1)
+    (hY : ∀ i, IsPairProduct d (m i) K (Y i)) :
+    ∀ l : List ι, l.Pairwise (fun i i' => Disjoint (Set.range (e i)) (Set.range (e i'))) →
+      IsCircuitOn {x | ∃ i ∈ l, x ∈ Set.range (e i)} K
+        ((l.map fun i => embedOp (e i) (Y i)).prod)
+  | [], _ => by
+    simpa using IsCircuitOn.one (d := d) ({x | ∃ i ∈ ([] : List ι), x ∈ Set.range (e i)}) K
+  | i :: l, hl => by
+    rw [List.pairwise_cons] at hl
+    have h₁ := (hY i).isCircuitOn (he i) (hsucc i)
+    have h₂ := isCircuitOn_list_prod_embedOp e Y he hsucc hY l hl.2
+    have hdisj : Disjoint (Set.range (e i)) {x | ∃ i' ∈ l, x ∈ Set.range (e i')} := by
+      rw [Set.disjoint_left]
+      rintro x hx ⟨i', hi', hx'⟩
+      exact Set.disjoint_left.mp (hl.1 i' hi') hx hx'
+    rw [List.map_cons, List.prod_cons]
+    refine (h₁.par hdisj h₂).mono_set fun x hx => ?_
+    rcases hx with hx | ⟨i', hi', hx⟩
+    · exact ⟨i, List.mem_cons_self, hx⟩
+    · exact ⟨i', List.mem_cons_of_mem _ hi', hx⟩
 
 /-- **The leaves of all the blocks by one local circuit.** If every unitary of the leaves is a
 product of at most `K` gates on neighbouring sites, the leaves of all the blocks form a local

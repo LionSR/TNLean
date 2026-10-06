@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.SharedInfra.BlockGauge
+import TNLean.MPS.SharedInfra.BlockInclusionResolution
 import TNLean.MPS.SharedInfra.BlockIsometryAssembly
 import TNLean.MPS.SharedInfra.BoundaryDecomposition
 import TNLean.MPS.SharedInfra.CoisometryGauge

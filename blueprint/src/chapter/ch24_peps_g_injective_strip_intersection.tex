@@ -1,0 +1,127 @@
+\section{Intersection of local boundary spaces along a strip}%
+\label{sec:peps_g_injective_strip_intersection}
+
+\begin{lemma}[Averaged left inverse of an invariant MPS tensor]%
+    \label{lem:peps_mps_g_injective_averaged_left_inverse}
+    \lean{TNLean.PEPS.IsGInjective.exists_mpsLeftInverse}
+    \leanok
+    \uses{def:peps_mps_g_injective}
+    If $A$ is $G$-injective for a representation $\rho$ of a finite
+    group on a finite-dimensional virtual space, then
+    $\rho(g)A^i\rho(g)^{-1}=A^i$ and there is a linear map $L_A$
+    from physical vectors to virtual operators such that
+    \[
+        L_A\mathcal P(A)=\sigma,\qquad
+        \sigma(X)=|G|^{-1}\sum_g\rho(g)X\rho(g)^{-1}.
+    \]
+    This is \cite[Definition~4.2 and Lemma~4.7]{Schuch2010PEPS}
+    with the left inverse extended by group averaging.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_left_inverse,
+        thm:peps_mps_g_injective_source_form}
+    Apply the averaged left-inverse characterization of $G$-injectivity.
+    Invariance of the trace-pairing map is equivalent to conjugation
+    invariance of its tensor coefficients.
+\end{proof}
+
+\begin{definition}[Lifted strip boundary spaces]%
+    \label{def:peps_g_injective_strip_spaces}
+    \lean{TNLean.PEPS.stripLeftSlice,
+        TNLean.PEPS.stripRightSlice,
+        TNLean.PEPS.stripLeftGroundSpace,
+        TNLean.PEPS.stripRightGroundSpace,
+        TNLean.PEPS.mem_stripLeftGroundSpace_iff,
+        TNLean.PEPS.mem_stripRightGroundSpace_iff}
+    \leanok
+    Let $A^i,B^j,C^k$ be operator-valued tensors on a common
+    finite-dimensional virtual space $\mathcal V$, with independent
+    physical alphabets. Write
+    \[
+        \mathcal G_{AB}
+          =\{(\operatorname{tr}[A^iB^jX])_{ij}:X\in\operatorname{End}\mathcal V\},
+        \qquad
+        \mathcal G_{BC}
+          =\{(\operatorname{tr}[B^jC^kX])_{jk}:X\in\operatorname{End}\mathcal V\}.
+    \]
+    Define $\mathcal L$ to consist of three-block vectors whose every
+    fixed-$k$ slice belongs to $\mathcal G_{AB}$, and $\mathcal R$
+    to consist of those whose every fixed-$i$ slice belongs to
+    $\mathcal G_{BC}$. Thus
+    \[
+        \mathcal L=\mathcal G_{AB}\otimes\mathcal P_C,
+        \qquad
+        \mathcal R=\mathcal P_A\otimes\mathcal G_{BC}.
+    \]
+    These are the actual local boundary spaces with the unused physical
+    factor unrestricted, as in \cite[Theorem~4.8]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Inhomogeneous strip intersection]%
+    \label{thm:peps_g_injective_strip_intersection}
+    \lean{TNLean.PEPS.IsGInjective.strip_intersection_property_of_invariant_left,
+        TNLean.PEPS.IsGInjective.strip_groundSpace_intersection_of_invariant_left,
+        TNLean.PEPS.IsGInjective.strip_groundSpace_intersection}
+    \leanok
+    \uses{def:peps_g_injective_strip_spaces,def:peps_mps_g_injective}
+    Suppose a finite group acts on $\mathcal V$ through $\rho$, the
+    middle and right blocks $B,C$ are $G$-injective, and the left block
+    satisfies $\rho(g)A^i\rho(g)^{-1}=A^i$. Then
+    \[
+        \mathcal L\cap\mathcal R
+          =\{(\operatorname{tr}[A^iB^jC^kX])_{ijk}
+                :X\in\operatorname{End}\mathcal V\}.
+    \]
+    In particular this holds when all three blocks are $G$-injective.
+    The endpoints may have different tensors and physical alphabets.
+    This is the matrix-valued strip argument used in
+    \cite[Theorems~4.8 and~5.4]{Schuch2010PEPS}; identifying an arbitrary
+    graph's regional open contractions with these strip maps is a
+    separate geometric step.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_mps_g_injective_left_inverse_traces,
+        lem:peps_mps_g_injective_averaged_left_inverse,
+        lem:peps_mps_g_injective_twirl,
+        thm:peps_mps_g_injective_concatenation}
+    A vector in the intersection has representations
+    $\psi_{ijk}=\operatorname{tr}[A^iB^jM^k]
+       =\operatorname{tr}[N^iB^jC^k]$.
+    Apply the left inverse of the middle-right block. If $L_C$ is
+    the left inverse of $C$ and $\sigma$ is group averaging on virtual
+    operators, this gives
+    \[
+        \sigma(N^i)=XA^i,
+        \qquad
+        X=|G|\sum_k L_C|k\rangle\,\Delta\,\sigma(M^k).
+    \]
+    The invariant middle-right tensor permits replacing $N^i$ by
+    $\sigma(N^i)$ in its trace pairing. Cyclicity of the trace then
+    gives the three-block representation. Conversely, a three-block
+    boundary $X$ gives $M^k=C^kX$ and $N^i=XA^i$.
+\end{proof}
+
+\begin{corollary}[Unique invariant boundary and intersection dimension]%
+    \label{cor:peps_g_injective_strip_boundary}
+    \lean{TNLean.PEPS.IsGInjective.existsUnique_invariant_boundary_of_mem_strip_intersection,
+        TNLean.PEPS.IsGInjective.finrank_strip_groundSpace_intersection}
+    \leanok
+    \uses{thm:peps_g_injective_strip_intersection}
+    If all three blocks are $G$-injective and all physical alphabets
+    are finite, every vector in $\mathcal L\cap\mathcal R$ has a unique
+    boundary operator $X$ commuting with $\rho(G)$. Consequently
+    \[
+        \dim(\mathcal L\cap\mathcal R)
+          =\dim\operatorname{End}(\mathcal V)^G.
+    \]
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:peps_mps_g_injective_concatenation,
+        thm:peps_g_injective_invariants_range}
+    Concatenation makes the three-block map $G$-injective. It therefore
+    identifies the invariant virtual operator space with its physical
+    range. Apply the intersection theorem.
+\end{proof}

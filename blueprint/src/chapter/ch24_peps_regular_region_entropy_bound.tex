@@ -1,0 +1,86 @@
+\begin{definition}[Normalized physical regional density]%
+    \label{def:peps_normalized_region_reduced_density}
+    \lean{TNLean.PEPS.normalizedRegionReducedDensity}
+    \leanok
+    \uses{def:peps_region_reduced_density}
+    For a nonzero closed PEPS vector, write
+    $\widehat\rho_R=\rho_R/\operatorname{tr}\rho_R$ for its normalized
+    physical reduced density. The trace is positive for every region.
+    The normalized density is positive semidefinite, has trace one,
+    and has the same range and rank as $\rho_R$.
+\end{definition}
+
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.trace_regionReducedDensity_pos_of_stateCoeff_ne_zero,
+        TNLean.PEPS.normalizedRegionReducedDensity_properties,
+        TNLean.PEPS.range_normalizedRegionReducedDensity_eq}
+    \uses{thm:peps_region_reduced_density_support}
+    The physical coefficient matrix $M_R$ is nonzero because assembly
+    identifies its entries with the coefficients of the closed vector.
+    Thus $\operatorname{tr}(M_RM_R^*)>0$. Division by this trace preserves
+    positivity, rank, and range and makes the trace equal to one.
+\end{proof}
+
+\begin{theorem}[Normalized regular support and local annihilators]%
+    \label{thm:peps_normalized_regular_region_support}
+    \lean{TNLean.PEPS.range_normalizedRegionReducedDensity_of_regular_connected_cut,
+        TNLean.PEPS.mul_normalizedRegionReducedDensity_eq_zero_iff_of_regular_connected_cut,
+        TNLean.PEPS.IsRegionParentInteraction.mul_normalizedRegionReducedDensity_eq_zero}
+    \leanok
+    \uses{def:peps_normalized_region_reduced_density,
+        def:peps_region_ground_space, def:peps_g_injective}
+    Consider regular $G$-injective tensors on a finite graph and a cut
+    whose two induced subgraphs are connected and whose boundary is
+    nonempty. Then
+    $\operatorname{ran}\widehat\rho_R=\mathcal G_R$. In particular, for
+    every local linear operator $h$,
+    \[
+        h\widehat\rho_R=0
+        \quad\Longleftrightarrow\quad
+        \mathcal G_R\subseteq\ker h.
+    \]
+    Every regional parent interaction annihilates this normalized
+    density. Positivity of $h$ is not needed for the displayed
+    equivalence.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_support,
+        thm:peps_regular_region_dimension}
+    The closed vector is nonzero. Normalization preserves the range,
+    which is $\mathcal G_R$. The identity $h\widehat\rho_R=0$ means
+    precisely that this range is contained in the kernel of $h$.
+\end{proof}
+
+\begin{theorem}[Entropy bound for a regular G-injective cut]%
+    \label{thm:peps_regular_region_entropy_bound}
+    \lean{TNLean.PEPS.normalizedRegionReducedDensity_properties_of_regular_connected_cut,
+        TNLean.PEPS.entropy_normalizedRegionReducedDensity_of_regular_connected_cut}
+    \leanok
+    \uses{def:peps_normalized_region_reduced_density, def:peps_g_injective}
+    Let regular $G$-injective tensors define a PEPS on a finite graph.
+    Suppose that both induced subgraphs of a cut are connected and
+    that the cut has $n+1$ crossing bonds. Then the closed vector is
+    nonzero and its normalized physical reduced density satisfies
+    \[
+        \operatorname{rank}\widehat\rho_R=|G|^n,
+        \qquad
+        0\leq S(\widehat\rho_R)\leq n\log|G|,
+        \qquad
+        S_0(\widehat\rho_R)=n\log|G|.
+    \]
+    Here $S$ is the von Neumann entropy and $S_0$ is the zero-order
+    R\'enyi entropy, with natural logarithms. Neither isometry nor
+    flatness of the physical spectrum is assumed. This is an
+    auxiliary connected regular-cut consequence of the boundary
+    calculation in \cite[Corollary~6.10]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_dimension,
+        def:peps_normalized_region_reduced_density}
+    Normalization preserves the invariant boundary rank $|G|^n$.
+    The von Neumann entropy of a positive trace-one matrix lies
+    between zero and the logarithm of its rank. The zero-order
+    R\'enyi entropy is that logarithm by definition.
+\end{proof}

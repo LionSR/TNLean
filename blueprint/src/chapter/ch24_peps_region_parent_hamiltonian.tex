@@ -1,0 +1,115 @@
+\section{Parent Hamiltonians on finite PEPS graphs}%
+\label{sec:peps_region_parent_hamiltonian}
+
+The construction of \cite[Section~IV.C.1]{Cirac2021Matrix}, local source
+lines 2003--2011, applies to arbitrary finite graphs and site-dependent
+tensors. Different interaction terms may act on different regions.
+
+\begin{definition}[Regional parent interaction]%
+    \label{def:peps_region_parent_interaction}
+    \lean{TNLean.PEPS.IsRegionParentInteraction}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    A parent interaction on a region $R$ is a positive semidefinite
+    operator $h_R$ on its physical space satisfying
+    $\ker h_R=\mathcal G_R$. It need not be an orthogonal projector.
+\end{definition}
+
+\begin{theorem}[Canonical regional parent interaction]%
+    \label{thm:peps_canonical_region_interaction}
+    \lean{TNLean.PEPS.regionGroundSpaceES,
+        TNLean.PEPS.canonicalRegionParentInteraction,
+        TNLean.PEPS.canonicalRegionParentInteraction_posSemidef,
+        TNLean.PEPS.ker_canonicalRegionParentInteraction,
+        TNLean.PEPS.isRegionParentInteraction_canonical}
+    \leanok
+    \uses{def:peps_region_parent_interaction}
+    The orthogonal projector onto $\mathcal G_R^\perp$ is a regional
+    parent interaction.
+\end{theorem}
+
+\begin{proof}\leanok
+    Orthogonal projections are positive semidefinite, and the kernel
+    of the projector onto $\mathcal G_R^\perp$ is
+    $\mathcal G_R^{\perp\perp}=\mathcal G_R$.
+\end{proof}
+
+\begin{definition}[Parent Hamiltonian of a finite family of regions]%
+    \label{def:peps_region_parent_hamiltonian}
+    \lean{TNLean.PEPS.regionConfigEquiv,
+        TNLean.PEPS.regionLocalTerm,
+        TNLean.PEPS.regionSliceMap,
+        TNLean.PEPS.regionParentGroundSpace,
+        TNLean.PEPS.regionParentHamiltonian}
+    \leanok
+    \uses{def:peps_region_parent_interaction}
+    Let $(R_i)_{i\in I}$ be a finite family of regions, and let $h_i$
+    be a parent interaction on $R_i$. Its extension to the full graph
+    and the parent Hamiltonian are
+    \begin{align}
+        \widetilde h_i&=h_i\otimes\mathbb 1_{R_i^c},
+        \label{eq:peps_parent_extension}\\
+        H&=\sum_{i\in I}\widetilde h_i.
+        \label{eq:peps_parent_sum}
+    \end{align}
+    The corresponding space of regional boundary conditions is
+    \begin{align}
+        \mathcal K
+          &=\{\phi: \phi(\cdot,\tau)\in\mathcal G_{R_i}
+                 \text{ for every }i\in I
+                 \text{ and every complementary configuration }\tau\}.
+        \label{eq:peps_parent_common_kernel}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Positivity and the common kernel]%
+    \label{thm:peps_region_parent_common_kernel}
+    \lean{TNLean.PEPS.regionLocalTerm_posSemidef,
+        TNLean.PEPS.regionLocalTerm_mulVec_assemble,
+        TNLean.PEPS.regionLocalTerm_mulVec_eq_zero_iff,
+        TNLean.PEPS.regionParentHamiltonian_posSemidef,
+        TNLean.PEPS.regionParentHamiltonian_mulVec_eq_zero_iff,
+        TNLean.PEPS.ker_regionParentHamiltonian}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    The parent Hamiltonian is positive semidefinite and satisfies
+    \begin{align}
+        \ker H&=\bigcap_{i\in I}\ker\widetilde h_i=\mathcal K.
+        \label{eq:peps_parent_kernel}
+    \end{align}
+    Thus its kernel depends only on the regional PEPS spaces, rather
+    than on the choice of positive interactions with those kernels.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity is preserved by tensoring with the identity and by
+    finite sums. For each fixed complementary configuration $\tau$,
+    (\ref{eq:peps_parent_extension}) acts on the slice
+    $\phi(\cdot,\tau)$ as $h_i$. Finally,
+    $\langle\phi,H\phi\rangle=\sum_i
+      \langle\phi,\widetilde h_i\phi\rangle$ is a sum of nonnegative
+    numbers. If $H\phi=0$, each summand is zero, and positivity gives
+    $\widetilde h_i\phi=0$. The converse follows by summing.
+\end{proof}
+
+\begin{theorem}[Frustration freeness of the represented PEPS]%
+    \label{thm:peps_region_parent_frustration_free}
+    \lean{TNLean.PEPS.regionLocalTerm_stateCoeff_eq_zero,
+        TNLean.PEPS.stateCoeff_mem_regionParentGroundSpace,
+        TNLean.PEPS.regionParentHamiltonian_stateCoeff_eq_zero}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian,
+        thm:peps_region_ground_space_slice}
+    The closed PEPS vector $\psi$ satisfies
+    $\widetilde h_i\psi=0$ for every $i\in I$, and hence $H\psi=0$.
+    Whenever $\psi\ne0$, it is a ground state of this positive
+    Hamiltonian, and it minimizes every local term simultaneously.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_ground_space_slice,
+        thm:peps_region_parent_common_kernel}
+    Every complementary slice of $\psi$ belongs to the regional
+    PEPS ground space. Therefore every extended interaction kills
+    $\psi$, and their sum does as well.
+\end{proof}

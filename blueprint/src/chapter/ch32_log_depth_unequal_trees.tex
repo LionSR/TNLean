@@ -67,7 +67,7 @@ configurations of the $n$ sites.
     \lean{MPSPreparation.registerLayersOp,
         MPSPreparation.exists_rounds_registerLayersOp}
     \leanok
-    \uses{thm:qc_register_layer, lem:qc_round_implementation_compose}
+    \uses{thm:ldp_register_layer, lem:ldp_round_implementation_compose}
     Let $G_0,\dots,G_{m-1}$ be lists of register gates, the gates of each list
     with pairwise disjoint stretches, such that no register of a gate of $G_{j'}$
     lies in the interior of a gate of $G_j$ for $j'<j$, and every matrix of a
@@ -78,11 +78,11 @@ configurations of the $n$ sites.
 \end{theorem}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:qc_register_layer} each list is applied in depth
+    By Theorem~\ref{thm:ldp_register_layer} each list is applied in depth
     $4s+K+2$ on the vectors with $\ket0$ at the interiors of its gates. The
     gates of $G_{j'}$ act on their registers only, which lie outside the
     interiors of the later lists, so they keep $\ket0$ there. Induction on the
-    number of lists and Lemma~\ref{lem:qc_round_implementation_compose}.
+    number of lists and Lemma~\ref{lem:ldp_round_implementation_compose}.
 \end{proof}
 
 \begin{definition}[Tree layout of a block]
@@ -140,11 +140,11 @@ configurations of the $n$ sites.
         MPSPreparation.registerLayersOp_treeLevelGates,
         MPSPreparation.treeCentralSites,
         MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp,
+        MPSPreparation.isCircuitOn_list_prod_embedOp,
         MPSPreparation.isCircuitOn_blockLayerOp_treeLeafOp}
     \leanok
     \uses{def:ldp_tree_layout, thm:ldp_register_layers,
-        thm:ldp_register_tree_rounds, def:qc_local_circuit,
-        lem:qc_parallel_circuits}
+        thm:ldp_register_tree_rounds, def:ldp_local_circuit}
     Cut a ring into blocks, each with a tree layout with $h+1$ coarse depths, and
     let a unitary $X_{j,p}$ on $2s$ sites act on the two registers of the node
     $p$ of depth $j\le h$ of every block. If every $X_{j,p}$ is a product of at
@@ -254,8 +254,8 @@ configurations of the $n$ sites.
     \uses{thm:ldp_unequal_tree_isometry, thm:ldp_unequal_tree_rounds,
         lem:ldp_balanced_widths, def:ldp_block_isometry_state,
         thm:ldp_approximating_state_depth,
-        thm:qc_bounded_unitary_two_site_gates, def:qc_measurement_rounds,
-        lem:qc_round_implementation_compose}
+        thm:ldp_bounded_unitary_two_site_gates, def:ldp_measurement_rounds,
+        lem:ldp_round_implementation_compose}
     For every $s\ge2$ and $c$ there is $C$, depending only on $d$, $s$ and $c$,
     with the following property. Let $A$ be a tensor whose blocked tensors over
     $m\ge s$ sites are injective, and $\omega$ a unit vector on the pair space.
@@ -278,7 +278,7 @@ configurations of the $n$ sites.
     state; Theorem~\ref{thm:ldp_unequal_tree_rounds} applies the depths
     $0,\dots,h$ of the trees with the unitaries of
     Theorem~\ref{thm:ldp_unequal_tree_isometry}; and a local circuit of
-    bounded depth, by Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} for
+    bounded depth, by Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} for
     the boundedly many lengths of the leaves, applies the leaves in one round.
     The output is the state of the blocks as in
     Theorem~\ref{thm:ldp_approximating_state_depth}.
@@ -289,7 +289,7 @@ configurations of the $n$ sites.
     \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero,
         MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
     \leanok
-    \uses{def:qc_measurement_rounds}
+    \uses{def:ldp_measurement_rounds}
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
     for every $N\ge2$ and $0<\varepsilon\le1$ for which the periodic state
     $\ket{\phi_N(A)}$ is nonzero, a unit vector $\ket\psi$ with
@@ -309,7 +309,7 @@ configurations of the $n$ sites.
         thm:normalized_primitive_gauge, lem:ldp_normalized_state_rescaling,
         lem:ldp_periodic_state_nonzero,
         lem:ldp_approximating_state_unit_norm,
-        lem:qc_measurement_rounds_outputs, lem:qc_measurement_unitary_case}
+        lem:ldp_measurement_rounds_outputs, lem:ldp_measurement_unitary_case}
     Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}), which multiplies
     $\ket{\phi_N}$ by a nonzero scalar, with a bound $t<1$ on the moduli of the
     subleading eigenvalues, $r=-\tfrac14\log t$, and an injectivity length $L$;

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.DepthUpperBound
-import TNLean.Circuit.Teleportation.RegisterGates
+import TNLean.MPS.Preparation.RegisterGates
 
 /-!
 # Binary trees of gates on registers in depth `O(k)` with measurements
@@ -13,7 +13,7 @@ The tree-RG circuit of arXiv:2307.01696, eq. (16), applies to every block of the
 tree of isometries; above the lowest level each isometry maps a register carrying `ℂ^{D²}` to
 two such registers. This file places such trees on blocks of `q = s 2^{k+1}` sites with
 registers of `s` sites and proves, with the register gates of
-`TNLean.Circuit.Teleportation.RegisterGates`, that the trees of all the blocks are applied with
+`TNLean.MPS.Preparation.RegisterGates`, that the trees of all the blocks are applied with
 measurements in depth `(k + 1)(4s + K + 2)`, if every node is a product of at most `K` gates
 on neighbouring sites.
 
@@ -34,7 +34,7 @@ On the ring of `N` sites cut into `M` blocks of `q` sites, the unitaries of dept
 the blocks are register gates on pairwise disjoint stretches (`MPSPreparation.regLevelGates`),
 and the unitaries of depth `j' < j` act on no site strictly between the two registers of a
 unitary of depth `j`. So the depths are applied one after the other, each in depth
-`4s + K + 2` (`QuantumCircuit.RegisterGate.exists_rounds`), on the vectors with `|0⟩` at every
+`4s + K + 2` (`MPSPreparation.RegisterGate.exists_rounds`), on the vectors with `|0⟩` at every
 site of every block other than its first and its last `s` sites
 (`MPSPreparation.exists_rounds_blockLayerOp_regTreeOp`).
 
@@ -61,13 +61,38 @@ site of every block other than its first and its last `s` sites
 
 open Matrix MPSTensor
 open scoped BigOperators
-open QuantumCircuit
 
 namespace MPSPreparation
 
 open Fin.NatCast
 
 variable {d s : ℕ}
+
+/-! ### Placed operators -/
+
+/-- Placing an operator placed by `e` with an injective `f` places it by `f ∘ e`. -/
+theorem embedOp_embedOp {m n n' : ℕ} {f : Fin n → Fin n'} (hf : Function.Injective f)
+    (e : Fin m → Fin n) (X : Matrix (Cfg d m) (Cfg d m) ℂ) :
+    embedOp f (embedOp e X) = embedOp (f ∘ e) X := by
+  ext x y
+  simp only [embedOp_apply]
+  have h : AgreeOff (f ∘ e) x y ↔ AgreeOff f x y ∧ AgreeOff e (x ∘ f) (y ∘ f) := by
+    constructor
+    · intro h
+      refine ⟨fun i hi => h i fun j hj => hi (e j) hj, fun j hj => h (f j) fun j' hj' => ?_⟩
+      exact hj j' (hf hj')
+    · rintro ⟨h₁, h₂⟩ i hi
+      by_cases hif : ∃ j, f j = i
+      · obtain ⟨j, rfl⟩ := hif
+        exact h₂ j fun j' hj' => hi j' (by rw [Function.comp_apply, hj'])
+      · exact h₁ i fun j hj => hif ⟨j, hj⟩
+  by_cases h₁ : AgreeOff f x y
+  · by_cases h₂ : AgreeOff e (x ∘ f) (y ∘ f)
+    · simp only [h₁, h₂, h.mpr ⟨h₁, h₂⟩, ↓reduceIte]; rfl
+    · have h₃ : ¬ AgreeOff (f ∘ e) x y := fun h' => h₂ (h.mp h').2
+      simp only [h₁, h₂, h₃, ↓reduceIte]
+  · have h₃ : ¬ AgreeOff (f ∘ e) x y := fun h' => h₁ (h.mp h').1
+    simp only [h₁, h₃, ↓reduceIte]
 
 /-! ### Layers on blocks -/
 

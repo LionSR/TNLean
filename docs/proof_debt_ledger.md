@@ -1054,9 +1054,9 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## D18. One-site long-range gates and register gates kept as two layer stacks  —  duplication, impact 3/10, effort 4/10
 - **Status**: open (recorded in the review of #8492)
-- **Evidence**: `QuantumCircuit.RegisterGate` at `s = 1`
-  (`Circuit/Teleportation/RegisterGates.lean`) is the same object as
-  `QuantumCircuit.LongRangeGate` (`Circuit/Teleportation/LongRangeGates.lean`): a
+- **Evidence**: `MPSPreparation.RegisterGate` at `s = 1`
+  (`MPS/Preparation/RegisterGates.lean`) is the same object as
+  `MPSPreparation.LongRangeGate` (`MPS/Preparation/LongRangeGates.lean`): a
   gate on the sites `a` and `a + 2L + 1`, with the same stretch, interior and
   zone, applied by a forward chain, a local gate and a backward chain. Both
   files carry the layer machinery (all-gate chain lists, site-permutation

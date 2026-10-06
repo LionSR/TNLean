@@ -21,9 +21,11 @@ import TNLean.MPS.Core.LetterScaledNormality
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Core.MultiBlockWord
 import TNLean.MPS.Core.NormalityFromTwoWords
+import TNLean.MPS.Core.PhysicalDimension
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.PhysicalRotation
+import TNLean.MPS.Core.ProductVector
 import TNLean.MPS.Core.ProjectionTriangularTrace
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionBlocking

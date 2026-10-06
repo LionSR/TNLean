@@ -228,6 +228,19 @@
     eigenvector, which is a contradiction.
 \end{proof}
 
+\begin{lemma}[A periodic tensor has positive physical dimension]
+    \label{lem:periodic_physical_dimension_pos}
+    \lean{MPSTensor.IsPeriodic.physDim_ne_zero}
+    \leanok
+    \uses{def:periodic_tensor,thm:periodic_bond_dimension_pos}
+    If $A$ is a normalized periodic tensor, then $d\geq1$.
+\end{lemma}
+\begin{proof}\leanok
+    If $d=0$, the left-canonical sum is zero. This contradicts its being
+    the identity matrix on a bond space of positive dimension.
+    \uses{thm:periodic_bond_dimension_pos}
+\end{proof}
+
 \begin{definition}[Irreducible form]
     \label{def:irreducible_form}
     \lean{MPSTensor.IsIrreducibleForm}

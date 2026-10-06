@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.Teleportation.LongRangeGates
-import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.Preparation.LongRangeGates
 
 /-!
 # Binary trees of gates in depth `O(k)` with measurements
@@ -30,15 +29,15 @@ Before level `i` the sites strictly inside the complete blocks of size `2^{i+1}`
 residue modulo `2^{i+1}` lies in `{1, …, 2^{i+1} - 2}` (`MPSPreparation.blockInterior`), carry
 `|0⟩`, and the gates of level `i`, acting on the residues `0` and `2^{i+1} - 1`, act on no site
 strictly inside a complete block of a finer level. So every level is a layer of long-range gates
-in the sense of `TNLean.Circuit.Teleportation.LongRangeGates`, applied in depth `5` with
-measurements, and the tree of `k` levels in depth `5k` on the vectors with `|0⟩` strictly inside the
-complete blocks of all its levels (`MPSPreparation.treeInterior`,
+in the sense of `TNLean.MPS.Preparation.LongRangeGates`, applied in depth `5` with measurements,
+and the tree of `k` levels in depth `5k` on the vectors with `|0⟩` strictly inside the complete
+blocks of all its levels (`MPSPreparation.treeInterior`,
 `MPSPreparation.isRoundsImplementationOn_treeRounds`). No divisibility of `N` is assumed: only
 complete blocks carry gates, and the sites of an incomplete block need no `|0⟩` on its account.
 
 Every register of this tree is one site of dimension `d` and every node carries a two-site
 unitary, whereas in arXiv:2307.01696, eq. (16), a register above the lowest level carries
-`ℂ^{D²}`. Registers of several sites are the subject of `TNLean.Circuit.Teleportation.RegisterGates`
+`ℂ^{D²}`. Registers of several sites are the subject of `TNLean.MPS.Preparation.RegisterGates`
 and `TNLean.MPS.Preparation.RegisterTree`, and the preparation of matrix product states in depth
 `O(log log(N/ε))` of `TNLean.MPS.Preparation.LogLogDepthPreparation`.
 
@@ -68,7 +67,6 @@ and `TNLean.MPS.Preparation.RegisterTree`, and the preparation of matrix product
 
 open Matrix MPSTensor
 open scoped BigOperators
-open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -197,7 +195,7 @@ noncomputable def treeOp : ℕ → Matrix (Cfg d N) (Cfg d N) ℂ
 variable [NeZero d]
 
 /-- The measurement rounds applying the levels `0, …, k - 1` of the tree, the coarsest first:
-two rounds for each level (`QuantumCircuit.LongRangeGate.rounds`).
+two rounds for each level (`MPSPreparation.LongRangeGate.rounds`).
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
 noncomputable def treeRounds : ℕ → List (MeasurementRound d N)

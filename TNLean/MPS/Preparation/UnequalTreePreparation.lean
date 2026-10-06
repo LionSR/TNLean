@@ -53,7 +53,6 @@ an even number of sites apart. After every sequence of outcomes the output is a 
 
 open Matrix MPSTensor
 open scoped BigOperators
-open QuantumCircuit
 
 namespace MPSPreparation
 

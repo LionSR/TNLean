@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.Spectrum
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
-import TNLean.Circuit.LocalCircuit
+import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.WindowCorrelator
 
 /-!
@@ -24,7 +24,7 @@ operators:
 * an operator on a window inside a larger window is an operator on the smaller
   window (`chainWindowOperator_chainWindowOperator`);
 * an operator on the window of sites `a, …, a + L - 1` acts on those sites in the sense
-  of the light-cone file `TNLean.Circuit.LocalCircuit`
+  of the light-cone file `TNLean.MPS.Preparation.LocalCircuit`
   (`chainWindowOperator_mem_supportedOperators`).
 
 All windows here are windows that do not wrap around the ring: `a + L ≤ N`.
@@ -153,18 +153,18 @@ theorem chainWindowOperator_chainWindowOperator {L w N a b : ℕ} (ha : a < N)
     exact h₁ fun k hk ↦ h k (by omega)
 
 /-- **Support of a window operator.** The operator `X` placed on the sites
-`a, …, a + L - 1` acts on those sites in the sense of `QuantumCircuit.supportedOperators`.
+`a, …, a + L - 1` acts on those sites in the sense of `MPSPreparation.supportedOperators`.
 This is what the light cone of arXiv:2307.01696, Supplemental Material, proof of
 Theorem 1, is applied to. -/
 theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     chainWindowOperator N a X ∈
-      QuantumCircuit.supportedOperators d {k : Fin N | a ≤ k.val ∧ k.val < a + L} := by
+      MPSPreparation.supportedOperators d {k : Fin N | a ≤ k.val ∧ k.val < a + L} := by
   classical
   set S : Set (Fin N) := {k : Fin N | a ≤ k.val ∧ k.val < a + L}
   have hunit : ∀ τ₀ σ₀ : Fin L → Fin d,
       chainWindowOperator N a (Matrix.single τ₀ σ₀ (1 : ℂ)) ∈
-        QuantumCircuit.supportedOperators d S := by
+        MPSPreparation.supportedOperators d S := by
     intro τ₀ σ₀
     let m : Fin N → Matrix (Fin d) (Fin d) ℂ := fun k ↦
       if h : a ≤ k.val ∧ k.val < a + L then
@@ -243,7 +243,7 @@ theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
             refine hj (Eq.trans ?_ h)
             exact congrArg σ₀ (Fin.ext (by simp only; omega))
     rw [heq]
-    exact QuantumCircuit.finKronecker_mem_supportedOperators hm
+    exact MPSPreparation.finKronecker_mem_supportedOperators hm
   have hX : X = ∑ τ₀ : Fin L → Fin d, ∑ σ₀ : Fin L → Fin d,
       X τ₀ σ₀ • Matrix.single τ₀ σ₀ (1 : ℂ) := by
     conv_lhs => rw [Matrix.matrix_eq_sum_single X]

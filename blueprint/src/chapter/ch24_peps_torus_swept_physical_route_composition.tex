@@ -1,0 +1,44 @@
+\begin{definition}[Chronological product of the endpoint operations]%
+    \label{def:peps_torus_swept_physical_route_composition}
+    \lean{TNLean.PEPS.torusSweptPhysicalRouteProduct}
+    \leanok
+    \uses{def:peps_torus_swept_route_bond_assignments}
+    For twelve physical matrices $M_0,\ldots,M_{11}$, let $P_0=I$ and
+    $P_{n+1}=M_nP_n$ for $0\leq n<12$. Thus the latest operation acts
+    on the left. This is the chronological product for the explicit
+    endpoint route of \cite[\S6.6, local lines 2340--2423]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Twelve fixed original-spin endpoint operations]%
+    \label{thm:peps_torus_swept_physical_route_composition}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusSweptPhysicalRoute}
+    \leanok
+    \uses{def:peps_torus_swept_physical_route_composition,
+        thm:peps_torus_swept_route_vacancies,
+        thm:peps_vacant_plaquette_physical_move}
+    Assume torus periods at least eight and seven and regular
+    G-isometry of every original site tensor. There are twelve global
+    unitaries $M_0,\ldots,M_{11}$, chosen before both initial flux labels.
+    Each is the identity extension of a unitary on its actual six-site
+    movement patch, or the adjoint of such an extension.
+    If $\Psi_n(g,h)$ is the actual closed tensor contraction with the
+    recursively derived bond assignment after $n$ steps, then
+    \begin{align}
+        M_n\Psi_n(g,h)&=\Psi_{n+1}(g,h) &&(0\leq n<12),\\
+        P_n\Psi_0(g,h)&=\Psi_n(g,h) &&(0\leq n\leq12).
+    \end{align}
+    Every $P_n$ is unitary. No flux label is used to choose these
+    original-spin operations. This is the specified finite-torus
+    endpoint route, not an unrestricted braid or an operation
+    annihilating the final partners.
+\end{theorem}
+
+\begin{proof}\leanok
+    At each source position choose the fixed elementary original-spin
+    unitary in the required direction. The actual next plaquette has
+    identity holonomy by the derived vacancy calculation, so its
+    all-input action gives the literal next bond assignment. Choose all
+    twelve operations before introducing the flux labels. Induction
+    on the chronological product proves both its unitarity and the
+    actual closed-state identity at every stage.
+\end{proof}

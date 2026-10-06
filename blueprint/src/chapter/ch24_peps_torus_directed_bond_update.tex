@@ -1,0 +1,43 @@
+\begin{definition}[A literal update of one directed torus bond]%
+    \label{def:peps_torus_directed_bond_update}
+    \lean{TNLean.PEPS.torusDirectedBondTransport,
+        TNLean.PEPS.torusDirectedBondUpdate}
+    \leanok
+    \uses{thm:peps_regular_walk_holonomy}
+    On a finite torus with both periods at least three, let $u$ assign an
+    element of a group to each ordered edge. Denote its positive rightward
+    and upward transports by $D_0(u;p)$ and $D_1(u;p)$.
+    For $a\in\{0,1\}$, define $u[a,p,t]$ by replacing the ordered coefficient
+    of the corresponding bond by $t$ when its positive direction agrees
+    with the ordering, and by $t^{-1}$ otherwise. Every other coefficient
+    is retained. These auxiliary coordinates include bonds crossing either
+    periodic seam; they support the string operations in
+    \cite[\S6.6]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Transport of a literal single-bond update]%
+    \label{thm:peps_torus_directed_bond_update}
+    \lean{TNLean.PEPS.torusDirectedBondTransport_update_same,
+        TNLean.PEPS.torusDirectedBondTransport_update_other,
+        TNLean.PEPS.torusDirectedBondTransport_update,
+        TNLean.PEPS.torusDirectedBondUpdate_eq_of_ne}
+    \leanok
+    \uses{def:peps_torus_directed_bond_update}
+    For either axis $b$ and every native vertex $q$,
+    \begin{align}
+        D_b(u[a,p,t];q)
+        &=\begin{cases}t,& b=a\text{ and }q=p,\\D_b(u;q),&\text{otherwise}.
+          \end{cases}
+    \end{align}
+    In particular, only the selected ordered coefficient changes.
+    This is a coefficient identity, not an assertion that an arbitrary
+    single-bond update is physically implementable.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positive rightward bonds and positive upward bonds are separately
+    injectively indexed by their starting vertices, and the two families
+    are disjoint. At the selected bond, the ordering inversion in the
+    coefficient is cancelled by the inversion in directed transport.
+    Every other transport reads its original coefficient.
+\end{proof}

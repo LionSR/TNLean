@@ -1,0 +1,29 @@
+\begin{theorem}[Transport around an oriented native plaquette]%
+    \label{thm:peps_torus_plaquette_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusPlaquetteWalk,
+        TNLean.PEPS.regularWalkHolonomy_torusPlaquetteWalk_reverse}
+    \leanok
+    \uses{thm:peps_regular_walk_holonomy}
+    Let both torus periods be at least three. Assign arbitrary group
+    transports to its native edges. At any plaquette, let $R_b,R_t$
+    denote the rightward transports on the bottom and top edges, and let
+    $U_l,U_r$ denote the upward transports on the left and right edges.
+    The counterclockwise and clockwise walks based at the lower left
+    corner have transports
+    \begin{align}
+        H_+ &= U_l^{-1}R_t^{-1}U_rR_b,\\
+        H_- &= R_b^{-1}U_r^{-1}R_tU_l=H_+^{-1}.
+    \end{align}
+    The formulas hold at every translation, including plaquettes crossing
+    either periodic seam. They are the auxiliary transport identities
+    underlying flux detection and the string diagrams in
+    \cite[Theorem 6.15 and \S6.6]{Schuch2010PEPS}; they assert no physical
+    movement or measurement operation.
+\end{theorem}
+
+\begin{proof}\leanok
+    The counterclockwise walk traverses the bottom, right, top and left
+    edges in that order. The last two steps reverse the directed edge
+    transports, and the first traversed edge acts first. This gives the
+    first product. Reversing the entire walk gives the second product.
+\end{proof}

@@ -40,7 +40,6 @@ an isometric extension of `V` (`MPSPreparation.exists_blockUnitary_isometricExte
 open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators ComplexOrder
-open QuantumCircuit
 
 /-! ### A basis adapted to a projector -/
 

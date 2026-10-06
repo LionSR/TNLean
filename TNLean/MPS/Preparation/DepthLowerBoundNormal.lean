@@ -49,7 +49,7 @@ theorem eventually_one_half_lt_infidelity_of_isNormalTensor {A : MPSTensor d D}
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     (hξ : 0 < correlationLength lam₂) {T : ℕ → ℕ}
     (hT : (fun N ↦ (T N : ℝ)) =o[atTop] fun N ↦ Real.log N) (ψ : ∀ N, Cfg d N → ℂ)
-    (hψ : ∀ (N : ℕ) [NeZero N], QuantumCircuit.IsPreparedInDepth (T N) (ψ N))
+    (hψ : ∀ (N : ℕ) [NeZero N], MPSPreparation.IsPreparedInDepth (T N) (ψ N))
     (hψ1 : ∀ N, star (ψ N) ⬝ᵥ ψ N = 1) :
     ∀ᶠ N in atTop, 1 / 2 <
       1 - ‖⟪normalizedMPVState A N, (WithLp.toLp 2 (ψ N) : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ := by
@@ -78,7 +78,7 @@ theorem eventually_one_half_lt_infidelity_of_isNormal {A : MPSTensor d D} (hA : 
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ lam₁ → ‖μ‖ ≤ ‖lam₂‖)
     (hξ : 0 < correlationLength (lam₂ / lam₁)) {T : ℕ → ℕ}
     (hT : (fun N ↦ (T N : ℝ)) =o[atTop] fun N ↦ Real.log N) (ψ : ∀ N, Cfg d N → ℂ)
-    (hψ : ∀ (N : ℕ) [NeZero N], QuantumCircuit.IsPreparedInDepth (T N) (ψ N))
+    (hψ : ∀ (N : ℕ) [NeZero N], MPSPreparation.IsPreparedInDepth (T N) (ψ N))
     (hψ1 : ∀ N, star (ψ N) ⬝ᵥ ψ N = 1) :
     ∀ᶠ N in atTop, 1 / 2 <
       1 - ‖⟪normalizedMPVState A N, (WithLp.toLp 2 (ψ N) : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ := by

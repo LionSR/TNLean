@@ -131,10 +131,10 @@ restrictions remain.
 \begin{enumerate}
     \item \emph{Two dimensions.} The source states the theorem for PEPS. The
     two-dimensional parent Hamiltonian, with local terms on $2\times2$
-    plaquettes, and the operator $P$ for a plaquette are not formalized. The
-    stability of $G$-isometry under the contraction of one link of two PEPS
-    tensors, which the plaquette operator would use, is formalized
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    plaquettes, the operator $P$ for a plaquette, and the stability of
+    $G$-isometry under the two-dimensional concatenation (an open scope
+    restriction recorded in \cite{gap:rmp_peps_quantum_double_g_isometry})
+    are not formalized.
     \item \emph{Rings of two sites.} On a ring of two sites the two
     translated terms act on the same pair of sites in opposite orders, and
     the three-site argument does not apply. The source does not discuss this
@@ -146,9 +146,9 @@ The note is a scope restriction: the commutation theorem, stated for PEPS,
 is formalized for matrix product states on rings of at least three sites;
 the lemma on the form of the local terms, stated for matrix product states,
 is formalized as stated, with the local fix that its operator is $1-h_i$.
-Elimination: formalize the two-dimensional parent Hamiltonian on plaquettes,
-build the plaquette operator from the contraction of the four tensors of a
-plaquette, which is $G$-isometric, and run the same computation with the two-site operator replaced by the plaquette
+Elimination: formalize the two-dimensional parent Hamiltonian on plaquettes
+and the two-dimensional stability of $G$-isometry under concatenation, and
+run the same computation with the two-site operator replaced by the plaquette
 operator; for the ring of two sites, compute the product of the two terms
 with the transfer identity
 $\sum_b(A^b)^\dagger YA^b=c\,|G|^{-1}\sum_h\operatorname{tr}[L_h^{-1}Y]L_h$.

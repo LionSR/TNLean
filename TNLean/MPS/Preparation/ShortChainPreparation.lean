@@ -28,7 +28,6 @@ The source does not treat chains shorter than the block length: its proof of The
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
-open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -44,6 +43,12 @@ theorem sum_star_mul_self_eq_norm_sq {N : ℕ} (v : MPVSpace d N) :
   rfl
 
 /-! ### Bounded chains -/
+
+/-- A placed operator on all sites of the chain, in their order, is the operator itself. -/
+theorem embedOp_id {N : ℕ} (X : Matrix (Cfg d N) (Cfg d N) ℂ) : embedOp id X = X := by
+  ext x y
+  rw [embedOp_apply, ite_eq_left (show AgreeOff id x y from fun i hi => absurd rfl (hi i))]
+  rfl
 
 /-- **Unit vectors on bounded chains.** For `d ≥ 1` and every bound `n₀` there is `K` such that
 every unit vector on a ring of `N` sites, `2 ≤ N ≤ n₀`, is prepared in depth at most `K` from a

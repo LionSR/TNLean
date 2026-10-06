@@ -30,7 +30,6 @@ that "every connected correlation for operators at a distance larger than `2T` v
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
-open QuantumCircuit
 
 namespace MPSPreparation
 

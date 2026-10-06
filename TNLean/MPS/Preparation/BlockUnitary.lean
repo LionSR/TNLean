@@ -25,7 +25,6 @@ with `C` depending only on `d`, `D` and `r₁`.
 open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators
-open QuantumCircuit
 
 namespace MPSPreparation
 

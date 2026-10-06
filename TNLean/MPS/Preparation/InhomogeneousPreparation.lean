@@ -66,7 +66,6 @@ varying along the ring. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scop
 
 open Matrix MPSTensor
 open scoped BigOperators InnerProductSpace
-open QuantumCircuit
 
 namespace MPSPreparation
 

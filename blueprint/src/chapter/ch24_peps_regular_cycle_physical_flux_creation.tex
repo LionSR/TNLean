@@ -1,0 +1,98 @@
+\begin{lemma}[A commutation criterion for the actual local projector]%
+    \label{lem:peps_regular_projector_commutation}
+    \lean{TNLean.PEPS.commute_regionLocalProjector_of_vertexTranslation}
+    \leanok
+    \uses{thm:peps_cycle_controlled_local_support}
+    An operator on the actual regional half-edge space which commutes with
+    every independent vertex translation commutes with the product of the
+    local regular invariant projectors.
+\end{lemma}
+\begin{proof}\leanok
+    The product projector is the scalar average of all independent vertex
+    translations. Commutation passes through that finite sum and its scalar.
+\end{proof}
+
+\begin{definition}[Creation on one actual cycle coordinate]%
+    \label{def:peps_regular_region_flux_creation}
+    \lean{TNLean.PEPS.regularRegionFluxCreationMatrix}
+    \leanok
+    \uses{lem:peps_regular_region_coordinates,def:peps_regular_flux_creation_matrix}
+    Let $R$ be a nonempty finite region with a spanning tree $T$, root $o$,
+    and an internal bond $e$ outside $T$. In the actual coordinates $(y,a,r,z)$,
+    apply the class creation unitary $U_g$ to $z_e$ and the identity to every
+    other coordinate. Transport this operator through the actual coordinate
+    bijection and denote the resulting half-edge operator by $Q_{g,e}$.
+\end{definition}
+
+\begin{theorem}[Creation preserves the genuine locally invariant support]%
+    \label{thm:peps_regular_region_flux_creation_support}
+    \lean{TNLean.PEPS.regularRegionFluxCreationMatrix_mem_unitaryGroup,
+        TNLean.PEPS.regularRegionFluxCreationMatrix_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionFluxCreationMatrix_commute_localProjector}
+    \leanok
+    \uses{def:peps_regular_region_flux_creation,
+        thm:peps_regular_flux_creation_matrix,lem:peps_regular_projector_commutation}
+    The operator $Q_{g,e}$ is unitary and commutes with every independent vertex
+    translation, hence with the product of the local regular invariant projectors.
+\end{theorem}
+\begin{proof}\leanok
+    Tensoring $U_g$ with the identity and reindexing preserves unitarity.
+    Vertex translation conjugates the selected cycle coordinate by the root
+    translation, while the remaining coordinates undergo a bijection.
+    Conjugation invariance of the matrix entries therefore preserves its kernel.
+    The commutation criterion gives the projector assertion.
+\end{proof}
+
+\begin{theorem}[Normalized creation in actual canonical boundary columns]%
+    \label{thm:peps_regular_canonical_flux_creation}
+    \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_fluxCreation}
+    \leanok
+    \uses{def:peps_regular_region_flux_creation,thm:peps_regular_two_cycle_flux_move,
+        thm:peps_regular_flux_creation_norm}
+    Write $u_e(t)$ for the assignment equal to $t$ on $e$ and to the identity
+    on every other bond. For every boundary configuration $\theta$,
+    \begin{align}
+        Q_{g,e}\Psi_R^{\mathrm{can}}(1,\theta)
+        =(\kappa c_g)^{-1/2}\sum_{z\in G}
+          \Psi_R^{\mathrm{can}}(u_e(zgz^{-1}),\theta).
+    \end{align}
+    Both sides are actual contracted canonical tensors. No column identity
+    is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    Isolate the selected cycle coordinate using the actual tree bijection.
+    The identity assignment gives its identity basis vector, multiplied by one
+    common boundary and ancillary coefficient. The creation operator replaces
+    this basis vector by the normalized conjugacy sum. In the inserted columns,
+    replacing the conjugating variable by $x^{-1}z$ removes the common gauge $x$.
+    Summing gives precisely the class vector with its centralizer multiplicity.
+\end{proof}
+
+\begin{theorem}[Coherent creation on the original physical spins]%
+    \label{thm:peps_regular_physical_flux_creation}
+    \lean{TNLean.PEPS.exists_unitary_regularCyclePhysicalFluxCreation}
+    \leanok
+    \uses{thm:peps_regular_region_flux_creation_support,
+        thm:peps_regular_canonical_flux_creation,
+        thm:peps_regular_physical_unitary_transport,
+        thm:peps_regular_twisted_region_accessibility}
+    Suppose each original tensor is $G$-isometric for the regular incident-edge
+    action. For each requested class $g$ there exists a unitary $W_{g,e}$ on
+    the original spins of $R$, chosen before every boundary configuration, with
+    \begin{align}
+        W_{g,e}\Psi_R(1,\theta)
+        =(\kappa c_g)^{-1/2}\sum_{z\in G}\Psi_R(u_e(zgz^{-1}),\theta).
+    \end{align}
+    This is a local coherent creation identity of the kind used in
+    \cite[Theorem 6.17]{Schuch2010PEPS}, for the explicitly chosen tree and cycle
+    bond. The native two-plaquette geometry and global identity extension are
+    separate assertions.
+\end{theorem}
+\begin{proof}\leanok
+    The product physical map has a positive scalar-projector Gram matrix,
+    derived from the local $G$-isometry. The canonical unitary commutes with
+    this projector, so equal Gram matrices give a physical unitary intertwining
+    the two operators. Apply it to the canonical column identity. The actual
+    original and canonical contractions are related by the product physical
+    map, which distributes over the coherent finite sum.
+\end{proof}

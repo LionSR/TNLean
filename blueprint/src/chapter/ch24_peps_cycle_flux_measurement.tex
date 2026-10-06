@@ -1,0 +1,115 @@
+\begin{definition}[A cycle conjugacy-class detector]%
+    \label{def:peps_cycle_class_detector}
+    \lean{TNLean.PEPS.regularCycleClassDetector}
+    \leanok
+    \uses{lem:peps_regular_region_coordinates}
+    Let $G$ be a finite group and let $R$ be a finite region of an ordered
+    graph. Fix a rooted spanning tree $T$ of the induced graph on $R$
+    and a non-tree internal edge $e$. Write the exposed coordinates of a
+    physical half-edge configuration $\alpha$ as $(y,a,r,z)$.
+    For a conjugacy class $C$ of $G$, define the diagonal operator
+    \begin{align}
+        D_C\ket{\alpha}&=\mathbf1_{\{[z_e]=C\}}\ket{\alpha}.
+        \label{eq:peps_cycle_class_diagonal}
+    \end{align}
+    This is the chosen-cycle form of the conjugacy-class measurement in
+    the proof of \cite[Theorem~6.15]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Physical projective measurement of a block cycle]%
+    \label{thm:peps_cycle_class_physical_measurement}
+    \lean{TNLean.PEPS.exists_regularCycleClass_physicalMeasurement}
+    \leanok
+    \uses{def:peps_cycle_class_detector,
+        thm:peps_conjugacy_class_invariance,
+        thm:peps_regular_twisted_projector_coordinates,
+        thm:peps_regular_twisted_region_accessibility,
+        thm:peps_regular_physical_unitary_transport,
+        thm:peps_cycle_controlled_local_support}
+    In the setting of Definition~\ref{def:peps_cycle_class_detector},
+    suppose every original local tensor is regular $G$-isometric.
+    There is a single projective measurement $(Q_C)_C$, together with an
+    additional outcome $Q_\perp$, on the original physical spins in $R$.
+    Every operator is Hermitian and positive semidefinite, and the full
+    family satisfies
+    \begin{align}
+        Q_iQ_j&=\delta_{ij}Q_i,&
+        Q_\perp+\sum_C Q_C&=\mathbb 1.
+        \label{eq:peps_cycle_class_measurement}
+    \end{align}
+    For arbitrary inserted regular-bond operators $u_f$, let $\omega_e(u)$
+    be the cycle residual obtained from the rooted spanning-tree gauge.
+    Denote the actual twisted open-block column with crossing labels
+    $\theta$ by $\psi_{u,\theta}$. Then
+    \begin{align}
+        Q_C\psi_{u,\theta}
+            &=\mathbf1_{\{[\omega_e(u)]=C\}}\psi_{u,\theta},&
+        Q_\perp\psi_{u,\theta}&=0.
+        \label{eq:peps_cycle_class_certainty}
+    \end{align}
+    Thus every nonzero such column yields the conjugacy class of its
+    cycle residual with certainty. This establishes the conjugacy
+    calculation $ab^{-1}=xgx^{-1}$ in
+    \cite[proof of Theorem~6.15]{Schuch2010PEPS} for a connected block
+    with a chosen spanning-tree cycle. Its geometric scope and the
+    remaining native plaquette identification are recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+    Independent vertex translations conjugate $z_e$ by their common
+    root translation, so every $D_C$ commutes with the product local
+    averaging projector $P$. The diagonal operators satisfy
+    $D_CD_D=\delta_{CD}D_C$ and $\sum_C D_C=\mathbb 1$.
+    Let $A$ be the product of the original local physical maps.
+    Local $G$-isometry gives $A^\dagger A=cP$ with $c>0$, while
+    invariance gives $AP=A$. Set
+    \begin{align}
+        Q_C&=c^{-1}AD_CA^\dagger,&
+        Q_\perp&=\mathbb 1-\sum_C Q_C,&
+        Q_CA&=AD_C.
+        \label{eq:peps_cycle_class_transport}
+    \end{align}
+    These identities imply (\ref{eq:peps_cycle_class_measurement});
+    Hermitian idempotence implies positivity. The extra projection
+    annihilates $A$. Every nonzero canonical twisted coefficient has
+    $z_e=x\omega_e(u)x^{-1}$ for some $x\in G$. Consequently $D_C$
+    fixes precisely the columns with $[\omega_e(u)]=C$ and annihilates
+    the others. The exact recovery of the original twisted columns
+    through $A$, followed by (\ref{eq:peps_cycle_class_transport}), gives
+    (\ref{eq:peps_cycle_class_certainty}).
+\end{proof}
+
+\begin{theorem}[Physical measurement of a closed-walk holonomy]%
+    \label{thm:peps_closed_walk_class_physical_measurement}
+    \lean{TNLean.PEPS.exists_regularClosedWalkClass_physicalMeasurement}
+    \leanok
+    \uses{lem:peps_regular_region_coordinates,
+        thm:peps_conjugacy_class_invariance,
+        thm:peps_regular_region_cycle_holonomy,
+        thm:peps_regular_twisted_projector_coordinates,
+        thm:peps_regular_twisted_region_accessibility,
+        thm:peps_regular_physical_unitary_transport,
+        thm:peps_cycle_controlled_local_support}
+    Let $R$ have connected induced graph and let $p$ be a specified
+    closed walk based at a vertex of $R$. Suppose the original local
+    tensors are regular $G$-isometric for a finite group $G$.
+    There is a complete projective measurement on the original physical
+    spins in $R$, indexed by the conjugacy classes of $G$ and one unused
+    outcome, such that every actual twisted open-block column
+    $\psi_{u,\theta}$ has outcome $[\operatorname{Hol}_u(p)]$ with
+    certainty. The operators are Hermitian and positive semidefinite,
+    satisfy $Q_iQ_j=\delta_{ij}Q_i$, and sum to the identity on the whole
+    physical space. This is an auxiliary closed-walk form of the
+    conjugacy calculation in \cite[proof of Theorem~6.15]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose a rooted spanning tree. The actual walk gives a group word
+    $w_p$ in the residual cycles. Evaluation commutes with simultaneous
+    conjugation, and the normalized root gauge gives
+    $w_p(\omega(u))=\operatorname{Hol}_u(p)$.
+    Replace $z_e$ in (\ref{eq:peps_cycle_class_diagonal}) by $w_p(z)$.
+    This detector still commutes with independent vertex translations.
+    The construction (\ref{eq:peps_cycle_class_transport}) therefore
+    gives a complete physical projective measurement with the stated
+    outcome on every actual twisted column.
+\end{proof}

@@ -1,0 +1,65 @@
+\begin{definition}[The charge projection in the group-pair basis]
+    \label{def:peps_regular_charge_detector_matrix}
+    \lean{TNLean.PEPS.regularChargeDetectorMatrix,
+      TNLean.PEPS.regularChargeTranslationMatrix}
+    \leanok
+    \uses{def:peps_regular_charge_translation_detector}
+    Write $D_\chi$ for the matrix of the orthogonal projection onto
+    $\mathcal H_\chi$ in the canonical basis of $\ell^2(G\times G)$.
+    Write $T_{z,w}$ for the matrix of independent left translations.
+    These are the regular-coordinate operators used in
+    \cite[charge detection]{Schuch2010PEPS}, lines 2470--2486.
+\end{definition}
+
+\begin{theorem}[Matrix properties and translation covariance of the charge projection]
+    \label{thm:peps_regular_charge_detector_matrix}
+    \lean{TNLean.PEPS.regularChargeTranslationMatrix_eq_kronecker,
+      TNLean.PEPS.regularChargeDetectorMatrix_properties,
+      TNLean.PEPS.regularChargeDetectorMatrix_mulVec,
+      TNLean.PEPS.regularChargeDetectorMatrix_commute_translation,
+      TNLean.PEPS.regularChargeDetectorMatrix_translate_entries}
+    \leanok
+    \uses{def:peps_regular_charge_detector_matrix,
+      thm:peps_regular_charge_detector}
+    The matrix $D_\chi$ is Hermitian, positive semidefinite, and idempotent.
+    It acts on coefficient vectors as the orthogonal projection onto
+    $\mathcal H_\chi$. Moreover,
+    \[
+        T_{z,w}=U_z\otimes U_w,\qquad
+        T_{z,w}D_\chi=D_\chi T_{z,w},
+    \]
+    and its entries satisfy
+    \[
+        D_\chi((zr,ws),(za,wb))=D_\chi((r,s),(a,b)).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Express the previously constructed orthogonal projection and unitary
+    translations in the canonical orthonormal basis. The two independent
+    register permutations give the displayed tensor product. Comparing
+    entries in their commutation identity gives the entry covariance.
+\end{proof}
+
+\begin{theorem}[Action on literal charge coefficient vectors]
+    \label{thm:peps_regular_charge_detector_matrix_eigenvectors}
+    \lean{TNLean.PEPS.regularChargeDetectorMatrix_chargeVector,
+      TNLean.PEPS.regularChargeDetectorMatrix_other_chargeVector}
+    \leanok
+    \uses{thm:peps_regular_charge_detector_matrix,
+      thm:peps_regular_charge_subspace_orthogonality}
+    For every $p,x,y\in G$,
+    \[
+        D_\chi A_\chi(p;x,y)=A_\chi(p;x,y).
+    \]
+    If $\sigma,\tau$ are irreducible complex representations with distinct
+    characters and $\sigma$ is unitary, then
+    \[
+        D_{\chi_\sigma}A_{\chi_\tau}(p;x,y)=0.
+    \]
+    These matrix identities are auxiliary to the original-spin detector in
+    \cite[charge detection]{Schuch2010PEPS}, lines 2474--2486.
+\end{theorem}
+\begin{proof}\leanok
+    Express the selected-charge and distinct-charge actions of the Hilbert-space
+    projection in the canonical basis.
+\end{proof}

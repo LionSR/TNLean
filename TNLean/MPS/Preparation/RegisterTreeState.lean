@@ -47,7 +47,6 @@ The proof follows the tree from the root: after the depths `0, …, j` the regis
 
 open Matrix MPSTensor
 open scoped BigOperators
-open QuantumCircuit
 
 namespace MPSPreparation
 

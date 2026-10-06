@@ -238,9 +238,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn,
         MPSPreparation.isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth}
     \leanok
-    \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
+    \uses{def:ldp_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
         thm:ldp_block_sum_unitary, thm:ldp_sequential_factorization_on,
-        def:ldp_block_isometry_state, lem:qc_measurement_unitary_case}
+        def:ldp_block_isometry_state, lem:ldp_measurement_unitary_case}
     For $d\geq2$, every bond dimension $D$ and every number $b$ of labels, there
     are $C$ and $L_0$ such that the following holds. Let $A$ be a tensor of bond
     dimension $D$, $S$ a set of bond pairs, $\omega_1,\dots,\omega_b$
@@ -266,7 +266,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     isometric factor $V^{(\ell_k)}$ on the pairs of $S$, which suffices because
     the products of the pairs are supported there. For the second statement, the
     measurement stage measures no site and the circuit after it is empty, by
-    Lemma~\ref{lem:qc_measurement_unitary_case}.
+    Lemma~\ref{lem:ldp_measurement_unitary_case}.
 \end{proof}
 
 \begin{lemma}[A chain of one block]

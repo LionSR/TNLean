@@ -1,0 +1,32 @@
+\begin{theorem}[Nonvanishing on every finite graph]%
+    \label{thm:peps_graph_regular_averaging_nonzero}
+    \lean{TNLean.PEPS.graphBondRegrouping_regularAveragingSite_one,
+        TNLean.PEPS.graphBondRegrouping_regularAveragingSite_one_re_pos,
+        TNLean.PEPS.graphBondNetwork_regularAveragingSite_ne_zero}
+    \leanok
+    \uses{thm:peps_graph_weighted_averaging_coherent}
+    Let $G$ be finite and let $\Gamma$ be any finite simple graph with vertex
+    set $\mathcal V$. The actual regular averaging-site contraction is nonzero.
+    More precisely, at the all-identity physical bond configuration its
+    regrouped coefficient equals
+    \begin{align}
+        |G|^{-|\mathcal V|}
+        \bigl|\{q:\mathcal V\to G:\ q_{h(e)}=q_{t(e)}
+            \text{ for every }e\in E(\Gamma)\}\bigr|.
+    \end{align}
+    This coefficient has strictly positive real part. The statement includes
+    empty graphs, disconnected graphs, and isolated vertices; no connectedness
+    or nonempty-region premise is imposed. It is an auxiliary consequence of
+    the actual regular bond expansion in \cite[Section~7]{Schuch2010PEPS},
+    without a parent-Hamiltonian assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the regular basis, the all-identity matrix entry of
+    $L_{q_hq_t^{-1}}$ equals one precisely when $q_h=q_t$, and is zero otherwise.
+    The actual coherent graph coefficient therefore counts exactly the stated
+    labelings. The constant identity labeling contributes one, even when the
+    vertex set is empty. Both the count and its normalization are positive.
+    Since regrouping is a coordinate equivalence, the original contracted
+    vector is nonzero.
+\end{proof}

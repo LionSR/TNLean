@@ -345,7 +345,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSPreparation.exists_pairEquiv_val_lt_card_iff_mem,
         MPSPreparation.isPreparedInDepth_zero_of_le_one}
     \leanok
-    \uses{def:ldp_chain_pos_state, def:qc_local_circuit, def:ldpolar_injective_on}
+    \uses{def:ldp_chain_pos_state, def:ldp_local_circuit, def:ldpolar_injective_on}
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be tensors of bond dimension $D$
@@ -363,7 +363,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \uses{lem:ldp_unitary_implementing_isometry,
         thm:ldp_sequential_factorization_on,
         thm:ldp_block_sum_unitary,
-        thm:qc_bounded_unitary_two_site_gates}
+        thm:ldp_bounded_unitary_two_site_gates}
     For $d\le1$ there is at most one configuration, and a product vector
     carries any amplitude on it. For $D=0$ there is no unit pair. Otherwise
     $d\ge2$, so $D\le d^D$, and each bond index is encoded in $D$ sites. The
@@ -406,7 +406,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSPreparation.extend_inputCfg,
         MPSPreparation.exists_blockUnitary_of_equiv_mul}
     \leanok
-    \uses{thm:ldp_block_sum_unitary, thm:qc_bounded_unitary_two_site_gates,
+    \uses{thm:ldp_block_sum_unitary, thm:ldp_bounded_unitary_two_site_gates,
         lem:ldp_unitary_implementing_isometry}
     Let $D\ge1$, encode the bond indices injectively in $r_1\ge1$ sites, let $\pi$
     enumerate the bond pairs, and let $Q_1,\dots,Q_q$ be an isometric chain
@@ -427,7 +427,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     Theorem~\ref{thm:ldp_block_sum_unitary}, after the SWAP gates have brought
     the two inputs onto the last $2r_1$ sites, apply this unitary for $G$ on
     those sites, a product of a bounded number of gates by
-    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, and then the
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, and then the
     staircase; $Z(\sigma,y)$ is the amplitude of the staircase on the encoded
     input $y$.
 \end{proof}
@@ -540,7 +540,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
     \leanok
     \uses{def:ldp_varying_bond_chain, def:ldp_pair_approximable,
-        def:qc_local_circuit, thm:ldp_isometric_extension_depth}
+        def:ldp_local_circuit, thm:ldp_isometric_extension_depth}
     Let $D^2\le d^{3D}$. There is $C$, depending only on $d$ and $D$, such that
     the following holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be a chain with bond dimensions at

@@ -1,0 +1,79 @@
+\begin{lemma}[Native regular injectivity in incident-bond coordinates]%
+    \label{lem:peps_native_regular_incident_injectivity}
+    \lean{TNLean.PEPS.torusIncidentCoordinatesEquiv,
+        TNLean.PEPS.torusIncidentCoordinatesEquiv_apply,
+        TNLean.PEPS.torusIncidentCoordinatesEquiv_smul,
+        TNLean.PEPS.regularSiteMap_torusIncidentSite_eq_siteMap,
+        TNLean.PEPS.IsGInjective.isGInjective_torusIncidentSite,
+        TNLean.PEPS.torusGClosure_one_eq_stateCoeff_torusIncidentSite}
+    \leanok
+    \uses{lem:peps_torus_singleton_geometry, def:peps_g_injective}
+    Let $G$ be a finite group and let a four-leg tensor be $G$-injective
+    for the regular representation. On a native square torus with
+    both periods at least three, identify its four virtual labels with
+    the top, right, down, and left incident bonds. The resulting
+    virtual-to-physical map is $G$-injective on the actual incident
+    graph coordinates. Its ordinary closed graph contraction equals
+    the native closure with both closure elements equal to the identity.
+\end{lemma}
+
+\begin{proof}\leanok
+    The four actual legs are a bijection. The resulting bijection of
+    virtual configurations intertwines simultaneous regular
+    translation. Changing variables in the finite contraction sum
+    identifies the two site maps. Invariance and injectivity on
+    invariant vectors are therefore preserved. Identity closure
+    elements insert identity operators on every seam bond, so the
+    closed contraction agrees with the ordinary graph contraction.
+\end{proof}
+
+\begin{theorem}[Single-site support of a native regular injective tensor]%
+    \label{thm:peps_native_regular_singleton_support}
+    \lean{TNLean.PEPS.IsGInjective.range_regionReducedDensity_torus_singleton,
+        TNLean.PEPS.IsGInjective.rank_regionReducedDensity_torus_singleton}
+    \leanok
+    \uses{lem:peps_native_regular_incident_injectivity,
+        def:peps_region_reduced_density, def:peps_region_ground_space}
+    Place one regular $G$-injective four-leg tensor at every site of a
+    native square torus whose periods are at least three. For its
+    untwisted closed vector, the physical density of every site $v$
+    satisfies
+    \[
+        \operatorname{ran}\rho_{\{v\}}=\mathcal G_{\{v\}},
+        \qquad \operatorname{rank}\rho_{\{v\}}=|G|^3.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_torus_singleton_support,
+        lem:peps_native_regular_incident_injectivity}
+    Express native $G$-injectivity on the actual incident bonds and
+    apply the single-site support and rank statements.
+\end{proof}
+
+\begin{theorem}[Local relations forced by equal native regular closures]%
+    \label{thm:peps_native_regular_closure_local_rigidity}
+    \lean{TNLean.PEPS.regionGroundSpace_torus_singleton_eq_of_torusGClosure_one_eq,
+        TNLean.PEPS.card_group_eq_of_torusGClosure_one_eq}
+    \leanok
+    \uses{lem:peps_native_regular_incident_injectivity,
+        def:peps_g_injective, def:peps_region_ground_space}
+    Consider two native four-leg regular $G$-injective tensors with
+    the same physical space on a square torus whose periods are at
+    least three. If their untwisted closed coefficient vectors agree,
+    their single-site ground spaces agree at every vertex. If the two
+    descriptions instead use regular representations of different
+    finite groups $G$ and $H$, equality of these untwisted closed
+    vectors forces $|G|=|H|$.
+    These are necessary local relations toward a Fundamental Theorem;
+    neither a group isomorphism nor a product of individual bond
+    gauges is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_torus_local_rigidity,
+        lem:peps_native_regular_incident_injectivity}
+    Identity native closures are the ordinary graph contractions.
+    The incident-bond descriptions remain $G$-injective, so the local
+    ground-space and group-order rigidity statements apply.
+\end{proof}
