@@ -38,6 +38,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.GroupedSpectatorNorm
 import TNLean.MPS.ParentHamiltonian.Martingale.GroupedWindowBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.IntervalGapTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.IntervalKernelTransport
+import TNLean.MPS.ParentHamiltonian.Martingale.IsometricCompressionGap
 import TNLean.MPS.ParentHamiltonian.Martingale.LocalEquivalenceBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleFullRangeEstimate

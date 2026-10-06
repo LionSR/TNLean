@@ -445,6 +445,7 @@ jobs:
           for example in MixedEndpointComparison MixedEndpointPhase \
               MixedEndpointOpenGap MixedEndpointUniformPathGap JointInsertedOpenKernel \
               JointMixedEndpointFamily JointMixedEndpointBoundaryColumns \
+              JointMixedEndpointEdgeNormalization \
               DependentSpectatorGapEquivalence; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
