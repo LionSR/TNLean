@@ -77,7 +77,8 @@ theorem jointMixedEndpoint_periodic_mul_activeProjection
       periodicInteractionHamiltonianES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N ≤
       jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N := by
     exact sub_le_iff_le_add.mpr (by simpa only [add_comm] using hUpper)
-  ext v
+  apply LinearMap.ext
+  intro v
   exact LinearMap.apply_eq_of_le_of_sub_le_of_apply_eq_zero hLower hDifference
     (LinearMap.congr_fun jointMixedPeriodicPhasePenalty_activeProjection v)
 
@@ -202,8 +203,8 @@ theorem jointMixedEndpoint_periodic_groundSpace_eq
   · ext v
     rw [jointMixed_chain_eq_zero_of_physicalDim_eq_zero hd (by omega) v]
     simp
-  · letI : NeZero (jointMixedPhysicalDim d₀ d₁ D₀ D₁) := ⟨hd⟩
-    letI : ∀ x, NeZero (D₀ x) := fun x => ⟨Nat.ne_of_gt (hD₀ x)⟩
+  · let : NeZero (jointMixedPhysicalDim d₀ d₁ D₀ D₁) := ⟨hd⟩
+    let : ∀ x, NeZero (D₀ x) := fun x => ⟨Nat.ne_of_gt (hD₀ x)⟩
     rw [jointMixedEndpoint_periodic_ker_eq A₀ A₁ hN]
     exact ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
       (fun _ => 1) (jointMixedEndpointLeftTensor A₀ d₁ D₁) (fun _ => one_ne_zero)
@@ -221,11 +222,20 @@ theorem jointMixedEndpoint_periodic_groundSpace_eq_actual
     LinearMap.ker (periodicInteractionHamiltonianES
       (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) =
         (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 0) N).range := by
-  rw [jointMixedEndpoint_periodic_groundSpace_eq A₀ A₁ h₀ h₁ hD₀ hN]
-  congr 1
-  ext c σ
-  simp only [blockPeriodicMpvMapES_apply,
-    mpv_jointMixedEndpointInterpolation_zero A₀ A₁ _ (by omega : 0 < N)]
+  have hMap : blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 0) N =
+      blockPeriodicMpvMapES (jointMixedEndpointLeftTensor A₀ d₁ D₁) N := by
+    apply ContinuousLinearMap.ext
+    intro c
+    apply PiLp.ext
+    intro σ
+    simp only [blockPeriodicMpvMapES_apply]
+    apply Finset.sum_congr rfl
+    intro x _
+    exact congrArg
+      (fun w : NSiteSpace (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N => c x * w σ)
+      (mpv_jointMixedEndpointInterpolation_zero A₀ A₁ x (by omega))
+  rw [hMap]
+  exact jointMixedEndpoint_periodic_groundSpace_eq A₀ A₁ h₀ h₁ hD₀ hN
 
 /-- Simultaneous one-site spanning supplies an intrinsic gap for the actual
 periodic endpoint, uniform over all rings of at least two sites. This uses
@@ -247,8 +257,8 @@ theorem exists_uniform_jointMixedEndpoint_periodic_gap
     intro N hN v _
     rw [jointMixed_chain_eq_zero_of_physicalDim_eq_zero hd (by omega) v]
     simp
-  · letI : NeZero (jointMixedPhysicalDim d₀ d₁ D₀ D₁) := ⟨hd⟩
-    letI : ∀ x, NeZero (D₀ x) := fun x => ⟨Nat.ne_of_gt (hD₀ x)⟩
+  · let : NeZero (jointMixedPhysicalDim d₀ d₁ D₀ D₁) := ⟨hd⟩
+    let : ∀ x, NeZero (D₀ x) := fun x => ⟨Nat.ne_of_gt (hD₀ x)⟩
     obtain ⟨δ, hδ, hGap⟩ :=
       exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop
         (fun _ => 1) (jointMixedEndpointLeftTensor A₀ d₁ D₁) (fun _ => one_ne_zero)
