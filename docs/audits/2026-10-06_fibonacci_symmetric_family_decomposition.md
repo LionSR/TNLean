@@ -157,6 +157,11 @@ and the empty subtype has an unused named binder. The current test-only
 repair handles those two diagnostics. The production proof is unchanged;
 the complete repaired regression and all final-head checks remain pending.
 
+Run `37441641307`, job `112197081418`, subsequently exposed a parser error
+in the anonymous empty-subtype binder. Naming it `_x` preserves the exact
+predicate and suppresses the intended unused-binder warning. The pinned
+Lean parser accepts this binder form; the full regression still awaits CI.
+
 Source checks passed: generated-import coverage (71 aggregators, 2765
 production modules), the existing strict-loop YAML and regression entry,
 unique ownership of the new theorem, all seven distinct references in the

@@ -54,7 +54,7 @@ example {D : Fin 3 → ℕ} {A : ∀ x, MPSTensor 2 (D x)}
 -- Empty physical families satisfy the same theorem without a nonemptiness premise.
 example (A : Fin 0 → MPSTensor 2 1) :
     Even (Fintype.card (Fin 0)) ∧
-      ∃ σ : Fin 0 ≃ {_ : Fin 0 // (0 : ℂ) = 0} × Fin 2, ∀ a x y,
+      ∃ σ : Fin 0 ≃ {_x : Fin 0 // (0 : ℂ) = 0} × Fin 2, ∀ a x y,
         (0 : ℂ) = if (σ x).1 = (σ y).1 then
           (fibNim a (σ x).2 (σ y).2 : ℂ) else 0 :=
   exists_equiv_prod_of_isMPOSymmetricFamily_fibNim
