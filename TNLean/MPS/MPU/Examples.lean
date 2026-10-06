@@ -9,6 +9,8 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPU.Examples
 
 import TNLean.MPS.MPU.Examples.CZXNormalizationAudit
+import TNLean.MPS.MPU.Examples.ControlledZ
+import TNLean.MPS.MPU.Examples.OddRing
 import TNLean.MPS.MPU.Examples.Shift
 import TNLean.MPS.MPU.Examples.ShiftBlockedIndex
 import TNLean.MPS.MPU.Examples.ShiftIndex
@@ -18,6 +20,7 @@ import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftSourceGateFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
+import TNLean.MPS.MPU.Examples.ShiftStrictEquivalence
 import TNLean.MPS.MPU.Examples.ShiftSwap
 import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
 import TNLean.MPS.MPU.Examples.ShiftSymmetryPaths

@@ -111,6 +111,55 @@ closing a chain of $N$ copies of $\mathcal U$.
     condition in \cite[Section~III, equation~(10)]{Cirac2017MPU}.
 \end{definition}
 
+\begin{example}[A tensor unitary on odd rings only]
+    \label{ex:mpu_odd_ring_tensor}
+    \lean{MPOTensor.oddRingTensor, MPOTensor.mpo_oddRingTensor_eq,
+        MPOTensor.oddRingMap_injective,
+        MPOTensor.mpo_oddRingTensor_mem_unitaryGroup_of_odd,
+        MPOTensor.mpo_oddRingTensor_not_mem_unitaryGroup_of_even,
+        MPOTensor.not_isMPU_oddRingTensor,
+        MPOTensor.rightRank_oddRingTensor, MPOTensor.leftRank_oddRingTensor}
+    \leanok
+    \uses{def:mpu, def:mpu_right_rank}
+    Let $d=D=3$ with indices in $\mathbb Z_3$ and $M^{ij}=|{-(i+j)})(j|$. The
+    operator on $N\geq1$ sites is the matrix of the map $j\mapsto i$,
+    $i_n=-(j_{n-1}+j_n)$, which is $\mathbb Z_3$-linear, injective for odd $N$, and
+    not injective for even $N$. Hence $M^{(N)}$ is unitary for odd $N$ and not
+    unitary for even $N$ (at $N=2$ the inputs $01$ and $10$ have the same image
+    $22$), so the tensor does not generate matrix product unitaries.
+    Its ranks are $r=9$ and $\ell=3$.
+    % Source: Şahinoğlu, Shukla, Bi, Chen, arXiv:1704.01943, Section 6, which
+    % states the properties from the transfer tensor; the kernel argument is the
+    % chapter's.
+\end{example}
+
+\begin{example}[The next-nearest-neighbour controlled-$Z$ tensor]
+    \label{ex:mpu_controlled_z_tensor}
+    \lean{MPOTensor.czTensor, MPOTensor.mpo_czTensor_apply, MPOTensor.mpo_czTensor_apply',
+        MPOTensor.czTensor_isMPU, MPOTensor.not_isMPUSimple_czTensor,
+        MPOTensor.blockTensor_czTensor_two_simple_witnesses,
+        MPOTensor.blockTensor_czTensor_two_isMPUSimple,
+        MPOTensor.rightRank_czTensor, MPOTensor.leftRank_czTensor,
+        MPOTensor.rightRank_blockTensor_czTensor_two,
+        MPOTensor.leftRank_blockTensor_czTensor_two,
+        MPOTensor.isMPUSimple_of_rankOne_diagonal}
+    \leanok
+    \uses{def:mpu, def:mpu_simple, def:mpdo_physical_blocking, def:mpu_right_rank}
+    Let $d=2$, $D=4$, bond indices $\alpha=(\alpha_1,\alpha_2)\in\{0,1\}^2$, and
+    $U^{ij}_{\alpha\beta}=\delta_{ij}\delta_{\alpha_2\beta_1}\delta_{\beta_2i}(-1)^{\alpha_1i}$.
+    For $N\geq1$ the operator on $N$ sites is diagonal with entries
+    $\prod_n(-1)^{i_ni_{n+2}}$ (indices modulo $N$), so the tensor generates matrix
+    product unitaries, and
+    for $N\geq3$ the product of controlled-$Z$ gates between next-nearest
+    neighbours. The tensor is not simple, its blocking of two sites is simple
+    with boundary vectors $\Omega$ and $\Omega/4$, and the ranks are $r=\ell=4$
+    for the tensor and for its blocking. The simplicity of the blocking follows
+    from a general criterion: a tensor whose double-layer letters are
+    $\delta_{ij}|X_i)(Y_i|$ with $(Y_i|X_k)=(Y_i|b)(a|X_k)$ and $(a|X_i)(Y_i|b)=1$
+    is simple with boundary vectors $a,b$.
+    % Source: the chapter's Example 4.9 (not in arXiv:1703.09188).
+\end{example}
+
 \begin{center}
     % Formula: U^{(N)}_{\sigma,\tau}=\tr(\mathcal U^{\sigma_1\tau_1}\cdots
     % \mathcal U^{\sigma_N\tau_N}), the periodic operator whose unitarity for
@@ -4952,6 +5001,22 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_nonzero_weights,gap:mpu_canonical_form_full_support}.
 \end{definition}
 
+\begin{lemma}[Canonical form from canonical form II]
+    \label{lem:mpu_canonical_form_of_cfii}
+    \lean{MPOTensor.IsMPUCanonicalFormII.isMPUCanonicalForm}
+    \leanok
+    \uses{def:mpu_canonical_form, def:cpsv_cfii}
+    Let $d\geq1$. A matrix product unitary tensor in canonical form II is in
+    canonical form.
+\end{lemma}
+
+\begin{proof}\leanok
+    Canonical form II gives a block decomposition of $d^{-1/2}\mathcal U$ with
+    normal blocks filling the bond space; a normal block is irreducible with a
+    transfer map of spectral radius one, so the same blocks with the weights
+    multiplied by $d^{1/2}$ decompose $\mathcal U$ as canonical form requires.
+\end{proof}
+
 \begin{theorem}[Normality of an MPU in canonical form]
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm}
@@ -6484,6 +6549,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_standard_form_parity_gap}.
 \end{theorem}
 
+
 \begin{proof}\leanok
     \uses{def:mpu_simple, def:mpo_family, def:mpo_stacked_layers,
         thm:mpu_double_layer_scalar_invariance, thm:mpu_identity_tensor_simple,
@@ -6498,6 +6564,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \mathcal V_2 & =\mathcal U_2, &
         U^{(3)}      & =I_8,          & V^{(3)} & =-I_8.
     \end{align}
+\end{proof}
+\begin{theorem}[The parity gates coincide]
+    \label{thm:mpu_parity_gates_coincide}
+    \lean{MPOTensor.parityIdentitySourceFactors, MPOTensor.parityNegativeSourceFactors,
+        MPOTensor.sourceU_parity_eq, MPOTensor.sourceV_parity_eq,
+        MPOTensor.parityIdentityTensor_exists_canonicalFormII,
+        MPOTensor.parityNegativeIdentityTensor_exists_canonicalFormII,
+        MPOTensor.rightRank_parityIdentityTensor, MPOTensor.leftRank_parityIdentityTensor,
+        MPOTensor.rightRank_parityNegativeIdentityTensor,
+        MPOTensor.leftRank_parityNegativeIdentityTensor}
+    \leanok
+    \uses{thm:mpu_standard_form_parity_obstruction, def:mpu_right_rank}
+    The two tensors of the parity obstruction are in canonical form II with
+    $\rho=1$, and have cut matrices $\pm I_2$ and ranks $r=\ell=2$. With the factors $X_1=X_2=I$, $Y_1=Y_2=Z_1=Z_2=I$ for the identity
+    tensor and $X_1=X_2=I$, $Y_1=Y_2=Z_1=Z_2=-I$ for its negative, both satisfying the
+    six factor identities with $\rho=1$, the gates $u$ and $v$ computed from the
+    factors are the same for both tensors: $u_{(l,r),(i_1i_2)}=\delta_{li_1}\delta_{ri_2}$
+    and $v_{(j_1j_2),(r,l)}=\delta_{j_1r}\delta_{j_2l}$.
+    % Source: the chapter's parity example; gap note mpu_standard_form_parity_gap.tex
+    % (which places the signs on $X$ instead; both choices give identity gates).
+\end{theorem}
+
+\begin{proof}\leanok
+    With bond dimension one the gate formulas $u=Y_2Y_1$ and $v=X_1X_2$ have one
+    term each, and $(-I)(-I)=I$.
 \end{proof}
 
 \begin{remark}
@@ -10678,6 +10769,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 1988--1995.
 \end{definition}
+
+\begin{proposition}[The shift products $U_2$ and $U_3$ are strictly equivalent]
+    \label{prop:mpu_shift_products_strictly_equivalent}
+    \lean{MPOTensor.shiftExampleU₂_strictlyEquivalent_shiftExampleU₃,
+        MPOTensor.shiftExampleU₂_isMPUCanonicalForm,
+        MPOTensor.shiftExampleU₃_isMPUCanonicalForm,
+        MPOTensor.IsMPU.conjugatePhysical, MPOTensor.IsMPU.bondConj}
+    \leanok
+    \uses{threeMPU, def:strictly-equivalent-tensors, lem:mpu_canonical_form_of_cfii,
+        thm:mpu-continuous-unitary-swap-path}
+    For $d\geq1$ the tensors $U_2=T^\dagger\otimes T$ and $U_3=T\otimes T^\dagger$ are in
+    canonical form and strictly equivalent, with no bond directions adjoined.
+    Conjugating the physical legs of a tensor by a unitary, or its bond space by a
+    unitary, preserves the matrix product unitary property.
+    % Source: paper_v2.tex, lines 1980--2001 and 2138--2151, where the source joins
+    % the ancilla-dressed $\widetilde U_{2,3}$ by one physical path; here $U_2$ and
+    % $U_3$ themselves are joined by a physical path followed by a bond path.
+\end{proposition}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_canonical_form_of_cfii, thm:mpu-continuous-unitary-swap-path}
+    The letter of $U_3$ at the exchanged physical indices is the letter of $U_2$
+    conjugated on the bond by the factor exchange $\mathbb S$. Let $\mathbb S(x)$,
+    $x\in[0,1]$, be the continuous unitary path from the identity to $\mathbb S$.
+    The path $x\mapsto\mathbb S(x)$ acting on the physical legs of $U_2$ ends at
+    $U_2$ with its two spins exchanged; the path $x\mapsto\mathbb S(x)(\cdot)\mathbb S(x)^\dagger$
+    on the bond space then ends at $U_3$. Every point generates matrix product
+    unitaries, since $\mathbb S(x)^{\otimes N}U^{(N)}\mathbb S(x)^{\dagger\otimes N}$ is
+    unitary and bond conjugation changes no operator. Canonical form of the
+    endpoints: the shift is in canonical form II, so are its physical adjoint
+    and the tensor products, hence they are in canonical form.
+\end{proof}
 
 \begin{definition}[Trace-normalized shift weight]
     \label{def:mpu_shift_trace_weight}

@@ -16,6 +16,7 @@ import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.BondPadding
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.CanonicalFormBlocking
+import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
 import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
@@ -76,6 +77,7 @@ import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
+import TNLean.MPS.MPU.SimpleRankOne
 import TNLean.MPS.MPU.SimpleSupportCompression
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SimpleTensorProduct
