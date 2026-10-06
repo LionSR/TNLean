@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.MinimalCutRepresentationPadding
 import TNLean.MPS.Preparation.VaryingBondBlocks
-import QICLean.Channel.KrausCPTP
+import QICLean.Kraus.RectangularChain
 
 /-!
 # Actual rectangular blocks and their zero padding
@@ -29,12 +29,10 @@ open scoped BigOperators
 namespace MPSChainTensor
 
 /-- Ordered multiplication on the actual bond spaces of a rectangular chain. -/
-def rectangularEval {d : ℕ} : {n : ℕ} → (b : ℕ → ℕ) →
+abbrev rectangularEval {d : ℕ} : {n : ℕ} → (b : ℕ → ℕ) →
     (∀ i : Fin n, Fin d → Matrix (Fin (b i.val)) (Fin (b (i.val + 1))) ℂ) →
-    (Fin n → Fin d) → Matrix (Fin (b 0)) (Fin (b n)) ℂ
-  | 0, _, _, _ => 1
-  | _n + 1, b, A, s => A ⟨0, Nat.succ_pos _⟩ (s ⟨0, Nat.succ_pos _⟩) *
-      rectangularEval (fun i => b (i + 1)) (fun i => A i.succ) (fun i => s i.succ)
+    (Fin n → Fin d) → Matrix (Fin (b 0)) (Fin (b n)) ℂ :=
+  @Kraus.rectangularEval d
 
 /-- Zero padding commutes with a nonempty ordered rectangular tensor product. -/
 theorem zeroPad_rectangularEval {d D n : ℕ} (b : ℕ → ℕ)
@@ -43,44 +41,30 @@ theorem zeroPad_rectangularEval {d D n : ℕ} (b : ℕ → ℕ)
     (s : Fin n → Fin d) (hn : 0 < n) :
     Matrix.zeroPad D (rectangularEval b A s) =
       eval (fun i k => Matrix.zeroPad D (A i k)) s := by
+  change Matrix.zeroPad D (Kraus.rectangularEval b A s) = _
   induction n generalizing b with
   | zero => omega
   | succ n ih =>
     cases n with
-    | zero => simp [rectangularEval, eval_succ]
+    | zero => simp [Kraus.rectangularEval, eval_succ]
     | succ n =>
-      rw [rectangularEval, eval_succ, Matrix.zeroPad_mul _ _ (hb 1),
+      rw [Kraus.rectangularEval, eval_succ, Matrix.zeroPad_mul _ _ (hb 1),
         ih (fun i => b (i + 1)) (fun i => hb (i + 1)) _ _ (Nat.succ_pos _)]
       rfl
 
 /-- The ordered composition of the actual rectangular transfer maps. -/
-noncomputable def rectangularTransfer {d : ℕ} : {n : ℕ} → (b : ℕ → ℕ) →
+noncomputable abbrev rectangularTransfer {d : ℕ} : {n : ℕ} → (b : ℕ → ℕ) →
     (∀ i : Fin n, Fin d → Matrix (Fin (b i.val)) (Fin (b (i.val + 1))) ℂ) →
     (Matrix (Fin (b n)) (Fin (b n)) ℂ →ₗ[ℂ]
-      Matrix (Fin (b 0)) (Fin (b 0)) ℂ)
-  | 0, _, _ => LinearMap.id
-  | _n + 1, b, A => (Matrix.rectangularKrausMap (A ⟨0, Nat.succ_pos _⟩)).comp
-      (rectangularTransfer (fun i => b (i + 1)) (fun i => A i.succ))
+      Matrix (Fin (b 0)) (Fin (b 0)) ℂ) :=
+  @Kraus.rectangularTransfer d
 
 /-- The actual rectangular product has exactly the ordered site transfer map. -/
 theorem rectangularTransfer_apply {d n : ℕ} (b : ℕ → ℕ)
     (A : ∀ i : Fin n, Fin d → Matrix (Fin (b i.val)) (Fin (b (i.val + 1))) ℂ)
     (X : Matrix (Fin (b n)) (Fin (b n)) ℂ) :
-    rectangularTransfer b A X = ∑ s, rectangularEval b A s * X * (rectangularEval b A s)ᴴ := by
-  induction n generalizing b with
-  | zero => simp [rectangularTransfer, rectangularEval, Finset.univ_unique]
-  | succ n ih =>
-    rw [rectangularTransfer, LinearMap.comp_apply, ih]
-    simp only [map_sum, Matrix.rectangularKrausMap, LinearMap.coe_mk, AddHom.coe_mk]
-    rw [Finset.sum_comm, ← (Fin.consEquiv (fun _ : Fin (n + 1) => Fin d)).sum_comp,
-      Fintype.sum_prod_type]
-    congr 1
-    funext i
-    apply Finset.sum_congr rfl
-    intro s _
-    dsimp only [rectangularEval, Fin.consEquiv_apply, Fin.cons_zero, Fin.cons_succ]
-    simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
-    rfl
+    rectangularTransfer b A X = ∑ s, rectangularEval b A s * X * (rectangularEval b A s)ᴴ :=
+  Kraus.rectangularTransfer_apply b A X
 
 end MPSChainTensor
 

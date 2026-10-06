@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Canonical purity consequences — promoted (2026-10-05)
+
+- **Pattern:** From a faithful canonical stationary density and the simple
+  peripheral eigenspace property, derive irreducibility and peripheral
+  primitivity before applying a twisted-transfer theorem.
+- **Seen:** The source spectral theorem and physical selection rule repeated
+  this reduction; finite physical endpoints need the same consequences.
+- **Abstraction:** `MPSTensor.pureCanonical_isIrreducibleMap_and_isPrimitive`
+  in `PureTwistedSpectrum`; the existing two consumers and the new canonical
+  endpoint theorem use it without altering their mathematical hypotheses.
+- **Notes:** Actual-import validation of the combined analytic refactor is
+  recorded separately in the String Order integration audit.
+
+
 ### Logarithmic normalization cutoff — promoted (2026-10-05)
 
 - **Pattern:** Turn `(log K - log ε) / r ≤ x` into `K exp(-rx) ≤ ε`.
@@ -2725,6 +2739,10 @@ three-plaquette output measurement, and the routed reunion measurement.
   captured rather than threaded through the lemma signature.
   `neighboringOperator_entry_eq_of_heq` stays: its conclusion is indexed by a
   sector pair, not a single index family.
+- **Upstream reuse (2026-10-05):** the unchanged generic `Matrix.entry_eq_of_heq`
+  now belongs to `QICLean/Algebra/MatrixDependentEntries.lean`. The original MPDO
+  module imports it, preserving the same name and binders for every existing consumer.
+  Actual varying-bond interval identification uses the same coordinate transport.
 
 ### MPDO pair-trace separation duality
 - **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,

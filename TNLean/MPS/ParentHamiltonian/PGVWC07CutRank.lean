@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
+import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.PGVWC07CanonicalForm
 import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
@@ -26,8 +27,6 @@ the functions of the first piece obtained by fixing the second piece lie in a su
 
 ## Main results
 
-* `Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` — block injectivity of the adjoint
-  family gives block injectivity at the same length.
 * `MPSTensor.wordTupleSpanTop_of_le_one` — a family of at most one block spans simultaneously
   wherever its block is injective.
 * `MPSTensor.wordTupleSpanTop_of_ge_of_isNBlkInjective`,
@@ -51,35 +50,6 @@ to the direct-sum lemma for canonical-form blocks, `BNTBlockIntersection`, which
 -/
 
 open scoped Matrix BigOperators ComplexOrder
-
-namespace Kraus
-
-variable {d D : ℕ}
-
-/-- Bridge: block injectivity passes from the adjoint family \(K_i^\dagger\) to \(K\), since
-conjugate transposition maps the words of \(K^\dagger\) of length \(L\) onto the reversed
-words of \(K\). -/
-theorem isNBlkInjective_of_isNBlkInjective_conjTranspose
-    {K : Fin d → Matrix (Fin D) (Fin D) ℂ} {L : ℕ}
-    (hK : IsNBlkInjective (fun i => (K i)ᴴ) L) : IsNBlkInjective K L := by
-  unfold IsNBlkInjective wordSpan at hK ⊢
-  refine eq_top_iff.mpr fun X _ => ?_
-  have key : ∀ Y ∈ Submodule.span ℂ
-      (Set.range fun σ : Fin L → Fin d => evalWord (fun i => (K i)ᴴ) (List.ofFn σ)),
-      Yᴴ ∈ Submodule.span ℂ
-        (Set.range fun σ : Fin L → Fin d => evalWord K (List.ofFn σ)) := by
-    intro Y hY
-    induction hY using Submodule.span_induction with
-    | mem x hx =>
-      obtain ⟨σ, rfl⟩ := hx
-      refine Submodule.subset_span ⟨σ ∘ Fin.rev, ?_⟩
-      simp only [evalWord_conjTranspose, Matrix.conjTranspose_conjTranspose, List.ofFn_reverse]
-    | zero => simp
-    | add x y _ _ hx hy => rw [Matrix.conjTranspose_add]; exact Submodule.add_mem _ hx hy
-    | smul a x _ hx => rw [Matrix.conjTranspose_smul]; exact Submodule.smul_mem _ _ hx
-  simpa using key Xᴴ (by rw [hK]; exact Submodule.mem_top)
-
-end Kraus
 
 namespace MPSTensor
 
