@@ -75,8 +75,11 @@ theorem jointMixedOuterCornerProjection_isSymmetricProjection (p : Bool × Bool)
 two-site physical space. -/
 theorem sum_jointMixedOuterCornerProjection :
     (∑ p : Bool × Bool, jointMixedOuterCornerProjection d₀ d₁ D₀ D₁ p) = 1 := by
-  simp [Fintype.sum_prod_type, Fintype.sum_bool, jointMixedOuterCornerProjection] <;>
-    noncomm_ring
+  let R := jointMixedRowSector d₀ d₁ D₀ D₁ (0 : Fin 2)
+  let C := jointMixedColumnSector d₀ d₁ D₀ D₁ (1 : Fin 2)
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool]
+  change ((1 - R) * (1 - C) + (1 - R) * C) + (R * (1 - C) + R * C) = 1
+  noncomm_ring
 
 /-- Distinct outer phase selectors have zero product, because at least
 one physical phase is selected with opposite values. -/
@@ -215,7 +218,7 @@ theorem jointMixedEndpointCornerSupport_false_false
       groundSpaceES (toTensorFromBlocks (μ := fun _ => 1)
         (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 := by
   simpa only [jointMixedEndpointCornerSupport, jointMixedOuterCornerProjection,
-    Bool.false_eq_true, if_false] using
+    Bool.false_eq_true, ite_false, Module.End.mul_eq_comp] using
       jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES A₀ A₁
 
 end MPSTensor.MPOSymmetry

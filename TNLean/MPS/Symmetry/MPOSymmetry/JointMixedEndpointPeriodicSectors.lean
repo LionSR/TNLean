@@ -72,7 +72,7 @@ theorem sum_periodicLocalInteractionES_jointMixedRowSector
   fin_cases site
   · simp
   · simpa only [Fin.val_one, cyclicForwardSite_one_eq_finRotate] using
-      (finRotate N).sum_comp (jointMixedRowSector d₀ d₁ D₀ D₁)
+      Equiv.sum_comp (finRotate N) (jointMixedRowSector d₀ d₁ D₀ D₁)
 
 /-- Summing a fixed local column-phase selector around the ring counts
 each chain column once. -/
@@ -85,7 +85,7 @@ theorem sum_periodicLocalInteractionES_jointMixedColumnSector
   fin_cases site
   · simp
   · simpa only [Fin.val_one, cyclicForwardSite_one_eq_finRotate] using
-      (finRotate N).sum_comp (jointMixedColumnSector d₀ d₁ D₀ D₁)
+      Equiv.sum_comp (finRotate N) (jointMixedColumnSector d₀ d₁ D₀ D₁)
 
 /-- The sum of all first-row and first-column phase penalties on a ring. -/
 noncomputable def jointMixedPeriodicPhasePenalty
@@ -232,8 +232,8 @@ theorem range_jointMixedPeriodicActiveProjection :
 kernel. -/
 theorem jointMixedPeriodicActiveProjection_eq_starProjection :
     jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N =
-      (LinearMap.ker (jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N)).starProjection
-        .toLinearMap := by
+      (LinearMap.ker
+        (jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N)).starProjection.toLinearMap := by
   apply jointMixedPeriodicActiveProjection_isSymmetricProjection.ext
     (Submodule.isSymmetricProjection_starProjection _)
   rw [Submodule.range_starProjection, range_jointMixedPeriodicActiveProjection]

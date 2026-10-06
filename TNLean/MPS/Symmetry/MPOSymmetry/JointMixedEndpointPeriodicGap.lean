@@ -91,9 +91,9 @@ theorem jointMixedEndpoint_periodic_active_of_mem_ker
     (hv : v ∈ LinearMap.ker (periodicInteractionHamiltonianES
       (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N)) :
     jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N v = v :=
-  jointMixedPeriodicActiveProjection_isSymmetricProjection
-    .apply_eq_self_of_one_sub_le_twice_of_mem_ker
-      (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN) hv
+  LinearMap.IsSymmetricProjection.apply_eq_self_of_one_sub_le_twice_of_mem_ker
+    jointMixedPeriodicActiveProjection_isSymmetricProjection
+    (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN) hv
 
 /-- The actual periodic extended endpoint and the common canonical parent
 have equal kernels. No injectivity is required for this identity.
