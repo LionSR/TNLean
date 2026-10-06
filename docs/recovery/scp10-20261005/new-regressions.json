@@ -1,0 +1,12 @@
+[
+  "TNLeanTest/FinitePermutationAverage.lean",
+  "TNLeanTest/QuantumDoubleCheckerboardBlocking.lean",
+  "TNLeanTest/QuantumDoubleLatticeHamiltonian.lean",
+  "TNLeanTest/QuantumDoublePlaquetteParent.lean",
+  "TNLeanTest/ToricCodePauliHamiltonian.lean",
+  "TNLeanTest/ToricCodePauliPreparation.lean",
+  "TNLeanTest/TorusDualBulkRerouting.lean",
+  "TNLeanTest/TorusPhysicalChargePairInterference.lean",
+  "TNLeanTest/TorusChargeBraidInterference.lean",
+  "TNLeanTest/QuantumDoubleOriginalHamiltonian.lean"
+]

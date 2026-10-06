@@ -1,0 +1,72 @@
+{
+  "snapshot_date_utc": "2026-10-06",
+  "historical_original_spin_commit": "04105be3202480fbb0c0e81d7f59defeb47de2e3",
+  "historical_integration_commit": "791f42a4c8449c84640030369f21a6f0b9596500",
+  "historical_integration_tree": "550dc9698b49813810fb07930a14cecd7c32ec70",
+  "historical_qiclean_pin": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f",
+  "files": [
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalGeometry.lean",
+      "sha256": "6684ad2dd2c9e99c86c2e840f71594392f3bf6e44e98789d0f86baf4dc745c34",
+      "recovery_status": "byte_verified_against_retained_original_final_sha256",
+      "original_sha256": "6684ad2dd2c9e99c86c2e840f71594392f3bf6e44e98789d0f86baf4dc745c34",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalGroundProjector.lean",
+      "sha256": "17490bbeb37a5c7ad2425a6b568c04005ae8e7836891199ec5a620f4d0002d03",
+      "recovery_status": "reconstructed_from_retained_source_text_no_original_hash_available",
+      "original_sha256": null,
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalGroundSpace.lean",
+      "sha256": "fc64283ce5262a146e40e68f36599ec04175bf6147cdb8d7fceb9b18cf5ff263",
+      "recovery_status": "byte_verified_against_retained_original_final_sha256",
+      "original_sha256": "fc64283ce5262a146e40e68f36599ec04175bf6147cdb8d7fceb9b18cf5ff263",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalHamiltonian.lean",
+      "sha256": "6adb9b6796be81bddcbc26d7d120088d4ff2e903f20d91d98c6e8195b433fbae",
+      "recovery_status": "byte_verified_against_retained_original_final_sha256",
+      "original_sha256": "6adb9b6796be81bddcbc26d7d120088d4ff2e903f20d91d98c6e8195b433fbae",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalPreparation.lean",
+      "sha256": "4c57b472358399a077775177a2acfde2451553ca4f7f527d142050d497bb1d5c",
+      "recovery_status": "reconstructed_from_retained_source_text_no_original_hash_available",
+      "original_sha256": null,
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLeanTest/QuantumDoubleOriginalHamiltonian.lean",
+      "sha256": "2cba0e95ad7ee87b40593e249d9c4ab2410004953afc004cb4bdd5b686e8e46d",
+      "recovery_status": "reconstructed_from_retained_source_text_no_original_hash_available",
+      "original_sha256": null,
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/blueprint/src/chapter/ch24_peps_quantum_double_original_spins.tex",
+      "sha256": "2e62edebf8103e018a853e2f077ee5d7359e85952ad51bba491e01802faa9fc1",
+      "recovery_status": "reconstructed_from_retained_source_text_no_original_hash_available",
+      "original_sha256": null,
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/docs/audits/2026-10-05_quantum_double_original_spins.md",
+      "sha256": "51de7b79576aac7fd4db5926afeacc72d95cf38b72556556388cec4ec2f71f9d",
+      "recovery_status": "reconstructed_from_retained_source_text_no_original_hash_available",
+      "original_sha256": null,
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/TorusCorrelatedChargePairCreation.lean",
+      "sha256": "e7c770f8583af636e7d2409f69e717fc8eb5a8ec6faff51321c344c190e91b9a",
+      "recovery_status": "byte_verified_against_recorded_original_sha256",
+      "original_sha256": "e7c770f8583af636e7d2409f69e717fc8eb5a8ec6faff51321c344c190e91b9a",
+      "current_validation": "not_run"
+    }
+  ]
+}

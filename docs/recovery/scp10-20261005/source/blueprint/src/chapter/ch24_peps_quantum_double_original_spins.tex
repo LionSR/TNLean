@@ -1,0 +1,276 @@
+\subsection{The original-spin quantum-double Hamiltonian}
+\label{sec:peps_qd_original_spins}
+
+Let $G$ be a finite group and let $w,h\ge3$.
+On the original lattice
+$\Lambda=(\mathbb Z/2w\mathbb Z)\times(\mathbb Z/2h\mathbb Z)$,
+place one copy of $\mathbb C[G]$ at every vertex.
+Use the four-site tiling $t(v,i)=2v+b_i$ of
+Definition~\ref{def:peps_tc_original_faces}, with
+$b_0=(1,1)$, $b_1=(1,0)$, $b_2=(0,0)$, and $b_3=(0,1)$.
+The tile interiors are the clockwise A faces in the arrow convention of
+\cite[Section~7.2]{Schuch2010PEPS}; the intervening A faces have the
+opposite geometric orientation. The face bijection in
+Theorem~\ref{thm:peps_tc_face_geometry} is independent of $G$.
+The period restriction is recorded in
+\cite{gap:rmp_peps_examples_small_torus}.
+
+\begin{definition}[Ordered products and original spin actions]
+    \label{def:peps_qd_original_actions}
+    \lean{TNLean.PEPS.quantumDoubleOriginalAHolonomy,
+        TNLean.PEPS.quantumDoubleOriginalBOutgoing,
+        TNLean.PEPS.quantumDoubleOriginalBIncoming,
+        TNLean.PEPS.quantumDoubleOriginalBAction,
+        TNLean.PEPS.quantumDoubleOriginalBPermutation}
+    \leanok
+    Write $\sigma_{v,i}=\sigma(t(v,i))$ for $\sigma\in G^\Lambda$,
+    and let $\mathrm e,\mathrm n$ denote the right and upper coarse steps.
+    The two A products are
+    \begin{align}
+        a_{\mathrm{in},v}(\sigma)
+          &=\sigma_{v,0}\sigma_{v,1}\sigma_{v,2}\sigma_{v,3},\\
+        a_{\mathrm{hole},v}(\sigma)
+          &=\sigma_{v+\mathrm n,1}\sigma_{v,0}
+            \sigma_{v+\mathrm e,3}\sigma_{v+\mathrm e+\mathrm n,2}.
+        \label{eq:peps_qd_original_a}
+    \end{align}
+    For a B face $e$, denote its outgoing and incoming spin sets by
+    $O_e$ and $I_e$. Across a right boundary and an upper boundary,
+    respectively, these are
+    \begin{align}
+        O_{\mathrm e,v}&=\{t(v,1),t(v+\mathrm e,3)\},&
+        I_{\mathrm e,v}&=\{t(v,0),t(v+\mathrm e,2)\},\\
+        O_{\mathrm n,v}&=\{t(v,0),t(v+\mathrm n,2)\},&
+        I_{\mathrm n,v}&=\{t(v,3),t(v+\mathrm n,1)\}.
+        \label{eq:peps_qd_original_incidence}
+    \end{align}
+    For $u\in G$, the original four-spin operation is
+    \begin{align}
+        (V_e(u)\sigma)_p=
+        \begin{cases}
+            u\sigma_p,&p\in O_e,\\
+            \sigma_pu^{-1},&p\in I_e,\\
+            \sigma_p,&p\notin O_e\cup I_e.
+        \end{cases}
+        \label{eq:peps_qd_original_action}
+    \end{align}
+    Thus an outgoing arrow receives $L_u$ and an incoming arrow receives
+    $R_u$, as in \cite[Section~7.2]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Four-spin support and the group action]
+    \label{thm:peps_qd_original_action_support}
+    \lean{TNLean.PEPS.quantumDoubleOriginalBOutgoing_right,
+        TNLean.PEPS.quantumDoubleOriginalBOutgoing_up,
+        TNLean.PEPS.quantumDoubleOriginalBIncoming_right,
+        TNLean.PEPS.quantumDoubleOriginalBIncoming_up,
+        TNLean.PEPS.quantumDoubleOriginalB_incidence,
+        TNLean.PEPS.quantumDoubleOriginalBAction_spectator,
+        TNLean.PEPS.quantumDoubleOriginalBAction_one,
+        TNLean.PEPS.quantumDoubleOriginalBAction_mul}
+    \leanok
+    \uses{def:peps_qd_original_actions,thm:peps_tc_face_geometry}
+    The sets $O_e$ and $I_e$ are disjoint, and their union is exactly
+    the four-site B face. Every other spin is fixed.
+    Moreover, $V_e(1)=I$ and $V_e(uv)=V_e(u)V_e(v)$ on the whole
+    original configuration space, including across either periodic seam.
+\end{theorem}
+\begin{proof}\leanok
+    The four corner labels in~(\ref{eq:peps_qd_original_incidence}) are
+    distinct under the bijective tiling. On outgoing spins, composition
+    gives $u(vg)=(uv)g$; on incoming spins it gives
+    $(gv^{-1})u^{-1}=g(uv)^{-1}$. Other spins remain fixed.
+\end{proof}
+
+\begin{definition}[Literal original A and B penalties]
+    \label{def:peps_qd_original_hamiltonian}
+    \lean{TNLean.PEPS.quantumDoubleOriginalATerm,
+        TNLean.PEPS.quantumDoubleOriginalBMatrix,
+        TNLean.PEPS.quantumDoubleOriginalBAverage,
+        TNLean.PEPS.quantumDoubleOriginalBTerm,
+        TNLean.PEPS.quantumDoubleOriginalTerm,
+        TNLean.PEPS.quantumDoubleOriginalHamiltonian}
+    \leanok
+    \uses{def:peps_qd_original_actions}
+    Let $M_e(u)\ket\sigma=\ket{V_e(u)\sigma}$. Define
+    \begin{align}
+        h_A^j&=I-\sum_{\sigma:a_j(\sigma)=1}\ket\sigma\bra\sigma,\\
+        P_B^e&=\frac1{|G|}\sum_{u\in G}M_e(u),& h_B^e&=I-P_B^e,\\
+        H&=\sum_j h_A^j+\sum_e h_B^e.
+        \label{eq:peps_qd_original_hamiltonian}
+    \end{align}
+    Every spectator spin carries the identity. The factor $|G|^{-1}$
+    corrects the unnormalized B sum printed in
+    \cite[Section~7.2]{Schuch2010PEPS}; see
+    \cite{gap:scp10_quantum_double_local_hamiltonian}.
+\end{definition}
+
+\begin{theorem}[Coefficientwise physical regrouping]
+    \label{thm:peps_qd_original_blocking}
+    \lean{TNLean.PEPS.quantumDoubleOriginalAHolonomy_block,
+        TNLean.PEPS.quantumDoubleOriginalBAction_block,
+        TNLean.PEPS.quantumDoubleOriginalBMatrix_apply,
+        TNLean.PEPS.quantumDoubleUnblockOperator_apply,
+        TNLean.PEPS.quantumDoubleOriginalATerm_eq_unblocked,
+        TNLean.PEPS.quantumDoubleOriginalBMatrix_eq_unblocked,
+        TNLean.PEPS.quantumDoubleOriginalBAverage_eq_unblocked,
+        TNLean.PEPS.quantumDoubleOriginalBTerm_eq_unblocked,
+        TNLean.PEPS.quantumDoubleOriginalTerm_eq_unblocked,
+        TNLean.PEPS.quantumDoubleOriginalHamiltonian_eq_unblocked}
+    \leanok
+    \uses{def:peps_qd_original_hamiltonian}
+    Let $U$ regroup each tile into its clockwise four-spin K register.
+    If $\widetilde h_j$ and $\widetilde H$ are the placed K penalties and
+    their sum, then on the entire physical space
+    \begin{align}
+        M_e(u)_{\sigma,\tau}
+          &=\mathbf1_{\sigma=V_e(u)\tau},\\
+        h_j&=U^\dagger\widetilde h_jU,&
+        H&=U^\dagger\widetilde HU.
+        \label{eq:peps_qd_original_blocking}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Regrouping~(\ref{eq:peps_qd_original_a}) gives exactly the local and
+    hole K products, in their stated order. On a right B face the four
+    affected spins receive $(R_u,L_u,R_u,L_u)$ in the order
+    $(v,0),(v,1),(v+\mathrm e,2),(v+\mathrm e,3)$; on an upper B face
+    they receive $(L_u,R_u,R_u,L_u)$ in the order
+    $(v,0),(v,3),(v+\mathrm n,1),(v+\mathrm n,2)$.
+    These are exactly the adjacent K-bond actions.
+    The bijective regrouping sends every matrix entry to the corresponding
+    K entry. Averaging with the same $|G|^{-1}$ and taking complements proves
+    the B identity; the diagonal product-one indicators prove the A identity.
+\end{proof}
+
+\begin{theorem}[Original projectors and their complete common kernel]
+    \label{thm:peps_qd_original_kernel}
+    \lean{TNLean.PEPS.quantumDoubleOriginalATerm_mulVec_eq_zero_iff,
+        TNLean.PEPS.quantumDoubleOriginalBTerm_mulVec_eq_zero_iff,
+        TNLean.PEPS.quantumDoubleOriginalTerm_isStarProjection,
+        TNLean.PEPS.quantumDoubleOriginalTerm_commute,
+        TNLean.PEPS.quantumDoubleOriginalTerm_posSemidef,
+        TNLean.PEPS.quantumDoubleOriginalHamiltonian_posSemidef,
+        TNLean.PEPS.quantumDoubleOriginalHamiltonian_mulVec_eq_zero_iff,
+        TNLean.PEPS.quantumDoubleOriginalHamiltonian_mulVec_eq_zero_iff_closureSpan}
+    \leanok
+    \uses{thm:peps_qd_original_blocking}
+    All original penalties are commuting orthogonal projections and
+    are positive semidefinite. Their sum is positive semidefinite. The
+    coefficient conditions below are imposed for every $\sigma\in G^\Lambda$
+    and $u\in G$:
+
+    \begin{align}
+        \ker H
+          &=\bigcap_j\ker h_A^j\cap\bigcap_e\ker h_B^e,\\
+        h_A^j\psi=0
+          &\iff a_j(\sigma)\ne1\Longrightarrow\psi(\sigma)=0,\\
+        h_B^e\psi=0
+          &\iff\psi(V_e(u)\sigma)=\psi(\sigma).
+    \end{align}
+    Equivalently, $H\psi=0$ precisely when $U\psi$ belongs to the span
+    of the actual commuting K closures.
+\end{theorem}
+\begin{proof}\leanok
+    The A assertion follows from its diagonal entries. The finite-group
+    average fixes exactly the invariant coefficient functions, proving
+    the B assertion. The coefficientwise identities transport the
+    full-space K commutators, orthogonal projections and complete kernel
+    through the unitary $U$; positivity identifies the sum's kernel with
+    the intersection of the individual kernels.
+\end{proof}
+
+\begin{theorem}[All original-spin ground sectors]
+    \label{thm:peps_qd_original_sectors}
+    \lean{TNLean.PEPS.quantumDoubleOriginalBlockingLinearEquiv,
+        TNLean.PEPS.quantumDoubleOriginalBlockingLinearEquiv_apply,
+        TNLean.PEPS.map_ker_quantumDoubleOriginalHamiltonian,
+        TNLean.PEPS.quantumDoubleOriginalClosure,
+        TNLean.PEPS.ker_quantumDoubleOriginalHamiltonian_eq_span_closures,
+        TNLean.PEPS.finrank_ker_quantumDoubleOriginalHamiltonian}
+    \leanok
+    \uses{thm:peps_qd_original_kernel}
+    Let $\Psi^K_{g,h}$ be the actual K closures and put
+    $\Phi_{g,h}=U^\dagger\Psi^K_{g,h}$. Then
+    \begin{align}
+        \ker H&=\operatorname{span}_{\mathbb C}
+          \{\Phi_{g,h}:gh=hg\},\\
+        \dim_{\mathbb C}\ker H
+          &=\#\bigl(\{(g,h):gh=hg\}/G\bigr),
+    \end{align}
+    where $G$ acts by simultaneous conjugation. No identity condition is imposed on either
+    noncontractible torus holonomy.
+\end{theorem}
+\begin{proof}\leanok
+    The linear regrouping maps the entire original kernel bijectively
+    onto the K kernel. Its commuting-closure spanning theorem and
+    commuting-pair conjugacy-class dimension formula therefore give
+    both assertions.
+\end{proof}
+
+\begin{theorem}[The original orthogonal ground projector]
+    \label{thm:peps_qd_original_ground_projector}
+    \lean{TNLean.PEPS.quantumDoubleOriginalGroundProjector,
+        TNLean.PEPS.quantumDoubleOriginalGroundProjector_eq_B_prod_A,
+        TNLean.PEPS.quantumDoubleOriginalGroundProjector_isStarProjection,
+        TNLean.PEPS.quantumDoubleOriginalGroundProjector_mulVec_eq_self_iff,
+        TNLean.PEPS.range_quantumDoubleOriginalGroundProjector}
+    \leanok
+    \uses{thm:peps_qd_original_kernel}
+    The correctly normalized product
+    \begin{align}
+        Q=\left(\prod_e P_B^e\right)\left(\prod_j(I-h_A^j)\right)
+    \end{align}
+    is an orthogonal projection with $\operatorname{ran}Q=\ker H$.
+    Equivalently, $Q\psi=\psi$ if and only if $H\psi=0$.
+\end{theorem}
+\begin{proof}\leanok
+    A product of commuting orthogonal projections is an orthogonal
+    projection whose fixed space is the intersection of their fixed
+    spaces. Here that intersection is the common kernel of the penalties.
+\end{proof}
+
+\begin{theorem}[Exact preparation from the group identity]
+    \label{thm:peps_qd_original_preparation}
+    \lean{TNLean.PEPS.quantumDoubleOriginalTerm_checkerboard,
+        TNLean.PEPS.quantumDoubleOriginalHamiltonian_checkerboard,
+        TNLean.PEPS.quantumDoubleOriginalCheckerboard_one_coefficient,
+        TNLean.PEPS.quantumDoubleOriginalCheckerboard_ne_zero,
+        TNLean.PEPS.quantumDoubleOriginalPhysicalColorConfig,
+        TNLean.PEPS.quantumDoubleOriginalATerm_one,
+        TNLean.PEPS.quantumDoubleOriginalGroundProjector_one_eq_B_product,
+        TNLean.PEPS.quantumDoubleOriginalCheckerboard_eq_sum_colorBasis,
+        TNLean.PEPS.card_quantumDoubleOriginalPhysicalColorings,
+        TNLean.PEPS.quantumDoubleOriginalCheckerboard_eq_groundProjector_one,
+        TNLean.PEPS.quantumDoubleOriginalCheckerboard_eq_B_product_one,
+        TNLean.PEPS.quantumDoubleOriginalGroundProjector_one_ne_zero}
+    \leanok
+    \uses{thm:peps_qd_original_ground_projector,thm:peps_qd_original_blocking}
+    Retain the elementary T tensor with its printed, unnormalized entries,
+    and let $\Psi_T$ be its actual periodic contraction. Every original
+    penalty annihilates $\Psi_T$, and
+    \begin{align}
+        \Psi_T
+          &=|G|^{2wh}Q\ket{1,\ldots,1}
+           =|G|^{2wh}\left(\prod_e P_B^e\right)\ket{1,\ldots,1},
+        \label{eq:peps_qd_original_preparation}\\
+        \Psi_T(1,\ldots,1)&=|G|\ne0.
+    \end{align}
+    Thus the projected product state is nonzero. The overall state scalar
+    in~(\ref{eq:peps_qd_original_preparation}) does not change the required
+    normalization of any individual projector.
+\end{theorem}
+\begin{proof}\leanok
+    Physical blocking gives $U\Psi_T=\Psi_K$ with scalar one. The actual
+    K contraction is the sum of the basis vectors produced by all shared
+    edge colorings $c\in G^E$, so
+    $\Psi_T=\sum_c\ket{\sigma(c)}$ with every stabilizer multiplicity retained.
+    Every K penalty kills $\Psi_K$, hence $Q\Psi_T=\Psi_T$.
+    Each column of $Q$ is a ground vector and is invariant under all bond
+    color changes. Self-adjointness of $Q$ therefore gives
+    $Q\ket{\sigma(c)}=Q\ket{1,\ldots,1}$ for every $c$.
+    There are $|G|^{|E|}=|G|^{2wh}$ colorings, proving the first identity.
+    The A projectors fix the all-identity input, so they can be omitted
+    from its preparation. Finally the all-identity K coefficient is
+    $|G|$, proving the nonzero assertion.
+\end{proof}

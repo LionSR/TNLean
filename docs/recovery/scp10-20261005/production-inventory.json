@@ -1,0 +1,70 @@
+{
+  "physical_t_to_k_blocking": [
+    "TNLean/PEPS/QuantumDoubleCheckerboardBlocking.lean",
+    "TNLean/PEPS/QuantumDoubleGlobalCheckerboardBlocking.lean",
+    "TNLean/PEPS/QuantumDoubleNativeGlobalBlocking.lean",
+    "TNLean/PEPS/QuantumDoubleBlockingNormalization.lean",
+    "TNLean/PEPS/QuantumDoubleBlockingTransport.lean"
+  ],
+  "six_spin_reunion": [
+    "TNLean/PEPS/RegularBraidedChargePairColumns.lean",
+    "TNLean/PEPS/RegularBraidedChargePairNorm.lean",
+    "TNLean/PEPS/RegularChargePairExterior.lean",
+    "TNLean/PEPS/RegularPhysicalBraidedChargePair.lean",
+    "TNLean/PEPS/RegularPhysicalChargePairReunion.lean",
+    "TNLean/PEPS/RegularRegionChargePairReturn.lean",
+    "TNLean/PEPS/TorusPhysicalChargePairInterference.lean",
+    "TNLean/PEPS/TorusPhysicalChargePairReunion.lean"
+  ],
+  "quantum_double_lattice": [
+    "TNLean/Algebra/FinitePermutationAverage.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeBlocking.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeClosure.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeGauge.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeHalfEdge.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeHamiltonian.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeKernel.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeNativeParent.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticePEPS.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeSourceParent.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleLatticeTwistedState.lean",
+    "TNLean/PEPS/Examples/QuantumDoublePlaquetteParent.lean",
+    "TNLean/PEPS/Examples/QuantumDoublePlaquetteParentGeometry.lean"
+  ],
+  "pauli": [
+    "TNLean/Algebra/CommutingMatrixProjectionProduct.lean",
+    "TNLean/PEPS/Examples/ToricCodePauliOperators.lean",
+    "TNLean/PEPS/Examples/ToricCodePlaquetteGeometry.lean",
+    "TNLean/PEPS/Examples/ToricCodePauliHamiltonian.lean",
+    "TNLean/PEPS/Examples/ToricCodePauliGroundSpace.lean",
+    "TNLean/PEPS/Examples/ToricCodePauliGroundProjector.lean",
+    "TNLean/PEPS/Examples/ToricCodePauliPreparation.lean"
+  ],
+  "bulk_rerouting": [
+    "TNLean/PEPS/TorusDualRectangle.lean",
+    "TNLean/PEPS/TorusDualBulkRerouting.lean"
+  ],
+  "geometric_braid": [
+    "TNLean/PEPS/FinitePhysicalStateNormalization.lean",
+    "TNLean/PEPS/RegularCorrelatedChargeGlobalCreation.lean",
+    "TNLean/PEPS/RegularCorrelatedChargeMotion.lean",
+    "TNLean/PEPS/RegularCorrelatedChargeNativeCut.lean",
+    "TNLean/PEPS/RegularThreeVertexChargeMotion.lean",
+    "TNLean/PEPS/TorusChargeBraidGeometry.lean",
+    "TNLean/PEPS/TorusChargeBraidInterference.lean",
+    "TNLean/PEPS/TorusChargeBraidMotion.lean",
+    "TNLean/PEPS/TorusChargeBraidPreparation.lean",
+    "TNLean/PEPS/TorusChargeBraidRoute.lean",
+    "TNLean/PEPS/TorusChargeLoopGeometry.lean",
+    "TNLean/PEPS/TorusChargeLoopMotion.lean",
+    "TNLean/PEPS/TorusChargeLoopRoute.lean",
+    "TNLean/PEPS/TorusCorrelatedChargePairCreation.lean"
+  ],
+  "original_spins": [
+    "TNLean/PEPS/Examples/QuantumDoubleOriginalGeometry.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleOriginalGroundProjector.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleOriginalGroundSpace.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleOriginalHamiltonian.lean",
+    "TNLean/PEPS/Examples/QuantumDoubleOriginalPreparation.lean"
+  ]
+}
