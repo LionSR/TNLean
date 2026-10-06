@@ -33,7 +33,9 @@ import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedIntersection
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedOpenKernel
+import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointBoundaryColumns
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointFamily
+import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSupport
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveBoundaryTransport

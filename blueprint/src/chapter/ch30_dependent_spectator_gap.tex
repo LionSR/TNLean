@@ -1,0 +1,322 @@
+\subsection{Dependent finite spectator coordinates}
+\label{subsec:mpo_dependent_spectator_gap}
+
+% Source checkpoint: the declarations below have not yet been built.
+% Add proof-status tags only after the pinned-toolchain verification succeeds.
+
+\begin{definition}[Finite dependent direct sums]
+    \label{def:mpo_sigma_fiber_operator}
+    \lean{ContinuousLinearMap.sigmaFiber, ContinuousLinearMap.sigmaFiberwiseMap,
+        ContinuousLinearMap.sigmaFiberwiseMap_apply_apply,
+        ContinuousLinearMap.sigmaFiber_sigmaFiberwiseMap}
+    Let $Q$ be finite, let $J_q$ be finite for each $q\in Q$, and set
+    $E_q=\C^{J_q}$ and $E=\C^{\coprod_{q\in Q}J_q}$, with Euclidean inner
+    products.  For $v\in E$, its restriction $v_q\in E_q$ is given by
+    $v_q(i)=v(q,i)$.  A family of complex linear maps $F_q:E_q\to E_q$
+    defines $F_\Sigma:E\to E$ by
+    \begin{align}
+        (F_\Sigma v)(q,i) & =(F_qv_q)(i), & (F_\Sigma v)_q & =F_qv_q.
+    \end{align}
+    The finite sets may be empty.
+\end{definition}
+
+\begin{definition}[Extension from one label by zero]
+    \label{def:mpo_single_sigma_fiber}
+    \lean{ContinuousLinearMap.singleSigmaFiber,
+        ContinuousLinearMap.sigmaFiber_singleSigmaFiber}
+    \uses{def:mpo_sigma_fiber_operator}
+    For $q\in Q$ and $u\in E_q$, the extension $\iota_qu\in E$ has
+    restriction $u$ at $q$ and zero at every other label.  Thus
+    $(\iota_qu)_q=u$ and $(\iota_qu)_r=0$ for $r\ne q$.
+\end{definition}
+
+\begin{theorem}[Inner products and norms in a finite direct sum]
+    \label{thm:mpo_sigma_fiber_inner_norm}
+    \lean{ContinuousLinearMap.inner_eq_sum_inner_sigmaFiber,
+        ContinuousLinearMap.norm_sq_eq_sum_norm_sq_sigmaFiber}
+    \uses{def:mpo_sigma_fiber_operator}
+    For finite $Q$, finite $J_q$, and $v,w\in E$,
+    \begin{align}
+        \langle v,w\rangle & =\sum_{q\in Q}\langle v_q,w_q\rangle,
+                           & \|v\|^2                               & =\sum_{q\in Q}\|v_q\|^2.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Expand each inner product as the sum of its scalar coordinates and
+    group the coordinates with the same label $q$.
+\end{proof}
+
+\begin{theorem}[Extension identities]
+    \label{thm:mpo_single_sigma_fiber_identities}
+    \lean{ContinuousLinearMap.norm_singleSigmaFiber,
+        ContinuousLinearMap.inner_singleSigmaFiber,
+        ContinuousLinearMap.sigmaFiberwiseMap_singleSigmaFiber}
+    \uses{def:mpo_single_sigma_fiber, def:mpo_sigma_fiber_operator}
+    For finite $Q$, finite $J_q$, any complex linear family $(F_q)$,
+    $q\in Q$, $u\in E_q$, and $v\in E$,
+    \begin{align}
+        \|\iota_qu\|             & =\|u\|,                &
+        \langle\iota_qu,v\rangle & =\langle u,v_q\rangle, &
+        F_\Sigma\iota_qu         & =\iota_qF_qu.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{def:mpo_single_sigma_fiber, thm:mpo_sigma_fiber_inner_norm}
+    All restrictions outside $q$ vanish.  The sums for the norm and inner
+    product therefore have only the term indexed by $q$.  The operator
+    identity follows from $F_r0=0$ at every $r\ne q$.
+\end{proof}
+
+\begin{theorem}[Kernels in a finite direct sum]
+    \label{thm:mpo_sigma_fiber_kernel}
+    \lean{ContinuousLinearMap.mem_ker_sigmaFiberwiseMap_iff}
+    \uses{def:mpo_sigma_fiber_operator}
+    For finite $Q$, finite $J_q$, and a complex linear family $(F_q)$,
+    $v\in\ker F_\Sigma$ if and only if $v_q\in\ker F_q$ for every $q\in Q$.
+\end{theorem}
+\begin{proof}
+    The equation $F_\Sigma v=0$ is equivalent to $F_qv_q=0$ at every label.
+\end{proof}
+
+\begin{theorem}[Orthogonal kernels in a finite direct sum]
+    \label{thm:mpo_sigma_fiber_orthogonal}
+    \lean{ContinuousLinearMap.mem_orthogonal_ker_sigmaFiberwiseMap_iff}
+    \uses{def:mpo_sigma_fiber_operator}
+    For finite $Q$, finite $J_q$, and a complex linear family $(F_q)$,
+    $v\in(\ker F_\Sigma)^\perp$ if and only if
+    $v_q\in(\ker F_q)^\perp$ for every $q\in Q$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_sigma_fiber_kernel, thm:mpo_sigma_fiber_inner_norm,
+        thm:mpo_single_sigma_fiber_identities}
+    If $v\perp\ker F_\Sigma$, test against $\iota_qu$ for $u\in\ker F_q$,
+    obtaining $0=\langle\iota_qu,v\rangle=\langle u,v_q\rangle$.
+    Conversely, for $w\in\ker F_\Sigma$, each summand in
+    $\langle w,v\rangle=\sum_q\langle w_q,v_q\rangle$ vanishes.
+\end{proof}
+
+\begin{theorem}[Extension of norm gaps to a finite direct sum]
+    \label{thm:mpo_sigma_fiber_gap_forward}
+    \lean{ContinuousLinearMap.norm_gap_sigmaFiberwiseMap}
+    \uses{def:mpo_sigma_fiber_operator}
+    Let $Q$ and every $J_q$ be finite, let each $F_q$ be complex linear,
+    and let $\delta\geq0$.  If $\delta\|u\|\leq\|F_qu\|$ for all $q\in Q$
+    and $u\in(\ker F_q)^\perp$, then
+    $\delta\|v\|\leq\|F_\Sigma v\|$ for every
+    $v\in(\ker F_\Sigma)^\perp$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_sigma_fiber_orthogonal, thm:mpo_sigma_fiber_inner_norm}
+    Sum the inequalities $\delta^2\|v_q\|^2\leq\|F_qv_q\|^2$ and take
+    nonnegative square roots.
+\end{proof}
+
+\begin{theorem}[Norm gaps in a finite direct sum]
+    \label{thm:mpo_sigma_fiber_gap_iff}
+    \lean{ContinuousLinearMap.norm_gap_sigmaFiberwiseMap_iff}
+    \uses{def:mpo_sigma_fiber_operator}
+    Let $Q$ and every $J_q$ be finite, let each $F_q$ be complex linear,
+    and let $\delta\geq0$.  Then
+    \begin{align}
+         & \bigl[\forall v\in(\ker F_\Sigma)^\perp,\quad
+        \delta\|v\|\leq\|F_\Sigma v\|\bigr]\notag        \\
+         & \qquad\Longleftrightarrow\quad
+        \bigl[\forall q\in Q\;\forall u\in(\ker F_q)^\perp,\quad
+            \delta\|u\|\leq\|F_qu\|\bigr].
+    \end{align}
+    No nonemptiness, positivity, or symmetry assumption is imposed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_sigma_fiber_gap_forward, thm:mpo_sigma_fiber_orthogonal,
+        thm:mpo_single_sigma_fiber_identities}
+    The reverse implication is Theorem~\ref{thm:mpo_sigma_fiber_gap_forward}.
+    For the forward implication, apply the bound to $\iota_qu$, using
+    $\|\iota_qu\|=\|u\|$ and $\|F_\Sigma\iota_qu\|=\|F_qu\|$.
+\end{proof}
+
+\begin{definition}[Operators with dependent spectator coordinates]
+    \label{def:mpo_dependent_spectator_operator}
+    \lean{ContinuousLinearMap.dependentRightFiber, ContinuousLinearMap.dependentRightFiberwiseMap,
+        ContinuousLinearMap.dependentRightFiberwiseMap_apply_apply,
+        ContinuousLinearMap.dependentRightFiber_dependentRightFiberwiseMap}
+    Let $Q$ be a finite set, and let $I_q$ and $S_q$ be finite sets for each
+    $q\in Q$.  Write $\mathcal H_q=\C^{I_q}$ and
+    $\mathcal H_S=\C^{\coprod_{q\in Q}(I_q\times S_q)}$, with their Euclidean
+    inner products.  For $v\in\mathcal H_S$, $q\in Q$, and $s\in S_q$, define
+    $v_{q,s}\in\mathcal H_q$ by $v_{q,s}(i)=v(q,i,s)$.
+    Given complex linear operators $G_q:\mathcal H_q\to\mathcal H_q$, define
+    $H_S:\mathcal H_S\to\mathcal H_S$ by
+    \begin{align}
+        (H_Sv)(q,i,s) & =(G_qv_{q,s})(i).
+        \label{eq:mpo_dependent_spectator_action}
+    \end{align}
+    No set in this definition is required to be nonempty.
+\end{definition}
+
+\begin{theorem}[Kernel decomposition]
+    \label{thm:mpo_dependent_spectator_kernel}
+    \lean{ContinuousLinearMap.mem_ker_dependentRightFiberwiseMap_iff}
+    \uses{def:mpo_dependent_spectator_operator}
+    For the finite sets and operators in
+    Definition~\ref{def:mpo_dependent_spectator_operator}, every
+    $v\in\mathcal H_S$ satisfies
+    \begin{align}
+        v\in\ker H_S
+         & \quad\Longleftrightarrow\quad
+        \forall q\in Q\;\forall s\in S_q,\quad v_{q,s}\in\ker G_q.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    By~(\ref{eq:mpo_dependent_spectator_action}), $H_Sv=0$ if and only if
+    $G_qv_{q,s}=0$ for every $q$ and $s$.
+\end{proof}
+
+\begin{theorem}[Orthogonal kernel decomposition]
+    \label{thm:mpo_dependent_spectator_orthogonal}
+    \lean{ContinuousLinearMap.mem_orthogonal_ker_dependentRightFiberwiseMap_iff}
+    \uses{def:mpo_dependent_spectator_operator}
+    For the finite sets and operators in
+    Definition~\ref{def:mpo_dependent_spectator_operator}, every
+    $v\in\mathcal H_S$ satisfies
+    \begin{align}
+        v\in(\ker H_S)^\perp
+         & \quad\Longleftrightarrow\quad
+        \forall q\in Q\;\forall s\in S_q,\quad v_{q,s}\in(\ker G_q)^\perp.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_dependent_spectator_kernel}
+    For the forward implication, extend any $u\in\ker G_q$ by zero outside
+    the coordinate $(q,s)$.  The resulting vector $\widetilde u$ belongs to
+    $\ker H_S$ and satisfies
+    $\langle\widetilde u,v\rangle=\langle u,v_{q,s}\rangle$.
+    For the reverse implication, sum
+    $\langle u,v\rangle=\sum_{q\in Q}\sum_{s\in S_q}
+        \langle u_{q,s},v_{q,s}\rangle=0$ for $u\in\ker H_S$.
+\end{proof}
+
+\begin{theorem}[Squared norm decomposition]
+    \label{thm:mpo_dependent_spectator_norm}
+    \lean{ContinuousLinearMap.norm_sq_eq_sum_norm_sq_dependentRightFiber}
+    \uses{def:mpo_dependent_spectator_operator}
+    For finite $Q$, finite $I_q,S_q$, and every $v\in\mathcal H_S$,
+    \begin{align}
+        \|v\|^2 & =\sum_{q\in Q}\sum_{s\in S_q}\|v_{q,s}\|^2.
+        \label{eq:mpo_dependent_spectator_norm}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Expand $\|v\|^2=\sum_{q,i,s}|v(q,i,s)|^2$ and exchange the finite sums
+    over $i\in I_q$ and $s\in S_q$.
+\end{proof}
+
+\begin{theorem}[Extension of a common norm gap]
+    \label{thm:mpo_dependent_spectator_gap_forward}
+    \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap}
+    \uses{def:mpo_dependent_spectator_operator}
+    Let $Q$, $I_q$, and $S_q$ be finite, let each $G_q$ be complex linear, and
+    let $\delta\geq0$.  Suppose
+    $\delta\|u\|\leq\|G_qu\|$ for every $q\in Q$ and
+    $u\in(\ker G_q)^\perp$.  Then
+    $\delta\|v\|\leq\|H_Sv\|$ for every $v\in(\ker H_S)^\perp$.
+    The sets $Q$, $I_q$, and $S_q$ may be empty.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_dependent_spectator_orthogonal, thm:mpo_dependent_spectator_norm}
+    For $v\in(\ker H_S)^\perp$, the hypotheses and
+    (\ref{eq:mpo_dependent_spectator_norm}) give
+    \begin{align}
+        \delta^2\|v\|^2
+         & =\sum_{q\in Q}\sum_{s\in S_q}\delta^2\|v_{q,s}\|^2
+        \leq\sum_{q\in Q}\sum_{s\in S_q}\|G_qv_{q,s}\|^2
+        =\|H_Sv\|^2.
+    \end{align}
+    Taking nonnegative square roots proves the claim.
+\end{proof}
+
+\begin{theorem}[Equivalence of common norm gaps]
+    \label{thm:mpo_dependent_spectator_gap_iff}
+    \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap_iff}
+    \uses{def:mpo_dependent_spectator_operator}
+    Let $Q$ and each $I_q$ be finite, let each $S_q$ be finite and nonempty,
+    let each $G_q$ be complex linear, and let $\delta\geq0$.  Then
+    \begin{align}
+         & \bigl[\forall v\in(\ker H_S)^\perp,\quad
+        \delta\|v\|\leq\|H_Sv\|\bigr]\notag         \\
+         & \qquad\Longleftrightarrow\quad
+        \bigl[\forall q\in Q\;\forall u\in(\ker G_q)^\perp,\quad
+            \delta\|u\|\leq\|G_qu\|\bigr].
+    \end{align}
+    The label set $Q$ may be empty; no positivity or symmetry is assumed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_dependent_spectator_gap_forward, thm:mpo_dependent_spectator_orthogonal}
+    The reverse implication is
+    Theorem~\ref{thm:mpo_dependent_spectator_gap_forward}.
+    For the forward implication, fix $q\in Q$ and choose $s\in S_q$.
+    Extend $u\in(\ker G_q)^\perp$ by zero outside $(q,s)$ to obtain
+    $v\in(\ker H_S)^\perp$.  Then $\|v\|=\|u\|$ and
+    $\|H_Sv\|=\|G_qu\|$.
+\end{proof}
+
+\begin{theorem}[Changing dependent spectator multiplicities]
+    \label{thm:mpo_dependent_spectator_replacement}
+    \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap_iff_dependentRightFiberwiseMap}
+    \uses{def:mpo_dependent_spectator_operator}
+    Let $Q$ and each $I_q$ be finite.  Let $S_q$ and $T_q$ be finite and
+    nonempty for every $q\in Q$, let each $G_q$ be complex linear, and let
+    $\delta\geq0$.  Form $H_S$ and $H_T$ from this same family $(G_q)_{q\in Q}$.
+    Then
+    \begin{align}
+         & \bigl[\forall v\in(\ker H_S)^\perp,\quad
+        \delta\|v\|\leq\|H_Sv\|\bigr]\notag         \\
+         & \qquad\Longleftrightarrow\quad
+        \bigl[\forall w\in(\ker H_T)^\perp,\quad
+            \delta\|w\|\leq\|H_Tw\|\bigr].
+    \end{align}
+    There is no restriction on the relative cardinalities of $S_q$ and $T_q$,
+    and no positivity, symmetry, or nonemptiness of $Q$ is assumed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_dependent_spectator_gap_iff}
+    Both statements are equivalent to
+    $\delta\|u\|\leq\|G_qu\|$ for all $q\in Q$ and
+    $u\in(\ker G_q)^\perp$.
+\end{proof}
+
+\begin{theorem}[Ordered-pair boundary multiplicities]
+    \label{thm:mpo_joint_boundary_spectator_gap}
+    \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_spectatorGap_iff}
+    \uses{def:mpo_dependent_spectator_operator}
+    Let $r,d_0,N\in\N$, and let $D_x^0,D_x^1\in\N$ for $0\leq x<r$,
+    with $D_x^0>0$.  For every ordered pair $(x,y)$, put
+    \begin{align}
+        I_{x,y} & =\{0,\ldots,D_x^0-1\}\times\{0,\ldots,d_0-1\}^{\{0,\ldots,N-1\}}
+        \times\{0,\ldots,D_y^0-1\},                                                \\
+        S_{x,y} & =\{0,\ldots,D_x^0-1\}\times\{0,\ldots,D_y^0-1\},                 \\
+        T_{x,y} & =\{0,\ldots,D_x^0+D_x^1-1\}\times\{0,\ldots,D_y^0+D_y^1-1\}.
+    \end{align}
+    For any family of complex linear operators $G_{x,y}:\C^{I_{x,y}}\to\C^{I_{x,y}}$
+    and any $\delta\geq0$, the operators $H_S$ and $H_T$ defined by this same
+    family satisfy
+    \begin{align}
+         & \bigl[\forall v\in(\ker H_S)^\perp,\quad
+        \delta\|v\|\leq\|H_Sv\|\bigr]\notag         \\
+         & \qquad\Longleftrightarrow\quad
+        \bigl[\forall w\in(\ker H_T)^\perp,\quad
+            \delta\|w\|\leq\|H_Tw\|\bigr].
+    \end{align}
+    Every ordered pair is retained, including $x\ne y$.  The case $r=0$ is
+    allowed, and no positivity of $D_x^1$ or of $G_{x,y}$ is required.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_dependent_spectator_replacement}
+    Each $S_{x,y}$ is nonempty because $D_x^0,D_y^0>0$.
+    The inequalities $D_x^0+D_x^1\geq D_x^0>0$ and
+    $D_y^0+D_y^1\geq D_y^0>0$ imply that $T_{x,y}$ is nonempty.
+    Apply Theorem~\ref{thm:mpo_dependent_spectator_replacement} with label set
+    $\{0,\ldots,r-1\}^2$.
+\end{proof}
+
+% This is only the change of spectator multiplicities. Identifying actual
+% mixed-endpoint Hamiltonians with the common family G_{x,y} remains separate.
