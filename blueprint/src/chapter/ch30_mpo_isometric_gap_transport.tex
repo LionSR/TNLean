@@ -81,12 +81,13 @@ $E^\dagger$, so their coefficients are complex conjugated as in
     \label{thm:mpo_isometry_support_commute}
     \lean{MPOTensor.embed_twoSiteSectorProjection_commute,
         MPSTensor.isometricInteractionExtension_zero_translate_commute}
+    \leanok
     For any one-site matrix $R$ and $N\geq2$, all periodic translates
     of $R\otimes R$ commute. Thus the translates of $I-Q\otimes Q$
     commute. The commutation assertion requires neither $R$ to be a
     projection nor $E$ to be an isometry when $Q=EE^\dagger$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     A translate is the tensor product of $R$ on its two cyclic sites
     and $I$ elsewhere. At each site, the factors from any two translates
     belong to $\{R,I\}$ and commute. Multiplication of tensor products
@@ -100,6 +101,7 @@ $E^\dagger$, so their coefficients are complex conjugated as in
     \lean{MPSTensor.isometricInteractionExtension_zero_ker_eq_range,
         MPSTensor.isometricInteractionExtension_posSemidef,
         MPSTensor.isometricInteractionExtension_inactive_energy_lower_bound}
+    \leanok
     \uses{def:spt_isometric_interaction_extension}
     If $E^\dagger E=I$, $h\geq0$, and $N\geq2$, then $h'\geq0$ and
     \begin{align}
@@ -110,7 +112,7 @@ $E^\dagger$, so their coefficients are complex conjugated as in
         \label{eq:mpo_isometry_inactive_energy}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpo_isometry_support_commute,
         thm:spt_isometric_interaction_ground_space,
         thm:spt_sector_bond_gap,thm:spt_isometric_parent_interaction,
@@ -147,11 +149,12 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
 \begin{theorem}[Kernel transport from a strict complementary bound]
     \label{thm:mpo_isometry_abstract_kernel}
     \lean{LinearIsometry.ker_eq_map_of_intertwines_of_inactive_bound}
+    \leanok
     If $c>0$ and $c\|y\|^2\leq q_L(y)$ whenever $U^\dagger y=0$,
     then $\ker L=U(\ker K)$. No symmetry or positivity assumption on
     $L$ or $K$ is needed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     If $Lv=0$, use (\ref{eq:mpo_isometry_decomposition}). Then
     $Ly=-UKx$, so orthogonality gives $q_L(y)=0$. The strict lower
     bound forces $y=0$. Thus $v=Ux$, and $UKx=Lv=0$ implies $Kx=0$
@@ -161,6 +164,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
 \begin{theorem}[Combining quadratic-form bounds]
     \label{thm:mpo_isometry_abstract_quadratic}
     \lean{LinearIsometry.re_inner_ge_of_intertwines}
+    \leanok
     Suppose $L$ is self-adjoint, $\delta,c\in\R$, and
     \begin{align}
         \delta\|x\|^2 & \leq q_K(x)
@@ -171,7 +175,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     Then $\min\{\delta,c\}\|v\|^2\leq q_L(v)$ for
     $v\perp\ker L$. Neither constant is required to be nonnegative.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     For $v\perp\ker L$, the vector $x=U^\dagger v$ lies in
     $(\ker K)^\perp$, because $U(\ker K)\subseteq\ker L$.
     Intertwining gives $\langle LUx,y\rangle=0$ in
@@ -189,13 +193,14 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
 \begin{theorem}[Combining a norm gap with a complementary energy bound]
     \label{thm:mpo_isometry_abstract_norm}
     \lean{LinearIsometry.norm_gap_of_intertwines}
+    \leanok
     Suppose $K,L\geq0$, $\delta\geq0$, and
     $\delta\|x\|\leq\|Kx\|$ for $x\perp\ker K$.
     If $c\|y\|^2\leq q_L(y)$ whenever $U^\dagger y=0$, then
     $\min\{\delta,c\}\|v\|\leq\|Lv\|$ for $v\perp\ker L$.
     No sign assumption on $c$ is required.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpo_isometry_abstract_quadratic}
     For a positive operator, the norm-gap hypothesis with
     $\delta\geq0$ gives $q_K(x)\geq\delta\|x\|^2$ on the kernel
@@ -211,6 +216,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     \label{thm:mpo_isometry_positive_kernel}
     \lean{MPSTensor.isometricInteractionExtension_ker_eq_map_of_posSemidef,
         MPSTensor.isometricInteractionExtension_ker_eq_span_of_posSemidef}
+    \leanok
     \uses{def:spt_isometric_interaction_extension}
     For $E^\dagger E=I$, $h\geq0$, and $N\geq2$,
     \begin{align}
@@ -221,7 +227,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     $\ker H'_N=\spn_{\C}\{W_N\psi\}$. This holds even for
     $\psi=0$; a nonzero ground vector is not a hypothesis.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:spt_isometric_interaction_zero_modes,
         thm:mpo_isometry_inactive_bound,thm:mpo_isometry_abstract_kernel}
     The tensor power $W_N$ is an isometry, and the periodic
@@ -237,6 +243,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     \lean{MPSTensor.isometricInteractionExtension_quadratic_gap,
         MPSTensor.isometricInteractionExtension_norm_gap,
         MPSTensor.isometricInteractionExtension_spectrum_gap}
+    \leanok
     \uses{def:spt_isometric_interaction_extension}
     Suppose $E^\dagger E=I$, $h\geq0$, and $N\geq2$.
     A quadratic-form bound $\delta\|x\|^2\leq
@@ -262,7 +269,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     The quadratic-form and spectral assertions allow arbitrary real
     $\delta$. None of these assertions requires $0$ to be an eigenvalue.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:spt_isometric_interaction_zero_modes,
         thm:spt_periodic_hamiltonian_order,thm:mpo_isometry_inactive_bound,
         thm:mpo_isometry_abstract_quadratic,thm:mpo_isometry_abstract_norm}
@@ -308,10 +315,11 @@ interpolation in \cite[Section~5]{GarreRubio2023MPOSym}.
 \begin{theorem}[Injectivity of the positive polar tensor]
     \label{thm:mpo_polar_support_injective}
     \lean{MPSTensor.isInjective_polarPosTensor}
+    \leanok
     \uses{def:ldpolar_tensor,def:injective}
     If $A_p$ is one-site injective, then $B_p$ is one-site injective.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:ldpolar_tensor_decomposition}
     Every letter $A_p^i=\sum_k(F_p)_{ik}B_p^k$ belongs to the span
     of the letters of $B_p$. Since the letters of $A_p$ span
@@ -340,6 +348,7 @@ These assertions require no symmetry of the endpoint tensors.
 \begin{definition}[The mixed tensor in the common physical space]
     \label{def:mpo_arbitrary_physical_tensor}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInterpolation}
+    \leanok
     \uses{def:mpo_mixed_endpoint_tensor,def:ldpolar_tensor,
         def:spt_common_physical_endpoints}
     Let $\mathcal B(\gamma)$ be the mixed interpolation of $B_0,B_1$
@@ -355,13 +364,14 @@ These assertions require no symmetry of the endpoint tensors.
     \label{thm:mpo_arbitrary_tensor_continuity}
     \lean{MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalMixedInterpolation,
         MPSTensor.MPOSymmetry.isInjective_arbitraryPhysicalMixedInterpolation}
+    \leanok
     \uses{def:mpo_arbitrary_physical_tensor,def:injective}
     For arbitrary $A_0,A_1$, the tensor $\widetilde A(\gamma)$ is
     continuous for $\gamma\in\R$. If both tensors are one-site
     injective, then $\widetilde A(\gamma)$ is injective for
     $0<\gamma<1$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpo_mixed_interior,thm:mpo_polar_support_injective,
         thm:spt_common_physical_endpoints}
     The mixed tensor depends continuously on $\gamma$, and physical
@@ -379,6 +389,7 @@ These assertions require no symmetry of the endpoint tensors.
         MPSTensor.MPOSymmetry.rotatePhysical_mixedEndpointRightTensor_polarPosTensor,
         MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_zero,
         MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_one}
+    \leanok
     \uses{def:mpo_arbitrary_physical_tensor,def:mpo_mixed_first_endpoint,
         def:mpo_mixed_endpoint_swap}
     Extending a square-alphabet tensor by zero into its diagonal
@@ -396,7 +407,7 @@ These assertions require no symmetry of the endpoint tensors.
     \end{align}
     The equality at $p$ requires injectivity only of $A_p$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:spt_common_physical_polar_endpoints,
         thm:ldpolar_tensor_decomposition,
         thm:mpo_mixed_periodic_line_continuity}
@@ -432,6 +443,7 @@ original tensors.
     \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator,
         MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator,
         MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_interactionHamiltonian}
+    \leanok
     For any local matrix $a$ on $(\C^d)^{\otimes R}$, with $R\leq N$,
     its action on a cyclic window agrees with the operator defined by applying $a$
     to that window and fixing the exterior configuration. Their periodic
@@ -440,7 +452,7 @@ original tensors.
     configuration-basis matrix $\sum_{i=0}^{N-1}a_i$.
     No positivity or projection assumption on $a$ is needed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     For a configuration $\sigma$, let $\sigma|_i$ be its ordered
     cyclic window and let $\sigma[i\leftarrow\tau]$ replace that
     window by $\tau$. Both local operators have the coefficient formula
@@ -460,6 +472,7 @@ original tensors.
     \lean{MPSTensor.MPOSymmetry.mixedEndpointInteractionMatrix,
         MPSTensor.MPOSymmetry.toEuclideanLin_mixedEndpointInteractionMatrix,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
+    \leanok
     \uses{def:mpo_mixed_extended_support,def:mpo_arbitrary_physical_tensor,
         def:spt_isometric_interaction_extension}
     For any square-alphabet tensors $C_0,C_1$, let
@@ -483,6 +496,7 @@ original tensors.
         MPSTensor.MPOSymmetry.continuous_mixedEndpointInteractionMatrix,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_posSemidef,
         MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalMixedInteraction}
+    \leanok
     \uses{def:mpo_arbitrary_physical_interaction,def:injective}
     For arbitrary $C_0,C_1$ and real $\gamma$,
     $h_{C_0,C_1}(\gamma)\geq0$; for arbitrary $A_0,A_1$,
@@ -492,7 +506,7 @@ original tensors.
     Thus, if $D_0,D_1>0$ and $A_0,A_1$ are one-site injective,
     $\widetilde h_\gamma$ is continuous on $\R$, including at $0$ and $1$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpo_mixed_endpoint_projector_comparison,
         thm:mpo_mixed_support_continuity,thm:mpo_polar_support_injective,
         thm:mpo_isometry_inactive_bound}
@@ -509,12 +523,13 @@ original tensors.
 \begin{theorem}[Canonical parent equality in the open interval]
     \label{thm:mpo_arbitrary_interior_parent}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_eq_parent_of_mem_Ioo}
+    \leanok
     \uses{def:mpo_arbitrary_physical_interaction,def:parent_interaction}
     For arbitrary original tensors $A_0,A_1$ and $0<\gamma<1$,
     $\widetilde h_\gamma$ equals the canonical two-site parent
     interaction of $\widetilde A(\gamma)$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpo_mixed_support_continuity,thm:spt_isometric_parent_interaction}
     In the open interval the insertion in the mixed tensor is invertible,
     so its extended two-site support is the canonical one. The
@@ -529,6 +544,7 @@ original tensors.
     \lean{MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_ne_zero,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_groundSpace_finrank}
+    \leanok
     \uses{def:mpo_arbitrary_physical_interaction,def:injective,def:mpv}
     Suppose $D_0,D_1>0$ and $A_0,A_1$ are one-site injective.
     For every $\gamma\in[0,1]$ and $N\geq2$, the vector
@@ -540,7 +556,7 @@ original tensors.
         \label{eq:mpo_arbitrary_ground_line}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpo_polar_support_injective,
         thm:mpo_mixed_periodic_line_continuity,
         thm:mpo_periodic_interaction_coordinates,
@@ -559,6 +575,7 @@ original tensors.
 \begin{theorem}[Uniform gap for arbitrary original physical alphabets]
     \label{thm:mpo_arbitrary_uniform_path_gap}
     \lean{MPSTensor.MPOSymmetry.exists_uniform_arbitraryPhysicalMixed_periodic_path_gap}
+    \leanok
     \uses{def:mpo_arbitrary_physical_interaction,def:injective}
     If $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, there is a
     constant $0<\varepsilon\leq1$, depending only on these tensors,
@@ -569,7 +586,7 @@ original tensors.
         \label{eq:mpo_arbitrary_uniform_gap}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpo_polar_support_injective,
         thm:mpo_mixed_uniform_periodic_path_gap,
         thm:mpo_periodic_interaction_coordinates,

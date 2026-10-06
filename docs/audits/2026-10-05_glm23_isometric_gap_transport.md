@@ -232,3 +232,40 @@ definition, representation identity, positivity, continuity repair, and
 parenthesized singleton syntax. This is a targeted pass only; the complete
 path wrapper, its finrank/gap consequences, and six guarded axioms still
 require the fresh full draft run.
+
+## Full production pass and endpoint regression repair: 2026-10-06 03:07 UTC
+
+At PR #8715 head `01183377a336032f11126a57db92571f987467ee`, the complete
+production library build passed (12,393 jobs). All five new production
+modules compiled: algebraic gap transfer 4.0 s, matrix representation
+8.3 s, physical isometric transport 13 s, actual interpolation 5.7 s,
+and final arbitrary-physical path wrapper 10 s. The tested merge
+`39993283e949dd00edc9bafea94cc2d62e120c2c` has exactly the published tree
+`e73bdd5b874427ba6564dcd617afdddfe5cf5b3d`.
+
+The build job subsequently failed at one endpoint regression rewrite:
+the target used real zero while the instantiated theorem displayed the
+coercion of unit-interval zero. The candidate uses explicit
+`Set.Icc.coe_zero` normalization with the same proved kernel theorem and
+endpoint-vector identity. It changes no production source or hypotheses.
+No other test or axiom-guard diagnostic was reported, but the regression
+file as a whole did not pass. Its repaired version still requires fresh
+exact-head CI. The timing job was skipped after the regression failure;
+production compilation times alone are not a timing-gate pass.
+
+The 38 blueprint owners now have 17 checked statement markers and
+15 checked mathematical proofs, supported by the complete production
+build. The immutable proof-source/pin manifest is
+`2026-10-06_glm23_arbitrary_physical_checked.json`. It records the failed
+regression checkpoint explicitly. Final combined validation remains
+pending; these markers do not claim full-paper completion or a passed
+repaired regression.
+
+The marked leaf's focused strict web build and generated HTML checks pass
+with all 38 links and both original Tenkz panels. The 16-page PDF was
+rerendered; the affected contents and all main-text pages were inspected.
+No warnings, unresolved references, overfull boxes or underfull boxes
+remain. Native diagram signatures and contraction checks pass. Pinned
+latexindent is idempotent. The earlier full browser pass belongs to the
+previous published head; fresh full browser validation remains required
+for this combined regression/documentation update.

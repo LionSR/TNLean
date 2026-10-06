@@ -75,9 +75,10 @@ example :
       (arbitraryPhysicalMixedInteraction A₀ A₁ 0) (by omega : 2 ≤ 2))) =
       Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := 2)
         (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀)))} := by
-  rw [arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv (N := 2) A₀ A₁ h₀ h₁
-    (0 : unitInterval) (by omega),
-    mpv_arbitraryPhysicalMixedInterpolation_zero (N := 2) A₀ A₁ h₀ (by omega)]
+  simpa only [Set.Icc.coe_zero,
+    mpv_arbitraryPhysicalMixedInterpolation_zero (N := 2) A₀ A₁ h₀ (by omega)] using
+    arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv (N := 2) A₀ A₁ h₀ h₁
+      (0 : unitInterval) (by omega)
 
 example :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
