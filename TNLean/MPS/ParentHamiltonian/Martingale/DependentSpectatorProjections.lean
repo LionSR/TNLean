@@ -39,8 +39,9 @@ theorem isSymmetricProjection_sigmaFiberwiseMap
     rw [inner_eq_sum_inner_sigmaFiber, inner_eq_sum_inner_sigmaFiber]
     apply Finset.sum_congr rfl
     intro q _
-    simp only [sigmaFiber_sigmaFiberwiseMap]
-    exact (hG q).isSymmetric _ _
+    change ⟪G q (sigmaFiber x q), sigmaFiber y q⟫_ℂ =
+      ⟪sigmaFiber x q, G q (sigmaFiber y q)⟫_ℂ
+    exact (hG q).isSymmetric (sigmaFiber x q) (sigmaFiber y q)
 
 /-- Dependent exterior extension preserves orthogonal projections. -/
 theorem isSymmetricProjection_dependentRightFiberwiseMap

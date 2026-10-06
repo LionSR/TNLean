@@ -1,24 +1,176 @@
 {
   "base_commit": "7b6bbfab322bb2dbd2571606d4f4f11db060ceac",
-  "source_head": "1c74aadd285a9196ff9a587baf2010bc72a72e3b",
+  "source_head": "4d295270be94562bdcbd2224aa5fce79628fea04",
   "scope": "Explicit normalized support-constraint sums, concrete all-ordered-pair core identity, and exact normalized gap equivalence. Actual physical Hamiltonian identification remains separate.",
   "source_sha256": {
-    "TNLean/MPS/ParentHamiltonian/Martingale/DependentSpectatorProjections.lean": "81ed031ed520bb0c447fd6f037543ceed7b1b70e0e6bb55b012cc907e2e2ff93",
+    "TNLean/MPS/ParentHamiltonian/Martingale/DependentSpectatorProjections.lean": "5fe2e7b772434f213109b9bcca1334cc78f0807fe323402ed9c2b444f539d2c9",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCoreEdges.lean": "b00e57b8e354edc27fa12a24f1790f39d2e810e8e2c2ad1e35ef0da69e28e0d2",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCoreHamiltonian.lean": "3fee2e6f52a690daf2239b6a5f7874994db842eefef9310f96d56f807b48d6e6",
-    "TNLeanTest/JointMixedEndpointCoreHamiltonian.lean": "f9c23677cee86fdf464aa22c23951be5a46d0332afea92e9d29322966601e8f2",
-    "blueprint/src/chapter/ch30_mpo_joint_core_hamiltonian.tex": "e495d2b467e459c1626c14c85b6e3d7e94459bdb29d3a930de9d2653e9855a81"
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCoreHamiltonian.lean": "7fe13c3410bb3c51ef15db344014d497ff52b7936c3e59f292ef066eecdcedbd",
+    "TNLeanTest/JointMixedEndpointCoreHamiltonian.lean": "37fcaf0ae28e6a02b5cd99a773e1cc42056451b9b4418620ea5005f5e4cdbbbf",
+    "blueprint/src/chapter/ch30_mpo_joint_core_hamiltonian.tex": "e495d2b467e459c1626c14c85b6e3d7e94459bdb29d3a930de9d2653e9855a81",
+    "TNLean/MPS/ParentHamiltonian/Martingale/SpectatorMaps.lean": "ea616286bf8ad49819cfe4a6326f7eca297f3c8368a22ef63016a32e14624b60",
+    "TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean": "0095bfccb3bdac2f9872d04587a37030f6163183ad496a80326cc339ea1edb6b",
+    "TNLean/MPS/ParentHamiltonian/Martingale/SpectatorGapEquivalence.lean": "5d8c8ab78495123abd48290db310c6a254ba76cd24d10551853a1b23d6a09ab7",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSpectatorGap.lean": "c335b25d368cdbe6e8a61d25bbb2fe47f6d7adce3330ef777f738a67bad44518"
   },
   "native_lean_validation": {
-    "status": "pending_parent_coordinated_read_only_probe",
-    "module_builds": "pending",
+    "status": "all_new_core_production_and_regressions_passed_individually",
+    "reexport_consumer": "SpectatorTransport wall timeout; no diagnostic or artifact",
     "guard_count": 5,
+    "existing_dependent_guard_count": 2,
     "expected_foundations": [
       "propext",
       "Classical.choice",
       "Quot.sound"
     ],
-    "worker_lean_or_lake_commands": 0
+    "lake_commands": 0,
+    "module_checks": {
+      "TNLean.MPS.ParentHamiltonian.Martingale.BoundedCongruenceGap": {
+        "status": "passed",
+        "elapsed_seconds": 10.489,
+        "source_sha256": "81bb3e0de99f02a78e3bff75f24aec74975fed68aad791e1cdfb150567192fcd",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.ParentHamiltonian.Martingale.BoundedCongruenceGap-1.json",
+        "output_sha256": [
+          "92ebf97b2ef021354d64f57923ea58f6116b8c68d73ae32bb681179a64873f7a"
+        ]
+      },
+      "TNLean.MPS.ParentHamiltonian.Martingale.BoundedProjectionDeformation": {
+        "status": "passed",
+        "elapsed_seconds": 10.622,
+        "source_sha256": "e3bcc360a3e46c1a74568277709792806aaa105986e94496013749104c45db99",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.ParentHamiltonian.Martingale.BoundedProjectionDeformation-1.json",
+        "output_sha256": [
+          "2fee4edc17b904f5e03c5945f00be8dc931b7ccb768ad381ef7c941c82ffa590"
+        ]
+      },
+      "TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence": {
+        "status": "passed",
+        "elapsed_seconds": 6.81,
+        "source_sha256": "976e649450db0d0f5b75b6e855c62c61984757b9b0d6864f22ea400f0b710b25",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence-1.json",
+        "output_sha256": [
+          "2cdad676db0ad3c135af71410ac9400d31d53a0c124aa496b5578d287ec6529a"
+        ]
+      },
+      "TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorProjections": {
+        "status": "passed",
+        "elapsed_seconds": 3.884,
+        "source_sha256": "5fe2e7b772434f213109b9bcca1334cc78f0807fe323402ed9c2b444f539d2c9",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorProjections-2.json",
+        "output_sha256": [
+          "e45acdc355ddd08b9b9374f08ae50155fbc8c7208b37c0d50e32f50cf3aa1d61"
+        ]
+      },
+      "TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence": {
+        "status": "passed",
+        "elapsed_seconds": 4.266,
+        "source_sha256": "5d8c8ab78495123abd48290db310c6a254ba76cd24d10551853a1b23d6a09ab7",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence-1.json",
+        "output_sha256": [
+          "b91c7e660d3038bb24cbb1ba1c6c0443d71d742426281e6b9a64fd7b6e7ba55a"
+        ]
+      },
+      "TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps": {
+        "status": "passed",
+        "elapsed_seconds": 11.397,
+        "source_sha256": "ea616286bf8ad49819cfe4a6326f7eca297f3c8368a22ef63016a32e14624b60",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.ParentHamiltonian.Martingale.json",
+        "output_sha256": [
+          "b77958492f9697c49b36edc1ae00db86e96eccdb9ea4e23d3beb42c7f1a4ce63"
+        ]
+      },
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreEdges": {
+        "status": "passed",
+        "elapsed_seconds": 13.462,
+        "source_sha256": "b00e57b8e354edc27fa12a24f1790f39d2e810e8e2c2ad1e35ef0da69e28e0d2",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreEdges-1.json",
+        "output_sha256": [
+          "194fe65b7b69f6d2bd1f00824767bbb088af1df0f75c0bde8484ba3de9a45b24"
+        ]
+      },
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreHamiltonian": {
+        "status": "passed",
+        "elapsed_seconds": 17.485,
+        "source_sha256": "7fe13c3410bb3c51ef15db344014d497ff52b7936c3e59f292ef066eecdcedbd",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreHamiltonian-3.json",
+        "output_sha256": [
+          "3faeb24cda3f2fb77cfb82b59171c789d2171b0df7e3cac67ecd1ebe86def37a"
+        ]
+      },
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeFactors": {
+        "status": "passed",
+        "elapsed_seconds": 21.751,
+        "source_sha256": "eaba358ecf96c26d190986c7fe32594bef98cb17d71759a85cf30d41cb27da82",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeFactors-1.json",
+        "output_sha256": [
+          "926df806803a1cc521827aad1958e01ad2030ab97855d6ea1093d8b3e000e1bc"
+        ]
+      },
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeNormalization": {
+        "status": "passed",
+        "elapsed_seconds": 6.98,
+        "source_sha256": "760709842dbccfebe23df7e747dd4932870cdf3e97d2ef350b08dc00e12f07e7",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeNormalization-1.json",
+        "output_sha256": [
+          "4bc9f059a16a1c7e520d23e87fe381581655044d8218d4d8ed7a175cfbcd3e69"
+        ]
+      },
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeProjectors": {
+        "status": "passed",
+        "elapsed_seconds": 8.769,
+        "source_sha256": "8d2740ea09e363f65c35cb290e6a9916f09aec35a30cf0d9fb2314d61b39a4c3",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeProjectors-1.json",
+        "output_sha256": [
+          "b6f2209307e0e3c27b3ed9d5759cf6e48449898b629f9312bb834b6e10b65870"
+        ]
+      },
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap": {
+        "status": "passed",
+        "elapsed_seconds": 4.483,
+        "source_sha256": "c335b25d368cdbe6e8a61d25bbb2fe47f6d7adce3330ef777f738a67bad44518",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap-2.json",
+        "output_sha256": [
+          "65721774b338ed96039b418e1625ffa183ebdbb364bf0dfb3d765c6dbcb67063"
+        ]
+      },
+      "TNLeanTest.DependentSpectatorGapEquivalence": {
+        "status": "passed",
+        "elapsed_seconds": 6.827,
+        "source_sha256": "2c6a2912b576af4d869d6ff0d242bcf7907d165db72aa6c13fb5c31ad23da840",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLeanTest.DependentSpectatorGapEquivalence-1.json",
+        "output_sha256": [
+          "ecd83ada7824c65bac580ed63b795cd6ecaacd5c4e5ed9907e4c7584949cfb0b"
+        ]
+      },
+      "TNLeanTest.JointMixedEndpointCoreHamiltonian": {
+        "status": "passed",
+        "elapsed_seconds": 6.395,
+        "source_sha256": "37fcaf0ae28e6a02b5cd99a773e1cc42056451b9b4418620ea5005f5e4cdbbbf",
+        "native_record": "/workspace/shared/glm23-core-validation/modules-20261006T1020/logs/TNLeanTest.JointMixedEndpointCoreHamiltonian-2.json",
+        "output_sha256": [
+          "4ef2b4031d311c2b859eda6ea89fb16844d39a5a243ffd3d4834c2ccbe9b3d3d"
+        ]
+      },
+      "TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport": {
+        "status": "inconclusive_wall_timeout",
+        "elapsed_seconds": 60.564,
+        "source_sha256": "0095bfccb3bdac2f9872d04587a37030f6163183ad496a80326cc339ea1edb6b",
+        "log_bytes": 0,
+        "artifact_promoted": false
+      }
+    },
+    "strict_flags": [
+      "autoImplicit=false",
+      "relaxedAutoImplicit=false",
+      "pp.unicode.fun=true",
+      "maxSynthPendingDepth=3",
+      "linter.mathlibStandardSet=true",
+      "warningAsError=true"
+    ],
+    "threads": 1,
+    "per_module_wall_bound_seconds": 60,
+    "validation_summary": "/workspace/shared/glm23-core-validation/native-validation-summary.json",
+    "canonical_cache_writes": false
   },
   "static": {
     "forbidden_proof_tokens": "passed",
@@ -34,7 +186,8 @@
     "reverse_coverage": "passed",
     "duplicate_owners": 0,
     "leanok_markers": 0,
-    "report": "/workspace/shared/glm23-core-validation/source-sync.json"
+    "report": "/workspace/shared/glm23-core-validation/source-sync.json",
+    "moved_declaration_owners_added": 6
   },
   "focused_render": {
     "source_head": "1c74aadd285a9196ff9a587baf2010bc72a72e3b",
@@ -74,5 +227,54 @@
     "context_only_warnings": [
       "Overfull \\hbox (7.55418pt too wide) in paragraph at lines 5--10"
     ]
+  },
+  "import_refactor": {
+    "moved": {
+      "moved_lines": 297,
+      "exact_section_sha256": "9e243261ee1a926ea253acbb23b6385f5fc6b0caa81806f0039537e24b3d284c",
+      "old_source": "TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean",
+      "new_source": "TNLean/MPS/ParentHamiltonian/Martingale/SpectatorMaps.lean",
+      "body_changed": false
+    },
+    "closure_counts": {
+      "TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence": {
+        "before": 10932,
+        "after": 3822,
+        "removed": 7111,
+        "added": 1,
+        "C3Threshold_in_after": false,
+        "SpectatorTransport_in_after": false
+      },
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap": {
+        "before": 10933,
+        "after": 4170,
+        "removed": 6764,
+        "added": 1,
+        "C3Threshold_in_after": false,
+        "SpectatorTransport_in_after": false
+      }
+    },
+    "native_checks": "moved generic leaf and gap consumers passed; heavy SpectatorTransport re-export inconclusive",
+    "target_closure": {
+      "root_module": "TNLeanTest.JointMixedEndpointCoreHamiltonian",
+      "dependency_modules": 4650,
+      "source_overrides": [
+        "TNLean.MPS.ParentHamiltonian.Martingale.BoundedCongruenceGap",
+        "TNLean.MPS.ParentHamiltonian.Martingale.BoundedProjectionDeformation",
+        "TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence",
+        "TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorProjections",
+        "TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence",
+        "TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps",
+        "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreEdges",
+        "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreHamiltonian",
+        "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeFactors",
+        "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeNormalization",
+        "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeProjectors",
+        "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap",
+        "TNLeanTest.JointMixedEndpointCoreHamiltonian"
+      ],
+      "forbidden_stale_artifacts": [],
+      "method": "Complete target source closure; unchanged imported modules read from canonical ilean directImports."
+    }
   }
 }
