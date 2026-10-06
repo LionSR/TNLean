@@ -30,6 +30,24 @@ example : TorusDualHomotopy (torusRectInterior (0 : ZMod 5) (0 : ZMod 5) 2 2)
     Quiver.Path.nil :=
   rectDualPath_homotopy _ _ _ Quiver.Path.nil
 
+-- Start away from the comb root: the proof must cancel a nonempty prefix.
+private def reverseDetour : Quiver.Path (1, 1) (0, 1) :=
+  (((Quiver.Path.nil.cons (RectDualStep.south 1 0 (by decide) (by decide))).cons
+    (RectDualStep.west 0 0 (by decide) (by decide))).cons
+      (RectDualStep.north 0 0 (by decide) (by decide)))
+
+example : TorusDualHomotopy (torusRectInterior (4 : ZMod 5) (4 : ZMod 5) 2 2)
+    ((rectDualToTorus (4 : ZMod 5) (4 : ZMod 5)).mapPath reverseDetour)
+    ((rectDualToTorus (4 : ZMod 5) (4 : ZMod 5)).mapPath
+      (Quiver.Path.nil.cons (RectDualStep.west 0 1 (by decide) (by decide)))) :=
+  patch.homotopy reverseDetour _
+
+example (P : TorusDualRectangle 5 5) {a b : ℕ × ℕ}
+    (p q : @Quiver.Path (ℕ × ℕ) (rectDualQuiver P.cols P.rows) a b) :
+    torusDualPathDisplacement ((rectDualToTorus P.origin.1 P.origin.2).mapPath p) =
+      torusDualPathDisplacement ((rectDualToTorus P.origin.1 P.origin.2).mapPath q) :=
+  (P.homotopy p q).displacement_eq
+
 -- Width zero is a legitimate one-column patch.
 example : TorusDualRectangle 1 3 := ⟨(0, 0), 0, 2, by decide, by decide⟩
 
