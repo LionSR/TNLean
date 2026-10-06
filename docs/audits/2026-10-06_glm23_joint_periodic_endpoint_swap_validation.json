@@ -87,5 +87,17 @@
   "prose_check": "passed",
   "latexindent": "passed: pinned 3.24.7 and repository settings",
   "source_audit": "no mathematical or obvious elaboration blocker found; compilation still required",
-  "validation_timestamp_utc": "2026-10-06T11:14:00Z"
+  "validation_timestamp_utc": "2026-10-06T11:14:00Z",
+  "first_native_ci": {
+    "head": "e4b8df552bbda78fc2d34f6df7568b6efde13964",
+    "run": 37469197230,
+    "build_job": 112287970182,
+    "status": "failed in actual swap module",
+    "diagnostics": [
+      "rectangular finite-sector disjointness at lines 81 and 88",
+      "forward support-image coercion at line 173"
+    ],
+    "repair_source_sha256": "dd0e65cfc13a9eaa594ef451b4aaf4d414b5cb1e6ae69b758ee5678253e38139",
+    "repair_validation": "pending; statements unchanged"
+  }
 }

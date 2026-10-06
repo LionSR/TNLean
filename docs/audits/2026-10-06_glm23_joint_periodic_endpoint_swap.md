@@ -111,3 +111,13 @@ The prior local browser launch was denied permission to create its
 singleton socket; it was not repeated. The exact-head CI browser gate
 remains required. The adjacent validation JSON records all source and
 render hashes and distinguishes these checks from the pending Lean gates.
+
+## First native CI diagnostics
+
+Run 37469197230 reached the actual swap module and found two rectangular
+sector goals requiring disjointness of the two finite-sum embeddings, plus
+one forward support-image goal needing explicit isometry/linear-map
+coercion normalization. The repair reduces finite equalities to their
+natural coordinates and discharges the impossible cross-sector equalities
+with the existing arithmetic tactic; the support statement is unchanged.
+The repaired module, capstone and fourteen guards await fresh validation.

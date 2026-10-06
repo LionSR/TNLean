@@ -81,14 +81,16 @@ theorem jointMixedEndpointBase_swap
     · subst y
       cases i <;> cases j <;>
         simp [jointMixedEndpointBase, jointMixedEndpointLetter, jointMixedEndpointPhysicalSwap,
-          jointMixedPhysicalSwap, mixedEndpointBondSwap, hp, Matrix.single_apply]
+          jointMixedPhysicalSwap, mixedEndpointBondSwap, hp, Matrix.single_apply,
+          Fin.ext_iff] <;> omega
     · simp [jointMixedEndpointBase, jointMixedEndpointLetter, jointMixedEndpointPhysicalSwap,
         jointMixedPhysicalSwap, mixedEndpointBondSwap, hp, Pi.single_eq_of_ne h]
   · by_cases h : x = y
     · subst y
       cases i <;> cases j <;>
         simp [jointMixedEndpointBase, jointMixedEndpointLetter, jointMixedEndpointPhysicalSwap,
-          jointMixedPhysicalSwap, mixedEndpointBondSwap, hp, Matrix.single_apply]
+          jointMixedPhysicalSwap, mixedEndpointBondSwap, hp, Matrix.single_apply,
+          Fin.ext_iff] <;> omega
     · simp [jointMixedEndpointBase, jointMixedEndpointLetter, jointMixedEndpointPhysicalSwap,
         jointMixedPhysicalSwap, mixedEndpointBondSwap, hp, Pi.single_eq_of_ne h]
   · cases i <;> cases j <;>
@@ -170,7 +172,8 @@ theorem jointMixedEndpoint_extendedSupport_eq_map_reflect_swap
     refine ⟨blockInsertedBoundaryMap (jointMixedEndpointBase A₁ A₀)
       (fun x => bondInterpolationMatrix (D₁ x) (D₀ x) (1 - γ)) 2
       (blockBoundaryEquiv.symm fun x => Φ x (X x)), ⟨_, rfl⟩, ?_⟩
-    simpa only [X, Φ, LinearEquiv.symm_apply_apply] using
+    simpa only [X, Φ, LinearEquiv.symm_apply_apply, ContinuousLinearMap.coe_coe,
+      LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv] using
       blockInsertedBoundaryMap_jointMixed_reflect_swap A₀ A₁ γ X
   · rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
     let Y := blockBoundaryEquiv v
