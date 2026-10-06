@@ -129,12 +129,13 @@ the physical consumer. Its regression runs in the existing strict
 `Test boundary transport and fusion actions` loop in `pr-ci.yml`; the
 Fibonacci change adds no job, dependency pin, or timeout. The packet contains one new public
 theorem in 86 production lines and five examples plus a guarded
-logical-dependency report in 86 regression lines.
+logical-dependency report in 88 regression lines.
 
 The new theorem and proof deliberately have no `\leanok` markers pending
 native validation. Previously checked decomposition entries are unchanged.
-No actual-import Lean, Lake, or compiled declaration check has passed for
-this packet, and no Lean or Lake command was run during integration.
+No Lean or Lake command was run during the original integration. The
+subsequent CI results below distinguish production elaboration from the
+still-pending complete regression pass.
 
 The first published checkpoint `ead8307519e4f5f59dca88978d9a3c8fb43c0db3`
 was checked by GitHub CI run `37438244286`, build job `112185315154`.
@@ -144,7 +145,17 @@ ill-typed dependent decidability motive. The repair casts the already
 proved natural coefficient equality and uses the simplifier's congruence
 rule for the conditional. It changes no hypothesis or conclusion. Both
 module-documentation headings were normalized in the same repair batch.
-The repaired production proof and strict regression remain unvalidated.
+At that checkpoint the repaired production proof and strict regression
+were unvalidated.
+
+The next published head `02ae27198f3bc4152e7bfc670e3af9d76413ad60`
+passes the complete 12,444-target Lean build in run `37439623349`, job
+`112190222498`; the new production module takes 2.6 seconds. Its strict
+regression then reports two errors: the rank-three contradiction needs
+the witness in the definition of evenness exposed to integer arithmetic,
+and the empty subtype has an unused named binder. The current test-only
+repair handles those two diagnostics. The production proof is unchanged;
+the complete repaired regression and all final-head checks remain pending.
 
 Source checks passed: generated-import coverage (71 aggregators, 2765
 production modules), the existing strict-loop YAML and regression entry,
