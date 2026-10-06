@@ -1,5 +1,5 @@
 {
-  "baseline_commit": "ef64f1c5b1e575c9a2852342259642242e4f3a7c",
+  "baseline_commit": "48049acadc77bafd79bc2e6c296285b4657db79a",
   "modules": [
     "TNLean.Algebra.MatrixTensorPower",
     "TNLean.Circuit.Measurement.GHZ",
