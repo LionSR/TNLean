@@ -26,6 +26,7 @@ import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.BondEmbedding
 import TNLean.MPS.Preparation.CircuitEquivalence
 import TNLean.MPS.Preparation.CoherentBlockTreePreparation
+import TNLean.MPS.Preparation.CoherentGroundspaceConversion
 import TNLean.MPS.Preparation.CompatibleSeedCircuitEquivalence
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.CornerReferenceOverlap
@@ -44,6 +45,7 @@ import TNLean.MPS.Preparation.DepthUpperBound
 import TNLean.MPS.Preparation.DiagonalPolar
 import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
 import TNLean.MPS.Preparation.ExactFixedPointPolar
+import TNLean.MPS.Preparation.ExactSectorEncoder
 import TNLean.MPS.Preparation.ExplicitPreparationScale
 import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
@@ -133,6 +135,11 @@ import TNLean.MPS.Preparation.SecondOrderBlockError
 import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap
 import TNLean.MPS.Preparation.SectorEncoder
+import TNLean.MPS.Preparation.SectorEncoderCompilation
+import TNLean.MPS.Preparation.SectorEncoderGroundspace
+import TNLean.MPS.Preparation.SectorEncoderPreparation
+import TNLean.MPS.Preparation.SectorEncoderRates
+import TNLean.MPS.Preparation.SectorSpectralGap
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla

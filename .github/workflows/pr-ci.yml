@@ -25,6 +25,12 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/coherent_qic_prerequisites.json'
+      - 'scripts/export_coherent_qic_prerequisites.py'
+      - 'scripts/test_export_coherent_qic_prerequisites.py'
+      - 'scripts/coherent_tn_prerequisites.json'
+      - 'scripts/export_coherent_tn_prerequisites.py'
+      - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -122,6 +128,12 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/coherent_qic_prerequisites.json'
+      - 'scripts/export_coherent_qic_prerequisites.py'
+      - 'scripts/test_export_coherent_qic_prerequisites.py'
+      - 'scripts/coherent_tn_prerequisites.json'
+      - 'scripts/export_coherent_tn_prerequisites.py'
+      - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -225,6 +237,7 @@ jobs:
       blueprint: ${{ steps.filter.outputs.blueprint }}
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
+      coherent_prerequisites: ${{ steps.filter.outputs.coherent_prerequisites }}
     steps:
       - uses: dorny/paths-filter@v4
         id: filter
@@ -237,9 +250,29 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
+              - 'scripts/coherent_qic_prerequisites.json'
+              - 'scripts/export_coherent_qic_prerequisites.py'
+              - 'scripts/test_export_coherent_qic_prerequisites.py'
+              - 'scripts/coherent_tn_prerequisites.json'
+              - 'scripts/export_coherent_tn_prerequisites.py'
+              - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/test_ci_cache_lake_invalidation.py'
+            coherent_prerequisites:
+              - 'TNLean/MPS/Preparation/ExactSectorEncoder.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderRates.lean'
+              - 'TNLean/MPS/Preparation/CoherentGroundspaceConversion.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderCompilation.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderPreparation.lean'
+              - 'TNLean/MPS/Preparation/SectorEncoderGroundspace.lean'
+              - 'TNLean/MPS/Preparation/SectorSpectralGap.lean'
+              - 'scripts/coherent_qic_prerequisites.json'
+              - 'scripts/export_coherent_qic_prerequisites.py'
+              - 'scripts/test_export_coherent_qic_prerequisites.py'
+              - 'scripts/coherent_tn_prerequisites.json'
+              - 'scripts/export_coherent_tn_prerequisites.py'
+              - 'scripts/test_export_coherent_tn_prerequisites.py'
             module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
@@ -247,6 +280,12 @@ jobs:
               - 'scripts/test_lean_file_policies.py'
               - 'docbuild/**'
               - 'scripts/check_docbuild_manifest.py'
+              - 'scripts/coherent_qic_prerequisites.json'
+              - 'scripts/export_coherent_qic_prerequisites.py'
+              - 'scripts/test_export_coherent_qic_prerequisites.py'
+              - 'scripts/coherent_tn_prerequisites.json'
+              - 'scripts/export_coherent_tn_prerequisites.py'
+              - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/lake_build_locked.sh'
@@ -429,13 +468,74 @@ jobs:
             --prefix "$PREFIX" --matched "$MATCHED_KEY"
           python3 scripts/ci_compatible_cache.py prune
 
+      # Build and export only the allowlisted QIC prerequisites before the TN root build.
+      # The root build reuses their Lake traces; an artifact is not a TN build pass.
+      # Export only the explicit QIC allowlist and hashes, never the whole workspace.
+      - name: Prepare verified coherent QIC prerequisites
+        id: coherent-prerequisites
+        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
+        continue-on-error: true
+        run: >
+          python3 scripts/export_coherent_qic_prerequisites.py --build --root .
+          --output "$RUNNER_TEMP/coherent-qic-prerequisites"
+
+      - name: Export coherent QIC prerequisites
+        if: success() && steps.coherent-prerequisites.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: coherent-qic-prerequisites-${{ github.sha }}
+          path: ${{ runner.temp }}/coherent-qic-prerequisites
+          if-no-files-found: ignore
+          retention-days: 1
+          compression-level: 9
+
+      # The selected TN sources and their TN import closure are unchanged from
+      # an explicit baseline. Source/dependency verification precedes collection.
+      - name: Prepare verified coherent TN prerequisites
+        id: coherent-tn-prerequisites
+        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
+        continue-on-error: true
+        run: |
+          set -eo pipefail
+          python3 scripts/export_coherent_tn_prerequisites.py --build --root . \
+            --output "$RUNNER_TEMP/coherent-tn-prerequisites" \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Export coherent TN prerequisites
+        if: success() && steps.coherent-tn-prerequisites.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: coherent-tn-prerequisites-${{ github.sha }}
+          path: ${{ runner.temp }}/coherent-tn-prerequisites
+          if-no-files-found: ignore
+          retention-days: 1
+          compression-level: 9
+
+      # Fail on the new theorem targets before building unrelated TN modules.
+      # Keep their timings in the same log consumed by the changed-file gate.
+      - name: Check coherent sector conversion targets
+        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
+        run: |
+          set -eo pipefail
+          lake --fail-fast build \
+            +TNLean.MPS.Preparation.ExactSectorEncoder:olean \
+            +TNLean.MPS.Preparation.SectorEncoderRates:olean \
+            +TNLean.MPS.Preparation.SectorSpectralGap:olean \
+            +TNLean.MPS.Preparation.SectorEncoderPreparation:olean \
+            +TNLean.MPS.Preparation.SectorEncoderCompilation:olean \
+            +TNLean.MPS.Preparation.CoherentGroundspaceConversion:olean \
+            +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
           {
             lake build
             lake build lint_style
-          } 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
+          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
@@ -700,6 +800,11 @@ jobs:
 
       - name: Test Lean compilation-time checker
         run: python3 scripts/test_lake_build_hotspots.py
+
+      - name: Test bounded coherent prerequisite export
+        run: |
+          python3 scripts/test_export_coherent_qic_prerequisites.py
+          python3 scripts/test_export_coherent_tn_prerequisites.py
 
       - name: Test compatible CI cache guards
         run: |
