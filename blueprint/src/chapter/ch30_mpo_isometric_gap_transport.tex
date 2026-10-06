@@ -1,0 +1,597 @@
+% Source context: arXiv:2203.12563v3, REsubmission.tex, line 1584;
+% arXiv:1010.3732, Section II.F.2. The quantitative bounds below are
+% auxiliary physical-enlargement results, not the full classification theorem.
+% Source-only declarations: compiler and axiom-guard validation are pending.
+% No statement or proof carries a checked marker.
+
+\section{Physical isometries and periodic gaps}
+\label{sec:mpo_isometric_gap_transport}
+
+The physical-support reduction in
+\cite[Section~5]{GarreRubio2023MPOSym} restricts each endpoint to the
+subspace spanned by its tensor. To compare Hamiltonians before and after
+an isometric inclusion, the unused physical space must have positive
+energy. Let $E:\C^d\to\C^m$ satisfy $E^\dagger E=I$, put
+$Q=EE^\dagger$, $T=E\otimes E$, and $W_N=E^{\otimes N}$.
+For a positive two-site interaction $h$, use the extension of
+Definition~\ref{def:spt_isometric_interaction_extension}:
+\begin{align}
+    h' & =ThT^\dagger+B, & B & =I-Q\otimes Q.
+    \label{eq:mpo_isometry_extension}
+\end{align}
+For $N\geq2$, write $h_i$, $h'_i$, and $B_i$ for the respective
+translates on sites $i,i+1$ modulo $N$, and put
+$H_N=\sum_{i=0}^{N-1}h_i$, $H'_N=\sum_{i=0}^{N-1}h'_i$, and
+$P_N=\sum_{i=0}^{N-1}B_i$. Neither the $h_i$ nor the $h'_i$ are
+assumed to commute.
+
+The conjugated term $C=ThT^\dagger$ in
+(\ref{eq:mpo_isometry_extension}) has components
+\begin{align}
+    C_{\alpha_0\alpha_1,\beta_0\beta_1}
+    =\sum_{a_0,a_1,b_0,b_1=0}^{d-1}
+    E_{\alpha_0a_0}E_{\alpha_1a_1}
+    h_{a_0a_1,b_0b_1}
+    \overline{E_{\beta_0b_0}E_{\beta_1b_1}}.
+    \label{eq:mpo_isometry_components}
+\end{align}
+The north legs are output indices $\alpha_0,\alpha_1$ and the south
+legs are input indices $\beta_0,\beta_1$, each of dimension $m$.
+The four internal legs have dimension $d$; the lower tensors are
+$E^\dagger$, so their coefficients are complex conjugated as in
+(\ref{eq:mpo_isometry_components}).
+% TENKZ-ISOMETRIC-GAP-BEGIN
+% Formula: C = (E tensor E) h (E tensor E)^dagger.
+% Ink: upper boxes E_{alpha_i,a_i}; center h_{a_0 a_1,b_0 b_1};
+% lower boxes (E^dagger)_{b_i,beta_i}=conjugate(E_{beta_i,b_i}).
+% Contracted indices a_0,a_1,b_0,b_1 each range over Fin d.
+% Open alpha_0,alpha_1 (north outputs) and beta_0,beta_1 (south inputs)
+% each range over Fin m. No virtual bonds and no inter-isometry edge.
+% Boundary signature on each panel: phys:n, phys:n, phys:s, phys:s.
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=C, skin=box, wide=2, size=l,
+            ports={90@1:physical:$\alpha_0$, 90@2:physical:$\alpha_1$,
+                    270@1:physical:$\beta_0$, 270@2:physical:$\beta_1$}]{C}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=Ezero, skin=box,
+            ports={90:physical:$\alpha_0$, 270:physical}]{E}
+        \tn[at=(1,2), name=Eone, skin=box,
+            ports={90:physical:$\alpha_1$, 270:physical}]{E}
+        \tn[at=(2,1), name=h, skin=box, wide=2, size=l,
+            ports={90@1:physical, 90@2:physical,
+                    270@1:physical, 270@2:physical}]{h}
+        \tn[at=(3,1), name=Fzero, skin=box,
+            ports={90:physical, 270:physical:$\beta_0$}]{E^\dagger}
+        \tn[at=(3,2), name=Fone, skin=box,
+            ports={90:physical, 270:physical:$\beta_1$}]{E^\dagger}
+        \tnwire{Ezero.270}{h.90@1}
+        \tnwire{Eone.270}{h.90@2}
+        \tnwire{h.270@1}{Fzero.90}
+        \tnwire{h.270@2}{Fone.90}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-ISOMETRIC-GAP-END
+
+\subsection{Commuting support penalties}
+
+\begin{theorem}[Commutation of tensor-square translates]
+    \label{thm:mpo_isometry_support_commute}
+    \lean{MPOTensor.embed_twoSiteSectorProjection_commute,
+        MPSTensor.isometricInteractionExtension_zero_translate_commute}
+    For any one-site matrix $R$ and $N\geq2$, all periodic translates
+    of $R\otimes R$ commute. Thus the translates of $I-Q\otimes Q$
+    commute. The commutation assertion requires neither $R$ to be a
+    projection nor $E$ to be an isometry when $Q=EE^\dagger$.
+\end{theorem}
+\begin{proof}
+    A translate is the tensor product of $R$ on its two cyclic sites
+    and $I$ elsewhere. At each site, the factors from any two translates
+    belong to $\{R,I\}$ and commute. Multiplication of tensor products
+    gives commutation on the chain. Taking complements preserves it.
+    The same argument includes $N=2$, when both translates cover the
+    whole ring.
+\end{proof}
+
+\begin{theorem}[Energy outside the included chain]
+    \label{thm:mpo_isometry_inactive_bound}
+    \lean{MPSTensor.isometricInteractionExtension_zero_ker_eq_range,
+        MPSTensor.isometricInteractionExtension_posSemidef,
+        MPSTensor.isometricInteractionExtension_inactive_energy_lower_bound}
+    \uses{def:spt_isometric_interaction_extension}
+    If $E^\dagger E=I$, $h\geq0$, and $N\geq2$, then $h'\geq0$ and
+    \begin{align}
+        \ker P_N & =\operatorname{ran}W_N,
+        \label{eq:mpo_isometry_penalty_kernel}                 \\
+        \|y\|^2  & \leq\operatorname{Re}\langle H'_Ny,y\rangle
+        \quad (y\perp\operatorname{ran}W_N).
+        \label{eq:mpo_isometry_inactive_energy}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_isometry_support_commute,
+        thm:spt_isometric_interaction_ground_space,
+        thm:spt_sector_bond_gap,thm:spt_isometric_parent_interaction,
+        thm:spt_periodic_hamiltonian_order}
+    The interaction $B$ is the isometric extension of zero and is an
+    orthogonal projection. Apply the exact kernel transport for
+    commuting projections to the zero interaction and $B$; the original
+    zero Hamiltonian has the whole chain as its kernel. This gives
+    (\ref{eq:mpo_isometry_penalty_kernel}). The commuting-projection
+    spectral bound gives $\operatorname{spec}P_N\subseteq
+        \{0\}\cup[1,\infty)$, hence
+    $\langle P_Ny,y\rangle\geq\|y\|^2$ on its kernel complement.
+    Positivity of $h$ gives $0\leq B\leq h'$ and $P_N\leq H'_N$.
+    Comparing quadratic forms proves
+    (\ref{eq:mpo_isometry_inactive_energy}). Only the auxiliary
+    penalties $B_i$ have been required to commute.
+\end{proof}
+
+\subsection{Orthogonal decomposition along an isometry}
+
+Let $U:\mathcal E\to\mathcal F$ be an isometry between finite-dimensional
+complex inner-product spaces. Suppose $K$ and $L$ are linear operators
+on $\mathcal E$ and $\mathcal F$, respectively, with $LU=UK$.
+Write $q_L(v)=\operatorname{Re}\langle Lv,v\rangle$ and
+$q_K(x)=\operatorname{Re}\langle Kx,x\rangle$.
+Every $v\in\mathcal F$ has the orthogonal decomposition
+\begin{align}
+    x       & =U^\dagger v,     & y & =v-Ux, & U^\dagger y & =0,
+    \label{eq:mpo_isometry_decomposition}                        \\
+    \|v\|^2 & =\|x\|^2+\|y\|^2.
+    \label{eq:mpo_isometry_norm_split}
+\end{align}
+
+\begin{theorem}[Kernel transport from a strict complementary bound]
+    \label{thm:mpo_isometry_abstract_kernel}
+    \lean{LinearIsometry.ker_eq_map_of_intertwines_of_inactive_bound}
+    If $c>0$ and $c\|y\|^2\leq q_L(y)$ whenever $U^\dagger y=0$,
+    then $\ker L=U(\ker K)$. No symmetry or positivity assumption on
+    $L$ or $K$ is needed.
+\end{theorem}
+\begin{proof}
+    If $Lv=0$, use (\ref{eq:mpo_isometry_decomposition}). Then
+    $Ly=-UKx$, so orthogonality gives $q_L(y)=0$. The strict lower
+    bound forces $y=0$. Thus $v=Ux$, and $UKx=Lv=0$ implies $Kx=0$
+    by injectivity of $U$. Conversely, $Kx=0$ gives $LUx=UKx=0$.
+\end{proof}
+
+\begin{theorem}[Combining quadratic-form bounds]
+    \label{thm:mpo_isometry_abstract_quadratic}
+    \lean{LinearIsometry.re_inner_ge_of_intertwines}
+    Suppose $L$ is self-adjoint, $\delta,c\in\R$, and
+    \begin{align}
+        \delta\|x\|^2 & \leq q_K(x)
+                      &             & (x\perp\ker K),\notag  \\
+        c\|y\|^2      & \leq q_L(y)
+                      &             & (U^\dagger y=0).\notag
+    \end{align}
+    Then $\min\{\delta,c\}\|v\|^2\leq q_L(v)$ for
+    $v\perp\ker L$. Neither constant is required to be nonnegative.
+\end{theorem}
+\begin{proof}
+    For $v\perp\ker L$, the vector $x=U^\dagger v$ lies in
+    $(\ker K)^\perp$, because $U(\ker K)\subseteq\ker L$.
+    Intertwining gives $\langle LUx,y\rangle=0$ in
+    (\ref{eq:mpo_isometry_decomposition}). Self-adjointness gives
+    $\langle Ly,Ux\rangle=0$ as well. Therefore
+    \begin{align}
+        q_L(v) & =q_K(x)+q_L(y)
+        \geq\delta\|x\|^2+c\|y\|^2\notag                         \\
+               & \geq\min\{\delta,c\}\bigl(\|x\|^2+\|y\|^2\bigr)
+        =\min\{\delta,c\}\|v\|^2.\notag
+    \end{align}
+    The last equality is (\ref{eq:mpo_isometry_norm_split}).
+\end{proof}
+
+\begin{theorem}[Combining a norm gap with a complementary energy bound]
+    \label{thm:mpo_isometry_abstract_norm}
+    \lean{LinearIsometry.norm_gap_of_intertwines}
+    Suppose $K,L\geq0$, $\delta\geq0$, and
+    $\delta\|x\|\leq\|Kx\|$ for $x\perp\ker K$.
+    If $c\|y\|^2\leq q_L(y)$ whenever $U^\dagger y=0$, then
+    $\min\{\delta,c\}\|v\|\leq\|Lv\|$ for $v\perp\ker L$.
+    No sign assumption on $c$ is required.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_isometry_abstract_quadratic}
+    For a positive operator, the norm-gap hypothesis with
+    $\delta\geq0$ gives $q_K(x)\geq\delta\|x\|^2$ on the kernel
+    complement. Apply Theorem~\ref{thm:mpo_isometry_abstract_quadratic}
+    and the bound $q_L(v)\leq\|Lv\|\|v\|$.
+    When $v\neq0$, division by $\|v\|$ gives the assertion;
+    for $v=0$ it is immediate.
+\end{proof}
+
+\subsection{Periodic ground spaces and gap bounds}
+
+\begin{theorem}[Exact ground-space transport for positive interactions]
+    \label{thm:mpo_isometry_positive_kernel}
+    \lean{MPSTensor.isometricInteractionExtension_ker_eq_map_of_posSemidef,
+        MPSTensor.isometricInteractionExtension_ker_eq_span_of_posSemidef}
+    \uses{def:spt_isometric_interaction_extension}
+    For $E^\dagger E=I$, $h\geq0$, and $N\geq2$,
+    \begin{align}
+        \ker H'_N=W_N(\ker H_N).
+        \label{eq:mpo_isometry_kernel_transport}
+    \end{align}
+    In particular, if $\ker H_N=\spn_{\C}\{\psi\}$, then
+    $\ker H'_N=\spn_{\C}\{W_N\psi\}$. This holds even for
+    $\psi=0$; a nonzero ground vector is not a hypothesis.
+\end{theorem}
+\begin{proof}
+    \uses{thm:spt_isometric_interaction_zero_modes,
+        thm:mpo_isometry_inactive_bound,thm:mpo_isometry_abstract_kernel}
+    The tensor power $W_N$ is an isometry, and the periodic
+    intertwining identity is $H'_NW_N=W_NH_N$.
+    Theorem~\ref{thm:mpo_isometry_inactive_bound} supplies the strict
+    complementary bound with $c=1$. Apply
+    Theorem~\ref{thm:mpo_isometry_abstract_kernel}. The image of a
+    span is the span of the image, giving the final assertion.
+\end{proof}
+
+\begin{theorem}[Gap transport with a unit unused-space penalty]
+    \label{thm:mpo_isometry_positive_gap}
+    \lean{MPSTensor.isometricInteractionExtension_quadratic_gap,
+        MPSTensor.isometricInteractionExtension_norm_gap,
+        MPSTensor.isometricInteractionExtension_spectrum_gap}
+    \uses{def:spt_isometric_interaction_extension}
+    Suppose $E^\dagger E=I$, $h\geq0$, and $N\geq2$.
+    A quadratic-form bound $\delta\|x\|^2\leq
+        \operatorname{Re}\langle H_Nx,x\rangle$ on $(\ker H_N)^\perp$
+    gives
+    \begin{align}
+        \min\{\delta,1\}\|v\|^2
+        \leq\operatorname{Re}\langle H'_Nv,v\rangle
+        \quad (v\perp\ker H'_N).
+        \label{eq:mpo_isometry_quadratic_gap}
+    \end{align}
+    If $\delta\geq0$, a norm gap $\delta\|x\|\leq\|H_Nx\|$
+    on $(\ker H_N)^\perp$ gives
+    $\min\{\delta,1\}\|v\|\leq\|H'_Nv\|$ on $(\ker H'_N)^\perp$.
+    Finally, spectral separation
+    $\operatorname{spec}H_N\subseteq\{0\}\cup[\delta,\infty)$ gives
+    \begin{align}
+        \operatorname{spec}H'_N
+        \subseteq[0,\infty)\cap
+        \bigl(\{0\}\cup[\min\{\delta,1\},\infty)\bigr).
+        \label{eq:mpo_isometry_spectral_gap}
+    \end{align}
+    The quadratic-form and spectral assertions allow arbitrary real
+    $\delta$. None of these assertions requires $0$ to be an eigenvalue.
+\end{theorem}
+\begin{proof}
+    \uses{thm:spt_isometric_interaction_zero_modes,
+        thm:spt_periodic_hamiltonian_order,thm:mpo_isometry_inactive_bound,
+        thm:mpo_isometry_abstract_quadratic,thm:mpo_isometry_abstract_norm}
+    Positivity of $h$ and $h'$ makes both periodic sums positive.
+    Combine $H'_NW_N=W_NH_N$ with
+    (\ref{eq:mpo_isometry_inactive_energy}) and apply the abstract
+    quadratic-form or norm theorem with $U=W_N$ and $c=1$.
+    For the spectral assertion, finite-dimensional spectral separation
+    first gives the quadratic-form bound on $(\ker H_N)^\perp$.
+    Transfer it by (\ref{eq:mpo_isometry_quadratic_gap}) and apply
+    the converse spectral implication to the positive operator $H'_N$.
+\end{proof}
+
+In particular, a positive bound $\delta$ uniform in $N\geq2$ remains
+uniform after physical inclusion, with constant $\min\{\delta,1\}$.
+For canonical two-site parent interactions,
+Theorem~\ref{thm:spt_isometric_parent_interaction} identifies $h'$ with
+the parent interaction of the physically included tensor. Thus the gap
+estimate applies when restoring a larger physical alphabet after a
+support reduction. Constructing the endpoint support coordinates,
+proving covariance under a common MPO symmetry along an interpolation,
+and classifying phases with degenerate ground spaces remain separate
+mathematical assertions.
+
+% Source context: arXiv:2203.12563v3, REsubmission.tex, lines 1584--1601
+% and 1687--1692. Source-only arbitrary-alphabet continuation; no checked markers.
+\section{Mixed paths in arbitrary physical alphabets}
+\label{sec:mpo_arbitrary_physical_path}
+
+Let $A_p=(A_p^i)_{i=0}^{d_p-1}$ have bond dimension $D_p$, for
+$p=0,1$, and put $D=D_0+D_1$. The physical dimensions $d_p$ need
+not equal $D_p^2$. Read $A_p$ as a matrix
+$\mathscr A_p:\C^{D_p^2}\to\C^{d_p}$ and take its polar
+factorization $\mathscr A_p=F_pP_p$. Let $B_p$ be the tensor formed
+from the rows of $P_p$, with physical dimension $D_p^2$ and bond
+dimension $D_p$, as in Definition~\ref{def:ldpolar_tensor}.
+Thus $A_p=F_pB_p$, where multiplication denotes physical mixing.
+This realizes the physical-support reduction preceding the mixed
+interpolation in \cite[Section~5]{GarreRubio2023MPOSym}.
+
+\subsection{Polar support and full endpoint embeddings}
+
+\begin{theorem}[Injectivity of the positive polar tensor]
+    \label{thm:mpo_polar_support_injective}
+    \lean{MPSTensor.isInjective_polarPosTensor}
+    \uses{def:ldpolar_tensor,def:injective}
+    If $A_p$ is one-site injective, then $B_p$ is one-site injective.
+\end{theorem}
+\begin{proof}
+    \uses{thm:ldpolar_tensor_decomposition}
+    Every letter $A_p^i=\sum_k(F_p)_{ik}B_p^k$ belongs to the span
+    of the letters of $B_p$. Since the letters of $A_p$ span
+    $\MN{D_p}$, the letters of $B_p$ span that algebra as well.
+\end{proof}
+
+Let $I_p:\C^{D_p^2}\to\C^{D^2}$ include the $p$th diagonal
+physical sector, and put
+$\mathcal H=\C^{D^2}\oplus\C^{d_0}\oplus\C^{d_1}$ and
+$Jw=(w,0,0)$. The full original physical spaces enter $\mathcal H$
+through the maps of Definition~\ref{def:spt_common_physical_endpoints}:
+\begin{align}
+    E_0v & =(I_0F_0^\dagger v,(I-F_0F_0^\dagger)v,0),\notag \\
+    E_1v & =(I_1F_1^\dagger v,0,(I-F_1F_1^\dagger)v).
+    \label{eq:mpo_arbitrary_full_embeddings}
+\end{align}
+When $A_p$ is injective, Theorems~\ref{thm:ldpolar_tensor_injective}
+and~\ref{thm:spt_common_physical_endpoints} give
+$F_p^\dagger F_p=I$ and $E_p^\dagger E_p=I$.
+The original unused directions are retained in the separate
+$\C^{d_p}$ summands. The disjoint coordinate sectors also give
+$E_0^\dagger E_1=0$, by
+Theorem~\ref{thm:spt_common_physical_endpoint_orthogonality}.
+These assertions require no symmetry of the endpoint tensors.
+
+\begin{definition}[The mixed tensor in the common physical space]
+    \label{def:mpo_arbitrary_physical_tensor}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInterpolation}
+    \uses{def:mpo_mixed_endpoint_tensor,def:ldpolar_tensor,
+        def:spt_common_physical_endpoints}
+    Let $\mathcal B(\gamma)$ be the mixed interpolation of $B_0,B_1$
+    from Definition~\ref{def:mpo_mixed_endpoint_tensor}. Define
+    \begin{align}
+        \widetilde A(\gamma)=J\mathcal B(\gamma).
+        \label{eq:mpo_arbitrary_tensor}
+    \end{align}
+    Its physical dimension is $D^2+d_0+d_1$ and its bond dimension is $D$.
+\end{definition}
+
+\begin{theorem}[Continuity and interior injectivity of the enlarged tensor]
+    \label{thm:mpo_arbitrary_tensor_continuity}
+    \lean{MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalMixedInterpolation,
+        MPSTensor.MPOSymmetry.isInjective_arbitraryPhysicalMixedInterpolation}
+    \uses{def:mpo_arbitrary_physical_tensor,def:injective}
+    For arbitrary $A_0,A_1$, the tensor $\widetilde A(\gamma)$ is
+    continuous for $\gamma\in\R$. If both tensors are one-site
+    injective, then $\widetilde A(\gamma)$ is injective for
+    $0<\gamma<1$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_mixed_interior,thm:mpo_polar_support_injective,
+        thm:spt_common_physical_endpoints}
+    The mixed tensor depends continuously on $\gamma$, and physical
+    mixing by the fixed matrix $J$ is continuous. Injectivity of
+    $B_0,B_1$ gives interior injectivity of $\mathcal B(\gamma)$.
+    Since $J^\dagger J=I$, applying $J^\dagger$ to the physical
+    letters recovers $\mathcal B(\gamma)$ and preserves their full span.
+\end{proof}
+
+\begin{theorem}[Original endpoint vectors in orthogonal physical spaces]
+    \label{thm:mpo_arbitrary_endpoint_vectors}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointLeftTensor_eq_rotatePhysical,
+        MPSTensor.MPOSymmetry.mixedEndpointRightTensor_eq_rotatePhysical,
+        MPSTensor.MPOSymmetry.rotatePhysical_mixedEndpointLeftTensor_polarPosTensor,
+        MPSTensor.MPOSymmetry.rotatePhysical_mixedEndpointRightTensor_polarPosTensor,
+        MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_zero,
+        MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_one}
+    \uses{def:mpo_arbitrary_physical_tensor,def:mpo_mixed_first_endpoint,
+        def:mpo_mixed_endpoint_swap}
+    Extending a square-alphabet tensor by zero into its diagonal
+    physical sector is exactly physical mixing by $I_p$.
+    In particular, the auxiliary small-bond tensors
+    $\widehat B_p=I_pB_p$ satisfy $J\widehat B_p=E_pA_p$ whenever
+    $A_p$ is injective. For every $N>0$, injectivity of the corresponding
+    endpoint gives
+    \begin{align}
+        \ket{V^{(N)}(\widetilde A(0))}
+         & =\ket{V^{(N)}(E_0A_0)},\notag \\
+        \ket{V^{(N)}(\widetilde A(1))}
+         & =\ket{V^{(N)}(E_1A_1)}.
+        \label{eq:mpo_arbitrary_endpoint_vectors}
+    \end{align}
+    The equality at $p$ requires injectivity only of $A_p$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:spt_common_physical_polar_endpoints,
+        thm:ldpolar_tensor_decomposition,
+        thm:mpo_mixed_periodic_line_continuity}
+    The coordinate inclusion agrees with the original tensor on its
+    sector and vanishes elsewhere. The identities
+    $E_pF_p=JI_p$ and $A_p=F_pB_p$ give
+    $E_pA_p=JI_pB_p=J\widehat B_p$.
+    The mixed endpoint tensors have block forms
+    \begin{align}
+        \mathcal B(0)^\mu
+         & =\begin{pmatrix}\widehat B_0^\mu&0\\ R^\mu&0\end{pmatrix},
+         & \mathcal B(1)^\mu
+         & =\begin{pmatrix}0&S^\mu\\0&\widehat B_1^\mu\end{pmatrix}.
+        \label{eq:mpo_arbitrary_endpoint_blocks}
+    \end{align}
+    The off-diagonal blocks do not contribute to the trace of any
+    nonempty word. Hence their periodic vectors equal those of
+    $\widehat B_0$ and $\widehat B_1$, respectively. Physical mixing
+    by $J$ acts on every physical index of these vector equalities and
+    gives (\ref{eq:mpo_arbitrary_endpoint_vectors}).
+\end{proof}
+
+The off-diagonal blocks in (\ref{eq:mpo_arbitrary_endpoint_blocks})
+are retained by the actual tensor path. The endpoint identities
+(\ref{eq:mpo_arbitrary_endpoint_vectors}) compare periodic vectors;
+they do not identify the raw bond-$D$ tensors with the bond-$D_p$
+original tensors.
+
+\subsection{The continuous positive interaction}
+
+\begin{theorem}[Coordinate representation of a periodic interaction]
+    \label{thm:mpo_periodic_interaction_coordinates}
+    \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator,
+        MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator,
+        MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_interactionHamiltonian}
+    For any local matrix $a$ on $(\C^d)^{\otimes R}$, with $R\leq N$,
+    its action on a cyclic window agrees with the operator defined by applying $a$
+    to that window and fixing the exterior configuration. Their periodic
+    sums therefore agree. In particular, for $R=2$ and $N\geq2$,
+    the sum of the Euclidean local operators is the operator with
+    configuration-basis matrix $\sum_{i=0}^{N-1}a_i$.
+    No positivity or projection assumption on $a$ is needed.
+\end{theorem}
+\begin{proof}
+    For a configuration $\sigma$, let $\sigma|_i$ be its ordered
+    cyclic window and let $\sigma[i\leftarrow\tau]$ replace that
+    window by $\tau$. Both local operators have the coefficient formula
+    \begin{align}
+        (a_iv)_\sigma
+        =\sum_{\tau\in\{0,\ldots,d-1\}^{R}}
+        a_{\sigma|_i,\tau}\,v_{\sigma[i\leftarrow\tau]}.
+        \label{eq:mpo_periodic_matrix_action}
+    \end{align}
+    The cyclic window and its complement partition the sites, so their
+    coordinate permutation extracts and replaces precisely these indices.
+    Sum (\ref{eq:mpo_periodic_matrix_action}) over the cyclic origins.
+\end{proof}
+
+\begin{definition}[Enlarged mixed local interaction]
+    \label{def:mpo_arbitrary_physical_interaction}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointInteractionMatrix,
+        MPSTensor.MPOSymmetry.toEuclideanLin_mixedEndpointInteractionMatrix,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
+    \uses{def:mpo_mixed_extended_support,def:mpo_arbitrary_physical_tensor,
+        def:spt_isometric_interaction_extension}
+    For any square-alphabet tensors $C_0,C_1$, let
+    $h_{C_0,C_1}(\gamma)$ be the configuration-basis matrix of
+    $I-\Pi_{\mathcal S'_\gamma}$ for their extended mixed two-site
+    support. It represents exactly that Euclidean operator. Set
+    $h_\gamma=h_{B_0,B_1}(\gamma)$, $T=J\otimes J$, and define
+    \begin{align}
+        \widetilde h_\gamma
+                     & =Th_\gamma T^\dagger+I-TT^\dagger,\notag                                             \\
+        H_{\gamma,N} & =\sum_{i=0}^{N-1}(h_\gamma)_i,
+                     & \widetilde H_{\gamma,N}                  & =\sum_{i=0}^{N-1}(\widetilde h_\gamma)_i.
+        \label{eq:mpo_arbitrary_interaction}
+    \end{align}
+    The periodic sums are defined for $N\geq2$.
+\end{definition}
+
+\begin{theorem}[Positivity and continuity through the endpoints]
+    \label{thm:mpo_arbitrary_interaction_continuity}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointInteractionMatrix_posSemidef,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpointInteractionMatrix,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_posSemidef,
+        MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalMixedInteraction}
+    \uses{def:mpo_arbitrary_physical_interaction,def:injective}
+    For arbitrary $C_0,C_1$ and real $\gamma$,
+    $h_{C_0,C_1}(\gamma)\geq0$; for arbitrary $A_0,A_1$,
+    $\widetilde h_\gamma\geq0$.
+    If $D_0,D_1>0$ and $C_0,C_1$ are injective, then
+    $h_{C_0,C_1}(\gamma)$ is continuous on $\R$.
+    Thus, if $D_0,D_1>0$ and $A_0,A_1$ are one-site injective,
+    $\widetilde h_\gamma$ is continuous on $\R$, including at $0$ and $1$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_mixed_endpoint_projector_comparison,
+        thm:mpo_mixed_support_continuity,thm:mpo_polar_support_injective,
+        thm:mpo_isometry_inactive_bound}
+    The complement of an orthogonal projection is positive.
+    Passing to matrix coordinates preserves positivity and continuity
+    in finite dimension. Under the stated injectivity hypotheses,
+    the positive polar tensors are injective, so the continuous-support
+    theorem applies to $h_\gamma$.
+    Since $T$ is fixed, (\ref{eq:mpo_arbitrary_interaction}) is an
+    affine continuous function of $h_\gamma$. Positivity of the
+    isometric extension gives $\widetilde h_\gamma\geq0$.
+\end{proof}
+
+\begin{theorem}[Canonical parent equality in the open interval]
+    \label{thm:mpo_arbitrary_interior_parent}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_eq_parent_of_mem_Ioo}
+    \uses{def:mpo_arbitrary_physical_interaction,def:parent_interaction}
+    For arbitrary original tensors $A_0,A_1$ and $0<\gamma<1$,
+    $\widetilde h_\gamma$ equals the canonical two-site parent
+    interaction of $\widetilde A(\gamma)$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_mixed_support_continuity,thm:spt_isometric_parent_interaction}
+    In the open interval the insertion in the mixed tensor is invertible,
+    so its extended two-site support is the canonical one. The
+    canonical parent of a tensor physically included by $J$ is its
+    isometric interaction extension. Apply these two identities.
+\end{proof}
+
+\subsection{Ground lines and a volume-uniform gap}
+
+\begin{theorem}[The exact nonzero periodic ground line]
+    \label{thm:mpo_arbitrary_periodic_ground_line}
+    \lean{MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_ne_zero,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_groundSpace_finrank}
+    \uses{def:mpo_arbitrary_physical_interaction,def:injective,def:mpv}
+    Suppose $D_0,D_1>0$ and $A_0,A_1$ are one-site injective.
+    For every $\gamma\in[0,1]$ and $N\geq2$, the vector
+    $\ket{V^{(N)}(\widetilde A(\gamma))}$ is nonzero, and
+    \begin{align}
+        \ker\widetilde H_{\gamma,N}
+         & =\spn_{\C}\{\ket{V^{(N)}(\widetilde A(\gamma))}\},
+         & \dim\ker\widetilde H_{\gamma,N}                    & =1.
+        \label{eq:mpo_arbitrary_ground_line}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_polar_support_injective,
+        thm:mpo_mixed_periodic_line_continuity,
+        thm:mpo_periodic_interaction_coordinates,
+        thm:mpo_arbitrary_interaction_continuity,
+        thm:mpo_isometry_positive_kernel}
+    The support-coordinate theorem gives the nonzero periodic vector
+    of $\mathcal B(\gamma)$ and its exact ground line.
+    The coordinate identity identifies its Euclidean Hamiltonian with
+    $H_{\gamma,N}$. Isometric kernel transport gives
+    $\ker\widetilde H_{\gamma,N}=J^{\otimes N}(\ker H_{\gamma,N})$.
+    Physical mixing takes the support-coordinate vector to
+    $\ket{V^{(N)}(\widetilde A(\gamma))}$. Since $J^{\otimes N}$ is
+    an isometry, this vector remains nonzero. Its span has dimension one.
+\end{proof}
+
+\begin{theorem}[Uniform gap for arbitrary original physical alphabets]
+    \label{thm:mpo_arbitrary_uniform_path_gap}
+    \lean{MPSTensor.MPOSymmetry.exists_uniform_arbitraryPhysicalMixed_periodic_path_gap}
+    \uses{def:mpo_arbitrary_physical_interaction,def:injective}
+    If $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, there is a
+    constant $0<\varepsilon\leq1$, depending only on these tensors,
+    such that for every $\gamma\in[0,1]$, every $N\geq2$, and every
+    $v\perp\ker\widetilde H_{\gamma,N}$,
+    \begin{align}
+        \varepsilon\|v\|\leq\|\widetilde H_{\gamma,N}v\|.
+        \label{eq:mpo_arbitrary_uniform_gap}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_polar_support_injective,
+        thm:mpo_mixed_uniform_periodic_path_gap,
+        thm:mpo_periodic_interaction_coordinates,
+        thm:mpo_arbitrary_interaction_continuity,
+        thm:mpo_isometry_positive_gap}
+    Apply the uniform mixed-path gap theorem to the derived injective
+    tensors $B_0,B_1$, which have square physical alphabets.
+    It gives $\delta>0$, independent of $\gamma\in[0,1]$ and
+    $N\geq2$, with $\delta\|x\|\leq\|H_{\gamma,N}x\|$ on the
+    kernel complement. The coordinate identity transfers precisely
+    this bound to the matrix Hamiltonian. Each $h_\gamma$ is positive,
+    so Theorem~\ref{thm:mpo_isometry_positive_gap} applies to the fixed
+    inclusion $J$ and gives (\ref{eq:mpo_arbitrary_uniform_gap}) with
+    $\varepsilon=\min\{\delta,1\}>0$. Both constants are obtained
+    from the endpoint tensors; a support-path gap is not an assumption.
+\end{proof}
+
+The resulting continuous positive interactions connect the exact periodic
+endpoint vectors in the orthogonal full embeddings
+(\ref{eq:mpo_arbitrary_full_embeddings}), with a uniform gap including
+$N=2$. The endpoint interactions use the extended limiting supports;
+canonical-parent equality has been asserted only in the open interval.
+Attaching paths to canonical endpoint interactions, proving covariance
+under a common MPO symmetry, and the phase classification with degenerate
+ground spaces are separate assertions.

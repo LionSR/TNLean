@@ -5444,3 +5444,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The scalar rate conversion likewise reuses
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
+
+### Isometric active/inactive gap splitting — candidate (2026-10-05)
+
+- **Pattern:** split a vector as `U (U.adjoint v) + (v - U (U.adjoint v))`,
+  remove mixed energy terms by intertwining and symmetry, and combine the
+  two quadratic bounds with their minimum.
+- **Seen:** `MPS/Symmetry/MPOSymmetry/MixedEndpointActiveGapTransfer.lean`
+  and `Algebra/IsometricGapTransfer.lean`.
+- **Abstraction:** `LinearIsometry.re_inner_ge_of_intertwines` and
+  `LinearIsometry.norm_gap_of_intertwines` now serve the noncommuting physical
+  isometry transport. The independent kernel theorem only needs intertwining
+  and a strictly positive inactive bound.
+- **Notes:** The existing mixed-endpoint consumer is unchanged while its
+  separate validation is in progress; its later migration is a direct
+  application of the generic norm-gap theorem.

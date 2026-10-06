@@ -76,6 +76,7 @@ import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
+import TNLean.Algebra.IsometricGapTransfer
 import TNLean.Algebra.IsometricProjection
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.KernelGapPerturbation
