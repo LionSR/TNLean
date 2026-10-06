@@ -45,10 +45,11 @@ theorem torusOpenCoefficient_eq_zero_of_isEmpty [IsEmpty V]
     (O : E → Matrix V V ℂ)
     (θ : RegionBoundaryEndpoint torusLabelledBondTail torusLabelledBondHead R → V) :
     torusOpenCoefficient R A O θ = 0 := by
-  letI : IsEmpty (RegionSiteConfig torusLabelledBondTail torusLabelledBondHead R (V := V)) :=
+  let : IsEmpty (RegionSiteConfig torusLabelledBondTail torusLabelledBondHead R (V := V)) :=
     ⟨fun η ↦ isEmptyElim (η v (torusIncidentEndpoint v.1 (false, false)))⟩
   simp [torusOpenCoefficient, openCoefficient]
 
+omit [NeZero width] [NeZero height] in
 open Classical in
 /-- The homotopy-derived gauge survives replacing noninternal matrices by
 identity: the collar puts both endpoints of every such bond off its support. -/
@@ -69,7 +70,7 @@ theorem TorusDualCollar.exists_internalFluxGauge
   refine ⟨k, hk, ?_⟩
   intro e
   by_cases he : torusLabelledBondTail e ∈ C.region ∧ torusLabelledBondHead e ∈ C.region
-  · simp only [internalBondMatrices, he, ite_true]
+  · simp only [internalBondMatrices, he]
     rcases e with ⟨v, d⟩
     cases d <;> simp [torusDualFluxBondMatrices, heq, torusBondGauge,
       torusLabelledBondHead, torusLabelledBondTail, map_mul]
@@ -123,7 +124,7 @@ theorem TorusDualCollar.openCoefficient_eq
       (torusLegMatrix U (k v)) = torusDeltaCompletedTensor C.region F v₀ θ v
     rw [hinside]
     exact vecMul_torusLegMatrix_of_comp_eq U (A v) (hA v hs) (k v) (σ ⟨v, hr⟩)
-  · letI : IsEmpty V := not_nonempty_iff.mp hn
+  · let : IsEmpty V := not_nonempty_iff.mp hn
     rw [torusOpenCoefficient_eq_zero_of_isEmpty _ ⟨C.patch.origin, C.origin_mem⟩,
       torusOpenCoefficient_eq_zero_of_isEmpty _ ⟨C.patch.origin, C.origin_mem⟩]
 

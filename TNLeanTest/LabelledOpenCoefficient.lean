@@ -49,3 +49,7 @@ example (A : collar.region → (Empty × Empty × Empty × Empty) → ℂ)
     (θ : RegionBoundaryEndpoint torusLabelledBondTail torusLabelledBondHead collar.region → Empty) :
     torusOpenCoefficient collar.region A O θ = 0 :=
   torusOpenCoefficient_eq_zero_of_isEmpty _ ⟨collar.patch.origin, collar.origin_mem⟩ A O θ
+
+#print axioms torusOpenCoefficient_eq_zero_of_isEmpty
+set_option pp.proofs true in
+#print TorusDualCollar.openCoefficient_eq

@@ -388,11 +388,11 @@ class WorkflowTests(unittest.TestCase):
                         self.assertIn(flag, run)
                     checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
                     self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLeanTest/LabelledOpenCoefficient.lean',
                         'TNLean/PEPS/LabelledOpenCoefficient.lean',
                         'TNLean/PEPS/TorusLabelledOpenCoefficient.lean',
                         'TNLean/PEPS/TorusDualCollar.lean',
-                        'TNLean/PEPS/TorusDualOpenDeformation.lean',
-                        'TNLeanTest/LabelledOpenCoefficient.lean'])
+                        'TNLean/PEPS/TorusDualOpenDeformation.lean'])
                     imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.TorusDualOpenDeformation'])
