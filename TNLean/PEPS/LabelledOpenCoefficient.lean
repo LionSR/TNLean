@@ -135,10 +135,18 @@ private theorem completed_siteWeight
       (joinRegionConfig tail head R η ξ v.1) PUnit.unit =
       if ξ v = deltaExteriorConfig tail head R v₀ θ v then 1 else 0 := by
     simp [deltaCompletedTensor, joinRegionConfig, Equiv.piEquivPiSubtypeProd, v.2]
-  simp_rw [hin, hout]
-  rw [Fintype.prod_ite_zero]
-  congr 2
-  exact propext funext_iff.symm
+  calc
+    _ = (∏ v, A v (η v)) *
+        ∏ v : {v // v ∉ R},
+          (if ξ v = deltaExteriorConfig tail head R v₀ θ v then (1 : ℂ) else 0) := by
+      congr 1
+      · exact Finset.prod_congr rfl fun v _ ↦ hin v
+      · exact Finset.prod_congr rfl fun v _ ↦ hout v
+    _ = _ := by
+      rw [Fintype.prod_ite_zero]
+      simp only [Finset.prod_const_one]
+      congr 2
+      exact propext funext_iff.symm
 
 open Classical in
 /-- Exact delta-exterior bridge. There is no dimension scalar and no product
