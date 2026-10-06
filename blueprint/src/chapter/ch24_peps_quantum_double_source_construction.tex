@@ -1,0 +1,370 @@
+% Source: SCP10, paper_v3.tex:2625--2923, Section 7.
+% Inspected artwork: tc-lattice, tc-blocked-lattice, proj-as-peps,
+% tc-tensor-orientation, tc-2x2-renorm and tc-2x2-renorm-syms (figs6 PDFs).
+% The unavailable renorm-as-diff-doubles artwork is not reconstructed.
+% These are source constructions, not additional formalization claims.
+\paragraph{The checkerboard and its blocked plaquettes.}
+In the lattice of \cite[Section~7]{Schuch2010PEPS}, each vertex carries
+one physical spin and each square is an A or B plaquette. The diagonal
+arrows below reproduce the original spin orientations. The horizontal
+and vertical lines only record adjacency; they are not tensor contractions.
+% Source: figs6/tc-lattice.pdf; upper-left A, alternating A/B plaquettes.
+% Ink: cb00,...,cb33 are sixteen physical sites, with no tensor ports.
+% Diagonal arrows are source spin orientations, not virtual contractions.
+% No indices are contracted or opened: this incidence picture has empty
+% tensor boundary signature. The spin Hilbert space is C[G] at each dot.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire},cols=7,bonds=none]
+        \tn[at=(1,1),name=cb00,skin=dot]{}
+        \tn[at=(1,3),name=cb01,skin=dot]{}
+        \tn[at=(1,5),name=cb02,skin=dot]{}
+        \tn[at=(1,7),name=cb03,skin=dot]{}
+        \tn[at=(3,1),name=cb10,skin=dot]{}
+        \tn[at=(3,3),name=cb11,skin=dot]{}
+        \tn[at=(3,5),name=cb12,skin=dot]{}
+        \tn[at=(3,7),name=cb13,skin=dot]{}
+        \tn[at=(5,1),name=cb20,skin=dot]{}
+        \tn[at=(5,3),name=cb21,skin=dot]{}
+        \tn[at=(5,5),name=cb22,skin=dot]{}
+        \tn[at=(5,7),name=cb23,skin=dot]{}
+        \tn[at=(7,1),name=cb30,skin=dot]{}
+        \tn[at=(7,3),name=cb31,skin=dot]{}
+        \tn[at=(7,5),name=cb32,skin=dot]{}
+        \tn[at=(7,7),name=cb33,skin=dot]{}
+        \tnwire[name=cbH00,stroke=dotted]{cb00}{cb01}
+        \tnwire[name=cbH01,stroke=dotted]{cb01}{cb02}
+        \tnwire[name=cbH02,stroke=dotted]{cb02}{cb03}
+        \tnwire[name=cbH10,stroke=dotted]{cb10}{cb11}
+        \tnwire[name=cbH11,stroke=dotted]{cb11}{cb12}
+        \tnwire[name=cbH12,stroke=dotted]{cb12}{cb13}
+        \tnwire[name=cbH20,stroke=dotted]{cb20}{cb21}
+        \tnwire[name=cbH21,stroke=dotted]{cb21}{cb22}
+        \tnwire[name=cbH22,stroke=dotted]{cb22}{cb23}
+        \tnwire[name=cbH30,stroke=dotted]{cb30}{cb31}
+        \tnwire[name=cbH31,stroke=dotted]{cb31}{cb32}
+        \tnwire[name=cbH32,stroke=dotted]{cb32}{cb33}
+        \tnwire[name=cbV00,stroke=dotted]{cb00}{cb10}
+        \tnwire[name=cbV01,stroke=dotted]{cb01}{cb11}
+        \tnwire[name=cbV02,stroke=dotted]{cb02}{cb12}
+        \tnwire[name=cbV03,stroke=dotted]{cb03}{cb13}
+        \tnwire[name=cbV10,stroke=dotted]{cb10}{cb20}
+        \tnwire[name=cbV11,stroke=dotted]{cb11}{cb21}
+        \tnwire[name=cbV12,stroke=dotted]{cb12}{cb22}
+        \tnwire[name=cbV13,stroke=dotted]{cb13}{cb23}
+        \tnwire[name=cbV20,stroke=dotted]{cb20}{cb30}
+        \tnwire[name=cbV21,stroke=dotted]{cb21}{cb31}
+        \tnwire[name=cbV22,stroke=dotted]{cb22}{cb32}
+        \tnwire[name=cbV23,stroke=dotted]{cb23}{cb33}
+        \tnwire[name=cbArrow00,kind=string,dir=to]{cb00}{0.7 sw of cb00}
+        \tnwire[name=cbArrow01,kind=string,dir=to]{cb01}{0.7 nw of cb01}
+        \tnwire[name=cbArrow02,kind=string,dir=to]{cb02}{0.7 sw of cb02}
+        \tnwire[name=cbArrow03,kind=string,dir=to]{cb03}{0.7 nw of cb03}
+        \tnwire[name=cbArrow10,kind=string,dir=to]{cb10}{0.7 se of cb10}
+        \tnwire[name=cbArrow11,kind=string,dir=to]{cb11}{0.7 ne of cb11}
+        \tnwire[name=cbArrow12,kind=string,dir=to]{cb12}{0.7 se of cb12}
+        \tnwire[name=cbArrow13,kind=string,dir=to]{cb13}{0.7 ne of cb13}
+        \tnwire[name=cbArrow20,kind=string,dir=to]{cb20}{0.7 sw of cb20}
+        \tnwire[name=cbArrow21,kind=string,dir=to]{cb21}{0.7 nw of cb21}
+        \tnwire[name=cbArrow22,kind=string,dir=to]{cb22}{0.7 sw of cb22}
+        \tnwire[name=cbArrow23,kind=string,dir=to]{cb23}{0.7 nw of cb23}
+        \tnwire[name=cbArrow30,kind=string,dir=to]{cb30}{0.7 se of cb30}
+        \tnwire[name=cbArrow31,kind=string,dir=to]{cb31}{0.7 ne of cb31}
+        \tnwire[name=cbArrow32,kind=string,dir=to]{cb32}{0.7 se of cb32}
+        \tnwire[name=cbArrow33,kind=string,dir=to]{cb33}{0.7 ne of cb33}
+        \tnmark[name=cbPlaquette00,form=label]{(2,2)}{A}
+        \tnmark[name=cbPlaquette01,form=label]{(2,4)}{B}
+        \tnmark[name=cbPlaquette02,form=label]{(2,6)}{A}
+        \tnmark[name=cbPlaquette10,form=label]{(4,2)}{B}
+        \tnmark[name=cbPlaquette11,form=label]{(4,4)}{A}
+        \tnmark[name=cbPlaquette12,form=label]{(4,6)}{B}
+        \tnmark[name=cbPlaquette20,form=label]{(6,2)}{A}
+        \tnmark[name=cbPlaquette21,form=label]{(6,4)}{B}
+        \tnmark[name=cbPlaquette22,form=label]{(6,6)}{A}
+    \end{tenkz}
+\end{tenkzequation}
+For a B plaquette, an arrow pointing away from its center carries
+$L_u\ket g=\ket{ug}$, and an arrow pointing towards it carries
+$R_u\ket g=\ket{gu^{-1}}$. Its invariant-space projector is
+$\Pi_B=|G|^{-1}\sum_{u\in G}V_u$, with $V_u$ the product of these four
+actions, and its penalty is $h_B=I-\Pi_B$.
+For $G=\mathbb Z_2$, the two penalties are
+$h_A=\tfrac12(I-Z^{\otimes4})$ and
+$h_B=\tfrac12(I-X^{\otimes4})$, so the B projector is
+$\Pi_B=\tfrac12(I+X^{\otimes4})$.
+% Normalization correction: the printed unnormalized group sum and the
+% printed extra factors multiplying I-h_B are not projector identities.
+
+Choose the disjoint A plaquettes at the corners of this patch as blocks.
+They become the four sites $K_{NW},K_{NE},K_{SE},K_{SW}$.
+The remaining A plaquette becomes the hole between them. The B plaquettes
+become bonds: $B_h$ is horizontal and $B_v$ is vertical.
+The next picture records this partition of the original physical sites;
+each contour contains four spins and one A plaquette. Its arrows use the
+clockwise physical coordinates obtained by the basis inversion described below.
+% Source: figs6/tc-blocked-lattice.pdf and paper_v3.tex:2808--2844.
+% Ink: bk00,...,bk33 are the same sixteen physical sites as cb00,...,cb33.
+% Four disjoint enclosures contain the four inner A supports. A_square
+% is supported on bk11,bk12,bk22,bk21, one spin from each block.
+% B_h uses bk01,bk02,bk12,bk11; B_v uses bk10,bk11,bk21,bk20.
+% Spin arrows are reversed from the source by physical basis inversion J.
+% The dotted adjacency rails contract nothing; tensor boundary is empty.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire},cols=7,bonds=none]
+        \tn[at=(1,1),name=bk00,skin=dot]{}
+        \tn[at=2 e of bk00,name=bk01,skin=dot]{}
+        \tn[at=2 e of bk01,name=bk02,skin=dot]{}
+        \tn[at=2 e of bk02,name=bk03,skin=dot]{}
+        \tn[at=2 s of bk00,name=bk10,skin=dot]{}
+        \tn[at=2 e of bk10,name=bk11,skin=dot]{}
+        \tn[at=2 e of bk11,name=bk12,skin=dot]{}
+        \tn[at=2 e of bk12,name=bk13,skin=dot]{}
+        \tn[at=2 s of bk10,name=bk20,skin=dot]{}
+        \tn[at=2 e of bk20,name=bk21,skin=dot]{}
+        \tn[at=2 e of bk21,name=bk22,skin=dot]{}
+        \tn[at=2 e of bk22,name=bk23,skin=dot]{}
+        \tn[at=2 s of bk20,name=bk30,skin=dot]{}
+        \tn[at=2 e of bk30,name=bk31,skin=dot]{}
+        \tn[at=2 e of bk31,name=bk32,skin=dot]{}
+        \tn[at=2 e of bk32,name=bk33,skin=dot]{}
+        \tnwire[name=bkH00,stroke=dotted]{bk00}{bk01}
+        \tnwire[name=bkH01,stroke=dotted]{bk01}{bk02}
+        \tnwire[name=bkH02,stroke=dotted]{bk02}{bk03}
+        \tnwire[name=bkH10,stroke=dotted]{bk10}{bk11}
+        \tnwire[name=bkH11,stroke=dotted]{bk11}{bk12}
+        \tnwire[name=bkH12,stroke=dotted]{bk12}{bk13}
+        \tnwire[name=bkH20,stroke=dotted]{bk20}{bk21}
+        \tnwire[name=bkH21,stroke=dotted]{bk21}{bk22}
+        \tnwire[name=bkH22,stroke=dotted]{bk22}{bk23}
+        \tnwire[name=bkH30,stroke=dotted]{bk30}{bk31}
+        \tnwire[name=bkH31,stroke=dotted]{bk31}{bk32}
+        \tnwire[name=bkH32,stroke=dotted]{bk32}{bk33}
+        \tnwire[name=bkV00,stroke=dotted]{bk00}{bk10}
+        \tnwire[name=bkV01,stroke=dotted]{bk01}{bk11}
+        \tnwire[name=bkV02,stroke=dotted]{bk02}{bk12}
+        \tnwire[name=bkV03,stroke=dotted]{bk03}{bk13}
+        \tnwire[name=bkV10,stroke=dotted]{bk10}{bk20}
+        \tnwire[name=bkV11,stroke=dotted]{bk11}{bk21}
+        \tnwire[name=bkV12,stroke=dotted]{bk12}{bk22}
+        \tnwire[name=bkV13,stroke=dotted]{bk13}{bk23}
+        \tnwire[name=bkV20,stroke=dotted]{bk20}{bk30}
+        \tnwire[name=bkV21,stroke=dotted]{bk21}{bk31}
+        \tnwire[name=bkV22,stroke=dotted]{bk22}{bk32}
+        \tnwire[name=bkV23,stroke=dotted]{bk23}{bk33}
+        \tnwire[name=bkArrow00,kind=string,dir=to]{bk00}{0.7 ne of bk00}
+        \tnwire[name=bkArrow01,kind=string,dir=to]{bk01}{0.7 se of bk01}
+        \tnwire[name=bkArrow02,kind=string,dir=to]{bk02}{0.7 ne of bk02}
+        \tnwire[name=bkArrow03,kind=string,dir=to]{bk03}{0.7 se of bk03}
+        \tnwire[name=bkArrow10,kind=string,dir=to]{bk10}{0.7 nw of bk10}
+        \tnwire[name=bkArrow11,kind=string,dir=to]{bk11}{0.7 sw of bk11}
+        \tnwire[name=bkArrow12,kind=string,dir=to]{bk12}{0.7 nw of bk12}
+        \tnwire[name=bkArrow13,kind=string,dir=to]{bk13}{0.7 sw of bk13}
+        \tnwire[name=bkArrow20,kind=string,dir=to]{bk20}{0.7 ne of bk20}
+        \tnwire[name=bkArrow21,kind=string,dir=to]{bk21}{0.7 se of bk21}
+        \tnwire[name=bkArrow22,kind=string,dir=to]{bk22}{0.7 ne of bk22}
+        \tnwire[name=bkArrow23,kind=string,dir=to]{bk23}{0.7 se of bk23}
+        \tnwire[name=bkArrow30,kind=string,dir=to]{bk30}{0.7 nw of bk30}
+        \tnwire[name=bkArrow31,kind=string,dir=to]{bk31}{0.7 sw of bk31}
+        \tnwire[name=bkArrow32,kind=string,dir=to]{bk32}{0.7 nw of bk32}
+        \tnwire[name=bkArrow33,kind=string,dir=to]{bk33}{0.7 sw of bk33}
+        \tnmark[name=blockNW,form=enclosure,species=selected]{{bk00,bk01,bk10,bk11}}{}
+        \tnmark[name=blockNE,form=enclosure,species=selected]{{bk02,bk03,bk12,bk13}}{}
+        \tnmark[name=blockSE,form=enclosure,species=selected]{{bk22,bk23,bk32,bk33}}{}
+        \tnmark[name=blockSW,form=enclosure,species=selected]{{bk20,bk21,bk30,bk31}}{}
+        \tnmark[name=bkPlaquette22,form=label]{(2,2)}{K_{NW}:A}
+        \tnmark[name=bkPlaquette26,form=label]{(2,6)}{K_{NE}:A}
+        \tnmark[name=bkPlaquette66,form=label]{(6,6)}{K_{SE}:A}
+        \tnmark[name=bkPlaquette62,form=label]{(6,2)}{K_{SW}:A}
+        \tnmark[name=bkPlaquette44,form=label]{(4,4)}{A_\square}
+        \tnmark[name=bkPlaquette24,form=label]{(2,4)}{B_h}
+        \tnmark[name=bkPlaquette64,form=label]{(6,4)}{B_h}
+        \tnmark[name=bkPlaquette42,form=label]{(4,2)}{B_v}
+        \tnmark[name=bkPlaquette46,form=label]{(4,6)}{B_v}
+    \end{tenkz}
+\end{tenkzequation}
+
+\paragraph{Clockwise physical coordinates.}
+Keep the B colors $p,q,r,s$ at north, east, south, west. In the original
+arrow convention, the spins at northeast, southeast, southwest, northwest
+are $(qp^{-1},rq^{-1},sr^{-1},ps^{-1})$. Inverting every physical basis
+label gives the clockwise coordinates
+$(a,b,c,d)=(pq^{-1},qr^{-1},rs^{-1},sp^{-1})$ used below.
+Indeed, the basis involution $J\ket g=\ket{g^{-1}}$ satisfies
+$JL_uJ=R_u$ and $JR_uJ=L_u$. Thus this change reverses the spin arrows
+and exchanges their incoming and outgoing actions. It leaves the
+checkerboard incidence unchanged.
+% Source anchors: paper_v3.tex:2873--2876 (L/R), 2889--2894 (two colors),
+% 2896--2908 (clockwise K); original arrows from tc-lattice.pdf.
+% This elementary basis comparison is stated mathematically here, without
+% identifying it with quantumDoubleDualToK (a different coordinate change).
+
+At one K site, the A product is $abcd=1$, read clockwise from northeast.
+At the hole it is
+$\sigma_{NW,b}\sigma_{SW,a}\sigma_{SE,d}\sigma_{NE,c}=1$, read in the
+opposite sense from its northwest corner. These ordered products must
+not be interchanged when $G$ is nonabelian.
+For the horizontal and vertical B bonds, respectively, the four actions
+in these clockwise coordinates are
+\begin{align}
+    V_u^h & : (a,b,c,d;e,f,g,h)
+    \longmapsto(au^{-1},ub,c,d;e,f,gu^{-1},uh), \\
+    V_u^v & : (a,b,c,d;e,f,g,h)
+    \longmapsto(a,bu^{-1},uc,d;ue,f,g,hu^{-1}).
+    \label{eq:peps_source_bond_actions}
+\end{align}
+The ordered tensor pairs are left--right and top--bottom, respectively.
+In both cases $\Pi_B=|G|^{-1}\sum_uV_u$ and $h_B=I-\Pi_B$.
+A horizontal bond changes spins $a,b$ on the left and $c,d$ on the right.
+A vertical bond changes spins $b,c$ on top and $a,d$ below.
+% Only the horizontal bond and the northern hole-bond statements below
+% carry published declaration links. This source illustration adds none.
+
+\paragraph{A controlled plaquette loop and its two layers.}
+For a spin adjacent to a B plaquette, let $U_s$ denote the appropriate
+$L_s$ or $R_s$. The elementary tensor is
+$P=\sum_{s,k}U_s\ket{k}_{\rm out}\bra{k}_{\rm in}
+    \otimes\ket{s}_v\bra{s}_v$.
+The two virtual indices force the same control color to pass through P.
+Contracting four copies around one plaquette gives
+\begin{align}
+    \operatorname{Loop}(P) & =\sum_{s\in G}
+    U_s^{NW}\otimes U_s^{NE}\otimes U_s^{SE}\otimes U_s^{SW}
+    =|G|\Pi_B.
+    \label{eq:peps_source_p_loop}
+\end{align}
+The factor $|G|^{-1}$ belongs to the whole loop, rather than once to
+each of its four tensors. In the drawing the four virtual bonds carry
+one summed color $s$, whereas the eight physical legs remain open.
+% Source: figs6/proj-as-peps.pdf; paper_v3.tex:2696--2722,2879--2885.
+% Ink: loopNW,loopNE,loopSE,loopSW are controlled P tensors. Their directed
+% virtual edges close clockwise, imposing one common summed control color.
+% All physical input/output indices remain open: boundary (virtual,physical)=(0,8).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire},cols=2,bonds=none]
+        \tn[at=(1,1),name=loopNW,skin=box,
+            ports={0:virtual,270:virtual,90:physical:$o_1$,180:physical:$i_1$}]{P}
+        \tn[at=4 e of loopNW,name=loopNE,skin=box,
+            ports={180:virtual,270:virtual,90:physical:$o_2$,0:physical:$i_2$}]{P}
+        \tn[at=3 s of loopNE,name=loopSE,skin=box,
+            ports={90:virtual,180:virtual,0:physical:$o_3$,270:physical:$i_3$}]{P}
+        \tn[at=3 s of loopNW,name=loopSW,skin=box,
+            ports={0:virtual,90:virtual,180:physical:$o_4$,270:physical:$i_4$}]{P}
+        \tnwire[name=loopN,dir=to]{loopNW.0}{loopNE.180}
+        \tnwire[name=loopE,dir=to]{loopNE.270}{loopSE.90}
+        \tnwire[name=loopS,dir=to]{loopSE.180}{loopSW.0}
+        \tnwire[name=loopW,dir=to]{loopSW.90}{loopNW.270}
+        \tnmark[name=loopColor,form=label]{on loopN 0.5}{$s$}
+    \end{tenkz}
+\end{tenkzequation}
+
+Every spin belongs to two B plaquettes, one from each disjoint layer.
+Their actions on that spin are a left and a right multiplication, so
+$L_rR_s=R_sL_r$. Applying the two P tensors to $\ket1$ therefore
+produces $\ket{rs^{-1}}$ or $\ket{sr^{-1}}$, according to the
+left and right assignments.
+For $\mathbb Z_2$ this is $\ket{r+s}$.
+The diagram uses clockwise coordinates at the southeast spin of a blocked
+A plaquette. Here $r$ is the northeast B color and $s$ the southwest B color,
+so the two actions are $L_r$ and $R_s$. In the original arrow convention
+this same spin is $sr^{-1}$; applying $J$ gives $rs^{-1}$.
+The equality contracts only the intermediate physical index and the
+initial state; all four virtual legs of T remain open. The duplicated $r$ and $s$ labels express equality
+constraints, not additional sums.
+% Source: paper_v3.tex:2724--2749,2886--2894; tc-tensor-orientation.pdf.
+% Ink: lower P^R_s and upper P^L_r have opposite virtual directions.
+% One physical wire joins them, and a second joins P^R_s to |1>.
+% Result: at original site cb11 / clockwise site bk11, T has virtual
+% N,E=r and S,W=s, one physical output rs^{-1} after basis inversion J.
+% Both panels have boundary (virtual,physical)=(4,1).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire},cols=1,bonds=none]
+        \tn[at=(1,1),name=stackL,skin=box,
+            ports={135:virtual,45:virtual,90:physical:$rs^{-1}$,270:physical}]{P^L}
+        \tn[at=2 s of stackL,name=stackR,skin=box,
+            ports={225:virtual,315:virtual,90:physical,270:physical}]{P^R}
+        \tn[at=2 s of stackR,name=stackOne,skin=box,ports={90:physical}]{\ket1}
+        \tnwire[name=stackLIn,dir=from]{stackL.135}{open nw}
+        \tnwire[name=stackLOut,dir=to]{stackL.45}{open ne}
+        \tnwire[name=stackRIn,dir=from]{stackR.225}{open sw}
+        \tnwire[name=stackROut,dir=to]{stackR.315}{open se}
+        \tnmark[form=label,label pos=w]{on stackLIn 0.5}{$r$}
+        \tnmark[form=label,label pos=e]{on stackLOut 0.5}{$r$}
+        \tnmark[form=label,label pos=w]{on stackRIn 0.5}{$s$}
+        \tnmark[form=label,label pos=e]{on stackROut 0.5}{$s$}
+        \tnwire[name=stackMiddle,dir=to]{stackR.90}{stackL.270}
+        \tnwire[name=stackInput,dir=to]{stackOne.90}{stackR.270}
+    \end{tenkz}
+    \quad = \quad
+    \begin{tenkz}[rows={wire},cols=1,bonds=none]
+        \tn[at=(1,1),name=stackT,skin=box,
+            ports={90:virtual,0:virtual,270:virtual,180:virtual,
+                    135:physical:$rs^{-1}$}]{T}
+        \tnwire[name=stackTNorth,dir=from]{stackT.90}{open n}
+        \tnwire[name=stackTEast,dir=to]{stackT.0}{open e}
+        \tnwire[name=stackTSouth,dir=to]{stackT.270}{open s}
+        \tnwire[name=stackTWest,dir=from]{stackT.180}{open w}
+        \tnmark[form=label,label pos=e]{on stackTNorth 0.5}{$r$}
+        \tnmark[form=label,label pos=n]{on stackTEast 0.5}{$r$}
+        \tnmark[form=label,label pos=e]{on stackTSouth 0.5}{$s$}
+        \tnmark[form=label,label pos=n]{on stackTWest 0.5}{$s$}
+    \end{tenkz}
+\end{tenkzequation}
+
+\paragraph{The source renormalization and the open boundary identity.}
+The source groups four T tensors around an A plaquette and separates
+K from four local factors L. In the binary construction, the CNOT
+$\ket{a,b}\mapsto\ket{a,a+b}$ conjugates $X\otimes X$ to
+$X\otimes I$ and $Z\otimes Z$ to $I\otimes Z$, separating the local
+pair symmetries from the retained four-leg symmetry.
+For a general group, the source uses the pair permutation
+$\ket{a,b}\mapsto\ket{a,b^{-1}a}$.
+Each L has one virtual index and a physical
+output; its one-leg symmetry gives a product state after adjoining
+neighboring blocks. The diagram shows the factorized side of this
+source construction. Physical indices are bundled, as in the original
+renormalization drawing; no equality of the unrestricted physical
+ambient spaces is asserted.
+% Source: paper_v3.tex:2777--2806 and figs6/tc-2x2-renorm.pdf.
+% Ink: sourceK carries four virtual indices and a bundled physical output;
+% each sourceL* carries ONE virtual index AND a distinct physical output.
+% K virtual arrows enter at N,W and leave at E,S; every L arrow enters,
+% as in tc-2x2-renorm.pdf. No factors are connected in this block drawing.
+% Boundary (virtual,physical)=(8,5); physical ports denote output factors,
+% not five elementary qubits and not the four fixed virtual CNOT registers.
+% Source physical RG statement only: no leanok or declaration is attached.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire},cols=3,bonds=none]
+        \tn[at=(2,2),name=sourceK,skin=box,
+            ports={90:virtual,0:virtual,270:virtual,180:virtual,135:physical:$\mathcal H_K$}]{K}
+        \tn[at=3 n of sourceK,name=sourceLN,skin=box,
+            ports={90:virtual,0:physical:$\mathcal H_{L_N}$}]{L_N}
+        \tn[at=3 e of sourceK,name=sourceLE,skin=box,
+            ports={0:virtual,90:physical:$\mathcal H_{L_E}$}]{L_E}
+        \tn[at=3 s of sourceK,name=sourceLS,skin=box,
+            ports={270:virtual,0:physical:$\mathcal H_{L_S}$}]{L_S}
+        \tn[at=3 w of sourceK,name=sourceLW,skin=box,
+            ports={180:virtual,270:physical:$\mathcal H_{L_W}$}]{L_W}
+        \tnwire[name=sourceKn,dir=from]{sourceK.90}{open n}
+        \tnwire[name=sourceKe,dir=to]{sourceK.0}{open e}
+        \tnwire[name=sourceKs,dir=to]{sourceK.270}{open s}
+        \tnwire[name=sourceKw,dir=from]{sourceK.180}{open w}
+        \tnwire[name=sourceLNn,dir=from]{sourceLN.90}{open n}
+        \tnwire[name=sourceLEe,dir=from]{sourceLE.0}{open e}
+        \tnwire[name=sourceLSs,dir=from]{sourceLS.270}{open s}
+        \tnwire[name=sourceLWw,dir=from]{sourceLW.180}{open w}
+    \end{tenkz}
+\end{tenkzequation}
+
+A different, coefficient-level identity retains the original four physical
+spins and changes only the eight virtual boundary coordinates. For the
+binary model, the pair CNOTs give
+$\mathsf B\mathsf C=\mathsf K E^\dagger$, where E sets four second
+virtual registers to zero, as stated in
+Theorem~\ref{thm:peps_kitaev_checkerboard_map_identity}.
+Those four fixed virtual registers are not the physical-output L factors
+in the source drawing. The clockwise K tensor and its local Hamiltonian
+constraints are described next.

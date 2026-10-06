@@ -37,6 +37,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/add_blueprint_search.py'
@@ -98,6 +99,7 @@ jobs:
             'docs/slides/*.tex'
           python3 scripts/test_tenkz_pic.py
           python3 scripts/test_tenkz_ordered_mixing.py
+          python3 scripts/test_tenkz_quantum_double_source_construction.py --no-render
           python3 scripts/test_sector_encoder_diagram.py
 
       - name: Check paper-gap references resolve
