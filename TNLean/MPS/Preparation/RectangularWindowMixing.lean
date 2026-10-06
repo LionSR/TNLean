@@ -11,8 +11,12 @@ import QICLean.Analysis.GeometricDecay
 
 Fixed-width Choi minorization on the actual varying bond spaces produces compatible
 reference densities and a dimension-uniform interval estimate. The references are derived
-from the full-cycle channel and may be singular. The local condition is an additional
-quantitative sufficient condition, not a consequence of qualitative finite correlation.
+from the full-cycle channel and may be singular.
+
+**Scope restriction (local minorization):** the interval estimate takes fixed-width
+Choi minorization as quantitative input. Qualitative finite correlation alone does
+not supply a uniform positive minorization strength; see
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 ## References
 
