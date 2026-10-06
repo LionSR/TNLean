@@ -78,6 +78,8 @@ import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
 import TNLean.MPS.MPDO.Boundary
 import TNLean.MPS.MPDO.BoundaryActionComparison
+import TNLean.MPS.MPDO.BoundaryActionCrossFusionEntries
+import TNLean.MPS.MPDO.BoundaryActionCrossTransport
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
 import TNLean.MPS.MPDO.BoundaryActionTreeEntries
 import TNLean.MPS.MPDO.BoundaryActionTrees

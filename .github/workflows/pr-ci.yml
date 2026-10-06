@@ -89,6 +89,8 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_mixed_action.py'
+      - 'scripts/test_tenkz_mixed_fusion.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -170,6 +172,8 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_mixed_action.py'
+      - 'scripts/test_tenkz_mixed_fusion.py'
   workflow_dispatch:
 
 concurrency:
@@ -268,6 +272,8 @@ jobs:
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
+              - 'scripts/test_tenkz_mixed_action.py'
+              - 'scripts/test_tenkz_mixed_fusion.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -426,7 +432,8 @@ jobs:
               PiMatrixRepresentation BoundaryReconstruction BoundaryMultiplicity PBCGroupProjector \
               BoundaryDecompositionComparison BoundaryActionLMatrix \
               TriangularPadding CompleteZipperFusionMixedOrientation TriangularBoundary \
-              BoundaryFusionComparison BoundarySourceMixedPentagon; do
+              BoundaryFusionComparison BoundarySourceMixedPentagon MixedEndpointMPOAction \
+              BoundaryActionCrossTransport MixedEndpointMPOFusionMaps MixedEndpointMPOFusion; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -447,6 +454,17 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
+
+      - name: Test mixed endpoint parent interactions
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in MixedEndpointComparison MixedEndpointPhase; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
 
       - name: Check changed Lean compilation times
         id: compilation-time
@@ -812,6 +830,14 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_ordered_mixing.py
 
+      - name: Test exact mixed MPO action diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_action.py
+
+      - name: Test exact mixed MPO fusion diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_fusion.py
+
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
 
@@ -889,6 +915,8 @@ jobs:
           python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
+          python3 scripts/test_tenkz_mixed_action.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_fusion.py --web-root blueprint/web --browser
 
       - name: Add and test blueprint search
         if: env.TEX_CHANGED == 'true'

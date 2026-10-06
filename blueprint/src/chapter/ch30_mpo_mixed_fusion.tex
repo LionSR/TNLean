@@ -1,0 +1,380 @@
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1667--1685;
+% rawrels, eq:F_symbol2, and 1Fsymbol, lines 491--552.
+% Proof status: declarations and proofs checked by the exact-source Lean build.
+% Diagram regressions are supplementary checks.
+
+\subsection{Fusion of the mixed operator family}
+\label{sec:mpo_mixed_fusion}
+
+For $p\in\{0,1\}$, let $E_p=\C^{D_p}$ with $D_p>0$, and let
+$A_p$ be an injective tensor with physical space $E_p\otimes E_p$
+and bond space $E_p$. Fix a common finite label set $a,b,c\in I$,
+nonnegative fusion multiplicities $N_{ab}^c$, and nonnegative action
+multiplicities $m_a$. At each end of the interpolation take operator
+tensors $T_{p,a}$ with bond spaces $K_{p,a}=\C^{\chi_{p,a}}$.
+The dimensions $D_0,D_1$ and all the operator-bond dimensions may differ.
+Write the exact fusion and action decompositions as
+\begin{align}
+    (T_{p,a}T_{p,b})^{\rho\sigma}
+     & =\sum_{c\in I}\sum_{\mu=0}^{N_{ab}^c-1}
+    W^F_{p,ab;c\mu}T_{p,c}^{\rho\sigma}V^F_{p,ab;c\mu},
+    \label{eq:mpo_mix_fusion_input}                        \\
+    (T_{p,a}\cdot A_p)^\rho
+     & =\sum_{i=0}^{m_a-1}W^A_{p,a;i}A_p^\rho V^A_{p,a;i}.
+    \label{eq:mpo_mix_fusion_action}
+\end{align}
+Here $V^F_{p,ab;c\mu}:K_{p,a}\otimes K_{p,b}\to K_{p,c}$,
+$W^F_{p,ab;c\mu}:K_{p,c}\to K_{p,a}\otimes K_{p,b}$,
+$V^A_{p,a;i}:K_{p,a}\otimes E_p\to E_p$, and
+$W^A_{p,a;i}:E_p\to K_{p,a}\otimes E_p$ are biorthogonal maps:
+$V^F_{p,ab;c\mu}W^F_{p,ab;d\nu}$ is the identity for
+$(c,\mu)=(d,\nu)$ and zero otherwise, and
+$V^A_{p,a;i}W^A_{p,a;j}=\delta_{ij}\Id_{E_p}$.
+The product convention is
+$(T_aT_b)^{\rho\sigma}=\sum_\tau T_a^{\rho\tau}\otimes
+    T_b^{\tau\sigma}$, with the $a$ bond before the $b$ bond.
+No synthesis map is assumed to be an adjoint.
+
+For a fixed pair $a,b$, put
+$P_{ab}=\{(i,j):0\leq i<m_a,\ 0\leq j<m_b\}$ and
+$Q_{ab}=\{(c,k,\mu):c\in I,\ 0\leq k<m_c,\ 0\leq\mu<N_{ab}^c\}$.
+Use the association $(K_{p,a}\otimes K_{p,b})\otimes E_p$ for
+all two-operator action maps. Let $S_{p,ij},H_{p,ij}$ denote the
+sequential synthesis and analysis maps, and $R_{p,ck\mu},Q_{p,ck\mu}$
+the fusion-then-action maps. Their entries are
+\begin{align}
+    (S_{p,ij})_{(\alpha,\gamma,k),r}
+                & =\sum_t(W^A_{p,b;j})_{(\gamma,k),t}
+    (W^A_{p,a;i})_{(\alpha,t),r},
+    \label{eq:mpo_mix_fusion_seq}                                      \\
+    (H_{p,ij})_{s,(\beta,\delta,l)}
+                & =\sum_t(V^A_{p,a;i})_{s,(\beta,t)}
+    (V^A_{p,b;j})_{t,(\delta,l)},\notag                                \\
+    R_{p,ck\mu} & =(W^F_{p,ab;c\mu}\otimes\Id_{E_p})W^A_{p,c;k},
+    \label{eq:mpo_mix_fusion_tree}                                     \\
+    Q_{p,ck\mu} & =V^A_{p,c;k}(V^F_{p,ab;c\mu}\otimes\Id_{E_p}).\notag
+\end{align}
+The actual comparison matrix $L_p$, with rows $P_{ab}$ and columns
+$Q_{ab}$, is determined by
+$H_{p,ij}R_{p,ck\mu}=(L_p)_{ij,ck\mu}\Id_{E_p}$.
+Its entries are equivalently the trace of this product divided by $D_p$.
+This fixes the orientation of the $L$-symbols without choosing a new
+change of basis.
+
+\begin{theorem}[Equal comparison matrices give a crossed contraction]
+    \label{thm:mpo_mixed_fusion_cross}
+    \lean{MPOTensor.actionLMatrix_synthesis,
+        MPOTensor.singleState_actionLMatrix_relations,
+        MPOTensor.crossEndpoint_actionTree_contraction_of_actionLMatrix_eq,
+        MPOTensor.crossEndpoint_actionTree_contraction_apply_of_actionLMatrix_eq,
+        MPOTensor.crossEndpoint_fusion_entry_of_actionLMatrix_eq}
+    \leanok
+    \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_decomposition}
+    Under (\ref{eq:mpo_mix_fusion_input}) and
+    (\ref{eq:mpo_mix_fusion_action}), the individual comparison relations are
+    \begin{align}
+        H_{p,i} & =\sum_{q\in Q_{ab}}(L_p)_{iq}Q_{p,q},
+                & R_{p,q}                               & =\sum_{i\in P_{ab}}(L_p)_{iq}S_{p,i}.
+        \label{eq:mpo_mix_fusion_l}
+    \end{align}
+    Suppose the actual matrices agree, $L_0=L_1$, for the selected
+    pair $a,b$. Then every rectangular matrix $X:E_1\to E_0$ satisfies
+    \begin{align}
+        \sum_{i\in P_{ab}}S_{0,i}XH_{1,i}
+         & =\sum_{q\in Q_{ab}}R_{0,q}XQ_{1,q}.
+        \label{eq:mpo_mix_fusion_cross}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_action_comparison,thm:glm_boundary_action_l_factor}
+    Injectivity and $D_p>0$ give a positive simultaneous word span
+    for the single target block $A_p$. The two exact action
+    decompositions therefore have the same support. Comparing their
+    full analysis and synthesis maps gives (\ref{eq:mpo_mix_fusion_l}).
+    Substitute the analysis relation at $p=1$, interchange the two
+    finite sums, and use the synthesis relation at $p=0$:
+    \begin{align}
+        \sum_i S_{0,i}XH_{1,i}
+         & =\sum_q\left(\sum_i(L_1)_{iq}S_{0,i}\right)XQ_{1,q}
+        =\sum_qR_{0,q}XQ_{1,q}.\notag
+    \end{align}
+    No inverse of $L_p$ enters this contraction.
+\end{proof}
+
+% TENKZ-MIXED-FUSION-CROSS-BEGIN
+% Formula: sum_i S0_i X H1_i = sum_q R0_q X Q1_q.
+% Ink: S/H are sequential action maps; R/Q are fusion-then-action maps.
+% Open row legs west: alpha in K0a, gamma in K0b, k in E0.
+% Open column legs east: beta in K1a, delta in K1b, l in E1.
+% Internal legs are the row/column of X in E0/E1; i and q are explicit sums.
+% Boundary signature: three open west and three open east; no conjugation.
+\tenkzkernel
+\begin{tenkzequation}
+    $\displaystyle\sum_{i\in P_{ab}}$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=seqs, skin=box, size=l, wires=3,
+            ports={180@1:virtual:$\alpha$, 180@2:virtual:$\gamma$,
+                    180@3:virtual:$k$, 0:virtual}]{S_{0,i}}
+        \tn[at=(1,2), name=rect, skin=box, size=l, wires=3,
+            ports={180:virtual, 0:virtual}]{X}
+        \tn[at=(1,3), name=seqh, skin=box, size=l, wires=3,
+            ports={180:virtual, 0@1:virtual:$\beta$,
+                    0@2:virtual:$\delta$, 0@3:virtual:$l$}]{H_{1,i}}
+        \tnwire{seqs.0}{rect.180}
+        \tnwire{rect.0}{seqh.180}
+    \end{tenkz}
+    $=\displaystyle\sum_{q\in Q_{ab}}$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=fuss, skin=box, size=l, wires=3,
+            ports={180@1:virtual:$\alpha$, 180@2:virtual:$\gamma$,
+                    180@3:virtual:$k$, 0:virtual}]{R_{0,q}}
+        \tn[at=(1,2), name=rectf, skin=box, size=l, wires=3,
+            ports={180:virtual, 0:virtual}]{X}
+        \tn[at=(1,3), name=fush, skin=box, size=l, wires=3,
+            ports={180:virtual, 0@1:virtual:$\beta$,
+                    0@2:virtual:$\delta$, 0@3:virtual:$l$}]{Q_{1,q}}
+        \tnwire{fuss.0}{rectf.180}
+        \tnwire{rectf.0}{fush.180}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-FUSION-CROSS-END
+
+\begin{definition}[Fusion maps on matching direct-sum sectors]
+    \label{def:mpo_mixed_fusion_maps}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointFusionAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpointFusionSynthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusionAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusionSynthesis}
+    \leanok
+    Set $K_a=K_{0,a}\oplus K_{1,a}$ for every label $a$.
+    Define $\widetilde V_{ab;c\mu}:K_a\otimes K_b\to K_c$ by
+    $V^F_{p,ab;c\mu}$ on $K_{p,a}\otimes K_{p,b}$, with output in
+    $K_{p,c}$. It vanishes on $K_{0,a}\otimes K_{1,b}$ and
+    $K_{1,a}\otimes K_{0,b}$. Define
+    $\widetilde W_{ab;c\mu}:K_c\to K_a\otimes K_b$ by
+    $W^F_{p,ab;c\mu}$ into the same matching sectors, with all
+    other entries zero. Order each direct sum with sector zero first,
+    and each product with the $a$ coordinate first.
+\end{definition}
+
+\begin{theorem}[Rectangular products and four-corner sandwiches]
+    \label{thm:mpo_mixed_fusion_maps}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointFusionAnalysis_mul_synthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusionAnalysis_mul_synthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointFusion_sandwich_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_sandwich}
+    \leanok
+    \uses{def:mpo_mixed_fusion_maps}
+    For arbitrary outgoing labels $c,d$ and copies $\mu,\nu$,
+    \begin{align}
+        \widetilde V_{ab;c\mu}\widetilde W_{ab;d\nu}
+         & =(V^F_{0,ab;c\mu}W^F_{0,ab;d\nu})
+        \oplus(V^F_{1,ab;c\mu}W^F_{1,ab;d\nu}).
+        \label{eq:mpo_mix_fusion_retract}
+    \end{align}
+    This identity is rectangular when $\dim K_c\ne\dim K_d$.
+    For a matrix $M:K_d\to K_c$ with corners $M_{pq}:K_{q,d}\to K_{p,c}$,
+    the $(pp,qq)$ corner of
+    $\widetilde W_{ab;c\mu}M\widetilde V_{ab;d\nu}$ is
+    $W^F_{p,ab;c\mu}M_{pq}V^F_{q,ab;d\nu}$ for all $p,q\in\{0,1\}$.
+    Every corner with an unmatched incoming or outgoing pair is zero.
+    In particular the mixed maps inherit biorthogonality.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand over the direct-sum coordinates. A nonzero factor forces
+    the two incoming sectors and its outgoing sector to agree.
+    The product therefore retains precisely the two diagonal products
+    in (\ref{eq:mpo_mix_fusion_retract}); a sandwich retains precisely
+    the four stated corners. Relabelling the finite bases changes none
+    of these contractions.
+\end{proof}
+
+\begin{theorem}[Exact reconstruction of the mixed product]
+    \label{thm:mpo_mixed_fusion_exact}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOLetter_fusion,
+        MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_mixedEndpointMPO}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:mpo_mixed_fusion_maps}
+    Let $T_a$ be the fixed mixed operator of
+    Definition~\ref{def:mpo_mixed_action_tensor}, using the action maps
+    for label $a$. Under the hypotheses of
+    Theorem~\ref{thm:mpo_mixed_fusion_cross}, including $L_0=L_1$ for
+    the selected pair $a,b$, its product has the exact decomposition
+    \begin{align}
+        (T_aT_b)^{\rho\sigma}
+         & =\sum_{c\in I}\sum_{\mu=0}^{N_{ab}^c-1}
+        \widetilde W_{ab;c\mu}T_c^{\rho\sigma}
+        \widetilde V_{ab;c\mu}.
+        \label{eq:mpo_mix_fusion_exact}
+    \end{align}
+    Together with (\ref{eq:mpo_mix_fusion_retract}), this is a
+    biorthogonal decomposition into the labelled tensors $T_c$, with
+    the original multiplicities $N_{ab}^c$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_fusion_cross,thm:mpo_mixed_fusion_maps}
+    Write $\rho=(r,s)$ and $\sigma=(k,l)$. When all four physical
+    indices belong to $E_p$, (\ref{eq:mpo_mix_fusion_input}) gives
+    (\ref{eq:mpo_mix_fusion_exact}). For $r,k\in E_p$ and
+    $s,l\in E_q$ with $p\ne q$, take $X=|r\rangle\langle s|$
+    in (\ref{eq:mpo_mix_fusion_cross}). The resulting scalar identity is
+    \begin{align}
+        \sum_{\substack{u\in E_p                                    \\v\in E_q}}
+        (T_a^{(r,s),(u,v)})_{\alpha\beta}
+        (T_b^{(u,v),(k,l)})_{\gamma\delta}
+         & =\sum_{c,\mu}\sum_{\xi\in K_{p,c}}\sum_{\eta\in K_{q,c}}
+        (W^F_{p,ab;c\mu})_{(\alpha,\gamma),\xi}
+        (T_c^{(r,s),(k,l)})_{\xi\eta}
+        (V^F_{q,ab;c\mu})_{\eta,(\beta,\delta)}.
+        \label{eq:mpo_mix_fusion_entry}
+    \end{align}
+    The sums here are over standard-basis indices of the indicated
+    spaces. Expanding (\ref{eq:mpo_mix_fusion_seq}) and
+    (\ref{eq:mpo_mix_fusion_tree}) and commuting scalar factors gives
+    exactly (\ref{eq:mpo_mix_fusion_entry}). Reverse the two ends for
+    $p=1,q=0$. Every remaining sector is zero by the definitions.
+    Theorem~\ref{thm:mpo_mixed_fusion_maps} supplies biorthogonality.
+\end{proof}
+
+% TENKZ-MIXED-FUSION-LOCAL-BEGIN
+% Formula: sum_tau T_a[rho,tau](alpha,beta) T_b[tau,sigma](gamma,delta)
+% = sum_c,mu,xi,eta Wtilde((alpha,gamma),xi) T_c[rho,sigma](xi,eta)
+% Vtilde(eta,(beta,delta)). rho=(r,s), sigma=(k,l), tau=(u,v).
+% LHS contraction: the physical pair tau. RHS: c-bonds xi and eta.
+% Boundary: alpha,gamma west; beta,delta east; rho north; sigma south.
+% W is synthesis on the left, V analysis on the right. No adjoints.
+\tenkzkernel
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=opa, skin=box, size=l,
+            ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                    90:physical:$\rho$, 270:physical}]{T_a}
+        \tn[at=(2,1), name=opb, skin=box, size=l,
+            ports={180:virtual:$\gamma$, 0:virtual:$\delta$,
+                    90:physical, 270:physical:$\sigma$}]{T_b}
+        \tnwire{opa.270}{opb.90}
+    \end{tenkz}
+    $=\displaystyle\sum_{c,\mu}$
+    \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=fsyn, skin=box, size=l, wires=2,
+            ports={180@1:virtual:$\alpha$, 180@2:virtual:$\gamma$,
+                    0:virtual}]{\widetilde W_{ab;c\mu}}
+        \tn[at=(1,2), name=target, skin=box, size=l, wires=2,
+            ports={180:virtual, 0:virtual, 90:physical:$\rho$,
+                    270:physical:$\sigma$}]{T_c}
+        \tn[at=(1,3), name=fana, skin=box, size=l, wires=2,
+            ports={180:virtual, 0@1:virtual:$\beta$,
+                    0@2:virtual:$\delta$}]{\widetilde V_{ab;c\mu}}
+        \tnwire{fsyn.0}{target.180}
+        \tnwire{target.0}{fana.180}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-FUSION-LOCAL-END
+
+\begin{theorem}[Length-independent boundaries for the labelled family]
+    \label{thm:mpo_mixed_fusion_boundary}
+    \lean{MPSTensor.MPOSymmetry.mpoWithBoundary_mixedEndpointMPO_mul}
+    \leanok
+    \uses{thm:mpo_mixed_fusion_exact}
+    Under the same hypotheses for $a,b$, fix arbitrary
+    $X\in\End(K_a)$ and $Y\in\End(K_b)$. For each channel $(c,\mu)$ set
+    \begin{align}
+        Z_{c\mu}(X,Y) & =\widetilde V_{ab;c\mu}(X\otimes Y)
+        \widetilde W_{ab;c\mu}.
+        \label{eq:mpo_mix_fusion_boundary}
+    \end{align}
+    These boundaries are independent of the chain length. For every
+    $n>0$, the arbitrary-boundary operators satisfy
+    \begin{align}
+        O^n_{T_a,X}O^n_{T_b,Y}
+         & =\sum_{c\in I}\sum_{\mu=0}^{N_{ab}^c-1}
+        O^n_{T_c,Z_{c\mu}(X,Y)}.
+        \label{eq:mpo_mix_fusion_family}
+    \end{align}
+    The sum ranges over the labelled family; it does not identify
+    the target tensors for different labels.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_decomposition,thm:glm_boundary_stack}
+    In a nonempty product of (\ref{eq:mpo_mix_fusion_exact}), every
+    adjacent analysis-synthesis pair removes unequal channels. Thus
+    $(T_aT_b)^w=\sum_{c,\mu}\widetilde W_{ab;c\mu}T_c^w
+        \widetilde V_{ab;c\mu}$ for $|w|>0$.
+    The boundary of the product is $X\otimes Y$. Cyclicity of the
+    rectangular trace gives
+    $\tr((X\otimes Y)\widetilde W_{ab;c\mu}T_c^w
+        \widetilde V_{ab;c\mu})=\tr(Z_{c\mu}(X,Y)T_c^w)$.
+    Sum over the channels and physical configurations.
+\end{proof}
+
+% TENKZ-MIXED-FUSION-BOUNDARY-BEGIN
+% Formula: Z_cmu(xi,eta)=sum_alpha,gamma,beta,delta
+% Vtilde(xi,(alpha,gamma)) X(alpha,beta) Y(gamma,delta)
+% Wtilde((beta,delta),eta). All four internal indices are virtual.
+% Boundary: xi west in K_c, eta east in K_c. X precedes Y in X tensor Y.
+% Analysis V is now on the left; synthesis W on the right, with no transpose.
+\tenkzkernel
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=closed, skin=box, size=l,
+            ports={180:virtual:$\xi$, 0:virtual:$\eta$}]{Z_{c\mu}}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=bana, skin=box, size=l, wires=2,
+            ports={180:virtual:$\xi$, 0@1:virtual,
+                    0@2:virtual}]{\widetilde V_{ab;c\mu}}
+        \tn[at=(1,2), name=bx, skin=box, size=l,
+            ports={180:virtual, 0:virtual}]{X}
+        \tn[at=(2,2), name=by, skin=box, size=l,
+            ports={180:virtual, 0:virtual}]{Y}
+        \tn[at=(1,3), name=bsyn, skin=box, size=l, wires=2,
+            ports={180@1:virtual, 180@2:virtual,
+                    0:virtual:$\eta$}]{\widetilde W_{ab;c\mu}}
+        \tnwire{bana.0@1}{bx.180}
+        \tnwire{bana.0@2}{by.180}
+        \tnwire{bx.0}{bsyn.180@1}
+        \tnwire{by.0}{bsyn.180@2}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-FUSION-BOUNDARY-END
+
+\begin{theorem}[Periodic mixed fusion with the original multiplicities]
+    \label{thm:mpo_mixed_fusion_periodic}
+    \lean{MPSTensor.MPOSymmetry.isMPOFusionAlgebra_mixedEndpointMPO}
+    \leanok
+    \uses{thm:mpo_mixed_fusion_exact}
+    If $L_0=L_1$ for every pair $a,b$, then the fixed mixed family
+    satisfies, for every $n>0$,
+    \begin{align}
+        O^n_{T_a}O^n_{T_b} & =\sum_{c\in I}N_{ab}^c O^n_{T_c}.
+        \label{eq:mpo_mix_fusion_periodic}
+    \end{align}
+    Zero multiplicities are allowed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_fusion_boundary,thm:mpo_mixed_fusion_maps}
+    Take identity boundaries. Biorthogonality gives
+    $Z_{c\mu}(\Id,\Id)=\Id_{K_c}$, so the $N_{ab}^c$ copies of
+    $T_c$ in (\ref{eq:mpo_mix_fusion_family}) have identical traces.
+\end{proof}
+
+The restriction $n>0$ is essential: an empty word is the identity
+on $K_a\otimes K_b$, whereas
+$\sum_{c,\mu}\widetilde W_{ab;c\mu}\widetilde V_{ab;c\mu}$
+vanishes on the unmatched sectors and need not be the ambient identity.
+The equality $L_0=L_1$ is an assumption about the chosen actual
+comparison matrices. It does not follow here from equivalence of
+$L$-symbols under changes of basis. No common $F$-symbols are needed
+for (\ref{eq:mpo_mix_fusion_exact}) or
+(\ref{eq:mpo_mix_fusion_periodic}). The construction in
+\cite[Section~5]{GarreRubio2023MPOSym} also asks for common $F$-symbols
+when asserting coherent recoupling. Inheritance of the actual mixed
+$L$-symbols, coherent $F$-symbols, injectivity of the mixed operator,
+closure under physical adjoints, Hamiltonian symmetry, and the full
+symmetric-phase classification are separate assertions.
