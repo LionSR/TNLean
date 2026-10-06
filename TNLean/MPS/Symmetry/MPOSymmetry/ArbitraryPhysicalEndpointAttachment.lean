@@ -179,8 +179,9 @@ theorem arbitraryPhysicalEndpointAttachment_norm_le_one
     rw [Matrix.le_iff]
     convert (Matrix.le_iff.mp
       (arbitraryPhysicalMixedInteraction_endpoint_le_parent A₀ A₁ h₀ h₁ right)).smul
-        (sub_nonneg.mpr ht.2) using 1 <;>
-      dsimp only [arbitraryPhysicalEndpointAttachment] <;> module
+        (sub_nonneg.mpr ht.2) using 1
+    dsimp only [arbitraryPhysicalEndpointAttachment]
+    module
   have hnorm := CStarAlgebra.norm_le_norm_of_le_of_nonneg hle
     (arbitraryPhysicalEndpointAttachment_posSemidef A₀ A₁ h₀ h₁ right ht.1).nonneg
   apply hnorm.trans
@@ -209,7 +210,7 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
             (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) 2)) hN))
     have hEmbedded : Kraus.IsInjective
         (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) := by
-      simpa only [rotatePhysical] using isInjective_kraus_isometry A₀
+      exact isInjective_kraus_isometry A₀
         (commonPhysicalEmbeddingLeft d₁ D₁ A₀)
         (commonPhysicalEmbeddingLeft_isometry d₁ D₁ h₀) h₀
     have hParent := interactionHamiltonian_parent_groundSpace_eq_span_mpv
@@ -218,9 +219,17 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
       (arbitraryPhysicalMixedInteraction A₀ A₁ (0 : ℝ)) hN)) =
         Submodule.span ℂ {(WithLp.toLp 2
           (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ (0 : ℝ))))} at hline
-    refine Eq.trans ?_ hParent.symm
-    simpa only [WithLp.linearEquiv_symm_apply,
-      mpv_arbitraryPhysicalMixedInterpolation_zero A₀ A₁ h₀ (by omega)] using hline
+    change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+      (LinearMap.toMatrix' (parentInteraction
+        (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) 2)) hN)) =
+        Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
+          (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀)))} at hParent
+    have hmpv := mpv_arbitraryPhysicalMixedInterpolation_zero (N := N)
+      A₀ A₁ h₀ (by omega)
+    have hspan := congrArg
+      (fun v : NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N =>
+        Submodule.span ℂ {WithLp.toLp 2 v}) hmpv
+    exact hline.trans (hspan.trans hParent.symm)
   · change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
       (arbitraryPhysicalMixedInteraction A₀ A₁ 1) hN)) =
         LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
@@ -228,7 +237,7 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
             (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2)) hN))
     have hEmbedded : Kraus.IsInjective
         (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) := by
-      simpa only [rotatePhysical] using isInjective_kraus_isometry A₁
+      exact isInjective_kraus_isometry A₁
         (commonPhysicalEmbeddingRight d₀ D₀ A₁)
         (commonPhysicalEmbeddingRight_isometry d₀ D₀ h₁) h₁
     have hParent := interactionHamiltonian_parent_groundSpace_eq_span_mpv
@@ -237,9 +246,17 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
       (arbitraryPhysicalMixedInteraction A₀ A₁ (1 : ℝ)) hN)) =
         Submodule.span ℂ {(WithLp.toLp 2
           (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ (1 : ℝ))))} at hline
-    refine Eq.trans ?_ hParent.symm
-    simpa only [WithLp.linearEquiv_symm_apply,
-      mpv_arbitraryPhysicalMixedInterpolation_one A₀ A₁ h₁ (by omega)] using hline
+    change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+      (LinearMap.toMatrix' (parentInteraction
+        (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2)) hN)) =
+        Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
+          (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁)))} at hParent
+    have hmpv := mpv_arbitraryPhysicalMixedInterpolation_one (N := N)
+      A₀ A₁ h₁ (by omega)
+    have hspan := congrArg
+      (fun v : NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N =>
+        Submodule.span ℂ {WithLp.toLp 2 v}) hmpv
+    exact hline.trans (hspan.trans hParent.symm)
 
 /-- Each affine attachment has precisely the periodic ground line of its
 embedded original tensor, expressed as the kernel of that canonical parent.

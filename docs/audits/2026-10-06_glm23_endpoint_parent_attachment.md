@@ -177,3 +177,27 @@ ground-line equality is instead reduced definitionally with an explicit
 `change` to the real endpoint zero or one before the endpoint-vector
 identity is used. This adds no hypotheses or resource overrides, and the
 compilation status remains pending.
+
+
+## Explicit MPV transport repair after the next CI run
+
+The next CI diagnostics on public head `decaced` reported that simp still
+failed to reconcile the embedded tensor's injectivity statement, and that
+the endpoint-MPV simplification left the chain length unconstrained and the
+Hilbert-space conversion mismatched. The finrank repair passed this stage.
+
+Embedded injectivity is now supplied by direct application of the existing
+Kraus-isometry theorem, matching the already-elaborating later ground-space
+proof. Both endpoint MPV identities explicitly specify the current chain
+length `N`. Their equalities are transported through the typed map
+`v ↦ span {WithLp.toLp 2 v}` by `congrArg`, then composed with the two
+explicitly typed ground-line equalities. Neither branch relies on a nested
+simp rewrite of a periodic vector. The two single-goal tactic combinators
+in the local-norm proof were replaced by sequential tactics.
+
+All public signatures, the previously passing finrank proof, regression
+statements, eight axiom guards and resource limits are unchanged. Static
+signature/test preservation, proof-integrity and whitespace checks pass.
+This worker has not run Lean or Lake while the root's canonical build is
+warming; compilation and the unchanged guarded regression remain pending
+for this latest repair. No passing result for this commit is claimed.
