@@ -114,7 +114,7 @@ theorem torusRectComb_east (R : Set X) (x : ZMod width) (y : ZMod height)
     | zero => simp [torusRectComb, torusRectColumn, torusRectCoord]
     | succ i => rfl
   rw [hc]
-  simpa only [torusRectComb, Quiver.Path.comp_assoc, Quiver.Path.comp_cons,
+  simpa only [torusRectComb, ← Quiver.Path.comp_assoc, Quiver.Path.comp_cons,
     Quiver.Path.comp_nil, Quiver.Hom.toPath, torusRectCoord] using
     (TorusDualHomotopy.refl (torusRectComb x y i 0)).comp
       (torusRectColumn_east R (torusRectCoord x i) y j hs)
