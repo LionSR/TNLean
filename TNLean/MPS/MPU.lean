@@ -25,6 +25,11 @@ import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
+import TNLean.MPS.MPU.FundamentalTheorem
+import TNLean.MPS.MPU.FundamentalTheoremGates
+import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
+import TNLean.MPS.MPU.FundamentalTheoremGatesNecessity
+import TNLean.MPS.MPU.FundamentalTheoremLetters
 import TNLean.MPS.MPU.GroupCocycleMPO
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionTensors

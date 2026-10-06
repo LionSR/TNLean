@@ -6351,9 +6351,90 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unblocked all-length wording. Its converse has the odd-length parity
     obstruction of Theorem~\ref{thm:mpu_standard_form_parity_obstruction};
     the blocked-family interpretation is distinguished in
-    \cite{gap:mpu_standard_form_parity_gap}.
+    \cite{gap:mpu_standard_form_parity_gap}. The formalized form of this
+    theorem is Theorem~\ref{thm:mpu_fundamental_letters} together with
+    Theorems~\ref{thm:mpu_fundamental_gates_necessity}
+    and~\ref{thm:mpu_fundamental_gates_sufficiency}: the equivalence is
+    stated between the operators and a unitary conjugation of the letters,
+    the gate relations follow, and the gate relations give the operators on
+    rings of even length. The source's converse from the half-factor
+    relations alone is not formalized.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
+
+\begin{theorem}[Fundamental theorem of MPU, letters]
+    \label{thm:mpu_fundamental_letters}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mpo_eq_iff_exists_unitary_conj,
+        MPOTensor.mpo_eq_of_unitary_conj}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpo_family}
+    Let $\mathcal U$ and $\mathcal V$ be tensors in canonical form II with
+    bond dimensions $D_1$ and $D_2$. Then $U^{(N)}=V^{(N)}$ for every
+    $N\ge 2$ if and only if $D_1=D_2$ and there is a unitary $z$ on
+    $\mathbb C^{D_1}$ with $V^{ij}=zU^{ij}z^\dagger$ for all $i,j$.
+    % Source: paper_v2.tex 624--648 with the remark at 647--648 that $z$ is
+    % unitary; the letter-level equivalence itself is not printed in the source.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_cfii_equal_periodic_virtual_unitary}
+    The forward direction is the unitary virtual gauge obtained from equal
+    operators. For the converse, conjugating every letter by $z$ leaves each
+    trace $\operatorname{tr}(V^{i_1j_1}\cdots V^{i_Nj_N})$ unchanged.
+\end{proof}
+
+\begin{theorem}[Fundamental theorem of MPU, gates, necessity]
+    \label{thm:mpu_fundamental_gates_necessity}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_source_gate_unitary_gauges_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.eq_virtualSandwich_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.fundamentalTheorem}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv,
+        def:mpu_virtual_sandwich}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    of the same bond dimension with $U^{(N)}=V^{(N)}$ for every $N\ge2$. Then
+    $\mathcal V=z\,\mathcal U\,z^\dagger$ letterwise for a unitary $z$, the
+    source ranks of the two tensors agree, and after identifying the rank
+    spaces there are unitaries $x$ on $\mathbb C^{\ell}$ and $y$ on
+    $\mathbb C^{r}$ with $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ and
+    $v_{\mathcal V}=v_{\mathcal U}(y^\dagger\otimes x^\dagger)$, the gates
+    being those of the selected factorizations.
+    % Source: paper_v2.tex 624--648, equation SFuu and the contraction of SFvv.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_fundamental_letters,
+        thm:mpu_source_gates_virtual_unitary_gauge}
+    Theorem~\ref{thm:mpu_fundamental_letters} gives $z$; the selected source
+    gates of a unitary virtual conjugate are related to the transported gates
+    by unitaries on the two rank spaces.
+\end{proof}
+
+\begin{theorem}[Fundamental theorem of MPU, gates, sufficiency]
+    \label{thm:mpu_fundamental_gates_sufficiency}
+    \lean{MPOTensor.TwoSiteStandardFormData.mpo_eq_of_gate_gauges,
+        MPOTensor.IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges,
+        MPOTensor.IsMPUCanonicalFormII.mpo_blockTwo_eq_of_source_gate_gauges,
+        MPOTensor.TwoSiteStandardFormData.reindexRanks,
+        MPOTensor.siteProduct}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    of the same bond dimension whose selected source gates satisfy, after an
+    identification of the rank spaces, $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$
+    and $v_{\mathcal V}=v_{\mathcal U}(y^\dagger\otimes x^\dagger)$ for
+    unitaries $x$, $y$. Then $U^{(2N)}=V^{(2N)}$ for every $N\ge1$. The same
+    holds for any two tensors carrying two-site standard-form data with gates
+    so related on the same internal legs.
+    % Source: paper_v2.tex 624--648, the "if" direction read for the standard
+    % forms; the parity obstruction limits it to even lengths.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_standard_form_parity_obstruction}
+    Write both operators as the two-layer circuit of the standard form. In
+    the circuit of $\mathcal V$ the unitary placed on the internal leg of
+    each site by the layer of $u$ meets its adjoint placed there by the layer
+    of $v$, so the circuits coincide. The relabelling of the rank spaces is
+    transported through the standard-form data.
+\end{proof}
 
 \begin{theorem}[Scalar invariance of the double layer]
     \label{thm:mpu_double_layer_scalar_invariance}
