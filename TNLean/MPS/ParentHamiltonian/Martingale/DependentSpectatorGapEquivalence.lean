@@ -125,6 +125,7 @@ omit [Fintype Q] [∀ q, Fintype (J q)] in
   apply PiLp.ext
   intro i
   simp [sigmaFiber, singleSigmaFiber]
+  rfl
 
 /-- Extension by zero preserves the norm. -/
 @[simp] theorem norm_singleSigmaFiber (q : Q) (x : EuclideanSpace ℂ (J q)) :
@@ -196,7 +197,7 @@ dependent sum, including when the label type is empty. -/
 theorem norm_gap_sigmaFiberwiseMap
     (G : ∀ q, EuclideanSpace ℂ (J q) →L[ℂ] EuclideanSpace ℂ (J q))
     {δ : ℝ} (hδ : 0 ≤ δ)
-    (hGap : ∀ q x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖) :
+    (hGap : ∀ q, ∀ x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖) :
     ∀ x ∈ (LinearMap.ker (sigmaFiberwiseMap G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖sigmaFiberwiseMap G x‖ := by
   intro x hx
@@ -222,7 +223,7 @@ theorem norm_gap_sigmaFiberwiseMap_iff
     {δ : ℝ} (hδ : 0 ≤ δ) :
     (∀ x ∈ (LinearMap.ker (sigmaFiberwiseMap G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖sigmaFiberwiseMap G x‖) ↔
-      ∀ q x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖ := by
+      ∀ q, ∀ x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖ := by
   classical
   constructor
   · intro hGap q x hx
@@ -305,7 +306,7 @@ empty spectator types. -/
 theorem norm_gap_dependentRightFiberwiseMap
     (G : ∀ q, EuclideanSpace ℂ (I q) →L[ℂ] EuclideanSpace ℂ (I q))
     {δ : ℝ} (hδ : 0 ≤ δ)
-    (hGap : ∀ q x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖) :
+    (hGap : ∀ q, ∀ x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖) :
     ∀ x ∈ (LinearMap.ker (dependentRightFiberwiseMap (S := S) G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap (S := S) G x‖ :=
   norm_gap_sigmaFiberwiseMap _ hδ fun q ↦ norm_gap_rightFiberwiseMap (G q) hδ (hGap q)
@@ -317,7 +318,7 @@ theorem norm_gap_dependentRightFiberwiseMap_iff [∀ q, Nonempty (S q)]
     {δ : ℝ} (hδ : 0 ≤ δ) :
     (∀ x ∈ (LinearMap.ker (dependentRightFiberwiseMap (S := S) G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap (S := S) G x‖) ↔
-      ∀ q x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖ := by
+      ∀ q, ∀ x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖ := by
   exact (norm_gap_sigmaFiberwiseMap_iff
     (fun q ↦ rightFiberwiseMap (S := S q) (G q)) hδ).trans
       (forall_congr' fun q ↦ norm_gap_rightFiberwiseMap_iff (S := S q) (G q) hδ)

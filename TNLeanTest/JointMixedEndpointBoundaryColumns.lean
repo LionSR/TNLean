@@ -7,7 +7,7 @@ isometries. The empty block-label case is also admitted. -/
 
 set_option linter.hashCommand false
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 open MPSTensor MPSTensor.MPOSymmetry
 
 private def overlappingBoundaryEndpoints : Fin 2 → MPSTensor 2 1 :=

@@ -52,7 +52,7 @@ example (G : ∀ _ : Fin 0, EuclideanSpace ℂ (Fin 1) →L[ℂ] EuclideanSpace 
 example (G : ∀ q : Fin 2,
       EuclideanSpace ℂ (Fin (q.val + 1)) →L[ℂ] EuclideanSpace ℂ (Fin (q.val + 1)))
     {δ : ℝ} (hδ : 0 ≤ δ)
-    (hGap : ∀ q x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖) :
+    (hGap : ∀ q, ∀ x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖) :
     ∀ x ∈ (LinearMap.ker
       (dependentRightFiberwiseMap (S := fun _ ↦ Fin 0) G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap (S := fun _ ↦ Fin 0) G x‖ :=

@@ -25,7 +25,7 @@ rectangular factors. These identities alone assert no Hamiltonian gap.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
@@ -95,7 +95,9 @@ theorem jointMixedFirstBoundaryColumns_apply
     (x : Fin r) (a : Fin (D₀ x + D₁ x)) (b : Fin (D₀ x)) :
     jointMixedFirstBoundaryColumns A₀ A₁ i ⟨x, a, b⟩ =
       (jointMixedEndpointBase A₀ A₁ x i *
-        Matrix.coordinateInclusion (Fin.castAddEmb (D₁ x))) a b := by
+        Matrix.coordinateInclusion (Fin.castAddEmb (D₁ x) :
+          Fin (D₀ x) ↪ Fin (D₀ x + D₁ x)) :
+          Matrix (Fin (D₀ x + D₁ x)) (Fin (D₀ x)) ℂ) a b := by
   rw [Matrix.mul_coordinateInclusion]
   rfl
 
@@ -108,8 +110,10 @@ theorem jointMixedLastBoundaryColumns_apply
     (i : Fin (jointMixedPhysicalDim d₀ d₁ D₀ D₁))
     (x : Fin r) (c : Fin (D₀ x)) (e : Fin (D₀ x + D₁ x)) :
     jointMixedLastBoundaryColumns A₀ A₁ i ⟨x, c, e⟩ =
-      ((Matrix.coordinateInclusion (Fin.castAddEmb (D₁ x)))ᴴ *
-        jointMixedEndpointBase A₀ A₁ x i) c e := by
+      ((Matrix.coordinateInclusion (Fin.castAddEmb (D₁ x) :
+        Fin (D₀ x) ↪ Fin (D₀ x + D₁ x)))ᴴ *
+        jointMixedEndpointBase A₀ A₁ x i :
+          Matrix (Fin (D₀ x)) (Fin (D₀ x + D₁ x)) ℂ) c e := by
   rw [Matrix.conjTranspose_coordinateInclusion_mul]
   rfl
 
@@ -285,8 +289,9 @@ theorem jointMixedEndpoint_insertedEvalWord_originalBulk
             jointMixedLastBoundaryColumns A₀ A₁ j ⟨x, c, e⟩ := by
   rw [jointMixedEndpoint_insertedEvalWord_boundaryFactors,
     evalWord_jointMixedEndpointLeftTensor_firstPhysicalIndex]
-  simp only [Matrix.mul_apply, Finset.sum_mul,
-    jointMixedFirstBoundaryColumns_apply, jointMixedLastBoundaryColumns_apply]
+  simp only [Matrix.mul_coordinateInclusion, Matrix.conjTranspose_coordinateInclusion_mul,
+    Matrix.mul_apply, Finset.sum_mul, Matrix.submatrix_apply, id_eq, Fin.castAddEmb_apply,
+    jointMixedFirstBoundaryColumns, jointMixedLastBoundaryColumns]
 
 end MPOSymmetry
 end MPSTensor
