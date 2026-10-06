@@ -13,15 +13,16 @@
         MPSTensor.MPOSymmetry.blockInsertedBoundaryMap,
         MPSTensor.MPOSymmetry.mem_range_blockInsertedBoundaryMap_iff,
         MPSTensor.MPOSymmetry.blockInsertedGroundSpace}
+    \leanok
     \uses{def:mpo_mixed_extended_boundary}
     Let $\{A_x^i\}_{i=0}^{d-1}\subseteq\MN{D_x}$ be a finite family of
     tensor blocks indexed by $x$, all with the same physical alphabet,
     and let $W_x\in\MN{D_x}$. For $N\geq1$, define
     \begin{align}
         \Gamma'_{W,N}((X_x)_x)_{i_1\cdots i_N}
-          &=\sum_x\tr(A_x^{i_1}W_xA_x^{i_2}\cdots W_xA_x^{i_N}X_x),
-          \label{eq:mpo_joint_inserted_map}\\
-        \mathcal S'_{W,N}&=\operatorname{range}\Gamma'_{W,N}.
+                          & =\sum_x\tr(A_x^{i_1}W_xA_x^{i_2}\cdots W_xA_x^{i_N}X_x),
+        \label{eq:mpo_joint_inserted_map}                                            \\
+        \mathcal S'_{W,N} & =\operatorname{range}\Gamma'_{W,N}.
     \end{align}
     The boundary domain is $\prod_x\MN{D_x}$.
     This is the joint extended boundary space for the block construction
@@ -35,6 +36,7 @@
         MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_injective,
         MPSTensor.MPOSymmetry.finrank_range_blockInsertedBoundaryMap,
         MPSTensor.MPOSymmetry.continuous_blockInsertedBoundaryMap_family}
+    \leanok
     \uses{def:mpo_joint_inserted_boundary}
     Suppose $\spn_{\C}\{(A_x^i)_x:0\leq i<d\}=\prod_x\MN{D_x}$
     and $W_x\neq0$ for every $x$. Then $\Gamma'_{W,N}$ is injective for
@@ -44,6 +46,7 @@
     entries and insertions. The physical block columns need not be orthogonal.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_extended_intersection}
     Simultaneous spanning and the nondegenerate product trace pairing
     give injectivity at $N=1$. Each block is injective, so there are
@@ -66,18 +69,20 @@
         MPSTensor.MPOSymmetry.blockInsertedGroundSpace_intersection,
         MPSTensor.MPOSymmetry.blockInsertedGroundSpace_iff_left_right,
         MPSTensor.MPOSymmetry.contiguousRestrictₗ_blockInsertedGroundSpace_mem}
+    \leanok
     \uses{def:mpo_joint_inserted_boundary}
     Under the hypotheses of Theorem~\ref{thm:mpo_joint_inserted_injective},
     for $L\geq2$,
     \begin{align}
         (\mathcal S'_{W,L}\otimes\C^d)
         \cap(\C^d\otimes\mathcal S'_{W,L})
-          =\mathcal S'_{W,L+1}.
+        =\mathcal S'_{W,L+1}.
     \end{align}
     Every positive-length contiguous restriction of a vector in
     $\mathcal S'_{W,N}$ lies in the corresponding shorter extended support.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_inserted_injective,thm:mpo_mixed_extended_intersection}
     Fixing the first or last letter changes $X_x$ to $X_xA_x^iW_x$ or
     $W_xA_x^jX_x$, respectively. Conversely, let $Y_{i,x}$ and $Z_{j,x}$
@@ -96,19 +101,21 @@
         MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_blockInserted_eq,
         MPSTensor.MPOSymmetry.finrank_ker_openInteractionHamiltonianES_blockInserted,
         MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_blockInserted_starProjection}
+    \leanok
     \uses{def:mpo_joint_inserted_boundary}
     Under the hypotheses of Theorem~\ref{thm:mpo_joint_inserted_injective},
     put $h'_W=I-\Pi_{\mathcal S'_{W,2}}$ and
     $H'^{\mathrm{open}}_{W,N}=\sum_{i=0}^{N-2}h'_{W,i,i+1}$.
     For $N\geq2$,
     \begin{align}
-        \ker H'^{\mathrm{open}}_{W,N}&=\mathcal S'_{W,N},\\
-        \dim\ker H'^{\mathrm{open}}_{W,N}&=\sum_xD_x^2.
+        \ker H'^{\mathrm{open}}_{W,N}     & =\mathcal S'_{W,N}, \\
+        \dim\ker H'^{\mathrm{open}}_{W,N} & =\sum_xD_x^2.
     \end{align}
     Along a continuous family satisfying these hypotheses, the orthogonal
     projector onto this kernel is continuous at each fixed $N\geq2$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_inserted_injective,thm:mpo_joint_inserted_intersection,
         thm:mpo_mixed_extended_open_kernel}
     Positivity identifies the kernel of the sum with the simultaneous

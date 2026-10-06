@@ -42,17 +42,68 @@ repaired snapshot was recreated by applying the exact retained repair
 operations. Those repaired-file hashes were first recorded during recovery;
 this is not a claim to have recovered a successful second log.
 
-The integration additionally shortens the explicit nilpotent-square simp
-proof to avoid likely unused simp arguments. That change and all six strict
-axiom guards still require separate-module CI. No proof placeholder or new
-axiom is authored. All 22 new declaration owners remain unchecked.
+The integration additionally shortened the explicit nilpotent-square simp
+proof to avoid unused simp arguments. These repairs, the production modules
+and all six strict axiom guards subsequently passed the full CI build; the
+unknown recovery-run outcome remains unknown. No proof placeholder or new
+axiom is authored.
+
+### Checked production checkpoint
+
+Draft [#8719](https://github.com/LionSR/TNLean/pull/8719) has production head
+`edd9d1ff2afb79c7a9e9f6c29ffe8e63bf19d699`, with tree
+`0b8fbec9396a0c22dec565493e5c2dd6f8cbf241`. The recovered local checkpoint
+`a7510c36de0c35f7bf712f287baa45ecb714e9d6` has exactly the same tree.
+[CI run 37414574404, build job 112110257136](https://github.com/LionSR/TNLean/actions/runs/37414574404/job/112110257136)
+tested merge `eba712a1c3bff50bbf2f859207d214585615e143`, whose tree is also
+`0b8fbec9396a0c22dec565493e5c2dd6f8cbf241`, and passed the full library build, separate-module strict regressions, all six standard-axiom
+guards and the unchanged timing gate. The three new production modules took
+4.2, 4.5 and 8.2 seconds respectively. The guards permit only `propext`,
+`Classical.choice` and `Quot.sound`.
+
+The blueprint job failed at pinned LaTeX formatting in
+`ch30_mpo_joint_inserted_open.tex`; its downstream rendering/browser checks
+were not thereby validated. The documentation correction adds checked
+statement markers for all 22 declaration owners in four entries and checked
+markers for the three proofs, using the successful production checkpoint.
+It also applies the pinned formatter to this leaf only. It changes no Lean
+source, regression, workflow, router or dependency pin.
+
+### Documentation validation
 
 Generated imports, the existing strict regression loop and the chapter
-router include this package. Global and reverse source synchronization pass
-using the exact pinned QIC source. The draft is checkpointed before further
-long checking. Post-recovery Lean, full blueprint rendering/browser checks
-and the unchanged timing gate remain pending. Independent source-only
-mathematical review found no blocker; it is not compiler verification.
+router already include this package. The final documentation batch passed:
+
+- The repository-wide pinned `latexindent` 3.24.7 check, with only this
+  chapter reformatted.
+- Global source synchronization: 19,753 references and 39,424 declarations,
+  with no missing, stale or duplicate ownership tags. The exact QIC source
+  revision was `2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f`, matching the pin.
+- Reverse coverage for all three new production modules: no declaration
+  owners missing from the blueprint. The chapter has 22 checked owners in
+  four entries; the three checked proofs cover 16 theorem owners.
+- A six-page focused PDF, rendered with the unchanged mathematical leaf
+  and seven exact referenced statements. Visual inspection covered all
+  four joint entries, their proofs and the referenced Tenkz figure. The
+  final TeX log has no unresolved references, missing glyphs or overflow
+  diagnostics.
+- Strict `texra-blueprint` 0.3.8 web rendering and generated-source checks
+  on six HTML pages. All 22 owner links are present. The focused temporary
+  router selects the leaf and reference context; its configuration omits
+  the unrelated fundamental-theorem graph subset. Repository configuration
+  and strict renderer checks are unchanged. The inherited Tenkz picture
+  uses the renderer's supported PDF-to-SVG route because local `dvisvgm`
+  is absent; no new diagram is introduced.
+
+This is focused rendering, not a new full-volume or browser-CI pass.
+The full-volume browser harness cannot run on this extract because its
+fixture pages are absent; a separate browser launch also confirmed that
+local Chromium is missing. Browser checks remain **unrun**, and the
+fail-closed CI browser gate is unchanged. The optional local `chktex`
+invocation is also unrun because its executable is absent. No local Lean
+build, probe or cache mutation was performed. Independent source-only mathematical review
+found no blocker; compiler verification comes from the CI run above.
+The manifest records exact production and rendered-artifact hashes.
 
 ## Dependency boundary
 

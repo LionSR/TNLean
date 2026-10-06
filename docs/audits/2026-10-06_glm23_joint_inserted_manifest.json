@@ -1,6 +1,6 @@
 {
   "base_head": "8ed3342960e9f543dc988be6ac62a598676ea359",
-  "validation": "uncompiled repaired recovery; prior full check failed, repaired probe outcome unknown",
+  "validation": "CI production success; final documentation formatting, source synchronization, reverse ownership, focused PDF and strict web passed; browser checks unrun locally",
   "production_modules": 3,
   "production_lines": 489,
   "standard_axiom_guards": 6,
@@ -9,5 +9,124 @@
     "TNLean/MPS/Symmetry/MPOSymmetry/JointInsertedIntersection.lean": "82983a2401115f746338c270c9dc62a55e4ff170fc0cc9f5fd9a225019664f7a",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointInsertedOpenKernel.lean": "84e399257fb4c1349a77b2168b9db2344be8874f5a5cd2f65f6c2ed419758201",
     "TNLeanTest/JointInsertedOpenKernel.lean": "60ff634e2b188d191f138d4c1143241369aa5f44b45b79e14ba8163bfe0adae0"
+  },
+  "production_checkpoint": {
+    "public_head": "edd9d1ff2afb79c7a9e9f6c29ffe8e63bf19d699",
+    "local_recovered_head": "a7510c36de0c35f7bf712f287baa45ecb714e9d6",
+    "source_tree": "0b8fbec9396a0c22dec565493e5c2dd6f8cbf241",
+    "tested_merge": "eba712a1c3bff50bbf2f859207d214585615e143",
+    "workflow_run": 37414574404,
+    "build_job": 112110257136,
+    "build_url": "https://github.com/LionSR/TNLean/actions/runs/37414574404/job/112110257136",
+    "full_lean_build": "success",
+    "strict_regressions": "success",
+    "standard_axiom_guards": "success",
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "timing_gate": "success; unchanged",
+    "production_module_seconds": {
+      "JointInsertedBoundary": 4.2,
+      "JointInsertedIntersection": 4.5,
+      "JointInsertedOpenKernel": 8.2
+    },
+    "blueprint_job": "failed at pinned LaTeX formatting; downstream rendering/browser checks not validated",
+    "tested_merge_tree": "0b8fbec9396a0c22dec565493e5c2dd6f8cbf241"
+  },
+  "recovery_history": {
+    "first_exact_body_check": "failed; three production elaboration details and strict style/test issues",
+    "repaired_pre_reset_check": "terminal result unknown",
+    "recovered_original_files": "all four matched recorded pre-reset SHA-256 values",
+    "repaired_snapshot": "recreated from retained repair operations; hashes first recorded during recovery",
+    "integration_regression_cleanup": "nilpotent-square simp proof shortened before the successful CI checkpoint"
+  },
+  "blueprint": {
+    "leaf": "blueprint/src/chapter/ch30_mpo_joint_inserted_open.tex",
+    "declaration_owners": 22,
+    "checked_entries": 4,
+    "checked_proofs": 3,
+    "local_validation": "passed source and focused render checks; browser unrun",
+    "sha256": "00e846e9af9a27a81fcd8dc09d7bf1ee8ce2a3b68f4fa54df33f8a555daf25be",
+    "checked_proof_owner_refs": 16,
+    "rendered_owner_links": 22,
+    "declaration_owner_names": [
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_apply",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_one",
+      "MPSTensor.MPOSymmetry.blockInsertedBoundaryMap",
+      "MPSTensor.MPOSymmetry.mem_range_blockInsertedBoundaryMap_iff",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpace",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_injective",
+      "MPSTensor.MPOSymmetry.span_range_blockInsertedEvalWord_eq_top",
+      "MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_injective",
+      "MPSTensor.MPOSymmetry.finrank_range_blockInsertedBoundaryMap",
+      "MPSTensor.MPOSymmetry.continuous_blockInsertedBoundaryMap_family",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_restrictLast",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_restrictFirst",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_mul_eq_of_restrict",
+      "MPSTensor.MPOSymmetry.mem_blockInsertedGroundSpace_succ_of_intertwine",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpace_intersection",
+      "MPSTensor.MPOSymmetry.blockInsertedGroundSpace_iff_left_right",
+      "MPSTensor.MPOSymmetry.contiguousRestrict\u2097_blockInsertedGroundSpace_mem",
+      "MPSTensor.MPOSymmetry.mem_ker_blockInsertedParentInteraction_iff",
+      "MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_blockInserted_eq",
+      "MPSTensor.MPOSymmetry.finrank_ker_openInteractionHamiltonianES_blockInserted",
+      "MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_blockInserted_starProjection"
+    ]
+  },
+  "scope": "generic joint inserted spaces, intersection, exact open kernel, dimension and fixed-volume continuity; not actual mixed-family span, endpoint spectral gap, periodic identification or MPO classification",
+  "documentation_validation": {
+    "verified_at_utc": "2026-10-06T05:07:00Z",
+    "source_checkpoint": "ad687e9a28dca35b9c2eb3fa0ab34c5dfc3ed711",
+    "repository_wide_formatting": "pass; latexindent 3.24.7",
+    "global_sync": {
+      "result": "pass",
+      "blueprint_refs": 19753,
+      "lean_declarations": 39424,
+      "missing": 0,
+      "stale": 0,
+      "duplicates": 0,
+      "qiclean_revision": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f"
+    },
+    "reverse_ownership": "pass; no missing owners across all three new modules",
+    "focused_pdf": {
+      "result": "pass; visually inspected",
+      "pages": 6,
+      "unresolved_references": 0,
+      "missing_glyphs": 0,
+      "overflow_diagnostics": 0,
+      "sha256": "0ba9251dcaa58bd1fa7fdde707800cbf352a7de57e676b94268b9fac8611ab57"
+    },
+    "focused_strict_web": {
+      "result": "pass",
+      "html_pages": 6,
+      "generated_source_checks": "pass",
+      "target_html_sha256": "b158c15243e188e1ac76e30ce748c31206bc8ddc5b25147e44bf9fd2b8040959",
+      "target_owner_links": 22
+    },
+    "focus": {
+      "target_leaves": 1,
+      "exact_context_statements": 7,
+      "new_diagrams": 0,
+      "inherited_tenkz_figures": 1,
+      "manifest_sha256": "0f33c032b7bcc88ae2a271fa38acaf1ba779f4cb7722a48c2181ddbdfa63ffdb",
+      "temporary_adjustments": [
+        "Focused router selects the exact target and referenced statements.",
+        "Unrelated ft_equal_gauge graph subset omitted from temporary config."
+      ],
+      "tenkz_route": "supported XeLaTeX PDF-to-SVG fallback; dvisvgm absent"
+    },
+    "browser": "unrun: focused extract lacks full-volume harness fixture pages; independent launch confirms local Chromium executable absent; fail-closed CI unchanged",
+    "full_volume_render": "not rerun locally",
+    "local_lean_builds_probes_or_cache_mutations": "none",
+    "tools": {
+      "leanblueprint": "0.0.20",
+      "texra-blueprint": "0.3.8",
+      "plasTeX": "3.1",
+      "playwright": "1.63.0"
+    },
+    "chktex": "unrun: local executable absent"
   }
 }
