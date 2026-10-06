@@ -5459,3 +5459,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The existing mixed-endpoint consumer is unchanged while its
   separate validation is in progress; its later migration is a direct
   application of the generic norm-gap theorem.
+
+### Transporting endpoint parent order through polar inclusion — candidate (2026-10-06)
+
+- **Pattern:** Recover an embedded original tensor from its polar factor,
+  rewrite its canonical parent as an isometric interaction extension, then
+  transfer the square-support order through `isometricInteractionExtension_mono`
+  and `Matrix.isPositive_toEuclideanLin_iff`.
+- **Seen:** The two actual limiting-interaction comparisons in
+  `MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalEndpointAttachment.lean`.
+- **Abstraction:** The common order transport already uses the existing
+  isometric-extension monotonicity theorem; the endpoint-specific rewrites
+  have two occurrences in one file and do not yet warrant another theorem.
+- **Notes:** Kernel and norm-gap transport use the existing affine-kernel
+  theorem and QICLean's positive-order gap theorem. No copy of the spectral
+  argument or new proof tactic is introduced.
