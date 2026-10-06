@@ -56,6 +56,7 @@ import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedCompression
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
 import TNLean.MPS.MPU.ParityConditioning
+import TNLean.MPS.MPU.PhaseSelectorRows
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.PositiveCanonicalGauge
@@ -114,6 +115,7 @@ import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
+import TNLean.MPS.MPU.UnitCircleRankTwo
 import TNLean.MPS.MPU.VirtualSandwich
 import TNLean.MPS.MPU.VirtualSourceFactorTransport
 import TNLean.MPS.MPU.VirtualUnitaryGauge
