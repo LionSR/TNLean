@@ -1,0 +1,753 @@
+{
+  "production_source_checkpoint": "4870c7498a9329b99bab5a13961a16d80b2d47bb",
+  "source_diff_base": "d4b97308f1a17801910e95a4ddab2f08d081f9fd",
+  "public_declarations": 69,
+  "initial_missing_owners": 53,
+  "missing_owners": 0,
+  "duplicate_owners": 0,
+  "checked_target_markers": 0,
+  "source_modules": {
+    "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean": "98efd4c3b43eb6fb687801144265e5023fafcecda0438bf56160cd2efe287222",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean": "9286ad6aacee5265d32b4f5efdb74f12335eae6b3a73c88d0e90fd001973d7d4",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean": "61ba80a1c3288581eaa997946ced7c48c89a9fe22549fbd33c549299f7754dbb",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean": "ea6e39bfa40828fac1b588f870ee62a2bcfff6dcc4bfaf1fb8cc64121a016a7e",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointReducingSectors.lean": "ed8d72611a9db6f3c07bca3cd89154a1d0b6c6c0d09b7c9d38c76ad95a7f864c"
+  },
+  "blueprint_leaves": {
+    "ch30_mpo_joint_site_projection_embedding.tex": "0d2f32956bb06f695e70870f43b8b46e8396cd3c2c8f5b335917c1b56fd9e276",
+    "ch30_mpo_joint_one_sided_support.tex": "c09391f65a39e5133f91058dd9592d68f55d220ffd9f87beb1e944a5e0836c86",
+    "ch30_mpo_joint_open_sector_penalty.tex": "693282f52330cea4bb160d078d22ce6e4e57ca3f17ac09ae7a91711dc591ecf8"
+  },
+  "declaration_owners": [
+    {
+      "declaration": "MPSTensor.cyclicForwardSite_injective",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 28,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 17,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.periodicLocalInteractionES_eq_embedOp",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 75,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 17,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.periodicLocalInteractionES_mul",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 118,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 59,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.periodicLocalInteractionES_isSymmetricProjection",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 135,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 59,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.periodicLocalInteractionES_finKronecker",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 153,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 80,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.finKronecker_toEuclideanLin_isSymmetricProjection",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 162,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 144,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.siteMatrixES",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 184,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 104,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.siteMatrixES_diagonal",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 189,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 104,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.siteMatrixES_mul_same",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 213,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 127,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.commute_siteMatrixES_of_ne",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 226,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 127,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.siteMatrixES_isSymmetricProjection",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 241,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 144,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.commute_siteMatrixES_periodicLocalInteractionES_of_notMem",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 256,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.periodicLocalInteractionES_twoSite_product",
+      "source": "TNLean/MPS/ParentHamiltonian/Martingale/SiteProjectionEmbedding.lean",
+      "source_line": 282,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 186,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 66,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 21,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 75,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 21,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.toEuclideanLin_jointMixedFirstFrameProjectionMatrix",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 83,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 21,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.toEuclideanLin_jointMixedLastFrameProjectionMatrix",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 92,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 21,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix_isHermitian",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 102,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 40,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix_isHermitian",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 111,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 40,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix_mul_self",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 119,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 40,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix_mul_self",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 127,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 40,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix_mul_polarIso",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 135,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 40,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix_mul_polarIso",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 143,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 40,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 187,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 66,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 199,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 66,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 210,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 222,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection_apply_of_mem_support",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 273,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection_apply_of_mem_support",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 296,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_firstOneSidedProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 318,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_lastOneSidedProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 329,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedFirstOneSidedProjection_le_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 341,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedLastOneSidedProjection_le_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 354,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection_commute_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 367,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection_commute_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 380,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 87,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 393,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 153,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 405,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 153,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 417,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 427,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection_apply_of_mem_support",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 464,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection_apply_of_mem_support",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 477,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection_commute_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 490,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection_commute_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 504,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedFirstFrameAtZeroProjection_le_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 517,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedLastFrameAtOneProjection_le_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOneSidedSupport.lean",
+      "source_line": 531,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_one_sided_support.tex",
+      "owner_line": 167,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedTwoSiteInnerProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 33,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 21,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedTwoSiteInnerProjection_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 39,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 29,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_innerProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 47,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 29,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedTwoSiteInnerProjection_le_parentInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 66,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 29,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedRowSector_commute_periodicLocalInteraction_zero",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 80,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 47,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_periodicLocalInteraction_zero",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 92,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 47,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedRowSector_commute_openInteractionHamiltonian_zero",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 104,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 47,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_openInteractionHamiltonian_zero",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointInnerConstraints.lean",
+      "source_line": 117,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 47,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenLeftMatrix",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 116,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 71,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenRightMatrix",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 127,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 71,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenBondProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 138,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 71,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenBondProjection_commute",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 212,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 94,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenBondProjection_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 224,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 94,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 236,
+      "kind": "def",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 71,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 258,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 94,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.mem_range_jointMixedOpenActiveProjection_iff_bonds",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 267,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 94,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.mem_range_jointMixedOpenActiveProjection_iff",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 290,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 94,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedOpenBondProjection_le_localInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 430,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 184,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedOpenActiveProjection_le_openInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 460,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 205,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenBondProjection_commute_localInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 569,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 184,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection_commute_openInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 581,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 205,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.one_sub_jointMixedOpenActiveProjection_le_twice_openInteraction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 598,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 205,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_openInteraction_reduction",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOpenSectorPenalty.lean",
+      "source_line": 640,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_open_sector_penalty.tex",
+      "owner_line": 237,
+      "checked_marker": false
+    },
+    {
+      "declaration": "MPSTensor.MPOSymmetry.binaryDiagonal_isSymmetricProjection",
+      "source": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointReducingSectors.lean",
+      "source_line": 27,
+      "kind": "theorem",
+      "owner_file": "src/chapter/ch30_mpo_joint_site_projection_embedding.tex",
+      "owner_line": 205,
+      "checked_marker": false
+    }
+  ],
+  "focused_fixture": "/workspace/scratch/757f4f120786/glm23-blueprint-validation/joint-open-sector-penalty-focused",
+  "target_label_counts": {
+    "ch30_mpo_joint_site_projection_embedding.tex": 14,
+    "ch30_mpo_joint_one_sided_support.tex": 13,
+    "ch30_mpo_joint_open_sector_penalty.tex": 13
+  },
+  "rendered_target_declaration_links": 69,
+  "html_pages": [
+    "ch-mpo_symmetry_basics.html",
+    "dep_graph_chapter_1.html",
+    "dep_graph_document.html",
+    "dep_graphs.html",
+    "index.html",
+    "sect0001.html"
+  ],
+  "html_sha256": {
+    "ch-mpo_symmetry_basics.html": "3bae6b81f97a0fb8d30ea4e77d250735256824997b47dc18b802eca1b87630c7",
+    "dep_graph_chapter_1.html": "7bcc12e632ec556a389e3a104393c7fe7ae13a11d8aab88291d8f27e1c1ee710",
+    "dep_graph_document.html": "4205ad046d834156a28db75f3230951ddbc1dd886674fe2bb229b38a9c7e8a7f",
+    "dep_graphs.html": "bf8a3e9eb27ac4989029aba9d519ba83edbeff3c0f102e120941933ac027b98c",
+    "index.html": "307389bcb79b30ba2dd76a1fc7d6d054185d3f5156821cd7dd1618800cf5768d",
+    "sect0001.html": "ffac608457deb169b06a9da60b00894b5cfb00e0a7376be3f82973f1aeb27e8f"
+  },
+  "missing_html_anchors": [],
+  "duplicate_html_ids": [],
+  "html_sentinels": [],
+  "raw_html_reader_checks": "passed for all generated pages",
+  "image_resources": [
+    "tenkz_svg/tenkz-29c645daf2027b02.svg",
+    "tenkz_svg/tenkz-9dbf24ae769c52d7.svg",
+    "tenkz_svg/tenkz-ca706fdf6d9786cb.svg"
+  ],
+  "tenkz_svg": [
+    {
+      "file": "tenkz-29c645daf2027b02.svg",
+      "viewBox": "0 0 113.67 121.98",
+      "paths": 41,
+      "sha256": "b1890abd5d229845dd7254bd87ebfdd8fc80370d48e0dc86601b7d9b968e0a4d"
+    },
+    {
+      "file": "tenkz-9dbf24ae769c52d7.svg",
+      "viewBox": "0 0 113.67 59.62",
+      "paths": 23,
+      "sha256": "3828f8896e4af8158cd2c26eb3b41b6bb5e4ad07abd4be241bd46d880e9793a9"
+    },
+    {
+      "file": "tenkz-ca706fdf6d9786cb.svg",
+      "viewBox": "0 0 32.6 51.89",
+      "paths": 6,
+      "sha256": "127bd918a6ce2541cc8328c28ad0c683c1b3be92e2a9052ed4c2449713bf57f3"
+    }
+  ],
+  "pdf_pages": 11,
+  "pdf_sha256": "8dcc30cb0fcaa19ae99f29ec2435386932a4bf8db391e884526e1f37da9ffdee",
+  "pdf_visual_pages": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "pdf_page_sha256": {
+    "3": "6b382db15260575bd9011eb20b28b71156f7451608863b2b7bf99f69bae5d7c5",
+    "4": "929e2fa6f10704f6120e701c1069242030f50fb75d660a66b2c872775391eb07",
+    "5": "809c6125992f6785515e859abc3960e8a38ca333e6c91824cb630001e453248b",
+    "6": "3569e913e7cb7edae596a4309777779d35b1b35ec803bf649d57ee9d9cc26c3d",
+    "7": "e1d27fac7cff360ac74715e298a0e62f7b01918353161d412e04025da30f32b4",
+    "8": "c5c558effda4d89d6dd77b30e4957f0813e3e353ab5ae743d3178a0d015e8ca7",
+    "9": "0ac421d03d7597dea5179fa771d859ce2bb53ce907c56e55acdfa18f266a585e"
+  },
+  "pdf_warnings": [],
+  "tenkz_audit": {
+    "pictures": 2,
+    "units": 1,
+    "hard_findings": 0,
+    "advisories": 0,
+    "hard_equation_group_checks": 0,
+    "advisory_source_equals_checks": 1
+  },
+  "formatter": "latexindent 3.24.7, repository settings, byte comparison passed for all three leaves",
+  "browser_status": "blocked before any page opened: Chromium process-singleton socket() returned Operation not permitted; browser layout and MathJax checks unverified",
+  "native_lean_validation": "pending; no compiler or cache operation in this task",
+  "axiom_guard_execution": "pending; ten standard-axiom guards remain unexecuted",
+  "shared_root_integration": "untouched; root imports, workflows, common blueprint input list and shared lean_decls need coordinated integration",
+  "validation_timestamp_utc": "2026-10-06T14:24:18Z",
+  "pdf_pixel_review": "passed: final PDF pages 3 through 9 inspected, including the new four-site diagram",
+  "public_declaration_counts": {
+    "SiteProjectionEmbedding": 13,
+    "JointMixedEndpointOneSidedSupport": 32,
+    "JointMixedEndpointInnerConstraints": 8,
+    "JointMixedEndpointOpenSectorPenalty": 15,
+    "promoted_binary_diagonal_projection": 1
+  },
+  "mathematical_owning_entries": 23,
+  "focused_source_sync": "passed using scripts/blueprint_lean_sync.py with --ci --report-duplicate-tags; 69/69 source references resolved",
+  "source_reverse_coverage": "passed using the repository reverse-coverage checker on d4b97308..4870c749, four new production leaves and the promoted public declaration; 53 missing reduced to zero",
+  "reader_facing_prose": "passed for the actual staged diff against d4b97308",
+  "web_image_fallback": "dvisvgm unavailable; successful xelatex/PDF/pdftocairo SVG fallback; all generated image resources exist and contain nonempty paths",
+  "native_browser_attempts": 1,
+  "logs": {
+    "glm23-open-sector-source-sync.json": "31f59b68df1a74813f143d447c38bfc3aacff117ff7c3cbf6c4a355cb24d795b",
+    "glm23-open-sector-source-sync.log": "7f344c5e5928089a9e7e25dda44caa230aa00382727b2a6066be7bd88f0aa884",
+    "glm23-open-sector-pdf.log": "c5b8c85d6167d74c1ea79e309d2ec961699542405f58511ca25e3a5b10ce7ec2",
+    "glm23-open-sector-web.log": "27aa5a748608c7e3e44db153bb534e32a969de4b5335fce56248b94734f55edc",
+    "glm23-open-sector-tenkz.log": "5dc7d2157af22014565dedfffe6e4d3f87714af66ffc4a9d511757f3b7e164f7",
+    "glm23-open-sector-browser.log": "8f1ed088f7858b345d307a76b39ee45963cdf6b071af442fd31e8d4eb0621c5e"
+  }
+}

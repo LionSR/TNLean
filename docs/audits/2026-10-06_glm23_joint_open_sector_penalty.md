@@ -53,17 +53,57 @@ separately by its one full-frame term.
   first fibers, empty labels, `N = 3`, and the separate `N = 2` term. Ten
   standard-axiom guards cover the main statements and the embedding bridge.
 
-Only static source review, whitespace checking, declaration-reference
-checking, and the tactic-pattern scan were performed here. No Lean compiler,
-Lake build, cache mutation, blueprint build, or diagram compilation ran:
-another task held the sole native validation slot. The new blueprint leaf
-therefore has no completion markers yet. Native elaboration and the actual
-axiom-guard outputs remain unverified.
+The first source checkpoint covered 16 of the 69 added/promoted public
+declarations in its blueprint leaf; the repository reverse-coverage checker
+found 53 missing owners. This was incomplete reverse coverage, despite every
+existing tag resolving. The documentation completion assigns all 69 declarations
+exactly one mathematical owner across three focused leaves: 14 embedding and
+binary-diagonal declarations, 32 one-sided-support declarations, and 23 inner
+and open-chain declarations. There are 23 coherent mathematical owning entries,
+with no checked markers. Private helpers are excluded.
 
-Root imports, shared workflow lists, and the common blueprint input list
-were left for coordinated integration. The new blueprint leaf is
-`ch30_mpo_joint_open_sector_penalty.tex`, intended after the full-frame
-reduction leaf. No MPU or PEPS source was changed.
+The repository reverse-coverage checker now reports zero missing declarations
+for the actual four-leaf source diff from `d4b97308` through `4870c749`, plus
+its promoted public binary-diagonal declaration. The focused source-sync check
+also passes with duplicate ownership treated as an error: all 69 tags resolve.
+The complete ownership inventory, source hashes, rendered-artifact hashes,
+and validation limits are in
+`2026-10-06_glm23_joint_open_sector_blueprint_validation.json`.
+
+The focused PDF has 11 pages. Final pages 3–9, including the tensor-product
+diagram, were inspected as raster images. The PDF log has no warnings,
+overfull boxes, or underfull boxes. The focused web build succeeds; all 69
+owner links render, every target label and local anchor resolves, all image
+resources exist, and raw-HTML reader checks pass for six generated pages.
+The review repaired missing anchors on multi-line displays and prepared the
+numbered bibliography in the temporary web fixture. The Tenkz event audit
+reports two new pictures in one display, zero hard findings, and zero
+advisories. This is a presentational equation row: no hard `tenkzeq` group
+check ran. The fallback SVG converter is the restored
+XeLaTeX/PDF/pdftocairo route because `dvisvgm` is unavailable.
+
+Browser inspection is **unverified**. Chromium failed before opening a page
+because creating its process-singleton Unix socket returned
+`Operation not permitted`. No alternate browser route or sandbox change was
+attempted. Browser layout and dynamic MathJax checks therefore remain pending.
+
+The pinned `latexindent` 3.24.7 byte-comparison check passes for all three
+leaves, as do the changed reader-facing prose and whitespace checks.
+No Lean compiler, Lake build, or Lean cache operation ran; native elaboration
+and the ten actual axiom-guard outputs remain unverified. Completion markers
+remain absent from every newly owned statement and proof.
+
+Root imports, shared workflow lists, the common blueprint input list, and
+shared `blueprint/lean_decls` remain unchanged. The three new leaves should
+be integrated after the full-frame reduction, in this order:
+
+1. `ch30_mpo_joint_site_projection_embedding.tex`
+2. `ch30_mpo_joint_one_sided_support.tex`
+3. `ch30_mpo_joint_open_sector_penalty.tex`
+
+No MPU or PEPS source was changed. Publication is handled separately by the
+parent task; this completion is preserved locally as a clean source commit,
+a patch against the already preserved checkpoint, and a source/render archive.
 
 ## Remaining endpoint argument
 

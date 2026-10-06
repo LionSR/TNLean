@@ -1,0 +1,205 @@
+% Source context: GLM23, arXiv:2203.12563v3, REsubmission.tex,
+% Section 5, lines 1695--1777. These projection identities are auxiliary
+% consequences for the actual parameter-zero support.
+% Native declaration validation remains pending for this source leaf.
+
+\subsection{One-sided supports in the full physical space}
+\label{sec:mpo_joint_one_sided_support}
+
+For the mixed family of \cite[Section~5]{GarreRubio2023MPOSym}, retain
+the full joint boundary matrices $L,R$ from
+Definition~\ref{def:mpo_joint_boundary_columns} and their polar
+decompositions $L=U_LP_L$, $R=U_RP_R$. Put
+$\mathcal H=\C^{\mathcal I}$ and $U=U_L\otimes U_R$.
+As in (\ref{eq:mpo_joint_full_trace}), let
+$S=\operatorname{ran}\Gamma'_2\subseteq\mathcal H\otimes\mathcal H$
+be the actual parameter-zero two-site support and let $h=I-P_S$.
+Throughout this subsection the families $A^0,A^1$ are arbitrary;
+all dimensions may be zero, and no simultaneous spanning condition is
+assumed.
+
+\begin{definition}[Projections onto the full joint frame ranges]
+    \label{def:mpo_joint_frame_range_projections}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix,
+        MPSTensor.MPOSymmetry.toEuclideanLin_jointMixedFirstFrameProjectionMatrix,
+        MPSTensor.MPOSymmetry.toEuclideanLin_jointMixedLastFrameProjectionMatrix}
+    \uses{def:mpo_joint_full_frame}
+    Let $E_L,E_R$ be the matrices, in the physical coordinate basis,
+    of the orthogonal projections
+    \begin{align}
+        E_L & =P_{\operatorname{ran}U_L}, \\
+        E_R & =P_{\operatorname{ran}U_R}.
+    \end{align}
+    Thus multiplication by these matrices on $\mathcal H$ is exactly
+    orthogonal projection onto the indicated ranges. The ranges are
+    those of the full joint matrices, with all cross-label Gram entries
+    retained.
+\end{definition}
+
+\begin{theorem}[Hermitian frame projections and absorption]
+    \label{thm:mpo_joint_frame_projection_identities}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix_isHermitian,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix_isHermitian,
+        MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix_mul_self,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix_mul_self,
+        MPSTensor.MPOSymmetry.jointMixedFirstFrameProjectionMatrix_mul_polarIso,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameProjectionMatrix_mul_polarIso}
+    \uses{def:mpo_joint_frame_range_projections}
+    For each $\alpha\in\{L,R\}$,
+    \begin{align}
+        E_\alpha^*        & =E_\alpha, & E_\alpha^2 & =E_\alpha, &
+        E_\alpha U_\alpha & =U_\alpha.
+        \label{eq:mpo_joint_frame_absorption}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{def:mpo_joint_frame_range_projections}
+    An orthogonal projection is self-adjoint and idempotent, so its
+    matrix is Hermitian and idempotent. For every boundary vector $z$,
+    the vector $U_\alpha z$ lies in $\operatorname{ran}U_\alpha$ and
+    is therefore fixed by its orthogonal projection. This gives
+    (\ref{eq:mpo_joint_frame_absorption}), including when the boundary
+    space is zero-dimensional.
+\end{proof}
+
+\begin{definition}[One-sided product constraints]
+    \label{def:mpo_joint_one_sided_projections}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection,
+        MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection}
+    \uses{def:mpo_joint_frame_range_projections}
+    Decompose the original physical space by row and column phase as
+    $\mathcal H=\mathcal H_{00}\oplus\mathcal H_{01}
+        \oplus\mathcal H_{10}\oplus\mathcal H_{11}$, with
+    $\mathcal H_{00}=\C^{d_0}$ shared by all block labels.
+    Let $R_0$ be the diagonal projection onto
+    $\mathcal H_{00}\oplus\mathcal H_{01}$ and let $C_0$ be the
+    diagonal projection onto $\mathcal H_{00}\oplus\mathcal H_{10}$.
+    On the full two-site space, define
+    \begin{align}
+        F_L & =E_L\otimes R_0, \\
+        F_R & =C_0\otimes E_R.
+    \end{align}
+    The first and second tensor factors correspond to sites $0$ and
+    $1$, respectively.
+\end{definition}
+
+\begin{theorem}[One-sided support of the actual interaction]
+    \label{thm:mpo_joint_one_sided_support}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection_apply_of_mem_support,
+        MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection_apply_of_mem_support,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_firstOneSidedProjection,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_lastOneSidedProjection,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedFirstOneSidedProjection_le_parentInteraction,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedLastOneSidedProjection_le_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedFirstOneSidedProjection_commute_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedLastOneSidedProjection_commute_parentInteraction}
+    \uses{def:mpo_joint_one_sided_projections}
+    Both $F_L$ and $F_R$ are orthogonal projections. For every $v\in S$
+    and each $\alpha\in\{L,R\}$,
+    \begin{align}
+        F_\alpha v   & =v, & S          & \subseteq\operatorname{ran}F_\alpha, &
+        [F_\alpha,h] & =0, & I-F_\alpha & \le h.
+        \label{eq:mpo_joint_one_sided_penalty}
+    \end{align}
+    The inequalities are in the order of positive semidefinite
+    operators and have coefficient one.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_frame_projection_identities,
+        thm:mpo_joint_full_frame_support,def:mpo_joint_one_sided_projections}
+    The diagonal entries of $R_0,C_0$ belong to $\{0,1\}$, so these
+    matrices are Hermitian and idempotent. Tensor products preserve
+    both properties; hence $F_L,F_R$ are orthogonal projections.
+    By Theorem~\ref{thm:mpo_joint_full_frame_support}, each $v\in S$
+    has the form $v=Uz$. Using
+    (\ref{eq:mpo_joint_frame_absorption}) gives
+    \begin{align}
+        F_LU & =(E_LU_L)\otimes(R_0U_R)=(I\otimes R_0)U,
+        \label{eq:mpo_joint_left_product_frame}
+    \end{align}
+    and, with the reflected factors,
+    \begin{align}
+        F_RU & =(C_0U_L)\otimes(E_RU_R)=(C_0\otimes I)U.
+        \label{eq:mpo_joint_right_product_frame}
+    \end{align}
+    In the trace defining $\Gamma'_2$, the inserted matrix is
+    $W_x(0)=V_xV_x^*$. If the first physical letter has column phase
+    one, then $C_x^iW_x(0)=0$; if the second has row phase one, then
+    $W_x(0)C_x^j=0$. The corresponding trace coefficient vanishes.
+    Consequently
+    \begin{align}
+        (C_0\otimes I)\Gamma'_2(X) & =\Gamma'_2(X), &
+        (I\otimes R_0)\Gamma'_2(X) & =\Gamma'_2(X).
+        \label{eq:mpo_joint_inner_phase_fixing}
+    \end{align}
+    Combining (\ref{eq:mpo_joint_left_product_frame}) with
+    (\ref{eq:mpo_joint_inner_phase_fixing}) gives $F_Lv=v$.
+    Likewise, (\ref{eq:mpo_joint_right_product_frame}) and
+    (\ref{eq:mpo_joint_inner_phase_fixing}) give $F_Rv=v$.
+    In each case $v$ itself witnesses membership in
+    $\operatorname{ran}F_\alpha$.
+
+    Since $F_\alpha$ is self-adjoint and preserves $S$, it commutes
+    with $P_S$. In fact, fixing $S$ gives
+    $F_\alpha P_S=P_S=P_SF_\alpha$, hence $[F_\alpha,h]=0$.
+    The range inclusion for orthogonal projections gives
+    $P_S\le F_\alpha$. Subtracting from $I$ yields
+    (\ref{eq:mpo_joint_one_sided_penalty}).
+\end{proof}
+
+\begin{definition}[Separate boundary-frame constraints]
+    \label{def:mpo_joint_boundary_site_projections}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection}
+    \uses{def:mpo_joint_frame_range_projections}
+    The frame constraint at site $0$ and the frame constraint at
+    site $1$ are, respectively,
+    \begin{align}
+        B_L & =E_L\otimes I_{\mathcal H}, \\
+        B_R & =I_{\mathcal H}\otimes E_R.
+    \end{align}
+    Each acts as the full identity on the other physical site.
+\end{definition}
+
+\begin{theorem}[Separate boundary frames reduce the actual interaction]
+    \label{thm:mpo_joint_boundary_site_support}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection_apply_of_mem_support,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection_apply_of_mem_support,
+        MPSTensor.MPOSymmetry.jointMixedFirstFrameAtZeroProjection_commute_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedLastFrameAtOneProjection_commute_parentInteraction,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedFirstFrameAtZeroProjection_le_parentInteraction,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedLastFrameAtOneProjection_le_parentInteraction}
+    \uses{def:mpo_joint_boundary_site_projections}
+    Both $B_L$ and $B_R$ are orthogonal projections. For every $v\in S$
+    and each $\alpha\in\{L,R\}$,
+    \begin{align}
+        B_\alpha v   & =v,    \\
+        [B_\alpha,h] & =0,    \\
+        I-B_\alpha   & \le h.
+    \end{align}
+    Thus the support lies in each separate boundary-frame range,
+    even with every direction at the other site retained.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_frame_projection_identities,
+        thm:mpo_joint_full_frame_support,def:mpo_joint_boundary_site_projections}
+    Tensoring the Hermitian idempotents $E_L,E_R$ with the identity
+    gives orthogonal projections. By
+    (\ref{eq:mpo_joint_frame_absorption}),
+    \begin{align}
+        B_LU & =(E_LU_L)\otimes U_R=U, & B_RU & =U_L\otimes(E_RU_R)=U.
+        \label{eq:mpo_joint_boundary_frame_fixing}
+    \end{align}
+    Theorem~\ref{thm:mpo_joint_full_frame_support} expresses every
+    $v\in S$ as $Uz$, so (\ref{eq:mpo_joint_boundary_frame_fixing}) gives $B_\alpha v=v$.
+    Self-adjointness and invariance of $S$ give commutation with
+    $P_S$, hence with $h=I-P_S$. Finally,
+    $S\subseteq\operatorname{ran}B_\alpha$ implies
+    $P_S\le B_\alpha$ for orthogonal projections, and therefore
+    $I-B_\alpha\le h$.
+\end{proof}

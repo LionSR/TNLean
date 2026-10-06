@@ -1,0 +1,216 @@
+% Auxiliary local-operator identities for arXiv:2203.12563v3,
+% Section 5, lines 1690--1692 and 1695--1777.
+% Native source validation is pending; no verification markers are asserted.
+
+\subsection{Site projections and cyclic placement}
+\label{sec:mpo_joint_site_projection_embedding}
+
+For nonnegative integers $d,n$, write
+$\operatorname{Cfg}(d,n)=(\Fin{n}\to\Fin{d})$ and
+$\mathcal H_n=\C^{\operatorname{Cfg}(d,n)}$. Matrices on configurations
+act by $(Mv)(\sigma)=\sum_\tau M_{\sigma,\tau}v(\tau)$.
+For $i\in\Fin{N}$, let $\mathcal E_i(h)$ denote the cyclic extension
+of a range-$R$ operator from Definition~\ref{def:periodic-fixed-interaction}.
+Thus $\mathcal E_i(h)=U_i^*(h\otimes I)U_i$ when $R\leq N$, and
+$\mathcal E_i(h)=0$ when $R>N$. No positivity assumption on $d$ is made.
+
+\begin{theorem}[Matrix entries and action on a cyclic window]
+    \label{thm:mpo_joint_cyclic_embedding}
+    \lean{MPSTensor.cyclicForwardSite_injective,
+        MPSTensor.periodicLocalInteractionES_eq_embedOp}
+    \uses{def:periodic-fixed-interaction,def:cyclic_window_complement_indexing}
+    Suppose $R\leq N$ and $i\in\Fin{N}$. The map
+    $e_i:\Fin{R}\to\Fin{N}$ given by $e_i(r)=i+r\pmod N$ is
+    injective. For $\sigma\in\operatorname{Cfg}(d,N)$ and
+    $\omega\in\operatorname{Cfg}(d,R)$, let $\sigma[e_i\leftarrow\omega]$
+    equal $\omega(r)$ at $e_i(r)$ and equal $\sigma(k)$ outside
+    $\operatorname{ran}e_i$. Let $\chi_i(\sigma,\tau)$ be one when
+    $\sigma(k)=\tau(k)$ at every $k\notin\operatorname{ran}e_i$,
+    and zero otherwise. For every matrix $M$ on $\mathcal H_R$,
+    its cyclic extension has entries and action
+    \begin{align}
+        \mathcal E_i(M)_{\sigma,\tau}
+         & =\chi_i(\sigma,\tau)M_{\sigma\circ e_i,\tau\circ e_i}.
+        \label{eq:mpo_joint_window_entries}
+    \end{align}
+    Equivalently, its action on a vector is
+    \begin{align}
+        (\mathcal E_i(M)v)(\sigma)
+         & =\sum_{\omega\in\operatorname{Cfg}(d,R)}
+        M_{\sigma\circ e_i,\omega}\,
+        v\bigl(\sigma[e_i\leftarrow\omega]\bigr).
+        \label{eq:mpo_joint_window_action}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{def:cyclic_window_complement_indexing,def:periodic-fixed-interaction}
+    The cyclic ordering identifies $\Fin{N}$ with
+    $\Fin{R}\sqcup\Fin{N-R}$, so its restriction $e_i$ to the first
+    summand is injective. The coordinate map $U_i$ sends $\sigma$ to
+    its window word $\sigma\circ e_i$ and its complementary word.
+    Replacing the window word by $\omega$ and applying $U_i^{-1}$ gives
+    $\sigma[e_i\leftarrow\omega]$. Expanding $U_i^*(M\otimes I)U_i$
+    therefore gives (\ref{eq:mpo_joint_window_action}). The configurations
+    agreeing with $\sigma$ outside the window are precisely these
+    replacements, each occurring once. Summing over that set gives the
+    matrix entries in (\ref{eq:mpo_joint_window_entries}).
+\end{proof}
+
+\begin{theorem}[Products and projections under cyclic extension]
+    \label{thm:mpo_joint_cyclic_projection_transport}
+    \lean{MPSTensor.periodicLocalInteractionES_mul,
+        MPSTensor.periodicLocalInteractionES_isSymmetricProjection}
+    \uses{def:periodic-fixed-interaction}
+    For arbitrary operators $h,k$ on $\mathcal H_R$ and $i\in\Fin{N}$,
+    $\mathcal E_i(hk)=\mathcal E_i(h)\mathcal E_i(k)$, including the
+    case $R>N$. If $P^2=P=P^*$, then
+    $\mathcal E_i(P)^2=\mathcal E_i(P)=\mathcal E_i(P)^*$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_cyclic_embedding,thm:periodic-fixed-interaction-order}
+    When $R\leq N$, represent $h,k$ by matrices. Multiplying the entries
+    in (\ref{eq:mpo_joint_window_entries}) sums over the intermediate
+    window word and gives the entries of the placed product $hk$.
+    When $R>N$, both sides vanish. In particular,
+    $\mathcal E_i(P)^2=\mathcal E_i(P^2)=\mathcal E_i(P)$.
+    Since $P\geq0$, preservation of order gives $\mathcal E_i(P)\geq0$,
+    which implies self-adjointness.
+\end{proof}
+
+\begin{theorem}[Tensor products on cyclic windows]
+    \label{thm:mpo_joint_cyclic_tensor_placement}
+    \lean{MPSTensor.periodicLocalInteractionES_finKronecker}
+    \uses{def:periodic-fixed-interaction}
+    Suppose $R\leq N$. For one-site matrices $A_r$, indexed by
+    $r\in\Fin{R}$, define $B_{e_i(r)}=A_r$ and $B_k=I$ at the
+    remaining sites. Then
+    \begin{align}
+        \mathcal E_i\left(\bigotimes_{r\in\Fin{R}}A_r\right)
+         & =\bigotimes_{k\in\Fin{N}}B_k.
+        \label{eq:mpo_joint_tensor_placement}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_cyclic_embedding}
+    The matrix entry of the local tensor product is
+    $\prod_r(A_r)_{\sigma(e_i(r)),\tau(e_i(r))}$.
+    Its placement multiplies this by
+    $\prod_{k\notin\operatorname{ran}e_i}\delta_{\sigma(k),\tau(k)}$.
+    Injectivity of $e_i$ identifies this product with
+    $\prod_k(B_k)_{\sigma(k),\tau(k)}$, the entry of the right side
+    of (\ref{eq:mpo_joint_tensor_placement}).
+\end{proof}
+
+\begin{definition}[One-site placement]
+    \label{def:mpo_joint_site_matrix}
+    \lean{MPSTensor.siteMatrixES,MPSTensor.siteMatrixES_diagonal}
+    For a matrix $M$ on $\C^{\Fin{d}}$ and $k\in\Fin{N}$, put
+    $M^{[k]}=\bigotimes_{j\in\Fin{N}}B_j$, where $B_k=M$ and
+    $B_j=I$ for $j\ne k$. Its matrix entries are
+    \begin{align}
+        (M^{[k]})_{\sigma,\tau}
+         & =M_{\sigma(k),\tau(k)}
+        \prod_{j\ne k}\delta_{\sigma(j),\tau(j)}.
+        \label{eq:mpo_joint_site_entries}
+    \end{align}
+    In particular, if $M=\operatorname{diag}(f)$, then
+    $M^{[k]}=\operatorname{diag}(\sigma\mapsto f(\sigma(k)))$, so
+    $(M^{[k]}v)(\sigma)=f(\sigma(k))v(\sigma)$.
+\end{definition}
+\begin{proof}
+    Expand the tensor-product entry. On the diagonal every identity
+    factor contributes one, leaving $f(\sigma(k))$. If $\sigma\ne\tau$,
+    choose a site where they differ. The factor at that site is zero,
+    whether it is the diagonal factor at $k$ or an identity factor.
+\end{proof}
+
+\begin{theorem}[Products of one-site placements]
+    \label{thm:mpo_joint_site_matrix_products}
+    \lean{MPSTensor.siteMatrixES_mul_same,
+        MPSTensor.commute_siteMatrixES_of_ne}
+    \uses{def:mpo_joint_site_matrix}
+    For arbitrary one-site matrices $M,K$,
+    $M^{[k]}K^{[k]}=(MK)^{[k]}$.
+    If $i\ne j$, then $M^{[i]}K^{[j]}=K^{[j]}M^{[i]}$.
+\end{theorem}
+\begin{proof}
+    \uses{def:mpo_joint_site_matrix}
+    Tensor products multiply site by site. At the same distinguished
+    site the factor is $MK$, and every other factor is $I$.
+    For two distinct distinguished sites, the factors are $M I=I M$
+    at $i$, $I K=K I$ at $j$, and $I$ elsewhere.
+\end{proof}
+
+\begin{theorem}[Tensor products of orthogonal projections]
+    \label{thm:mpo_joint_tensor_site_projections}
+    \lean{MPSTensor.finKronecker_toEuclideanLin_isSymmetricProjection,
+        MPSTensor.siteMatrixES_isSymmetricProjection}
+    \uses{def:mpo_joint_site_matrix}
+    Let $P_j$ be one-site orthogonal projections for every
+    $j\in\Fin{N}$. Then $\bigotimes_jP_j$ is an orthogonal projection.
+    In particular, $P^{[k]}$ is an orthogonal projection whenever $P$ is.
+    These assertions include $d=0$ and the empty tensor product.
+\end{theorem}
+\begin{proof}
+    \uses{def:mpo_joint_site_matrix}
+    Tensor-product multiplication and adjoints give
+    \begin{align}
+        \left(\bigotimes_jP_j\right)^2
+         & =\bigotimes_jP_j^2=\bigotimes_jP_j, \\
+        \left(\bigotimes_jP_j\right)^*
+         & =\bigotimes_jP_j^*=\bigotimes_jP_j.
+    \end{align}
+    For $P^{[k]}$, take $P_k=P$ and $P_j=I$ at every other site;
+    the identity is itself an orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Commutation outside an interaction window]
+    \label{thm:mpo_joint_site_window_commutation}
+    \lean{MPSTensor.commute_siteMatrixES_periodicLocalInteractionES_of_notMem}
+    \uses{def:mpo_joint_site_matrix,def:periodic-fixed-interaction}
+    Suppose $R\leq N$, $i,k\in\Fin{N}$, and $k\notin\operatorname{ran}e_i$.
+    For every one-site matrix $M$ and every operator $h$ on $\mathcal H_R$,
+    $M^{[k]}\mathcal E_i(h)=\mathcal E_i(h)M^{[k]}$.
+    Neither operator is required to be diagonal or self-adjoint.
+\end{theorem}
+\begin{proof}
+    \uses{def:mpo_joint_site_matrix,thm:mpo_joint_cyclic_embedding}
+    Represent $h$ by a matrix. By
+    (\ref{eq:mpo_joint_window_entries}), its extension acts only on
+    $\operatorname{ran}e_i$, while $M^{[k]}$ acts only on $\{k\}$.
+    These site sets are disjoint, so the two operators act on distinct
+    tensor factors and commute. Passing from matrices to their linear
+    actions preserves multiplication.
+\end{proof}
+
+\begin{theorem}[Two-site product placement]
+    \label{thm:mpo_joint_two_site_product}
+    \lean{MPSTensor.periodicLocalInteractionES_twoSite_product}
+    \uses{def:mpo_joint_site_matrix,def:periodic-fixed-interaction}
+    If $N\geq2$ and $i\in\Fin{N}$, then for arbitrary one-site
+    matrices $M,K$,
+    $\mathcal E_i(M\otimes K)=M^{[i]}K^{[i+1]}$, where $i+1$ is
+    taken modulo $N$ and the extension has range two.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_cyclic_embedding,
+        thm:mpo_joint_cyclic_tensor_placement,def:mpo_joint_site_matrix}
+    Injectivity of the two-site window gives $i\ne i+1$.
+    By (\ref{eq:mpo_joint_tensor_placement}), the left side has factor
+    $M$ at $i$, factor $K$ at $i+1$, and $I$ elsewhere.
+    Sitewise multiplication of the two tensor products on the right
+    gives exactly these same factors.
+\end{proof}
+
+\begin{theorem}[Binary diagonal projections]
+    \label{thm:mpo_joint_binary_diagonal_projection}
+    \lean{MPSTensor.MPOSymmetry.binaryDiagonal_isSymmetricProjection}
+    Let $J$ be any finite set and $f:J\to\C$ satisfy
+    $f(j)\in\{0,1\}$ for every $j$. Then the operator
+    $P=\operatorname{diag}(f)$ on $\C^J$ is an orthogonal projection.
+\end{theorem}
+\begin{proof}
+    At each coordinate, $f(j)^2=f(j)$ and $\overline{f(j)}=f(j)$.
+    Hence $(P^2v)(j)=f(j)^2v(j)=(Pv)(j)$, and the conjugate transpose
+    of the diagonal matrix is itself. Thus $P^2=P=P^*$.
+\end{proof}

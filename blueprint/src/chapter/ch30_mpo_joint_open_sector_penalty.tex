@@ -9,7 +9,7 @@
 Write the original physical space as
 $\mathcal H=\mathcal H_{00}\oplus\mathcal H_{01}
     \oplus\mathcal H_{10}\oplus\mathcal H_{11}$, where
-$\mathcal H_{00}=\mathbb C^{d_0}$ is shared by all block labels.
+$\mathcal H_{00}=\C^{d_0}$ is shared by all block labels.
 Let $R_0$ project onto $\mathcal H_{00}\oplus\mathcal H_{01}$,
 let $C_0$ project onto $\mathcal H_{00}\oplus\mathcal H_{10}$,
 and set $P_{00}=R_0C_0=C_0R_0$. Let $S$ be the actual zero-parameter
@@ -18,36 +18,54 @@ For the full joint polar boundary frames define
 $E_L=P_{\operatorname{ran}U_L}$ and
 $E_R=P_{\operatorname{ran}U_R}$.
 
-\begin{theorem}[One-sided support of the actual interaction]
-    \label{thm:mpo_joint_one_sided_support}
-    \lean{MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_firstOneSidedProjection,
-        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_lastOneSidedProjection,
-        MPSTensor.MPOSymmetry.one_sub_jointMixedFirstOneSidedProjection_le_parentInteraction,
-        MPSTensor.MPOSymmetry.one_sub_jointMixedLastOneSidedProjection_le_parentInteraction,
+\begin{definition}[The inner phase constraint]
+    \label{def:mpo_joint_inner_projection}
+    \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteInnerProjection}
+    The inner phase constraint on two sites is $F_{\mathrm{in}}=C_0\otimes R_0$.
+    It selects column phase zero at the first site and row phase zero
+    at the second site.
+\end{definition}
+
+\begin{theorem}[The actual support satisfies the inner constraint]
+    \label{thm:mpo_joint_inner_projection_support}
+    \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteInnerProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_innerProjection,
         MPSTensor.MPOSymmetry.one_sub_jointMixedTwoSiteInnerProjection_le_parentInteraction}
-    \uses{thm:mpo_joint_full_frame_support}
-    For arbitrary endpoint families and all dimensions, including zero,
-    \begin{align}
-        S &\subseteq \operatorname{ran}(E_L\otimes R_0), &
-        S &\subseteq \operatorname{ran}(C_0\otimes E_R), &
-        S &\subseteq \operatorname{ran}(C_0\otimes R_0).
-        \label{eq:mpo_joint_one_sided_support}
-    \end{align}
-    Each of these three product projections is orthogonal and commutes
-    with $h$, and each complementary projection is bounded by $h$.
+    \uses{def:mpo_joint_inner_projection}
+    The operator $F_{\mathrm{in}}$ is an orthogonal projection, and
+    $S\subseteq\operatorname{ran}F_{\mathrm{in}}$. Consequently
+    $I-F_{\mathrm{in}}\le h$.
 \end{theorem}
 \begin{proof}
-    \uses{thm:mpo_joint_full_frame_support,thm:mpo_supported_parent_projection}
-    Every $v\in S$ belongs to $\operatorname{ran}(U_L\otimes U_R)$,
-    so $(E_L\otimes I)v=v=(I\otimes E_R)v$.
-    The actual inserted trace contraction also gives
-    $(C_0\otimes I)v=v=(I\otimes R_0)v$.
-    Multiplying these commuting one-site identities gives
-    (\ref{eq:mpo_joint_one_sided_support}).
-    If $P$ is any of the three resulting product projections,
-    $PP_S=P_S=P_SP$, whence $[P,h]=0$ and $I-P\le h$.
-    The ranges of $U_L,U_R$ are taken from the full joint matrices;
-    no cross-label Gram entry is discarded.
+    The two commuting zero-one diagonal selectors are orthogonal.
+    For every actual support vector $v$, the inserted trace contraction
+    gives $(C_0\otimes I)v=v=(I\otimes R_0)v$. Their product therefore
+    fixes $v$. The inclusion implies $P_S\le F_{\mathrm{in}}$ and
+    hence $I-F_{\mathrm{in}}\le I-P_S=h$.
+\end{proof}
+
+\begin{theorem}[Phase selectors reduce all translated interactions]
+    \label{thm:mpo_joint_open_phase_commutators}
+    \lean{MPSTensor.MPOSymmetry.jointMixedRowSector_commute_periodicLocalInteraction_zero,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_periodicLocalInteraction_zero,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_commute_openInteractionHamiltonian_zero,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_openInteractionHamiltonian_zero}
+    Let $N\ge2$. Write $h_i$ for the cyclic translate of $h$ to sites
+    $i,i+1$ and $H_N=\sum_{i=0}^{N-2}h_i$ for the nonwrapping open sum.
+    For all chain sites $k$ and cyclic starts $i$,
+    \begin{align}
+        [(R_0)_k,h_i] & =0, & [(C_0)_k,h_i] & =0, &
+        [(R_0)_k,H_N] & =0, & [(C_0)_k,H_N] & =0.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Both local row selectors and both local column selectors commute
+    with $h$: the inner selectors fix $S$, while the outer selectors
+    preserve $S$ by acting on its virtual boundary. A selector inside
+    a translated window therefore commutes by its local identity.
+    A selector outside the window is constant on each active-coordinate
+    fiber and also commutes. Summing the nonwrapping translates gives
+    the two commutators with $H_N$.
 \end{proof}
 
 \begin{definition}[The open active projection]
@@ -60,11 +78,14 @@ $E_R=P_{\operatorname{ran}U_R}$.
     identity elsewhere, and set $H_N=\sum_{i=0}^{N-2}h_i$.
     Define projections on the same bonds by
     \begin{align}
-        F_0&=(E_L)_0(R_0)_1, &
-        F_i&=(C_0)_i(R_0)_{i+1}\quad(1\le i\le N-3), &
-        F_{N-2}&=(C_0)_{N-2}(E_R)_{N-1},
-        \label{eq:mpo_joint_open_bond_constraints}\\
-        Q_N&=F_0F_1\cdots F_{N-2}.
+        F_0     & =(E_L)_0(R_0)_1,                         &
+        F_i     & =(C_0)_i(R_0)_{i+1}\quad(1\le i\le N-3), &
+        F_{N-2} & =(C_0)_{N-2}(E_R)_{N-1}.
+        \label{eq:mpo_joint_open_bond_constraints}
+    \end{align}
+    Their product is
+    \begin{align}
+        Q_N & =F_0F_1\cdots F_{N-2}.
         \label{eq:mpo_joint_open_active_product}
     \end{align}
     The middle family is empty at $N=3$.
@@ -73,14 +94,17 @@ $E_R=P_{\operatorname{ran}U_R}$.
 \begin{theorem}[The exact open active range]
     \label{thm:mpo_joint_open_active_range}
     \lean{MPSTensor.MPOSymmetry.jointMixedOpenBondProjection_commute,
+        MPSTensor.MPOSymmetry.jointMixedOpenBondProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.mem_range_jointMixedOpenActiveProjection_iff_bonds,
         MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection_isSymmetricProjection,
         MPSTensor.MPOSymmetry.mem_range_jointMixedOpenActiveProjection_iff}
     \uses{def:mpo_joint_open_active_projection}
-    The $F_i$ commute, and $Q_N$ is an orthogonal projection.
-    A vector $v$ belongs to its range precisely when
+    The $F_i$ commute, and each $F_i$ and $Q_N$ is an orthogonal projection.
+    The range of $Q_N$ is the common fixed space of both one-site factors
+    in every $F_i$. Equivalently, a vector $v$ belongs to its range precisely when
     \begin{align}
-        (E_L)_0v&=v, & (E_R)_{N-1}v&=v, &
-        (R_0)_kv&=v=(C_0)_kv\quad(1\le k\le N-2).
+        (E_L)_0v & =v,                              & (E_R)_{N-1}v & =v, &
+        (R_0)_kv & =v=(C_0)_kv\quad(1\le k\le N-2).
         \label{eq:mpo_joint_open_active_conditions}
     \end{align}
     Thus the active subspace is
@@ -157,6 +181,27 @@ Each vertical line is the full original physical space $\mathcal H$.
     \end{tenkz}
 \end{tenkzequation}
 
+\begin{theorem}[Each active constraint is controlled by its own bond]
+    \label{thm:mpo_joint_open_bond_control}
+    \lean{MPSTensor.MPOSymmetry.one_sub_jointMixedOpenBondProjection_le_localInteraction,
+        MPSTensor.MPOSymmetry.jointMixedOpenBondProjection_commute_localInteraction}
+    \uses{def:mpo_joint_open_active_projection}
+    For every pair of nonwrapping bonds $i,j$,
+    $I-F_i\le h_i$ and $[F_i,h_j]=0$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_one_sided_support,thm:mpo_joint_inner_projection_support,
+        thm:mpo_joint_open_phase_commutators}
+    The first and last bond inequalities are the two one-sided support
+    inequalities; the remaining bonds use $I-F_{\mathrm{in}}\le h$.
+    Extension by the spectator identity preserves order.
+    Every phase factor of $F_i$ commutes with $h_j$ by the phase
+    commutators. Its possible first or last frame factor commutes with
+    its incident interaction by support inclusion and with every other
+    interaction by disjoint support. Thus both factors, and their
+    product $F_i$, commute with $h_j$.
+\end{proof}
+
 \begin{theorem}[Reduction and the inactive-sector penalty]
     \label{thm:mpo_joint_open_inactive_penalty}
     \lean{MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection_commute_openInteraction,
@@ -165,7 +210,7 @@ Each vertical line is the full original physical space $\mathcal H$.
     \uses{def:mpo_joint_open_active_projection}
     The actual open Hamiltonian satisfies
     \begin{align}
-        [Q_N,H_N]&=0, & I-Q_N&\le H_N\le2H_N.
+        [Q_N,H_N] & =0, & I-Q_N & \le H_N\le2H_N.
         \label{eq:mpo_joint_open_inactive_penalty}
     \end{align}
     The coefficient-one estimate is an auxiliary consequence of the
@@ -173,7 +218,7 @@ Each vertical line is the full original physical space $\mathcal H$.
     of $H_N$ within $\operatorname{ran}Q_N$.
 \end{theorem}
 \begin{proof}
-    \uses{thm:mpo_joint_one_sided_support,thm:mpo_joint_open_active_range}
+    \uses{thm:mpo_joint_open_bond_control,thm:mpo_joint_open_active_range}
     The actual support is fixed by each local constraint, so
     $I-F_i\le h_i$. The row and column phase selectors commute with
     every translated interaction. The first frame commutes with $h_0$
@@ -183,8 +228,8 @@ Each vertical line is the full original physical space $\mathcal H$.
     $[Q_N,H_N]=0$. The orthogonal projection inequality
     $I-PQ\le(I-P)+(I-Q)$ for commuting $P,Q$ gives by induction
     \begin{align}
-        I-Q_N&\le\sum_{i=0}^{N-2}(I-F_i)
-            \le\sum_{i=0}^{N-2}h_i=H_N.
+        I-Q_N & \le\sum_{i=0}^{N-2}(I-F_i)
+        \le\sum_{i=0}^{N-2}h_i=H_N.
     \end{align}
     Finally $H_N\ge0$, which yields the coefficient-two bound.
 \end{proof}
