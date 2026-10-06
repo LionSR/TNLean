@@ -1,5 +1,6 @@
 % Source: arXiv:2203.12563v3, REsubmission.tex, lines 1690--1692.
-% Source-only continuation; no compilation or leanok claim.
+% Lean build and guarded regressions passed at 0c51478b87ef.
+% Checkpoint: CI run 37398080332, build 112058990825.
 
 \subsection{Open gaps from changes at the two boundary sites}
 
@@ -84,6 +85,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
         MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveLocalInteraction_iff_fibers,
         MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveHamiltonian_iff_fibers,
         MPSTensor.MPOSymmetry.mixedEndpoint_open_norm_gap_of_active_norm_gap}
+    \leanok
     \uses{def:mpo_mixed_extended_support,def:mpo_mixed_physical_sectors}
     Let $Q_N$ select the configurations for which every column register
     except the last and every row register except the first lies in
@@ -102,6 +104,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     a gap $\min\{\eta,1/2\}$ of $H_N$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_endpoint_projector_comparison,
         thm:mpo_mixed_reducing_sectors,
         thm:periodic-fixed-interaction-order}
@@ -373,6 +376,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
         MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators,
         MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_core,
         MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_zeroSector}
+    \leanok
     \uses{def:mpo_mixed_extended_support,def:mpo_mixed_physical_sectors,def:injective}
     Suppose $A_0$ is one-site injective and $N\geq3$. Changing
     the physical coordinates at only the first and last active sites
@@ -385,6 +389,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     exterior registers.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_open_active_sectors}
     The $D_0^2$ endpoint letters form a basis of $M_{D_0}$, so their
     physical coefficient matrix is invertible. Its inverse changes
@@ -445,6 +450,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
         MPSTensor.MPOSymmetry.mixedEndpoint_openInteractionHamiltonian_one_apply_swap,
         MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_one_gap,
         MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_endpoints_gap}
+    \leanok
     \uses{def:mpo_mixed_extended_support,def:injective}
     If both given endpoint tensors are one-site injective, there exist $W\geq3$ and
     $\delta>0$ such that, for $p\in\{0,1\}$, $N\geq W$, and
@@ -456,6 +462,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     exterior registers.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_open_boundary_normalization,
         thm:mpo_mixed_open_active_sectors,
         thm:mpo_mixed_second_endpoint_comparison,

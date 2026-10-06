@@ -1,7 +1,35 @@
 # GLM23 whole-interval gap: source and validation checkpoint
 
-Checkpoint: 5 October 2026. This records a draft continuation and its exact
-local evidence; it is not a full-paper completion claim.
+Initial checkpoint: 5 October 2026. Historical compiler checkpoints below
+are retained without upgrading their evidence. The full proof checkpoint
+on 6 October is recorded next; this is not a full-paper completion claim.
+
+## Latest proof checkpoint: 6 October 2026, 01:36 UTC
+
+Head `0c51478b87ef711dc7e339cfa5a166456f0a20c5` passes the full Lean
+build, both new strict regression files, all three standard-axiom guards,
+style and declaration checks. The final uniform-path module compiled in
+9.0 seconds. The unchanged timing gate passed; six 25-second advisories
+remain, with maximum changed-module time 48 seconds below the 50-second
+failure threshold. No claim of zero advisory warnings is made.
+
+Run [37398080332](https://github.com/LionSR/TNLean/actions/runs/37398080332),
+build job `112058990825`, checked merge
+`5a364cfc2b717793730e9c3e81f0ab53f97fbcf3`. Its tree
+`b97968d93c0233f1e5c23194b247004d806f5f7d` exactly equals the proof
+head and local commit `0497edf559d6e508baae6b80e3f3224f047f172a`.
+The exact source/pin hashes are preserved in
+`2026-10-06_glm23_whole_interval_checked.json`.
+
+The guarded results allow only `propext`, `Classical.choice`, and
+`Quot.sound`. They cover the uniform closed-interval periodic gap, both
+endpoint open gaps, and continuous periodic kernel projection. The two
+strict regression files also check the theorem signatures without adding
+finite-window, supplied-gap, or kernel-continuity hypotheses.
+
+The full blueprint/browser job is still running at this proof checkpoint.
+Checked-marker documentation changes require fresh exact-head validation;
+the successful proof tree is kept distinct from that later final tree.
 
 ## Source assumptions and conclusion
 
@@ -9,7 +37,7 @@ Source context: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3,
 `Papers/2203.12563/REsubmission.tex`, Section 5, lines 1687–1692;
 the finite-window compactness argument follows arXiv:1010.3732, Appendix A.
 
-The candidate declaration
+The declaration
 `MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_path_gap`
 takes positive natural bond dimensions D₀,D₁ and the actual given tensors
 Aₚ : MPSTensor (Dₚ * Dₚ) Dₚ, each one-site injective. Its conclusion is one
@@ -215,3 +243,21 @@ An isolated exact threshold example passed the strict Lean options with
 exit zero. Its legacy Mathlib import emitted a deprecation warning; the
 production file's imports are unchanged. This checks the arithmetic
 coercion repair only, not the complete uniform-path module.
+
+### 2026-10-06 01:46 UTC: checked blueprint integration
+
+All eight engineering checks on the proof head `0c51478b` are now green,
+including complete blueprint/web/browser job `112058990789`. The two
+mathematical leaves now carry six checked statement markers and six checked
+proof markers, covering all 378 unique declaration references. No Lean
+source or hypothesis changes accompany these markers.
+
+Pinned formatting, all 49 reference/dependency occurrences, strict focused
+web and generated HTML checks pass. The marked 28-page PDF was rerendered;
+every changed page and all five Tenkz diagrams were visually inspected.
+There are no unresolved references, missing glyphs or overfull boxes. One
+readable, unclipped underfull proof line remains, with badness 1038.
+Local browser execution and a full-volume book PDF are not claimed.
+
+The checked-marker head requires a fresh full CI run. The green proof-head
+evidence above does not preempt that final-head validation.

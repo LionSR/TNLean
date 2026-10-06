@@ -1,0 +1,265 @@
+{
+  "scope": "GLM23 whole-interval square-physical injective mixed path; not full symmetric-phase classification",
+  "proof_head": "0c51478b87ef711dc7e339cfa5a166456f0a20c5",
+  "proof_tree": "b97968d93c0233f1e5c23194b247004d806f5f7d",
+  "tested_merge": "5a364cfc2b717793730e9c3e81f0ab53f97fbcf3",
+  "workflow_run": 37398080332,
+  "build_job": 112058990825,
+  "verified_at_utc": "2026-10-06T01:46:00Z",
+  "full_lean_build": "success",
+  "strict_new_regressions": "success",
+  "standard_axiom_guards": 3,
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "timing_gate": "success; 25-second advisories remain; maximum changed-module time 48 seconds, below the unchanged 50-second failure limit",
+  "blueprint_job": "112058990789: success, including full web and browser checks",
+  "pin_sha256": {
+    "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+    "lake-manifest.json": "a6ccb46404b164ab38d9c250f613bd902794d6e94436677764c7b610b7b82b18",
+    "tenkz.toml": "b47dd85f2a66ae5a809712f494b50176ada4ffb5809ec5cbc74012c851242e39"
+  },
+  "files": [
+    {
+      "path": "TNLean/MPS/Core/SquarePhysicalCoordinates.lean",
+      "sha256": "4bc2d69d57bfad4df4b506573347d7c30bcba9e2dec702ba61ab22d5811b6ddd",
+      "lines": 91,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/MPDO/PhysicalGibbsEmbedding.lean",
+      "sha256": "df6fde6eaf255e6a8af6874844a5201b81b19e9fa66149328245f0e4b342d308",
+      "lines": 446,
+      "new_relative_to_base": false,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/MPDO/TopologicalPhysicalGibbs.lean",
+      "sha256": "7a1ffcd4e504a5328435be6ecf1ea0b306a9cfdd75bd1c403a4790d250d9a0a9",
+      "lines": 678,
+      "new_relative_to_base": false,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/BoundedCongruenceGap.lean",
+      "sha256": "81bb3e0de99f02a78e3bff75f24aec74975fed68aad791e1cdfb150567192fcd",
+      "lines": 121,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/BoundedProjectionDeformation.lean",
+      "sha256": "e3bcc360a3e46c1a74568277709792806aaa105986e94496013749104c45db99",
+      "lines": 217,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/LocalEquivalenceBounds.lean",
+      "sha256": "e88204615c1b2f56ee327338f0a8bf9320383e4b5c463194b1f4855d5353ab58",
+      "lines": 149,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/SpectatorGapEquivalence.lean",
+      "sha256": "5b44a4a46bb4094590a4a8c0ba6dc6ae63868d5c4e49e499099cb84c5a1d8e25",
+      "lines": 143,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/BondProductSpectralGap.lean",
+      "sha256": "46fe1df336b4a922d085c2be7e0c8955ab3d4cad33ed8c7ee0da424646601ebf",
+      "lines": 143,
+      "new_relative_to_base": false,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/ExactMPSPhaseGaugeInvariance.lean",
+      "sha256": "a1d72b98c667735215909b189f3da6285d3a0cbd3a797e5200b90e058e6cc2a8",
+      "lines": 119,
+      "new_relative_to_base": false,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveBoundaryTransport.lean",
+      "sha256": "9dc053fbf4f0e9180b5eab15af24d656e0b22ba6851ec389d9b07cd5ac93a88e",
+      "lines": 749,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveConfigEquiv.lean",
+      "sha256": "02916c55cef0fcddd20cba3c9e8ff615f43d95085f47da2127f2736988481738",
+      "lines": 289,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveEdgeNormalization.lean",
+      "sha256": "5e169cf157c81e9473af9383b7cb7238f388250d35e213b1ee5f05d7be18bf24",
+      "lines": 692,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveEdgePlacement.lean",
+      "sha256": "faf560f28f995057a24521a7a527c0e25df5c75c2a16133aa05e935d7392af31",
+      "lines": 517,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveGapTransfer.lean",
+      "sha256": "16ec596e4e30e8c2f8130c3f5ff52f216c59a88f292cc7edaab0ff40fb589cda",
+      "lines": 119,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveHamiltonian.lean",
+      "sha256": "5ed1a369892023790fb027f33081d7fe4d61c2de33a0e41b13c1db471cce4091",
+      "lines": 552,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointBoundaryCoordinates.lean",
+      "sha256": "7fc0e92d26f6f6323bb709be2d7fd0b2d3a3bcf7f6c4d984b285664b4c11c2f6",
+      "lines": 84,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointBoundaryFactors.lean",
+      "sha256": "27434b4dccd7fda6d432bcd3d6564e1b5a01afaacc3e86e698f7abbf13b7a582",
+      "lines": 238,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointBoundaryNormBounds.lean",
+      "sha256": "cbc8a5da2b743437be3a2805eeff1fb546eaa8535d91a18073e8512f00e5dd7a",
+      "lines": 230,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointCoreEdgeSpectators.lean",
+      "sha256": "faae1b7f77be450e4cb396df311c39361070fe89526f7f729e9a49833964a034",
+      "lines": 202,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointCoreHamiltonianSpectators.lean",
+      "sha256": "25012d33a5cbac2f76a62ee14342a462454f34cb677a0c481f453a7b591d63c7",
+      "lines": 424,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointEdgeBoundaryTransport.lean",
+      "sha256": "57d01e89283dded5b139b85f11beb3d6704ad3a9d7c941ca7a2d75dd59f63e84",
+      "lines": 345,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointEdgeCompression.lean",
+      "sha256": "843266d7c2ed97f6206046742866ee6f54be7ddedf2920ecadfc7ed0e94c1c4f",
+      "lines": 631,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointEdgeProjectors.lean",
+      "sha256": "d44dfdcb7746e357beec540050162cb492ba5feb79a1f0b0d08eba33a5c18353",
+      "lines": 432,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointOpenGap.lean",
+      "sha256": "335c64288ec9f6dd3faf2a904c1a24a489729b416689cf1a8b89bdf4d6ac5f08",
+      "lines": 170,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointOpenGapContinuity.lean",
+      "sha256": "327f3107b31dc83d4578ae6f471a69a9fcb3d15d48c910db57c2c09aab8782dd",
+      "lines": 145,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointOpenSectors.lean",
+      "sha256": "a17c56a7b281421019ad9146ea2de8d84d08c1b736d110ebc0ea447d2773eb6d",
+      "lines": 585,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointPeriodicStateContinuity.lean",
+      "sha256": "1ffb1ff0683e52e2957a02e4bcf5e6c64cab4989f07b6e7ca5a0dc7bc7d71ac8",
+      "lines": 309,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointRightComparison.lean",
+      "sha256": "e29fcaafea2133dde95323655ecf8b93617e2ec27ed88d632bb5a8b7cc87eab4",
+      "lines": 139,
+      "new_relative_to_base": false,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointRightOpenGap.lean",
+      "sha256": "d92976eedd34225eb7127498da247aa5a9bd309d34697770289ba9671cc92d47",
+      "lines": 85,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointRightOpenTransport.lean",
+      "sha256": "cc5c354ba8853aedf73de2ef7065bd4375ad4c013e22e2bb29ec543efc85158c",
+      "lines": 181,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointUniformPathGap.lean",
+      "sha256": "1e3a41f27984228b892816b31f04549fcd3bcd818564792d6e643a0858c7f440",
+      "lines": 212,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointZeroSectorGap.lean",
+      "sha256": "fdbc8820629a49c9e9a0f72e35e7394b1d065ef768ebdbe28e48124c238fd3f9",
+      "lines": 226,
+      "new_relative_to_base": true,
+      "role": "production"
+    },
+    {
+      "path": "TNLeanTest/MixedEndpointOpenGap.lean",
+      "sha256": "9eb6db5f10470210737bc64066ccfea6cb26e23d77fe0ba303e101e8a44ada9d",
+      "lines": 38,
+      "new_relative_to_base": true,
+      "role": "regression"
+    },
+    {
+      "path": "TNLeanTest/MixedEndpointUniformPathGap.lean",
+      "sha256": "18b304f56aa110cfc1beb0865cf06c1371f78ff522d8a6d8fa56457d3805661c",
+      "lines": 46,
+      "new_relative_to_base": true,
+      "role": "regression"
+    }
+  ],
+  "all_eight_engineering_checks": "success on the proof head"
+}
