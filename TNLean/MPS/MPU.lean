@@ -85,6 +85,8 @@ import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SimpleTensorProduct
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceDecompositionUniqueness
+import TNLean.MPS.MPU.SourceFactorChoice
+import TNLean.MPS.MPU.SourceFactorChoiceGates
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SourceFactors
 import TNLean.MPS.MPU.SourceFactorsTensorProduct

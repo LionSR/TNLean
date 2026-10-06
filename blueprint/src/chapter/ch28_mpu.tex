@@ -2808,10 +2808,15 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceY₁_apply, MPOTensor.sourceZ₁_apply,
         MPOTensor.sourceX₂_apply, MPOTensor.sourceY₂_apply,
         MPOTensor.sourceZ₂_apply, MPOTensor.SourceFactors,
-        MPOTensor.sourceFactors}
+        MPOTensor.sourceFactors, MPOTensor.sourceFactorsOf, MPOTensor.sourceGramOf,
+        MPOTensor.sourceX₁Of, MPOTensor.sourceY₁Of, MPOTensor.sourceZ₁Of,
+        MPOTensor.sourceX₂Of, MPOTensor.sourceY₂Of, MPOTensor.sourceZ₂Of,
+        MPOTensor.sourceFactors_eq_sourceFactorsOf}
     \leanok
     \uses{def:mpu_source_svd_data, thm:mpu_source_gram_posdef}
-    Let $\rho\in\MN{D}$ be positive definite. Define
+    Let $\rho\in\MN{D}$ be positive definite and let compact decompositions of
+    the two source cuts be given (any; the chosen ones of
+    Definition~\ref{def:mpu_source_svd_data} are one value). Define
     \begin{align}
         X_1 & =V_1^\dagger A^{-1/2},
             & Y_1                    & =A^{1/2}D_1U_1,
@@ -2850,6 +2855,90 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         X_2^\dagger X_2 & =V_2V_2^\dagger=\Id_\ell,             \\
         Y_2Z_2          & =D_2U_2U_2^\dagger D_2^{-1}=\Id_\ell.
     \end{align}
+\end{proof}
+
+\begin{theorem}[Change of decomposition]
+    \label{thm:mpu_source_factors_change_of_svd}
+    \lean{MPOTensor.SourceCutSVD.conjTranspose_mul_V_eq,
+        MPOTensor.SourceCutSVD.conjTranspose_mul_U_eq,
+        MPOTensor.SourceCutSVD.relatingUnitary_mul_V,
+        MPOTensor.SourceCutSVD.exists_unitary_relating,
+        MPOTensor.SourceCutSVD.relatingUnitary,
+        MPOTensor.sourceX₁Of_eq_of_V_eq, MPOTensor.sourceY₁Of_eq_of_V_eq,
+        MPOTensor.sourceZ₁Of_eq_of_V_eq, MPOTensor.sourceX₂Of_eq_of_V_eq,
+        MPOTensor.sourceY₂Of_eq_of_V_eq, MPOTensor.sourceZ₂Of_eq_of_V_eq,
+        MPOTensor.sourceU_sourceV_sourceFactorsOf_relatingUnitary,
+        MPOTensor.sourceU_sourceFactorsOf_eq,
+        Matrix.IsHermitian.cfc_eq_of_eq_unitary_conj}
+    \leanok
+    \uses{def:mpu_source_svd_data, def:mpu_weighted_source_factors, def:mpu_source_uv}
+    Two compact decompositions $M=V^\dagger DU=V'^\dagger D'U'$ of one source cut
+    have $V^\dagger V=V'^\dagger V'$ and $U^\dagger U=U'^\dagger U'$, and $x=V'V^\dagger$ is a
+    unitary of the intermediate space with $V'=xV$ and $D'U'=xDU$. With the
+    unitaries $x_1$, $x_2$ of the two cuts, the factors built from the second
+    decompositions are $X_i'=X_ix_i^\dagger$, $Y_i'=x_iY_i$, $Z_i'=Z_ix_i^\dagger$, and
+    the gates are $u'=(x_2\otimes x_1)u$ and $v'=v(x_1^\dagger\otimes x_2^\dagger)$. The
+    source does not fix a decomposition (line 479: "using a singular value
+    decomposition, we can write"); this theorem shows that none of its gate
+    statements depends on the choice.
+    % Source lines: paper_v2.tex 479--502; the theorem itself is not in the source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    From $UU^\dagger=\Id$ and the invertibility of $D$, $V^\dagger=MU^\dagger D^{-1}$,
+    and $V'^\dagger V'M=M$; hence $V'^\dagger V'\,V^\dagger V=V^\dagger V$, and by symmetry
+    the other product; both projections are Hermitian, so they are equal. Then
+    $x=V'V^\dagger$ is unitary with $xV=V'$ and $D'U'=V'M=xVM=xDU$. The compressed
+    metric transforms as $A'=x_1Ax_1^\dagger$, and the continuous functional
+    calculus commutes with a unitary conjugation, so $A'^{\pm1/2}=x_1A^{\pm1/2}x_1^\dagger$;
+    the factor and gate identities follow by substitution.
+\end{proof}
+
+\begin{theorem}[The gate statements hold for every decomposition]
+    \label{thm:mpu_gate_statements_any_svd}
+    \lean{MPOTensor.TwoSiteStandardFormData.ofGateGauges,
+        MPOTensor.IsMPUCanonicalFormII.sourceU_sourceFactorsOf_isIsometry,
+        MPOTensor.IsMPUCanonicalFormII.isMPUSimple_iff_sourceU_sourceFactorsOf_isUnitaryBetween,
+        MPOTensor.IsMPUCanonicalFormII.isMPUSimple_iff_sourceV_sourceFactorsOf_isUnitaryBetween,
+        MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_sourceFactorsOf,
+        MPOTensor.IsMPUCanonicalFormII.exists_source_gate_unitary_gauges_of_mpo_eq_sourceFactorsOf,
+        MPOTensor.SourceFactors.mpo_two_reindex_eq_sourceV_mul_sourceU_swap,
+        MPOTensor.exists_source_factor_unitary_gauges_of_virtualSandwich,
+        MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges_sourceFactorsOf,
+        MPOTensor.IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges_sourceFactorsOf}
+    \leanok
+    \uses{thm:mpu_source_factors_change_of_svd, lemuisometry, ThmFund1, SF, FundamentalMPU,
+        thm:mpu_fundamental_gates_necessity, thm:mpu_fundamental_gates_sufficiency}
+    Let $\mathcal U$ be a matrix product unitary in canonical form II with
+    $\rho$ its fixed matrix, and let the factors and gates be built from any
+    compact decompositions of its two source cuts. Then $u$ is an isometry;
+    $\mathcal U$ is simple if and only if $u$ is unitary, if and only if $v$ is
+    unitary; if $\mathcal U$ is simple, its two-site block carries standard-form
+    data with these gates; and if $\mathcal U$, $\mathcal V$ are simple, in
+    canonical form II, of the same bond dimension, with equal periodic
+    operators at every length greater than one, then for any decompositions of the cuts of each there are
+    identifications of the rank spaces and unitaries $x$, $y$ with
+    $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ and
+    $v_{\mathcal V}=v_{\mathcal U}(y^\dagger\otimes x^\dagger)$; conversely, gates so
+    related give equal operators on every ring of even length. The two-site
+    operator is $v$ times the swapped $u$ for the factors of any decomposition,
+    and the factor relations under a bond unitary hold for any decompositions
+    of the two tensors. Standard-form data transport along gate gauges: from data with gates $u,v$ and unitaries
+    $x$, $y$ one obtains data with gates $(x\otimes y)u$, $v(y^\dagger\otimes x^\dagger)$.
+    % Source: the source never fixes a decomposition (line 479); these are its
+    % gate statements, lines 545--622 and 624--648, for every choice.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_factors_change_of_svd}
+    The gates of any choice are those of the fixed choice multiplied by the
+    unitaries $x_2\otimes x_1$ and $x_1^\dagger\otimes x_2^\dagger$; isometry and
+    unitarity are preserved, the standard-form data transport along the gauge,
+    and the gate relation of the fundamental theorem composes with the
+    change-of-decomposition unitaries of each tensor.
 \end{proof}
 
 \begin{theorem}[Source-cut factorizations]
