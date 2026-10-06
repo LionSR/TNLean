@@ -490,6 +490,20 @@ jobs:
               "$source"
           done
 
+      - name: Check labelled open coefficients early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.LabelledOpenCoefficient:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          for source in TNLean/PEPS/LabelledOpenCoefficient.lean \
+              TNLeanTest/LabelledOpenCoefficient.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
       # Export only the explicit QIC allowlist and hashes, never the whole workspace.

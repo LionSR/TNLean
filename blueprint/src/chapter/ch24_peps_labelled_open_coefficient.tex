@@ -1,0 +1,37 @@
+% SCP10 arXiv1001.3807v3, Lemma 6.14: finite-coordinate bridge only.
+\begin{definition}[Open coefficients on labelled bonds]
+    \label{def:peps_labelled_open_coefficient}
+    \lean{TNLean.PEPS.DependentBondNetwork.RegionBoundaryEndpoint,
+        TNLean.PEPS.DependentBondNetwork.RegionSiteConfig,
+        TNLean.PEPS.DependentBondNetwork.joinRegionConfig,
+        TNLean.PEPS.DependentBondNetwork.openBondFactor,
+        TNLean.PEPS.DependentBondNetwork.openCoefficient,
+        TNLean.PEPS.DependentBondNetwork.openBoundaryContraction,
+        TNLean.PEPS.DependentBondNetwork.deltaExteriorConfig,
+        TNLean.PEPS.DependentBondNetwork.deltaCompletedTensor,
+        TNLean.PEPS.DependentBondNetwork.internalBondMatrices}
+    \notready
+    For a region $R$ in a finite directed multigraph, assign an independent
+    virtual index to every incidence at every vertex of $R$. Fix the indices
+    on region-side incidences of crossing bonds to boundary data $\theta$.
+    Multiply the region site coefficients and the prescribed matrix entries
+    on internal bonds, and sum the remaining indices. Pair this coefficient
+    with any joint boundary tensor by summing over $\theta$.
+\end{definition}
+\begin{theorem}[Exact delta-exterior completion]
+    \label{thm:peps_labelled_open_delta}
+    \lean{TNLean.PEPS.DependentBondNetwork.network_deltaCompletedTensor}
+    \notready
+    \uses{def:peps_labelled_open_coefficient}
+    Fix a virtual label $v_0$. Replace every exterior site by a delta tensor
+    fixing each incidence opposite $R$ to its prescribed boundary label,
+    and each other exterior incidence to $v_0$. Retain the internal bond
+    matrices and insert identity matrices on all other bonds. The closed
+    contraction equals the open coefficient exactly, with no scalar factor.
+\end{theorem}
+\begin{proof}
+    Split the site assignments into region and exterior assignments.
+    The exterior deltas leave one assignment. Identity matrices on crossing
+    bonds impose the boundary constraints, while those on exterior bonds
+    contribute one. The remaining sum is the defining open coefficient.
+\end{proof}
