@@ -1,0 +1,180 @@
+{
+  "base_commit": "3e1cdad36f82c24a1de80f561cf4a2c269de7b0c",
+  "scope": "Actual full two-site support inclusion, parent projection reduction, complement penalties, and exact supported isometric compression. No chain or cropped-edge identification or uniform gap.",
+  "source_sha256": {
+    "TNLean/MPS/ParentHamiltonian/Martingale/SupportedParentProjection.lean": "e58a0193a3e32ca71d2c59fab9b820ae576c693989e323ca977dff347199f45e",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointFrameSupport.lean": "5acc14ea255945d0b5f10cac1bbbc2a84b6ae9a7d5792e2c1553293735615c84",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointFrameReduction.lean": "882582999b3a411ad2e798da646f756ea12577b41d9c6e6e5944bdb9441bf347",
+    "TNLeanTest/JointMixedEndpointFrameReduction.lean": "7463460261c8fcbb3c6c7049e52a1473ae20c0e244ebf34617dac3b38b0601b0",
+    "blueprint/src/chapter/ch30_mpo_joint_frame_reduction.tex": "6d5b6e8c80699a3054a831724303d9fee7d41217b5e018d3440b2b8f13347527"
+  },
+  "strict_options": [
+    "autoImplicit=false",
+    "relaxedAutoImplicit=false",
+    "pp.unicode.fun=true",
+    "maxSynthPendingDepth=3",
+    "linter.mathlibStandardSet=true",
+    "warningAsError=true"
+  ],
+  "threads": 1,
+  "artifact_or_cache_writes": false,
+  "complete_frame_support_module": {
+    "status": "passed",
+    "elapsed_seconds": 7,
+    "log": "/workspace/shared/glm23-joint-frame-support-probe-3.log",
+    "log_bytes": 0
+  },
+  "complete_generic_supported_projection_bodies": {
+    "status": "passed",
+    "elapsed_seconds": 20,
+    "log": "/workspace/shared/glm23-supported-parent-probe-5.log",
+    "log_bytes": 0,
+    "scope": "Complete unchanged IsometricCompressionGap and complete new SupportedParentProjection source bodies in one section-scoped bundle."
+  },
+  "generic_under_physical_imports": {
+    "status": "passed",
+    "elapsed_seconds": 16,
+    "log": "/workspace/shared/glm23-supported-parent-physical-imports-probe-1.log",
+    "log_bytes": 0
+  },
+  "actual_reduction_bundle": {
+    "status": "production_bodies_passed",
+    "elapsed_seconds": 40,
+    "log": "/workspace/shared/glm23-joint-frame-probe-4.log",
+    "scope": "Complete source bodies of IsometricCompressionGap, SupportedParentProjection, JointMixedEndpointFrameSupport, JointMixedEndpointFrameReduction, and full focused regression. All production declarations, all regression mathematical assertions, and four standard dependency guards were accepted. The only diagnostic was one unused simp argument in a regression proof.",
+    "log_production_errors": 0,
+    "regression_linter_errors": 1,
+    "resource_limit_changes": false
+  },
+  "strict_regression": {
+    "status": "final_rerun_inconclusive",
+    "guard_count": 4,
+    "expected_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "guards_executed": "All four guards passed in the 40-second complete-source probe; their source bodies and all referenced production bodies are unchanged.",
+    "last_source_change": "Removed the one redundant PiLp.single_apply simp argument from the proper-frame nonsurjectivity regression.",
+    "final_probe": {
+      "exit_code": 124,
+      "elapsed_seconds": 61,
+      "external_wall_timeout_seconds": 60,
+      "log": "/workspace/shared/glm23-joint-frame-probe-5.log",
+      "log_bytes": 0,
+      "meaning": "No final strict file success is claimed."
+    }
+  },
+  "native_package_build": {
+    "status": "not_run",
+    "reason": "Local heavy build handle unavailable; native module validation is coordinated separately."
+  },
+  "static_checks": {
+    "forbidden_proof_tokens": "passed",
+    "whitespace": "passed",
+    "oversized_files": "passed",
+    "noncomment_line_lengths": "passed",
+    "latexindent_3_24_7": "passed",
+    "global_blueprint_sync": "passed",
+    "changed_declaration_reverse_coverage": "passed",
+    "shared_router_or_ci_edits": false,
+    "public_declarations": 34
+  },
+  "numerical_consistency": {
+    "seed": 20261006,
+    "D0": [
+      2,
+      1
+    ],
+    "D1": [
+      1,
+      2
+    ],
+    "physical_alphabet": 22,
+    "left_frame_shape": [
+      22,
+      9
+    ],
+    "right_frame_shape": [
+      22,
+      9
+    ],
+    "actual_support_rank": 18,
+    "joint_cross_label_gram_abs": 4.965831150153251,
+    "trace_factor_error": 3.972054645195637e-15,
+    "polar_factor_error": 1.1378567399694855e-14,
+    "support_absorption_error": 3.1480506981915074e-15,
+    "parent_commutator_error": 3.911529621422604e-15,
+    "complement_identity_error": 3.3039725376254366e-15,
+    "penalty_min_eigenvalue": -1.7638267160609886e-15,
+    "compressed_actual_projection_error": 7.540377585528438e-15
+  },
+  "focused_render": {
+    "source_head": "10e81da6b338aeda1ee62d0a52936ae486bbc801",
+    "html_pages": [
+      "ch-mpo_symmetry_basics.html",
+      "sect0001.html",
+      "index.html",
+      "dep_graph_document.html"
+    ],
+    "missing_local_anchors": [],
+    "duplicate_ids": [],
+    "sentinels": [],
+    "leaf_labels": 11,
+    "missing_leaf_labels": [],
+    "tenkz_svg": [
+      {
+        "file": "tenkz-3b5e02d25d1695a0.svg",
+        "paths": 19,
+        "viewBox": "0 0 119.68 56.7"
+      },
+      {
+        "file": "tenkz-ca706fdf6d9786cb.svg",
+        "paths": 6,
+        "viewBox": "0 0 32.6 51.89"
+      },
+      {
+        "file": "tenkz-8800f919acf4b6e9.svg",
+        "paths": 14,
+        "viewBox": "0 0 88.5 42.04"
+      }
+    ],
+    "native_pdf_pages": 7,
+    "inspected_physical_pdf_pages": [
+      3,
+      4
+    ],
+    "native_log_warnings": [],
+    "source_leaf_sha256": {
+      "ch30_mpo_joint_frame_reduction.tex": "6d5b6e8c80699a3054a831724303d9fee7d41217b5e018d3440b2b8f13347527"
+    },
+    "checked_markers": {
+      "ch30_mpo_joint_frame_reduction.tex": 0
+    },
+    "formatter_version": "3.24.7",
+    "formatter_byte_comparison": "passed",
+    "native_tenkz_audit": "New two-site contraction picture rendered to SVG and PDF; source port signature and PDF visually inspected.",
+    "browser_visual_inspection": false,
+    "source_sync_passed": true
+  },
+  "integrated_base_commit": "7b6bbfab322bb2dbd2571606d4f4f11db060ceac",
+  "final_source_bundle": {
+    "root": "/workspace/shared/TNLean-joint-frame-reduction",
+    "source_sha256": {
+      "TNLean/MPS/ParentHamiltonian/Martingale/IsometricCompressionGap.lean": "d5ab8dedd0d22bb9027beca83617c389efcd424e6d2197b507dad9b2bb57ceab",
+      "TNLean/MPS/ParentHamiltonian/Martingale/SupportedParentProjection.lean": "e58a0193a3e32ca71d2c59fab9b820ae576c693989e323ca977dff347199f45e",
+      "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointFrameSupport.lean": "5acc14ea255945d0b5f10cac1bbbc2a84b6ae9a7d5792e2c1553293735615c84",
+      "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointFrameReduction.lean": "882582999b3a411ad2e798da646f756ea12577b41d9c6e6e5944bdb9441bf347",
+      "TNLeanTest/JointMixedEndpointFrameReduction.lean": "7463460261c8fcbb3c6c7049e52a1473ae20c0e244ebf34617dac3b38b0601b0"
+    },
+    "external_imports": [
+      "Mathlib.Analysis.InnerProductSpace.Adjoint",
+      "TNLean.Algebra.IsometricProjection",
+      "Mathlib.Analysis.InnerProductSpace.Positive",
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointBoundaryColumns",
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary",
+      "Mathlib.LinearAlgebra.Matrix.Kronecker"
+    ],
+    "bundle_sha256": "bf778e64f7e7a50b78517b1d30ff51abe046c05aecdfbb57ba4e9183606b025f"
+  }
+}
