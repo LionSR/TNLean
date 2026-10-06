@@ -5,8 +5,6 @@ boundary-frame reduction. Labels overlap physically; the second endpoint
 fibers may vanish; empty labels and zero first fibers give the zero actual
 coefficient map. No kernel-identification premise is supplied. -/
 
-set_option linter.hashCommand false
-
 open scoped Matrix BigOperators InnerProductSpace ComplexOrder
 open MPSTensor MPSTensor.MPOSymmetry
 
@@ -161,6 +159,10 @@ example :
     (⊥ : Submodule ℂ ℂ).subtypeₗᵢ.ker_compression_one_sub_starProjection_of_le_range
       (⊥ : Submodule ℂ ℂ) bot_le
 
+section AxiomChecks
+
+set_option linter.hashCommand false
+
 /--
 info: 'MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_jointMixed_eq_boundaryColumns'
 depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -188,3 +190,5 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.MPOSymmetry.ker_jointMixedTwoSitePolar_compression_parentInteraction
+
+end AxiomChecks

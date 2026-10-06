@@ -1,0 +1,223 @@
+% Source: GLM23v3, REsubmission.tex, lines 1695--1777.
+% New declarations are source checkpoints only; native validation is pending.
+
+\subsection{Actual cropped interactions and boundary normalization}
+\label{sec:mpo_joint_cropped_compression}
+
+Let $S=\operatorname{ran}\Gamma'_2$ and $h=I-P_S$ be the actual
+extended support and local interaction at parameter zero. Retain the
+joint polar decompositions $L=U_LP_L$ and $R=U_RP_R$.
+Write $\iota_0:\C^{d_0}\to\C^{\mathcal I}$ for the coordinate
+inclusion of the entire shared first physical alphabet. The three other
+parts of $\mathcal I$ are retained in the ambient physical space.
+
+\begin{theorem}[Compression to a reducing coordinate space]
+    \label{thm:mpo_reducing_parent_compression}
+    \lean{LinearIsometry.isSymmetricProjection_compression_of_commute,
+        LinearIsometry.ker_compression_one_sub_starProjection_of_commute,
+        LinearIsometry.compression_one_sub_starProjection_of_commute,
+        LinearIsometry.compression_comp}
+    Let $U:E\to F$ be an isometry of finite-dimensional complex Hilbert
+    spaces. If $UU^*$ commutes with an orthogonal projection $H$, then
+    $U^*HU$ is an orthogonal projection. In particular, if $H=I-P_S$,
+    \begin{align}
+        \ker(U^*HU) & =U^*S,
+                    & U^*HU  & =I-P_{U^*S}.
+        \label{eq:mpo_reducing_compression}
+    \end{align}
+    No inclusion $S\subseteq\operatorname{ran}U$ is required.
+    For a further isometry $V:F\to G$ and an operator $K$ on $G$,
+    $(VU)^*K(VU)=U^*(V^*KV)U$.
+\end{theorem}
+\begin{proof}
+    The relation $U(U^*HU)=HU$ gives
+    $U(U^*HU)^2=H^2U=HU=U(U^*HU)$. Injectivity of $U$ proves
+    idempotence; taking adjoints proves symmetry. The reducing-kernel
+    identity gives $\ker(U^*HU)=U^*\ker H=U^*S$. A symmetric
+    projection is determined by its kernel, proving
+    (\ref{eq:mpo_reducing_compression}). The composition formula follows
+    from $(VU)^*=U^*V^*$.
+\end{proof}
+
+\begin{definition}[Physical restrictions beside the boundary]
+    \label{def:mpo_joint_physical_crop}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgePhysicalEmbedding,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgePhysicalEmbedding,
+        MPSTensor.MPOSymmetry.jointMixedFirstEdgePhysicalIsometry,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgePhysicalIsometry}
+    Define $E_L=I\otimes\iota_0$ and $E_R=\iota_0\otimes I$.
+    Their coordinate embeddings send $(i,k)$ to $(i,\iota_0(k))$
+    and $(k,j)$ to $(\iota_0(k),j)$, respectively. They preserve the
+    norm, including when their domains are zero-dimensional.
+\end{definition}
+
+\begin{theorem}[Physical restriction reduces the actual interaction]
+    \label{thm:mpo_joint_physical_crop_reduces}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgePhysicalIsometry_adjoint_apply,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgePhysicalIsometry_adjoint_apply,
+        MPSTensor.MPOSymmetry.jointMixedFirstEdgePhysicalIsometry_comp_adjoint,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgePhysicalIsometry_comp_adjoint,
+        MPSTensor.MPOSymmetry.jointMixedFirstEdgePhysicalIsometry_commute_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgePhysicalIsometry_commute_parentInteraction}
+    \uses{def:mpo_joint_physical_crop}
+    Let $Q_{00}^{(s)}$ be the product of the row-zero and column-zero
+    phase projections at site $s\in\{0,1\}$. Then
+    \begin{align}
+        E_LE_L^* & =Q_{00}^{(1)}, & E_RE_R^*         & =Q_{00}^{(0)},
+                 & [E_LE_L^*,h]   & =[E_RE_R^*,h]=0.
+        \label{eq:mpo_joint_crop_reduces}
+    \end{align}
+    The adjoints read coefficients:
+    $(E_L^*v)_{i,k}=v_{i,\iota_0(k)}$ and
+    $(E_R^*v)_{k,j}=v_{\iota_0(k),j}$.
+\end{theorem}
+\begin{proof}
+    The coordinate range indicator is one precisely when the relevant
+    letter has both phase weights equal to one. Thus $E_LE_L^*$ and
+    $E_RE_R^*$ equal the stated products. Each phase projection
+    commutes with $P_S$, so their products commute with $h$.
+    This argument allows nonzero components of $S$ outside either
+    physical restriction.
+\end{proof}
+
+\begin{definition}[The cropped coefficient supports]
+    \label{def:mpo_joint_cropped_support}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeCroppedSupportES,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgeCroppedSupportES}
+    Let $B_L(X)_{i,k}=\Gamma'_2(X)_{i,\iota_0(k)}$ and
+    $B_R(X)_{k,j}=\Gamma'_2(X)_{\iota_0(k),j}$, and set
+    $S_L=\operatorname{ran}B_L$ and $S_R=\operatorname{ran}B_R$.
+\end{definition}
+
+\begin{theorem}[Actual physically restricted kernels]
+    \label{thm:mpo_joint_physical_crop_kernel}
+    \lean{MPSTensor.MPOSymmetry.map_jointMixedSupport_firstPhysicalAdjoint,
+        MPSTensor.MPOSymmetry.map_jointMixedSupport_lastPhysicalAdjoint,
+        MPSTensor.MPOSymmetry.jointMixedFirstPhysical_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedLastPhysical_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.ker_jointMixedFirstPhysical_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.ker_jointMixedLastPhysical_compression_parentInteraction}
+    \uses{def:mpo_joint_cropped_support}
+    The exact support images and actual restricted interactions satisfy
+    \begin{align}
+        E_L^*S & =S_L, & E_L^*hE_L & =I-P_{S_L}, & \ker(E_L^*hE_L) & =S_L, \\
+        E_R^*S & =S_R, & E_R^*hE_R & =I-P_{S_R}, & \ker(E_R^*hE_R) & =S_R.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_physical_crop_reduces,thm:mpo_reducing_parent_compression}
+    Applying either adjoint to $\Gamma'_2(X)$ gives its defining cropped
+    coefficient vector. Conversely every such vector uses that same
+    boundary $X$, proving both range equalities. Apply
+    (\ref{eq:mpo_reducing_compression}) with the commutators from
+    (\ref{eq:mpo_joint_crop_reduces}).
+\end{proof}
+
+\begin{definition}[The boundary polar restrictions]
+    \label{def:mpo_joint_cropped_polar_isometries}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgePolarIsometry,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgePolarIsometry,
+        MPSTensor.MPOSymmetry.jointMixedFirstEdgeIsometry,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgeIsometry}
+    Assume each endpoint family jointly spans its direct sum of block
+    algebras in one physical letter. The joint polar factors are
+    isometries. Set $F_L=U_L\otimes I_{d_0}$,
+    $F_R=I_{d_0}\otimes U_R$, and
+    $J_L=E_LF_L=U_L\otimes\iota_0$,
+    $J_R=E_RF_R=\iota_0\otimes U_R$.
+\end{definition}
+
+\begin{theorem}[The cropped support lies in the polar range]
+    \label{thm:mpo_joint_cropped_polar_support}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeCroppedSupport_le_polarRange,
+        MPSTensor.MPOSymmetry.jointMixedLastEdgeCroppedSupport_le_polarRange,
+        MPSTensor.MPOSymmetry.map_jointMixedFirstCroppedSupport_polarAdjoint,
+        MPSTensor.MPOSymmetry.map_jointMixedLastCroppedSupport_polarAdjoint}
+    \uses{def:mpo_joint_cropped_polar_isometries,def:mpo_joint_cropped_support}
+    Let $\widetilde S_L$ and $\widetilde S_R$ be the joint compressed
+    coefficient supports. Then
+    $S_L\subseteq\operatorname{ran}F_L$,
+    $S_R\subseteq\operatorname{ran}F_R$,
+    $F_L^*S_L=\widetilde S_L$, and $F_R^*S_R=\widetilde S_R$.
+\end{theorem}
+\begin{proof}
+    The exact coefficient identities are
+    $B_L(X)=(L\otimes I)\Phi_L(V^*X)$ and
+    $B_R(X)=(I\otimes R)\Phi_R(XV)$.
+    Substitute $L=U_LP_L$ and $R=U_RP_R$ to obtain the range
+    inclusions. Applying the Hilbert adjoints yields exactly the
+    defining compressed maps, in both directions on their ranges.
+\end{proof}
+
+The polar identity on the first boundary has the same open legs on
+both sides; $\beta,\gamma$ index the entire joint boundary space.
+The positive factor may mix distinct block labels.
+\begin{tenkzequation}
+    % Formula: L_{i,beta} = sum_gamma (U_L)_{i,gamma} (P_L)_{gamma,beta}.
+    % Source: GLM23v3, REsubmission.tex, lines 1704--1754.
+    % Open legs: virtual beta west; physical i north.
+    % No bulk physical leg is transformed.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=L, skin=box, size=l,
+            ports={180:virtual:$\beta$, 90:physical:$i$}]{L}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=P, skin=box, size=l,
+            ports={180:virtual:$\beta$, 0:virtual}]{P_L}
+        \tn[at=(1,2), name=U, skin=box, size=l,
+            ports={180:virtual, 90:physical:$i$}]{U_L}
+        \tnwire{P.0}{U.180}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[Actual boundary compression and normalized constraints]
+    \label{thm:mpo_joint_actual_cropped_compression}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdge_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedLastEdge_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.ker_jointMixedFirstEdge_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.ker_jointMixedLastEdge_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedFirstEdge_normalize_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedLastEdge_normalize_compression_parentInteraction}
+    \uses{def:mpo_joint_cropped_polar_isometries}
+    The actual local interactions satisfy
+    \begin{align}
+        J_L^*hJ_L & =I-P_{\widetilde S_L},
+                  & \ker(J_L^*hJ_L)        & =\widetilde S_L.
+        \label{eq:mpo_joint_actual_compression}
+    \end{align}
+    \begin{align}
+        J_R^*hJ_R & =I-P_{\widetilde S_R},
+                  & \ker(J_R^*hJ_R)        & =\widetilde S_R.
+        \label{eq:mpo_joint_actual_compression_right}
+    \end{align}
+    Let $e_L=P_L^{-1}\otimes I_{d_0}$ and
+    $e_R=I_{d_0}\otimes P_R^{-1}$. If $T_L,T_R$ are the one-sided
+    core supports formed from the original $A_0$, then the canonical
+    constraints with normalized kernels are $P_{T_L^\perp}$ and
+    $P_{T_R^\perp}$. Explicitly,
+    \begin{align}
+        P_{(e_L\ker(J_L^*hJ_L))^\perp} & =P_{T_L^\perp},
+                                       & P_{(e_R\ker(J_R^*hJ_R))^\perp} & =P_{T_R^\perp}.
+        \label{eq:mpo_joint_actual_normalization}
+    \end{align}
+    These identities are valid for empty label sets and zero-dimensional
+    fibers. For a chain of two sites, both boundary changes act on its
+    single interaction through $U_L\otimes U_R$; the two cropped
+    descriptions are not summed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_physical_crop_kernel,
+        thm:mpo_joint_cropped_polar_support,thm:mpo_reducing_parent_compression}
+    Composition of compressions gives
+    $J_L^*hJ_L=F_L^*(I-P_{S_L})F_L$.
+    Since $S_L\subseteq\operatorname{ran}F_L$, this equals
+    $I-P_{F_L^*S_L}=I-P_{\widetilde S_L}$; the reflected argument
+    gives the last edge. Taking kernels proves the remaining equalities
+    in (\ref{eq:mpo_joint_actual_compression}) and
+    (\ref{eq:mpo_joint_actual_compression_right}). The established
+    support normalizations $e_L\widetilde S_L=T_L$ and
+    $e_R\widetilde S_R=T_R$ give
+    (\ref{eq:mpo_joint_actual_normalization}).
+\end{proof}

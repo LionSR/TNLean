@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreEdges
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap
+import TNLean.MPS.ParentHamiltonian.Martingale.IsometricConjugationGap
 
 /-!
 # The common ordered-pair core of the normalized joint constraint sum
@@ -325,43 +326,6 @@ theorem jointEndpointNormalizedSum_conj_coreSpectators
       (fun q ↦ (jointEndpointCoreHamiltonian A n q).toContinuousLinearMap) (U (U.symm v)) at h
   simpa only [U.apply_symm_apply] using h
 
-private theorem norm_gap_iff_of_isometric_conj
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F]
-    (U : E ≃ₗᵢ[ℂ] F) (P : E →ₗ[ℂ] E) (Q : F →ₗ[ℂ] F)
-    (hPQ : U.toLinearEquiv.conj P = Q) (δ : ℝ) :
-    (∀ x ∈ (LinearMap.ker P)ᗮ, δ * ‖x‖ ≤ ‖P x‖) ↔
-      ∀ y ∈ (LinearMap.ker Q)ᗮ, δ * ‖y‖ ≤ ‖Q y‖ := by
-  have hintertwine (x : E) : U (P x) = Q (U x) := by
-    have h := LinearMap.congr_fun hPQ (U x)
-    change U (P (U.symm (U x))) = Q (U x) at h
-    simpa only [U.symm_apply_apply] using h
-  have hker (x : E) : x ∈ LinearMap.ker P ↔ U x ∈ LinearMap.ker Q := by
-    change P x = 0 ↔ Q (U x) = 0
-    rw [← hintertwine]
-    exact U.map_eq_zero_iff.symm
-  have horth (x : E) : x ∈ (LinearMap.ker P)ᗮ ↔ U x ∈ (LinearMap.ker Q)ᗮ := by
-    constructor
-    · intro hx
-      apply ((LinearMap.ker Q).mem_orthogonal (U x)).mpr
-      intro y hy
-      obtain ⟨z, rfl⟩ := U.surjective y
-      rw [U.inner_map_map]
-      exact ((LinearMap.ker P).mem_orthogonal x).mp hx z ((hker z).mpr hy)
-    · intro hx
-      apply ((LinearMap.ker P).mem_orthogonal x).mpr
-      intro z hz
-      simpa only [U.inner_map_map] using
-        ((LinearMap.ker Q).mem_orthogonal (U x)).mp hx (U z) ((hker z).mp hz)
-  constructor
-  · intro hGap y hy
-    obtain ⟨x, rfl⟩ := U.surjective y
-    rw [← hintertwine, U.norm_map, U.norm_map]
-    exact hGap x ((horth x).mpr hy)
-  · intro hGap x hx
-    have h := hGap (U x) ((horth x).mp hx)
-    simpa only [← hintertwine x, U.norm_map] using h
-
 /-- Canonical and enlarged exterior multiplicities give exactly the same
 nonnegative norm gap for the explicitly constructed normalized constraint
 sums. The core family is derived above; no operator identity or individual
@@ -377,13 +341,13 @@ theorem jointEndpointNormalizedSum_norm_gap_iff_enlarged
         δ * ‖v‖ ≤ ‖jointEndpointNormalizedSum A
           (fun x ↦ D₀ x + D₁ x) (fun x ↦ D₀ x + D₁ x) n v‖ := by
   let G := fun q : Fin r × Fin r ↦ (jointEndpointCoreHamiltonian A n q).toContinuousLinearMap
-  have hcanonical := norm_gap_iff_of_isometric_conj
+  have hcanonical := LinearIsometryEquiv.norm_gap_iff_of_conj
     (jointEndpointChainSpectatorIsometry d (n + 1) D₀ D₀ D₀)
     (jointEndpointNormalizedSum A D₀ D₀ n)
     (dependentRightFiberwiseMap
       (S := fun q : Fin r × Fin r ↦ Fin (D₀ q.1) × Fin (D₀ q.2)) G).toLinearMap
     (jointEndpointNormalizedSum_conj_coreSpectators A D₀ D₀ n) δ
-  have henlarged := norm_gap_iff_of_isometric_conj
+  have henlarged := LinearIsometryEquiv.norm_gap_iff_of_conj
     (jointEndpointChainSpectatorIsometry d (n + 1) D₀
       (fun x ↦ D₀ x + D₁ x) (fun x ↦ D₀ x + D₁ x))
     (jointEndpointNormalizedSum A (fun x ↦ D₀ x + D₁ x) (fun x ↦ D₀ x + D₁ x) n)

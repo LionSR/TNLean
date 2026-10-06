@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeProjectors
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointReducingSectors
+import TNLean.MPS.ParentHamiltonian.Martingale.ReducingParentCompression
 
 /-!
 # Physical zero-phase cropping of the actual joint edge
@@ -103,6 +104,7 @@ private def cropCoordinateIsometry
     rw [← LinearMap.adjoint_inner_right, ← LinearMap.comp_apply,
       cropCoordinateLin_adjoint_comp, LinearMap.id_apply]
 
+open Classical in
 private theorem cropCoordinateLin_projection_apply
     {ι κ : Type*} [Fintype ι] [Fintype κ] (f : ι ↪ κ)
     (v : EuclideanSpace ℂ κ) (j : κ) :
@@ -226,7 +228,8 @@ theorem jointMixedFirstEdgePhysicalIsometry_commute_parentInteraction
     Commute (jointMixedFirstEdgePhysicalIsometry.toLinearMap ∘ₗ
       jointMixedFirstEdgePhysicalIsometry.toLinearMap.adjoint)
       (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
-        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap) := by
+        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0)
+          2).range.starProjection.toLinearMap) := by
   rw [jointMixedFirstEdgePhysicalIsometry_comp_adjoint]
   exact (Commute.one_right _).sub_right
     ((jointMixedRowSector_commute_extendedSupport_starProjection A₀ A₁ 1).mul_left
@@ -240,7 +243,8 @@ theorem jointMixedLastEdgePhysicalIsometry_commute_parentInteraction
     Commute (jointMixedLastEdgePhysicalIsometry.toLinearMap ∘ₗ
       jointMixedLastEdgePhysicalIsometry.toLinearMap.adjoint)
       (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
-        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap) := by
+        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0)
+          2).range.starProjection.toLinearMap) := by
   rw [jointMixedLastEdgePhysicalIsometry_comp_adjoint]
   exact (Commute.one_right _).sub_right
     ((jointMixedRowSector_commute_extendedSupport_starProjection A₀ A₁ 0).mul_left
@@ -320,7 +324,61 @@ theorem map_jointMixedSupport_lastPhysicalAdjoint
     rw [blockBoundaryEquiv.apply_symm_apply]
     rfl
 
+/-- The actual first interaction compressed to the neighboring physical-00
+alphabet is the parent projection of the cropped coefficient support.
+Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem jointMixedFirstPhysical_compression_parentInteraction
+    (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
+    jointMixedFirstEdgePhysicalIsometry.compression
+        (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+          (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap) =
+      1 - (jointMixedFirstEdgeCroppedSupportES A₀ A₁).starProjection.toLinearMap := by
+  rw [LinearIsometry.compression_one_sub_starProjection_of_commute _ _
+    (jointMixedFirstEdgePhysicalIsometry_commute_parentInteraction A₀ A₁),
+    map_jointMixedSupport_firstPhysicalAdjoint]
+
+/-- The reflected actual compression is the last cropped parent projection.
+Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem jointMixedLastPhysical_compression_parentInteraction
+    (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
+    jointMixedLastEdgePhysicalIsometry.compression
+        (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+          (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap) =
+      1 - (jointMixedLastEdgeCroppedSupportES A₀ A₁).starProjection.toLinearMap := by
+  rw [LinearIsometry.compression_one_sub_starProjection_of_commute _ _
+    (jointMixedLastEdgePhysicalIsometry_commute_parentInteraction A₀ A₁),
+    map_jointMixedSupport_lastPhysicalAdjoint]
+
+/-- The first physical compression has exactly the actual cropped support
+as kernel; no containment of the full support in the crop is asserted.
+Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem ker_jointMixedFirstPhysical_compression_parentInteraction
+    (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
+    LinearMap.ker (jointMixedFirstEdgePhysicalIsometry.compression
+        (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+          (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap)) =
+      jointMixedFirstEdgeCroppedSupportES A₀ A₁ := by
+  rw [LinearIsometry.ker_compression_one_sub_starProjection_of_commute _ _
+    (jointMixedFirstEdgePhysicalIsometry_commute_parentInteraction A₀ A₁),
+    map_jointMixedSupport_firstPhysicalAdjoint]
+
+/-- The last physical compression has the reflected cropped coefficient
+support as its kernel, also for empty alphabets or virtual sectors.
+Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem ker_jointMixedLastPhysical_compression_parentInteraction
+    (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
+    LinearMap.ker (jointMixedLastEdgePhysicalIsometry.compression
+        (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+          (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap)) =
+      jointMixedLastEdgeCroppedSupportES A₀ A₁ := by
+  rw [LinearIsometry.ker_compression_one_sub_starProjection_of_commute _ _
+    (jointMixedLastEdgePhysicalIsometry_commute_parentInteraction A₀ A₁),
+    map_jointMixedSupport_lastPhysicalAdjoint]
+
 end
 
 end MPSTensor.MPOSymmetry
-

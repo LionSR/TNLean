@@ -1,0 +1,94 @@
+{
+  "scope": "Actual first/last phase crop reduction, precise compressed interaction kernels, and boundary-only canonical normalization. No chain sum or uniform gap.",
+  "combined_base": "3b4ff7c1fe616fcb9be7325675e66e1635246ec4",
+  "reused_phase_source": "7526a088de379402132b015c8186ec879e07fa42",
+  "new_production_files": [
+    "TNLean/MPS/ParentHamiltonian/Martingale/ReducingParentCompression.lean",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointPhysicalCrop.lean",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCroppedCompression.lean"
+  ],
+  "reused_production_files": [
+    "TNLean/MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSectors.lean",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCornerSupport.lean",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointReducingSectors.lean"
+  ],
+  "new_public_declaration_count": 36,
+  "source_sha256": {
+    "TNLean/MPS/ParentHamiltonian/Martingale/ReducingParentCompression.lean": "efd7d7881cf6e8c1f6450787c544ce7981de92e8a05270caa5355f900655e845",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointPhysicalCrop.lean": "994f327c58803d2871462b65bdec11bfc5252ce7b675fc2473f253c1cb1b9888",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCroppedCompression.lean": "c998836ca690b23eebf541f875381b156f4c0feee619ce2f93a037e718516c5f",
+    "TNLean/MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean": "a997061d795d9e242cfdb0346d71d5f45b1080024dd53a4edb9b227ed59702b6",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSectors.lean": "01323540527857c75e5a4fe6bdd4afdffe0335045cfd9cc1258286a1d9d9918a",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCornerSupport.lean": "d3b57bc371e2e623d9d72a49b1c3393e6a6fec418ea1f2f2d472416c4704268f",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointReducingSectors.lean": "1e9acaad25c6cfb4625b37579e58c59f1b8da2ad0200c2961d0452e6592b729c",
+    "TNLeanTest/JointMixedEndpointCroppedCompression.lean": "f9789ab6909e5884f4a9e3581341de28011c8face31da8f93aeec35c6a516e50",
+    "blueprint/src/chapter/ch30_mpo_joint_cropped_compression.tex": "a5167aea53fd48c746a6e0ce35aae327e978436f011b6578819cb2a53acdd874"
+  },
+  "native_validation": {
+    "status": "not_run",
+    "reason": "Original shared workspace disappeared before first bridge compilation. Source recovered in the surviving task directory; parent is restoring the pinned toolchain/cache."
+  },
+  "strict_regression": {
+    "status": "not_run",
+    "guard_count": 6,
+    "expected_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "blueprint": {
+    "native_render": "passed",
+    "html_render": "passed",
+    "tenkz_figures": 1,
+    "checked_markers": 0,
+    "public_owner_coverage": "36/36 source-linked",
+    "fixture": "/workspace/scratch/757f4f120786/glm23-blueprint-validation/joint-cropped-compression-focused",
+    "native_pdf_pages": 6,
+    "visual_review_pages": [
+      3,
+      4,
+      5
+    ],
+    "overfull_boxes": 0,
+    "undefined_references": 0,
+    "missing_characters": 0,
+    "source_labels": 14,
+    "missing_html_anchors": [],
+    "duplicate_html_ids": [],
+    "html_text_sentinels": [],
+    "tenkz_audit": {
+      "hard_errors": 0,
+      "advisories": 0,
+      "pictures": 2,
+      "linked_source": true
+    },
+    "current_svg_path_counts": [
+      10,
+      6
+    ],
+    "formatter_version": "3.24.7",
+    "formatter_check": "passed"
+  },
+  "static_checks": {
+    "whitespace": "passed",
+    "new_forbidden_proof_tokens": "none",
+    "new_resource_overrides": "none",
+    "blueprint_sync": {
+      "new_leaves": "no_missing_tags_or_declarations; 36/36 public owners linked",
+      "global": "incomplete: separate worktree has no restored QIC source link, so inherited QIC references are reported missing",
+      "report": "/workspace/scratch/757f4f120786/glm23-preserved-boundary/blueprint-sync.json"
+    }
+  },
+  "integration": {
+    "routers_modified": false,
+    "workflow_modified": false,
+    "external_publication": "parent_owned"
+  },
+  "independent_static_review": {
+    "status": "completed_no_mathematical_blocker",
+    "concrete_repair": "Added DecidableEq instances to private map_euclidean_range_mulVec, as required by Matrix.toEuclideanLin.",
+    "compiler_run": false
+  }
+}
