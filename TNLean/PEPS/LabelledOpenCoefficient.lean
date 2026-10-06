@@ -114,10 +114,16 @@ private theorem completed_bondWeight
   intro e _
   have hhead : β (e, true) =
       if hh : head e ∈ R then η ⟨head e, hh⟩ ⟨(e, true), rfl⟩
-      else if ht : tail e ∈ R then θ ⟨(e, false), ht, hh⟩ else v₀ := rfl
+      else if ht : tail e ∈ R then θ ⟨(e, false), ht, hh⟩ else v₀ := by
+    by_cases hh : head e ∈ R
+    all_goals simp [β, joinRegionConfig, Equiv.piEquivPiSubtypeProd,
+      endpointVertex, deltaExteriorConfig, hh]
   have htail : β (e, false) =
       if ht : tail e ∈ R then η ⟨tail e, ht⟩ ⟨(e, false), rfl⟩
-      else if hh : head e ∈ R then θ ⟨(e, true), hh, ht⟩ else v₀ := rfl
+      else if hh : head e ∈ R then θ ⟨(e, true), hh, ht⟩ else v₀ := by
+    by_cases ht : tail e ∈ R
+    all_goals simp [β, joinRegionConfig, Equiv.piEquivPiSubtypeProd,
+      endpointVertex, deltaExteriorConfig, ht]
   rw [hhead, htail]
   by_cases ht : tail e ∈ R <;> by_cases hh : head e ∈ R
   all_goals simp only [internalBondMatrices, openBondFactor, ht, hh,
