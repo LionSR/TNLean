@@ -64,7 +64,9 @@ theorem TorusDualCollar.neighbors_mem (C : TorusDualCollar width height)
     ⟨i, by omega, j + 1, by omega, ?_⟩,
     ⟨i + 1, by omega, j + 2, by omega, ?_⟩,
     ⟨i + 1, by omega, j, by omega, ?_⟩⟩
-  all_goals simp [torusRectCoord_eq, Nat.cast_add, add_assoc] <;> ring
+  all_goals
+    simp [torusRectCoord_eq, Nat.cast_add, add_assoc]
+    ring
 
 /-- Every labelled bond incident to the swept support is internal to the collar. -/
 theorem TorusDualCollar.incident_internal (C : TorusDualCollar width height)

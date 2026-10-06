@@ -98,7 +98,6 @@ def internalBondMatrices (O : Edge → Matrix V V ℂ) (e : Edge) : Matrix V V �
   exact if tail e ∈ R ∧ head e ∈ R then O e else 1
 
 omit [DecidableEq Vertex] [DecidableEq Edge] [Fintype Vertex] [Fintype V] in
-set_option maxHeartbeats 800000 in
 open Classical in
 private theorem completed_bondWeight
     (O : Edge → Matrix V V ℂ) (v₀ : V) (θ : RegionBoundaryEndpoint tail head R → V)
@@ -108,13 +107,23 @@ private theorem completed_bondWeight
         (joinRegionConfig tail head R η (deltaExteriorConfig tail head R v₀ θ))) =
       ∏ e, openBondFactor tail head R O θ η e := by
   classical
+  let β := (endpointSiteEquiv tail head (fun _ ↦ V)).symm
+    (joinRegionConfig tail head R η (deltaExteriorConfig tail head R v₀ θ))
+  change (∏ e, internalBondMatrices tail head R O e (β (e, true)) (β (e, false))) = _
   apply Finset.prod_congr rfl
   intro e _
+  have hhead : β (e, true) =
+      if hh : head e ∈ R then η ⟨head e, hh⟩ ⟨(e, true), rfl⟩
+      else if ht : tail e ∈ R then θ ⟨(e, false), ht, hh⟩ else v₀ := rfl
+  have htail : β (e, false) =
+      if ht : tail e ∈ R then η ⟨tail e, ht⟩ ⟨(e, false), rfl⟩
+      else if hh : head e ∈ R then θ ⟨(e, true), hh, ht⟩ else v₀ := rfl
+  rw [hhead, htail]
   by_cases ht : tail e ∈ R <;> by_cases hh : head e ∈ R
-  all_goals simp [internalBondMatrices, openBondFactor, joinRegionConfig,
-    Equiv.piEquivPiSubtypeProd, endpointVertex, deltaExteriorConfig, ht, hh,
+  all_goals simp only [internalBondMatrices, openBondFactor, ht, hh,
+    and_self, and_false, and_true, ite_true, ite_false, dite_true, dite_false,
     Matrix.one_apply]
-  all_goals simp only [eq_comm]
+  all_goals simp only [eq_comm, ite_true]
 
 omit [DecidableEq Edge] [Fintype V] in
 open Classical in
