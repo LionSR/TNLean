@@ -7321,21 +7321,33 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Strict equivalence]
     \label{def:strictly-equivalent-tensors}
-    \lean{MPOTensor.StrictlyEquivalent}
+    \lean{MPOTensor.StrictlyEquivalent, MPOTensor.padBond,
+        MPOTensor.StrictlyEquivalent.of_fixedBond}
     \leanok
     \uses{def:mpu, def:mpu_physical_reindexing, def:mpu_canonical_form}
-    Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be
-    canonical-form MPU tensors with physical dimensions $d_a$ and $d_b$. Given
-    an equality $h\colon d_a=d_b$, reindex $\mathcal U$ from $d_a$ to $d_b$
-    along $h^{-1}$. The tensors are strictly equivalent with respect to $h$ if
-    there is a continuous path $\mathcal W(p)$, $p\in[0,1]$, in the fixed-bond
-    MPU locus such that
+    Let $\mathcal U$ and $\mathcal V$ be canonical-form MPU tensors with
+    physical dimensions $d_a$ and $d_b$ and virtual bond dimensions $D_a$ and
+    $D_b$. For a tensor $\mathcal U$ of bond dimension $D$ and $D'\geq D$,
+    write $\mathcal U_{\uparrow D'}$ for the tensor of
+    bond dimension $D'$ whose letters are those of $\mathcal U$ in the upper
+    left $D\times D$ corner and zero on the adjoined directions; adjoining
+    unused bond directions changes no periodic operator of positive length.
+    Given an equality $h\colon d_a=d_b$, reindex $\mathcal U$ from $d_a$ to
+    $d_b$ along $h^{-1}$. The tensors are strictly equivalent with respect to
+    $h$ if there are $D'\geq\max(D_a,D_b)$ and a continuous path
+    $\mathcal W(p)$, $p\in[0,1]$, of MPU tensors of bond dimension $D'$ such
+    that
     \begin{align}
-        \mathcal W(0) & =\operatorname{reind}_{h^{-1}}(\mathcal U), \\
-        \mathcal W(1) & =\mathcal V.
+        \mathcal W(0) & =\operatorname{reind}_{h^{-1}}(\mathcal U_{\uparrow D'}), \\
+        \mathcal W(1) & =\mathcal V_{\uparrow D'}.
     \end{align}
-    Only the canonical-form requirement is relaxed along the path, matching the
-    fixed-bond interpretation of \cite[lines~708--714]{Cirac2017MPU}.
+    Only the canonical-form requirement is relaxed along the path
+    \cite[lines~708--714]{Cirac2017MPU}. When $D_a=D_b=D$, a path of MPU
+    tensors of bond dimension $D$ from $\mathcal U$ to $\mathcal V$ witnesses
+    strict equivalence with $D'=D$.
+    % **Local fix:** the source does not say in which bond space the path runs
+    % when $D_a\neq D_b$; its canonical form admits the adjoined directions and
+    % ours does not. Documented in docs/paper-gaps/mpu_equivalence_fixed_bond.tex.
 \end{definition}
 
 \begin{theorem}[Normalized transfer data under identity ancillas]
@@ -7379,7 +7391,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.Equivalent}
     \leanok
     \uses{def:mpu, def:strictly-equivalent-tensors, lem:mpu_blocking}
-    Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be MPU
+    Let $\mathcal U$ and $\mathcal V$ be MPU
     tensors with physical dimensions $d_a$ and $d_b$. They are equivalent if
     there are a
     positive blocking length $k$ and coprime positive integers $p_a,p_b$ with
@@ -7392,8 +7404,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \mathcal U^{(p)} & =\mathcal U\otimes\Id_p.
     \end{align}
-    This provides the fixed-bond formulation of
-    \cite[lines~716--724]{Cirac2017MPU}.
+    As in \cite[lines~716--724]{Cirac2017MPU}, canonical form of the blocked
+    tensors with ancilla is a condition of the definition.
 \end{definition}
 
 \begin{definition}[Admissible equivalence and path datum]
@@ -9466,22 +9478,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Strict equivalence under a symmetry]
     \label{def:strictly-equivalent-symmetry}
-    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry}
+    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry,
+        MPOTensor.StrictlyEquivalentUnderSymmetry.of_fixedBond}
     \leanok
     \discussion{6948}
     \uses{def:strictly-equivalent-tensors, def:mpu_finite_chain_operator_symmetry}
     % **Local fix:** paper_v2.tex 1345--1353 repeats the symmetry-transformed
     % operator on the right-hand side. Invariance requires the original MPU.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    Fix a virtual bond dimension $D$. Two canonical-form tensors $\mathcal U$
+    Two canonical-form tensors $\mathcal U$
     and $\mathcal V$ are strictly equivalent under a symmetry $\mathcal S$ if
-    they have the same physical dimension and there is a continuous path
-    $\mathcal W(p)$ of fixed-bond MPU tensors from $\mathcal U$ to $\mathcal V$,
+    they have the same physical dimension and, for some common bond dimension
+    $D'$ as in Definition~\ref{def:strictly-equivalent-tensors}, there is a
+    continuous path $\mathcal W(p)$ of MPU tensors of bond dimension $D'$ from
+    $\mathcal U_{\uparrow D'}$ to $\mathcal V_{\uparrow D'}$,
     not necessarily in canonical form, such that
     \begin{align}
         \mathcal S[W^{(N)}(p)] & =W^{(N)}(p)
     \end{align}
-    for every $p\in[0,1]$ and every applicable chain length $N$.
+    for every $p\in[0,1]$ and every applicable chain length $N$. When
+    $\mathcal U$ and $\mathcal V$ have one bond dimension $D$, such a path of
+    bond dimension $D$ from $\mathcal U$ to $\mathcal V$ witnesses the relation
+    with $D'=D$.
     % Source lines: paper_v2.tex 1340--1354.
 \end{definition}
 
@@ -9532,18 +9550,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1356--1366.
 \end{definition}
 
-\begin{definition}[Fixed-bond coherent-family equivalence under a symmetry]
+\begin{definition}[Coherent-family equivalence under a symmetry]
     \label{def:mpu_coherent_family_equivalent_symmetry}
     \lean{MPOTensor.EquivalentUnderSymmetry}
     \leanok
     \discussion{7015}
     \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors,
         def:mpu_coherent_symmetry_family, def:mpu_blocked_finite_chain_symmetry}
-    % **Scope restriction (fixed bond and coherent family):** the symmetry is
+    % **Scope restriction (coherent family):** the symmetry is
     % supplied at every physical dimension and semiconjugates the canonical
     % identity-ancilla embeddings. Documented in
     % docs/paper-gaps/mpu_symmetry_ancilla_transport.tex.
-    Fix a virtual bond dimension $D$, and let $\mathcal U$ and $\mathcal V$
+    Let $\mathcal U$ and $\mathcal V$
     have physical dimensions $d_a$ and $d_b$. They are coherently equivalent
     under a dimension-indexed symmetry family $\mathcal S$ if they are MPUs and
     there are a positive blocking length $k$ and coprime positive ancilla
@@ -9563,7 +9581,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpu_coherent_family_equivalent_symmetry, def:equivalent-tensors,
         lem:mpu_strict_symmetry_equivalence_forget}
-    Fixed-bond equivalence under a coherent symmetry family implies ordinary
+    Equivalence under a coherent symmetry family implies ordinary
     equivalence after the same ancillas and blocking.
 \end{theorem}
 

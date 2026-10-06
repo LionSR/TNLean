@@ -6,19 +6,27 @@ Authors: TNLean contributors
 import Mathlib.Topology.Connected.PathConnected
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
+import TNLean.MPS.MPU.BondPadding
 
 /-!
 # Equivalence of matrix product unitary tensors
 
 This file formalizes strict equivalence and equivalence after attaching physical
 identity ancillas and then blocking, following arXiv:1703.09188, lines 706--724.
-It also formalizes strict equivalence under symmetry and the fixed-bond,
-coherent-family variant of stabilized equivalence from lines 1340--1366.
+It also formalizes strict equivalence under symmetry and the coherent-family
+variant of stabilized equivalence from lines 1340--1366.
 
-The virtual bond dimension is fixed along every path. The source does not specify
-a stabilization that compares tensors of different virtual bond dimensions, so
-no such relation is introduced here. Strict paths remain inside the MPU locus;
-only the canonical-form condition from the paper is omitted along the path.
+Two tensors of bond dimensions `Da` and `Db` are compared after unused bond
+directions are adjoined to each up to a common bond dimension `D'`
+(`MPOTensor.padBond`); the path runs in bond dimension `D'`. **Local fix
+(arXiv:1703.09188, lines 706--724):** the source does not say in which space a
+path between tensors of different bond dimensions runs. Its canonical form
+admits the adjoined directions; the library's canonical form does not, so the
+definitions state the endpoints as the enlarged tensors and require canonical
+form of the original tensors. See `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
+Strict paths remain inside the MPU locus; only the canonical-form condition from
+the paper is omitted along the path. The case `D' = Da = Db` is the former
+fixed-bond definition (`StrictlyEquivalent.of_fixedBond`).
 
 The symmetry used after adjoining an identity ancilla is supplied as part of a
 coherent dimension-indexed family. This avoids extending an action arbitrarily
@@ -28,7 +36,8 @@ configuration equivalence.
 
 ## Main definitions
 
-* `MPOTensor.StrictlyEquivalent`: path connectedness inside the fixed-bond MPU locus.
+* `MPOTensor.StrictlyEquivalent`: path connectedness inside the MPU locus of a
+  common enlarged bond dimension.
 * `MPOTensor.Equivalent`: strict equivalence after positive identity-ancilla
   attachment and a common positive blocking length.
 * `MPOTensor.FiniteChainOperatorSymmetry`: an operator action at specified chain lengths.
@@ -41,7 +50,7 @@ open scoped Matrix Kronecker
 
 namespace MPOTensor
 
-variable {d da db D : ℕ}
+variable {d da db D Da Db : ℕ}
 
 /-- A finite-chain operator symmetry at physical dimension \(d\) consists of an
 action on every length-\(N\) operator space and a set of chain lengths on which
@@ -174,50 +183,60 @@ theorem IsInvariantUnderSymmetry.blockTensor
     simp [Matrix.reindex_apply]
   rw [hreindex, hU hN]
 
-/-- Two fixed-bond MPU tensors in canonical form are strictly equivalent when,
-after explicitly identifying their physical dimensions, they are joined by a
-continuous path all of whose points generate MPUs.
+/-- Two MPU tensors in canonical form are strictly equivalent when, after
+explicitly identifying their physical dimensions and adjoining unused bond
+directions to each up to a common bond dimension `D'`, they are joined by a
+continuous path of tensors of bond dimension `D'` all of whose points generate
+MPUs.
 
-Canonical form is required only at the endpoints. The bond dimension \(D\) is
-fixed throughout.
-
-**Scope restriction (arXiv:1703.09188, lines 706--724):** the paper does not
-specify a stabilization for unequal raw virtual bond dimensions, so this
-definition only compares tensors in one fixed ambient bond dimension. See
-`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
+Canonical form is required of the two tensors themselves, not along the path
+and not of the enlarged endpoints; see the module docstring for the convention
+on bond dimensions.
 
 Source: arXiv:1703.09188, Definition `def:strictly-equivalent-tensors`,
 lines 708--714. -/
-def StrictlyEquivalent (U : MPOTensor da D) (V : MPOTensor db D)
+def StrictlyEquivalent (U : MPOTensor da Da) (V : MPOTensor db Db)
     (hphys : da = db) : Prop :=
   MPSTensor.IsMPUCanonicalForm U.toMPSTensor ∧
     MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
-      JoinedIn {W : MPOTensor db D | IsMPU W}
-        (reindexPhysical (finCongr hphys).symm U) V
+      ∃ (D' : ℕ) (ha : Da ≤ D') (hb : Db ≤ D'),
+        JoinedIn {W : MPOTensor db D' | IsMPU W}
+          (reindexPhysical (finCongr hphys).symm (padBond U D' ha)) (padBond V D' hb)
 
-/-- Two fixed-bond canonical-form MPU tensors are strictly equivalent under
-`S` when they are joined by a continuous path of MPUs invariant under `S` at
-every applicable chain length.
+/-- Two tensors of one bond dimension `D` in canonical form, joined by a path of
+MPU tensors of bond dimension `D`, are strictly equivalent: the case `D' = D` of
+the definition, which was the former fixed-bond definition. -/
+theorem StrictlyEquivalent.of_fixedBond {U : MPOTensor da D} {V : MPOTensor db D}
+    (hphys : da = db)
+    (hU : MPSTensor.IsMPUCanonicalForm U.toMPSTensor)
+    (hV : MPSTensor.IsMPUCanonicalForm V.toMPSTensor)
+    (hpath : JoinedIn {W : MPOTensor db D | IsMPU W}
+      (reindexPhysical (finCongr hphys).symm U) V) :
+    StrictlyEquivalent U V hphys :=
+  ⟨hU, hV, D, le_rfl, le_rfl, by simpa only [padBond_self] using hpath⟩
+
+/-- Two canonical-form MPU tensors are strictly equivalent under `S` when, after
+adjoining unused bond directions up to a common bond dimension, they are joined
+by a continuous path of MPUs invariant under `S` at every applicable chain
+length.
 
 Lines 1340--1343 introduce this definition in full analogy with
 `def:strictly-equivalent-tensors`, whose endpoints are in canonical form.
-Canonical form is required only at the endpoints. The physical dimension is
-identified explicitly, and the virtual bond dimension remains fixed along the
-path.
-
-**Scope restriction (arXiv:1703.09188, lines 1340--1354):** the paper does not
-specify a stabilization for unequal raw virtual bond dimensions, so this
-definition only compares tensors in one fixed ambient bond dimension. See
-`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
+Canonical form is required of the two tensors; the physical dimension is
+identified explicitly, and bond dimensions are compared as in
+`StrictlyEquivalent`. The invariance condition constrains the ring operators,
+which the adjoined directions do not change at positive lengths (`mpo_padBond`);
+at length zero the ring operator is the bond dimension itself.
 
 Source: arXiv:1703.09188, Definition `def:strictly-equivalent-symmetry`,
 lines 1345--1354. -/
 def StrictlyEquivalentUnderSymmetry (S : FiniteChainOperatorSymmetry db)
-    (U : MPOTensor da D) (V : MPOTensor db D) (hphys : da = db) : Prop :=
+    (U : MPOTensor da Da) (V : MPOTensor db Db) (hphys : da = db) : Prop :=
   MPSTensor.IsMPUCanonicalForm U.toMPSTensor ∧
     MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
-      JoinedIn {W : MPOTensor db D | IsMPU W ∧ IsInvariantUnderSymmetry S W}
-        (reindexPhysical (finCongr hphys).symm U) V
+      ∃ (D' : ℕ) (ha : Da ≤ D') (hb : Db ≤ D'),
+        JoinedIn {W : MPOTensor db D' | IsMPU W ∧ IsInvariantUnderSymmetry S W}
+          (reindexPhysical (finCongr hphys).symm (padBond U D' ha)) (padBond V D' hb)
 
 /-- Forgetting symmetry invariance from a strict symmetry-preserving path gives
 ordinary strict equivalence.
@@ -225,10 +244,22 @@ ordinary strict equivalence.
 Source: arXiv:1703.09188, Definitions `def:strictly-equivalent-tensors` and
 `def:strictly-equivalent-symmetry`, lines 708--714 and 1345--1354. -/
 theorem StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent
-    {S : FiniteChainOperatorSymmetry db} {U : MPOTensor da D} {V : MPOTensor db D}
+    {S : FiniteChainOperatorSymmetry db} {U : MPOTensor da Da} {V : MPOTensor db Db}
     {hphys : da = db} (h : StrictlyEquivalentUnderSymmetry S U V hphys) :
-    StrictlyEquivalent U V hphys :=
-  ⟨h.1, h.2.1, h.2.2.mono fun _ hW ↦ hW.1⟩
+    StrictlyEquivalent U V hphys := by
+  obtain ⟨hU, hV, D', ha, hb, hpath⟩ := h
+  exact ⟨hU, hV, D', ha, hb, hpath.mono fun _ hW ↦ hW.1⟩
+
+/-- The case `D' = D` of strict equivalence under symmetry, the former
+fixed-bond definition. -/
+theorem StrictlyEquivalentUnderSymmetry.of_fixedBond {S : FiniteChainOperatorSymmetry db}
+    {U : MPOTensor da D} {V : MPOTensor db D} (hphys : da = db)
+    (hU : MPSTensor.IsMPUCanonicalForm U.toMPSTensor)
+    (hV : MPSTensor.IsMPUCanonicalForm V.toMPSTensor)
+    (hpath : JoinedIn {W : MPOTensor db D | IsMPU W ∧ IsInvariantUnderSymmetry S W}
+      (reindexPhysical (finCongr hphys).symm U) V) :
+    StrictlyEquivalentUnderSymmetry S U V hphys :=
+  ⟨hU, hV, D, le_rfl, le_rfl, by simpa only [padBond_self] using hpath⟩
 
 private theorem blockedAncillaPhysicalDim_eq (k : ℕ) {pa pb : ℕ}
     (hphys : pa * da = pb * db) :
@@ -236,21 +267,20 @@ private theorem blockedAncillaPhysicalDim_eq (k : ℕ) {pa pb : ℕ}
   simp only [MPSTensor.blockPhysDim_eq_pow]
   rw [Nat.mul_comm da pa, Nat.mul_comm db pb, hphys]
 
-/-- Two fixed-bond MPU tensors are equivalent when positive coprime ancilla
-sizes \(p_a\) and \(p_b\) make their enlarged physical dimensions equal and,
-after attaching those ancillas, a common positive blocking length makes the
-resulting tensors strictly equivalent.
+/-- Two MPU tensors are equivalent when positive coprime ancilla sizes \(p_a\)
+and \(p_b\) make their enlarged physical dimensions equal and, after attaching
+those ancillas, a common positive blocking length makes the resulting tensors
+strictly equivalent (bond dimensions compared as `StrictlyEquivalent`
+prescribes).
 
 Ancillas are attached before blocking. The physical-size condition is the source
 equation \(p_a d_a = p_b d_b\); it supplies the explicit reindexing witness
-needed by `StrictlyEquivalent` after blocking.
-
-**Scope restriction (arXiv:1703.09188, lines 706--724):** the bond dimension
-\(D\) is fixed. No heterogeneous raw-bond stabilization is asserted. See
-`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
+needed by `StrictlyEquivalent` after blocking. As in the source, canonical form
+of the blocked tensors with ancilla is a condition imposed by
+`StrictlyEquivalent`, not a claim.
 
 Source: arXiv:1703.09188, Definition `def:equivalent-tensors`, lines 716--724. -/
-def Equivalent (U : MPOTensor da D) (V : MPOTensor db D) : Prop :=
+def Equivalent (U : MPOTensor da Da) (V : MPOTensor db Db) : Prop :=
   IsMPU U ∧ IsMPU V ∧
     ∃ k pa pb : ℕ,
       0 < k ∧ 0 < pa ∧ 0 < pb ∧ Nat.Coprime pa pb ∧
@@ -260,27 +290,42 @@ def Equivalent (U : MPOTensor da D) (V : MPOTensor db D) : Prop :=
             (blockTensor (tensorPhysicalId V pb) k)
             (blockedAncillaPhysicalDim_eq k hphys)
 
-/-- Two fixed-bond MPU tensors are equivalent under a coherent symmetry family
-when, after adjoining positive coprime identity ancillas and then applying a
-common positive blocking length, they are strictly equivalent under the
-canonically blocked enlarged-dimension symmetry.
+/-- The case `D' = D` of equivalence: blocked tensors with ancilla of one bond
+dimension `D` in canonical form, joined by a path of MPU tensors of bond
+dimension `D`. -/
+theorem Equivalent.of_fixedBond {U : MPOTensor da D} {V : MPOTensor db D}
+    (hU : IsMPU U) (hV : IsMPU V) {k pa pb : ℕ}
+    (hk : 0 < k) (hpa : 0 < pa) (hpb : 0 < pb) (hcoprime : Nat.Coprime pa pb)
+    (hphys : pa * da = pb * db)
+    (hUcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
+    (hVcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
+    (hpath : JoinedIn {W : MPOTensor (MPSTensor.blockPhysDim (db * pb) k) D | IsMPU W}
+      (reindexPhysical (finCongr (blockedAncillaPhysicalDim_eq k hphys)).symm
+        (blockTensor (tensorPhysicalId U pa) k))
+      (blockTensor (tensorPhysicalId V pb) k)) :
+    Equivalent U V :=
+  ⟨hU, hV, k, pa, pb, hk, hpa, hpb, hcoprime, hphys,
+    StrictlyEquivalent.of_fixedBond _ hUcf hVcf hpath⟩
+
+/-- Two MPU tensors are equivalent under a coherent symmetry family when, after
+adjoining positive coprime identity ancillas and then applying a common positive
+blocking length, they are strictly equivalent under the canonically blocked
+enlarged-dimension symmetry (bond dimensions compared as
+`StrictlyEquivalentUnderSymmetry` prescribes).
 
 The order is ancilla attachment followed by blocking. The component at the full
 enlarged physical dimension is supplied by the coherent family; it is not an
 extension chosen from the original-dimension action. The blocked applicable
 lengths are exactly \(\{N\mid Nk\in A\}\).
 
-**Scope restriction (arXiv:1703.09188, lines 1356--1366):** the virtual bond
-dimension \(D\) is fixed. In addition, the symmetry is supplied as a family
-indexed by physical dimension that semiconjugates every canonical
-identity-ancilla embedding. The standard-form path criterion belongs to a
-separate result. See
-`docs/paper-gaps/mpu_equivalence_fixed_bond.tex` and
-`docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
+**Scope restriction (arXiv:1703.09188, lines 1356--1366):** the symmetry is
+supplied as a family indexed by physical dimension that semiconjugates every
+canonical identity-ancilla embedding. The standard-form path criterion belongs
+to a separate result. See `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
 
 Source: arXiv:1703.09188, Definition `def:equivalent-symmetry`, lines 1356--1366. -/
 def EquivalentUnderSymmetry (S : FiniteChainOperatorSymmetryFamily)
-    (U : MPOTensor da D) (V : MPOTensor db D) : Prop :=
+    (U : MPOTensor da Da) (V : MPOTensor db Db) : Prop :=
   IsMPU U ∧ IsMPU V ∧
     ∃ k pa pb : ℕ,
       0 < k ∧ 0 < pa ∧ 0 < pb ∧ Nat.Coprime pa pb ∧
@@ -291,6 +336,23 @@ def EquivalentUnderSymmetry (S : FiniteChainOperatorSymmetryFamily)
             (blockTensor (tensorPhysicalId V pb) k)
             (blockedAncillaPhysicalDim_eq k hphys)
 
+/-- The case `D' = D` of equivalence under a coherent symmetry family. -/
+theorem EquivalentUnderSymmetry.of_fixedBond {S : FiniteChainOperatorSymmetryFamily}
+    {U : MPOTensor da D} {V : MPOTensor db D}
+    (hU : IsMPU U) (hV : IsMPU V) {k pa pb : ℕ}
+    (hk : 0 < k) (hpa : 0 < pa) (hpb : 0 < pb) (hcoprime : Nat.Coprime pa pb)
+    (hphys : pa * da = pb * db)
+    (hUcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
+    (hVcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
+    (hpath : JoinedIn {W : MPOTensor (MPSTensor.blockPhysDim (db * pb) k) D |
+        IsMPU W ∧ IsInvariantUnderSymmetry ((S.at (db * pb)).block k) W}
+      (reindexPhysical (finCongr (blockedAncillaPhysicalDim_eq k hphys)).symm
+        (blockTensor (tensorPhysicalId U pa) k))
+      (blockTensor (tensorPhysicalId V pb) k)) :
+    EquivalentUnderSymmetry S U V :=
+  ⟨hU, hV, k, pa, pb, hk, hpa, hpb, hcoprime, hphys,
+    StrictlyEquivalentUnderSymmetry.of_fixedBond _ hUcf hVcf hpath⟩
+
 /-- Forgetting the symmetry from stabilized symmetry-preserving equivalence gives
 ordinary stabilized equivalence.
 
@@ -298,7 +360,7 @@ Source: arXiv:1703.09188, Definitions `def:equivalent-tensors` and
 `def:equivalent-symmetry`, lines 716--724 and 1356--1366. -/
 theorem EquivalentUnderSymmetry.toEquivalent
     {S : FiniteChainOperatorSymmetryFamily}
-    {U : MPOTensor da D} {V : MPOTensor db D}
+    {U : MPOTensor da Da} {V : MPOTensor db Db}
     (h : EquivalentUnderSymmetry S U V) : Equivalent U V := by
   rcases h with ⟨hU, hV, k, pa, pb, hk, hpa, hpb, hcoprime, hphys, hstrict⟩
   exact ⟨hU, hV, k, pa, pb, hk, hpa, hpb, hcoprime, hphys,
