@@ -5445,16 +5445,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
 
-### Norm gaps under isometric conjugacy — candidate (2026-10-06)
+### Norm gaps under isometric conjugacy — promoted (2026-10-06)
 
 - **Pattern:** Derive kernel membership from the conjugacy identity, transport
   orthogonality by inner-product preservation, and then transport the norm bound.
-- **Seen:** Two identical biconditional proofs in
-  `MixedEndpointCoreHamiltonianSpectators.lean` and
-  `JointMixedEndpointCoreHamiltonian.lean`, both named
-  `norm_gap_iff_of_isometric_conj` and private to their modules.
-- **Abstraction:** A public `LinearIsometryEquiv` norm-gap equivalence would
-  replace both helpers when another consumer needs this precise assertion.
-- **Notes:** The dependent projection identification itself is already shared
-  as `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; its two edge consumers
-  use that theorem rather than repeat the orthogonal-projection proof.
+- **Abstraction:** `LinearIsometryEquiv.norm_gap_iff_of_conj` and its kernel and
+  intertwining companions in `IsometricConjugationGap.lean`, without
+  finite-dimensionality or sign assumptions.
+- **Consumers:** The joint normalized core comparison now uses the public
+  theorem. The endpoint-swap development uses the same API. The older
+  single-block `MixedEndpointCoreHamiltonianSpectators` still has its private
+  proof; migrating that independent consumer awaits its own focused validation.
+- **Notes:** The dependent projection identification is separately shared as
+  `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; both joint edge consumers
+  use that theorem instead of repeating the orthogonal-projection proof.

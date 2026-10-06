@@ -239,7 +239,8 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
 \begin{theorem}[Identical gaps for the two exterior multiplicities]
     \label{thm:mpo_joint_normalized_gap_equivalence}
     \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_norm_gap_iff_enlarged}
-    \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap}
+    \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap,
+        thm:martingale_isometric_conjugation_gap}
     Suppose $D_x^0>0$ for every label, $D_x^1\geq0$, and $\delta\geq0$.
     Set $D=D^0$ and $\widetilde D=D^0+D^1$. For each $m\geq1$,
     \begin{align}
@@ -252,7 +253,8 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     Each side quantifies over its entire indicated kernel complement.
 \end{theorem}
 \begin{proof}
-    \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap}
+    \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap,
+        thm:martingale_isometric_conjugation_gap}
     The coordinate unitaries preserve norms, kernels and their orthogonal
     complements. Apply (\ref{eq:mpo_joint_core_identity}) on each side and
     then Theorem~\ref{thm:mpo_joint_boundary_spectator_gap} to the common
