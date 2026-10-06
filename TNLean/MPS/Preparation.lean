@@ -119,8 +119,11 @@ import TNLean.MPS.Preparation.PolynomialAccuracy
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.QCccClassification
 import TNLean.MPS.Preparation.RectangularBlocks
+import TNLean.MPS.Preparation.RectangularIntervalBlocks
 import TNLean.MPS.Preparation.RectangularPreparation
 import TNLean.MPS.Preparation.RectangularTransferEstimate
+import TNLean.MPS.Preparation.RectangularWindowMixing
+import TNLean.MPS.Preparation.RectangularWindowPreparation
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
 import TNLean.MPS.Preparation.RelativePositivePart

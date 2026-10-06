@@ -529,6 +529,23 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build rectangular local-window preparation targets early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build \
+            +TNLean.MPS.Preparation.RectangularWindowPreparation:olean \
+            +TNLean.MPS.Preparation.InhomogeneousChoiResidual:olean \
+            +TNLean.MPS.Preparation.WindowMixingPreparation:olean \
+            +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test actual rectangular local-window regression strictly
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/RectangularWindowMixing.lean
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail

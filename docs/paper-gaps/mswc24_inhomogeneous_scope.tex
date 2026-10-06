@@ -447,5 +447,35 @@ numerical open-boundary study; the formal physical circuit conclusion
 uses ring adjacency. It does not assert open-line locality without a
 proof that the wrap-around edge is unused.
 
+\section{Rectangular local-window criterion}
+The preceding actual rectangular rate can be derived from a local condition.
+Fix $s\ge1$ and $\eta>0$, uniformly across a family with $1\le D_i\le D$.
+Require every available window $F_{a:a+s}:M_{D_{a+s}}\to M_{D_a}$ to satisfy
+\[
+    J(F_{a:a+s})\ge\frac{\eta}{D_{a+s}}(\tau_a\otimes I_{D_{a+s}}),
+\]
+where the normalized output-first Choi convention includes the actual input
+dimension, and $\tau_a$ is a density that may be singular and vary with the window.
+The original rectangular site maps must be completely positive and trace preserving.
+No full-space trace-preservation claim is made about zero-padding.
+
+A fixed density of the full-cycle channel and suffix transport derive compatible
+cyclic references. Subtracting the local trace-prepare contributions gives completely
+positive residual maps. Peeling complete windows from the right leaves a shorter
+left remainder. The residual product has trace scale
+$t=(1-\eta)^{\lfloor n/s\rfloor}$ and unnormalized Choi trace $D_{a+n}t$.
+This bounds the actual Hilbert--Schmidt induced interval error by $2Dt$ directly,
+without introducing a common enlarged channel or changing the physical tensors.
+
+The family window at $N=s$ gives $\eta\le1$. Weakening to $\eta/2$ yields
+$K=4D$ and $r=-\log(1-\eta/2)/s>0$. The theorem
+\leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
+in \doclink{TNLean/MPS/Preparation/RectangularWindowPreparation}
+then gives the original physical ring preparation conclusion with $N_0\ge s$
+and $C$ chosen before $N,\varepsilon$. Dimension-one bonds and singular references
+are included. This local condition remains additional quantitative input;
+the paper's qualitative finite-correlation discussion does not provide its uniform
+window length and strength.
+
 \bibliography{references}
 \end{document}
