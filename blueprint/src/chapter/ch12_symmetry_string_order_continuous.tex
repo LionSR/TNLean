@@ -22,9 +22,9 @@ string order with identity endpoints, as suggested by
     For $A=\{A^i\}_{i=0}^{d-1}$, let $F:\C^d\to\C^{D\times D}$
     have column $i$ equal to the row-vectorization of $A^i$:
     \begin{align}
-        F_{(a,b),i}&=(A^i)_{ab},\notag\\
-        E&=\sum_i A^i\otimes\overline{A^i},\notag\\
-        L_H&=H\otimes\Id-\Id\otimes\overline H.
+        F_{(a,b),i} & =(A^i)_{ab},\notag                      \\
+        E           & =\sum_i A^i\otimes\overline{A^i},\notag \\
+        L_H         & =H\otimes\Id-\Id\otimes\overline H.
         \label{eq:symmetry_row_generator}
     \end{align}
     The row-vectorization convention is $(\opvec_r X)_{(a,b)}=X_{ab}$.
@@ -43,12 +43,12 @@ string order with identity endpoints, as suggested by
     The Choi Gram matrix $G=FF^\dagger$ and the transfer matrix $E$ have
     different index pairings. For all virtual indices $a,b,c,e$,
     \begin{align}
-        G_{(a,b),(c,e)}&=E_{(a,c),(b,e)}.
+        G_{(a,b),(c,e)} & =E_{(a,c),(b,e)}.
         \label{eq:symmetry_gram_realignment}
     \end{align}
     If $H=H^\dagger$, their commutators satisfy
     \begin{align}
-        [L_H,G]_{(a,b),(c,e)}&=[L_H,E]_{(a,c),(b,e)}.
+        [L_H,G]_{(a,b),(c,e)} & =[L_H,E]_{(a,c),(b,e)}.
         \label{eq:symmetry_commutator_realignment}
     \end{align}
     Consequently $[L_H,E]=0$ if and only if $[L_H,FF^\dagger]=0$.
@@ -60,11 +60,11 @@ string order with identity endpoints, as suggested by
     $X$ and pair indices $p,q$, the two actions of $L_H$ are
     \begin{align}
         (L_HX)_{(a,b),q}
-        &=\sum_r H_{ar}X_{(r,b),q}
-          -\sum_r\overline{H_{br}}X_{(a,r),q},\notag\\
+         & =\sum_r H_{ar}X_{(r,b),q}
+        -\sum_r\overline{H_{br}}X_{(a,r),q},\notag \\
         (XL_H)_{p,(c,e)}
-        &=\sum_r X_{p,(r,e)}H_{rc}
-          -\sum_r X_{p,(c,r)}\overline{H_{re}}.
+         & =\sum_r X_{p,(r,e)}H_{rc}
+        -\sum_r X_{p,(c,r)}\overline{H_{re}}.
         \notag
     \end{align}
     Substitute (\ref{eq:symmetry_gram_realignment}) and
@@ -85,9 +85,9 @@ string order with identity endpoints, as suggested by
     For a physical matrix $K_0$ and a virtual matrix $V$,
     \begin{align}
         (FK_0)_{(a,b),i}
-        &=\left(\sum_j(K_0^{\top})_{ij}A^j\right)_{ab},\notag\\
+         & =\left(\sum_j(K_0^{\top})_{ij}A^j\right)_{ab},\notag \\
         \bigl((V\otimes\overline V)F\bigr)_{(a,b),i}
-        &=(VA^iV^\dagger)_{ab}.
+         & =(VA^iV^\dagger)_{ab}.
         \label{eq:symmetry_row_actions}
     \end{align}
     If $H=H^\dagger$, then $L_H=L_H^\dagger$ and
@@ -114,8 +114,8 @@ string order with identity endpoints, as suggested by
     Let $H=H^\dagger$ and $[L_H,E]=0$. There is a Hermitian physical
     matrix $K$ such that, for every physical index $i$ and real $t$,
     \begin{align}
-        \sum_jK_{ij}A^j&=HA^i-A^iH,\notag\\
-        \sum_j u(t)_{ij}A^j&=V(t)A^iV(t)^\dagger,
+        \sum_jK_{ij}A^j     & =HA^i-A^iH,\notag     \\
+        \sum_j u(t)_{ij}A^j & =V(t)A^iV(t)^\dagger,
         \label{eq:symmetry_continuous_covariance}
     \end{align}
     where $u(t)=e^{itK}$ and $V(t)=e^{itH}$. Both paths are continuous
@@ -152,20 +152,20 @@ string order with identity endpoints, as suggested by
     By Theorem~\ref{thm:row_transfer_gram_realignment}, $L_H$ commutes
     with $G=FF^\dagger$. The Hermitian lift criterion of the companion
     quantum-channel volume~\cite[``Hermitian intertwiners of rectangular
-    matrices'']{QICLean2026Blueprint} gives
+        matrices'']{QICLean2026Blueprint} gives
     \begin{align}
-        K_0&=F^\dagger G^+L_HF,
-        & K_0^\dagger&=K_0,
-        & FK_0&=L_HF.
+        K_0 & =F^\dagger G^+L_HF,
+            & K_0^\dagger         & =K_0,
+            & FK_0                & =L_HF.
         \label{eq:symmetry_supported_generator}
     \end{align}
     Set $K=K_0^\top$. Theorem~\ref{thm:row_physical_virtual_actions}
     gives the infinitesimal relation, and $K$ is Hermitian because $K_0$ is.
     Intertwining passes to powers and then to the exponential series:
     \begin{align}
-        Fe^{itK_0}&=e^{itL_H}F
-          =(e^{itH}\otimes\overline{e^{itH}})F,\notag\\
-        e^{itK_0^\top}&=(e^{itK_0})^\top.
+        Fe^{itK_0}     & =e^{itL_H}F
+        =(e^{itH}\otimes\overline{e^{itH}})F,\notag \\
+        e^{itK_0^\top} & =(e^{itK_0})^\top.
         \notag
     \end{align}
     The tensor-exponential identity is proved in
@@ -196,7 +196,7 @@ string order with identity endpoints, as suggested by
     Multiplying each commutator by $(A^i)^\dagger$ and summing gives
     \begin{align}
         H-\E_A(H)
-        &=\sum_i(HA^i-A^iH)(A^i)^\dagger=c\Id.
+         & =\sum_i(HA^i-A^iH)(A^i)^\dagger=c\Id.
         \notag
     \end{align}
     Stationarity implies $\tr(\Lambda\E_A(H))=\tr(\Lambda H)$.
@@ -216,9 +216,9 @@ string order with identity endpoints, as suggested by
     then the complex correlator itself converges:
     \begin{align}
         S_N(\Id,\Id,u)
-        &\longrightarrow
-          \overline{\tr(\Lambda V)}\,\tr(\Lambda V)
-          =|\tr(\Lambda V)|^2.
+         & \longrightarrow
+        \overline{\tr(\Lambda V)}\,\tr(\Lambda V)
+        =|\tr(\Lambda V)|^2.
         \label{eq:symmetry_identity_endpoint_limit}
     \end{align}
     No additional invariance assumption on $\Lambda$ is required.
@@ -229,8 +229,8 @@ string order with identity endpoints, as suggested by
     with $x=y=\Id$ and phase $\mu=1$. Since $\E_1=\E_A$,
     unitality and stationarity give
     \begin{align}
-        \alpha_{\Id}&=\tr(\Lambda V^\dagger),\notag\\
-        \beta_{\Id}&=\tr(\Lambda\E_A(V))=\tr(\Lambda V).
+        \alpha_{\Id} & =\tr(\Lambda V^\dagger),\notag       \\
+        \beta_{\Id}  & =\tr(\Lambda\E_A(V))=\tr(\Lambda V).
         \notag
     \end{align}
     Hermiticity of $\Lambda$ and trace cyclicity imply
@@ -273,7 +273,7 @@ string order with identity endpoints, as suggested by
     $u(t)\notin\C\Id$ and
     \begin{align}
         \lim_{N\to\infty}S_N(\Id,\Id,u(t))
-        &=|\tr(\Lambda e^{itH})|^2>0.
+         & =|\tr(\Lambda e^{itH})|^2>0.
         \label{eq:symmetry_continuous_string_limit}
     \end{align}
     In particular, $A$ has physical string order with Hermitian identity
