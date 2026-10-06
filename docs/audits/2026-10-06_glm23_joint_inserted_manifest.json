@@ -1,0 +1,13 @@
+{
+  "base_head": "8ed3342960e9f543dc988be6ac62a598676ea359",
+  "validation": "uncompiled repaired recovery; prior full check failed, repaired probe outcome unknown",
+  "production_modules": 3,
+  "production_lines": 489,
+  "standard_axiom_guards": 6,
+  "sha256": {
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointInsertedBoundary.lean": "c12752bffbea76fa1bc9165a6e283e39c8ff0c5665eb710721a14eb34c057d51",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointInsertedIntersection.lean": "82983a2401115f746338c270c9dc62a55e4ff170fc0cc9f5fd9a225019664f7a",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointInsertedOpenKernel.lean": "84e399257fb4c1349a77b2168b9db2344be8874f5a5cd2f65f6c2ed419758201",
+    "TNLeanTest/JointInsertedOpenKernel.lean": "60ff634e2b188d191f138d4c1143241369aa5f44b45b79e14ba8163bfe0adae0"
+  }
+}
