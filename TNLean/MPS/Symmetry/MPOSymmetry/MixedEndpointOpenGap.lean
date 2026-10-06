@@ -124,7 +124,7 @@ theorem exists_mixedEndpointActiveHamiltonian_uniform_gap
       rintro ⟨a, ⟨b, σ, c⟩, e⟩
       exact Fin.elim0 b
     simp [hv]
-  · letI : NeZero D₀ := ⟨hD₀⟩
+  · let : NeZero D₀ := ⟨hD₀⟩
     obtain ⟨W, hW, δ, hδ, hGap₀⟩ :=
       exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap A₀ hA₀
     let C₀ := mixedEndpointBoundaryCondition A₀ hA₀ 0

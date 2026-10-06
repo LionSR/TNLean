@@ -183,3 +183,19 @@ guarded `#print` commands, following the repository test convention. All
 mathematical examples and expected axiom lists are unchanged, and every other
 strict linter/check remains enabled. This avoids a command-style diagnostic
 being mistaken for an axiom-report mismatch; it does not weaken axiom guards.
+
+### 2026-10-06 00:50 UTC: final compactness binder
+
+Exact-head CI at `5843332b48c82258a4077205d114d8dc2f258394` compiled
+`MixedEndpointCoreHamiltonianSpectators` (35 s), `MixedEndpointOpenGap`
+(13 s), and `MixedEndpointRightOpenGap` (7.9 s). The remaining reported
+production errors were both consequences of one private eventual-gap
+statement: Lean inferred the untyped parameter over the real line rather
+than the intended closed interval. The binder is now explicitly
+`unitInterval`, matching its proof and the subsequent compactness lemma.
+This changes no public theorem statement or hypotheses. The new open-gap
+`letI` style warning is also repaired using the prescribed `let`.
+
+The final uniform-path theorem and its strict regression/axiom guards
+remain pending a fresh exact-head run; these intermediate compilation
+results are not a full-build pass.

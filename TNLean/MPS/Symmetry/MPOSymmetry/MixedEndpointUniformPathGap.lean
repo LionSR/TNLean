@@ -87,7 +87,7 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ₀ : unitInterval) :
-    ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ᶠ γ in 𝓝 γ₀,
+    ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ᶠ γ : unitInterval in 𝓝 γ₀,
       ∀ N : ℕ, N₀ ≤ N →
         ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
           (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
