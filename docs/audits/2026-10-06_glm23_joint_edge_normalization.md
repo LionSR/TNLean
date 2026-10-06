@@ -86,8 +86,15 @@ not validate the new edge leaves.
 
 The generic isometric-compression leaf passed a strict one-thread Lean
 elaboration probe, with all package strictness and linter options enabled,
-before its integration. The three new joint edge leaves and their focused
-regression have not yet passed native validation. The first authorized
+before its integration. The exact complete `JointMixedEndpointEdgeFactors.lean`
+file now passes a strict one-thread read-only elaboration check in 15 seconds,
+with an empty log. A later strict source-bundle check also passes all four
+production leaves and the complete focused regression, including all four
+standard guards, in 40 seconds with an empty log. It includes the complete real
+sources of the two missing dependency leaves, replaces only their internal
+imports, and isolates each source body in a section. No definition or proof
+is replaced by a stub. This is not an individual Lake-target or module-import
+check; those remain pending. The first authorized
 read-only probe timed out at the external 60-second wall limit with no
 diagnostics; exit 124 is inconclusive, not a successful check. It wrote no
 Lean artifact or cache. The shared heavy-build slot is reserved for this
@@ -95,7 +102,8 @@ package after the current owner releases it.
 
 The new blueprint leaf deliberately has no `leanok` markers, including
 for the generic isometry assertions, until the coherent package passes
-native module checks and the strict axiom guards. The scoped source and
+individual native module checks. The strict standard guards have executed
+successfully in the exact-source bundle. The scoped source and
 render checks are recorded separately from native proof validation.
 
 Static validation passes: forbidden proof-token checking, generated-import

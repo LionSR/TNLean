@@ -157,9 +157,9 @@ private theorem lastEdge_trace
     (X : (x : Fin r) → Matrix (Fin (D₀ x + D₁ x)) (Fin (D₀ x + D₁ x)) ℂ)
     (i : Fin d₀) (j : Fin (jointMixedPhysicalDim d₀ d₁ D₀ D₁)) :
     jointMixedLastEdgeBoundaryMap A₀ A₁ X (i, j) =
-      ∑ x, Matrix.trace (((X x).submatrix id (Fin.castAdd (D₁ x)) * A₀ x i) *
-        ((Matrix.coordinateInclusion (Fin.castAddEmb (D₁ x)))ᴴ *
-          jointMixedEndpointBase A₀ A₁ x j)) := by
+      ∑ x, Matrix.trace (((Matrix.coordinateInclusion (Fin.castAddEmb (D₁ x)))ᴴ *
+          jointMixedEndpointBase A₀ A₁ x j) *
+        ((X x).submatrix id (Fin.castAdd (D₁ x)) * A₀ x i)) := by
   change blockInsertedGroundSpaceMap _ _ 2 X _ = _
   simp only [blockInsertedGroundSpaceMap_apply, Finset.sum_apply,
     insertedGroundSpaceMap_apply]
@@ -171,6 +171,8 @@ private theorem lastEdge_trace
   simp only [Kraus.evalWord, Matrix.mul_one,
     jointMixedEndpointBase_firstPhysical_mul_inclusion]
   rw [Matrix.trace_mul_comm _ (X x)]
+  rw [Matrix.trace_mul_comm ((Matrix.coordinateInclusion (Fin.castAddEmb (D₁ x)))ᴴ *
+    jointMixedEndpointBase A₀ A₁ x j)]
   simp only [← Matrix.mul_assoc, Matrix.mul_coordinateInclusion, Fin.coe_castAddEmb]
 
 /-- The actual first-edge coefficients are the joint first column matrix
@@ -188,10 +190,10 @@ theorem jointMixedFirstEdgeBoundaryMap_eq_columns_core
   classical
   ext ⟨i, j⟩
   rw [firstEdge_trace]
-  simp [Matrix.mulVec, dotProduct, Matrix.kronecker_apply, Fintype.sum_prod_type,
+  simp [Matrix.mulVec, dotProduct, Fintype.sum_prod_type,
     Fintype.sum_sigma, Matrix.one_apply, jointEndpointFirstEdgeCoreMap,
     Matrix.trace, Matrix.mul_apply, jointMixedFirstBoundaryColumns,
-    Matrix.mul_coordinateInclusion, Fin.castAddEmb_apply]
+    Matrix.mul_coordinateInclusion]
 
 /-- The reflected coefficient factorization; again the adjacent physical
 site retains its entire original alphabet and identity change.
@@ -207,11 +209,10 @@ theorem jointMixedLastEdgeBoundaryMap_eq_columns_core
   classical
   ext ⟨i, j⟩
   rw [lastEdge_trace]
-  simp [Matrix.mulVec, dotProduct, Matrix.kronecker_apply, Fintype.sum_prod_type,
+  simp [Matrix.mulVec, dotProduct, Fintype.sum_prod_type,
     Fintype.sum_sigma, Matrix.one_apply, jointEndpointLastEdgeCoreMap,
     Matrix.trace, Matrix.mul_apply, jointMixedLastBoundaryColumns,
-    Matrix.conjTranspose_coordinateInclusion_mul, Fin.castAddEmb_apply,
-    Finset.sum_comm, mul_comm]
+    Matrix.conjTranspose_coordinateInclusion_mul]
 
 /-- Cropping the first virtual rows is onto all rectangular joint
 boundaries, even when labels or fibers are empty.

@@ -96,9 +96,7 @@ example (X : (x : Fin 2) → Matrix (Fin (1 + 0)) (Fin (1 + 0)) ℂ) :
 
 -- Core maps and virtual padding never introduce an inhabitant of the label type.
 example {d : ℕ} {D E : Fin 0 → ℕ} (A : (x : Fin 0) → MPSTensor d (D x)) :
-    jointEndpointFirstEdgeCoreMap A E = 0 := by
-  ext Y ⟨⟨x, a, b⟩, i⟩
-  exact Fin.elim0 x
+    jointEndpointFirstEdgeCoreMap A E = 0 := Subsingleton.elim _ _
 
 example {r : ℕ} {D : Fin r → ℕ} :
     Function.Surjective (fun X : (x : Fin r) →
@@ -112,7 +110,7 @@ private def rectangularFrame : ℂ →ₗᵢ[ℂ] EuclideanSpace ℂ (Fin 2) whe
   map_smul' z w := by
     apply PiLp.ext
     intro i
-    fin_cases i <;> simp [PiLp.single_apply]
+    fin_cases i <;> simp
   norm_map' z := PiLp.norm_single 2 (fun _ : Fin 2 => ℂ) 0 z
 
 -- This is genuinely rectangular: the second ambient basis vector is absent.
@@ -120,7 +118,7 @@ example : ¬ Function.Surjective rectangularFrame := by
   intro h
   obtain ⟨z, hz⟩ := h (PiLp.single 2 (1 : Fin 2) (1 : ℂ))
   have := congrArg (fun v : EuclideanSpace ℂ (Fin 2) => v 1) hz
-  simpa [rectangularFrame, PiLp.single_apply] using this
+  simp [rectangularFrame] at this
 
 -- An identity gap restricts unchanged through this nonsurjective frame.
 example : ∀ v ∈ (LinearMap.ker
