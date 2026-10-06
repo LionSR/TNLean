@@ -78,7 +78,8 @@ example : WordTupleSpanTop
 
 -- The zero endpoint insertion is singular, with its second diagonal entry zero.
 example : bondInterpolationMatrix 1 1 0
-    (finSumFinEquiv (.inr 0)) (finSumFinEquiv (.inr 0)) = 0 := by simp
+    (finSumFinEquiv (.inr 0)) (finSumFinEquiv (.inr 0)) = 0 :=
+  bondInterpolationMatrix_zero_right 1 1 0
 
 example (γ : ℝ) (hN : 0 < N) :
     Module.finrank ℂ (blockInsertedBoundaryMap
@@ -145,7 +146,7 @@ info: 'MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_jointMi
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_jointMixedEndpoint_starProjection
+#print axioms continuous_ker_openInteractionHamiltonianES_jointMixedEndpoint_starProjection
 
 /--
 info: 'MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedGroundSpace_eq_iSup'

@@ -2,7 +2,8 @@
 % The endpoint simultaneous spans are explicit hypotheses. This leaf supplies
 % the actual mixed family and specializes the joint finite-volume boundary
 % results; it claims neither a spectral gap nor the full MPO phase theorem.
-% Checked markers await build evidence for the final source.
+% Declaration and proof checks: source head 06075cb0a7a63b9131434ee622248124ecf8bde5.
+% See docs/audits/2026-10-06_glm23_joint_mixed_family.md for exact evidence.
 
 \subsection{The mixed family with shared endpoint alphabets}
 \label{sec:mpo_joint_mixed_family}
@@ -35,6 +36,7 @@ $(10,x,a,b)$ and $(11,j)$. Only the two cross sectors carry a block label.
         MPSTensor.MPOSymmetry.jointMixedEndpointBase,
         MPSTensor.MPOSymmetry.jointMixedEndpointLeftTensor,
         MPSTensor.MPOSymmetry.jointMixedEndpointInterpolation}
+    \leanok
     \uses{def:mps_tensor}
     Let $V_{x,p}:\C^{D_x^p}\to E_x$ be the coordinate inclusions and
     $E_{x;ab}^{pq}=V_{x,p}\ketbra{a}{b}V_{x,q}^*$ the rectangular
@@ -93,6 +95,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     \lean{MPSTensor.wordTupleSpanTop_one_iff,
         MPSTensor.wordTupleSpanTop_one_of_rectangular_compression,
         MPSTensor.wordTupleSpanTop_one_of_right_inverse}
+    \leanok
     \uses{def:blockwise_product_word_span}
     Let $(B_x)_x$ have simultaneous one-site span
     $\spn_{\C}\{(B_x^i)_x:i\in\Fin{d}\}=\prod_x\MN{n_x}$.
@@ -104,6 +107,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     span $\prod_x\MN{n_x}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:blockwise_product_word_span}
     For a target tuple $(X_x)_x$, expand $(V_xX_xU_x)_x$ using the
     common coefficients of the original family, then compress:
@@ -127,6 +131,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
         MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointBase,
         MPSTensor.MPOSymmetry.continuous_jointMixedEndpointInterpolation,
         MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointInterpolation}
+    \leanok
     \uses{def:mpo_joint_mixed_family,def:blockwise_product_word_span}
     Suppose that for $p=0,1$,
     \begin{align}
@@ -145,6 +150,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     $\gamma\in\R$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_joint_mixed_family,thm:mpo_joint_one_site_span,
         thm:spt_normalized_bond_interpolation,thm:mpo_mixed_interior}
     Decompose an arbitrary tuple $Z=(Z_x)_x$ into its four virtual
@@ -166,6 +172,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     \label{thm:mpo_joint_mixed_compression}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_first_compression,
         MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointLeftTensor}
+    \leanok
     \uses{def:mpo_joint_mixed_family,def:blockwise_product_word_span}
     For every $x$ and every physical letter $\mu$, the first virtual
     compression is $V_{x,0}^*C_x^\mu V_{x,0}=B_x^\mu$.
@@ -174,6 +181,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     $\prod_x\MN{D_x^0}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_joint_mixed_family,thm:mpo_joint_mixed_span,
         thm:mpo_joint_one_site_span,def:spt_coordinate_inclusions}
     The compression retains the $00$ virtual corner. The letters
@@ -206,6 +214,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
         MPSTensor.MPOSymmetry.blockGroundSpaceMap_rightMul_eq_inserted,
         MPSTensor.MPOSymmetry.range_blockInsertedGroundSpaceMap_eq_of_isUnit,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedGroundSpace_eq_iSup}
+    \leanok
     \uses{def:mpo_joint_inserted_boundary,def:mpo_joint_mixed_support,
         def:block_ground_space_map}
     Let $(B_x)_x$ be any block family and $W_x$ any square insertion
@@ -228,6 +237,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     These assertions require no simultaneous span assumption.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_joint_inserted_boundary,def:block_ground_space_map,
         def:mpo_joint_mixed_family,thm:mpo_mixed_interior}
     Associativity regroups the alternating product
@@ -250,6 +260,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
         MPSTensor.MPOSymmetry.continuous_jointMixedEndpoint_extendedBoundarySupport_starProjection,
         MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_jointMixedEndpoint_eq,
         MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_jointMixedEndpoint_starProjection}
+    \leanok
     \uses{def:mpo_joint_mixed_support,def:blockwise_product_word_span}
     For arbitrary endpoint families, the maps
     $\gamma\mapsto\Gamma'_{\gamma,N}$ are continuous at fixed $N$.
@@ -274,6 +285,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     including at $\gamma=0,1$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_mixed_span,thm:mpo_joint_inserted_injective,
         thm:mpo_joint_inserted_open_kernel,thm:spt_normalized_bond_interpolation}
     Theorem~\ref{thm:mpo_joint_mixed_span} supplies simultaneous spanning

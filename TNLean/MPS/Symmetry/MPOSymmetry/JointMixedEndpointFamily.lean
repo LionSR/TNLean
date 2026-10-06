@@ -76,11 +76,18 @@ theorem span_jointMixedEndpointLetter_eq_top
     | mem M hM =>
         obtain ⟨i, rfl⟩ := hM
         exact Submodule.subset_span ⟨.inl i, rfl⟩
-    | zero => simpa using S.zero_mem
+    | zero =>
+        convert S.zero_mem using 1
+        ext x i j
+        cases i <;> cases j <;> rfl
     | add M N _ _ hM hN =>
-        simpa only [Pi.add_apply, Matrix.fromBlocks_add, add_zero] using S.add_mem hM hN
+        convert S.add_mem hM hN using 1
+        funext x
+        simp only [Pi.add_apply, Matrix.fromBlocks_add, add_zero]
     | smul c M _ hM =>
-        simpa only [Pi.smul_apply, Matrix.fromBlocks_smul, smul_zero] using S.smul_mem c hM
+        convert S.smul_mem c hM using 1
+        funext x
+        simp only [Pi.smul_apply, Matrix.fromBlocks_smul, smul_zero]
   have hright (M : (x : Fin r) → Matrix (Fin (D₁ x)) (Fin (D₁ x)) ℂ) :
       (fun x => Matrix.fromBlocks (0 : Matrix (Fin (D₀ x)) (Fin (D₀ x)) ℂ)
         0 0 (M x)) ∈ S := by
@@ -91,11 +98,18 @@ theorem span_jointMixedEndpointLetter_eq_top
     | mem M hM =>
         obtain ⟨i, rfl⟩ := hM
         exact Submodule.subset_span ⟨.inr (.inr (.inr i)), rfl⟩
-    | zero => simpa using S.zero_mem
+    | zero =>
+        convert S.zero_mem using 1
+        ext x i j
+        cases i <;> cases j <;> rfl
     | add M N _ _ hM hN =>
-        simpa only [Pi.add_apply, Matrix.fromBlocks_add, add_zero] using S.add_mem hM hN
+        convert S.add_mem hM hN using 1
+        funext x
+        simp only [Pi.add_apply, Matrix.fromBlocks_add, add_zero]
     | smul c M _ hM =>
-        simpa only [Pi.smul_apply, Matrix.fromBlocks_smul, smul_zero] using S.smul_mem c hM
+        convert S.smul_mem c hM using 1
+        funext x
+        simp only [Pi.smul_apply, Matrix.fromBlocks_smul, smul_zero]
   have hsingle (x : Fin r) : ∀ M, Pi.single x M ∈ S := by
     have ht : S.comap (LinearMap.single ℂ _ x) = ⊤ := by
       apply Submodule.eq_top_of_forall_single_mem
@@ -154,7 +168,7 @@ theorem wordTupleSpanTop_jointMixedEndpointBase
   rw [wordTupleSpanTop_one_iff]
   let e := LinearEquiv.piCongrRight fun x : Fin r =>
     Matrix.reindexLinearEquiv ℂ ℂ (finSumFinEquiv (m := D₀ x) (n := D₁ x))
-      finSumFinEquiv
+      (finSumFinEquiv (m := D₀ x) (n := D₁ x))
   have hrange : Set.range (fun i => fun x => jointMixedEndpointBase A₀ A₁ x i) =
       e.toLinearMap '' Set.range (jointMixedEndpointLetter A₀ A₁) := by
     ext M
@@ -163,6 +177,7 @@ theorem wordTupleSpanTop_jointMixedEndpointBase
       exact ⟨_, ⟨(Fintype.equivFin _).symm i, rfl⟩, rfl⟩
     · rintro ⟨_, ⟨p, rfl⟩, rfl⟩
       refine ⟨Fintype.equivFin _ p, ?_⟩
+      funext x
       simp [jointMixedEndpointBase, e]
   rw [hrange, ← Submodule.map_span]
   exact (Submodule.map_eq_top_iff (e := e)).mpr
@@ -207,11 +222,11 @@ theorem jointMixedEndpointBase_first_compression
   · rfl
   · by_cases h : x = y
     · subst y
-      simp [jointMixedEndpointLetter, Matrix.single_apply]
+      simp [jointMixedEndpointLetter]
     · simp [jointMixedEndpointLetter, Pi.single_eq_of_ne h]
   · by_cases h : x = y
     · subst y
-      simp [jointMixedEndpointLetter, Matrix.single_apply]
+      simp [jointMixedEndpointLetter]
     · simp [jointMixedEndpointLetter, Pi.single_eq_of_ne h]
   · rfl
 

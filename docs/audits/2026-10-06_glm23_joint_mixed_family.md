@@ -20,8 +20,8 @@ The blueprint leaf is
 `blueprint/src/chapter/ch30_mpo_joint_mixed_family.tex`. It is included immediately after the generic joint inserted-boundary leaf.
 The generated import frontier includes all three production modules, and the
 existing mixed-interaction regression loop includes the seven-guard test.
-No new checked markers are attached without compile evidence for the
-corresponding exact source.
+The checked markers cover the compiled construction and finite-volume results
+listed below; they make no spectral-gap or MPO-symmetry claim.
 
 ## Physical and virtual coordinates
 
@@ -101,42 +101,103 @@ supply the missing joint endpoint spectral comparison.
 
 ## Validation
 
-Source-only coverage matches all 27 public declarations from
-`SharedInfra/JointOneSiteSpan.lean`, `MPOSymmetry/JointMixedEndpointFamily.lean`,
-and `MPOSymmetry/JointMixedEndpointSupport.lean` to exactly one owner in the
-new leaf. This includes the four canonical-support bridge declarations
+The final checked source checkpoint is
+`06075cb0a7a63b9131434ee622248124ecf8bde5`. The production proof sources are
+unchanged from `fc1c7f8baa355c1d80bb0220d79eb2246491374c`; the final checkpoint
+shortens one regression command through an already-open namespace to satisfy
+the strict line-length linter. It retains the original theorem names in the
+expected guard output and introduces no alias or warning suppression.
+The build used Lean 4.35.0-rc3, commit
+`470d5ce1400764999581fd26d5d72b00d990b0f4`. Machine-readable native evidence is
+`/workspace/shared/glm23-recovery/joint-mixed-native-validation.json`.
+
+The verified SHA-256 values are:
+
+| File | SHA-256 |
+| --- | --- |
+| `TNLean/MPS/SharedInfra/JointOneSiteSpan.lean` | `7f7034c5c4139faf4e74a5e17ed2f8ddec380aaec73205f6b820920ceaa883ac` |
+| `TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointFamily.lean` | `ea08244da6a35eb6fb7db74fdfc64d953041ee0dc43209c77fc41addb622d89d` |
+| `TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSupport.lean` | `d8eb09afda3f5eb42424d7829f903c82744b5f9f0c5a2240fe1a12be8dd67f0d` |
+| `TNLeanTest/JointMixedEndpointFamily.lean` | `b2f45fb65f21349a2fa7892ce4c9585574373cbf38f4d660b854aa8313f91831` |
+
+The native production command was:
+
+```sh
+source /workspace/shared/glm23-env.sh
+LEAN_NUM_THREADS=2 lake build TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSupport
+```
+
+It exited zero after 9,299 jobs; the final support-module build took 101
+seconds locally. None of the three changed production modules emitted a
+warning. Lake replayed inherited deprecation warnings from Gametheory and
+QICLean dependencies. The log is
+`/workspace/shared/glm23-recovery/joint-mixed-build-final.log`.
+
+The strict regression command was:
+
+```sh
+LEAN_NUM_THREADS=2 lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/JointMixedEndpointFamily.lean
+```
+
+It exited zero, and
+`/workspace/shared/glm23-recovery/joint-mixed-regression-checked.log` is empty.
+All seven original theorem guards passed with exactly `propext`,
+`Classical.choice`, and `Quot.sound`. The regression retains two overlapping
+endpoint columns `(1,0)` and `(1,1)` with inner product one, checks physical
+dimension eight, and covers the joint support rank, singular endpoint,
+canonical interior support, exact open kernel, and projector continuity.
+
+All 27 public declarations have exactly one owner in the blueprint leaf.
+Six statement markers and five proof markers record the completed checks;
+the separate extended-support notation definition has no new declaration
+owner and remains unmarked. The four canonical-support declarations
 `insertedEvalWord_mul_right`, `blockGroundSpaceMap_rightMul_eq_inserted`,
 `range_blockInsertedGroundSpaceMap_eq_of_isUnit`, and
-`jointMixedEndpoint_extendedGroundSpace_eq_iSup`. Every referenced label
-resolves uniquely in the blueprint source. No checked markers are present.
+`jointMixedEndpoint_extendedGroundSpace_eq_iSup` are included in that coverage.
+Every dependency and reference label resolves uniquely.
 
-The full repository source-synchronization check also passes with the exact
+The full repository source-synchronization check passes with the exact
 pinned QICLean source revision `2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f`
 visible through a local source symlink: zero missing declarations, zero
 duplicate owners, and zero stale declaration records. The generated-import
 check covers 2,722 production modules with 71 aggregators. The only CI edit
 is one added regression name in the existing mixed-interaction loop.
 
-The exact native Tenkz picture body was compiled with the restored pinned
-documentation environment, both in its ordinary equation wrapper and in a
-`tenkzeq` boundary-signature check. Both two-panel forms passed the Tenkz
-audit with zero hard errors and zero advisories. The ordinary PDF was
-rasterized and visually inspected: the two virtual legs and single physical
-leg agree, the internal virtual connection is visible, and the labels do not
-overlap. The harness explicitly loads the existing Computer Modern font maps
-because the restored environment lacks a generated default font map.
+The leaf was formatted with the repository's checksum-verified
+`latexindent` 3.24.7 and passed its one-file CI formatting check. The three
+previously missing HTML anchors were repaired without changing their
+mathematics: the alphabet label is on the first row, and the cross-corner
+and boundary-map identities each have their own labelled display.
 
-Local render and source-check evidence is in
-`/workspace/shared/glm23-blueprint-validation/joint-mixed-native/`:
-`joint-mixed-wrapper.pdf`, `joint-mixed-wrapper.png`,
-`joint-mixed-signature.pdf`, their TeX/log files, and
-`source-validation.json`. These are documentation-only checks, not Lean
-verification or a full blueprint web build.
+The exact native Tenkz picture body was compiled in an ordinary equation
+wrapper and a `tenkzeq` boundary-signature check; both two-panel forms passed
+with zero hard errors and advisories. The rasterized ordinary PDF was
+visually inspected: the two virtual legs and single physical leg agree,
+the internal virtual connection is visible, and the labels do not overlap.
+Native evidence remains under
+`/workspace/shared/glm23-blueprint-validation/joint-mixed-native/`.
 
-The source regression retains two overlapping endpoint columns `(1,0)` and
-`(1,1)` with inner product one, checks physical dimension eight, and states
-the joint support-rank and singular-endpoint consequences. Its compilation
-and guarded axiom reports are still pending. No Lean/Lake command or cache
-change was run for this documentation task. All new Lean declarations remain
-uncompiled at this checkpoint; the parent task owns the first compile. No
-success from a previous commit is attributed to the current source tree.
+The final checked-marker focused fixture under
+`/workspace/shared/glm23-blueprint-validation/joint-mixed-checked/`
+compiled to 11 PDF pages, four HTML files, and six SVGs. The three changed
+mathematical pages, physical PDF pages 3–5, were rasterized and visually
+inspected after adding the markers. They have no overflow, clipping,
+unresolved references, or overlapping labels. Context and bibliography
+pages 6–11 are byte-identical to the previously inspected raster images.
+All three repaired HTML anchors occur exactly once, every leaf label has a
+static HTML anchor, and there are no missing images or unresolved citation
+sentinels. The pinned `texra-blueprint bbl` generated the web bibliography.
+Three PDF overflow warnings and the missing `eq:mpo_mixed_letters` HTML
+anchor belong to unchanged extracted context. The detailed report is
+`review.json`; outputs are `blueprint/src/print.pdf` and
+`blueprint/web/ch-mpo_symmetry_basics.html` beneath the same fixture path.
+
+Cloud-browser visual inspection remains unavailable: the authorized same-call
+retry rejected the local `file:` URL because the browser permits only HTTP
+and HTTPS. No further browser retry or route workaround was attempted.
+The HTML evidence is static inspection, not a claimed browser pass. No
+Lean/Lake command, cache mutation, or dependency change was performed by the
+documentation task. The production and strict-regression evidence above comes
+from the task holding the single build slot. Later documentation changes do
+not reattribute a previous commit's results to a later source tree; affected
+remote CI and timing checks remain separate.

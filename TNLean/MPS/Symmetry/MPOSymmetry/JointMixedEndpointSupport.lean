@@ -70,11 +70,11 @@ theorem range_blockInsertedGroundSpaceMap_eq_of_isUnit {d : ℕ} {dim : Fin r �
   choose u hu using hW
   apply le_antisymm
   · rintro ψ ⟨X, rfl⟩
-    refine ⟨fun x => ↑((u x)⁻¹) * X x, ?_⟩
+    refine ⟨fun x => (↑((u x)⁻¹) : Matrix (Fin (dim x)) (Fin (dim x)) ℂ) * X x, ?_⟩
     rw [blockGroundSpaceMap_rightMul_eq_inserted _ _ _ hN]
     congr 1
     funext x
-    simp [← hu x, Matrix.mul_assoc]
+    simp [← hu x]
   · rintro ψ ⟨X, rfl⟩
     exact ⟨fun x => W x * X x,
       (blockGroundSpaceMap_rightMul_eq_inserted A W X hN).symm⟩
