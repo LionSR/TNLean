@@ -47,9 +47,8 @@ theorem spectrum_separated_of_quadratic_gap {n : Type*} [Fintype n]
     rw [inner_self_eq_norm_sq_to_K, hnorm]
     norm_num
   have hineq : hA.eigenvalues i ≤ (hA.eigenvalues i) ^ 2 := by
-    simpa [inner_smul_left, inner_smul_right, inner_self_eq_norm_sq_to_K,
-      hnorm, norm_smul, Complex.norm_real, abs_of_nonneg hnonneg,
-      Complex.star_def, Complex.conj_ofReal, pow_two] using hg
+    rw [inner_smul_left, inner_smul_right, inner_smul_left, hinner] at hg
+    simpa [Complex.star_def, pow_two] using hg
   constructor
   · simp [hnonneg]
   · by_cases hzero : hA.eigenvalues i = 0

@@ -40,6 +40,7 @@ import TNLean.MPS.Core.ReductionResidualComposition
 import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.ScaledNormality
+import TNLean.MPS.Core.SquarePhysicalCoordinates
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.TensorProduct
 import TNLean.MPS.Core.TensorProductSpan
