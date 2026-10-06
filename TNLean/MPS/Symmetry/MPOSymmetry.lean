@@ -38,8 +38,11 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointIntersection
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOAction
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOActionSymbols
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOFusionMaps
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOFusionSymbols
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPONormality
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOWeights
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointOpenKernel
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointProjectorComparison
@@ -49,6 +52,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointRightComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSectors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSupport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSwap
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointTripleMaps
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.PBCGroupProjector
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks

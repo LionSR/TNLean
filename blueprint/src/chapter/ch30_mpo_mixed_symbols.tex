@@ -1,0 +1,305 @@
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1667--1685;
+% Agammasym, eq:F_symbol2, and Fsymbolsdef. Exact version: Papers/NOTICE.md.
+% Proof validation is pending; no checked declaration/proof markers are asserted.
+% The algebraic statements below concern the actual chosen maps, including empty bonds.
+
+\subsection{Common symbols along the mixed interpolation}
+\label{sec:mpo_mixed_symbols}
+
+The construction in \cite[Section~5]{GarreRubio2023MPOSym} uses chosen
+fusion and action maps with $L_0=L_1$ and $F_0=F_1$. Their mixed maps
+retain these common coefficients. For $L$, this holds throughout the
+interpolation, including $\gamma=0,1$.
+
+Fix a finite label set $I$, nonnegative multiplicities $N_{ab}^c,m_a$,
+and spaces $E_p=\C^{D_p}$ and $K_{p,a}=\C^{\chi_{p,a}}$, for
+$p\in\{0,1\}$. All dimensions may vanish and are independent between
+the two ends and between labels. Take arbitrary maps
+$V^A_{p,a;i}:K_{p,a}\otimes E_p\to E_p$,
+$W^A_{p,a;i}:E_p\to K_{p,a}\otimes E_p$,
+$V^F_{p,ab;c\mu}:K_{p,a}\otimes K_{p,b}\to K_{p,c}$, and
+$W^F_{p,ab;c\mu}:K_{p,c}\to K_{p,a}\otimes K_{p,b}$.
+Their mixed maps are those of
+Definitions~\ref{def:mpo_mixed_action_maps} and
+\ref{def:mpo_mixed_fusion_maps}: every virtual leg independently
+chooses its direct-sum sector, and a map vanishes unless all its
+sectors agree. Tildes denote these mixed maps.
+For $M\in\End(\C^n)$ write $\tau_n(M)=n^{-1}\tr(M)$ when $n>0$,
+and set $\tau_0(M)=0$.
+
+\begin{definition}[Three-leg maps on matching sectors]
+    \label{def:mpo_mixed_triple_maps}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointTripleEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpointTripleSynthesis}
+    Let $B_{j,p}=\C^{n_{j,p}}$, $U_p=\C^{d_p}$, and
+    $Z_p=\C^{e_p}$, for $j=1,2,3$ and $p=0,1$. Given maps
+    $H_p:(B_{1,p}\otimes B_{2,p})\otimes B_{3,p}\to U_p$ and
+    $S_p:Z_p\to(B_{1,p}\otimes B_{2,p})\otimes B_{3,p}$,
+    their matching-sector extensions $\widetilde H,\widetilde S$
+    agree with $H_p,S_p$ when all four indices have sector $p$,
+    and vanish otherwise. Each direct-sum basis lists sector zero
+    first. The three incoming coordinates are ordered as
+    $((\alpha,\beta),\gamma)$, with the usual product-basis ordering.
+\end{definition}
+
+\begin{theorem}[Three-leg contraction and normalized trace]
+    \label{thm:mpo_mixed_triple_trace}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis_mul_synthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis_trace_mul_synthesis,
+        MPSTensor.MPOSymmetry.finDimension_mul_normalizedTrace,
+        MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis_normalizedTrace_mul_synthesis}
+    \uses{def:mpo_mixed_triple_maps}
+    The matching-sector extensions satisfy the rectangular identity
+    \begin{align}
+        \widetilde H\widetilde S
+         & =(H_0S_0)\oplus(H_1S_1).
+        \label{eq:mpo_mix_symbols_triple_product}
+    \end{align}
+    When $Z_p=U_p$ for $p=0,1$, this gives
+    \begin{align}
+        \tr(\widetilde H\widetilde S)
+         & =\tr(H_0S_0)+\tr(H_1S_1),
+        \label{eq:mpo_mix_symbols_triple_trace} \\
+        \tau_{d_0+d_1}(\widetilde H\widetilde S)
+         & =(d_0+d_1)^{-1}
+        \bigl(d_0\tau_{d_0}(H_0S_0)+d_1\tau_{d_1}(H_1S_1)\bigr).
+        \label{eq:mpo_mix_symbols_triple_weight}
+    \end{align}
+    Here the inverse at zero is zero. For every $n\geq0$ and
+    $M\in\End(\C^n)$, $n\tau_n(M)=\tr(M)$.
+\end{theorem}
+\begin{proof}
+    Expand the product over the three independent sector choices.
+    A nonzero summand requires all three contracted sectors and
+    both external sectors to agree, proving
+    (\ref{eq:mpo_mix_symbols_triple_product}). Summing its diagonal
+    gives (\ref{eq:mpo_mix_symbols_triple_trace}). For $n>0$,
+    $n\tau_n(M)=\tr(M)$ by cancellation; for $n=0$, both sides are
+    zero. Substitute this identity in
+    (\ref{eq:mpo_mix_symbols_triple_trace}) and normalize to obtain
+    (\ref{eq:mpo_mix_symbols_triple_weight}).
+\end{proof}
+
+\begin{theorem}[Inheritance of the action comparison matrix]
+    \label{thm:mpo_mixed_l_symbols}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpoint_sequentialActionAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpoint_fusionThenActionSynthesis,
+        MPSTensor.MPOSymmetry.mixedEndpoint_actionTree_cross,
+        MPSTensor.MPOSymmetry.actionLMatrix_mixedEndpoint,
+        MPSTensor.MPOSymmetry.actionLMatrix_mixedEndpoint_eq_of_eq}
+    \uses{def:mpo_mixed_action_maps,def:mpo_mixed_fusion_maps,
+        def:glm_boundary_action_l_matrix}
+    For fixed $a,b$, the sequential analysis and fusion-then-action
+    synthesis maps, in the order $(K_{p,a}\otimes K_{p,b})\otimes E_p$,
+    are
+    \begin{align}
+        H_{p,ij}    & =V^A_{p,a;i}(\Id_{K_{p,a}}\otimes V^A_{p,b;j}),
+        \label{eq:mpo_mix_symbols_action_trees}                       \\
+        R_{p,ck\mu} & =(W^F_{p,ab;c\mu}\otimes\Id_{E_p})W^A_{p,c;k}.
+        \notag
+    \end{align}
+    Identify the parenthesizations in the first line.
+    Set $(L_p)_{ij,ck\mu}=\tau_{D_p}(H_{p,ij}R_{p,ck\mu})$
+    and define $\widetilde L$ from the corresponding mixed maps.
+    Thus rows are sequential paths and columns are fusion-then-action
+    paths; there is a single state block. Then
+    \begin{align}
+        \widetilde H_{ij}\widetilde R_{ck\mu}
+         & =(H_{0,ij}R_{0,ck\mu})\oplus(H_{1,ij}R_{1,ck\mu}),
+        \label{eq:mpo_mix_symbols_l_cross}                    \\
+        \widetilde L
+         & =(D_0+D_1)^{-1}(D_0L_0+D_1L_1).
+        \label{eq:mpo_mix_symbols_l_weight}
+    \end{align}
+    The inverse at zero in (\ref{eq:mpo_mix_symbols_l_weight}) is
+    defined to be zero. If $L_0=L_1$, then $\widetilde L=L_0$,
+    including when $D_0+D_1=0$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_mixed_triple_trace}
+    Expanding (\ref{eq:mpo_mix_symbols_action_trees}) over the internal
+    direct-sum coordinate gives zero unless all three incoming legs
+    and the outgoing leg have the same sector $p$. On that sector,
+    the expansion is exactly $H_{p,ij}$ or $R_{p,ck\mu}$.
+    Theorem~\ref{thm:mpo_mixed_triple_trace} therefore gives
+    (\ref{eq:mpo_mix_symbols_l_cross}) and, after taking normalized
+    traces, (\ref{eq:mpo_mix_symbols_l_weight}). If $L_0=L_1$ and
+    $D_0+D_1>0$, cancel the total dimension. If $D_0+D_1=0$,
+    both spaces are zero and all three normalized-trace matrices vanish.
+\end{proof}
+
+Put $C_{ij,ck\mu}=\widetilde H_{ij}\widetilde R_{ck\mu}$.
+The three contracted legs in this comparison are the $a$ bond,
+the $b$ bond, and the state bond, in that order.
+% TENKZ-MIXED-SYMBOLS-L-BEGIN
+% Formula: C_ij,ckmu(s,r)=sum_alpha,beta,x Htilde_ij(s,((alpha,beta),x))
+% Rtilde_ckmu(((alpha,beta),x),r). This is eq:mpo_mix_symbols_l_cross.
+% Ink: H is sequential analysis; R is fusion-then-action synthesis.
+% Internal virtual legs: alpha in K_a, beta in K_b, x in E, top to bottom.
+% Open virtual legs: s west and r east in E. Boundary signature: w,e.
+% No adjoints, transposes, scalarity assumption, or physical legs occur.
+\tenkzkernel
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=comparison, skin=box, size=l,
+            ports={180:virtual:$s$, 0:virtual:$r$}]{C_{ij,ck\mu}}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=seqana, skin=box, size=l, wires=3,
+            ports={180:virtual:$s$, 0@1:virtual, 0@2:virtual,
+                    0@3:virtual}]{\widetilde H_{ij}}
+        \tn[at=(1,2), name=fussyn, skin=box, size=l, wires=3,
+            ports={180@1:virtual, 180@2:virtual, 180@3:virtual,
+                    0:virtual:$r$}]{\widetilde R_{ck\mu}}
+        \tnwire{seqana.0@1}{fussyn.180@1}
+        \tnwire{seqana.0@2}{fussyn.180@2}
+        \tnwire{seqana.0@3}{fussyn.180@3}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-SYMBOLS-L-END
+
+The mixed action and fusion maps contain no $\gamma$. Whenever the
+chosen maps give the action decomposition of
+Theorem~\ref{thm:mpo_mixed_action_exact}, they therefore give this same
+$\widetilde L$ on $A(\gamma)$ for every real $\gamma$. In particular,
+common coefficients persist on $[0,1]$ without injectivity of the mixed
+state at either end.
+
+\begin{definition}[Source-oriented fusion trees and coefficients]
+    \label{def:mpo_mixed_f_trees}
+    \lean{MPOTensor.fusionLeftTreeAnalysis,
+        MPOTensor.fusionRightTreeAnalysis,
+        MPOTensor.fusionRightTreeSynthesis,
+        MPOTensor.fusionFMatrix_eq_inv_dim_mul_trace,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusionAnalysis_sum_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusionSynthesis_sum_apply}
+    Fix $a,b,c,d\in I$. Let $q=(e,\mu,\nu)$ run over left fusion
+    paths, with $0\leq\mu<N_{ab}^e$ and $0\leq\nu<N_{ec}^d$,
+    and let $t=(f,\lambda,\sigma)$ run over right fusion paths,
+    with $0\leq\lambda<N_{bc}^f$ and $0\leq\sigma<N_{af}^d$.
+    On $(K_{p,a}\otimes K_{p,b})\otimes K_{p,c}$ set
+    \begin{align}
+        H^\ell_{p,q}
+         & =V^F_{p,ec;d\nu}(V^F_{p,ab;e\mu}\otimes\Id_{K_{p,c}}),
+        \label{eq:mpo_mix_symbols_f_trees}                                \\
+        H^r_{p,t}
+         & =V^F_{p,af;d\sigma}(\Id_{K_{p,a}}\otimes V^F_{p,bc;f\lambda}),
+        \notag                                                            \\
+        S^r_{p,t}
+         & =(\Id_{K_{p,a}}\otimes W^F_{p,bc;f\lambda})W^F_{p,af;d\sigma},
+        \notag                                                            \\
+        (F_p)_{q,t}
+         & =\tau_{\chi_{p,d}}(H^\ell_{p,q}S^r_{p,t}).
+        \label{eq:mpo_mix_symbols_f_trace}
+    \end{align}
+    The right trees use the same associativity identification as the
+    left trees. The matrix has left-analysis rows $(e,\mu,\nu)$ and
+    right-synthesis columns $(f,\lambda,\sigma)$, as in
+    \cite[Section~2]{GarreRubio2023MPOSym}. Define the mixed trees and
+    $\widetilde F$ by the same formulas with mixed fusion maps.
+    In the ordered direct-sum bases, an entry of a mixed fusion
+    analysis or synthesis map equals its $p$ entry when its three
+    sectors all equal $p$, and is zero otherwise.
+\end{definition}
+
+\begin{theorem}[Inheritance of the fusion comparison matrix]
+    \label{thm:mpo_mixed_f_symbols}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_leftTreeAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_rightTreeAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_rightTreeSynthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_fusionFMatrix_eq_weighted,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_fusionFMatrix_of_eq}
+    \uses{def:mpo_mixed_f_trees,def:mpo_mixed_fusion_maps}
+    For the arbitrary chosen maps above,
+    \begin{align}
+        \widetilde H^\ell_q\widetilde S^r_t
+         & =(H^\ell_{0,q}S^r_{0,t})\oplus(H^\ell_{1,q}S^r_{1,t}),
+        \label{eq:mpo_mix_symbols_f_cross}                        \\
+        \widetilde F
+         & =(\chi_{0,d}+\chi_{1,d})^{-1}
+        (\chi_{0,d}F_0+\chi_{1,d}F_1).
+        \label{eq:mpo_mix_symbols_f_weight}
+    \end{align}
+    The inverse at zero is defined to be zero. If $F_0=F_1$, then
+    $\widetilde F=F_0$, including when both final bonds are zero.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_mixed_triple_trace}
+    Each contraction in (\ref{eq:mpo_mix_symbols_f_trees}) forces
+    all three incoming sectors to equal the outgoing sector. Thus
+    the mixed trees agree with the corresponding trees at $p=0,1$
+    on the two matching sectors and vanish elsewhere.
+    Theorem~\ref{thm:mpo_mixed_triple_trace} gives
+    (\ref{eq:mpo_mix_symbols_f_cross}); its normalized-trace
+    identity and (\ref{eq:mpo_mix_symbols_f_trace}) give
+    (\ref{eq:mpo_mix_symbols_f_weight}). When the final total
+    dimension is positive, equality follows by cancellation; when it
+    is zero, $F_0,F_1,\widetilde F$ all vanish.
+\end{proof}
+
+\begin{theorem}[The common analysis recoupling relation]
+    \label{thm:mpo_mixed_f_move}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_fusionFMatrix_analysis}
+    \uses{def:mpo_mixed_f_trees}
+    Suppose $F_0=F_1=F$ and that, for both $p=0,1$ and every left
+    fusion path $q$, the chosen maps satisfy the analysis relation
+    $H^\ell_{p,q}=\sum_t(F_p)_{q,t}H^r_{p,t}$. Then
+    \begin{align}
+        \widetilde H^\ell_q
+         & =\sum_t\widetilde F_{q,t}\widetilde H^r_t
+        =\sum_tF_{q,t}\widetilde H^r_t.
+        \label{eq:mpo_mix_symbols_f_move}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_mixed_f_symbols}
+    Theorem~\ref{thm:mpo_mixed_f_symbols} identifies
+    $\widetilde F=F$. On the sector where all four external indices
+    belong to $p$, (\ref{eq:mpo_mix_symbols_f_move}) is the assumed
+    relation for $H^\ell_{p,q}$. Every other sector is zero on both
+    sides. This proves the equality entry by entry, including empty
+    multiplicity sums.
+\end{proof}
+
+% TENKZ-MIXED-SYMBOLS-F-BEGIN
+% Formula: sum_u Vtilde_ec;dnu(z,(u,gamma)) Vtilde_ab;emu(u,(alpha,beta))
+% = sum_f,lambda,sigma F[(e,mu,nu),(f,lambda,sigma)]
+%   sum_v Vtilde_af;dsigma(z,(alpha,v)) Vtilde_bc;flambda(v,(beta,gamma)).
+% Ink: every V is actual mixed fusion analysis, never synthesis or an adjoint.
+% Contracted virtual leg: u in K_e (left), v in K_f (right).
+% Open virtual legs: z west in K_d; alpha,beta,gamma east in K_a,K_b,K_c.
+% Boundary signature: w,e,e,e; rows are (e,mu,nu), columns (f,lambda,sigma).
+\tenkzkernel
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=leftouter, skin=box, size=l, wires=3,
+            ports={180:virtual:$z$, 0@1:virtual,
+                    0@3:virtual:$\gamma$}]{\widetilde V_{ec;d\nu}}
+        \tn[at=(1,2), name=leftinner, skin=box, size=l, wires=2,
+            ports={180:virtual, 0@1:virtual:$\alpha$,
+                    0@2:virtual:$\beta$}]{\widetilde V_{ab;e\mu}}
+        \tnwire{leftouter.0@1}{leftinner.180}
+    \end{tenkz}
+    $=\displaystyle\sum_{f,\lambda,\sigma}F_{q,t}$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=rightouter, skin=box, size=l, wires=3,
+            ports={180:virtual:$z$, 0@1:virtual:$\alpha$,
+                    0@2:virtual}]{\widetilde V_{af;d\sigma}}
+        \tn[at=(2,2), name=rightinner, skin=box, size=l, wires=2,
+            ports={180:virtual, 0@1:virtual:$\beta$,
+                    0@2:virtual:$\gamma$}]{\widetilde V_{bc;f\lambda}}
+        \tnwire{rightouter.0@2}{rightinner.180}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-SYMBOLS-F-END
+
+Equality of the chosen normalized-trace matrices is assumed; choosing
+such maps from gauge-equivalent symbol classes is a separate question.
+The coefficient identities require neither biorthogonality nor
+injectivity. The recoupling theorem additionally assumes the two
+analysis relations at the ends of the interpolation; equality of
+$F_0,F_1$ alone does not supply those relations. These statements do
+not assert injectivity of the mixed operator or symmetric-phase
+classification.

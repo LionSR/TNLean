@@ -5444,3 +5444,21 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The scalar rate conversion likewise reuses
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
+
+### Block-supported mixed tree contractions — promoted (2026-10-06)
+
+- **Pattern:** Expand a product of analysis/synthesis matrices supported on
+  one common endpoint summand, split the three finite sums by that summand,
+  and take the normalized trace without assuming the endpoint dimensions
+  are nonzero.
+- **Seen:** The sequential-action, fusion-action, and left/right fusion-tree
+  calculations in `MixedEndpointMPOActionSymbols.lean` and
+  `MixedEndpointMPOFusionSymbols.lean`.
+- **Abstraction:** `mixedEndpointTripleAnalysis_mul_synthesis`,
+  `mixedEndpointTripleAnalysis_trace_mul_synthesis`, and
+  `mixedEndpointTripleAnalysis_normalizedTrace_mul_synthesis` in
+  `MixedEndpointTripleMaps.lean`; `finDimension_mul_normalizedTrace`
+  handles the zero-dimensional case separately from field cancellation.
+- **Notes:** The coefficient weights use the final state bond for L and
+  the final operator bond for F. Equal coefficients are inherited; unequal
+  coefficients are dimension-weighted, not averaged without weights.

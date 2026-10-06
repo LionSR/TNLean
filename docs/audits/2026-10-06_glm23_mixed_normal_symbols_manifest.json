@@ -1,0 +1,27 @@
+{
+  "base_pr": 8714,
+  "base_head": "bce3c01de917efbf9ab3c614d11f1c336cf9e239",
+  "base_tree": "c14ffe914722ad0d4e2f2b0e3eedce18a1dbe648",
+  "production_modules": 4,
+  "production_lines": 936,
+  "public_declarations": 28,
+  "regression_files": 3,
+  "standard_axiom_guards": 19,
+  "normality_targeted_strict": "pass, production and regression bytes unchanged",
+  "symbols_targeted_production_and_guards": "pass in combined probe5",
+  "symbols_combined_strict": "failed only12 unused binder-name diagnostics in one test; four binder lists made anonymous afterward",
+  "separate_module_build_and_final_regressions": "pending exact-head CI",
+  "checked_blueprint_markers": false,
+  "sha256": {
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPONormality.lean": "a82228dc43207801293af4f5a1c2c5b620f61257a836d1a178624f884b902c7e",
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointTripleMaps.lean": "64bffc634a2596598a7001401ad1c67c9a9392b74367f7ace159b5262f4dbe99",
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPOActionSymbols.lean": "397972894417567e2a551c766a05ddabf260ba217931561387641b328b23e171",
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPOFusionSymbols.lean": "dfef0373b344d4f02652dfc3536e74687e923b248a4084869216ff6a97060646",
+    "TNLeanTest/MixedEndpointMPONormality.lean": "9c3bbd1c51a9cb3d2c880b3bd03ba3bcf8b07a1b5ae7eaabbe2e5e2e4daaf1cf",
+    "TNLeanTest/MixedEndpointMPOActionSymbols.lean": "6c3422071c6c42f661f8c44de87c4a3843155c759bda85b14641ef759cbe67cf",
+    "TNLeanTest/MixedEndpointMPOFusionSymbols.lean": "07c1be9a9f32f433d7431bfafe8dc897859f7dfde51a89b0dfbe381fcf1a3437",
+    "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+    "lake-manifest.json": "a6ccb46404b164ab38d9c250f613bd902794d6e94436677764c7b610b7b82b18",
+    "tenkz.toml": "b47dd85f2a66ae5a809712f494b50176ada4ffb5809ec5cbc74012c851242e39"
+  }
+}

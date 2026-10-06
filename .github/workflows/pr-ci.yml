@@ -91,6 +91,8 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_mixed_action.py'
       - 'scripts/test_tenkz_mixed_fusion.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -174,6 +176,8 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_mixed_action.py'
       - 'scripts/test_tenkz_mixed_fusion.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
   workflow_dispatch:
 
 concurrency:
@@ -274,6 +278,8 @@ jobs:
               - 'scripts/test_tenkz_ordered_mixing.py'
               - 'scripts/test_tenkz_mixed_action.py'
               - 'scripts/test_tenkz_mixed_fusion.py'
+              - 'scripts/test_tenkz_mixed_normality.py'
+              - 'scripts/test_tenkz_mixed_symbols.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -433,7 +439,8 @@ jobs:
               BoundaryDecompositionComparison BoundaryActionLMatrix \
               TriangularPadding CompleteZipperFusionMixedOrientation TriangularBoundary \
               BoundaryFusionComparison BoundarySourceMixedPentagon MixedEndpointMPOAction \
-              BoundaryActionCrossTransport MixedEndpointMPOFusionMaps MixedEndpointMPOFusion; do
+              BoundaryActionCrossTransport MixedEndpointMPOFusionMaps MixedEndpointMPOFusion \
+              MixedEndpointMPONormality MixedEndpointMPOActionSymbols MixedEndpointMPOFusionSymbols; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -838,6 +845,14 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_mixed_fusion.py
 
+      - name: Test mixed MPO normality diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_normality.py
+
+      - name: Test actual mixed MPO symbol diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_symbols.py
+
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
 
@@ -917,6 +932,8 @@ jobs:
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
           python3 scripts/test_tenkz_mixed_action.py --web-root blueprint/web --browser
           python3 scripts/test_tenkz_mixed_fusion.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_normality.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_symbols.py --web-root blueprint/web --browser
 
       - name: Add and test blueprint search
         if: env.TEX_CHANGED == 'true'
