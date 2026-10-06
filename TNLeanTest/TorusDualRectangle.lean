@@ -5,8 +5,8 @@ import TNLean.PEPS.TorusDualWinding
 The first two examples include reverse steps and nontrivial detours. -/
 namespace TNLean.PEPS
 
-local instance : Quiver (ℕ × ℕ) := rectDualQuiver 2 2
-local instance : Quiver (TorusVertex 5 5) := torusDualQuiver 5 5
+local instance rectangleTestQuiver : Quiver (ℕ × ℕ) := rectDualQuiver 2 2
+local instance rectangleTestTorusQuiver : Quiver (TorusVertex 5 5) := torusDualQuiver 5 5
 
 private def patch : TorusDualRectangle 5 5 := ⟨(4, 4), 2, 2, by decide, by decide⟩
 

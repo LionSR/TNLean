@@ -20,7 +20,7 @@ namespace TNLean.PEPS
 
 variable {width height : ℕ}
 local notation "X" => TorusVertex width height
-local instance : Quiver X := torusDualQuiver width height
+local instance rectangleTorusQuiver : Quiver X := torusDualQuiver width height
 
 /-- A common initial path can be cancelled using elementary backtracks. -/
 theorem TorusDualHomotopy.cancel_prefix {R : Set X} {r a b : X}
