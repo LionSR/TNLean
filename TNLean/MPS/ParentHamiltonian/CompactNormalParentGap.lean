@@ -184,14 +184,9 @@ theorem exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective
     ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ x ∈ S, ∀ N : ℕ, N₀ ≤ N →
       ∀ v ∈ (LinearMap.ker (parentHamiltonianES (A x) (p + 1) N))ᗮ,
         δ * ‖v‖ ≤ ‖parentHamiltonianES (A x) (p + 1) N v‖ := by
-  apply hS.exists_uniform_pos_nat_bounds
-    (fun δ N₀ x => ∀ N : ℕ, N₀ ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES (A x) (p + 1) N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES (A x) (p + 1) N v‖)
-  · intro δ δ' N₀ x hle hgap N hN v hv
-    exact (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap N hN v hv)
-  · intro δ N₀ N₁ x hle hgap N hN
-    exact hgap N (hle.trans hN)
+  apply hS.exists_uniform_norm_lower_bound_on_tail
+    (fun x N v => parentHamiltonianES (A x) (p + 1) N v)
+    (fun x N => ↑((LinearMap.ker (parentHamiltonianES (A x) (p + 1) N))ᗮ))
   · intro x hx
     obtain ⟨m, hm, γ, hnum, hgap⟩ :=
       exists_strict_openParentHamiltonianES_window_of_isNBlkInjective (A x) hp (hInj x)

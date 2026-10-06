@@ -104,16 +104,11 @@ theorem exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact
         (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N))ᗮ,
         δ * ‖v‖ ≤ ‖parentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N v‖ := by
-  apply hK.exists_uniform_pos_nat_bounds
-    (fun δ N₀ x => ∀ N : ℕ, N₀ ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-        (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N v‖)
-  · intro δ δ' N₀ x hle hgap N hN v hv
-    exact (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap N hN v hv)
-  · intro δ N₀ N₁ x hle hgap N hN
-    exact hgap N (hle.trans hN)
+  apply hK.exists_uniform_norm_lower_bound_on_tail
+    (fun x N v => parentHamiltonianES
+      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N v)
+    (fun x N => ↑((LinearMap.ker (parentHamiltonianES
+      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N))ᗮ))
   · intro x _
     obtain ⟨m, hm, γ, _hγ, hnum, hgap⟩ :=
       exists_strict_openParentHamiltonianES_toTensorFromBlocks_window_of_wordTupleSpanTop

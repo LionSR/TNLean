@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LeftPolar
+import TNLean.MPS.ParentHamiltonian.NormalBlockInjectiveBlocking
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
 
 /-!
@@ -215,9 +216,8 @@ theorem exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor
               (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N v‖ := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
-    exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor
-      A (lt_of_lt_of_le zero_lt_one (le_max_right _ _)) (le_max_left _ _) hNormal hDistinct
+    exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
   exact ⟨L, hL, hBound, exists_uniform_isometricDeformation_parent_gap
-    (fun j => blockTensor (A j) L) (wordTupleSpanTop_blockTensor_one A hSpan)⟩
+    (fun j => blockTensor (A j) L) hSpan⟩
 
 end MPSTensor
