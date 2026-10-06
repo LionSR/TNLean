@@ -35,3 +35,66 @@
     bonds impose the boundary constraints, while those on exterior bonds
     contribute one. The remaining sum is the defining open coefficient.
 \end{proof}
+
+\begin{definition}[Native coordinates and an embedded one-site collar]
+    \label{def:peps_dual_collar}
+    \lean{TNLean.PEPS.torusLocalTupleEquiv,TNLean.PEPS.torusEndpointTupleEquiv,
+        TNLean.PEPS.torusOpenCoefficient,TNLean.PEPS.torusDeltaCompletedTensor,
+        TNLean.PEPS.TorusDualCollar,TNLean.PEPS.TorusDualCollar.region,
+        TNLean.PEPS.TorusDualCollar.swept,TNLean.PEPS.torusDualFluxBondMatrices}
+    \notready
+    \uses{def:peps_labelled_open_coefficient,def:peps_dual_rectangle_comb}
+    Native horizontal and vertical bond labels retain their direction and
+    endpoint polarity. The four incidence labels at a site are ordered
+    top, right, down, left. Around a rectangular sweep of side lengths
+    $W,H$, take the translated collar with lifted coordinates
+    $0\leq i\leq W+1$, $0\leq j\leq H+1$, requiring
+    $W+1<w$ and $H+1<h$.
+\end{definition}
+\begin{theorem}[Native delta completion and collar geometry]
+    \label{thm:peps_dual_collar_geometry}
+    \lean{TNLean.PEPS.labelledNetwork_eq_torusBondNetwork,
+        TNLean.PEPS.torusBondNetwork_deltaCompletedTensor,
+        TNLean.PEPS.TorusDualCollar.origin_mem,TNLean.PEPS.TorusDualCollar.injective,
+        TNLean.PEPS.TorusDualCollar.neighbors_mem,
+        TNLean.PEPS.TorusDualCollar.incident_internal,
+        TNLean.PEPS.TorusDualCollar.noninternal_outside,
+        TNLean.PEPS.torusOpenCoefficient_eq_zero_of_isEmpty}
+    \notready
+    \uses{def:peps_dual_collar,thm:peps_labelled_open_delta}
+    The labelled contraction equals the native four-leg contraction, so the
+    delta-completion identity holds in native coordinates as well.
+    The collar is nonempty and embedded. Every swept site and its four
+    neighbors lie in it; hence each noninternal bond has both endpoints
+    outside the swept support. For an empty virtual alphabet the open
+    coefficient is zero, since the collar contains an incidence.
+\end{theorem}
+\begin{proof}
+    Regroup the four anchored bond endpoints at each vertex and read their
+    incident site coordinates. The collar bounds follow directly from the
+    lifted coordinate ranges. A noninternal bond incident to a swept site
+    would have its other endpoint among that site's neighbors, a contradiction.
+\end{proof}
+\begin{theorem}[Collared open deformation with a correlated boundary]
+    \label{thm:peps_dual_collar_open}
+    \lean{TNLean.PEPS.TorusDualCollar.exists_internalFluxGauge,
+        TNLean.PEPS.TorusDualCollar.openCoefficient_eq,
+        TNLean.PEPS.TorusDualCollar.correlatedBoundary_eq}
+    \notready
+    \uses{thm:peps_dual_collar_geometry,thm:peps_dual_rectangle}
+    Two labelled unit-step paths with the same lifted endpoints in the
+    embedded patch have equal open coefficients on its collar, provided
+    the site tensors are virtually invariant on the swept interior.
+    The group and its matrix representation are arbitrary. Equality persists
+    after contraction against any joint boundary tensor, without a
+    factorization hypothesis or a nonempty virtual-alphabet assumption.
+\end{theorem}
+\begin{proof}
+    Derive the supported gauge from the rectangular homotopy. Both endpoints
+    of crossing bonds are outside its support, so their gauge values are
+    identity. Complete the fixed physical coefficient by exterior delta
+    tensors and apply the closed gauge-contraction identity. The exact
+    completion formula gives equality of open coefficients. Sum it against
+    the joint boundary tensor. If the virtual alphabet is empty, both open
+    sums vanish.
+\end{proof}

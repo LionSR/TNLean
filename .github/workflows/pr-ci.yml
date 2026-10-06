@@ -494,10 +494,11 @@ jobs:
         run: |
           set -eo pipefail
           test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          lake --fail-fast build +TNLean.PEPS.LabelledOpenCoefficient:olean \
+          lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
           for source in TNLean/PEPS/LabelledOpenCoefficient.lean \
-              TNLeanTest/LabelledOpenCoefficient.lean; do
+              TNLean/PEPS/TorusLabelledOpenCoefficient.lean TNLean/PEPS/TorusDualCollar.lean \
+              TNLean/PEPS/TorusDualOpenDeformation.lean TNLeanTest/LabelledOpenCoefficient.lean; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
