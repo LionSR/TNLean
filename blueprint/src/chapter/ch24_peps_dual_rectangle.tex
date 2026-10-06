@@ -1,6 +1,5 @@
 % SCP10 arXiv:1001.3807v3, Lemma 6.14, paper_v3.tex:2199--2214.
-% Candidate finite-rectangle specialization. Lean compilation is blocked by
-% unavailable pinned Mathlib cache; intentionally no leanok tags yet.
+% Finite-rectangle specialization verified by strict Lean checks in PR #8726.
 
 \begin{definition}[Lifted rectangular steps and the rooted comb]%
     \label{def:peps_dual_rectangle_comb}
@@ -17,7 +16,7 @@
         TNLean.PEPS.rectDualPathToTorus,
         TNLean.PEPS.TorusDualRectangle,
         TNLean.PEPS.TorusDualRectangle.injective}
-    \notready
+    \leanok
     \uses{def:peps_dual_flux_path}
     Choose $(x_0,y_0)\in X$ and $W,H\geq0$.
     Lifted vertices are pairs $(i,j)\in\mathbb N^2$.
@@ -42,13 +41,13 @@
         TNLean.PEPS.torusRectComb_north,
         TNLean.PEPS.torusRectComb_east,
         TNLean.PEPS.RectDualStep.comb}
-    \notready
+    \leanok
     \uses{def:peps_dual_rectangle_comb,def:peps_dual_flux_homotopy}
     For every permitted edge $e:a\to b$, $C_a e\sim_R C_b$.
     More generally, $ce\sim_R d$ implies $de^{-1}\sim_R c$,
     and $cp\sim_R cq$ implies $p\sim_R q$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Exchange a column and its final east edge by successive adjacent
     squares; a north edge simply extends a column.
     Reverse edges and common prefixes are removed by backtrack cancellation.
@@ -59,7 +58,7 @@
     \lean{TNLean.PEPS.rectDualPath_comb,
         TNLean.PEPS.rectDualPath_homotopy,
         TNLean.PEPS.TorusDualRectangle.homotopy}
-    \notready
+    \leanok
     \uses{thm:peps_dual_rectangle_comb}
     Fix a dual plaquette $(x_0,y_0)$ and integers $0\leq W<w$,
     $0\leq H<h$. Embed the closed rectangle
@@ -71,7 +70,7 @@
     This is the rectangular bulk specialization of
     \cite[Lemma~6.14]{Schuch2010PEPS}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Let $C_{i,j}$ run along the bottom row from $(0,0)$ to $(i,0)$,
     then up to $(i,j)$. Interchanging an east edge with a column of
     height $j$ uses exactly the $j$ adjacent squares. Hence
@@ -94,7 +93,7 @@
 % This depicts the column/east exchange, not the whole arbitrary-path proof.
 \begin{tenkzequation}
     \tenkzkernel
-    \begin{tenkz}[size=m, rows={wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
+    \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
         \tnwire[kind=string, stroke=dotted, route=orth, dir=to,
             name=rectColumnEast, via={(2,2)}]{(6,2)}{(2,6)}
         \tnmark[form=label, label pos=225]{(6,2)}{$a$}
@@ -103,7 +102,7 @@
         \tnmark[form=label]{(3,4)}{$s_2$}
     \end{tenkz}
     $\quad\sim_R\quad$
-    \begin{tenkz}[size=m, rows={wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
+    \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
         \tnwire[kind=string, stroke=dotted, route=orth, dir=to,
             name=rectEastColumn, via={(6,6)}]{(6,2)}{(2,6)}
         \tnmark[form=label, label pos=225]{(6,2)}{$a$}
@@ -117,7 +116,7 @@
 \begin{theorem}[Rectangular bulk deformation with a fixed exterior]%
     \label{thm:peps_dual_rectangle_exterior}
     \lean{TNLean.PEPS.TorusDualRectangle.torusBondNetwork_eq_with_exterior}
-    \notready
+    \leanok
     \uses{thm:peps_dual_rectangle,thm:peps_dual_flux_deformation}
     Let $p,q$ be two paths as above, let $U$ be a group representation,
     and fix $g$ in the group. Assume virtual $G$-invariance at every
@@ -127,7 +126,7 @@
     The two actual native contractions are equal for each fixed physical
     configuration. Site tensors outside $R$ are unrestricted.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The derived homotopy uses only squares supported in $R$.
     Apply the supported gauge cancellation identity to the actual contraction.
 \end{proof}

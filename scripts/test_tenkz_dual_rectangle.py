@@ -68,6 +68,12 @@ def main():
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         assert run.returncode == 0, run.stdout
         assert 'Overfull' not in run.stdout, run.stdout
+        info = subprocess.check_output(['pdfinfo', str(work / 'rectangle.pdf')], text=True)
+        assert re.search(r'Pages:\s+1\b', info), info
+        dimensions = re.search(r'Page size:\s+([\d.]+) x ([\d.]+) pts', info)
+        assert dimensions, info
+        width, height = map(float, dimensions.groups())
+        assert width > 1.8 * height, 'equation panels wrapped vertically'
         audit = Audit(work / 'rectangle.tnlog', tex)
         audit.parse_log()
         audit.link_tex()
@@ -77,7 +83,7 @@ def main():
             getattr(audit, check)()
         assert not audit.findings, [(f.severity, f.rule, f.msg) for f in audit.findings]
     print('PASS: routes, lifted endpoints, swept centers, four negative mutations, '
-          'XeLaTeX rendering and eight Tenkz audits')
+          'single-row XeLaTeX rendering and eight Tenkz audits')
 
 
 if __name__ == '__main__':

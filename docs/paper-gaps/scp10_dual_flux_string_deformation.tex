@@ -178,7 +178,8 @@ rather than introduce a flatness assumption or a supplied gauge witness
 into the geometric deformation theorem.
 
 \section{Finite rectangular continuation}
-A separate finite rectangular specialization is under verification.
+A finite rectangular specialization has passed strict Lean compilation and
+axiom checks in draft \ghpr{8726}.
 Choose a translated lifted rectangle $[0,W]\times[0,H]$ with $W<w$ and
 $H<h$, retain the four unit-step labels, and require both paths to have
 the same lifted endpoints. A bottom-row and column comb reduces the
@@ -191,8 +192,6 @@ allowed only on bonds whose two endpoints both lie outside $R$.
 
 This specialization does not assert deformation avoiding an arbitrary
 region, equality of winding classes, an open-boundary theorem, or equality
-with a vacuum reduced density matrix. Its candidate declarations have
-not yet passed the strict compilation and axiom checks; the unrestricted
-source gap remains open.
+with a vacuum reduced density matrix. The unrestricted source gap remains open.
 
 \end{document}

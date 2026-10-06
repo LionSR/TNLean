@@ -1,14 +1,32 @@
-# Finite rectangular bulk checkpoint — Lean verification blocked
+# Finite rectangular bulk verification
 
 Base: `f8ebaf5180d79443e38644adaa176cd452a24aa8` (published #8707 integration).
 Branch: `codex/scp10-finite-bulk`.
 
-This is an **unverified source checkpoint**, not a completed formalization.
-No Lean elaboration or axiom audit of the new declarations has succeeded.
-The blueprint entries are `notready`, with no new `leanok` claims.
-Declaration links identify candidate source without asserting verification.
+Strict verification passed at `0c04b3772ee9c733d7851b5383685494a6dd6469`
+in [GitHub Actions run 37496233138](https://github.com/LionSR/TNLean/actions/runs/37496233138),
+build job `112381690211`. The PR merge tree matched the head tree
+`cf39e2c7c14b423aede46d31d9f3e424c289b418`.
+Both new production modules and the focused regression passed with
+`autoImplicit=false`, `relaxedAutoImplicit=false`, `maxSynthPendingDepth=3`,
+`linter.mathlibStandardSet=true`, and `warningAsError=true`.
+The full Lean project build, all subsequent regression steps, style linter,
+compilation-time checks, and blueprint/paper-gap declaration checks passed.
+The subsequent documentation and figure update does not change Lean sources.
+The restricted blueprint entries are now `leanok`; the unrestricted source gap
+remains open.
 
-## Candidate mathematics
+Axiom output from both the early check and the later PEPS regression agrees:
+
+- `torusRectColumn_east`, `RectDualStep.comb`, `rectDualPath_homotopy`,
+  `TorusDualRectangle.injective`, and `TorusDualRectangle.homotopy`:
+  `[propext, Quot.sound]`.
+- `TorusDualRectangle.torusBondNetwork_eq_with_exterior`:
+  `[propext, Classical.choice, Quot.sound]`.
+
+No `sorryAx` or additional axioms occur in these audited declarations.
+
+## Verified mathematics
 
 `TorusDualRectangle.lean` constructs a bottom-row/column comb. It contains
 prefix cancellation, reverse-edge cancellation, the column/east square exchange,
@@ -53,11 +71,12 @@ The old unpublished `791f42a4` packet was not accessed or used.
 - No Mathlib source rebuild, stale artifact substitution, or dependency update
   was attempted. Interrupted the futile cache downloader after diagnosing 403.
 
-Smallest recovery: allow the official pinned cache endpoint, or transfer its
-matching prebuilt artifacts. Exact-head PR CI can instead elaborate the files
-using the normal cache setup. Strict regressions have been added to the existing
-PEPS regression loop. Axiom output must still be inspected for the new geometry
-and its actual-contraction corollary; no axiom result is claimed here.
+The local cache blocker remains, but exact-head PR CI supplied the authorized
+validation route using its normal pinned cache setup. The narrowly scoped early
+CI check guards for `Mathlib.olean`, builds the two required targets with
+`lake --fail-fast`, and strictly re-elaborates all three files before the full
+project build. Compatible-cache provenance protections remain in place;
+29 cache-policy tests pass. No further cache mirror probing was attempted.
 
 ## Checks completed
 
@@ -68,6 +87,8 @@ and its actual-contraction corollary; no axiom result is claimed here.
   wrong stroke, wrong swept center).
 - Eight Tenkz event-stream audits passed: empty pictures, dialects, crossings,
   kernel checks, bounding boxes, label overlaps, equation groups and boundaries.
+- Visual inspection confirmed a single row with both panels and the relation
+  between them. A PDF aspect-ratio assertion now rejects accidental wrapping.
 - Geometry-only dotted routes have no tensor indices or physical legs.
   The figure illustrates only `N,N,E ~ E,N,N`, not the entire path-induction
   theorem and not a density-matrix assertion.
