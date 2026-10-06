@@ -140,3 +140,22 @@ indices and contractions remain legible, with no overflow or unresolved
 references. One benign underfull-paragraph warning remains; full integrated
 web/browser checks are still reserved for CI. Independent source review found
 no mathematical, scope, diagram-semantic or CI-gate blocker.
+
+## Compilation-time repair: 2026-10-06 00:16 UTC
+
+Published head `61312f1` passed its full Lean build, all configured strict
+regressions and axiom guards, and the full blueprint/browser checks. Its
+separate timing check failed because `MixedEndpointMPOAction` took 64 seconds
+against the unchanged 50-second limit. The coordinate proof now uses only
+its explicit required simplification rules instead of the global simp set.
+All public statements, declaration names and the existing heartbeat cap
+are unchanged. No timing or verification gate is relaxed.
+
+The candidate source SHA-256 is
+`eb28b5df0e0e383d85083f0621b8d9b75eb4a626c0c3a67955ffd250d2ca8acd`.
+It passes a strict standalone source check and a combined check with the
+unchanged regression body, including all three standard-axiom guards.
+That combined check removes only the test's import of the source being
+checked; it does not replace separate-module validation in fresh CI.
+Local profiling showed substantially less simplifier work, but only the
+next exact-head CI run can establish compliance with its timing limit.

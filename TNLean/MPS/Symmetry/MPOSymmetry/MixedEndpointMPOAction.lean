@@ -77,11 +77,15 @@ theorem mixedEndpointMPOLetter_action
           (α, i) (β, j) := by
   classical
   cases r <;> cases s <;> cases i <;> cases j <;> cases α <;> cases β <;>
-    simp [Fintype.sum_sum_type, mixedEndpointMPOLetter, mixedEndpointLetter,
+    simp only [Fintype.sum_sum_type, mixedEndpointMPOLetter, mixedEndpointLetter,
       mixedEndpointSynthesis, mixedEndpointAnalysis, Matrix.fromBlocks_apply₁₁,
       Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂,
       Matrix.mul_apply, Matrix.single_apply, ite_and, mul_ite, ite_mul,
-      Finset.sum_mul]
+      Finset.sum_mul, Matrix.zero_apply, zero_mul, mul_zero, Finset.sum_const_zero,
+      zero_add, add_zero, Sum.inl.injEq, Sum.inr.injEq, Sum.inl_ne_inr,
+      Sum.inr_ne_inl, and_false, false_and, ite_false, ite_true,
+      Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.sum_ite_irrel,
+      Finset.mem_univ, mul_one]
   · simpa [Matrix.mul_apply, Finset.sum_mul] using
       endpoint_action_entry T₀ A₀ V₀ W₀ h₀ _ _ _ _ _ _
   · simpa [Matrix.mul_apply, Finset.sum_mul] using
