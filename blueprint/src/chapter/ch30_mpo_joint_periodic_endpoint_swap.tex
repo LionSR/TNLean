@@ -1,6 +1,6 @@
 % Source: GLM23v3, REsubmission.tex, lines 1695--1777.
 % Scope: exact sector exchange and both actual periodic endpoints.
-% These new declarations await compilation; existing first-endpoint markers remain checked.
+% Checked against native CI run 37472300569, build job 112298681251.
 
 \subsection{Exchanging the two periodic endpoints}
 \label{sec:mpo_joint_periodic_endpoint_swap}
@@ -14,6 +14,7 @@ preserved.
     \label{def:mpo_joint_endpoint_swap}
     \lean{MPSTensor.MPOSymmetry.jointMixedPhysicalSwap,
         MPSTensor.MPOSymmetry.jointMixedEndpointPhysicalSwap}
+    \leanok
     \uses{def:mpo_joint_mixed_family}
     Write $\mathcal I$ for the joint alphabet of $(A_0,A_1)$ and
     $\widetilde{\mathcal I}$ for that of the reversed pair $(A_1,A_0)$.
@@ -41,6 +42,7 @@ preserved.
         MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_jointMixed_reflect_swap,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_eq_map_reflect_swap,
         MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_eq_conj_reflect_swap}
+    \leanok
     \uses{def:mpo_joint_endpoint_swap,def:mpo_joint_mixed_support}
     A tilde denotes the reversed pair. For every $\gamma\in\mathbb R$,
     every block $x$, and every physical letter $\mu$,
@@ -61,6 +63,7 @@ preserved.
     These identities require no spanning or dimension assumptions.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_phase_boundary}
     Inspect the four physical summands. An endpoint letter stays in its
     corresponding virtual corner after both labels are exchanged; a
@@ -79,6 +82,7 @@ preserved.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_eq_conj_reflect_swap,
         MPSTensor.MPOSymmetry.mpv_jointMixedEndpointInterpolation_reflect_swap,
         MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_jointMixed_reflect_swap}
+    \leanok
     \uses{thm:mpo_joint_endpoint_swap_support}
     For every $N\ge0$ and every real $\gamma$,
     \begin{align}
@@ -91,6 +95,7 @@ preserved.
     of the component vectors, with its coefficient vector unchanged.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_endpoint_swap_support}
     Relabeling physical letters commutes with restriction to each cyclic
     window and with extension by the spectator identity. It therefore
@@ -108,6 +113,7 @@ preserved.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_endpoints_eq_actual,
         MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_one_gap,
         MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_endpoints_gap}
+    \leanok
     \uses{thm:mpo_joint_endpoint_swap_periodic,thm:mpo_joint_periodic_gap,
         thm:martingale_isometric_conjugation_gap}
     Suppose that both endpoint families have simultaneous one-site span
@@ -133,6 +139,7 @@ preserved.
     The statement concerns the two endpoints only.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_endpoint_swap_periodic,thm:mpo_joint_periodic_gap,
         thm:martingale_isometric_conjugation_gap}
     Apply Theorem~\ref{thm:mpo_joint_periodic_gap} to $(A_1,A_0)$.

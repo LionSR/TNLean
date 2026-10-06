@@ -1,5 +1,5 @@
 {
-  "status": "coherent source and rendered documentation checkpoint; actual swap/capstone compilation pending",
+  "status": "both actual periodic endpoints checked by native CI; documentation-only checked markers rendered and verified locally",
   "base_public_commit": "f2498b2487ba23b5ba6a449ddc59172597c6ecbd",
   "base_tree": "de73e3c6794a6db002c7039e30750c3670c822f7",
   "production_checkpoint_public_commit": "18fe4919ac69bfbf670245dcf6c9d0fe02808b47",
@@ -10,30 +10,30 @@
   "full_path_gap_claim": false,
   "source_sha256": {
     "TNLean/MPS/ParentHamiltonian/Martingale/IsometricConjugationGap.lean": "62849c6e2055d5b8fb99fb2e2c0814cbabd9219274ee345d31ff438371df60fb",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSwap.lean": "82e5479aa9e420bc935975273b751f3a1236b69f2bb9e1ce5a18d49458122ff4",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSwap.lean": "dd0e65cfc13a9eaa594ef451b4aaf4d414b5cb1e6ae69b758ee5678253e38139",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointRightPeriodicGap.lean": "d60b397453c497bfc60ca0d91b558c2f158269c5866af5d2f3d981c84593d700",
     "TNLeanTest/JointMixedEndpointRightPeriodicGap.lean": "8af3a49d3757533d4e52c26338fd11e2b0f7f7638bf77debcebc1da51cfe38c1",
-    "blueprint/src/chapter/ch30_mpo_joint_periodic_endpoint_swap.tex": "0a1575a525f0219d43e6fb7486b0cd63dccd9f39b8fb79161195436b36534a6f",
+    "blueprint/src/chapter/ch30_mpo_joint_periodic_endpoint_swap.tex": "667a56b358dbdbb2a2c9fe85aa6c6488afcce0f0e53b122d0ee5f69e2b068a81",
     "blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap_martingale.tex": "22a8ee0281d011381e0bb3ccb44fda88a02f6e0734f2e8b473b711585315108d"
   },
   "shared_generic_owner_label": "thm:martingale_isometric_conjugation_gap",
-  "shared_generic_owner_fragment_sha256": "436a657d58f33aad3fbad8e299e58389d34a288d64d5e3740bafc89c9749a1e3",
+  "shared_generic_owner_fragment_sha256": "d036d026778ca08a129c010bbd45d4e4cc287f68392dd4a14118462100b53355",
   "helper_native_validation": {
-    "status": "passed before filesystem interruption; source unchanged",
-    "seconds": 8.9,
+    "status": "passed in full native CI",
+    "seconds": 2.0,
     "source_sha256": "62849c6e2055d5b8fb99fb2e2c0814cbabd9219274ee345d31ff438371df60fb"
   },
-  "actual_swap_and_capstone_native_validation": "pending",
+  "actual_swap_and_capstone_native_validation": "passed: native CI run 37472300569, build job 112298681251",
   "strict_axiom_guards": {
     "count": 14,
-    "status": "pending",
+    "status": "passed: fourteen new guards; eleven existing first-endpoint guards also passed",
     "expected_axioms": [
       "propext",
       "Classical.choice",
       "Quot.sound"
     ]
   },
-  "compiled_owner_check": "pending",
+  "compiled_owner_check": "passed: native blueprint declaration check, build job 112298681251",
   "source_owner_check": "passed: exactly one owner per declaration",
   "declaration_owners": [
     "MPSTensor.MPOSymmetry.jointMixedPhysicalSwap",
@@ -59,20 +59,20 @@
     "LinearIsometryEquiv.norm_gap_iff_of_conj"
   ],
   "rendered_owner_links": 21,
-  "new_swap_checked_entries": 0,
-  "new_swap_checked_proofs": 0,
+  "new_swap_checked_entries": 4,
+  "new_swap_checked_proofs": 3,
   "shared_generic_checked_entries": 1,
   "shared_generic_checked_proofs": 1,
-  "pdf_sha256": "4e7de5f2b73a6b328d103a0562bdb02d3abd30aaf3078e83e181eedbe2e660f8",
-  "html_sha256": "f30e62644162b8c2458ef9ce24c1c4167d19f9a57921545590a71c09d4cc9dba",
-  "focus_manifest_sha256": "44fb525460910a45aae89e9b61e81a8ff4dffae75353ce16578abd2556860aee",
+  "pdf_sha256": "5e41458a1a4dd6426e558e925d2c16688ddbe51f238fafa50ad533e8004bfced",
+  "html_sha256": "2ccec945a9c25518eb0d34e40555cd3a2a9ba71466da63de8140c8e1c2369fb9",
+  "focus_manifest_sha256": "ef8012b5f298603c9b53aa8366685271f8423a62e3c24b9f72fc02bb1ce10a31",
   "pdf_visual_pages": [
     3,
     4
   ],
   "visual_page_sha256": {
-    "3": "1f8b0e67fa3c1252f73556b2e416a8c111f056e871cca7eb3c3ec00801aefb8b",
-    "4": "ea9b5ebc138ab70c02bee57a4d31872b9cb77338cb31cd81ba04bbebd8b009a4"
+    "3": "b3b55f7d35e23bf416d1fa083bfb68c69d2cb22da5ae61a0ba5772fb277cf6b2",
+    "4": "b88b73a73b850e2f79a129bec4a85877c530b13f148832c15f8726e1f0adb773"
   },
   "overfull_boxes": 0,
   "tenkz_event_audit": {
@@ -80,14 +80,14 @@
     "hard_errors": 0,
     "advisories": 0
   },
-  "raw_html_reader_checks": "passed",
-  "browser_reader_checks": "not repeated after the prior executor singleton-socket denial; exact-head CI browser gate pending",
+  "raw_html_reader_checks": "passed: six generated HTML pages",
+  "browser_reader_checks": "passed in native blueprint job 112298681274: 91 pages and 192621 typeset expressions; local browser not repeated after prior singleton-socket permission denial",
   "import_aggregators": "passed: 71 aggregators, 2733 production modules",
   "source_reverse_coverage": "passed for all 21 added public declarations",
-  "prose_check": "passed",
+  "prose_check": "passed for the changed blueprint; native changed-prose gate passed",
   "latexindent": "passed: pinned 3.24.7 and repository settings",
-  "source_audit": "no mathematical or obvious elaboration blocker found; compilation still required",
-  "validation_timestamp_utc": "2026-10-06T11:14:00Z",
+  "source_audit": "all four new statements and three proofs matched to compiled source; both endpoints only",
+  "validation_timestamp_utc": "2026-10-06T14:06:00Z",
   "first_native_ci": {
     "head": "e4b8df552bbda78fc2d34f6df7568b6efde13964",
     "run": 37469197230,
@@ -98,6 +98,104 @@
       "forward support-image coercion at line 173"
     ],
     "repair_source_sha256": "dd0e65cfc13a9eaa594ef451b4aaf4d414b5cb1e6ae69b758ee5678253e38139",
-    "repair_validation": "pending; statements unchanged"
+    "repair_validation": "passed in run 37472300569; final source statements unchanged",
+    "final_validated_swap_source_sha256": "dd0e65cfc13a9eaa594ef451b4aaf4d414b5cb1e6ae69b758ee5678253e38139"
+  },
+  "prior_unchecked_render_checkpoint": {
+    "validation_timestamp_utc": "2026-10-06T11:14:00Z",
+    "pdf_sha256": "4e7de5f2b73a6b328d103a0562bdb02d3abd30aaf3078e83e181eedbe2e660f8",
+    "html_sha256": "f30e62644162b8c2458ef9ce24c1c4167d19f9a57921545590a71c09d4cc9dba",
+    "focus_manifest_sha256": "44fb525460910a45aae89e9b61e81a8ff4dffae75353ce16578abd2556860aee",
+    "visual_page_sha256": {
+      "3": "1f8b0e67fa3c1252f73556b2e416a8c111f056e871cca7eb3c3ec00801aefb8b",
+      "4": "ea9b5ebc138ab70c02bee57a4d31872b9cb77338cb31cd81ba04bbebd8b009a4"
+    },
+    "source_sha256": {
+      "TNLean/MPS/ParentHamiltonian/Martingale/IsometricConjugationGap.lean": "62849c6e2055d5b8fb99fb2e2c0814cbabd9219274ee345d31ff438371df60fb",
+      "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSwap.lean": "82e5479aa9e420bc935975273b751f3a1236b69f2bb9e1ce5a18d49458122ff4",
+      "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointRightPeriodicGap.lean": "d60b397453c497bfc60ca0d91b558c2f158269c5866af5d2f3d981c84593d700",
+      "TNLeanTest/JointMixedEndpointRightPeriodicGap.lean": "8af3a49d3757533d4e52c26338fd11e2b0f7f7638bf77debcebc1da51cfe38c1",
+      "blueprint/src/chapter/ch30_mpo_joint_periodic_endpoint_swap.tex": "0a1575a525f0219d43e6fb7486b0cd63dccd9f39b8fb79161195436b36534a6f",
+      "blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap_martingale.tex": "22a8ee0281d011381e0bb3ccb44fda88a02f6e0734f2e8b473b711585315108d"
+    }
+  },
+  "verified_implementation_authored_commit": "ee50ef44ca75f22a4885ccb2430f4b2c985dcd8c",
+  "verified_implementation_public_commit": "e8e89126bf85e16d1fa0df36d1f0d2e17164cecf",
+  "verified_implementation_tree": "ef908946b606e9b3e19c92dea873a979f920c85d",
+  "native_ci": {
+    "run_id": 37472300569,
+    "run_url": "https://github.com/LionSR/TNLean/actions/runs/37472300569",
+    "public_head": "e8e89126bf85e16d1fa0df36d1f0d2e17164cecf",
+    "tested_merge_commit": "33adb3d33e84222d1010da026e1cc8a0f4ec0982",
+    "public_head_and_tested_merge_tree": "ef908946b606e9b3e19c92dea873a979f920c85d",
+    "build_job_id": 112298681251,
+    "build_job_url": "https://github.com/LionSR/TNLean/actions/runs/37472300569/job/112298681251",
+    "build_status": "success",
+    "build_jobs": 12405,
+    "module_seconds": {
+      "TNLean.MPS.ParentHamiltonian.Martingale.IsometricConjugationGap": 2.0,
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSwap": 10.0,
+      "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointRightPeriodicGap": 8.9
+    },
+    "strict_endpoint_regressions": "passed: all eight mixed-endpoint regression files with standard linters and warningAsError",
+    "strict_axiom_guards": {
+      "existing_first_endpoint": 11,
+      "new_second_endpoint": 14,
+      "combined": 25,
+      "status": "passed"
+    },
+    "compiled_blueprint_declarations": "passed",
+    "compiled_paper_gap_declarations": "passed",
+    "text_style_linter": "passed",
+    "changed_module_timing": "passed",
+    "timing_warning": {
+      "module": "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointPeriodicSectors",
+      "seconds": 35.0,
+      "warning_threshold_seconds": 25,
+      "failure_threshold_seconds": 50
+    },
+    "blueprint_job_id": 112298681274,
+    "blueprint_job_url": "https://github.com/LionSR/TNLean/actions/runs/37472300569/job/112298681274",
+    "blueprint_status": "success",
+    "blueprint_checks": [
+      "full web render",
+      "Tenkz event sweep",
+      "equation web layout",
+      "search",
+      "generated-page browser checks",
+      "source synchronization",
+      "reverse declaration coverage",
+      "LaTeX formatting",
+      "reader-facing prose"
+    ],
+    "browser_reader_pages": 91,
+    "browser_reader_typeset_expressions": 192621,
+    "other_jobs": {
+      "112298637544": "changes: success",
+      "112298681228": "inline diagram semantics: success",
+      "112298681424": "Lean module policies: success",
+      "112308087852": "changed Lean compilation times: success"
+    },
+    "scope": "complete verified implementation tree before this documentation-only marker batch"
+  },
+  "earlier_isolated_helper_native_validation": {
+    "status": "passed before filesystem interruption; source unchanged",
+    "seconds": 8.9,
+    "source_sha256": "62849c6e2055d5b8fb99fb2e2c0814cbabd9219274ee345d31ff438371df60fb"
+  },
+  "statement_hypothesis_review": {
+    "def:mpo_joint_endpoint_swap": "physical and virtual sector permutations; ordered rectangular coordinates preserved; reversed-to-original chain isometry",
+    "thm:mpo_joint_endpoint_swap_support": "every real parameter; exact letters, boundary maps, support and parent conjugacy; no span or dimension assumptions",
+    "thm:mpo_joint_endpoint_swap_periodic": "every natural chain length and real parameter; Hamiltonian and component-vector conjugacy; common coefficients unchanged",
+    "thm:mpo_joint_both_periodic_endpoints": "two simultaneous one-site spans; positive second dimensions only for parameter one; both dimension families positive for the common bound; ring length at least two"
+  },
+  "shared_generic_owner_unchanged": true,
+  "shared_generic_owner_comparison": "byte-identical statement and proof to PR #8725 core-identification worktree; no shared ch13 edit",
+  "shared_generic_owner_fragment_hash_scope": "from theorem begin through proof end, excluding the trailing newline",
+  "local_renders": "passed after adding all seven checked markers; PDF pages 3 and 4 visually inspected",
+  "new_entry_anchors": "passed: all four statement anchors and referenced local source targets present",
+  "local_global_checks": {
+    "source_sync": "incomplete in this documentation worktree: QICLean checkout absent, 523 unresolved dependency references; native full source and compiled checks passed",
+    "prose_scan": "ten pre-existing PEPS findings outside this change; changed blueprint passes"
   }
 }

@@ -78,15 +78,31 @@ adds three generated imports, one strict regression entry, and one chapter
 include. The swap blueprint leaf gives direct mathematical statements and
 proofs; it adds no tensor diagram.
 
-## Validation checkpoint
+## Checked implementation and documentation
 
 The initial three-module source checkpoint is preserved publicly at
 `18fe4919ac69bfbf670245dcf6c9d0fe02808b47`, tree
 `27d03b2780228bb42c94b9af4b4f8a0c547e49f0`.
-The generic helper passed an isolated strict native compile in 8.9 seconds
-before the executor filesystem interruption, with no source repair.
-The actual swap and right-periodic modules are still uncompiled at this
-checkpoint. Their new blueprint entries remain unchecked.
+That checkpoint did not compile the actual swap or right-periodic modules;
+its new blueprint entries were intentionally unchecked. The generic helper
+had passed an isolated strict native compile in 8.9 seconds before the
+executor filesystem interruption, with no source repair.
+
+Native [CI run 37472300569](https://github.com/LionSR/TNLean/actions/runs/37472300569)
+subsequently passed for public head
+`e8e89126bf85e16d1fa0df36d1f0d2e17164cecf`. GitHub tested merge commit
+`33adb3d33e84222d1010da026e1cc8a0f4ec0982`; its tree, the public-head tree,
+and the authored checkpoint `ee50ef44ca75f22a4885ccb2430f4b2c985dcd8c` tree
+are all `ef908946b606e9b3e19c92dea873a979f920c85d`.
+
+The [native build job](https://github.com/LionSR/TNLean/actions/runs/37472300569/job/112298681251)
+completed all 12,405 build jobs. The actual swap took 10.0 seconds, the
+right-periodic module 8.9 seconds, and the shared isometric-conjugacy
+module 2.0 seconds. Strict endpoint regressions, the text style linter,
+compiled blueprint declarations, and compiled paper-gap declarations
+passed. The changed-module timing gate also passed; it reported one
+35-second warning for the existing periodic-sector module, below the
+50-second failure threshold.
 
 The regression covers physically overlapping block columns on endpoint
 alphabets of sizes two and three, unequal virtual dimensions one and two,
@@ -96,9 +112,19 @@ zero physical and bond dimensions, and empty labels with both empty and
 nonempty physical alphabets. Fourteen strict guards expect only
 `propext`, `Classical.choice`, and `Quot.sound`.
 
-Strict regression and full compiled declaration checks remain pending.
-No success is inferred from the completed first-endpoint checks or from
-the generic helper's separate native check.
+All fourteen new guards passed together with the eleven first-endpoint
+guards. The successful strict test step also ran the six other existing
+mixed-endpoint regressions. Every checked blueprint statement was matched
+to the compiled declarations, including the absence of span or dimension
+hypotheses for sector exchange, all chain lengths for conjugacy, the two
+one-site spans and positive second dimensions for the second endpoint,
+and positivity of both dimension families for the common bound.
+
+The four new entries and their three proofs now carry checked markers.
+The shared ch13 isometric-conjugacy statement and proof remain byte-identical
+to the core-identification development in PR #8725. This documentation
+batch changes no Lean source, regression, workflow, import, or mathematical
+statement.
 
 The focused PDF and web builds pass. Both new mathematical pages, PDF
 pages 3–4, were visually inspected; the equations fit and references
@@ -107,10 +133,23 @@ are present in the HTML and have unique source owners. The native Tenkz
 event audit passes for the one inherited context panel, with no hard
 errors or advisories. Raw HTML reader checks, pinned latexindent 3.24.7,
 reader-facing prose, generated imports, and source reverse coverage pass.
-The prior local browser launch was denied permission to create its
-singleton socket; it was not repeated. The exact-head CI browser gate
-remains required. The adjacent validation JSON records all source and
-render hashes and distinguishes these checks from the pending Lean gates.
+All local cross-references resolve. The prior local browser launch was
+denied permission to create its singleton socket and was not repeated.
+The [native blueprint job](https://github.com/LionSR/TNLean/actions/runs/37472300569/job/112298681274)
+passed the full web render, Tenkz sweep, equation-layout and search checks,
+and browser reader checks over 91 pages with 192,621 typeset expressions.
+Its source synchronization and reverse declaration coverage also passed.
+The current focused PDF and HTML were regenerated after adding the seven
+markers; the native run predates this documentation-only batch.
+
+The focused prose check passes. A broader local prose scan additionally
+reported ten pre-existing PEPS prose findings outside this change. A local
+whole-repository source synchronization attempt could not validate 523
+references because QICLean is not checked out in this documentation
+worktree; the complete native source and compiled checks above passed.
+Local checks confirm unique ownership and reverse coverage for all 21
+added declarations. The adjacent JSON records these scopes and the current
+source and render hashes.
 
 ## First native CI diagnostics
 
@@ -120,4 +159,6 @@ one forward support-image goal needing explicit isometry/linear-map
 coercion normalization. The repair reduces finite equalities to their
 natural coordinates and discharges the impossible cross-sector equalities
 with the existing arithmetic tactic; the support statement is unchanged.
-The repaired module, capstone and fourteen guards await fresh validation.
+The repaired module, capstone and fourteen guards passed in run 37472300569
+above. These initial diagnostics are retained as history, not current
+blockers.
