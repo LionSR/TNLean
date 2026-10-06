@@ -16,12 +16,12 @@ its blocks. The mixed construction of
 \cite[Section~5]{GarreRubio2023MPOSym} uses the disjoint union
 \begin{align}
     \mathcal I
-      &=\Fin{d_0}
-        \sqcup\coprod_x\bigl(\Fin{D_x^0}\times\Fin{D_x^1}\bigr)
-        \notag\\
-      &\quad\sqcup\coprod_x\bigl(\Fin{D_x^1}\times\Fin{D_x^0}\bigr)
-        \sqcup\Fin{d_1}.
-    \label{eq:mpo_joint_mixed_alphabet}
+     & =\Fin{d_0}
+    \sqcup\coprod_x\bigl(\Fin{D_x^0}\times\Fin{D_x^1}\bigr)
+    \label{eq:mpo_joint_mixed_alphabet}                             \\
+     & \quad\sqcup\coprod_x\bigl(\Fin{D_x^1}\times\Fin{D_x^0}\bigr)
+    \sqcup\Fin{d_1}.
+    \notag
 \end{align}
 Write these four kinds of physical letters as $(00,i)$, $(01,x,a,b)$,
 $(10,x,a,b)$ and $(11,j)$. Only the two cross sectors carry a block label.
@@ -40,18 +40,20 @@ $(10,x,a,b)$ and $(11,j)$. Only the two cross sectors carry a block label.
     $E_{x;ab}^{pq}=V_{x,p}\ketbra{a}{b}V_{x,q}^*$ the rectangular
     matrix units embedded in $\End(E_x)$. Define the letters of $C_x$ by
     \begin{align}
-        C_x^{(00,i)}&=(A_x^0)^i\oplus0,
-        & C_x^{(11,j)}&=0\oplus(A_x^1)^j,
-        \label{eq:mpo_joint_mixed_diagonal}\\
-        C_x^{(01,x,a,b)}&=E_{x;ab}^{01},
-        & C_x^{(10,x,a,b)}&=E_{x;ab}^{10}.
+        C_x^{(00,i)} & =(A_x^0)^i\oplus0,
+                     & C_x^{(11,j)}       & =0\oplus(A_x^1)^j,
+        \label{eq:mpo_joint_mixed_diagonal}
+    \end{align}
+    \begin{align}
+        C_x^{(01,x,a,b)} & =E_{x;ab}^{01},
+                         & C_x^{(10,x,a,b)} & =E_{x;ab}^{10}.
         \label{eq:mpo_joint_mixed_cross}
     \end{align}
     Cross letters bearing a label different from $x$ give the zero
     matrix in block $x$. For $\gamma\in\R$, set
     \begin{align}
-        W_x(\gamma)&=(1-\gamma)I_{D_x^0}\oplus\gamma I_{D_x^1},
-        & A_x^\mu(\gamma)&=C_x^\mu W_x(\gamma).
+        W_x(\gamma) & =(1-\gamma)I_{D_x^0}\oplus\gamma I_{D_x^1},
+                    & A_x^\mu(\gamma)                             & =C_x^\mu W_x(\gamma).
         \label{eq:mpo_joint_mixed_weight}
     \end{align}
     The full tensor is $A^\mu(\gamma)=\bigoplus_xA_x^\mu(\gamma)$.
@@ -106,14 +108,14 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     For a target tuple $(X_x)_x$, expand $(V_xX_xU_x)_x$ using the
     common coefficients of the original family, then compress:
     \begin{align}
-        V_xX_xU_x&=\sum_i c_iB_x^i,
-        & X_x&=\sum_i c_iU_xB_x^iV_x.
+        V_xX_xU_x & =\sum_i c_iB_x^i,
+                  & X_x               & =\sum_i c_iU_xB_x^iV_x.
     \end{align}
     For the second assertion expand $(X_xR_x)_x$ and multiply on the
     right by $W_x$:
     \begin{align}
-        X_xR_x&=\sum_i c_iB_x^i,
-        & X_x&=\sum_i c_iB_x^iW_x.
+        X_xR_x & =\sum_i c_iB_x^i,
+               & X_x               & =\sum_i c_iB_x^iW_x.
     \end{align}
     At one site each word is a single letter, so these are precisely
     the asserted one-site spans.
@@ -129,13 +131,13 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     Suppose that for $p=0,1$,
     \begin{align}
         \spn_{\C}\{((A_x^p)^i)_x:i\in\Fin{d_p}\}
-          &=\prod_x\MN{D_x^p}.
+         & =\prod_x\MN{D_x^p}.
         \label{eq:mpo_joint_mixed_endpoint_span}
     \end{align}
     Then the mixed base has simultaneous one-site span
     \begin{align}
         \spn_{\C}\{(C_x^\mu)_x:\mu\in\mathcal I\}
-          &=\prod_x\MN{D_x}.
+         & =\prod_x\MN{D_x}.
         \label{eq:mpo_joint_mixed_span}
     \end{align}
     For $0<\gamma<1$, the family $(A_x(\gamma))_x$ has the same
@@ -187,11 +189,11 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     For $N\geq1$, let the joint extended boundary map be
     \begin{align}
         \Gamma'_{\gamma,N}((X_x)_x)_{\mu_1\cdots\mu_N}
-          &=\sum_x\tr\bigl(
-              C_x^{\mu_1}W_x(\gamma)C_x^{\mu_2}
-              \cdots W_x(\gamma)C_x^{\mu_N}X_x\bigr),
-          \label{eq:mpo_joint_mixed_boundary}\\
-        \mathcal S'_{\gamma,N}&=\operatorname{range}\Gamma'_{\gamma,N}.
+                               & =\sum_x\tr\bigl(
+        C_x^{\mu_1}W_x(\gamma)C_x^{\mu_2}
+        \cdots W_x(\gamma)C_x^{\mu_N}X_x\bigr),
+        \label{eq:mpo_joint_mixed_boundary}                               \\
+        \mathcal S'_{\gamma,N} & =\operatorname{range}\Gamma'_{\gamma,N}.
     \end{align}
     The domain is $\prod_x\MN{D_x}$. Set
     $h'_\gamma=I-\Pi_{\mathcal S'_{\gamma,2}}$ and
@@ -210,15 +212,17 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     matrices of the matching sizes. At every length $N\geq1$,
     \begin{align}
         (B_x^{i_1}W_xB_x^{i_2}\cdots W_xB_x^{i_N})W_x
-          &=(B_x^{i_1}W_x)\cdots(B_x^{i_N}W_x),\\
+         & =(B_x^{i_1}W_x)\cdots(B_x^{i_N}W_x).
+    \end{align}
+    \begin{align}
         \Gamma^{\oplus}_{BW,N}((X_x)_x)
-          &=\Gamma'_{B,W,N}((W_xX_x)_x).
-          \label{eq:mpo_joint_mixed_boundary_change}
+         & =\Gamma'_{B,W,N}((W_xX_x)_x).
+        \label{eq:mpo_joint_mixed_boundary_change}
     \end{align}
     If every $W_x$ is invertible, the two boundary maps have the same
     range. In particular, for $0<\gamma<1$,
     \begin{align}
-        \mathcal S'_{\gamma,N}&=\sum_xG_N(A_x(\gamma)).
+        \mathcal S'_{\gamma,N} & =\sum_xG_N(A_x(\gamma)).
         \label{eq:mpo_joint_mixed_interior_support}
     \end{align}
     These assertions require no simultaneous span assumption.
@@ -258,10 +262,10 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     For $N\geq2$,
     \begin{align}
         \ker H'^{\mathrm{open}}_{\gamma,N}
-          &=\mathcal S'_{\gamma,N},
-          \label{eq:mpo_joint_mixed_kernel}\\
+         & =\mathcal S'_{\gamma,N},
+        \label{eq:mpo_joint_mixed_kernel} \\
         \dim\ker H'^{\mathrm{open}}_{\gamma,N}
-          &=\sum_x(D_x^0+D_x^1)^2.
+         & =\sum_x(D_x^0+D_x^1)^2.
     \end{align}
     For fixed $N\geq1$, the orthogonal projector onto
     $\mathcal S'_{\gamma,N}$ is continuous on $\R$.

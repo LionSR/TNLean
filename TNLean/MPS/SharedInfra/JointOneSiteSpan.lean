@@ -66,8 +66,8 @@ theorem wordTupleSpanTop_one_of_rectangular_compression
       _ = (U x * V x) * X x * (U x * V x) := by simp only [Matrix.mul_assoc]
       _ = X x := by rw [hUV x, Matrix.one_mul, Matrix.mul_one]
   rw [hcomp] at hx
-  simpa [Fintype.linearCombination_apply, Matrix.mul_sum, Finset.sum_mul,
-    Matrix.mul_smul, smul_mul_assoc] using hx
+  simpa [Fintype.linearCombination_apply, Matrix.mul_sum, Matrix.sum_mul,
+    Matrix.mul_smul, Matrix.smul_mul] using hx
 
 /-- An invertible right insertion preserves simultaneous one-site spanning.
 Source: arXiv:2203.12563, Section 5, lines 1695–1704 and 1777. -/
@@ -89,7 +89,7 @@ theorem wordTupleSpanTop_one_of_right_inverse
   refine ⟨c, ?_⟩
   funext x
   have hx := congrArg (fun Y => Y x * W x) hc
-  simpa [Fintype.linearCombination_apply, Finset.sum_mul, smul_mul_assoc,
+  simpa [Fintype.linearCombination_apply, Matrix.sum_mul, Matrix.smul_mul,
     Matrix.mul_assoc, hVW x] using hx
 
 end MPSTensor
