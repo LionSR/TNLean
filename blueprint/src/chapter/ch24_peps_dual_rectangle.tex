@@ -1,10 +1,65 @@
 % SCP10 arXiv:1001.3807v3, Lemma 6.14, paper_v3.tex:2199--2214.
 % Candidate finite-rectangle specialization. Lean compilation is blocked by
-% unavailable pinned Mathlib cache; intentionally no leanok or lean tags yet.
+% unavailable pinned Mathlib cache; intentionally no leanok tags yet.
+
+\begin{definition}[Lifted rectangular steps and the rooted comb]%
+    \label{def:peps_dual_rectangle_comb}
+    \lean{TNLean.PEPS.torusRectCoord,
+        TNLean.PEPS.torusRectCoord_eq,
+        TNLean.PEPS.torusRectCoord_injective,
+        TNLean.PEPS.torusRectColumn,
+        TNLean.PEPS.torusRectComb,
+        TNLean.PEPS.RectDualStep,
+        TNLean.PEPS.rectDualQuiver,
+        TNLean.PEPS.RectDualStep.toTorus,
+        TNLean.PEPS.torusRectInterior,
+        TNLean.PEPS.rectDualToTorus,
+        TNLean.PEPS.TorusDualRectangle,
+        TNLean.PEPS.TorusDualRectangle.injective}
+    \notready
+    \uses{def:peps_dual_flux_path}
+    Choose $(x_0,y_0)\in X$ and $W,H\geq0$.
+    Lifted vertices are pairs $(i,j)\in\mathbb N^2$.
+    The horizontal steps join $(i,j)$ and $(i+1,j)$ for $i<W$, $j\leq H$;
+    the vertical steps join $(i,j)$ and $(i,j+1)$ for $i\leq W$, $j<H$.
+    Both orientations retain their direction labels under
+    $\iota(i,j)=(x_0+i,y_0+j)$ modulo the periods.
+    Vertices outside the rectangle are isolated.
+    The rooted comb path $C_{i,j}$ consists of $i$ east steps on the
+    bottom row followed by $j$ north steps. Its vertical segment is
+    the column at $i$. The swept primal set is
+    $R=\{\iota(i+1,j+1):i<W,\ j<H\}$.
+    An embedded patch also requires $W<w$ and $H<h$; these inequalities
+    imply injectivity of $\iota$ on its closed lifted rectangle.
+\end{definition}
+
+\begin{theorem}[Comb-edge normalization and prefix cancellation]%
+    \label{thm:peps_dual_rectangle_comb}
+    \lean{TNLean.PEPS.TorusDualHomotopy.cancel_prefix,
+        TNLean.PEPS.TorusDualHomotopy.reverse_edge,
+        TNLean.PEPS.torusRectColumn_east,
+        TNLean.PEPS.torusRectComb_north,
+        TNLean.PEPS.torusRectComb_east,
+        TNLean.PEPS.RectDualStep.comb}
+    \notready
+    \uses{def:peps_dual_rectangle_comb,def:peps_dual_flux_homotopy}
+    For every permitted edge $e:a\to b$, $C_a e\sim_R C_b$.
+    More generally, $ce\sim_R d$ implies $de^{-1}\sim_R c$,
+    and $cp\sim_R cq$ implies $p\sim_R q$.
+\end{theorem}
+\begin{proof}
+    Exchange a column and its final east edge by successive adjacent
+    squares; a north edge simply extends a column.
+    Reverse edges and common prefixes are removed by backtrack cancellation.
+\end{proof}
+
 \begin{theorem}[Deformation inside an embedded rectangular dual patch]%
     \label{thm:peps_dual_rectangle}
+    \lean{TNLean.PEPS.rectDualPath_comb,
+        TNLean.PEPS.rectDualPath_homotopy,
+        TNLean.PEPS.TorusDualRectangle.homotopy}
     \notready
-    \uses{def:peps_dual_flux_homotopy}
+    \uses{thm:peps_dual_rectangle_comb}
     Fix a dual plaquette $(x_0,y_0)$ and integers $0\leq W<w$,
     $0\leq H<h$. Embed the closed rectangle
     $D=\{0,\ldots,W\}\times\{0,\ldots,H\}$ by
@@ -56,3 +111,22 @@
         \tnmark[form=label]{(3,4)}{$s_2$}
     \end{tenkz}
 \end{tenkzequation}
+
+
+\begin{theorem}[Rectangular bulk deformation with a fixed exterior]%
+    \label{thm:peps_dual_rectangle_exterior}
+    \lean{TNLean.PEPS.TorusDualRectangle.torusBondNetwork_eq_with_exterior}
+    \notready
+    \uses{thm:peps_dual_rectangle}
+    Let $p,q$ be two paths as above, let $U$ be a group representation,
+    and fix $g$ in the group. Assume virtual $G$-invariance at every
+    primal site of $R$. Insert $U_g$ and $U_{g^{-1}}$ according to the
+    signed crossings of the paths on bonds incident to $R$, and keep
+    arbitrary fixed matrices on all remaining bonds.
+    The two actual native contractions are equal for each fixed physical
+    configuration. Site tensors outside $R$ are unrestricted.
+\end{theorem}
+\begin{proof}
+    The derived homotopy uses only squares supported in $R$.
+    Apply the supported gauge cancellation identity to the actual contraction.
+\end{proof}

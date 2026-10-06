@@ -50,7 +50,8 @@ def main():
             pass
         else:
             raise AssertionError(f'accepted malformed geometry: {old}')
-    picture = source[source.index(r'\begin{tenkzequation}'):]
+    picture = source[source.index(r'\begin{tenkzequation}'):
+                     source.index(r'\end{tenkzequation}') + len(r'\end{tenkzequation}')]
     fixture = (r'\documentclass[varwidth,border=3pt]{standalone}' '\n'
                r'\usepackage{amsmath,amssymb,amsthm,mathtools,tenkz}' '\n'
                r'\newcounter{chapter}\input{macros/common}\input{macros/diagrams}' '\n'

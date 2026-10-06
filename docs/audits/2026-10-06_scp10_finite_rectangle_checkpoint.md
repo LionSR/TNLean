@@ -5,7 +5,8 @@ Branch: `codex/scp10-finite-bulk`.
 
 This is an **unverified source checkpoint**, not a completed formalization.
 No Lean elaboration or axiom audit of the new declarations has succeeded.
-The blueprint entry is `notready`, with no new `leanok` claims.
+The blueprint entries are `notready`, with no new `leanok` claims.
+Declaration links identify candidate source without asserting verification.
 
 ## Candidate mathematics
 
