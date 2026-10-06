@@ -22,7 +22,7 @@ edge sum; at chain length two the sole edge must still be counted once.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped Matrix BigOperators Kronecker ComplexOrder
 
 namespace MPSTensor.MPOSymmetry
 

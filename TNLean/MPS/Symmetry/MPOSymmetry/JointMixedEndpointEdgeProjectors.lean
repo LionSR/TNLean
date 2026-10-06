@@ -18,7 +18,7 @@ similarity-conjugation identity is used.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
-open scoped Matrix Kronecker
+open scoped Matrix Kronecker ComplexOrder
 
 namespace MPSTensor.MPOSymmetry
 
@@ -119,10 +119,10 @@ private theorem map_conjugateEquiv_of_map_eq
     (h : S.map e.toLinearMap = T) :
     (S.map U.symm.toLinearMap).map (U.trans (e.trans U.symm)).toLinearMap =
       T.map U.symm.toLinearMap := by
-  rw [Submodule.map_map]
+  rw [← Submodule.map_comp]
   have heq : (U.trans (e.trans U.symm)).toLinearMap.comp U.symm.toLinearMap =
       U.symm.toLinearMap.comp e.toLinearMap := by ext; simp
-  rw [heq, ← Submodule.map_map, h]
+  rw [heq, Submodule.map_comp, h]
 
 /-- The Euclidean first-boundary normalization carries the compressed
 actual support exactly onto the unchanged-tensor core support.
