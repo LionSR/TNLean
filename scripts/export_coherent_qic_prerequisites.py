@@ -17,6 +17,8 @@ import subprocess
 SUFFIXES = (".olean", ".olean.private", ".olean.server", ".ilean")
 MAX_BYTES = 30 * 1024 * 1024
 MODULE = re.compile(r"QICLean(?:\.[A-Za-z_][A-Za-z_0-9]*)+\Z")
+PACKAGE = re.compile(r"[A-Za-z_][A-Za-z_0-9.-]*\Z")
+COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 
 
 def digest(data: bytes) -> str:
@@ -36,34 +38,46 @@ def prerequisite_modules(root: Path) -> list[str]:
 
 def build_prerequisites(root: Path) -> None:
     """Build the allowlisted module facets once; the later root build reuses them."""
-    targets = [f"@qiclean/+{module}:olean" for module in prerequisite_modules(root)]
+    before = prepare(root)
+    targets = [f"@qiclean/+{module}:olean" for module in before[0]]
     subprocess.run(["lake", "build", *targets], cwd=root, check=True)
+    if prepare(root) != before:
+        raise ValueError("source state changed during the prerequisite build")
 
 
-def export(root: Path, output: Path) -> dict:
+def prepare(root: Path) -> tuple[list[str], Path, dict]:
+    """Verify recorded dependency pins and their complete Lean/config source state."""
     root = root.resolve()
     entries = prerequisite_modules(root)
-    packages = {p["name"]: p for p in json.loads((root / "lake-manifest.json").read_text())["packages"]}
-    pin = packages["qiclean"]["rev"]
+    manifest_bytes = (root / "lake-manifest.json").read_bytes()
+    packages = json.loads(manifest_bytes)["packages"]
+    pins = {}
+    for package in packages:
+        name, rev = package["name"], package["rev"]
+        if not PACKAGE.fullmatch(name) or not COMMIT.fullmatch(rev) or name in pins:
+            raise ValueError("invalid or duplicate dependency name or revision")
+        checkout = root / ".lake/packages" / name
+        if git(checkout, "rev-parse", "HEAD").decode().strip() != rev:
+            raise ValueError(f"dependency checkout differs from its pin: {name}")
+        if git(checkout, "status", "--porcelain", "--untracked-files=all", "--",
+               "*.lean", "lean-toolchain", "lake-manifest.json", "lakefile.*").strip():
+            raise ValueError(f"dependency Lean/config sources are dirty: {name}")
+        pins[name] = rev
+    pin = pins["qiclean"]
     qic = (root / ".lake/packages/qiclean").resolve()
-    if git(qic, "rev-parse", "HEAD").decode().strip() != pin:
-        raise ValueError("QIC checkout is not at the root manifest pin")
     toolchain = (root / "lean-toolchain").read_bytes()
     if (qic / "lean-toolchain").read_bytes() != toolchain:
         raise ValueError("QIC and TNLean toolchains differ")
-    if output.exists():
-        raise ValueError("the export destination must not already exist")
     manifest = {
         "format_version": 1,
         "qic_commit": pin,
         "lean_toolchain": toolchain.decode().strip(),
         "lean_toolchain_sha256": digest(toolchain),
-        "root_manifest_sha256": digest((root / "lake-manifest.json").read_bytes()),
-        "dependency_pins": {k: packages[k]["rev"] for k in ("qiclean", "mathlib", "Gametheory")},
+        "root_manifest_sha256": digest(manifest_bytes),
+        "dependency_pins": pins,
+        "dependency_lean_config_sources_clean": True,
         "modules": {},
     }
-    files = []
-    total = 0
     for module in entries:
         relative = Path(*module.split("."))
         source_path = relative.with_suffix(".lean")
@@ -73,6 +87,18 @@ def export(root: Path, output: Path) -> dict:
         source = source_file.read_bytes()
         if git(qic, "show", f"{pin}:{source_path.as_posix()}") != source:
             raise ValueError(f"source differs from the QIC pin: {module}")
+        manifest["modules"][module] = {"source_sha256": digest(source), "artifacts": {}}
+    return entries, qic, manifest
+
+
+def export(root: Path, output: Path) -> dict:
+    if output.exists():
+        raise ValueError("the export destination must not already exist")
+    entries, qic, manifest = prepare(root)
+    files = []
+    total = 0
+    for module in entries:
+        relative = Path(*module.split("."))
         base = qic / ".lake/build/lib/lean" / relative
         if not Path(str(base) + ".olean").is_file():
             raise ValueError(f"compiled module missing: {module}")
@@ -92,14 +118,17 @@ def export(root: Path, output: Path) -> dict:
             target = Path(str(relative) + suffix)
             artifact_info[target.as_posix()] = {"sha256": digest(data), "bytes": len(data)}
             files.append((data, target))
-        manifest["modules"][module] = {"source_sha256": digest(source), "artifacts": artifact_info}
+        manifest["modules"][module]["artifacts"] = artifact_info
+    manifest["total_artifact_bytes"] = total
+    manifest_data = (json.dumps(manifest, indent=2) + "\n").encode()
+    if total + len(manifest_data) > MAX_BYTES:
+        raise ValueError("the bounded prerequisite export including provenance exceeds 30 MiB")
     output.mkdir(parents=True)
     for data, target in files:
         destination = output / target
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(data)
-    manifest["total_artifact_bytes"] = total
-    (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    (output / "manifest.json").write_bytes(manifest_data)
     return manifest
 
 

@@ -97,6 +97,7 @@ These need not be equal, and none is a physical spin index.
 \begin{theorem}[Physical preparation from rectangular local windows]
     \label{thm:ldp_rectangular_window_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
+    \leanok
     Let $d>0$, and fix $D$, $s\ge1$ and $\eta>0$. Suppose a family of original
     varying-bond rings satisfies the preceding positive-dimension, channel and local
     minorization conditions with these same constants. There are $N_0\ge s$ and $C$,
@@ -105,7 +106,7 @@ These need not be equal, and none is a physical spin index.
     at most $C\log(N/\varepsilon)$ and normalized overlap error at most
     $\varepsilon$ against the original MPS.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The window on the ring of length $s$ forces $\eta\le1$. Weaken the minorization
     to $\eta/2$ and put $r=-\log(1-\eta/2)/s>0$. Since
     $1-\eta/2\ge1/2$, the preceding bound is at most $4D e^{-r(b-a)}$.
