@@ -78,58 +78,61 @@ per-block minimum of gaps, or uniform-gap conclusion is added here.
 
 ## Validation status
 
-The unchanged base PR #8721 passed all eight checks on exact source head
-`5ff8b1f986d702da458392d71413355c7411b210`, including the full blueprint
-and browser checks and the strict regression guards. Its test merge
-`b31d1af` had the identical tree `bcdc61aa`. These inherited checks do
-not validate the new edge leaves.
+The individual-module proof gate passes on the exact public head
+`7b6bbfab322bb2dbd2571606d4f4f11db060ceac` of PR #8724. GitHub Actions
+[run 37443744958, build job 112204012969](https://github.com/LionSR/TNLean/actions/runs/37443744958/job/112204012969)
+compiled all four production modules, ran the strict regression and all four
+standard guards, and passed compiled declaration, style, and timing checks.
+The tested merge checkout was `be05ad5dae147f1474b22f85ef912f8acc4a289a`;
+its tree `79a28916888ebbd8fa56aa790fc496291c1e2bb0` is identical to the
+authored source checkpoint `d8f74705c00cf21e4ad4cc083b7dd2af9ddb799c`.
+Production compilation times were 2.6 seconds for the isometric restriction,
+8.2 seconds for the edge coefficients, 2.9 seconds for normalization, and
+5.8 seconds for the projection constraints. Each standard guard retained
+exactly `propext`, `Classical.choice`, and `Quot.sound`.
 
-The generic isometric-compression leaf passed a strict one-thread Lean
-elaboration probe, with all package strictness and linter options enabled,
-before its integration. The exact complete `JointMixedEndpointEdgeFactors.lean`
-file now passes a strict one-thread read-only elaboration check in 15 seconds,
-with an empty log. A later strict source-bundle check also passes all four
-production leaves and the complete focused regression, including all four
-standard guards, in 40 seconds with an empty log. It includes the complete real
-sources of the two missing dependency leaves, replaces only their internal
-imports, and isolates each source body in a section. No definition or proof
-is replaced by a stub. This is not an individual Lake-target or module-import
-check; those remain pending. The first authorized
-read-only probe timed out at the external 60-second wall limit with no
-diagnostics; exit 124 is inconclusive, not a successful check. It wrote no
-Lean artifact or cache. The shared heavy-build slot is reserved for this
-package after the current owner releases it.
+This checked-documentation batch changes neither production nor regression
+sources. Its blueprint adds 23 statement/proof markers for the 35 public
+declarations. The exact proof-tested source hashes and CI identifiers are
+recorded in the companion validation report. CI on the later documentation
+head is separate and remains pending until publication and completion.
+The proof-tested head's full blueprint job was still finishing its page
+checks when the individual-module result was recorded; it is not represented
+here as a completed full-documentation check.
 
-The new blueprint leaf deliberately has no `leanok` markers, including
-for the generic isometry assertions, until the coherent package passes
-individual native module checks. The strict standard guards have executed
-successfully in the exact-source bundle. The scoped source and
-render checks are recorded separately from native proof validation.
+Earlier local evidence is preserved separately: the exact edge-coefficient
+file passed strict read-only Lean in 15 seconds, and the full real-source
+bundle passed all four production leaves, both missing dependency sources,
+the focused regression, and its four guards in 40 seconds with an empty log.
+Those concatenation checks were not substitutes for individual module or
+import-boundary validation. No cache or compiled Lean artifact was written
+by the bounded probes, and no proof was replaced by a stub.
 
-Static validation passes: forbidden proof-token checking, generated-import
-synchronization, file-size and changed non-comment line-length checks,
-reader-facing prose, and the pinned latexindent 3.24.7 byte comparison.
-Global blueprint/source synchronization and reverse coverage find all 35
-new public declarations with no missing or duplicate owners. The source
-checker reads manifest-identical QICLean sources from the canonical
-validation checkout, without creating a source-worktree Lake cache.
+The unchanged base PR #8721 had already passed all eight checks at source
+head `5ff8b1f986d702da458392d71413355c7411b210`, including its full blueprint,
+browser checks, and strict regression guards. That is inherited evidence,
+separate from the later #8724 proof gate and this documentation update.
 
-The focused PDF has ten pages. All four pages containing the new leaf
-(physical pages 4–7) were inspected after the final render. There are no
-overflow, undefined-reference, or missing-character warnings. The HTML
-has all 22 labels of the new and preceding boundary leaves, no broken
-local anchors, duplicate IDs, or rendering sentinels. The inherited
-Tenkz picture rendered to a six-path SVG. This is focused PDF and HTML
-validation, not browser inspection or a whole-book build. Detailed render
-evidence is in the companion validation report.
+Focused checks of the checked leaf pass with pinned latexindent 3.24.7.
+All 35 public declarations have exactly one blueprint owner; global source
+synchronization, scoped reverse coverage, reader-facing prose, forbidden
+token, generated-import, and whitespace checks pass. The focused native PDF
+has ten pages. Physical pages 4–7, containing all new checked mathematics,
+and page 8, containing the inherited tensor diagram, were inspected without
+clipping or overflow. There are no undefined-reference or missing-character
+warnings. HTML contains all 22 labels of the new and preceding boundary
+leaves, with no missing local anchors, duplicate IDs, or rendering sentinels.
+The inherited Tenkz picture has a valid six-path SVG and passes the native
+audit with zero hard errors and zero advisories; its expected source-wrapper
+`tex-unlinked` note is recorded. This focused PDF/HTML verification is
+separate from the full-book CI and does not claim browser inspection.
 
-The focused regression covers two physically overlapping scalar labels
+The focused regression retains two physically overlapping scalar labels
 in a three-letter alphabet, so the canonical columns are rectangular.
-It also covers zero second endpoint dimensions, empty labels, zero
-first fibers, a nonsurjective isometry, and a zero-dimensional compressed
-space with a nontrivial ambient space. Four strict guards expect exactly
-`propext`, `Classical.choice`, and `Quot.sound`.
+It also covers the unused third physical direction, zero second dimensions,
+empty labels, zero first fibers, a nonsurjective frame, and a zero-dimensional
+compressed space with a nontrivial physical complement.
 
-The generated module imports, chapter include, and existing strict CI
-regression loop are extended additively. No resource limit, dependency pin,
-existing theorem hypothesis, or unrelated source file is changed.
+The generated imports, chapter include, and existing strict CI regression
+loop were extended additively. No resource limit, dependency pin, existing
+theorem hypothesis, or unrelated source file is changed.

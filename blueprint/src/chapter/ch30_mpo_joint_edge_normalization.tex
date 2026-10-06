@@ -13,6 +13,7 @@ all block labels jointly.
     \label{def:mpo_joint_edge_cores}
     \lean{MPSTensor.MPOSymmetry.jointEndpointFirstEdgeCoreMap,
         MPSTensor.MPOSymmetry.jointEndpointLastEdgeCoreMap}
+    \leanok
     For arbitrary nonnegative exterior dimensions $E_x$, set
     $\mathcal B_L(E)=\coprod_x(\Fin{E_x}\times\Fin{D_x^0})$ and
     $\mathcal B_R(E)=\coprod_x(\Fin{D_x^0}\times\Fin{E_x})$.
@@ -30,6 +31,7 @@ all block labels jointly.
     \label{def:mpo_joint_cropped_edges}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeBoundaryMap,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeBoundaryMap}
+    \leanok
     \uses{def:mpo_joint_mixed_family}
     For $X_x\in\MN{D_x}$, define
     \begin{align}
@@ -44,12 +46,14 @@ all block labels jointly.
     \label{thm:mpo_joint_shared_letter_inclusion}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_firstPhysical_mul_inclusion,
         MPSTensor.MPOSymmetry.jointMixedEndpointBase_inclusion_adjoint_mul_firstPhysical}
+    \leanok
     \uses{def:mpo_joint_mixed_family}
     Every shared first-endpoint letter satisfies
     $C_x^{\iota_0(i)}V_x=V_x(A_x^0)^i$ and
     $V_x^*C_x^{\iota_0(i)}=(A_x^0)^iV_x^*$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_joint_mixed_family}
     In the virtual sum $\C^{D_x^0}\oplus\C^{D_x^1}$, the letter
     $C_x^{\iota_0(i)}$ is $\operatorname{diag}((A_x^0)^i,0)$.
@@ -60,6 +64,7 @@ all block labels jointly.
     \label{thm:mpo_joint_edge_factors}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeBoundaryMap_eq_columns_core,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeBoundaryMap_eq_columns_core}
+    \leanok
     \uses{def:mpo_joint_cropped_edges,def:mpo_joint_edge_cores,def:mpo_joint_boundary_columns}
     With $E_x=D_x$, the actual maps satisfy
     \begin{align}
@@ -73,6 +78,7 @@ all block labels jointly.
     No spanning or positive-dimension hypothesis is required.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_shared_letter_inclusion,def:mpo_joint_boundary_columns}
     Substitute the virtual inclusion identities and expand the trace:
     \begin{align}
@@ -92,12 +98,14 @@ all block labels jointly.
     \label{thm:mpo_joint_boundary_extraction}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstBoundaryExtraction_surjective,
         MPSTensor.MPOSymmetry.jointMixedLastBoundaryExtraction_surjective}
+    \leanok
     The maps $(X_x)_x\mapsto(V_x^*X_x)_x$ and
     $(X_x)_x\mapsto(X_xV_x)_x$ are surjective onto their respective
     rectangular boundary spaces. The assertion includes empty label
     sets and zero-dimensional fibers.
 \end{theorem}
 \begin{proof}
+    \leanok
     Given $Y_x\in\C^{D_x^0\times D_x}$, choose $X_x=V_xY_x$.
     Given $Z_x\in\C^{D_x\times D_x^0}$, choose $X_x=Z_xV_x^*$.
     Both claims follow from $V_x^*V_x=I$.
@@ -107,6 +115,7 @@ all block labels jointly.
     \label{def:mpo_joint_polar_edge_compression}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeCompressedMap,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeCompressedMap}
+    \leanok
     \uses{def:mpo_joint_cropped_edges,thm:mpo_joint_boundary_polar}
     Define $\widehat B_L=(U_L^*\otimes I_{d_0})B_L$ and
     $\widehat B_R=(I_{d_0}\otimes U_R^*)B_R$.
@@ -118,6 +127,7 @@ all block labels jointly.
         MPSTensor.MPOSymmetry.jointMixedLastEdgeCompressedMap_eq_polarPos_core,
         MPSTensor.MPOSymmetry.jointMixedFirstEdge_normalize_compressed,
         MPSTensor.MPOSymmetry.jointMixedLastEdge_normalize_compressed}
+    \leanok
     \uses{def:mpo_joint_polar_edge_compression,def:mpo_joint_edge_cores,
         thm:mpo_joint_boundary_polar}
     Suppose both endpoint families span their block algebras simultaneously
@@ -133,6 +143,7 @@ all block labels jointly.
     The matrices $P_L,P_R$ retain all cross-label entries.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_boundary_polar,thm:mpo_joint_edge_factors}
     Since $L=U_LP_L$ and $U_L^*U_L=I$, one has $U_L^*L=P_L$;
     likewise $U_R^*R=P_R$. Apply these identities to
@@ -146,6 +157,7 @@ all block labels jointly.
     \label{thm:mpo_joint_normalized_edge_supports}
     \lean{MPSTensor.MPOSymmetry.map_jointMixedFirstEdgeCompressed_range_eq_core,
         MPSTensor.MPOSymmetry.map_jointMixedLastEdgeCompressed_range_eq_core}
+    \leanok
     \uses{def:mpo_joint_polar_edge_compression,def:mpo_joint_edge_cores}
     Under the simultaneous spanning hypotheses,
     \begin{align}
@@ -158,6 +170,7 @@ all block labels jointly.
     polar frame fills its ambient physical alphabet.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_polar_edge_coefficients,thm:mpo_joint_boundary_extraction}
     The coefficient identities give the forward inclusions.
     The reverse inclusions follow by choosing the padded square
@@ -177,6 +190,7 @@ No sum of edge operators is asserted here.
         MPSTensor.MPOSymmetry.jointMixedLastEdgeCompressedSupportES,
         MPSTensor.MPOSymmetry.jointEndpointFirstEdgeCoreSupportES,
         MPSTensor.MPOSymmetry.jointEndpointLastEdgeCoreSupportES}
+    \leanok
     \uses{def:mpo_joint_edge_cores,def:mpo_joint_polar_edge_compression,
         thm:mpo_joint_boundary_polar}
     Equip all coefficient spaces with their Euclidean inner products.
@@ -194,10 +208,12 @@ No sum of edge operators is asserted here.
     \label{thm:mpo_joint_edge_euclidean_support}
     \lean{MPSTensor.MPOSymmetry.map_jointMixedFirstEdgeNormalization_support,
         MPSTensor.MPOSymmetry.map_jointMixedLastEdgeNormalization_support}
+    \leanok
     \uses{def:mpo_joint_edge_normalization_equiv}
     With $E_x=D_x$, one has $e_L(S_L)=T_{L,D}$ and $e_R(S_R)=T_{R,D}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_normalized_edge_supports}
     The underlying coefficient vectors are unchanged when their
     Euclidean norms are specified, so the two range equalities apply directly.
@@ -207,6 +223,7 @@ No sum of edge operators is asserted here.
     \label{thm:mpo_joint_edge_deformed_constraints}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeNormalization_deformed_constraints,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeNormalization_deformed_constraints}
+    \leanok
     \uses{def:mpo_joint_edge_normalization_equiv}
     For either boundary, let $e(S)=T$ be the corresponding normalization
     and write $h_S=\Pi_{S^\perp}$, $h_T=\Pi_{T^\perp}$.
@@ -216,6 +233,7 @@ No sum of edge operators is asserted here.
     $\mathcal D_e(h_T)=h_S$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_edge_euclidean_support}
     Since $\ker h_S=S$ and $\ker h_T=T$, the two pulled-back kernels
     are $e(S)=T$ and $e^{-1}(T)=S$. Orthogonal projection onto their
@@ -225,6 +243,7 @@ No sum of edge operators is asserted here.
 \begin{definition}[Isometric compression]
     \label{def:mpo_rectangular_compression}
     \lean{LinearIsometry.compression}
+    \leanok
     For finite-dimensional complex Hilbert spaces $E,F$, an isometry
     $U:E\to F$, and an operator $H:F\to F$, define $K=U^*HU$ on $E$.
 \end{definition}
@@ -236,6 +255,7 @@ No sum of edge operators is asserted here.
         LinearIsometry.ker_compression_of_commute,
         LinearIsometry.ker_compression_eq_map_adjoint_of_commute,
         LinearIsometry.map_mem_orthogonal_ker_compression_of_commute}
+    \leanok
     \uses{def:mpo_rectangular_compression}
     Suppose that $UU^*H=HUU^*$. Then
     \begin{align}
@@ -246,6 +266,7 @@ No sum of edge operators is asserted here.
     No surjectivity or self-adjointness assumption is needed.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_rectangular_compression}
     Use $U^*U=I$ and the commutation hypothesis to obtain
     $UK=UU^*HU=HU$ and $KU^*=U^*HUU^*=U^*H$.
@@ -259,6 +280,7 @@ No sum of edge operators is asserted here.
 \begin{theorem}[A norm gap restricts without loss]
     \label{thm:mpo_rectangular_compression_gap}
     \lean{LinearIsometry.norm_gap_compression_of_commute}
+    \leanok
     \uses{def:mpo_rectangular_compression}
     Suppose that $UU^*H=HUU^*$ and that $\delta\in\R$ satisfies
     $\delta\lVert w\rVert\le\lVert Hw\rVert$ for every
@@ -268,6 +290,7 @@ No sum of edge operators is asserted here.
     domain or codomain.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_rectangular_compression_intertwines}
     For $v\perp\ker K$, apply the given estimate to $Uv$ and use
     $HUv=UKv$. Since $U$ preserves norms,

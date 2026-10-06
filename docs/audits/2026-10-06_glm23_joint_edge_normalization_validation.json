@@ -9,23 +9,26 @@
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeNormalization.lean": "760709842dbccfebe23df7e747dd4932870cdf3e97d2ef350b08dc00e12f07e7",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeProjectors.lean": "8d2740ea09e363f65c35cb290e6a9916f09aec35a30cf0d9fb2314d61b39a4c3",
     "TNLeanTest/JointMixedEndpointEdgeNormalization.lean": "c0b1d164f29ec2061b7576c405f8d95b0c31e6cde3fcba26d967eba608d83c82",
-    "blueprint/src/chapter/ch30_mpo_joint_edge_normalization.tex": "24c6c77697c4a926deada340fcf28a8fc75d8538554969ac0a6adc250f45df3d"
+    "blueprint/src/chapter/ch30_mpo_joint_edge_normalization.tex": "4cd8a3d6848a5e08d0d436201d1f803598585970e41312a9333ce03848a23227"
   },
   "production_native_build": {
-    "status": "pending",
-    "reason": "Serialized canonical build slot currently assigned to the periodic endpoint package."
+    "status": "passed",
+    "provider": "GitHub Actions",
+    "evidence": "proof_gate_ci",
+    "scope": "Individual production modules on an exact-tree CI checkout."
   },
   "strict_regression": {
-    "status": "passed_in_exact_source_bundle",
+    "status": "passed",
     "expected_axioms": [
       "propext",
       "Classical.choice",
       "Quot.sound"
     ],
     "guard_count": 4,
-    "individual_module_import_check": "pending",
+    "individual_module_import_check": "passed",
     "log": "/workspace/shared/glm23-edge-regression-full-dependencies-probe-3.log",
-    "log_bytes": 0
+    "log_bytes": 0,
+    "ci_evidence": "proof_gate_ci"
   },
   "generic_compression_probe": {
     "status": "passed",
@@ -48,56 +51,15 @@
     "noncomment_line_lengths": "passed",
     "reader_facing_prose": "passed",
     "latexindent_3_24_7": "passed",
-    "new_leanok_markers": 0
+    "new_leanok_markers": 23
   },
   "blueprint": {
     "source_sync": "passed",
     "public_declarations": 35,
     "reverse_coverage": "passed",
     "duplicate_owners": 0,
-    "report": "/workspace/shared/glm23-blueprint-validation/joint-edge-normalization/source-sync.json"
-  },
-  "focused_render": {
-    "source_head": "607ce7e5174cbf659dede28bf935e06ef8bc9033",
-    "html_pages": [
-      "ch-mpo_symmetry_basics.html",
-      "sect0001.html",
-      "index.html",
-      "dep_graph_document.html"
-    ],
-    "missing_local_anchors": [],
-    "duplicate_ids": [],
-    "sentinels": [],
-    "leaf_labels": 22,
-    "missing_leaf_labels": [],
-    "tenkz_svg": [
-      {
-        "file": "tenkz-ca706fdf6d9786cb.svg",
-        "paths": 6,
-        "viewBox": "0 0 32.6 51.89"
-      }
-    ],
-    "native_pdf_pages": 10,
-    "inspected_physical_pdf_pages": [
-      4,
-      5,
-      6,
-      7
-    ],
-    "native_log_warnings": [],
-    "source_leaf_sha256": {
-      "ch30_mpo_joint_boundary_columns.tex": "b89ad763fe4653f3208fc040dc5b32f0eccacb85d1feb2557f6d0a8cb4370789",
-      "ch30_mpo_joint_edge_normalization.tex": "24c6c77697c4a926deada340fcf28a8fc75d8538554969ac0a6adc250f45df3d"
-    },
-    "checked_markers": {
-      "ch30_mpo_joint_boundary_columns.tex": 7,
-      "ch30_mpo_joint_edge_normalization.tex": 0
-    },
-    "formatter_version": "3.24.7",
-    "formatter_byte_comparison": "passed",
-    "native_tenkz_audit": "Not rerun; one inherited picture rendered and its SVG structure inspected.",
-    "browser_visual_inspection": false,
-    "source_sync_passed": true
+    "report": "/workspace/shared/glm23-blueprint-validation/joint-edge-normalization-checked/source-sync.json",
+    "checked_public_declarations": 35
   },
   "edge_factors_prefix_probe": {
     "status": "passed",
@@ -174,5 +136,125 @@
     ],
     "artifact_or_cache_writes": false,
     "limitation": "This is source concatenation, not an individual Lake module-target or import-boundary check."
-  }
+  },
+  "proof_gate_ci": {
+    "status": "passed",
+    "public_head": "7b6bbfab322bb2dbd2571606d4f4f11db060ceac",
+    "tested_merge_checkout": "be05ad5dae147f1474b22f85ef912f8acc4a289a",
+    "tested_tree": "79a28916888ebbd8fa56aa790fc496291c1e2bb0",
+    "authored_checkpoint": "d8f74705c00cf21e4ad4cc083b7dd2af9ddb799c",
+    "run_id": 37443744958,
+    "job_id": 112204012969,
+    "url": "https://github.com/LionSR/TNLean/actions/runs/37443744958/job/112204012969",
+    "production_and_regression_sha256": {
+      "TNLean/MPS/ParentHamiltonian/Martingale/IsometricCompressionGap.lean": "d5ab8dedd0d22bb9027beca83617c389efcd424e6d2197b507dad9b2bb57ceab",
+      "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean": "eaba358ecf96c26d190986c7fe32594bef98cb17d71759a85cf30d41cb27da82",
+      "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeNormalization.lean": "760709842dbccfebe23df7e747dd4932870cdf3e97d2ef350b08dc00e12f07e7",
+      "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeProjectors.lean": "8d2740ea09e363f65c35cb290e6a9916f09aec35a30cf0d9fb2314d61b39a4c3",
+      "TNLeanTest/JointMixedEndpointEdgeNormalization.lean": "c0b1d164f29ec2061b7576c405f8d95b0c31e6cde3fcba26d967eba608d83c82"
+    },
+    "individual_module_builds": "passed",
+    "strict_regression_and_four_guards": "passed",
+    "compiled_declaration_checks": "passed",
+    "style_checks": "passed",
+    "compile_time_gate": "passed",
+    "module_elapsed_seconds": {
+      "IsometricCompressionGap": 2.6,
+      "JointMixedEndpointEdgeFactors": 8.2,
+      "JointMixedEndpointEdgeNormalization": 2.9,
+      "JointMixedEndpointEdgeProjectors": 5.8
+    },
+    "full_blueprint_job": "still finishing page checks when proof-gate evidence was recorded"
+  },
+  "documentation_head_ci": {
+    "status": "pending_publication",
+    "scope": "Later checked-documentation commit; do not conflate with inherited proof-tested head."
+  },
+  "inherited_unchecked_render": {
+    "source_head": "607ce7e5174cbf659dede28bf935e06ef8bc9033",
+    "html_pages": [
+      "ch-mpo_symmetry_basics.html",
+      "sect0001.html",
+      "index.html",
+      "dep_graph_document.html"
+    ],
+    "missing_local_anchors": [],
+    "duplicate_ids": [],
+    "sentinels": [],
+    "leaf_labels": 22,
+    "missing_leaf_labels": [],
+    "tenkz_svg": [
+      {
+        "file": "tenkz-ca706fdf6d9786cb.svg",
+        "paths": 6,
+        "viewBox": "0 0 32.6 51.89"
+      }
+    ],
+    "native_pdf_pages": 10,
+    "inspected_physical_pdf_pages": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "native_log_warnings": [],
+    "source_leaf_sha256": {
+      "ch30_mpo_joint_boundary_columns.tex": "b89ad763fe4653f3208fc040dc5b32f0eccacb85d1feb2557f6d0a8cb4370789",
+      "ch30_mpo_joint_edge_normalization.tex": "24c6c77697c4a926deada340fcf28a8fc75d8538554969ac0a6adc250f45df3d"
+    },
+    "checked_markers": {
+      "ch30_mpo_joint_boundary_columns.tex": 7,
+      "ch30_mpo_joint_edge_normalization.tex": 0
+    },
+    "formatter_version": "3.24.7",
+    "formatter_byte_comparison": "passed",
+    "native_tenkz_audit": "Not rerun; one inherited picture rendered and its SVG structure inspected.",
+    "browser_visual_inspection": false,
+    "source_sync_passed": true
+  },
+  "focused_render": {
+    "source_head": "d8f74705c00cf21e4ad4cc083b7dd2af9ddb799c",
+    "html_pages": [
+      "ch-mpo_symmetry_basics.html",
+      "sect0001.html",
+      "index.html",
+      "dep_graph_document.html"
+    ],
+    "missing_local_anchors": [],
+    "duplicate_ids": [],
+    "sentinels": [],
+    "leaf_labels": 22,
+    "missing_leaf_labels": [],
+    "tenkz_svg": [
+      {
+        "file": "tenkz-ca706fdf6d9786cb.svg",
+        "paths": 6,
+        "viewBox": "0 0 32.6 51.89"
+      }
+    ],
+    "native_pdf_pages": 10,
+    "inspected_physical_pdf_pages": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "native_log_warnings": [],
+    "source_leaf_sha256": {
+      "ch30_mpo_joint_boundary_columns.tex": "b89ad763fe4653f3208fc040dc5b32f0eccacb85d1feb2557f6d0a8cb4370789",
+      "ch30_mpo_joint_edge_normalization.tex": "4cd8a3d6848a5e08d0d436201d1f803598585970e41312a9333ce03848a23227"
+    },
+    "checked_markers": {
+      "ch30_mpo_joint_boundary_columns.tex": 7,
+      "ch30_mpo_joint_edge_normalization.tex": 23
+    },
+    "formatter_version": "3.24.7",
+    "formatter_byte_comparison": "passed",
+    "native_tenkz_audit": "Passed: 1 inherited picture, zero hard errors, zero advisories; expected source-wrapper tex-unlinked note.",
+    "browser_visual_inspection": false,
+    "source_sync_passed": true,
+    "native_tenkz_audit_log": "/workspace/shared/glm23-blueprint-validation/joint-edge-normalization-checked/tenkz-audit.log"
+  },
+  "production_and_regression_unchanged_in_checked_doc_batch": true
 }
