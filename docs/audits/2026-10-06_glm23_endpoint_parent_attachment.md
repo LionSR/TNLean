@@ -20,6 +20,36 @@ The base is local commit `908e7dd0028a93bab88ac8bfbe99f614f93f7eb5`, whose
 corresponding arbitrary-physical package passed all eight remote checks at
 `0d6654d1`, including its repaired regression and nine guards, as verified in run 37407799655. That validates the base, not the new attachment source.
 
+## Current validation status
+
+The complete production build passed in [CI run 37424899108, build job
+112142631279](https://github.com/LionSR/TNLean/actions/runs/37424899108/job/112142631279)
+for public head `210e1d8300d2bf585a34511fc4eb2bf6a394ee1b`, tested as merge
+`98c696deae14aaa7330203aabc9bde8f2a7a2728`. Both have tree
+`7f4498ab78ff201416e31d63b97945f32fe86896`. The attachment production module
+built in 11 seconds at 2026-10-06 06:55:40 UTC, without production errors.
+Its checked Git blob is `91babeaf7722ef8710c8a88c5ebe0add99355ab9` and SHA-256
+is `9c4a67d14d8a8d4400a6e49c94ec70db5d67fd24271c3ad442476f8a8de691e8`.
+The author worktree's production file matches both hashes exactly and is
+unchanged by the present test/documentation checkpoint.
+
+The strict regression run failed only at its two deprecated conditional
+lemmas: `if_false` on line 66 and `if_true` on line 76, reported at
+2026-10-06 07:01:36 UTC. All eight guarded axiom commands were processed
+without reported guard errors; their expectations remain exactly
+`propext`, `Classical.choice`, and `Quot.sound`. This is not a successful
+whole-file regression pass. The present repair changes only those two
+lemma names to the compiler-recommended `ite_false` and `ite_true`.
+A strict pass of the repaired file remains pending.
+
+The 15 production declaration owners in the isolated attachment blueprint
+now carry checked statement markers, and both production-backed proof
+blocks carry checked proof markers. This promotion records the successful
+production build, not success of the repaired regression. The inspectable
+checkout/pass/error excerpt is
+[`data/glm23-endpoint-attachment-ci-210e1d.txt`](data/glm23-endpoint-attachment-ci-210e1d.txt).
+The local canonical warmup of the earlier head is not used as pass evidence.
+
 ## Dependency and coverage findings
 
 1. `MixedEndpointProjectorComparison` proves local order at zero by padding
@@ -59,7 +89,7 @@ transfer. The new generic norm-gap comparison reuses these results; it does
 not repeat an eigenvector or quadratic-form argument. The two polar endpoint
 rewrites are recorded below the promotion threshold in the tactic ledger.
 
-## Regression and validation status
+## Original recovery validation record
 
 - `TNLeanTest/ArbitraryPhysicalEndpointAttachment.lean` covers both exact
   local endpoint matrices, both attachment ends, continuity, positivity,
@@ -93,7 +123,7 @@ after its exact-head validation: they no longer describe its already
 checked 38 declaration owners as source-only. No inherited mathematical body,
 shared router, workflow, MPU, or PEPS file was changed.
 
-## Remaining work
+## Original recovery remaining work
 
 The source was committed as `d29dc992da0709879655769b97eed657ac6fdbc7` in the
 previous executor. That Git object is unavailable after executor replacement.
@@ -201,3 +231,36 @@ signature/test preservation, proof-integrity and whitespace checks pass.
 This worker has not run Lean or Lake while the root's canonical build is
 warming; compilation and the unchanged guarded regression remain pending
 for this latest repair. No passing result for this commit is claimed.
+
+
+## Production-backed checkpoint and strict-regression correction
+
+The production theorem statements and proof bodies are byte-identical to
+the CI-validated file. The only Lean-file changes in this checkpoint are
+the two deprecated simp-lemma names in the regression. The regression's
+mathematical statements, all eight guard commands and expectations, and
+all resource limits are unchanged. No new axioms or proof placeholders
+are introduced. The earlier pending-compilation paragraphs above are
+historical checkpoints, superseded by the exact production evidence in
+“Current validation status”.
+
+No Lean or Lake process was started by this worker while the root's
+canonical endpoint warmup remained active. The repaired strict regression
+must still pass as a whole before that gate can be reported successful.
+
+
+The exact current blueprint leaf was formatted with pinned latexindent
+3.24.7 and rendered in isolation using the repository's common/print macros
+and bibliography under XeLaTeX. The final render has two content pages and
+one bibliography page; all three page images were inspected. There are no
+final-pass LaTeX/BibTeX warnings, overfull/underfull boxes or missing-glyph
+reports, and no clipping or illegible formulas was observed. Rendering
+required the existing writable TeX cache and explicit installed TeX/font
+search paths; no Lean cache was touched. The production/source/test and
+render hashes, page counts and marker counts are recorded in
+[`data/glm23-endpoint-attachment-render-review.json`](data/glm23-endpoint-attachment-render-review.json).
+
+The pinned single-leaf formatting check passed. The source-level global
+blueprint/Lean synchronization and reverse coverage check also passed with
+no missing, stale or unresolved declaration references. This is a source
+checker result, not a new Lean compiler or repaired-regression pass.

@@ -1,0 +1,91 @@
+{
+  "date_utc": "2026-10-06",
+  "production_ci": {
+    "public_head": "210e1d8300d2bf585a34511fc4eb2bf6a394ee1b",
+    "tested_merge": "98c696deae14aaa7330203aabc9bde8f2a7a2728",
+    "tree": "7f4498ab78ff201416e31d63b97945f32fe86896",
+    "run": 37424899108,
+    "job": 112142631279,
+    "url": "https://github.com/LionSR/TNLean/actions/runs/37424899108/job/112142631279",
+    "module_seconds": 11,
+    "production_pass": true
+  },
+  "production_git_blob": "91babeaf7722ef8710c8a88c5ebe0add99355ab9",
+  "production_sha256": "9c4a67d14d8a8d4400a6e49c94ec70db5d67fd24271c3ad442476f8a8de691e8",
+  "regression": {
+    "examples": 13,
+    "guards": 8,
+    "repaired_file_sha256": "7ee4b432d1776c26854e7cd3940b038f383d309d364836b67644c9e6c18fe529",
+    "whole_file_repaired_pass": "pending",
+    "prior_guard_errors": 0,
+    "test_only_replacements": {
+      "if_false": "ite_false",
+      "if_true": "ite_true"
+    },
+    "all_guard_blocks_byte_unchanged": true
+  },
+  "blueprint": {
+    "leaf": "blueprint/src/chapter/ch30_mpo_endpoint_parent_attachment.tex",
+    "sha256": "9cea262a205c391f90530f9bd1a954eee3bce6c8c8e0966398d1dc2b9d9c0f0f",
+    "owners": [
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_zero_le_parent",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_one_le_parent",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointParentInteraction",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_zero",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_one",
+      "MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalEndpointAttachment",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_posSemidef",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_norm_le_one",
+      "MPSTensor.interactionHamiltonian_affine_norm_gap_of_order",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_ker_eq_parent",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_groundSpace_eq_span_mpv",
+      "MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_groundSpace_finrank",
+      "MPSTensor.MPOSymmetry.exists_uniform_arbitraryPhysicalEndpointAttachment_gap"
+    ],
+    "owner_count": 15,
+    "checked_statement_nodes": 3,
+    "checked_proof_nodes": 2,
+    "total_leanok_markers": 5,
+    "formatter_version": "3.24.7",
+    "pinned_formatter_check": "passed"
+  },
+  "render": {
+    "engine": "XeLaTeX (TeX Live 2025/dev/Debian)",
+    "repository_common_and_print_macros": true,
+    "pages": 3,
+    "content_pages": [
+      1,
+      2
+    ],
+    "bibliography_pages": [
+      3
+    ],
+    "visually_inspected_pages": [
+      1,
+      2,
+      3
+    ],
+    "final_warnings": [],
+    "overfull_underfull_boxes": [],
+    "missing_glyphs": [],
+    "visible_clipping": false,
+    "pdf_sha256": "b63b3a5f6cc2887dff093d4395774dc72667ff992206f385e7196556e8f57f9e",
+    "wrapper_sha256": "f44824471e78d8547602e98343a9960e56fe8773d562598322ea30e50863f37f",
+    "final_log_sha256": "7cbc5bd98164d5e181f010092088a334a3b32c849f1673668ad5f3f9c0f2a986"
+  },
+  "worker_ran_lean_or_lake": false,
+  "production_byte_unchanged": true,
+  "source_synchronization": {
+    "global_status": "passed",
+    "reverse_changed_declaration_coverage": "passed",
+    "tool": "scripts/blueprint_lean_sync.py",
+    "mode": "source-level; no Lean compiler invocation",
+    "report_sha256": "7ac7afab4dc876089d573e5015274ef4de397f808874d3ef22f2b996b2d8ddbf",
+    "missing_in_lean": [],
+    "leanok_but_missing": [],
+    "stale_lean_decls": [],
+    "missing_from_lean_decls_file": []
+  }
+}

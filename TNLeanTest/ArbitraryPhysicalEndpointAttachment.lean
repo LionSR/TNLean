@@ -63,7 +63,7 @@ example (t : unitInterval) (hN : 2 ≤ N) :
       (arbitraryPhysicalEndpointAttachment A₀ A₁ false t) hN)) =
       Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
         (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀)))} := by
-  simpa only [Bool.false_eq_true, if_false] using
+  simpa only [Bool.false_eq_true, ite_false] using
     arbitraryPhysicalEndpointAttachment_groundSpace_eq_span_mpv
       A₀ A₁ h₀ h₁ false t.property.1 hN
 
@@ -73,7 +73,7 @@ example (t : unitInterval) (hN : 2 ≤ N) :
       (arbitraryPhysicalEndpointAttachment A₀ A₁ true t) hN)) =
       Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
         (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁)))} := by
-  simpa only [if_true] using
+  simpa only [ite_true] using
     arbitraryPhysicalEndpointAttachment_groundSpace_eq_span_mpv
       A₀ A₁ h₀ h₁ true t.property.1 hN
 
