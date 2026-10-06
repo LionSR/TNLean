@@ -66,76 +66,8 @@ namespace MPSTensor
 
 variable {d D b : ℕ}
 
-/-! ### The direct sum of blocks of multiplicity one -/
-
 variable {Dj : Fin b → ℕ}
-
-/-- The direct sum `Aⁱ = ⊕ⱼ μⱼ A_jⁱ` of blocks `A_j`, each of multiplicity one, with the block
-`j` placed on the bond coordinates `ι_j`: arXiv:2307.01696, Supplemental Material, eq. (S2),
-for `m_j = 1`. -/
-def blockSum (Aj : (j : Fin b) → MPSTensor d (Dj j)) (ι : (j : Fin b) → Fin (Dj j) → Fin D)
-    (μ : Fin b → ℂ) : MPSTensor d D :=
-  fun i => ∑ j, μ j • (coordEmbedding (ι j) * Aj j i * (coordEmbedding (ι j))ᴴ)
-
 variable {Aj : (j : Fin b) → MPSTensor d (Dj j)} {ι : (j : Fin b) → Fin (Dj j) → Fin D}
-
-/-- A nonempty word of the direct sum is the direct sum of the words of the blocks:
-`A^{w} = ⊕ⱼ μⱼ^{|w|} A_j^{w}`. -/
-theorem evalWord_blockSum (hι : ∀ j, Function.Injective (ι j))
-    (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (μ : Fin b → ℂ) :
-    ∀ w : List (Fin d), w ≠ [] →
-      Kraus.evalWord (blockSum Aj ι μ) w =
-        ∑ j, μ j ^ w.length •
-          (coordEmbedding (ι j) * Kraus.evalWord (Aj j) w * (coordEmbedding (ι j))ᴴ)
-  | [], h => absurd rfl h
-  | [i], _ => by simp [blockSum]
-  | i :: i' :: w, _ => by
-    rw [Kraus.evalWord_cons, evalWord_blockSum hι hdisj μ (i' :: w) (List.cons_ne_nil _ _),
-      blockSum, sum_mul_sum_of_mul_eq_zero fun j j' h => by
-        rw [smul_mul_smul_comm]
-        simp only [Matrix.mul_assoc,
-          conjTranspose_coordEmbedding_mul_mul_eq_zero (hdisj j j' h), Matrix.mul_zero,
-          smul_zero]]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [smul_mul_smul_comm]
-    simp only [Kraus.evalWord_cons, List.length_cons, pow_succ', Matrix.mul_assoc,
-      conjTranspose_coordEmbedding_mul_mul_self (hι j)]
-
-/-- The periodic state of the direct sum on `N ≥ 1` sites:
-`|φ_N(A)⟩ = ∑ⱼ μⱼ^N |φ_N(A_j)⟩` (arXiv:2307.01696, Supplemental Material, eqs. (S3) and (S4),
-for `m_j = 1`, where `βⱼ = μⱼ^N`). -/
-theorem mpv_blockSum (hι : ∀ j, Function.Injective (ι j))
-    (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (μ : Fin b → ℂ) {N : ℕ} (hN : N ≠ 0)
-    (s : Fin N → Fin d) : mpv (blockSum Aj ι μ) s = ∑ j, μ j ^ N * mpv (Aj j) s := by
-  have hw : List.ofFn s ≠ [] := by simpa [List.ofFn_eq_nil_iff] using hN
-  rw [mpv_eq, coeff_eq, evalWord_blockSum hι hdisj μ _ hw, trace_sum, List.length_ofFn]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [trace_smul, trace_mul_comm, ← Matrix.mul_assoc, conjTranspose_coordEmbedding_mul_self (hι j),
-    Matrix.one_mul, smul_eq_mul, mpv_eq, coeff_eq]
-
-/-- The physical matrix of the `q`-site blocked tensor of the direct sum, for `q ≥ 1`:
-`B = ∑ⱼ μⱼ^q B_j K_jᴴ`, where `B_j` is the blocked tensor of the block `j` and `K_j` embeds its
-bond pairs. -/
-theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι j))
-    (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (μ : Fin b → ℂ) {q : ℕ} (hq : q ≠ 0) :
-    physicalMatrix (blockTensor (blockSum Aj ι μ) q) =
-      ∑ j, μ j ^ q • (physicalMatrix (blockTensor (Aj j) q) * (pairEmbedding (ι j))ᴴ) := by
-  ext w p
-  have hw : Kraus.wordOfBlock d q w ≠ [] := by
-    rw [← List.length_pos_iff, Kraus.length_wordOfBlock]; omega
-  simp only [physicalMatrix, blockTensor, Kraus.blockTensor]
-  rw [evalWord_blockSum hι hdisj μ _ hw, Kraus.length_wordOfBlock, Matrix.sum_apply,
-    Matrix.sum_apply]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [Matrix.smul_apply, Matrix.smul_apply]
-  congr 1
-  simp only [mul_apply, Finset.sum_mul, Fintype.sum_prod_type]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun c _ => ?_
-  rcases p with ⟨x, y⟩
-  simp only [conjTranspose_apply, pairEmbedding_apply, coordEmbedding, of_apply, Prod.mk.injEq,
-    physicalMatrix]
-  by_cases h1 : x = ι j a <;> by_cases h2 : y = ι j c <;> simp [h1, h2, Kraus.blockTensor]
 
 /-! ### The approximating state -/
 

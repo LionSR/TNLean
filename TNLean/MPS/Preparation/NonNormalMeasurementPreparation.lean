@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Preparation.SectorSpectralGap
 import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.MeasurementPreparation
 import TNLean.MPS.Preparation.BlockSumError
@@ -191,22 +192,6 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b
   exact copyApproxVector_eq_sum hι hdisj hσ htr hq0 hB horth M α hNq s
 
 /-! ### Error `ε` in depth `O(log(N/ε))` -/
-
-/-- **A common gap for normal blocks.** For finitely many normal left-canonical blocks there is
-`0 < t < 1` bounding the moduli of the eigenvalues other than `1` of all their transfer maps
-(arXiv:2307.01696, eq. (5) and the remark after it, for each block). -/
-theorem exists_forall_eigenvalue_norm_le [NeZero b] (hN : ∀ j, Kraus.IsNormal (Aj j))
-    (hA : ∀ j, IsLeftCanonical (Aj j)) (hD : ∀ j, NeZero (Dj j)) :
-    ∃ t : ℝ, 0 < t ∧ t < 1 ∧ ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖(t : ℂ)‖ := by
-  choose t ht0 ht1 hgap using fun j =>
-    haveI := hD j
-    exists_eigenvalue_norm_le_of_isNormal (Aj j) (hN j) (hA j)
-  set t₀ := Finset.univ.sup' Finset.univ_nonempty t
-  have ht₀ : 0 < t₀ := (ht0 0).trans_le (Finset.le_sup' t (Finset.mem_univ 0))
-  refine ⟨t₀, ht₀, (Finset.sup'_lt_iff _).2 fun j _ => ht1 j, fun j μ' hμ hne => ?_⟩
-  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht₀]
-  exact (hgap j μ' hμ hne).trans (Finset.le_sup' t (Finset.mem_univ j))
 
 /-- **Tensors that are not normal, with measurements, in depth `O(log(N/ε))`.** Let
 `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (arXiv:2307.01696, Supplemental Material,

@@ -28,6 +28,36 @@ and make equality of the two formulas an explicit invariant.
 
 open scoped Matrix
 
+namespace Kraus
+
+variable {d D : ℕ}
+
+/-- Bridge: block injectivity passes from the adjoint family \(K_i^\dagger\) to \(K\), since
+conjugate transposition maps the words of \(K^\dagger\) of length \(L\) onto the reversed
+words of \(K\). -/
+theorem isNBlkInjective_of_isNBlkInjective_conjTranspose
+    {K : Fin d → Matrix (Fin D) (Fin D) ℂ} {L : ℕ}
+    (hK : IsNBlkInjective (fun i => (K i)ᴴ) L) : IsNBlkInjective K L := by
+  unfold IsNBlkInjective wordSpan at hK ⊢
+  refine eq_top_iff.mpr fun X _ => ?_
+  have key : ∀ Y ∈ Submodule.span ℂ
+      (Set.range fun σ : Fin L → Fin d => evalWord (fun i => (K i)ᴴ) (List.ofFn σ)),
+      Yᴴ ∈ Submodule.span ℂ
+        (Set.range fun σ : Fin L → Fin d => evalWord K (List.ofFn σ)) := by
+    intro Y hY
+    induction hY using Submodule.span_induction with
+    | mem x hx =>
+      obtain ⟨σ, rfl⟩ := hx
+      refine Submodule.subset_span ⟨σ ∘ Fin.rev, ?_⟩
+      simp only [evalWord_conjTranspose, Matrix.conjTranspose_conjTranspose, List.ofFn_reverse]
+    | zero => simp
+    | add x y _ _ hx hy => rw [Matrix.conjTranspose_add]; exact Submodule.add_mem _ hx hy
+    | smul a x _ hx => rw [Matrix.conjTranspose_smul]; exact Submodule.smul_mem _ _ hx
+  simpa using key Xᴴ (by rw [hK]; exact Submodule.mem_top)
+
+
+end Kraus
+
 namespace MPSTensor
 
 variable {d D L : ℕ}
