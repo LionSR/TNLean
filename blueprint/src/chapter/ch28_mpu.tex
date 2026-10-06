@@ -5017,6 +5017,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     multiplied by $d^{1/2}$ decompose $\mathcal U$ as canonical form requires.
 \end{proof}
 
+\begin{lemma}[Canonical form up to similarity]
+    \label{lem:mpu_canonical_form_similar_cfii}
+    \lean{MPOTensor.IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm}
+    \leanok
+    \uses{def:mpu_canonical_form, def:mpu_canonical_form_ii, def:mpu}
+    Let $d,D\geq1$ and let $\mathcal U$ be a matrix product unitary tensor in
+    canonical form. There is an invertible $X$ on the bond space such that the
+    tensor with letters $XU^{ij}X^{-1}$ is in canonical form II; it generates
+    the same operators.
+    % Source: paper_v2.tex lines 294 and 356 (a normal tensor can be gauged to
+    % canonical form II, assumed without loss of generality).
+\end{lemma}
+
+\begin{proof}\leanok
+    The normalized tensor $d^{-1/2}\mathcal U$ is normal. The adjoint transfer
+    map of a normal tensor has a positive definite fixed point $\sigma$, and
+    $\sigma^{1/2}(\cdot)\sigma^{-1/2}$ makes the tensor left-canonical and keeps
+    it normal; a unitary then diagonalizes the positive definite fixed point of
+    the transfer map, and division by its trace gives trace one. The result is
+    a one-block canonical-form-II datum with that fixed matrix.
+\end{proof}
+
 \begin{theorem}[Normality of an MPU in canonical form]
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm}
@@ -6750,11 +6772,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Index]
     \label{def:index}
-    \notready
+    \lean{MPOTensor.IsMPU.index, MPOTensor.IsMPU.index_eq_logb_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.index_eq_logb_rightRank_div_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.rightRank_mul_leftRank_blockTensor_of_isMPUCanonicalForm}
+    \leanok
     \discussion{6014}
-    \uses{ThmFund1, thm:mpu_bounded_simple_blocking}
-    Let $k$ be any blocking length for which $\mathcal U_k$ is simple, and let
-    $r$ and $\ell$ be its right and left source-cut ranks. The source index is
+    \uses{ThmFund1, thm:mpu_bounded_simple_blocking, def:mpu_canonical_form,
+        lem:mpu_canonical_form_similar_cfii}
+    Let $\mathcal U$ be a tensor in canonical form generating matrix product
+    unitaries, let $k\geq1$ be any blocking length for which $\mathcal U_k$ is
+    simple, and let $r$ and $\ell$ be its right and left source-cut ranks. The
+    source index is
     \begin{align}
         \operatorname{ind}(\mathcal U)
          & =\frac12(\log_2 r-\log_2\ell).
@@ -6765,8 +6793,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =\log_2\frac{r}{d^k}
         =-\log_2\frac{\ell}{d^k}.
     \end{align}
-    This is the unrestricted definition of
-    \cite[Definition~IV.1]{Cirac2017MPU}.
+    This is the definition of \cite[Definition~IV.1]{Cirac2017MPU}, stated there
+    for a tensor in canonical form with the ranks of its simple blocking, after
+    the source has assumed without loss of generality that the tensor is in
+    canonical form II (lines 294 and 356). The library defines the index of
+    every matrix product unitary through a canonical-form-II representative and
+    proves, for a tensor in canonical form, that this value is the displayed
+    expression in the ranks of its own blocking; the ranks are invariant under
+    the similarity to canonical form II.
     % Source lines: paper_v2.tex 681--688.
 \end{definition}
 
@@ -6912,20 +6946,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proposition}[Well-definedness of the index]
     \label{index-well-defined}
-    \notready
+    \lean{MPOTensor.IsMPU.blockTensor_add_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.leftRank_blockTensor_add_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.blockTensor_isMPUSimple_of_isMPUCanonicalForm}
+    \leanok
     \discussion{6014}
-    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings}
-    The source index is independent of the chosen simple blocking. More
-    precisely, if $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$
-    are simple, then
+    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings, lem:mpu_canonical_form_similar_cfii}
+    Let $\mathcal U$ be a tensor in canonical form generating matrix product
+    unitaries. The source index is independent of the chosen simple blocking.
+    More precisely, if $k\geq k_0\geq1$ and $\mathcal U_{k_0}$ is simple, then
+    $\mathcal U_k$ is simple and
     \begin{align}
         r_k    & =d^{k-k_0}r_{k_0},    &
         \ell_k & =d^{k-k_0}\ell_{k_0}.
     \end{align}
-    This is the unrestricted statement of
-    \cite[Proposition~IV.2]{Cirac2017MPU}.
+    This is \cite[Proposition~IV.2]{Cirac2017MPU} for a tensor in canonical
+    form, the hypothesis under which the source defines the index.
+    % **Local fix (rank-product exponent):** the source's proof prints
+    % $r_k\ell_k=d^k$; it is $d^{2k}$. Documented in
+    % docs/paper-gaps/mpu_blocking_rank_product_exponent.tex.
     % Source lines: paper_v2.tex 690--704.
 \end{proposition}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_canonical_form_similar_cfii, lem:mpu_virtual_sandwich_blocking,
+        prop:mpu_admissible_index_well_defined}
+    Pass to the similar tensor in canonical form II, which has the same
+    operators, the same simple blockings and the same ranks; for it the
+    statement is the canonical-form-II version.
+\end{proof}
 
 \begin{theorem}[Well-definedness on a canonical-form-II representative]
     \label{prop:mpu_admissible_index_well_defined}
@@ -8512,6 +8561,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     multiplication by these matrices preserves rank. Apply this observation to
     each source-cut formula in
     Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
+\end{proof}
+
+\begin{lemma}[Blocking, simplicity and ranks under a bond similarity]
+    \label{lem:mpu_virtual_sandwich_blocking}
+    \lean{MPOTensor.blockTensor_virtualSandwich, MPOTensor.isMPUSimple_virtualSandwich_iff,
+        MPOTensor.mpo_virtualSandwich, MPOTensor.IsMPU.virtualSandwich,
+        MPOTensor.rightRank_blockTensor_virtualSandwich,
+        MPOTensor.leftRank_blockTensor_virtualSandwich}
+    \leanok
+    \uses{thm:mpu_virtual_sandwich_source_ranks, def:mpu_simple, def:mpdo_physical_blocking}
+    Let $A,B$ be square matrices on the bond space with $BA=I$. The tensor with
+    letters $AU^{ij}B$ has the blockings $A\,U_L\,B$, the same periodic
+    operators as $\mathcal U$, and is simple if and only if $\mathcal U$ is;
+    the ranks of its blockings equal those of $\mathcal U$.
+    % Source: paper_v2.tex, Proposition IV.5, lines 773--804.
+\end{lemma}
+
+\begin{proof}\leanok
+    The letters of a blocking are products, and $BA=I$ telescopes; the trace is
+    cyclic; the double layer is conjugated by $\bar A\otimes A$, which carries
+    the boundary vectors along; the ranks by the source-ranks theorem.
 \end{proof}
 
 \begin{theorem}[Source factors under a unitary virtual conjugation]

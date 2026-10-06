@@ -16,6 +16,7 @@ import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.BondPadding
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.CanonicalFormBlocking
+import TNLean.MPS.MPU.CanonicalFormGauge
 import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
 import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
@@ -40,6 +41,7 @@ import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
 import TNLean.MPS.MPU.Index
 import TNLean.MPS.MPU.IndexContinuity
+import TNLean.MPS.MPU.IndexOfCanonicalForm
 import TNLean.MPS.MPU.InverseCompatibleComparisonUnitarity
 import TNLean.MPS.MPU.InverseCompatibleCutComparison
 import TNLean.MPS.MPU.InverseCompatibleFamilyProperties
@@ -118,5 +120,6 @@ import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
 import TNLean.MPS.MPU.VirtualSandwich
+import TNLean.MPS.MPU.VirtualSandwichBlocking
 import TNLean.MPS.MPU.VirtualSourceFactorTransport
 import TNLean.MPS.MPU.VirtualUnitaryGauge
