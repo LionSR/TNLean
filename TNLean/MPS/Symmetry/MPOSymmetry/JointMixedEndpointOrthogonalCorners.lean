@@ -159,8 +159,13 @@ theorem jointMixedEndpointCornerSupport_le
         (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range := by
   rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
   obtain ⟨X, rfl⟩ := blockBoundaryEquiv.symm.surjective v
-  rw [jointMixedOuterCornerProjection_blockInsertedBoundaryMap]
-  exact ⟨_, rfl⟩
+  refine ⟨blockBoundaryEquiv.symm (fun x =>
+    (if p.2 then 1 - bondInterpolationMatrix (D₀ x) (D₁ x) 0
+      else bondInterpolationMatrix (D₀ x) (D₁ x) 0) * X x *
+    (if p.1 then 1 - bondInterpolationMatrix (D₀ x) (D₁ x) 0
+      else bondInterpolationMatrix (D₀ x) (D₁ x) 0)), ?_⟩
+  exact (jointMixedOuterCornerProjection_blockInsertedBoundaryMap A₀ A₁
+    (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) X p).symm
 
 /-- The actual joint endpoint support is exactly the sum of its four
 outer physical phase corners. -/

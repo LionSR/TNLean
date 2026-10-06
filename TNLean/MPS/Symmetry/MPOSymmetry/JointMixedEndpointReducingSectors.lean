@@ -71,8 +71,9 @@ theorem range_blockInsertedBoundaryMap_jointMixed_invariant_rowSector
         (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁) W 2).range := by
   rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
   obtain ⟨X, rfl⟩ := blockBoundaryEquiv.symm.surjective v
-  rw [jointMixedRowSector_blockInsertedBoundaryMap]
-  exact ⟨_, rfl⟩
+  exact ⟨blockBoundaryEquiv.symm
+    (fun x => X x * bondInterpolationMatrix (D₀ x) (D₁ x) 0),
+      (jointMixedRowSector_blockInsertedBoundaryMap A₀ A₁ W X).symm⟩
 
 /-- The last column selector preserves the full joint extended support.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
@@ -85,8 +86,9 @@ theorem range_blockInsertedBoundaryMap_jointMixed_invariant_columnSector
         (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁) W 2).range := by
   rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
   obtain ⟨X, rfl⟩ := blockBoundaryEquiv.symm.surjective v
-  rw [jointMixedColumnSector_blockInsertedBoundaryMap]
-  exact ⟨_, rfl⟩
+  exact ⟨blockBoundaryEquiv.symm
+    (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0 * X x),
+      (jointMixedColumnSector_blockInsertedBoundaryMap A₀ A₁ W X).symm⟩
 
 /-- Every local row phase reduces the actual zero-parameter joint support.
 The inner phase is fixed; the outer phase acts on the virtual boundary.
@@ -103,8 +105,8 @@ theorem jointMixedRowSector_commute_extendedSupport_starProjection
   · exact range_blockInsertedBoundaryMap_jointMixed_invariant_rowSector A₀ A₁ _
   · rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
     obtain ⟨X, rfl⟩ := blockBoundaryEquiv.symm.surjective v
-    rw [jointMixedRowSector_one_blockInsertedBoundaryMap]
-    exact ⟨_, rfl⟩
+    exact ⟨blockBoundaryEquiv.symm X,
+      (jointMixedRowSector_one_blockInsertedBoundaryMap A₀ A₁ X).symm⟩
 
 /-- Every local column phase reduces the actual zero-parameter joint support.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
@@ -119,8 +121,8 @@ theorem jointMixedColumnSector_commute_extendedSupport_starProjection
   fin_cases site
   · rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
     obtain ⟨X, rfl⟩ := blockBoundaryEquiv.symm.surjective v
-    rw [jointMixedColumnSector_zero_blockInsertedBoundaryMap]
-    exact ⟨_, rfl⟩
+    exact ⟨blockBoundaryEquiv.symm X,
+      (jointMixedColumnSector_zero_blockInsertedBoundaryMap A₀ A₁ X).symm⟩
   · exact range_blockInsertedBoundaryMap_jointMixed_invariant_columnSector A₀ A₁ _
 
 /-- Every local row phase reduces the actual endpoint interaction.
