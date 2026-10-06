@@ -361,8 +361,14 @@ class WorkflowTests(unittest.TestCase):
                     self.assertIn('-DwarningAsError=true', run)
                     self.assertIn('-DautoImplicit=false -DrelaxedAutoImplicit=false', run)
                     self.assertEqual(run.count('lake env lean'), 1)
-                    self.assertEqual(run.strip().splitlines()[-1].strip(),
-                                     'TNLeanTest/TorusDualRectangle.lean')
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLean/PEPS/TorusDualRectangle.lean',
+                        'TNLean/PEPS/TorusDualRectangleFlux.lean',
+                        'TNLeanTest/TorusDualRectangle.lean',
+                    ])
+                    self.assertEqual(run.strip().splitlines()[-2].strip(), '"$source"')
+                    self.assertEqual(run.strip().splitlines()[-1].strip(), 'done')
                     imports = (ROOT / 'TNLeanTest/TorusDualRectangle.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')], [
                         'import TNLean.PEPS.TorusDualRectangleFlux',

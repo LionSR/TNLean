@@ -114,10 +114,10 @@ theorem torusRectComb_east (R : Set X) (x : ZMod width) (y : ZMod height)
     | zero => simp [torusRectComb, torusRectColumn, torusRectCoord]
     | succ i => rfl
   rw [hc]
-  simpa only [torusRectComb, ← Quiver.Path.comp_assoc, Quiver.Path.comp_cons,
-    Quiver.Path.comp_nil, Quiver.Hom.toPath, torusRectCoord] using
-    (TorusDualHomotopy.refl (torusRectComb x y i 0)).comp
-      (torusRectColumn_east R (torusRectCoord x i) y j hs)
+  have hh := (TorusDualHomotopy.refl (torusRectComb x y i 0)).comp
+    (torusRectColumn_east R (torusRectCoord x i) y j hs)
+  rw [← Quiver.Path.comp_assoc] at hh
+  exact hh
 
 /-- Labelled unit steps in the lifted closed rectangle `[0,W] × [0,H]`.
 Distinct direction constructors retain the edge labels after projection to a torus. -/

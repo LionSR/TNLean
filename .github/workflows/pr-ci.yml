@@ -482,10 +482,13 @@ jobs:
           lake --fail-fast build +TNLean.PEPS.TorusDualRectangleFlux:olean \
             +TNLean.PEPS.TorusDualWinding:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-          lake env lean \
-            -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-            -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            TNLeanTest/TorusDualRectangle.lean
+          for source in TNLean/PEPS/TorusDualRectangle.lean \
+              TNLean/PEPS/TorusDualRectangleFlux.lean TNLeanTest/TorusDualRectangle.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
 
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
