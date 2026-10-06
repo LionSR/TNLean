@@ -5525,3 +5525,15 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The scalar rate conversion likewise reuses
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
+
+### Finite periodic quotient error — candidate (2026-10-06)
+
+- **Pattern:** Bound a normalized periodic expectation by rewriting
+  `a / b - s = ((a - s) + s * (1 - b)) / b` and using `‖b‖ ≥ 1/2`.
+- **Seen:** The fixed-support quantitative expectation proof and its simpler
+  full-ring contracting case in `MPS/Symmetry/PeriodicStringBounds`.
+- **Abstraction:** None yet. The fixed-support proof bounds a centered
+  numerator, while the full-ring proof has target zero. Existing norm and
+  division inequalities keep both arguments short.
+- **Notes:** The two occurrences do not justify another exported quotient
+  wrapper; the underlying estimates stay with the actual periodic observables.
