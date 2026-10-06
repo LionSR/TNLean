@@ -39,7 +39,7 @@ example (A : (v : (Set.univ : Set Unit)) →
     (θ : RegionBoundaryEndpoint (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) Set.univ → Fin 2) :
     network (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) (fun _ ↦ Fin 2)
       (deltaCompletedTensor _ _ Set.univ A 0 θ)
-      (internalBondMatrices _ _ Set.univ O) (fun _ ↦ PUnit.unit) =
+      (internalBondMatrices _ _ Set.univ O) (fun _ ↦ PUnit.unit.{1}) =
       openCoefficient _ _ Set.univ A O θ :=
   network_deltaCompletedTensor _ _ Set.univ A O 0 θ
 

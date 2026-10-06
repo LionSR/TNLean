@@ -60,20 +60,29 @@ def torusEndpointTupleEquiv :
     cases d <;> cases b <;> rfl
   right_inv γ := rfl
 
+omit [DecidableEq V] in
 open Classical in
 /-- Exact equality of native and independently labelled contractions. -/
 theorem labelledNetwork_eq_torusBondNetwork
     (A : X → (V × V × V × V) → ℂ) (O : E → Matrix V V ℂ) :
     network torusLabelledBondTail torusLabelledBondHead (fun _ ↦ V)
-      (fun v η (_ : PUnit) ↦ A v (torusLocalTupleEquiv v η)) O (fun _ ↦ PUnit.unit) =
+      (fun v η (_ : PUnit.{1}) ↦ A v (torusLocalTupleEquiv v η)) O (fun _ ↦ PUnit.unit.{1}) =
     torusBondNetwork A (fun v ↦ O (v, false)) (fun v ↦ O (v, true)) := by
   unfold network
   rw [← (torusEndpointTupleEquiv (width := width) (height := height) (V := V)).symm.sum_comp]
   unfold torusBondNetwork
   apply Finset.sum_congr rfl
   intro γ _
-  simp [bondWeight, Fintype.prod_prod_type, torusEndpointTupleEquiv,
-    torusLocalTupleEquiv, torusIncidentEndpoint, endpointSiteEquiv, mul_comm]
+  apply congrArg₂ (· * ·)
+  · unfold bondWeight
+    rw [Fintype.prod_prod_type]
+    apply Finset.prod_congr rfl
+    intro v _
+    rw [Fintype.prod_bool]
+    exact mul_comm _ _
+  · apply Finset.prod_congr rfl
+    intro v _
+    rfl
 
 open Classical in
 /-- Native open coefficient with fixed region site coefficients and arbitrary
@@ -92,7 +101,7 @@ def torusDeltaCompletedTensor (R : Set X) (A : R → (V × V × V × V) → ℂ)
     (v : X) (c : V × V × V × V) : ℂ :=
   deltaCompletedTensor torusLabelledBondTail torusLabelledBondHead R
     (fun w η ↦ A w (torusLocalTupleEquiv w.1 η)) v₀ θ v
-    ((torusLocalTupleEquiv v).symm c) PUnit.unit
+    ((torusLocalTupleEquiv v).symm c) PUnit.unit.{1}
 
 open Classical in
 /-- The exact delta-exterior bridge in native torus coordinates. -/

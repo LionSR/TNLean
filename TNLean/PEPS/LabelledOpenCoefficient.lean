@@ -86,7 +86,7 @@ open Classical in
 def deltaCompletedTensor
     (A : (v : R) → LocalConfig tail head (fun _ ↦ V) v.1 → ℂ)
     (v₀ : V) (θ : RegionBoundaryEndpoint tail head R → V)
-    (v : Vertex) (c : LocalConfig tail head (fun _ ↦ V) v) (_ : PUnit) : ℂ := by
+    (v : Vertex) (c : LocalConfig tail head (fun _ ↦ V) v) (_ : PUnit.{1}) : ℂ := by
   classical
   exact if h : v ∈ R then A ⟨v, h⟩ c
     else if c = deltaExteriorConfig tail head R v₀ θ ⟨v, h⟩ then 1 else 0
@@ -129,7 +129,7 @@ private theorem completed_bondWeight
   all_goals simp only [internalBondMatrices, openBondFactor, ht, hh,
     and_self, and_false, and_true, ite_true, ite_false, dite_true, dite_false,
     Matrix.one_apply]
-  all_goals simp only [eq_comm, ite_true]
+  all_goals simp only [eq_comm]
 
 omit [DecidableEq Edge] [Fintype V] in
 open Classical in
@@ -139,15 +139,15 @@ private theorem completed_siteWeight
     (η : RegionSiteConfig tail head R (V := V))
     (ξ : (v : {v // v ∉ R}) → LocalConfig tail head (fun _ ↦ V) v.1) :
     (∏ v, deltaCompletedTensor tail head R A v₀ θ v
-      (joinRegionConfig tail head R η ξ v) PUnit.unit) =
+      (joinRegionConfig tail head R η ξ v) PUnit.unit.{1}) =
     (∏ v, A v (η v)) * if ξ = deltaExteriorConfig tail head R v₀ θ then 1 else 0 := by
   classical
   rw [← Fintype.prod_subtype_mul_prod_subtype (fun v ↦ v ∈ R)]
   have hin (v : R) : deltaCompletedTensor tail head R A v₀ θ v.1
-      (joinRegionConfig tail head R η ξ v.1) PUnit.unit = A v (η v) := by
+      (joinRegionConfig tail head R η ξ v.1) PUnit.unit.{1} = A v (η v) := by
     simp [deltaCompletedTensor, joinRegionConfig, Equiv.piEquivPiSubtypeProd, v.2]
   have hout (v : {v // v ∉ R}) : deltaCompletedTensor tail head R A v₀ θ v.1
-      (joinRegionConfig tail head R η ξ v.1) PUnit.unit =
+      (joinRegionConfig tail head R η ξ v.1) PUnit.unit.{1} =
       if ξ v = deltaExteriorConfig tail head R v₀ θ v then 1 else 0 := by
     simp [deltaCompletedTensor, joinRegionConfig, Equiv.piEquivPiSubtypeProd, v.2]
   calc
@@ -170,7 +170,7 @@ theorem network_deltaCompletedTensor
     (A : (v : R) → LocalConfig tail head (fun _ ↦ V) v.1 → ℂ)
     (O : Edge → Matrix V V ℂ) (v₀ : V) (θ : RegionBoundaryEndpoint tail head R → V) :
     network tail head (fun _ ↦ V) (deltaCompletedTensor tail head R A v₀ θ)
-      (internalBondMatrices tail head R O) (fun _ ↦ PUnit.unit) =
+      (internalBondMatrices tail head R O) (fun _ ↦ PUnit.unit.{1}) =
         openCoefficient tail head R A O θ := by
   classical
   rw [network_eq_sum_site]
@@ -178,7 +178,7 @@ theorem network_deltaCompletedTensor
     (LocalConfig tail head (fun _ ↦ V))).symm.sum_comp]
   rw [Fintype.sum_prod_type]
   change (∑ η, ∑ ξ, _ * ∏ v, deltaCompletedTensor tail head R A v₀ θ v
-    (joinRegionConfig tail head R η ξ v) PUnit.unit) = _
+    (joinRegionConfig tail head R η ξ v) PUnit.unit.{1}) = _
   simp_rw [completed_siteWeight, ← mul_assoc]
   simp only [mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   unfold openCoefficient
