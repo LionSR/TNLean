@@ -89,7 +89,9 @@ import TNLean.MPS.Symmetry.NormalizedBondLocalSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
+import TNLean.MPS.Symmetry.PeriodicFullRingString
 import TNLean.MPS.Symmetry.PeriodicMPSNormLowerBound
+import TNLean.MPS.Symmetry.PeriodicPhysicalString
 import TNLean.MPS.Symmetry.PhysicalCharacterGappedPath
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.PhysicalInteractionGap

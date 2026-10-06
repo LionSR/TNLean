@@ -234,4 +234,14 @@ theorems.
     Theorem~1 of~\cite{PerezGarcia2008StringOrder}. It has no physical
     string order under the explicit projective convention.
     See~\cite{gap:pgwsvc08_string_order_scalar_phase}.
+
+    On the actual normalized periodic ring, the scalar twist $i\Id$ gives
+    $\langle(i\Id)^{\otimes L}\rangle_L=i^L$ whenever the periodic vector
+    is nonzero. The twist $-\Id$ has no complex full-ring limit, despite
+    unit magnitude on the eventual nonzero tail. These phase-sensitive
+    statements use the same tensor and the periodic closure of
+    Theorem~\ref{thm:periodic_string_exact_phase}; the qualification of
+    display RL is recorded in~\cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    \lean{MPSTensor.stringPhaseTensor_fullRing_I_eq_pow,
+        MPSTensor.stringPhaseTensor_fullRing_neg_one_not_tendsto}
 \end{example}
