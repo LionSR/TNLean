@@ -113,7 +113,7 @@ theorem bondDim_dual (h : IsPeriodicAdjointFamily A dual)
     (hdual : Function.Involutive dual)
     (hNormal : ∀ a, Kraus.IsNormal (A a).toMPSTensor)
     (hDim : ∀ a, 0 < dim a) (a : ι) : dim a = dim (dual a) := by
-  letI : ∀ a, NeZero (dim a) := fun a ↦ ⟨Nat.ne_of_gt (hDim a)⟩
+  let : ∀ a, NeZero (dim a) := fun a ↦ ⟨Nat.ne_of_gt (hDim a)⟩
   obtain ⟨V₁, W₁, h₁⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
       (A (dual a)).toMPSTensor (physicalAdjointTensor (A a)).toMPSTensor
@@ -142,7 +142,7 @@ theorem exists_boundaryGauge (h : IsPeriodicAdjointFamily A dual)
       ∀ (X : Matrix (Fin (dim a)) (Fin (dim a)) ℂ) (N : ℕ),
         (mpoWithBoundary (A a) X N)ᴴ =
           mpoWithBoundary (A (dual a)) (V * X.map (starRingEnd ℂ) * W) N := by
-  letI : NeZero (dim (dual a)) := ⟨Nat.ne_of_gt (hDim (dual a))⟩
+  let : NeZero (dim (dual a)) := ⟨Nat.ne_of_gt (hDim (dual a))⟩
   obtain ⟨V, W, hred⟩ :=
     MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
       (A (dual a)).toMPSTensor (physicalAdjointTensor (A a)).toMPSTensor

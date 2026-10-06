@@ -68,11 +68,23 @@ All existing boundary and parent dependencies are supplied by the integration
 base; no copied dependency is part of this change.
 
 The candidate contains four new production modules and three regressions.
-The three positive bridge modules and their two focused regressions remain
-uncompiled. Their five axiom guards are expectations until executed.
-The concrete counterexample has the focused checks described below, including
-four executed standard-axiom guards. Full package compilation and exact-head
-CI remain pending; no blueprint checked markers have been added.
+At the first published head
+`f46a818ab46c18c82b9f48776d337b1561b0eac3` (tree
+`0f87cc390a1adbcdcecc861c54d4a28f5b2ff0cf`), the
+[full Lean job](https://github.com/LionSR/TNLean/actions/runs/37389193983/job/112029984176)
+passed on 2026-10-05. All four production modules compiled, and all three
+separate regression modules passed the repository's strict option set and
+all nine guards. Each guarded declaration depends only on `propext`,
+`Classical.choice`, and `Quot.sound`. Compilation-time, text-style, blueprint
+and paper-gap declaration checks also passed. The four new production modules
+took 4.7, 3.9, 3.0, and 3.9 seconds, respectively, in that run.
+
+The completion batch adds checked markers to the 29 explicitly scoped
+blueprint declaration owners and their eleven corresponding proof environments.
+It also replaces two `letI` tokens by the linter-recommended `let` inside
+proposition proofs. No theorem statement, assumption, argument, dependency pin,
+or regression changes. The recorded first-head evidence belongs to the exact
+commit above; every later head requires its own complete CI result.
 
 The positive regression signatures expose normality, positive dimensions,
 periodic physical adjoint identities, involution, exact dual dimensions,
@@ -97,11 +109,28 @@ from its projection properties and ground space, and proves that it does not
 commute with `P`. The production counterexample passes strict standalone
 elaboration against its declared imports. A combined exact-body check of the
 production file and regression, with their union of declared imports, passes
-all four standard-axiom guards. The separately compiled regression import and
-full package CI still require validation.
+all four standard-axiom guards. The subsequent published-head CI above also
+checks the separately compiled regression import and full package build.
 
-The new blueprint has 29 unique unchecked declaration owners. Its two Tenkz
-boundary contractions retain the virtual order and use entrywise boundary
-conjugation. Native and actual-wrapper audits, 21 exact coefficient tests,
-strict web generation and the inspected twelve-page PDF pass. Interactive
-browser validation remains pending CI; local socket restrictions prevent it.
+The new blueprint has 29 unique, explicitly scoped declaration owners. Its
+two Tenkz boundary contractions retain the virtual order and use entrywise
+boundary conjugation. Native and actual-wrapper audits, 21 exact coefficient
+tests, focused strict web generation and the inspected twelve-page PDF pass.
+The native/actual-wrapper checks were rerun successfully on the exact initial
+publication tree. The initial publication's
+[complete exact-head PR CI](https://github.com/LionSR/TNLean/actions/runs/37389193983)
+finished successfully on 2026-10-06: full strict web generation, native/event
+sweep, equation-layout browser checks, root/subpath search tests, generated-page
+tests, declaration synchronization and changed-source coverage all passed.
+Import completeness and the Tenkz demolition guard also passed. The tested
+merge checkout `6fb240996765d8689d75bde07efdb59620cd4bd5` has exactly the
+publication tree `0f87cc390a1adbcdcecc861c54d4a28f5b2ff0cf`.
+Local socket restrictions still prevent a local browser rerun. This does not
+claim a new full-volume PDF or live deployment; the PDF evidence remains the
+inspected focused twelve-page preview.
+
+The exact stack has three chapter-30 equation wrappers: the existing
+multiplicity-L row and the two normal-adjoint rows. Independently stacked
+#8711 contributes two further mixed-action rows. Combining those branches
+requires reconciling the wrapper count and retaining its dedicated fail-closed
+browser check. This package changes no PEPS or MPU source.
