@@ -82,14 +82,14 @@ theorem torusRectColumn_east (R : Set X) (x : ZMod width) (y : ZMod height)
     (j : ℕ) (hs : ∀ k < j, (x + 1, torusRectCoord y (k + 1)) ∈ R) :
     TorusDualHomotopy R
       ((torusRectColumn x y j).cons (.east x (torusRectCoord y j)))
-      ((Quiver.Hom.toPath (.east x y)).comp (torusRectColumn (x + 1) y j)) := by
+      ((Quiver.Hom.toPath (TorusDualStep.east x y)).comp (torusRectColumn (x + 1) y j)) := by
   induction j with
   | zero => exact .refl _
   | succ j ih =>
     have hsq := (TorusDualHomotopy.refl (torusRectColumn x y j)).comp
       (TorusDualHomotopy.square x (torusRectCoord y j) (hs j (Nat.lt_succ_self j))).symm
     have hh := (ih (fun k hk => hs k (Nat.lt_succ_of_lt hk))).comp
-      (TorusDualHomotopy.refl (Quiver.Hom.toPath (.north (x + 1) (torusRectCoord y j))))
+      (TorusDualHomotopy.refl (Quiver.Hom.toPath (TorusDualStep.north (x + 1) (torusRectCoord y j))))
     exact hsq.trans hh
 
 /-- Appending a north edge stays on the chosen column. -/
@@ -161,11 +161,13 @@ theorem RectDualStep.comb {W H : ℕ} (x : ZMod width) (y : ZMod height)
   cases e with
   | east i j hi hj => exact he i j hi hj
   | west i j hi hj => exact TorusDualHomotopy.reverse_edge _ (he i j hi hj)
-  | north i j hi hj =>
-    simpa only [toTorus, torusRectComb_north] using
-      (TorusDualHomotopy.refl (R := torusRectInterior x y W H)
-        (torusRectComb x y i (j + 1)))
-  | south i j hi hj =>
+  | north i j _hi _hj =>
+    change TorusDualHomotopy _
+      ((torusRectComb x y i j).cons
+        (TorusDualStep.north (torusRectCoord x i) (torusRectCoord y j))) _
+    rw [torusRectComb_north]
+    exact .refl _
+  | south i j _hi _hj =>
     apply TorusDualHomotopy.reverse_edge (.north (torusRectCoord x i) (torusRectCoord y j))
     rw [torusRectComb_north]
     exact .refl _
@@ -173,16 +175,16 @@ theorem RectDualStep.comb {W H : ℕ} (x : ZMod width) (y : ZMod height)
 section Paths
 
 variable {W H : ℕ}
-local instance : Quiver (ℕ × ℕ) := rectDualQuiver W H
 
 /-- Projection of the lifted rectangle preserves the four direction labels. -/
-def rectDualToTorus (x : ZMod width) (y : ZMod height) : (ℕ × ℕ) ⥤q X where
+def rectDualToTorus (x : ZMod width) (y : ZMod height) :
+    @Prefunctor (ℕ × ℕ) (rectDualQuiver W H) X (torusDualQuiver width height) where
   obj a := (torusRectCoord x a.1, torusRectCoord y a.2)
   map e := e.toTorus x y
 
 /-- Induction on an arbitrary labelled path reduces it to the rooted comb. -/
 theorem rectDualPath_comb (x : ZMod width) (y : ZMod height)
-    {a b : ℕ × ℕ} (p : Quiver.Path a b) :
+    {a b : ℕ × ℕ} (p : @Quiver.Path (ℕ × ℕ) (rectDualQuiver W H) a b) :
     TorusDualHomotopy (torusRectInterior x y W H)
       ((torusRectComb x y a.1 a.2).comp ((rectDualToTorus x y).mapPath p))
       (torusRectComb x y b.1 b.2) := by
@@ -196,7 +198,7 @@ endpoints are related by supported squares and backtracks. No supplied homotopy,
 gauge, or equality of crossing counts is assumed. Source: the finite rectangular
 bulk case of SCP10, Lemma 6.14. -/
 theorem rectDualPath_homotopy (x : ZMod width) (y : ZMod height)
-    {a b : ℕ × ℕ} (p q : Quiver.Path a b) :
+    {a b : ℕ × ℕ} (p q : @Quiver.Path (ℕ × ℕ) (rectDualQuiver W H) a b) :
     TorusDualHomotopy (torusRectInterior x y W H)
       ((rectDualToTorus x y).mapPath p) ((rectDualToTorus x y).mapPath q) := by
   exact TorusDualHomotopy.cancel_prefix (torusRectComb x y a.1 a.2)
