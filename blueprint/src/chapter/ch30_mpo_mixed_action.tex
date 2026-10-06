@@ -1,0 +1,290 @@
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex,
+% defAgamma/Agammasym, lines 1584--1665; compare lines 1667--1687.
+% All declaration owners below passed exact-source compilation and guarded regression.
+% The V/W directions follow the typed rectangular maps, not the paper glyphs.
+
+\subsection{Exact action on the mixed interpolation}
+\label{sec:mpo_mixed_action}
+
+Let $E_p=\C^{D_p}$ and $K_p=\C^{\chi_p}$ for $p\in\{0,1\}$,
+with arbitrary nonnegative dimensions. All indices refer to standard
+bases numbered from zero. Set $E=E_0\oplus E_1$,
+$K=K_0\oplus K_1$, and $D=D_0+D_1$.
+Take tensors $A_p$ with physical space $E_p\otimes E_p$ and bond
+space $E_p$, and operator tensors $T_p$ with the same physical space
+and bond space $K_p$. Fix a common multiplicity $m\geq0$ and maps
+$V_{p,\mu}:K_p\otimes E_p\to E_p$ and
+$W_{p,\mu}:E_p\to K_p\otimes E_p$, indexed by $0\leq\mu<m$.
+The hypotheses on their action are exactly
+\begin{align}
+    V_{p,\mu}W_{p,\nu} & =\delta_{\mu\nu}\Id_{E_p},
+    \label{eq:mpo_mix_action_retract}                                   \\
+    (T_p\cdot A_p)^{rs}
+                       & =\sum_{\mu=0}^{m-1}W_{p,\mu}A_p^{rs}V_{p,\mu}.
+    \label{eq:mpo_mix_action_input}
+\end{align}
+Here $(T\cdot A)^x=\sum_y T^{xy}\otimes A^y$, with the
+operator bond first. The maps are biorthogonal analysis and synthesis;
+no adjoint relation between them is assumed. The mixed tensor is
+$A^{rs}(\gamma)=A^{rs}H_\gamma$, where
+$H_\gamma=(1-\gamma)\Id_{E_0}\oplus\gamma\Id_{E_1}$ and $A^{rs}$ is
+the diagonal embedding of $A_p^{rs}$ when $r,s\in E_p$, and the matrix
+unit $|r\rangle\langle s|$ when their sectors differ. Thus this is the
+same interpolation as Definition~\ref{def:mpo_mixed_endpoint_tensor},
+without an injectivity assumption.
+
+\begin{definition}[Mixed analysis and synthesis]
+    \label{def:mpo_mixed_action_maps}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpointSynthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOAnalysis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOSynthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointPhysicalEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointActedEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointBase_physicalEquiv}
+    \leanok
+    Define $V_\mu:K\otimes E\to E$ and $W_\mu:E\to K\otimes E$
+    by the corresponding maps $V_{p,\mu},W_{p,\mu}$ on
+    $K_p\otimes E_p$ and $E_p$. All other entries vanish.
+    In particular, $V_\mu$ annihilates $K_0\otimes E_1$ and
+    $K_1\otimes E_0$, and $W_\mu$ has zero components in these spaces.
+    The physical coordinate order is $(r,s)$, and the acted bond order
+    is $(\alpha,i)$, with $\alpha\in K$ and $i\in E$; each direct sum
+    is ordered with sector zero before sector one.
+\end{definition}
+
+\begin{definition}[Fixed mixed operator tensor]
+    \label{def:mpo_mixed_action_tensor}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOLetter,
+        MPSTensor.MPOSymmetry.mixedEndpointMPO,
+        MPSTensor.MPOSymmetry.mixedEndpointMPO_physicalEquiv}
+    \leanok
+    \uses{def:mpo_mixed_action_maps}
+    Define $T_{\mathrm{mix}}$, independently of $\gamma$, as follows.
+    For $r,k\in E_p$, $s,l\in E_q$, $\alpha\in K_p$, and
+    $\beta\in K_q$, its entries are
+    \begin{align}
+        (T_{\mathrm{mix}}^{(r,s),(k,l)})_{\alpha\beta}
+         & =\begin{cases}
+                (T_p^{(r,s),(k,l)})_{\alpha\beta}, & p=q,    \\
+                \displaystyle\sum_{\mu=0}^{m-1}
+                (W_{p,\mu})_{(\alpha,k),r}
+                (V_{q,\mu})_{s,(\beta,l)},         & p\ne q.
+            \end{cases}
+        \label{eq:mpo_mix_action_cross}
+    \end{align}
+    Every entry with unmatched physical or operator-bond sectors is
+    zero. This is the mixed operator construction of
+    \cite[Section~5]{GarreRubio2023MPOSym}, with every multiplicity
+    contraction displayed explicitly.
+\end{definition}
+
+For $p\ne q$, the single internal wire in the right-hand diagram sums
+$\mu$. Matrix row indices are on the left of the displayed products;
+$W_{p,\mu}$ has row $(\alpha,k)$ and column $r$, whereas
+$V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
+% TENKZ-MIXED-ACTION-CROSS-BEGIN
+% Formula: Tmix[(r,s),(k,l)](alpha,beta)
+% = sum_mu Wp[mu]((alpha,k),r) Vq[mu](s,(beta,l)), p != q.
+% Boundary: alpha west, beta east; r,s north; k,l south.
+% Contraction: multiplicity mu only. No conjugation or normalization.
+\tenkzkernel
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=cross, skin=box, wide=2,
+            ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                    90@1:physical:$r$, 90@2:physical:$s$,
+                    270@1:physical:$k$, 270@2:physical:$l$}]{T_{\mathrm{mix}}^{pq}}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=syn, skin=box,
+            ports={180:virtual:$\alpha$, 0:virtual,
+                    90:physical:$r$, 270:physical:$k$}]{W_p}
+        \tn[at=(1,2), name=ana, skin=box,
+            ports={180:virtual, 0:virtual:$\beta$,
+                    90:physical:$s$, 270:physical:$l$}]{V_q}
+        \tnwire{syn.0}{ana.180}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-ACTION-CROSS-END
+
+\begin{theorem}[Biorthogonality and transport of the bond weight]
+    \label{thm:mpo_mixed_action_weight}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointAnalysis_mul_synthesis,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOAnalysis_mul_synthesis,
+        MPOTensor.actTensor_right_mul,
+        MPOTensor.productBoundary_one_diagonal,
+        MPSTensor.MPOSymmetry.mixedEndpointMPOAnalysis_mul_weight}
+    \leanok
+    \uses{def:mpo_mixed_action_maps}
+    Before imposing (\ref{eq:mpo_mix_action_retract}), the mixed
+    analysis-synthesis product is
+    $V_\mu W_\nu=(V_{0,\mu}W_{0,\nu})\oplus
+        (V_{1,\mu}W_{1,\nu})$. Consequently
+    $V_\mu W_\nu=\delta_{\mu\nu}\Id_E$ under that hypothesis.
+    For every real $\gamma$,
+    \begin{align}
+        V_\mu(\Id_K\otimes H_\gamma) & =H_\gamma V_\mu.
+        \label{eq:mpo_mix_action_weight}
+    \end{align}
+    More generally, for any tensor $B$, operator tensor $T$, and
+    square matrix $H$ on the bond of $B$,
+    $(T\cdot(BH))^x=(T\cdot B)^x(\Id\otimes H)$.
+    If $H$ is diagonal with entries $h_i$, its lifted weight is diagonal
+    with entry $h_i$ at the acted coordinate $(\alpha,i)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand each product over the four spaces $K_p\otimes E_q$.
+    Only the matching spaces $p=q$ contribute, giving the two diagonal
+    products. On the support of $V_\mu$, its row and state-bond column
+    belong to the same sector, so both sides of
+    (\ref{eq:mpo_mix_action_weight}) multiply its entry by the same
+    scalar, either $1-\gamma$ or $\gamma$. Finally distribute the
+    physical-index sum and use
+    $(T^{xy}\otimes B^y)(\Id\otimes H)=T^{xy}\otimes(B^yH)$.
+\end{proof}
+
+\begin{theorem}[Exact mixed action for every real parameter]
+    \label{thm:mpo_mixed_action_exact}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOLetter_action,
+        MPSTensor.MPOSymmetry.actTensor_mixedEndpointBase,
+        MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_mixedEndpointInterpolation}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:glm_boundary_decomposition}
+    Under (\ref{eq:mpo_mix_action_retract}) and
+    (\ref{eq:mpo_mix_action_input}), the constructed operator acts on
+    the actual mixed interpolation by an exact biorthogonal decomposition
+    into $m$ copies of that same tensor. For every $\gamma\in\R$,
+    \begin{align}
+        (T_{\mathrm{mix}}\cdot A(\gamma))^{rs}
+                    & =\sum_{\mu=0}^{m-1}W_\mu A^{rs}(\gamma)V_\mu,
+        \label{eq:mpo_mix_action_exact}                             \\
+        V_\mu W_\nu & =\delta_{\mu\nu}\Id_E.
+        \notag
+    \end{align}
+    In particular this holds at $\gamma=0,1$. No injectivity,
+    nonzero-weight, or identity $\sum_\mu W_\mu V_\mu=\Id_{K\otimes E}$
+    is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_action_weight}
+    First omit the weight $H_\gamma$ and expand one coefficient of the
+    action as $\sum_{k,l}(T_{\mathrm{mix}}^{(r,s),(k,l)})_{\alpha\beta}
+        A^{kl}_{ij}$. If all physical indices lie in one sector, use
+    (\ref{eq:mpo_mix_action_input}). If $r,s$ lie in different sectors,
+    $A^{kl}_{ij}=\delta_{ki}\delta_{lj}$, and
+    (\ref{eq:mpo_mix_action_cross}) gives
+    $\sum_\mu(W_\mu)_{(\alpha,i),r}(V_\mu)_{s,(\beta,j)}$.
+    All unmatched cases vanish on both sides. Thus
+    $(T_{\mathrm{mix}}\cdot A)^{rs}=\sum_\mu W_\mu A^{rs}V_\mu$.
+    Multiply on the right by $\Id_K\otimes H_\gamma$ and apply
+    (\ref{eq:mpo_mix_action_weight}):
+    \begin{align}
+        (T_{\mathrm{mix}}\cdot A(\gamma))^{rs}
+         & =\sum_\mu W_\mu A^{rs}V_\mu(\Id_K\otimes H_\gamma)
+        =\sum_\mu W_\mu A^{rs}H_\gamma V_\mu.\notag
+    \end{align}
+    The same theorem gives the biorthogonality. No inverse of
+    $H_\gamma$ occurs.
+\end{proof}
+
+In the next diagram $\rho=(r,s)$ is the outgoing physical pair.
+The vertical contraction in the left-hand diagram sums the incoming
+physical pair $(k,l)$. On the right, the two internal bonds are the row and
+column of $A(\gamma)$, and the displayed sum is over the common
+multiplicity. There is no scalar normalization in the local identity.
+% TENKZ-MIXED-ACTION-LOCAL-BEGIN
+% Formula: sum_(k,l) Tmix[(r,s),(k,l)](alpha,beta) A(gamma)[k,l](i,j)
+% = sum_mu,u,v Wmu((alpha,i),u) A(gamma)[r,s](u,v) Vmu(v,(beta,j)).
+% Boundary: alpha,i west; beta,j east; (r,s) north.
+% No adjoint or inverse weight. MPO-first acted coordinates on both sides.
+\tenkzkernel
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=op, skin=box, size=l,
+            ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                    90:physical:$\rho$, 270:physical}]{T_{\mathrm{mix}}}
+        \tn[at=(2,1), name=state, skin=box, size=l,
+            ports={180:virtual:$i$, 0:virtual:$j$, 90:physical}]{A(\gamma)}
+        \tnwire{op.270}{state.90}
+    \end{tenkz}
+    $=\displaystyle\sum_{\mu=0}^{m-1}$
+    \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=left, skin=box, size=l, wires=2,
+            ports={180@1:virtual:$\alpha$, 180@2:virtual:$i$,
+                    0:virtual}]{W_\mu}
+        \tn[at=(1,2), name=middle, skin=box, size=l, wires=2,
+            ports={180:virtual, 0:virtual, 90:physical:$\rho$}]{A(\gamma)}
+        \tn[at=(1,3), name=right, skin=box, size=l, wires=2,
+            ports={180:virtual, 0@1:virtual:$\beta$,
+                    0@2:virtual:$j$}]{V_\mu}
+        \tnwire{left.0}{middle.180}
+        \tnwire{middle.0}{right.180}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-ACTION-LOCAL-END
+
+\begin{theorem}[Length-independent boundary compatibility]
+    \label{thm:mpo_mixed_action_boundary}
+    \lean{MPSTensor.MPOSymmetry.isBoundaryCompatible_mixedEndpointInterpolation}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:glm_boundary_closedness}
+    Under (\ref{eq:mpo_mix_action_retract}) and
+    (\ref{eq:mpo_mix_action_input}), fix arbitrary boundaries
+    $X\in\End(K)$ and $Y\in\End(E)$. The single boundary
+    \begin{align}
+        Z(X,Y) & =\sum_{\mu=0}^{m-1}V_\mu(X\otimes Y)W_\mu
+        \label{eq:mpo_mix_action_boundary}
+    \end{align}
+    satisfies $O^N_{T_{\mathrm{mix}},X}\psi^N_{A(\gamma),Y}
+        =\psi^N_{A(\gamma),Z(X,Y)}$ for every real $\gamma$ and every
+    $N>0$. In particular, the output boundary is independent of both
+    the positive chain length and the interpolation parameter.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_action_exact,thm:glm_boundary_closedness_of_decomposition}
+    In a nonempty product, each adjacent pair $V_\mu W_\nu$ removes
+    unequal multiplicities. Hence
+    $(T_{\mathrm{mix}}\cdot A(\gamma))^w
+        =\sum_\mu W_\mu A(\gamma)^wV_\mu$ for $|w|>0$.
+    Move $V_\mu$ through the trace with boundary $X\otimes Y$,
+    and combine the resulting terms by linearity in the state boundary.
+    This gives (\ref{eq:mpo_mix_action_boundary}).
+\end{proof}
+
+\begin{theorem}[Periodic action with the common multiplicity]
+    \label{thm:mpo_mixed_action_periodic}
+    \lean{MPSTensor.MPOSymmetry.mpo_mulVec_mixedEndpointInterpolation}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:mpv}
+    Under (\ref{eq:mpo_mix_action_retract}) and
+    (\ref{eq:mpo_mix_action_input}), every $\gamma\in\R$ and $N>0$
+    satisfy
+    \begin{align}
+        O^N_{T_{\mathrm{mix}}}\ket{V^{(N)}(A(\gamma))}
+         & =m\ket{V^{(N)}(A(\gamma))}.
+        \label{eq:mpo_mix_action_periodic}
+    \end{align}
+    The vector is allowed to be zero; if it is nonzero, its eigenvalue
+    is $m$. In particular, a multiplicity-one action fixes it.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_action_exact,thm:glm_boundary_decomposition}
+    Apply trace transport to a nonempty word with identity boundary.
+    Each transported boundary is $V_\mu W_\mu=\Id_E$, so the $m$
+    summands have the same trace. This gives the coefficient of
+    (\ref{eq:mpo_mix_action_periodic}) for every physical configuration.
+\end{proof}
+
+At length zero the acted trace is taken over $K\otimes E$;
+biorthogonality alone does not identify it with $m$ copies of the trace
+on $E$. The positive-length restriction therefore remains essential.
+Fusion closure of a family of mixed operators, a common gauge for its
+$L$-symbols and $F$-symbols, closure under physical adjoints,
+Hamiltonian symmetry, and symmetric-phase classification are separate
+assertions. None is a premise of the exact action proved here.

@@ -37,6 +37,8 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_mixed_action.py'
+      - 'scripts/test_tenkz_mixed_fusion.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
@@ -97,6 +99,8 @@ jobs:
             'docs/slides/*.tex'
           python3 scripts/test_tenkz_pic.py
           python3 scripts/test_tenkz_ordered_mixing.py
+          python3 scripts/test_tenkz_mixed_action.py
+          python3 scripts/test_tenkz_mixed_fusion.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check
@@ -242,6 +246,8 @@ jobs:
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+          python3 scripts/test_tenkz_mixed_action.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_fusion.py --web-root blueprint/web --browser
 
       # Drop pictures no page references any more, so neither the published
       # site nor the saved cache carries figures that were edited away.
