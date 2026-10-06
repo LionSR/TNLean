@@ -1,0 +1,99 @@
+{
+  "base_commit": "5ff8b1f986d702da458392d71413355c7411b210",
+  "scope": "Actual cropped edge coefficient maps, joint polar support normalization, and generic rectangular gap restriction. No compressed Hamiltonian identification or endpoint gap theorem.",
+  "lean_toolchain": "leanprover/lean4:v4.35.0-rc3",
+  "qiclean_pin": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f",
+  "source_sha256": {
+    "TNLean/MPS/ParentHamiltonian/Martingale/IsometricCompressionGap.lean": "d5ab8dedd0d22bb9027beca83617c389efcd424e6d2197b507dad9b2bb57ceab",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean": "78d1a4b80ecb84fbc30028f7fbb613e36fe42aa214cc6c7e689081d02c120ad4",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeNormalization.lean": "80decc85e5501428e16a4ce0038ad9d4bf5eb7fd35cd8be4d802959cdbcc06c9",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeProjectors.lean": "74ce0f1bd1493f1daca45e1b3979a02abb41313b43573ecc815427411329f85f",
+    "TNLeanTest/JointMixedEndpointEdgeNormalization.lean": "fdc6bfde82c550475de86e58903922761d0079b9c939f98f8be1bc88c8b66ed0",
+    "blueprint/src/chapter/ch30_mpo_joint_edge_normalization.tex": "24c6c77697c4a926deada340fcf28a8fc75d8538554969ac0a6adc250f45df3d"
+  },
+  "production_native_build": {
+    "status": "pending",
+    "reason": "Serialized canonical build slot currently assigned to the periodic endpoint package."
+  },
+  "strict_regression": {
+    "status": "pending",
+    "expected_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "guard_count": 4
+  },
+  "generic_compression_probe": {
+    "status": "passed",
+    "kind": "One-thread read-only strict full-file elaboration, reported by its author",
+    "guards_executed": false
+  },
+  "edge_factors_probe": {
+    "status": "inconclusive",
+    "exit_code": 124,
+    "wall_timeout_seconds": 60,
+    "threads": 1,
+    "log": "/workspace/shared/glm23-edge-factors-probe-1.log",
+    "log_bytes": 0,
+    "artifact_or_cache_writes": false
+  },
+  "static_checks": {
+    "forbidden_proof_tokens": "passed",
+    "generated_imports": "passed",
+    "oversized_files": "passed",
+    "noncomment_line_lengths": "passed",
+    "reader_facing_prose": "passed",
+    "latexindent_3_24_7": "passed",
+    "new_leanok_markers": 0
+  },
+  "blueprint": {
+    "source_sync": "passed",
+    "public_declarations": 35,
+    "reverse_coverage": "passed",
+    "duplicate_owners": 0,
+    "report": "/workspace/shared/glm23-blueprint-validation/joint-edge-normalization/source-sync.json"
+  },
+  "focused_render": {
+    "source_head": "607ce7e5174cbf659dede28bf935e06ef8bc9033",
+    "html_pages": [
+      "ch-mpo_symmetry_basics.html",
+      "sect0001.html",
+      "index.html",
+      "dep_graph_document.html"
+    ],
+    "missing_local_anchors": [],
+    "duplicate_ids": [],
+    "sentinels": [],
+    "leaf_labels": 22,
+    "missing_leaf_labels": [],
+    "tenkz_svg": [
+      {
+        "file": "tenkz-ca706fdf6d9786cb.svg",
+        "paths": 6,
+        "viewBox": "0 0 32.6 51.89"
+      }
+    ],
+    "native_pdf_pages": 10,
+    "inspected_physical_pdf_pages": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "native_log_warnings": [],
+    "source_leaf_sha256": {
+      "ch30_mpo_joint_boundary_columns.tex": "b89ad763fe4653f3208fc040dc5b32f0eccacb85d1feb2557f6d0a8cb4370789",
+      "ch30_mpo_joint_edge_normalization.tex": "24c6c77697c4a926deada340fcf28a8fc75d8538554969ac0a6adc250f45df3d"
+    },
+    "checked_markers": {
+      "ch30_mpo_joint_boundary_columns.tex": 7,
+      "ch30_mpo_joint_edge_normalization.tex": 0
+    },
+    "formatter_version": "3.24.7",
+    "formatter_byte_comparison": "passed",
+    "native_tenkz_audit": "Not rerun; one inherited picture rendered and its SVG structure inspected.",
+    "browser_visual_inspection": false,
+    "source_sync_passed": true
+  }
+}
