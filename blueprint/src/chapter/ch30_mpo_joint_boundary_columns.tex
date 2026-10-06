@@ -1,5 +1,4 @@
 % Source: arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777.
-% Standalone leaf; checked markers await Lean validation.
 
 \subsection{Joint rectangular columns at a singular endpoint}
 \label{sec:mpo_joint_boundary_columns}
@@ -21,6 +20,7 @@ coordinates are
         MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns,
         MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_apply,
         MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns_apply}
+    \leanok
     \uses{def:mpo_joint_mixed_family}
     Define $L:\C^{\mathcal B_L}\to\C^{\mathcal I}$ and
     $R:\C^{\mathcal B_R}\to\C^{\mathcal I}$ by
@@ -37,6 +37,7 @@ coordinates are
         MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_injective,
         MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns_injective,
         MPSTensor.MPOSymmetry.jointMixedBoundaryColumns_polar}
+    \leanok
     \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_span}
     Suppose that each endpoint family has simultaneous one-site span,
     as in~(\ref{eq:mpo_joint_mixed_endpoint_span}). Then $L$ and $R$ are
@@ -49,6 +50,7 @@ coordinates are
     full joint boundary spaces. The assertions include the empty family.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_mixed_span,def:mpo_joint_boundary_columns}
     For any simultaneously spanning family $B_x$, its one-site
     coefficient map has columns $B_x^i[a,b]$ and is injective by
@@ -65,6 +67,7 @@ coordinates are
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_gram_apply,
         MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_gram_firstSector,
         MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns_gram_apply}
+    \leanok
     \uses{def:mpo_joint_boundary_columns}
     For arbitrary labels $x,y$, including $x\ne y$,
     \begin{align}
@@ -86,6 +89,7 @@ coordinates are
     block diagonal in $x$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_compression}
     Expand matrix multiplication. When the two exterior rows are in
     the first sector, only the shared $00$ physical alphabet contributes,
@@ -99,6 +103,7 @@ coordinates are
         MPSTensor.MPOSymmetry.jointMixedEndpointLeftTensor_firstPhysicalIndex,
         MPSTensor.MPOSymmetry.evalWord_jointMixedEndpointLeftTensor_firstPhysicalIndex,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_insertedEvalWord_originalBulk}
+    \leanok
     \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_compression}
     Let $\iota:\Fin{d_0}\to\mathcal I$ be the shared $00$ physical
     inclusion. For a word $w=(k_1,\ldots,k_n)$ over $\Fin{d_0}$, set
@@ -113,6 +118,7 @@ coordinates are
     indices $a,e\in\Fin{D_x}$ are unrestricted.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_mixed_compression,def:mpo_joint_boundary_columns}
     Substitute $W_x(0)=V_xV_x^*$ between neighboring letters.
     Every interior compression is

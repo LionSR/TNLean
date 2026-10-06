@@ -84,8 +84,32 @@ reference, or missing-character warnings. The HTML has all 24 new anchors and
 no missing internal links, duplicate IDs, or rendering sentinels. The inherited
 Tenkz picture rendered to a valid six-path SVG without errors or advisories.
 
-Lean elaboration, package linter checks, strict axiom-print checks, and native
-blueprint declaration validation still await the repository's single build
-slot. No placeholder proof, new axiom, or resource-cap increase is used. The
-blueprint entries remain without checked proof markers until that validation
-succeeds.
+The production code and both regression files are checked at author source
+`9aa0bb88595f6d4627213f2afa888eaff0051e49`, tree
+`9feb0b7b2b920022d105d848a02caae08988f6ad`. The canonical validation checkout
+had the identical tree at `25ba3d8942f2cabe6b2b7917049dde19524dab76`.
+Lean 4.35.0-rc3 was run with two threads and the existing package options.
+The three focused production targets completed successfully, with no warning
+in a changed module. Inherited Gametheory/QICLean deprecations were replayed.
+Local module elapsed times were 21, 110, and 179 seconds for the boundary
+columns, dependent transport, and ordered-pair specialization respectively;
+these local diagnostics are separate from the remote CI timing gate.
+
+Both regression files passed with `autoImplicit=false`,
+`relaxedAutoImplicit=false`, `maxSynthPendingDepth=3`,
+`linter.mathlibStandardSet=true`, and `warningAsError=true`. Their logs are
+empty. All five strict axiom guards retain exactly `propext`,
+`Classical.choice`, and `Quot.sound`. The examples retain the overlapping
+cross-label Gram entry, empty labels, the two-site single-edge factorization,
+unequal finite fibers, imaginary-unit action, empty spectators for forward
+transport, changed nonempty multiplicities, and every ordered pair when the
+second dimensions may vanish.
+
+A focused native declaration check imported the new leaves and checked all
+44 documented names, with zero errors or warnings. This is scoped declaration
+validation, not a whole-repository aggregate build. Evidence and source SHA-256
+hashes are in
+`/workspace/shared/glm23-recovery/joint-boundary-native-validation.json`;
+its referenced build, strict-regression, and declaration logs record the exact
+commands and outcomes. No placeholder proof, new axiom, resource-cap increase,
+or additional mathematical hypothesis was introduced by the repairs.

@@ -49,9 +49,9 @@ theorem jointMixedEndpoint_spectatorGap_iff
         δ * ‖v‖ ≤ ‖ContinuousLinearMap.dependentRightFiberwiseMap
           (S := fun q : Fin r × Fin r ↦
             Fin (D₀ q.1 + D₁ q.1) × Fin (D₀ q.2 + D₁ q.2)) G v‖ := by
-  letI : ∀ q : Fin r × Fin r, Nonempty (Fin (D₀ q.1) × Fin (D₀ q.2)) :=
+  let : ∀ q : Fin r × Fin r, Nonempty (Fin (D₀ q.1) × Fin (D₀ q.2)) :=
     fun q ↦ ⟨⟨⟨0, hD₀ q.1⟩, ⟨0, hD₀ q.2⟩⟩⟩
-  letI : ∀ q : Fin r × Fin r,
+  let : ∀ q : Fin r × Fin r,
       Nonempty (Fin (D₀ q.1 + D₁ q.1) × Fin (D₀ q.2 + D₁ q.2)) :=
     fun q ↦ ⟨⟨⟨0, by have h := hD₀ q.1; omega⟩,
       ⟨0, by have h := hD₀ q.2; omega⟩⟩⟩

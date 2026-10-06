@@ -1,14 +1,12 @@
 \subsection{Dependent finite spectator coordinates}
 \label{subsec:mpo_dependent_spectator_gap}
 
-% Source checkpoint: the declarations below have not yet been built.
-% Add proof-status tags only after the pinned-toolchain verification succeeds.
-
 \begin{definition}[Finite dependent direct sums]
     \label{def:mpo_sigma_fiber_operator}
     \lean{ContinuousLinearMap.sigmaFiber, ContinuousLinearMap.sigmaFiberwiseMap,
         ContinuousLinearMap.sigmaFiberwiseMap_apply_apply,
         ContinuousLinearMap.sigmaFiber_sigmaFiberwiseMap}
+    \leanok
     Let $Q$ be finite, let $J_q$ be finite for each $q\in Q$, and set
     $E_q=\C^{J_q}$ and $E=\C^{\coprod_{q\in Q}J_q}$, with Euclidean inner
     products.  For $v\in E$, its restriction $v_q\in E_q$ is given by
@@ -24,6 +22,7 @@
     \label{def:mpo_single_sigma_fiber}
     \lean{ContinuousLinearMap.singleSigmaFiber,
         ContinuousLinearMap.sigmaFiber_singleSigmaFiber}
+    \leanok
     \uses{def:mpo_sigma_fiber_operator}
     For $q\in Q$ and $u\in E_q$, the extension $\iota_qu\in E$ has
     restriction $u$ at $q$ and zero at every other label.  Thus
@@ -34,6 +33,7 @@
     \label{thm:mpo_sigma_fiber_inner_norm}
     \lean{ContinuousLinearMap.inner_eq_sum_inner_sigmaFiber,
         ContinuousLinearMap.norm_sq_eq_sum_norm_sq_sigmaFiber}
+    \leanok
     \uses{def:mpo_sigma_fiber_operator}
     For finite $Q$, finite $J_q$, and $v,w\in E$,
     \begin{align}
@@ -42,6 +42,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     Expand each inner product as the sum of its scalar coordinates and
     group the coordinates with the same label $q$.
 \end{proof}
@@ -51,6 +52,7 @@
     \lean{ContinuousLinearMap.norm_singleSigmaFiber,
         ContinuousLinearMap.inner_singleSigmaFiber,
         ContinuousLinearMap.sigmaFiberwiseMap_singleSigmaFiber}
+    \leanok
     \uses{def:mpo_single_sigma_fiber, def:mpo_sigma_fiber_operator}
     For finite $Q$, finite $J_q$, any complex linear family $(F_q)$,
     $q\in Q$, $u\in E_q$, and $v\in E$,
@@ -61,6 +63,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_single_sigma_fiber, thm:mpo_sigma_fiber_inner_norm}
     All restrictions outside $q$ vanish.  The sums for the norm and inner
     product therefore have only the term indexed by $q$.  The operator
@@ -70,23 +73,27 @@
 \begin{theorem}[Kernels in a finite direct sum]
     \label{thm:mpo_sigma_fiber_kernel}
     \lean{ContinuousLinearMap.mem_ker_sigmaFiberwiseMap_iff}
+    \leanok
     \uses{def:mpo_sigma_fiber_operator}
     For finite $Q$, finite $J_q$, and a complex linear family $(F_q)$,
     $v\in\ker F_\Sigma$ if and only if $v_q\in\ker F_q$ for every $q\in Q$.
 \end{theorem}
 \begin{proof}
+    \leanok
     The equation $F_\Sigma v=0$ is equivalent to $F_qv_q=0$ at every label.
 \end{proof}
 
 \begin{theorem}[Orthogonal kernels in a finite direct sum]
     \label{thm:mpo_sigma_fiber_orthogonal}
     \lean{ContinuousLinearMap.mem_orthogonal_ker_sigmaFiberwiseMap_iff}
+    \leanok
     \uses{def:mpo_sigma_fiber_operator}
     For finite $Q$, finite $J_q$, and a complex linear family $(F_q)$,
     $v\in(\ker F_\Sigma)^\perp$ if and only if
     $v_q\in(\ker F_q)^\perp$ for every $q\in Q$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_sigma_fiber_kernel, thm:mpo_sigma_fiber_inner_norm,
         thm:mpo_single_sigma_fiber_identities}
     If $v\perp\ker F_\Sigma$, test against $\iota_qu$ for $u\in\ker F_q$,
@@ -98,6 +105,7 @@
 \begin{theorem}[Extension of norm gaps to a finite direct sum]
     \label{thm:mpo_sigma_fiber_gap_forward}
     \lean{ContinuousLinearMap.norm_gap_sigmaFiberwiseMap}
+    \leanok
     \uses{def:mpo_sigma_fiber_operator}
     Let $Q$ and every $J_q$ be finite, let each $F_q$ be complex linear,
     and let $\delta\geq0$.  If $\delta\|u\|\leq\|F_qu\|$ for all $q\in Q$
@@ -106,6 +114,7 @@
     $v\in(\ker F_\Sigma)^\perp$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_sigma_fiber_orthogonal, thm:mpo_sigma_fiber_inner_norm}
     Sum the inequalities $\delta^2\|v_q\|^2\leq\|F_qv_q\|^2$ and take
     nonnegative square roots.
@@ -114,6 +123,7 @@
 \begin{theorem}[Norm gaps in a finite direct sum]
     \label{thm:mpo_sigma_fiber_gap_iff}
     \lean{ContinuousLinearMap.norm_gap_sigmaFiberwiseMap_iff}
+    \leanok
     \uses{def:mpo_sigma_fiber_operator}
     Let $Q$ and every $J_q$ be finite, let each $F_q$ be complex linear,
     and let $\delta\geq0$.  Then
@@ -127,6 +137,7 @@
     No nonemptiness, positivity, or symmetry assumption is imposed.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_sigma_fiber_gap_forward, thm:mpo_sigma_fiber_orthogonal,
         thm:mpo_single_sigma_fiber_identities}
     The reverse implication is Theorem~\ref{thm:mpo_sigma_fiber_gap_forward}.
@@ -139,6 +150,7 @@
     \lean{ContinuousLinearMap.dependentRightFiber, ContinuousLinearMap.dependentRightFiberwiseMap,
         ContinuousLinearMap.dependentRightFiberwiseMap_apply_apply,
         ContinuousLinearMap.dependentRightFiber_dependentRightFiberwiseMap}
+    \leanok
     Let $Q$ be a finite set, and let $I_q$ and $S_q$ be finite sets for each
     $q\in Q$.  Write $\mathcal H_q=\C^{I_q}$ and
     $\mathcal H_S=\C^{\coprod_{q\in Q}(I_q\times S_q)}$, with their Euclidean
@@ -156,6 +168,7 @@
 \begin{theorem}[Kernel decomposition]
     \label{thm:mpo_dependent_spectator_kernel}
     \lean{ContinuousLinearMap.mem_ker_dependentRightFiberwiseMap_iff}
+    \leanok
     \uses{def:mpo_dependent_spectator_operator}
     For the finite sets and operators in
     Definition~\ref{def:mpo_dependent_spectator_operator}, every
@@ -167,6 +180,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     By~(\ref{eq:mpo_dependent_spectator_action}), $H_Sv=0$ if and only if
     $G_qv_{q,s}=0$ for every $q$ and $s$.
 \end{proof}
@@ -174,6 +188,7 @@
 \begin{theorem}[Orthogonal kernel decomposition]
     \label{thm:mpo_dependent_spectator_orthogonal}
     \lean{ContinuousLinearMap.mem_orthogonal_ker_dependentRightFiberwiseMap_iff}
+    \leanok
     \uses{def:mpo_dependent_spectator_operator}
     For the finite sets and operators in
     Definition~\ref{def:mpo_dependent_spectator_operator}, every
@@ -185,6 +200,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_dependent_spectator_kernel}
     For the forward implication, extend any $u\in\ker G_q$ by zero outside
     the coordinate $(q,s)$.  The resulting vector $\widetilde u$ belongs to
@@ -198,6 +214,7 @@
 \begin{theorem}[Squared norm decomposition]
     \label{thm:mpo_dependent_spectator_norm}
     \lean{ContinuousLinearMap.norm_sq_eq_sum_norm_sq_dependentRightFiber}
+    \leanok
     \uses{def:mpo_dependent_spectator_operator}
     For finite $Q$, finite $I_q,S_q$, and every $v\in\mathcal H_S$,
     \begin{align}
@@ -206,6 +223,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     Expand $\|v\|^2=\sum_{q,i,s}|v(q,i,s)|^2$ and exchange the finite sums
     over $i\in I_q$ and $s\in S_q$.
 \end{proof}
@@ -213,6 +231,7 @@
 \begin{theorem}[Extension of a common norm gap]
     \label{thm:mpo_dependent_spectator_gap_forward}
     \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap}
+    \leanok
     \uses{def:mpo_dependent_spectator_operator}
     Let $Q$, $I_q$, and $S_q$ be finite, let each $G_q$ be complex linear, and
     let $\delta\geq0$.  Suppose
@@ -222,6 +241,7 @@
     The sets $Q$, $I_q$, and $S_q$ may be empty.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_dependent_spectator_orthogonal, thm:mpo_dependent_spectator_norm}
     For $v\in(\ker H_S)^\perp$, the hypotheses and
     (\ref{eq:mpo_dependent_spectator_norm}) give
@@ -237,6 +257,7 @@
 \begin{theorem}[Equivalence of common norm gaps]
     \label{thm:mpo_dependent_spectator_gap_iff}
     \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap_iff}
+    \leanok
     \uses{def:mpo_dependent_spectator_operator}
     Let $Q$ and each $I_q$ be finite, let each $S_q$ be finite and nonempty,
     let each $G_q$ be complex linear, and let $\delta\geq0$.  Then
@@ -250,6 +271,7 @@
     The label set $Q$ may be empty; no positivity or symmetry is assumed.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_dependent_spectator_gap_forward, thm:mpo_dependent_spectator_orthogonal}
     The reverse implication is
     Theorem~\ref{thm:mpo_dependent_spectator_gap_forward}.
@@ -262,6 +284,7 @@
 \begin{theorem}[Changing dependent spectator multiplicities]
     \label{thm:mpo_dependent_spectator_replacement}
     \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap_iff_dependentRightFiberwiseMap}
+    \leanok
     \uses{def:mpo_dependent_spectator_operator}
     Let $Q$ and each $I_q$ be finite.  Let $S_q$ and $T_q$ be finite and
     nonempty for every $q\in Q$, let each $G_q$ be complex linear, and let
@@ -278,6 +301,7 @@
     and no positivity, symmetry, or nonemptiness of $Q$ is assumed.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_dependent_spectator_gap_iff}
     Both statements are equivalent to
     $\delta\|u\|\leq\|G_qu\|$ for all $q\in Q$ and
@@ -287,6 +311,7 @@
 \begin{theorem}[Ordered-pair boundary multiplicities]
     \label{thm:mpo_joint_boundary_spectator_gap}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_spectatorGap_iff}
+    \leanok
     \uses{def:mpo_dependent_spectator_operator}
     Let $r,d_0,N\in\N$, and let $D_x^0,D_x^1\in\N$ for $0\leq x<r$,
     with $D_x^0>0$.  For every ordered pair $(x,y)$, put
@@ -310,6 +335,7 @@
     allowed, and no positivity of $D_x^1$ or of $G_{x,y}$ is required.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_dependent_spectator_replacement}
     Each $S_{x,y}$ is nonempty because $D_x^0,D_y^0>0$.
     The inequalities $D_x^0+D_x^1\geq D_x^0>0$ and

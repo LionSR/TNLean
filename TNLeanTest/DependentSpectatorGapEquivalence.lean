@@ -43,7 +43,7 @@ example (G : ∀ _ : Fin 0, EuclideanSpace ℂ (Fin 1) →L[ℂ] EuclideanSpace 
     ∀ x ∈ (LinearMap.ker
       (dependentRightFiberwiseMap (S := fun _ : Fin 0 ↦ Fin 0) G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap (S := fun _ : Fin 0 ↦ Fin 0) G x‖ := by
-  letI : ∀ q : Fin 0, Nonempty (Fin 0) := fun q ↦ Fin.elim0 q
+  let : ∀ q : Fin 0, Nonempty (Fin 0) := fun q ↦ Fin.elim0 q
   apply (norm_gap_dependentRightFiberwiseMap_iff (S := fun _ : Fin 0 ↦ Fin 0) G hδ).mpr
   intro q
   exact Fin.elim0 q
@@ -63,12 +63,12 @@ example (G : ∀ q : Fin 2,
       EuclideanSpace ℂ (Fin (q.val + 1)) →L[ℂ] EuclideanSpace ℂ (Fin (q.val + 1)))
     {δ : ℝ} (hδ : 0 ≤ δ) :
     (∀ x ∈ (LinearMap.ker
-      (dependentRightFiberwiseMap (S := fun q ↦ Fin (q.val + 2)) G).toLinearMap)ᗮ,
-      δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap (S := fun q ↦ Fin (q.val + 2)) G x‖) ↔
+      (dependentRightFiberwiseMap (S := fun q : Fin 2 ↦ Fin (q.val + 2)) G).toLinearMap)ᗮ,
+      δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap (S := fun q : Fin 2 ↦ Fin (q.val + 2)) G x‖) ↔
       ∀ x ∈ (LinearMap.ker
-        (dependentRightFiberwiseMap (S := fun q ↦ Fin (2 * q.val + 3)) G).toLinearMap)ᗮ,
+        (dependentRightFiberwiseMap (S := fun q : Fin 2 ↦ Fin (2 * q.val + 3)) G).toLinearMap)ᗮ,
         δ * ‖x‖ ≤
-          ‖dependentRightFiberwiseMap (S := fun q ↦ Fin (2 * q.val + 3)) G x‖ :=
+          ‖dependentRightFiberwiseMap (S := fun q : Fin 2 ↦ Fin (2 * q.val + 3)) G x‖ :=
   norm_gap_dependentRightFiberwiseMap_iff_dependentRightFiberwiseMap G hδ
 
 -- The actual boundary specialization keeps all four ordered pairs of two
@@ -80,14 +80,14 @@ example {d N : ℕ}
           (Fin (q.1.val + 1) × MPSTensor.Cfg d N × Fin (q.2.val + 1)))
     {δ : ℝ} (hδ : 0 ≤ δ) :
     (∀ x ∈ (LinearMap.ker (dependentRightFiberwiseMap
-        (S := fun q : Fin 2 × Fin 2 ↦ Fin (q.1.val + 1) × Fin (q.2.val + 1)) G)
-        .toLinearMap)ᗮ,
+        (S := fun q : Fin 2 × Fin 2 ↦ Fin (q.1.val + 1) × Fin (q.2.val + 1))
+        G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap
         (S := fun q : Fin 2 × Fin 2 ↦ Fin (q.1.val + 1) × Fin (q.2.val + 1)) G x‖) ↔
       ∀ x ∈ (LinearMap.ker (dependentRightFiberwiseMap
           (S := fun q : Fin 2 × Fin 2 ↦
-            Fin (q.1.val + 1 + 2 * q.1.val) × Fin (q.2.val + 1 + 2 * q.2.val)) G)
-          .toLinearMap)ᗮ,
+            Fin (q.1.val + 1 + 2 * q.1.val) × Fin (q.2.val + 1 + 2 * q.2.val))
+          G).toLinearMap)ᗮ,
         δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap
           (S := fun q : Fin 2 × Fin 2 ↦
             Fin (q.1.val + 1 + 2 * q.1.val) × Fin (q.2.val + 1 + 2 * q.2.val)) G x‖ :=

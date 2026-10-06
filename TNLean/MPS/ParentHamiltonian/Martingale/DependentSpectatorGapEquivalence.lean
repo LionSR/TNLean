@@ -122,10 +122,14 @@ omit [Fintype Q] [∀ q, Fintype (J q)] in
     (q r : Q) (x : EuclideanSpace ℂ (J q)) :
     sigmaFiber (singleSigmaFiber q x) r =
       Pi.single (M := fun q ↦ EuclideanSpace ℂ (J q)) q x r := by
-  apply PiLp.ext
-  intro i
-  simp [sigmaFiber, singleSigmaFiber]
-  rfl
+  by_cases hr : r = q
+  · subst r
+    apply PiLp.ext
+    intro i
+    simp [sigmaFiber, singleSigmaFiber]
+  · apply PiLp.ext
+    intro i
+    simp [sigmaFiber, singleSigmaFiber, hr]
 
 /-- Extension by zero preserves the norm. -/
 @[simp] theorem norm_singleSigmaFiber (q : Q) (x : EuclideanSpace ℂ (J q)) :
