@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointBoundaryColumns
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary
-import Mathlib.LinearAlgebra.Matrix.Kronecker
+import QICLean.Algebra.MatrixIsometryKronecker
 
 /-!
 # Full joint boundary-frame support of the actual endpoint
@@ -165,10 +165,8 @@ theorem jointMixedTwoSitePolarFrame_isIsometry
   have hR := Matrix.isIsometry_polarIso_of_injective _
     (jointMixedLastBoundaryColumns_injective A₀ A₁ h₀ h₁)
   have hprod : (Matrix.polarIso (jointMixedFirstBoundaryColumns A₀ A₁) ⊗ₖ
-      Matrix.polarIso (jointMixedLastBoundaryColumns A₀ A₁)).IsIsometry := by
-    change (_ ⊗ₖ _)ᴴ * (_ ⊗ₖ _) = 1
-    rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hL, hR,
-      Matrix.one_kronecker_one]
+      Matrix.polarIso (jointMixedLastBoundaryColumns A₀ A₁)).IsIsometry :=
+    Matrix.IsIsometry.kronecker _ _ hL hR
   exact hprod.reindex _ (finTwoArrowEquiv _).symm (Equiv.refl _)
 
 end

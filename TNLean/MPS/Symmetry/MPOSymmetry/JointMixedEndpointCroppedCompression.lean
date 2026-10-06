@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointPhysicalCrop
+import QICLean.Algebra.MatrixIsometryKronecker
 
 /-!
 # Actual joint edge compression to the normalized boundary coordinates
@@ -61,12 +62,11 @@ def jointMixedFirstEdgePolarIsometry
       EuclideanSpace ℂ (Fin (jointMixedPhysicalDim d₀ d₁ D₀ D₁) × Fin d₀) :=
   edgeMatrixIsometry
     (Matrix.polarIso (jointMixedFirstBoundaryColumns A₀ A₁) ⊗ₖ
-      (1 : Matrix (Fin d₀) (Fin d₀) ℂ)) (by
-        change (_ ⊗ₖ _)ᴴ * (_ ⊗ₖ _) = 1
-        rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
-          Matrix.isIsometry_polarIso_of_injective _
-            (jointMixedFirstBoundaryColumns_injective A₀ A₁ h₀ h₁),
-          Matrix.conjTranspose_one, Matrix.one_mul, Matrix.one_kronecker_one])
+      (1 : Matrix (Fin d₀) (Fin d₀) ℂ))
+    (Matrix.IsIsometry.kronecker _ _
+      (Matrix.isIsometry_polarIso_of_injective _
+        (jointMixedFirstBoundaryColumns_injective A₀ A₁ h₀ h₁))
+      (by simp [Matrix.IsIsometry]))
 
 /-- The reflected last polar frame leaves the adjacent physical site
 unchanged, including unused first-alphabet directions.
@@ -79,12 +79,10 @@ def jointMixedLastEdgePolarIsometry
       EuclideanSpace ℂ (Fin d₀ × Fin (jointMixedPhysicalDim d₀ d₁ D₀ D₁)) :=
   edgeMatrixIsometry
     ((1 : Matrix (Fin d₀) (Fin d₀) ℂ) ⊗ₖ
-      Matrix.polarIso (jointMixedLastBoundaryColumns A₀ A₁)) (by
-        change (_ ⊗ₖ _)ᴴ * (_ ⊗ₖ _) = 1
-        rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
-          Matrix.isIsometry_polarIso_of_injective _
-            (jointMixedLastBoundaryColumns_injective A₀ A₁ h₀ h₁),
-          Matrix.conjTranspose_one, Matrix.one_mul, Matrix.one_kronecker_one])
+      Matrix.polarIso (jointMixedLastBoundaryColumns A₀ A₁))
+    (Matrix.IsIsometry.kronecker _ _ (by simp [Matrix.IsIsometry])
+      (Matrix.isIsometry_polarIso_of_injective _
+        (jointMixedLastBoundaryColumns_injective A₀ A₁ h₀ h₁)))
 
 /-- The first cropped support lies in the actual polar frame range.
 This follows from the trace-derived coefficient factorization.

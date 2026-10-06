@@ -36,7 +36,6 @@ theorem isSymmetricProjection_compression_of_commute
     apply U.injective
     change U (U.compression H (U.compression H v)) = U (U.compression H v)
     rw [U.apply_compression_of_commute H hComm,
-      U.apply_compression_of_commute H hComm,
       U.apply_compression_of_commute H hComm]
     exact LinearMap.congr_fun hH.isIdempotentElem.eq (U v)
   · exact hH.isSymmetric.adjoint_conj U.toLinearMap

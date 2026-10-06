@@ -15,19 +15,47 @@
   ],
   "new_public_declaration_count": 36,
   "source_sha256": {
-    "TNLean/MPS/ParentHamiltonian/Martingale/ReducingParentCompression.lean": "efd7d7881cf6e8c1f6450787c544ce7981de92e8a05270caa5355f900655e845",
+    "TNLean/MPS/ParentHamiltonian/Martingale/ReducingParentCompression.lean": "b751424dc46a4cf6738e7d475ea2a628064c7b6bd02ef7ef5eb81d4e6cebf9df",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointPhysicalCrop.lean": "994f327c58803d2871462b65bdec11bfc5252ce7b675fc2473f253c1cb1b9888",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCroppedCompression.lean": "c998836ca690b23eebf541f875381b156f4c0feee619ce2f93a037e718516c5f",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCroppedCompression.lean": "604af4b4fd602676e5f0e541fed3e74c36c12d85011ba51e469362dbe95ea7e4",
     "TNLean/MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean": "a997061d795d9e242cfdb0346d71d5f45b1080024dd53a4edb9b227ed59702b6",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSectors.lean": "01323540527857c75e5a4fe6bdd4afdffe0335045cfd9cc1258286a1d9d9918a",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCornerSupport.lean": "d3b57bc371e2e623d9d72a49b1c3393e6a6fec418ea1f2f2d472416c4704268f",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointReducingSectors.lean": "1e9acaad25c6cfb4625b37579e58c59f1b8da2ad0200c2961d0452e6592b729c",
     "TNLeanTest/JointMixedEndpointCroppedCompression.lean": "f9789ab6909e5884f4a9e3581341de28011c8face31da8f93aeec35c6a516e50",
-    "blueprint/src/chapter/ch30_mpo_joint_cropped_compression.tex": "a5167aea53fd48c746a6e0ce35aae327e978436f011b6578819cb2a53acdd874"
+    "blueprint/src/chapter/ch30_mpo_joint_cropped_compression.tex": "a5167aea53fd48c746a6e0ce35aae327e978436f011b6578819cb2a53acdd874",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointFrameSupport.lean": "2454ef1e28accda6bb9c7027a956a4989699004acec5179908b4214710c8c9c0"
   },
   "native_validation": {
-    "status": "not_run",
-    "reason": "Original shared workspace disappeared before first bridge compilation. Source recovered in the surviving task directory; parent is restoring the pinned toolchain/cache."
+    "status": "first_attempt_failed; redundant_rewrite_repaired; recheck_pending",
+    "command": "lake --no-cache --fail-fast build +TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCroppedCompression:olean +TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointFrameReduction:olean",
+    "toolchain": "Lean 4.35.0-rc3; commit 470d5ce1400764999581fd26d5d72b00d990b0f4; x86_64-unknown-linux-gnu",
+    "lean_toolchain_sha256": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+    "manifest_sha256": "a6ccb46404b164ab38d9c250f613bd902794d6e94436677764c7b610b7b82b18",
+    "lakefile_sha256": "43ca574ffb5706e7a26b09730372894b01877ad5cd1db1aa53a02a9283c9407a",
+    "mathlib_revision": "c55e6e786f49471c72fbddbec5415808896aec1e",
+    "qiclean_revision": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f",
+    "official_mathlib_artifacts_verified": 8943,
+    "lean_num_threads": 2,
+    "mathlib_source_rebuild": false,
+    "log": "/workspace/scratch/757f4f120786/glm23-cropped-validation/cropped-first-build.log",
+    "dependency_diagnostics": "Pinned Gametheory and its QIC wrapper emit existing simplex deprecations; Scarf also emits tactic suggestions. Pins and dependency sources are unchanged.",
+    "first_attempt_resources": {
+      "command": [
+        "lake",
+        "--no-cache",
+        "--fail-fast",
+        "build",
+        "+TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCroppedCompression:olean",
+        "+TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointFrameReduction:olean"
+      ],
+      "exit_code": 1,
+      "wall_seconds": 6480.232879257994,
+      "user_seconds": 3590.048634,
+      "system_seconds": 4505.965073,
+      "max_rss_kib": 5197448
+    },
+    "first_attempt_failure": "ReducingParentCompression.lean:40 had a redundant third rewrite after both sides had already become H(H(Uv)) = H(Uv). No statement or hypothesis change."
   },
   "strict_regression": {
     "status": "not_run",
@@ -76,9 +104,9 @@
     "new_forbidden_proof_tokens": "none",
     "new_resource_overrides": "none",
     "blueprint_sync": {
-      "new_leaves": "no_missing_tags_or_declarations; 36/36 public owners linked",
-      "global": "incomplete: separate worktree has no restored QIC source link, so inherited QIC references are reported missing",
-      "report": "/workspace/scratch/757f4f120786/glm23-preserved-boundary/blueprint-sync.json"
+      "new_leaves": "passed; no changed public declarations missing blueprint owners; 36/36 linked",
+      "global": "passed; zero missing declarations, stale registry entries, or duplicate tags",
+      "report": "/workspace/scratch/757f4f120786/glm23-cropped-validation/cropped-blueprint-sync.json"
     }
   },
   "integration": {
@@ -90,5 +118,10 @@
     "status": "completed_no_mathematical_blocker",
     "concrete_repair": "Added DecidableEq instances to private map_euclidean_range_mulVec, as required by Matrix.toEuclideanLin.",
     "compiler_run": false
+  },
+  "proof_cleanup": {
+    "existing_file": "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointFrameSupport.lean",
+    "change": "Use promoted Matrix.IsIsometry.kronecker in the full and both cropped polar frame proofs. Public statements and hypotheses are unchanged.",
+    "validation": "pending"
   }
 }

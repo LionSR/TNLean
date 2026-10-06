@@ -1244,12 +1244,13 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/MPDO/BNTRightTripleFusion.lean` and
   `TNLean/MPS/MPDO/BNTLeftTripleFusion.lean` before promotion (2026-08-24).
 - **Abstraction:** `Matrix.IsIsometry.kronecker` in
-  `TNLean/Algebra/MatrixIsometryKronecker.lean`.
+  `QICLean/Algebra/MatrixIsometryKronecker.lean` (QICLean dependency).
 - **Notes:** the theorem is rectangular and assumes only the finite row
   coordinates and decidable column coordinates required by the two complex
   matrix isometry identities. All cited copies now use the common theorem; the
   four first- and second-stage fusion proofs compose it with
-  `Matrix.IsIsometry.reindex`.
+  `Matrix.IsIsometry.reindex`. The full and two cropped joint endpoint polar
+  frames also use this helper after the 2026-10-06 source review.
 
 ### rectangular isometry entries — promoted
 - **Pattern:** extract either scalar-product orientation of column
@@ -3351,6 +3352,28 @@ three-plaquette output measurement, and the routed reunion measurement.
   comparison matrix is not needed.
 
 ## Candidates
+
+### Euclidean coordinate inclusions — candidate (2026-10-06)
+
+- **Pattern:** represent zero extension by a coordinate-inclusion matrix,
+  evaluate its adjoint by coordinate restriction, and derive its isometry and
+  range projection from these two entry formulas.
+- **Seen:** two copies, in `MixedEndpointEdgeCompression.lean` and
+  `JointMixedEndpointPhysicalCrop.lean`.
+- **Promotion trigger:** a third consumer should move the generic coordinate
+  map, isometry, and adjoint formulas to the Euclidean matrix layer. Preserve
+  empty index types and avoid choosing an inhabitant.
+
+### Rectangular matrix isometries in Euclidean coordinates — candidate (2026-10-06)
+
+- **Pattern:** transport a matrix isometry identity through
+  `Matrix.toEuclideanLin`, then use `LinearMap.isometryOfInner` and the adjoint
+  identity to obtain a rectangular Hilbert-space isometry.
+- **Seen:** two copies, in `JointMixedEndpointFrameReduction.lean` and
+  `JointMixedEndpointCroppedCompression.lean`.
+- **Promotion trigger:** a third consumer should share this conversion in
+  the matrix-isometry layer. The Kronecker-isometry step is already promoted
+  separately and is reused at all three joint endpoint call sites.
 
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
