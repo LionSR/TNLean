@@ -199,3 +199,19 @@ This changes no public theorem statement or hypotheses. The new open-gap
 The final uniform-path theorem and its strict regression/axiom guards
 remain pending a fresh exact-head run; these intermediate compilation
 results are not a full-build pass.
+
+### 2026-10-06 01:10 UTC: Knabe threshold coercion
+
+At head `c2d4e74c1141edd13ea93d0406a95c7c1f7e66de`, the interval binder
+correction compiled. The remaining production diagnostic is the explicit
+natural-to-real cast of the interaction range in the Knabe threshold:
+`((2 : ℕ) : ℝ)` was not reduced by the deliberately restricted simplifier.
+The threshold proof now includes `Nat.cast_ofNat`, matching the subsequent
+Knabe-constant simplification. No theorem statement, premise, bound, or
+verification gate changes. Full capstone and guarded-regression success
+remain pending the next exact-head run.
+
+An isolated exact threshold example passed the strict Lean options with
+exit zero. Its legacy Mathlib import emitted a deprecation warning; the
+production file's imports are unchanged. This checks the arithmetic
+coercion repair only, not the complete uniform-path module.

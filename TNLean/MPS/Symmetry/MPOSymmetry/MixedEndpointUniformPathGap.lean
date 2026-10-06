@@ -138,7 +138,7 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
     exact hv
   have hKnabe := (parentHamiltonianES_gap_of_openParentHamiltonianES_gap
     (mixedEndpointInterpolation A₀ A₁ γ) (R := 2) (m := m) (by norm_num) hm
-    (by simpa only [show ((2 : ℝ) - 1) ^ 2 = 1 by norm_num] using hnum')
+    (by simpa only [Nat.cast_ofNat, show ((2 : ℝ) - 1) ^ 2 = 1 by norm_num] using hnum')
     hOpenCanonical).2 N hN v hvCanonical
   have hactual : δK * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
       (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
