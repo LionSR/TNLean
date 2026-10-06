@@ -194,6 +194,7 @@ import TNLean.PEPS.PhysicalSupportSection
 import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples
 import TNLean.PEPS.PureCutLocalEquivalence
+import TNLean.PEPS.QuantumDoubleNativeGlobalBlocking
 import TNLean.PEPS.RegionBlock
 import TNLean.PEPS.RegionBondGaugeHolonomy
 import TNLean.PEPS.RegionComplementComparison

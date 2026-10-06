@@ -37,6 +37,9 @@ on:
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
       - 'scripts/ci_compatible_cache.py'
+      - 'scripts/check_scp10_restoration.py'
+      - 'scripts/test_check_scp10_restoration.py'
+      - 'scripts/test_scp10_workflow_guard.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
       - 'docs/ci-automation.md'
@@ -143,6 +146,9 @@ on:
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
       - 'scripts/ci_compatible_cache.py'
+      - 'scripts/check_scp10_restoration.py'
+      - 'scripts/test_check_scp10_restoration.py'
+      - 'scripts/test_scp10_workflow_guard.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
       - 'docs/ci-automation.md'
@@ -263,6 +269,9 @@ jobs:
               - 'scripts/export_coherent_tn_prerequisites.py'
               - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/ci_compatible_cache.py'
+              - 'scripts/check_scp10_restoration.py'
+              - 'scripts/test_check_scp10_restoration.py'
+              - 'scripts/test_scp10_workflow_guard.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/test_ci_cache_lake_invalidation.py'
             coherent_prerequisites:
@@ -298,6 +307,9 @@ jobs:
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
               - 'scripts/ci_compatible_cache.py'
+              - 'scripts/check_scp10_restoration.py'
+              - 'scripts/test_check_scp10_restoration.py'
+              - 'scripts/test_scp10_workflow_guard.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/test_ci_cache_lake_invalidation.py'
               - 'docs/ci-automation.md'
@@ -538,6 +550,24 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      # Restoration checkpoints must compile the available lower layers before
+      # the incomplete capstones. The normal root build remains mandatory.
+      - name: Check SCP10 restoration lower layers
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          python3 scripts/test_check_scp10_restoration.py
+          python3 scripts/test_scp10_workflow_guard.py
+          lake --fail-fast build \
+            +TNLean.Algebra.CommutingMatrixProjectionProduct:olean \
+            +TNLean.Algebra.FinitePermutationAverage:olean \
+            +TNLean.PEPS.Examples.QuantumDoubleLatticeHamiltonian:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          # Refuse to continue toward acceptance with missing source imports.
+          # This checks TN source presence; the root build checks external imports.
+          git fetch --no-tags origin ca5273cd335633e0aea2e4930c897d732b8260de
+          python3 scripts/check_scp10_restoration.py
+
       - name: Build rectangular local-window preparation targets early
         run: |
           set -eo pipefail
@@ -559,6 +589,20 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check SCP10 restoration strict regressions
+        run: |
+          set -eo pipefail
+          for source in TNLean/Algebra/CommutingMatrixProjectionProduct.lean \
+            TNLean/Algebra/FinitePermutationAverage.lean \
+            TNLean/PEPS/Examples/QuantumDoubleLatticeGauge.lean \
+            TNLean/PEPS/Examples/QuantumDoubleLatticeHamiltonian.lean \
+            TNLeanTest/CommutingMatrixProjectionProduct.lean; do
+            lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
 
       - name: Test actual rectangular local-window regression strictly
         run: >
@@ -680,7 +724,8 @@ jobs:
           trap 'rm -rf "$test_root"' EXIT
           mkdir -p "$test_root/TNLeanTest"
           export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
-          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
+          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms \
+            QuantumDoubleLatticeHamiltonian QuantumDoubleOriginalHamiltonian; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \

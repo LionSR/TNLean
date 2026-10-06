@@ -1,3 +1,9 @@
+> **Historical record, not current acceptance.** Copied from immutable archive
+> `ca5273cd335633e0aea2e4930c897d732b8260de` on 2026-10-06. All statements below
+> about proof completion, review, builds, pins and superseded gaps describe the
+> historical packet. They have not been revalidated on this branch. See
+> [the current restoration audit](2026-10-06_scp10_restoration.md).
+
 # Literal original-spin quantum-double terms
 
 ## Source, dependencies and scope

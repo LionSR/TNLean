@@ -1,3 +1,5 @@
+% Restored from ca5273cd335633e0aea2e4930c897d732b8260de; current validation pending.
+% Historical acceptance badges removed until the full dependency closure passes.
 \subsection{The original-spin quantum-double Hamiltonian}
 \label{sec:peps_qd_original_spins}
 
@@ -15,6 +17,26 @@ Theorem~\ref{thm:peps_tc_face_geometry} is independent of $G$.
 The period restriction is recorded in
 \cite{gap:rmp_peps_examples_small_torus}.
 
+\begin{lemma}[Products of commuting orthogonal projections]
+    \label{lem:peps_qd_commuting_projection_product}
+    \lean{Matrix.isStarProjection_list_prod,Matrix.list_prod_mulVec_eq_self_iff}
+    Let $(P_j)_{j\in J}$ be pairwise commuting orthogonal projections on a
+    finite-dimensional complex vector space. For a finite list
+    $j_1,\ldots,j_n$, the product $Q=P_{j_1}\cdots P_{j_n}$ is an
+    orthogonal projection, and
+    \[
+        Q\psi=\psi\quad\Longleftrightarrow\quad
+        P_{j_k}\psi=\psi\text{ for every }1\le k\le n.
+    \]
+    The list may repeat indices, and its empty product is the identity.
+\end{lemma}
+\begin{proof}
+    Commutation and idempotence give $P_{j_k}Q=Q$ for every listed factor.
+    Applying this equality to a vector fixed by $Q$ proves one implication;
+    successive application of the factors proves the converse.
+    The product is self-adjoint and idempotent by the same commutation identities.
+\end{proof}
+
 \begin{definition}[Ordered products and original spin actions]
     \label{def:peps_qd_original_actions}
     \lean{TNLean.PEPS.quantumDoubleOriginalAHolonomy,
@@ -22,7 +44,7 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalBIncoming,
         TNLean.PEPS.quantumDoubleOriginalBAction,
         TNLean.PEPS.quantumDoubleOriginalBPermutation}
-    \leanok
+
     Write $\sigma_{v,i}=\sigma(t(v,i))$ for $\sigma\in G^\Lambda$,
     and let $\mathrm e,\mathrm n$ denote the right and upper coarse steps.
     The two A products are
@@ -68,14 +90,14 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalBAction_spectator,
         TNLean.PEPS.quantumDoubleOriginalBAction_one,
         TNLean.PEPS.quantumDoubleOriginalBAction_mul}
-    \leanok
+
     \uses{def:peps_qd_original_actions,thm:peps_tc_face_geometry}
     The sets $O_e$ and $I_e$ are disjoint, and their union is exactly
     the four-site B face. Every other spin is fixed.
     Moreover, $V_e(1)=I$ and $V_e(uv)=V_e(u)V_e(v)$ on the whole
     original configuration space, including across either periodic seam.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     The four corner labels in~(\ref{eq:peps_qd_original_incidence}) are
     distinct under the bijective tiling. On outgoing spins, composition
     gives $u(vg)=(uv)g$; on incoming spins it gives
@@ -90,7 +112,7 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalBTerm,
         TNLean.PEPS.quantumDoubleOriginalTerm,
         TNLean.PEPS.quantumDoubleOriginalHamiltonian}
-    \leanok
+
     \uses{def:peps_qd_original_actions}
     Let $M_e(u)\ket\sigma=\ket{V_e(u)\sigma}$. Define
     \begin{align}
@@ -117,7 +139,7 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalBTerm_eq_unblocked,
         TNLean.PEPS.quantumDoubleOriginalTerm_eq_unblocked,
         TNLean.PEPS.quantumDoubleOriginalHamiltonian_eq_unblocked}
-    \leanok
+
     \uses{def:peps_qd_original_hamiltonian}
     Let $U$ regroup each tile into its clockwise four-spin K register.
     If $\widetilde h_j$ and $\widetilde H$ are the placed K penalties and
@@ -130,7 +152,7 @@ The period restriction is recorded in
         \label{eq:peps_qd_original_blocking}
     \end{align}
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     Regrouping~(\ref{eq:peps_qd_original_a}) gives exactly the local and
     hole K products, in their stated order. On a right B face the four
     affected spins receive $(R_u,L_u,R_u,L_u)$ in the order
@@ -153,7 +175,7 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalHamiltonian_posSemidef,
         TNLean.PEPS.quantumDoubleOriginalHamiltonian_mulVec_eq_zero_iff,
         TNLean.PEPS.quantumDoubleOriginalHamiltonian_mulVec_eq_zero_iff_closureSpan}
-    \leanok
+
     \uses{thm:peps_qd_original_blocking}
     All original penalties are commuting orthogonal projections and
     are positive semidefinite. Their sum is positive semidefinite. The
@@ -171,7 +193,7 @@ The period restriction is recorded in
     Equivalently, $H\psi=0$ precisely when $U\psi$ belongs to the span
     of the actual commuting K closures.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     The A assertion follows from its diagonal entries. The finite-group
     average fixes exactly the invariant coefficient functions, proving
     the B assertion. The coefficientwise identities transport the
@@ -188,7 +210,7 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalClosure,
         TNLean.PEPS.ker_quantumDoubleOriginalHamiltonian_eq_span_closures,
         TNLean.PEPS.finrank_ker_quantumDoubleOriginalHamiltonian}
-    \leanok
+
     \uses{thm:peps_qd_original_kernel}
     Let $\Psi^K_{g,h}$ be the actual K closures and put
     $\Phi_{g,h}=U^\dagger\Psi^K_{g,h}$. Then
@@ -201,7 +223,7 @@ The period restriction is recorded in
     where $G$ acts by simultaneous conjugation. No identity condition is imposed on either
     noncontractible torus holonomy.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     The linear regrouping maps the entire original kernel bijectively
     onto the K kernel. Its commuting-closure spanning theorem and
     commuting-pair conjugacy-class dimension formula therefore give
@@ -215,7 +237,7 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalGroundProjector_isStarProjection,
         TNLean.PEPS.quantumDoubleOriginalGroundProjector_mulVec_eq_self_iff,
         TNLean.PEPS.range_quantumDoubleOriginalGroundProjector}
-    \leanok
+
     \uses{thm:peps_qd_original_kernel}
     The correctly normalized product
     \begin{align}
@@ -224,7 +246,7 @@ The period restriction is recorded in
     is an orthogonal projection with $\operatorname{ran}Q=\ker H$.
     Equivalently, $Q\psi=\psi$ if and only if $H\psi=0$.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     A product of commuting orthogonal projections is an orthogonal
     projection whose fixed space is the intersection of their fixed
     spaces. Here that intersection is the common kernel of the penalties.
@@ -244,7 +266,7 @@ The period restriction is recorded in
         TNLean.PEPS.quantumDoubleOriginalCheckerboard_eq_groundProjector_one,
         TNLean.PEPS.quantumDoubleOriginalCheckerboard_eq_B_product_one,
         TNLean.PEPS.quantumDoubleOriginalGroundProjector_one_ne_zero}
-    \leanok
+
     \uses{thm:peps_qd_original_ground_projector,thm:peps_qd_original_blocking}
     Retain the elementary T tensor with its printed, unnormalized entries,
     and let $\Psi_T$ be its actual periodic contraction. Every original
@@ -260,7 +282,7 @@ The period restriction is recorded in
     in~(\ref{eq:peps_qd_original_preparation}) does not change the required
     normalization of any individual projector.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     Physical blocking gives $U\Psi_T=\Psi_K$ with scalar one. The actual
     K contraction is the sum of the basis vectors produced by all shared
     edge colorings $c\in G^E$, so

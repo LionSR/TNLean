@@ -1,0 +1,131 @@
+{
+  "base": "fc0d3ce4985baa3ffa0b16f6316830b2d64eb39a",
+  "archive": "ca5273cd335633e0aea2e4930c897d732b8260de",
+  "byte_copy_checkpoint": "e31a8e3407669da1bd14abff31dbc0a15f9a776d",
+  "files": [
+    {
+      "path": "source/TNLean/Algebra/FinitePermutationAverage.lean",
+      "sha256": "20e5ceb19abf4587b40c84acb88aeb2b1d64d502ab0eec3c964937d323591531",
+      "recovery_status": "historical_source_sha256_match",
+      "current_validation": "not_run",
+      "historical_digest_table_match": true
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleLatticeBlocking.lean",
+      "sha256": "53787b124dc4e0cd11598953c61a19d6bb42542cadc3e1ad88dba10614ad8f49",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleLatticeGauge.lean",
+      "sha256": "7a0af04632ad2a542b62bd24339a603c4a02018785b5cacab8323d427e7be82e",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleLatticeHamiltonian.lean",
+      "sha256": "75f59b5d4602c8f3db73aae41f2f672a9cabd1ecfc42987fff020b4dc8f350c9",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalGeometry.lean",
+      "sha256": "6684ad2dd2c9e99c86c2e840f71594392f3bf6e44e98789d0f86baf4dc745c34",
+      "recovery_status": "historical_source_sha256_match",
+      "current_validation": "not_run",
+      "historical_digest_table_match": true
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalGroundProjector.lean",
+      "sha256": "17490bbeb37a5c7ad2425a6b568c04005ae8e7836891199ec5a620f4d0002d03",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalGroundSpace.lean",
+      "sha256": "fc64283ce5262a146e40e68f36599ec04175bf6147cdb8d7fceb9b18cf5ff263",
+      "recovery_status": "historical_source_sha256_match",
+      "current_validation": "not_run",
+      "historical_digest_table_match": false
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalHamiltonian.lean",
+      "sha256": "6adb9b6796be81bddcbc26d7d120088d4ff2e903f20d91d98c6e8195b433fbae",
+      "recovery_status": "historical_source_sha256_match",
+      "current_validation": "not_run",
+      "historical_digest_table_match": false
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/QuantumDoubleOriginalPreparation.lean",
+      "sha256": "4c57b472358399a077775177a2acfde2451553ca4f7f527d142050d497bb1d5c",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/ToricCodePauliGroundProjector.lean",
+      "sha256": "bc972e20f7b38a0048d3b9d32bdd8d91fe957b0b4da073bf3c379f76cee9b20f",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/ToricCodePauliGroundSpace.lean",
+      "sha256": "6fe0553f1932445beada456ad668576b9769bd1d09f725d59fd459f14e9a672f",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/ToricCodePauliHamiltonian.lean",
+      "sha256": "a02be40eca172b57a2e7e7d51d869da872e65555116f4a1c06b5882f527939f5",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/ToricCodePauliPreparation.lean",
+      "sha256": "c6913efcd0311878e578cbaf70b1f294181e860f0fff12e270703599dc6c363d",
+      "recovery_status": "historical_source_sha256_match",
+      "current_validation": "not_run",
+      "historical_digest_table_match": true
+    },
+    {
+      "path": "source/TNLean/PEPS/Examples/ToricCodePlaquetteGeometry.lean",
+      "sha256": "2ee651ba60bee8d0627be8f907ebedcf625dedf37862791571f02bfe9a4188de",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLean/PEPS/QuantumDoubleNativeGlobalBlocking.lean",
+      "sha256": "9f79aef9d426189116d2202d5c682b37fdfc285c7198d4428757256f269960d3",
+      "recovery_status": "historical_source_sha256_match",
+      "current_validation": "not_run",
+      "historical_digest_table_match": true
+    },
+    {
+      "path": "source/TNLeanTest/QuantumDoubleLatticeHamiltonian.lean",
+      "sha256": "9af572e6e6381727caa74abb51966e221f1507931511126ad151d20b23539ddc",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/TNLeanTest/QuantumDoubleOriginalHamiltonian.lean",
+      "sha256": "2cba0e95ad7ee87b40593e249d9c4ab2410004953afc004cb4bdd5b686e8e46d",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/blueprint/src/chapter/ch24_peps_quantum_double_original_spins.tex",
+      "sha256": "2e62edebf8103e018a853e2f077ee5d7359e85952ad51bba491e01802faa9fc1",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    },
+    {
+      "path": "source/docs/audits/2026-10-05_quantum_double_original_spins.md",
+      "sha256": "51de7b79576aac7fd4db5926afeacc72d95cf38b72556556388cec4ec2f71f9d",
+      "recovery_status": "source_reconstruction_without_original_hash",
+      "current_validation": "not_run"
+    }
+  ],
+  "new_implementation": [
+    "TNLean/Algebra/CommutingMatrixProjectionProduct.lean"
+  ],
+  "current_compilation": "not_run"
+}

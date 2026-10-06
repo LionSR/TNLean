@@ -26,6 +26,7 @@ import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
 import TNLean.Algebra.CommonKernelGapInterpolation
 import TNLean.Algebra.CommonKernelSpectralGap
+import TNLean.Algebra.CommutingMatrixProjectionProduct
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.CompactGapBounds
@@ -56,6 +57,7 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupCommutant
 import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FiniteIndicatorSum
+import TNLean.Algebra.FinitePermutationAverage
 import TNLean.Algebra.FinsetEnumeration
 import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum
