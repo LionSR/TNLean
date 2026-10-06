@@ -1,0 +1,260 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777.
+% Auxiliary operator identification; native module validation is pending.
+
+\subsection{The common core for every ordered pair of blocks}
+\label{sec:mpo_joint_core_hamiltonian}
+
+Write $A_x=A_x^0$ and $D_x=D_x^0$ in this subsection. The exterior
+multiplicities $E_x,F_x$ are arbitrary nonnegative integers. The shared
+physical alphabet remains $\Fin{d_0}$ throughout the interior.
+
+\begin{theorem}[Dependent orthogonal projections]
+    \label{thm:mpo_dependent_orthogonal_projections}
+    \lean{ContinuousLinearMap.isSymmetricProjection_sigmaFiberwiseMap,
+        ContinuousLinearMap.isSymmetricProjection_dependentRightFiberwiseMap,
+        LinearIsometryEquiv.conj_eq_dependentRightFiberwiseMap_of_ker_iff}
+    Let $I_q,S_q$ be finite families of finite sets, and let $P_q$ be
+    orthogonal projections on $\C^{I_q}$. Then
+    $\bigoplus_q(P_q\otimes I_{S_q})$ is an orthogonal projection.
+    If $P$ is an orthogonal projection and
+    $U:\mathcal H\to\bigoplus_q\C^{I_q\times S_q}$ is unitary with
+    $v\in\ker P$ exactly when $(Uv)_{q,s}\in\ker P_q$ for every $q,s$,
+    then $UPU^{-1}=\bigoplus_q(P_q\otimes I_{S_q})$.
+    Empty label sets and empty spectator fibers are allowed.
+\end{theorem}
+\begin{proof}
+    The inner product is the sum of the fiber inner products, so symmetry
+    and idempotence hold on each fiber. The two conjugated projections
+    have the same kernel, hence the same range, the orthogonal complement
+    of that kernel. Orthogonal projections with the same range are equal.
+\end{proof}
+
+\begin{definition}[Original-tensor boundary cores]
+    \label{def:mpo_original_boundary_cores}
+    \lean{MPSTensor.MPOSymmetry.endpointLeftCoreMap,
+        MPSTensor.MPOSymmetry.endpointRightCoreMap,
+        MPSTensor.MPOSymmetry.endpointLeftCoreSupportES,
+        MPSTensor.MPOSymmetry.endpointRightCoreSupportES,
+        MPSTensor.MPOSymmetry.endpointLeftCoreConstraintES,
+        MPSTensor.MPOSymmetry.endpointRightCoreConstraintES}
+    Define $L_x:\C^{D_x}\to\C^{D_x\times d_0}$ and
+    $R_x:\C^{D_x}\to\C^{d_0\times D_x}$ by
+    \begin{align}
+        (L_xu)_{b,i} & =\sum_c A_x^i[b,c]u_c,  &
+        (R_xu)_{i,c} & =\sum_b u_b A_x^i[b,c].
+    \end{align}
+    Put $S_{L,x}=\operatorname{ran}L_x$,
+    $S_{R,x}=\operatorname{ran}R_x$, and let
+    $p_{L,x}=\Pi_{S_{L,x}^{\perp}}$,
+    $p_{R,x}=\Pi_{S_{R,x}^{\perp}}$.
+\end{definition}
+
+\begin{definition}[Dependent exterior regrouping at an edge]
+    \label{def:mpo_joint_edge_regrouping}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointFirstEdgeSpectatorEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointLastEdgeSpectatorEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointFirstEdgeSpectatorIsometry,
+        MPSTensor.MPOSymmetry.jointEndpointLastEdgeSpectatorIsometry}
+    \uses{def:mpo_joint_edge_cores}
+    The unitary coordinate regroupings are
+    $((x,a,b),i)\mapsto(x,(b,i),a)$ on the first edge and
+    $(i,(x,c,e))\mapsto(x,(i,c),e)$ on the last edge.
+\end{definition}
+
+\begin{theorem}[The one-sided ranges split over exterior fibers]
+    \label{thm:mpo_joint_core_edge_fibers}
+    \lean{MPSTensor.MPOSymmetry.mem_jointEndpointFirstEdgeCoreSupportES_iff_fibers,
+        MPSTensor.MPOSymmetry.mem_jointEndpointLastEdgeCoreSupportES_iff_fibers}
+    \uses{def:mpo_joint_edge_cores,def:mpo_original_boundary_cores,
+        def:mpo_joint_edge_regrouping}
+    Under the respective regroupings,
+    \begin{align}
+        v\in\operatorname{ran}\Phi_{L,E}
+         & \iff v_{x,a}\in S_{L,x}\text{ for every }x,a, \\
+        w\in\operatorname{ran}\Phi_{R,E}
+         & \iff w_{x,e}\in S_{R,x}\text{ for every }x,e.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    In the first identity a rectangular boundary $Y_x$ supplies
+    $u_c=Y_x[c,a]$ at each fixed $x,a$. Conversely, choose such a vector
+    independently for each $x,a$ and assemble these columns into $Y_x$.
+    The last identity uses the rows $u_b=Z_x[e,b]$ in the same way.
+    Neither construction selects a label or an exterior value from an
+    empty set.
+\end{proof}
+
+\begin{theorem}[Exact normalized edge projector identities]
+    \label{thm:mpo_joint_core_edge_projectors}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointFirstEdgeCoreConstraint_conj_spectators,
+        MPSTensor.MPOSymmetry.jointEndpointLastEdgeCoreConstraint_conj_spectators,
+        MPSTensor.MPOSymmetry.jointEndpointFirstEdgeCoreConstraint_apply_fiber,
+        MPSTensor.MPOSymmetry.jointEndpointLastEdgeCoreConstraint_apply_fiber}
+    \uses{thm:mpo_joint_core_edge_fibers,def:mpo_original_boundary_cores}
+    The projections onto the orthogonal complements of
+    $\operatorname{ran}\Phi_{L,E}$ and $\operatorname{ran}\Phi_{R,E}$
+    become respectively
+    $\bigoplus_x(p_{L,x}\otimes I_{E_x})$ and
+    $\bigoplus_x(p_{R,x}\otimes I_{E_x})$ under the edge regroupings.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_core_edge_fibers,thm:mpo_dependent_orthogonal_projections}
+    Their kernels are exactly the ranges in
+    Theorem~\ref{thm:mpo_joint_core_edge_fibers}; apply
+    Theorem~\ref{thm:mpo_dependent_orthogonal_projections}.
+\end{proof}
+
+\begin{definition}[Ordered-pair chain and core coordinates]
+    \label{def:mpo_joint_ordered_pair_coordinates}
+    \lean{MPSTensor.MPOSymmetry.JointEndpointLeftIndex,
+        MPSTensor.MPOSymmetry.JointEndpointRightIndex,
+        MPSTensor.MPOSymmetry.JointEndpointChainCfg,
+        MPSTensor.MPOSymmetry.JointEndpointCoreCfg,
+        MPSTensor.MPOSymmetry.jointEndpointChainSpectatorEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointChainSpectatorIsometry,
+        MPSTensor.MPOSymmetry.jointEndpointExteriorFiber}
+    \uses{def:mpo_joint_edge_cores}
+    For $m\geq1$ interior sites, put
+    $I_{x,y,m}=\Fin{D_x}\times\operatorname{Cfg}(d_0,m)\times\Fin{D_y}$.
+    The normalized chain coordinates and their unitary regrouping are
+    \begin{align}
+        \mathcal B_L(E)\times\operatorname{Cfg}(d_0,m)\times\mathcal B_R(F)
+                                 & \longrightarrow\coprod_{x,y}
+        \bigl(I_{x,y,m}\times(\Fin{E_x}\times\Fin{F_y})\bigr),            \\
+        ((x,a,b),\sigma,(y,c,e)) & \longmapsto((x,y),(b,\sigma,c),(a,e)).
+    \end{align}
+    Denote the induced unitary by $U_{E,F,m}$. Its fiber at
+    $(x,y),(a,e)$ is given by
+    \begin{align}
+        v_{x,y;a,e}(b,\sigma,c)=v((x,a,b),\sigma,(y,c,e)).
+    \end{align}
+    All ordered pairs occur, including $x\ne y$.
+\end{definition}
+
+\begin{definition}[First, middle, and last coordinate placements]
+    \label{def:mpo_joint_core_placements}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointChainFirstEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointChainLastEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointChainBulkEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointCoreFirstEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointCoreLastEquiv,
+        MPSTensor.MPOSymmetry.jointEndpointCoreBulkEquiv}
+    \uses{def:mpo_joint_ordered_pair_coordinates}
+    The first placement separates $((x,a,b),\sigma_1)$ from the remaining
+    physical word and right boundary. The last separates
+    $(\sigma_m,(y,c,e))$ from the left boundary and preceding word.
+    The middle placement separates $\sigma$ from both boundaries.
+    On $I_{x,y,m}$ the same placements separate $(b,\sigma_1)$,
+    $(\sigma_m,c)$, and $\sigma$, respectively, retaining the remaining
+    core coordinates as spectators.
+\end{definition}
+
+\begin{definition}[The explicit common core and normalized sum]
+    \label{def:mpo_joint_common_core_sum}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedFirstTerm,
+        MPSTensor.MPOSymmetry.jointEndpointNormalizedLastTerm,
+        MPSTensor.MPOSymmetry.jointEndpointNormalizedBulkTerm,
+        MPSTensor.MPOSymmetry.jointEndpointCoreFirstTerm,
+        MPSTensor.MPOSymmetry.jointEndpointCoreLastTerm,
+        MPSTensor.MPOSymmetry.jointEndpointCoreBulkTerm,
+        MPSTensor.MPOSymmetry.jointEndpointCoreHamiltonian,
+        MPSTensor.MPOSymmetry.jointEndpointNormalizedSum}
+    \uses{def:mpo_original_boundary_cores,def:mpo_joint_core_placements}
+    Let $A_{\mathrm{joint}}=\bigoplus_z A_z$ on the original shared
+    physical alphabet, with all block weights equal to one. Its two-site
+    parent interaction is denoted by $h_{\mathrm{joint}}$. Define
+    \begin{align}
+        G_{x,y,m} & =p_{L,x}^{\mathrm{first}}+
+        \sum_{j=1}^{m-1}h_{\mathrm{joint}}^{(j,j+1)}+
+        p_{R,y}^{\mathrm{last}}.\label{eq:mpo_joint_core_sum}
+    \end{align}
+    \begin{align}
+        K_{E,F,m} & =\Pi_{(\operatorname{ran}\Phi_{L,E})^\perp}^{\mathrm{first}}+
+        \sum_{j=1}^{m-1}h_{\mathrm{joint}}^{(j,j+1)}+
+        \Pi_{(\operatorname{ran}\Phi_{R,F})^\perp}^{\mathrm{last}}.
+        \label{eq:mpo_joint_normalized_sum}
+    \end{align}
+    The middle interaction is joint even when $x\ne y$; it is not a
+    parent interaction chosen from one boundary label. The full physical
+    alphabet, including any unused directions, remains in every core.
+\end{definition}
+
+\begin{theorem}[The shortest supported chain has no middle edge]
+    \label{thm:mpo_joint_three_site_middle}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedBulkTerm_one_eq_zero}
+    \uses{def:mpo_joint_common_core_sum}
+    At $m=1$, the middle sum vanishes. The total length is three and
+    the first and last edges are distinct.
+\end{theorem}
+\begin{proof}
+    No two-site window fits inside a single middle site, so the middle
+    sum is indexed by the empty set.
+\end{proof}
+
+\begin{theorem}[Termwise identification on every ordered pair]
+    \label{thm:mpo_joint_core_term_fibers}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedFirstTerm_apply_fiber,
+        MPSTensor.MPOSymmetry.jointEndpointNormalizedLastTerm_apply_fiber,
+        MPSTensor.MPOSymmetry.jointEndpointNormalizedBulkTerm_apply_fiber,
+        MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_apply_fiber}
+    \uses{def:mpo_joint_common_core_sum,def:mpo_joint_ordered_pair_coordinates}
+    For each fixed $(x,y),(a,e)$, the three terms in
+    (\ref{eq:mpo_joint_normalized_sum}) act on $v_{x,y;a,e}$ as the
+    corresponding three terms in (\ref{eq:mpo_joint_core_sum}). Hence
+    $(K_{E,F,m}v)_{x,y;a,e}=G_{x,y,m}v_{x,y;a,e}$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_core_edge_projectors,def:mpo_joint_core_placements}
+    The first edge identity fixes $x,a$ and leaves the right boundary
+    unchanged. The last fixes $y,e$ and leaves the left boundary unchanged.
+    The middle placement evaluates the same joint open-chain operator on
+    $\sigma$ in both coordinate systems. Add these three identities.
+\end{proof}
+
+\begin{theorem}[Exact dependent spectator operator identification]
+    \label{thm:mpo_joint_core_operator_identity}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_intertwines_coreSpectators,
+        MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_conj_coreSpectators}
+    \uses{def:mpo_joint_common_core_sum,def:mpo_joint_ordered_pair_coordinates}
+    For arbitrary $E_x,F_x\geq0$ and $m\geq1$,
+    \begin{align}
+        U_{E,F,m}K_{E,F,m}U_{E,F,m}^{-1}
+         & =\bigoplus_{x,y}\bigl(G_{x,y,m}\otimes I_{E_xF_y}\bigr).
+        \label{eq:mpo_joint_core_identity}
+    \end{align}
+    Thus the choices $E=F=D^0$ and $E=F=D^0+D^1$ use the same concrete
+    family $G_{x,y,m}$. Empty labels, zero dimensions, and distinct
+    boundary labels are included.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_core_term_fibers}
+    Evaluate both sides at an arbitrary $(x,y),(b,\sigma,c),(a,e)$ and
+    use Theorem~\ref{thm:mpo_joint_core_term_fibers}.
+\end{proof}
+
+% Identifying K with the boundary-deformed actual physical Hamiltonian
+% remains a separate reducing-frame and compressed-kernel obligation.
+% Equation (eq:mpo_joint_core_identity) alone makes no physical gap claim.
+
+\begin{theorem}[Identical gaps for the two exterior multiplicities]
+    \label{thm:mpo_joint_normalized_gap_equivalence}
+    \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_norm_gap_iff_enlarged}
+    \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap}
+    Suppose $D_x^0>0$ for every label, $D_x^1\geq0$, and $\delta\geq0$.
+    Set $D=D^0$ and $\widetilde D=D^0+D^1$. For each $m\geq1$,
+    \begin{align}
+        \delta\|v\|\leq\|K_{D,D,m}v\|
+        \quad(v\perp\ker K_{D,D,m})
+        \iff
+        \delta\|w\|\leq\|K_{\widetilde D,\widetilde D,m}w\|
+        \quad(w\perp\ker K_{\widetilde D,\widetilde D,m}).
+    \end{align}
+    Each side quantifies over its entire indicated kernel complement.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap}
+    The coordinate unitaries preserve norms, kernels and their orthogonal
+    complements. Apply (\ref{eq:mpo_joint_core_identity}) on each side and
+    then Theorem~\ref{thm:mpo_joint_boundary_spectator_gap} to the common
+    family $G_{x,y,m}$. The exterior fibers are nonempty because $D_x^0>0$.
+\end{proof}

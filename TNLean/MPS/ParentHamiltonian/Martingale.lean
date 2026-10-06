@@ -22,6 +22,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapAtBoundedRange
 import TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapAtSimultaneousInjectivity
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence
+import TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
