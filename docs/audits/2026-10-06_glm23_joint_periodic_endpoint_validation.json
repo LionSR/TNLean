@@ -1,19 +1,19 @@
 {
-  "status": "source checkpoint; native validation pending",
+  "status": "proof source validated; checked documentation refreshed; final documentation-head CI pending",
   "base_commit": "476769cd544b256dcd30d1df465f90896ac60db6",
   "base_tree": "08eae47dac442d89a13640c9b3473386f39d0add",
   "first_endpoint_only": true,
   "source_sha256": {
     "TNLean/MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean": "a997061d795d9e242cfdb0346d71d5f45b1080024dd53a4edb9b227ed59702b6",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCornerSupport.lean": "d3b57bc371e2e623d9d72a49b1c3393e6a6fec418ea1f2f2d472416c4704268f",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOrthogonalCorners.lean": "1b9e0f0ba92eb9a734442190f52ba11a6f6ba719059ed83c47200f7c722e3a4a",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointPeriodicGap.lean": "2690d54c4165746bc83c1836bbf0293c44c58339c3eec2d67f5ee3ac2fd08dd7",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointPeriodicSectors.lean": "d0bcff629eefd3c4a6e9159e3027bdefdca66db4ae5810f676b7d3410ec9ad2e",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointOrthogonalCorners.lean": "ac1139a6b286c7736de918d6fffd8d32ab1db51943afdcc2fdb0c658cf5c205c",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointPeriodicGap.lean": "b554fdf17d447a1a3e75b7bb6ae77ad068e80f4c02fdc4d338fcbc7c7b9cfc25",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointPeriodicSectors.lean": "3500957b649caa99e487139468d8653deb6fffd7d6870c8298de7890eed7de1d",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointProjectorComparison.lean": "9bc7421d437813571c962f6c6950effea916d985823e6e304f03ec7cd6af00f8",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointReducingSectors.lean": "f36a161ec500629e244bc8153f0de54682deff7c1a7d467235ea11daba67893c",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointReducingSectors.lean": "1e9acaad25c6cfb4625b37579e58c59f1b8da2ad0200c2961d0452e6592b729c",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointSectors.lean": "01323540527857c75e5a4fe6bdd4afdffe0335045cfd9cc1258286a1d9d9918a",
-    "TNLeanTest/JointMixedEndpointPeriodicGap.lean": "81d2dafa7c555ac1ec228890b97c0bae8877f02d7b31f2d9f12c8b8d699a1c0c",
-    "blueprint/src/chapter/ch30_mpo_joint_periodic_endpoint.tex": "1928486b17f2d29870a7782b4c70598cdb1586ae9ebd02d508474ac3a247752f"
+    "TNLeanTest/JointMixedEndpointPeriodicGap.lean": "6ed9b0c32e711a4afc60f468d9e505e93b075164636fbc9a945f0f3e5045ba19",
+    "blueprint/src/chapter/ch30_mpo_joint_periodic_endpoint.tex": "dd33565f834e9ed418282a3a8bd393c0ac9829fc61f1d1a6b634824630968000"
   },
   "declaration_owners": [
     "MPSTensor.MPOSymmetry.jointMixedRowWeight",
@@ -106,12 +106,12 @@
     "MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_gap"
   ],
   "rendered_owner_links": 88,
-  "checked_entries": 0,
-  "checked_proofs": 0,
+  "checked_entries": 11,
+  "checked_proofs": 8,
   "strict_axiom_guards": 11,
-  "pdf_sha256": "deabcac113cba5a816ec65fbd2d858c904c29fed6afee45d763f658625c64f1c",
-  "html_sha256": "3ba26ffa65d31c58c6d2c22a83bbb34b7fafa15d92155b97453afee182605c08",
-  "focus_manifest_sha256": "4ab83c780435ee6ad02f9d5bd297859dd34f0fe540c523647c23942df3ca2f5e",
+  "pdf_sha256": "bb7af79fb29231364fe927041d94c850c4d55c7d4552b610bb4d36cdb60a0061",
+  "html_sha256": "34d1950e3614eca3f2bcf96a546162dce8ea2112ca6097684da9efba6bcf51d8",
+  "focus_manifest_sha256": "d7db23bc545a22ed254e560567fd66677babf8ba1879bdc65112e9523a06dde1",
   "pdf_visual_pages": [
     3,
     4,
@@ -125,10 +125,51 @@
     "advisories": 0
   },
   "raw_html_reader_checks": "passed",
-  "browser_reader_checks": "blocked: executor denies Chromium singleton socket creation, including an approved escalated launch",
+  "browser_reader_checks": {
+    "local": "blocked: executor denies Chromium singleton socket creation, including an approved escalated launch",
+    "github": "passed in exact-tree full blueprint job, run 37446115075"
+  },
   "import_aggregators": "passed: 71 aggregators, 2730 modules",
   "latexindent": "passed: pinned 3.24.7 with blueprint/latexindent.yaml",
   "prose_check": "passed",
-  "source_reverse_coverage": "passed: all added declarations have blueprint entries; full scan awaits dependency source availability",
-  "native_lean_validation": "not run; waiting for remote checkpoint preservation and serialized canonical slot"
+  "source_reverse_coverage": "passed: every added public declaration has one blueprint owner; full source synchronization also passed in CI",
+  "native_lean_validation": {
+    "local_lower_modules_passed": 7,
+    "local_capstone_warmup": "execution handle lost before final-module elaboration; no terminal native result claimed",
+    "complete_validation": "all eight production modules, eleven strict guards and compiled declarations passed in exact-tree GitHub CI"
+  },
+  "proof_source_ci": {
+    "public_commit": "7526a088de379402132b015c8186ec879e07fa42",
+    "authored_commit": "32824148466899720e3c56177137efede41dca81",
+    "tested_merge": "1e95f7a547c63f7195e768676fde437d0af1bd00",
+    "tested_tree": "ac5687ca14e45044681900f2f9a99268d7e476a6",
+    "run_id": 37446115075,
+    "build_job_id": 112211268126,
+    "url": "https://github.com/LionSR/TNLean/actions/runs/37446115075",
+    "checks_passed": 8,
+    "production_build": "passed",
+    "strict_regression": "passed",
+    "strict_standard_axiom_guards": 11,
+    "compiled_blueprint_declarations": "passed",
+    "full_blueprint": "passed",
+    "style": "passed",
+    "timing": "passed",
+    "module_seconds": {
+      "ReducingProjectionGap": 6.5,
+      "JointMixedEndpointSectors": 9.3,
+      "JointMixedEndpointCornerSupport": 10,
+      "JointMixedEndpointReducingSectors": 12,
+      "JointMixedEndpointOrthogonalCorners": 11,
+      "JointMixedEndpointProjectorComparison": 12,
+      "JointMixedEndpointPeriodicSectors": 33,
+      "JointMixedEndpointPeriodicGap": 9
+    }
+  },
+  "final_documentation_head_ci": "pending publication",
+  "visual_page_sha256": {
+    "3": "f8cc6c3078736f69e410d50e1f17c87dc5e5d70b896086171e703aa30230ccc7",
+    "4": "098c79691f0e92419cdb140ccc07c45403d47df3661c2d541fceac5cc9e0f19a",
+    "5": "b817795be1f5521bb1e8d3d712b9105254a0c5a67a4c89fcead438ba73b48c0d"
+  },
+  "validation_timestamp_utc": "2026-10-06T10:24:00Z"
 }

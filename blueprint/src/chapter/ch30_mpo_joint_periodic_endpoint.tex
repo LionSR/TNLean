@@ -1,6 +1,6 @@
 % Source: GLM23v3, REsubmission.tex, lines 1695--1777.
 % Scope: the actual first endpoint on periodic chains, including N=2.
-% Source declarations are awaiting native validation; no checked markers yet.
+% Linked declarations and proofs passed exact-tree Lean CI on 2026-10-06.
 
 \subsection{The degenerate mixed endpoint on a ring}
 \label{sec:mpo_joint_periodic_endpoint}
@@ -21,6 +21,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedRowSector_apply,
         MPSTensor.MPOSymmetry.jointMixedColumnSector_apply,
         MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction}
+    \leanok
     \uses{def:mpo_joint_mixed_family,def:mpo_joint_mixed_support}
     Let $r(\mu),c(\mu)\in\{0,1\}$ indicate whether the row and column
     phase of $\mu$ are zero. Their values on $00,01,10,11$ are respectively
@@ -42,6 +43,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedColumnSector_blockInsertedBoundaryMap,
         MPSTensor.MPOSymmetry.jointMixedColumnSector_zero_blockInsertedBoundaryMap,
         MPSTensor.MPOSymmetry.jointMixedRowSector_one_blockInsertedBoundaryMap}
+    \leanok
     \uses{def:mpo_joint_phase_projections}
     Left and right virtual projection give
     $P_xC_x^\mu=r(\mu)C_x^\mu$ and
@@ -58,6 +60,7 @@ overlaps of the original endpoint blocks.
     $C_0\Gamma'_2(X)=R_1\Gamma'_2(X)=\Gamma'_2(X)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:mpo_joint_mixed_family}
     Each mixed letter occupies its indicated virtual corner. Multiplication
     by $P_x$ therefore selects its row or column phase. Cyclicity of the
@@ -79,12 +82,14 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_extendedSupport_starProjection,
         MPSTensor.MPOSymmetry.jointMixedRowSector_commute_parentInteraction_zero,
         MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_parentInteraction_zero}
+    \leanok
     \uses{thm:mpo_joint_phase_boundary}
     The phase selectors are commuting orthogonal projections. Each of
     $R_0,R_1,C_0,C_1$ preserves $S$, commutes with $\Pi_S$, and commutes
     with $h'$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_phase_boundary}
     The diagonal coefficients are real and idempotent. The two boundary
     actions in (\ref{eq:mpo_joint_phase_boundary}) preserve the range, and
@@ -100,12 +105,14 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES,
         MPSTensor.MPOSymmetry.jointMixedEndpointLeftTensor_starProjection_eq_outerCorner,
         MPSTensor.MPOSymmetry.groundSpaceES_jointMixedEndpointLeftTensor_le_extendedSupport}
+    \leanok
     \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_mixed_compression}
     Let $G=\sum_x\mathcal G_2(B_x)$ be the full joint canonical support.
     Then $R_0C_1S=G\subseteq S$ and
     $\Pi_G=R_0C_1\Pi_S$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
         thm:mpo_joint_mixed_compression}
     If $V_x:\C^{D_x^0}\to E_x$ is the first coordinate inclusion, then
@@ -126,6 +133,7 @@ overlaps of the original endpoint blocks.
     \lean{MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection,
         MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection_apply,
         MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport}
+    \leanok
     \uses{def:mpo_joint_phase_projections}
     For $a,b\in\{0,1\}$, set
     $R_0^{(0)}=R_0$, $R_0^{(1)}=I-R_0$,
@@ -145,6 +153,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_eq_iSup_corners,
         MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport_pairwise_isOrtho,
         MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport_false_false}
+    \leanok
     \uses{def:mpo_joint_outer_corners,thm:mpo_joint_phase_boundary,
         thm:mpo_joint_canonical_corner}
     Put $P_x^{(0)}=P_x$ and $P_x^{(1)}=I-P_x$. For arbitrary insertions,
@@ -158,6 +167,7 @@ overlaps of the original endpoint blocks.
     $S=\bigoplus_{a,b}S_{ab}$ is an orthogonal sum and $S_{00}=G$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
         thm:mpo_joint_canonical_corner}
     Subtract the outer boundary actions from the identity to obtain
@@ -178,6 +188,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.parentInteractionES_jointMixedEndpointLeftTensor_le,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_rowSector_one_le_parentInteraction}
+    \leanok
     \uses{thm:mpo_joint_canonical_corner,thm:mpo_joint_phase_boundary}
     With $k=I-\Pi_G$, the actual endpoint satisfies
     \begin{align}
@@ -188,6 +199,7 @@ overlaps of the original endpoint blocks.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_canonical_corner,thm:mpo_joint_phase_reducing}
     The inclusion $G\subseteq S$ reverses the complementary projection
     order. For commuting orthogonal projections $P,Q$,
@@ -204,6 +216,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.JointMixedPeriodicActive,
         MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection,
         MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection_apply}
+    \leanok
     \uses{def:mpo_joint_phase_projections}
     On an $N$-site ring let
     $E_N=\sum_{i\in\Fin{N}}((I-R_i)+(I-C_i))$.
@@ -230,6 +243,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_eq_sum_outer,
         MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_le_twice,
         MPSTensor.MPOSymmetry.one_sub_jointMixedPeriodicActiveProjection_le_twice}
+    \leanok
     \uses{def:mpo_joint_cyclic_penalty,thm:mpo_joint_local_comparison}
     Let $H'_N=\sum_{i\in\Fin{N}}h'_{i,i+1}$, with cyclic indices.
     For every $N\ge2$,
@@ -242,6 +256,7 @@ overlaps of the original endpoint blocks.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_local_comparison}
     Each diagonal summand contributes one precisely when its condition
     fails. An inactive configuration has $n(\sigma)\ge1$, proving
@@ -265,6 +280,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_mul_activeProjection,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_active_of_mem_ker,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_ker_eq}
+    \leanok
     \uses{thm:mpo_joint_cyclic_penalty,thm:mpo_joint_local_comparison,
         thm:mpo_joint_phase_reducing}
     Let $K_N=\sum_i k_{i,i+1}$ be the full joint canonical parent.
@@ -277,6 +293,7 @@ overlaps of the original endpoint blocks.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_cyclic_penalty,
         thm:mpo_joint_local_comparison}
     Translate and sum (\ref{eq:mpo_joint_local_comparison}). Cyclic
@@ -298,6 +315,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_eq,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_eq_actual,
         MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_gap}
+    \leanok
     \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_mixed_compression,
         def:blockwise_product_word_span}
     Suppose that both endpoint families have simultaneous one-site span
@@ -313,6 +331,7 @@ overlaps of the original endpoint blocks.
     Here $\delta$ is one gap for the full joint canonical parent.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_cyclic_penalty,
         thm:mpo_joint_mixed_compression,
         thm:block-parent-uniform-gap-simultaneous-injectivity,

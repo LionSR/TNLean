@@ -12,10 +12,8 @@ complete phase classification.
 
 The isolated branch starts at `476769cd544b256dcd30d1df465f90896ac60db6`,
 whose tree is `08eae47dac442d89a13640c9b3473386f39d0add`.
-The implementation is cloud-only. MPU-gauging source and the import
-generator logic are unchanged. The generated import frontier,
-one strict regression entry, and one chapter include are integrated after
-the parent task's explicit review authorization.
+The implementation is cloud-only. The generated import frontier, one strict
+regression entry, and one chapter include integrate this package.
 
 ## Sibling integration reconciliation
 
@@ -121,46 +119,69 @@ and gap statements are direct. Empty block families are permitted both
 with empty and nonempty physical alphabets. No `NeZero d₀` or nonempty
 label assumption is introduced.
 
-## Regression and validation status
+## Regression and validation
 
 `TNLeanTest/JointMixedEndpointPeriodicGap.lean` uses two scalar blocks with
 physical columns `(1,0)` and `(1,1)`. Their inner product is one, while
 they span the product algebra simultaneously. The regression specializes
 the actual ground-space, common-gap, active-operator and phase-count
 statements to this overlapping family. It checks the two-site count,
-empty labels, zero physical alphabet, and strict standard-axiom guards.
+empty labels, zero physical alphabet, and eleven strict standard-axiom
+outputs, each exactly `propext`, `Classical.choice`, and `Quot.sound`.
+The hash-command style linter is disabled only inside the axiom-check
+section; all other strict regression options are retained.
 
-The focused blueprint leaf is
-`blueprint/src/chapter/ch30_mpo_joint_periodic_endpoint.tex`. It states
-the mathematical restrictions explicitly and contains no checked markers
-until native compilation succeeds.
+The complete proof source was validated at public commit
+`7526a088de379402132b015c8186ec879e07fa42`, corresponding to local commit
+`32824148466899720e3c56177137efede41dca81` and tree
+`ac5687ca14e45044681900f2f9a99268d7e476a6`.
+The tested merge `1e95f7a547c63f7195e768676fde437d0af1bd00` has this same
+exact tree. All eight checks passed in
+[CI run 37446115075](https://github.com/LionSR/TNLean/actions/runs/37446115075).
+The Lean build job, `112211268126`, passed the production build, strict
+regression, compiled blueprint declaration check, style, and timing gates.
+The new production modules took 6.5, 9.3, 10, 12, 11, 12, 33, and 9 seconds
+respectively for the generic helper, selectors, canonical corner, reducing
+sectors, orthogonal corners, projector comparison, periodic sectors, and
+periodic kernel/gap. Each lies below the 50-second changed-module ceiling.
 
-At this source checkpoint, Lean/Lake and cache activity are reserved for
-the parent's serialized build slot. Native checks, strict regression,
-and the affected CI integration remain pending. Documentation checks so
-far are:
+All 88 public declaration owners are compiled and indexed. The focused
+blueprint leaf,
+`blueprint/src/chapter/ch30_mpo_joint_periodic_endpoint.tex`, now marks
+its eleven entries and eight proofs checked. This documentation-only
+checkpoint preserves the validated production and regression source;
+CI for the final documentation head remains pending until publication.
+
+Local bottom-up checks also passed the seven lower production modules.
+The capstone warmup lost its execution handle before elaborating the final
+module; no terminal result is claimed for that interrupted local session.
+The exact-tree CI above supplies the complete proof and guard evidence.
+
+Documentation checks are:
 
 - The changed-declaration source scan reports complete reverse blueprint
-  coverage. The unseeded worktree's all-repository scan reports missing
-  dependency-source references; none belongs to the new leaf.
-- The focused PDF and web builds succeed. All 88 new declaration-owner
-  links occur in the generated HTML. There are no checked markers before
-  native validation.
-- The three new mathematical pages, PDF pages 3–5, were rendered and
-  visually inspected. Their displayed formulas fit the page, references
-  resolve, and the corner boundary is explicitly `P_b X P_a`. The copied
-  context has one overfull box in the existing canonical-gap theorem's
-  long title; the new leaf has none.
+  coverage. Full source synchronization and compiled declaration checking
+  pass in the exact-tree CI environment.
+- The focused PDF and web builds pass with the checked markers. All 88
+  declaration-owner links occur in the generated HTML, with eleven
+  checked entries and eight checked proofs.
+- The three mathematical pages, PDF pages 3–5, were rendered and visually
+  inspected. Their displayed formulas fit the page, references resolve,
+  and the corner boundary is explicitly `P_b X P_a`. The copied context
+  has one overfull box in the existing canonical-gap theorem's long
+  title; the new leaf has none.
 - The native Tenkz event audit passes with no hard errors or advisories.
   The focused context contains one inherited tensor panel; this leaf adds
   no diagram. The supported PDF-to-SVG fallback renders the web panel.
-- Generated HTML passes the repository's raw-source reader checks.
-  Chromium's phone/desktop reader checks are blocked by the executor's
-  denial of singleton socket creation, including an approved escalated
-  launch. No browser success is claimed.
+- Generated HTML passes the repository's raw-source reader checks. The
+  full blueprint job, including browser reader checks, passes in CI.
+  The local Chromium run remains blocked by the executor's denial of
+  singleton socket creation, including an approved escalated launch;
+  no local browser success is claimed.
 - Formatting uses the pinned latexindent 3.24.7 and repository settings.
+  Reader-facing prose, generated import consistency, and whitespace checks
+  pass.
 
-The local documentation evidence is
-`/workspace/shared/glm23-blueprint-validation/joint-periodic-focused/verification.json`.
-It records the exact rendered source and output hashes; it will be refreshed
-after the native checks and final checked-marker update.
+The adjacent validation JSON records the exact Lean and blueprint source
+hashes, CI source and tested-tree identities, focused render hashes,
+declaration owners, and local browser limitation.
