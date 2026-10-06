@@ -10,12 +10,14 @@ local instance : Quiver (TorusVertex 5 5) := torusDualQuiver 5 5
 
 private def patch : TorusDualRectangle 5 5 := ⟨(4, 4), 2, 2, by decide, by decide⟩
 
-private def detour : Quiver.Path (0, 0) (1, 0) :=
+private def detour :
+    @Quiver.Path (ℕ × ℕ) (rectDualQuiver 2 2) (0, 0) (1, 0) :=
   (((Quiver.Path.nil.cons (RectDualStep.north 0 0 (by decide) (by decide))).cons
     (RectDualStep.east 0 1 (by decide) (by decide))).cons
       (RectDualStep.south 1 0 (by decide) (by decide)))
 
-private def straight : Quiver.Path (0, 0) (1, 0) :=
+private def straight :
+    @Quiver.Path (ℕ × ℕ) (rectDualQuiver 2 2) (0, 0) (1, 0) :=
   Quiver.Path.nil.cons (RectDualStep.east 0 0 (by decide) (by decide))
 
 example : TorusDualHomotopy (torusRectInterior (4 : ZMod 5) (4 : ZMod 5) 2 2)
@@ -30,7 +32,8 @@ example : TorusDualHomotopy (torusRectInterior (0 : ZMod 5) (0 : ZMod 5) 2 2)
   rectDualPath_homotopy _ _ _ Quiver.Path.nil
 
 -- Start away from the comb root: the proof must cancel a nonempty prefix.
-private def reverseDetour : Quiver.Path (1, 1) (0, 1) :=
+private def reverseDetour :
+    @Quiver.Path (ℕ × ℕ) (rectDualQuiver 2 2) (1, 1) (0, 1) :=
   (((Quiver.Path.nil.cons (RectDualStep.south 1 0 (by decide) (by decide))).cons
     (RectDualStep.west 0 0 (by decide) (by decide))).cons
       (RectDualStep.north 0 0 (by decide) (by decide)))
@@ -38,7 +41,7 @@ private def reverseDetour : Quiver.Path (1, 1) (0, 1) :=
 example : TorusDualHomotopy (torusRectInterior (4 : ZMod 5) (4 : ZMod 5) 2 2)
     (rectDualPathToTorus (4 : ZMod 5) (4 : ZMod 5) reverseDetour)
     (rectDualPathToTorus (4 : ZMod 5) (4 : ZMod 5)
-      (Quiver.Path.nil.cons (RectDualStep.west 0 1 (by decide) (by decide)))) :=
+      (Quiver.Path.nil.cons (RectDualStep.west (W := 2) (H := 2) 0 1 (by decide) (by decide)))) :=
   patch.homotopy reverseDetour _
 
 example (P : TorusDualRectangle 5 5) {a b : ℕ × ℕ}

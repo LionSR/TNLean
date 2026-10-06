@@ -176,10 +176,23 @@ The continuation under \ghissue{8703} and \ghissue{8271} is to extend these
 precisely stated boundaries when the wider source setting is required,
 rather than introduce a flatness assumption or a supplied gauge witness
 into the geometric deformation theorem.
-\end{document}
 
-% 2026-10-06 continuation checkpoint: TorusDualRectangle and
-% TorusDualRectangleFlux propose the embedded rectangular bulk specialization
-% by bottom-row/column comb normalization. Local Lean checking is blocked by
-% unavailable pinned Mathlib artifacts; no source-gap closure or leanok claim.
-% See docs/audits/2026-10-06_scp10_finite_rectangle_checkpoint.md.
+\section{Finite rectangular continuation}
+A separate finite rectangular specialization is under verification.
+Choose a translated lifted rectangle $[0,W]\times[0,H]$ with $W<w$ and
+$H<h$, retain the four unit-step labels, and require both paths to have
+the same lifted endpoints. A bottom-row and column comb reduces the
+paths by adjacent-square exchanges and backtrack cancellations.
+The permitted swept primal sites form the whole rectangular interior
+$R=\{(x_0+i+1,y_0+j+1):i<W,\ j<H\}$, with coordinates reduced modulo
+the two periods. The contraction statement requires virtual invariance
+at every site of this chosen $R$. Arbitrary fixed exterior matrices are
+allowed only on bonds whose two endpoints both lie outside $R$.
+
+This specialization does not assert deformation avoiding an arbitrary
+region, equality of winding classes, an open-boundary theorem, or equality
+with a vacuum reduced density matrix. Its candidate declarations have
+not yet passed the strict compilation and axiom checks; the unrestricted
+source gap remains open.
+
+\end{document}

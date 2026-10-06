@@ -27,7 +27,8 @@ variable {Phys : TorusVertex width height → Type*}
 local notation "X" => TorusVertex width height
 
 /-- Equal lifted endpoints in an embedded rectangle suffice for equality of
-actual contractions, with site invariance required only on swept primal sites.
+actual contractions, with site invariance on the whole chosen rectangle interior.
+Exterior matrices are unrestricted on bonds with both endpoints outside that interior.
 The homotopy is derived from the paths, rather than supplied as a hypothesis. -/
 theorem TorusDualRectangle.torusBondNetwork_eq_with_exterior
     (P : TorusDualRectangle width height) {a b : ℕ × ℕ}
