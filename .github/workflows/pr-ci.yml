@@ -642,6 +642,17 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Build continuous physical string-order targets
+        run: lake build TNLean.MPS.Symmetry.ContinuousStringOrder
+
+      - name: Test continuous physical string order strictly
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ContinuousStringOrder.lean
+
       - name: Test example physical states and operators
         timeout-minutes: 5
         run: |

@@ -437,6 +437,35 @@ products of $D^2$ Hermitian one-site operators. Arbitrary virtual boundaries
 need not have Hermitian product representatives, so that nonvanishing
 statement is separate from exact realization.
 
+\section{Effective continuous generators}
+
+For the continuous criterion in source lines~352--359, the scalar virtual
+line is excluded explicitly: $H\notin\C\Id$.  With
+$F_{(a,b),i}=(A_i)_{ab}$ and $L=H\otimes\Id-\Id\otimes\overline H$,
+the Gram matrix $FF^\dagger$ is a realignment of the source transfer matrix,
+not the same matrix.  Their commutators have corresponding realigned entries.
+The supported Hermitian lift $K_0$ satisfies $FK_0=LF$ and vanishes on
+$\ker F$.  The physical row generator is $K=K_0^{\mathsf T}$, so its action
+is zero on $\overline{\ker F}$.  Identity action on that unused physical
+support is the convention for the constructed symmetry; this introduces no
+new counterexample to the source.
+
+Canonical purity makes $K$ nonscalar whenever $H$ is nonscalar.  Otherwise
+$[H,A_i]=cA_i$ would give $H-\mathcal E(H)=c\Id$; stationarity gives $c=0$,
+and fixed-space simplicity makes $H$ scalar.  A nonzero derivative of a
+matrix-unit commutator then makes $\exp(itK)$ nonscalar at every sufficiently
+small nonzero real $t$.  The exact, unphased covariance gives
+\begin{align}
+ \lim_{N\to\infty}S_N(\Id,\Id,\exp(itK))
+ &=\left|\operatorname{tr}(\Lambda\exp(itH))\right|^2>0.
+ \notag
+\end{align}
+The positivity holds near zero by continuity and $\operatorname{tr}\Lambda=1$.
+This establishes the effective-generator forward implication with Hermitian
+identity endpoints.  It does not classify arbitrary physical stabilizers on
+unused support, prove a converse for them, or exchange the limits in $t$ and
+$N$.  The earlier literal scalar-phase correction remains unchanged.
+
 \section{Verdict and remaining scope}
 
 The projective convention is explicit in the physical definition and in its
