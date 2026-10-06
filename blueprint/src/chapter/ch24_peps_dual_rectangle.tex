@@ -1,0 +1,58 @@
+% SCP10 arXiv:1001.3807v3, Lemma 6.14, paper_v3.tex:2199--2214.
+% Candidate finite-rectangle specialization. Lean compilation is blocked by
+% unavailable pinned Mathlib cache; intentionally no leanok or lean tags yet.
+\begin{theorem}[Deformation inside an embedded rectangular dual patch]%
+    \label{thm:peps_dual_rectangle}
+    \notready
+    \uses{def:peps_dual_flux_homotopy}
+    Fix a dual plaquette $(x_0,y_0)$ and integers $0\leq W<w$,
+    $0\leq H<h$. Embed the closed rectangle
+    $D=\{0,\ldots,W\}\times\{0,\ldots,H\}$ by
+    $\iota(i,j)=(x_0+i,y_0+j)$ modulo $(w,h)$, and put
+    $R=\{\iota(i+1,j+1):0\leq i<W,\ 0\leq j<H\}$.
+    Every two labelled unit-step paths in $D$ with the same lifted
+    endpoints have projections related by $\sim_R$.
+    This is the rectangular bulk specialization of
+    \cite[Lemma~6.14]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}
+    Let $C_{i,j}$ run along the bottom row from $(0,0)$ to $(i,0)$,
+    then up to $(i,j)$. Interchanging an east edge with a column of
+    height $j$ uses exactly the $j$ adjacent squares. Hence
+    $C_a e\sim_R C_b$ for an east edge $e:a\to b$.
+    The north-edge identity holds directly; west and south follow
+    by cancelling an edge with its reverse. Induction on the steps
+    of $p:a\to b$ gives $C_a p\sim_R C_b$.
+    Thus $C_a p\sim_R C_a q$; prepend $C_a^{-1}$ and cancel
+    its successive backtracks. The bounds $W<w$ and $H<h$ make
+    $\iota$ injective on $D$. No periodic-endpoint identification
+    replaces equality of the lifted endpoints.
+\end{proof}
+
+% Ink-to-index: all dotted arrows are dual geometric routes, with no tensor
+% indices or physical legs. In each panel a=(0,0), b=(1,2); vertical drawing
+% rows decrease as lifted j increases. The two square centers s_1=(1,1),
+% s_2=(1,2) are primal-site labels in the lower-left-plaquette convention.
+% The rectangle is two squares high and one square wide. The left route is
+% N,N,E; the right route E,N,N. Only these two primal sites are swept.
+% This depicts the column/east exchange, not the whole arbitrary-path proof.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[size=m, rows={wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
+        \tnwire[kind=string, stroke=dotted, route=orth, dir=to,
+            name=rectColumnEast, via={(2,2)}]{(6,2)}{(2,6)}
+        \tnmark[form=label, label pos=225]{(6,2)}{$a$}
+        \tnmark[form=label, label pos=45]{(2,6)}{$b$}
+        \tnmark[form=label]{(5,4)}{$s_1$}
+        \tnmark[form=label]{(3,4)}{$s_2$}
+    \end{tenkz}
+    $\quad\sim_R\quad$
+    \begin{tenkz}[size=m, rows={wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
+        \tnwire[kind=string, stroke=dotted, route=orth, dir=to,
+            name=rectEastColumn, via={(6,6)}]{(6,2)}{(2,6)}
+        \tnmark[form=label, label pos=225]{(6,2)}{$a$}
+        \tnmark[form=label, label pos=45]{(2,6)}{$b$}
+        \tnmark[form=label]{(5,4)}{$s_1$}
+        \tnmark[form=label]{(3,4)}{$s_2$}
+    \end{tenkz}
+\end{tenkzequation}

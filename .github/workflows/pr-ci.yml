@@ -677,7 +677,7 @@ jobs:
           trap 'rm -rf "$test_root"' EXIT
           mkdir -p "$test_root/TNLeanTest"
           export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
-          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
+          for example in TorusDualFluxString TorusDualFluxParent TorusDualRectangle QuantumDoublePhysicalTerms; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \

@@ -399,6 +399,8 @@ import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
 import TNLean.PEPS.TorusDualPath
+import TNLean.PEPS.TorusDualRectangle
+import TNLean.PEPS.TorusDualRectangleFlux
 import TNLean.PEPS.TorusDualWinding
 import TNLean.PEPS.TorusEdgeAbsorbed
 import TNLean.PEPS.TorusEdgeBlockingCrossing
