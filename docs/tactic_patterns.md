@@ -2739,6 +2739,10 @@ three-plaquette output measurement, and the routed reunion measurement.
   captured rather than threaded through the lemma signature.
   `neighboringOperator_entry_eq_of_heq` stays: its conclusion is indexed by a
   sector pair, not a single index family.
+- **Upstream reuse (2026-10-05):** the unchanged generic `Matrix.entry_eq_of_heq`
+  now belongs to `QICLean/Algebra/MatrixDependentEntries.lean`. The original MPDO
+  module imports it, preserving the same name and binders for every existing consumer.
+  Actual varying-bond interval identification uses the same coordinate transport.
 
 ### MPDO pair-trace separation duality
 - **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,

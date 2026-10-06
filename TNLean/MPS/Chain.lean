@@ -18,6 +18,7 @@ import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.FundamentalTheorem
 import TNLean.MPS.Chain.Interval
 import TNLean.MPS.Chain.OneSidedInverse
+import TNLean.MPS.Chain.RectangularIntervals
 import TNLean.MPS.Chain.SiteIndependent
 import TNLean.MPS.Chain.TensorEquality
 import TNLean.MPS.Chain.Transfer
