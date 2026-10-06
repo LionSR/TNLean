@@ -10,7 +10,7 @@
         TNLean.PEPS.DependentBondNetwork.deltaExteriorConfig,
         TNLean.PEPS.DependentBondNetwork.deltaCompletedTensor,
         TNLean.PEPS.DependentBondNetwork.internalBondMatrices}
-    \notready
+    \leanok
     For a region $R$ in a finite directed multigraph, assign an independent
     virtual index to every incidence at every vertex of $R$. Fix the indices
     on region-side incidences of crossing bonds to boundary data $\theta$.
@@ -21,7 +21,7 @@
 \begin{theorem}[Exact delta-exterior completion]
     \label{thm:peps_labelled_open_delta}
     \lean{TNLean.PEPS.DependentBondNetwork.network_deltaCompletedTensor}
-    \notready
+    \leanok
     \uses{def:peps_labelled_open_coefficient}
     Fix a virtual label $v_0$. Replace every exterior site by a delta tensor
     fixing each incidence opposite $R$ to its prescribed boundary label,
@@ -29,7 +29,7 @@
     matrices and insert identity matrices on all other bonds. The closed
     contraction equals the open coefficient exactly, with no scalar factor.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Split the site assignments into region and exterior assignments.
     The exterior deltas leave one assignment. Identity matrices on crossing
     bonds impose the boundary constraints, while those on exterior bonds
@@ -42,7 +42,7 @@
         TNLean.PEPS.torusOpenCoefficient,TNLean.PEPS.torusDeltaCompletedTensor,
         TNLean.PEPS.TorusDualCollar,TNLean.PEPS.TorusDualCollar.region,
         TNLean.PEPS.TorusDualCollar.swept,TNLean.PEPS.torusDualFluxBondMatrices}
-    \notready
+    \leanok
     \uses{def:peps_labelled_open_coefficient,def:peps_dual_rectangle_comb}
     Native horizontal and vertical bond labels retain their direction and
     endpoint polarity. The four incidence labels at a site are ordered
@@ -60,7 +60,7 @@
         TNLean.PEPS.TorusDualCollar.incident_internal,
         TNLean.PEPS.TorusDualCollar.noninternal_outside,
         TNLean.PEPS.torusOpenCoefficient_eq_zero_of_isEmpty}
-    \notready
+    \leanok
     \uses{def:peps_dual_collar,thm:peps_labelled_open_delta}
     The labelled contraction equals the native four-leg contraction, so the
     delta-completion identity holds in native coordinates as well.
@@ -69,7 +69,7 @@
     outside the swept support. For an empty virtual alphabet the open
     coefficient is zero, since the collar contains an incidence.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Regroup the four anchored bond endpoints at each vertex and read their
     incident site coordinates. The collar bounds follow directly from the
     lifted coordinate ranges. A noninternal bond incident to a swept site
@@ -80,7 +80,7 @@
     \lean{TNLean.PEPS.TorusDualCollar.exists_internalFluxGauge,
         TNLean.PEPS.TorusDualCollar.openCoefficient_eq,
         TNLean.PEPS.TorusDualCollar.correlatedBoundary_eq}
-    \notready
+    \leanok
     \uses{thm:peps_dual_collar_geometry,thm:peps_dual_rectangle,
         thm:peps_dual_flux_deformation}
     Two labelled unit-step paths with the same lifted endpoints in the
@@ -90,7 +90,7 @@
     after contraction against any joint boundary tensor, without a
     factorization hypothesis or a nonempty virtual-alphabet assumption.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Derive the supported gauge from the rectangular homotopy. Both endpoints
     of crossing bonds are outside its support, so their gauge values are
     identity. Complete the fixed physical coefficient by exterior delta
