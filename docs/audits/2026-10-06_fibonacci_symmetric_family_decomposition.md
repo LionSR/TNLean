@@ -131,8 +131,9 @@ Fibonacci change adds no job, dependency pin, or timeout. The packet contains on
 theorem in 86 production lines and five examples plus a guarded
 logical-dependency report in 88 regression lines.
 
-The new theorem and proof deliberately have no `\leanok` markers pending
-native validation. Previously checked decomposition entries are unchanged.
+The new theorem and proof receive `\leanok` markers after the compiled
+validation recorded below. Previously checked decomposition entries are
+unchanged.
 No Lean or Lake command was run during the original integration. The
 subsequent CI results below distinguish production elaboration from the
 still-pending complete regression pass.
@@ -162,6 +163,18 @@ in the anonymous empty-subtype binder. Naming it `_x` preserves the exact
 predicate and suppresses the intended unused-binder warning. The pinned
 Lean parser accepts this binder form; the full regression still awaits CI.
 
+The complete repaired proof and regression now pass at public head
+`5914f509b0db3ded35be53bf0c008810f7f510a1`, tree
+`341ce9cc04e448ba795a4870298edd54f4248588`, in run `37443676408`, build
+job `112203387512`. The checkout log identifies merge
+`c1db2c24d97c20db67099ebc084b7eeea32a6ae8`, whose tree is exactly the
+head tree. The production module takes 2.8 seconds; all five regression
+examples and the strict three-standard-axiom guard pass. The compiled
+blueprint and paper-gap declaration checks, style check, and changed-file
+timing check also pass. The full blueprint job is separate and was still
+running when these checked markers were prepared. The final documentation
+head requires a fresh complete CI run; no new main merge is claimed.
+
 Source checks passed: generated-import coverage (71 aggregators, 2765
 production modules), the existing strict-loop YAML and regression entry,
 unique ownership of the new theorem, all seven distinct references in the
@@ -190,18 +203,21 @@ Both changed TeX files pass the pinned latexindent 3.24.7 byte comparison.
 A focused fixture containing the complete owned fragment and its referenced
 statements renders to a nine-page XeLaTeX PDF and six plasTeX HTML pages.
 The two physical PDF pages containing the new theorem and proof were
-visually inspected; the new entry has no checked badge. All five fragment
+visually inspected again with the checked statement and proof badges. All five fragment
 labels appear in the HTML, with no broken local anchors, duplicate IDs,
 unresolved-reference sentinels, or renderer errors. Two overfull boxes of
 0.23 and 1.48 points occur only in copied prerequisite context. Inherited
 diagrams use the supported XeLaTeX/PDF conversion fallback because dvisvgm
 is absent. No new tensor diagram was needed. No browser inspection was run.
 
-The render is reused after the baseline merge: the owned fragment is
-byte-identical, with SHA-256
-`e694bdc8c7a84e9a252b55ee6b3777ff1feaa060ff7f86a88792cc453a06299a`,
-and none of the six source files supplying the copied prerequisite context
-changed in the merge. The fixture's context SHA-256 is
+The initial unmarked render was reused after the baseline merge because
+the fragment and all six source files supplying its prerequisite context
+were unchanged. The final checked render was regenerated. Its fragment
+SHA-256 is `7956c93dd4bbea78a87484d707d147badfb9af6b32132eacc8b9ba89e8bb4f44`;
+the PDF SHA-256 is
+`48ce8e1f546ac1dffb20548149e42e1677ce8f309769b0c8fc54a501f9a95b67`.
+Both `id` and standard named bibliography anchors were checked in all six
+HTML pages. The fixture's unchanged context SHA-256 is
 `60fc7f763a84b9d6475deb793f8c750fd1e235a87000547e42f2c6ca8381ac9a`.
 
 The separate paper-gap PDF attempt stopped because `dsfont.sty` is absent
