@@ -5444,3 +5444,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The scalar rate conversion likewise reuses
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
+
+### Norm gaps under isometric conjugacy — candidate (2026-10-06)
+
+- **Pattern:** Derive kernel membership from the conjugacy identity, transport
+  orthogonality by inner-product preservation, and then transport the norm bound.
+- **Seen:** Two identical biconditional proofs in
+  `MixedEndpointCoreHamiltonianSpectators.lean` and
+  `JointMixedEndpointCoreHamiltonian.lean`, both named
+  `norm_gap_iff_of_isometric_conj` and private to their modules.
+- **Abstraction:** A public `LinearIsometryEquiv` norm-gap equivalence would
+  replace both helpers when another consumer needs this precise assertion.
+- **Notes:** The dependent projection identification itself is already shared
+  as `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; its two edge consumers
+  use that theorem rather than repeat the orthogonal-projection proof.

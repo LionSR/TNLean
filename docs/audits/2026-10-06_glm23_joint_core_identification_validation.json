@@ -1,0 +1,78 @@
+{
+  "base_commit": "7b6bbfab322bb2dbd2571606d4f4f11db060ceac",
+  "source_head": "1c74aadd285a9196ff9a587baf2010bc72a72e3b",
+  "scope": "Explicit normalized support-constraint sums, concrete all-ordered-pair core identity, and exact normalized gap equivalence. Actual physical Hamiltonian identification remains separate.",
+  "source_sha256": {
+    "TNLean/MPS/ParentHamiltonian/Martingale/DependentSpectatorProjections.lean": "81ed031ed520bb0c447fd6f037543ceed7b1b70e0e6bb55b012cc907e2e2ff93",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCoreEdges.lean": "b00e57b8e354edc27fa12a24f1790f39d2e810e8e2c2ad1e35ef0da69e28e0d2",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCoreHamiltonian.lean": "3fee2e6f52a690daf2239b6a5f7874994db842eefef9310f96d56f807b48d6e6",
+    "TNLeanTest/JointMixedEndpointCoreHamiltonian.lean": "f9c23677cee86fdf464aa22c23951be5a46d0332afea92e9d29322966601e8f2",
+    "blueprint/src/chapter/ch30_mpo_joint_core_hamiltonian.tex": "e495d2b467e459c1626c14c85b6e3d7e94459bdb29d3a930de9d2653e9855a81"
+  },
+  "native_lean_validation": {
+    "status": "pending_parent_coordinated_read_only_probe",
+    "module_builds": "pending",
+    "guard_count": 5,
+    "expected_foundations": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "worker_lean_or_lake_commands": 0
+  },
+  "static": {
+    "forbidden_proof_tokens": "passed",
+    "generated_imports": "passed",
+    "noncomment_line_lengths": "passed",
+    "file_size": "passed",
+    "reader_facing_prose": "passed",
+    "latexindent_3_24_7": "passed"
+  },
+  "blueprint_source": {
+    "global_sync": "passed_with_manifest_identical_pinned_dependency_sources",
+    "new_public_declarations": 48,
+    "reverse_coverage": "passed",
+    "duplicate_owners": 0,
+    "leanok_markers": 0,
+    "report": "/workspace/shared/glm23-core-validation/source-sync.json"
+  },
+  "focused_render": {
+    "source_head": "1c74aadd285a9196ff9a587baf2010bc72a72e3b",
+    "html_pages": [
+      "ch-mpo_symmetry_basics.html",
+      "sect0001.html",
+      "index.html",
+      "dep_graph_document.html"
+    ],
+    "missing_local_anchors": [],
+    "duplicate_ids": [],
+    "sentinels": [],
+    "leaf_labels": 16,
+    "missing_leaf_labels": [],
+    "tenkz_svg": [],
+    "native_pdf_pages": 7,
+    "inspected_physical_pdf_pages": [
+      3,
+      4,
+      5
+    ],
+    "native_log_warnings": [
+      "Overfull \\hbox (7.55418pt too wide) in paragraph at lines 5--10"
+    ],
+    "source_leaf_sha256": {
+      "ch30_mpo_joint_core_hamiltonian.tex": "e495d2b467e459c1626c14c85b6e3d7e94459bdb29d3a930de9d2653e9855a81"
+    },
+    "checked_markers": {
+      "ch30_mpo_joint_core_hamiltonian.tex": 0
+    },
+    "formatter_version": "3.24.7",
+    "formatter_byte_comparison": "passed",
+    "native_tenkz_audit": "No new tensor diagram: the explicit coordinate and operator formulas carry this leaf.",
+    "browser_visual_inspection": false,
+    "source_sync_passed": true,
+    "target_leaf_warnings": [],
+    "context_only_warnings": [
+      "Overfull \\hbox (7.55418pt too wide) in paragraph at lines 5--10"
+    ]
+  }
+}
