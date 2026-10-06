@@ -1,5 +1,7 @@
 import TNLean.PEPS.TorusDualOpenDeformation
 
+/-! Regressions and axiom audits for the native collared open-boundary specialization. -/
+
 open TNLean.PEPS.DependentBondNetwork
 
 #print axioms network_deltaCompletedTensor
@@ -39,7 +41,7 @@ example (A : (v : (Set.univ : Set Unit)) →
     (θ : RegionBoundaryEndpoint (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) Set.univ → Fin 2) :
     network (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) (fun _ ↦ Fin 2)
       (deltaCompletedTensor _ _ Set.univ A 0 θ)
-      (internalBondMatrices _ _ Set.univ O) (fun _ ↦ PUnit.unit.{1}) =
+      (internalBondMatrices (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) Set.univ O) (fun _ ↦ PUnit.unit.{1}) =
       openCoefficient _ _ Set.univ A O θ :=
   network_deltaCompletedTensor _ _ Set.univ A O 0 θ
 
@@ -51,5 +53,4 @@ example (A : collar.region → (Empty × Empty × Empty × Empty) → ℂ)
   torusOpenCoefficient_eq_zero_of_isEmpty _ ⟨collar.patch.origin, collar.origin_mem⟩ A O θ
 
 #print axioms torusOpenCoefficient_eq_zero_of_isEmpty
-set_option pp.proofs true in
-#print TorusDualCollar.openCoefficient_eq
+#check TorusDualCollar.openCoefficient_eq

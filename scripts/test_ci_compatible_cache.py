@@ -380,6 +380,8 @@ class WorkflowTests(unittest.TestCase):
                     self.assertNotIn('continue-on-error', step)
                     run = step['run']
                     target = 'lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean'
+                    self.assertIn('python3 scripts/check_collared_open_axioms.py', run)
+                    self.assertIn('tee -a "$RUNNER_TEMP/collared-open-check.log"', run)
                     self.assertLess(run.index('test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'), run.index(target))
                     self.assertLess(run.index(target), run.index('lake env lean'))
                     for flag in ['set -eo pipefail', '-DwarningAsError=true',

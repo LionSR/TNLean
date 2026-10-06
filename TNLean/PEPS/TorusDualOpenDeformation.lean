@@ -77,7 +77,7 @@ theorem TorusDualCollar.exists_internalFluxGauge
   · obtain ⟨ht, hh⟩ := C.noninternal_outside e he
     simp [internalBondMatrices, he, hk _ ht, hk _ hh]
 
-variable {Phys : X → Type*}
+variable {Phys : TorusVertex width height → Type*}
 
 open Classical in
 /-- Actual open coefficients agree for arbitrary labelled paths with the same

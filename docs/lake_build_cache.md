@@ -185,5 +185,13 @@ exactly the regression file's imports. Only after these complete import
 closures are rebuilt does it elaborate `TNLeanTest/TorusDualRectangle.lean`
 with strict options and warnings as errors. The workflow guard tests check
 this narrow exception's order, module targets, regression path, imports, and
-failure behavior. All other direct Lean regressions remain after the full
-root build. No dependency pin or artifact provenance rule changes.
+failure behavior.
+
+The collared open-boundary check follows the same provenance pruning and
+explicit Mathlib cache guard. Its fail-fast Lake target is
+`TorusDualOpenDeformation`, the sole regression import, so all four new production
+modules and their complete import closures are rebuilt before strict elaboration.
+The regression prints eight axiom audits; `check_collared_open_axioms.py` requires
+all eight and rejects every axiom outside `propext`, `Classical.choice`, and
+`Quot.sound`, including `sorryAx`. All other direct Lean regressions remain after
+the full root build. No dependency pin or artifact provenance rule changes.
