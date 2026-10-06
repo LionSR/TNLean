@@ -131,18 +131,18 @@ theorem exists_step_unitary (hd : 0 < d) {r D' : ℕ} {enc : Fin D' → Cfg d r}
 
 /-! ### The staircase -/
 
-/-- **The staircase circuit of an isometric chain.** Let `r ≥ 2`, and let `enc` encode the bond
-levels `Fin D'` injectively in the configurations of `r` sites. There are `K₀`, `K₁` such
-that for every `n ≥ r` and every chain `Q₀, …, Q_{n-1}` with bonds `b₀ = 1, b₁, …, b_n`, every
+/-- **The staircase circuit of an isometric chain.** Let `r ≥ 2`. There are `K₀`, `K₁`,
+depending only on `d` and `r`, such that for every `D' ≥ 1`, every `enc` encoding the bond
+levels `Fin D'` injectively in the configurations of `r` sites, every `n ≥ r` and every chain `Q₀, …, Q_{n-1}` with bonds `b₀ = 1, b₁, …, b_n`, every
 site vanishing on the rows beyond its left bond and isometric on its right bond, there is a
 unitary `U` on `n` sites, a product of at most `K₀ + (n - r) K₁` gates on neighbouring sites,
 with `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}` for every `x < b_n`.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the isometries `V_i` of
 eq. (14) applied in sequence, each acting on the bond register and one site. -/
-theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
-    {enc : Fin D' → Cfg d r} (henc : Function.Injective enc) :
-    ∃ K₀ K₁ : ℕ, ∀ n, r ≤ n → ∀ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D' n),
+theorem exists_staircase (hd : 0 < d) {r : ℕ} (hr : 2 ≤ r) :
+    ∃ K₀ K₁ : ℕ, ∀ {D' : ℕ} (hD' : 0 < D') {enc : Fin D' → Cfg d r}, Function.Injective enc →
+      ∀ n, r ≤ n → ∀ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D' n),
       b 0 = 1 → (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
       (∀ p, IsIsometryOn (b p.succ) (Q p)) →
       ∃ U : Matrix (Cfg d n) (Cfg d n) ℂ, IsPairProduct d n (K₀ + (n - r) * K₁) U ∧
@@ -151,7 +151,7 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
   classical
   obtain ⟨K₀, hK₀⟩ := exists_isPairProduct (n := r) hd (by omega)
   obtain ⟨K₁, hK₁⟩ := exists_isPairProduct (n := r + 1) hd (by omega)
-  refine ⟨K₀, K₁, fun n hn => ?_⟩
+  refine ⟨K₀, K₁, fun {D'} hD' {enc} henc n hn => ?_⟩
   induction n, hn using Nat.le_induction with
   | base =>
     intro b Q hb0 hrow hiso

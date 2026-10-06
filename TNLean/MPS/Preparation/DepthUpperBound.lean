@@ -354,7 +354,7 @@ theorem exists_isPreparedInDepth_approximatingMPVState (d D : ℕ) :
   obtain ⟨dig⟩ : Nonempty (Fin D ↪ Cfg d D) :=
     Function.Embedding.nonempty_of_card_le (by simpa using hDd)
   have hdig : Function.Injective dig := dig.injective
-  obtain ⟨Cb, hCb⟩ := exists_blockUnitary hd (r₁ := D) (by omega) hdig hD
+  obtain ⟨Cb, hCb⟩ := exists_blockUnitary hd (r₁ := D) (by omega) hD
   obtain ⟨Kw, hKw⟩ := exists_isPairProduct (n := D + D) hd (by omega)
   refine ⟨Cb + Kw, fun A σ hσ htr q hq hinj M _ => ?_⟩
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd hdig (fixedPointPair σ)
@@ -363,7 +363,7 @@ theorem exists_isPreparedInDepth_approximatingMPVState (d D : ℕ) :
   have hq0 : 0 < q := by omega
   obtain ⟨b, Q, hb0, hbq, -, hrow, -, hiso, hVQ⟩ :=
     exists_isometric_chain_polarIsoMatrix A hq0 hinj
-  obtain ⟨U, hUpp, hUQ⟩ := hCb q hq b Q hb0 hbq hrow hiso
+  obtain ⟨U, hUpp, hUQ⟩ := hCb hdig q hq b Q hb0 hbq hrow hiso
   have hU : ∀ l r τ, U τ (blockInputCfg hd q dig l r) =
       polarIsoMatrix (blockTensor A q) ((decodeBlockEquiv d q).symm τ)
         (finProdFinEquiv (l, r)) := fun l r τ => by

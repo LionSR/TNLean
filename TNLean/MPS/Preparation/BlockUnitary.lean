@@ -157,17 +157,17 @@ theorem inputCfg_comp_routePerm (hd : 0 < d) {r₁ q : ℕ} (hq : 3 * r₁ ≤ q
 
 /-! ### The block unitary -/
 
-/-- **The unitary of a block.** Let `D ≤ d^{r₁}` through an injective `dig`, `r₁ ≥ 1`. There is
-`C` such that for every `q ≥ 3 r₁` and every isometric chain `Q₀, …, Q_{q-1}` with bonds
+/-- **The unitary of a block.** Let `r₁ ≥ 1` and `D ≥ 1`. There is `C`, depending only on `d`,
+`D` and `r₁`, such that for every injective `dig : Fin D → Cfg d r₁`, every `q ≥ 3 r₁` and every
+isometric chain `Q₀, …, Q_{q-1}` with bonds
 `b₀ = 1`, `b_q = D²` (as produced by the sequential factorization), there is a unitary `U` on
 `q` sites, a product of at most `C q` gates on neighbouring sites, with
 `⟨σ| U |l, 0 ⋯ 0, r⟩ = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0,(l,r)}`.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit": each block unitary is a staircase of
 the isometries of eq. (14), with SWAP gates bringing its two inputs together, of depth `O(q)`. -/
-theorem exists_blockUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁) {dig : Fin D → Cfg d r₁}
-    (hdig : Function.Injective dig) (hD : 0 < D) :
-    ∃ C : ℕ, ∀ q, 3 * r₁ ≤ q → ∀ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
+theorem exists_blockUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁) (hD : 0 < D) :
+    ∃ C : ℕ, ∀ {dig : Fin D → Cfg d r₁}, Function.Injective dig → ∀ q, 3 * r₁ ≤ q → ∀ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
       b 0 = 1 → b (Fin.last q) = D * D →
       (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
       (∀ p, IsIsometryOn (b p.succ) (Q p)) →
@@ -175,15 +175,14 @@ theorem exists_blockUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁) {dig 
         ∀ l r σ, U σ (blockInputCfg hd q dig l r) =
           eval Q σ ⟨0, Nat.mul_pos hD hD⟩ (finProdFinEquiv (l, r)) := by
   classical
+  obtain ⟨K₀, K₁, hK⟩ := exists_staircase hd (r := r₁ + r₁) (by omega)
+  refine ⟨K₀ + K₁ + 2 * r₁, fun {dig} hdig q hq b Q hb0 hbq hrow hiso => ?_⟩
   set enc : Fin (D * D) → Cfg d (r₁ + r₁) := fun x =>
     twoCfg dig (finProdFinEquiv.symm x).1 (finProdFinEquiv.symm x).2 with henc
   have hencinj : Function.Injective enc := fun x x' h => by
     obtain ⟨h1, h2⟩ := twoCfg_injective hdig h
     exact finProdFinEquiv.symm.injective (Prod.ext h1 h2)
-  obtain ⟨K₀, K₁, hK⟩ := exists_staircase hd (r := r₁ + r₁) (by omega) (Nat.mul_pos hD hD)
-    hencinj
-  refine ⟨K₀ + K₁ + 2 * r₁, fun q hq b Q hb0 hbq hrow hiso => ?_⟩
-  obtain ⟨U, hU, hUQ⟩ := hK q (by omega) b Q hb0 hrow hiso
+  obtain ⟨U, hU, hUQ⟩ := hK (Nat.mul_pos hD hD) hencinj q (by omega) b Q hb0 hrow hiso
   have hτpp := isPairProduct_permOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
   have hin := inputCfg_comp_routePerm hd hq dig
   generalize routePerm q (q - (r₁ + r₁)) r₁ = τ at hτpp hin
