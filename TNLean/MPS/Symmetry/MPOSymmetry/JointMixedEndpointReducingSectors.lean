@@ -23,7 +23,8 @@ namespace MPSTensor.MPOSymmetry
 
 variable {d₀ d₁ r N : ℕ} {D₀ D₁ : Fin r → ℕ}
 
-private theorem binaryDiagonal_isSymmetricProjection
+/-- A diagonal operator with entries zero or one is an orthogonal projection. -/
+theorem binaryDiagonal_isSymmetricProjection
     {ι : Type*} [Fintype ι] [DecidableEq ι] (f : ι → ℂ)
     (hf : ∀ i, f i = 0 ∨ f i = 1) :
     (Matrix.toEuclideanLin (Matrix.diagonal f)).IsSymmetricProjection := by

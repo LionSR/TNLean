@@ -24,6 +24,16 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Binary diagonal orthogonal projections — promoted (2026-10-06)
+
+- **Pattern:** Prove idempotence and symmetry of a diagonal Euclidean
+  operator by splitting each entry into zero or one.
+- **Seen:** The row/column sectors and the joint open-chain site factors.
+- **Abstraction:** `MPSTensor.MPOSymmetry.binaryDiagonal_isSymmetricProjection`
+  in `JointMixedEndpointReducingSectors.lean` is now public; the open-chain
+  factors reuse it instead of copying its proof.
+- **Validation:** Source refactor only; native elaboration is pending.
+
 ### Simultaneous permutation invariance of matrix entries — promoted (2026-10-03)
 
 - **Pattern:** Convert simultaneous invariance of matrix entries into commutation

@@ -249,7 +249,7 @@ theorem siteMatrixES_isSymmetricProjection (k : Fin N)
     simpa only [Pi.mulSingle_eq_same] using hP
   · rw [Pi.mulSingle_eq_of_ne hj]
     rw [Matrix.toEuclideanLin, Matrix.toLpLin_one]
-    exact ⟨isIdempotentElem_one, LinearMap.IsSymmetric.id⟩
+    exact ⟨IsIdempotentElem.one, LinearMap.IsSymmetric.id⟩
 
 /-- A matrix on a site outside a cyclic interaction window commutes with that
 interaction. The local matrix and the interaction need not be diagonal. -/
@@ -266,7 +266,7 @@ theorem commute_siteMatrixES_periodicLocalInteractionES_of_notMem
       QuantumCircuit.supportedOperators d ({k} : Set (Fin N)) := by
     apply QuantumCircuit.finKronecker_mem_supportedOperators
     intro j hj
-    exact Pi.mulSingle_eq_of_ne (by simpa only [Set.mem_singleton_iff] using hj)
+    exact Pi.mulSingle_eq_of_ne (by simpa only [Set.mem_singleton_iff] using hj) M
   have hd : Disjoint ({k} : Set (Fin N))
       (Set.range (fun r : Fin R => cyclicForwardSite i r.val)) := by
     rw [Set.disjoint_left]

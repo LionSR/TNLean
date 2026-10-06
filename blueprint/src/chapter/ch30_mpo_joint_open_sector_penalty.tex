@@ -1,0 +1,204 @@
+% Source context: GLM23, arXiv:2203.12563v3, REsubmission.tex,
+% Section 5, lines 1695--1777. The coefficient-one open-chain penalty
+% below is an auxiliary consequence of the commuting constraints.
+% Native declaration and diagram validation is pending for this source leaf.
+
+\subsection{The active range of the actual joint open chain}
+\label{sec:mpo_joint_open_sector_penalty}
+
+Write the original physical space as
+$\mathcal H=\mathcal H_{00}\oplus\mathcal H_{01}
+    \oplus\mathcal H_{10}\oplus\mathcal H_{11}$, where
+$\mathcal H_{00}=\mathbb C^{d_0}$ is shared by all block labels.
+Let $R_0$ project onto $\mathcal H_{00}\oplus\mathcal H_{01}$,
+let $C_0$ project onto $\mathcal H_{00}\oplus\mathcal H_{10}$,
+and set $P_{00}=R_0C_0=C_0R_0$. Let $S$ be the actual zero-parameter
+two-site support and $h=I-P_S$ its complementary projection.
+For the full joint polar boundary frames define
+$E_L=P_{\operatorname{ran}U_L}$ and
+$E_R=P_{\operatorname{ran}U_R}$.
+
+\begin{theorem}[One-sided support of the actual interaction]
+    \label{thm:mpo_joint_one_sided_support}
+    \lean{MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_firstOneSidedProjection,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_lastOneSidedProjection,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedFirstOneSidedProjection_le_parentInteraction,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedLastOneSidedProjection_le_parentInteraction,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedTwoSiteInnerProjection_le_parentInteraction}
+    \uses{thm:mpo_joint_full_frame_support}
+    For arbitrary endpoint families and all dimensions, including zero,
+    \begin{align}
+        S &\subseteq \operatorname{ran}(E_L\otimes R_0), &
+        S &\subseteq \operatorname{ran}(C_0\otimes E_R), &
+        S &\subseteq \operatorname{ran}(C_0\otimes R_0).
+        \label{eq:mpo_joint_one_sided_support}
+    \end{align}
+    Each of these three product projections is orthogonal and commutes
+    with $h$, and each complementary projection is bounded by $h$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_full_frame_support,thm:mpo_supported_parent_projection}
+    Every $v\in S$ belongs to $\operatorname{ran}(U_L\otimes U_R)$,
+    so $(E_L\otimes I)v=v=(I\otimes E_R)v$.
+    The actual inserted trace contraction also gives
+    $(C_0\otimes I)v=v=(I\otimes R_0)v$.
+    Multiplying these commuting one-site identities gives
+    (\ref{eq:mpo_joint_one_sided_support}).
+    If $P$ is any of the three resulting product projections,
+    $PP_S=P_S=P_SP$, whence $[P,h]=0$ and $I-P\le h$.
+    The ranges of $U_L,U_R$ are taken from the full joint matrices;
+    no cross-label Gram entry is discarded.
+\end{proof}
+
+\begin{definition}[The open active projection]
+    \label{def:mpo_joint_open_active_projection}
+    \lean{MPSTensor.MPOSymmetry.jointMixedOpenLeftMatrix,
+        MPSTensor.MPOSymmetry.jointMixedOpenRightMatrix,
+        MPSTensor.MPOSymmetry.jointMixedOpenBondProjection,
+        MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection}
+    For $N\ge3$, write $h_i$ for $h$ on sites $i,i+1$ and the
+    identity elsewhere, and set $H_N=\sum_{i=0}^{N-2}h_i$.
+    Define projections on the same bonds by
+    \begin{align}
+        F_0&=(E_L)_0(R_0)_1, &
+        F_i&=(C_0)_i(R_0)_{i+1}\quad(1\le i\le N-3), &
+        F_{N-2}&=(C_0)_{N-2}(E_R)_{N-1},
+        \label{eq:mpo_joint_open_bond_constraints}\\
+        Q_N&=F_0F_1\cdots F_{N-2}.
+        \label{eq:mpo_joint_open_active_product}
+    \end{align}
+    The middle family is empty at $N=3$.
+\end{definition}
+
+\begin{theorem}[The exact open active range]
+    \label{thm:mpo_joint_open_active_range}
+    \lean{MPSTensor.MPOSymmetry.jointMixedOpenBondProjection_commute,
+        MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.mem_range_jointMixedOpenActiveProjection_iff}
+    \uses{def:mpo_joint_open_active_projection}
+    The $F_i$ commute, and $Q_N$ is an orthogonal projection.
+    A vector $v$ belongs to its range precisely when
+    \begin{align}
+        (E_L)_0v&=v, & (E_R)_{N-1}v&=v, &
+        (R_0)_kv&=v=(C_0)_kv\quad(1\le k\le N-2).
+        \label{eq:mpo_joint_open_active_conditions}
+    \end{align}
+    Thus the active subspace is
+    $\operatorname{ran}U_L\otimes\mathcal H_{00}^{\otimes(N-2)}
+        \otimes\operatorname{ran}U_R$.
+    Every original direction of $\mathcal H_{00}$ is retained,
+    including directions unused by the endpoint tensor.
+\end{theorem}
+\begin{proof}
+    A boundary frame occurs only at its boundary site. Distinct bonds
+    therefore overlap only in $R_0$ and $C_0$, which commute.
+    The product of commuting orthogonal projections is orthogonal and
+    fixes exactly the vectors fixed by each factor.
+    Applied to (\ref{eq:mpo_joint_open_bond_constraints}), this is
+    (\ref{eq:mpo_joint_open_active_conditions}). At an interior site the
+    two phase-zero conditions select exactly the shared $00$ summand.
+\end{proof}
+
+For four sites, the product in
+(\ref{eq:mpo_joint_open_active_product}) has the following contraction.
+Each vertical line is the full original physical space $\mathcal H$.
+\begin{tenkzequation}
+    % Formula: (E_L tensor R_0 tensor I tensor I)
+    % (I tensor C_0 tensor R_0 tensor I)
+    % (I tensor I tensor C_0 tensor E_R)
+    % = E_L tensor P_00 tensor P_00 tensor E_R.
+    % Boundary signature on both sides: up=4, down=4, west=0, east=0.
+    % The rows act from bottom input to top output. All wires have dimension dim H.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+        \tn[at=(1,1), name=A, skin=box, size=m,
+            ports={90:physical:$i_0$,270:physical}]{E_L}
+        \tn[at=(1,2), name=B, skin=box, size=m,
+            ports={90:physical:$i_1$,270:physical}]{R_0}
+        \tn[at=(1,3), name=C, skin=box, size=m,
+            ports={90:physical:$i_2$,270:physical}]{I}
+        \tn[at=(1,4), name=D, skin=box, size=m,
+            ports={90:physical:$i_3$,270:physical}]{I}
+        \tn[at=(2,1), name=E, skin=box, size=m,
+            ports={90:physical,270:physical}]{I}
+        \tn[at=(2,2), name=F, skin=box, size=m,
+            ports={90:physical,270:physical}]{C_0}
+        \tn[at=(2,3), name=G, skin=box, size=m,
+            ports={90:physical,270:physical}]{R_0}
+        \tn[at=(2,4), name=H, skin=box, size=m,
+            ports={90:physical,270:physical}]{I}
+        \tn[at=(3,1), name=J, skin=box, size=m,
+            ports={90:physical,270:physical:$j_0$}]{I}
+        \tn[at=(3,2), name=K, skin=box, size=m,
+            ports={90:physical,270:physical:$j_1$}]{I}
+        \tn[at=(3,3), name=L, skin=box, size=m,
+            ports={90:physical,270:physical:$j_2$}]{C_0}
+        \tn[at=(3,4), name=M, skin=box, size=m,
+            ports={90:physical,270:physical:$j_3$}]{E_R}
+        \tnwire{A.270}{E.90}
+        \tnwire{B.270}{F.90}
+        \tnwire{C.270}{G.90}
+        \tnwire{D.270}{H.90}
+        \tnwire{E.270}{J.90}
+        \tnwire{F.270}{K.90}
+        \tnwire{G.270}{L.90}
+        \tnwire{H.270}{M.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+        \tn[at=(1,1), name=A, skin=box, size=m,
+            ports={90:physical:$i_0$,270:physical:$j_0$}]{E_L}
+        \tn[at=(1,2), name=B, skin=box, size=m,
+            ports={90:physical:$i_1$,270:physical:$j_1$}]{P_{00}}
+        \tn[at=(1,3), name=C, skin=box, size=m,
+            ports={90:physical:$i_2$,270:physical:$j_2$}]{P_{00}}
+        \tn[at=(1,4), name=D, skin=box, size=m,
+            ports={90:physical:$i_3$,270:physical:$j_3$}]{E_R}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[Reduction and the inactive-sector penalty]
+    \label{thm:mpo_joint_open_inactive_penalty}
+    \lean{MPSTensor.MPOSymmetry.jointMixedOpenActiveProjection_commute_openInteraction,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedOpenActiveProjection_le_openInteraction,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedOpenActiveProjection_le_twice_openInteraction}
+    \uses{def:mpo_joint_open_active_projection}
+    The actual open Hamiltonian satisfies
+    \begin{align}
+        [Q_N,H_N]&=0, & I-Q_N&\le H_N\le2H_N.
+        \label{eq:mpo_joint_open_inactive_penalty}
+    \end{align}
+    The coefficient-one estimate is an auxiliary consequence of the
+    chosen commuting constraints. It makes no assertion about the gap
+    of $H_N$ within $\operatorname{ran}Q_N$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_one_sided_support,thm:mpo_joint_open_active_range}
+    The actual support is fixed by each local constraint, so
+    $I-F_i\le h_i$. The row and column phase selectors commute with
+    every translated interaction. The first frame commutes with $h_0$
+    by its support inclusion and with the remaining terms by disjoint
+    support; the last frame has the reflected property.
+    Hence $[F_i,h_j]=0$ for every pair of nonwrapping bonds, proving
+    $[Q_N,H_N]=0$. The orthogonal projection inequality
+    $I-PQ\le(I-P)+(I-Q)$ for commuting $P,Q$ gives by induction
+    \begin{align}
+        I-Q_N&\le\sum_{i=0}^{N-2}(I-F_i)
+            \le\sum_{i=0}^{N-2}h_i=H_N.
+    \end{align}
+    Finally $H_N\ge0$, which yields the coefficient-two bound.
+\end{proof}
+
+\begin{theorem}[The single two-site boundary term]
+    \label{thm:mpo_joint_open_two_site_reduction}
+    \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_openInteraction_reduction}
+    At $N=2$, set $Q_2=P_{\operatorname{ran}(U_L\otimes U_R)}$.
+    The open sum contains one term, $H_2=h$, and satisfies
+    $[Q_2,H_2]=0$ and $I-Q_2\le H_2$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mpo_joint_full_frame_reduction}
+    There is exactly one nonwrapping two-site window. Its full-frame
+    support inclusion supplies both conclusions, with both boundary
+    frames acting on this same term.
+\end{proof}

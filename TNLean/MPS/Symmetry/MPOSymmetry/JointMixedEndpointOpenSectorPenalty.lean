@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointInnerConstraints
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointOneSidedSupport
+import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointFrameReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.SiteProjectionEmbedding
 
 /-!
@@ -99,27 +100,15 @@ private theorem mem_range_projection_listProd_iff
       rw [List.pairwise_cons] at hcomm
       have htail := fun q hq => hP q (List.mem_cons_of_mem p hq)
       have htailProj := projection_listProd P htail hcomm.2
-      rw [(projection_listProd (p :: P) hP (List.pairwise_cons.mpr hcomm)).isIdempotentElem.mem_range_iff,
+      rw [LinearMap.IsIdempotentElem.mem_range_iff
+          (projection_listProd (p :: P) hP (List.pairwise_cons.mpr hcomm)).isIdempotentElem,
         List.prod_cons, fixed_mul_iff (hP p List.mem_cons_self).isIdempotentElem
           htailProj.isIdempotentElem (Commute.list_prod_right P p hcomm.1),
-        ← htailProj.isIdempotentElem.mem_range_iff, ih htail hcomm.2]
+        ← LinearMap.IsIdempotentElem.mem_range_iff htailProj.isIdempotentElem,
+        ih htail hcomm.2]
       simp only [List.mem_cons, forall_eq_or_imp]
 
 variable {d₀ d₁ r : ℕ} {D₀ D₁ : Fin r → ℕ}
-
-private theorem binaryDiagonal_projection {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (f : ι → ℂ) (hf : ∀ i, f i = 0 ∨ f i = 1) :
-    (Matrix.toEuclideanLin (Matrix.diagonal f)).IsSymmetricProjection := by
-  constructor
-  · ext v i
-    simp only [Module.End.mul_apply, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
-      Matrix.mulVec_diagonal]
-    rcases hf i with h | h <;> simp [h]
-  · apply Matrix.isSymmetric_toEuclideanLin_iff.mpr
-    apply Matrix.isHermitian_diagonal_of_self_adjoint
-    funext i
-    simp only [Pi.star_apply]
-    rcases hf i with h | h <;> simp [h]
 
 /-- Left site matrix on a nonwrapping bond: the full joint frame at the
 left endpoint, and the column-zero selector at every later site.
@@ -160,7 +149,7 @@ private theorem leftMatrix_projection
   split_ifs
   · rw [toEuclideanLin_jointMixedFirstFrameProjectionMatrix]
     exact Submodule.isSymmetricProjection_starProjection _
-  · exact binaryDiagonal_projection _ jointMixedColumnWeight_eq_zero_or_one
+  · exact binaryDiagonal_isSymmetricProjection _ jointMixedColumnWeight_eq_zero_or_one
 
 private theorem rightMatrix_projection
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
@@ -170,7 +159,7 @@ private theorem rightMatrix_projection
   split_ifs
   · rw [toEuclideanLin_jointMixedLastFrameProjectionMatrix]
     exact Submodule.isSymmetricProjection_starProjection _
-  · exact binaryDiagonal_projection _ jointMixedRowWeight_eq_zero_or_one
+  · exact binaryDiagonal_isSymmetricProjection _ jointMixedRowWeight_eq_zero_or_one
 
 private theorem castSucc_ne_succ {n : ℕ} (i : Fin (n + 2)) : i.castSucc ≠ i.succ := by
   intro h
@@ -292,6 +281,67 @@ theorem mem_range_jointMixedOpenActiveProjection_iff_bonds
     (siteMatrixES_isSymmetricProjection i.castSucc (leftMatrix_projection A₀ A₁ n i)).isIdempotentElem
     (siteMatrixES_isSymmetricProjection i.succ (rightMatrix_projection A₀ A₁ n i)).isIdempotentElem
     (commute_siteMatrixES_of_ne _ _ (castSucc_ne_succ i)) v
+
+/-- The active range has the full first and last joint polar frames at the
+two boundary sites. At each of the \(n+1\) interior sites both phase
+selectors fix the vector, hence the site belongs to the original shared
+physical 00 alphabet. The statement does not split that alphabet by label.
+Source context: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem mem_range_jointMixedOpenActiveProjection_iff
+    (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (n : ℕ)
+    (v : EuclideanSpace ℂ (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) (n + 3))) :
+    v ∈ LinearMap.range (jointMixedOpenActiveProjection A₀ A₁ n) ↔
+      siteMatrixES (jointMixedFirstFrameProjectionMatrix A₀ A₁) (0 : Fin (n + 3)) v = v ∧
+      siteMatrixES (jointMixedLastFrameProjectionMatrix A₀ A₁) (Fin.last (n + 2)) v = v ∧
+      ∀ k : Fin (n + 1),
+        jointMixedRowSector d₀ d₁ D₀ D₁ k.succ.castSucc v = v ∧
+        jointMixedColumnSector d₀ d₁ D₀ D₁ k.succ.castSucc v = v := by
+  rw [mem_range_jointMixedOpenActiveProjection_iff_bonds]
+  constructor
+  · intro hv
+    refine ⟨?_, ?_, fun k => ?_⟩
+    · simpa only [jointMixedOpenLeftMatrix, if_pos rfl, Fin.castSucc_zero] using (hv 0).1
+    · simpa only [jointMixedOpenRightMatrix, if_pos rfl, Fin.succ_last] using
+        (hv (Fin.last (n + 1))).2
+    · have hk : k.castSucc ≠ Fin.last (n + 1) := by
+        intro h
+        have hval := congrArg Fin.val h
+        have := k.isLt
+        simp only [Fin.val_castSucc, Fin.val_last] at hval
+        omega
+      have hks : k.succ ≠ (0 : Fin (n + 2)) := by simp
+      have heq : k.castSucc.succ = k.succ.castSucc := by apply Fin.ext; rfl
+      constructor
+      · simpa only [jointMixedOpenRightMatrix, if_neg hk, siteMatrixES_diagonal, heq] using
+          (hv k.castSucc).2
+      · simpa only [jointMixedOpenLeftMatrix, if_neg hks, siteMatrixES_diagonal] using
+          (hv k.succ).1
+  · rintro ⟨hL, hR, hI⟩ i
+    constructor
+    · by_cases hi : i = 0
+      · subst i
+        simpa only [jointMixedOpenLeftMatrix, if_pos rfl, Fin.castSucc_zero] using hL
+      · have hipos : 0 < i.val := by
+          have hne : i.val ≠ 0 := fun h => hi (Fin.ext h)
+          omega
+        let k : Fin (n + 1) := ⟨i.val - 1, by have := i.isLt; omega⟩
+        have hk : k.succ = i := by apply Fin.ext; dsimp [k]; omega
+        simp only [jointMixedOpenLeftMatrix, if_neg hi, siteMatrixES_diagonal]
+        rw [← hk]
+        exact (hI k).2
+    · by_cases hi : i = Fin.last (n + 1)
+      · subst i
+        simpa only [jointMixedOpenRightMatrix, if_pos rfl, Fin.succ_last] using hR
+      · have hilt : i.val < n + 1 := by
+          have hne : i.val ≠ n + 1 := fun h => hi (Fin.ext h)
+          have := i.isLt
+          omega
+        let k : Fin (n + 1) := ⟨i.val, hilt⟩
+        have hk : k.succ.castSucc = i.succ := by apply Fin.ext; rfl
+        simp only [jointMixedOpenRightMatrix, if_neg hi, siteMatrixES_diagonal]
+        rw [← hk]
+        exact (hI k).1
 
 private theorem twoSite_kronecker_eq_finKronecker {d : ℕ}
     (M K : Matrix (Fin d) (Fin d) ℂ) :
@@ -561,6 +611,44 @@ theorem one_sub_jointMixedOpenActiveProjection_le_twice_openInteraction
   rw [two_smul]
   exact (one_sub_jointMixedOpenActiveProjection_le_openInteraction A₀ A₁ n).trans
     (le_add_of_nonneg_right hH)
+
+private theorem openInteractionHamiltonian_two_eq {d : ℕ}
+    (h : EuclideanSpace ℂ (Cfg d 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d 2)) :
+    openInteractionHamiltonianES h 2 = h := by
+  let i : NonwrappingStart 2 2 := ⟨0, by simp⟩
+  let : Subsingleton (NonwrappingStart 2 2) :=
+    ⟨fun j k => by
+      apply Subtype.ext
+      apply Fin.ext
+      have hj := j.2
+      have hk := k.2
+      omega⟩
+  rw [openInteractionHamiltonianES, Fintype.sum_subsingleton _ i]
+  obtain ⟨M, rfl⟩ := Matrix.toEuclideanLin.surjective h
+  rw [periodicLocalInteractionES_eq_embedOp _ (le_refl 2)]
+  have he : (fun k : Fin 2 => cyclicForwardSite i.1 k.val) = id := by
+    funext k
+    apply Fin.ext
+    simp only [cyclicForwardSite, i, Fin.val_zero, zero_add, id_eq,
+      Nat.mod_eq_of_lt k.isLt]
+  rw [he, QuantumCircuit.embedOp_id]
+
+/-- At two sites there is one full-frame term. Both polar boundary frames
+belong to that same term, so the one-sided boundary constraints are not
+summed as separate interactions.
+Source context: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem jointMixedTwoSiteFrameProjection_openInteraction_reduction
+    (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
+    Commute (jointMixedTwoSiteFrameProjection A₀ A₁)
+        (openInteractionHamiltonianES
+          (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap 2) ∧
+      1 - jointMixedTwoSiteFrameProjection A₀ A₁ ≤
+        openInteractionHamiltonianES
+          (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap 2 := by
+  rw [openInteractionHamiltonian_two_eq]
+  exact ⟨jointMixedTwoSiteFrameProjection_commute_parentInteraction A₀ A₁,
+    one_sub_jointMixedTwoSiteFrameProjection_le_parentInteraction A₀ A₁⟩
 
 end
 
