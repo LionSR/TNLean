@@ -1,4 +1,3 @@
-% Separate-module validation is pending; keep all owners in this leaf unchecked.
 \section{Adjoint boundaries from star-compatible coalgebras}
 \label{sec:glm_coalgebra_adjoint}
 
@@ -16,6 +15,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     \label{thm:glm_coalgebra_dual_star}
     \lean{Coalgebra.dualStar_mul,Coalgebra.dualStarMulEquiv,
         Coalgebra.dualStar_one}
+    \leanok
     For $f\in H^*$, define $\kappa(f)(x)=\overline{f(x^*)}$.
     Then $\kappa$ is conjugate-linear, involutive, and satisfies
     \begin{align}
@@ -26,6 +26,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     Here multiplication is convolution, and $1$ is the counit.
 \end{theorem}
 \begin{proof}
+    \leanok
     On a pure tensor, complex conjugation sends
     $f(x^*)g(y^*)$ to $\kappa(f)(x)\kappa(g)(y)$.
     Extend this identity additively to $\Delta(x)$ and use the
@@ -36,6 +37,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
 \begin{definition}[Tensor from physical coefficients]
     \label{def:glm_dual_representation_tensor}
     \lean{MPOTensor.dualCoefficient,MPOTensor.ofDualRepresentation}
+    \leanok
     Let $\phi:H\to M_d(\mathbb C)$ be linear and let
     $\psi:H^*\to M_D(\mathbb C)$ be a unital algebra representation.
     Define $f_{ij}(x)=\phi(x)_{ij}$ and $T^{ij}=\psi(f_{ij})$.
@@ -45,6 +47,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     \label{thm:glm_dual_representation_words}
     \lean{MPOTensor.evalWord_ofDualRepresentation,
         MPOTensor.star_dualCoefficient,MPOTensor.star_dualCoefficient_prod}
+    \leanok
     \uses{def:glm_dual_representation_tensor}
     Suppose $\phi(x^*)=\phi(x)^\dagger$. For every pair of physical
     configurations $\sigma,\tau$ of length $N\geq0$, put
@@ -58,6 +61,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_coalgebra_dual_star}
     Star compatibility gives $\kappa(f_{ij})=f_{ji}$.
     Induction on $N$, using multiplicativity and unitality of $\psi$
@@ -69,6 +73,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     \lean{MPOTensor.exists_boundary_trace_dualStar,
         MPOTensor.exists_adjointBoundary_of_dualRepresentation,
         MPOTensor.isBoundaryAdjointClosed_of_dualRepresentation}
+    \leanok
     \uses{def:glm_dual_representation_tensor,def:glm_boundary_adjoint_closed}
     Suppose $\phi$ preserves the involution and $\psi$ is injective.
     For every $X\in M_D(\mathbb C)$ there exists one
@@ -80,6 +85,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     for every $N\geq0$. In particular, $T$ is boundary adjoint closed.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_dual_representation_words}
     The functional
     $\ell_X(f)=\overline{\operatorname{tr}(X\psi(\kappa(f)))}$
@@ -102,6 +108,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     \label{thm:glm_dual_representation_parent}
     \lean{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_of_dualRepresentation,
         MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_of_dualRepresentation}
+    \leanok
     \uses{def:glm_dual_representation_tensor,def:glm_boundary_closedness,
         def:parent_interaction,def:parent_hamiltonian,def:mpdo_commuting_boundary}
     Under the hypotheses of Theorem~\ref{thm:glm_coalgebra_adjoint_boundary},
@@ -112,6 +119,7 @@ the dual $C^*$-algebra involution, which also involves the antipode
     letter $T^{ij}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:glm_coalgebra_adjoint_boundary,thm:glm_boundary_parent_local,
         thm:glm_boundary_parent_periodic}
     Compatibility makes the local state support invariant. Its

@@ -140,7 +140,8 @@ making its previously section-bound physical dimension explicit. The
 forbidden-token, numbered-file, oversized-file, and whitespace checks passed.
 No new proof holes, axioms, native evaluation, or conclusion premises occur.
 
-Separate-module builds and exact-head CI remain integration checks.
+Separate-module builds and exact-head CI were integration checks at this
+checkpoint; their subsequent success is recorded below.
 The local import and documentation integration is recorded below. No remote publication or shared cache mutation
 was performed by this package.
 
@@ -156,8 +157,8 @@ name, implicit physical and bond dimensions, predicate body, and existing
 blueprint owner. No consuming declaration is renamed.
 
 The five new blueprint entries own thirteen new public declarations exactly
-once. Their statements and proofs remain **unchecked** pending separate-module
-validation. The relocated predicate retains its single existing owner.
+once. Their statements and proofs are now checked on the exact-tree CI evidence
+recorded below. The relocated predicate retains its single existing owner.
 The new text distinguishes the same-order involution from the antipode-bearing
 dual involution and cites the precise local and periodic parent criteria;
 the periodic tensor-letter centralizer is retained explicitly.
@@ -193,6 +194,71 @@ Chromium headless-shell executable was absent. The production assertions and
 fail-closed CI browser gate are unchanged. No browser installation or
 sandbox/network workaround was attempted.
 
-Separate-module builds, browser validation, and exact-head CI remain
-outstanding. The integration performed no Lean build, elaboration, shared
+Separate-module builds, browser validation, and exact-head CI were
+outstanding at this local checkpoint. The subsequent exact-tree CI passed
+all engineering checks, including the unchanged fail-closed browser gate. The integration performed no Lean build, elaboration, shared
 Lean-cache mutation, or remote publication.
+
+## Exact-tree CI validation and checked owners, 2026-10-06
+
+[PR #8717](https://github.com/LionSR/TNLean/pull/8717) passed all engineering
+checks at head `71f35e3724b284ef41994485b3f9874c88db181e`. Its tested merge
+`8a0cd3e22aa0faec53b6a6e9f6615b00b0f33a90` has the same tree,
+`0d21b41da4bae0090e8f1d76a38bd3b11430d456`. The immutable
+[CI run](https://github.com/LionSR/TNLean/actions/runs/37410841184) includes
+the passing [build](https://github.com/LionSR/TNLean/actions/runs/37410841184/job/112098728483),
+[blueprint](https://github.com/LionSR/TNLean/actions/runs/37410841184/job/112098728486),
+and [timing](https://github.com/LionSR/TNLean/actions/runs/37410841184/job/112102251514)
+jobs. It validates all four new modules (336 lines, including the relocated
+predicate) and all five regression guards. The four new module times were
+2.5, 3.2, 5.8, and 4.1 seconds.
+
+On that evidence, the five new statements and their four proofs now carry
+checked markers, covering all thirteen new declaration owners. Every
+production and regression byte is preserved. The same-order involution,
+length-independent boundary, empty-chain identity, and periodic centralizer
+condition retain their precise scopes. No full weak-Hopf package, mixed
+realization, integral, or classification conclusion is added. Fresh local
+rendering is recorded separately; the earlier local browser limitations
+remain historical local limitations and are not reported as local passes.
+
+## Checked-marker rendering verification, 2026-10-06
+
+The exact changed leaves were copied into a focused, reference-closed fixture
+with the unchanged production macros and renderer. Tool versions were
+texra-blueprint 0.3.8 (commit `65434add8b88bc6a22c701521baa3abec2369341`),
+plasTeX 3.1, and the pinned Tenkz commit
+`08a6493f3605dcf2ca5b512823ccb2698dfc027b`. TeX formats were regenerated
+from installed official sources in a separate workspace tree; no Lean
+build, elaboration, or Lean-cache mutation was performed.
+
+The eight-page XeLaTeX PDF includes the new leaf and twenty exact context
+excerpts. All mathematical pages and diagrams were visually inspected;
+the new leaf has no clipping or box warnings, and all references resolve.
+An unchanged context excerpt, the word-evaluation definition, has one
+3.25276pt overfull line in this fixture. Strict web generation and
+generated-source checks pass: six HTML files, thirteen new declaration
+links, five checked statements, four checked proofs, and four inherited
+SVGs. The source-linked native audit of those four context pictures has
+zero hard or advisory findings. The new leaf adds no diagram.
+
+Full blueprint/source synchronization with the pinned QICLean source has
+no missing references, stale declaration-list entries, or duplicate owners.
+Reverse coverage, reader-facing prose, and whitespace checks pass. All
+production, regression, workflow, router, and dependency bytes are unchanged
+from the exact tested public head.
+
+The web renderer used its existing XeLaTeX/PDF/pdftocairo fallback because
+`dvisvgm` is absent. Local browser layout validation is **not passed**: the
+ordinary Playwright launch failed because its Chromium headless-shell
+executable is absent. No browser/security workaround or weakening of the
+fail-closed CI checks was made. LuaLaTeX was also unavailable locally because
+the installed tree lacks `luaotfload-main`; the successful PDF route was
+XeLaTeX. These focused local results do not claim a fresh full-volume build
+or a fresh exact-head CI run for the documentation-only commit.
+
+Artifact SHA-256 values:
+
+- Focused PDF: `0473c3284b37ad2c4cd7e76c81b8e50ebb8fd50e283a28e296424945366346a0`.
+- Generated chapter HTML: `cd5cf6bf7bbc9a3c50b71919b1fbb201ed8be6786c30e26e852b176ceec4b3ee`.
+- `ch30_mpo_coalgebra_adjoint_boundary.tex`: `5d8f8bd6c5bd4cd333d0d6d1cb745ebbe487834c8aa66fcc823753979f348b03`.
