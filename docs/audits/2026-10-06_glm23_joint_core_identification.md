@@ -72,10 +72,29 @@ claim is made.
 
 ## Validation
 
-Source-only development: no Lean, Lake, cache writes, or publication have
-been performed by this worker. Native elaboration and strict guards are
-pending coordinated read-only probes and later individual module checks.
-The blueprint has no `leanok` markers until the required native checks pass.
+Fourteen isolated individual module/regression checks pass with the pinned
+Lean binary, exact module roots, one thread, all package strictness and linter
+options, warnings as errors, and a sixty-second bound per module. This includes
+all three new production leaves, the moved generic spectator leaf, both gap
+leaves, the joint specialization, all five exact edge prerequisites, and both
+regression files. All five new foundation guards and both existing dependent
+gap guards pass, expecting exactly `propext`, `Classical.choice`, `Quot.sound`.
+
+The modified heavy `SpectatorTransport` re-export module alone reaches the
+wall bound in 60.6 seconds with no diagnostic. It is inconclusive; no output
+was promoted. It is absent from the checked core target closure. The new
+blueprint markers remain withheld until this modified consumer and the
+coherent package checks finish. No whole-package or public CI pass is claimed.
+
+The validation directory has real directories and per-file read-only symlinks
+to unchanged canonical artifacts. Every rebuilt module and the stale old
+`SpectatorTransport` artifact are excluded. Compiler outputs go to temporary
+paths and are atomically promoted only after exit zero. Source hashes,
+manifest/toolchain/compiler hashes, direct imports and command flags are
+recorded per module. The complete checked target closure has 4,650 modules
+and contains neither the stale re-export artifact nor `C3Threshold`. No Lake,
+Mathlib rebuild, canonical cache write, or publication was performed here.
+
 The regression file includes physically overlapping scalar labels in a
 three-letter alphabet, an off-diagonal `(0,1)` core, different left/right
 exterior multiplicities, empty labels, zero exterior fibers, zero virtual
@@ -100,3 +119,49 @@ new labels, with no broken local anchors, duplicate IDs, or rendering
 sentinels. Browser visual inspection and a whole-book build were not run.
 The coordinate and operator formulas carry this leaf; no new tensor diagram
 was needed. The companion JSON records source hashes and validation scope.
+
+## Narrow spectator dependency extraction
+
+The first bounded probe and its import-only diagnostic did not reach new
+proof diagnostics within sixty seconds. Inspection of the actual artifact
+import graph found that the dependent gap leaf loaded 10,932 modules, compared
+with 4,612 for the checked boundary-column dependency. The generic spectator
+maps were housed in `SpectatorTransport`, which also imported the C3/FNW and
+strong-irreducibility applications.
+
+The complete existing `ContinuousLinearMap` section, 297 lines, is moved
+unchanged to `SpectatorMaps.lean`. Its exact section SHA-256 remains
+`9e243261ee1a926ea253acbb23b6385f5fc6b0caa81806f0039537e24b3d284c`.
+No public name or proof body changes. `SpectatorTransport` imports the new
+leaf and retains its application-specific mathematics. `SpectatorGapEquivalence`
+imports only the light leaf, and `JointMixedEndpointSpectatorGap` imports
+`Overlap.Basic` explicitly for the configuration abbreviation.
+This is a dependency extraction, not new mathematical coverage.
+
+The source bundles include the complete real moved leaf and both unchanged
+gap proof bodies, avoiding stale heavy imported artifacts. Mixing the new
+`SpectatorMaps` artifact with an old `SpectatorTransport` artifact would
+duplicate the moved declarations, so native validation must rebuild the
+re-exporting module before checking consumers that import both routes.
+
+Using the same artifact-graph traversal with only the changed source imports
+overridden, the dependent gap closure decreases from 10,932 to 3,822 modules
+(7,111 removed, one new leaf). The joint specialization decreases from
+10,933 to 4,170 modules (6,764 removed, one new leaf). Neither new closure
+contains `SpectatorTransport` or `C3Threshold`. Counts are dependency-graph
+results, not timing or native-module validation claims.
+
+The move exposed six existing generic helpers without prior blueprint tags.
+They are now linked to the existing right-spectator extension and kernel
+projection entries. Their proof text and mathematical statements are unchanged;
+these ownership links do not count as new results. Global synchronization and
+reverse coverage pass for both moved and newly authored declarations.
+
+The initial two whole-import probes and a concatenated complete edge bundle
+hit the sixty-second wall bound without diagnostics. Those attempts were
+inconclusive. Isolated module checks subsequently validated the new results
+and their actual imports; their source hashes supersede the early bundle
+snapshots. Native elaboration found two argument-inference issues and one
+coercion-wrapper issue. Explicit fiber vectors, explicit regression
+parameters and an explicit conjugated target resolved them without changing
+a statement, assumption or resource limit.

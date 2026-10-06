@@ -317,7 +317,12 @@ theorem jointEndpointNormalizedSum_conj_coreSpectators
   apply LinearMap.ext
   intro v
   have h := jointEndpointNormalizedSum_intertwines_coreSpectators A E F n (U.symm v)
-  change U (jointEndpointNormalizedSum A E F n (U.symm v)) = _
+  change U (jointEndpointNormalizedSum A E F n (U.symm v)) =
+    dependentRightFiberwiseMap (S := fun q : Fin r × Fin r ↦ Fin (E q.1) × Fin (F q.2))
+      (fun q ↦ (jointEndpointCoreHamiltonian A n q).toContinuousLinearMap) v
+  change U (jointEndpointNormalizedSum A E F n (U.symm v)) =
+    dependentRightFiberwiseMap (S := fun q : Fin r × Fin r ↦ Fin (E q.1) × Fin (F q.2))
+      (fun q ↦ (jointEndpointCoreHamiltonian A n q).toContinuousLinearMap) (U (U.symm v)) at h
   simpa only [U.apply_symm_apply] using h
 
 private theorem norm_gap_iff_of_isometric_conj

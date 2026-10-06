@@ -7,7 +7,7 @@ set_option linter.hashCommand false
 
 open MPSTensor MPSTensor.MPOSymmetry ContinuousLinearMap
 
-private def overlapCoreEndpoint : Fin 2 → MPSTensor 3 1 :=
+private def overlapEndpoint : Fin 2 → MPSTensor 3 1 :=
   fun x i ↦ if i = 0 then 1 else if i = 1 ∧ x = 1 then 1 else 0
 
 -- The two labels are physically overlapping, and the physical alphabet
@@ -23,11 +23,12 @@ example (n : ℕ)
     (v : EuclideanSpace ℂ (JointEndpointChainCfg 3 (n + 1) (fun _ : Fin 2 ↦ 1)
       (fun _ ↦ 2) (fun _ ↦ 3)))
     (κ : JointEndpointCoreCfg 3 (n + 1) (fun _ : Fin 2 ↦ 1) (0, 1)) :
-    jointEndpointNormalizedSum overlapCoreEndpoint (fun _ ↦ 2) (fun _ ↦ 3) n v
+    jointEndpointNormalizedSum overlapEndpoint (fun _ ↦ 2) (fun _ ↦ 3) n v
         (⟨0, 0, κ.1⟩, κ.2.1, ⟨1, κ.2.2, 0⟩) =
-      jointEndpointCoreHamiltonian overlapCoreEndpoint n (0, 1)
+      jointEndpointCoreHamiltonian overlapEndpoint n (0, 1)
         (jointEndpointExteriorFiber v (0, 1) (0, 0)) κ :=
-  jointEndpointNormalizedSum_apply_fiber _ _ _ _ _ _ _ _
+  jointEndpointNormalizedSum_apply_fiber overlapEndpoint (fun _ ↦ 2) (fun _ ↦ 3)
+    n v (0, 1) (0, 0) κ
 
 -- At the minimum supported total length three, there are two boundary
 -- terms and no middle edge. This does not make a two-site doubled-edge claim.
@@ -41,12 +42,12 @@ example (A : Fin 2 → MPSTensor 3 1) :
 example (n : ℕ) :
     (jointEndpointChainSpectatorIsometry 3 (n + 1) (fun _ : Fin 2 ↦ 1)
       (fun _ ↦ 0) (fun _ ↦ 3)).toLinearEquiv.conj
-        (jointEndpointNormalizedSum overlapCoreEndpoint (fun _ ↦ 0) (fun _ ↦ 3) n) =
+        (jointEndpointNormalizedSum overlapEndpoint (fun _ ↦ 0) (fun _ ↦ 3) n) =
       (dependentRightFiberwiseMap
         (S := fun _ : Fin 2 × Fin 2 ↦ Fin 0 × Fin 3)
-        (fun q ↦ (jointEndpointCoreHamiltonian overlapCoreEndpoint n q).toContinuousLinearMap))
-          .toLinearMap :=
-  jointEndpointNormalizedSum_conj_coreSpectators _ _ _ _
+        (fun q ↦
+          (jointEndpointCoreHamiltonian overlapEndpoint n q).toContinuousLinearMap)).toLinearMap :=
+  jointEndpointNormalizedSum_conj_coreSpectators overlapEndpoint (fun _ ↦ 0) (fun _ ↦ 3) n
 
 -- An empty label family has no ordered-pair fibers and needs no chosen label.
 example (d n : ℕ) (D E F : Fin 0 → ℕ) (A : (x : Fin 0) → MPSTensor d (D x)) :
@@ -63,7 +64,7 @@ example (n : ℕ) (A : Fin 2 → MPSTensor 0 0) :
         (jointEndpointNormalizedSum A (fun _ ↦ 2) (fun _ ↦ 3) n) =
       (dependentRightFiberwiseMap (S := fun _ : Fin 2 × Fin 2 ↦ Fin 2 × Fin 3)
         (fun q ↦ (jointEndpointCoreHamiltonian A n q).toContinuousLinearMap)).toLinearMap :=
-  jointEndpointNormalizedSum_conj_coreSpectators _ _ _ _
+  jointEndpointNormalizedSum_conj_coreSpectators A (fun _ ↦ 2) (fun _ ↦ 3) n
 
 -- The consumer compares the two concrete normalized sums, deriving the
 -- common core and operator identification rather than assuming either.
