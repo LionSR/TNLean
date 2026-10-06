@@ -202,18 +202,26 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
   have hline := arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
     A₀ A₁ h₀ h₁ (if right then (1 : unitInterval) else 0) hN
   cases right
-  · rw [arbitraryPhysicalEndpointParentInteraction, Bool.false_eq_true, if_false,
-      interactionHamiltonian_parent_groundSpace_eq_span_mpv _
-        (isInjective_kraus_isometry _ _
-          (commonPhysicalEmbeddingLeft_isometry d₁ D₁ h₀) h₀) hN]
-    simpa only [Bool.false_eq_true, if_false, Set.Icc.coe_zero,
-      mpv_arbitraryPhysicalMixedInterpolation_zero A₀ A₁ h₀ (by omega)] using hline
-  · rw [arbitraryPhysicalEndpointParentInteraction, if_true,
-      interactionHamiltonian_parent_groundSpace_eq_span_mpv _
-        (isInjective_kraus_isometry _ _
-          (commonPhysicalEmbeddingRight_isometry d₀ D₀ h₁) h₁) hN]
-    simpa only [if_true, Set.Icc.coe_one,
-      mpv_arbitraryPhysicalMixedInterpolation_one A₀ A₁ h₁ (by omega)] using hline
+  · change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+      (arbitraryPhysicalMixedInteraction A₀ A₁ 0) hN)) =
+        LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+          (LinearMap.toMatrix' (parentInteraction
+            (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) 2)) hN))
+    rw [interactionHamiltonian_parent_groundSpace_eq_span_mpv _
+      (isInjective_kraus_isometry _ _
+        (commonPhysicalEmbeddingLeft_isometry d₁ D₁ h₀) h₀) hN]
+    simpa only [mpv_arbitraryPhysicalMixedInterpolation_zero A₀ A₁ h₀ (by omega)]
+      using hline
+  · change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+      (arbitraryPhysicalMixedInteraction A₀ A₁ 1) hN)) =
+        LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+          (LinearMap.toMatrix' (parentInteraction
+            (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2)) hN))
+    rw [interactionHamiltonian_parent_groundSpace_eq_span_mpv _
+      (isInjective_kraus_isometry _ _
+        (commonPhysicalEmbeddingRight_isometry d₀ D₀ h₁) h₁) hN]
+    simpa only [mpv_arbitraryPhysicalMixedInterpolation_one A₀ A₁ h₁ (by omega)]
+      using hline
 
 /-- Each affine attachment has precisely the periodic ground line of its
 embedded original tensor, expressed as the kernel of that canonical parent.
@@ -267,11 +275,15 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_finrank
     (right : Bool) {t : ℝ} (ht : 0 ≤ t) (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
       (arbitraryPhysicalEndpointAttachment A₀ A₁ right t) hN))) = 1 := by
-  rw [arbitraryPhysicalEndpointAttachment_ker_eq_parent A₀ A₁ h₀ h₁ right ht hN,
-    ← arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN]
-  simpa only [apply_ite, Set.Icc.coe_zero, Set.Icc.coe_one] using
-    arbitraryPhysicalMixedInteraction_groundSpace_finrank A₀ A₁ h₀ h₁
-      (if right then (1 : unitInterval) else 0) hN
+  have hker := (arbitraryPhysicalEndpointAttachment_ker_eq_parent
+    A₀ A₁ h₀ h₁ right ht hN).trans
+      (arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN).symm
+  have hdim := arbitraryPhysicalMixedInteraction_groundSpace_finrank A₀ A₁ h₀ h₁
+    (if right then (1 : unitInterval) else 0) hN
+  have hcoe : ((if right then (1 : unitInterval) else 0) : ℝ) =
+      (if right then 1 else 0) := by cases right <;> rfl
+  rw [hcoe] at hdim
+  exact (congrArg (fun S : Submodule ℂ _ ↦ Module.finrank ℂ S) hker).trans hdim
 
 /-- One positive gap works for both canonical-parent attachments, all
 parameters in the unit interval, and all rings of length at least two.

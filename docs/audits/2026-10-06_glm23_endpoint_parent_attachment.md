@@ -122,3 +122,23 @@ checking; global and reverse blueprint synchronization pass. Source/prose and
 whitespace checks pass. No local compiler or post-recovery PDF/browser pass is
 claimed. The draft is checkpointed before further long validation; full
 separate-module CI and the eight strict guards remain required.
+
+## First draft CI repair
+
+Head `226de1565e7185cc690acd521db61fb03b9670e0` reached the full production
+build and reported two endpoint-choice rewrite errors plus a finrank
+elaboration timeout. Rewriting a Boolean equality changed a dependent
+Decidable argument; the candidate instead uses the definitionally reduced endpoint
+goal before applying the already-proved canonical kernel identity. The
+finrank argument now uses the derived equality of submodules through
+`congrArg`, with an explicit unit-interval coercion equality, rather than a
+large dependent goal rewrite. Statements, assumptions and resource limits
+are unchanged. The blueprint failure was pinned-formatting drift and is
+also repaired. Full exact-head validation is required for this batch; no
+new local production pass is claimed.
+
+A small generic Mathlib check confirmed the typed finrank transport through
+`congrArg`. Its initial closed-Boolean simp test reported no progress because
+the expression was already definitionally reduced; the actual endpoint proof
+therefore uses explicit reduced goals with `change`. This targeted check is
+not a compilation of the full repaired attachment module.
