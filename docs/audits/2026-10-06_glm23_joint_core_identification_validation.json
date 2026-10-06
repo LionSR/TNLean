@@ -276,5 +276,102 @@
       "forbidden_stale_artifacts": [],
       "method": "Complete target source closure; unchanged imported modules read from canonical ilean directImports."
     }
+  },
+  "historical_validation_scope": "The original source_sha256, native_lean_validation, focused_render, and import_refactor records are historical isolated checks before recovery. Their source hashes and timeout observations are retained unchanged; later exact-tree public CI resolves the heavy re-export uncertainty.",
+  "subsequent_validation": {
+    "audit": "2026-10-06_glm23_frame_core_recovery.json",
+    "public_ci": {
+      "verified_at_utc": "2026-10-06T13:42:50Z",
+      "repository": "LionSR/TNLean",
+      "pull_request": 8725,
+      "authored_commit": "3b4ff7c1fe616fcb9be7325675e66e1635246ec4",
+      "published_head": "d18d1a360223039dc366e1dc0c5ba43402065888",
+      "tested_merge": "3eee7cf359b6cfd1fbe62e585b02a8bccb1fc7ad",
+      "identical_source_tree": "843e233eb40d2c59e080e57e64315301fe1ec857",
+      "run_id": 37468535974,
+      "run_url": "https://github.com/LionSR/TNLean/actions/runs/37468535974",
+      "jobs": [
+        {
+          "id": 112286016322,
+          "name": "changes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 112286081445,
+          "name": "Check Lean module policies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 112286081508,
+          "name": "Check blueprint compiles without errors",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 112286081510,
+          "name": "build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 112286081566,
+          "name": "Check inline diagram semantics",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 112298656226,
+          "name": "Check changed Lean compilation times",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "spectator_transport": {
+        "status": "passed",
+        "elapsed_seconds": 32,
+        "warning_threshold_seconds": 25,
+        "failure_threshold_seconds": 50,
+        "resolves": "Historical isolated 60-second empty-log timeout; full build now checks the heavy re-export and its consumers."
+      },
+      "core_hamiltonian": {
+        "status": "passed",
+        "elapsed_seconds": 18
+      },
+      "strict_dependency_guards": {
+        "core": 5,
+        "frame": 4,
+        "existing_dependent": 2,
+        "expected_foundations": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "full_blueprint_web": "passed",
+      "full_blueprint_pdf": "not_run_by_this_CI_job",
+      "post_CI_changes": "Checked markers and documentation only; no Lean, regression, import, or workflow changes."
+    },
+    "checked_blueprint": {
+      "core_leaf": "blueprint/src/chapter/ch30_mpo_joint_core_hamiltonian.tex",
+      "core_source_sha256": "9f143cace6b4a7a89b8db8f8851952294738801477691767c83bd255afdb9792",
+      "core_statement_markers": 12,
+      "core_proof_markers": 7,
+      "generic_owner": "blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap_martingale.tex",
+      "generic_label": "thm:martingale_isometric_conjugation_gap",
+      "generic_owner_changed": false,
+      "generic_owner_fragment_sha256": "d036d026778ca08a129c010bbd45d4e4cc287f68392dd4a14118462100b53355",
+      "generic_statement_markers": 1,
+      "generic_proof_markers": 1,
+      "generic_owner_matches_periodic_swap": true,
+      "frame_source_sha256": "91f6b744257a6d0ade0ff4af7c22d2172a0f369285bcf3bd9fdc4625768c7879",
+      "frame_markers_unchanged": 12,
+      "lean_test_import_workflow_changes": false,
+      "physical_cropped_chain_identification": false,
+      "physical_endpoint_uniform_gap": false,
+      "prose_change": "Split the edge-regrouping sentence to avoid checked-badge overflow; both coordinate maps unchanged."
+    },
+    "post_marker_focused_render": "See post_ci_focused_documentation in 2026-10-06_glm23_frame_core_recovery.json: final PDF and HTML passed, physical PDF pages 3\u20137 visually inspected."
   }
 }

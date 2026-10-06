@@ -70,7 +70,11 @@ physical sectors still requires the inactive-sector lower bound and
 boundary norm estimates. None is assumed or claimed here. No uniform-gap
 claim is made.
 
-## Validation
+## Historical isolated validation
+
+The checks and focused render in this section precede the recovery and public
+CI described below. Their original source hashes and limitations are retained
+in the companion JSON.
 
 Fourteen isolated individual module/regression checks pass with the pinned
 Lean binary, exact module roots, one thread, all package strictness and linter
@@ -80,11 +84,12 @@ leaves, the joint specialization, all five exact edge prerequisites, and both
 regression files. All five new foundation guards and both existing dependent
 gap guards pass, expecting exactly `propext`, `Classical.choice`, `Quot.sound`.
 
-The modified heavy `SpectatorTransport` re-export module alone reaches the
-wall bound in 60.6 seconds with no diagnostic. It is inconclusive; no output
-was promoted. It is absent from the checked core target closure. The new
-blueprint markers remain withheld until this modified consumer and the
-coherent package checks finish. No whole-package or public CI pass is claimed.
+The modified heavy `SpectatorTransport` re-export module alone reached the
+wall bound in 60.6 seconds with no diagnostic. That isolated check was
+inconclusive; no output was promoted. It was absent from the checked core
+target closure. Blueprint markers were withheld at this stage pending the
+modified consumer and coherent package checks. This historical validation
+did not establish a whole-package or public CI pass.
 
 The validation directory has real directories and per-file read-only symlinks
 to unchanged canonical artifacts. Every rebuilt module and the stale old
@@ -119,6 +124,26 @@ new labels, with no broken local anchors, duplicate IDs, or rendering
 sentinels. Browser visual inspection and a whole-book build were not run.
 The coordinate and operator formulas carry this leaf; no new tensor diagram
 was needed. The companion JSON records source hashes and validation scope.
+
+## Subsequent checked package
+
+[CI run 37468535974](https://github.com/LionSR/TNLean/actions/runs/37468535974)
+passed on tested merge `3eee7cf359b6cfd1fbe62e585b02a8bccb1fc7ad`, whose tree
+`843e233eb40d2c59e080e57e64315301fe1ec857` is identical to public draft #8725
+head `d18d1a360223039dc366e1dc0c5ba43402065888` and the recovered authored
+commit `3b4ff7c1fe616fcb9be7325675e66e1635246ec4`.
+The full build, strict registered regressions, compiled declaration checks,
+formatting, timing, and complete blueprint web checks pass. In particular,
+the heavy re-export compiled in 32 seconds, resolving the earlier uncertainty,
+and the core Hamiltonian module compiled in 18 seconds.
+
+The core blueprint now marks its 12 statements and seven proofs checked.
+The already checked generic conjugacy owner remains unchanged and matches
+the periodic-swap branch exactly. The source restrictions above are unchanged:
+the normalized chain and full two-site frame results do not prove the actual
+cropped-chain identification or a physical endpoint uniform gap.
+The [recovery audit](2026-10-06_glm23_frame_core_recovery.md) and its companion
+JSON record the exact CI jobs and the later focused documentation checks.
 
 ## Narrow spectator dependency extraction
 
