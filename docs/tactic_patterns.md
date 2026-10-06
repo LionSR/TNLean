@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Canonical purity consequences — promoted (2026-10-05)
+
+- **Pattern:** From a faithful canonical stationary density and the simple
+  peripheral eigenspace property, derive irreducibility and peripheral
+  primitivity before applying a twisted-transfer theorem.
+- **Seen:** The source spectral theorem and physical selection rule repeated
+  this reduction; finite physical endpoints need the same consequences.
+- **Abstraction:** `MPSTensor.pureCanonical_isIrreducibleMap_and_isPrimitive`
+  in `PureTwistedSpectrum`; the existing two consumers and the new canonical
+  endpoint theorem use it without altering their mathematical hypotheses.
+- **Notes:** Actual-import validation of the combined analytic refactor is
+  recorded separately in the String Order integration audit.
+
+
 ### Logarithmic normalization cutoff — promoted (2026-10-05)
 
 - **Pattern:** Turn `(log K - log ε) / r ≤ x` into `K exp(-rx) ≤ ε`.

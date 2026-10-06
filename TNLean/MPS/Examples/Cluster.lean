@@ -37,7 +37,7 @@ is injective and which lies in a non-trivial symmetry-protected topological
 * `clusterBlocked_isInjective` : the length-`2` blocked tensor is injective
 * `cluster_isOnSiteSymmetric_Z2Z2` : the blocked tensor is on-site symmetric
   under `Z₂ × Z₂`, with anticommuting virtual gauges `σz` and `σx`
-* `cluster_hasStringOrder` : the blocked tensor has string order under every
+* `cluster_hasStringOrder` : the blocked tensor has virtual-boundary nondecay under every
   element of its `Z₂ × Z₂` symmetry, with the maximally mixed boundary state
   as its stationary boundary
 
@@ -544,11 +544,11 @@ theorem cluster_isNontrivialSPT : ScalarCocycle.IsNontrivialClass clusterOmega :
 
 /-! ### String order under the `Z₂ × Z₂` symmetry
 
-The blocked cluster tensor is injective and on-site symmetric under `Z₂ × Z₂`,
-so it falls under the string-order criterion of Pérez-García, Wolf, Sanz,
-Verstraete, Cirac (arXiv:0802.0447): an injective symmetric finitely correlated
-state has string order for every on-site symmetry.  The cluster state is the
-first explicit witness of that criterion in this development.
+The blocked cluster tensor is injective and on-site symmetric under `Z₂ × Z₂`.
+Consequently every fixed symmetry twist, including the identity, gives
+virtual-boundary nondecay. The physical one-site obstruction and two-site
+endpoint calculation of arXiv:0802.0447 are treated in
+`ClusterPhysicalStringOrder`.
 
 The stationary boundary state is the maximally mixed state `Λ = (1/2) · 1`.  It
 is a fixed point of both the transfer map and its adjoint, because the four
@@ -612,18 +612,15 @@ theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
     (by rw [clusterPhysX1_conjTranspose, clusterPhysX1_sq])
     (by rw [clusterPhysX2_conjTranspose, clusterPhysX2_sq]) g
 
-/-- **The cluster state has string order under its `Z₂ × Z₂` symmetry.**
+/-- The blocked cluster tensor has virtual-boundary nondecay for every element
+of its `Z₂ × Z₂` symmetry, including the identity.
 
-For every group element `g`, the blocked cluster tensor has string order with the
-maximally mixed boundary state `Λ = (1/2) · 1`.  The blocked tensor is injective
-and on-site symmetric, the maximally mixed state is a positive definite,
-trace-one fixed point of the adjoint transfer map, and the transfer map itself is
-unital; an injective, on-site symmetric tensor meeting these conditions has string
-order for every group element (see `hasStringOrder_of_symmetric_injective`).
-
-This exhibits the cluster state as the first explicit witness of the string-order
-criterion of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447): a
-non-trivial symmetry-protected topological phase carrying genuine string order. -/
+The tensor is injective and on-site symmetric. Its maximally mixed state
+`Λ = (1/2)·1` is a faithful trace-one fixed point of the adjoint transfer map,
+and its transfer map is unital. The conclusion uses arbitrary virtual
+boundary matrices and does not assert the physical endpoint criterion of
+arXiv:0802.0447; see
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 theorem cluster_hasStringOrder (g : Multiplicative (ZMod 2 × ZMod 2)) :
     HasStringOrder clusterBlocked (clusterZ2Z2Action g)
       ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)) :=

@@ -8,7 +8,7 @@
 
 \title{PGWSVC08 Physical String Order versus Virtual-Boundary Nondecay}
 \author{}
-\date{2026-10-04}
+\date{2026-10-05}
 
 \begin{document}
 \maketitle
@@ -130,7 +130,9 @@ but it changes the complex asymptotic formula.
 The blueprint restores the phase in the proof of
 \path{thm:pgwsvc08_physical_string_order} in
 \path{blueprint/src/chapter/ch12_symmetry_string_order.tex}. The correlator is
-formalized as \leanid{MPSTensor.physicalStringOrderParam}. The full existential source theorem remains marked \path{notready}.
+formalized as \leanid{MPSTensor.physicalStringOrderParam}. The literal
+printed assertion is retained for comparison and marked \path{notready};
+the explicit projective correction below is a separate statement.
 The fixed-correlator asymptotic formula is now supplied by
 \leanid{MPSTensor.physicalStringOrderParam_phase_adjusted_tendsto}:
 $\mu^{-N}S_N\to\alpha_y\beta_x$. The magnitude limit is proved by
@@ -153,9 +155,10 @@ The transfer-form physical correlator is formally defined by
 \footnote{Formal declaration:
 \leanid{MPSTensor.physicalStringOrderParam} in
 \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.}
-The source-style predicate is also formalized. It asserts that there exist a
-unitary $u\neq\mathbf{1}$, physical endpoint operators $x,y$, and a number
-$s>0$ such that
+The physical predicate uses the explicit projective correction
+$u\notin\C\Id$, rather than the literal $u\ne\Id$ printed by the source.
+It asserts that there exist such a unitary $u$, physical endpoint operators
+$x,y$, and a number $s>0$ such that
 \begin{align}
     \left|S_N(x,y,u)\right|
         &\xrightarrow[N\to\infty]{}s.
@@ -362,49 +365,109 @@ exactly when $\tr(V\Lambda A_nA_m^\dagger)\ne0$ for some $n,m$.
 explicit source canonical spectral-purity condition, deriving irreducibility
 rather than assuming one-site injectivity.
 
-This fixed-twist result does not redefine the global source predicate.
-The current \leanid{MPSTensor.HasPhysicalStringOrder} excludes the literal
-matrix $u=\Id$. Nontrivial physical action modulo a scalar phase is a
-separate interface question for the full existential equivalence in
-\ghissue{4872}. In particular, removing a peripheral phase does not itself
-prove $u_0\ne\Id$. The present results neither assert that conclusion nor
-interpret a conventional global phase as a new physical symmetry.
-The full existential Theorem~1, finite-support endpoint realization and
-physical reduced-state Theorem~2 remain open.
+\section{The explicit projective convention}
 
-\section{Verdict}
+The source's inequality $u\ne\Id$ is not preserved by removal of a
+peripheral phase: $u=\mu\Id$ becomes $u_0=\Id$.
+Indeed identity endpoints give
+$S_N(\Id,\Id,\mu\Id)=\mu^N$ whenever
+$\mathcal E(\Id)=\Id$ and $\operatorname{tr}\Lambda=1$.
+For $\mu=-1$, the literal nonidentity condition therefore has positive
+limiting magnitude for every such tensor, with Hermitian endpoints.
 
-Virtual-boundary nondecay is mathematically sound. For the injective tensors
-covered by the relevant theorems, the existential physical-endpoint criterion
-and the existential virtual-boundary criterion are equivalent by the source's
-span argument
-(\ref{eq:pgwsvc08_string_order_virtual_boundary_endpoint_span}). The physical
-correlator and the source's positive-limit predicate are now formal
-definitions, but the equivalence between physical and virtual endpoints has no
-formal counterpart. The fixed-data physical selection rule above is now proved directly.
-The existing existential symmetry/order equivalences still concern the
-virtual-boundary formulation; the explicit physical examples are also
-proved independently.
+The physical predicate now explicitly requires $u\notin\C\Id$.
+This convention is stable under scalar rephasing and is a correction to the
+printed definition. It is not an extra assumption silently attached to
+Theorem~1. There is no parallel literal-source predicate: the printed
+condition is expressed directly when evaluating scalar witnesses.
+The two existing physical AKLT and cluster witnesses are nonscalar, so their
+correlator calculations remain unchanged. The fixed-endpoint physical
+condition and fixed-twist virtual-boundary nondecay are also unchanged;
+the latter legitimately includes identity symmetry elements.
 
-The general physical equivalence results remain open. The spectral lemma
-above now uses faithful canonical density and the explicit simple-peripheral
-spectral condition. The older virtual-boundary equivalence theorems still
-assume one-site injectivity and do not themselves prove Theorems~1--2.
+For a fixed twist the phase-retaining selection criterion is
+\begin{align}
+ \mathcal E_u(V)&=\mu V,
+ &|\mu|&=1,
+ &\operatorname{tr}(V\Lambda A_nA_m^\dagger)&\ne0.
+ \label{eq:pgwsvc08_projective_peripheral_criterion}
+\end{align}
+Under the corrected nonscalar convention, $u_0=\mu^{-1}u$ remains nonscalar
+and has a fixed eigenmatrix. Thus the projective global criterion and the
+printed literal assertion have different nontriviality conventions.
+The corrected projective and phase-retaining criteria are proved. The
+literal printed assertion is false, as the explicit nondegenerate
+counterexample in \path{pgwsvc08_string_order_scalar_phase.tex} shows.
 
-The endpoint-realization restriction requires a theorem that realizes arbitrary
-virtual boundary matrices by physical endpoint operators for injective
-tensors, followed by a source-faithful proof of Theorem~1 in
-Ref.~\cite{PerezGarcia2008StringOrder}. The existing single-site construction
-\leanid{MPSTensor.physRealize} is a starting point.\footnote{Source path:
-\path{TNLean/MPS/Chain/VirtualInsertion.lean}. This file is not currently
-imported by the string-order files.}
+\section{Dimension-bounded physical endpoints}
 
-Separately, Theorems~1--2 must be proved under the source canonical-purity
-hypotheses rather than one-site injectivity. The spectral and fixed-twist selection steps are now
-available above, but physical endpoint realization for an injective tensor
-alone does not prove either general physical equivalence. These remaining
-tasks are tracked in \ghissue{4872};
-\ghissue{2660} was absorbed into that issue.
+For a normal tensor and an invertible stationary matrix $\Omega$, the spaces
+\begin{align}
+ S_\ell(\Omega)&=\operatorname{span}_{\C}
+ \{A^\sigma\Omega(A^\tau)^\dagger:|\sigma|=|\tau|=\ell\}
+ \notag
+\end{align}
+are increasing. A plateau propagates, whereas normality implies eventual
+fullness. Since the ambient matrix algebra has dimension $D^2$, this gives
+$S_{D^2}(\Omega)=M_D(\C)$. Consequently every virtual boundary has a
+physical representative on $D^2$ sites.
+For the left boundary, apply the weighted statement to the adjoint letters
+at the stationary matrix $\Lambda$ and reverse the physical words.
+Both endpoints then satisfy the exact identity
+\begin{align}
+ \operatorname{tr}\!\left[\Lambda\mathcal E_x^{[D^2]}
+   \mathcal E_u^N\bigl(\mathcal E_y^{[D^2]}(\Id)\bigr)\right]
+ &=\operatorname{tr}\!\left[\Lambda X\mathcal E_u^N(Y)\right]
+ \notag
+\end{align}
+for every individual middle length $N$, with the original twist $u$.
+Neither the endpoint operators nor their support depend on $N$.
+\footnote{The actual algebraic declarations
+\leanid{MPSTensor.exists_physicalObservableTransfer_eq_at_stationary},
+\leanid{MPSTensor.exists_physicalStringBlockEndpoints}, and
+\leanid{MPSTensor.exists_isHermitian_physicalStringProductEndpoints}
+and their final module headers have been checked in the production import
+graph.}
+
+When only nonvanishing of an endpoint coefficient is needed, its linearity
+first selects a tensor product of one-site matrix units. Multilinearity and
+Hermitian real/imaginary decomposition then select a Hermitian factor at
+each site while keeping that coefficient nonzero. This supplies literal
+products of $D^2$ Hermitian one-site operators. Arbitrary virtual boundaries
+need not have Hermitian product representatives, so that nonvanishing
+statement is separate from exact realization.
+
+\section{Verdict and remaining scope}
+
+The projective convention is explicit in the physical definition and in its
+corrected criterion. The printed existential Theorem~1, read with its literal
+nonidentity condition, is false. The four-letter injective canonical example
+satisfies the source's full spectral-purity hypotheses and the literal
+string-order condition, but admits no nonidentity unitary with a nonzero
+fixed twisted eigenmatrix. The separate false-source note
+\path{pgwsvc08_string_order_scalar_phase.tex} records the full argument.
+This is a refutation of the printed assertion, not a proof of it under an
+unstated nonscalar hypothesis.
+
+The dimension-bounded endpoint comparison is proved without one-site
+injectivity. Source canonical purity supplies normality; every pair of
+virtual boundaries is realized exactly on $D^2$ physical sites at each end,
+for every individual middle length. A separate nonvanishing selection gives
+literal Hermitian one-site products with positive limiting string magnitude.
+\footnote{The production declarations include
+\leanid{MPSTensor.isNormal_of_pureCanonical},
+\leanid{MPSTensor.pureCanonical_exists_physicalStringBlockEndpoints},
+\leanid{MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder},
+\leanid{MPSTensor.pureCanonical_exists_physicalStringOrderWith_iff_peripheral_letter},
+and \leanid{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}.
+The explicit counterexample is
+\leanid{MPSTensor.stringPhaseTensor_literal_criterion_counterexample}.}
+
+The fixed-twist virtual-boundary predicate remains unchanged and includes
+identity symmetry elements. It is not itself the physical endpoint assertion
+of the printed Theorem~1. The physical reduced-state symmetry statement of
+Theorem~2 is a separate remaining task. These source-facing tasks are tracked
+in \ghissue{4872}; \ghissue{2660} was absorbed into that issue.
 
 \bibliographystyle{alpha}
 \bibliography{references}
