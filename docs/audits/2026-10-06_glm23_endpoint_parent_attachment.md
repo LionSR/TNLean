@@ -142,3 +142,38 @@ A small generic Mathlib check confirmed the typed finrank transport through
 the expression was already definitionally reduced; the actual endpoint proof
 therefore uses explicit reduced goals with `change`. This targeted check is
 not a compilation of the full repaired attachment module.
+
+
+## Endpoint tensor and coercion repair
+
+The subsequent CI diagnostics for PR #8718 identified three remaining
+elaboration failures in `ArbitraryPhysicalEndpointAttachment`: the two
+canonical-kernel rewrites inferred tensors as expanded Kraus sums instead of
+`rotatePhysical`, and the finrank coercion rewrite did not match the
+coercion of the Boolean-selected unit-interval endpoint.
+
+The endpoint branches now first establish injectivity with the exact
+`rotatePhysical` tensor type. Each canonical ground-space theorem is then
+instantiated with that tensor explicitly, and the resulting equalities are
+composed by transitivity. This avoids relying on the rewrite tactic to
+unfold the tensor constructor while finding a kernel expression.
+
+The finrank proof still transports dimension through the already-derived
+kernel equality. Its final, typed dimension consequence is established by
+splitting the Boolean endpoint choice, so there is no conditional-coercion
+rewrite. The public theorem statements, hypotheses, regression file, eight
+axiom guards, and resource limits are unchanged.
+
+At this checkpoint only source inspection, statement/test preservation,
+proof-integrity scanning and whitespace checking have been performed for
+this repair. No Lean or Lake process was started by this worker while the
+root's canonical warmup was active. A separate-module production build and
+the unchanged strict regression with all eight guards remain required;
+no successful compilation or CI outcome is claimed for this repair yet.
+
+A follow-up source review removed the closed-Boolean simp lists from both
+kernel branches, including the deprecated `if_true` lemma. Each selected
+ground-line equality is instead reduced definitionally with an explicit
+`change` to the real endpoint zero or one before the endpoint-vector
+identity is used. This adds no hypotheses or resource overrides, and the
+compilation status remains pending.
