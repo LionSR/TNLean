@@ -203,3 +203,32 @@ and the new isometry transport. The native isometry test is also added to
 the existing blueprint workflow. All existing browser failure gates and
 unrelated workflow contents are preserved. No full-paper classification
 or common MPO covariance conclusion is asserted.
+
+## First full draft CI and wrapper repair: 2026-10-06 02:36 UTC
+
+At PR #8715 head `77fd6ca8ba468e36632697f64d7052275ebda0b9`, full CI
+compiled four of the five production modules. The actual arbitrary-physical
+interpolation, including both exact endpoint-vector identities, compiled in
+7.4 seconds. The full blueprint/web/browser job also passed.
+
+The remaining path wrapper exposed missing complex/matrix-order scopes,
+an underconstrained matrix-coordinate continuity map, and ambiguous singleton
+notation. The candidate adds the intended existing order instances, explicitly
+types the continuity linear map, and parenthesizes the singleton vectors in
+both proof and regression. It does not add mathematical hypotheses or raise
+resource limits. A subsequent finrank timeout and final-theorem diagnostic
+followed the missing kernel declaration; they are not claimed resolved until
+fresh full checking succeeds. There is no authored proof placeholder.
+
+The first isolated repair probe lacked the existing ChainOperator import and
+failed before testing the intended statements. The corrected probe uses the
+real CommutingForm import. Full wrapper and its six guarded axioms remain
+pending. The draft also incorporates the base's statement-preserving boundary
+map performance repair; the base must satisfy its own unchanged timing gate.
+
+The corrected isolated probe then passed the strict package options with
+exit zero and no diagnostics. It checks the exact interaction-matrix
+definition, representation identity, positivity, continuity repair, and
+parenthesized singleton syntax. This is a targeted pass only; the complete
+path wrapper, its finrank/gap consequences, and six guarded axioms still
+require the fresh full draft run.

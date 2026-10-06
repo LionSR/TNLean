@@ -7,7 +7,7 @@ no gap, kernel, continuity, commuting-term, or square-alphabet input is added. -
 -- These regression files intentionally audit axioms with guarded #print commands.
 set_option linter.hashCommand false
 
-open scoped Matrix
+open scoped Matrix MatrixOrder ComplexOrder
 open MPSTensor MPSTensor.MPOSymmetry
 
 variable {d₀ d₁ D₀ D₁ N : ℕ} [NeZero D₀] [NeZero D₁]
@@ -60,8 +60,8 @@ example (γ : unitInterval) (hN : 2 ≤ N) :
 example (γ : unitInterval) (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
       (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)) =
-      Submodule.span ℂ {WithLp.toLp 2
-        (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ γ))} :=
+      Submodule.span ℂ {(WithLp.toLp 2
+        (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ γ)))} :=
   arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv A₀ A₁ h₀ h₁ γ hN
 
 example (γ : unitInterval) (hN : 2 ≤ N) :
@@ -73,8 +73,8 @@ example (γ : unitInterval) (hN : 2 ≤ N) :
 example :
     LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
       (arbitraryPhysicalMixedInteraction A₀ A₁ 0) (by omega : 2 ≤ 2))) =
-      Submodule.span ℂ {WithLp.toLp 2 (mpv (N := 2)
-        (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀))} := by
+      Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := 2)
+        (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀)))} := by
   rw [arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv (N := 2) A₀ A₁ h₀ h₁
     (0 : unitInterval) (by omega),
     mpv_arbitraryPhysicalMixedInterpolation_zero (N := 2) A₀ A₁ h₀ (by omega)]

@@ -30,7 +30,7 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563, Section 5,
 lines 1584–1601 and 1687–1692.
 -/
 
-open scoped Matrix InnerProductSpace
+open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 namespace MPOSymmetry
@@ -71,8 +71,13 @@ theorem continuous_mixedEndpointInteractionMatrix [NeZero D₀] [NeZero D₁]
       EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) →L[ℂ]
         EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) =>
       Matrix.toEuclideanLin.symm T.toLinearMap :=
-    (Matrix.toEuclideanLin.symm.toLinearMap.comp
-      (ContinuousLinearMap.coeLM ℂ)).continuous_of_finiteDimensional
+    by
+      let F :
+          (EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) →L[ℂ]
+            EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2)) →ₗ[ℂ]
+          MPOTensor.ChainOperator ((D₀ + D₁) * (D₀ + D₁)) 2 :=
+        Matrix.toEuclideanLin.symm.toLinearMap.comp (ContinuousLinearMap.coeLM ℂ)
+      exact F.continuous_of_finiteDimensional
   exact hMat.comp (continuous_mixedEndpointParentInteraction B₀ B₁ h₀ h₁
     (NeZero.pos D₀) (NeZero.pos D₁))
 
@@ -141,8 +146,8 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
     (γ : unitInterval) (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
       (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)) =
-      Submodule.span ℂ {WithLp.toLp 2
-        (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ γ))} := by
+      Submodule.span ℂ {(WithLp.toLp 2
+        (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ γ)))} := by
   rw [arbitraryPhysicalMixedInteraction,
     isometricInteractionExtension_ker_eq_map_of_posSemidef _
       (commonFixedPointInclusion_isometry _ d₀ d₁)
@@ -157,8 +162,8 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
       (mixedEndpointInterpolation (polarPosTensor A₀) (polarPosTensor A₁) γ)))
   simp only [show (periodicMpvLineMap
       (mixedEndpointInterpolation (polarPosTensor A₀) (polarPosTensor A₁) γ) N).range =
-      Submodule.span ℂ {WithLp.toLp 2 (mpv (N := N)
-        (mixedEndpointInterpolation (polarPosTensor A₀) (polarPosTensor A₁) γ))}
+      Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
+        (mixedEndpointInterpolation (polarPosTensor A₀) (polarPosTensor A₁) γ)))}
       from hline,
     Submodule.map_span, Set.image_singleton,
     toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical,
