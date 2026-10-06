@@ -8,8 +8,6 @@ retains both directed interactions. Empty block and physical families are
 also included. Axiom guards allow only Lean's standard axioms.
 -/
 
-set_option linter.style.commandStart false
-
 open scoped Matrix BigOperators InnerProductSpace ComplexOrder
 open MPSTensor MPSTensor.MPOSymmetry
 
@@ -80,11 +78,13 @@ example : ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, 2 ≤ N →
 
 private noncomputable def firstLetter :
     Fin (jointMixedPhysicalDim 2 2 (fun _ : Fin 2 => 1) (fun _ => 1)) :=
-  Fintype.equivFin _ (Sum.inl 0)
+  Fintype.equivFin (JointMixedPhysical 2 2 (fun _ : Fin 2 => 1) (fun _ => 1))
+    (Sum.inl (0 : Fin 2))
 
 private noncomputable def crossLetter :
     Fin (jointMixedPhysicalDim 2 2 (fun _ : Fin 2 => 1) (fun _ => 1)) :=
-  Fintype.equivFin _ (Sum.inr (Sum.inl ⟨0, (0, 0)⟩))
+  Fintype.equivFin (JointMixedPhysical 2 2 (fun _ : Fin 2 => 1) (fun _ => 1))
+    (Sum.inr (Sum.inl ⟨0, ((0 : Fin 1), (0 : Fin 1))⟩))
 
 -- One 01 phase on a two-site ring violates exactly its column constraint.
 example : jointMixedPeriodicViolationCount 2 2 (fun _ : Fin 2 => 1) (fun _ => 1) 2
@@ -138,6 +138,10 @@ example (A : (x : Fin 0) → MPSTensor 1 (Fin.elim0 x)) :
     (fun x => x.elim0) (by decide)
 
 end TNLeanTest.JointMixedEndpointPeriodicGap
+
+section AxiomChecks
+
+set_option linter.hashCommand false
 
 /--
 info: 'MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_eq_iSup_corners'
@@ -205,3 +209,5 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LinearMap.IsPositive.norm_gap_of_reducing_projection
+
+end AxiomChecks
