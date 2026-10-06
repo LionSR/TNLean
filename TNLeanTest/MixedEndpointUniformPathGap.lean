@@ -3,6 +3,9 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointUniformPathGap
 /-! Scope regressions for the actual closed mixed path. These introduce no
 finite-window, endpoint-gap, or kernel-continuity hypotheses. -/
 
+-- These regression files intentionally audit axioms with guarded #print commands.
+set_option linter.hashCommand false
+
 open MPSTensor MPSTensor.MPOSymmetry
 
 variable {D₀ D₁ : ℕ} [NeZero D₀] [NeZero D₁]

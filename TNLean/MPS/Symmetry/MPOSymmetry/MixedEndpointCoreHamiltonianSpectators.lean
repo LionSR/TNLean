@@ -197,42 +197,30 @@ private theorem firstCoreConstraint_apply_exterior
     (v : EuclideanSpace ℂ (endpointFirstEdgeCfg ι D₀)) (a : ι) (b : Fin D₀)
     (q : Fin (D₀ * D₀)) :
     endpointFirstEdgeCoreConstraintES A₀ ι v ((a, b), q) =
-      endpointFirstEdgeCoreConstraintES A₀ PUnit
+      endpointFirstEdgeCoreConstraintES A₀ PUnit.{1}
         (WithLp.toLp 2 fun η => v ((a, η.1.2), η.2)) ((PUnit.unit, b), q) := by
   let U := endpointFirstEdgeSpectatorIsometry ι D₀
   have h := LinearMap.congr_fun (endpointFirstEdgeCoreConstraintES_conj_spectator A₀ ι) (U v)
-  have h' : U (endpointFirstEdgeCoreConstraintES A₀ ι v) =
-      rightFiberwiseMap (I := endpointFirstEdgeCfg PUnit.{1} D₀) (S := ι)
-        (LinearMap.toContinuousLinearMap (𝕜 := ℂ)
-          (E := EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit.{1} D₀))
-          (F' := EuclideanSpace ℂ (endpointFirstEdgeCfg PUnit.{1} D₀))
-          (endpointFirstEdgeCoreConstraintES A₀ PUnit.{1})) (U v) := by
-    change U (endpointFirstEdgeCoreConstraintES A₀ ι (U.symm (U v))) = _ at h
-    simpa only [U.symm_apply_apply] using h
+  change U (endpointFirstEdgeCoreConstraintES A₀ ι (U.symm (U v))) = _ at h
+  simp only [U.symm_apply_apply, ContinuousLinearMap.coe_coe] at h
   simpa [U, endpointFirstEdgeSpectatorIsometry, endpointFirstEdgeSpectatorEquiv,
     LinearIsometryEquiv.piLpCongrLeft_apply, rightFiber] using
-    congrArg (fun w => w (((PUnit.unit, b), q), a)) h'
+    congrArg (fun w => w (((PUnit.unit, b), q), a)) h
 
 private theorem lastCoreConstraint_apply_exterior
     {ι : Type*} [Fintype ι] (A₀ : MPSTensor (D₀ * D₀) D₀)
     (v : EuclideanSpace ℂ (endpointLastEdgeCfg ι D₀)) (q : Fin (D₀ * D₀))
     (c : Fin D₀) (e : ι) :
     endpointLastEdgeCoreConstraintES A₀ ι v (q, (c, e)) =
-      endpointLastEdgeCoreConstraintES A₀ PUnit
+      endpointLastEdgeCoreConstraintES A₀ PUnit.{1}
         (WithLp.toLp 2 fun η => v (η.1, (η.2.1, e))) (q, (c, PUnit.unit)) := by
   let U := endpointLastEdgeSpectatorIsometry ι D₀
   have h := LinearMap.congr_fun (endpointLastEdgeCoreConstraintES_conj_spectator A₀ ι) (U v)
-  have h' : U (endpointLastEdgeCoreConstraintES A₀ ι v) =
-      rightFiberwiseMap (I := endpointLastEdgeCfg PUnit.{1} D₀) (S := ι)
-        (LinearMap.toContinuousLinearMap (𝕜 := ℂ)
-          (E := EuclideanSpace ℂ (endpointLastEdgeCfg PUnit.{1} D₀))
-          (F' := EuclideanSpace ℂ (endpointLastEdgeCfg PUnit.{1} D₀))
-          (endpointLastEdgeCoreConstraintES A₀ PUnit.{1})) (U v) := by
-    change U (endpointLastEdgeCoreConstraintES A₀ ι (U.symm (U v))) = _ at h
-    simpa only [U.symm_apply_apply] using h
+  change U (endpointLastEdgeCoreConstraintES A₀ ι (U.symm (U v))) = _ at h
+  simp only [U.symm_apply_apply, ContinuousLinearMap.coe_coe] at h
   simpa [U, endpointLastEdgeSpectatorIsometry, endpointLastEdgeSpectatorEquiv,
     LinearIsometryEquiv.piLpCongrLeft_apply, rightFiber] using
-    congrArg (fun w => w ((q, (c, PUnit.unit)), e)) h'
+    congrArg (fun w => w ((q, (c, PUnit.unit)), e)) h
 
 /-- Every actually normalized placed term acts only on the common-core
 coordinates and leaves each pair of exterior registers independent.

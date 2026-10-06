@@ -2,6 +2,9 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointRightOpenGap
 
 /-! Source-scope regressions for the derived actual endpoint open gaps. -/
 
+-- These regression files intentionally audit axioms with guarded #print commands.
+set_option linter.hashCommand false
+
 open MPSTensor MPSTensor.MPOSymmetry
 
 variable {D₀ D₁ : ℕ}

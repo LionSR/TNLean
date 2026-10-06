@@ -168,3 +168,18 @@ same batch, using the pinned Mathlib declaration signatures.
 The full local spectator check cannot start until its normalization import
 artifact is available. No spectator, open-gap, whole-path or guarded-test
 pass is claimed at this checkpoint. Fresh exact-head CI remains required.
+
+## Residual spectator repair: 2026-10-06 00:30 UTC
+
+Head `7309a124` reduced the spectator module to four errors in two private
+helpers. Their singleton core now has the intended explicit universe, and
+the proof evaluates the original conjugation equality directly instead of
+introducing a redundant coercion comparison. Both exact helpers pass a
+strict focused check with no diagnostics. The public statements are unchanged;
+full-file and downstream checks remain pending.
+
+Both standalone gap fixtures also explicitly permit their intentional
+guarded `#print` commands, following the repository test convention. All
+mathematical examples and expected axiom lists are unchanged, and every other
+strict linter/check remains enabled. This avoids a command-style diagnostic
+being mistaken for an axiom-report mismatch; it does not weaken axiom guards.
