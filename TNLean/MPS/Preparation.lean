@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
+import TNLean.MPS.Preparation.ArbitrarySiteGateEmbedding
 import TNLean.MPS.Preparation.BlockApproximationError
 import TNLean.MPS.Preparation.BlockGateUnitary
 import TNLean.MPS.Preparation.BlockIsometryState
@@ -19,6 +20,8 @@ import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.CircuitEquivalence
+import TNLean.MPS.Preparation.CleanImplementationPlacement
+import TNLean.MPS.Preparation.CleanUnitaryImplementation
 import TNLean.MPS.Preparation.ComplexWeightError
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
@@ -33,6 +36,7 @@ import TNLean.MPS.Preparation.DepthUpperBound
 import TNLean.MPS.Preparation.DiagonalPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.InhomogeneousPreparation
+import TNLean.MPS.Preparation.InitializedRegisterProjection
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.IsometricExtension
@@ -59,11 +63,15 @@ import TNLean.MPS.Preparation.OverlappingBlockOverlap
 import TNLean.MPS.Preparation.OverlappingBlockStates
 import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PairLayer
+import TNLean.MPS.Preparation.PairProductPowers
+import TNLean.MPS.Preparation.PartialIsometryDilation
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
+import TNLean.MPS.Preparation.QuantitativeSitePermutation
+import TNLean.MPS.Preparation.QuantitativeUnitaryGates
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
 import TNLean.MPS.Preparation.RelativePositivePart
@@ -76,6 +84,9 @@ import TNLean.MPS.Preparation.RepeatedOverlappingBlockWeights
 import TNLean.MPS.Preparation.SecondOrderBlockError
 import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap
+import TNLean.MPS.Preparation.SelectedZeroRegisterReflection
+import TNLean.MPS.Preparation.SelectedZeroRegisterReflectionPool
+import TNLean.MPS.Preparation.SelectedZeroRegisterSupport
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
@@ -99,3 +110,5 @@ import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Preparation.WindowGHZ
 import TNLean.MPS.Preparation.WindowOperatorSupport
 import TNLean.MPS.Preparation.WindowSeparation
+import TNLean.MPS.Preparation.ZeroRegisterConjunction
+import TNLean.MPS.Preparation.ZeroRegisterReflection

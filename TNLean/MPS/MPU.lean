@@ -22,6 +22,7 @@ import TNLean.MPS.MPU.DaggerInverse
 import TNLean.MPS.MPU.DaggerInverseGauge
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.Equivalence
+import TNLean.MPS.MPU.ExactSubspaceAmplification
 import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteAlphabetRows
