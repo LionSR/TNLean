@@ -87,6 +87,13 @@ def jointMixedLastEdgeBoundaryMap
     ext ⟨i, j⟩
     exact congrFun (map_smul (blockInsertedGroundSpaceMap _ _ 2) z X) _
 
+private theorem firstVirtual_ne_secondVirtual {m n : ℕ} (a : Fin m) (b : Fin n) :
+    Fin.castAdd n a ≠ Fin.natAdd m b := by
+  intro h
+  have hval := congrArg Fin.val h
+  simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
+  omega
+
 /-- A shared first-endpoint letter has only its first virtual rows.
 Source: arXiv:2203.12563, Section 5, lines 1695–1704. -/
 theorem jointMixedEndpointBase_firstPhysical_mul_inclusion
@@ -102,7 +109,7 @@ theorem jointMixedEndpointBase_firstPhysical_mul_inclusion
   cases a <;>
     simp [jointMixedEndpointBase, jointMixedFirstPhysicalIndex,
       jointMixedEndpointLetter, Matrix.reindex_apply, Matrix.coordinateInclusion,
-      Matrix.mul_apply, Fin.castAddEmb_apply]
+      Matrix.mul_apply, Fin.castAddEmb_apply, eq_comm, firstVirtual_ne_secondVirtual]
 
 /-- The reflected first-sector boundary identity.
 Source: arXiv:2203.12563, Section 5, lines 1695–1704. -/
@@ -119,7 +126,8 @@ theorem jointMixedEndpointBase_inclusion_adjoint_mul_firstPhysical
   cases b <;>
     simp [jointMixedEndpointBase, jointMixedFirstPhysicalIndex,
       jointMixedEndpointLetter, Matrix.reindex_apply, Matrix.coordinateInclusion,
-      Matrix.mul_apply, Matrix.conjTranspose_apply, Fin.castAddEmb_apply, eq_comm]
+      Matrix.mul_apply, Matrix.conjTranspose_apply, Fin.castAddEmb_apply,
+      eq_comm, firstVirtual_ne_secondVirtual]
 
 private theorem firstEdge_trace
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
@@ -138,9 +146,10 @@ private theorem firstEdge_trace
   have hword : List.ofFn ![i, jointMixedFirstPhysicalIndex d₁ D₀ D₁ j] =
       i :: ([] ++ [jointMixedFirstPhysicalIndex d₁ D₀ D₁ j]) := by simp
   rw [hword, jointMixedEndpoint_insertedEvalWord_boundaryFactors]
-  simp only [Kraus.evalWord, Matrix.mul_one,
-    jointMixedEndpointBase_inclusion_adjoint_mul_firstPhysical, Matrix.mul_assoc,
-    Matrix.conjTranspose_coordinateInclusion_mul, Fin.castAddEmb_apply]
+  simp only [Kraus.evalWord, Matrix.mul_one]
+  rw [jointMixedEndpointBase_inclusion_adjoint_mul_firstPhysical]
+  simp only [Matrix.mul_assoc, Matrix.conjTranspose_coordinateInclusion_mul,
+    Fin.coe_castAddEmb]
 
 private theorem lastEdge_trace
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
@@ -162,7 +171,7 @@ private theorem lastEdge_trace
   simp only [Kraus.evalWord, Matrix.mul_one,
     jointMixedEndpointBase_firstPhysical_mul_inclusion]
   rw [Matrix.trace_mul_comm _ (X x)]
-  simp only [← Matrix.mul_assoc, Matrix.mul_coordinateInclusion, Fin.castAddEmb_apply]
+  simp only [← Matrix.mul_assoc, Matrix.mul_coordinateInclusion, Fin.coe_castAddEmb]
 
 /-- The actual first-edge coefficients are the joint first column matrix
 applied to the original one-sided core, with identity on the adjacent
