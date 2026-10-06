@@ -354,12 +354,12 @@ def activeFirstBoundaryMap
   map_add' ψ φ := by
     ext ⟨a, ⟨b, σ, c⟩, e⟩
     exact congrFun (map_add (firstBoundaryCoordinateMap F)
-      (fun p => ψ (p.1, (p.2, σ, c), e))
-      (fun p => φ (p.1, (p.2, σ, c), e))) (a, b)
+      (fun p : (Fin D₀ ⊕ Fin D₁) × Fin D₀ => ψ (p.1, (p.2, σ, c), e))
+      (fun p : (Fin D₀ ⊕ Fin D₁) × Fin D₀ => φ (p.1, (p.2, σ, c), e))) (a, b)
   map_smul' z ψ := by
     ext ⟨a, ⟨b, σ, c⟩, e⟩
     exact congrFun (map_smul (firstBoundaryCoordinateMap F) z
-      (fun p => ψ (p.1, (p.2, σ, c), e))) (a, b)
+      (fun p : (Fin D₀ ⊕ Fin D₁) × Fin D₀ => ψ (p.1, (p.2, σ, c), e))) (a, b)
 
 /-- The last-site physical change on the full active chain.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -372,12 +372,12 @@ def activeLastBoundaryMap
   map_add' ψ φ := by
     ext ⟨a, ⟨b, σ, c⟩, e⟩
     exact congrFun (map_add (lastBoundaryCoordinateMap F)
-      (fun p => ψ (a, (b, σ, p.1), p.2))
-      (fun p => φ (a, (b, σ, p.1), p.2))) (c, e)
+      (fun p : Fin D₀ × (Fin D₀ ⊕ Fin D₁) => ψ (a, (b, σ, p.1), p.2))
+      (fun p : Fin D₀ × (Fin D₀ ⊕ Fin D₁) => φ (a, (b, σ, p.1), p.2))) (c, e)
   map_smul' z ψ := by
     ext ⟨a, ⟨b, σ, c⟩, e⟩
     exact congrFun (map_smul (lastBoundaryCoordinateMap F) z
-      (fun p => ψ (a, (b, σ, p.1), p.2))) (c, e)
+      (fun p : Fin D₀ × (Fin D₀ ⊕ Fin D₁) => ψ (a, (b, σ, p.1), p.2))) (c, e)
 
 
 /-- The identity first-site change fixes every active-chain vector.

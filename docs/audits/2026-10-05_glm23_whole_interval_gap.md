@@ -261,3 +261,32 @@ Local browser execution and a full-volume book PDF are not claimed.
 
 The checked-marker head requires a fresh full CI run. The green proof-head
 evidence above does not preempt that final-head validation.
+
+### 2026-10-06 02:30 UTC: boundary-map elaboration performance
+
+Documentation head `4ec52abefce52a00260da9db53f8af7e50a90d5e` passed the
+full Lean build, strict regressions/guards and full blueprint/browser. Its
+separate unchanged timing gate failed because `MixedEndpointActiveBoundaryTransport`
+reached exactly 50 seconds (the previous proof checkpoint was 48 seconds).
+Two other modules remained 48-second advisories. This is not recorded as
+an all-green final head, and no threshold is changed.
+
+Profiling identified unresolved tuple-projection metavariables in the
+linearity proofs of `activeFirstBoundaryMap` and `activeLastBoundaryMap`.
+Six explicit tuple-type annotations remove that elaboration work while
+preserving every public signature, computational `toFun` body, hypothesis,
+import and resource cap. The entire candidate module passes the strict
+one-thread warning-as-error check without output artifacts.
+
+Under the same detailed local profiler, the two declarations fell below
+its 250-millisecond reporting threshold; the unmodified profile recorded
+16.76 and 17.36 seconds, with the latter exhausting the unchanged heartbeat
+cap under tracing. That diagnostic failure is kept distinct from the
+successful baseline CI build. Candidate imports took 88.1 seconds and total
+wall time was 102.871 seconds; these local totals are not CI benchmarks.
+
+Candidate source SHA-256:
+`880f1cb33cbbddd4adb6158f34fe243a873b2645cdfaee23a2f45daed2f625b2`.
+Source-equivalence, module policies and timing-checker tests pass. The exact
+new head still requires full CI, including the unchanged 50-second gate.
+The earlier JSON source manifest remains the immutable proof-head inventory.
