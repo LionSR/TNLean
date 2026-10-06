@@ -32,6 +32,7 @@ import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
+import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.ExpectationOverlap
@@ -95,6 +96,7 @@ import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
+import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization

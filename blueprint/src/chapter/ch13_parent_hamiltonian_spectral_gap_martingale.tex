@@ -7274,3 +7274,29 @@ shorter interaction range.
     exactly at every interaction range and every chain length, so the
     prescribed lower bounds transfer unchanged.
 \end{proof}
+
+\begin{corollary}[The joint left window in the original covering intervals]
+\label{cor:residual_window_left_joint_range_cover}
+\lean{MPSTensor.iSup_range_residualWindowLeftMapES_eq_reindex_cover_leftBoundaryMapES}
+\leanok
+Under the isometric virtual resolution and blocked letter intertwining of
+Theorem~\ref{thm:residual_window_left_original_ground_space}, let
+$U^{\mathrm{cover}}_{K,M,r}$ be the unitary from original configurations
+of length $KL+ML+r$ to the three-window coordinates of
+Definition~\ref{def:residual_cover_coordinates}. Then
+\[
+ \bigvee_j\operatorname{ran}L_{B_j}(K,M,r)
+ =U^{\mathrm{cover}}_{K,M,r}\operatorname{ran}
+    \Gamma^{\mathrm{left},A}_{KL+ML,r}.
+\]
+All lengths may be zero. This is the same physical coordinate isometry
+used for the right and full windows; no additional tensor hypothesis
+is imposed. The equality supplies the aligned prefix space in
+\cite[Lemma~\texttt{commutation}(ii)]{Nachtergaele1996Spectral}.
+\uses{thm:residual_window_left_original_ground_space,def:residual_cover_coordinates}
+\end{corollary}
+\begin{proof}\leanok
+Transport the previous left-window equality along the arithmetic
+identification $(K+M)L=KL+ML$. By its definition, the cover bijection is
+exactly the previous configuration bijection followed by this identification.
+\end{proof}

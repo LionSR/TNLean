@@ -1,0 +1,96 @@
+\begin{theorem}[Semi-regularity and the group algebra]
+    \label{thm:peps_semiregular_group_algebra}
+    \lean{Representation.linearIndependent_iff_injective_asAlgebraHom,
+        Representation.isSemiRegular_of_linearIndependent,
+        Representation.isSemiRegular_iff_linearIndependent,
+        Representation.isSemiRegular_iff_injective_asAlgebraHom}
+    \leanok
+    \uses{def:peps_semiregular, thm:peps_semiregular_trace}
+    Let $G$ be a finite group and let $\rho$ be a finite-dimensional complex
+    representation. The following assertions are equivalent:
+    $\rho$ contains every irreducible representation; the operators
+    $(\rho(g))_{g\in G}$ are linearly independent; and the induced algebra
+    homomorphism $\mathbb C[G]\to\operatorname{End}(V)$ is injective.
+    This is an algebraic characterization of the occurrence condition in
+    \cite[Definition~4.5 and Lemma~4.6]{Schuch2010PEPS}.
+    More generally, for a representation of a monoid over a commutative
+    semiring, independence of its operators is equivalent to injectivity
+    of its monoid-algebra homomorphism.
+\end{theorem}
+\begin{proof}\leanok
+    The trace-dual identity gives independence for a semi-regular
+    representation. Conversely, if an irreducible character $\chi$ is
+    absent, its character projector vanishes:
+    \begin{align}
+        \frac{\chi(1)}{|G|}\sum_{g\in G}\chi(g^{-1})\rho(g)=0.
+        \label{eq:peps_absent_character}
+    \end{align}
+    Indeed, the projector vanishes on every irreducible summand of $V$.
+    Independence in (\ref{eq:peps_absent_character}) would imply
+    $\chi(1)=0$, contrary to the positive dimension of the irreducible
+    representation. The standard basis of the group algebra identifies
+    the last assertion with independence of the group operators.
+\end{proof}
+
+\begin{theorem}[Reversing a semi-regular bond]
+    \label{thm:peps_semiregular_dual}
+    \lean{Representation.IsSemiRegular.dual,
+        Representation.isSemiRegular_dual_iff}
+    \leanok
+    \uses{thm:peps_semiregular_group_algebra}
+    A finite-dimensional complex representation $\rho$ of a finite group
+    is semi-regular if and only if its contragredient
+    $\rho^*(g)=\rho(g^{-1})^{\mathsf T}$ is semi-regular.
+    This justifies reversing the bond orientation in the contraction
+    convention of \cite[Definition~5.1 and Lemma~5.2]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Inversion permutes the group indices, and transposition is injective
+    on endomorphisms of a finite-dimensional vector space. It therefore
+    preserves independence of the group operators. Conversely,
+    independence of their transposes implies independence of the
+    original operators.
+\end{proof}
+
+\begin{theorem}[Nonzero tensor factors of a semi-regular representation]
+    \label{thm:peps_semiregular_nonzero_tensor}
+    \lean{Representation.IsSemiRegular.tprod_of_nontrivial,
+        Representation.IsSemiRegular.tprod_left_of_nontrivial}
+    \leanok
+    \uses{thm:peps_semiregular_group_algebra, thm:peps_semiregular_trace,
+        thm:peps_semiregular_equivalence}
+    Let $G$ be a finite group, let $\rho$ be a finite-dimensional
+    semi-regular complex representation, and let $\sigma$ be any
+    nonzero finite-dimensional complex representation. Then both
+    $\rho\otimes\sigma$ and $\sigma\otimes\rho$ are semi-regular.
+    This strengthens the tensor-product assertion in
+    \cite[Lemma~5.2]{Schuch2010PEPS}: the second factor need not contain
+    the trivial representation.
+\end{theorem}
+\begin{proof}\leanok
+    A dependence among the tensor-product operators is a dependence
+    among the tensors $\rho(g)\otimes\sigma(g)$, by the natural
+    identification of their endomorphism spaces. Applying the
+    trace-dual functional at $h$ to the first factor gives
+    $c_h\sigma(h)=0$. Since $\sigma(h)$ is invertible on a nonzero
+    vector space, $c_h=0$. The group-algebra criterion proves
+    semi-regularity. Interchanging the tensor factors gives the
+    other order.
+\end{proof}
+
+\begin{theorem}[Irreducibility of the contragredient]
+    \label{thm:peps_irreducible_dual}
+    \lean{Representation.isIrreducible_dual}
+    \leanok
+    The contragredient of a finite-dimensional irreducible complex
+    representation of a group is irreducible. No unitarity or finite-group
+    hypothesis is needed. This is an algebraic ingredient for the
+    conjugate charge in \cite{Schuch2010PEPS}, lines 2514--2518.
+\end{theorem}
+\begin{proof}\leanok
+    The annihilator of an invariant dual subspace is invariant in the
+    original representation, since the group action on the dual uses
+    the inverse element. Irreducibility makes this annihilator zero or
+    the whole space. Finite-dimensional annihilator duality then makes
+    the original dual subspace the whole space or zero, respectively.
+\end{proof}

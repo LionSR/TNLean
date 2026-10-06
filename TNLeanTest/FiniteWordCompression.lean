@@ -32,6 +32,12 @@ example (A : MPSTensor 4 2) (B : MPSTensor 4 3)
   allWordCompression_of_finiteWordCompression (A := A) (B := B) (V := V) (W := W)
     (by decide) h
 
+<<<<<<< HEAD
+=======
+section AxiomChecks
+set_option linter.hashCommand false
+
+>>>>>>> 4f21dc48c2a9ed0ab3d899232301fe6c98d624c9
 /-- info: 'Kraus.allWordCompression_of_finiteWordCompression' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
 #print axioms Kraus.allWordCompression_of_finiteWordCompression
@@ -48,4 +54,9 @@ example (A : MPSTensor 4 2) (B : MPSTensor 4 3)
 #guard_msgs in
 #print axioms Kraus.finiteWordCompression_iff_hasInvariantSubquotient
 
+<<<<<<< HEAD
+=======
+end AxiomChecks
+
+>>>>>>> 4f21dc48c2a9ed0ab3d899232301fe6c98d624c9
 end Kraus

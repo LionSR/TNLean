@@ -19,7 +19,7 @@ commutator of the two truncations `U^{[i₁,j₁]}` and `U^{[i₂,j₂]}` on a g
 `U = ⊗_{i ∈ Λ} u`, the truncation is `U^{[a,b]} = ⊗_{i ∈ [a,b]} u`, the commutator is the
 identity and its expectation value is `+1` (lines 2104--2106).
 
-This file formalizes two parts of this discussion.
+This file formalizes three parts of this discussion.
 
 * The commutator of two unitaries `U₁`, `U₂` acts on a vector `ψ` by the scalar `c` whenever
   `U₂ U₁ ψ = c U₁ U₂ ψ`, so its expectation value is `c ⟨ψ|ψ⟩`. With the exchange relation of
@@ -28,9 +28,15 @@ This file formalizes two parts of this discussion.
   have the identity as their commutator, and the expectation value is `⟨ψ|ψ⟩`, which is `1` on
   a normalized state.
 
-The exchange relation `U^{[i₂,j₂]} U^{[i₁,j₁]} |ψ_A⟩ = ω U^{[i₁,j₁]} U^{[i₂,j₂]} |ψ_A⟩` of two
-truncations of an anomalous matrix product unitary, and the general-group detection
-`detectG` (lines 2108--2114), are not formalized here.
+* The value of the detector depends on the choice of truncation. For the on-site symmetry
+  `X^{⊗N}`, the truncations `Z_j X^{⊗[i,j]}`, which are circuit truncations of `X^{⊗N}` in the
+  sense of the source, have commutator `-1` on overlapping intervals, although the anomaly is
+  trivial. So `detecZ2` is false for an arbitrary circuit truncation; this is recorded in
+  `docs/paper-gaps/gs24_truncation_detector_endpoint_dependence.tex`.
+
+The detection for unitaries acting on `|ψ_A⟩` as domain-wall strings is
+`TNLean/MPS/Symmetry/MPOSymmetry/DomainWallDetector.lean`. The general-group detection `detectG`
+(lines 2108--2114) is not formalized.
 
 ## Main definitions
 
@@ -48,6 +54,9 @@ truncations of an anomalous matrix product unitary, and the general-group detect
   symmetry is the identity.
 * `Matrix.star_dotProduct_groupCommutator_onSiteTruncation_mulVec`: its expectation value on a
   normalized state is `1`.
+* `Matrix.groupCommutator_dressed_onSiteTruncation_pauliX`,
+  `Matrix.star_dotProduct_groupCommutator_dressed_onSiteTruncation_pauliX`: truncations of
+  `X^{⊗N}` dressed by `Z` at one endpoint have commutator `-1`.
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -135,6 +144,81 @@ theorem star_dotProduct_groupCommutator_onSiteTruncation_mulVec {u : Matrix ι �
     (hu : uᴴ * u = 1) (S₁ S₂ : Finset (Fin N)) {ψ : (Fin N → ι) → ℂ} (hψ : star ψ ⬝ᵥ ψ = 1) :
     star ψ ⬝ᵥ (groupCommutator (onSiteTruncation u S₁) (onSiteTruncation u S₂) *ᵥ ψ) = 1 := by
   rw [groupCommutator_onSiteTruncation hu, one_mulVec, hψ]
+
+/-! ### Truncations dressed at one endpoint -/
+
+/-- The Pauli matrix `X`. -/
+local notation "σX" => !![(0 : ℂ), 1; 1, 0]
+
+/-- The Pauli matrix `Z`. -/
+local notation "σZ" => !![(1 : ℂ), 0; 0, -1]
+
+/-- A truncation of an on-site symmetry dressed by a unitary `w` at one site is still unitary. -/
+theorem dressed_onSiteTruncation_conjTranspose_mul_self {u w : Matrix ι ι ℂ} (hu : uᴴ * u = 1)
+    (hw : wᴴ * w = 1) (S : Finset (Fin N)) (j : Fin N) :
+    (onSiteTruncation w {j} * onSiteTruncation u S)ᴴ *
+        (onSiteTruncation w {j} * onSiteTruncation u S) = 1 := by
+  rw [conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc (onSiteTruncation w {j})ᴴ,
+    onSiteTruncation_conjTranspose_mul_self hw, Matrix.one_mul,
+    onSiteTruncation_conjTranspose_mul_self hu]
+
+/-- **The anomaly detector depends on the endpoints of the truncations.** For the on-site
+symmetry `X^{⊗N}`, whose anomaly is trivial, take the truncations
+`U₁ = Z_{j₁} X^{S₁}` and `U₂ = Z_{j₂} X^{S₂}`, each dressed by the Pauli matrix `Z` at one
+endpoint. If `j₁ ∈ S₂`, `j₂ ∉ S₁` and `j₁ ≠ j₂`, then `U₂† U₁† U₂ U₁ = -1`.
+
+These are circuit truncations in the sense of arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex`
+lines 2081--2087. The symmetry `X^{⊗N}` is the depth-two circuit whose first layer applies
+`X ⊗ ZX` to the pairs of sites `(2k, 2k+1)` and whose second layer applies `Z` to every odd site,
+a gate on the pair `(2k+1, 2k+2)`; indeed `Z · ZX = X`. Dropping the gates that are not
+contained in an interval `[i, j]` with `i` even and `j` odd keeps both factors on every odd
+site of `[i, j]` except `j`, which keeps only `ZX`, so the truncation is `Z_j X^{⊗[i,j]}`; this
+identification of the circuit truncation is not formalized.
+For `i₂ < i₁ < j₁ < j₂` of these parities the hypotheses hold, and the expectation value of the
+commutator on every normalized state is `-1`, not the trivial anomaly `1`
+(`star_dotProduct_groupCommutator_dressed_onSiteTruncation_pauliX`).
+
+Project result: a counterexample to arXiv:2405.00439, `detecZ2`, lines 2097--2102, read for an
+arbitrary circuit truncation; documented in
+`docs/paper-gaps/gs24_truncation_detector_endpoint_dependence.tex`. -/
+theorem groupCommutator_dressed_onSiteTruncation_pauliX {S₁ S₂ : Finset (Fin N)} {j₁ j₂ : Fin N}
+    (hj₁ : j₁ ∈ S₂) (hj₂ : j₂ ∉ S₁) (hj : j₁ ≠ j₂) :
+    groupCommutator (onSiteTruncation σZ {j₁} * onSiteTruncation σX S₁)
+        (onSiteTruncation σZ {j₂} * onSiteTruncation σX S₂) = -1 := by
+  simp only [groupCommutator, onSiteTruncation, finKronecker_mul, finKronecker_conjTranspose]
+  rw [← neg_one_smul ℂ (1 : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ),
+    ← finKronecker_ite_smul_one (α := fun _ ↦ Fin 2) j₁]
+  congr 1
+  funext k
+  simp only [Finset.mem_singleton]
+  by_cases hk₁ : k = j₁
+  · subst hk₁
+    simp only [hj₁, hj, ite_true, ite_false]
+    split_ifs <;> ext a b <;> fin_cases a <;> fin_cases b <;>
+      simp [Matrix.mul_apply, Fin.sum_univ_two]
+  · by_cases hk₂ : k = j₂
+    · subst hk₂
+      simp only [hj₂, hk₁, ite_true, ite_false]
+      split_ifs <;> ext a b <;> fin_cases a <;> fin_cases b <;>
+        simp [Matrix.mul_apply, Fin.sum_univ_two]
+    · simp only [hk₁, hk₂, ite_false]
+      split_ifs <;> ext a b <;> fin_cases a <;> fin_cases b <;>
+        simp [Matrix.mul_apply, Fin.sum_univ_two]
+
+/-- **The detector of the dressed truncations is `-1`** (arXiv:2405.00439, `detecZ2`,
+`Papers/2405.00439/MPU-DW.tex` lines 2097--2102): for the truncations of
+`groupCommutator_dressed_onSiteTruncation_pauliX` and every normalized state `ψ`,
+`⟨ψ| U₂† U₁† U₂ U₁ |ψ⟩ = -1`, although the on-site symmetry `X^{⊗N}` has trivial anomaly.
+
+Project result: documented in
+`docs/paper-gaps/gs24_truncation_detector_endpoint_dependence.tex`. -/
+theorem star_dotProduct_groupCommutator_dressed_onSiteTruncation_pauliX {S₁ S₂ : Finset (Fin N)}
+    {j₁ j₂ : Fin N} (hj₁ : j₁ ∈ S₂) (hj₂ : j₂ ∉ S₁) (hj : j₁ ≠ j₂)
+    {ψ : (Fin N → Fin 2) → ℂ} (hψ : star ψ ⬝ᵥ ψ = 1) :
+    star ψ ⬝ᵥ (groupCommutator (onSiteTruncation σZ {j₁} * onSiteTruncation σX S₁)
+        (onSiteTruncation σZ {j₂} * onSiteTruncation σX S₂) *ᵥ ψ) = -1 := by
+  rw [groupCommutator_dressed_onSiteTruncation_pauliX hj₁ hj₂ hj, neg_mulVec, one_mulVec,
+    dotProduct_neg, hψ]
 
 end OnSite
 
