@@ -391,6 +391,33 @@
     $m\in[n-l,n]$.
 \end{proof}
 
+\begin{theorem}[Kernel and gap transport under an isometric conjugacy]
+    \label{thm:martingale_isometric_conjugation_gap}
+    \lean{LinearIsometryEquiv.map_apply_eq_of_conj,
+        LinearIsometryEquiv.mem_ker_iff_of_conj,
+        LinearIsometryEquiv.ker_eq_map_of_conj,
+        LinearIsometryEquiv.mem_orthogonal_ker_iff_of_conj,
+        LinearIsometryEquiv.norm_gap_iff_of_conj}
+    \leanok
+    Let $U:E\to F$ be a surjective complex linear isometry of inner
+    product spaces, and let $P:E\to E$ and $Q:F\to F$ be linear maps
+    satisfying $Q=UPU^{-1}$. Then $UPx=QUx$,
+    $\ker Q=U(\ker P)$ and $(\ker Q)^\perp=U((\ker P)^\perp)$.
+    For every real $\delta$, the estimate
+    $\delta\|x\|\leq\|Px\|$ on $(\ker P)^\perp$ is equivalent to
+    $\delta\|y\|\leq\|Qy\|$ on $(\ker Q)^\perp$.
+    Finite dimensionality and positivity are not required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Substituting $Ux$ in the conjugacy gives $UPx=QUx$.
+    Injectivity of $U$ identifies kernel membership, and surjectivity
+    gives the kernel equality. The equality
+    $\langle Uz,Ux\rangle=\langle z,x\rangle$ identifies the orthogonal
+    complements. Apply the respective norm estimate to $x$ and $Ux$
+    and use $\|Ux\|=\|x\|$.
+\end{proof}
+
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
 % proof of Theorem 2.1(i), lines 1178--1259.
 \begin{lemma}[Right-spectator extension]

@@ -1,0 +1,61 @@
+{
+  "safe_combined_remote": "0c025f08eeb1ad50fb41a282488882114254d3bc",
+  "safe_combined_tree": "545b8e8f4a678dd25059766fa7239a9d05ad908b",
+  "helper_remote_checkpoint": "18fe4919ac69bfbf670245dcf6c9d0fe02808b47",
+  "helper_source_sha256": "62849c6e2055d5b8fb99fb2e2c0814cbabd9219274ee345d31ff438371df60fb",
+  "observed_before_workspace_loss": [
+    {
+      "module": "TNLean.MPS.ParentHamiltonian.Martingale.IsometricConjugationGap",
+      "exit_code": 0,
+      "elapsed_seconds": 8.869
+    },
+    {
+      "module": "TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreHamiltonian",
+      "exit_code": 0,
+      "elapsed_seconds": 25.451
+    },
+    {
+      "module": "TNLeanTest.JointMixedEndpointCoreHamiltonian",
+      "exit_code": 0,
+      "elapsed_seconds": 6.708,
+      "guards": 5
+    },
+    {
+      "module": "TNLeanTest.JointMixedEndpointFrameReduction",
+      "exit_code": 0,
+      "elapsed_seconds": 15.093,
+      "guards": 4
+    }
+  ],
+  "threads": 1,
+  "wall_bound_seconds": 60,
+  "strict_flags": [
+    "autoImplicit=false",
+    "relaxedAutoImplicit=false",
+    "pp.unicode.fun=true",
+    "maxSynthPendingDepth=3",
+    "linter.mathlibStandardSet=true",
+    "warningAsError=true"
+  ],
+  "expected_foundations": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "artifact_status": "Original worktree, native artifacts, logs and per-module hash records under /workspace/shared disappeared at approximately10:59UTC. Successful tool results survive in the conversation. Production/test changes are deterministically recoverable from the safe combined tree and published helper source. This is historical observed validation, not a fresh post-recovery compilation.",
+  "shared_owner_status": "Applied after recovery: one generic entry in existing ch13, label thm:martingale_isometric_conjugation_gap. Both consumers use the same owner. Placement has static checks only in the recovered environment; no post-recovery render or compilation is claimed.",
+  "recovered_source_sha256": {
+    "TNLean/MPS/ParentHamiltonian/Martingale/IsometricConjugationGap.lean": "62849c6e2055d5b8fb99fb2e2c0814cbabd9219274ee345d31ff438371df60fb",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCoreHamiltonian.lean": "f99c1151f299d38465e3c9ac0055ee1e78900983867a2376567c6833413a2b3a",
+    "TNLeanTest/JointMixedEndpointCoreHamiltonian.lean": "184b647ade721ccdab65cea0cd06226e616e88949288afb5ecb337fa6e0719e5",
+    "TNLeanTest/JointMixedEndpointFrameReduction.lean": "6e7e3e9cffd3d46f0d824a0e7467bceadcb093380aa7c9a39329932e5564e090",
+    "TNLean/MPS/ParentHamiltonian/Martingale.lean": "0cd69a16f0470e13c53b99fde0a3f6396c8b5cde2a7eff4e51638929828fc9b4"
+  },
+  "recovery_scripts_sha256": {
+    "restore_checked_changes.py": "8c196a783b72c773edc933d5a0ca294e16662b276ab561d93971fe222d12a4a8",
+    "restore_owner.py": "38dafeff6926b3f80f125452384c0e3abfd8726b4a9cbac11c66644ad3cdd335"
+  },
+  "helper_matches_published_source": true,
+  "shared_owner_text_sha256": "436a657d58f33aad3fbad8e299e58389d34a288d64d5e3740bafc89c9749a1e3",
+  "post_recovery_compiler_runs": 0
+}

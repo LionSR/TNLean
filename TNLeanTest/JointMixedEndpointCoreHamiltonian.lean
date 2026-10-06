@@ -3,8 +3,6 @@ import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreHamiltonian
 /-! Regression coverage for all ordered pairs, arbitrary exterior
 multiplicities, original joint bulk, empty labels, and vanishing fibers. -/
 
-set_option linter.hashCommand false
-
 open MPSTensor MPSTensor.MPOSymmetry ContinuousLinearMap
 
 private def overlapEndpoint : Fin 2 → MPSTensor 3 1 :=
@@ -78,6 +76,10 @@ example {r d n : ℕ} (D₀ D₁ : Fin r → ℕ) (hD₀ : ∀ x, 0 < D₀ x)
           (fun x ↦ D₀ x + D₁ x) (fun x ↦ D₀ x + D₁ x) n v‖ :=
   jointEndpointNormalizedSum_norm_gap_iff_enlarged D₀ D₁ hD₀ A n hδ
 
+section AxiomChecks
+
+set_option linter.hashCommand false
+
 /--
 info: 'LinearIsometryEquiv.conj_eq_dependentRightFiberwiseMap_of_ker_iff'
 depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -112,3 +114,5 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_norm_gap_iff_enlarged
+
+end AxiomChecks
