@@ -11,6 +11,16 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For string order in arXiv:0802.0447:
+
+- `pgwsvc08_string_order_scalar_phase.tex` (false source claim, resolved)
+  gives a nondegenerate canonical counterexample to the literal existential
+  Theorem 1, and states the explicit projective and phase-retaining corrections.
+- `pgwsvc08_string_order_virtual_boundary.tex` records the physical versus
+  virtual endpoint comparison, now including exact D²-site realization and
+  Hermitian product endpoints for every individual middle length. The physical
+  reduced-state symmetry assertion is tracked separately.
+
 For the Fibonacci string-net example of arXiv:1511.08090:
 
 - `bmwshv17_fibonacci_block_entries_provenance.tex` records that the source
@@ -38,6 +48,13 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   unit laws derived from it fail there as well, and that the empty chain is
   excluded as a degenerate reading.
 
+For the project Ising bond-object twist motivated by arXiv:1606.00608:
+
+- `tnlean_ising_three_object_twist_scope.tex` records the four channels of the
+  forty-dimensional local product and distinguishes this compression from
+  the unformalized literal round-45B boundary tensors of dimensions
+  forty-eight and sixty-four.
+
 For the Kitaev chain of arXiv:2011.12127, Appendix A:
 
 - `rmp_kitaev_chain_bosonic_scope.tex` records that the review and
@@ -58,25 +75,30 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
   realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
-- `spc11_uniform_gap_injective_scope.tex` (scope restriction) records that the
-  uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, is formalized
-  for continuous compact families of one-site injective tensors with the
-  canonical two-site interaction, while the source's path also covers
-  non-injective normal forms with several blocks.
-- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
-  that the formal fixed point takes a projective representation with the given
-  factor system as input, whereas the source starts from the 2-cocycle alone; the
-  twisted regular representation on `ℂ^G` would supply it and is not formalized.
-- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction) records that
-  the twist identity `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹` is proved for every
-  character `φ`, but on-site symmetry and the realization of the class of `ω`
-  only for `φ = 1`, because the formal symmetry predicate does not allow the
-  global phase `φ(g)^N`; symmetry up to a character would remove the restriction.
-- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction) records that the
-  source's construction covers groups combining on-site, time-reversal and
-  reflection symmetries, with cocycles twisted by `α` and `β`, while the
-  formalized fixed point and its symmetry results treat only a linear on-site
-  action with untwisted cocycles.
+- `spc11_uniform_gap_injective_scope.tex` (scope restriction, resolved) records
+  that the uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, was
+  first formalized only for continuous compact families of one-site injective
+  tensors with the canonical two-site interaction, and that compact multiblock
+  families, continuous positive interactions, and the source's blocked
+  isometric deformation now cover the source path, using finite-range Knabe
+  windows in place of Nachtergaele's estimate.
+- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
+  records that the formal fixed point takes a projective representation as input,
+  whereas the source starts from the 2-cocycle alone. For finite groups the twisted
+  regular representation on `ℂ^G` supplies a unitary representation whose factor
+  system lies in the class of the cocycle, and the fixed point built from it
+  realizes that class.
+- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction, resolved)
+  records the extension from exact vector invariance to symmetry up to an
+  arbitrary character. The length-`N` vector has phase `φ(g)^N`, and the same
+  character is retained in virtual-class uniqueness and finite-group realization.
+- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction, resolved) records
+  the mixed-symmetry extension of the corrected dimer fixed point. Time reversal
+  and reflection act on tensor letters and finite chains, with phase twist
+  `β = t` and virtual twist `α = t + r`. Every pair of twisted U(1) cocycles of a
+  finite group has a fixed-point representative with the prescribed character
+  and virtual factor system; its virtual U(1) cohomology class is independent
+  of the unitary gauge. This does not establish mixed-symmetry gapped interpolation.
 
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
@@ -90,11 +112,13 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
-- `rmp_peps_czx_boundary_chain.tex` records that the virtual action of the
-  on-site CZX symmetry is identified with the CZX matrix product unitary on a
-  closed chain of legs subject to the plaquette constraint, and that the
-  support of the contraction of a region of the torus on that chain is not
-  formalized.
+- `rmp_peps_czx_boundary_chain.tex` records the actual physical boundary
+  identification for positive proper bounded CZX rectangles: the incident-only
+  contraction has a faithful effective plaquette-spin basis, intertwines the
+  physical symmetry with the printed CZX operator, and has the same support
+  as the actual reduced density, of rank `2^(2*w+2*h)` even after trace
+  normalization. Nonzero spectral values, entropy, isometric normalization
+  and general nonrectangular regions remain open.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the
@@ -107,9 +131,12 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   of the Gauss-law configurations of trivial holonomy, the only sector the
   dual network reaches on a torus. It also records that stability of
   `G`-isometry under concatenation (Lemma 6.2) is formalized in one
-  dimension, with the constants multiplying, and that in two dimensions only
-  the simplification of the left inverse for the left-regular representation
-  on the contracted link is formalized (open scope restriction).
+  dimension and for the contraction of one link of two PEPS tensors, with
+  the constants multiplying. Finally it records the scope of the physical
+  entropy and local-equivalence results of Section 6: connected regular
+  regions, contiguous simply connected torus regions with periods at least
+  three, and no identification with the entire parent-Hamiltonian ground
+  space; these remaining restrictions are open.
 - `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
   records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
   operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product
@@ -158,6 +185,12 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_shift_supplied_standard_forms.tex` records that the shift-family gates
+  of Section VII are formalized as explicit two-site decompositions with
+  supplied gates and normalized half factors. Only the blocked
+  counterpropagating families take their half factors and gates from an
+  explicit source-cut factorization; the unblocked and swap-transformed
+  decompositions are not identified with Definition SF.
 - `mpu_shift_specified_tensor_index_scope.tex` records the resolved distinction
   between the specified-tensor formulas and the public blocking-independent
   MPU index. `ShiftPublicIndex.lean` constructs the right-shift canonical form
@@ -526,14 +559,22 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
-- `ssvcw05_sequential_bond_upper_bound_scope.tex` records that only the upper
-  bounds `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of
-  the successive decompositions are formalized, not the exact dimension or the
-  equality with the Schmidt rank implied by "minimal resources".
+- `ssvcw05_sequential_bond_upper_bound_scope.tex` records the upper bounds
+  `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of the
+  successive decompositions, the formalized "minimal resources" (bond dimensions
+  equal to the cut ranks, least ancilla dimension equal to the largest cut rank,
+  and the bound `d^{⌊N/2⌋}` for every state), that the printed size is not
+  minimal for product states, and that the gauge conditions of the completeness
+  theorem are not formalized.
 - `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
   scheme without an ancilla presupposes two sites, since its first operation
   acts on sites 1 and 2, that the literal one-site reading of the theorem is
   false, and that the formal statements are for chains of length at least two.
+- `pgvwc07_sequential_with_ancilla_positive_length.tex` records that the
+  theorem on sequential generation with an ancilla fails on the empty chain and,
+  for the probabilistic scheme, for a zero-dimensional ancilla, and that the
+  formal set equalities are for chains of at least one site and, in the
+  probabilistic case, ancillas of dimension at least one.
 - `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
@@ -676,10 +717,11 @@ For the matrix product operator symmetries of arXiv:2203.12563:
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
 
-- `sun25_mpdo_symmetry_boundary_scope.tex` records that the family predicates
-  are stated for the periodic operators, the identity boundary of the source's
-  boundary-weighted density operators, while the single-length results hold
-  for arbitrary matrices.
+- `sun25_mpdo_symmetry_boundary_scope.tex` (resolved) records that the family
+  predicates and the purification lemma now retain an arbitrary virtual
+  boundary of the source's boundary-weighted density operators; only the
+  local-purifying-tensor and normal-purification gauge characterizations
+  remain identity-boundary results.
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
@@ -716,6 +758,11 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   walls and their phases are nonzero and that the local action of the
   symmetry on a domain wall holds against blocked regions of the two ground
   states.
+- `gs24_domain_wall_half_string_gluing.tex` (scope restriction) records that
+  the exchange of two left endpoints of domain-wall strings is proved for the
+  half-chain operators glued with right endpoints of strings, not as an
+  identity of half-chain objects with open legs, which needs the fixed-point
+  form of the action tensors.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
@@ -724,6 +771,14 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   arXiv:2405.00439; the two agree exactly when the stabilizer is normal, in
   particular for abelian groups, and `S_3` acting on three blocks separates
   them.
+- `gs24_truncation_detector_endpoint_dependence.tex` (false source claim)
+  records that the expectation value of the commutator of two truncated
+  symmetries depends on the choice of truncation: two circuit truncations
+  `Z_j X^{⊗[i,j]}` of the on-site symmetry `X^{⊗N}` give `-1` although the
+  anomaly is trivial; the detection holds for truncations whose walls on
+  `ψ_B` are the images under the symmetry of their walls on `ψ_A`, which the
+  formal theorem takes as the hypothesis that the truncations act on `ψ_A` as
+  the domain-wall strings.
 
 For the group matrix product operators of arXiv:2203.12563:
 
@@ -750,6 +805,23 @@ For the group matrix product operators of arXiv:2203.12563:
   formalized, so the anomaly class is the type-II class; the comparison with
   the original odd-ring or two-site-blocked family remains open.
 
+For the PVBS spectral formulas of Bachmann--Nachtergaele, arXiv:1112.4097:
+
+- `bn12_pvbs_periodic_gap.tex` records the exact finite periodic one-species,
+  zero-phase gap and its local-projector normalization, including the
+  two-oriented-window convention at length two. It distinguishes this
+  result from the broader multi-species thermodynamic conjecture and
+  proves critical finite-periodic-volume gaplessness with positive-energy
+  Fourier magnons, while no fixed finite-volume gap is asserted to vanish.
+
+For the one-species PVBS example of arXiv:2011.12127, Section IV.C.4:
+
+- `cpgsv21_pvbs_threshold.tex` corrects the right-boundary threshold under
+  `q = 1 + λ`, records the finite-ring condition `q^N ≠ 1` for periodic
+  vacuum uniqueness, and gives the critical W-state counterexample. The
+  open-chain ground space and both geometric localization regimes are
+  formalized; no uniform spectral-gap theorem is claimed.
+
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
 - `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis
@@ -762,6 +834,13 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
+- `mswc24_mixed_polar_injectivity_scope.tex` retains the false-source record
+  for footnote 3's full-input pseudoinverse claim, with a nonzero two-site GHZ
+  tensor witness. The local correction is proved: parametrize the actual polar
+  support by an isometry, apply the inward sweeps to that input, and reconstruct
+  the full polar partial isometry with the support embedding's adjoint.
+  A formal normal, unital and trace-preserving witness also satisfies the
+  physical-dimension capacity condition and refutes the full-input identity.
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
@@ -781,7 +860,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   canonical form has multiplicity `m_j ≥ 2`, the block form of the positive part
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
-  tends to `1/√5` for every blocking length.
+  tends to `1/√5` for every blocking length. The failure lies in the coefficients:
+  with the pairs of block `j` on one copy `k_j` and `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`
+  in place of `βⱼ`, the state of eq. (S7) is the corrected state and satisfies
+  part (ii) of the approximation-error lemma for all nonzero complex weights, also
+  for blocks whose `q`-site states overlap, at the rate of
+  `mswc24_block_form_mixed_overlap.tex`.
 - `mswc24_block_form_mixed_overlap.tex` records that the block form of the
   positive part in eq. (S5) also fails when every multiplicity is one, because
   `B†B` couples distinct blocks through the overlaps of their `q`-site states,
@@ -798,8 +882,16 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   index, and the corrected approximating state `V^{⊗M} ∑ⱼ βⱼ L_j^{⊗M} |Ω_j⟩`
   with the source's weights. For blocks whose `q`-site states are orthogonal,
   part (ii) of the approximation-error lemma is proved for it with arbitrary
-  multiplicities and complex weights; numerical checks on the counterexamples
-  are recorded.
+  multiplicities and complex weights; for blocks whose states overlap it is
+  proved at the corrected rate for all nonzero complex weights, with constants
+  independent of the weights; numerical checks on the counterexamples are
+  recorded.
+- `mswc24_repeated_overlap_small_weight_sum.tex` is a resolved scope restriction:
+  for repeated blocks whose `q`-site states overlap, an earlier bound for the
+  corrected state carried the factor `min(1, b)^{-1/2}` with `b = ∑ⱼ |βⱼ|²`. An
+  estimate of the positive part relative to the block weights, from a Sylvester
+  equation, removes it: `ε ≤ C y e^{C y}` and `ε ≤ C' y` hold for all nonzero
+  complex weights, with constants independent of the weights.
 - `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
   false-source note for Lemma 2 of the Supplemental Material. It records that
   the lemma holds in modulus for the source's
@@ -811,6 +903,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   the remaining repairs to the proof of Theorem 1 (normal versus injective,
   Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
   constant `ξ/4`, which is implicit in the source's final inequality.
+- `mswc24_depth_lower_bound_constant.tex` is the resolved local-correction
+  note for the constants of the closing inequality in the proof of Theorem 1:
+  `(1 - δ)^{k/2} < 1/e` gives a trace distance above `1 - 1/e - o(1)`, not
+  `√(3/4)`, and the factor `γ` of the final chain is undefined. Neither affects the rate
+  `4/ξ`; the formal bound `(ξ/4) log N ≤ T + (ξ/4) log(T+1) + C` and the
+  `Θ(log N)` depth at fixed error carry it.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
   in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
@@ -832,32 +930,99 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   measurements (paragraph "Tree-RG circuit with measurements") is formalized
   as a sequence of measurement rounds, with teleportation along chains of hops
   in one round of depth `2`, layers of two-site gates between distant sites in
-  depth `5`, and binary trees of two-site gates with `k` levels in depth `5k`,
-  every register being one site; open: registers of several sites and the
-  identification with the approximating state give the source's depth
-  `O(log log(N/ε))` for matrix product states.
+  depth `5`, and binary trees of two-site gates with `k` levels in depth `5k`;
+  with registers of `s` sites, the approximating state with blocks of
+  `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
+  unequal widths remove the former restriction to chain lengths divisible by
+  `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
+  chain length; open: two-site gates between distant sites only at odd
+  separation, on disjoint stretches, which the trees do not need.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
-  short-range correlated MPS") is formalized for a ring with a common bond
-  dimension `D`, injective blocked tensors and blocks of at least `3D` sites,
-  with the finite-correlation assumption stated for one ring with error `δ`;
-  open: varying bond dimensions and partial isometries.
+  short-range correlated MPS") is formalized for a ring with bond dimensions
+  at most `D`, varying along the ring and handled by zero padding, and for
+  blocked tensors that need not be injective, the block unitaries
+  implementing isometric extensions `W_k` of the partial isometries `V_k`
+  with error exactly `ε(Ω, φ_pos)`; the remaining restriction is blocks of at
+  least `3D` sites, against the source's requirement `d^q ≥ D²`, which for
+  such blocks implies the hypothesis `D² ≤ d^{3D}` of the exact error
+  identity, with the finite-correlation assumption
+  stated for one ring with error `δ`. For sequences with the explicit lower
+  bound `c log N ≤ ℓ_k`, `c > 0`, finite exceptional rings are now prepared
+  exactly and their depths absorbed into one constant: `T_N ≤ C L_N` for
+  every positive ring length. If `L_N = O(log N)` and `δ_N → 0`, the prepared
+  states have logarithmic depth and vanishing error. Open: removing the
+  additional positive lower-growth hypothesis and deriving the
+  uniform accuracy rate needed for `O(log(N/ε))`. The conditional theorem
+  assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
+  with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
+  when the selected block length exceeds the ring length.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
-  "Long-range MPS using measurements"): orthogonal `q`-site states of distinct
-  blocks, block lengths dividing `N`, and the corrected approximating state; and
-  two readings of the construction, the circuit applied after the measurement
-  and the depth `O(q)`, rather than constant, of the GHZ-type state on the chain
-  of `N` sites; open.
+  "Long-range MPS using measurements"). The first formal statement takes
+  orthogonal `q`-site states of distinct blocks, block lengths dividing `N`, and
+  the corrected approximating state. The second removes these restrictions: it
+  prepares every direct sum of normal blocks in the canonical form (S2), with
+  overlapping `q`-site states, every multiplicity and every nonzero complex
+  weight, for every `N ≥ 2` at which the periodic state is nonzero, with blocks
+  of equal length except a larger last one, using the isometries of the direct
+  sum with weights one, so that its error bound has no factor
+  `min(1, ∑ⱼ |βⱼ|²)^{-1/2}`. The note also records two readings of the
+  construction and the original one-round GHZ depth `O(q)`. The sparse-register
+  measurement-round construction resolves the remaining depth restriction:
+  it prepares the same GHZ state in constant depth for arbitrary block lengths
+  at least `3r`, every parity pattern, and a singleton ring. All physical
+  scratch sites are restored, with input-independent fixed-history scalars.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
-  (paragraph "Connection to MERA") is formalized for tensors whose two-site
-  blocked tensor is injective, so that every layer is an isometry, and for
-  chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
-  a coarser last block remove the two restrictions.
+  (paragraph "Connection to MERA") was first formalized for tensors whose
+  two-site blocked tensor is injective and chain lengths `N = M 2^{k+1}`;
+  finest isometries writing registers of `s` sites, with the tensor blocked
+  over `s` sites injective, cover every normal tensor for the chain lengths
+  `N = M s 2^{k+1}`; open: trees on leaves of unequal widths for every chain
+  length.
+- `mswc24_same_phase_compatible_seed.tex` records the sufficient coherent
+  seed condition for the non-normal chosen-vector conversion in #8469.
+  It gives a mathematical (not Lean-checked) covariance obstruction to
+  replacing that condition by equality of parent groundspaces. The informal
+  paper remark is not declared unconditionally false; its general phase
+  interpretation remains open.
 - `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.
+
+For the phase relation of arXiv:2103.13367:
+
+- `psc21_local_channel_phase_scope.tex` records approximate and asymptotic
+  conversion by enlarged-site local channels without classical feedforward.
+  It distinguishes unit-cost gates on unbounded intermediate dimensions from
+  the source's physical-qudit gate convention, with no asserted uniform-depth
+  simulation or relation inclusion. The local results include
+  additive-error composition and mutual-conversion equivalence. Finite adaptive
+  channels and composition are formalized separately; a system-size-independent
+  decomposition into source-ordered QCcc blocks and a uniform physical gate-cost
+  comparison remain open.
+
+For the classification of translation-invariant MPS under circuits assisted by
+measurements and classical communication (arXiv:2103.13367, Theorem
+`MPS_classification`):
+
+- `psc21_mps_classification_scope.tex` (scope restriction) records that only
+  the direction from the trivial sequence to the MPS sequence is formalized,
+  for the canonical form with normal blocks and mixed transfer maps of
+  spectral radius below one, and for periodic states that are nonzero for all
+  large chain lengths; open: the converse direction needs channels acting on
+  arbitrary input states.
+
+- `psc21_physical_port_simulation_scope.tex` records the derived
+  `2 * ceil(log_d B)` overhead per native layer, hence total intersite depth
+  at most `2 * ceil(log_d B) * T` for a depth-`T` bounded native channel protocol,
+  including exact reference preservation, original physical-port
+  input/output and product-zero designated memory reset. Every such finite
+  physical-port protocol also has an actual unitary realization at the same
+  intersite depth, with fresh local product-zero environments and one final
+  discard. The discarded environments need not reset. Source QCcc block/control
+  and pure-output system--ancilla conditions remain separate.
 
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
@@ -865,4 +1030,47 @@ For the correlation functions of arXiv:2011.12127, Section II.B.3:
   pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
   printed for a primitive tensor with a defective subleading eigenvalue
   (explicit counterexample), the diagonalizability hypothesis under which it
-  holds, and the rate correction for the decay bound.
+  holds, and the rate correction for the decay bound. The corrected
+  all-separation binomial and polynomial-plus-transient expansions are now
+  proved for normal tensors in an arbitrary bond basis. The broader singular
+  fixed-matrix source class remains open.
+
+For the finite-round extension of arXiv:2103.13367:
+
+- `psc21_adaptive_channel_round_scope.tex` records arbitrary-input adaptive
+  local channels and separates their quantum-layer depth from the fixed
+  number of composed `QCcc` blocks required by the asymptotic source relation.
+  One source block may already contain sequential measurements at many sites;
+  the adaptive tree does not record the required source-block decomposition.
+
+- `pgvwc07_half_chain_spectrum_conventions.tex` records the boundary-index
+  convention in the half-chain calculation, normalization by the actual
+  finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
+  transfer-error estimate used for ordered physical eigenvalue convergence.
+
+For the periodic decomposition in PGVWC07 Theorem 5:
+
+- `pgvwc07_periodic_decomposition_scope.tex` records the resolved normalization
+  boundary: the one-block unital canonical hypotheses now yield the peripheral
+  period and the original-tensor component decomposition. Non-divisible ring
+  lengths vanish componentwise; the separate empty-word boundary convention
+  remains explicit.
+
+For SCP10, arXiv:1001.3807:
+
+- `scp10_general_group_physical_blocking.tex` records the proved physical
+  support-isometry and normalized Bell separation, and the remaining geometric
+  reblocking and original-coarse-tensor identification.
+
+### SCP10: two-by-two regular fixed point
+
+[scp10_two_by_two_regular_fixed_point.tex](scp10_two_by_two_regular_fixed_point.tex)
+records the proved normalized original-tensor reblocking on untwisted coarse
+tori of periods at least three, and the remaining tiny-period/twisted scope.
+
+### SCP10: coherent twisted regular fixed point
+
+[scp10_twisted_two_by_two_regular_fixed_point.tex](scp10_twisted_two_by_two_regular_fixed_point.tex)
+records the single block-local map for every native closure and coherent
+sum, with the same original coarse tensor and normalized Bell factors.
+Coarse periods at least three and the stated boundary/support scope remain.

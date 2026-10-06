@@ -6994,6 +6994,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     indices agree by Theorem~\ref{thm:mpu_cfii_index_periodic_comparison}.
 \end{proof}
 
+\input{chapter/ch28_mpu_injective_source_index}
+
 \begin{theorem}[Blocking and adjunction of the representative index]
     \label{thm:mpu_representative_index_blocking_adjoint}
     \lean{MPOTensor.IsMPU.index_blockTensor,
@@ -10264,28 +10266,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Gauge invariance of the time-reversal sign]
     \label{lem:mpu_sigma_gauge_invariant}
-    \notready
-    \discussion{5714}
-    \uses{eq:sigma-from-trace}
-    Under the hypotheses of Lemma~\ref{eq:sigma-from-trace}, let $x$ and $y$ be
-    unitaries and change the standard-form gauge by
+    \lean{MPOTensor.timeReversalTrace_gauge}
+    \leanok
+    Let $u,v\in\operatorname{End}(\C^d\otimes\C^d)$ and let
+    $x,y\in U(d)$. Set
     \begin{align}
         u' & =(x\otimes y)u,                 &
         v' & =v(y^\dagger\otimes x^\dagger).
     \end{align}
-    Then the trace formula has the same value for $(u',v')$ as for $(u,v)$.
-    Consequently the sign $\sigma$ is independent of the standard-form gauge.
+    The four-site trace is unchanged:
+    \begin{align}
+        \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
+         & =\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right].
+    \end{align}
+    In particular, the trace expression in~(\ref{eq:sigma-from-trace}) is
+    invariant under the standard-form gauge.
     % Source proof: paper_v2.tex 1624--1630.
 \end{lemma}
 
-\begin{proof}
-    \uses{eq:sigma-from-trace, thm:matrix_swap_kronecker_intertwine}
+\begin{proof}\leanok
+    \uses{thm:matrix_swap_kronecker_intertwine}
     Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
     $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
     $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
-    Substitution into Lemma~\ref{eq:sigma-from-trace}, cancellation on the
-    middle legs, and
-    $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ give
+    Cancellation of $y_2^\dagger y_2$ and $x_3^\dagger x_3$ gives
+    $v'_{23}u'_{12}u'_{34}v'_{23}
+        =x_1y_4v_{23}u_{12}u_{34}v_{23}y_2^\dagger x_3^\dagger$,
+    since the outer-leg operators commute with $v_{23}$. The identity
+    $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ then gives
     \begin{align}
         \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
          & =\tr\!\left[x_3y_2\mathbb S_{12,34}
@@ -11542,13 +11550,59 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factorizations.
 \end{proof}
 
-\begin{proposition}[Standard forms of the three shift MPUs]
-    \label{prop:threeMPU_standard_forms}
-    \notready
-    \discussion{5715}
-    \uses{threeMPU, def:mpu_source_uv}
-    Assume $d>0$. For the fixed standard-form source factors, the corresponding
-    unitaries satisfy
+\begin{theorem}[Trace-normalized source gates for the counterpropagating shifts]
+    \label{thm:threeMPU_normalized_source_gates}
+    \lean{MPOTensor.shiftExampleU₂Paper_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₂Paper_sourceV_fourSpin_apply,
+        MPOTensor.shiftExampleU₃Paper_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply,
+        MPOTensor.shiftExampleU₂PaperSourceFactors,
+        MPOTensor.shiftExampleU₃PaperSourceFactors}
+    \leanok
+    \uses{threeMPU, def:mpu_weighted_source_factors,
+        def:mpu_source_uv, def:mpu_shift_trace_weight}
+    For $d>0$, the two counterpropagating shift tensors have source factors
+    with trace-one weight $\rho=d^{-2}\Id_{d^2}$. In the four-spin coordinates
+    used above, their source gates are
+    \begin{align}
+        u_2^{(2)} & = \Id\otimes\mathbb S\otimes \Id,
+                  & v_2^{(2)}                                                      & = (\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes \Id), \\
+        u_3^{(2)} & = (\Id\otimes\mathbb S\otimes \Id)(\mathbb S\otimes\mathbb S),
+                  & v_3^{(2)}                                                      & = \Id\otimes\mathbb S\otimes \Id.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:threeMPU_supplied_source_factors, thm:threeMPU_U2_supplied_source_gates_two,
+        thm:threeMPU_U3_supplied_source_gates_two}
+    Starting with the identity-weight source factors, replace
+    $X_1,Y_1,Z_1$ by $dX_1,d^{-1}Y_1,dZ_1$, respectively, and leave the
+    second cut unchanged. The cut factorizations and right inverses are
+    preserved, while the first weighted isometry now uses $d^{-2}\Id_{d^2}$.
+    Writing $\hat u_k,\hat v_k$ for the identity-weight gates of
+    Theorem~\ref{thm:threeMPU_U2_supplied_source_gates_two} and
+    Theorem~\ref{thm:threeMPU_U3_supplied_source_gates_two}, the source gates
+    rescale as
+    \begin{align}
+        u_k^{(2)} & = d^{-1}\hat u_k, & v_k^{(2)} & = d\,\hat v_k, & k & = 2,3,
+    \end{align}
+    which cancels the scalar factors in those formulas.
+\end{proof}
+
+\begin{theorem}[Two-site decompositions of the three shift MPUs]
+    \label{thm:threeMPU_supplied_decompositions}
+    \lean{MPOTensor.shiftExampleU₁StandardForm_normalized,
+        MPOTensor.shiftExampleU₃StandardForm_normalized,
+        MPOTensor.shiftExampleU₂BlockedStandardForm_normalized,
+        MPOTensor.shiftExampleU₃BlockedStandardForm_normalized,
+        MPOTensor.shiftExampleU₁StandardForm,
+        MPOTensor.shiftExampleU₃StandardForm,
+        MPOTensor.shiftExampleU₂BlockedStandardForm,
+        MPOTensor.shiftExampleU₃BlockedStandardForm}
+    \leanok
+    \uses{threeMPU, def:mpu_supplied_two_site_standard_form,
+        def:mpu_shift_trace_weight}
+    Assume $d>0$. The three shift families have two-site decompositions
+    with supplied gates whose unitary gates satisfy
     \begin{align}
         u_1                          & =\Id\otimes\Id,                  & v_1 & =\Id\otimes\Id, \\
         u_3                          & =\mathbb S,                      & v_3 & =\mathbb S,     \\
@@ -11559,14 +11613,64 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\mathbb S\otimes\mathbb S), &
         v_3^{(2)}                    & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
-    These statements concern the paper gates $u=Y_2\mathbin{-}Y_1$ and
-    $v=X_1\mathbin{-}X_2$ for trace-normalized standard-form factors. The
-    supplied identity-weight computations above give the same gate matrices
-    only after transferring reciprocal scalar factors between $u$ and $v$.
-    Constructing the trace-normalized factors and proving the displayed
-    equalities remains.
+    The two-site blockings in the last two lines use the physical order
+    $((1,2),(3,4))$. These are unitary gates with normalized half factors
+    satisfying the open standard-form equation. For the two blocked families,
+    the half factors and gates are those of the source factors of
+    Theorem~\ref{thm:threeMPU_normalized_source_gates}. For $U_1$ and the
+    unblocked $U_3$, the one-site tensor is read as a pair of spins and
+    decomposed directly; these decompositions are not identified with the
+    standard form of Definition~\ref{SF}
+    \cite{gap:mpu_shift_supplied_standard_forms}.
     % Source lines: paper_v2.tex 2002--2042.
-\end{proposition}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_weight, thm:threeMPU_normalized_source_gates,
+        thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity,
+        thm:mpu_swap_matrix_unitary}
+    For the identity family, take
+    $X_1(i,\gamma;r)=\delta_{i,r}$ and
+    $X_2(\alpha,i;\ell)=\delta_{i,\ell}$. For the unblocked third family, take
+    \begin{align}
+        X_1(i,(a,b);r)    & =\sqrt d\,\delta_{a,r}\delta_{b,i},   &
+        X_2((a,b),i;\ell) & =d^{-1/2}\delta_{a,i}\delta_{b,\ell}.
+    \end{align}
+    Its gates are the swap, which is unitary by
+    Theorem~\ref{thm:mpu_swap_matrix_unitary}.
+    The reciprocal scalars cancel in both contractions. Summing the Gram
+    entries proves $X_1^*(\Id\otimes\rho)X_1=\Id$ and $X_2^*X_2=\Id$, with
+    $\rho=d^{-2}\Id_{d^2}$ for the third family and $\rho=1$ for the identity.
+    For the two blocked families, use the trace-normalized source factors
+    of Theorem~\ref{thm:threeMPU_normalized_source_gates}, relabeling the
+    intermediate coordinates by pairs of spin indices. Write
+    $e_L:\{0,\ldots,d^2-1\}\to L$ and
+    $e_R:\{0,\ldots,d^2-1\}\to R$ for these bijections, obtained by
+    $\ell\leftrightarrow(a,b)$ and $r\leftrightarrow(c,e)$ and the
+    source-factor rank identifications. The open contraction becomes
+    \begin{align}
+        \sum_{p\in L}\sum_{q\in R}
+        X_2(\alpha,i_1;p)u(p,q;j_1,j_2)X_1(i_2,\gamma;q)
+         & =\sum_{\ell=0}^{d^2-1}\sum_{r=0}^{d^2-1}
+        X_2(\alpha,i_1;e_L(\ell))u(e_L(\ell),e_R(r);j_1,j_2)
+        X_1(i_2,\gamma;e_R(r)).
+        \notag
+    \end{align}
+    Thus the source-factor contraction theorem gives the open equation
+    in the displayed coordinates. The four-spin permutation matrices are
+    unitary. The relabeled half factors are
+    $\widehat X_1(i,\gamma;r)=X_1(i,\gamma;e_R(r))$ and
+    $\widehat X_2(\alpha,i;\ell)=X_2(\alpha,i;e_L(\ell))$. Since $e_R$
+    and $e_L$ are injective, the source normalization identities give
+    \begin{align}
+        \bigl(\widehat X_1^*(\Id\otimes\rho)\widehat X_1\bigr)_{r,t}
+         & =\bigl(X_1^*(\Id\otimes\rho)X_1\bigr)_{e_R(r),e_R(t)}
+        =\delta_{e_R(r),e_R(t)}=\delta_{r,t},                    \\
+        \bigl(\widehat X_2^*\widehat X_2\bigr)_{\ell,m}
+         & =\bigl(X_2^*X_2\bigr)_{e_L(\ell),e_L(m)}
+        =\delta_{e_L(\ell),e_L(m)}=\delta_{\ell,m}.
+    \end{align}
+\end{proof}
 
 \begin{definition}[Transformation with swaps]
     \label{threeMPU2}
@@ -11667,20 +11771,67 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the second action gives the third, which proves the identity.
 \end{proof}
 
-\begin{theorem}[Standard forms of the swap-transformed shifts]
-    \label{thm:threeMPU2_remaining_formulas}
-    \notready
-    \discussion{5715}
-    \uses{threeMPU2, def:mpu_source_uv}
-    The first two standard forms are
+\begin{theorem}[Two-site decompositions of the swap-transformed shifts]
+    \label{thm:threeMPU2_supplied_decompositions}
+    \lean{MPOTensor.shiftExampleTildeU₁StandardForm_normalized,
+        MPOTensor.shiftExampleTildeU₂StandardForm_normalized,
+        MPOTensor.shiftExampleTildeU₁StandardForm,
+        MPOTensor.shiftExampleTildeU₂StandardForm}
+    \leanok
+    \uses{threeMPU2, def:mpu_supplied_two_site_standard_form,
+        def:mpu_shift_trace_weight}
+    For $d>0$, the first two transformed families have two-site
+    decompositions with supplied gates and normalized half factors, with gates
     \begin{align}
         \widetilde u_1 & =\mathbb S,     &
         \widetilde v_1 & =\Id\otimes\Id,   \\
         \widetilde u_2 & =\Id\otimes\Id, &
         \widetilde v_2 & =\mathbb S.
     \end{align}
+    The one-site tensors are read as pairs of spins and decomposed directly;
+    these decompositions are not identified with the standard form of
+    Definition~\ref{SF} \cite{gap:mpu_shift_supplied_standard_forms}.
     % Source lines: paper_v2.tex 2087--2099.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{threeMPU2, thm:threeMPU_supplied_decompositions,
+        def:mpu_source_weight, def:mpu_supplied_two_site_standard_form,
+        thm:mpu_swap_matrix_unitary}
+    The physical swap exchanges the two output indices of each tensor.
+    For the first family, retain the identity family's half factors and
+    replace its unshifted gate by the swap. For the second family, choose
+    $X_1(i,(a,b);r)=\sqrt d\,\delta_{a,i}\delta_{b,r}$ and
+    $X_2((a,b),i;\ell)=d^{-1/2}\delta_{a,\ell}\delta_{b,i}$.
+    Contracting over the bond index $\beta=(a,b)$ gives the shifted swap
+    gate,
+    \begin{align}
+        \sum_{a,b}X_1(i_1,(a,b);s)\,X_2((a,b),i_2;t)
+        =\delta_{i_1,t}\delta_{i_2,s}
+        =\mathbb S_{(i_1,i_2),(s,t)}.
+    \end{align}
+    Inserting the unshifted identity gate $\Id\otimes\Id$ between the half
+    factors gives, for $\alpha=(a,b)$ and $\gamma=(a',b')$,
+    \begin{align}
+        \sum_{\ell,r}X_2(\alpha,i_1;\ell)\,
+        (\Id\otimes\Id)_{(\ell,r),(j_1,j_2)}\,X_1(i_2,\gamma;r)
+        =X_2(\alpha,i_1;j_1)\,X_1(i_2,\gamma;j_2)
+        =\delta_{a,j_1}\delta_{b,i_1}\delta_{a',i_2}\delta_{b',j_2},
+    \end{align}
+    which is the entry of $\widetilde{\mathcal U}_2$ with output
+    $(i_1,i_2)$, input $(j_1,j_2)$, and bond indices $\alpha,\gamma$.
+    The swap is unitary by Theorem~\ref{thm:mpu_swap_matrix_unitary}, so
+    both gates are unitary. With $\rho=d^{-2}\Id_{d^2}$, the Gram sums are
+    \begin{align}
+        \bigl(X_1^*(\Id\otimes\rho)X_1\bigr)_{r,r'}
+         & =d^{-2}\sum_{i,a,b}d\,\delta_{a,i}\delta_{b,r}\delta_{b,r'}
+        =\delta_{r,r'},                                                   \\
+        \bigl(X_2^*X_2\bigr)_{\ell,\ell'}
+         & =d^{-1}\sum_{a,b,i}\delta_{a,\ell}\delta_{a,\ell'}\delta_{b,i}
+        =\delta_{\ell,\ell'},
+    \end{align}
+    since $d$ pairs $(i,a)$ satisfy $a=i$ and $d$ pairs $(b,i)$ satisfy $b=i$.
+\end{proof}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
     \label{lemma:sym-trafo-swap}

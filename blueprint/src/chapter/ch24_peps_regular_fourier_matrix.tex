@@ -1,0 +1,53 @@
+\begin{lemma}[Positive sector dimensions]%
+    \label{lem:peps_positive_dimension_bounds}
+    \lean{TNLean.PEPS.positive_dimension_bounds}
+    \leanok
+    For any finite family of positive integers $d_i$, the single-copy index
+    space has cardinality $\sum_i d_i$, and
+    \begin{align}
+        \sum_i d_i\leq\sum_i d_i^2,
+        \qquad
+        \sum_i d_i<\sum_i d_i^2\ \Longleftrightarrow\ \exists i,\ d_i>1.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Each positive integer satisfies $d_i\leq d_i^2$, with equality exactly
+    when $d_i=1$. Summing these inequalities gives the claims.
+\end{proof}
+
+\begin{theorem}[Matrix coordinates of the finite-group Fourier decomposition]%
+    \label{thm:peps_regular_fourier_matrix}
+    \lean{TNLean.PEPS.exists_minimalSemiRegular_leftRegular_matrix,
+        TNLean.PEPS.card_eq_sum_sq_of_regular_intertwiner,
+        TNLean.PEPS.bondDimensions_of_regular_intertwiner}
+    \leanok
+    \uses{thm:peps_regular_minimal_representation,
+        lem:peps_positive_dimension_bounds}
+    For every finite group $G$, there are positive dimensions $d_i$,
+    pairwise inequivalent irreducible unitary matrix representations $D_i$,
+    and an isometric matrix $Q$ such that
+    \begin{align}
+        U_{\mathrm{reg}}(g)
+        =Q\left(\bigoplus_i D_i(g)\otimes I_{d_i}\right)Q^\dagger
+        \qquad(g\in G).
+    \end{align}
+    The same matrices give a unitary semi-regular representation
+    $U_{\min}=\bigoplus_iD_i$ with character multiplicity one in each sector.
+    The dimensions satisfy $|G|=\sum_i d_i^2$ and
+    $\sum_i d_i\leq |G|$, with strict inequality exactly when some $d_i>1$.
+    The representation and coordinate matrix depend only on $G$.
+    This is the matrix form of the Fourier decomposition used in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the orthonormal Fourier basis of the regular representation.
+    Let $Q$ consist of its columns in the original group basis. Both bases
+    are orthonormal, so $Q^\dagger Q=I$, and its conjugate transpose is the
+    inverse change of coordinates. Applying the change-of-basis identity
+    to each group matrix gives the displayed formula. The single-copy sum
+    has the unitary, semi-regular, and multiplicity properties already proved.
+    The identity group element also gives $QQ^\dagger=I$, so the two index
+    spaces have the same dimension. Counting the repeated indices gives
+    $|G|=\sum_i d_i^2$; the preceding numerical lemma gives the comparison.
+\end{proof}

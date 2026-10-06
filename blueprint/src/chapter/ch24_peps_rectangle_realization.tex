@@ -1,0 +1,25 @@
+\begin{theorem}[Simply connected rectangular cell regions]%
+    \label{thm:peps_torus_rectangle_realization}
+    \lean{TNLean.PEPS.isSimplyConnected_torusRegionRealization_rectangle}
+    \leanok
+    \uses{thm:peps_torus_region_realization}
+    Let the torus periods be positive integers $w,h$. Let $a,b\geq0$ and
+    $\ell,m>0$ be integers with $\ell<w$, $m<h$, $a+\ell\leq w$, and
+    $b+m\leq h$, and let $R$ be the native rectangle with coordinate ranges
+    $a\leq x<a+\ell$ and $b\leq y<b+m$.
+    Then the actual closed-cell realization of $R$ is simply connected.
+    This is auxiliary geometry for the stripe reduction in
+    \cite[Theorem~6.7]{Schuch2010PEPS}, local source lines 1995--2011.
+\end{theorem}
+
+\begin{proof}\leanok
+    The torus projection maps the planar rectangle
+    $[a-1/2,a+\ell-1/2]\times[b-1/2,b+m-1/2]$ onto the closed-cell
+    realization of $R$. To verify surjectivity, choose in each coordinate
+    an integer center in the indicated range at distance at most $1/2$;
+    conversely, every cell centered in $R$ lies in this planar rectangle.
+    Since its side lengths are smaller than the periods, projection is
+    injective there. The continuous bijection from this compact rectangle
+    to its Hausdorff image is a homeomorphism. The planar rectangle is
+    nonempty and convex, hence contractible and simply connected.
+\end{proof}

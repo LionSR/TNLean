@@ -1,0 +1,69 @@
+\begin{theorem}[Direct-sum classification of Fibonacci representations]%
+    \label{thm:mpo_symmetry_fibonacci_decomposition}
+    \lean{FibonacciCompression.exists_fibNim_pair,
+        FibonacciCompression.fibNimPartner,
+        FibonacciCompression.fibNimPartner_involutive,
+        FibonacciCompression.exists_equiv_prod_of_fibNim_sq,
+        FibonacciCompression.fibNim_symmetric_of_sq,
+        FibonacciCompression.exists_equiv_prod_of_isNIMRep_fibNim}
+    \leanok
+    \uses{def:asymex_fib_anomaly_nim}
+    Let $T$ be a matrix indexed by a finite set $K$, with entries in $\N$,
+    satisfying $T^2=I+T$. Set $R=\{x\in K:T_{xx}=0\}$ and
+    $F=\begin{pmatrix}0&1\\1&1\end{pmatrix}$. There is a bijection
+    $\sigma:K\longrightarrow R\times\{0,1\}$ for which
+    \begin{align}
+        T_{\sigma^{-1}(r,i),\sigma^{-1}(s,j)}
+         & =\delta_{rs}F_{ij}.
+        \label{eq:mpo_fibonacci_direct_sum}
+    \end{align}
+    In particular, $T$ is symmetric. Every unital nonnegative integer
+    representation of the Fibonacci fusion ring is therefore a direct sum
+    of regular representations. This gives the decomposition underlying
+    the two-block action of \cite[Section~6]{GarreRubio2023MPOSym}; the
+    correction adding the missing indecomposability hypothesis is recorded in
+    \cite{gap:glm23_fibonacci_module_rank_scope}.
+    % Source anchor: arXiv:2203.12563, lines 564--565 and 1991--1993.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:asymex_fib_anomaly_nim}
+    The diagonal equation gives $T_{xx}\in\{0,1\}$ and
+    $\sum_{z\ne x}T_{xz}T_{zx}=1$. Thus $x$ has a unique partner $y\ne x$
+    with $T_{xy}=T_{yx}=1$. For $z\notin\{x,y\}$,
+    $T_{xz}T_{zx}=0$ and the $(z,x)$ equation gives $T_{zy}\leq T_{zx}$.
+    Hence $T_{xz}T_{zy}=0$, and the $(x,y)$ equation reduces to
+    $T_{xx}+T_{yy}=1$. Orient the pair by $T_{xx}=0$, $T_{yy}=1$.
+    The $(x,z)$ and $(y,z)$ equations imply
+    $T_{yz}\leq T_{xz}$ and $T_{xz}+T_{yz}\leq T_{yz}$, respectively;
+    hence $T_{xz}=T_{yz}=0$. The partner operation is an involution,
+    because $x$ is the only possible partner of $y$. Its pairs partition
+    $K$, proving (\ref{eq:mpo_fibonacci_direct_sum}). In a unital
+    Fibonacci representation the fusion relation at $a=b=\tau$ is
+    precisely $T^2=I+T$.
+\end{proof}
+
+\begin{theorem}[The indecomposable Fibonacci action]%
+    \label{thm:mpo_symmetry_fibonacci_indecomposable}
+    \lean{FibonacciCompression.exists_equiv_of_isIndecomposable_fibNim}
+    \leanok
+    \uses{def:asymex_fib_anomaly_nim}
+    A nonempty finite indecomposable nonnegative integer representation
+    of the Fibonacci ring, with the unit acting as the identity, has
+    exactly two blocks. Here indecomposability means that $M_\tau$ cannot
+    be permuted into block-triangular form with two nonempty diagonal blocks.
+    The blocks can be labelled $x_1,x_\tau$ so that
+    $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 1993.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_symmetry_fibonacci_decomposition,
+        thm:mpo_symmetry_fibonacci_rank_two}
+    Each isolated pair in (\ref{eq:mpo_fibonacci_direct_sum}) is a nonempty
+    invariant subset. Indecomposability makes it all of $K$, and the
+    two-block classification identifies the action with the regular one.
+\end{proof}

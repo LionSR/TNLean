@@ -1,0 +1,113 @@
+\begin{theorem}[Topology of native plaquettes]%
+    \label{thm:peps_torus_plaquette_realization}
+    \lean{TNLean.PEPS.torusVertexPoint_add,
+        TNLean.PEPS.torusRegionRealization_image_add,
+        TNLean.PEPS.connected_torusPlaquetteRegion,
+        TNLean.PEPS.torusPlaquetteRegion_eq_image_add,
+        TNLean.PEPS.torusPlaquetteRegion_zero_eq_rectangle,
+        TNLean.PEPS.isSimplyConnected_torusRegionRealization_plaquette}
+    \leanok
+    \uses{thm:peps_torus_rectangle_realization}
+    On a discrete torus of periods $m,n\ge3$, let
+    $R_v=v+\{(0,0),(1,0),(1,1),(0,1)\}$.
+    The graph induced on $R_v$ is connected, and the union of its
+    closed unit cells in $\mathbb R^2/(m\mathbb Z\times n\mathbb Z)$
+    is simply connected, including when $R_v$ crosses a periodic seam.
+\end{theorem}
+\begin{proof}\leanok
+    The four-step plaquette walk has support $R_v$, so its induced graph
+    is connected. Translation by $v$ carries the closed-cell realization
+    of $R_0$ homeomorphically onto that of $R_v$.
+    The realization of $R_0$ is the image of
+    $[-\tfrac12,\tfrac32]^2$ under the quotient map.
+    Since $2<m,n$, this restriction of the quotient map is injective.
+    The compact rectangle is therefore homeomorphic to its image;
+    its convexity gives simple connectedness.
+\end{proof}
+
+\begin{theorem}[Full regular torus parent ground space]%
+    \label{thm:peps_regular_torus_parent_ground_space}
+    \lean{TNLean.PEPS.IsGInjective.commutingClosureSpan_le_torusParentKernel,
+        TNLean.PEPS.IsGInjective.torusParentKernel_eq_commutingClosureSpan,
+        TNLean.PEPS.IsGInjective.finrank_torusParentKernel}
+    \leanok
+    \uses{thm:peps_torus_plaquette_realization,
+        thm:peps_regular_closure_parent_constraint,
+        thm:peps_regular_torus_parent_spanning,
+        thm:peps_g_injective_closure_dimension}
+    Let $A$ be regular $G$-injective on a native torus with both
+    periods at least three. For each native plaquette $R_v$, let
+    $P_v\ge0$ have kernel equal to the image of the regional PEPS map,
+    and let $H=\sum_v(P_v\otimes\mathbf1_{R_v^c})$. Then
+    \begin{align}
+        \ker H     & =\operatorname{span}\{\lvert A;(g,h)\rangle:gh=hg\},
+        \label{eq:peps_regular_parent_kernel}                             \\
+        \dim\ker H & =\#\bigl(\{(g,h):gh=hg\}/G\bigr).
+        \label{eq:peps_regular_parent_dimension}
+    \end{align}
+    where $G$ acts by simultaneous conjugation.
+    This specializes \cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}
+    to the regular representation and the indicated torus periods.
+\end{theorem}
+\begin{proof}\leanok
+    Each plaquette is connected with simply connected realization,
+    so every commuting closure is annihilated by every $P_v$.
+    Conversely, reconstruction from regular inverse coordinates and
+    flat-connection reduction express every vector in $\ker H$
+    as a linear combination of commuting closures.
+    Every site carries $A$. Cut the two seams of the illustrative $3\times3$ torus.
+    The coordinate $x$ increases rightward and $y$ increases toward
+    the top of the square. Write $\ell_y,r_y$ for the left and right boundary indices and
+    $b_x,t_x$ for the bottom and top indices. For $x,y\in\{0,1,2\}$,
+    define
+    \begin{align}
+        B_{g,h}(\ell,r,b,t)
+         & =\prod_{y=0}^2 L_h(\ell_y,r_y)
+        \prod_{x=0}^2 L_{g^{-1}}(b_x,t_x),
+        \label{eq:peps_regular_seam_coefficients}
+    \end{align}
+    where $L_q(\beta,\alpha)=\mathbf1_{\{\beta=q\alpha\}}$.
+    The horizontal native transport is $h$ and the upward native
+    transport is $g^{-1}$. Reversing the seam edges to the ordered-edge
+    convention gives $h^{-1}$ and $g$, respectively. The closure is
+    % Formula: |A;(g,h)> = sum_{ell,r,b,t} B_{g,h}(ell,r,b,t)
+    % times the open 3x3 patch; gh=hg. Every sum runs independently over G^3.
+    % Source: SCP10 paper_v3.tex:1515--1525 (close-AAAA-ug-uh), 1623--1655;
+    % TorusFlatConnectionGauge.lean, native right/up closure transport lemmas.
+    % Ink-to-index: column x increases rightward, row y increases up the plane;
+    % the displayed top row is y=2, bottom row y=0. The left/right/top/bottom
+    % exposed virtual legs are ell_y/r_y/t_x/b_x. The nine transverse legs
+    % are the physical indices. Unmarked internal bonds contract by identity.
+    % Patch boundary signature: (V,P)=(12,9). The four explicit G^3 sums
+    % contract all twelve virtual indices against B, giving the full state
+    % with (V,P)=(0,9). No normalization or unshown seam contraction is used.
+    \begin{tenkzequation}
+        \tenkzkernel
+        $\displaystyle\lvert A;(g,h)\rangle=
+            \sum_{\ell,r,b,t\in G^3}B_{g,h}(\ell,r,b,t)$
+        % Tenkz lattice dimensions are literal DSL tokens, not printed products.
+        \begin{tenkz}[lattice={3x3}, frame=plane, physical=up] % chktex 29
+            \tn[at=(1,1), name=parentSeam,
+                ports={180:virtual:$\ell_2$,0:virtual,90:virtual:$t_0$,270:virtual}, label pos=sw]{}
+            \tn[at=(1,2), name=seam12,
+                ports={180:virtual,0:virtual,90:virtual:$t_1$,270:virtual}, label pos=sw]{}
+            \tn[at=(1,3), name=seam13,
+                ports={180:virtual,0:virtual:$r_2$,90:virtual:$t_2$,270:virtual}, label pos=sw]{}
+            \tn[at=(2,1), name=seam21,
+                ports={180:virtual:$\ell_1$,0:virtual,90:virtual,270:virtual}, label pos=sw]{}
+            \tn[at=(2,2), name=seam22,
+                ports={180:virtual,0:virtual,90:virtual,270:virtual}, label pos=sw]{}
+            \tn[at=(2,3), name=seam23,
+                ports={180:virtual,0:virtual:$r_1$,90:virtual,270:virtual}, label pos=sw]{}
+            \tn[at=(3,1), name=seam31,
+                ports={180:virtual:$\ell_0$,0:virtual,90:virtual,270:virtual:$b_0$}, label pos=sw]{}
+            \tn[at=(3,2), name=seam32,
+                ports={180:virtual,0:virtual,90:virtual,270:virtual:$b_1$}, label pos=sw]{}
+            \tn[at=(3,3), name=seam33,
+                ports={180:virtual,0:virtual:$r_0$,90:virtual,270:virtual:$b_2$}, label pos=sw]{}
+        \end{tenkz}
+    \end{tenkzequation}
+    Closures in the same simultaneous conjugacy class coincide,
+    and one closure per commuting class forms a linearly independent
+    family. These statements give both the equality and its dimension.
+\end{proof}

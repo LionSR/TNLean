@@ -16,6 +16,10 @@ length `q ∝ log(N/ε)` chosen after Lemma 1 of the source ("it follows that
 $q = O (\log (N / \epsilon))$"), for chains whose length is a multiple of the block length, as
 for the `N/q` equal blocks of eq. (10).
 
+* `MPSPreparation.exists_approximationError_le_of_slope`: for every slope `a > ξ/2` there is
+  `b₀ ≥ 0` such that the approximating state of eq. (10) has error at most `ε` once the block
+  length satisfies `q ≥ a log(Mq/ε) + b₀`; it is shared with the preparation with measurements
+  of `TNLean.MPS.Preparation.LogLogDepthPreparation`.
 * `MPSPreparation.exists_isPreparedInDepth_approximationError_le_of_slope`: the preparation below
   holds with every slope `a > ξ/2`, where `ξ = -1/log t` is the correlation length at a bound
   `t < 1` on the moduli of the transfer eigenvalues other than `1` in the gauge of eq. (5).
@@ -40,6 +44,7 @@ into it by a gauge transformation and a rescaling
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -93,6 +98,46 @@ theorem exists_normalGaugeData {D : ℕ} [NeZero D] {A : MPSTensor d D}
       (isNBlkInjective_iff_blockTensor_isInjective B n).1 (isNBlkInjective_of_le hLpos hL hn)⟩
   rw [hnorm]; exact hgap μ hμ hne
 
+/-- **The error at block length `q ≥ a log(Mq/ε) + b₀` for every slope `a > ξ/2`.** Let `B` be a
+normal left-canonical tensor with a positive definite fixed point `σ` of trace one, with
+`|φ_N(B)⟩ = ζ^N |φ_N(A)⟩` for some `ζ ≠ 0`, and let `0 < t < 1` bound the moduli of the
+eigenvalues of its transfer map other than `1`, with correlation length `ξ = -1/log t`. Then for
+every `a > ξ/2` there is `b₀ ≥ 0` such that for `ε > 0`, every block length `q ≥ 1` and every
+number of blocks `M ≥ 1` with `q ≥ a log(Mq/ε) + b₀`, the approximating state `|φ'_N⟩` of
+eq. (10) for `B` on `N = Mq` sites has error `1 - |⟨φ'_N|φ_N(A)⟩| ≤ ε`.
+
+Project result: the rate `2γ/ξ` with `γ = ξ/(2a) < 1` of `exists_approximationError_le_mul`,
+which strengthens Lemma 1'(i) of arXiv:2307.01696. -/
+theorem exists_approximationError_le_of_slope {D : ℕ} {A B : MPSTensor d D} {ζ : ℂ}
+    {σ : Matrix (Fin D) (Fin D) ℂ} {t : ℝ} (hζ : ζ ≠ 0)
+    (hmpv : ∀ (N : ℕ) (s : Fin N → Fin d), mpv B s = ζ ^ N * mpv A s)
+    (hNB : Kraus.IsNormal B) (hLC : IsLeftCanonical B) (hσ : σ.PosDef) (htr : σ.trace = 1)
+    (hfix : Kraus.transferMap B σ = σ) (ht0 : 0 < t) (ht1 : t < 1)
+    (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap B) μ → μ ≠ 1 → ‖μ‖ ≤ t)
+    {a : ℝ} (ha : correlationLength t / 2 < a) :
+    ∃ b₀ : ℝ, 0 ≤ b₀ ∧ ∀ ε : ℝ, 0 < ε → ∀ (q M : ℕ) [NeZero M], 1 ≤ q →
+      a * Real.log (M * q / ε) + b₀ ≤ q →
+        1 - ‖⟪approximatingMPVState B σ q M, normalizedMPVState A (M * q)⟫_ℂ‖ ≤ ε := by
+  have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
+  have hξ : 0 < correlationLength (t : ℂ) :=
+    correlationLength_pos (by rwa [hnorm]) (by rwa [hnorm])
+  have ha0 : 0 < a := by linarith
+  -- Lemma 1'(i) at rate `2γ/ξ` with `γ = ξ/(2a) < 1`.
+  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul B hNB hLC hσ htr hfix
+    (lam₂ := (t : ℂ)) (fun μ hμ hne => (hlam μ hμ hne).trans_eq hnorm.symm)
+    (γ := correlationLength (t : ℂ) / (2 * a)) (by positivity)
+    ((div_lt_one (by positivity)).2 (by linarith))
+  have hexp : ∀ q : ℕ, Real.exp (-(2 * (correlationLength (t : ℂ) / (2 * a))) * q /
+      correlationLength (t : ℂ)) = Real.exp (-(q / a)) := fun q => by
+    congr 1
+    field_simp
+  refine ⟨a * max (Real.log K) 0, by positivity, fun ε hε q M _ hq1 hq => ?_⟩
+  rw [← norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv (M * q))]
+  refine (herr q M).trans ?_
+  rw [hexp]
+  have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
+  exact mul_mul_exp_neg_div_le_of_le hK hM1 (by exact_mod_cast hq1) ha0 hε le_rfl hq
+
 /-- **Block length `a log(N/ε) + b` for every slope `a > ξ/2`.** There is `C`, depending only on
 `d` and `D`, with the following property. Let `B` be a normal left-canonical tensor with a
 positive definite fixed point `σ` of trace one, with `|φ_N(B)⟩ = ζ^N |φ_N(A)⟩` for some
@@ -129,46 +174,31 @@ theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZ
   have hξ : 0 < correlationLength (t : ℂ) :=
     correlationLength_pos (by rwa [hnorm]) (by rwa [hnorm])
   have ha0 : 0 < a := by linarith
+  obtain ⟨b₀, hb₀, herr⟩ := exists_approximationError_le_of_slope hζ hmpv hNB hLC hσ htr hfix
+    ht0 ht1 hlam ha
   obtain ⟨L, hLpos, hL⟩ := hNB
   have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := fun n hn =>
     (isNBlkInjective_iff_blockTensor_isInjective B n).1 (isNBlkInjective_of_le hLpos hL hn)
-  -- Lemma 1'(i) at rate `2γ/ξ` with `γ = ξ/(2a) < 1`.
-  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul B ⟨L, hLpos, hL⟩ hLC hσ htr hfix
-    (lam₂ := (t : ℂ)) (fun μ hμ hne => (hlam μ hμ hne).trans_eq hnorm.symm)
-    (γ := correlationLength (t : ℂ) / (2 * a)) (by positivity)
-    ((div_lt_one (by positivity)).2 (by linarith))
-  have hexp : ∀ q : ℕ, Real.exp (-(2 * (correlationLength (t : ℂ) / (2 * a))) * q /
-      correlationLength (t : ℂ)) = Real.exp (-(q / a)) := fun q => by
-    congr 1
-    field_simp
-  refine ⟨a * max (Real.log K) 0 + L + 3 * D + 1, le_add_of_nonneg_left (by positivity),
-    fun ε hε hε1 N q _ hqN hq => ?_⟩
+  refine ⟨b₀ + L + 3 * D + 1, by linarith, fun ε hε hε1 N q _ hqN hq => ?_⟩
   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne N)
   have hlog0 : 0 ≤ Real.log (N / ε) :=
     Real.log_nonneg ((one_le_div hε).2 (hε1.trans hN1))
-  have hbq : a * max (Real.log K) 0 + L + 3 * D + 1 ≤ q := by
+  have hbq : b₀ + L + 3 * D + 1 ≤ q := by
     have : 0 ≤ a * Real.log (N / ε) := by positivity
     linarith
-  have hmax : 0 ≤ a * max (Real.log K) 0 := by positivity
   have hLq : L ≤ q := by exact_mod_cast (show (L : ℝ) ≤ q by linarith)
   have h3D : 3 * D ≤ q := by exact_mod_cast (show ((3 * D : ℕ) : ℝ) ≤ q by push_cast; linarith)
-  have hq1 : (1 : ℝ) ≤ q := by linarith
+  have hq1 : 1 ≤ q := by exact_mod_cast (show (1 : ℝ) ≤ q by linarith)
   obtain ⟨M, hM⟩ := hqN
   rw [mul_comm] at hM
   subst hM
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
   have hB : Kraus.IsInjective (blockTensor B q) := hinj q hLq
   refine ⟨approximatingMPVState B σ q M, norm_approximatingMPVState B hB hσ.posSemidef htr M,
-    hC B σ hσ.posSemidef htr q h3D hB M, ?_⟩
-  rw [← norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv (M * q))]
-  refine (herr q M).trans ?_
-  rw [hexp]
-  -- `K M e^{-q/a} ≤ ε` from `q ≥ a log(Mq/ε) + a max(log K, 0)`.
-  have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
+    hC B σ hσ.posSemidef htr q h3D hB M, herr ε hε q M hq1 ?_⟩
   push_cast at hq
-  exact mul_mul_exp_neg_div_le_of_le hK hM1 hq1 ha0 hε
-    (by have : (0 : ℝ) ≤ L + 3 * D + 1 := by positivity
-        linarith) hq
+  have : (0 : ℝ) ≤ L + 3 * D + 1 := by positivity
+  linarith
 
 /-- **Error `ε` in depth `O(q)` with `q ∝ log(N/ε)`.** There is `C`, depending only on `d` and
 `D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending only on `A`,

@@ -5,7 +5,7 @@
 \input{command}
 \title{Commuting Parent Hamiltonians of $G$-Isometric Tensors: the Projector and the Scope}
 \author{}
-\date{2026-10-01}
+\date{2026-10-05}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -57,8 +57,15 @@ The proof of the lemma shows that $P$ is the orthogonal projector onto
 $\mathcal S_2$, not onto its complement, so the operator of
 equation ``eq:iso:ham-proj-from-A'' is $1-h_i$. The commutation theorem is
 unaffected: $h_1$ and $h_2$ commute exactly when $1-h_1$ and $1-h_2$ do.
-In addition the source omits normalizations in diagrams, and the formal
-notion of $G$-isometry allows $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$
+In addition the source omits normalizations in diagrams. For a tensor $A$
+with matrices $A^i$ on the bond space $\mathbb C[G]$, let
+$\mathcal P(A)X=\sum_i\operatorname{tr}[A^iX]\ket i$ be the map from the
+virtual operators $X$ to the physical system of one site, let
+$\mathcal P(A^\dagger)\ket i=(A^i)^\dagger$ be the corresponding map for the
+tensor $A^\dagger$, and let
+$\sigma(X)=|G|^{-1}\sum_{g\in G}L_gXL_g^{-1}$ be the twirl onto the
+commutant of the left-regular representation. The formal notion of
+$G$-isometry allows $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$
 with one constant $c>0$ \cite{gap:rmp_peps_quantum_double_g_isometry}; then
 $P=c_2\,\Pi_{\mathcal S_2}$ for the constant $c_2>0$ of the two-site tensor
 $A^iA^j$. The formalization therefore states
@@ -75,9 +82,8 @@ that with $A^{-1}$ in place of $A^\dagger$ the operator is a projector onto
 $\mathcal S_2$ that is not self-adjoint, is not formalized.
 
 \section{The proof of the commutation}
-With $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$, where $\sigma$ is the
-twirl onto the commutant of the left-regular representation, one has for
-every operator $N$ commuting with every $L_g$
+Applying $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$ to an operator $N$
+that commutes with every $L_g$, for which $\sigma(N)=N$, gives
 \begin{align}
     \sum_b\operatorname{tr}[A^bN]\,(A^b)^\dagger=c\,N .
     \label{eq:scp10_isometry_identity}
@@ -87,47 +93,102 @@ in the basis of group elements, $L_g^\dagger=L_{g^{-1}}$, each adjoint
 $(A^i)^\dagger$ also commutes with every $L_g$. Every product of the
 matrices $A^i$ and $(A^i)^\dagger$ therefore commutes with every $L_g$; this
 is the step in which the sum over $g$ of figure ``ham-comm-step1'' drops out.
-The matrix of $(P\otimes1)(1\otimes P)$ is
+Multiplying \eqref{eq:scp10_isometry_identity} on the left by any operator
+$M$ and taking the trace gives the trace pairing
+\begin{align}
+    \sum_b\operatorname{tr}[M(A^b)^\dagger]\,\operatorname{tr}[A^bN]
+    =c\operatorname{tr}[MN].
+    \label{eq:scp10_trace_pairing}
+\end{align}
+The matrix entry of $(P\otimes1)(1\otimes P)$ at the configurations
+$s_0s_1s_2$ and $w_0w_1w_2$ is computed with
+$M=(A^{w_0})^\dagger A^{s_0}A^{s_1}$ and
+$N=A^{s_2}(A^{w_2})^\dagger(A^{w_1})^\dagger$, which commutes with every
+$L_g$. By cyclicity of the trace, and then by
+\eqref{eq:scp10_trace_pairing},
 \begin{align}
     \sum_b\operatorname{tr}\bigl[A^{s_0}A^{s_1}(A^{w_0}A^b)^\dagger\bigr]\,
         \operatorname{tr}\bigl[A^bA^{s_2}(A^{w_1}A^{w_2})^\dagger\bigr]
+    &=\sum_b\operatorname{tr}[M(A^b)^\dagger]\,\operatorname{tr}[A^bN]
+    \nonumber\\
+    &=c\operatorname{tr}[MN]
     =c\,\operatorname{tr}\bigl[A^{s_0}A^{s_1}A^{s_2}
-        (A^{w_0}A^{w_1}A^{w_2})^\dagger\bigr],
+        (A^{w_0}A^{w_1}A^{w_2})^\dagger\bigr].
     \label{eq:scp10_three_site_entry}
 \end{align}
-and the matrix of $(1\otimes P)(P\otimes1)$ is the same, so both products are
+For $(1\otimes P)(P\otimes1)$ the same computation applies with
+$M=A^{s_1}A^{s_2}(A^{w_2})^\dagger$ and
+$N=(A^{w_1})^\dagger(A^{w_0})^\dagger A^{s_0}$.
+The two matrices agree, so both products are
 $c$ times the three-site operator of the same form. The two translated terms
 on any three consecutive sites of a ring commute, and terms with disjoint
 supports commute trivially.
 
-\section{Scope}
-The formalization proves the theorem for matrix product states, the case in
-which the source writes the proof, on every ring of $N\ge 3$ sites. Two
-restrictions remain.
-\begin{enumerate}
-    \item \emph{Two dimensions.} The source states the theorem for PEPS. The
-    two-dimensional parent Hamiltonian, with local terms on $2\times2$
-    plaquettes, the operator $P$ for a plaquette, and the stability of
-    $G$-isometry under the two-dimensional concatenation (an open scope
-    restriction recorded in \cite{gap:rmp_peps_quantum_double_g_isometry})
-    are not formalized.
-    \item \emph{Rings of two sites.} On a ring of two sites the two
-    translated terms act on the same pair of sites in opposite orders, and
-    the three-site argument does not apply. The source does not discuss this
-    case.
-\end{enumerate}
+\section{Two-dimensional regional projectors}
+For a finite simple graph, assign a group label $\alpha_{v,e}$ to each
+half-edge. The actual canonical regular open-region range consists exactly
+of functions invariant under independent left multiplication at the region
+vertices and simultaneous right multiplication at the ends of each internal
+edge, and vanishing unless there is a vertex assignment $k$ with
+$k_v^{-1}\alpha_{v,e}=k_w^{-1}\alpha_{w,e}$ on every internal edge $e=(v,w)$.
+This equality is proved from the original open-region contraction, including
+all independent dangling boundary labels; neither a rank formula nor
+connectedness is assumed.
 
-\section{Verdict and elimination plan}
-The note is a scope restriction: the commutation theorem, stated for PEPS,
-is formalized for matrix product states on rings of at least three sites;
-the lemma on the form of the local terms, stated for matrix product states,
-is formalized as stated, with the local fix that its operator is $1-h_i$.
-Elimination: formalize the two-dimensional parent Hamiltonian on plaquettes
-and the two-dimensional stability of $G$-isometry under concatenation, and
-run the same computation with the two-site operator replaced by the plaquette
-operator; for the ring of two sites, compute the product of the two terms
-with the transfer identity
-$\sum_b(A^b)^\dagger YA^b=c\,|G|^{-1}\sum_h\operatorname{tr}[L_h^{-1}Y]L_h$.
+Let $A_v$ average the left action at vertex $v$, $B_e$ average the shared
+right action on edge $e$, and $D_R$ be the diagonal indicator of this flat
+locus on a region $R$. The extended actual regional range projector is
+\[
+  Q_R=\left(\prod_{v\in R}A_v\right)
+       \left(\prod_{e\subseteq R}B_e\right)D_R.
+\]
+Left and right multiplication commute. Averages on distinct vertices or
+edges act on distinct half-edge coordinates; coincident averages are
+identical. Flatness is invariant under every left vertex action and shared
+right edge action, and the $D_R$ are diagonal. Thus $Q_RQ_S=Q_SQ_R$ for
+arbitrary overlapping regions.
+
+For the original physical site maps, local $G$-isometry gives
+$A^\dagger A=cE$ with $c>0$ and $E$ the regular invariant projector.
+A supported orthogonal projector $Q$ is transported to
+$c^{-1}AQA^\dagger$, whose range is exactly the original physical regional
+range. Its intertwining relation is $PA=AQ$.
+No surjectivity onto the ambient physical space is imposed. The normalized
+local adjoints give nonzero physical site-image projectors $J_v$; nonzero
+follows from the constant vector in the regular invariant subspace.
+
+The physical regional projectors commute with every product of site-image
+projectors. For regions $R,S$, their commutator is supported on $R\cup S$
+and absorbs the product of site-image projectors there. Its product with
+the full product of site maps is zero by the virtual commutation. Multiplying
+by the product of normalized adjoints and canceling the nonzero complementary
+site-image factor therefore makes the commutator zero on the entire physical
+space, including unused local physical directions. The parent interactions
+are the complements of these range projectors and consequently commute.\footnote{
+The source-facing statement is
+\texttt{regularIsometric\_canonicalRegionParentInteractions\_commute} in
+\path{TNLean/PEPS/ParentHamiltonian/GIsometricRegionParentHamiltonian.lean}.
+Its hypotheses are local regular $G$-isometry; all support, nonzero-image,
+and regional intertwining identities are derived.}
+
+\section{Scope and verdict}
+The two-dimensional commutation assertion is now proved for the original
+canonical physical parent interactions on every finite simple graph and
+arbitrary overlapping regions. In particular, it covers plaquette terms on
+ordinary square tori represented by this graph convention. The source's
+projector-complement error is corrected as in
+\eqref{eq:scp10_local_term}.
+
+A residual indexing restriction remains: the simple-graph description does
+not encode self-loops or parallel bonds in degenerate periodic presentations.
+The older matrix-product theorem still states $N\geq3$ and does not by itself
+cover the two-site periodic double-bond convention. Square tori with both
+periods at least three have no such issue. No assertion about those smaller
+periodic presentations is inferred from the finite-simple-graph theorem.
+Eliminating this last restriction requires an incidence description retaining
+multiple half-edge occurrences, or a direct proof for the exceptional
+periodic contractions; it does not require another two-dimensional range or
+physical-transport hypothesis.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -3,9 +3,9 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{The Tree Circuit with Measurements: Rounds and Single-Site Registers}
+\title{The Tree Circuit with Measurements: Rounds, Registers, and Chain Length}
 \author{}
-\date{2026-10-01}
+\date{2026-10-01; chain length resolved 2026-10-02; canonical extension 2026-10-05}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -56,46 +56,197 @@ measurements.
           complete blocks of $2^k$ sites and on the complete smaller blocks
           after them, is applied with measurements in depth $5k$, on the vectors
           with $\ket0$ strictly inside the complete blocks of every level.
+    \item \emph{Registers of several sites.} A register is $s$ consecutive
+          sites. A unitary on two registers $a,\dots,a+s-1$ and
+          $a+2L+s,\dots,a+2L+2s-1$ is applied by teleporting the first register
+          site by site, the site $a+s-1$ first, in $s$ rounds of depth $2$,
+          applying the unitary to $2s$ consecutive sites by a local circuit of
+          depth $K$, and teleporting back; a layer of such unitaries on disjoint
+          stretches takes depth $4s+K+2$, whatever $L$. Trees of such unitaries
+          on the $M$ blocks of $q=s2^{k+1}$ sites take depth $(k+1)(4s+K+2)$.
+    \item \emph{The approximating state.} If the blocked tensor of $A$ over $s$
+          sites is injective, a register carries $\mathbb{C}^{D^2}$, every layer
+          of the tree factorization of the blocked tensor over $s$ sites is an
+          isometry, and the tree of unitaries extending these isometries
+          implements the isometry $V$ of the polar decomposition of $A$ blocked
+          over $q$ sites. After the pairs of the fixed point, prepared by a local
+          circuit, the protocol outputs the approximating state of eq.~(10) with
+          blocks of $q$ sites, in depth at most $C(k+1)$ with $C$ depending on $d$
+          and $s$.
+    \item \emph{The depth.} For a normal tensor, $s$ is a length at which the
+          blocked tensor in the gauge of eq.~(5) is injective, and with
+          Lemma~1'(i) at slope $a=\xi$ the error is at most $\varepsilon$ once
+          $s2^{k+1}\ge a\log(N/\varepsilon)+b$. If moreover
+          $s2^{k+1}\le2(a\log(N/\varepsilon)+b)$, then
+          $k\le\log_2(a\log(N/\varepsilon)+b)$ and the depth is
+          $O(\log\log(N/\varepsilon))$.
 \end{enumerate}
+The blocking over $s$ sites makes the two-site injectivity assumed for the
+multiscale network of~\cite{gap:mswc24_tree_mera_scope} unnecessary here: the
+tree is that of the blocked tensor, whose sites are the registers.
 The formal statements\footnote{Formal declarations:
-    \leanid{MPSPreparation.TeleportHop.isImplementationOn_round} in
-    \doclink{TNLean/MPS/Preparation/TeleportationRound},
-    \leanid{MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds} in
-    \doclink{TNLean/MPS/Preparation/LongRangeGates}, and
+    \leanid{QuantumCircuit.TeleportHop.isImplementationOn_round} in
+    \doclink{TNLean/Circuit/Teleportation/Round},
+    \leanid{QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds} in
+    \doclink{TNLean/Circuit/Teleportation/LongRangeGates}, and
     \leanid{MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp} in
-    \doclink{TNLean/MPS/Preparation/TreeMeasurement}.}
+    \doclink{TNLean/MPS/Preparation/TreeMeasurement},
+    \leanid{QuantumCircuit.RegisterGate.exists_rounds} in
+    \doclink{TNLean/Circuit/Teleportation/RegisterGates},
+    \leanid{MPSPreparation.exists_rounds_blockLayerOp_regTreeOp} in
+    \doclink{TNLean/MPS/Preparation/RegisterTree},
+    \leanid{MPSPreparation.regTreeOp_apply_blockInputCfg} in
+    \doclink{TNLean/MPS/Preparation/RegisterTreeState}, and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState},
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le}
+    and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log}
+    in \doclink{TNLean/MPS/Preparation/LogLogDepthPreparation}.}
 are exact, and no outcome is post-selected.
 
-\section{The restriction}
-Every register of the tree above is one site of the ring, of the physical
-dimension $d$, and every node carries a two-site unitary. In eq.~(16) the
-registers above the lowest level carry $\mathbb{C}^{D^2}$, and the isometries
-map $\mathbb{C}^{D^2}$ into $\mathbb{C}^{D^2}\otimes\mathbb{C}^{D^2}$, so a
-register is a group of sites once $D^2>d$. The preparation of the approximating
-state of a matrix product state with measurements in depth
-$O(\log\log(N/\varepsilon))$ is therefore not formalized; the formal statements
-are the constant-depth layers and the depth-$5k$ tree on which it rests.
+\section{The restriction formerly adopted: the chain length}
+The block length $q=s2^{k+1}$ divided the chain length $N$, so that the $N/q$
+blocks of eq.~(10) all had $q$ sites and every tree was complete. The depth
+bound held for the chain lengths $N$ divisible by $s2^{k+1}$ for some $k$ with
+$a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$, for instance
+$N=Ms2^K$ with $K$ large, and not for every chain length; since the block length
+$s2^{k+1}$ is even, no odd $N$ was covered. The source states the depth for every
+$N$.
 
-\section{Elimination}
+\section{Elimination plan}
+The depth bound for every chain length of the circuit without measurements
+uses unequal blocks: the last block has length $q'$ with $q\le q'<2q$
+\cite{gap:mswc24_depth_upper_bound_divisible_length}. A complete binary tree of
+registers covers $s2^{k+1}$ sites, so the last block needs a tree whose leaves
+have unequal lengths; each node is still a unitary on a bounded number of sites,
+so the depth stays $O(k)$.
+
+\section{Resolution}
+The restriction on the chain length is removed by trees on leaves of unequal
+widths.\footnote{Formal declarations:
+    \leanid{MPSPreparation.cfgPolarIso_split} in
+    \doclink{TNLean/MPS/Preparation/PolarMerge},
+    \leanid{MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp} in
+    \doclink{TNLean/MPS/Preparation/UnequalRegisterTree},
+    \leanid{MPSPreparation.treeBlockOp_apply} in
+    \doclink{TNLean/MPS/Preparation/UnequalRegisterTreeState},
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState}
+    in \doclink{TNLean/MPS/Preparation/UnequalTreePreparation}, and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero}
+    and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
+    in \doclink{TNLean/MPS/Preparation/LogLogDepthEveryLength}.}
 \begin{enumerate}
-    \item \emph{Registers of several sites.} Take registers of $r$ consecutive
-          sites with $d^r\ge D^2$. A register is teleported site by site, $r$
-          rounds of depth $2$ for each direction, and a unitary on two adjacent
-          registers is a product of a number of nearest-neighbour gates
-          depending only on $d$ and $r$. A layer of the tree then takes depth
-          bounded by a constant depending on $d$ and $D$.
-    \item \emph{The approximating state.} The layers of eq.~(16) are those of
-          the tree factorization of the blocked isometry, and the tree circuit
-          prepares the approximating state of eq.~(10) for $q=2^{k+1}$ and
-          $N=M2^{k+1}$, as for the multiscale network
-          of~\cite{gap:mswc24_tree_mera_scope}; its two restrictions, two-site
-          injectivity and the chain lengths, carry over.
-    \item \emph{The depth.} With Lemma~1'(i) of the source and
-          $2^{k+1}\ge\xi\log(CN/\varepsilon)$, the error is at most
-          $\varepsilon$ and the depth is a constant times
-          $k+1=O(\log\log(N/\varepsilon))$, plus the constant depth of the
-          fixed-point pairs.
+    \item \emph{Halves of unequal lengths.} For polar decompositions
+          $\mathcal B_{n_i}=V_{n_i}P_{n_i}$ of $A$ blocked over $n_1$ and over
+          $n_2$ sites, $V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W$, where $W$ is the
+          partial isometry of the polar decomposition of the tensor
+          $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two neighbouring sites. No
+          injectivity is needed: the initial projector of
+          $V_{n_1}\otimes V_{n_2}$ fixes that tensor, so
+          $V_{n_1}\otimes V_{n_2}$ composes with its partial isometry. The tree
+          below uses injectivity only to make $W$ and the leaf maps isometries.
+    \item \emph{The tree of a block.} A block of $\ell\ge2^{h+2}s$ sites is cut
+          into $2^{h+1}$ leaves of even widths, as equal as possible, at least
+          $2s$ each; when $\ell$ is odd the last leaf has one more site. The node
+          $p$ of depth $j\le h$ covers $2^{h+1-j}$ consecutive leaves, its
+          registers are its first $s$ sites and the last $s$ sites of its last
+          leaf, not counting the extra site, and its unitary extends the isometry
+          $W$ joining its two halves. The leaves carry unitaries extending
+          $V_{\ell'}$ on their $\ell'$ sites. The widths are even, so the two
+          registers of every node are an even number of sites apart, as the
+          register gates require. The tree implements $V_\ell$ on the input of
+          the block.
+    \item \emph{The legs of the pairs.} The register length is $s=L+2$, with $L$
+          the injectivity length of the tensor in the gauge of eq.~(5), so that
+          $D\le d^{s-1}$ and a leg of a pair is written on the first $s-1$ sites
+          of a register, the last site in $\ket0$. For odd $\ell$ the right leg
+          of the pair of a block then ends on the extra site, which carries
+          $\ket0$, and the input of the block lies on the two registers of the
+          root.
+    \item \emph{The depth.} The depths $0,\dots,h$ of the trees of all the blocks
+          are applied one after the other with measurements, and the leaves by
+          one local circuit; for blocks of lengths between $2^{h+2}s$ and
+          $2^{h+1}c$ the depth is at most $C(h+1)$, with $C$ depending on $d$, $s$
+          and $c$.
+    \item \emph{Every chain length.} With $q=\lceil a\log(N/\varepsilon)+b\rceil$
+          and $q\le N$, the chain is cut into $M-1$ blocks of $q$ sites and one of
+          $q'=q+(N\bmod q)<2q$ sites, Lemma~1'(i) for unequal blocks bounds the
+          error by $\varepsilon$, and $2^{h+2}s\le q<2^{h+3}s$ gives the depth
+          $C(h+1)\le c\log(\log(N/\varepsilon)+1)$. A chain with $N<q$ is one
+          block, and $\ket{\phi_N}$ itself is the state of that block with the
+          pair $\omega\propto P\ket{\mathbb 1}$; below $4s$ sites it is prepared
+          in bounded depth.
 \end{enumerate}
+The main theorem holds for every $N\ge2$ and $0<\varepsilon\le1$ with
+$\ket{\phi_N(A)}\neq0$, the presupposition recorded in
+\path{docs/paper-gaps/mswc24_depth_upper_bound_nonzero_state.tex}, and for every
+$N\ge N_0$.
+The bound $c\log(\log(N/\varepsilon)+1)$ is $O(\log\log(N/\varepsilon))$; the
+shift by $1$ keeps it positive for $N/\varepsilon\ge2$.
+
+\section{Supported polar trees}
+For a tensor injective on a common set $S$ of virtual pairs after a fixed
+length, choose a coordinate inclusion $J\colon\mathbb C^\chi\to\mathbb C^{D^2}$
+onto $S$. The restricted factors $\widehat V_n=V_nJ$ are isometries and obey
+$\widehat V_{l+r}=(\widehat V_l\otimes\widehat V_r)\widehat W_{l,r}$, where
+$\widehat W_{l,r}=(J^\dagger\otimes J^\dagger)W_{l,r}J$ satisfies
+$\widehat W_{l,r}^\dagger\widehat W_{l,r}=I$.
+The bounded-leaf tree and its measurement implementation now apply with
+arbitrary virtual dimension $\chi$. They preserve all supported
+superpositions simultaneously. For each fixed measurement history the
+branch scalar is independent of the input on the zero-scratch subspace;
+the final equality specifies every physical site.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isometryTree_matrix_eq_supportedCfgPolarIso} in
+    \doclink{TNLean/MPS/Preparation/SupportedPolarTree}, and
+    \leanid{MPSPreparation.exists_rounds_blockLayerOp_supportedPolarTree} in
+    \doclink{TNLean/MPS/Preparation/SupportedTreePreparation}.}
+The supported trees now compose with the constant-depth sparse GHZ seed
+and one simultaneous pair-window unitary. The bond encodings end in a zero
+site, and an equality of full physical configurations aligns them with the
+even tree-root cutoff also for odd block lengths.
+
+\section{Canonical non-normal resolution}
+The all-length bound now holds for the supplied canonical repeated-block
+class with normal inequivalent left-canonical blocks and positive definite
+trace-one transfer fixed points.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_supported_block_preparation_constants} in
+    \doclink{TNLean/MPS/Preparation/CoherentBlockTreePreparation},
+    \leanid{MPSPreparation.exists_log_log_preparation_of_supported_block_approximation} in
+    \doclink{TNLean/MPS/Preparation/SupportedLogLogPreparation}, and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log_of_inequivalent}
+    in \doclink{TNLean/MPS/Preparation/OverlappingLogLogPreparation}.}
+The same constant precedes $N$ and $\varepsilon$. It covers every $N\ge2$
+with nonzero periodic vector and $0<\varepsilon\le1$, finite-block overlap,
+complex copy phases, repetitions, and vanishing individual sector sums.
+The approximation uses the unweighted direct sum, and its common rate
+bounds the mixed maps as well as the individual maps, as in the inherited
+corrections of~\cite{gap:mswc24_block_form_mixed_overlap}.
+
+For $q=\lceil a\log(N/\varepsilon)+b\rceil\le N$, use the unequal
+blocks and the amplitude-uniform exponential error estimate. If $N<q$
+and $N\ge4s$, use a whole-ring supported tree of height $O(\log N)$.
+The exact one-block pair is required to have support only at $M=1$;
+it need not have that support at other ring sizes. Only the finitely many
+lengths $N<4s$ use bounded exact synthesis. Thus no accuracy-dependent
+linear-depth fallback or free $N$-site gate is hidden in the bound.
+
+Nearest-neighbour unitary layers are counted. Measurement, classical
+communication and on-site correction are free, and the number of rounds
+may grow with the tree height. Every nonzero-probability history gives the
+target up to a scalar, with no postselection or discarded environment.
+The original-to-canonical transport for arbitrary tensors and their
+periodicity data is not asserted here.
+
+\section{The remaining restriction}
+A two-site gate between distant sites joins sites at odd separation, on pairwise
+disjoint stretches; gates at even separation, or on overlapping stretches, are
+not covered, whereas the paragraph of the source speaks of teleporting spatially
+separated sites in general. Neither the tree of two-site gates nor the trees of
+registers need such gates. This geometric limitation does not restrict the
+canonical non-normal construction just described. The earlier
+logarithmic-depth construction and its corrections are recorded
+in~\cite{gap:mswc24_measurement_preparation_scope}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

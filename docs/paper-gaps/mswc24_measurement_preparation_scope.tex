@@ -5,10 +5,10 @@
 \input{command}
 \title{Long-Range Matrix Product States with Measurements: Scope of the Formal Statement}
 \author{}
-\date{2026-10-01}
+\date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 The paragraph ``Long-range MPS using measurements'' of~\cite{Malz2024Preparation}
@@ -31,11 +31,12 @@ obtained by blocking $q\propto\log(N/\varepsilon)$ sites, it concludes that if
 depth is $O(\log(N/\varepsilon))$'', for all translation-invariant MPS, short-
 or long-range correlated.
 
-\section{The statement formalized}
+\section{The statements formalized}
+\paragraph{Orthogonal blocks and block lengths dividing $N$.}
 Let $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})\otimes A_j^i$
 with normal blocks $A_j$ in the gauge of eq.~(5) of the source and nonzero
-weights. The formal statement prepares, with measurements, a unit vector of
-error at most $\varepsilon$ in depth at most $c\log(N/\varepsilon)$, for
+weights. The first formal statement prepares, with measurements, a unit vector
+of error at most $\varepsilon$ in depth at most $c\log(N/\varepsilon)$, for
 $N\geq2$, $0<\varepsilon\leq1$, and block lengths $q$ with
 $a\log(N/\varepsilon)+b'\leq q\leq2(a\log(N/\varepsilon)+b')$ under three
 restrictions.\footnote{Formal declarations:
@@ -48,26 +49,73 @@ restrictions.\footnote{Formal declarations:
           block form of the positive part fails
           \cite{gap:mswc24_block_form_mixed_overlap}, and the isometry $V$ of the
           blocked direct sum is no longer the sum of the isometries $V_j$ of the
-          blocks, which is what the block unitary of the formal statement
-          implements.
+          blocks, which is what the block unitary of this statement implements.
     \item The block length $q$ divides $N$, so that the chain consists of
-          $N/q$ blocks of $q$ sites, as in eq.~(10) of the source. The error
-          bound for blocks with multiplicities
-          \cite{gap:mswc24_repeated_block_corrected_state} is proved for equal
-          blocks; for normal tensors the analogous restriction was removed with a
-          larger last block \cite{gap:mswc24_depth_upper_bound_divisible_length}.
-          Together with the window
-          $a\log(N/\varepsilon)+b'\leq q\leq2(a\log(N/\varepsilon)+b')$, the
-          statement applies only to chain lengths $N$ with a divisor in this
-          window, and it is vacuous for the others, for instance for every
-          large prime $N$. When $N$ is a power of two, such a divisor exists as
-          soon as $a\log(N/\varepsilon)+b'\leq N$, since the window contains a
-          power of two and $b'\geq1$.
+          $N/q$ blocks of $q$ sites, as in eq.~(10) of the source. Together with
+          the window above, this statement applies only to chain lengths $N$
+          with a divisor in this window, and it is vacuous for the others, for
+          instance for every large prime $N$.
     \item The state prepared is the corrected approximating state of
           \cite{gap:mswc24_repeated_block_corrected_state}, which agrees with
           the state of eq.~(S7) when every multiplicity is one and every weight
           is positive.
 \end{enumerate}
+
+\paragraph{Overlapping blocks and every chain length.}
+The second formal statement removes the three restrictions above.\footnote{Formal
+    declarations:
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero}
+    and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log}
+    in \doclink{TNLean/MPS/Preparation/OverlappingMeasurementPreparation}.}
+For $A$ as above, with every fixed point positive definite and the mixed
+transfer maps of distinct blocks of spectral radius below one, there is $c$
+such that for every $N\geq2$ and $0<\varepsilon\leq1$ at which
+$\ket{\phi_N(A)}\neq0$, a unit vector of error at most $\varepsilon$ is prepared
+with measurements and a circuit in depth at most $c\log(N/\varepsilon)$. There
+is $N_0$ such that $\ket{\phi_N(A)}\neq0$ for every $N\geq N_0$ at which the
+weights $\beta_j=\sum_k\mu_{j,k}^N$ are not all zero. The $q$-site states of
+distinct blocks may overlap, the multiplicities and the complex weights are
+arbitrary, and the chain is cut into blocks ``all of the same size, $q_N$,
+except for the last one, which may be larger'', as in the proof of Theorem~1 of
+the source. The statement reads the construction as follows.
+\begin{enumerate}
+    \item The isometries applied on the blocks are the isometric factors
+          $V^{(\ell)}$ of the polar decompositions of the blocked maps of the
+          direct sum $\bigoplus_jA_j$ with weights one and one copy of each
+          block, not that of the blocked map of $A$, whose positive part does
+          not have the block form (S5) when the blocks overlap or repeat. For
+          large $\ell$ this blocked map is injective on the bond pairs of the
+          blocks, by the positive definiteness of the limit of its Gram matrix,
+          so $V^{(\ell)}$ is an isometry on these pairs. The state prepared is
+          \begin{align*}
+              \ket\psi=\sum_j\alpha_j\Bigl(\bigotimes_kV^{(\ell_k)}\Bigr)
+              \bigotimes_k\ket{\omega_j},\qquad
+              \alpha_j=\frac{\beta_j}{(\sum_l\lvert\beta_l\rvert^2)^{1/2}},
+          \end{align*}
+          with $\omega_j$ the pair of the fixed point of block $j$. The weights
+          enter only through the amplitudes, so the overlap
+          $\braket\psi{\phi_N(A)}$ is a quadratic form
+          $\sum_{j,j'}\overline{\beta_j}\beta_{j'}z_{jj'}$ divided by
+          $(\sum_l\lvert\beta_l\rvert^2)^{1/2}$, with
+          $\lvert z_{jj'}-\delta_{jj'}\rvert\leq Cy\,e^{Cy}$ and
+          $y=Me^{-\gamma q/\xi}$. The error is therefore at most
+          $CMe^{-\gamma q/\xi}$ with $C$ independent of the weights, and the
+          factor $\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$ of the error bound
+          of the corrected state \cite{gap:mswc24_repeated_overlap_small_weight_sum}
+          does not enter.\footnote{Formal declaration:
+              \leanid{MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le}
+              in \doclink{TNLean/MPS/Preparation/OverlappingBlockStates}.}
+    \item The rate is $e^{-\gamma q/\xi}$ with $\xi$ bounding the correlation
+          lengths of the blocks and of the mixed transfer maps of distinct
+          blocks \cite{gap:mswc24_block_form_mixed_overlap}.
+    \item The periodic state is assumed nonzero, as the normalization of the
+          source presupposes \cite{gap:mswc24_depth_upper_bound_nonzero_state};
+          this holds for $N\geq N_0$ when the weights $\beta_j$ are not all
+          zero.
+\end{enumerate}
+For $N$ below the block length the normalized target itself is prepared, as
+the state of one block or, below a fixed length, by a circuit of bounded depth.
 
 \section{Two readings of the construction}
 \paragraph{The circuit after the measurement.}
@@ -78,38 +126,32 @@ statement counts such a preparation as a vector prepared with measurements in
 depth $T_1$, followed by a local circuit of depth $T_2$ that does not depend on
 the outcomes, of total depth $T_1+T_2$.
 
-\paragraph{The depth of the GHZ-type state.}
-The state $\ket{\chi_{N/q}}$ lives on the $N/q$ blocks. On the chain of $N$
-sites, the label of block $k$ is stored in the last $r_1$ sites of the block,
-and the first $r_1$ sites of the next block serve as the ancilla of Example~1
-of~\cite{Piroli2021LOCC}; this ancilla is $q-r_1$ sites away from the register
-of its own block, and the controlled shift between them is carried out with
-SWAP gates in depth $O(q)$. The formal statement therefore prepares
-$\ket{\chi_{N/q}}$ in depth $O(q)$ rather than in constant depth, a scope
-restriction of this step. Constant depth
-on the chain of $N$ sites would need the controlled shifts between distant
-sites to be implemented with further measurements, for instance by
-teleportation along pairs of neighbouring sites. Since the isometries of the
-blocked tensor already take depth $O(q)$, the total depth $O(\log(N/\varepsilon))$
-is unaffected.
+\paragraph{Constant depth on the physical chain.}
+The one-round construction uses SWAP routing and has depth $O(q)$. With
+additional measurement rounds the GHZ-type state is prepared in constant
+depth on the original chain itself, for arbitrary cyclic block lengths
+$\ell_k\ge3r_1$ and $r_1\ge2$.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState}
+    and \leanid{MPSPreparation.exists_rounds_sparseBlockShift}
+    in \doclink{TNLean/MPS/Preparation/SparseWindowGHZ}.}
+For an odd block, a unitary on its first $r_1+1$ sites moves the first
+register one site to the right, leaving an even scratch gap. The two
+registers are then joined by a teleportation-assisted controlled subtraction
+of depth $4r_1+K+2$, independent of their separation, and the padding rotation
+is undone. All stretches lie inside disjoint blocks, so they run in parallel.
+The same construction covers the singleton cyclic ring and arbitrary parity
+patterns. The original cyclic measurement and corrections finish the GHZ
+state, with an outcome scalar independent of the coherent label amplitudes.
 
-\section{Elimination}
-For blocks of multiplicity one and weight one whose $q$-site states overlap, the
-error of the source's state $V^{\otimes N/q}\sum_j\alpha_j\ket{\Omega_j}$ is
-bounded with the correlation lengths of the mixed transfer matrices included
-\cite{gap:mswc24_block_form_mixed_overlap}. Removing the first restriction in
-that scope needs one unitary on $q$ sites, of depth $O(q)$, that implements the
-isometry $V$ on the bond pairs of the blocks. Its matrix elements are those of
-the direct sum $\bigoplus_jA_j$ with $(B^\dagger B)^{-1/2}$ absorbed on the
-right, so the sequential factorization on the first inputs applies once the
-blocked maps of the blocks have jointly linearly independent columns, which
-holds for large $q$ because $B^\dagger B$ converges to a matrix that is positive
-definite on these pairs. The second is removed by the error
-bound for blocks with multiplicities and a larger last block, along the lines of
-the normal case. The second restriction does not affect the depth count, which
-is proved for blocks of arbitrary lengths at most $L$ with depth $O(L)$. The
-first does: the block unitary of depth $O(L)$ is proved only for orthogonal
-blocks, and its replacement is the unitary implementing $V$ described above.
+\section{Resolution and resource convention}
+The overlapping-block result removes the earlier orthogonality and
+chain-length restrictions. The sparse-register
+construction now removes the remaining GHZ depth restriction. It restores
+all scratch sites and ancillas exactly to $\ket0$, uses no postselection or
+additional physical sites, and counts all quantum layers on neighbouring
+sites. On-site measurements, on-site corrections and global classical
+feedforward are free in the measurement-round model. Neither an arbitrary
+unitary on $q$ sites nor a hidden environment is treated as free.
 
 \bibliographystyle{alpha}
 \bibliography{references}

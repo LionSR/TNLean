@@ -6,56 +6,28 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.OverlappingBlockOverlap
 
 /-!
-# The approximation error for blocks with overlapping states
+# Overlaps after the partial isometry, and the final estimate of Lemma 1'(ii)
 
 Malz, Styliaris, Wei, and Cirac (arXiv:2307.01696, Supplemental Material, Lemma 1'(ii)) bound
-the error of the approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of eq. (S7) for a tensor
-`Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` that is not normal by
-`ε = O((N/q) e^{-γ q/ξ_diag})` for `q = o(N)`, with `ξ_diag = max_j ξ_jj`. When the `q`-site
-states of distinct blocks overlap, this rate is false: for the blocks `A_1 = (1, 0)` and
-`A_2 = (3/5, 4/5)` the error is at least `(9/25)^q / 16`, while `ξ_diag` can be taken
-arbitrarily small (`MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock`).
-
-This file proves that the source's construction nevertheless converges, at the rate governed by
-the larger of the correlation lengths of the blocks and of their mixed transfer maps. For
-normal blocks of multiplicity one and real weights `0 ≤ wⱼ ≤ 1` with `max_j wⱼ = 1`, let `λ₂`
-bound the moduli of the eigenvalues other than `1` of every transfer map `E_{jj}` and of all
-eigenvalues of the mixed transfer maps `E_{jj'}`, `j ≠ j'`, so that `ξ = -1/log|λ₂|` bounds
-both `ξ_diag` and `ξ_off-diag = max_{j≠j'} ξ_{jj'}`, and let `0 < γ < 1/2`. Then there is `C` with
-`ε ≤ C y e^{C y}`, `y = M e^{-γ q/ξ} = (N/q) e^{-γ q/ξ}`, for every block length `q` and every
-number of blocks `M ≥ 1` (`exists_approximationError_le_overlappingBlockSum_weight`), and in
-`O`-form `ε ≤ C y` (`exists_approximationError_le_mul_overlappingBlockSum_weight`); the case of
-unit weights is `exists_approximationError_le_overlappingBlockSum` and
-`exists_approximationError_le_mul_overlappingBlockSum`. No condition `q = o(N)` is needed, and no
-orthogonality of the blocks.
-
-The proof: after `V^{⊗M}` the overlap of the approximating state with the target is
-`b^{-1/2} ∑ⱼ βⱼ zⱼ` with `βⱼ = wⱼ^N` and `b = ∑ⱼ βⱼ²` (`sum_star_nonNormalApproxVector_mul_mpv`),
-with the overlaps `zⱼ` of the positive part of the whole blocked tensor with the fixed points of
-the blocks; `V^{⊗M}` does not increase norms, so normalizing the approximating state can only
-increase the overlap; `zⱼ` is `wⱼ^N` up to `O(y e^{O(y)})`
-(`exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le` with the Hölder estimate
-`exists_norm_polarPos_blockTensor_blockSum_weight_sub_le`), and the squared norm of the target is
-`b` up to `O(e^{-γ N/ξ})` (`exists_abs_norm_mpvState_blockSum_weight_sq_sub_le`).
-
-**Local fix (rate of the overlapping blocks):** the rate `e^{-γ q/ξ_diag}` of the source is
-replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented in
-`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
-
-**Scope restriction (multiplicity one, real weights):** every block occurs once, with a real
-weight `0 ≤ wⱼ ≤ 1`, so that `βⱼ = wⱼ^N`; a complex weight of multiplicity one is reduced to this
-case by absorbing its phase into the block, which replaces the source's `βⱼ = μⱼ^N` by `|μⱼ|^N`.
-Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+the error of the approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of eq. (S7) for a tensor that is not
+normal. This file collects the steps of that proof that do not depend on how the blocks of the
+tensor overlap: after `V^{⊗M}` the overlap of the approximating state with the target is a
+combination of the overlaps `⟨φ_M(P_{σ'_j})|φ_M(P)⟩` of the positive part `P` of the whole
+blocked tensor with fixed-point tensors (`sum_star_nonNormalApproxVector_mul_mpv`); `V^{⊗M}` does
+not increase norms, so normalizing the approximating state can only increase the overlap
+(`inv_mul_norm_le_norm_of_sum_norm_sq_le_one`); and two elementary estimates combine the overlaps
+of the blocks with the norm of the target. The error bounds themselves are
+`MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum` and its corollaries in
+`TNLean.MPS.Preparation.BlockSumError`.
 
 ## Main declarations
 
-* `MPSTensor.sum_star_nonNormalApproxVector_mul_mpv` — the unnormalized overlap after `V^{⊗M}`.
-* `MPSTensor.one_sub_norm_div_le_of_norm_sub_le` — the elementary estimate combining the errors.
-* `MPSTensor.exists_approximationError_le_overlappingBlockSum_weight`,
-  `MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_weight` — Lemma 1'(ii) for
-  blocks of multiplicity one and real weights whose states may overlap, at the corrected rate.
-* `MPSTensor.exists_approximationError_le_overlappingBlockSum`,
-  `MPSTensor.exists_approximationError_le_mul_overlappingBlockSum` — the case of unit weights.
+* `MPSTensor.sum_star_tensorPower_polarIso_mulVec_mul_mpv`,
+  `MPSTensor.sum_star_nonNormalApproxVector_mul_mpv` — the unnormalized overlap after `V^{⊗M}`.
+* `MPSTensor.inv_mul_norm_le_norm_of_sum_norm_sq_le_one` — normalizing a vector of norm at most
+  one does not decrease an overlap.
+* `MPSTensor.one_sub_norm_div_le_of_norm_sub_le`, `MPSTensor.one_sub_le_mul_mul_exp_div_of_one_le`,
+  `MPSTensor.one_sub_le_mul_mul_exp_div_of_sum_le` — the elementary estimates combining the errors.
 
 ## References
 
@@ -74,18 +46,18 @@ variable {d D b : ℕ}
 
 /-! ### The overlap after the partial isometry -/
 
-/-- **The overlap after `V^{⊗M}`.** For any tensor `A` and pairs `ω_j` of matrices `σ'_j`, the
-unnormalized approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of arXiv:2307.01696, Supplemental
-Material, eq. (S7), has overlap `∑ⱼ conj(αⱼ) ⟨φ_M(P_{σ'_j})|φ_M(P)⟩` with the periodic state of `A`
-on `N = qM` sites, where `P` is the positive part of the `q`-site blocked tensor and `P_{σ'_j}`
-the fixed-point tensor of `σ'_j`. The source uses `V†V = Π` and `Π P = P`; no injectivity is
-needed. -/
-theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
-    (α : Fin b → ℂ) (σ' : Fin b → Matrix (Fin D) (Fin D) ℂ) :
-    ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
+/-- **The overlap after `V^{⊗M}`.** For any tensor `A` and any vector `F` on the bond pairs of
+`M` sites, `V^{⊗M} F` has overlap `⟨F|φ_M(P)⟩` with the periodic state of `A` on `N = qM`
+sites, where `V P` is the polar decomposition of the `q`-site blocked tensor and `φ_M(P)` is the
+periodic state of the positive part read as a tensor. The source uses `V†V = Π` and `Π P = P`
+(arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
+tensors"); no injectivity is needed. -/
+theorem sum_star_tensorPower_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : ℕ)
+    (F : (Fin M → Fin D × Fin D) → ℂ) :
+    ∑ τ, star ((tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ F) τ) *
         mpv A (blockedConfigEquiv d M q τ) =
-      ∑ j, star (α j) *
-        mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M := by
+      ∑ c, star (F c) *
+        mpv (polarPosTensor (blockTensor A q)) fun k => (virtualPairEquiv D).symm (c k) := by
   set Bq := blockTensor A q
   set V := Matrix.polarIso (physicalMatrix Bq)
   set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
@@ -107,388 +79,153 @@ theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [
     simp only [mulVec, dotProduct, tensorPower, of_apply, m]
     refine (Fintype.sum_equiv e.symm _ _ fun c' => ?_)
     simp [e, polarSupportMatrix, Bq]
+  simp only [hT]
+  rw [sum_star_tensorPower_mulVec_mul, hfixP]
+  rfl
+
+/-- **The overlap after `V^{⊗M}`.** For any tensor `A` and pairs `ω_j` of matrices `σ'_j`, the
+unnormalized approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of arXiv:2307.01696, Supplemental
+Material, eq. (S7), has overlap `∑ⱼ conj(αⱼ) ⟨φ_M(P_{σ'_j})|φ_M(P)⟩` with the periodic state of `A`
+on `N = qM` sites, where `P` is the positive part of the `q`-site blocked tensor and `P_{σ'_j}`
+the fixed-point tensor of `σ'_j` (`sum_star_tensorPower_polarIso_mulVec_mul_mpv`). -/
+theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
+    (α : Fin b → ℂ) (σ' : Fin b → Matrix (Fin D) (Fin D) ℂ) :
+    ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
+        mpv A (blockedConfigEquiv d M q τ) =
+      ∑ j, star (α j) *
+        mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M := by
+  set Bq := blockTensor A q
+  set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
+    Equiv.piCongrRight fun _ => virtualPairEquiv D
+  set m : (Fin M → Fin D × Fin D) → ℂ := fun c => mpv (polarPosTensor Bq) (e.symm c)
   have hpair : ∀ j, ∑ c, star (pairProductState (fixedPointPair (σ' j)) c) * m c =
       mpvOverlap (polarPosTensor Bq) (fixedPointTensor (σ' j)) M := fun j => by
     rw [mpvOverlap]
     refine (Fintype.sum_equiv e.symm _ _ fun c => ?_)
     rw [mpv_fixedPointTensor, mul_comm]
     simp [e, m, virtualPairEquiv]
-  calc ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
-        mpv A (blockedConfigEquiv d M q τ)
-      = ∑ τ, star ((tensorPower M V *ᵥ nonNormalFixedPointState α
-          (fun j => fixedPointPair (σ' j))) τ) * (tensorPower M V *ᵥ m) τ := by
-        simp only [hT]; rfl
-    _ = ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c := by
-        rw [sum_star_tensorPower_mulVec_mul, hfixP]
-    _ = ∑ j, star (α j) * ∑ c, star (pairProductState (fixedPointPair (σ' j)) c) * m c := by
+  rw [nonNormalApproxVector, sum_star_tensorPower_polarIso_mulVec_mul_mpv]
+  change ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c = _
+  calc ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c
+      = ∑ j, star (α j) * ∑ c, star (pairProductState (fixedPointPair (σ' j)) c) * m c := by
         simp only [nonNormalFixedPointState, star_sum, star_mul', Finset.sum_mul,
           Finset.mul_sum]
         rw [Finset.sum_comm]
         exact Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun c _ => by ring
     _ = _ := by simp only [hpair]
 
+/-- **Normalizing a short vector does not decrease an overlap.** If `∑_τ |v_τ|² ≤ 1` and `t ≥ 0`,
+then `t⁻¹ |⟨v|w⟩| ≤ |(‖v‖⁻¹ t⁻¹) ⟨v|w⟩|`: the approximating vector `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` has norm at
+most one because `V^{⊗M}` does not increase norms, so normalizing it can only increase its
+overlap with the target (arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii)). -/
+theorem inv_mul_norm_le_norm_of_sum_norm_sq_le_one {ι : Type*} [Fintype ι] (v w : ι → ℂ)
+    (hv : ∑ τ, ‖v τ‖ ^ 2 ≤ 1) {t : ℝ} (ht : 0 ≤ t) :
+    t⁻¹ * ‖∑ τ, star (v τ) * w τ‖ ≤
+      ‖((Real.sqrt (∑ τ, ‖v τ‖ ^ 2) : ℂ)⁻¹ * (t : ℂ)⁻¹) * ∑ τ, star (v τ) * w τ‖ := by
+  set num := ∑ τ, star (v τ) * w τ
+  rw [norm_mul, norm_mul, norm_inv, norm_inv, Complex.norm_real, Complex.norm_real,
+    Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (Real.sqrt_nonneg _), abs_of_nonneg ht]
+  rcases (Real.sqrt_nonneg (∑ τ, ‖v τ‖ ^ 2)).lt_or_eq with hpos' | hzero
+  · have hle : Real.sqrt (∑ τ, ‖v τ‖ ^ 2) ≤ 1 := Real.sqrt_le_one.mpr hv
+    have h1 : 1 ≤ (Real.sqrt (∑ τ, ‖v τ‖ ^ 2))⁻¹ := one_le_inv₀ hpos' |>.2 hle
+    have h2 : 0 ≤ t⁻¹ * ‖num‖ := by positivity
+    nlinarith
+  · have hv0 : ∀ τ, v τ = 0 := by
+      have hsum : ∑ τ, ‖v τ‖ ^ 2 = 0 := by
+        have := Real.sqrt_eq_zero'.1 hzero.symm
+        linarith [Finset.sum_nonneg fun τ (_ : τ ∈ Finset.univ) => sq_nonneg ‖v τ‖]
+      intro τ
+      have := (Finset.sum_eq_zero_iff_of_nonneg fun τ _ => sq_nonneg ‖v τ‖).1 hsum τ
+        (Finset.mem_univ τ)
+      simpa using this
+    have : num = 0 := Finset.sum_eq_zero fun τ _ => by rw [hv0 τ, star_zero, zero_mul]
+    rw [this, norm_zero, mul_zero]
+    positivity
+
 /-! ### An elementary estimate -/
 
-/-- If `‖S - b‖ ≤ δ` and `|t² - b| ≤ η` with `b ≥ 1` and `t ≥ 0`, then
-`1 - ‖S‖ / (√b t) ≤ δ + η`. This combines the overlap `S = ∑ⱼ zⱼ` and the norm `t = ‖φ_N‖` in the
-triangle inequality of arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii). -/
-theorem one_sub_norm_div_le_of_norm_sub_le {b : ℝ} (hb : 1 ≤ b) {S : ℂ} {t δ η : ℝ}
-    (ht : 0 ≤ t) (hS : ‖S - b‖ ≤ δ) (hT : |t ^ 2 - b| ≤ η) :
-    1 - t⁻¹ * (‖S‖ / Real.sqrt b) ≤ δ + η := by
+/-- If `‖S - 1‖ ≤ δ` and `|t² - 1| ≤ η` with `t ≥ 0`, then `1 - ‖S‖ / t ≤ δ + η`. This combines
+the normalized overlap `S` and the normalized norm `t` in the triangle inequality of
+arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii). -/
+theorem one_sub_norm_div_le_of_norm_sub_le {S : ℂ} {t δ η : ℝ} (ht : 0 ≤ t)
+    (hS : ‖S - 1‖ ≤ δ) (hT : |t ^ 2 - 1| ≤ η) : 1 - ‖S‖ / t ≤ δ + η := by
   have hδ : 0 ≤ δ := (norm_nonneg _).trans hS
   have hη : 0 ≤ η := (abs_nonneg _).trans hT
-  have hnn : 0 ≤ t⁻¹ * (‖S‖ / Real.sqrt b) := by positivity
+  have hnn : 0 ≤ ‖S‖ / t := by positivity
   rcases le_or_gt 1 (δ + η) with h | h
   · linarith
-  have hsb : 0 < Real.sqrt b := Real.sqrt_pos.2 (by linarith)
-  have hsb2 : Real.sqrt b ^ 2 = b := Real.sq_sqrt (by linarith)
   have ht2 := abs_le.1 hT
   have htpos : 0 < t := by
     rcases ht.lt_or_eq with h' | h'
     · exact h'
     · rw [← h'] at ht2; nlinarith [ht2.1]
-  have hS' : b - δ ≤ ‖S‖ := by
-    have := norm_sub_norm_le (b : ℂ) S
-    rw [norm_sub_rev, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith)] at this
+  have hS' : 1 - δ ≤ ‖S‖ := by
+    have := norm_sub_norm_le (1 : ℂ) S
+    rw [norm_sub_rev, norm_one] at this
     linarith
-  set w := Real.sqrt b * t
-  have hw : 0 < w := mul_pos hsb htpos
-  have hw2 : 2 * w ≤ b + t ^ 2 := by nlinarith [sq_nonneg (Real.sqrt b - t)]
-  have hwle : w ≤ b + η / 2 := by linarith [ht2.2]
-  have heq : t⁻¹ * (‖S‖ / Real.sqrt b) = ‖S‖ / w := by
-    simp only [w]; field_simp
-  rw [heq]
-  have : 1 - δ - η ≤ ‖S‖ / w := by
-    rw [le_div_iff₀ hw]
+  have hw2 : 2 * t ≤ 1 + t ^ 2 := by nlinarith [sq_nonneg (1 - t)]
+  have hwle : t ≤ 1 + η / 2 := by linarith [ht2.2]
+  have : 1 - δ - η ≤ ‖S‖ / t := by
+    rw [le_div_iff₀ htpos]
     nlinarith [mul_le_mul_of_nonneg_right hwle (by linarith : (0 : ℝ) ≤ 1 - δ - η)]
   linarith
 
-/-! ### The approximation error -/
+/-- **The trivial range of the error bound.** If `0 ≤ r`, `C ≥ 1`, `u ≥ 1` and `0 < s ≤ 1`, then
+`1 - r ≤ C u e^{C u} / s`. -/
+theorem one_sub_le_mul_mul_exp_div_of_one_le {r C u s : ℝ} (hr : 0 ≤ r) (hC : 1 ≤ C) (hu : 1 ≤ u)
+    (hs : 0 < s) (hs1 : s ≤ 1) : 1 - r ≤ C * u * Real.exp (C * u) / s := by
+  have h1 : 1 ≤ C * u := by nlinarith
+  have h2 : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by linarith)
+  have h3 : 1 ≤ C * u * Real.exp (C * u) / s := by rw [le_div_iff₀ hs]; nlinarith
+  linarith
 
-variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
-  {ι : (j : Fin b) → Fin (Dj j) → Fin D}
-
-/-- **Approximation error for overlapping blocks with weights of different moduli**
-(arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate of the
-module docstring). Let `Aⁱ = ⊕ⱼ wⱼ A_jⁱ` be the direct sum with real weights `0 ≤ wⱼ ≤ 1`, at
-least one of which equals `1` (the normalization of the source, after eq. (S2)), of blocks placed
-on the bond coordinates `ι_j`. Let every block `A_j` be normal in the gauge
-`∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1` (eq. (5)), let `λ₂` bound
-the moduli of the eigenvalues other than `1` of every transfer map `E_{A_j}` and the moduli of all
-eigenvalues of the mixed transfer maps `E_{jj'}(X) = ∑ᵢ A_jⁱ X (A_{j'}ⁱ)†` of distinct blocks, so
-that `ξ = -1/log|λ₂|` bounds `ξ_diag` and `ξ_off-diag`, and let `0 < γ < 1/2`. There is `C > 0`
-such that for every block length `q` and every number of blocks `M ≥ 1`, with `N = qM`, the
-weights `βⱼ = wⱼ^N` of eq. (S4) for `m_j = 1`, the pairs of the `σ_j` embedded along `ι_j`, and
-`y = M e^{-γ q/ξ}`, the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating state of eq. (S7)
-satisfies `ε ≤ C y e^{C y}`.
-
-Compared with unit weights the proof changes in two places. The limit
-`∑ⱼ wⱼ^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ` of the Gram matrices is not bounded below on the blocks of
-smaller weight, so the positive part is estimated by the Hölder bound of the square root
-(`exists_norm_polarPos_blockTensor_blockSum_weight_sub_le`), which uses `γ < 1/2`; and the mixed
-transfer matrix of the limit against block `j` is `wⱼ^q` times an idempotent, whose powers stay
-bounded (`exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le`), so that
-`zⱼ = wⱼ^N` up to `O(y e^{O(y)})`. -/
-theorem exists_approximationError_le_overlappingBlockSum_weight
-    (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
-    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
-    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
-    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
-    {lam₂ : ℂ}
-    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
-    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ ≤ ‖lam₂‖)
-    {w : Fin b → ℝ} (hw0 : ∀ j, 0 ≤ w j) (hw1 : ∀ j, w j ≤ 1) (hwmax : ∃ j, w j = 1)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      1 - ‖nonNormalApproxOverlap (blockSum Aj ι fun j => (w j : ℂ)) q M
-          (ghzAmplitude fun j => (w j : ℂ) ^ (M * q))
-          (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
-        C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
-          Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
-  obtain ⟨j₀, hj₀⟩ := hwmax
-  set x := Real.exp (-γ / correlationLength lam₂) with hx_def
-  have hx0 : 0 < x := Real.exp_pos _
-  have hxq : ∀ q : ℕ, Real.exp (-γ * q / correlationLength lam₂) = x ^ q := fun q =>
-    Real.exp_neg_mul_div_eq_pow _ _ q
-  simp_rw [hxq]
-  set μ : Fin b → ℂ := fun j => (w j : ℂ)
-  have hμn : ∀ j, ‖μ j‖ = w j := fun j => by
-    simp only [μ, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (hw0 j)]
-  have hμ : ∀ j, ‖μ j‖ ≤ 1 := fun j => (hμn j).le.trans (hw1 j)
-  -- The trivial bound `ε ≤ 1`, which suffices whenever `M x^q ≥ 1`.
-  have htriv : ∀ (C : ℝ), 1 ≤ C → ∀ (q M : ℕ) [NeZero M], 1 ≤ (M : ℝ) * x ^ q →
-      1 - ‖nonNormalApproxOverlap (blockSum Aj ι μ) q M (ghzAmplitude fun j => μ j ^ (M * q))
-          (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
-        C * (M * x ^ q) * Real.exp (C * (M * x ^ q)) := fun C hC q M _ hu => by
-    have h1 : 1 ≤ C * (M * x ^ q) := by nlinarith
-    have h2 : 1 ≤ Real.exp (C * (M * x ^ q)) := Real.one_le_exp (by linarith)
-    have h3 : 0 ≤ ‖nonNormalApproxOverlap (blockSum Aj ι μ) q M
-        (ghzAmplitude fun j => μ j ^ (M * q))
-        (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ := norm_nonneg _
-    nlinarith
-  rcases le_or_gt 1 ‖lam₂‖ with hl | hl
-  · -- For `|λ₂| ≥ 1` the rate is at least `1` and the bound is trivial.
-    have hx1 : 1 ≤ x := by
-      rw [hx_def, neg_div_correlationLength]
-      exact Real.one_le_exp (mul_nonneg hγ0.le (Real.log_nonneg hl))
-    refine ⟨1, one_pos, fun q M _ => htriv 1 le_rfl q M ?_⟩
-    have := one_le_pow₀ hx1 (n := q)
-    have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-    nlinarith
-  have hD : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
-  have hDD : NeZero D := ⟨fun h => by subst h; exact (ι j₀ 0).elim0⟩
-  have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hl.le
-  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_blockSum_weight_sub_le hι hdisj hN hA
-    hσ htr hfix hl hlam hmix hγ0 hγ
-  choose C₀ hC₀ hgen using fun j =>
-    exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le hι hdisj
-      (fun j => (hσ j).posSemidef) htr j
-  obtain ⟨Kt, hKt, hnorm⟩ := exists_abs_norm_mpvState_blockSum_weight_sq_sub_le hι hdisj hN hA hσ
-    htr hfix hl hlam hmix hγ0 hγ
-  set Cz : Fin b → ℝ := fun j => C₀ j * K₁ + 1
-  have hCz : ∀ j, 0 < Cz j := fun j =>
-    add_pos_of_nonneg_of_pos (mul_nonneg (hC₀ j).le hK₁) one_pos
+/-- **The final estimate of the approximation error.** Let `0 ≤ x ≤ 1`, `M ≥ 1`, `u = M x^q`,
+`K ≥ 0`, `0 < s ≤ 1`, and let `e_j ≤ C_j u e^{C_j u}` with `C_j ≥ 0`. If
+`1 - r ≤ (∑ⱼ e_j) / s + K x^{Mq}`, then `1 - r ≤ C u e^{C u} / s` with `C = ∑ⱼ C_j + K + 1`.
+This collects the overlaps of the blocks and the norm of the target in the proof of
+arXiv:2307.01696, Supplemental Material, Lemma 1'(ii). -/
+theorem one_sub_le_mul_mul_exp_div_of_sum_le {ι : Type*} [Fintype ι] {Cz e : ι → ℝ}
+    {K x s r : ℝ} {M q : ℕ} (hCz : ∀ j, 0 ≤ Cz j)
+    (he : ∀ j, e j ≤ Cz j * (M * x ^ q) * Real.exp (Cz j * (M * x ^ q))) (hK : 0 ≤ K)
+    (hx0 : 0 ≤ x) (hx1 : x ≤ 1) (hM : M ≠ 0) (hs : 0 < s) (hs1 : s ≤ 1)
+    (h : 1 - r ≤ (∑ j, e j) / s + K * x ^ (M * q)) :
+    1 - r ≤ (∑ j, Cz j + K + 1) * (M * x ^ q) *
+      Real.exp ((∑ j, Cz j + K + 1) * (M * x ^ q)) / s := by
+  set u : ℝ := M * x ^ q
   set S := ∑ j, Cz j
-  have hS : 0 ≤ S := Finset.sum_nonneg fun j _ => (hCz j).le
-  refine ⟨S + Kt + 1, by positivity, fun q M _ => ?_⟩
-  have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  set u := (M : ℝ) * x ^ q
   have hu : 0 ≤ u := by positivity
-  rcases Nat.eq_zero_or_pos q with hq | hq
-  · subst hq
-    have hSK : 1 ≤ S + Kt + 1 := by linarith
-    exact htriv _ hSK 0 M (by simp [hM])
-  have hq0 : q ≠ 0 := hq.ne'
-  -- The ingredients.
-  set A := blockSum Aj ι μ
-  set β : Fin b → ℂ := fun j => μ j ^ (M * q)
-  set ω : Fin b → Fin D × Fin D → ℂ := fun j => embedPair (ι j) (fixedPointPair (σ j))
-  set α : Fin b → ℂ := ghzAmplitude β
-  set σ' : Fin b → Matrix (Fin D) (Fin D) ℂ := fun j => embeddedBlockState (ι j) (σ j)
-  have hω : ω = fun j => fixedPointPair (σ' j) :=
-    funext fun j => embedPair_fixedPointPair (hι j) (hσ j).posSemidef
-  set v := nonNormalApproxVector A q M α ω
-  set z : Fin b → ℂ := fun j =>
-    mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M
-  set bb : ℝ := ∑ l, ‖β l‖ ^ 2
-  have hβr : ∀ j, β j = ((w j ^ (M * q) : ℝ) : ℂ) := fun j => by simp only [β, μ]; push_cast; rfl
-  have hβn : ∀ j, ‖β j‖ ^ 2 = (w j ^ (M * q)) ^ 2 := fun j => by
-    rw [hβr, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (hw0 j) _)]
-  have hbb1 : 1 ≤ bb := by
-    have h := Finset.single_le_sum (f := fun l => ‖β l‖ ^ 2) (fun l _ => sq_nonneg _)
-      (Finset.mem_univ j₀)
-    rw [hβn, hj₀, one_pow, one_pow] at h
-    exact h
-  have hnum : ∑ τ, star (v τ) * mpv A (blockedConfigEquiv d M q τ) =
-      ((Real.sqrt bb : ℝ) : ℂ)⁻¹ * ∑ j, β j * z j := by
-    simp only [v, hω]
-    rw [sum_star_nonNormalApproxVector_mul_mpv, Finset.mul_sum]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    simp only [α, ghzAmplitude, star_div₀, hβr, Complex.star_def, Complex.conj_ofReal, bb]
-    ring
-  -- The approximating vector has norm at most one.
-  have hvle : ∑ τ, ‖v τ‖ ^ 2 ≤ 1 := by
-    have hidem := Matrix.conjTranspose_polarIso_mul_polarIso
-      (physicalMatrix (blockTensor A q))
-    have h := sum_norm_sq_tensorPower_mulVec_le (M := M)
-      (W := Matrix.polarIso (physicalMatrix (blockTensor A q)))
-      (by rw [hidem, Matrix.polarSupport_mul_polarSupport])
-      (nonNormalFixedPointState α ω)
-    have horth : ∀ j j', ∑ p, star (ω j p) * ω j' p = if j = j' then 1 else 0 := by
-      intro j j'
-      split_ifs with h'
-      · subst h'
-        simp only [ω]
-        rw [inner_embedPair_self (hι j), fixedPointPair_norm_sq (hσ j).posSemidef, htr j]
-      · exact inner_embedPair_eq_zero_of_disjoint (hdisj j j' h') _ _
-    have hβ : β ≠ 0 := fun h' => by
-      have := congrFun h' j₀
-      simp only [β, μ, hj₀, Complex.ofReal_one, one_pow, Pi.zero_apply] at this
-      exact one_ne_zero this
-    have hΩ := nonNormalFixedPointState_norm_sq (NeZero.ne M) hβ horth
-    rw [← ofReal_sum_norm_sq, ← Complex.ofReal_one] at hΩ
-    have hΩ' := Complex.ofReal_injective hΩ
-    exact h.trans hΩ'.le
-  -- The overlap is at least `|num| / ‖φ_N‖`.
-  set num := ∑ τ, star (v τ) * mpv A (blockedConfigEquiv d M q τ)
-  set t := ‖mpvState A (M * q)‖
-  have hov : t⁻¹ * ‖num‖ ≤ ‖nonNormalApproxOverlap A q M α ω‖ := by
-    rw [nonNormalApproxOverlap_eq]
-    change t⁻¹ * ‖num‖ ≤ ‖((Real.sqrt (∑ τ, ‖v τ‖ ^ 2) : ℂ)⁻¹ * (t : ℂ)⁻¹) * num‖
-    rw [norm_mul, norm_mul, norm_inv, norm_inv, Complex.norm_real, Complex.norm_real,
-      Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (Real.sqrt_nonneg _),
-      abs_of_nonneg (norm_nonneg _)]
-    rcases (Real.sqrt_nonneg (∑ τ, ‖v τ‖ ^ 2)).lt_or_eq with hpos' | hzero
-    · have hle : Real.sqrt (∑ τ, ‖v τ‖ ^ 2) ≤ 1 := Real.sqrt_le_one.mpr hvle
-      have h1 : 1 ≤ (Real.sqrt (∑ τ, ‖v τ‖ ^ 2))⁻¹ := one_le_inv₀ hpos' |>.2 hle
-      have h2 : 0 ≤ t⁻¹ * ‖num‖ := by positivity
-      nlinarith
-    · have hv0 : ∀ τ, v τ = 0 := by
-        have hsum : ∑ τ, ‖v τ‖ ^ 2 = 0 := by
-          have := Real.sqrt_eq_zero'.1 hzero.symm
-          linarith [Finset.sum_nonneg fun τ (_ : τ ∈ Finset.univ) => sq_nonneg ‖v τ‖]
-        intro τ
-        have := (Finset.sum_eq_zero_iff_of_nonneg fun τ _ => sq_nonneg ‖v τ‖).1 hsum τ
-          (Finset.mem_univ τ)
-        simpa using this
-      have : num = 0 := Finset.sum_eq_zero fun τ _ => by rw [hv0 τ, star_zero, zero_mul]
-      rw [this, norm_zero, mul_zero]
-      positivity
-  -- The overlaps of the blocks.
-  have hzj : ∀ j, ‖z j - β j‖ ≤ Cz j * u * Real.exp (Cz j * u) := fun j => by
-    have h := hgen j (fun k => ‖μ k‖ ^ q) (fun k => by positivity)
-      (pow_le_one₀ (norm_nonneg _) (hμ j)) _ (K₁ * x ^ q) M (hpos μ hμ q hq0)
-    have hβj : ((‖μ j‖ ^ q : ℝ) : ℂ) ^ M = β j := by
-      rw [hμn, hβr]; push_cast; rw [← pow_mul, mul_comm q M]
-    rw [hβj] at h
-    have hre : C₀ j * (M * (K₁ * x ^ q)) = C₀ j * K₁ * u := by simp only [u]; ring
-    calc ‖z j - β j‖ ≤ C₀ j * (M * (K₁ * x ^ q)) * Real.exp (C₀ j * (M * (K₁ * x ^ q))) := h
-      _ = C₀ j * K₁ * u * Real.exp (C₀ j * K₁ * u) := by rw [hre]
-      _ ≤ Cz j * u * Real.exp (Cz j * u) := by
-          have : C₀ j * K₁ ≤ Cz j := by simp only [Cz]; linarith
-          have h0 : 0 ≤ C₀ j * K₁ := mul_nonneg (hC₀ j).le hK₁
-          gcongr
-  -- Combine.
-  set Sz := ∑ j, β j * z j
-  have hSz : ‖Sz - (bb : ℂ)‖ ≤ ∑ j, ‖z j - β j‖ := by
-    have : Sz - (bb : ℂ) = ∑ j, β j * (z j - β j) := by
-      simp only [Sz, bb, Complex.ofReal_sum, ← Finset.sum_sub_distrib]
-      refine Finset.sum_congr rfl fun j _ => ?_
-      rw [hβn, hβr]; push_cast; ring
-    rw [this]
-    refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
-    rw [norm_mul]
-    refine mul_le_of_le_one_left (norm_nonneg _) ?_
-    rw [norm_pow]; exact pow_le_one₀ (norm_nonneg _) (hμ j)
-  have hNq : M * q ≠ 0 := Nat.mul_ne_zero (NeZero.ne M) hq0
-  have hmain := one_sub_norm_div_le_of_norm_sub_le hbb1 (norm_nonneg _) hSz
-    (hnorm μ hμ (M * q) hNq)
-  have hnum' : t⁻¹ * (‖Sz‖ / Real.sqrt bb) = t⁻¹ * ‖num‖ := by
-    rw [hnum, norm_mul, norm_inv, Complex.norm_real, Real.norm_eq_abs,
-      abs_of_nonneg (Real.sqrt_nonneg _), div_eq_inv_mul]
-  rw [hnum'] at hmain
-  have hzj' : ∀ j, ‖z j - β j‖ ≤ Cz j * u * Real.exp (S * u) := fun j => by
-    refine (hzj j).trans ?_
-    have hCS : Cz j ≤ S :=
-      Finset.single_le_sum (f := Cz) (fun j _ => (hCz j).le) (Finset.mem_univ j)
-    exact mul_le_mul_of_nonneg_left (Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right hCS hu))
-      (mul_nonneg (hCz j).le hu)
-  have hδ : ∑ j, ‖z j - β j‖ ≤ S * u * Real.exp (S * u) := by
-    refine (Finset.sum_le_sum fun j _ => hzj' j).trans_eq ?_
+  have hS : 0 ≤ S := Finset.sum_nonneg fun j _ => hCz j
+  have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 hM
+  have hδ : ∑ j, e j ≤ S * u * Real.exp (S * u) := by
+    have h' : ∀ j, e j ≤ Cz j * u * Real.exp (S * u) := fun j => by
+      refine (he j).trans ?_
+      have hCS : Cz j ≤ S :=
+        Finset.single_le_sum (f := Cz) (fun j _ => hCz j) (Finset.mem_univ j)
+      exact mul_le_mul_of_nonneg_left (Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right hCS hu))
+        (mul_nonneg (hCz j) hu)
+    refine (Finset.sum_le_sum fun j _ => h' j).trans_eq ?_
     rw [← Finset.sum_mul, ← Finset.sum_mul]
-  have hη : Kt * x ^ (M * q) ≤ Kt * u := by
-    refine mul_le_mul_of_nonneg_left ?_ hKt
-    calc x ^ (M * q) ≤ x ^ q := pow_le_pow_of_le_one hx0.le hx1 (Nat.le_mul_of_pos_left q
-          (Nat.pos_of_ne_zero (NeZero.ne M)))
-      _ ≤ u := le_mul_of_one_le_left (by positivity) hM
-  have hexp : 1 ≤ Real.exp ((S + Kt + 1) * u) := Real.one_le_exp (by positivity)
-  have he : Real.exp (S * u) ≤ Real.exp ((S + Kt + 1) * u) :=
+  have hη : K * x ^ (M * q) ≤ K * u / s := by
+    have h1 : x ^ (M * q) ≤ u := by
+      calc x ^ (M * q) ≤ x ^ q :=
+            pow_le_pow_of_le_one hx0 hx1 (Nat.le_mul_of_pos_left q (Nat.pos_of_ne_zero hM))
+        _ ≤ u := le_mul_of_one_le_left (by positivity) hM1
+    calc K * x ^ (M * q) ≤ K * u := mul_le_mul_of_nonneg_left h1 hK
+      _ ≤ K * u / s := le_div_self (by positivity) hs hs1
+  have hexp : 1 ≤ Real.exp ((S + K + 1) * u) := Real.one_le_exp (by positivity)
+  have he' : Real.exp (S * u) ≤ Real.exp ((S + K + 1) * u) :=
     Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right (by linarith) hu)
-  calc 1 - ‖nonNormalApproxOverlap A q M α ω‖ ≤ 1 - t⁻¹ * ‖num‖ := by linarith
-    _ ≤ ∑ j, ‖z j - β j‖ + Kt * x ^ (M * q) := hmain
-    _ ≤ S * u * Real.exp (S * u) + Kt * u := add_le_add hδ hη
-    _ ≤ (S + Kt + 1) * u * Real.exp ((S + Kt + 1) * u) := by
-        have h1 : S * u * Real.exp (S * u) ≤ S * u * Real.exp ((S + Kt + 1) * u) :=
-          mul_le_mul_of_nonneg_left he (mul_nonneg hS hu)
-        have h2 : Kt * u ≤ Kt * u * Real.exp ((S + Kt + 1) * u) :=
-          le_mul_of_one_le_right (mul_nonneg hKt hu) hexp
-        have h3 : 0 ≤ u * Real.exp ((S + Kt + 1) * u) := by positivity
-        nlinarith
-
-/-- **Approximation error for overlapping blocks with weights of different moduli, `O`-form**
-(arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate): in the
-setting of `exists_approximationError_le_overlappingBlockSum_weight`, there is `C` with
-`ε ≤ C (N/q) e^{-γ q/ξ}` for every block length `q` and every number of blocks `M ≥ 1`. -/
-theorem exists_approximationError_le_mul_overlappingBlockSum_weight
-    (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
-    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
-    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
-    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
-    {lam₂ : ℂ}
-    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
-    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ ≤ ‖lam₂‖)
-    {w : Fin b → ℝ} (hw0 : ∀ j, 0 ≤ w j) (hw1 : ∀ j, w j ≤ 1) (hwmax : ∃ j, w j = 1)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      1 - ‖nonNormalApproxOverlap (blockSum Aj ι fun j => (w j : ℂ)) q M
-          (ghzAmplitude fun j => (w j : ℂ) ^ (M * q))
-          (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
-        C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
-  obtain ⟨C, hC, h⟩ := exists_approximationError_le_overlappingBlockSum_weight hι hdisj hN hA hσ
-    htr hfix hlam hmix hw0 hw1 hwmax hγ0 hγ
-  refine ⟨C * Real.exp C + 1, by positivity, fun q M _ => ?_⟩
-  refine le_mul_of_le_mul_exp_of_le hC.le zero_le_one (by positivity) (h q M) ?_
-  linarith [norm_nonneg (nonNormalApproxOverlap (blockSum Aj ι fun j => (w j : ℂ)) q M
-    (ghzAmplitude fun j => (w j : ℂ) ^ (M * q))
-    (fun j => embedPair (ι j) (fixedPointPair (σ j))))]
-
-/-- **Approximation error for blocks with overlapping states** (arXiv:2307.01696,
-Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate of the module docstring),
-for unit weights: `exists_approximationError_le_overlappingBlockSum_weight` at `wⱼ = 1`.
-Let `Aⁱ = ⊕ⱼ A_jⁱ` be the direct sum with unit weights of blocks placed on the bond coordinates
-`ι_j`, let every block `A_j` be normal in the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`,
-`σ_j > 0`, `Tr σ_j = 1` (eq. (5)), let `λ₂` bound the moduli of the eigenvalues other than `1` of
-every transfer map `E_{A_j}` and the moduli of all eigenvalues of the mixed transfer maps
-`E_{jj'}(X) = ∑ᵢ A_jⁱ X (A_{j'}ⁱ)†` of distinct blocks, so that `ξ = -1/log|λ₂|` bounds
-`ξ_diag = max_j ξ_jj` and `ξ_off-diag = max_{j≠j'} ξ_{jj'}`, and let `0 < γ < 1/2`. There is
-`C > 0` such that for every block length `q` and every number of blocks `M ≥ 1`, with `N = qM`,
-`βⱼ = 1` (eq. (S4) for `m_j = 1` and `μ_{j,1} = 1`), the pairs of the `σ_j` embedded along `ι_j`,
-and `y = M e^{-γ q/ξ}` (`= (N/q) e^{-γ q/ξ}` for `q ≥ 1`), the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the
-approximating state of eq. (S7) satisfies `ε ≤ C y e^{C y}`.
-
-The `q`-site states of distinct blocks need not be orthogonal, and no condition `q = o(N)` is
-needed. The source's rate `e^{-γ q/ξ_diag}` fails for overlapping blocks
-(`isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock`); here `ξ` also bounds the
-correlation lengths `ξ_{jj'}` of the mixed transfer maps. -/
-theorem exists_approximationError_le_overlappingBlockSum [NeZero b]
-    (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
-    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
-    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
-    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
-    {lam₂ : ℂ}
-    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
-    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      1 - ‖nonNormalApproxOverlap (blockSum Aj ι fun _ => 1) q M (ghzAmplitude fun _ => 1)
-          (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
-        C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
-          Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
-  obtain ⟨C, hC, h⟩ := exists_approximationError_le_overlappingBlockSum_weight hι hdisj hN hA hσ
-    htr hfix hlam hmix (w := fun _ => 1) (fun _ => zero_le_one) (fun _ => le_rfl)
-    ⟨0, rfl⟩ hγ0 hγ
-  exact ⟨C, hC, fun q M _ => by simpa using h q M⟩
-
-/-- **Approximation error for blocks with overlapping states, `O`-form** (arXiv:2307.01696,
-Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate): in the setting of
-`exists_approximationError_le_overlappingBlockSum`, there is `C` with
-`ε ≤ C (N/q) e^{-γ q/ξ}` for every block length `q` and every number of blocks `M ≥ 1`. -/
-theorem exists_approximationError_le_mul_overlappingBlockSum [NeZero b]
-    (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
-    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
-    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
-    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
-    {lam₂ : ℂ}
-    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
-    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      1 - ‖nonNormalApproxOverlap (blockSum Aj ι fun _ => 1) q M (ghzAmplitude fun _ => 1)
-          (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
-        C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
-  obtain ⟨C, hC, h⟩ := exists_approximationError_le_overlappingBlockSum hι hdisj hN hA hσ htr
-    hfix hlam hmix hγ0 hγ
-  refine ⟨C * Real.exp C + 1, by positivity, fun q M _ => ?_⟩
-  refine le_mul_of_le_mul_exp_of_le hC.le zero_le_one (by positivity) (h q M) ?_
-  linarith [norm_nonneg (nonNormalApproxOverlap (blockSum Aj ι fun _ => 1) q M
-    (ghzAmplitude fun _ => 1) (fun j => embedPair (ι j) (fixedPointPair (σ j))))]
+  have hfin : S * u * Real.exp (S * u) + K * u ≤ (S + K + 1) * u * Real.exp ((S + K + 1) * u) := by
+    have h1 : S * u * Real.exp (S * u) ≤ S * u * Real.exp ((S + K + 1) * u) :=
+      mul_le_mul_of_nonneg_left he' (mul_nonneg hS hu)
+    have h2 : K * u ≤ K * u * Real.exp ((S + K + 1) * u) :=
+      le_mul_of_one_le_right (mul_nonneg hK hu) hexp
+    have h3 : 0 ≤ u * Real.exp ((S + K + 1) * u) := by positivity
+    nlinarith
+  calc 1 - r ≤ (∑ j, e j) / s + K * x ^ (M * q) := h
+    _ ≤ S * u * Real.exp (S * u) / s + K * u / s :=
+        add_le_add (div_le_div_of_nonneg_right hδ hs.le) hη
+    _ = (S * u * Real.exp (S * u) + K * u) / s := by rw [add_div]
+    _ ≤ _ := by gcongr
 
 end MPSTensor

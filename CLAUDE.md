@@ -54,11 +54,14 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 #   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 # Run after lake build succeeds.
 python3 scripts/fetch_tenkz.py
-cd blueprint && leanblueprint checkdecls
+(cd blueprint && leanblueprint checkdecls)
 
 # Blueprint web/PDF generation
-cd blueprint && leanblueprint web
-cd blueprint && leanblueprint pdf
+(cd blueprint && leanblueprint web)
+# Add client-side search to the web pages (run from repo root after the web build)
+python3 -m pip install 'pagefind[extended]==1.5.2'
+python3 scripts/add_blueprint_search.py --web-root blueprint/web
+(cd blueprint && leanblueprint pdf)
 ```
 
 ## Lean Toolchain & Dependencies
@@ -87,13 +90,14 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 | Layer | Modules | Content |
 |-------|---------|---------|
 | **0** | `Algebra/` | Tensor-network-facing algebra and compatibility results not owned by QICLean |
+| **1** | `Circuit/` | Local quantum circuits on qudit chains: supported operators, layers and light cones, two-site universality, measurement protocols, teleportation and long-range gates, local channel circuits; imports nothing from `MPS/` |
 | **3** | `MPS/Defs`, `MPS/Chain/`, `MPS/Core/`, `MPS/Overlap/` | MPSTensor definition, finite-Kraus compatibility wrappers, word evaluation, blocking, transfer matrices, overlap matrices |
 | **4** | `MPS/FundamentalTheorem/`, `MPS/Symmetry/` | Single-block FT, gauge equivalence, on-site/virtual symmetries, cocycle coboundary |
 | **5** | `MPS/BNT/`, `MPS/CanonicalForm/`, `MPS/Structure/`, `MPS/Irreducible/`, `MPS/Periodic/`, `MPS/FundamentalTheorem/Multi/` | Multi-block assembly, BNT canonical forms, permutation rigidity, periodic tensors |
 | **5b** | `MPS/RFP/` | Renormalization fixed-point scaffolding |
 | **6** | `Wielandt/` | Tensor-typed span-growth, primitivity, and Wielandt consequences built on QICLean |
 
-**Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).
+**Other modules**: `Circuit/` (local quantum circuits on qudit chains, namespace `QuantumCircuit`, used by the log-depth preparation of `MPS/Preparation/`; it imports nothing from `MPS/`), `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).
 
 ### Key Types and Definitions
 
@@ -449,7 +453,7 @@ follow-up, not against the temporary `sorry` count.
 | `MPSTensor.transferMap_smul_eq_of_norm_eq_one` | helper theorem | Replacing the transfer map of a tensor scaled by a unit-norm complex scalar with the original transfer map | `TNLean/MPS/SharedInfra/Scaling.lean` |
 | `Matrix.IsIsometry.kronecker` | helper theorem | Preserving matrix isometries under the Kronecker product | `QICLean/Algebra/MatrixIsometryKronecker.lean` (QICLean dependency) |
 | `Matrix.reindexLinearEquiv_mul` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences; instantiate all three equivalences explicitly | `Mathlib/LinearAlgebra/Matrix/Reindex.lean` |
-| `Matrix.entry_eq_of_heq` | helper theorem | Equating entries of a dependent family of matrices from the index equation and two heterogeneous coordinate identifications | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean` |
+| `Matrix.entry_eq_of_heq` | helper theorem | Equating entries of a dependent family of matrices from the index equation and two heterogeneous coordinate identifications | `QICLean/Algebra/MatrixDependentEntries.lean` (QICLean dependency) |
 | `MPSTensor.cyclic_projection_mul_left` | helper theorem | Multiplying out the adjoint transfer map applied to a cyclic-sector projection times an arbitrary matrix, instead of rebuilding the Kadison–Schwarz multiplicative-domain argument | `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
 | `MPSTensor.cyclic_projection_mul_right` | helper theorem | The same on the other side: the adjoint transfer map applied to an arbitrary matrix times a cyclic-sector projection | `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
 | `Fin.cyclic_induction` | helper theorem | Proving a predicate on a finite cyclic index from the zero case and one step of adding one, instead of re-running the induction on the underlying natural number | `TNLean/Algebra/FinCyclicInduction.lean` |

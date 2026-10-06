@@ -1,0 +1,47 @@
+\begin{theorem}[Regular representation multiplicities]
+    \label{thm:peps_regular_fourier_multiplicities}
+    \lean{TNLean.PEPS.leftRegularEuclideanMatrixEquiv,
+        TNLean.PEPS.exists_unitary_leftRegular_matrix_blocks}
+    \leanok
+    \uses{thm:peps_unitary_character_blocks, thm:peps_semiregular_equivalence}
+    The actual left-regular permutation representation of a finite group
+    admits the orthonormal decomposition
+    (\ref{eq:peps_unitary_irreducible_rows}), with $m_i=d_i$ for every
+    irreducible sector. This is the regular decomposition used in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    The group basis identifies the group-algebra regular representation
+    with the permutation matrices on the standard Hilbert space.
+    Their characters agree. The multiplicity of a character $\chi$ in
+    the regular representation is $\chi(1)$. For an irreducible row,
+    $\chi(1)=d_i$, whereas the orthonormal row decomposition gives
+    multiplicity $m_i$. Thus $m_i=d_i$.
+\end{proof}
+
+\begin{theorem}[Unitary Fourier decomposition of the regular matrices]
+    \label{thm:peps_regular_unitary_fourier}
+    \lean{TNLean.PEPS.exists_unitary_leftRegular_fourier}
+    \leanok
+    \uses{thm:peps_regular_fourier_multiplicities}
+    There are positive dimensions $d_i$, pairwise inequivalent irreducible
+    unitary matrix representations $D_i$, and an orthonormal basis
+    $(e_{i,j,a})$ of $\mathbb C^G$, in row then multiplicity order, in
+    which the actual regular permutation matrices are
+    \begin{align}
+        U_{\mathrm{reg}}(g)\cong
+        \bigoplus_i D_i(g)\otimes I_{d_i}.
+        \label{eq:peps_regular_unitary_fourier}
+    \end{align}
+    The matrices $D_i$ and the orthonormal change of basis are derived
+    from the finite group. This is the regular block form used in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Take the matrix representation of one irreducible row in its inherited
+    orthonormal basis. This gives a unitary irreducible homomorphism $D_i$.
+    The common action on every multiplicity row gives the same matrix
+    $D_i(g)$ on each copy. The preceding multiplicity identity supplies
+    exactly $d_i$ copies. Interchanging the row and copy indices gives
+    (\ref{eq:peps_regular_unitary_fourier}).
+\end{proof}

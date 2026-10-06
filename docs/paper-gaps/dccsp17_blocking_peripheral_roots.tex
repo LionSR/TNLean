@@ -45,6 +45,13 @@ root set as its peripheral spectrum; with the same correction, that spectrum is
 again the set of $q$-th roots of unity.\footnote{Formal declaration:
     \leanid{MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq}, in
     \doclink{TNLean/MPS/Periodic/BlockingEigenvalues.lean}.}
+The full decomposition derives the cyclic projections, constructs the
+$\gcd(m,p)$ nonzero left-canonical compressed blocks, and, for $p>0$, proves
+irreducibility and exact period $m/\gcd(m,p)$ for each; the isometries, total
+dimension, and equality of matrix product vectors are retained.\footnote{Formal
+    declaration:
+    \leanid{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}, in
+    \doclink{TNLean/MPS/Periodic/PrescribedBlocking.lean}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

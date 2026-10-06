@@ -97,15 +97,6 @@ theorem inner_mpvState_chainWindowOperator_mul_offset (A : MPSTensor d D) {L : �
     pow_add]
   simp only [mul_assoc]
 
-/-- The squared norm of `φ_N` is `tr E_A^N` (arXiv:2307.01696, Supplemental Material, proof
-of Lemma 2, normalization of the correlator). -/
-theorem inner_mpvState_self_eq_trace (A : MPSTensor d D) (N : ℕ) :
-    ⟪mpvState A N, mpvState A N⟫_ℂ =
-      LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) (Kraus.transferMap A ^ N) := by
-  have h := inner_mpvState_toEuclideanLin A N 1
-  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply] at h
-  rwa [physicalObservableTransfer_one] at h
-
 /-! ### Bounds on normalized expectations -/
 
 /-- The normalized expectation of an operator is at most its operator norm. This bounds the
@@ -386,7 +377,9 @@ theorem exists_norm_mpvExpectation_mul_sub_mul_le [NeZero D] {A : MPSTensor d D}
     simpa using this
   have hgl : ‖limitCorrelator A ρ htr w X Y g‖ ≤ K * r ^ g := by
     have e : limitCorrelator A ρ htr w X Y g = LinearMap.trace ℂ _ (EX * Q ^ g * EY * P) := by
-      rw [htrFP, hEX_def, hEY_def, hQ_def, hE_def, hP_def]; rfl
+      rw [limitCorrelator_eq_compl_pow_of_pos A ρ htr hA
+        (by simpa only [hE_def] using hρfix) w X Y (by omega),
+        htrFP, hEX_def, hEY_def, hQ_def, hE_def, hP_def]; rfl
     rw [e]
     refine htrK _ g ((hmul _ _ (hmul _ _ (hmul _ _ hEX (hQk g)) hEY) hPB).trans ?_)
     calc B * (B * r ^ g) * B * B = B ^ 4 * r ^ g := by ring

@@ -1,0 +1,82 @@
+\begin{theorem}[Additivity of the index on an MPU representation]
+    \label{thm:mpug_group_index_additivity}
+    \lean{MPOTensor.GroupFamily.IsRawRepresentation.index_mul,
+        MPOTensor.GroupFamily.IsRawRepresentation.index_one,
+        MPOTensor.GroupFamily.IsRawRepresentation.neZero_phys}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_reduced_representative_index}
+    Let $\{\mathcal U_g\}_{g\in G}$ be an injective family of MPUs with positive
+    bond dimensions, satisfying~(\ref{eq:mpug_rep_identity}) and
+    (\ref{eq:mpug_rep_multiplication}) at every positive chain length.
+    Simplicity is not required. Then $d>0$ and
+    \begin{align}
+        \operatorname{ind}(\mathcal U_e) & =0,                                                                 \\
+        \operatorname{ind}(\mathcal U_{gh})
+                                         & =\operatorname{ind}(\mathcal U_g)+\operatorname{ind}(\mathcal U_h).
+    \end{align}
+    These are the index properties used in the finite-order argument of
+    \cite[line~1547]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_representative_index_tensor_product,
+        thm:mpu_identity_index, thm:mpu_admissible_index_composition}
+    Injectivity on a positive-dimensional bond space excludes an empty
+    physical alphabet, so $d>0$. The identity law identifies the periodic
+    operators of $\mathcal U_e$ with those of the identity tensor, whose
+    index is zero. The multiplication law identifies those of
+    $\mathcal U_{gh}$ with the composition of $\mathcal U_g$ and
+    $\mathcal U_h$. Invariance under equality of periodic operators and
+    additivity under composition give the two conclusions.
+\end{proof}
+
+\begin{theorem}[Vanishing of the index for a finite-group representation]
+    \label{thm:mpug_finite_group_index_zero}
+    \lean{MPOTensor.GroupFamily.IsRawRepresentation.index_eq_zero}
+    \leanok
+    \uses{thm:mpug_group_index_additivity}
+    Under the hypotheses of Theorem~\ref{thm:mpug_group_index_additivity},
+    suppose that $G$ is finite. Then
+    $\operatorname{ind}(\mathcal U_g)=0$ for every $g\in G$.
+    This is the finite-order conclusion in
+    \cite[line~1547]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_group_index_additivity}
+    Induction gives
+    $\operatorname{ind}(\mathcal U_{g^n})=n\operatorname{ind}(\mathcal U_g)$.
+    For $n=\operatorname{ord}(g)>0$, the identity $g^n=e$ gives
+    $0=n\operatorname{ind}(\mathcal U_g)$; hence
+    $\operatorname{ind}(\mathcal U_g)=0$.
+\end{proof}
+
+\begin{theorem}[Source-leg dimensions in a finite-group representation]
+    \label{thm:mpug_finite_group_source_ranks}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.sourceRanks_eq_physDim}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpu_right_rank, def:mpu_left_rank}
+    Let $G$ be finite and let $\{\mathcal U_g\}_{g\in G}$ be an exact
+    representation by simple injective MPU tensors of physical dimension
+    $d$. For every $g\in G$, the two source-leg dimensions are
+    \begin{align}
+        d_r(g) & =d, \\
+        d_l(g) & =d.
+    \end{align}
+    This is the conclusion of
+    \cite[line~1547]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_finite_group_index_zero,
+        thm:mpu_simple_injective_source_index,
+        thm:mpug_zero_specified_source_index_ranks}
+    Put $r=d_r(g)$ and $\ell=d_l(g)$. Simplicity and injectivity give
+    $r\ell=d^2$ and
+    $\operatorname{ind}(\mathcal U_g)=\frac12(\log_2 r-\log_2\ell)$.
+    The physical dimension is positive, so both ranks are positive.
+    Finite order gives $\operatorname{ind}(\mathcal U_g)=0$. Using
+    $r\ell=d^2$, the index can also be written as $\log_2(r/d)$.
+    Thus $r/d=1$ and $r=d$; substitution into $r\ell=d^2$ gives $\ell=d$.
+\end{proof}

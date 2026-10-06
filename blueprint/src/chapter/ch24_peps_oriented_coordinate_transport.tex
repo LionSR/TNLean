@@ -1,0 +1,244 @@
+\section{Coordinate changes with native edge orientations}
+\label{sec:peps_oriented_coordinate_transport}
+
+Continue with the incidence and bond coordinates of
+Section~\ref{sec:peps_oriented_open_contractions}. The matrix on a reversed
+edge is the entrywise conjugate of the matrix on an unreversed edge.
+This conjugation follows from exchanging the two physical endpoints;
+it does not require real representation matrices.
+
+\begin{theorem}[Coordinate changes on reversed bonds]%
+    \label{thm:peps_oriented_coordinate_swap}
+    \lean{TNLean.PEPS.bondCoordinateMatrix_map_star,
+        TNLean.PEPS.bondCoordinateMatrix_map_star_mulVec}
+    \leanok
+    For a matrix $Q:\C^X\to\C^Y$, put $T(Q)=Q\otimes\overline Q$
+    on ordered head--tail pairs, and let $S_X,S_Y$ exchange their
+    two coordinates. Then $T(\overline Q)=S_YT(Q)S_X$ and, for every
+    matrix $M$ on $\C^X$,
+    \begin{align}
+        T(\overline Q)\operatorname{vec}(M^T)
+        =\operatorname{vec}\bigl((QMQ^\dagger)^T\bigr).
+        \label{eq:peps_oriented_transposed_coordinate}
+    \end{align}
+    Here $\operatorname{vec}(M)(a,b)=M_{a,b}$.
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient of $T(Q)$ is $Q_{a,c}\overline{Q_{b,d}}$.
+    Exchanging both endpoint pairs gives
+    $\overline{Q_{a,c}}Q_{b,d}$, which is $T(\overline Q)_{(a,b),(c,d)}$.
+    Summing this coefficient against $M_{d,c}$ gives
+    $(QMQ^\dagger)_{b,a}$.
+\end{proof}
+
+\begin{definition}[Oriented regional coordinate matrix]%
+    \label{def:peps_oriented_coordinate_matrix}
+    \lean{TNLean.PEPS.graphOrientedEdgeCoordinateMatrix,
+        TNLean.PEPS.graphOrientedBondCoordinateMatrix,
+        TNLean.PEPS.graphOrientedBoundaryCoordinateMatrix,
+        TNLean.PEPS.graphOrientedRegionCoordinateMatrix}
+    \leanok
+    \uses{def:peps_oriented_native_tail}
+    Set $Q_e=Q$ if $o_e=0$ and $Q_e=\overline Q$ if $o_e=1$.
+    The internal bond matrix is $T_e(Q)=Q_e\otimes\overline{Q_e}$.
+    On a crossing edge $e=(t,h)$, set $B_{e,R}(Q)=\overline{Q_e}$
+    when $t\in R$, and $B_{e,R}(Q)=Q_e$ when $h\in R$.
+    Define
+    \begin{align}
+        T_R^o(Q)=
+        \bigotimes_{e\in\partial E_R}B_{e,R}(Q)
+        \otimes\bigotimes_{e\in E_R}T_e(Q).
+        \label{eq:peps_oriented_regional_coordinate}
+    \end{align}
+    The corresponding global matrix in numbered site coordinates is
+    $M_o(Q)=M((T_e(Q))_e)$.
+\end{definition}
+
+\begin{theorem}[Cancellation of oriented coordinates]%
+    \label{thm:peps_oriented_coordinate_inverse}
+    \lean{TNLean.PEPS.map_star_mul_eq_one,
+        TNLean.PEPS.graphOrientedRegionCoordinateMatrix_mul_conjTranspose}
+    \leanok
+    \uses{def:peps_oriented_coordinate_matrix}
+    If $AB=1$, then $\overline A\,\overline B=1$.
+    Consequently $QQ^\dagger=1$ implies
+    $T_R^o(Q)T_R^o(Q^\dagger)=1$ for every region and orientation.
+\end{theorem}
+\begin{proof}\leanok
+    Take entrywise conjugates of the finite sums defining $AB$.
+    Apply the resulting identity to each $Q_e$, its conjugate on a
+    retained tail, and the two factors of every internal pair.
+    Multiplication of the independent boundary and internal tensor
+    factors proves the regional assertion.
+\end{proof}
+
+\begin{theorem}[Coordinate transport for every boundary vector]%
+    \label{thm:peps_oriented_coordinate_open}
+    \lean{TNLean.PEPS.graphOrientedOpenBoundaryFactor_coordinates,
+        TNLean.PEPS.graphOrientedOpenInternalFactor_coordinates,
+        TNLean.PEPS.graphOrientedRegionCoordinateMatrix_open,
+        TNLean.PEPS.graphOrientedRegionCoordinateMatrix_open_superposition,
+        TNLean.PEPS.graphOrientedRegionCoordinateMatrix_maps_openBondSpace,
+        TNLean.PEPS.graphOrientedRegionCoordinateMatrix_map_openBondSpace}
+    \leanok
+    \uses{def:peps_oriented_coordinate_matrix,
+        def:peps_oriented_open_coefficients}
+    Suppose $Q^\dagger Q=1$ and $U,L$ are representations satisfying
+    $L_g=QU_gQ^\dagger$. For $W=1$, internal factors obey
+    $T_e(Q)I_e^U(q)=I_e^L(q)$, while crossing factors obey
+    \begin{align}
+        B_{e,R}(Q)B_e^U(q;\theta)
+         & =\sum_{a\in Y}B_{e,R}(Q)_{a,\theta}B_e^L(q;a).
+        \label{eq:peps_oriented_boundary_coordinate}
+    \end{align}
+    The internal identity only uses $L_g=QU_gQ^\dagger$.
+    Put $K_R(Q)_{a,\theta}
+        =\prod_{e\in\partial E_R}B_{e,R}(Q)_{a_e,\theta_e}$.
+    Then
+    \begin{align}
+        T_R^o(Q)C_R^{U,1,o}(\theta)
+                                    & =\sum_a K_R(Q)_{a,\theta}C_R^{L,1,o}(a),
+        \label{eq:peps_oriented_open_coordinate}                                                \\
+        T_R^o(Q)\sum_\theta c_\theta C_R^{U,1,o}(\theta)
+                                    & =\sum_a\left(\sum_\theta K_R(Q)_{a,\theta}c_\theta\right)
+        C_R^{L,1,o}(a),
+        \label{eq:peps_oriented_boundary_superposition}                                         \\
+        T_R^o(Q)\mathcal S_R(U,1,o) & =\mathcal S_R(L,1,o).
+        \label{eq:peps_oriented_coordinate_range}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_coordinate_swap,
+        thm:peps_oriented_coordinate_inverse}
+    At a native head, use $L_gQ=QU_g$; at a native tail use
+    $Q^\dagger L_g=U_gQ^\dagger$, with conjugates as specified by
+    $B_{e,R}(Q)$. This gives~(\ref{eq:peps_oriented_boundary_coordinate}).
+    Internal factors follow by conjugating the relative representation
+    matrix, using~(\ref{eq:peps_oriented_transposed_coordinate}) on
+    reversed edges. Apply these identities inside
+    (\ref{eq:peps_oriented_open}) and factor the independent boundary
+    sums to obtain~(\ref{eq:peps_oriented_open_coordinate}).
+    Linearity gives~(\ref{eq:peps_oriented_boundary_superposition}) and
+    the forward range inclusion. At $g=1$, the representation identity
+    gives $1=L_1=QQ^\dagger$. The reverse coordinate change $Q^\dagger$
+    therefore satisfies the same hypotheses, and cancellation proves
+    (\ref{eq:peps_oriented_coordinate_range}).
+\end{proof}
+
+\begin{definition}[Exterior coefficient of a coordinate change]%
+    \label{def:peps_oriented_coordinate_exterior}
+    \lean{TNLean.PEPS.graphOrientedBoundaryExteriorCoordinateCoefficient}
+    \leanok
+    \uses{def:peps_oriented_coordinate_matrix}
+    For fixed crossing exterior labels $\gamma_Y,\gamma_X$, put
+    \begin{align}
+        b_R(Q;\gamma_Y,\gamma_X)
+        =\prod_{e=(t,h)\in\partial E_R}
+        \begin{cases}
+            (Q_e)_{\gamma_{Y,e},\gamma_{X,e}},            & t\in R, \\
+            \overline{(Q_e)_{\gamma_{Y,e},\gamma_{X,e}}}, & h\in R.
+        \end{cases}
+        \label{eq:peps_oriented_coordinate_exterior}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Regional blocks preserve every parent condition]%
+    \label{thm:peps_oriented_coordinate_blocks}
+    \lean{TNLean.PEPS.mixedPhysicalProductMatrix_oriented_boundary_coordinates,
+        TNLean.PEPS.regionOperatorBlock_graphNumberedBondFamilyMatrix_oriented_coordinates_maps,
+        TNLean.PEPS.graphNumberedBondFamilyMatrix_oriented_coordinates_maps_regionParentGroundSpace}
+    \leanok
+    \uses{def:peps_oriented_coordinate_exterior,
+        def:peps_oriented_bond_family}
+    The mixed product of crossing blocks and internal coordinate matrices
+    is $b_R(Q;\gamma_Y,\gamma_X)T_R^o(Q)$.
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_oriented_coordinate_open}, every exterior
+    block of $M_o(Q)$ sends the regional range for $A^{U,1,o}$ into
+    that for $A^{L,1,o}$. Thus, for every region family $\mathcal R$,
+    \begin{align}
+        M_o(Q)\mathcal P_{\mathcal R}(A^{U,1,o})
+        \subseteq\mathcal P_{\mathcal R}(A^{L,1,o}).
+        \label{eq:peps_oriented_coordinate_parent_inclusion}
+    \end{align}
+    No coverage condition is needed for this inclusion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_bond_family_blocks,
+        thm:peps_oriented_coordinate_open,thm:peps_oriented_open_range,
+        thm:peps_parent_support_block_criterion}
+    A crossing coefficient of $Q_e\otimes\overline{Q_e}$ factors
+    into its fixed exterior entry and its retained endpoint entry.
+    Taking their product gives~(\ref{eq:peps_oriented_coordinate_exterior}).
+    By~(\ref{eq:peps_oriented_family_block}), each global block is
+    $c_Rb_RJ_{Y,R}^{-1}T_R^o(Q)J_{X,R}$.
+    Equations~(\ref{eq:peps_oriented_range}) and
+    (\ref{eq:peps_oriented_coordinate_range}) show that this block
+    preserves the required regional range. Each output slice of a
+    global vector is a sum of such blocks applied to its input slices,
+    proving~(\ref{eq:peps_oriented_coordinate_parent_inclusion}).
+\end{proof}
+
+\begin{theorem}[Global inverses]%
+    \label{thm:peps_oriented_global_coordinate_inverse}
+    \lean{TNLean.PEPS.graphNumberedBondFamilyMatrix_oriented_coordinates_rightInverse,
+        TNLean.PEPS.graphNumberedBondFamilyMatrix_oriented_coordinates_injective}
+    \leanok
+    \uses{def:peps_oriented_coordinate_matrix}
+    If $QQ^\dagger=1$, then $M_o(Q)M_o(Q^\dagger)=1$ on the
+    full target physical space. If $Q^\dagger Q=1$, then $M_o(Q)$
+    is injective on the full source physical space.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_coordinate_inverse,
+        thm:peps_oriented_bond_family_algebra}
+    Each edge factor and its inverse cancel. The conjugated factors
+    on reversed edges cancel as well. Their global product
+    cancels by Theorem~\ref{thm:peps_oriented_bond_family_algebra}.
+    Applying the same identity to $Q^\dagger$ supplies a left inverse
+    under $Q^\dagger Q=1$ and hence injectivity.
+\end{proof}
+
+\begin{theorem}[Full parent spaces under oriented coordinates]%
+    \label{thm:peps_oriented_coordinate_parent}
+    \lean{TNLean.PEPS.map_regionParentGroundSpace_oriented_coordinates_eq,
+        TNLean.PEPS.finrank_regionParentGroundSpace_oriented_coordinates_eq,
+        TNLean.PEPS.map_ker_regionParentHamiltonian_oriented_coordinates_eq}
+    \leanok
+    \uses{def:peps_oriented_coordinate_matrix,
+        def:peps_region_parent_interaction}
+    If $Q^\dagger Q=1$ and $L_g=QU_gQ^\dagger$ for representations
+    $U,L$, then for every $\mathcal R$,
+    \begin{align}
+        M_o(Q)\mathcal P_{\mathcal R}(A^{U,1,o})
+         & =\mathcal P_{\mathcal R}(A^{L,1,o}).
+        \label{eq:peps_oriented_coordinate_parent}
+    \end{align}
+    These parent spaces have equal dimension. For a finite region
+    family, let $H_U,H_L$ be sums of positive regional interactions
+    whose kernels are exactly the respective regional contraction
+    ranges. Then $M_o(Q)\ker H_U=\ker H_L$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_oriented_coordinate_blocks,
+        thm:peps_oriented_global_coordinate_inverse,
+        thm:peps_region_parent_common_kernel}
+    Evaluating the intertwining identity at $1$ gives $QQ^\dagger=1$.
+    Apply the block inclusion in both directions and cancel the global
+    coordinate matrices. The restriction of $M_o(Q)$ is then bijective,
+    which gives equal dimension. Positivity identifies each Hamiltonian
+    kernel with the intersection of its regional parent conditions,
+    giving the kernel assertion.
+\end{proof}
+
+\begin{definition}[Oriented coordinate parent equivalence]%
+    \label{def:peps_oriented_coordinate_parent_equivalence}
+    \lean{TNLean.PEPS.canonicalOrientedCoordinateParentEquiv}
+    \leanok
+    \uses{thm:peps_oriented_coordinate_parent}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_oriented_coordinate_parent}, define
+    $E_Q^o:\mathcal P_{\mathcal R}(A^{U,1,o})
+        \simeq\mathcal P_{\mathcal R}(A^{L,1,o})$ to be the restriction
+    of $M_o(Q)$. Its inverse is the restriction of $M_o(Q^\dagger)$.
+\end{definition}

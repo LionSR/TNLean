@@ -122,14 +122,11 @@ noncomputable def edgeCoeffIdentityWitness_translate
       (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) hEX where
   region := Region.map (translate a b) R
   isBoundary := (boundaryEdgeMap (translate a b) R f).2
-  hRB := by
-    have h := (regionBlockedTensorInjective_transport B (translate a b) R).mpr hRB
-    rwa [hB a b] at h
+  hRB := regionBlockedTensorInjective_translate hB a b R hRB
   hCB := by
     rw [show Finset.univ \ Region.map (translate a b) R =
         Region.map (translate a b) (Finset.univ \ R) from (Region_map_compl (translate a b) R).symm]
-    have h := (regionBlockedTensorInjective_transport B (translate a b) (Finset.univ \ R)).mpr hCB
-    rwa [hB a b] at h
+    exact regionBlockedTensorInjective_translate hB a b _ hCB
   hposB := hposB
   hidZ := hidX
   hidZref := by

@@ -1,0 +1,201 @@
+\subsection{Uniform coherent conversion of the canonical sector encodings}
+\label{sec:ldp_coherent_groundspace_conversion}
+
+The endpoints below are the fixed polar encoders of the actual periodic
+sector columns. A single physical circuit acts on the whole logical
+space, including inputs entangled with an external reference. This is a
+precise enhancement of the discussion and outlook of
+\cite{Malz2024Preparation}; it does not identify an additional phase predicate.
+
+\begin{theorem}[Decay of the logical Gram matrix]
+    \label{thm:ldp_sector_gram_rate}
+    \lean{MPSTensor.exists_norm_gram_sectorColumnMatrix_sub_one_le}
+    \leanok
+    \uses{def:ldp_sector_encoder, def:correlation_length}
+    Let $A_j$ be finitely many normal left-canonical sectors with faithful
+    stationary densities $\sigma_j$ of trace one. Suppose $|\lambda_2|<1$
+    bounds all nontrivial diagonal-transfer eigenvalues and every
+    mixed-transfer eigenvalue between distinct sectors. For $0<\gamma<1$,
+    put $x=\exp(-\gamma/\xi(\lambda_2))$. There is $K_G\ge0$, independent
+    of $N$, such that
+    \begin{align*}
+        \|V_{A,N}^\dagger V_{A,N}-I_b\|\le K_G x^N.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_approximation_error_normal, lem:ldp_mixed_transfer_decay,
+        thm:ldp_sector_gram_cross_entries}
+    The diagonal entries are the squared sector norms minus one; the
+    off-diagonal entries are complex periodic overlaps. Their existing
+    transfer estimates give entry bounds $K_{ij}x^N$. Sum these bounds
+    weighted by the norms of the logical matrix units, over the fixed
+    indices $i,j$. No sum over the physical dimension occurs.
+\end{proof}
+
+\begin{theorem}[Decay of the complex cross matrix]
+    \label{thm:ldp_sector_cross_rate}
+    \lean{MPSTensor.exists_norm_cross_blockIsometryEncoder_sectorColumnMatrix_sub_one_le}
+    \leanok
+    \uses{def:ldp_sector_encoder, def:ldp_embedded_sectors}
+    Under the preceding canonical and common-spectrum hypotheses, embed
+    the sectors with injective coordinate maps of disjoint ranges. Let
+    $W_A$ be their simultaneous blocked-polar encoder, with pairs from
+    the embedded fixed densities. There is $K_Z>0$, chosen before the
+    partition, such that for every partition into $M\ge1$ supported-
+    injective blocks of lengths $\ell_k\ge q\ge1$, with $y=Mx^q$,
+    \begin{align*}
+        \|W_A^\dagger V_{A,N}-I_b\|\le K_Z y e^{K_Z y}.
+    \end{align*}
+    The cross matrix is complex, so this estimate retains relative
+    logical phases.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_block_overlaps_limit,
+        thm:ldp_sector_gram_cross_entries}
+    The exact cross-overlap identity identifies each entry with the
+    trace of an ordered mixed-transfer product. Its difference from
+    $\delta_{ij}$ is bounded by $C_{ij}y e^{C_{ij}y}$. Choose $K_Z>0$
+    dominating all $C_{ij}$ and their sum weighted by the norms of the
+    logical matrix units. Sum the entry bounds with these weights. The
+    sums again have only the fixed logical dimension.
+\end{proof}
+
+\begin{theorem}[A square-root exponential encoder estimate]
+    \label{thm:ldp_sector_sqrt_rate}
+    \lean{MPSTensor.norm_sectorEncoder_sub_blockIsometryEncoder_le_of_rates}
+    \leanok
+    \uses{def:ldp_sector_encoder}
+    Suppose $V_{A,N}$ is injective, $W$ is an isometric block encoder,
+    and for $K_G,K_Z,r\ge0$,
+    \begin{align*}
+        \|V_{A,N}^\dagger V_{A,N}-I\| & \le K_Ge^{-rN},                   \\
+        \|W^\dagger V_{A,N}-I\|       & \le K_Z(Me^{-rq})e^{K_ZMe^{-rq}}.
+    \end{align*}
+    If $N\ge1$, $q\le N$, $M\le N$, and $z=Ne^{-rq}\le1$, then
+    \begin{align*}
+        \|F_{A,N}-W\|
+        \le\bigl(\sqrt{K_G+2K_Ze^{K_Z}}+K_G\bigr)\sqrt z.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_polar_frame_bound}
+    Both defects are bounded respectively by $K_Gz$ and $K_Zze^{K_Z}$.
+    Apply the polar-frame estimate and use $0\le z\le\sqrt z$ for
+    $0\le z\le1$.
+\end{proof}
+
+\begin{theorem}[Uniform approximate and exact encoding from fixed registers]
+    \label{thm:ldp_uniform_sector_encoding}
+    \lean{MPSPreparation.exists_sectorEncoder_preparation_bounds}
+    \leanok
+    \uses{def:ldp_sector_encoder, def:ldp_embedded_sectors, def:qc_local_circuit}
+    Fix the embedded canonical family, a common spectral bound $0<t<1$,
+    and injective bond and logical encodings in $r_0\ge2$ sites. Suppose
+    $L\ge3r_0$ and every blocked unweighted sum of length at least $L$ is
+    injective on its sector-pair support. Put $r=-\tfrac12\log t>0$.
+    There are $C\in\mathbb N$ and $K\ge1$, fixed before all partitions,
+    with the following properties.
+    For $L\le q\le\ell_k\le2q$ and $Ne^{-rq}\le1$, one genuine local
+    unitary $U$ of depth at most $Cq$ satisfies
+    \begin{align*}
+        \|F_{A,N}-UJ\|\le K\sqrt{Ne^{-rq}}.
+    \end{align*}
+    For every $N\ge L$, a genuine local unitary of depth at most $CN$
+    satisfies $UJ_N=F_{A,N}$ exactly for the one-block register encoder.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_sector_gram_rate, thm:ldp_sector_cross_rate,
+        thm:ldp_sector_sqrt_rate, thm:ldp_supported_sector_independence,
+        thm:ldp_coherent_sector_circuit, thm:ldp_exact_whole_encoder_circuit}
+    Use the simultaneous genuine-unitary block construction for the
+    orthonormal embedded fixed-point pairs. Supported injectivity gives
+    independent endpoint columns. The common transfer bound with
+    $\gamma=1/2$ supplies the two defects in the preceding estimate.
+    The exact assertion is the fixed-width whole-encoder construction.
+    Increase the constants to cover both depth bounds.
+\end{proof}
+
+\begin{theorem}[All-accuracy block-length choice for whole encoders]
+    \label{thm:ldp_sector_all_accuracy_compilation}
+    \lean{MPSPreparation.exists_log_depth_sectorEncoder_conversion_of_block_approximation}
+    \leanok
+    \uses{def:ldp_sector_encoder, def:qc_local_circuit}
+    Fix two endpoint families, $N_0\ge2$, $L,C\in\mathbb N$, $K\ge1$,
+    and $r>0$. Suppose that at every $N\ge N_0$ and $L\le q\le N$ with
+    $Ne^{-rq}\le1$, some genuine local circuit of depth at most $Cq$
+    converts the encoders with error at most $K\sqrt{Ne^{-rq}}$.
+    Suppose also that an exact conversion of depth at most $CN$ exists
+    for every such $N$. Then there is $c>0$, fixed before $N$ and
+    $\varepsilon$, such that for all $N\ge N_0$ and $0<\varepsilon\le1$
+    one conversion has depth at most $c\log(N/\varepsilon)$ and
+    operator-norm error at most $\varepsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    Take $q=\lceil a\log(N/\varepsilon)+b\rceil$, with $a=2/r$ and
+    $b=\max(\log K,0)/(r/2)+L+1$. Set $u=Ne^{-(r/2)q}$.
+    The logarithmic threshold gives $Ku\le\varepsilon$, while
+    $Ne^{-rq}\le u^2$ because $N\ge1$. Thus the square-root error is
+    at most $Ku\le\varepsilon$, and the small-defect hypothesis holds.
+    If $q>N$, use the exact conversion. In either branch, the depth is
+    at most $Cq$, and $q\le c_0\log(N/\varepsilon)$ for a fixed $c_0$,
+    using $\log(N/\varepsilon)\ge\log2$.
+\end{proof}
+
+\begin{theorem}[Coherent conversion of matched canonical sector spaces]
+    \label{thm:ldp_coherent_groundspace_conversion}
+    \lean{MPSPreparation.exists_log_depth_coherent_sectorEncoder_conversion}
+    \leanok
+    \uses{def:ldp_sector_encoder, def:qc_local_circuit}
+    Fix two explicitly matched families $(A_j)_{j=1}^b$ and
+    $(B_j)_{j=1}^b$ of normal sectors with $b>0$ and common physical
+    dimension $d\ge2$. Each sector is left canonical with a faithful
+    stationary density of trace one. Within each family, the mixed
+    transfer spectral radii of distinct sectors are strictly less than one.
+    There exist $N_0\ge2$ and $c>0$, fixed before length and accuracy,
+    such that for every $N\ge N_0$ the two fixed polar encoders are
+    isometries, and for every $0<\varepsilon\le1$ one genuine
+    nearest-neighbor unitary $U$ satisfies
+    \begin{align*}
+        \operatorname{depth}(U) & \le c\log(N/\varepsilon), &
+        \|UF_{A,N}-F_{B,N}\|    & \le\varepsilon.
+    \end{align*}
+    The same $U$ satisfies, for every finite reference space $\mathcal R$
+    and every logical-reference vector $\xi$,
+    \begin{align*}
+        \|[(UF_{A,N}-F_{B,N})\otimes I_{\mathcal R}]\xi\|
+        \le\varepsilon\|\xi\|.
+    \end{align*}
+    The endpoints depend only on the labelled families and $N$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_uniform_sector_encoding, thm:ldp_sector_all_accuracy_compilation,
+        lem:ldp_common_mixed_gap, lem:ldp_overlapping_block_injectivity,
+        thm:ldp_common_encoder_conversion}
+    Choose one common strict spectral bound, one register width large
+    enough for both virtual bonds and the logical labels, and one
+    eventual support-injectivity cutoff. Both approximate circuits use
+    the same partition and register encoder $J$. Their relative unitary
+    $U_BU_A^\dagger$ has the sum of their depths and endpoint errors.
+    The exact one-block circuits share the same seed as well. Apply the
+    preceding all-accuracy theorem. The operator error tensored with an
+    identity has the same bound, by summing squared norms of reference
+    slices. No preparation of the common seed is charged.
+\end{proof}
+
+\begin{theorem}[The encoder range is a canonical parent kernel]
+    \label{thm:ldp_sector_encoder_parent_kernel}
+    \lean{MPSTensor.CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian}
+    \leanok
+    \uses{def:ldp_sector_encoder}
+    Let canonical data for a tensor of physical and bond dimensions
+    $d,D\ge1$ supply its retained normal representatives. For
+    $3D^5\le L\le N$, the range of the polar encoder of those actual
+    representatives equals the kernel of the range-$L$ parent Hamiltonian.
+    No further gauge or column rescaling is identified implicitly.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_sector_encoder_range, thm:canonical_bounded_range_ground_space}
+    The polar encoder has exactly the periodic-sector span. The canonical
+    bounded-range parent theorem identifies this span with the kernel
+    at the stated interaction range, including $N=L$.
+\end{proof}

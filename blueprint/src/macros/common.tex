@@ -3,6 +3,13 @@
 %  All macros here must be plasTeX-compatible.
 % ==========================================================================
 
+% -- Build discriminator ---------------------------------------------------
+% True only while the focused Fundamental-Theorem--MPS volume (print_ft_mps.tex
+% via content_ft_mps.tex) is typeset; the full blueprint and the web build
+% leave it false. The introduction uses it to omit references to chapters that
+% the focused volume does not include.
+\newif\ifftmpsvolume
+
 % -- Theorem-like environments (collected by the dependency graph) ---------
 % Reset within subsections.  In a section without subsections, omit the zero
 % subsection index and number directly within the section.

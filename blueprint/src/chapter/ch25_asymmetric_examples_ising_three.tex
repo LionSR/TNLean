@@ -1,0 +1,118 @@
+\subsection{The three-object weighted direct sum}
+
+Retaining all three hidden bond objects gives four fusion channels,
+since $\sigma\otimes\sigma=1\oplus\psi$. The following result concerns
+the local product of the weighted direct sum with the $\sigma$ strand.
+The literal round-45B boundary tensors require the additional register
+contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
+
+\begin{definition}[The three-object product tensor]%
+    \label{def:asymex_ising_three_product}
+    \lean{IsingTwist.isingBondObjectThree, IsingTwist.thetaThree_eq_directSum,
+        IsingTwist.isingThreeBlockDim, IsingTwist.isingThreeTargets}
+    \leanok
+    \uses{def:asymex_ising_action, def:asymex_ising_tensors,
+        def:mpdo_operator_product}
+    Put $\widehat A_\sigma=\sqrt2A_\sigma$,
+    $\Theta_3=5A_1\oplus3A_\psi\oplus2A_\sigma$, and
+    $B_3=\Theta_3\star\widehat A_\sigma$, of auxiliary dimension forty.
+    Its four weighted targets are
+    $5\widehat A_\sigma$, $3\widehat A_\sigma$,
+    $2\sqrt2A_1$, and $2\sqrt2A_\psi$, of dimensions $4,4,3,3$.
+\end{definition}
+
+\begin{theorem}[Four-channel Ising product]%
+    \label{thm:asymex_ising_three_trace}
+    \lean{IsingTwist.thetaThree_mpo_mul_isingSigma,
+        IsingTwist.isingBondObjectThree_trace_evalWord}
+    \leanok
+    \uses{def:asymex_ising_three_product, thm:asymex_ising_sigma_fusion,
+        thm:asymex_ising_sigma_square}
+    At every positive length $L$,
+    \begin{align}
+        O_L(\Theta_3)O_L(\widehat A_\sigma)
+         & = (5^L+3^L)O_L(\widehat A_\sigma)
+        +(2\sqrt2)^L\bigl(O_L(A_1)+O_L(A_\psi)\bigr).
+        \label{eq:asymex_ising_three_product}
+    \end{align}
+    For every nonempty word $w$, the corresponding trace identity is
+    \begin{align}
+        \operatorname{tr}(B_3^w)
+         & = (5^{|w|}+3^{|w|})\operatorname{tr}(\widehat A_\sigma^w)
+        +(2\sqrt2)^{|w|}
+        \bigl(\operatorname{tr}(A_1^w)+\operatorname{tr}(A_\psi^w)\bigr).
+        \label{eq:asymex_ising_three_trace}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_ising_sigma_fusion, thm:asymex_ising_sigma_square}
+    The periodic operator of a direct sum is the sum of the periodic
+    operators of its summands. Apply the fusion rules
+    $1\otimes\sigma=\sigma$, $\psi\otimes\sigma=\sigma$, and
+    $\sigma\otimes\sigma=1\oplus\psi$ to obtain
+    (\ref{eq:asymex_ising_three_product}). Every pair-alphabet word is
+    the word of a pair of physical configurations, so taking that matrix
+    element gives (\ref{eq:asymex_ising_three_trace}).
+\end{proof}
+
+\begin{theorem}[Compression of the three-object product]%
+    \label{thm:asymex_ising_three_compression}
+    \lean{IsingTwist.isingBondObjectThree_compression_exists,
+        IsingTwist.isingThreeCompression, IsingTwist.isingBondObjectThree_dim_eq,
+        IsingTwist.isingBondObjectThree_z_eq}
+    \leanok
+    \uses{def:asymex_ising_three_product, thm:asymex_ising_three_trace,
+        thm:asymex_ising_normal, thm:asym_multiblock}
+    The tensor $B_3$ admits a multi-block asymmetric compression onto the
+    four weighted targets in Definition~\ref{def:asymex_ising_three_product}.
+    The auxiliary dimensions satisfy $40=4+4+3+3+26$: in an
+    upper-triangular presentation, twenty-six additional one-dimensional
+    diagonal blocks vanish.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_ising_normal, thm:asymex_ising_three_trace,
+        thm:asym_multiblock}
+    Each target is a nonzero scalar multiple of a normal tensor of
+    positive auxiliary dimension. Apply Theorem~\ref{thm:asym_multiblock}
+    to (\ref{eq:asymex_ising_three_trace}), and subtract the sum of the
+    four target dimensions from forty.
+\end{proof}
+
+\begin{theorem}[A split four-channel Ising compression]%
+    \label{thm:asymex_ising_three_split}
+    \lean{IsingTwist.isingThreeSplitCompression,
+        IsingTwist.isingBondObjectThree_split_remainder,
+        IsingTwist.isingBondObjectThree_mul_right_eq_right_mul,
+        IsingTwist.isingBondObjectThree_left_mul_eq_mul_left}
+    \leanok
+    \uses{def:asymex_ising_three_product}
+    There is an explicit four-target compression of $B_3$ with zero remainder.
+    Its left and right maps $W_s,V_s$ satisfy, for every letter $a$ and each
+    of the four weighted targets $C_s$,
+    \begin{align*}
+        B_3^aV_s & = V_sC_s^a, \\
+        W_sB_3^a & = C_s^aW_s.
+    \end{align*}
+    In its auxiliary coordinates the letters are the direct sum of
+    $5\widehat A_\sigma$, $3\widehat A_\sigma$,
+    $2\sqrt2 A_1$, $2\sqrt2 A_\psi$, and twenty-six zero matrices.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_ising_compression, thm:asymex_ising_sigma_square,
+        prop:asym_split_intertwiners}
+    Group the first two summands of $\Theta_3$. The stacked product is the
+    direct sum of the twenty-four-dimensional two-object product and
+    $\sqrt2$ times the sixteen-dimensional $\sigma$ square.
+    Take the direct sum of their gauges. The first inverse is its transpose;
+    the second inverse is half its transpose. Their letter identities give
+    the four stated blocks and respectively sixteen and ten zero coordinates.
+    Rearranging the auxiliary coordinates yields the block-diagonal form.
+    The remainder therefore vanishes, and multiplication by the block
+    inclusion and projection gives the two intertwining identities.
+\end{proof}

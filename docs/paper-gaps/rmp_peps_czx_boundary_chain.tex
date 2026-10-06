@@ -3,9 +3,9 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{The CZX PEPS: the Boundary Action on a Chain of Legs}
+\title{The CZX PEPS: Actual Rectangle Boundaries and Their Symmetry}
 \author{}
-\date{2026-09-27}
+\date{2026-10-04}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -46,30 +46,100 @@ carries two qubits $(a,b)$, and the following hold.
           carry the same qubit of their common plaquette, and let $\iota$ be
           the resulting isometry from $N$ effective spins into the legs. Then
           $V^{\otimes N}\iota=\iota\,U_N$ with
-          $U_N\ket{c}=(-1)^{\sum_mc_mc_{m+1}}\ket{\bar c}$, the matrix product
-          unitary with $T^{0,1}=\ket0\bra+$, $T^{1,0}=\ket1\bra-$, and
+          $U_N=X^{\otimes N}D_N$ and
+          $U_N\ket{c}=(-1)^{\sum_mc_mc_{m+1}}\ket{\bar c}$, and
           $\iota^\dagger V^{\otimes N}\iota=U_N$.
 \end{enumerate}
 
-\section{The restriction}
-Item~3 is stated on the chain of legs subject to the plaquette constraint,
-not on the boundary of a region of the torus PEPS: that the contraction of
-the tensors of a region, as a vector on its boundary legs, lies in the range
-of $\iota$ is not formalized. In the source this is the statement that the
-reduced state of the region is supported on the effective spins. The
-restriction concerns only the identification of the region with the chain;
-items~1 and~2 carry no restriction beyond the torus size recorded
-elsewhere.\footnote{Results: \leanid{TNLean.PEPS.onSiteOperator_czxOnSite_mulVec_stateCoeff_czxPEPS},
-    \leanid{TNLean.PEPS.czxOnSite_mul_czxSiteTensor},
-    \leanid{TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding},
-    \leanid{TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_onSiteOperator_mul}.}
+The review's two printed local matrices instead contract to
+\[
+    O(A)=D_NX^{\otimes N}=(-1)^NU_N.
+\]
+Its bra-ket display with normalized
+$\ket\pm$ has an additional factor $2^{-N/2}$ and is not the unitary
+normalization. These order and normalization distinctions are recorded in
+\path{mpu_czx_tensor_normalization.tex}. The rectangle perimeter $P$ is
+even, so the printed-matrix operator agrees exactly with $U_P$ in the
+physical rectangle theorem below.
 
-\section{Elimination plan}
-Contract the tensors of a rectangular region of the torus with free
-boundary legs, show from the plaquette constraints inside the region that
-neighbouring boundary legs carry equal qubits at their common plaquette, so
-the region's vector lies in the range of $\iota$, and combine with item~2
-applied at every site of the region.
+\section{The actual rectangle map}
+The rectangular-region part of the former restriction is now proved for
+$R=\lbrack x_0,x_0+w)\times\lbrack y_0,y_0+h)$ in a $W\times H$ torus, with
+$W,H\geq3$, $w,h>0$, $w<W$, $h<H$, $x_0+w\leq W$, and
+$y_0+h\leq H$. Rectangles may meet a coordinate seam. Write $P=2w+2h$.
+
+Let $A_R$ denote the actual open-region contraction: only incident bond
+labels occur, internal bonds are summed, and crossing bonds are fixed.
+The clockwise enumeration of the $P$ crossing bonds reverses bottom and
+left pairs. A nonzero physical coefficient forces those oriented labels
+to have the form $(c_i,c_{i+1})$, with the successor taken modulo $P$.
+This follows from actual shared internal bonds along each side and from
+one site tensor at each corner. It is not a hypothesis on the region map.
+
+
+Define $F_R\ket c=A_R\ket{\mu(c)}$, where $\mu(c)$ is the corresponding
+native boundary assignment. Conversely, arbitrary bits $c$ on the distinct
+perimeter plaquettes extend to torus plaquette bits. Copying them into the
+four physical qubits at each site gives a configuration $\sigma_c$ for which
+$F_R(\sigma_c,c')=\delta_{c,c'}$. Thus $F_R$ is injective and its columns
+span exactly the image of $A_R$, of dimension $2^P$.
+
+
+Applying the one-site pull-through identity inside the actual contraction
+cancels every internal controlled phase twice. The remaining factors are
+on the actual crossing bonds. In the effective coordinates this gives
+\[
+    U_RF_R\ket c=(-1)^{\sum_i c_ic_{i+1}}F_R\ket{\bar c}.
+\]
+Pair reversal preserves its controlled phase and commutes with simultaneous
+bit flip. The identification is therefore compatible with the source's
+physical on-site symmetry and with the native bottom/left bond convention.
+Since $P$ is even, it also gives $U_RF_R=F_RO(A)$ for the review's printed
+matrix product operator, without a remaining sign.
+
+
+\section{Physical reduced-density support}
+The same plaquette witnesses identify the support of the actual regional
+reduced density. Fix effective boundary bits $c$ and extend them to global
+plaquette bits. On the complement, the copied physical configuration has
+open coefficient one at the selected native crossing labels and zero at
+all other labels. The actual closed-state contraction across the cut
+therefore contains the column $F_R|c\rangle$ as a literal physical slice.
+Using the coefficient-matrix factorization $\rho_R=MM^\dagger$ gives
+\[
+    \operatorname{ran}\rho_R=\operatorname{im}F_R,
+    \qquad \operatorname{rank}\rho_R=2^P.
+\]
+Here $\rho_R$ is the unnormalized partial trace of the actual closed PEPS.
+Its trace is nonzero because it is positive semidefinite of positive rank.
+Division by that trace preserves the proved support and rank.
+
+\section{Remaining scope}
+The exact support and its dimension, including trace normalization, are
+now proved for the stated rectangles. The source's explicit reduced-state
+projection, its nonzero eigenvalues, the Gram normalization of $F_R$, and
+entropy remain open. The support theorem alone does not imply flatness or
+that $F_R$ itself is an isometry. General nonrectangular regions and
+parent-Hamiltonian ground-space completeness are not asserted. The
+torus-size and bond-orientation conventions in the separate notes are
+unchanged.
+
+\section{Formal statements}
+\begin{enumerate}
+    \item \leanid{TNLean.PEPS.czxRectangleBoundaryLabels_mem_range_of_openRegionWeight_ne_zero}.
+    \item \leanid{TNLean.PEPS.exists_czxRectangleBoundaryMatrix_selector},
+          \leanid{TNLean.PEPS.czxRectangleBoundaryMatrix_mulVec_injective},
+          \leanid{TNLean.PEPS.range_openRegionMap_czxRectangle},
+          \leanid{TNLean.PEPS.finrank_range_openRegionMap_czxRectangle}.
+    \item \leanid{TNLean.PEPS.regionPhysicalMap_czxOnSite_openRegionWeight},
+          \leanid{TNLean.PEPS.regionPhysicalMap_czxRectangleBoundaryMatrix_column},
+          \leanid{TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review}.
+    \item \leanid{TNLean.PEPS.range_regionReducedDensity_czxRectangle},
+          \leanid{TNLean.PEPS.rank_regionReducedDensity_czxRectangle},
+          \leanid{TNLean.PEPS.trace_regionReducedDensity_czxRectangle_ne_zero},
+          \leanid{TNLean.PEPS.range_normalizedRegionReducedDensity_czxRectangle},
+          \leanid{TNLean.PEPS.rank_normalizedRegionReducedDensity_czxRectangle}.
+\end{enumerate}
 
 \bibliographystyle{alpha}
 \bibliography{references}

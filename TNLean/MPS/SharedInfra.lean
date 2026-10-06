@@ -10,10 +10,13 @@ Authors: TNLean contributors
 
 import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.SharedInfra.BlockGauge
+import TNLean.MPS.SharedInfra.BlockIsometryAssembly
 import TNLean.MPS.SharedInfra.BoundaryDecomposition
 import TNLean.MPS.SharedInfra.CoisometryGauge
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
+import TNLean.MPS.SharedInfra.MatrixFamilyTracePairing
+import TNLean.MPS.SharedInfra.PhysicalObservableGauge
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.SharedInfra.SectorCompression
 import TNLean.MPS.SharedInfra.SectorDecomposition

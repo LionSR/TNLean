@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.TorusAbsorbedCovariance
-import TNLean.PEPS.TorusEdgeAbsorbed
+import TNLean.PEPS.TorusReferenceAbsorbedFamily
 
 /-!
 # The translation-covariant absorbed gauge family on the torus
@@ -43,39 +42,6 @@ namespace PEPS
 
 variable {width height d : ℕ} [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
-
-/-- The translated coefficient witness when its edge gauge is the transported reference gauge. -/
-private noncomputable def transportedEdgeCoeffIdentityWitness
-    {A B : Tensor (torusGraph width height) d}
-    (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
-    (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
-    (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
-    (hE : A.bondDim f.1 = B.bondDim f.1)
-    (Z : GL (Fin (B.bondDim f.1)) ℂ)
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
-    (hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R)
-    (hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R))
-    (hid : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
-      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
-      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
-      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
-        regionInsertedCoeff (G := torusGraph width height) B R f
-          ((Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
-              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE) M *
-            (↑Z⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
-    (hEX : A.bondDim (boundaryEdgeMap (translate a b) R f).1 =
-      B.bondDim (boundaryEdgeMap (translate a b) R f).1) :
-    EdgeCoeffIdentityWitness A B (boundaryEdgeMap (translate a b) R f).1
-      (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z)
-      (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) hEX :=
-  edgeCoeffIdentityWitness_translate hA hB a b R f hE Z hposB hRB hCB hid
-    (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) hEX (by
-      intro M σ' τ'
-      obtain ⟨σ, τ, rfl, rfl⟩ :=
-        exists_regionPhysicalConfig_translate_preimage (d := d) a b R σ' τ'
-      exact regionInsertedCoeff_translate_coeffIdentity_conj hA hB a b R f hE Z hid hEX
-        (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) rfl M σ τ)
 
 /-- **The translation-covariant absorbed gauge family on the torus.**
 
@@ -148,135 +114,30 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
     (torusVerticalReferenceEdge xvStart yvStart)
     (fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hAr hUA hxv0 hyv0 hxvw
       hyvh g) with hfvdef
-  -- The constructed family: at each edge, the absorbing gauge of the transported reference
-  -- witness of its orientation class, along the chosen translation reaching the edge.
-  set X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ := fun e =>
-    if he : IsHorizontalTorusEdge e then
-      glReindex
-        (congrArg B.bondDim
-          (translate_horizontalReferenceEdge (xStart := xhStart) (yStart := yhStart) he).2.symm)
-        (transportedAbsorbedGauge B hB Rh fh Zh
-          (translate_horizontalReferenceEdge (xStart := xhStart) (yStart := yhStart) he).1.1
-          (translate_horizontalReferenceEdge (xStart := xhStart) (yStart := yhStart) he).1.2)
-    else
-      glReindex
-        (congrArg B.bondDim
-          (translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart)
-            ((torusEdge_horizontal_or_vertical e).resolve_left he)).2.symm)
-        (transportedAbsorbedGauge B hB Rv fv Zv
-          (translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart)
-            ((torusEdge_horizontal_or_vertical e).resolve_left he)).1.1
-          (translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart)
-            ((torusEdge_horizontal_or_vertical e).resolve_left he)).1.2)
-    with hXdef
-  -- The family at any translate of the horizontal reference edge is the transported absorbing
-  -- gauge of that translate: the chosen translation agrees with the given one by rigidity.
-  have hUh : ∀ (a : ZMod width) (b : ZMod height),
-      X (Edge.map (translate a b) (torusHorizontalReferenceEdge xhStart yhStart)) =
-        transportedAbsorbedGauge B hB Rh fh Zh a b := by
-    intro a b
-    have hhor : IsHorizontalTorusEdge
-        (Edge.map (translate a b) (torusHorizontalReferenceEdge xhStart yhStart)) := by
-      rw [← translateEdge_eq_map]
-      exact translateEdge_isHorizontal a b
-        (isHorizontalTorusEdge_torusHorizontalReferenceEdge xhStart yhStart)
-    rw [hXdef]
-    simp only
-    rw [dite_eq_left hhor]
-    generalize translate_horizontalReferenceEdge (xStart := xhStart) (yStart := yhStart) hhor
-      = pq
-    obtain ⟨⟨a', b'⟩, hspec⟩ := pq
-    have hmap : Edge.map (translate a' b') (torusHorizontalReferenceEdge xhStart yhStart) =
-        Edge.map (translate a b) (torusHorizontalReferenceEdge xhStart yhStart) := hspec.symm
-    obtain ⟨ha, hb⟩ := translate_param_unique_right hw _ hmap
-    subst a'
-    subst b'
-    exact glReindex_self _ _
-  have hUv : ∀ (a : ZMod width) (b : ZMod height),
-      X (Edge.map (translate a b) (torusVerticalReferenceEdge xvStart yvStart)) =
-        transportedAbsorbedGauge B hB Rv fv Zv a b := by
-    intro a b
-    have hver : IsVerticalTorusEdge
-        (Edge.map (translate a b) (torusVerticalReferenceEdge xvStart yvStart)) := by
-      rw [← translateEdge_eq_map]
-      exact translateEdge_isVertical a b
-        (isVerticalTorusEdge_torusVerticalReferenceEdge xvStart yvStart)
-    have hnh : ¬ IsHorizontalTorusEdge
-        (Edge.map (translate a b) (torusVerticalReferenceEdge xvStart yvStart)) := fun hcon =>
-      torusEdge_not_horizontal_and_vertical _ ⟨hcon, hver⟩
-    rw [hXdef]
-    simp only
-    rw [dite_eq_right hnh]
-    generalize translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart)
-      ((torusEdge_horizontal_or_vertical _).resolve_left hnh) = pq
-    obtain ⟨⟨a', b'⟩, hspec⟩ := pq
-    have hmap : Edge.map (translate a' b') (torusVerticalReferenceEdge xvStart yvStart) =
-        Edge.map (translate a b) (torusVerticalReferenceEdge xvStart yvStart) := hspec.symm
-    obtain ⟨ha, hb⟩ := translate_param_unique_up hh _ hmap
-    subst a'
-    subst b'
-    exact glReindex_self _ _
-  -- The two reference boundary edges have their first stored endpoint in the reference region.
-  have hmemh : fh.1.1.1 ∈ Rh :=
+  have hRhB : RegionBlockedTensorInjective B Rh := by
+    have hi := hBr.horizontalEdgeRed_injective (xStart := xhStart) (yStart := yhStart)
+      (by omega) (by omega)
+    rwa [regionInjectivityDataOf_isInjective] at hi
+  have hChB : RegionBlockedTensorInjective B (Finset.univ \ Rh) :=
+    regionBlockedTensorInjective_host
+      (torusHorizontalRectangleBlockingDatum hBr hUB hxh0 hyh0 hxhw hyhh) hUB
+  have hRvB : RegionBlockedTensorInjective B Rv := by
+    have hi := hBr.verticalEdgeRed_injective (xStart := xvStart) (yStart := yvStart)
+      (by omega) (by omega)
+    rwa [regionInjectivityDataOf_isInjective] at hi
+  have hCvB : RegionBlockedTensorInjective B (Finset.univ \ Rv) :=
+    regionBlockedTensorInjective_host
+      (torusVerticalRectangleBlockingDatum hBr hUB hxv0 hyv0 hxvw hyvh) hUB
+  let wh : EdgeCoeffIdentityWitness A B fh.1 Zh Zh (congr_fun hbd fh.1) :=
+    ⟨Rh, fh.property, hRhB, hChB, hposB, hZh, hZh⟩
+  let wv : EdgeCoeffIdentityWitness A B fv.1 Zv Zv (congr_fun hbd fv.1) :=
+    ⟨Rv, fv.property, hRvB, hCvB, hposB, hZv, hZv⟩
+  exact exists_torusCovariantAbsorbedGaugeFamily_of_edgeReferenceWitnesses
+    hA hB hw hh hbd hposA fh.1 fv.1
+    (isHorizontalTorusEdge_torusHorizontalReferenceEdge xhStart yhStart)
+    (isVerticalTorusEdge_torusVerticalReferenceEdge xvStart yvStart) Zh Zh Zv Zv wh wv
     (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw hyhh).left_mem_red
-  have hmemv : fv.1.1.1 ∈ Rv :=
     (torusVerticalRectangleBlockingDatum hAr hUA hxv0 hyv0 hxvw hyvh).left_mem_red
-  refine ⟨X, ?_, ?_⟩
-  · -- Translation covariance.
-    intro a b e
-    rcases torusEdge_horizontal_or_vertical e with he | he
-    · obtain ⟨⟨a₀, b₀⟩, rfl⟩ :=
-        translate_horizontalReferenceEdge (xStart := xhStart) (yStart := yhStart) he
-      rw [translateEdge_translateEdge]
-      intro h
-      rw [hUh a₀ b₀, hUh (a₀ + a) (b₀ + b)]
-      exact transportedAbsorbedGauge_translate_pair B hB Rh fh Zh hmemh a₀ (a₀ + a) a b₀
-        (b₀ + b) b (by apply Prod.ext <;> simp <;> ring) (by apply Prod.ext <;> simp <;> ring) h
-    · obtain ⟨⟨a₀, b₀⟩, rfl⟩ :=
-        translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart) he
-      rw [translateEdge_translateEdge]
-      intro h
-      rw [hUv a₀ b₀, hUv (a₀ + a) (b₀ + b)]
-      exact transportedAbsorbedGauge_translate_pair B hB Rv fv Zv hmemv a₀ (a₀ + a) a b₀
-        (b₀ + b) b (by apply Prod.ext <;> simp <;> ring) (by apply Prod.ext <;> simp <;> ring) h
-  · -- The bare-edge absorbed equality at every edge.
-    intro e σ N
-    rcases torusEdge_horizontal_or_vertical e with he | he
-    · obtain ⟨⟨a, b⟩, rfl⟩ :=
-        translate_horizontalReferenceEdge (xStart := xhStart) (yStart := yhStart) he
-      -- `B`'s reference region block and host block are injective.
-      have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B Rh := by
-        have hi := hBr.horizontalEdgeRed_injective (xStart := xhStart) (yStart := yhStart)
-          (by omega) (by omega)
-        rwa [regionInjectivityDataOf_isInjective] at hi
-      have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B
-          (Finset.univ \ Rh) :=
-        regionBlockedTensorInjective_host
-          (torusHorizontalRectangleBlockingDatum hBr hUB hxh0 hyh0 hxhw hyhh) hUB
-      have hEX : A.bondDim (boundaryEdgeMap (translate a b) Rh fh).1 =
-          B.bondDim (boundaryEdgeMap (translate a b) Rh fh).1 :=
-        (bondDim_boundaryEdgeMap_translate hA a b Rh fh).trans
-          (hEh.trans (bondDim_boundaryEdgeMap_translate hB a b Rh fh).symm)
-      refine edgeAbsorbed_of_edgeCoeffIdentityWitness
-        (transportedEdgeCoeffIdentityWitness hA hB a b Rh fh hEh Zh hposB hRB hCB hZh hEX)
-        hbd X (hUh a b) hposA σ N
-    · obtain ⟨⟨a, b⟩, rfl⟩ :=
-        translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart) he
-      have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B Rv := by
-        have hi := hBr.verticalEdgeRed_injective (xStart := xvStart) (yStart := yvStart)
-          (by omega) (by omega)
-        rwa [regionInjectivityDataOf_isInjective] at hi
-      have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B
-          (Finset.univ \ Rv) :=
-        regionBlockedTensorInjective_host
-          (torusVerticalRectangleBlockingDatum hBr hUB hxv0 hyv0 hxvw hyvh) hUB
-      have hEX : A.bondDim (boundaryEdgeMap (translate a b) Rv fv).1 =
-          B.bondDim (boundaryEdgeMap (translate a b) Rv fv).1 :=
-        (bondDim_boundaryEdgeMap_translate hA a b Rv fv).trans
-          (hEv.trans (bondDim_boundaryEdgeMap_translate hB a b Rv fv).symm)
-      refine edgeAbsorbed_of_edgeCoeffIdentityWitness
-        (transportedEdgeCoeffIdentityWitness hA hB a b Rv fv hEv Zv hposB hRB hCB hZv hEX)
-        hbd X (hUv a b) hposA σ N
 
 end PEPS
 end TNLean

@@ -1,0 +1,38 @@
+\begin{theorem}[The six-spin flux operation in the actual torus contraction]%
+    \label{thm:peps_torus_two_plaquette_global_flux_move}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTwoPlaquetteGlobalFluxMove}
+    \leanok
+    \uses{thm:peps_two_plaquette_torus_geometry,
+        thm:peps_torus_two_plaquette_flux_holonomy,
+        thm:peps_regular_two_cycle_global_flux_move}
+    Let the horizontal and vertical periods be at least four and three,
+    respectively, and let the original four-leg tensor be $G$-isometric for
+    the regular virtual action. In the six-site region
+    $R=\{0,1,2\}\times\{0,1\}$, let $u_g$ insert $g$ on the upward bond
+    at horizontal coordinate zero, and let $u'_g$ insert $g$ on both upward
+    bonds at horizontal coordinates zero and one. All other internal bonds
+    carry the identity.
+    There exists one unitary $W$ on the six original spins whose extension
+    $\widehat W=W\otimes I$ is a global unitary, such that
+    \begin{align}
+        \widehat W\,\Psi(u_g;u)=\Psi(u'_g;u)
+    \end{align}
+    for every $g\in G$ and every common assignment $u$ on exterior and crossing
+    bonds. Both vectors are actual globally contracted torus states, with
+    the stated internal insertions and the same remaining bond operators.
+    The unitary is chosen before $g$ and $u$.
+    This is the regular-representation six-site specialization of the local
+    flux-moving construction in \cite[Theorem~6.16]{Schuch2010PEPS}; no
+    parent-Hamiltonian ground-space membership is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    Express the four-leg tensor in incident-edge coordinates; its
+    $G$-isometry is preserved. The fixed spanning path of the actual rectangle
+    leaves exactly the leftmost and middle upward bonds as the chosen cycle
+    bonds. Apply the global physical two-cycle operation with this fixed tree,
+    root, and pair of bonds. The literal insertion assignments equal its
+    tree-cycle assignments. Substitution yields the asserted global state
+    identity for every common exterior and crossing assignment. Extension by
+    the identity preserves unitarity.
+\end{proof}

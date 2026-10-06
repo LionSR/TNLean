@@ -183,6 +183,8 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     tensors are not required.
 \end{definition}
 
+\input{chapter/ch29_mpu_group_index}
+
 \begin{theorem}[Group fusion rules]
     \label{thm:mpug_group_fusion_rules}
     \lean{MPOTensor.GroupFamily.isMPOFusionAlgebra,
@@ -263,9 +265,8 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     $\bigl(U_g^{(N)}\bigr)^{\operatorname{ord}(g)}=U_e^{(N)}=\Id$.
 \end{proof}
 
-% Tracking boundary: these entries cover only finite order of the periodic
-% operators. Issue #7318 remains open for public-index vanishing, the
-% rank-product input r l = d^2, and the final rank equality r = l = d.
+% The index vanishing and source-leg equality for simple injective families
+% are proved in chapter/ch29_mpu_group_index.tex.
 
 \begin{theorem}[Product-tensor operator identity]
     \label{thm:mpug_product_tensor_operator}
@@ -5398,6 +5399,12 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \label{thm:mpug_domain_wall_string_exchange}
     \lean{MPOTensor.wallConfig_resplit,
         MPOTensor.twoWallChain_append,
+        MPOTensor.wallConfig_eq_wallConfig,
+        MPOTensor.twoWallMPV_wallConfig_comp_cast,
+        MPOTensor.fourWallCoeff,
+        MPOTensor.exists_wallConfig_wallSplit,
+        MPOTensor.GroupFamily.BlockActionData.wallString_outer_mul_inner_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_inner_mul_outer_mulVec_mpv_apply,
         MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv}
     \leanok
     \uses{thm:mpug_domain_wall_string_creation, thm:mpug_domain_wall_pair}
@@ -5474,6 +5481,44 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     full matrix algebras and they are normal. Lemma~\ref{lem:mpug_domain_wall_exchange_phase_square}
     gives $(c_{AB}c_{BA})^2=1$. Multiply the identity of
     Theorem~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$.
+\end{proof}
+
+\begin{theorem}[Exchange of two left endpoints of domain-wall strings]
+    \label{thm:mpug_domain_wall_endpoint_exchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_right_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_left_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near}
+    \leanok
+    \uses{thm:mpug_domain_wall_string_exchange}
+    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange},
+    let $j<i$ and let $r_1\neq r_2$ be two sites to the right of $i$. If the
+    regions between the four sites $j,i,r_1,r_2$ are longer than a fixed
+    buffer, then
+    \begin{align}
+        O^{[j,r_1]}O^{[i,r_2]}\ket{\psi_A}
+         & =c_{AB}\,O^{[i,r_1]}O^{[j,r_2]}\ket{\psi_A}.
+        \notag
+    \end{align}
+    This is the exchange of two left endpoints
+    $O^{[j]}_xO^{[i]}_y\ket{\psi_A}=c_{AB}\,O^{[i]}_xO^{[j]}_y\ket{\psi_A}$
+    of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}, with the
+    half-chain operators glued with the right endpoints of their strings at
+    $r_1$ and $r_2$; the identity of half-chain objects with open legs is not
+    formalized \cite{gap:gs24_domain_wall_half_string_gluing}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every side is a multiple of the state with the domain walls $e_{AB}$,
+    $e_{BA}$, $e_{AB}$, $e_{BA}$ at the four sites in increasing order. For
+    $r_2<r_1$ the left side is a nested pair whose outer string acts second,
+    with phase $c_{AB}c_{BA}$ by
+    Theorem~\ref{thm:mpug_domain_wall_string_exchange}; on the right side the
+    string on $[i,r_1]$ starts in the $B$ region, passes over the domain wall
+    $e_{BA}$ at $r_2$ and ends in the $A$ region, so the local action gives
+    $c_{BA}$. For $r_1<r_2$ the string on $[j,r_1]$ on the left side passes
+    over the domain wall $e_{AB}$ at $i$, with phase $c_{AB}$, and the right
+    side is a nested pair whose inner string acts second, with no phase.
 \end{proof}
 
 \begin{theorem}[Rescaling domain walls]
@@ -5628,6 +5673,157 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     Finally, by Theorem~\ref{thm:mpug_domain_wall_state},
     $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}
         =\omega(g,g,g)\,\omega(g,e,g)\ket{\psi(B\text{-}A\text{-}B)}$.
+\end{proof}
+
+\subsection{Detecting the anomaly with truncated symmetries}
+
+\begin{lemma}[The commutator of two unitaries on a vector]
+    \label{lem:mpug_truncation_commutator}
+    \lean{Matrix.groupCommutator,
+        Matrix.groupCommutator_mulVec_eq_smul,
+        Matrix.star_dotProduct_groupCommutator_mulVec}
+    \leanok
+    Let $U_1$ and $U_2$ be unitary, let $\psi$ be a vector and $c$ a scalar
+    with $U_2U_1\psi=c\,U_1U_2\psi$. Then
+    \begin{align}
+        U_2^\dagger U_1^\dagger U_2U_1\psi
+         & =c\,\psi,
+         &
+        \langle\psi|\,U_2^\dagger U_1^\dagger U_2U_1\,|\psi\rangle
+         & =c\,\langle\psi|\psi\rangle.
+        \notag
+    \end{align}
+    For two truncations $U_1=U^{[i_1,j_1]}$ and $U_2=U^{[i_2,j_2]}$ of a
+    symmetry whose exchange relation on a ground state has the phase
+    $c=\omega$, this is the last step of the detection of the anomaly in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall}: the expectation value of
+    the commutator measures the exchange phase.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the exchange relation, then cancel $U_1^\dagger U_1$ and
+    $U_2^\dagger U_2$.
+\end{proof}
+
+\begin{theorem}[Truncations of an on-site symmetry]
+    \label{thm:mpug_onsite_truncation_commutator}
+    \lean{Matrix.onSiteTruncation,
+        Matrix.onSiteTruncation_univ,
+        Matrix.onSiteTruncation_conjTranspose_mul_self,
+        Matrix.groupCommutator_onSiteTruncation,
+        Matrix.star_dotProduct_groupCommutator_onSiteTruncation_mulVec}
+    \leanok
+    Let $u$ satisfy $u^\dagger u=\mathbf 1$ and, for a set $S$ of sites of a
+    chain, let $U^S=\bigotimes_{i\in S}u^{[i]}$ act by $u$ on the sites of $S$
+    and by the identity elsewhere. For any two sets $S_1$ and $S_2$,
+    \begin{align}
+        (U^{S_2})^\dagger(U^{S_1})^\dagger U^{S_2}U^{S_1}
+         & =\mathbf 1,
+        \notag
+    \end{align}
+    so the expectation value of the commutator on every normalized state is
+    $1$, as for the trivial anomaly of on-site symmetries
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The four operators are tensor products over the sites. On a site in both
+    sets the product of the four factors is
+    $u^\dagger u^\dagger uu=\mathbf 1$, on a site in one set it is
+    $u^\dagger u=\mathbf 1$, and elsewhere all four factors are the
+    identity.
+\end{proof}
+
+\begin{theorem}[The detector depends on the endpoints of the truncations]
+    \label{thm:mpug_truncation_detector_endpoint_dependence}
+    \lean{Matrix.finKronecker_ite_smul_one,
+        Matrix.dressed_onSiteTruncation_conjTranspose_mul_self,
+        Matrix.groupCommutator_dressed_onSiteTruncation_pauliX,
+        Matrix.star_dotProduct_groupCommutator_dressed_onSiteTruncation_pauliX}
+    \leanok
+    Let $X$ and $Z$ be the Pauli matrices, and for sets of sites $S_1$, $S_2$
+    of a chain and sites $j_1\in S_2$, $j_2\notin S_1$ with $j_1\neq j_2$ put
+    $U_1=Z_{j_1}X^{S_1}$ and $U_2=Z_{j_2}X^{S_2}$. Then $U_1$ and $U_2$ are
+    unitary and
+    \begin{align}
+        U_2^\dagger U_1^\dagger U_2U_1
+         & =-\mathbf 1,
+        \notag
+    \end{align}
+    so the expectation value of the commutator on every normalized state is
+    $-1$, although the on-site symmetry $X^{\otimes N}$ has trivial anomaly.
+\end{theorem}
+
+\begin{proof}\leanok
+    The four operators are tensor products over the sites. At $j_1$ the
+    product of the four factors is $X(XZ)X(ZX)=ZXZX=-\mathbf 1$ if $j_1\in S_1$,
+    and $XZXZ=-\mathbf 1$ otherwise. At $j_2$ only $U_2$ acts, and the product is
+    $(ZX)^\dagger(ZX)=\mathbf 1$ or $Z^\dagger Z=\mathbf 1$. At every other site
+    the factors are $X$ or the identity, and they cancel.
+\end{proof}
+
+\begin{remark}[Circuit truncations with a nontrivial detector]
+    \label{rem:mpug_truncation_detector_circuit}
+    \uses{thm:mpug_truncation_detector_endpoint_dependence}
+    The symmetry $X^{\otimes N}$ on a periodic chain of even length is the
+    depth-two circuit whose first layer applies $X\otimes ZX$ to the pairs
+    $(2k,2k+1)$ and whose second layer applies $Z\otimes\mathbf 1$ to the pairs
+    $(2k+1,2k+2)$, since $Z\cdot ZX=X$. For $i$ even and $j$ odd, dropping the
+    gates not contained in $[i,j]$ leaves both factors on every odd site of
+    $[i,j]$ except $j$, which keeps only $ZX$, so the truncation is
+    $Z_jX^{\otimes[i,j]}$. For $i_2<i_1<j_1<j_2$ of these parities,
+    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} applies.
+    The expectation value of the commutator of two circuit truncations on a
+    symmetry-broken ground state is therefore not determined by the anomaly,
+    and the detection asserted in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall} fails for an arbitrary
+    circuit truncation \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+    The identification of the circuit truncation with $Z_jX^{\otimes[i,j]}$
+    is not formalized.
+\end{remark}
+
+\begin{theorem}[Detection for truncations acting as domain-wall strings]
+    \label{thm:mpug_truncation_detector_wall_strings}
+    \lean{MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_of_wallString,
+        MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_eq_omega}
+    \leanok
+    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
+        thm:mpug_domain_wall_involution}
+    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange}, let
+    $O_1=O^{[i_1,j_1]}$ and $O_2=O^{[i_2,j_2]}$ be domain-wall strings on
+    sites $i_2<i_1<j_1<j_2$ whose three inner regions are longer than a fixed
+    buffer, and let $U_1$ and $U_2$ be unitary operators with
+    \begin{align}
+        U_2U_1\ket{\psi_A} & =O_2O_1\ket{\psi_A}, &
+        U_1U_2\ket{\psi_A} & =O_1O_2\ket{\psi_A}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \bra{\psi_A}U_2^\dagger U_1^\dagger U_2U_1\ket{\psi_A}
+         & =c_{AB}c_{BA}\braket{\psi_A}{\psi_A}.
+        \notag
+    \end{align}
+    If moreover $g$ is an involution of a normal representation, then
+    $c_{AB}c_{BA}=\omega(g,g,g)\,\omega(g,e,g)$. This is the detection of the
+    anomaly of \cite[Section~V]{GarreRubioSchuch2024DomainWall} restricted to
+    unitaries whose two ordered products on $\ket{\psi_A}$ agree with the
+    corresponding products of the domain-wall strings. These identities are
+    expected for truncations whose walls on $\ket{\psi_B}$ are the images under
+    $U$ of their walls on $\ket{\psi_A}$, the property the source's argument
+    uses; that implication is not formalized. By
+    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} some
+    restriction of this kind is needed
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
+        thm:mpug_domain_wall_involution}
+    By Theorem~\ref{thm:mpug_domain_wall_string_exchange} and the hypotheses,
+    $U_2U_1\ket{\psi_A}=c_{AB}c_{BA}\,U_1U_2\ket{\psi_A}$, and
+    Lemma~\ref{lem:mpug_truncation_commutator} gives the first identity. The
+    second is Theorem~\ref{thm:mpug_domain_wall_involution}.
 \end{proof}
 
 \subsection{Normalization of the first source factor}
@@ -9066,9 +9262,10 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \end{enumerate}
     The last two items are the torsor statement of \cite{GarreRubio2023MPOSym}
     for fixed $(G,\omega,H)$, with the fusion gauge held fixed as in the
-    source. Here $G$ and $H$ are small groups, whose underlying sets lie in
-    a fixed set-theoretic universe containing $\Z$, in which the group
-    cohomology $H^2(H,\C^\times)$ is formed.
+    source. In all four items $G$, and hence $H$, is a small group: its
+    underlying set lies in a fixed set-theoretic universe containing $\Z$,
+    in which the group cohomology $H^2(H,\C^\times)$ is formed. In the last
+    two items the set $\mathsf X$ lies in the same universe.
     % Source anchor: arXiv:2203.12563, REsubmission.tex lines 749--761.
 \end{theorem}
 

@@ -1,0 +1,397 @@
+\section{Positive multiplicities and complete canonical parent spaces}
+\label{sec:peps_copy_parent_transport}
+
+Fix a finite group $G$, a finite ordered simple graph, and a finite family
+of matrix representations $D_i:G\to\operatorname{Mat}_{d_i}(\C)$.
+Write $X=\coprod_i\{0,\ldots,d_i-1\}$ and
+$X_m=\coprod_i(\{0,\ldots,d_i-1\}\times\{0,\ldots,m_i-1\})$.
+An edge is written $f=(t,h)$; physical bond coordinates are ordered
+head--tail. The construction extends the dimension multiplicities in
+\cite[Section~7]{Schuch2010PEPS} to arbitrary positive integers $m_i$.
+Irreducibility of $D_i$ is not required.
+
+\subsection{Copy weights and arbitrary open boundaries}
+
+\begin{definition}[Independent copy multiplicities]%
+    \label{def:peps_copy_representation}
+    \lean{TNLean.PEPS.blockMultiplicityRepresentation,
+        TNLean.PEPS.blockMultiplicityRootWeight,
+        TNLean.PEPS.blockMultiplicityRepresentation_self,
+        TNLean.PEPS.blockMultiplicityRootWeight_self}
+    \leanok
+    Define $D(g)=\bigoplus_iD_i(g)$,
+    $D^{[m]}(g)=\bigoplus_iD_i(g)\otimes I_{m_i}$, and
+    $W_m=\bigoplus_i m_i^{1/4}I_{d_i}$.
+    Taking $m_i=d_i$ gives dimension multiplicity restoration and the
+    fourth-root dimension weight.
+    Let $A_m$ be the actual averaging tensor for $D$ with virtual
+    weight $W_m$, and let $B_m$ be the unweighted averaging tensor
+    for $D^{[m]}$. Their site averages use the same factor $|G|^{-1}$.
+\end{definition}
+
+\begin{theorem}[One and two endpoint weights]%
+    \label{thm:peps_copy_weight_products}
+    \lean{TNLean.PEPS.blockMultiplicityRootWeight_mul,
+        TNLean.PEPS.mul_blockMultiplicityRootWeight,
+        TNLean.PEPS.blockMultiplicityRootWeight_commute,
+        TNLean.PEPS.blockMultiplicityRootWeight_sq_mul}
+    \leanok
+    \uses{def:peps_copy_representation}
+    For every $g\in G$,
+    \begin{align}
+        W_mD(g)=D(g)W_m & =\bigoplus_i m_i^{1/4}D_i(g),   \\
+        W_m^2D(g)       & =\bigoplus_i\sqrt{m_i}\,D_i(g).
+        \label{eq:peps_copy_weight_products}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Multiply within each diagonal block. Its scalar weight commutes
+    with every matrix, and $(m_i^{1/4})^2=\sqrt{m_i}$.
+\end{proof}
+
+\begin{definition}[Regional copy transformations]%
+    \label{def:peps_copy_regional_matrix}
+    \lean{TNLean.PEPS.graphRegionCopyMatrix,
+        TNLean.PEPS.graphRegionMultiplicityMatrix,
+        TNLean.PEPS.numberedRegionCopyMatrix,
+        TNLean.PEPS.numberedRegionMultiplicityMatrix}
+    \leanok
+    Let $F_m:\C^{X\times X}\to\C^{X_m\times X_m}$ be the supported
+    normalized copy map. For $y=(i,a,c)$, write $\pi y=(i,a)$, and set
+    $\alpha_m(y,z)=m_i^{-1/2}$ when $y,z$ have sector $i$ and the same
+    copy label, and zero otherwise.
+    Its one-ended map with fixed exterior output $z$ is
+    $B_z(y,x)=\alpha_m(y,z)\delta_{\pi y,x}$.
+    For a region $R$, let $E_R$ be its internal edges and
+    $\partial E_R$ its crossing edges. Given
+    $\gamma:\partial E_R\to X_m$, define
+    \begin{align}
+        M_{R,\gamma}
+        =\bigotimes_{f\in\partial E_R}B_{\gamma_f}
+        \otimes\bigotimes_{f\in E_R}F_m.
+        \label{eq:peps_copy_regional_matrix}
+    \end{align}
+    The numbered regional matrix is obtained by regrouping the site
+    labels into these crossing endpoints and internal head--tail pairs.
+    The dimension-multiplicity versions are obtained by setting $m=d$.
+\end{definition}
+
+\begin{theorem}[Transport of internal and crossing factors]%
+    \label{thm:peps_copy_open_factors}
+    \lean{TNLean.PEPS.graphOpenInternalFactor_copy,
+        TNLean.PEPS.graphOpenInternalFactor_copy_adjoint,
+        TNLean.PEPS.graphOpenBoundaryFactor_copy,
+        TNLean.PEPS.graphOpenBoundaryFactor_copy_adjoint,
+        TNLean.PEPS.graphOpenInternalFactor_multiplicity,
+        TNLean.PEPS.graphOpenInternalFactor_multiplicity_adjoint,
+        TNLean.PEPS.graphOpenBoundaryFactor_multiplicity,
+        TNLean.PEPS.graphOpenBoundaryFactor_multiplicity_adjoint}
+    \leanok
+    \uses{def:peps_copy_representation,def:peps_copy_regional_matrix}
+    Assume $m_i>0$. Fix $q:R\to G$.
+    Denote the internal bond factors of $A_m,B_m$ by $a_f(q),b_f(q)$,
+    and the crossing factors with virtual label $\theta$ by
+    $a_f(q;\theta),b_f(q;\theta)$.
+    For an internal edge, $F_ma_f(q)=b_f(q)$ and
+    $F_m^\dagger b_f(q)=a_f(q)$.
+    For a crossing edge and exterior output $z\in X_m$,
+    \begin{align}
+        B_za_f(q;\theta)
+         & =\sum_{y\in X_m}w_{y}\alpha_m(y,z)
+        \delta_{\pi y,\theta}\,b_f(q;y),
+        \label{eq:peps_copy_boundary_forward}  \\
+        B_z^\dagger b_f(q;y)
+         & =w_y^{-1}\alpha_m(y,z)a_f(q;\pi y),
+        \label{eq:peps_copy_boundary_adjoint}
+    \end{align}
+    where $w_y=m_i^{1/4}$ for $y$ in sector $i$.
+    These formulas hold for both crossing orientations; each crossing
+    retains exactly one fourth-root weight.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_weight_products,thm:peps_full_multiplicity_bond_map,
+        thm:peps_parent_support_boundary_factors,
+        thm:peps_parent_support_boundary_adjoints}
+    The internal factor is $W_m^2D(q_hq_t^{-1})$.
+    Equation~(\ref{eq:peps_copy_weight_products}) supplies
+    $\sqrt{m_i}$ in each block, canceled by the normalized copy map.
+    Its adjoint sums $m_i$ equal-copy terms with coefficient
+    $m_i^{-1/2}$, recovering the same factor.
+    At a crossing, use $W_mD(q_t^{-1})$ when the tail lies in $R$
+    and $D(q_h)W_m$ when the head lies in $R$.
+    The sparse coefficient of $B_z$ fixes the base coordinate and
+    copy label; moving the remaining $w_y$ to the virtual boundary
+    coefficient gives~(\ref{eq:peps_copy_boundary_forward}).
+    Conjugating the same sparse coefficient and dividing by the
+    nonzero $w_y$ gives~(\ref{eq:peps_copy_boundary_adjoint}).
+\end{proof}
+
+\begin{theorem}[Every virtual boundary coefficient is transported]%
+    \label{thm:peps_copy_open_generators}
+    \lean{TNLean.PEPS.graphRegionCopyMatrix_open,
+        TNLean.PEPS.graphRegionCopyMatrix_adjoint_open,
+        TNLean.PEPS.graphRegionMultiplicityMatrix_open,
+        TNLean.PEPS.graphRegionMultiplicityMatrix_adjoint_open}
+    \leanok
+    \uses{def:peps_copy_regional_matrix}
+    Assume $m_i>0$, and write $a_R(\theta),b_R(\eta)$ for the open
+    contractions of $A_m,B_m$ in regional bond coordinates.
+    For arbitrary virtual labels $\theta:\partial E_R\to X$ and
+    $\eta:\partial E_R\to X_m$,
+    \begin{align}
+        M_{R,\gamma}a_R(\theta)
+         & =\sum_\eta\left(\prod_{f\in\partial E_R}
+        w_{\eta_f}\alpha_m(\eta_f,\gamma_f)
+        \delta_{\pi\eta_f,\theta_f}\right)b_R(\eta),
+        \label{eq:peps_copy_open_forward}           \\
+        M_{R,\gamma}^\dagger b_R(\eta)
+         & =\left(\prod_{f\in\partial E_R}
+        w_{\eta_f}^{-1}\alpha_m(\eta_f,\gamma_f)\right)
+        a_R(\pi\eta).
+        \label{eq:peps_copy_open_adjoint}
+    \end{align}
+    Linear extension therefore transports arbitrary, possibly
+    entangled, virtual boundary coefficients. These identities also
+    give the dimension-multiplicity formulas when $m=d$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_open_factors,def:peps_parent_support_open_factors}
+    Expand each open contraction as $|G|^{-|R|}$ times a sum over
+    $q:R\to G$ of the product of its crossing and internal factors.
+    Apply Theorem~\ref{thm:peps_copy_open_factors} to each factor.
+    Distributing the crossing sums gives
+    (\ref{eq:peps_copy_open_forward}); collecting their scalar
+    coefficients gives~(\ref{eq:peps_copy_open_adjoint}).
+    The transformation never restricts the original virtual boundary.
+\end{proof}
+
+\begin{theorem}[Both regional range inclusions]%
+    \label{thm:peps_copy_local_ranges}
+    \lean{TNLean.PEPS.graphRegionCopyMatrix_maps_openBondSpace,
+        TNLean.PEPS.graphRegionCopyMatrix_adjoint_maps_openBondSpace,
+        TNLean.PEPS.numberedRegionCopyMatrix_maps_regionGroundSpace,
+        TNLean.PEPS.numberedRegionCopyMatrix_adjoint_maps_regionGroundSpace,
+        TNLean.PEPS.graphRegionMultiplicityMatrix_maps_openBondSpace,
+        TNLean.PEPS.graphRegionMultiplicityMatrix_adjoint_maps_openBondSpace,
+        TNLean.PEPS.numberedRegionMultiplicityMatrix_maps_regionGroundSpace,
+        TNLean.PEPS.numberedRegionMultiplicityMatrix_adjoint_maps_regionGroundSpace}
+    \leanok
+    If $m_i>0$, then for every region and every fixed exterior output
+    $\gamma$, the regional matrix and its adjoint satisfy
+    \begin{align}
+        M_{R,\gamma}\mathcal G_R(A_m) & \subseteq\mathcal G_R(B_m),
+                                      & M_{R,\gamma}^\dagger\mathcal G_R(B_m) & \subseteq\mathcal G_R(A_m).
+        \label{eq:peps_copy_local_ranges}
+    \end{align}
+    The statements hold both in bond coordinates and after the
+    supplied enumerations of the site physical spaces, including $m=d$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_open_generators,thm:peps_parent_support_open_coordinates}
+    The vectors $a_R(\theta)$ and $b_R(\eta)$ span the respective
+    full regional ranges. Equations~(\ref{eq:peps_copy_open_forward})
+    and~(\ref{eq:peps_copy_open_adjoint}) send every generator into
+    the required span. The coordinate permutations identify these
+    spans with the original numbered contraction ranges.
+\end{proof}
+
+\subsection{Global supported inverses}
+
+\begin{theorem}[All parent constraints are preserved]%
+    \label{thm:peps_copy_parent_inclusions}
+    \lean{TNLean.PEPS.graphNumberedCopyMatrix_maps_parent,
+        TNLean.PEPS.graphNumberedCopyMatrix_adjoint_maps_parent,
+        TNLean.PEPS.graphNumberedMultiplicityMatrix_maps_parent,
+        TNLean.PEPS.graphNumberedMultiplicityMatrix_adjoint_maps_parent}
+    \leanok
+    Suppose $m_i>0$ and let $M_m$ be the actual product
+    $\bigotimes_{f\in E}F_m$ in the supplied numbered site coordinates.
+    For any family $\mathcal R=(R_i)_i$,
+    \begin{align}
+        M_m\mathcal P_{\mathcal R}(A_m) & \subseteq\mathcal P_{\mathcal R}(B_m),
+                                        & M_m^\dagger\mathcal P_{\mathcal R}(B_m) & \subseteq\mathcal P_{\mathcal R}(A_m).
+        \label{eq:peps_copy_parent_inclusions}
+    \end{align}
+    No coverage assumption on the regions is needed for these inclusions.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_local_ranges,thm:peps_parent_support_copy_blocks,
+        thm:peps_parent_support_block_criterion}
+    Fix a region and the input and output exterior configurations.
+    The corresponding block of $M_m$ is a scalar times
+    $M_{R,\gamma}$: exterior edges give scalar factors, and crossing
+    edges additionally enforce equality of the exterior base labels.
+    Every such block carries the source regional range into the target
+    range by~(\ref{eq:peps_copy_local_ranges}).
+    Each target regional slice is a sum of these block images of
+    source slices, and so satisfies the target condition.
+    The adjoint block is the conjugate scalar times
+    $M_{R,\gamma}^\dagger$, proving the reverse inclusion.
+\end{proof}
+
+\begin{theorem}[Exact inverses on the entire parent spaces]%
+    \label{thm:peps_copy_parent_inverses}
+    \lean{TNLean.PEPS.graphNumberedCopyMatrix_leftInverse_parent,
+        TNLean.PEPS.graphNumberedCopyMatrix_rightInverse_parent,
+        TNLean.PEPS.graphNumberedCopyMatrix_injOn_parent,
+        TNLean.PEPS.graphNumberedMultiplicityMatrix_leftInverse_parent,
+        TNLean.PEPS.graphNumberedMultiplicityMatrix_rightInverse_parent,
+        TNLean.PEPS.graphNumberedMultiplicityMatrix_injOn_parent}
+    \leanok
+    Assume $m_i>0$ and every edge has both endpoints in some $R_i$.
+    For $\psi\in\mathcal P_{\mathcal R}(A_m)$ and
+    $\phi\in\mathcal P_{\mathcal R}(B_m)$,
+    \begin{align}
+        M_m^\dagger M_m\psi & =\psi,
+                            & M_mM_m^\dagger\phi & =\phi.
+        \label{eq:peps_copy_parent_inverses}
+    \end{align}
+    In particular, $M_m$ is injective on the source parent space.
+    These identities concern every parent vector, including for $m=d$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_weight_products,thm:peps_parent_support_factor_ranges,
+        thm:peps_parent_support_retractions}
+    The source internal factors $\bigoplus_i\sqrt{m_i}D_i(g)$ lie
+    in the matching-sector inclusion range. The target internal
+    factors $\bigoplus_iD_i(g)\otimes I_{m_i}$ lie in $\operatorname{im}F_m$.
+    Fixing crossing physical labels therefore puts every internal
+    slice of a regional generator in the corresponding product range.
+    Linear extension gives the same property on its regional range.
+    For each edge, choose a parent region containing both endpoints;
+    its regional constraint places every global one-bond slice in
+    the required range. The product-range criterion then gives source
+    matching-sector support and target product-image support.
+    On these supports the product partial-isometry identities are
+    exactly~(\ref{eq:peps_copy_parent_inverses}). Applying $M_m^\dagger$
+    to $M_m\psi=M_m\psi'$ proves injectivity.
+\end{proof}
+
+\begin{theorem}[Canonical parent equivalence under copy restoration]%
+    \label{thm:peps_copy_parent_equivalence}
+    \lean{TNLean.PEPS.map_regionParentGroundSpace_copy_eq,
+        TNLean.PEPS.canonicalCopyParentEquiv,
+        TNLean.PEPS.finrank_regionParentGroundSpace_copy_eq,
+        TNLean.PEPS.map_ker_regionParentHamiltonian_copy_eq,
+        TNLean.PEPS.map_regionParentGroundSpace_multiplicity_eq,
+        TNLean.PEPS.canonicalMultiplicityParentEquiv,
+        TNLean.PEPS.finrank_regionParentGroundSpace_multiplicity_eq,
+        TNLean.PEPS.map_ker_regionParentHamiltonian_multiplicity_eq}
+    \leanok
+    If $m_i>0$ and every edge is internal to some parent region,
+    restriction of the actual product map gives
+    \begin{align}
+        M_m:\mathcal P_{\mathcal R}(A_m)
+         & \xrightarrow{\ \cong\ }\mathcal P_{\mathcal R}(B_m),
+         & \dim\mathcal P_{\mathcal R}(A_m)                     & =
+        \dim\mathcal P_{\mathcal R}(B_m).
+        \label{eq:peps_copy_parent_equivalence}
+    \end{align}
+    Its inverse is the restriction of $M_m^\dagger$.
+    For any finite region family and positive interactions whose local
+    kernels are these exact regional ranges, $M_m(\ker H)=\ker K$.
+    Taking $m=d$ gives canonical dimension-multiplicity restoration.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_parent_inclusions,thm:peps_copy_parent_inverses,
+        thm:peps_region_parent_common_kernel}
+    The inclusions in~(\ref{eq:peps_copy_parent_inclusions}) and both
+    identities in~(\ref{eq:peps_copy_parent_inverses}) show that the
+    restrictions are mutually inverse. The dimension assertion follows.
+    Positivity identifies the Hamiltonian kernels with the common
+    regional parent spaces, so the same map identifies those kernels.
+\end{proof}
+
+\subsection{Removing weights and changing multiplicities}
+
+\begin{definition}[Physical copy filters]%
+    \label{def:peps_copy_physical_filter}
+    \lean{TNLean.PEPS.graphCopyWeight,
+        TNLean.PEPS.graphCopyWeightPhysicalEquiv,
+        TNLean.PEPS.toMatrix_graphCopyWeightPhysicalEquiv}
+    \leanok
+    For an incident physical configuration $\sigma$ at $v$, put
+    $c_v(\sigma)=\prod_{f\in\operatorname{Inc}(v)}m_{i(\sigma_f)}^{1/4}$.
+    When $m_i>0$, define the invertible diagonal physical filter
+    $C_v=\operatorname{diag}(c_v)$ in the numbered site coordinates,
+    and let $C=\bigotimes_vC_v$.
+\end{definition}
+
+\begin{theorem}[Copy weights are an invertible physical deformation]%
+    \label{thm:peps_copy_physical_filter}
+    \lean{TNLean.PEPS.graphDressedAveragingSite_copy_weight,
+        TNLean.PEPS.graphCopyWeight_ne_zero,
+        TNLean.PEPS.numberedGraphDressedAveragingTensor_copy_weight,
+        TNLean.PEPS.map_regionParentGroundSpace_copy_weight,
+        TNLean.PEPS.canonicalCopyWeightParentEquiv}
+    \leanok
+    \uses{def:peps_copy_physical_filter}
+    Let $A_0$ be the unweighted averaging tensor for $D$.
+    Every virtual column satisfies $(A_m)_v=C_v(A_0)_v$.
+    If $m_i>0$, then every $c_v(\sigma)$ is nonzero and, for any region
+    family without a coverage assumption,
+    \begin{align}
+        C\mathcal P_{\mathcal R}(A_0)=\mathcal P_{\mathcal R}(A_m),
+        \qquad
+        C:\mathcal P_{\mathcal R}(A_0)\cong\mathcal P_{\mathcal R}(A_m).
+        \label{eq:peps_copy_filter_parent}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_weight_products,thm:peps_region_parent_ground_space_physical_transport}
+    On each incident leg, the block-scalar weight can be read from the
+    physical sector label. Taking the product of these weights gives
+    $c_v(\sigma)$, independently of the virtual column.
+    Positive $m_i$ make the diagonal matrices invertible.
+    Physical deformation commutes with every open contraction.
+    Applying $C$ and $C^{-1}$ to regional slices proves
+    (\ref{eq:peps_copy_filter_parent}).
+\end{proof}
+
+\begin{definition}[The positive-multiplicity parent map]%
+    \label{def:peps_copy_positive_parent_map}
+    \lean{TNLean.PEPS.positiveMultiplicityParentMap,
+        TNLean.PEPS.canonicalPositiveMultiplicityParentEquiv,
+        TNLean.PEPS.canonicalMultiplicityChangeParentEquiv}
+    \leanok
+    \uses{def:peps_copy_physical_filter,thm:peps_copy_parent_equivalence}
+    Assume all $m_i>0$, and that every edge is internal to some $R_i$.
+    Define $T_m=M_mC$. Its restriction is the composite isomorphism
+    from the unweighted single-copy parent space to that of $D^{[m]}$.
+    For any two positive multiplicity families $m,n$, define their
+    parent-space comparison by $T_nT_m^{-1}$, where the inverse is
+    taken on the parent space.
+\end{definition}
+
+\begin{theorem}[Independence of positive copy multiplicities]%
+    \label{thm:peps_copy_positive_parent}
+    \lean{TNLean.PEPS.map_regionParentGroundSpace_positiveMultiplicity_eq,
+        TNLean.PEPS.finrank_regionParentGroundSpace_positiveMultiplicity_eq,
+        TNLean.PEPS.map_ker_regionParentHamiltonian_positiveMultiplicity_eq}
+    \leanok
+    \uses{def:peps_copy_positive_parent_map}
+    For arbitrary representations $D_i$, positive $m_i$, supplied common
+    incident enumerations, and internal coverage of every edge,
+    \begin{align}
+        T_m\mathcal P_{\mathcal R}(A_0) & =\mathcal P_{\mathcal R}(B_m),
+                                        & \dim\mathcal P_{\mathcal R}(B_m) & =\dim\mathcal P_{\mathcal R}(A_0).
+    \end{align}
+    Consequently any two positive multiplicity families have isomorphic
+    full canonical parent spaces. For a finite region family and
+    arbitrary positive local interactions with the corresponding exact
+    regional kernels, $T_m(\ker H)=\ker K$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_copy_physical_filter,thm:peps_copy_parent_equivalence,
+        thm:peps_region_parent_common_kernel}
+    First apply $C$ using~(\ref{eq:peps_copy_filter_parent}), then apply
+    $M_m$ using~(\ref{eq:peps_copy_parent_equivalence}).
+    Both restrictions are isomorphisms, so their composition preserves
+    dimensions. Reverse the comparison for $m$ and follow it by the
+    comparison for $n$. The kernel statement again follows from
+    positivity and the exact local-kernel hypotheses.
+\end{proof}
+
+% These results compare full kernels, not only chosen closed-state spans.
+% Their hypotheses do not include a local-range equality, global-kernel
+% equality, or a completeness claim for named torus closure vectors.

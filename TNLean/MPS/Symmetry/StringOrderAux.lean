@@ -7,6 +7,8 @@ import QICLean.Algebra.ComplexPhasePositivity
 import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
+import TNLean.MPS.Core.TPGauge
+import TNLean.Spectral.TransferOperatorGapNT
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.Scaling
@@ -29,6 +31,8 @@ boundary-state invariance `V† Λ V = Λ`.
 ## Contents
 
 * `TwistedTPGaugeSetup` — bundled TP-gauge data for the spectral radius bound
+* `twistedTransfer_eigenvalue_norm_le_one_of_irreducible` — the twisted eigenvalue bound
+* `twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible` — peripheral rigidity
 * `Kraus.mapLM_tpGauge_eq_similarityMap` — similarity transform of the transfer map
 * `Kraus.isPrimitive_mapLM_tpGauge_iff` — invariance of primitivity under the
   Perron gauge
@@ -73,11 +77,12 @@ structure TwistedTPGaugeSetup [NeZero D]
   hIrrA' : Kraus.IsIrreducibleFamily (d := d) (D := D) A'
   hIrrB' : Kraus.IsIrreducibleFamily (d := d) (D := D) B'
 
-/-- Constructs a `TwistedTPGaugeSetup` from an injective, normalized MPS tensor and
-a unitary twist matrix `u`. -/
-noncomputable def twistedTPGaugeSetup [NeZero D]
+/-- Constructs a `TwistedTPGaugeSetup` from an irreducible, normalized MPS tensor and
+a unitary twist matrix `u`. This is the Perron gauge reduction used for
+arXiv:0802.0447, Lemma 1. -/
+noncomputable def twistedTPGaugeSetup_of_irreducible [NeZero D]
     (A : MPSTensor d D)
-    (hA : Kraus.IsInjective A)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (hNorm : Kraus.transferMap A 1 = 1) :
@@ -88,8 +93,6 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
       Kraus.transferMap B X = Kraus.transferMap A X := by
     intro X
     simpa [B] using transferMap_twistedMixedCompanion_eq (A := A) (u := u) hu X
-  have hIrrA : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.injective_implies_irreducibleCP A hA
   have hEqBA : Kraus.transferMap B = Kraus.transferMap A := LinearMap.ext hB_eq
   have hIrrB : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) := by
     simpa [hEqBA] using hIrrA
@@ -167,6 +170,18 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
       hB'TP := hB'TP
       hIrrA' := hIrrA'
       hIrrB' := hIrrB' }
+
+/-- The trace-preserving gauge setup specialized to an injective normalized tensor.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
+noncomputable def twistedTPGaugeSetup [NeZero D]
+    (A : MPSTensor d D)
+    (hA : Kraus.IsInjective A)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1) :
+    TwistedTPGaugeSetup (d := d) (D := D) A u :=
+  twistedTPGaugeSetup_of_irreducible
+    A (Kraus.injective_implies_irreducibleCP A hA) u hu hNorm
 
 /-- An eigenvalue of the twisted transfer map is also an eigenvalue of the mixed
 transfer map in the TP-gauge picture. -/
@@ -337,12 +352,12 @@ private theorem inverse_physical_action_of_twisted_companion
     _ = ζ⁻¹ • (Uᴴ * A i * Uᴴᴴ) := by
           simp
 
-/-- If the twisted companion family is gauge-phase equivalent to `A`, the gauge
-matrix can be normalized to a unitary and converted into the phased virtual
-symmetry relation from the string-order paper. -/
-theorem virtualUnitary_of_gaugePhaseEquiv_twisted
+/-- If the twisted companion family is gauge-phase equivalent to a tensor with
+irreducible transfer map, its gauge can be normalized to a unitary. This gives
+the phased virtual symmetry relation of arXiv:0802.0447, Lemma 1. -/
+theorem virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible
     (A : MPSTensor d D)
-    (hA : Kraus.IsInjective A)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (hNorm : Kraus.transferMap A 1 = 1)
@@ -408,8 +423,6 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
            _ = (X * Xᴴ) * Xinᴴ := (Matrix.mul_assoc X Xᴴ Xinᴴ).symm
            _ = 0 := hQXin
     simp [X, Xin, hX_zero] at hX_mul_inv
-  have hIrrA : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.injective_implies_irreducibleCP A hA
   have hCPA : IsCPMap (Kraus.transferMap (d := d) (D := D) A) :=
     Kraus.transferMap_isCPMap A
   have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := Matrix.PosSemidef.one
@@ -521,6 +534,23 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     exact inverse_physical_action_of_twisted_companion A u hu U hU_unitary_right ζ hζ
       (fun j => by simpa [B] using hBi j) i
 
+/-- An injective tensor admits a unitary representative of a twisted gauge-phase
+equivalence.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
+theorem virtualUnitary_of_gaugePhaseEquiv_twisted
+    (A : MPSTensor d D)
+    (hA : Kraus.IsInjective A)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (hGauge : GaugePhaseEquiv A (twistedMixedCompanion A u)) :
+    ∃ V : Matrix (Fin D) (Fin D) ℂ, ∃ μ : ℂ,
+      V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧ ‖μ‖ = 1 ∧
+      ∀ i : Fin d,
+        ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ) :=
+  virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible
+    A (Kraus.injective_implies_irreducibleCP A hA) u hu hNorm hGauge
+
 /-- A phased virtual symmetry immediately produces a peripheral eigenvector of the
 twisted transfer map. -/
 theorem twistedTransfer_eigen_of_virtualUnitary
@@ -557,13 +587,12 @@ theorem twistedTransfer_eigen_of_virtualUnitary
     _ = μ • V := by
           simp [hNorm]
 
-/-- A phased virtual symmetry preserving the twisted transfer data also preserves
-the stationary boundary state `Λ`, provided `Λ` is the unique fixed point of the
-adjoint transfer channel. This is the paper's `V† Λ V = Λ` conclusion from
-Lemma 1. -/
-theorem boundaryState_invariant_of_virtualUnitary
+/-- A phased virtual symmetry of a tensor with irreducible transfer map preserves
+its stationary boundary state. This is the conclusion `V† Λ V = Λ` of
+arXiv:0802.0447, Lemma 1. -/
+theorem boundaryState_invariant_of_virtualUnitary_of_irreducible
     (A : MPSTensor d D)
-    (hA : Kraus.IsInjective A)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
@@ -650,8 +679,6 @@ theorem boundaryState_invariant_of_virtualUnitary
   have hρ_ne : ρ ≠ 0 := by
     intro hρ0
     simp [hρ0] at hρ_tr
-  have hIrrA : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.injective_implies_irreducibleCP A hA
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
   have hIrrAdj :
@@ -672,5 +699,111 @@ theorem boundaryState_invariant_of_virtualUnitary
     _ = (Vᴴ * V) * Λ * (Vᴴ * V) := by
           simp [show ρ = V * Λ * Vᴴ from rfl, Matrix.mul_assoc]
     _ = Λ := by simp [hV']
+
+/-- A phased virtual symmetry of an injective tensor preserves its stationary
+boundary state.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
+theorem boundaryState_invariant_of_virtualUnitary
+    (A : MPSTensor d D)
+    (hA : Kraus.IsInjective A)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (Λ : Matrix (Fin D) (Fin D) ℂ)
+    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (V : Matrix (Fin D) (Fin D) ℂ)
+    (μ : ℂ)
+    (hV : V * Vᴴ = 1) (hV' : Vᴴ * V = 1) (hμ : ‖μ‖ = 1)
+    (hC1μ : ∀ i : Fin d,
+      ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ)) :
+    Vᴴ * Λ * V = Λ :=
+  boundaryState_invariant_of_virtualUnitary_of_irreducible
+    A (Kraus.injective_implies_irreducibleCP A hA) u hu Λ hΛpos hΛtr hΛfix
+    V μ hV hV' hμ hC1μ
+
+/-! ### Irreducible twisted-transfer bounds and rigidity -/
+
+/-- Every eigenvalue of a unital irreducible tensor's twisted transfer map has
+modulus at most one (arXiv:0802.0447, Lemma 1). The proof passes the two Kraus
+families to a common trace-preserving gauge and applies the mixed-transfer
+eigenvalue bound. -/
+theorem twistedTransfer_eigenvalue_norm_le_one_of_irreducible
+    (A : MPSTensor d D)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
+    (hV : V ≠ 0)
+    (hEig : twistedTransferMap A u V = ev • V) :
+    ‖ev‖ ≤ 1 := by
+  have hDpos : 0 < D := by
+    by_contra hD
+    have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
+    subst hD0
+    apply hV
+    ext i j
+    exact Fin.elim0 i
+  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  let setup := twistedTPGaugeSetup_of_irreducible (A := A) hIrrA u hu hNorm
+  have hHas : Module.End.HasEigenvalue
+      (Kraus.mixedMapLM setup.A' setup.B') ev :=
+    twistedTPGaugeSetup_hasEigenvalue
+      (A := A) (u := u) (setup := setup) ev V hV hEig
+  exact Kraus.eigenvalue_norm_le_one
+    (A := setup.A') (B := setup.B') setup.hA'TP setup.hB'TP ev hHas
+
+open scoped Kraus in
+/-- For a unital irreducible tensor, a modulus-one twisted-transfer eigenvalue
+forces the twisted companion tensor to be gauge-phase equivalent to the original
+tensor (arXiv:0802.0447, Lemma 1). The proof passes to a common trace-preserving
+gauge and applies irreducible mixed-transfer rigidity. -/
+theorem twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible
+    (A : MPSTensor d D)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
+    (hV : V ≠ 0)
+    (hEig : twistedTransferMap A u V = ev • V)
+    (hev : ‖ev‖ = 1) :
+    GaugePhaseEquiv A (twistedMixedCompanion A u) := by
+  have hDpos : 0 < D := by
+    by_contra hD
+    have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
+    subst hD0
+    apply hV
+    ext i j
+    exact Fin.elim0 i
+  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  let setup := twistedTPGaugeSetup_of_irreducible (A := A) hIrrA u hu hNorm
+  have hHas : Module.End.HasEigenvalue (Kraus.mixedMapLM setup.A' setup.B') ev :=
+    twistedTPGaugeSetup_hasEigenvalue
+      (A := A) (u := u) (setup := setup) ev V hV hEig
+  let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+  have hspec : ev ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B')) := by
+    rw [AlgEquiv.spectrum_eq Φ]
+    exact hHas.mem_spectrum
+  have hRadGe : Kraus.mixedTransferSpectralRadius setup.A' setup.B' ≥ 1 := by
+    rw [Kraus.mixedTransferSpectralRadius_eq]
+    have hnorm_ev_nn : (1 : NNReal) = ‖ev‖₊ := by
+      apply Subtype.ext
+      simpa using hev.symm
+    have hnorm_ev : (1 : ENNReal) = ‖ev‖₊ := by
+      exact congrArg (fun r : NNReal => (r : ENNReal)) hnorm_ev_nn
+    rw [ge_iff_le, hnorm_ev, spectralRadius_eq_of_unital]
+    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B'))) _
+      (fun k _ => (‖k‖₊ : ENNReal)) ev hspec
+  have hGauge' : GaugePhaseEquiv setup.A' setup.B' :=
+    modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
+      setup.A' setup.B' setup.hIrrA' setup.hIrrB' setup.hA'TP setup.hB'TP hRadGe
+  simpa [setup.hA'_def, setup.hB'_def, setup.hB_def] using
+    gaugePhaseEquiv_of_gaugeEquiv_left_right
+    (gaugeEquiv_tpGauge (A := A) (ρ := setup.σ) setup.hσ_pd)
+    hGauge'
+    (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
 
 end MPSTensor

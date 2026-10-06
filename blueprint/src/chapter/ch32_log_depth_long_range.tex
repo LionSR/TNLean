@@ -20,56 +20,13 @@ as circuits. With the block length $q\propto\log(N/\varepsilon)$, ``If instead
 measurements are only used for the preparation of $\ket{\chi_{N/q}}$, the depth
 is $O(\log(N/\varepsilon))$''. This subsection proves this for direct sums of
 normal blocks whose $q$-site states are orthogonal and for block lengths
-dividing $N$ \cite{gap:mswc24_measurement_preparation_scope}. On the chain of
+dividing $N$ \cite{gap:mswc24_measurement_preparation_scope};
+Section~\ref{sec:ldp_overlapping_measurements} removes both restrictions. On the chain of
 $N$ sites the label of each block is stored in the last sites of the block, and
-the GHZ-type state is prepared in depth $O(q)$; the isometries of the blocked
-tensor take depth $O(q)$ as well.
-
-\begin{definition}[Preparation with measurements and a circuit]
-    \label{def:ldp_measurement_circuit_preparation}
-    \lean{MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth}
-    \leanok
-    \uses{def:ldp_measurement_preparation, def:ldp_local_circuit}
-    A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in
-        depth $T$} if $\ket\psi=U\ket\varphi$ for a vector $\ket\varphi$
-    prepared with measurements in depth $T_1$ and a local circuit $U$ of depth
-    $T_2$, with $T_1+T_2\leq T$. The circuit $U$ does not depend on the
-    outcomes of the measurements.
-\end{definition}
-
-\begin{lemma}[Layers acting on configurations]
-    \label{lem:ldp_configuration_layers}
-    \lean{MPSPreparation.apply_eq_ite_of_mulVec_eq_comp, MPSPreparation.sigmaSite,
-        MPSPreparation.sigmaSite_injective, MPSPreparation.layerCfg,
-        MPSPreparation.layerCfg_apply, MPSPreparation.layerCfg_comp,
-        MPSPreparation.layerCfg_apply_of_forall_ne, MPSPreparation.eq_layerCfg_iff,
-        MPSPreparation.noncommProd_embedOp_mulVec_eq_comp,
-        MPSPreparation.blockLayerOp_mulVec_eq_comp,
-        MPSPreparation.pairLayerOp_mulVec_eq_comp,
-        MPSPreparation.embedOp_mulVec_eq_comp, MPSPreparation.permOp_mulVec,
-        MPSPreparation.embedOp_mulVec_productVector}
-    \leanok
-    \uses{def:ldp_local_circuit, lem:ldp_permutation_layers}
-    Let $X_k$ be operators on pairwise disjoint sets $S_k$ of sites, each
-    acting by a map $f_k$ of the configurations of $S_k$, that is
-    $X_kv=v\circ f_k$ for every vector $v$; then $X_k$ has the entry $1$ at
-    $(u,f_k(u))$ and $0$ elsewhere. The product of the $X_k$ acts by the map
-    $\rho$ with $\rho(x)|_{S_k}=f_k(x|_{S_k})$ for every $k$ and
-    $\rho(x)_i=x_i$ at every site $i$ outside all the $S_k$. A permutation
-    $\tau$ of the sites acts as $v\mapsto v\circ(x\mapsto x\circ\tau)$. If $X$
-    acts on the sites of $S$ and the product vector $\ket\pi$ is $\ket z$ on
-    every site of $S$, then $(X\ket\pi)(y)=X_{y|_S,(z,\dots,z)}\pi'(y)$, where
-    $\ket{\pi'}$ is the product vector with the all-ones vector at the sites
-    of $S$ and the vectors of $\ket\pi$ elsewhere.
-\end{lemma}
-\begin{proof}
-    \leanok
-    Applying $X_k$ to the basis vector $\ket u$ gives the entries. The entry of
-    the product at $(x,y)$ is $\prod_k[y|_{S_k}=f_k(x|_{S_k})]$ when $x$ and
-    $y$ agree outside the $S_k$, and $0$ otherwise; this is $1$ exactly when
-    $y=\rho(x)$. For the product vector, only the configuration $y'$ agreeing
-    with $y$ outside $S$ and equal to $(z,\dots,z)$ on $S$ contributes.
-\end{proof}
+the one-round construction prepares the GHZ-type state in depth $O(q)$,
+while Theorem~\ref{thm:ldp_sparse_window_ghz} prepares it in constant depth
+using additional measurement rounds. The sequential block isometries take
+depth $O(q)$.
 
 \begin{definition}[Registers and the GHZ-type state on them]
     \label{def:ldp_window_ghz_state}
@@ -104,12 +61,35 @@ tensor take depth $O(q)$ as well.
     $(\delta(j),0,\dots,0)$ on every pair window and $0$ outside the windows.
 \end{definition}
 
+\begin{lemma}[Block and window layers acting on configurations]
+    \label{lem:ldp_block_layers_configurations}
+    \lean{MPSPreparation.blockLayerOp_mulVec_eq_comp,
+        MPSPreparation.pairLayerOp_mulVec_eq_comp}
+    \leanok
+    \uses{lem:qc_configuration_layers, def:ldp_window_ghz_state,
+        thm:ldp_approximating_state_depth}
+    Cut the ring of $N$ sites into $M$ blocks of lengths $\ell_k$. If operators
+    $U_k$ on the $\ell_k$ sites of the blocks act by maps $f_k$ of the
+    configurations of the blocks, $U_k(v)=v\circ f_k$, then the layer of the
+    $U_k$ on the blocks acts by the map changing the configuration of every
+    block $k$ by $f_k$; the blocks cover the ring. If $\ell_k\geq2r_1$ and
+    operators $W_k$ on $2r_1$ sites act by maps $f_k$, the layer of the $W_k$
+    on the pair windows of Definition~\ref{def:ldp_window_ghz_state} acts by
+    the map changing the configuration of every pair window $k$ by $f_k$ and
+    keeping the other sites.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The blocks are pairwise disjoint, and so are the pair windows; this is
+    Lemma~\ref{lem:qc_configuration_layers}.
+\end{proof}
+
 \begin{lemma}[A controlled shift between the ends of a block]
     \label{lem:ldp_block_shift}
     \lean{MPSPreparation.copyShift, MPSPreparation.blockShift,
         MPSPreparation.tailShift, MPSPreparation.exists_blockShiftUnitary}
     \leanok
-    \uses{lem:ldp_configuration_layers, thm:ldp_bounded_unitary_two_site_gates,
+    \uses{lem:qc_configuration_layers, thm:qc_bounded_unitary_two_site_gates,
         thm:ldp_approximating_state_depth}
     Let $r_1\geq1$ and values be taken in $\mathbb Z_d$. There is $C$ such
     that for every $q\geq3r_1$ some unitary on $q$ sites, a product of at most
@@ -121,9 +101,9 @@ tensor take depth $O(q)$ as well.
     \leanok
     SWAP gates move the first $r_1$ sites next to the last $r_1$ in at most
     $2qr_1$ gates; one unitary on the last $2r_1$ sites, of bounded depth by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, adds the second half
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, adds the second half
     to the first; and the same SWAP gates move the sites back. By
-    Lemma~\ref{lem:ldp_configuration_layers} the composite acts by the stated
+    Lemma~\ref{lem:qc_configuration_layers} the composite acts by the stated
     map.
 \end{proof}
 
@@ -131,9 +111,9 @@ tensor take depth $O(q)$ as well.
     \label{thm:ldp_window_ghz_measurement}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsInDepth_windowGHZState}
     \leanok
-    \uses{def:ldp_window_ghz_state, def:ldp_measurement_preparation,
-        lem:ldp_configuration_layers, lem:ldp_block_shift,
-        thm:ldp_ghz_measurement}
+    \uses{def:ldp_window_ghz_state, def:qc_measurement_preparation,
+        lem:qc_configuration_layers, lem:ldp_block_layers_configurations,
+        lem:ldp_block_shift, thm:qc_ghz_measurement}
     Let $r_1\geq2$. There is $C$ such that for every ring of $N$ sites cut into
     $M\geq1$ blocks of lengths $3r_1\leq\ell_k\leq L$ and every unit vector
     $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state on the registers of
@@ -157,7 +137,7 @@ tensor take depth $O(q)$ as well.
     register of the previous block. The circuit has depth $O(L)$. Measure every
     ancilla, with outcomes $m_k\in\mathbb Z_d^{r_1}$, and let
     $p_k=m_0+\cdots+m_{k-1}$. Correct by adding $m_k$ on the ancilla of $R_k$ and
-    $-p_k$ on $R_k$, site by site. By Lemma~\ref{lem:ldp_configuration_layers},
+    $-p_k$ on $R_k$, site by site. By Lemma~\ref{lem:qc_configuration_layers},
     the corrected vector has the amplitude $\alpha(x|_{R_0})$ at a
     configuration $x$ that is $0$ outside the registers and satisfies
     $m_k+(x|_{R_{k+1}}-p_{k+1})-(x|_{R_k}-p_k)=0$ for every $k$, cyclically, and
@@ -165,6 +145,72 @@ tensor take depth $O(q)$ as well.
     $\sum_km_k=0$ and all the registers of $x$ agree. So every outcome with
     $\sum_km_k=0$ gives the GHZ-type state, and every other outcome gives the
     zero vector, which has probability zero.
+\end{proof}
+
+\begin{theorem}[Constant-depth GHZ preparation on sparse registers]
+    \label{thm:ldp_sparse_window_ghz}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState,
+        MPSPreparation.exists_rounds_sparseBlockShift,
+        MPSPreparation.windowCentralSites,
+        MPSPreparation.windowGHZInitial,
+        MPSPreparation.exists_windowGHZSeedUnitary,
+        MPSPreparation.windowGHZDifference,
+        MPSPreparation.windowGHZDifference_eq_mulVec,
+        MPSPreparation.exists_windowGHZCorrectionRound,
+        MPSPreparation.SparseRegister.prefixEmbedding,
+        MPSPreparation.SparseRegister.padding,
+        MPSPreparation.SparseRegister.padding_first,
+        MPSPreparation.SparseRegister.padding_of_ge,
+        MPSPreparation.SparseRegister.exists_isPairProduct_padding,
+        MPSPreparation.SparseRegister.paddingAll,
+        MPSPreparation.SparseRegister.paddingAll_blockSite,
+        MPSPreparation.SparseRegister.paddingAll_symm_blockSite,
+        MPSPreparation.SparseRegister.exists_isCircuitOn_paddingAll,
+        MPSPreparation.SparseRegister.ends,
+        MPSPreparation.SparseRegister.ends_injective,
+        MPSPreparation.SparseRegister.ends_shift_mulVec,
+        MPSPreparation.SparseRegister.gate,
+        MPSPreparation.SparseRegister.gate_span_subset,
+        MPSPreparation.SparseRegister.pairwise_gates,
+        MPSPreparation.SparseRegister.gate_sites,
+        MPSPreparation.SparseRegister.gate_interior,
+        MPSPreparation.SparseRegister.padding_conj_gates}
+    \leanok
+    \uses{thm:ldp_window_ghz_measurement, def:qc_measurement_rounds,
+        thm:qc_register_layer}
+    Fix $d\ge1$ and $r_1\ge2$. There is $C$ such that, for every cyclic
+    partition into $M\ge1$ blocks of lengths $\ell_k\ge3r_1$ and every unit
+    vector $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state of
+    Definition~\ref{def:ldp_window_ghz_state} is prepared by measurement rounds
+    of total quantum depth at most $C$. There is no upper bound on $\ell_k$.
+    Every site outside the specified registers ends in $\ket0$. The statement
+    includes $M=1$ and every combination of even and odd block lengths.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use the seed and copying gates of
+    Theorem~\ref{thm:ldp_window_ghz_measurement}. In a block of length $q$, put
+    $e=q\bmod2$ and $L=\lfloor(q-2r_1)/2\rfloor$, so
+    $2L+2r_1+e=q$. When $e=1$, rotate the first $r_1+1$ sites to send
+    $\ket{a_1\cdots a_{r_1},0}$ to $\ket{0,a_1\cdots a_{r_1}}$; for $e=0$
+    do nothing. The registers now occupy offsets
+    $e,\ldots,e+r_1-1$ and $q-r_1,\ldots,q-1$, separated by $2L$ zero sites.
+    Their teleportation stretches lie inside disjoint blocks. Apply the
+    controlled subtraction by Theorem~\ref{thm:qc_register_layer}, and undo
+    the rotations. The resulting operator is exactly the controlled
+    subtraction between the original end registers, with all central sites
+    fixed. The padding rotations use only $r_1+1$ sites each, so both have
+    constant depth; the register gates have depth $4r_1+K+2$ for a fixed
+    $2r_1$-site gate bound $K$.
+
+    Finally measure and correct the ancillas as in
+    Theorem~\ref{thm:ldp_window_ghz_measurement}. The cyclic consistency
+    condition is $\sum_k m_k=0$; every other outcome has zero probability.
+    The same correction acts on every label amplitude, preserving coherent
+    superpositions. Quantum layers on neighbouring sites are counted;
+    on-site measurements, outcome-dependent on-site corrections, and global
+    classical communication are free. No postselection, additional physical
+    sites, or free unitary on an entire block is used.
 \end{proof}
 
 \begin{lemma}[Sequential factorization on the first inputs]
@@ -235,7 +281,7 @@ tensor take depth $O(q)$ as well.
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState_of_encoding,
         MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState}
     \leanok
-    \uses{def:ldp_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
+    \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
         thm:ldp_block_sum_unitary, def:ldp_block_isometry_state,
         thm:ldp_approximating_state_depth}
     For every family of bond dimensions $D_1,\dots,D_b$ there are $C$ and $L_0$
@@ -379,7 +425,7 @@ tensor take depth $O(q)$ as well.
 
 \begin{theorem}[All translation-invariant MPS with measurements]
     \label{thm:ldp_all_ti_measurement_source}
-    \uses{thm:ldp_long_range_measurement_depth}
+    \uses{thm:ldp_long_range_measurement_depth, thm:ldp_overlapping_measurement_depth}
     Every translation-invariant MPS of constant bond dimension, short- or
     long-range correlated, is prepared with error $\varepsilon$ in depth
     $O(\log(N/\varepsilon))$ by local circuits assisted by measurements, the
@@ -387,9 +433,17 @@ tensor take depth $O(q)$ as well.
     \cite[paragraph ``Long-range MPS using measurements'']{Malz2024Preparation}.
     Theorem~\ref{thm:ldp_long_range_measurement_depth} proves this for direct
     sums of normal blocks whose $q$-site states are orthogonal and for block
-    lengths dividing $N$; the statement for blocks whose states overlap and for
-    all chain lengths is not formalized
+    lengths dividing $N$. Theorem~\ref{thm:ldp_overlapping_measurement_depth}
+    proves it for direct sums of normal blocks in the canonical form
+    \cite[eq.~(S2)]{Malz2024Preparation} whose $q$-site states may overlap,
+    with every multiplicity and every nonzero complex weight, and for every
+    chain length $N\geq2$ at which $\ket{\phi_N(A)}\neq0$, with the mixed
+    transfer maps of distinct blocks of spectral radius below one, the
+    isometries of the direct sum with weights one, and the GHZ-type state
+    prepared in depth $O(q)$ rather than in constant depth
     \cite{gap:mswc24_measurement_preparation_scope}. The same paragraph claims
     the depth $O(\log\log(N/\varepsilon))$ when the tree-RG circuit is also
-    assisted by measurements; this is not formalized either.
+    assisted by measurements; for normal tensors and the chain lengths
+    divisible by $s2^{k+1}$ for some $k$ with $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$ this is Theorem~\ref{thm:ldp_loglog_depth}, and for
+    tensors that are not normal it is not formalized.
 \end{theorem}

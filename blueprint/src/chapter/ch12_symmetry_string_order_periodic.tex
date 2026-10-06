@@ -1,0 +1,160 @@
+\subsection{Periodic expectations and fixed-support limits}
+
+Write $\Phi_L(A)=V^{(L)}(A)$ for the raw periodic vector and
+$Z_L=\langle\Phi_L(A),\Phi_L(A)\rangle$. For a physical matrix $O$ on the
+ring, put $\langle O\rangle_L=\langle\Phi_L(A),O\Phi_L(A)\rangle/Z_L$,
+with value zero when $Z_L=0$. The trace $\operatorname{Tr}$ below is taken
+on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
+
+\begin{theorem}[Finite periodic trace ratio]
+    \label{thm:periodic_string_trace_ratio}
+    \lean{MPSTensor.mpvExpectation_finKronecker_const_eq_trace_div,
+        MPSTensor.physicalObservableTransfer_singleton,
+        MPSTensor.physicalObservableTransfer_finKronecker_const}
+    \leanok
+    \uses{def:source_periodic_string_overlap, def:twisted_transfer_map}
+    For every tensor $A$, physical matrix $u$, and length $L$, the normalized
+    full-ring expectation is
+    \begin{align}
+        \langle u^{\otimes L}\rangle_L
+         & =\frac{\operatorname{Tr}(\E_u^L)}{\operatorname{Tr}(\E_A^L)}.
+        \label{eq:periodic_string_trace_ratio}
+    \end{align}
+    Both sides use the zero convention at a vanishing periodic vector.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_observable_transfer_products}
+    The one-site insertion is $\E_u$. Splitting the last physical factor
+    and inducting on $L$ gives $\E_{u^{\otimes L}}=\E_u^L$, including $L=0$.
+    Expanding the physical numerator and squared norm as endomorphism traces
+    gives (\ref{eq:periodic_string_trace_ratio}).
+\end{proof}
+
+For the following thermodynamic statements, let $D>0$ and assume
+$\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$, $\Lambda>0$, and
+$\tr\Lambda=1$. The simple peripheral-space condition means explicitly that
+$\E_A(X)=zX$, $X\ne0$, and $|z|=1$ imply $z=1$ and $X\in\C\Id$.
+It is the pure canonical regime of
+\cite[lines~147--160]{PerezGarcia2008StringOrder}, with the eigenspace
+condition retained rather than only uniqueness of the eigenvalue as a set.
+
+\begin{theorem}[Eventual periodic normalization]
+    \label{thm:periodic_string_normalization}
+    \lean{MPSTensor.pureCanonical_mpvState_inner_self_tendsto_one,
+        MPSTensor.pureCanonical_eventually_mpvState_ne_zero}
+    \leanok
+    \uses{def:mpv_inner}
+    Under these canonical purity assumptions, $Z_L\to1$ as $L\to\infty$.
+    In particular, $\Phi_L(A)\ne0$ for all sufficiently large $L$.
+    No nonvanishing assertion at every short length is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:canonical_transfer_stationary_trace_limit,
+        lem:ldp_observable_transfer_products}
+    The transfer powers converge pointwise to $P(X)=\tr(\Lambda X)\Id$.
+    Finite dimensionality gives convergence of their traces, and the trace
+    of the rank-one map $P$ is $\tr\Lambda=1$. Thus
+    $Z_L=\operatorname{Tr}(\E_A^L)\to1$.
+\end{proof}
+
+\begin{theorem}[Thermodynamic limit with fixed physical support]
+    \label{thm:periodic_string_fixed_support}
+    \lean{MPSTensor.pureCanonical_mpvExpectation_appendObservable_tendsto,
+        MPSTensor.pureCanonical_mpvExpectation_block_string_tendsto,
+        MPSTensor.pureCanonical_mpvExpectation_string_tendsto}
+    \leanok
+    \uses{def:physical_string_order_param, def:physical_observable_transfer}
+    Under the same canonical purity assumptions, fix a support length $k$
+    and a physical operator $O$ on those $k$ sites. Then
+    \begin{align}
+        \lim_{n\to\infty}\langle O\otimes\Id^{\otimes n}\rangle_{k+n}
+         & =\tr\!\left[\Lambda\E_O(\Id)\right].
+        \label{eq:periodic_string_fixed_support}
+    \end{align}
+    In particular, for fixed endpoint blocks $x,y$ of lengths $p,q$ and
+    fixed middle length $N$, the limit for
+    $x\otimes u^{\otimes N}\otimes y$ is
+    $\tr[\Lambda\E_x\E_u^N\E_y(\Id)]$.
+    The case $p=q=1$ is display SOPMP of
+    \cite[lines~176--181]{PerezGarcia2008StringOrder}.
+    The middle length is fixed before the exterior $n$ tends to infinity;
+    no exchange of limits or rate uniform in $N$ is asserted.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_string_normalization,
+        lem:canonical_transfer_stationary_trace_limit,
+        lem:ldp_observable_transfer_products, thm:periodic_string_trace_ratio}
+    Put $F=\E_O$ and $P(X)=\tr(\Lambda X)\Id$. The exact numerator is
+    $\operatorname{Tr}(F\E_A^n)$. Pointwise convergence and finite
+    dimensionality give
+    $\operatorname{Tr}(F\E_A^n)\to\operatorname{Tr}(FP)
+        =\tr[\Lambda F(\Id)]$.
+    The denominator tends to one by
+    Theorem~\ref{thm:periodic_string_normalization}. Tensor-product insertions
+    give the stated physical string specializations.
+\end{proof}
+
+\begin{theorem}[Exact periodic symmetry phase]
+    \label{thm:periodic_string_exact_phase}
+    \lean{MPSTensor.trace_twistedTransferIter_eq_phase_mul_trace_transfer_pow,
+        MPSTensor.mpvExpectation_finKronecker_const_eq_phase_pow}
+    \leanok
+    \uses{def:twisted_transfer_map, def:source_periodic_string_overlap}
+    Let $A,u$ be arbitrary and suppose a unitary $V$ and $\mu\in\C$ satisfy
+    $\sum_j u_{ij}A_j=\mu V A_iV^\dagger$ for every physical index $i$.
+    At every length with $\Phi_L(A)\ne0$,
+    \begin{align}
+        \langle u^{\otimes L}\rangle_L & =\mu^L.
+        \label{eq:periodic_string_exact_phase}
+    \end{align}
+    The numerator identity
+    $\operatorname{Tr}(\E_u^L)=\mu^L\operatorname{Tr}(\E_A^L)$
+    holds also at zero periodic vectors, without purity or normalization.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_string_trace_ratio,
+        thm:physical_string_phase_retaining_asymptotics}
+    The exact iterate identity is
+    $\E_u^L=\mu^L L_V\E_A^L L_{V^\dagger}$, where $L_V(X)=VX$.
+    Since $L_{V^\dagger}L_V=\Id$, cyclicity of the endomorphism trace
+    gives the numerator identity. A nonzero periodic vector has $Z_L\ne0$,
+    so (\ref{eq:periodic_string_trace_ratio}) gives
+    (\ref{eq:periodic_string_exact_phase}).
+\end{proof}
+
+\begin{theorem}[Full-ring spectral alternatives]
+    \label{thm:periodic_string_spectral_alternatives}
+    \lean{MPSTensor.pureCanonical_mpvExpectation_fullRing_dichotomy,
+        MPSTensor.pureCanonical_mpvExpectation_fullRing_tendsto_zero,
+        MPSTensor.pureCanonical_mpvExpectation_fullRing_eventually_eq_phase_pow,
+        MPSTensor.pureCanonical_mpvExpectation_fullRing_norm_tendsto_one,
+        MPSTensor.pureCanonical_mpvExpectation_fullRing_phase_adjusted_tendsto_one,
+        MPSTensor.pureCanonical_mpvExpectation_fullRing_not_tendsto}
+    \leanok
+    \uses{def:source_periodic_string_overlap, def:twisted_transfer_map}
+    Assume the canonical purity conditions above and let $u$ be unitary.
+    Either $\rho(\E_u)<1$ and the complex full-ring expectation tends to
+    zero, or $\rho(\E_u)=1$ and its magnitude tends to one.
+    In the latter case, choose the unitary intertwiner and phase $\mu$
+    supplied by the twisted spectral criterion. The expectation is
+    eventually exactly $\mu^L$, so its phase-adjusted value tends to one;
+    if $\mu\ne1$, the unadjusted complex sequence has no limit.
+    This is the phase qualification of display RL, lines 381--388,
+    recorded in~\cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    No implication concerning a parameterized Hamiltonian gap is asserted.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:pgwsvc08_twisted_spectral_radius,
+        thm:periodic_string_trace_ratio, thm:periodic_string_normalization,
+        thm:periodic_string_exact_phase}
+    Below unit spectral radius, the twisted transfer-power traces tend to
+    zero, while $Z_L\to1$. At unit radius the intertwiner gives
+    (\ref{eq:periodic_string_exact_phase}) on the eventual nonzero tail.
+    If $\mu^L\to z$, then $|z|=1$ and comparison with the one-step shift
+    gives $z\mu=z$, forcing $\mu=1$.
+\end{proof}

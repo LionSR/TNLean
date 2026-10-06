@@ -4,12 +4,12 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 \input{./command}
-\title{The Fibonacci Module: Classification on at Most Two Blocks}
+\title{The Fibonacci Module: Direct-Sum Classification}
 \author{}
-\date{2026-09-27}
+\date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{false-source}{resolved}
 
 \section{The source claim}
 For a matrix product operator representing the Fibonacci fusion category
@@ -18,78 +18,76 @@ that ``the only solution for an invariant MPS subspace is characterized by two
 blocks $\{x_1,x_\tau\}$'' with $\tau\cdot x_1=x_\tau$ and
 $\tau\cdot x_\tau=x_1+x_\tau$~\cite{GarreRubio2023MPOSym}.\footnote{Source
     traceability: \path{Papers/2203.12563/REsubmission.tex}, lines 1991--1993.}
-The multiplicities $M_{a,x}^y$ of the blocks form a nonnegative integer
-representation of the fusion ring,
-\begin{align}
-    \sum_c N_{ab}^c M_{c,x}^y & =\sum_z M_{b,x}^z M_{a,z}^y ,
-    \label{eq:glm23_fib_nimrep}
-\end{align}
-and the unit acts on the blocks as the identity. For the Fibonacci ring,
-(\ref{eq:glm23_fib_nimrep}) at $a=b=\tau$ reads
-\begin{align}
-    M_\tau^2 & =\mathbb 1+M_\tau
-    \label{eq:glm23_fib_tau_square}
-\end{align}
-for the matrix $M_\tau$ with entries $M_{\tau,x}^y$. The claim is stated for
-invariant subspaces with any number of blocks.
+The action multiplicities form a nonnegative integer representation of the
+fusion ring. When the unit acts as the identity, its Fibonacci matrix
+$T=M_\tau$ satisfies $T^2=I+T$.
 
-\section{What is formalized}
-The nonnegative integer representations with the unit acting as the identity
-are classified on one and on two blocks. On one block, $m^2=1+m$ has no
-solution in $\mathbb N$. On two blocks, the entrywise equations of
-(\ref{eq:glm23_fib_tau_square}) force the diagonal entries to be $0$ or $1$ with
-sum $1$ and both off-diagonal entries to be $1$, so
+The printed two-block uniqueness statement does not assume
+indecomposability. Taken literally without that hypothesis, it is false:
+$F\oplus F$ is a four-block solution whenever $F$ is the displayed regular
+action, since $(F\oplus F)^2=I+(F\oplus F)$.
+The local correction proved here is that every nonempty indecomposable
+family has two blocks. Indecomposability is an added hypothesis correcting
+the source claim, not a condition stated in the cited passage. The
+unrestricted direct-sum theorem below records all decomposable solutions.
+
+\section{The earlier restriction and its removal}
+The earlier classification treated only one or two blocks. The finite-rank
+restriction is now removed: every natural matrix $T$ satisfying $T^2=I+T$
+is a direct sum of copies of
 \begin{align}
-    M_\tau & =\begin{pmatrix}0&1\\1&1\end{pmatrix}
-    \quad\text{or}\quad
-    M_\tau=\begin{pmatrix}1&1\\1&0\end{pmatrix},
+    F & =\begin{pmatrix}0&1\\1&1\end{pmatrix}.
     \label{eq:glm23_fib_regular}
 \end{align}
-the regular representation and its relabelling. Combined
-with integrality of the multiplicities of normal blocks, a nonempty symmetric family
-of at most two normal blocks with the unit acting trivially has exactly two
-blocks, transforming as in the source.\footnote{Results:
-    \leanid{FibonacciCompression.not_isNIMRep_fibNim_of_card_eq_one},
-    \leanid{FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two}
-    and
-    \leanid{FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock}.}
-
-\section{Boundary}
-Not formalized: families with three or more blocks. For these the source
-claim amounts to the statement that every indecomposable nonnegative integer
-representation of the Fibonacci ring with the unit acting trivially is the
-regular one. The source gives no argument or citation for this at the
-Fibonacci passage; for its $su(2)_4$ and group examples it cites the
-classification of module categories, and the Fibonacci claim is of the same
-kind. A decomposable family, a direct
-sum of copies of the regular representation, also satisfies
-(\ref{eq:glm23_fib_nimrep}); the source's uniqueness is up to this
-decomposition. The periodic-boundary reading of the symmetry hypothesis is
-recorded separately~\cite{gap:glm23_mpo_symmetric_mps_scope}.
-
-Elimination plan: show that a nonnegative integer matrix $M$ with
-$M^2=\mathbb 1+M$ is, after a permutation of the blocks, a direct sum of
-copies of $\begin{pmatrix}0&1\\1&1\end{pmatrix}$. Order the strongly connected
-classes of the support of $M$ so that $M$ is block upper triangular. Each
-diagonal block $F$ is irreducible with $F^2=\mathbb 1+F$, so its eigenvalues
-are $\varphi$, simple by the Perron--Frobenius theorem, and $-\varphi^{-1}$.
-Since $\varphi^{-1}=\varphi-1$, the trace of a block of size $k$ is
+No symmetry or irreducibility of $T$ is assumed. More explicitly, let
+$K$ be its finite index set and $R=\{x\in K:T_{xx}=0\}$. There is a bijection
+$\sigma:K\longrightarrow R\times\{0,1\}$ such that
 \begin{align}
-    \operatorname{tr}F & =\varphi-(k-1)\varphi^{-1}=(2-k)\varphi+k-1,
-    \label{eq:glm23_fib_block_trace}
+    T_{xy} & =
+    \begin{cases}
+        F_{ij}, & \sigma(x)=(r,i),\ \sigma(y)=(r,j),          \\
+        0,      & \sigma(x)=(r,i),\ \sigma(y)=(s,j),\ r\ne s.
+    \end{cases}
+    \label{eq:glm23_fib_direct_sum}
 \end{align}
-an integer only for $k=2$. An off-diagonal block $X$ between classes with
-diagonal blocks $F$ and $F'$ is the corresponding block of $\mathbb 1+M$, and
-the corresponding block of $M^2$ is $FX+XF'$ plus a nonnegative remainder.
-Pairing with positive Perron--Frobenius eigenvectors $uF=\varphi u$,
-$F'w=\varphi w$ gives
+Consequently, every unital Fibonacci nonnegative integer representation is a
+sum of regular representations, and every nonempty indecomposable such
+representation has exactly two blocks.\footnote{Results:
+    \leanid{FibonacciCompression.exists_equiv_prod_of_fibNim_sq},
+    \leanid{FibonacciCompression.exists_equiv_prod_of_isNIMRep_fibNim},
+    \leanid{FibonacciCompression.fibNim_symmetric_of_sq}, and
+    \leanid{FibonacciCompression.exists_equiv_of_isIndecomposable_fibNim}.}
+
+\section{An elementary proof}
+The diagonal equation implies $T_{xx}^2\leq1+T_{xx}$, hence
+$T_{xx}\in\{0,1\}$ and $\sum_{z\ne x}T_{xz}T_{zx}=1$.
+There is therefore a unique partner $y\ne x$ with
+$T_{xy}=T_{yx}=1$, and $T_{xz}T_{zx}=0$ for $z\notin\{x,y\}$.
+For such $z$, the $(z,x)$ equation gives $T_{zy}\leq T_{zx}$, so
+$T_{xz}T_{zy}=0$. The $(x,y)$ equation reduces to
+$T_{xx}+T_{yy}=1$.
+
+Orient the pair so that $T_{xx}=0$ and $T_{yy}=1$. For $z\notin\{x,y\}$,
+the $(x,z)$ and $(y,z)$ equations give
 \begin{align}
-    FX+XF'-X                           & \leq0\quad\text{entrywise},
-    \label{eq:glm23_fib_offdiagonal_block}                           \\
-    u\,(FX+XF'-X)\,w=(2\varphi-1)\,uXw & =\sqrt5\,uXw\leq0,
-    \label{eq:glm23_fib_offdiagonal}
+    T_{yz} & \leq T_{xz}, & T_{xz}+T_{yz} & \leq T_{yz}.
+    \label{eq:glm23_fib_isolation}
 \end{align}
-and since $X\geq0$ and $u$, $w$ are positive, $X=0$.
+Thus both entries vanish. The partner operation is an involution: the
+partner of $y$ must be $x$, because its outgoing row has no other
+nonzero off-diagonal entry. The isolated pairs partition $K$, proving
+(\ref{eq:glm23_fib_direct_sum}). Symmetry follows from this decomposition.
+Each pair is a nonempty invariant subset; indecomposability forces it to be
+all of $K$.
+
+\section{Remaining distinctions}
+The resolved restriction concerns the rank of the nonnegative integer
+representation. It does not assert that an arbitrary decomposable invariant
+family has two blocks, nor does the matrix classification by itself identify
+its associativity coefficients with the Fibonacci $F$-symbols. The
+periodic-boundary reading of the symmetry hypothesis is recorded
+separately~\cite{gap:glm23_mpo_symmetric_mps_scope}.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

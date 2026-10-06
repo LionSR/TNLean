@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.Core.PhysicalRotation
+import TNLean.MPS.Core.PhysicalMatrix
 import TNLean.MPS.Preparation.MatrixPolar
 
 /-!
@@ -32,6 +32,9 @@ operators of `B` and `P` coincide, and for `M` blocks of `q` sites of a tensor `
   a rectangular `W` acting on the physical leg through `MPSTensor.rotatePhysical`.
 * `MPSTensor.polarPosTensor`, `MPSTensor.polarIsoMatrix` — the two polar factors of a tensor.
 * `MPSTensor.rotatePhysical_polarIsoMatrix_polarPosTensor` — `B = V P`.
+* `MPSTensor.polarIsoMatrix_rotatePhysical`, `MPSTensor.polarPosTensor_rotatePhysical`,
+  `MPSTensor.polarSupportMatrix_rotatePhysical` — if `Wᴴ W` fixes `X`, then `W · X` has the
+  polar factors `W V`, `P`, and `Π` of `X`; the `_comp_equiv` forms relabel the physical index.
 * `MPSTensor.transferMap_polarPosTensor` — `E_B = E_P` (arXiv:2307.01696, eq. `eq:B_TM`,
   first equality).
 * `MPSTensor.mpv_blockedConfigEquiv_eq_sum_polar` — `|φ_N⟩ = (⊗ᵢ Vᵢ) |φ_pos⟩` for `N = qM`.
@@ -52,30 +55,6 @@ namespace MPSTensor
 variable {n m D : ℕ}
 
 /-! ### A tensor as a map from the virtual pair space to the physical space -/
-
-/-- The tensor `B` read as the matrix of the linear map `ℂ^{D²} → ℂ^n`, `(i, (α, β)) ↦ B^i_{αβ}`.
-
-arXiv:2307.01696, paragraph "Approximation through the fixed-point state": the blocked tensor
-is interpreted "as a map from the `D²`-dimensional virtual space to the `d^q`-dimensional
-physical space". -/
-def physicalMatrix (A : MPSTensor n D) : Matrix (Fin n) (Fin D × Fin D) ℂ :=
-  fun i p => A i p.1 p.2
-
-/-- The tensor whose physical matrix is `R`. -/
-def ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) : MPSTensor n D :=
-  fun i α β => R i (α, β)
-
-/-- Reading the physical matrix of a tensor back as a tensor returns the tensor. -/
-@[simp] lemma ofPhysicalMatrix_physicalMatrix (A : MPSTensor n D) :
-    ofPhysicalMatrix (physicalMatrix A) = A := rfl
-
-/-- The physical matrix of the tensor built from a matrix `R` is `R`. -/
-@[simp] lemma physicalMatrix_ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) :
-    physicalMatrix (ofPhysicalMatrix R) = R := rfl
-
-/-- A tensor is determined by its physical matrix. -/
-lemma physicalMatrix_injective : Function.Injective (physicalMatrix (n := n) (D := D)) :=
-  fun A B h => by rw [← ofPhysicalMatrix_physicalMatrix A, h, ofPhysicalMatrix_physicalMatrix]
 
 /-- An injective tensor (its matrices span the full matrix algebra) has an injective physical
 matrix.
@@ -103,12 +82,6 @@ theorem injective_physicalMatrix_mulVec_of_isInjective {A : MPSTensor n D}
   simpa [f, Matrix.single_apply, ← Prod.ext_iff, Finset.sum_ite_eq] using this
 
 /-! ### Matrices acting on the physical leg -/
-
-/-- The physical matrix of `W · A` is `W` times the physical matrix of `A`. -/
-lemma physicalMatrix_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) :
-    physicalMatrix (rotatePhysical W A) = W * physicalMatrix A := by
-  ext i p
-  simp [physicalMatrix, rotatePhysical, Matrix.mul_apply, Matrix.sum_apply]
 
 /-- The transfer operator of `W · A` in terms of the Gram matrix `Wᴴ W`. -/
 theorem transferMap_rotatePhysical_apply (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D)
@@ -224,6 +197,80 @@ theorem rotatePhysical_polarSupportMatrix (B : MPSTensor n D) :
   apply physicalMatrix_injective
   rw [physicalMatrix_rotatePhysical, physicalMatrix_polarPosTensor, polarSupportMatrix,
     Matrix.submatrix_mul_equiv, Matrix.polarSupport_mul_polarPos]
+
+/-! ### The polar factors of a rotated tensor -/
+
+/-- If `Wᴴ W` fixes `X` on its physical leg, then `W · X` and `X` have the same Gram matrix. -/
+private lemma gram_physicalMatrix_rotatePhysical {W : Matrix (Fin m) (Fin n) ℂ}
+    {X : MPSTensor n D} (h : rotatePhysical (Wᴴ * W) X = X) :
+    (W * physicalMatrix X)ᴴ * (W * physicalMatrix X) = (physicalMatrix X)ᴴ * physicalMatrix X :=
+  Matrix.gram_mul_eq_of_conjTranspose_mul_self_mul_eq (by
+    rw [← physicalMatrix_rotatePhysical, h])
+
+/-- **Polar factors of a rotated tensor**: if `Wᴴ W` fixes `X` on its physical leg, the partial
+isometry of `W · X` is `W V`, for `V` the partial isometry of `X`. This holds when `W` is an
+isometry, and when `W` is a partial isometry whose initial projector fixes the range of `X`.
+
+Supplied step for arXiv:2307.01696, eq. (16) and the sentence before it: a layer of the tree,
+acting inside its initial space, composes with the isometry ("to the same effect"). -/
+theorem polarIsoMatrix_rotatePhysical {W : Matrix (Fin m) (Fin n) ℂ} {X : MPSTensor n D}
+    (h : rotatePhysical (Wᴴ * W) X = X) :
+    polarIsoMatrix (rotatePhysical W X) = W * polarIsoMatrix X := by
+  rw [polarIsoMatrix, physicalMatrix_rotatePhysical,
+    Matrix.polarIso_mul_of_gram_eq (gram_physicalMatrix_rotatePhysical h)]
+  rfl
+
+/-- **Polar factors of a rotated tensor**: if `Wᴴ W` fixes `X` on its physical leg, then `W · X`
+has the positive-part tensor of `X`. -/
+theorem polarPosTensor_rotatePhysical {W : Matrix (Fin m) (Fin n) ℂ} {X : MPSTensor n D}
+    (h : rotatePhysical (Wᴴ * W) X = X) :
+    polarPosTensor (rotatePhysical W X) = polarPosTensor X := by
+  rw [polarPosTensor, physicalMatrix_rotatePhysical,
+    Matrix.polarPos_mul_of_gram_eq (gram_physicalMatrix_rotatePhysical h), polarPosTensor]
+
+/-- **Polar factors of a rotated tensor**: if `Wᴴ W` fixes `X` on its physical leg, then `W · X`
+has the support projector of `X`. -/
+theorem polarSupportMatrix_rotatePhysical {W : Matrix (Fin m) (Fin n) ℂ} {X : MPSTensor n D}
+    (h : rotatePhysical (Wᴴ * W) X = X) :
+    polarSupportMatrix (rotatePhysical W X) = polarSupportMatrix X := by
+  rw [polarSupportMatrix, physicalMatrix_rotatePhysical,
+    Matrix.polarSupport_mul_of_gram_eq (gram_physicalMatrix_rotatePhysical h), polarSupportMatrix]
+
+/-- Relabelling the physical index by a bijection is the rotation by a permutation matrix. -/
+private lemma rotatePhysical_one_submatrix (X : MPSTensor n D) (e : Fin m ≃ Fin n) :
+    rotatePhysical ((1 : Matrix (Fin n) (Fin n) ℂ).submatrix e id) X = fun i => X (e i) := by
+  funext i
+  simp [rotatePhysical, Matrix.one_apply]
+
+/-- The permutation matrix of a bijection is an isometry, so it fixes every tensor. -/
+private lemma rotatePhysical_conjTranspose_one_submatrix_mul (X : MPSTensor n D)
+    (e : Fin m ≃ Fin n) :
+    rotatePhysical (((1 : Matrix (Fin n) (Fin n) ℂ).submatrix e id)ᴴ *
+      (1 : Matrix (Fin n) (Fin n) ℂ).submatrix e id) X = X := by
+  rw [Matrix.conjTranspose_submatrix, Matrix.conjTranspose_one, Matrix.submatrix_mul_equiv,
+    Matrix.mul_one, Matrix.submatrix_id_id, rotatePhysical_one]
+
+/-- Relabelling the physical index of a tensor by a bijection relabels the rows of its partial
+isometry. -/
+theorem polarIsoMatrix_comp_equiv (X : MPSTensor n D) (e : Fin m ≃ Fin n) :
+    polarIsoMatrix (fun i => X (e i)) = (polarIsoMatrix X).submatrix e id := by
+  change (Matrix.polarIso ((physicalMatrix X).submatrix e id)).submatrix id _ = _
+  rw [Matrix.polarIso_submatrix_equiv]
+  rfl
+
+/-- Relabelling the physical index of a tensor by a bijection does not change its positive-part
+tensor. -/
+theorem polarPosTensor_comp_equiv (X : MPSTensor n D) (e : Fin m ≃ Fin n) :
+    polarPosTensor (fun i => X (e i)) = polarPosTensor X := by
+  rw [← rotatePhysical_one_submatrix,
+    polarPosTensor_rotatePhysical (rotatePhysical_conjTranspose_one_submatrix_mul X e)]
+
+/-- Relabelling the physical index of a tensor by a bijection does not change its support
+projector. -/
+theorem polarSupportMatrix_comp_equiv (X : MPSTensor n D) (e : Fin m ≃ Fin n) :
+    polarSupportMatrix (fun i => X (e i)) = polarSupportMatrix X := by
+  rw [← rotatePhysical_one_submatrix,
+    polarSupportMatrix_rotatePhysical (rotatePhysical_conjTranspose_one_submatrix_mul X e)]
 
 /-- **Transfer identity** `E_B = E_P`.
 

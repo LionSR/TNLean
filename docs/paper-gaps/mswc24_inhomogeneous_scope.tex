@@ -3,9 +3,9 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Inhomogeneous Matrix Product States: Common Bond Dimension and Injective Blocks}
+\title{Inhomogeneous Matrix Product States: Block Length}
 \author{}
-\date{2026-10-01}
+\date{2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -26,61 +26,132 @@ $\varepsilon(\Omega,\phi_{\mathrm{pos}})$.
 
 \section{The restriction adopted}
 The formal statements\footnote{Formal declarations:
-    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous} and
-    \leanid{MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
-    in \doclink{TNLean/MPS/Preparation/InhomogeneousPreparation}.}
-work on a ring of $N$ sites cut into blocks of lengths $\ell_k$ and assume three
-things.
-\begin{enumerate}
-    \item Every bond of the ring has the same dimension $D$. The source allows
-          bond dimensions at most $D$, which may vary along the ring.
-    \item Every blocked tensor is injective, so that each isometric factor
-          $V_k$ satisfies $V_k^\dagger V_k=\Id_{D^2}$. The source makes this
-          assumption for its polar decompositions in the footnote to the
-          paragraph ``Approximation through the fixed-point state'' and uses it
-          silently here: the identity between the error of
-          $(\bigotimes_kV_k)\ket\Omega$ against $\ket{\phi_N}$ and
-          $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ is proved when the $V_k$
-          are isometries; for partial isometries the projections $\Pi_k$
-          enter.
-    \item Every block has at least $3D$ sites, which the circuit needs to encode
-          the two bond indices of a block and run the staircase between them.
-          For $q=O(\log N)$ growing with $N$ this holds for large $N$.
-\end{enumerate}
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension}
+    and \leanid{MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
+    in \doclink{TNLean/MPS/Preparation/PartialIsometryPreparation}.}
+work on a ring of $N$ sites cut into blocks of lengths $\ell_k$, with bond
+dimensions $D_0,\dots,D_{N-1}\le D$ varying along the ring as in the source,
+and blocked tensors that need not be injective. They assume that every block
+has at least $3D$ sites, which the circuit needs to hold the two bond indices of
+a block in registers of $D$ sites each and to route them together. The first
+statement, with error exactly $\varepsilon(\Omega,\phi_{\mathrm{pos}})$, also
+assumes $D^2\le d^{3D}$, which holds for every $D$ when $d\ge2$. For blocks of
+$q\ge3D\ge1$ sites it follows from the source's requirement $d^q\ge D^2$
+recalled below, since $d^q\ge1$ forces $d\ge1$ and for $d=1$ both conditions
+read $D\le1$; it is therefore no further restriction. The second statement,
+with error at most $\delta$ under the approximation hypothesis, holds for
+every $d$.
+
+The source has no bound $3D$, but it is not silent on the block length. Its
+polar decompositions need ``$q$ large enough that $d^q\geq D^2$'' (footnote to
+the paragraph ``Approximation through the fixed-point state''), and its circuit
+holds the legs $R_i$ and $L_{i+1}$, of dimension $D$ each, on the sites of the
+blocks, with the central sites in $\ket0$ (eq.~(10) and the paragraph
+``Preparing the approximate state''). A block must therefore hold two registers
+of dimension at least $D$, that is, at least $2\lceil\log_dD\rceil$ sites. The
+bound $3D$ is a coarser sufficient condition: each register uses $D$ sites, as
+$D\le d^D$, and a third stretch of $D$ sites leaves room for routing the left
+register next to the right one. For $q=O(\log N)$ growing with $N$ both bounds
+hold for large $N$.
+
 The finite-correlation assumption is stated for one ring: some unit pairs
-$\omega^k$ have $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta$. The formal
-statements prove depth at most $CL$ for blocks of lengths at most $L$, with $C$
-depending only on $d$ and $D$, and error exactly
-$\varepsilon(\Omega,\phi_{\mathrm{pos}})$, hence at most $\delta$. The source's
-total depth $O(\log(N/\varepsilon))$ is the choice $L=O(\log(N/\varepsilon))$,
-which is not made here; the source's definition fixes blocks of length
-$q=O(\log N)$.
+$\omega^k$ on $\C^{D_j}\otimes\C^{D_j}$, for the bond $j$ joining block $k$ to
+block $k+1$, have $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta$. The
+formal statements prove depth at most $CL$ for blocks of lengths at most $L$,
+with $C$ depending only on $d$ and $D$. The source's total depth
+$O(\log(N/\varepsilon))$ is the choice $L=O(\log(N/\varepsilon))$, which is not
+made here; the source's definition fixes blocks of length $q=O(\log N)$.
+
+\section{Partial isometries}
+Without injectivity the isometric factor $V_k$ of the polar decomposition
+$B_k=V_kP_k$ is a partial isometry, $V_k^\dagger V_k=\Pi_k$ with $\Pi_k$ the
+projector onto the range of $P_k$, as in the Supplemental Material, ``Proof of
+Lemma~1 and extension to non-normal tensors'' of~\cite{Malz2024Preparation}; the
+footnote to the paragraph ``The sequential-RG circuit'' states that the
+derivation of the circuit ``remains valid also for non-injective tensors $B$'',
+with $P^{-1}$ read as the pseudo-inverse. A unitary circuit cannot prepare
+$(\bigotimes_kV_k)\ket\Omega$ itself, whose norm is that of
+$(\bigotimes_k\Pi_k)\ket\Omega$ and may be smaller than $1$. The formal
+statements prepare instead $(\bigotimes_kW_k)\ket\Omega$ for isometries $W_k$
+with $W_k\Pi_k=V_k$, isometric extensions of $V_k$. They agree with $V_k$ on the
+range of $\Pi_k$, and $W_kP_k=V_kP_k=B_k$, so
+$\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$ and the overlap of
+$(\bigotimes_kW_k)\ket\Omega$ with the normalized $\ket{\phi_N}$ is that of
+$\ket\Omega$ with the normalized $\ket{\phi_{\mathrm{pos}}}$. The error is
+therefore exactly $\varepsilon(\Omega,\phi_{\mathrm{pos}})$, the error the
+source states. The block unitary implementing $W_k$ applies, after routing the
+two input registers together, a unitary $T_k^\dagger$ on them whose
+conjugate $T_k$ has its first columns spanning the range of $\Pi_k$, and then
+the staircase of the sequential factorization of $V_kT_k$ on those columns.
+This is a choice of the prepared state, not a restriction: the source names the
+isometry $V_k$ and its circuit, and $W_k$ is the isometry that this circuit
+implements.
+
+When every blocked tensor is injective in the sense of the next section,
+$\Pi_k$ is the coordinate projector onto the rectangle of the bonds of block $k$,
+$\ket\Omega$ lies in the range of $\bigotimes_k\Pi_k$, and
+$(\bigotimes_kW_k)\ket\Omega=(\bigotimes_kV_k)\ket\Omega$; the corresponding
+statements\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous} in
+    \doclink{TNLean/MPS/Preparation/InhomogeneousPreparation}, and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn}
+    and \leanid{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState}
+    in \doclink{TNLean/MPS/Preparation/DepthUpperBound}.}
+prepare $(\bigotimes_kV_k)\ket\Omega$ itself and keep the injectivity
+hypothesis, together with the block length $3D$, for that purpose.
+
+\section{Varying bond dimensions by zero padding}
+The rectangular matrices $A_k^i$ of size $D_k\times D_{k+1}$ are padded with
+zeros to $D\times D$ matrices\footnote{Formal declarations:
+    \leanid{VaryingBondChain.zeroPad} and
+    \leanid{VaryingBondChain.coeff_zeroPad}
+    in \doclink{TNLean/MPS/Chain/VaryingBondChain}.}.
+The padded chain has the same state, which is proved. For a block of at least
+one site, its blocked tensor $B_k$ vanishes outside the upper-left corner
+$[0,D_{o_k})\times[0,D_{o_{k+1}})$, which is also proved, and its entries on
+that corner are those of the rectangular blocked tensor. This identification
+is proved by
+\leanid{VaryingBondChain.zeroPad_rectangularBlockTensor} in
+\doclink{TNLean/MPS/Preparation/RectangularBlocks}, together with the ordered
+composition formula for the actual rectangular site transfer maps.
+The injectivity hypothesis of the statement for injective blocked tensors
+is stated directly for $B_k$, as spanning every matrix unit in the corner. For a block of length zero the
+two readings differ, since $B_k$ is then the identity matrix of size $D$; the
+statement using the hypothesis assumes blocks of at least one site. Under the hypothesis, the
+support projector of the polar decomposition $B_k=V_kP_k$ is the coordinate
+projector $\Pi_k$ onto the corner, so $V_k$ is an isometry on it and vanishes
+on the other inputs. The pairs $\omega^k$ are padded in the same way,
+and $\ket\Omega$ is supported on the rectangles. The objects
+$\ket{\phi_{\mathrm{pos}}}$, $(\bigotimes_kV_k)\ket\Omega$ and
+$\varepsilon(\Omega,\phi_{\mathrm{pos}})$ of the formal statements are those of
+the padded chain; they agree with the source's after the zero coordinates are
+dropped. This is the reading adopted, not a restriction: the theorems are stated
+for every chain with bond dimensions at most $D$.
 
 \section{Nonzero state of the positive parts}
 The error $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ compares $\ket\Omega$ with
 the normalized state $\ket{\phi_{\mathrm{pos}}}/\lVert\phi_{\mathrm{pos}}\rVert$,
 which presupposes $\ket{\phi_{\mathrm{pos}}}\neq0$. The formal approximation
 condition\footnote{Formal declaration:
-    \leanid{MPSPreparation.IsPairApproximable}.}
+    \leanid{VaryingBondChain.IsPairApproximable}.}
 states $\ket{\phi_{\mathrm{pos}}}\neq0$ explicitly; without it the normalized
 vector would be read as $0$ and the condition would hold for every
 $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
 
 \section{Elimination}
 \begin{enumerate}
-    \item \emph{Varying bond dimensions.} Replace the chain of square tensors by
-          one with bond dimensions $D_i\le D$. The blocked tensor of block $k$
-          is then a map $\mathbb C^{D_{i}}\otimes\mathbb C^{D_{j}}\to
-              (\mathbb C^d)^{\otimes\ell_k}$, and the pair $\omega^k$ lives on
-          $\mathbb C^{D_{j}}\otimes\mathbb C^{D_{j}}$; the encoding of the bond
-          indices in $D$ sites and the sequential factorization go through
-          unchanged with rectangular matrices.
-    \item \emph{Injectivity.} Without it $V_k$ is a partial isometry with
-          $V_k^\dagger V_k=\Pi_k$, and the error becomes that of
-          $(\bigotimes_k\Pi_k)\ket\Omega$ against $\ket{\phi_{\mathrm{pos}}}$,
-          as in the non-normal case of the source.
+    \item \emph{Varying bond dimensions.} Done by zero padding, as described
+          above; the earlier restriction to a common bond dimension $D$ is
+          removed.
+    \item \emph{Injectivity.} Done, as described in the section on partial
+          isometries: the block unitary implements an isometric extension
+          $W_k$ of the partial isometry $V_k$, and the error is exactly
+          $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ without injectivity.
     \item \emph{Block length.} The bound $3D\le\ell_k$ is needed only by
-          the circuit, not by the state. The upper bound $q=O(\log N)$ alone
+          the circuit, not by the state. Registers of
+          $\lceil\log_dD\rceil$ sites in place of $D$ sites would lower it to
+          a multiple of $\log_dD$, the order of the source's own requirement
+          $d^q\ge D^2$; this is not done. The upper bound $q=O(\log N)$ alone
           allows bounded block lengths, so the sequence-level statement reads
           the source's blocking as $q_N\ge c\log N$ for some $c>0$, a block
           length growing with $N$ as in the translation-invariant case. Then
@@ -88,12 +159,19 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
           $c$; each of the finitely many rings with $N<N_0$ is prepared exactly
           by a circuit of depth bounded in terms of $N_0$ and $d$, and the
           largest of these depths is absorbed into the constant of the depth
-          bound.
-    \item \emph{Sequence-level statement.} State the source's definition of
-          finite correlation length for the sequence: unit pairs with
-          $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta_N$ after blocking
-          $q_N$ sites, with $\delta_N\to0$. This removes the restriction to one
-          ring, but it does not give the depth $O(\log(N/\varepsilon))$: the
+          bound. This argument is formalized in
+          \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_of_log_lower}
+          in \doclink{TNLean/MPS/Preparation/InhomogeneousSequence}, including
+          the one-site ring with depth zero. The positive lower-growth
+          hypothesis remains explicit; it is not inferred from the upper bound.
+    \item \emph{Sequence-level statement.} With unit pairs satisfying
+          $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta_N$ and
+          $\delta_N\to0$, together with the preceding lower-growth hypothesis,
+          \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_sequence}
+          gives prepared unit states on every positive ring length with depth
+          at most $CL_N$ and error tending to zero. Thus $L_N=O(\log N)$ gives
+          logarithmic depth. This removes the restriction to one ring under
+          that hypothesis, but it does not give the depth $O(\log(N/\varepsilon))$: the
           source supplies no rate for $\delta_N$, and the choice of a block
           length $L$ with error at most $\varepsilon$ and $L=O(\log(N/\varepsilon))$
           needs one. In the translation-invariant case the rate is proved: the
@@ -113,8 +191,291 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
           hypothesis would be a further scope-restricted theorem, not the
           source's; with $\delta_N\to0$ alone the sequence-level depth
           $O(\log(N/\varepsilon))$ remains open.
+
+          A conditional variant is now formalized in
+          \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
+          in \doclink{TNLean/MPS/Preparation/InhomogeneousUniformRate}.
+          It assumes a rate $KN^ke^{-rq}$, with $K,r>0$ and $k\ge0$
+          independent of $N$, at every scale $1\le q\le N$ for some
+          partition with $q\le\ell_j\le2q$.
+          Choosing $q=\lceil (\max(k,1)/r)\log(N/\varepsilon)+b\rceil$
+          gives the accuracy-dependent depth for every positive ring length.
+          If $q>N$, the ring is prepared exactly in depth $O(N)$ by
+          \leanid{MPSPreparation.exists_isPreparedInDepth_normalizedChainState}
+          in \doclink{TNLean/MPS/Preparation/InhomogeneousExactPreparation}:
+          the whole ring is one block, and its normalized positive-part state
+          is the input pair. Generic finite-dimensional synthesis is used
+          only for the fixed finite set $N<3D$. This proves the stated
+          conditional consequence; it does not derive the uniform rate from
+          the source's definition.
 \end{enumerate}
 
+
+\section{A quantitative sufficient condition on actual blocks}
+A separate structural result assumes a common faithful fixed state $\sigma$
+of trace one and normalized Choi domination
+$J(F_j)\ge(\eta/D)(\sigma\otimes I)$, $0\le\eta\le1$, for the
+trace-preserving transfer maps $F_j$ of actual contiguous blocks of at most $s$ sites. It proves
+\begin{align}
+    \lVert B^\dagger B-\sigma^\mathsf{T}\otimes I\rVert
+     & \le2D(1-\eta)^{\lfloor N/s\rfloor},\notag  \\
+    \lVert P_B-(\sqrt\sigma)^\mathsf{T}\otimes I\rVert
+     & \le K_\sigma(1-\eta)^{\lfloor N/s\rfloor},
+\end{align}
+for the whole blocked chain, with $K_\sigma$ independent of its tensors and
+length. The declarations are
+\leanid{MPSChainTensor.transferMap_blockTensor},
+\leanid{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination},
+and
+\leanid{MPSPreparation.exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination}
+in \doclink{TNLean/MPS/Chain/Transfer},
+\doclink{TNLean/MPS/Preparation/InhomogeneousDoeblin}, and
+\doclink{TNLean/MPS/Preparation/InhomogeneousPositivePartRate}.
+
+This condition is imposed on ordered products over actual intervals, not on
+powers of the individual site maps. Separate sitewise spectral gaps are
+insufficient to justify that replacement. The result is restricted to a
+common bond space and a common faithful fixed state. It gives a uniform
+Gram and polar estimate under those additional structural hypotheses, not
+the full source preparation theorem: varying rectangular bond spaces,
+varying fixed states, and passage from qualitative convergence to a uniform
+quantitative hypothesis remain separate requirements.
+
+A second sufficient-condition result now starts with actual ordered transfer
+products on each nonwrapping contiguous interval in the chosen ring cut:
+\[
+    \lVert T_{E_{A_i}\circ\cdots\circ E_{A_{i+\ell-1}}}
+    -T_\sigma\rVert \le K e^{-r\ell},
+\]
+with $K,r>0$ independent of the ring length and interval, in the $L^2$
+operator norm on the transfer matrices. The common limiting state is
+faithful and has trace one. The declarations
+\leanid{MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le} and
+\leanid{MPSPreparation.exists_one_sub_norm_inner_chainPosState_le}
+prove the ordered mixed-overlap and normalized pair estimates: transfer
+error at most $\delta$ on every selected block and on the whole ring
+gives normalized pair error at most $C_\sigma M\delta$. The constants
+are chosen before the tensors, physical dimension, ring, and partition.
+The whole-ring transfer controls the actual normalization
+$c_N^2=\operatorname{Tr}(T_{B_{\mathrm{whole}}})$; the local Gram
+estimates are not used as a substitute for that normalization.
+
+Consequently
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
+in \doclink{TNLean/MPS/Preparation/InhomogeneousMixingPreparation}
+derives pair error at most $C_\sigma KN e^{-rq}$ and physical depth
+$O(\log(N/\varepsilon))$. It assumes nonzero periodic targets at every
+positive ring length, as required to interpret the source's normalized
+quantum states. Mixing alone guarantees nonvanishing only eventually;
+it does not silently remove the finite short-ring condition. Exact
+preparation covers scales longer than the ring. This closes the uniform
+overlap and normalization step under the stated ordered mixing hypothesis.
+It does not derive that hypothesis from qualitative finite correlation,
+and it does not cover varying reference states or rectangular bond spaces.
+
+The direct consumer
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_choi_domination}
+in \doclink{TNLean/MPS/Preparation/InhomogeneousDoeblinPreparation}
+now connects the actual-site sufficient condition above to physical
+preparation. With trace-preserving site maps fixing the same faithful
+$\sigma$, and uniform Choi domination $0<\eta\le1$, inverse Gram
+reshuffling yields ordered-transfer error $K(1-\eta)^{\ell}$ on each
+actual interval. Weakening to $\eta/2$ retains the endpoint $\eta=1$
+while giving the finite positive exponent $-\log(1-\eta/2)$.
+Strict domination itself proves nonvanishing on every positive ring:
+\leanid{MPSPreparation.le_norm_chainState_sq_of_choi_domination}
+gives $\|\phi_N\|^2\ge\eta>0$ by splitting off the first site and
+using nonnegativity of the supertrace of the completely positive residual.
+Thus this concrete corollary needs no additional nonzero-target hypothesis.
+The general ordered-mixing theorem retains that physical normalization
+premise. This is a quantitative sufficient condition, not a replacement
+of ordered mixing by separate sitewise spectral gaps.
+
+\section{Short rings and undersized physical blocks}
+The algebraic pair estimate at a small blocking scale does not assert an
+isometry from $\mathbb C^{D^2}$ into an undersized physical space.
+The physical compiler chooses $q\ge3D$ first. For $d\ge2$, this implies
+$D^2\le d^q$, and it constructs support-preserving isometric extensions
+$W_j\Pi_j=V_j$ even for rank-deficient Gram matrices. For $d\le1$ it
+prepares the normalized target directly in depth zero. When the selected
+$q>N$, exact preparation handles the whole ring; generic synthesis is
+needed only for the fixed finite range $N<3D$.
+
+For example, AKLT dimensions $d=3,D=2$ give $d<D^2$, so no full-input
+one-site block isometry exists. The general ordered-mixing estimate
+permits this; circuit synthesis uses longer blocks or the exact short-ring
+branch. By contrast, strict faithful Choi domination at a microscopic
+site forces Choi rank $D^2$, whereas its Kraus rank is at most $d$.
+The direct actual-site Choi corollary therefore does not apply to unblocked
+AKLT. Such domination may hold after a fixed blocking; it is not supplied
+by separate sitewise eigenvalue gaps.
+
+The usual AKLT transfer spectrum is $1,-1/3,-1/3,-1/3$, giving periodic
+squared norm $1+3(-1/3)^N$. In particular the one-site periodic vector
+vanishes. The all-positive-length normalized theorem correctly keeps its
+explicit nonzero premise. The separate result
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixing}
+removes it from an eventual-length conclusion. Whole-ring convergence
+chooses a uniform $N_0$ with $\|\phi_N\|^2\ge1/2$ for $N\ge N_0$,
+then proves physical preparation for the original family on that range.
+It uses
+\leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from};
+the old all-positive-length rate interface is its $N_0=0$ specialization.
+No finite short-ring replacement is made in this proof. This is an
+application under uniform quantitative ordered mixing, not a derivation
+of that assumption from qualitative finite correlation.
+
 \bibliographystyle{alpha}
+\section{Varying positive semidefinite references on a square bond space}
+A separate sufficient-condition result permits density matrices
+$\sigma_{N,i}$ that vary with the ring and site and may be singular, while
+keeping the common square bond dimension $D$. It assumes the actual ordered
+transfer matrix on every positive nonwrapping interval starting at $a$ is
+within $K e^{-r\ell}$ of $X\mapsto\operatorname{Tr}(X)\sigma_{N,a}$,
+with $K,r>0$ independent of all intervals and rings. There is no separate
+transport or stationarity hypothesis: the global estimate is proved directly
+from these quantitative tensor-product bounds.
+
+The tensor-level comparison
+\leanid{MPSTensor.exists_norm_gram_transferMatrix_sub_le} in
+\doclink{TNLean/MPS/Preparation/PositivePartRate} uses one constant $K_D>0$
+chosen before the physical dimension, tensor, and positive semidefinite
+reference. It bounds the Gram error by the transfer-matrix error and
+conversely, both in the $L^2$ operator norm. No trace-one, stationarity, or
+faithfulness assumption is needed for this comparison. Positivity is
+needed only to identify the fixed-point tensor's transfer map with the
+algebraic trace-reset map. This finite-dimensional norm comparison
+supplies no mixing rate by itself.
+
+The global square-root H\"older bound replaces a reference-dependent
+Lipschitz constant by a dimension-dependent factor and halves the exponential
+rate. Compactness of the set of density matrices makes the mixed-transfer
+constants uniform, including at singular references. Since
+$R_\sigma R_\tau=R_\sigma$ for trace-one references, ordered reference
+products stay bounded. The positive reference tensor of block $j$ contributes
+the pair with coefficient $(\sqrt{\sigma_j})_{r_{j-1},l_j}$, so the outgoing
+pair from block $j$ uses $\sigma_{j+1}$. A two-block regression with distinct
+rank-one references detects this shift.
+
+The resulting normalized pair error is at most $C_D M\sqrt\delta$.
+For exponential transfer error this gives
+$C_D\sqrt K\,N e^{-rq/2}$ and logarithmic physical preparation of the
+original family beyond a uniform ring cutoff. Whole-ring transfer
+convergence derives eventual nonvanishing; no assumption is made on short
+zero rings. The common faithful-reference result retains its sharper
+exponent $r$.
+
+These declarations\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference},
+    \leanid{MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}, and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_reference}.}
+remove the common-reference and faithfulness restrictions from this
+fixed-square-bond sufficient condition. They still do not derive a uniform
+rate from the paper's qualitative finite-correlation definition. Rectangular
+bonds require the corresponding corner-supported reset maps; zero-padded
+rectangular site maps are not generally trace preserving on the full square
+space, so the square-space hypotheses are not silently applied to them.
+
+\section{A local window criterion with derived references}
+A quantitative sufficient condition is now proved for actual square-bond
+chains whose site transfer maps are trace preserving. Fix an integer
+$s\ge1$ and a strength $\eta>0$ uniformly across the family. Every actual
+nonwrapping $s$-window must satisfy the normalized output-first Choi bound
+$J(F)\ge(\eta/D)(\tau\otimes I)$ for some density matrix $\tau$.
+The minorizer can depend on the ring and window and can be singular.
+The actual window at $N=s$ implies $\eta\le1$ internally.
+
+The proof constructs a fixed density of the whole-ring channel and
+propagates it through ordered suffixes, deriving compatible references
+$\sigma_N=\sigma_0$ and
+$E_{[a,a+n)}(\sigma_{a+n})=\sigma_a$. These references need not equal
+the local Choi minorizers. Subtracting each reset contribution leaves
+completely positive residual maps with trace scales $1-\eta$.
+Their ordered product yields Gram error
+$2D(1-\eta)^{\lfloor n/s\rfloor}$, and a fixed-dimensional reshuffling
+converts it to the required transfer operator norm. The shorter final
+window uses only complete positivity and trace preservation.
+
+Weakening to $\eta/2$ before the logarithm covers the original
+$\eta=1$ endpoint with a finite positive rate. The resulting theorem
+\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domination}.}
+gives physical logarithmic-depth preparation of the original family above
+a uniform cutoff $N_0\ge s$. Global mixing, a compatible reference family,
+faithfulness, a common stationary state, and short-ring nonvanishing
+are derived or unnecessary, rather than additional input hypotheses.
+
+A concrete two-dimensional alternating unitary/reset family satisfies the
+criterion with $s=2$ and $\eta=1$, with distinct singular minorizers.
+The regression includes a three-site remainder and a zero one-site
+periodic vector with no available two-site window. This tests the
+necessity of the eventual conclusion without patching the family.
+
+This establishes a useful local sufficient criterion. It does not prove
+that the source's qualitative finite-correlation definition implies
+uniform window minorization. Rectangular varying bonds remain outside
+this theorem: zero-padding does not preserve full-space trace preservation.
+
+\section{Actual rectangular transfer rates}
+The rectangular dimensions need not be replaced by a fixed square-bond
+hypothesis. For $F_{a:b}:M_{D_b}\to M_{D_a}$, use the Hilbert--Schmidt
+induced operator norm in the matrix-unit bases and assume a uniform rate
+$\|F_{a:b}-\operatorname{Tr}(\cdot)\sigma_a\|\le Ke^{-r(b-a)}$
+for every nonempty block of every partition, with $K,r>0$ chosen before
+the ring length. The references $\sigma_a$ are positive semidefinite of
+trace one on the actual bonds and may be singular.
+
+The padded reference is
+$X\mapsto\operatorname{Tr}(P_bX)J_a\sigma_aJ_a^\dagger$,
+where $J_a$ is the coordinate isometry and $P_b=J_bJ_b^\dagger$.
+The full-space trace reset would be incorrect on inputs outside the
+outgoing corner. Its Gram reference is
+$(J_a\sigma_aJ_a^\dagger)^{\mathsf T}\otimes P_b$.
+The shared square-root and ordered-product estimates give pair error
+$C_D\sqrt K\,N e^{-rq/2}$ for blocks of lengths between $q$ and $2q$.
+Whole-ring mixing supplies nonvanishing beyond a fixed cutoff.
+The theorem
+\leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing}
+in \doclink{TNLean/MPS/Preparation/RectangularPreparation}
+therefore gives physical depth $C\log(N/\varepsilon)$ for all
+$N\ge N_0$ and $0<\varepsilon\le1$, with $N_0,C$ selected first.
+This is a quantitative sufficient condition, and does not derive the
+required rate from qualitative convergence alone.
+
+Dimension-one bonds are included. Equation (S39) concerns the paper's
+numerical open-boundary study; the formal physical circuit conclusion
+uses ring adjacency. It does not assert open-line locality without a
+proof that the wrap-around edge is unused.
+
+\section{Rectangular local-window criterion}
+The preceding actual rectangular rate can be derived from a local condition.
+Fix $s\ge1$ and $\eta>0$, uniformly across a family with $1\le D_i\le D$.
+Require every available window $F_{a:a+s}:M_{D_{a+s}}\to M_{D_a}$ to satisfy
+\[
+    J(F_{a:a+s})\ge\frac{\eta}{D_{a+s}}(\tau_a\otimes I_{D_{a+s}}),
+\]
+where the normalized output-first Choi convention includes the actual input
+dimension, and $\tau_a$ is a density that may be singular and vary with the window.
+The original rectangular site maps must be completely positive and trace preserving.
+No full-space trace-preservation claim is made about zero-padding.
+
+A fixed density of the full-cycle channel and suffix transport derive compatible
+cyclic references. Subtracting the local trace-prepare contributions gives completely
+positive residual maps. Peeling complete windows from the right leaves a shorter
+left remainder. The residual product has trace scale
+$t=(1-\eta)^{\lfloor n/s\rfloor}$ and unnormalized Choi trace $D_{a+n}t$.
+This bounds the actual Hilbert--Schmidt induced interval error by $2Dt$ directly,
+without introducing a common enlarged channel or changing the physical tensors.
+
+The family window at $N=s$ gives $\eta\le1$. Weakening to $\eta/2$ yields
+$K=4D$ and $r=-\log(1-\eta/2)/s>0$. The theorem
+\leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
+in \doclink{TNLean/MPS/Preparation/RectangularWindowPreparation}
+then gives the original physical ring preparation conclusion with $N_0\ge s$
+and $C$ chosen before $N,\varepsilon$. Dimension-one bonds and singular references
+are included. This local condition remains additional quantitative input;
+the paper's qualitative finite-correlation discussion does not provide its uniform
+window length and strength.
+
 \bibliography{references}
 \end{document}

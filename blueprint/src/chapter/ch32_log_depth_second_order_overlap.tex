@@ -1,0 +1,233 @@
+%% ==================================================
+%% Subsection: Overlapping blocks at the second-order rate
+%% Source: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), Supplemental
+%% Material, "Proof of Lemma 1 and extension to non-normal tensors",
+%% eqs. (S2)-(S12) and Lemma 1'(ii).
+%% Local fix: the rate of Lemma 1'(ii) is corrected by including the
+%% correlation lengths of the mixed transfer maps; scope restriction to
+%% blocks of multiplicity one and weight one;
+%% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
+%% ==================================================
+
+\subsection{Overlapping blocks at the second-order rate}
+\label{sec:ldp_overlapping_second_order}
+
+For blocks of multiplicity one and weight one whose states overlap,
+Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected} bounds the error at the
+rate $e^{-\gamma q/\xi}$ with $\gamma<1$. The positive part $P$ converges to $P_\infty$
+only to first order in the overlaps of distinct blocks, but the overlaps
+$z_j=\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}$ depend on $P$ only to second order
+around $P_\infty$, as in the normal case
+(Theorem~\ref{thm:ldp_positive_part_overlap_second_order}). This subsection proves the rate
+$e^{-2\gamma q/\xi}$ for every $0<\gamma<1$, the rate of the normal case
+(Theorem~\ref{thm:ldp_approximation_error_normal}). For the blocks of
+Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks} the error is at least
+$(9/25)^q/16$ for $M\geq3$, with $3/5$ the eigenvalue of their mixed transfer map; since
+$\lambda_2=3/5$ is admissible there, the exponent $2\gamma q/\xi$ cannot be replaced by $cq/\xi$
+with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
+
+\begin{theorem}[Powers of an element compressed by an idempotent]
+    \label{thm:ldp_idempotent_compressed_second_order}
+    \lean{IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq}
+    \leanok
+    \uses{thm:ldp_idempotent_second_order}
+    Let $e$ be an idempotent of a normed algebra over $\C$, and let $\Tr$ be linear with
+    $\Tr(xy)=\Tr(yx)$, $\lvert\Tr x\rvert\le K\lVert x\rVert$ and $\Tr e=1$. There is $C>0$
+    such that every $T$ with $eTe=\alpha e$ for a real $\alpha\le1$,
+    $\lVert T-e\rVert\le\delta$ and $1-\alpha\le\delta^2$ satisfies, for $M\ge2$ and
+    $CM\delta^2<1$,
+    \begin{align*}
+        \bigl\lvert\Tr T^M-1\bigr\rvert\le C(M\delta^2)\,e^{CM\delta^2}.
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    From $CM\delta^2<1$ with $C\ge4$ one gets $\delta\le1$ and $\alpha\ge3/4$. Put
+    $Z=\alpha^{-1}T-e$. Then $eZe=0$, $T=\alpha(e+Z)$, and
+    $\lVert Z\rVert\le\alpha^{-1}(\lVert T-e\rVert+(1-\alpha)\lVert e\rVert)
+        \le2(1+\lVert e\rVert)\delta$, so the blocks of $Z$ are bounded by a multiple $z$ of
+    $\delta$ with $z\le1/2$. Theorem~\ref{thm:ldp_idempotent_second_order} bounds
+    $\lvert\Tr(e+Z)^M-1\rvert$ by a multiple of $M\delta^2e^{cM\delta^2}$. Finally
+    $\Tr T^M-1=\alpha^M(\Tr(e+Z)^M-1)+(\alpha^M-1)$, with $0\le\alpha^M\le1$ and
+    $1-\alpha^M\le M(1-\alpha)\le M\delta^2$.
+\end{proof}
+
+\begin{lemma}[Overlaps of overlapping blocks, to second order]
+    \label{lem:ldp_overlapping_overlaps_second_order}
+    \lean{MPSTensor.trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor,
+        MPSTensor.im_trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor,
+        MPSTensor.cfc_sqrt_coordEmbedding_mul_mul, MPSTensor.trace_embeddedBlockState,
+        MPSTensor.trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState,
+        MPSTensor.embeddedBlockState_mul_coordEmbedding_mul_conjTranspose,
+        MPSTensor.blockSum_mul_coordEmbedding,
+        MPSTensor.transferMap_blockSum_embeddedBlockState,
+        MPSTensor.isIdempotentElem_of_apply_eq_trace_smul,
+        MPSTensor.trace_of_apply_eq_trace_smul,
+        MPSTensor.transferMatrix_mul_mul_of_eq_trace_smul,
+        MPSTensor.trace_mul_mixedMapLM_fixedPointTensor,
+        MPSTensor.isIdempotentElem_mixedTransferMatrixLeft_blockSumPosLimit,
+        MPSTensor.mixedTransferMatrixLeft_blockSumPosLimit_mul_mul,
+        MPSTensor.norm_sqrtWeightLM_fixedPointTensor, MPSTensor.norm_sqrtWeightLM_eq_one,
+        MPSTensor.norm_eq_of_forall_abs_norm_sub_le_pow,
+        MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq}
+    \leanok
+    \uses{thm:ldp_unit_vector_deficit, lem:ldp_overlapping_positive_part, lem:ldp_overlapping_overlaps,
+        thm:ldp_idempotent_compressed_second_order,
+        thm:ldp_positive_part_overlap_second_order, def:prep_fixed_point_tensor}
+    \begin{enumerate}
+        \item For a $D^2\times D^2$ matrix $H$, read as a tensor $X$ with physical index the
+              output pair, and a $D\times D$ matrix $\sigma$, the mixed transfer map of $X$
+              against the fixed-point tensor $P_{\infty,\sigma}$ satisfies
+              $\Tr\sum_iX^i\sigma(P_{\infty,\sigma}^i)^\dagger
+                  =\Tr\bigl(H(\sqrt\sigma^{\,\mathsf T}\otimes\sigma)\bigr)$, which is real
+              when $H$ and $\sigma$ are Hermitian.
+        \item For an isometry $E$ placing a block, $\sqrt{E\sigma E^\dagger}=E\sqrt\sigma E^\dagger$
+              for $\sigma\ge0$, $\Tr(E\sigma E^\dagger)=\Tr(\Pi E\sigma E^\dagger)=\Tr\sigma$, and
+              $EXE^\dagger\,\Pi=EXE^\dagger$ for $\Pi=EE^\dagger$.
+        \item For blocks placed as in Lemma~\ref{lem:ldp_overlapping_positive_part} with
+              weights one, $A^iE_j=E_jA_j^i$, and the transfer map of $A$ satisfies
+              $\E_A(E_jXE_j^\dagger)=E_j\E_{A_j}(X)E_j^\dagger$; in particular
+              $\tilde\rho_j=E_j\rho_jE_j^\dagger$ is a fixed point of $\E_A$.
+        \item A linear map $R:X\mapsto\Tr(QX)\sigma$ has trace $\Tr(Q\sigma)$ and is
+              idempotent when $\Tr(Q\sigma)=1$, and $RTR=\Tr(QT(\sigma))R$ for every linear
+              map $T$. If $\sqrt\sigma Q=\sqrt\sigma$, then
+              $\Tr(QY)=\Tr Y$ for every value $Y$ of a mixed transfer map against
+              $P_{\infty,\sigma}$.
+        \item The mixed transfer matrix $R_j$ of $P_\infty$ against $P_{\infty,\tilde\rho_j}$ is
+              idempotent with trace one, and for every $D^2\times D^2$ matrix $H$, read as a
+              tensor $X$, the mixed transfer matrix $\tau$ of $X$ against
+              $P_{\infty,\tilde\rho_j}$ satisfies $R_j\tau R_j=\alpha R_j$ with
+              $\alpha=\Tr\sum_iX^i\tilde\rho_j(P_{\infty,\tilde\rho_j}^i)^\dagger$.
+        \item For a state $\sigma$, the vector $(P_{\infty,\sigma}^i\sqrt\sigma)_i$ has norm one,
+              and so has $(X^i\sqrt\sigma)_i$ whenever $\Tr\E_X(\sigma)=1$. If
+              $\lvert\lVert u_q\rVert-c\rvert\le K'x^q$ and
+              $\lVert u_q-v\rVert\le Kx^q$ for every $q\ge1$, with $0\le x<1$, then
+              $\lVert v\rVert=c$.
+        \item In the setting of Lemma~\ref{lem:ldp_overlapping_positive_part} with weights
+              one, if $\lambda_2\neq0$, then for every block $j$ there is $C_j>0$ such that for every $q\ge1$ and
+              every $M\ge2$ with $C_jy<1$, where $y=Me^{-2\gamma q/\xi}$,
+              \begin{align*}
+                  \bigl\lvert\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}-1\bigr\rvert
+                  \le C_jy\,e^{C_jy}.
+              \end{align*}
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Part~(1) is the entrywise computation: the letter of $P_{\infty,\sigma}$ at the pair
+    $(l,r)$ is $\sqrt\sigma\ket l\bra r$, and the conjugate of $\Tr(HW)$ is
+    $\Tr\bigl((HW)^\dagger\bigr)=\Tr(WH)$ for Hermitian $H$ and $W$. Part~(2) follows from
+    $E^\dagger E=\Id$ and the uniqueness of the positive square root, and part~(3) from
+    $E_k^\dagger E_j=\delta_{kj}\Id$. In part~(4),
+    $R(T(R(X)))=\Tr(QX)\Tr(QT(\sigma))\sigma$, and the values of a mixed transfer map
+    against $P_{\infty,\sigma}$ are sums of terms $Y\sqrt\sigma$, on which
+    $\Tr(QY\sqrt\sigma)=\Tr(Y\sqrt\sigma Q)$. Part~(5) is part~(4) with the map
+    $X\mapsto\Tr(\Pi_jX)\tilde\rho_j$ of Lemma~\ref{lem:ldp_overlapping_overlaps}(3) and
+    $\Tr(\Pi_j\tilde\rho_j)=1$, since $\sqrt{\tilde\rho_j}\Pi_j=\sqrt{\tilde\rho_j}$ by
+    part~(2). In part~(6), the squared norm of $(X^i\sqrt\sigma)_i$ is $\Tr\E_X(\sigma)$, and
+    $\lvert\lVert v\rVert-c\rvert\le(K+K')x^q$ for every $q$.
+
+    For part~(7), $\lambda_2\neq0$ gives $0<e^{-\gamma/\xi}<1$. Let $\iota(X)=(X^i\sqrt{\tilde\rho_j})_i$. By part~(3) and
+    $\E_P=\E_A^q$, $\Tr\E_P(\tilde\rho_j)=1$, so $\iota(P)$ is a unit vector, as is
+    $\iota(P_{\infty,\tilde\rho_j})$. The inner product
+    $\braket{\iota(P_{\infty,\tilde\rho_j})}{\iota(P_\infty)}$ is the trace of
+    $\Tr(\Pi_j\tilde\rho_j)\tilde\rho_j$, which is one, and $\iota(P_\infty)$ is a unit vector
+    by part~(6) with $u_q=\iota(P)$; hence $\iota(P_\infty)=\iota(P_{\infty,\tilde\rho_j})$ and
+    $\lVert\iota(P)-\iota(P_{\infty,\tilde\rho_j})\rVert\le K''e^{-\gamma q/\xi}$ by
+    Lemma~\ref{lem:ldp_overlapping_positive_part}. The coefficient $\alpha$ of part~(5) is
+    $\braket{\iota(P_{\infty,\tilde\rho_j})}{\iota(P)}$, real by part~(1) since $P$ and
+    $\tilde\rho_j$ are Hermitian, at most one, and
+    $1-\alpha=\tfrac12\lVert\iota(P)-\iota(P_{\infty,\tilde\rho_j})\rVert^2$. With
+    $\lVert\tau-R_j\rVert\le K_3e^{-\gamma q/\xi}$ and $z_j=\Tr\tau^M$,
+    Theorem~\ref{thm:ldp_idempotent_compressed_second_order} with
+    $\delta$ a multiple of $e^{-\gamma q/\xi}$ gives the bound.
+\end{proof}
+
+\begin{lemma}[The norm of the target and one block of sites]
+    \label{lem:ldp_overlapping_one_block_second_order}
+    \lean{MPSTensor.mpvOverlap_fixedPointTensor_embeddedBlockState,
+        MPSTensor.norm_sq_sub_norm_inner_sq_div_le,
+        MPSTensor.exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le}
+    \leanok
+    \uses{lem:ldp_overlapping_overlaps, lem:ldp_overlapping_overlaps_second_order,
+        lem:ldp_mixed_transfer_decay, thm:ldp_approximation_error_normal}
+    In the setting of Lemma~\ref{lem:ldp_overlapping_positive_part} with weights one, let
+    $\phi_N$ be the periodic state of $A$.
+    \begin{enumerate}
+        \item There is $K$ with $\bigl\lvert\lVert\phi_N\rVert^2-b\bigr\rvert\le Ke^{-\gamma N/\xi}$
+              for every $N\ge1$.
+        \item The states $\phi_N(P_{\infty,\tilde\rho_j})$ are orthonormal for every $N\ge1$.
+        \item For a vector $W$ with $\lVert W\rVert^2=c>0$ and every $u$,
+              $\lVert u\rVert^2-\lvert\braket Wu\rvert^2/c\le\lVert u-W\rVert^2$.
+        \item If $\lambda_2\neq0$, there is $K'$ such that for every $q\ge1$
+              \begin{align*}
+                  \lVert\phi_q\rVert^2-\frac1b\Bigl\lvert\sum_j
+                  \braket{\phi_1(P_{\infty,\tilde\rho_j})}{\phi_1(P)}\Bigr\rvert^2
+                  \le K'e^{-2\gamma q/\xi}.
+              \end{align*}
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Part~(1) is Lemma~\ref{lem:ldp_overlapping_overlaps}(5). Part~(2)
+    holds because the pairs of the $\tilde\rho_j$ are orthonormal and the overlap of products
+    of pairs is the $N$-th power of the overlap of the pairs. Part~(3) is
+    $c-2\operatorname{Re}z+\lvert z\rvert^2/c=\lvert c-z\rvert^2/c\ge0$ with $z=\braket Wu$.
+    For part~(4) put $u=\phi_1(P)$ and $W=\sum_j\phi_1(P_{\infty,\tilde\rho_j})$. Then
+    $\lVert u\rVert=\lVert\phi_q\rVert$, the sum is $\braket Wu$, and
+    $\lVert W\rVert^2=b$ by part~(2), so part~(3) bounds the left side by
+    $\lVert u-W\rVert^2$. The overlaps of $\phi_1(P_\infty)$ with the
+    $\phi_1(P_{\infty,\tilde\rho_j})$ are the traces of the idempotents $R_j$ of
+    Lemma~\ref{lem:ldp_overlapping_overlaps_second_order}(5), which are one, and
+    $\lVert\phi_1(P_\infty)\rVert^2=b$ by
+    Lemma~\ref{lem:ldp_overlapping_overlaps_second_order}(6) and part~(1). Hence
+    $\phi_1(P_\infty)=W$, and $\lVert u-W\rVert$ is at most a multiple of
+    $\lVert P-P_\infty\rVert\le K''e^{-\gamma q/\xi}$.
+\end{proof}
+
+% **Local fix (rate of the overlapping blocks):** the rate of Lemma 1'(ii) of
+% arXiv:2307.01696 is corrected by including the correlation lengths of the
+% mixed transfer maps; scope restriction to multiplicity one and weight one;
+% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
+\begin{theorem}[Approximation error for overlapping blocks at the second-order rate]
+    \label{thm:ldp_approximation_error_overlapping_second_order}
+    \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum_sq,
+        MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_sq,
+        MPSTensor.one_sub_norm_nonNormalApproxOverlap_blockSum_le,
+        MPSTensor.one_sub_div_le_two_mul_of_sq_sub_sq_le}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, lem:ldp_overlapping_overlaps,
+        lem:ldp_overlapping_overlaps_second_order,
+        lem:ldp_overlapping_one_block_second_order, def:correlation_length}
+    In the setting of Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected}, let
+    $0<\gamma<1$. There are constants $C,C'>0$ such that for every
+    block length $q$ and every $M\ge1$, with $N=qM$ and $y=Me^{-2\gamma q/\xi}$, which is
+    $(N/q)e^{-2\gamma q/\xi}$ for $q\ge1$,
+    \begin{align*}
+        \varepsilon(\widetilde\phi_N,\phi_N)\le C'y
+        \qquad\text{and}\qquad
+        \varepsilon(\widetilde\phi_N,\phi_N)\le Cy\,e^{Cy}.
+    \end{align*}
+    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one and
+    weight one, with $\xi_{\mathrm{diag}}$ replaced by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$ and the exponent $\gamma q/\xi$
+    by $2\gamma q/\xi$ \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $e^{-\gamma/\xi}\ge1$, if $q=0$, or if $Cy\ge1$, the bound holds because
+    $\varepsilon\le1$; otherwise $0<\lvert\lambda_2\rvert<1$ and $q\ge1$. With
+    $z_j=\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}$,
+    $s=\lvert\sum_jz_j\rvert/\sqrt b$ and $t=\lVert\phi_N(A)\rVert$, by
+    Lemma~\ref{lem:ldp_overlapping_overlaps}(2) the unnormalized approximating vector has
+    inner product $\sum_jz_j/\sqrt b$ with $\ket{\phi_N(A)}$ and norm at most one, so
+    $\varepsilon\le1-s/t$. If $t^2\ge1/2$ and $t^2-s^2\le X$ with $X\ge0$, then
+    $1-s/t\le2X$: for $s<t$, $1-s/t\le1-s^2/t^2=(t^2-s^2)/t^2$. For $M=1$,
+    Lemma~\ref{lem:ldp_overlapping_one_block_second_order}(4) gives $X=K'y$, and
+    $t^2\ge b-Ke^{-\gamma q/\xi}\ge1/2$ once $4K^2y<1$. For $M\ge2$,
+    $N\ge2q$, so $\lvert t^2-b\rvert\le Ky$ by
+    Lemma~\ref{lem:ldp_overlapping_one_block_second_order}(1), and
+    $\lvert\sum_jz_j-b\rvert\le\delta=\sum_jC_jy\,e^{Cy}$ by
+    Lemma~\ref{lem:ldp_overlapping_overlaps_second_order}(7), so $s^2\ge b-2\delta$ and
+    $X=Ky+2\delta$. The first bound follows from the second because $\varepsilon\le1$.
+\end{proof}

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinKronecker
+import TNLean.MPS.MPDO.Boundary
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 
 /-!
@@ -11,7 +12,8 @@ import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 
 **Source.** Sun 2025 (arXiv:2504.16985), "Anomalous matrix product operator symmetries and
 1D mixed-state phases", `References/2504.16985/main.tex` line 182: a matrix product density
-operator `ρ^{(L)}` is strongly symmetric under a family of matrix product operators `O_a^{(L)}` when
+operator `ρ^{(L)}(X,M)` is strongly symmetric under a family of matrix product operators
+`O_a^{(L)}` when
 `O_a^{(L)} ρ^{(L)} = λ_a^{(L)} ρ^{(L)}` for all `a` and `L`, and weakly symmetric when
 `[O_a^{(L)}, ρ^{(L)}] = 0` for all `a` and `L`; strong symmetry is a special case of weak
 symmetry provided each `O_a^{(L)}` has its adjoint `O_{ā}^{(L)}` in the family. The on-site
@@ -25,11 +27,11 @@ adjoint-closure proviso; the unit modulus of the eigenvalue of a unitary strong 
 fusion rules satisfied by strong eigenvalues; and the on-site specialization `U_g^{⊗L}`, where
 the eigenvalues form a character of the group at each length.
 
-**Scope restriction (boundary `X = 1`):** the source's density operator
-`ρ^{(L)}(X, M) = ∑ tr[X M^{i_1 j_1} ⋯ M^{i_L j_L}] |i⟩⟨j|` carries a boundary matrix `X`
-commuting with every `M^{ij}` (`References/2504.16985/main.tex` lines 175–181); the family
-predicates of this file are stated for the periodic operators `mpo M L`, the case `X = 1`.
-Documented in `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+The family predicates permit an arbitrary virtual boundary. The source's
+commuting boundaries are the elements of `commutingBoundaryAlgebra M`;
+positivity of the resulting operators is `IsMPDOWithBoundary M X`.
+Neither commutation nor positivity is required for the symmetry equations
+themselves. Density-operator conclusions state positivity where it is used.
 
 ## Main definitions
 
@@ -174,27 +176,31 @@ Source: arXiv:2504.16985, line 182: `O_a^{(L)} ρ^{(L)} = λ_a^{(L)} ρ^{(L)}` f
 sizes are positive, as in `IsMPDO`. The definition is more general than the source: there the
 `O_a` are normal matrix product operators forming a fusion algebra (lines 125–137) and `ρ` is
 a matrix product density operator; here the family and `M` are arbitrary, and the fusion and
-positivity hypotheses are added where a result uses them. -/
+positivity hypotheses are added where a result uses them. The boundary need not
+commute with the letters for the symmetry equations; source-admissible boundaries
+are exactly the elements of `commutingBoundaryAlgebra M`. -/
 def IsStrongMPOSymmetry (O : ∀ a, MPOTensor d (χ a)) (M : MPOTensor d D)
-    (c : ι → ℕ → ℂ) : Prop :=
-  ∀ a L, 0 < L → mpo (O a) L * mpo M L = c a L • mpo M L
+    (X : Matrix (Fin D) (Fin D) ℂ) (c : ι → ℕ → ℂ) : Prop :=
+  ∀ a L, 0 < L → mpo (O a) L * mpoWithBoundary M X L = c a L • mpoWithBoundary M X L
 
 /-- **Weak symmetry of a matrix product density operator.**
 
 Source: arXiv:2504.16985, line 182: `[O_a^{(L)}, ρ^{(L)}] = 0` for all `a` and `L`, at positive
 system sizes. As for `IsStrongMPOSymmetry`, no fusion structure on the family and no
-positivity of `M` is assumed. -/
-def IsWeakMPOSymmetry (O : ∀ a, MPOTensor d (χ a)) (M : MPOTensor d D) : Prop :=
-  ∀ a L, 0 < L → Commute (mpo (O a) L) (mpo M L)
+positivity of the boundary-weighted family is assumed. -/
+def IsWeakMPOSymmetry (O : ∀ a, MPOTensor d (χ a)) (M : MPOTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  ∀ a L, 0 < L → Commute (mpo (O a) L) (mpoWithBoundary M X L)
 
 /-- **Strong symmetry implies weak symmetry under adjoint closure.**
 
 Source: arXiv:2504.16985, line 182: strong symmetry is a special case of weak symmetry
 provided the family contains the conjugate `O_{ā}^{(L)} = O_a^{(L)†}` of each operator. -/
 theorem IsStrongMPOSymmetry.isWeakMPOSymmetry {O : ∀ a, MPOTensor d (χ a)}
-    {M : MPOTensor d D} {c : ι → ℕ → ℂ} (hM : IsMPDO M) (h : IsStrongMPOSymmetry O M c)
+    {M : MPOTensor d D} {X : Matrix (Fin D) (Fin D) ℂ} {c : ι → ℕ → ℂ}
+    (hM : IsMPDOWithBoundary M X) (h : IsStrongMPOSymmetry O M X c)
     (bar : ι → ι) (hbar : ∀ a L, 0 < L → mpo (O (bar a)) L = (mpo (O a) L)ᴴ) :
-    IsWeakMPOSymmetry O M := by
+    IsWeakMPOSymmetry O M X := by
   intro a L hL
   refine Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose (hM L hL).isHermitian
     ⟨c a L, h a L hL⟩ ⟨c (bar a) L, ?_⟩
@@ -208,14 +214,16 @@ Bridge: if the periodic operators satisfy `O_a O_b = ∑_c N_{ab}^c O_c`
 strong symmetry (arXiv:2504.16985, line 182) satisfy `λ_a λ_b = ∑_c N_{ab}^c λ_c` at that
 length. -/
 theorem IsStrongMPOSymmetry.mul_eq_sum [Fintype ι] {O : ∀ a, MPOTensor d (χ a)}
-    {M : MPOTensor d D} {c : ι → ℕ → ℂ} (h : IsStrongMPOSymmetry O M c)
+    {M : MPOTensor d D} {X : Matrix (Fin D) (Fin D) ℂ} {c : ι → ℕ → ℂ}
+    (h : IsStrongMPOSymmetry O M X c)
     {Nf : ι → ι → ι → ℕ} (hF : IsMPOFusionAlgebra O Nf) {L : ℕ} (hL : 0 < L)
-    (hρ : mpo M L ≠ 0) (a b : ι) :
+    (hρ : mpoWithBoundary M X L ≠ 0) (a b : ι) :
     c a L * c b L = ∑ e, (Nf a b e : ℂ) * c e L := by
-  have h1 : mpo (O a) L * mpo (O b) L * mpo M L = (c a L * c b L) • mpo M L := by
+  have h1 : mpo (O a) L * mpo (O b) L * mpoWithBoundary M X L =
+      (c a L * c b L) • mpoWithBoundary M X L := by
     rw [Matrix.mul_assoc, h b L hL, Matrix.mul_smul, h a L hL, smul_smul, mul_comm]
-  have h2 : mpo (O a) L * mpo (O b) L * mpo M L =
-      (∑ e, (Nf a b e : ℂ) * c e L) • mpo M L := by
+  have h2 : mpo (O a) L * mpo (O b) L * mpoWithBoundary M X L =
+      (∑ e, (Nf a b e : ℂ) * c e L) • mpoWithBoundary M X L := by
     rw [hF a b L hL, Matrix.sum_mul, Finset.sum_smul]
     refine Finset.sum_congr rfl fun e _ => ?_
     rw [Matrix.smul_mul, h e L hL, smul_smul]
@@ -227,9 +235,9 @@ Bridge: under the hypotheses of `IsStrongMPOSymmetry.mul_eq_sum`, if `e` is the 
 the fusion ring and its eigenvalue is nonzero, then `a ↦ λ_a^{(L)}` is a fusion character: the
 fusion rules give `λ_e² = λ_e`, hence `λ_e = 1`. -/
 theorem IsStrongMPOSymmetry.isFusionCharacter [Fintype ι] [DecidableEq ι]
-    {O : ∀ a, MPOTensor d (χ a)} {M : MPOTensor d D} {c : ι → ℕ → ℂ}
-    (h : IsStrongMPOSymmetry O M c) {Nf : ι → ι → ι → ℕ} (hF : IsMPOFusionAlgebra O Nf)
-    {e : ι} (he : IsFusionUnit Nf e) {L : ℕ} (hL : 0 < L) (hρ : mpo M L ≠ 0)
+    {O : ∀ a, MPOTensor d (χ a)} {M : MPOTensor d D} {X : Matrix (Fin D) (Fin D) ℂ} {c : ι → ℕ → ℂ}
+    (h : IsStrongMPOSymmetry O M X c) {Nf : ι → ι → ι → ℕ} (hF : IsMPOFusionAlgebra O Nf)
+    {e : ι} (he : IsFusionUnit Nf e) {L : ℕ} (hL : 0 < L) (hρ : mpoWithBoundary M X L ≠ 0)
     (hce : c e L ≠ 0) : IsFusionCharacter Nf e fun a => c a L := by
   refine ⟨?_, fun a b => h.mul_eq_sum hF hL hρ a b⟩
   have h1 := h.mul_eq_sum hF hL hρ e e
@@ -263,25 +271,28 @@ variable {G : Type*} [Monoid G]
 Source: arXiv:2504.16985, line 182, for the family `O_g^{(L)} = U_g^{⊗L}` of an on-site
 representation; the case `c g L = 1` is the strong symmetry `U ρ = ρ` of arXiv:2603.28349,
 line 362. -/
-def IsStrongOnSiteSymmetry (M : MPOTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
+def IsStrongOnSiteSymmetry (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (c : G → ℕ → ℂ) : Prop :=
-  IsStrongMPOSymmetry (fun g => onSite (U g)) M c
+  IsStrongMPOSymmetry (fun g => onSite (U g)) M X c
 
 /-- **Weak on-site symmetry.**
 
 Source: arXiv:2504.16985, line 182, for `O_g^{(L)} = U_g^{⊗L}`; this is the weak symmetry
 `[U, ρ] = 0` of arXiv:2603.28349, line 362. -/
-def IsWeakOnSiteSymmetry (M : MPOTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
-  IsWeakMPOSymmetry (fun g => onSite (U g)) M
+def IsWeakOnSiteSymmetry (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  IsWeakMPOSymmetry (fun g => onSite (U g)) M X
 
 /-- **Strong on-site symmetry implies weak on-site symmetry for unitary representations.**
 
 Source: arXiv:2504.16985, line 182, in the on-site unitary case, where `U_g^{†} = U_{g^{-1}}`
 supplies the adjoint-closure proviso. -/
-theorem IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry {M : MPOTensor d D}
-    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (hM : IsMPDO M)
-    (hU : ∀ g, (U g)ᴴ * U g = 1) (h : IsStrongOnSiteSymmetry M U c) :
-    IsWeakOnSiteSymmetry M U := by
+theorem IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry
+    {M : MPOTensor d D} {X : Matrix (Fin D) (Fin D) ℂ}
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (hM : IsMPDOWithBoundary M X)
+    (hU : ∀ g, (U g)ᴴ * U g = 1) (h : IsStrongOnSiteSymmetry M X U c) :
+    IsWeakOnSiteSymmetry M X U := by
   intro g L hL
   have hL' := h g L hL
   simp only [mpo_onSite] at hL' ⊢
@@ -291,9 +302,9 @@ theorem IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry {M : MPOTensor d D}
 /-- **Unit modulus of on-site strong eigenvalues.**
 
 Bridge: for a unitary on-site representation and `ρ^{(L)} ≠ 0`, `|c_g^{(L)}| = 1`. -/
-theorem IsStrongOnSiteSymmetry.norm_eq_one {M : MPOTensor d D}
-    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (h : IsStrongOnSiteSymmetry M U c)
-    (hU : ∀ g, (U g)ᴴ * U g = 1) {L : ℕ} (hL : 0 < L) (hρ : mpo M L ≠ 0) (g : G) :
+theorem IsStrongOnSiteSymmetry.norm_eq_one {M : MPOTensor d D} {X : Matrix (Fin D) (Fin D) ℂ}
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (h : IsStrongOnSiteSymmetry M X U c)
+    (hU : ∀ g, (U g)ᴴ * U g = 1) {L : ℕ} (hL : 0 < L) (hρ : mpoWithBoundary M X L ≠ 0) (g : G) :
     ‖c g L‖ = 1 := by
   have hL' := h g L hL
   simp only [mpo_onSite] at hL'
@@ -304,9 +315,9 @@ theorem IsStrongOnSiteSymmetry.norm_eq_one {M : MPOTensor d D}
 
 Bridge: `U_{gh}^{⊗L} = U_g^{⊗L} U_h^{⊗L}`, so for `ρ^{(L)} ≠ 0` the eigenvalues satisfy
 `c_{gh}^{(L)} = c_g^{(L)} c_h^{(L)}`, the group case of `IsStrongMPOSymmetry.mul_eq_sum`. -/
-theorem IsStrongOnSiteSymmetry.map_mul {M : MPOTensor d D}
-    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (h : IsStrongOnSiteSymmetry M U c)
-    {L : ℕ} (hL : 0 < L) (hρ : mpo M L ≠ 0) (g k : G) :
+theorem IsStrongOnSiteSymmetry.map_mul {M : MPOTensor d D} {X : Matrix (Fin D) (Fin D) ℂ}
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (h : IsStrongOnSiteSymmetry M X U c)
+    {L : ℕ} (hL : 0 < L) (hρ : mpoWithBoundary M X L ≠ 0) (g k : G) :
     c (g * k) L = c g L * c k L := by
   have hg := h g L hL
   have hk := h k L hL
@@ -316,13 +327,13 @@ theorem IsStrongOnSiteSymmetry.map_mul {M : MPOTensor d D}
       (Matrix.finKronecker fun _ : Fin L => U g) * Matrix.finKronecker fun _ : Fin L => U k := by
     rw [Matrix.finKronecker_mul, _root_.map_mul]
   refine smul_left_injective ℂ hρ (hgk.symm.trans ?_)
-  change _ = (c g L * c k L) • mpo M L
+  change _ = (c g L * c k L) • mpoWithBoundary M X L
   rw [hsplit, Matrix.mul_assoc, hk, Matrix.mul_smul, hg, smul_smul, mul_comm (c k L)]
 
 /-- The on-site strong eigenvalue of the identity is `1` when `ρ^{(L)} ≠ 0`. -/
-theorem IsStrongOnSiteSymmetry.map_one {M : MPOTensor d D}
-    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (h : IsStrongOnSiteSymmetry M U c)
-    {L : ℕ} (hL : 0 < L) (hρ : mpo M L ≠ 0) : c 1 L = 1 := by
+theorem IsStrongOnSiteSymmetry.map_one {M : MPOTensor d D} {X : Matrix (Fin D) (Fin D) ℂ}
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (h : IsStrongOnSiteSymmetry M X U c)
+    {L : ℕ} (hL : 0 < L) (hρ : mpoWithBoundary M X L ≠ 0) : c 1 L = 1 := by
   have h1 := h 1 L hL
   simp only [mpo_onSite, _root_.map_one, Matrix.finKronecker_one, Matrix.one_mul] at h1
   exact smul_left_injective ℂ hρ (h1.symm.trans (one_smul ℂ _).symm)

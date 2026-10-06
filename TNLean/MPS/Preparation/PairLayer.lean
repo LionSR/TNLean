@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.BlockSites
 import TNLean.MPS.Preparation.BlockUnitary
-import TNLean.MPS.Preparation.CircuitComposition
-import TNLean.MPS.Preparation.EmbeddedProduct
-import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.Circuit.Composition
+import TNLean.Circuit.EmbeddedProduct
+import TNLean.MPS.Preparation.FixedPointPairState
 
 /-!
 # Pair windows and the layer of entangled pairs
@@ -30,6 +30,7 @@ of its action on the all-`|0⟩` state with the product of the pairs, with all o
 
 open Matrix MPSTensor
 open scoped BigOperators
+open QuantumCircuit
 
 namespace MPSPreparation
 

@@ -6,8 +6,10 @@ Authors: TNLean contributors
 import TNLean.Algebra.FinKronecker
 import TNLean.MPS.Chain.BlockTensor
 import TNLean.MPS.Core.CyclicTrace
-import TNLean.MPS.Preparation.ApproximatingState
+import QICLean.Algebra.MatrixUnitaryBetween
+import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.BlockSites
+import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.Spectral.MPVOverlapTrace
 
 /-!
@@ -25,16 +27,12 @@ Cut a ring of `N` sites into `M` blocks of lengths `ℓ 0, …, ℓ (M - 1)`
 proof of Theorem 1, blocks the chain into blocks "all of the same size, `q_N`, except for the last
 one, which may be larger"; the present file allows any lengths.
 
-**Scope restriction (common bond dimension):** the site-dependent declarations
-`MPSTensor.chainBlockTensor`, `MPSTensor.coeff_eq_mpvFamily_chainBlockTensor`,
-`MPSTensor.pairFamilyVector`, `MPSTensor.pairFamilyVector_apply`,
-`MPSTensor.norm_pairFamilyVector`, `MPSTensor.blockIsoVector`, `MPSTensor.blockIsoVector_apply`,
-`MPSTensor.inner_blockIsoVector`, `MPSTensor.norm_blockIsoVector`,
-`MPSTensor.chainBlockIsometryState` and `MPSTensor.chainBlockIsometryState_apply` model the inhomogeneous
-matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS",
-with the same square bond dimension `D` at every site, while the source allows "bond dimension at
-most `D`" varying along the ring. The translation-invariant declarations of this file are not
-affected. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+The site-dependent declarations apply to the inhomogeneous matrix product states of
+arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS", which have "bond
+dimension at most `D`" varying along the ring, through their zero-padded chains
+(`VaryingBondChain.zeroPad`); the padded blocked tensors are at most injective on the
+rectangles of their bonds, and `MPSTensor.inner_blockIsoVector_of_isInjectiveOn` covers that
+case.
 
 ## Main declarations
 
@@ -51,15 +49,124 @@ affected. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 * `MPSTensor.chainBlockIsometryState` — the same state for site-dependent tensors and
   site-dependent pairs, `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}`, arXiv:2307.01696, paragraph
   "Inhomogeneous short-range correlated MPS"; `MPSTensor.inner_blockIsoVector` — the
-  isometries `⊗ₖ V_k` preserve inner products when every blocked tensor is injective.
+  isometries `⊗ₖ V_k` preserve inner products when every blocked tensor is injective;
+  `MPSTensor.inner_blockIsoVector_of_isInjectiveOn` — the same for partial isometries on vectors
+  supported where they are isometric.
 
 ## References
 
-* arXiv:2307.01696, eqs. (9) and (10), the paragraph "Inhomogeneous short-range correlated MPS",
-  and Supplemental Material, proof of Lemma 1'(i) and proof of Theorem 1.
+* arXiv:2307.01696, eqs. (9) and (10), the paragraphs "Approximation through the fixed-point
+  state" and "Inhomogeneous short-range correlated MPS", and Supplemental Material, "Proof of
+  Lemma 1 and extension to non-normal tensors", proof of Lemma 1'(i) and proof of Theorem 1.
+* arXiv:2103.13367, the mixed transfer matrices after eq. `eq:a_tensor`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
+
+namespace Matrix
+
+/-- **Inner products after matrices on the sites.** For matrices `W_k : ℂ^κ → ℂ^{n_k}`, one on
+each of `M` sites, `⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ∑_{τ, τ'} (∏ₖ (W_k† W_k)_{τ_k τ'_k}) ψ(τ)^* φ(τ')`.
+
+arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
+the Gram matrices `V_k†V_k` of the isometric factors. -/
+theorem sum_star_mul_prod_eq_sum_conjTranspose_mul {M : ℕ} {n : Fin M → Type*}
+    [∀ k, Fintype (n k)] {κ : Type*} [Fintype κ] (W : ∀ k, Matrix (n k) κ ℂ)
+    (ψ φ : (Fin M → κ) → ℂ) :
+    ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
+        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ =
+      ∑ τ, ∑ τ', (∏ j, ((W j)ᴴ * W j) (τ j) (τ' j)) * (star (ψ τ) * φ τ') := by
+  classical
+  calc ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
+        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ
+      = ∑ s : ∀ k, n k, ∑ τ, ∑ τ', (∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j))) *
+          (star (ψ τ) * φ τ') := by
+        refine Finset.sum_congr rfl fun s _ => ?_
+        simp only [star_sum, star_mul, star_prod, Finset.sum_mul, Finset.mul_sum]
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun τ' _ => ?_
+        rw [Finset.prod_mul_distrib]
+        ring
+    _ = ∑ τ, ∑ τ', (∑ s : ∀ k, n k, ∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j))) *
+          (star (ψ τ) * φ τ') := by
+        simp only [Finset.sum_mul]
+        rw [Finset.sum_comm]
+        exact Finset.sum_congr rfl fun τ _ => Finset.sum_comm
+    _ = _ := by
+        refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun τ' _ => ?_
+        rw [← Fintype.prod_sum (fun j i => star (W j i (τ j)) * W j i (τ' j))]
+        simp only [mul_apply, conjTranspose_apply]
+
+/-- **Partial isometries on the sites preserve inner products of supported vectors.** Let
+`W_k : ℂ^κ → ℂ^{n_k}`, one on each of `M` sites, have orthonormal columns on a set `S_k` of
+inputs and zero columns outside, `W_k† W_k = Π_{S_k}`. If `ψ^* φ` vanishes at every
+configuration `τ` with some `τ_k ∉ S_k`, then `⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ⟨ψ, φ⟩`.
+
+arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
+the partial isometries `V_k` with `V_k†V_k = Π_k`. -/
+theorem sum_star_mul_prod_of_support {M : ℕ} {n : Fin M → Type*} [∀ k, Fintype (n k)]
+    {κ : Type*} [Fintype κ] [DecidableEq κ] {W : ∀ k, Matrix (n k) κ ℂ} {S : Fin M → Set κ}
+    [∀ k, DecidablePred (· ∈ S k)]
+    (hW : ∀ k a b, ∑ i, star (W k i a) * W k i b = if a = b ∧ a ∈ S k then 1 else 0)
+    (ψ φ : (Fin M → κ) → ℂ) (hψφ : ∀ τ, (∃ k, τ k ∉ S k) → star (ψ τ) * φ τ = 0) :
+    ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
+        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ =
+      ∑ τ, star (ψ τ) * φ τ := by
+  classical
+  have hprod : ∀ τ τ' : Fin M → κ, ∏ j, ((W j)ᴴ * W j) (τ j) (τ' j) =
+      if τ = τ' ∧ ∀ j, τ j ∈ S j then 1 else 0 := fun τ τ' => by
+    simp only [mul_apply, conjTranspose_apply, hW]
+    by_cases h : τ = τ' ∧ ∀ j, τ j ∈ S j
+    · obtain ⟨rfl, hS⟩ := h
+      simp [hS]
+    · rw [ite_eq_right h]
+      have : ∃ j, ¬(τ j = τ' j ∧ τ j ∈ S j) := by
+        by_contra hall
+        push Not at hall
+        exact h ⟨funext fun j => (hall j).1, fun j => (hall j).2⟩
+      obtain ⟨j, hj⟩ := this
+      exact Finset.prod_eq_zero (Finset.mem_univ j) (ite_eq_right hj)
+  rw [sum_star_mul_prod_eq_sum_conjTranspose_mul]
+  simp only [hprod, ite_mul, one_mul, zero_mul]
+  refine Finset.sum_congr rfl fun τ _ => ?_
+  by_cases hS : ∀ j, τ j ∈ S j
+  · simp [hS]
+  · rw [hψφ τ (not_forall.mp hS),
+      Finset.sum_eq_zero fun τ' _ => ite_eq_right fun h => hS h.2]
+
+/-- Isometries `W_k : ℂ^κ → ℂ^{n_k}`, one on each of `M` sites, preserve inner products:
+`⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ⟨ψ, φ⟩`.
+
+arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries on
+the blocks do not change norms or overlaps. The target spaces may differ from site to site, as
+for blocks of different lengths. This is `Matrix.sum_star_mul_prod_of_support` with every input
+kept. -/
+theorem IsIsometry.sum_star_mul_prod {M : ℕ} {n : Fin M → Type*} [∀ k, Fintype (n k)]
+    {κ : Type*} [Fintype κ] [DecidableEq κ] {W : ∀ k, Matrix (n k) κ ℂ}
+    (hW : ∀ k, (W k).IsIsometry) (ψ φ : (Fin M → κ) → ℂ) :
+    ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
+        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ =
+      ∑ τ, star (ψ τ) * φ τ := by
+  classical
+  refine sum_star_mul_prod_of_support (S := fun _ => Set.univ) (fun j a b => ?_) ψ φ
+    fun τ ⟨k, hk⟩ => absurd (Set.mem_univ _) hk
+  have h := congrFun (congrFun (hW j) a) b
+  rw [Matrix.mul_apply, Matrix.one_apply] at h
+  simpa [Matrix.conjTranspose_apply] using h
+
+/-- An isometry `W : ℂ^κ → ℂ^n` applied on every site preserves inner products of vectors on
+`M` sites: `⟨W^{⊗M} ψ, W^{⊗M} φ⟩ = ⟨ψ, φ⟩`; in particular `‖W^{⊗M} ψ‖² = ‖ψ‖²`.
+
+arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries
+`V^{⊗N/q}` do not change norms or overlaps. -/
+theorem IsIsometry.sum_star_mul_tensorPower {n κ : Type*} [Fintype n] [Fintype κ]
+    [DecidableEq κ] {W : Matrix n κ ℂ} (hW : W.IsIsometry) {M : ℕ}
+    (ψ φ : (Fin M → κ) → ℂ) :
+    ∑ s : Fin M → n, star (∑ τ, (∏ j, W (s j) (τ j)) * ψ τ) * ∑ τ, (∏ j, W (s j) (τ j)) * φ τ =
+      ∑ τ, star (ψ τ) * φ τ :=
+  IsIsometry.sum_star_mul_prod (n := fun _ => n) (fun _ => hW) ψ φ
+
+end Matrix
 
 namespace MPSTensor
 
@@ -305,6 +412,81 @@ noncomputable def blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
       (∏ k, polarIsoMatrix (B k) (blockIndexEquiv d hN s k) (τ k)) * x τ := by
   simp [blockIsoVector, EuclideanSpace.equiv, PiLp.toLp_apply]
 
+/-- **Matrices on the blocks**, `(⊗ₖ W_k) x`, for matrices `W_k : ℂ^{D²} → ℂ^{d^{ℓ k}}` on the
+blocks of a ring cut into blocks of lengths `ℓ`, applied to a vector `x` on `M` sites of
+dimension `D²`. For `W_k` the isometric factor of the polar decomposition of a tensor `B_k` this
+is `blockIsoVector` (`MPSTensor.blockIsoVector_eq_blockMatVector`); for a tensor that is not
+injective, an isometry `W_k` with `W_k Π_k = V_k` extends the partial isometry `V_k`.
+
+arXiv:2307.01696, eq. (10) and the paragraph "Inhomogeneous short-range correlated MPS": the
+isometries on the blocks applied to `|Ω⟩`. -/
+noncomputable def blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    (W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (D * D) M) : MPVSpace d N :=
+  (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s =>
+    ∑ τ : Fin M → Fin (D * D), (∏ k, W k (blockIndexEquiv d hN s k) (τ k)) * x τ
+
+@[simp] theorem blockMatVector_apply {N : ℕ} {ℓ : Fin M → ℕ}
+    (W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (D * D) M) (s : Cfg d N) :
+    blockMatVector W hN x s = ∑ τ : Fin M → Fin (D * D),
+      (∏ k, W k (blockIndexEquiv d hN s k) (τ k)) * x τ := by
+  simp [blockMatVector, EuclideanSpace.equiv, PiLp.toLp_apply]
+
+/-- The isometric factors on the blocks are the matrices `V_k` on the blocks. -/
+theorem blockIsoVector_eq_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (x : MPVSpace (D * D) M) :
+    blockIsoVector B hN x = blockMatVector (fun k => polarIsoMatrix (B k)) hN x := by
+  ext s
+  simp
+
+/-- **Isometries on the blocks preserve inner products**: if every `W_k` is an isometry, then
+`⟨(⊗ₖ W_k) x, (⊗ₖ W_k) y⟩ = ⟨x, y⟩`.
+
+arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries on
+the blocks do not change norms or overlaps. -/
+theorem inner_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ} (hN : ∑ k, ℓ k = N)
+    (hW : ∀ k, (W k).IsIsometry) (x y : MPVSpace (D * D) M) :
+    ⟪blockMatVector W hN x, blockMatVector W hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
+  classical
+  simp only [PiLp.inner_apply, RCLike.inner_apply, blockMatVector_apply]
+  have h := Matrix.IsIsometry.sum_star_mul_prod hW (fun τ => x τ) (fun τ => y τ)
+  rw [← Fintype.sum_equiv (blockIndexEquiv d hN) _ _ fun _ => rfl] at h
+  simp only [mul_comm (star _)] at h ⊢
+  exact h
+
+/-- Isometries on the blocks preserve norms: `‖(⊗ₖ W_k) x‖ = ‖x‖`. -/
+theorem norm_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ} (hN : ∑ k, ℓ k = N)
+    (hW : ∀ k, (W k).IsIsometry) (x : MPVSpace (D * D) M) :
+    ‖blockMatVector W hN x‖ = ‖x‖ := by
+  have h := inner_blockMatVector hN hW x x
+  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
+
+/-- **The partial isometries preserve inner products of supported vectors.** If every tensor
+`B_k` is injective on a set `S_k` of bond pairs, so that `V_k†V_k` is the projector onto `S_k`,
+then `⟨(⊗ₖ V_k) x, (⊗ₖ V_k) y⟩ = ⟨x, y⟩` whenever `x^* y` vanishes at every configuration `τ` with
+some `τ_k ∉ S_k`.
+
+arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
+`V†V = Π`. -/
+theorem inner_blockIsoVector_of_isInjectiveOn {N : ℕ} {ℓ : Fin M → ℕ}
+    {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
+    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (B k) (S k))
+    (x y : MPVSpace (D * D) M)
+    (hxy : ∀ τ, (∃ k, virtualPairEquiv D (τ k) ∉ S k) → star (x τ) * y τ = 0) :
+    ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
+  classical
+  simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
+  have h := Matrix.sum_star_mul_prod_of_support (S := fun k => virtualPairEquiv D ⁻¹' S k)
+    (fun k a b => by simpa using sum_star_polarIsoMatrix_mul (hB k) a b)
+    (fun τ => x τ) (fun τ => y τ) hxy
+  rw [← Fintype.sum_equiv (blockIndexEquiv d hN) _ _ fun _ => rfl] at h
+  simp only [mul_comm (star _)] at h ⊢
+  exact h
+
 /-- **The isometries preserve inner products.** If every blocked tensor is injective, then
 `⟨(⊗ₖ V_k) x, (⊗ₖ V_k) y⟩ = ⟨x, y⟩`.
 
@@ -313,24 +495,28 @@ arXiv:2307.01696, paragraph "Approximation through the fixed-point state": for i
 theorem inner_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
     (hB : ∀ k, Kraus.IsInjective (B k)) (x y : MPVSpace (D * D) M) :
-    ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
-  classical
-  simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
-  have h := Matrix.IsIsometry.sum_star_mul_prod
-    (fun k => isIsometry_polarIsoMatrix_of_isInjective (hB k)) (fun τ => x τ) (fun τ => y τ)
-  rw [← Fintype.sum_equiv (blockIndexEquiv d hN) _ _ fun _ => rfl] at h
-  simp only [mul_comm (star _)] at h ⊢
-  exact h
+    ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ :=
+  inner_blockIsoVector_of_isInjectiveOn hN (fun k => isInjectiveOn_univ_iff.mpr (hB k)) x y
+    fun _ ⟨_, hk⟩ => absurd (Set.mem_univ _) hk
+
+/-- The partial isometries preserve the norm of a vector supported on the sets `S_k`. -/
+theorem norm_blockIsoVector_of_isInjectiveOn {N : ℕ} {ℓ : Fin M → ℕ}
+    {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
+    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (B k) (S k))
+    (x : MPVSpace (D * D) M) (hx : ∀ τ, (∃ k, virtualPairEquiv D (τ k) ∉ S k) → x τ = 0) :
+    ‖blockIsoVector B hN x‖ = ‖x‖ := by
+  have h := inner_blockIsoVector_of_isInjectiveOn hN hB x x fun τ hτ => by rw [hx τ hτ, mul_zero]
+  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
 
 /-- The isometries preserve norms: `‖(⊗ₖ V_k) x‖ = ‖x‖` when every blocked tensor is
 injective. -/
 theorem norm_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
     (hB : ∀ k, Kraus.IsInjective (B k)) (x : MPVSpace (D * D) M) :
-    ‖blockIsoVector B hN x‖ = ‖x‖ := by
-  have h := inner_blockIsoVector hN hB x x
-  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
-  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
+    ‖blockIsoVector B hN x‖ = ‖x‖ :=
+  norm_blockIsoVector_of_isInjectiveOn hN (fun k => isInjectiveOn_univ_iff.mpr (hB k)) x
+    fun _ ⟨_, hk⟩ => absurd (Set.mem_univ _) hk
 
 /-- **The state `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}`** for a chain of site-dependent tensors `A`
 blocked into blocks of lengths `ℓ`, and site-dependent pairs `ω^k`: `V_k` is the isometric

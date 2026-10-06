@@ -45,6 +45,19 @@ noncomputable def mpvState {d D : ℕ} (A : MPSTensor d D) (N : ℕ) : MPVSpace 
   -- `mpvState` is just `WithLp.toLp 2` applied to the coefficient function.
   simp [mpvState, EuclideanSpace.equiv, PiLp.toLp_apply]
 
+variable {d D : ℕ}
+
+/-- The normalized periodic state `|φ_N⟩ = c_N⁻¹ |φ_N(A)⟩` with `c_N = ‖φ_N(A)‖`
+(arXiv:2307.01696, Supplemental Material, eq. `eq:TI-MPS2`); it is `0` when `c_N = 0`. -/
+noncomputable def normalizedMPVState (A : MPSTensor d D) (N : ℕ) : MPVSpace d N :=
+  ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
+
+/-- The normalized periodic state is a unit vector when the periodic state does not vanish. -/
+theorem norm_normalizedMPVState {A : MPSTensor d D} {N : ℕ} (h : mpvState A N ≠ 0) :
+    ‖normalizedMPVState A N‖ = 1 := by
+  rw [normalizedMPVState, norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+    inv_mul_cancel₀ (norm_ne_zero_iff.mpr h)]
+
 /-- Lean's inner product of MPV states. -/
 noncomputable def mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ :=
   ⟪mpvState (d := d) A N, mpvState (d := d) B N⟫_ℂ

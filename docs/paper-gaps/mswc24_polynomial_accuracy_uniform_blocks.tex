@@ -1,0 +1,151 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\interfootnotelinepenalty=10000
+\widowpenalty=10000
+\clubpenalty=10000
+\input{command}
+\title{Polynomial Approximation Accuracy at Positive Correlation Length}
+\author{}
+\date{2026-10-03}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+After Lemma~1, \cite[p.~4]{Malz2024Preparation} states that, for any
+$\eta>0$, blocking
+\begin{equation}
+    q=\left\lceil 2\xi(1+\eta)\log N\right\rceil
+    \label{eq:mswc24_polynomial_block_length}
+\end{equation}
+sites gives approximation error $O(N^{-\eta})$. Here the target is the
+normalized periodic state of a normal tensor, the error is
+$\varepsilon(\psi,\phi)=1-|\langle\psi,\phi\rangle|$, and
+$\xi=-1/\log|\lambda_2|$ is the correlation length. The construction uses
+the gauge of eq.~(5), with identity left fixed matrix and positive definite
+right fixed matrix $\rho$ satisfying $\operatorname{tr}\rho=1$.
+
+\section{The statement proved for equal blocks}
+The result in \doclink{TNLean/MPS/Preparation/PolynomialAccuracy} concerns
+finite positive correlation length $\xi>0$ and equal blocks. There is
+$C>0$, depending on the tensor and its fixed-point data, such that for
+every $\eta>0$ and all positive integers $q,M$ with
+$N=Mq\geq2$ and (\ref{eq:mswc24_polynomial_block_length}),
+\begin{equation}
+    1-\left|\left\langle\widetilde\phi_N,\phi_N\right\rangle\right|
+    \leq C N^{-\eta}.
+    \label{eq:mswc24_polynomial_uniform_error}
+\end{equation}
+The vector $\widetilde\phi_N$ is the normalized periodic state obtained
+by replacing the positive part of the $q$-site blocked tensor by its
+fixed-point limit, as in eqs.~(9)--(10) of the source. The constant $C$ is
+independent of $\eta,q,M$.
+
+The proof uses the stronger second-order estimate already established in
+\doclink{TNLean/MPS/Preparation/ApproximationError}:
+\begin{equation}
+    \varepsilon(\widetilde\phi_N,\phi_N)
+    \leq C_\gamma M e^{-2\gamma q/\xi},\qquad 0<\gamma<1.
+    \label{eq:mswc24_polynomial_second_order}
+\end{equation}
+Fixing $\gamma=1/4$ makes the constant independent of $\eta$. Since
+$q\geq2\xi(1+\eta)\log N$ and $q\geq1$, one has $M\leq N$. The bound
+(\ref{eq:mswc24_polynomial_uniform_error}) follows from
+\begin{equation*}
+    M e^{-q/(2\xi)}
+    \leq N e^{-(1+\eta)\log N}=N^{-\eta}.
+\end{equation*}
+The printed Lemma~1 gives only $O(Me^{-\gamma q/\xi})$ for
+$\gamma<1/2$. Substituting (\ref{eq:mswc24_polynomial_block_length}) into
+that estimate gives $O(N^{1-2\gamma(1+\eta)}/q)$, whose power of $N$
+has exponent strictly greater than $-\eta$. The factor $1/q$ decays only
+logarithmically for fixed $\eta$. Thus that substitution alone does not
+establish the exact coefficient in
+(\ref{eq:mswc24_polynomial_block_length}); the proved second-order
+estimate (\ref{eq:mswc24_polynomial_second_order}) supplies one justification.
+The all-length argument below uses the corresponding second-order
+estimate for unequal blocks.
+
+\section{Every sufficiently large chain length}
+The equal-block proof requires $N=Mq$. For fixed $\eta$ and sufficiently
+large prime $N$, the prescribed $q$ lies strictly between $1$ and $N$
+and does not divide $N$. This arithmetic restriction has now been removed
+by the actual construction in
+\doclink{TNLean/MPS/Preparation/AllLengthPolynomialAccuracy}.
+
+There exist constants $C,c>0$ and an integer $N_0\geq2$, chosen before
+$\eta$ and $N$, such that for every $\eta>0$ and $N\geq N_0$, the target
+periodic state is nonzero and the prescribed approximation $\psi_{N,\eta}$
+is a unit vector satisfying
+\begin{align}
+    1-|\langle\psi_{N,\eta},\phi_N\rangle|
+      &\leq C N^{-\eta},\label{eq:mswc24_polynomial_all_length_error}\\
+    T &\leq c(1+\eta)\log N.
+    \label{eq:mswc24_polynomial_all_length_depth}
+\end{align}
+Here $T$ is the depth of a local circuit preparing $\psi_{N,\eta}$ from
+a product state. Normality supplies the eventual block injectivity and
+nonvanishing of the target; these are conclusions derived in the proof,
+not additional assumptions.
+
+When $q\leq N$, write $N=Mq+r$, where $M=\lfloor N/q\rfloor\geq1$
+and $0\leq r<q$. Use $M-1$ blocks of length $q$ and a final block of
+length $q'=q+r$. Thus $q\leq q'<2q$, and their lengths sum to $N$.
+This implements the larger-final-block prescription in
+\cite[Supplemental Material, p.~9, proof of Theorem~1, following
+ eq.~(S23)]{Malz2024Preparation}. Apply each block's polar partial
+isometry to the fixed-point pairs. The resulting vector is exactly
+$\psi_{N,\eta}$, rather than an unspecified approximant.
+
+The second-order unequal-block estimate is proved in
+\doclink{TNLean/MPS/Preparation/BlockApproximationError} for $0<\gamma<1$:
+\begin{align}
+    \varepsilon(\psi_{N,\eta},\phi_N)
+     & \leq C_\gamma M e^{-2\gamma q/\xi}.
+    \label{eq:mswc24_polynomial_variable_error}
+\end{align}
+Choosing $\gamma=1/4$ gives the same comparison
+$M e^{-q/(2\xi)}\leq N^{-\eta}$ as above, with one constant independent
+of $\eta$ and $N$. The preparation depth is $O(q)$ because every block
+has length at most $2q$.
+
+When $q>N$, the construction uses the exact normalized target. Its error
+is zero and exact one-block preparation has depth $O(N)$. Since $N<q$
+and
+\begin{equation*}
+    q\leq \left(2\xi+\frac1{\log2}\right)(1+\eta)\log N
+       \qquad(N\geq2),
+\end{equation*}
+this branch obeys the same logarithmic-depth bound. The threshold $N_0$
+is independent of $\eta$: it can ensure both eventual nonvanishing and
+$2\xi\log N$ beyond every required injectivity and block-size threshold.
+The divisibility restriction is therefore resolved using the second-order
+unequal-block estimate above.
+
+\section{The remaining scope: zero correlation length}
+The theorem still assumes $\xi>0$. The source's class of normal tensors
+also contains tensors whose subleading transfer eigenvalues all vanish.
+For instance, a rank-one transfer map
+$\mathcal{E}(X)=\operatorname{tr}(X)\rho$, with $\rho>0$ of trace one, has this
+property. These tensors have zero correlation length and are outside
+the present logarithmic block prescription. The source explicitly
+assumes positive correlation length for its lower-bound discussion,
+but the upper-bound construction begins with a normal tensor without
+that restriction \cite[pp.~2--3]{Malz2024Preparation}.
+
+To eliminate this remaining restriction, prove that a sufficiently
+large, fixed positive blocking makes the transfer map equal to its
+fixed-point projection when the entire subleading spectrum is zero.
+The subleading part may be nilpotent, so one cannot assume this equality
+already holds at one site. Then use the resulting exact fixed-point
+preparation with a block size independent of $N$. Merely substituting
+$\xi=0$ in (\ref{eq:mswc24_polynomial_block_length}) selects $q=0$;
+the exact-state branch alone gives a sequential depth bound and does not
+establish the required logarithmic-depth conclusion.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

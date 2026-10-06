@@ -2,51 +2,91 @@
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\widowpenalty=10000
+\clubpenalty=10000
 \input{command}
 \title{SPT Fixed Points with a Nontrivial Character}
 \author{}
-\date{2026-09-27}
+\date{2026-10-03}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
-\section{What the source states}
-In the paragraph ``Symmetry protected topological order'' of
-\cite{Cirac2021Matrix}, a symmetry acts on an MPS by
-$S_g(A^i)=e^{i\phi(g)}X_g^\dagger A^iX_g$ with $\phi$ a 1-cocycle, and the
-zero-correlation-length representative is constructed so that it ``transforms
-according to a given 1- and 2-cocycle $\phi$ and $\omega$''.\footnote{Source
-    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, lines 1147--1157.}
-The phase $e^{i\phi(g)}$ is part of the symmetry: on a ring of $N$ sites the
-matrix product vector is multiplied by $e^{iN\phi(g)}$.
+\section{The source statement}
+In Section~III.A of \cite{Cirac2021Matrix}, a symmetry acts on an MPS by
+$S_g(A^i)=e^{i\theta(g)}X_g^\dagger A^iX_g$, where
+$\phi(g)=e^{i\theta(g)}$ is a circle-valued character. The source constructs
+a zero-correlation-length representative for a prescribed character and
+2-cocycle class. On a ring of $N$ sites, the character contributes the
+physical phase $\phi(g)^N$. The relevant passage is
+\path{Papers/2011.12127/TN-Review-main.tex}, lines 1147--1157.
 
-\section{What is formalized}
-For a projective representation $\rho$ with factor system $\omega$, a character
-$\phi$ and $W_g=\rho(g^{-1})$, the twist identity
+\section{The earlier restriction}
+The original exact-invariance predicate required each physical twist to
+have the same matrix product vectors as the untwisted tensor. Consequently,
+the fixed-point symmetry and class-realization results using that predicate
+were restricted to $\phi=1$, although the local twist identity was already
+proved for arbitrary $\phi$. Exact vector invariance omits the character
+phase when $\phi(g)^N\ne1$.
+
+\section{Character and cocycle-class realization}
+Let $\rho$ be a projective representation with factor system $\omega$,
+put $W_g=\rho(g^{-1})$, and take the dimer fixed point
 \begin{align}
-    \sum_jU(g)_{ij}A^j & =\phi(g)\,W_gA^iW_g^{-1}
+    A^{(a,b)} & =D^{-1/2}|a\rangle\langle b|, &
+    U(g) & =\phi(g)(W_g^T\otimes W_g^{-1}).
+    \label{eq:rmp_spt_character_action}
+\end{align}
+The symmetry relation is
+\begin{align}
+    \widetilde A_g^i=\sum_jU(g)_{ij}A^j
+      & =\phi(g)W_gA^iW_g^{-1}.
     \label{eq:rmp_spt_trivial_character_twist}
 \end{align}
-is proved for every $\phi$. On-site symmetry, the existence of a virtual
-projective representation, and the identification of its factor system with
-$\omega$ up to a coboundary are proved only for $\phi=1$. The formal on-site
-symmetry predicate asks that each twisted tensor generate the same matrix
-product vectors as the tensor itself, and for $\phi\neq1$ the twisted vector on
-$N$ sites is $\phi(g)^N$ times the original one. For bond dimension $D\geq1$ the
-vector on one site is nonzero, so the predicate fails whenever
-$\phi(g)\neq1$. For $D=0$ the physical alphabet is empty, no configuration of
-positive length exists, and the predicate holds for every character.
+Thus the twist is gauge equivalent to $\phi(g)A$, and
+\begin{align}
+    |V^{(N)}(\widetilde A_g)\rangle
+      & =\phi(g)^N|V^{(N)}(A)\rangle.
+    \label{eq:rmp_spt_character_vector}
+\end{align}
+These statements use on-site symmetry up to a character, rather than
+requiring equality of the two vectors. The projective representation
+$\rho$ itself realizes (\ref{eq:rmp_spt_trivial_character_twist}).
+For $D\geq1$, every other virtual projective representation realizing
+that relation with the same character has a factor system cohomologous
+to $\omega$: cancel the nonzero scalar $\phi(g)$, then apply gauge
+uniqueness to the injective fixed-point tensor.
 
-\section{Elimination plan}
-Introduce on-site symmetry up to a character, asking that each twisted tensor be
-gauge equivalent to $\phi(g)$ times the tensor, and state the symmetry and
-cocycle-class results for it with the character $\phi$ of
-(\ref{eq:rmp_spt_trivial_character_twist}). Since $\phi(g)^{-1}U(g)$ is the
-action with trivial character, the factor system of the virtual representation
-is again cohomologous to $\omega$. The affected declarations are
-\leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetric},
-\leanid{MPSTensor.cohomologousTo_of_sptFixedPointTensor} and
-\leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}.
+For finite $G$, a unitary twisted regular representation supplies the
+virtual representation from the cocycle alone. Its factor system is
+cohomologous to $\omega$, and the physical action in
+(\ref{eq:rmp_spt_character_action}) realizes the prescribed character and
+cocycle class. No unit-modulus assumption on a complex-valued character
+is needed here. Every $g$ has finite positive order $m$, so
+$\phi(g)^m=1$ and $|\phi(g)|=1$ follow from the character law. For a general
+group, the algebraic identities hold for every complex-valued character;
+unitarity of the physical action requires the source's circle-valued
+character and unitary virtual matrices.
+
+The general-character results are in
+\doclink{TNLean/MPS/Symmetry/Character} and
+\doclink{TNLean/MPS/Symmetry/SPTFixedPoint}. They include the vector phase,
+on-site symmetry up to the character, virtual class uniqueness and
+existence, and finite-group realization from the cocycle alone. The
+trivial-character restriction is therefore resolved.
+
+\section{Distinct source questions}
+This correction concerns the character phase. The use of the dimer fixed
+point in place of the printed tensor remains the local correction recorded
+in \cite{gap:rmp_spt_fixed_point_tensor}. The action above treats linear
+on-site symmetries. Its mixed-symmetry extension includes time reversal
+and reflection, with a circle-valued character twisted by time reversal
+and a virtual factor system twisted by the sum of both parities
+\cite{gap:rmp_spt_fixed_point_onsite_scope}. In that extension,
+\leanid{MPSTensor.mixedSptAction_mpv} proves the same length-$N$ phase
+$\phi(g)^N$, including complex conjugation and site-order reversal. The
+printed-tensor correction remains necessary in both constructions.
 
 \bibliographystyle{alpha}
 \bibliography{references}

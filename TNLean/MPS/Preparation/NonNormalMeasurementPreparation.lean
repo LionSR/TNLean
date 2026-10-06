@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Preparation.SectorSpectralGap
 import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.MeasurementPreparation
-import TNLean.MPS.Preparation.RepeatedBlockError
+import TNLean.MPS.Preparation.BlockSumError
 
 /-!
 # Tensors that are not normal, prepared with measurements in depth `O(log(N/ε))`
@@ -27,6 +28,11 @@ blocks (eq. (S2)), with the corrected approximating state
 * with its error bound (`MPSTensor.exists_approximationError_le_mul_repeatedBlockSum`), a unit
   vector with error at most `ε` is prepared with measurements in depth `O(log(N/ε))`
   (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`).
+
+Both scope restrictions below are removed, for blocks whose states may overlap and for every
+chain length, by
+`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`,
+which prepares a different approximating state.
 
 **Scope restriction (orthogonal blocks):** both results take, at the block length `q`, the
 orthogonality `B_jᴴ B_{j'} = 0` of the `q`-site states of distinct blocks, which the source does
@@ -62,6 +68,7 @@ multiplicity `m_j ≥ 2`. Documented in `docs/paper-gaps/mswc24_repeated_block_c
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -186,22 +193,6 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b
 
 /-! ### Error `ε` in depth `O(log(N/ε))` -/
 
-/-- **A common gap for normal blocks.** For finitely many normal left-canonical blocks there is
-`0 < t < 1` bounding the moduli of the eigenvalues other than `1` of all their transfer maps
-(arXiv:2307.01696, eq. (5) and the remark after it, for each block). -/
-theorem exists_forall_eigenvalue_norm_le [NeZero b] (hN : ∀ j, Kraus.IsNormal (Aj j))
-    (hA : ∀ j, IsLeftCanonical (Aj j)) (hD : ∀ j, NeZero (Dj j)) :
-    ∃ t : ℝ, 0 < t ∧ t < 1 ∧ ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ ‖(t : ℂ)‖ := by
-  choose t ht0 ht1 hgap using fun j =>
-    haveI := hD j
-    exists_eigenvalue_norm_le_of_isNormal (Aj j) (hN j) (hA j)
-  set t₀ := Finset.univ.sup' Finset.univ_nonempty t
-  have ht₀ : 0 < t₀ := (ht0 0).trans_le (Finset.le_sup' t (Finset.mem_univ 0))
-  refine ⟨t₀, ht₀, (Finset.sup'_lt_iff _).2 fun j _ => ht1 j, fun j μ' hμ hne => ?_⟩
-  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht₀]
-  exact (hgap j μ' hμ hne).trans (Finset.le_sup' t (Finset.mem_univ j))
-
 /-- **Tensors that are not normal, with measurements, in depth `O(log(N/ε))`.** Let
 `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (arXiv:2307.01696, Supplemental Material,
 eq. (S2)) with nonzero weights, every block `A_j` normal in the gauge of eq. (5):
@@ -238,7 +229,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
   have hDj : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
   obtain ⟨t, ht0, ht1, hlam⟩ := exists_forall_eigenvalue_norm_le hN hA hDj
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
-  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul_repeatedBlockSum (μ := μ) hι hdisj hN
+  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul_repeatedBlockSum hι hdisj hN
     hA hσ htr hfix (lam₂ := (t : ℂ)) hlam (γ := 1 / 4) (by norm_num) (by norm_num)
   obtain ⟨Cp, L₀, hCp⟩ := exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector d b Dj
   choose Linj hLpos hLinj using hN
@@ -323,7 +314,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
   refine ⟨ψ, Cp * q, hψn, ?_, by rw [hψ]; exact hprep, ?_⟩
   · exact natCast_mul_le_mul_log_of_le_two_mul hN2 hε hε1 hb1 hq2
   · rw [hinner]
-    refine (herr q M horth hβ).trans ?_
+    refine (herr μ q M horth hβ).trans ?_
     rw [hexp]
     have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
     rw [show r * (q : ℝ) = q / a by rw [ha, div_div_eq_mul_div, div_one, mul_comm]]

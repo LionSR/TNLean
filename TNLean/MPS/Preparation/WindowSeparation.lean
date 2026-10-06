@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Circuit.RingSeparation
 import TNLean.MPS.Preparation.VarianceOfAverages
 import TNLean.MPS.Preparation.WindowOperatorSupport
 
@@ -30,6 +31,7 @@ that "every connected correlation for operators at a distance larger than `2T` v
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 
@@ -62,24 +64,7 @@ distance larger than `2T`"). -/
 theorem isSeparatedBy_window {a w b w' s : ℕ} (hab : a + w + s ≤ b)
     (hba : b + w' + s ≤ a + N) :
     IsSeparatedBy (window N a w) (window N b w') s := by
-  intro x hx y hy m hm heq
-  have hN : (0 : ℤ) < N := by exact_mod_cast Nat.pos_of_neZero N
-  have h0 : 0 ≤ m % (N : ℤ) := Int.emod_nonneg _ hN.ne'
-  have hv := congrArg Fin.val heq
-  rw [Fin.val_add, Fin.val_intCast] at hv
-  have hz : (y.val : ℤ) = ((x.val : ℤ) + m % N) % N := by
-    rw [hv, Int.natCast_emod, Nat.cast_add, Int.toNat_of_nonneg h0]
-  have e1 := Int.emod_add_mul_ediv ((x.val : ℤ) + m % N) N
-  have e2 := Int.emod_add_mul_ediv m N
-  have hdvd : (N : ℤ) ∣ (y.val : ℤ) - x.val - m :=
-    ⟨-(((x.val : ℤ) + m % N) / N) - m / N, by rw [hz]; linear_combination e1 + e2⟩
-  obtain ⟨hxa, hxw⟩ := hx
-  obtain ⟨hyb, hyw⟩ := hy
-  obtain ⟨hm1, hm2⟩ := abs_le.mp hm
-  have hpos : 0 ≤ (y.val : ℤ) - x.val - m := by omega
-  have hlt : (y.val : ℤ) - x.val - m < N := by omega
-  have := Int.eq_zero_of_dvd_of_nonneg_of_lt hpos hlt hdvd
-  omega
+  exact isSeparatedBy_of_val_bounds (fun _ h => h) (fun _ h => h) hab hba
 
 end Ring
 

@@ -18,6 +18,7 @@ require_verdict = true
 # review; tnlean marks internal theorem-surface audits with no single
 # external source. Enforced by `texra-blueprint paper-gaps check`.
 [paper_gaps.sources]
+bn12 = "Bachmann and Nachtergaele, Product vacua with boundary states, arXiv:1112.4097"
 bmwshv17 = "arXiv:1511.08090 (anyons and matrix product operator algebras)"
 cpgsv17 = "arXiv:1606.00608 (MPDO renormalization fixed points)"
 cpgsv21 = "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)"
@@ -30,6 +31,7 @@ gnvw12  = "Gross, Nesme, Vogts, Werner, Commun. Math. Phys. 310 (2012)"
 gs24    = "arXiv:2405.00439 (domain walls of anomalous MPU symmetries)"
 hjpw04  = "Hayden, Jozsa, Petz, Winter (2004)"
 knabe88 = "Knabe, J. Stat. Phys. 52 (1988)"
+lmsvkl25 = "arXiv:2509.03600 (bialgebraic structures in MPO symmetries)"
 mgsc18  = "arXiv:1706.07329 (semi-injective PEPS and MPS reductions)"
 mpu     = "arXiv:1703.09188 (matrix product unitaries)"
 mswc24  = "arXiv:2307.01696 (log-depth preparation of matrix product states)"
@@ -37,6 +39,7 @@ nachtergaele96 = "Nachtergaele, Commun. Math. Phys. 175 (1996), cond-mat/9410110
 peps    = "arXiv:1804.04964 (normal PEPS)"
 pgvwc07 = "quant-ph/0608197 (MPS representations)"
 pgwsvc08 = "arXiv:0802.0447 (string order and symmetries)"
+psc21   = "arXiv:2103.13367 (quantum circuits assisted by LOCC: transformations and phases of matter)"
 rmp     = "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)"
 scp10   = "arXiv:1001.3807 (PEPS as ground states: degeneracy and topology)"
 spc11   = "arXiv:1010.3732 (SPT classification)"

@@ -1,0 +1,418 @@
+% Common-alphabet auxiliary route for SCP10 Theorem 5.5.
+% Source: eq:2d:closure-intersection, eq:2d:closure-inv, eq:2d:close-in-in;
+% coefficient duality: Lemma 4.6. The full theorem has a separate owner.
+\subsection{Bond support and common-alphabet closure reconstruction}
+\label{sec:peps_four_cut_common_reconstruction}
+
+Throughout this subsection $G$ and $V$ are finite, and the torus periods
+are positive. The site tensors $A^0_v$ are the matched averaging tensors
+of Definition~\ref{def:peps_four_cut_common_matched_action}.
+Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the actual bonds.
+
+\begin{definition}[Bond labels, product vectors, and trace-dual coefficients]%
+    \label{def:peps_four_cut_common_bond_coefficients}
+    \lean{TNLean.PEPS.TorusBondLabels,
+        TNLean.PEPS.torusRepresentationBondProduct,
+        TNLean.PEPS.torusBondCoefficientExtraction,
+        TNLean.PEPS.torusBondLabelConfigEquiv,
+        TNLean.PEPS.card_torusBondLabels_two}
+    \leanok
+    \uses{def:peps_four_cut_common_matched_action,
+        def:peps_torus_physical_bond_regrouping,
+        thm:peps_torus_projector_extraction}
+    A bond labelling is $p=(p^{\mathrm h},p^{\mathrm v})\in G^X\times G^X$.
+    The bijection to $G^{\mathcal B}$ sends $p$ to
+    $(v,d)\mapsto p^d_v$; its inverse restricts to the two directions.
+    For any finite label alphabet $G$, there are $|G|^8$ such labellings
+    on the two-by-two torus. Define the bare product vector
+    \begin{align}
+        B_p(\sigma) & =\prod_{v\in X}
+        U^{\mathrm h}_v(p^{\mathrm h}_v)(l_{v+e},r_v)
+        U^{\mathrm v}_v(p^{\mathrm v}_v)(t_v,b_{v+n}).
+        \label{eq:peps_common_bond_product}
+    \end{align}
+    For each bond $f$, let $U_f$ denote its representation and put
+    $\delta_{f,k}(M)=\tr(U_f(k^{-1})M\Delta_{U_f})$, using the trace-dual
+    operator of Theorem~\ref{thm:peps_torus_projector_extraction}.
+    The linear coefficient functional is
+    \begin{align}
+        E_p(\psi) & =\sum_{\beta:\mathcal B\to V^2}
+        (\mathcal R\psi)(\beta)
+        \prod_{f\in\mathcal B}\delta_{f,p_f}
+        (E_{\beta_f^1,\beta_f^2}).
+        \label{eq:peps_common_bond_extraction}
+    \end{align}
+    For unitary representations, $U_f(k^{-1})=U_f(k)^\dagger$,
+    recovering the pairing in \cite[Lemma~4.6]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Coefficient uniqueness for coherent bond sums]%
+    \label{thm:peps_four_cut_common_coefficient_uniqueness}
+    \lean{TNLean.PEPS.torusBondCoefficientExtraction_bondProduct,
+        TNLean.PEPS.torusBondCoefficientExtraction_sum,
+        TNLean.PEPS.linearIndependent_torusRepresentationBondProduct,
+        TNLean.PEPS.sum_torusRepresentationBondProduct_eq_iff}
+    \leanok
+    \uses{def:peps_four_cut_common_bond_coefficients}
+    Suppose every individual bond representation is semi-regular. Then
+    \begin{align}
+        E_p(B_q)                      & =\delta_{p,q},
+        \label{eq:peps_common_bond_duality}            \\
+        E_p\left(\sum_q a_qB_q\right) & =a_p.
+        \nonumber
+    \end{align}
+    The family $(B_p)_p$ is linearly independent. In particular,
+    $\sum_pa_pB_p=\sum_pb_pB_p$ if and only if $a_p=b_p$ for every $p$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_torus_projector_extraction}
+    Pair the product vector bond by bond. Trace duality gives
+    $E_p(B_q)=\prod_f\delta_{p_f,q_f}=\delta_{p,q}$, since all labelled
+    bonds are distinct. Linearity extracts a specified coefficient from
+    any finite coherent sum. Applying every $E_p$ to a zero sum proves
+    linear independence and applying them to an equality proves coefficient
+    uniqueness.
+\end{proof}
+
+\begin{theorem}[Relative-label compatibility]%
+    \label{thm:peps_four_cut_common_relative_compatibility}
+    \lean{TNLean.PEPS.fourBlock_relativeLabel_compatibility,
+        TNLean.PEPS.fourBlock_compatibility_commute}
+    \leanok
+    For arbitrary $a,b,c,d$ in a group, put
+    $h_1=b^{-1}a$, $h_2=d^{-1}c$, $v_1=c^{-1}a$, $v_2=d^{-1}b$.
+    Then $v_2h_1=h_2v_1$. More generally, any four labels satisfying
+    $v_2h_1=h_2v_1$, $h_1=h_2$, and $v_1=v_2$ obey $v_1h_1=h_1v_1$.
+    These are the group identities in the proof of
+    \cite[Theorem~5.5]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Both $(d^{-1}b)(b^{-1}a)$ and $(d^{-1}c)(c^{-1}a)$ equal $d^{-1}a$.
+    Substituting equal horizontal and vertical labels into the
+    compatibility equation gives commutation.
+\end{proof}
+
+\begin{definition}[Representation columns and physical bond slices]%
+    \label{def:peps_four_cut_common_bond_slices}
+    \lean{TNLean.PEPS.representationBondMatrix,
+        TNLean.PEPS.representation_matrix_mem_bond_range,
+        TNLean.PEPS.torusPhysicalBondSlice,
+        TNLean.PEPS.torusBondRepresentation}
+    \leanok
+    \uses{def:peps_four_cut_common_matched_action,
+        def:peps_torus_physical_bond_regrouping}
+    Read $U_{(v,\mathrm h)}=U^{\mathrm h}_v$ and
+    $U_{(v,\mathrm v)}=U^{\mathrm v}_v$. Define
+    $F_f:\C^G\to\C^{V^2}$ by $F_f((i,j),k)=U_f(k)_{i,j}$.
+    Thus $\operatorname{ran}F_f$ is the span of the representation matrices,
+    and each vector $(i,j)\mapsto U_f(k)_{i,j}$ is its column
+    $F_f\delta_k$. For $\tau:\mathcal B\to V^2$, the physical bond slice is
+    the linear map
+    $S_{f,\tau}\psi(s)=(\mathcal R\psi)(\tau[f\mapsto s])$.
+\end{definition}
+\begin{proof}\leanok
+    Matrix multiplication by the coordinate vector $\delta_k$ gives
+    exactly the indicated representation column. Evaluation after the
+    inverse bond regrouping is linear in $\psi$.
+\end{proof}
+
+\begin{theorem}[An identity bond forces representation-matrix support]%
+    \label{thm:peps_four_cut_common_uncut_support}
+    \lean{TNLean.PEPS.product_coordinateSlice_eq_smul,
+        TNLean.PEPS.torusPhysicalBondSlice_averagingSite_mem_range}
+    \leanok
+    \uses{def:peps_four_cut_common_bond_slices}
+    For any finite set $I$, functions $f_i:Q\to\C$, $j\in I$, and
+    $\tau:I\to Q$,
+    \begin{align}
+        \prod_{i\in I}f_i(\tau[j\mapsto s]_i)
+         & =\left(\prod_{i\ne j}f_i(\tau_i)\right)f_j(s).
+        \label{eq:peps_common_product_slice}
+    \end{align}
+    If the inserted bond operator $O_f$ equals $\Id$, then every slice
+    $S_{f,\tau}\mathcal N_{A^0}(O)$ lies in $\operatorname{ran}F_f$.
+    The other bond operators are arbitrary.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_network_expansion,
+        def:peps_four_cut_common_bond_slices}
+    Separate the $j$th factor from the finite product to obtain
+    (\ref{eq:peps_common_product_slice}). In
+    (\ref{eq:peps_common_regrouped_average}), an identity bond has factor
+    $U_f(q_{h(f)}q_{t(f)}^{-1})$. Its $f$-slice is a scalar multiple of
+    one column of $F_f$ by (\ref{eq:peps_common_product_slice}). Sum these
+    vectors over all $q$ and retain the normalization $|G|^{-|X|}$.
+\end{proof}
+
+\begin{theorem}[The four cuts derive a complete bond-product expansion]%
+    \label{thm:peps_four_cut_common_bond_span}
+    \lean{TNLean.PEPS.torusPhysicalBondSlice_mem_range_of_mem_torusCutSpace,
+        TNLean.PEPS.torusBondRegrouping_mem_product_range_of_mem_fourTorusCutSpace,
+        TNLean.PEPS.exists_bondCoefficients_of_mem_fourTorusCutSpace,
+        TNLean.PEPS.exists_labelCoefficients_of_mem_fourTorusCutSpace,
+        TNLean.PEPS.eq_sum_extracted_bondProducts_of_mem_fourTorusCutSpace}
+    \leanok
+    \uses{def:peps_four_cut_common_boundary,
+        def:peps_four_cut_common_bond_slices,
+        def:peps_four_cut_common_bond_coefficients,
+        def:peps_four_cut_common_physical_product}
+    If $\psi\in\mathcal S^{A^0}_{c,r}$ and $f$ is uncut, then
+    $S_{f,\tau}\psi\in\operatorname{ran}F_f$ for every $\tau$.
+    Here uncut means $v_x+1\ne c$ for $f=(v,\mathrm h)$ or
+    $v_y+1\ne r$ for $f=(v,\mathrm v)$.
+    On $X=(\Z/2\Z)^2$, every $\psi\in\mathcal S^{A^0}$ satisfies
+    \begin{align}
+        \mathcal R\psi & \in\operatorname{ran}\mathcal T_F,
+        \nonumber                                           \\
+        \psi           & =\sum_{q:\mathcal B\to G}a_q
+        B_{(v\mapsto q(v,\mathrm h),\,v\mapsto q(v,\mathrm v))}
+        =\sum_pa'_pB_p
+        \label{eq:peps_common_derived_bond_span}
+    \end{align}
+    for suitable coefficients. If all bond representations are
+    semi-regular, these coefficients are uniquely determined and
+    \begin{align}
+        \psi & =\sum_pE_p(\psi)B_p.
+        \label{eq:peps_common_extracted_expansion}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_boundary_span,
+        thm:peps_four_cut_common_uncut_support,
+        thm:peps_four_cut_common_product_range,
+        thm:peps_four_cut_common_coefficient_uniqueness,
+        def:peps_four_cut_common_bond_coefficients}
+    Expand each boundary in fixed endpoint tensors. Each such cut vector
+    has matrix units on cut bonds and identities on uncut bonds, so
+    Theorem~\ref{thm:peps_four_cut_common_uncut_support} gives the slice
+    condition; linearity extends it to the entire cut range.
+    A bond based at $v$ is uncut in the cut $(v_x,v_y)$ on the
+    two-by-two torus. Thus every bond satisfies the slice condition, and
+    (\ref{eq:peps_common_product_range}) gives a vector $a$ with
+    $\mathcal R\psi=\mathcal T_Fa$.
+    Expand this product map and undo regrouping to obtain the first sum
+    in (\ref{eq:peps_common_derived_bond_span}); the bond-label bijection
+    gives the second. Only after this existence argument, apply each
+    $E_p$ and use (\ref{eq:peps_common_bond_duality}) to obtain
+    (\ref{eq:peps_common_extracted_expansion}).
+\end{proof}
+
+\begin{theorem}[Trace extraction of a canonical network]%
+    \label{thm:peps_four_cut_common_network_extraction}
+    \lean{TNLean.PEPS.torusBondCoefficientExtraction_averagingSite}
+    \leanok
+    \uses{def:peps_four_cut_common_bond_coefficients}
+    For arbitrary inserted bond matrices, with $O^q_f$ as in
+    (\ref{eq:peps_common_gauged_horizontal}) and
+    (\ref{eq:peps_common_gauged_vertical}),
+    \begin{align}
+        E_p(\mathcal N_{A^0}(O))
+         & =|G|^{-|X|}\sum_{q:X\to G}
+        \prod_{f\in\mathcal B}\delta_{f,p_f}(O^q_f).
+        \label{eq:peps_common_network_extraction}
+    \end{align}
+    This identity requires no semi-regularity assumption.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_network_expansion,
+        thm:peps_torus_projector_extraction}
+    Apply the linear functional $E_p$ to
+    (\ref{eq:peps_common_network_average}). Move it through the finite sum
+    and normalization, and factor the pairing of each product into its
+    individual bond pairings.
+\end{proof}
+
+\begin{theorem}[Nonflat coefficients vanish in the four-cut intersection]%
+    \label{thm:peps_four_cut_common_nonflat_vanish}
+    \lean{TNLean.PEPS.torusBondCoefficientExtraction_cutNetwork_eq_zero,
+        TNLean.PEPS.torusBondCoefficientExtraction_eq_zero_of_mem_torusCutSpace,
+        TNLean.PEPS.torusBondCoefficientExtraction_eq_zero_of_mem_fourTorusCutSpace_not_flat}
+    \leanok
+    \uses{def:peps_four_cut_common_boundary,
+        def:peps_four_cut_common_bond_coefficients,def:peps_bond_flat}
+    Assume $X=(\Z/2\Z)^2$ and that every bond representation is
+    semi-regular. Fix a cut $(c,r)$ and a labelling $p$ for which
+    \begin{align}
+        p^{\mathrm v}_{(c+1,r)}p^{\mathrm h}_{(c,r+1)}
+         & \ne p^{\mathrm h}_{(c,r)}p^{\mathrm v}_{(c,r)}.
+        \label{eq:peps_common_failed_plaquette}
+    \end{align}
+    If $O^{\mathrm h}_v=\Id$ when $v_x+1\ne c$ and
+    $O^{\mathrm v}_v=\Id$ when $v_y+1\ne r$, then
+    $E_p(\mathcal N_{A^0}(O))=0$.
+    Consequently $E_p(\psi)=0$ for every
+    $\psi\in\mathcal S^{A^0}_{c,r}$.
+    If $\psi\in\mathcal S^{A^0}$ and $p$ is not flat, then
+    $E_p(\psi)=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_network_extraction,
+        thm:peps_torus_projector_extraction,
+        thm:peps_four_cut_common_boundary_span}
+    A nonzero summand in (\ref{eq:peps_common_network_extraction})
+    has no zero bond pairing. Trace duality on its uncut bonds forces
+    $p^{\mathrm h}_v=q_{v+e}q_v^{-1}$ and
+    $p^{\mathrm v}_v=q_vq_{v+n}^{-1}$ there. The four uncut edges then give
+    \begin{align}
+        p^{\mathrm v}_{(c+1,r)}p^{\mathrm h}_{(c,r+1)}
+         & =q_{(c+1,r)}q_{(c,r+1)}^{-1}
+        =p^{\mathrm h}_{(c,r)}p^{\mathrm v}_{(c,r)},
+        \nonumber
+    \end{align}
+    contradicting (\ref{eq:peps_common_failed_plaquette}). Thus every
+    summand vanishes. Apply this conclusion to the matrix-unit networks
+    spanning the cut range. Finally, a nonflat labelling fails the
+    plaquette equation at some $(c,r)$, whose cut membership gives the result.
+\end{proof}
+
+\begin{definition}[Product of the local invariant projectors]%
+    \label{def:peps_four_cut_common_average_projection}
+    \lean{TNLean.PEPS.representationAveragingSite_invariant,
+        TNLean.PEPS.torusSitewiseAveragingProjector}
+    \leanok
+    \uses{def:peps_four_cut_common_matched_action,
+        def:peps_four_cut_common_physical_product}
+    For arbitrary representations $\rho_v$ of finite $G$ on $\C^{V^4}$,
+    define $\mathcal Q_\rho=\mathcal T_{(\Pi_{\rho_v})_v}$.
+    Each averaging tensor is invariant:
+    $\mathcal P(A^0_{\rho_v})\rho_v(k)=\mathcal P(A^0_{\rho_v})$ for all $k$.
+\end{definition}
+\begin{proof}\leanok
+    Right multiplication by $k$ permutes the summands of
+    $\Pi_{\rho_v}=|G|^{-1}\sum_g\rho_v(g)$, so
+    $\Pi_{\rho_v}\rho_v(k)=\Pi_{\rho_v}$.
+\end{proof}
+
+\begin{theorem}[Projection fixes cut vectors and inserts averaging sites]%
+    \label{thm:peps_four_cut_common_average_projection}
+    \lean{TNLean.PEPS.torusSitewiseAveragingProjector_cutMap,
+        TNLean.PEPS.torusSitewiseAveragingProjector_eq_self_of_mem_cut,
+        TNLean.PEPS.torusSitewiseAveragingProjector_bondProduct}
+    \leanok
+    \uses{def:peps_four_cut_common_average_projection,
+        def:peps_four_cut_common_boundary,def:peps_four_cut_common_bond_coefficients}
+    For every boundary $M$,
+    $\mathcal Q_\rho\mathcal C^{A^0}_{c,r}M=\mathcal C^{A^0}_{c,r}M$.
+    Therefore $\mathcal Q_\rho\psi=\psi$ for every
+    $\psi\in\mathcal S^{A^0}_{c,r}$. For any bond representations
+    $U^{\mathrm h},U^{\mathrm v}$ and labelling $p$,
+    \begin{align}
+        \mathcal Q_\rho B_p
+         & =\mathcal N_{A^0}
+        ((U^{\mathrm h}_v(p^{\mathrm h}_v))_v,
+        (U^{\mathrm v}_v(p^{\mathrm v}_v))_v).
+        \label{eq:peps_common_project_bond_product}
+    \end{align}
+    The actions $\rho_v$ need not be the matched actions for these bond
+    representations.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_local_inverse,
+        def:peps_four_cut_common_average_projection,
+        thm:peps_four_cut_common_physical_contraction,
+        thm:peps_torus_projector_expansion}
+    Apply the recovery identity
+    (\ref{eq:peps_common_cut_recovery}) with $A_v=A^0_{\rho_v}$;
+    its invariance proves the fixed-vector assertion.
+    Express $B_p$ as a bond network whose local tensors have coefficients
+    $\delta_{(t,r,b,l),s}$. Applying $\Pi_{\rho_v}$ to such an identity
+    tensor produces $A^0_{\rho_v}$. Physical transport through the
+    contraction gives (\ref{eq:peps_common_project_bond_product}).
+\end{proof}
+
+\begin{theorem}[Projecting a flat product gives a commuting closure]%
+    \label{thm:peps_four_cut_common_flat_projection}
+    \lean{TNLean.PEPS.exists_averagingProjector_bondProduct_eq_matchedClosure,
+        TNLean.PEPS.averagingProjector_bondProduct_mem_matchedClosureSpan}
+    \leanok
+    \uses{def:peps_four_cut_common_average_projection,
+        def:peps_four_cut_common_bond_coefficients,
+        def:peps_four_cut_common_closure,def:peps_bond_flat}
+    Use the matched actions $\rho_v$. For every flat bond labelling $p$
+    on a torus with positive periods, there exist $g,h\in G$ with $gh=hg$
+    such that $\mathcal Q_\rho B_p=\mathcal M_{A^0}(g,h)$.
+    In particular, $\mathcal Q_\rho B_p\in\mathcal Z_{A^0}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_bond_flat_classification,
+        thm:peps_four_cut_common_average_projection,
+        thm:peps_four_cut_common_vertex_gauge,
+        def:peps_four_cut_common_average_projection}
+    Theorem~\ref{thm:peps_bond_flat_classification} gives a vertex gauge
+    $q$ sending $p$ to two seams labelled by commuting $g,h$.
+    Formula (\ref{eq:peps_common_project_bond_product}) expresses
+    $\mathcal Q_\rho B_p$ as the corresponding actual averaging network.
+    Its invariant sites permit the matched vertex-gauge transformation.
+    Applying each bond's representation to the transformed labels turns
+    its matrices into $H^0(h)$ and $V^0(g)$, giving
+    $\mathcal M_{A^0}(g,h)$. This vector is a generator of the stated span.
+\end{proof}
+
+\begin{theorem}[Canonical four-cut closure with common alphabets]%
+    \label{thm:peps_four_cut_common_canonical_closure}
+    \lean{TNLean.PEPS.fourTorusCutSpace_matchedAveraging_le_commutingClosureSpan,
+        TNLean.PEPS.fourTorusCutSpace_matchedAveraging_eq_commutingClosureSpan}
+    \leanok
+    \uses{def:peps_four_cut_common_boundary,def:peps_four_cut_common_closure}
+    On the two-by-two torus, assume every individual bond representation is
+    semi-regular. Then $\mathcal S^{A^0}\subseteq\mathcal Z_{A^0}$ and,
+    together with the opposite inclusion,
+    $\mathcal S^{A^0}=\mathcal Z_{A^0}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_bond_span,
+        thm:peps_four_cut_common_nonflat_vanish,
+        thm:peps_four_cut_common_average_projection,
+        thm:peps_four_cut_common_flat_projection,
+        thm:peps_four_cut_common_matched_membership,
+        def:peps_four_cut_common_average_projection}
+    For $\psi\in\mathcal S^{A^0}$, the cut $(0,0)$ gives
+    $\mathcal Q_\rho\psi=\psi$. Apply this projector to the derived
+    expansion (\ref{eq:peps_common_extracted_expansion}):
+    \begin{align}
+        \psi & =\sum_pE_p(\psi)\mathcal Q_\rho B_p
+        =\sum_{p\text{ flat}}E_p(\psi)\mathcal Q_\rho B_p
+        \in\mathcal Z_{A^0}.
+        \label{eq:peps_common_flat_reconstruction}
+    \end{align}
+    The nonflat terms have zero extracted coefficient, while every flat
+    term is a commuting closure. The averaging sites are invariant, so
+    Theorem~\ref{thm:peps_four_cut_common_matched_membership} gives
+    $\mathcal Z_{A^0}\subseteq\mathcal S^{A^0}$.
+\end{proof}
+
+\begin{theorem}[Four-cut closure for independent tensors with common alphabets]%
+    \label{thm:peps_four_cut_common_closure}
+    \lean{TNLean.PEPS.fourTorusCutSpace_eq_matchedCommutingClosureSpan}
+    \leanok
+    \uses{def:peps_four_cut_common_boundary,
+        def:peps_four_cut_common_matched_action,
+        def:peps_four_cut_common_closure,def:peps_g_injective}
+    Let $G,V,P$ be finite and $X=(\Z/2\Z)^2$. Assign an arbitrary
+    semi-regular representation on $\C^V$ to each of the eight bonds,
+    and let each independent site tensor $A_v:V^4\times P\to\C$ be
+    $G$-injective for its matched action $\rho_v$. Then
+    \begin{align}
+        \bigcap_{c,r\in\Z/2\Z}\operatorname{ran}\mathcal C^A_{c,r}
+         & =\spn_{\C}\{\mathcal M_A(g,h):g,h\in G,\ gh=hg\}.
+        \label{eq:peps_common_four_cut_closure}
+    \end{align}
+    This is the common-coordinate specialization of
+    \cite[Theorem~5.5]{Schuch2010PEPS}; the independently sized bond and
+    physical spaces are treated in Theorem~\ref{thm:peps_four_cut_closure}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_common_local_inverse,
+        thm:peps_four_cut_common_canonical_closure}
+    Put $R_v=\mathcal P(A_v)$. The common local inverse and the canonical
+    equality give
+    \begin{align}
+        \mathcal S^A
+         & =\mathcal T_R(\mathcal S^{A^0})
+        =\mathcal T_R(\mathcal Z_{A^0})
+        =\mathcal Z_A.
+        \nonumber
+    \end{align}
+    The last equality is closure recovery by the original invariant site
+    maps. Each cut retains its arbitrary joint boundary throughout.
+\end{proof}

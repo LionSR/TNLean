@@ -113,6 +113,9 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 \end{center}
 
 %% ---------------------------------------------------------
+\input{chapter/ch30_mpo_boundary_transport}
+\input{chapter/ch30_mpo_boundary_reconstruction}
+
 \section{Invertible symmetries}%
 \label{sec:mposym_invertible}
 
@@ -926,6 +929,8 @@ $N$-th power of one phase.
     two relations make the resulting map of blocks a bijection.
 \end{proof}
 
+\input{chapter/ch30_mpo_symmetry_group_action}
+
 \begin{example}[Fibonacci]%
     \label{ex:mpo_symmetry_fibonacci}
     \lean{FibonacciCompression.isFusionUnit_fibNim,
@@ -961,10 +966,10 @@ $N$-th power of one phase.
     $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$. Consequently a
     nonempty symmetric family of at most two normal tensors as in
     Theorem~\ref{thm:mpo_symmetric_nimrep}, on which the unit acts trivially,
-    has exactly two blocks transforming in this way. The source states the
-    uniqueness of this two-block family without a bound on the number of
-    blocks \cite[Section~6]{GarreRubio2023MPOSym}; only one and two blocks
-    are treated here \cite{gap:glm23_fibonacci_module_rank_scope}.
+    has exactly two blocks transforming in this way. The unrestricted
+    direct-sum classification follows below; the unique indecomposable
+    summand is this regular two-block representation
+    \cite[Section~6]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 1991--1993.
 \end{theorem}
 
@@ -982,6 +987,8 @@ $N$-th power of one phase.
     the family, the coefficients form such a representation by
     Theorem~\ref{thm:mpo_symmetric_nimrep}.
 \end{proof}
+
+\input{chapter/ch30_mpo_symmetry_fibonacci_decomposition}
 
 \begin{definition}[The Ising fusion algebra data]%
     \label{def:mpo_symmetry_ising_data}

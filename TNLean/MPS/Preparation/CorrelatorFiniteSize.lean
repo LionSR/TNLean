@@ -43,8 +43,8 @@ theorem limitCorrelator_smul_smul (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin 
     (htr : Matrix.trace ρ ≠ 0) (L : ℕ)
     (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (a b : ℂ) (t : ℕ) :
     limitCorrelator A ρ htr L (a • X) (b • Y) t = a * b * limitCorrelator A ρ htr L X Y t := by
-  simp only [limitCorrelator, ← physicalObservableTransferₗ_apply, map_smul,
-    LinearMap.smul_apply, Matrix.trace_smul, smul_eq_mul]
+  simp only [limitCorrelator, physicalConnectedCorrelator, ← physicalObservableTransferₗ_apply,
+    map_smul, ← smul_sub, LinearMap.smul_apply, Matrix.trace_smul, smul_eq_mul]
   ring
 
 /-- The limit correlator of the zero observable vanishes. This is used for the
@@ -53,7 +53,7 @@ theorem limitCorrelator_zero_left (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin 
     (htr : Matrix.trace ρ ≠ 0) (L : ℕ)
     (Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (t : ℕ) :
     limitCorrelator A ρ htr L 0 Y t = 0 := by
-  simp [limitCorrelator, ← physicalObservableTransferₗ_apply]
+  simp [limitCorrelator, physicalConnectedCorrelator, ← physicalObservableTransferₗ_apply]
 
 /-- The limit correlator of the zero observable vanishes. This is used for the
 correlators of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
@@ -61,7 +61,7 @@ theorem limitCorrelator_zero_right (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin
     (htr : Matrix.trace ρ ≠ 0) (L : ℕ)
     (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (t : ℕ) :
     limitCorrelator A ρ htr L X 0 t = 0 := by
-  simp [limitCorrelator, ← physicalObservableTransferₗ_apply]
+  simp [limitCorrelator, physicalConnectedCorrelator, ← physicalObservableTransferₗ_apply]
 
 /-- The algebraic estimate behind the replacement of the finite-size correlator by its
 limit: if the normalization `Z`, the two-point numerator and the one-point numerators
@@ -335,10 +335,11 @@ theorem mpvConnectedCorrelator_eq_of_compl {A : MPSTensor d D} {L : ℕ} (hL0 : 
         limitCorrelator A ρ htr L X Y t +
         LinearMap.trace ℂ _ (physicalObservableTransfer A L X * E ^ t *
           physicalObservableTransfer A L Y * T ^ n) := by
-    rw [hEk n hn, mul_add, map_add, htrFP]
+    rw [limitCorrelator_eq_compl_pow_of_pos A ρ htr hA hρfix L X Y ht,
+      hEk n hn, mul_add, map_add, htrFP]
     congr 1
     simp only [Module.End.mul_apply, hEk t ht, LinearMap.add_apply, hPform, map_add,
-      map_smul, Matrix.trace_add, Matrix.trace_smul, smul_eq_mul, limitCorrelator]
+      map_smul, Matrix.trace_add, Matrix.trace_smul, smul_eq_mul]
     ring
   rw [hZ, hX, hY, hXY]
 

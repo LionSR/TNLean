@@ -1,0 +1,83 @@
+\section{The full-region ground space}%
+\label{sec:peps_full_region_ground_space}
+
+The following statements concern the full vertex region in the construction
+of \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines 2003--2011.
+A term on this region acts on the entire graph.
+
+\begin{theorem}[Full-region physical range]%
+    \label{thm:peps_full_region_range}
+    \lean{TNLean.PEPS.not_isRegionBoundaryEdge_univ,
+        TNLean.PEPS.openRegionWeight_univ,
+        TNLean.PEPS.regionGroundSpace_univ,
+        TNLean.PEPS.regionSliceMap_univ}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    Let $\psi$ be the closed PEPS vector on a finite graph.
+    Identifying the full-region physical configurations with the
+    configurations of the graph, every full-region open tensor is
+    $\psi$, and $\mathcal G_V=\operatorname{span}\{\psi\}$.
+    If $\psi=0$, this space is zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    The full region has neither crossing bonds nor exterior edges.
+    Thus its open contraction sums precisely the virtual labels
+    of the closed PEPS contraction. The boundary-configuration
+    space has one element, so its physical range is the asserted span.
+\end{proof}
+
+\begin{theorem}[Ground space with a full-region condition]%
+    \label{thm:peps_parent_full_region_span}
+    \lean{TNLean.PEPS.regionParentGroundSpace_eq_span_of_full_region,
+        TNLean.PEPS.ker_regionParentHamiltonian_eq_span_of_full_region,
+        TNLean.PEPS.finrank_regionParentGroundSpace_eq_one_of_full_region,
+        TNLean.PEPS.ker_regionLocalTerm_univ_canonical}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    If a collection of regions contains the entire vertex set,
+    its common regional ground space is $\operatorname{span}\{\psi\}$.
+    For a finite collection, every positive parent Hamiltonian
+    with those regional kernels has this same kernel.
+    It is one-dimensional when $\psi\ne0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_full_region_range,
+        thm:peps_region_parent_frustration_free,
+        thm:peps_region_parent_common_kernel}
+    The full-region condition forces a vector to belong to
+    $\operatorname{span}\{\psi\}$. Conversely, every regional
+    condition is satisfied by $\psi$ and hence by its span.
+    Apply the common-kernel characterization and the dimension
+    formula for the span of a nonzero vector.
+\end{proof}
+
+\begin{theorem}[Canonical projectors and their unit gap]%
+    \label{thm:peps_region_projector_unit_gap}
+    \lean{TNLean.PEPS.canonicalRegionParentInteraction_isIdempotentElem,
+        TNLean.PEPS.canonicalRegionParentInteraction_apply_eq_self,
+        TNLean.PEPS.canonicalRegionParentInteraction_unit_norm_gap,
+        TNLean.PEPS.canonicalRegionParentInteraction_spectrum_subset,
+        TNLean.PEPS.regionLocalTerm_canonical_isIdempotentElem,
+        TNLean.PEPS.regionLocalTerm_canonical_isSymmetricProjection,
+        TNLean.PEPS.regionLocalTerm_canonical_unit_norm_gap}
+    \leanok
+    \uses{thm:peps_canonical_region_interaction,
+        def:peps_region_parent_hamiltonian}
+    The canonical interaction $P_R$ and its extension
+    $\widetilde P_R$ are orthogonal projections. Their spectra
+    contain only zero and one. On the orthogonal complement of
+    either kernel the corresponding projector is the identity,
+    and hence has unit norm gap.
+\end{theorem}
+
+\begin{proof}\leanok
+    The canonical interaction is the orthogonal projector onto
+    $\mathcal G_R^\perp$. Tensoring with the identity and
+    permuting the physical coordinates preserve idempotence
+    and positivity. For a symmetric projection, its range is
+    the orthogonal complement of its kernel, and it acts as
+    the identity on its range. Idempotence restricts the spectrum
+    to $\{0,1\}$.
+\end{proof}

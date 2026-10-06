@@ -19,6 +19,9 @@ module name matching its non-Archive path. This provenance lets the generator
 remove stale aggregators after their source directory disappears, while copying
 the marker into handwritten code does not make that file disposable.
 
+For the maintained boundaries inside circuits and preparation, see
+[`circuit_channel_architecture.md`](circuit_channel_architecture.md).
+
 ## Conceptual layers
 
 The generated files sort imports by module name; they do not encode dependency
@@ -31,6 +34,7 @@ TNLean, the remaining source follows these conceptual layers:
 | Layer | Main areas | Responsibility |
 | --- | --- | --- |
 | 0 | `Algebra` | Tensor-network-facing algebra and compatibility results not owned by QICLean. |
+| 1 | `Circuit` | Local quantum circuits on qudit chains: supported operators, layers and light cones, two-site universality, measurement protocols, teleportation and long-range gates, and local channel circuits. It imports nothing from `MPS`, so it could move to QICLean. |
 | 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, finite-Kraus compatibility wrappers, words, blocking, transfer matrices, and overlaps. |
 | 3b | `MPS.MPDO` | MPO, MPDO, and LPDO foundations. |
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
@@ -44,6 +48,34 @@ quasi-local and cellular-automaton layer. `Spectral` contains MPS-specific
 transfer-operator gap and overlap-decay results built on QICLean's spectral
 theory. Public chapter-index modules are part of the production tree and
 therefore enter the generated import surface automatically.
+
+## Preparation algebra and convergence
+
+`MPS.Core.PhysicalMatrix` owns the tensor-to-physical-matrix reshape, its inverse,
+physical-rotation compatibility, and Gram/transfer entry identities. These are
+MPS-typed finite-dimensional algebra; they do not depend on polar decomposition,
+canonical gauges, or preparation circuits. `Preparation.BlockedPolar` adds polar
+factors, and `Preparation.ApproximatingState` adds spectral convergence. See the
+[physical-matrix ownership audit](audits/2026-10-04_physical_matrix_core.md).
+
+`MPS.Preparation.FixedPointPairState` contains the concrete fixed-point tensor,
+cyclic pair states and their algebraic identities. `BlockIsometryState` owns the
+existing finite-configuration contraction identities used by its block-state
+maps. `BlockStatePreparation` assembles the pair and block-unitary layers.
+These interfaces do not import the normal-gauge construction.
+
+The original `FixedPointPairs`, `ApproximatingState`, and `DepthUpperBound`
+modules retain their public declarations and import the lower interfaces.
+They add the spectral convergence, normal-state approximation, or uniform-state
+identification that needs the higher theory. See the
+[dependency audit](audits/2026-10-04_preparation_algebra_dependency_extraction.md)
+for the initial extraction. `InhomogeneousPreparation` and `ShortChainPreparation`
+import `BlockStatePreparation` directly; their partial-isometry, sequence and
+exact-preparation consumers therefore avoid normal-gauge construction as well.
+`MPS.Overlap.Basic` owns `normalizedMPVState` and its unit-norm theorem alongside
+`mpvState`; `ApproximationError` uses and re-exports them. No normalization
+assumption is needed merely to define the vector. See the
+[consumer audit](audits/2026-10-05_inhomogeneous_preparation_imports.md).
 
 ## Archive exclusion
 

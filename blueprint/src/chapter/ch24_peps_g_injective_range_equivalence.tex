@@ -1,0 +1,76 @@
+\section{Local physical ranges of G-injective tensors}%
+\label{sec:peps_g_injective_physical_ranges}
+
+\begin{theorem}[Invariant virtual space and physical range]%
+    \label{thm:peps_g_injective_invariants_range}
+    \lean{TNLean.PEPS.IsGInjective.ker_eq_ker_averageMap,
+        TNLean.PEPS.IsGInjective.bijective_invariants_rangeRestrict,
+        TNLean.PEPS.IsGInjective.invariantsRangeEquiv,
+        TNLean.PEPS.IsGInjective.finrank_range}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $G$ be a finite group acting linearly on a complex virtual space
+    $\mathcal V$, and let $P_G=|G|^{-1}\sum_{g\in G}U_g$ be the
+    projector onto $\mathcal V^G$. If
+    $T:\mathcal V\to\mathcal P$ is $G$-injective, then
+    \[
+        \ker T=\ker P_G,
+        \qquad T\big|_{\mathcal V^G}:\mathcal V^G
+        \mathrel{\cong}\operatorname{im}T.
+    \]
+    In finite dimension, $\dim\operatorname{im}T=\dim\mathcal V^G$.
+    These are local consequences of
+    \cite[Definition~5.1]{Schuch2010PEPS}.
+    The virtual projector can be inserted before the physical map:
+    % Formula: T P_G = T, the invariant-boundary form of Definition 5.1(i).
+    % Source: Papers/1001.3807/paper_v3.tex:1278--1296, figs3/ug-sym.
+    % Ink-to-index: a west virtual leg is the entire boundary configuration
+    % in V, not one microscopic PEPS bond; the east physical leg is in P.
+    % Contraction: the P_G--T join sums over a basis of V. Both panels have
+    % one open virtual input and one open physical output, hence (V,P)=(1,1).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[name=rangeProjector, skin=box,
+                ports={180:virtual, 0:virtual}]{P_G}
+            \tn[at=(1,2), name=rangeTensor,
+                ports={180:virtual, 0:physical}]{T}
+            \tnwire{rangeProjector.0}{rangeTensor.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[ports={180:virtual, 0:physical}]{T}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{theorem}
+
+\begin{proof}\leanok
+    Invariance gives $T P_G=T$. If $Tx=0$, then $T P_Gx=0$;
+    injectivity on $\mathcal V^G$ implies $P_Gx=0$. The converse
+    follows from $T P_G=T$. The restriction is injective by
+    $G$-injectivity, and every $Tx$ equals $T(P_Gx)$, proving
+    surjectivity onto the physical range.
+\end{proof}
+
+\begin{theorem}[Comparison of physical ranges]%
+    \label{thm:peps_g_injective_physical_range_equivalence}
+    \lean{TNLean.PEPS.IsGInjective.rangeEquiv,
+        TNLean.PEPS.IsGInjective.rangeEquiv_apply,
+        TNLean.PEPS.IsGInjective.rangeEquiv_unique}
+    \leanok
+    \uses{thm:peps_g_injective_invariants_range}
+    Let $T:\mathcal V\to\mathcal P$ and
+    $S:\mathcal V\to\mathcal Q$ be $G$-injective for the same
+    virtual representation. There is a unique linear map
+    $F:\operatorname{im}T\to\operatorname{im}S$ such that
+    $F(Tx)=Sx$ for every $x\in\mathcal V$, and this map is an
+    isomorphism.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compose the inverse of
+    $T|_{\mathcal V^G}$ with $S|_{\mathcal V^G}$.
+    Since $Tx=T(P_Gx)$ and $Sx=S(P_Gx)$, the resulting map has the
+    required identity. That identity specifies its value at every
+    element of $\operatorname{im}T$, so it also proves uniqueness.
+\end{proof}

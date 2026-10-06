@@ -3,12 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Defs
 import QICLean.Kraus.Transfer
 import QICLean.Channel.KrausFreedom
 import QICLean.Channel.KrausRepresentation
-import TNLean.Spectral.TransferOperatorGapInjective
+import QICLean.Kraus.MixedMap
+import QICLean.Analysis.SpectralRadiusPowerDecay
 import Mathlib.Analysis.Matrix.Order
+import QICLean.Algebra.MatrixOperatorSpace
 
 /-!
 # String order: definitions and condition equivalences
@@ -17,8 +19,8 @@ This file collects the core definitions for the string-order / local-symmetry
 theory of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447):
 
 * The **twisted transfer map** `ℰ_u` and its iterates.
-* The **string order parameter** `R_L(u)`, its boundary refinement, and the
-  physical-endpoint transfer-form correlator.
+* The stationary-boundary block-twist functional, its virtual-boundary
+  refinement, and the physical-endpoint transfer-form correlator.
 * **Local symmetry**, the virtual-boundary string-order condition, and the
   physical-endpoint string-order condition.
 * **Conditions C1/C2/C3** and their equivalences.
@@ -31,7 +33,7 @@ The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.
 * Wolf, *Quantum Channels & Operations*, Chapter 2
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus TNOperatorSpace
 
 attribute [local instance]
   ContinuousLinearMap.toNormedAddCommGroup
@@ -135,14 +137,18 @@ lemma twistedTransferIter_zero (A : MPSTensor d D)
 
 /-! ### String order parameter -/
 
-/-- The string order parameter `R_L(u)` for an MPS with stationary
-state `Λ`:
+/-- The stationary-boundary block-twist functional
+`tr(Λ · ℰ_u^L(1))`.
 
-$$R_L(u) = \mathrm{tr}(\Lambda \cdot \mathcal{E}_u^L(\mathbf{1}))$$
+For canonical pure data this is the expectation of a length-`L` on-site twist
+in the infinite finitely correlated state, obtained by first taking the
+ambient periodic ring to infinity with `L` fixed. It is the identity-endpoint
+case of arXiv:0802.0447, display `SOPMP`, lines 176–181.
 
-This measures the overlap `⟨ψ_L | u^{⊗L} | ψ_L⟩` in the
-transfer-matrix formalism (arXiv:0802.0447, display `RL`, lines 380–384;
-transfer form as in display `SOPMP`, lines 176–181). -/
+The source's full-ring quantity `RL`, lines 381–388, instead uses the entire
+finite periodic ring. Its normalized form is the operator-trace ratio
+`Tr(ℰ_u^L) / Tr(ℰ^L)`, represented by the actual finite `mpvExpectation`.
+The two boundary closures are not identified by this definition. -/
 noncomputable def stringOrderParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
@@ -179,20 +185,23 @@ def HasPhysicalStringOrderWith (A : MPSTensor d D)
     Filter.Tendsto (fun N : ℕ => ‖physicalStringOrderParam A Λ x y u N‖)
       Filter.atTop (nhds s)
 
-/-- The source string-order predicate with physical endpoint operators.
+/-- Physical string order with a projectively nontrivial physical twist.
 
-There is a nontrivial physical unitary \(u\) and physical endpoint operators
-\(x,y\) such that the physical string correlator has positive limiting
+There are a unitary \(u\) that is not any scalar multiple of the identity and
+physical endpoint operators \(x,y\) whose correlator has positive limiting
 absolute value.
 
-Source: arXiv:0802.0447, display `SOP`, lines 112--122.  The comparison with
-the virtual-boundary predicate `HasStringOrder` is not part of this definition;
-it is the endpoint-realizability theorem still tracked by
+**Local fix (projective nontriviality):** arXiv:0802.0447, display `SOP`,
+lines 114–121, prints only `u ≠ 1`, which also allows scalar phase twists.
+This definition explicitly excludes all scalar twists, so removing a
+peripheral phase preserves nontriviality in the corrected Theorem 1.
+The literal printed condition is evaluated separately, without introducing a
+second string-order predicate; see
 `docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 def HasPhysicalStringOrder (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∃ u x y : Matrix (Fin d) (Fin d) ℂ,
-    u * uᴴ = 1 ∧ u ≠ 1 ∧ HasPhysicalStringOrderWith A Λ x y u
+    u * uᴴ = 1 ∧ (∀ c : ℂ, u ≠ c • 1) ∧ HasPhysicalStringOrderWith A Λ x y u
 
 /-! ### Boundary string order and local symmetry -/
 
@@ -203,10 +212,11 @@ This replaces the paper's physical endpoint operators `x, y`
 (arXiv:0802.0447, display `SOP`, lines 112–122) by arbitrary virtual
 boundary matrices `X, Y`.  A physical endpoint expands to a particular
 virtual boundary matrix in the transfer picture (display `SOPMP`, lines
-176–181); conversely the paper argues (lines 278–296) that for injective
-tensors, endpoint operators on sufficiently many sites reach every
-virtual matrix.  Neither direction of that comparison is formalized; see
-`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
+176–181). For normal tensors with faithful canonical density, both virtual
+boundaries are realized on `D^2` physical sites by
+`exists_physicalStringBlockEndpoints`, retaining every individual middle
+length. The source-canonical reduction and the explicit projective convention
+are recorded in `docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 noncomputable def stringOrderBoundaryParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ X Y : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
