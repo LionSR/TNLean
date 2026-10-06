@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Periodic norm as transfer trace — promoted (2026-10-06)
+
+- **Pattern:** Apply the physical expectation trace identity to the identity
+  observable and simplify its action to obtain the periodic squared norm.
+- **Seen:** The canonical norm limit and two finite full-ring proofs repeated
+  the same calculation, in addition to the existing `WindowClustering` lemma.
+- **Abstraction:** The existing public
+  `MPSTensor.inner_mpvState_self_eq_trace` is moved unchanged to its lower owner
+  `WindowCorrelator`; no alias or second declaration is added.
+- **Refactor:** All three new callers use the existing identity. The clustering
+  owner still imports it transitively through `WindowOperatorSupport`.
+
+
 ### Canonical purity consequences — promoted (2026-10-05)
 
 - **Pattern:** From a faithful canonical stationary density and the simple

@@ -19,8 +19,8 @@ This file collects the core definitions for the string-order / local-symmetry
 theory of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447):
 
 * The **twisted transfer map** `ℰ_u` and its iterates.
-* The **string order parameter** `R_L(u)`, its boundary refinement, and the
-  physical-endpoint transfer-form correlator.
+* The stationary-boundary block-twist functional, its virtual-boundary
+  refinement, and the physical-endpoint transfer-form correlator.
 * **Local symmetry**, the virtual-boundary string-order condition, and the
   physical-endpoint string-order condition.
 * **Conditions C1/C2/C3** and their equivalences.
@@ -137,14 +137,18 @@ lemma twistedTransferIter_zero (A : MPSTensor d D)
 
 /-! ### String order parameter -/
 
-/-- The string order parameter `R_L(u)` for an MPS with stationary
-state `Λ`:
+/-- The stationary-boundary block-twist functional
+`tr(Λ · ℰ_u^L(1))`.
 
-$$R_L(u) = \mathrm{tr}(\Lambda \cdot \mathcal{E}_u^L(\mathbf{1}))$$
+For canonical pure data this is the expectation of a length-`L` on-site twist
+in the infinite finitely correlated state, obtained by first taking the
+ambient periodic ring to infinity with `L` fixed. It is the identity-endpoint
+case of arXiv:0802.0447, display `SOPMP`, lines 176–181.
 
-This measures the overlap `⟨ψ_L | u^{⊗L} | ψ_L⟩` in the
-transfer-matrix formalism (arXiv:0802.0447, display `RL`, lines 380–384;
-transfer form as in display `SOPMP`, lines 176–181). -/
+The source's full-ring quantity `RL`, lines 381–388, instead uses the entire
+finite periodic ring. Its normalized form is the operator-trace ratio
+`Tr(ℰ_u^L) / Tr(ℰ^L)`, represented by the actual finite `mpvExpectation`.
+The two boundary closures are not identified by this definition. -/
 noncomputable def stringOrderParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
