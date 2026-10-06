@@ -5,7 +5,7 @@
   "qiclean_pin": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f",
   "source_sha256": {
     "TNLean/MPS/ParentHamiltonian/Martingale/IsometricCompressionGap.lean": "d5ab8dedd0d22bb9027beca83617c389efcd424e6d2197b507dad9b2bb57ceab",
-    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean": "78d1a4b80ecb84fbc30028f7fbb613e36fe42aa214cc6c7e689081d02c120ad4",
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean": "9a3640c39d32bba3a8b67cdbea702fb89fbf0011ac06fc66b24bbc19a6e972ad",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeNormalization.lean": "80decc85e5501428e16a4ce0038ad9d4bf5eb7fd35cd8be4d802959cdbcc06c9",
     "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeProjectors.lean": "74ce0f1bd1493f1daca45e1b3979a02abb41313b43573ecc815427411329f85f",
     "TNLeanTest/JointMixedEndpointEdgeNormalization.lean": "fdc6bfde82c550475de86e58903922761d0079b9c939f98f8be1bc88c8b66ed0",
@@ -95,5 +95,25 @@
     "native_tenkz_audit": "Not rerun; one inherited picture rendered and its SVG structure inspected.",
     "browser_visual_inspection": false,
     "source_sync_passed": true
+  },
+  "edge_factors_prefix_probe": {
+    "status": "passed",
+    "exit_code": 0,
+    "threads": 1,
+    "wall_timeout_seconds": 60,
+    "scope": "Initial definitions and the two shared-letter inclusion theorems, through the line preceding firstEdge_trace; not a full module check.",
+    "log": "/workspace/shared/glm23-edge-factors-prefix-probe-2.log",
+    "log_bytes": 0,
+    "artifact_or_cache_writes": false
+  },
+  "edge_trace_prefix_probe": {
+    "status": "passed",
+    "exit_code": 0,
+    "threads": 1,
+    "wall_timeout_seconds": 60,
+    "scope": "Initial definitions, shared-letter inclusion theorems, and both private trace factorizations; not a full module check.",
+    "log": "/workspace/shared/glm23-edge-trace-prefix-probe-2.log",
+    "log_bytes": 0,
+    "artifact_or_cache_writes": false
   }
 }
