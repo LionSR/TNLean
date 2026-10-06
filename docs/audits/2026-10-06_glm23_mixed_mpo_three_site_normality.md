@@ -61,10 +61,9 @@ are, in namespace `MPSTensor.MPOSymmetry`:
 - `isNBlkInjective_mixedEndpointMPO_three_of_exact_action`
 
 The signatures were compared against the production source. All four have
-exactly one owner in the new leaf. No new checked statement or proof marker
-is present. Diagram, coefficient, and presentation checks cannot justify
-such markers; the integrating owner must use final exact-source Lean
-verification to decide them.
+exactly one owner in the new leaf. Checked statement and proof markers now follow the exact-tree CI evidence
+recorded below. Diagram, coefficient, and presentation checks alone do not
+justify those markers.
 
 ## Regression coverage
 
@@ -180,7 +179,8 @@ without byte changes. Their SHA-256 values are respectively
 `9c3bbd1c51a9cb3d2c880b3bd03ba3bcf8b07a1b5ae7eaabbe2e5e2e4daaf1cf`.
 The exact-body strict Lean probe, including all four standard-axiom guards,
 passed with exit zero and no diagnostics. This is a local elaboration
-check; the integrated aggregate build and exact-head CI remain pending.
+check; the integrated aggregate build and exact-head CI were pending at
+that checkpoint and have since passed as recorded below.
 
 The integration adds the production aggregator import, the existing strict
 regression loop entry, the chapter inclusion, and native/browser diagram
@@ -195,3 +195,24 @@ operator's L- and F-symbols. Those additional theorems have their own
 validation record; the checked normality theorem does not imply their
 proofs have passed. The paper's full phase-classification and weak-Hopf
 realization obligations remain open.
+
+## Exact-tree CI validation and checked owners, 2026-10-06
+
+[PR #8716](https://github.com/LionSR/TNLean/pull/8716) passed all eight
+engineering checks at head `866ecede0a71a5617699023f250604abcd64a097`.
+Its tested merge `b61da9527f101cada0c87fa1889c03009c53acc8` has the same
+tree, `72d41a91226aad75e9f713fe718f0fdad39503a2`. The immutable
+[CI run](https://github.com/LionSR/TNLean/actions/runs/37409746063) and
+[build job](https://github.com/LionSR/TNLean/actions/runs/37409746063/job/112095291464)
+validate the four production modules (936 lines) and final three regression
+files, including all nineteen standard-foundation guards. The four new
+module times were 7.9, 6.4, 7.4, and 11.0 seconds.
+
+On that evidence, the two leaves now mark all nine statements and their
+seven proofs checked, covering the 28 uniquely owned new declarations.
+This documentation-only update preserves every production and regression
+byte and the mathematical hypotheses. Three-site normality, chosen-symbol
+alignment, and the assumed endpoint analysis relations retain their stated
+scopes; no mixed weak-Hopf realization, integral, or phase classification
+is supplied by these markers. Fresh local rendering is recorded separately
+and is not the basis for Lean proof status.

@@ -1,6 +1,5 @@
 % Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1667--1685;
 % Agammasym, eq:F_symbol2, and Fsymbolsdef. Exact version: Papers/NOTICE.md.
-% Proof validation is pending; no checked declaration/proof markers are asserted.
 % The algebraic statements below concern the actual chosen maps, including empty bonds.
 
 \subsection{Common symbols along the mixed interpolation}
@@ -32,6 +31,7 @@ and set $\tau_0(M)=0$.
     \lean{MPSTensor.MPOSymmetry.mixedEndpointTripleEquiv,
         MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis,
         MPSTensor.MPOSymmetry.mixedEndpointTripleSynthesis}
+    \leanok
     Let $B_{j,p}=\C^{n_{j,p}}$, $U_p=\C^{d_p}$, and
     $Z_p=\C^{e_p}$, for $j=1,2,3$ and $p=0,1$. Given maps
     $H_p:(B_{1,p}\otimes B_{2,p})\otimes B_{3,p}\to U_p$ and
@@ -49,6 +49,7 @@ and set $\tau_0(M)=0$.
         MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis_trace_mul_synthesis,
         MPSTensor.MPOSymmetry.finDimension_mul_normalizedTrace,
         MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis_normalizedTrace_mul_synthesis}
+    \leanok
     \uses{def:mpo_mixed_triple_maps}
     The matching-sector extensions satisfy the rectangular identity
     \begin{align}
@@ -70,6 +71,7 @@ and set $\tau_0(M)=0$.
     $M\in\End(\C^n)$, $n\tau_n(M)=\tr(M)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Expand the product over the three independent sector choices.
     A nonzero summand requires all three contracted sectors and
     both external sectors to agree, proving
@@ -88,6 +90,7 @@ and set $\tau_0(M)=0$.
         MPSTensor.MPOSymmetry.mixedEndpoint_actionTree_cross,
         MPSTensor.MPOSymmetry.actionLMatrix_mixedEndpoint,
         MPSTensor.MPOSymmetry.actionLMatrix_mixedEndpoint_eq_of_eq}
+    \leanok
     \uses{def:mpo_mixed_action_maps,def:mpo_mixed_fusion_maps,
         def:glm_boundary_action_l_matrix}
     For fixed $a,b$, the sequential analysis and fusion-then-action
@@ -117,6 +120,7 @@ and set $\tau_0(M)=0$.
     including when $D_0+D_1=0$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_triple_trace}
     Expanding (\ref{eq:mpo_mix_symbols_action_trees}) over the internal
     direct-sum coordinate gives zero unless all three incoming legs
@@ -175,6 +179,7 @@ state at either end.
         MPOTensor.fusionFMatrix_eq_inv_dim_mul_trace,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusionAnalysis_sum_apply,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusionSynthesis_sum_apply}
+    \leanok
     Fix $a,b,c,d\in I$. Let $q=(e,\mu,\nu)$ run over left fusion
     paths, with $0\leq\mu<N_{ab}^e$ and $0\leq\nu<N_{ec}^d$,
     and let $t=(f,\lambda,\sigma)$ run over right fusion paths,
@@ -211,6 +216,7 @@ state at either end.
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_rightTreeSynthesis,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_fusionFMatrix_eq_weighted,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_fusionFMatrix_of_eq}
+    \leanok
     \uses{def:mpo_mixed_f_trees,def:mpo_mixed_fusion_maps}
     For the arbitrary chosen maps above,
     \begin{align}
@@ -226,6 +232,7 @@ state at either end.
     $\widetilde F=F_0$, including when both final bonds are zero.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_triple_trace}
     Each contraction in (\ref{eq:mpo_mix_symbols_f_trees}) forces
     all three incoming sectors to equal the outgoing sector. Thus
@@ -242,6 +249,7 @@ state at either end.
 \begin{theorem}[The common analysis recoupling relation]
     \label{thm:mpo_mixed_f_move}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_fusionFMatrix_analysis}
+    \leanok
     \uses{def:mpo_mixed_f_trees}
     Suppose $F_0=F_1=F$ and that, for both $p=0,1$ and every left
     fusion path $q$, the chosen maps satisfy the analysis relation
@@ -254,6 +262,7 @@ state at either end.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_f_symbols}
     Theorem~\ref{thm:mpo_mixed_f_symbols} identifies
     $\widetilde F=F$. On the sector where all four external indices

@@ -2,7 +2,6 @@
 % eq:orthoV, and the square-physical restriction in lines 1584--1601.
 % This proves three-site injectivity from isolated biorthogonal maps.
 % The one-site source claim belongs to the aligned categorical setting.
-% Checked-marker decisions remain with integration; this leaf has none.
 
 \subsection{Three-site injectivity of the mixed operator}
 \label{sec:mpo_mixed_normality}
@@ -35,12 +34,14 @@ right denotes the span of all matrix products.
     \label{thm:mpo_mixed_normality}
     \lean{MPSTensor.MPOSymmetry.isNBlkInjective_mixedEndpointMPO_three,
         MPSTensor.MPOSymmetry.isNormal_mixedEndpointMPO}
+    \leanok
     \uses{def:mpo_mixed_action_tensor}
     If both $T_0$ and $T_1$ are injective, then
     $\mathcal S_3=\End(K)$. In particular, $T$ is normal, with
     blocking length three.
 \end{theorem}
 \begin{proof}
+    \leanok
     For $X:E_1\to E_0$ and any $0\leq\nu<m$, biorthogonality gives
     \begin{align}
         V_{0,\nu}\left(\sum_{\mu=0}^{m-1}W_{0,\mu}XV_{1,\mu}\right)W_{1,\nu}
@@ -137,6 +138,7 @@ matrix units force those indices to be $u$ and $v$, respectively.
 \begin{theorem}[Positive action multiplicity]
     \label{thm:mpo_mixed_positive_multiplicity}
     \lean{MPSTensor.MPOSymmetry.multiplicity_pos_of_injective_endpoint_action}
+    \leanok
     \uses{def:glm_boundary_decomposition}
     Let $A$ be an injective tensor of physical dimension $D^2$ and
     bond dimension $D$, and let $T$ be an injective operator tensor
@@ -146,6 +148,7 @@ matrix units force those indices to be $u$ and $v$, respectively.
     then $m>0$.
 \end{theorem}
 \begin{proof}
+    \leanok
     The $D^2$ matrices $A^y$ span the $D^2$-dimensional space
     $\End(\C^D)$, so they are linearly independent. If $m=0$, the
     action equation gives $\sum_y T^{xy}_{\alpha\beta}A^y=0$ for
@@ -157,6 +160,7 @@ matrix units force those indices to be $u$ and $v$, respectively.
 \begin{theorem}[Three-site injectivity from exact actions]
     \label{thm:mpo_mixed_normality_exact_action}
     \lean{MPSTensor.MPOSymmetry.isNBlkInjective_mixedEndpointMPO_three_of_exact_action}
+    \leanok
     \uses{def:mpo_mixed_action_tensor,def:glm_boundary_decomposition}
     Let $D_0,D_1>0$ and $\chi_0>0$. Suppose both $T_0,T_1$ are
     injective, $A_0$ is injective of physical dimension $D_0^2$ and
@@ -168,6 +172,7 @@ matrix units force those indices to be $u$ and $v$, respectively.
     three sites.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:mpo_mixed_positive_multiplicity,thm:mpo_mixed_normality}
     Theorem~\ref{thm:mpo_mixed_positive_multiplicity} applied at $p=0$
     gives $m>0$. The biorthogonality hypotheses and the injectivity

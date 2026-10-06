@@ -10,8 +10,8 @@
   "normality_targeted_strict": "pass, production and regression bytes unchanged",
   "symbols_targeted_production_and_guards": "pass in combined probe5",
   "symbols_combined_strict": "failed only12 unused binder-name diagnostics in one test; four binder lists made anonymous afterward",
-  "separate_module_build_and_final_regressions": "pending exact-head CI",
-  "checked_blueprint_markers": false,
+  "separate_module_build_and_final_regressions": "pass: exact-tree CI run 37409746063, build job 112095291464",
+  "checked_blueprint_markers": true,
   "sha256": {
     "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPONormality.lean": "a82228dc43207801293af4f5a1c2c5b620f61257a836d1a178624f884b902c7e",
     "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointTripleMaps.lean": "64bffc634a2596598a7001401ad1c67c9a9392b74367f7ace159b5262f4dbe99",
@@ -23,5 +23,36 @@
     "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
     "lake-manifest.json": "a6ccb46404b164ab38d9c250f613bd902794d6e94436677764c7b610b7b82b18",
     "tenkz.toml": "b47dd85f2a66ae5a809712f494b50176ada4ffb5809ec5cbc74012c851242e39"
+  },
+  "exact_tree_ci": {
+    "head": "866ecede0a71a5617699023f250604abcd64a097",
+    "tested_merge": "b61da9527f101cada0c87fa1889c03009c53acc8",
+    "tree": "72d41a91226aad75e9f713fe718f0fdad39503a2",
+    "run": 37409746063,
+    "build_job": 112095291464,
+    "engineering_checks_passed": 8,
+    "new_module_seconds": [
+      7.9,
+      6.4,
+      7.4,
+      11.0
+    ]
+  },
+  "checked_marker_local_rendering": {
+    "declaration_links": 28,
+    "statement_markers": 9,
+    "proof_markers": 7,
+    "pdf_pages": 10,
+    "html_files": 6,
+    "svg_files": 9,
+    "image_occurrences": 9,
+    "equation_rows": 4,
+    "pdf_sha256": "be425615e19724f9721b339b8d69733d341e8e6887d75cceba5c6f8378ade8c7",
+    "chapter_html_sha256": "ee0692117333556ff06ff646b24e42a75646c0148968a906f023e7558729ddd2",
+    "source_sha256": {
+      "ch30_mpo_mixed_normality.tex": "ab52477bc32d70395a101f223e1d5d4421d3f9d7b1b8e667ed5d6f24259865ce",
+      "ch30_mpo_mixed_symbols.tex": "8ce00b6b7d9cd6eac55aac123cf290235c2a8b80f0968f03f424e71fa436924a"
+    },
+    "browser": "not run successfully: missing Playwright Chromium headless-shell executable"
   }
 }

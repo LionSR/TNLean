@@ -176,7 +176,8 @@ All production and regression bytes match their respective final source
 manifests. The normality probe passed strictly; the symbol probe passed all
 production proofs and fifteen guards but failed only on unused names in
 constant-dimension test binders, subsequently made anonymous. The final
-separate-module build and repaired regression remain pending exact-head CI.
+separate-module build and repaired regression were pending at this checkpoint;
+the exact-tree CI record below establishes their subsequent success.
 
 The two mathematical leaves add four equation rows / eight Tenkz panels.
 The chapter-wide browser expectation grows from seven to eleven rows;
@@ -193,7 +194,28 @@ replace the full blueprint/browser CI run.
 Independent read-only review found no mathematical or source-faithfulness
 blocker: the final-bond weights, source F orientation, zero-dimension
 branches, three-site normality argument, and actual endpoint-to-mixed
-F-move were checked. The leaves remain unchecked until actual separate-module
-compilation. No equality of gauge classes is silently replaced by equality
+F-move were checked. The leaves were unchecked at this checkpoint; the exact-tree CI record
+below establishes separate-module compilation and the checked-marker update. No equality of gauge classes is silently replaced by equality
 of chosen coefficients, and no physical adjoint or phase-classification
 conclusion is claimed.
+
+## Exact-tree CI validation and checked owners, 2026-10-06
+
+[PR #8716](https://github.com/LionSR/TNLean/pull/8716) passed all eight
+engineering checks at head `866ecede0a71a5617699023f250604abcd64a097`.
+Its tested merge `b61da9527f101cada0c87fa1889c03009c53acc8` has the same
+tree, `72d41a91226aad75e9f713fe718f0fdad39503a2`. The immutable
+[CI run](https://github.com/LionSR/TNLean/actions/runs/37409746063) and
+[build job](https://github.com/LionSR/TNLean/actions/runs/37409746063/job/112095291464)
+validate the four production modules (936 lines) and final three regression
+files, including all nineteen standard-foundation guards. The four new
+module times were 7.9, 6.4, 7.4, and 11.0 seconds.
+
+On that evidence, the two leaves now mark all nine statements and their
+seven proofs checked, covering the 28 uniquely owned new declarations.
+This documentation-only update preserves every production and regression
+byte and the mathematical hypotheses. Three-site normality, chosen-symbol
+alignment, and the assumed endpoint analysis relations retain their stated
+scopes; no mixed weak-Hopf realization, integral, or phase classification
+is supplied by these markers. Fresh local rendering is recorded separately
+and is not the basis for Lean proof status.
