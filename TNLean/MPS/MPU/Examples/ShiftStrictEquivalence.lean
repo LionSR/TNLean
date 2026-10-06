@@ -227,7 +227,7 @@ equivalent at the common bond dimension `d²`: the physical path `x ↦ S(x) · 
 bond path `x ↦ S(x) (S · Q₂) S(x)†` stays among matrix product unitaries.
 
 Source: arXiv:1703.09188, eq. (58), lines 1980--2001, and the proposition on the symmetry
-phases of `Ũ₂, Ũ₃`, lines 2138--2151; chapter Example 7.9, "Two strictly equivalent shifts". -/
+phases of the ancilla-dressed U₂, U₃, lines 2138--2151; chapter Example 7.9, "Two strictly equivalent shifts". -/
 theorem shiftExampleU₂_strictlyEquivalent_shiftExampleU₃ (d : ℕ) [NeZero d] :
     StrictlyEquivalent (shiftExampleU₂ d) (shiftExampleU₃ d) rfl := by
   refine StrictlyEquivalent.of_fixedBond rfl (shiftExampleU₂_isMPUCanonicalForm d)

@@ -11,7 +11,7 @@ import TNLean.MPS.MPU.SourceCuts
 /-!
 # A tensor that is unitary on odd rings only
 
-The tensor of Şahinoğlu, Shukla, Bi and Chen (arXiv:1704.01943, Section 6, Figure `M_f`) has
+The tensor of Sahinoglu, Shukla, Bi and Chen (arXiv:1704.01943, Section 6, Figure `M_f`) has
 physical and bond dimension three, with indices in `Fin 3` read as `ℤ/3`, and letters
 $$M^{ij}=|{-(i+j)})(j|.$$
 Its periodic operator on `N` sites is the matrix of the map $j\mapsto i$ with
@@ -34,7 +34,7 @@ unitarity on odd rings is ours; the source asserts the unitarity without a writt
 
 ## References
 
-* Şahinoğlu, Shukla, Bi, Chen, *Matrix product representation of locality preserving
+* Sahinoglu, Shukla, Bi, Chen, *Matrix product representation of locality preserving
   unitaries*, arXiv:1704.01943, Section 6.
 -/
 
@@ -42,7 +42,7 @@ open scoped Matrix
 
 namespace MPOTensor
 
-/-- The odd-ring tensor of Şahinoğlu, Shukla, Bi and Chen (arXiv:1704.01943, Section 6,
+/-- The odd-ring tensor of Sahinoglu, Shukla, Bi and Chen (arXiv:1704.01943, Section 6,
 Figure `M_f`): `M^{ij} = |-(i+j))(j|` over `Fin 3` with its ring structure. -/
 noncomputable def oddRingTensor : MPOTensor 3 3 :=
   fun i j => Matrix.single (-(i + j)) j 1
