@@ -11,7 +11,7 @@ on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
     \lean{MPSTensor.mpvExpectation_finKronecker_const_eq_trace_div,
         MPSTensor.physicalObservableTransfer_singleton,
         MPSTensor.physicalObservableTransfer_finKronecker_const}
-    \notready
+    \leanok
     \uses{def:source_periodic_string_overlap, def:twisted_transfer_map}
     For every tensor $A$, physical matrix $u$, and length $L$, the normalized
     full-ring expectation is
@@ -23,6 +23,7 @@ on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
     Both sides use the zero convention at a vanishing periodic vector.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lem:ldp_observable_transfer_products}
     The one-site insertion is $\E_u$. Splitting the last physical factor
     and inducting on $L$ gives $\E_{u^{\otimes L}}=\E_u^L$, including $L=0$.
@@ -42,13 +43,14 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     \label{thm:periodic_string_normalization}
     \lean{MPSTensor.pureCanonical_mpvState_inner_self_tendsto_one,
         MPSTensor.pureCanonical_eventually_mpvState_ne_zero}
-    \notready
+    \leanok
     \uses{def:mpv_inner}
     Under these canonical purity assumptions, $Z_L\to1$ as $L\to\infty$.
     In particular, $\Phi_L(A)\ne0$ for all sufficiently large $L$.
     No nonvanishing assertion at every short length is required.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lem:canonical_transfer_stationary_trace_limit,
         lem:ldp_observable_transfer_products}
     The transfer powers converge pointwise to $P(X)=\tr(\Lambda X)\Id$.
@@ -62,7 +64,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     \lean{MPSTensor.pureCanonical_mpvExpectation_appendObservable_tendsto,
         MPSTensor.pureCanonical_mpvExpectation_block_string_tendsto,
         MPSTensor.pureCanonical_mpvExpectation_string_tendsto}
-    \notready
+    \leanok
     \uses{def:physical_string_order_param, def:physical_observable_transfer}
     Under the same canonical purity assumptions, fix a support length $k$
     and a physical operator $O$ on those $k$ sites. Then
@@ -81,6 +83,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     no exchange of limits or rate uniform in $N$ is asserted.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:periodic_string_normalization,
         lem:canonical_transfer_stationary_trace_limit,
         lem:ldp_observable_transfer_products, thm:periodic_string_trace_ratio}
@@ -98,7 +101,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     \label{thm:periodic_string_exact_phase}
     \lean{MPSTensor.trace_twistedTransferIter_eq_phase_mul_trace_transfer_pow,
         MPSTensor.mpvExpectation_finKronecker_const_eq_phase_pow}
-    \notready
+    \leanok
     \uses{def:twisted_transfer_map, def:source_periodic_string_overlap}
     Let $A,u$ be arbitrary and suppose a unitary $V$ and $\mu\in\C$ satisfy
     $\sum_j u_{ij}A_j=\mu V A_iV^\dagger$ for every physical index $i$.
@@ -112,6 +115,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     holds also at zero periodic vectors, without purity or normalization.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:periodic_string_trace_ratio,
         thm:physical_string_phase_retaining_asymptotics}
     The exact iterate identity is
@@ -130,7 +134,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
         MPSTensor.pureCanonical_mpvExpectation_fullRing_norm_tendsto_one,
         MPSTensor.pureCanonical_mpvExpectation_fullRing_phase_adjusted_tendsto_one,
         MPSTensor.pureCanonical_mpvExpectation_fullRing_not_tendsto}
-    \notready
+    \leanok
     \uses{def:source_periodic_string_overlap, def:twisted_transfer_map}
     Assume the canonical purity conditions above and let $u$ be unitary.
     Either $\rho(\E_u)<1$ and the complex full-ring expectation tends to
@@ -144,6 +148,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     No implication concerning a parameterized Hamiltonian gap is asserted.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lem:pgwsvc08_twisted_spectral_radius,
         thm:periodic_string_trace_ratio, thm:periodic_string_normalization,
         thm:periodic_string_exact_phase}

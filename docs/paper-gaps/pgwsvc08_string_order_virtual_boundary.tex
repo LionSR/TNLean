@@ -285,6 +285,18 @@ middle length $N$, including finite endpoint blocks. The statements are
 These results do not exchange the exterior and string-length limits and
 provide no rate uniform in $N$.
 
+The finite-size form now supplies one rate $0<r<1$, constants $C_0>0$,
+and a tail $L\geq N_0$ with $|Z_L-1|\leq C_0r^L$ and $|Z_L|\geq1/2$.
+For every fixed $k,O$, a possibly observable-dependent constant $C_O>0$
+bounds the error in (\ref{eq:pgwsvc08_periodic_stationary_limit}) by
+$C_Or^n$ for $n\geq N_0$. This is
+\leanid{MPSTensor.pureCanonical_periodic_expectations_le_geometric}.
+The rate is common to fixed observables, but the prefactors are not asserted
+to be uniform over a sequence of growing supports. The transfer estimate
+\leanid{MPSTensor.canonical_transfer_pow_sub_stationary_le_geometric}
+uses the row-sum matrix norm and its induced endomorphism norm; it derives
+its spectral gap from the existing complementary remainder.
+
 For the raw full-ring numerator,
 $\langle\Phi_L,u^{\otimes L}\Phi_L\rangle=\operatorname{Tr}(\mathcal E_u^L)$.
 Write $\widehat R_L(u)$ for its normalized version. Its exact formula is
@@ -321,6 +333,28 @@ The already defined faithful pure tensor verifies the unconjugated phase
 $i^L$ and failure of a complex limit for the twist $-\Id$ in
 \leanid{MPSTensor.stringPhaseTensor_fullRing_I_eq_pow} and
 \leanid{MPSTensor.stringPhaseTensor_fullRing_neg_one_not_tendsto}.
+
+For any prescribed $q>\rho(\mathcal E_u)$, the finite-ring bound
+$|\widehat R_L(u)|\leq C_uq^L$ holds on an eventual nonzero tail, by
+\leanid{MPSTensor.pureCanonical_mpvExpectation_fullRing_le_geometric}.
+The physical stationary string satisfies a prescribed-rate bound at every
+length in \leanid{MPSTensor.physicalStringOrderParam_le_geometric}.
+In the symmetry branch,
+\leanid{MPSTensor.physicalStringOrderParam_phase_adjusted_le_geometric}
+bounds $|\mu^{-N}S_N-\alpha_y\beta_x|$ geometrically for $N\geq1$,
+with the phase retained. None of these bounds assumes diagonalizability.
+
+The printed examples also have exact finite-ring conclusions. For AKLT,
+$Z_L=1+3(-1/3)^L$, so the sole zero vector occurs at $L=1$; its normalized
+symmetry overlap is one at every other length and zero at that exceptional
+length. For the cluster tensor the positive-length vectors have squared
+norm one, the empty coefficient is two, and the $(-\sigma_x)^{\otimes L}$
+overlap is one at every length. The statements are
+\leanid{MPSTensor.akltPGWSVC08_mpvState_inner_self},
+\leanid{MPSTensor.akltPGWSVC08_fullRing}, and
+\leanid{MPSTensor.clusterTensorRMP_fullRing}.
+The one-site and two-site cluster vectors use the existing ring convention,
+giving $|{-}\rangle$ and $|{+}\rangle\otimes|{+}\rangle$, respectively.
 
 These conclusions do not establish the RL paragraph's separate assertion
 about a parameterized Hamiltonian gap closing. The literal Theorem~1 issue and its projective correction remain
