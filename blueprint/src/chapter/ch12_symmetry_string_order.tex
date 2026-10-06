@@ -301,8 +301,7 @@ virtual-boundary nondecay and virtual local covariance.
     \label{thm:projective_physical_string_order}
     \lean{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}
     \leanok
-    \uses{def:has_physical_string_order,
-        thm:physical_string_peripheral_letter_criterion}
+    \uses{def:has_physical_string_order}
     Let $A$ have the faithful normalized canonical density and the
     simple-peripheral purity property of
     Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius}.
@@ -318,6 +317,8 @@ virtual-boundary nondecay and virtual local covariance.
     unchanged printed assertion above.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:physical_string_peripheral_letter_criterion,
+        lem:physical_string_scalar_phases, lem:physical_string_endpoint_pairing}
     At a fixed unitary $u$, physical endpoints have positive limiting
     string magnitude exactly when there are $V$, $|\mu|=1$, and $n,m$
     with $\E_u(V)=\mu V$ and a nonzero displayed trace coefficient.
