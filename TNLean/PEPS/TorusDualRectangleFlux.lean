@@ -38,8 +38,8 @@ theorem TorusDualRectangle.torusBondNetwork_eq_with_exterior
     (σ : ∀ v, Phys v) (g : G)
     (E : (X → Matrix V V ℂ) × (X → Matrix V V ℂ)) :
     let R := torusRectInterior P.origin.1 P.origin.2 P.cols P.rows
-    let pT := (rectDualToTorus P.origin.1 P.origin.2).mapPath p
-    let qT := (rectDualToTorus P.origin.1 P.origin.2).mapPath q
+    let pT := rectDualPathToTorus P.origin.1 P.origin.2 p
+    let qT := rectDualPathToTorus P.origin.1 P.origin.2 q
     torusBondNetwork (fun v c => A v c.1 c.2.1 c.2.2.1 c.2.2.2 (σ v))
         (torusFluxMatricesWithExterior U R E (torusDualFluxLabels g qT)).1
         (torusFluxMatricesWithExterior U R E (torusDualFluxLabels g qT)).2 =

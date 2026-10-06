@@ -14,6 +14,7 @@
         TNLean.PEPS.RectDualStep.toTorus,
         TNLean.PEPS.torusRectInterior,
         TNLean.PEPS.rectDualToTorus,
+        TNLean.PEPS.rectDualPathToTorus,
         TNLean.PEPS.TorusDualRectangle,
         TNLean.PEPS.TorusDualRectangle.injective}
     \notready
@@ -117,7 +118,7 @@
     \label{thm:peps_dual_rectangle_exterior}
     \lean{TNLean.PEPS.TorusDualRectangle.torusBondNetwork_eq_with_exterior}
     \notready
-    \uses{thm:peps_dual_rectangle}
+    \uses{thm:peps_dual_rectangle,thm:peps_dual_flux_deformation}
     Let $p,q$ be two paths as above, let $U$ be a group representation,
     and fix $g$ in the group. Assume virtual $G$-invariance at every
     primal site of $R$. Insert $U_g$ and $U_{g^{-1}}$ according to the

@@ -89,7 +89,8 @@ theorem torusRectColumn_east (R : Set X) (x : ZMod width) (y : ZMod height)
     have hsq := (TorusDualHomotopy.refl (torusRectColumn x y j)).comp
       (TorusDualHomotopy.square x (torusRectCoord y j) (hs j (Nat.lt_succ_self j))).symm
     have hh := (ih (fun k hk => hs k (Nat.lt_succ_of_lt hk))).comp
-      (TorusDualHomotopy.refl (Quiver.Hom.toPath (TorusDualStep.north (x + 1) (torusRectCoord y j))))
+      (TorusDualHomotopy.refl
+        (Quiver.Hom.toPath (TorusDualStep.north (x + 1) (torusRectCoord y j))))
     exact hsq.trans hh
 
 /-- Appending a north edge stays on the chosen column. -/
@@ -113,8 +114,10 @@ theorem torusRectComb_east (R : Set X) (x : ZMod width) (y : ZMod height)
     | zero => simp [torusRectComb, torusRectColumn, torusRectCoord]
     | succ i => rfl
   rw [hc]
-  exact (TorusDualHomotopy.refl (torusRectComb x y i 0)).comp
-    (torusRectColumn_east R (torusRectCoord x i) y j hs)
+  simpa only [torusRectComb, Quiver.Path.comp_assoc, Quiver.Path.comp_cons,
+    Quiver.Path.comp_nil, Quiver.Hom.toPath, torusRectCoord] using
+    (TorusDualHomotopy.refl (torusRectComb x y i 0)).comp
+      (torusRectColumn_east R (torusRectCoord x i) y j hs)
 
 /-- Labelled unit steps in the lifted closed rectangle `[0,W] × [0,H]`.
 Distinct direction constructors retain the edge labels after projection to a torus. -/
@@ -178,15 +181,25 @@ variable {W H : ℕ}
 
 /-- Projection of the lifted rectangle preserves the four direction labels. -/
 def rectDualToTorus (x : ZMod width) (y : ZMod height) :
-    @Prefunctor (ℕ × ℕ) (rectDualQuiver W H) X (torusDualQuiver width height) where
-  obj a := (torusRectCoord x a.1, torusRectCoord y a.2)
-  map e := e.toTorus x y
+    @Prefunctor (ℕ × ℕ) (rectDualQuiver W H) X (torusDualQuiver width height) := by
+  letI : Quiver (ℕ × ℕ) := rectDualQuiver W H
+  exact { obj := fun a => (torusRectCoord x a.1, torusRectCoord y a.2)
+          map := fun e => e.toTorus x y }
+
+/-- Mathlib path projection with the rectangle quiver supplied explicitly.
+Its dimensions cannot be recovered from the ambient type `ℕ × ℕ` alone. -/
+abbrev rectDualPathToTorus (x : ZMod width) (y : ZMod height)
+    {a b : ℕ × ℕ} (p : @Quiver.Path (ℕ × ℕ) (rectDualQuiver W H) a b) :
+    TorusDualPath (torusRectCoord x a.1, torusRectCoord y a.2)
+      (torusRectCoord x b.1, torusRectCoord y b.2) :=
+  @Prefunctor.mapPath (ℕ × ℕ) (rectDualQuiver W H) X (torusDualQuiver width height)
+    (rectDualToTorus x y) a b p
 
 /-- Induction on an arbitrary labelled path reduces it to the rooted comb. -/
 theorem rectDualPath_comb (x : ZMod width) (y : ZMod height)
     {a b : ℕ × ℕ} (p : @Quiver.Path (ℕ × ℕ) (rectDualQuiver W H) a b) :
     TorusDualHomotopy (torusRectInterior x y W H)
-      ((torusRectComb x y a.1 a.2).comp ((rectDualToTorus x y).mapPath p))
+      ((torusRectComb x y a.1 a.2).comp (rectDualPathToTorus x y p))
       (torusRectComb x y b.1 b.2) := by
   induction p with
   | nil => exact .refl _
@@ -200,7 +213,7 @@ bulk case of SCP10, Lemma 6.14. -/
 theorem rectDualPath_homotopy (x : ZMod width) (y : ZMod height)
     {a b : ℕ × ℕ} (p q : @Quiver.Path (ℕ × ℕ) (rectDualQuiver W H) a b) :
     TorusDualHomotopy (torusRectInterior x y W H)
-      ((rectDualToTorus x y).mapPath p) ((rectDualToTorus x y).mapPath q) := by
+      (rectDualPathToTorus x y p) (rectDualPathToTorus x y q) := by
   exact TorusDualHomotopy.cancel_prefix (torusRectComb x y a.1 a.2)
     ((rectDualPath_comb x y p).trans (rectDualPath_comb x y q).symm)
 
@@ -234,8 +247,8 @@ theorem TorusDualRectangle.homotopy (P : TorusDualRectangle width height)
     {a b : ℕ × ℕ}
     (p q : @Quiver.Path (ℕ × ℕ) (rectDualQuiver P.cols P.rows) a b) :
     TorusDualHomotopy (torusRectInterior P.origin.1 P.origin.2 P.cols P.rows)
-      ((rectDualToTorus P.origin.1 P.origin.2).mapPath p)
-      ((rectDualToTorus P.origin.1 P.origin.2).mapPath q) :=
+      (rectDualPathToTorus P.origin.1 P.origin.2 p)
+      (rectDualPathToTorus P.origin.1 P.origin.2 q) :=
   rectDualPath_homotopy P.origin.1 P.origin.2 p q
 
 end Paths

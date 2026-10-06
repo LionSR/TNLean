@@ -345,7 +345,31 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn(' validate ', self.steps[prune]['run'])
         for i, step in enumerate(self.steps):
             if 'lake env lean' in step.get('run', ''):
-                self.assertLess(build, i)
+                if step.get('name') == 'Check finite rectangular dual geometry early':
+                    # One explicit early regression is safe after its complete
+                    # import closure is rebuilt by Lake. No generic exemption.
+                    self.assertLess(prune, i)
+                    self.assertLess(i, build)
+                    self.assertNotIn('continue-on-error', step)
+                    run = step['run']
+                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
+                    target = 'lake --fail-fast build +TNLean.PEPS.TorusDualRectangleFlux:olean'
+                    self.assertLess(run.index(cache_guard), run.index(target))
+                    self.assertLess(run.index(target), run.index('lake env lean'))
+                    self.assertIn('+TNLean.PEPS.TorusDualWinding:olean', run)
+                    self.assertIn('set -eo pipefail', run)
+                    self.assertIn('-DwarningAsError=true', run)
+                    self.assertIn('-DautoImplicit=false -DrelaxedAutoImplicit=false', run)
+                    self.assertEqual(run.count('lake env lean'), 1)
+                    self.assertEqual(run.strip().splitlines()[-1].strip(),
+                                     'TNLeanTest/TorusDualRectangle.lean')
+                    imports = (ROOT / 'TNLeanTest/TorusDualRectangle.lean').read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')], [
+                        'import TNLean.PEPS.TorusDualRectangleFlux',
+                        'import TNLean.PEPS.TorusDualWinding',
+                    ])
+                else:
+                    self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
         self.assertIs(setup['with']['build'], False)
         self.assertIs(setup['with']['use-github-cache'], False)

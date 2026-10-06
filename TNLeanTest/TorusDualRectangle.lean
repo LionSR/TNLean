@@ -1,5 +1,4 @@
 import TNLean.PEPS.TorusDualRectangleFlux
-import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualWinding
 
 /-! Regressions for the finite embedded rectangular case of SCP10 Lemma 6.14.
@@ -20,12 +19,12 @@ private def straight : Quiver.Path (0, 0) (1, 0) :=
   Quiver.Path.nil.cons (RectDualStep.east 0 0 (by decide) (by decide))
 
 example : TorusDualHomotopy (torusRectInterior (4 : ZMod 5) (4 : ZMod 5) 2 2)
-    ((rectDualToTorus (4 : ZMod 5) (4 : ZMod 5)).mapPath detour)
-    ((rectDualToTorus (4 : ZMod 5) (4 : ZMod 5)).mapPath straight) :=
+    (rectDualPathToTorus (4 : ZMod 5) (4 : ZMod 5) detour)
+    (rectDualPathToTorus (4 : ZMod 5) (4 : ZMod 5) straight) :=
   patch.homotopy detour straight
 
 example : TorusDualHomotopy (torusRectInterior (0 : ZMod 5) (0 : ZMod 5) 2 2)
-    ((rectDualToTorus (0 : ZMod 5) (0 : ZMod 5)).mapPath
+    (rectDualPathToTorus (0 : ZMod 5) (0 : ZMod 5)
       (straight.cons (RectDualStep.west 0 0 (by decide) (by decide))))
     Quiver.Path.nil :=
   rectDualPath_homotopy _ _ _ Quiver.Path.nil
@@ -37,15 +36,15 @@ private def reverseDetour : Quiver.Path (1, 1) (0, 1) :=
       (RectDualStep.north 0 0 (by decide) (by decide)))
 
 example : TorusDualHomotopy (torusRectInterior (4 : ZMod 5) (4 : ZMod 5) 2 2)
-    ((rectDualToTorus (4 : ZMod 5) (4 : ZMod 5)).mapPath reverseDetour)
-    ((rectDualToTorus (4 : ZMod 5) (4 : ZMod 5)).mapPath
+    (rectDualPathToTorus (4 : ZMod 5) (4 : ZMod 5) reverseDetour)
+    (rectDualPathToTorus (4 : ZMod 5) (4 : ZMod 5)
       (Quiver.Path.nil.cons (RectDualStep.west 0 1 (by decide) (by decide)))) :=
   patch.homotopy reverseDetour _
 
 example (P : TorusDualRectangle 5 5) {a b : ℕ × ℕ}
     (p q : @Quiver.Path (ℕ × ℕ) (rectDualQuiver P.cols P.rows) a b) :
-    torusDualPathDisplacement ((rectDualToTorus P.origin.1 P.origin.2).mapPath p) =
-      torusDualPathDisplacement ((rectDualToTorus P.origin.1 P.origin.2).mapPath q) :=
+    torusDualPathDisplacement (rectDualPathToTorus P.origin.1 P.origin.2 p) =
+      torusDualPathDisplacement (rectDualPathToTorus P.origin.1 P.origin.2 q) :=
   (P.homotopy p q).displacement_eq
 
 -- Width zero is a legitimate one-column patch.
