@@ -44,6 +44,41 @@
     precisely $T^2=I+T$.
 \end{proof}
 
+\begin{theorem}[Finite normal families with Fibonacci symmetry]%
+    \label{thm:mpo_symmetry_fibonacci_normal_decomposition}
+    \lean{FibonacciCompression.exists_equiv_prod_of_isMPOSymmetricFamily_fibNim}
+    \uses{thm:mpo_symmetry_fibonacci_decomposition, thm:mpo_symmetric_nimrep}
+    Let $O_1,O_\tau$ be a Fibonacci matrix product operator algebra and
+    $(A_x)_{x\in K}$ a finite family of normal tensors of positive bond
+    dimensions. Suppose its periodic vectors are invariant with
+    length-independent coefficients $M_{a,x}^y$, and linearly independent
+    at a positive length $N_0$. Assume that $O_1^{(N_0)}$ fixes each of
+    those vectors. Set $R=\{x\in K:M_{\tau,x}^x=0\}$.
+    There is a bijection $\sigma:K\longrightarrow R\times\{0,1\}$ such that
+    \begin{align}
+        M_{a,\sigma^{-1}(r,i)}^{\sigma^{-1}(s,j)}
+         & =\delta_{rs}N_{ai}^j.
+        \label{eq:mpo_fibonacci_normal_sum}
+    \end{align}
+    In particular, $|K|=2|R|$ is even. This applies to arbitrary finite
+    $K$, including the empty family, and to the Fibonacci operators of
+    Section~\ref{sec:asymex_fibonacci}
+    \cite[Sections~3 and~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 458--460, 564--568, 1991--1993.
+    % This theorem classifies multiplicities, not the gauge classes of L-symbols.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetry_fibonacci_decomposition}
+    The symmetry and normality hypotheses give natural-number coefficients
+    forming a representation of the fusion ring. Linear independence at
+    $N_0$ compares $O_1^{(N_0)}\ket{V^{(N_0)}(A_x)}$ with
+    $\ket{V^{(N_0)}(A_x)}$, and forces $M_{1,x}^y=\delta_{xy}$.
+    The direct-sum theorem then gives (\ref{eq:mpo_fibonacci_normal_sum}).
+    Its representatives have zero diagonal coefficient, so the displayed
+    bijection gives the cardinality formula.
+\end{proof}
+
 \begin{theorem}[The indecomposable Fibonacci action]%
     \label{thm:mpo_symmetry_fibonacci_indecomposable}
     \lean{FibonacciCompression.exists_equiv_of_isIndecomposable_fibNim}
