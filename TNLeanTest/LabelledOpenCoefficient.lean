@@ -31,3 +31,21 @@ example : ¬ ∃ C : TorusDualCollar 3 3, C.patch.cols = 2 := by
 #print axioms TorusDualCollar.exists_internalFluxGauge
 #print axioms TorusDualCollar.openCoefficient_eq
 #print axioms TorusDualCollar.correlatedBoundary_eq
+
+-- The delta bridge uses a labelled self bond with its two independent incidences.
+example (A : (v : (Set.univ : Set Unit)) →
+    LocalConfig (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) (fun _ ↦ Fin 2) v.1 → ℂ)
+    (O : Unit → Matrix (Fin 2) (Fin 2) ℂ)
+    (θ : RegionBoundaryEndpoint (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) Set.univ → Fin 2) :
+    network (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) (fun _ ↦ Fin 2)
+      (deltaCompletedTensor _ _ Set.univ A 0 θ)
+      (internalBondMatrices _ _ Set.univ O) (fun _ ↦ PUnit.unit) =
+      openCoefficient _ _ Set.univ A O θ :=
+  network_deltaCompletedTensor _ _ Set.univ A O 0 θ
+
+-- Empty virtual alphabets do not introduce a hidden Nonempty premise.
+example (A : collar.region → (Empty × Empty × Empty × Empty) → ℂ)
+    (O : TorusLabelledBond 5 5 → Matrix Empty Empty ℂ)
+    (θ : RegionBoundaryEndpoint torusLabelledBondTail torusLabelledBondHead collar.region → Empty) :
+    torusOpenCoefficient collar.region A O θ = 0 :=
+  torusOpenCoefficient_eq_zero_of_isEmpty _ ⟨collar.patch.origin, collar.origin_mem⟩ A O θ

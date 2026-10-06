@@ -17,7 +17,7 @@ arXiv:1001.3807v3, Lemma 6.14, not an arbitrary-region avoidance result.
 
 namespace TNLean.PEPS
 
-variable {width height : ℕ} [NeZero width] [NeZero height]
+variable {width height : ℕ}
 local notation "X" => TorusVertex width height
 
 /-- An embedded rectangular dual patch with one extra lifted coordinate in each
@@ -64,7 +64,7 @@ theorem TorusDualCollar.neighbors_mem (C : TorusDualCollar width height)
     ⟨i, by omega, j + 1, by omega, ?_⟩,
     ⟨i + 1, by omega, j + 2, by omega, ?_⟩,
     ⟨i + 1, by omega, j, by omega, ?_⟩⟩
-  all_goals simp [torusRectCoord_eq, Nat.cast_add, add_assoc]
+  all_goals simp [torusRectCoord_eq, Nat.cast_add, add_assoc] <;> ring
 
 /-- Every labelled bond incident to the swept support is internal to the collar. -/
 theorem TorusDualCollar.incident_internal (C : TorusDualCollar width height)

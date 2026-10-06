@@ -98,6 +98,7 @@ def internalBondMatrices (O : Edge → Matrix V V ℂ) (e : Edge) : Matrix V V �
   exact if tail e ∈ R ∧ head e ∈ R then O e else 1
 
 omit [DecidableEq Vertex] [DecidableEq Edge] [Fintype Vertex] [Fintype V] in
+set_option maxHeartbeats 800000 in
 open Classical in
 private theorem completed_bondWeight
     (O : Edge → Matrix V V ℂ) (v₀ : V) (θ : RegionBoundaryEndpoint tail head R → V)
@@ -110,7 +111,7 @@ private theorem completed_bondWeight
   apply Finset.prod_congr rfl
   intro e _
   by_cases ht : tail e ∈ R <;> by_cases hh : head e ∈ R
-  all_goals simp [bondWeight, internalBondMatrices, openBondFactor, joinRegionConfig,
+  all_goals simp [internalBondMatrices, openBondFactor, joinRegionConfig,
     Equiv.piEquivPiSubtypeProd, endpointVertex, deltaExteriorConfig, ht, hh,
     Matrix.one_apply]
   all_goals simp only [eq_comm]
@@ -136,7 +137,6 @@ private theorem completed_siteWeight
     simp [deltaCompletedTensor, joinRegionConfig, Equiv.piEquivPiSubtypeProd, v.2]
   simp_rw [hin, hout]
   rw [Fintype.prod_ite_zero]
-  simp only [Finset.prod_const_one]
   congr 2
   exact propext funext_iff.symm
 
