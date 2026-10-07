@@ -80,7 +80,7 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
         "Proves that a finite ambient integer dilation of radius r contains at most (2r+1)^2 cells per defining index, with no disjointness assumption on the squares.",
-        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143\u2013210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
+        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143–210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
       ],
       "verification": {
         "result": "passed",
@@ -130,7 +130,7 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
         "Defines the ambient integer cut-endpoint set Z by taking the endpoints of the existing unordered crossing-edge set; it does not add missing ambient lattice edges to the physical boundary.",
-        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143\u2013210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
+        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143–210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
       ],
       "verification": {
         "result": "passed",
@@ -179,8 +179,8 @@
       "notices": [],
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
-        "Proves |Z| \u2264 2b for the physical crossing-edge count b, including empty boundaries and arbitrary finite induced domains.",
-        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143\u2013210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
+        "Proves |Z| ≤ 2b for the physical crossing-edge count b, including empty boundaries and arbitrary finite induced domains.",
+        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143–210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
       ],
       "verification": {
         "result": "passed",
@@ -230,7 +230,7 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
         "Defines the four child indices of each dyadic parent z by 2z+a with a in {0,1}^2, valid for all integer parent indices, including negative indices.",
-        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143\u2013210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
+        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143–210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
       ],
       "verification": {
         "result": "passed",
@@ -280,7 +280,7 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
         "Proves injectivity of the parent-offset map and the exact identity |children(P)| = 4|P| for every finite parent-index set P, including the empty set.",
-        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143\u2013210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
+        "Auxiliary cardinality ingredient in the proof of prop:two-families, source lines 143–210; the translated dyadic mesh, its layer decomposition, distances and separated two-family construction remain separate proof obligations."
       ],
       "verification": {
         "result": "passed",
@@ -302,6 +302,600 @@
             "sha256": "a65d827bdeecd74a9641e649249de4bcf826803803cb1a82d77d377a63daaf30"
           }
         ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellindex",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The coordinatewise floor index in the translated half-open dyadic grid.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicparent",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicParent",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The coordinatewise integer parent of a dyadic cell index.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCell",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The translated half-open square of side `2 ^ k`, at a nonnegative scale.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellindex_succ",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_succ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Increasing the scale by one sends a cell index to its parent.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadiccell_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicCell_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Every point belongs to exactly the half-open cell given by its floor index.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicparent_abs_sub_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicParent_abs_sub_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Passing to dyadic parents preserves an integer coordinate-distance bound.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicparent_mem_ambientdilation_image",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicParent_mem_ambientDilation_image",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The parent of a nearby index lies near the parent image with the same radius.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.occupiedcellindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The dyadic indices of the cells occupied by a finite set of integer points.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.occupiedcellindices_succ",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices_succ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Occupied indices at the next scale are exactly the parent image.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The union of cells whose indices are within the specified integer radius of an occupied index.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadicneighborhood_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicNeighborhood_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "A point belongs to the dyadic neighborhood exactly when its index belongs to the enlarged occupied set.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_subset_succ",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_subset_succ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The actual dyadic neighborhoods are nested at every nonnegative scale.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadicchildren_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicChildren_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "An integer index is a dyadic child precisely when its parent is in the given set.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayerindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayerIndices",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The indices at the finer scale of the cells in the difference of successive neighborhoods.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The actual planar difference of successive dyadic neighborhoods.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_eq_iunion",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "A dyadic layer is exactly the union of its indexed half-open cells.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_dyadiclayerindices_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The layer-cell count is bounded uniformly in the scale and translation origin.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_dyadiclayerindices_boundary_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_boundary_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "The layer-cell count is at most eight times the squared neighborhood width times the crossing-edge count.",
+        "Formalizes an elementary component of Section 11, lines 151–185, at nonnegative scales k : Nat and arbitrary translation origin; the neighborhoods and layers are actual unions of half-open planar cells.",
+        "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
+      ],
+      "verification": {
+        "result": "pending"
       },
       "no_upstream_proof_text_reused": true
     }
