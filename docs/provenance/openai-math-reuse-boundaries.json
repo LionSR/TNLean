@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "downstream_base": "b7a0184ce22b29102fe17a6e96a9ba83b98d5510",
+  "status": "source_review_only",
+  "decisions": [
+    {
+      "module": "OAI.MathematicalPhysics.PEPSFilters.Basic",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+      "source_sha256": "a23b4b07c5bf2af982105f9bc987f568c7223d111fd9b04d2f9b7b5de517a50e",
+      "declarations_or_anchors": [
+        "Vertex",
+        "ForwardAdjacent",
+        "Edge",
+        "SupportedOn",
+        "UniqueGround",
+        "FullSystemGap",
+        "MainStatement",
+        "UniformAreaLaw"
+      ],
+      "owner_repository": "LionSR/TNLean",
+      "related_issues": [
+        8738,
+        8739,
+        8740,
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Split physical support/lattice definitions from headline predicates. Generic gap/entropy bridges remain #8739, canonical geometry #8738 and PEPS contraction #8740. Do not import the module as completion of its MainStatement/UniformAreaLaw predicates.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSFilters.LocalOperators",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSFilters/LocalOperators.lean",
+      "source_sha256": "c6601addf00f488e5f60cbcc26f381c90b9aba0e04124009a426e2252626a93e",
+      "declarations_or_anchors": [
+        "splitConfigurations",
+        "liftLocalHom",
+        "liftLocal_positive"
+      ],
+      "owner_repository": "LionSR/TNLean",
+      "related_issues": [
+        8738,
+        8739,
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Physical region lifts are reusable only after identification with canonical finite-site configurations; generic partial trace and positivity remain QICLean. Its two-module closure is not an independently accepted downstream interface.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSFilters.CollarWeights",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSFilters/CollarWeights.lean",
+      "source_sha256": "b1b469f5d58a8dc9bdf5b79a311f7c592597ded0ca0b3c44363679045a1f549d",
+      "declarations_or_anchors": [
+        "harmonicWindow_block",
+        "harmonicWindow_doubling",
+        "exists_uniform_collar_weights"
+      ],
+      "owner_repository": "LionSR/QICLean",
+      "related_issues": [
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Mathlib-only arithmetic leaf: generic harmonic sums and quadratic weight budget, despite the physical namespace. Candidate for companion extraction after precise-import scouting; no TNLean duplicate.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSFilters.HamiltonianEnergy",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSFilters/HamiltonianEnergy.lean",
+      "source_sha256": "9053aa9911804ee50d6c06cfb8b0c78da0c16f2dee526a2ac2236d02ee87caf9",
+      "declarations_or_anchors": [
+        "expectation",
+        "regularized_energy_bound",
+        "hermitianPart"
+      ],
+      "owner_repository": "LionSR/TNLean",
+      "related_issues": [
+        8739,
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Physical contour energy statement requires IsGridHamiltonian and regional support. The generic Hermitian-part algebra must be split into QICLean. Whole-module copying would pull the contour/interpolation proof chain.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSFilters.GeometricOptimizer",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSFilters/GeometricOptimizer.lean",
+      "source_sha256": "c06368af120acb94e16d263d8a5b4204b6ffa576ab12259b9333c877b1c3e102",
+      "declarations_or_anchors": [
+        "geometric_optimizer_producer"
+      ],
+      "owner_repository": "LionSR/TNLean",
+      "related_issues": [
+        8738,
+        8739,
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Preserve q>=2, J/Delta/epsilon>0, L>=2, r>0, rectangle bounds, grid support, UniqueGround, and FullSystemGap. Uniform weights/optimizer export is not full area law.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSMove.StrongSubadditivity",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSMove/StrongSubadditivity.lean",
+      "source_sha256": "0ba64db566701f8311724ac040162bae19505e8f1b8a176e15390b176409ac8f",
+      "declarations_or_anchors": [
+        "see lexical declarations in manifest"
+      ],
+      "owner_repository": "LionSR/QICLean",
+      "related_issues": [
+        8739,
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Existing QICLean Entropy.strongSubadditivity is a replacement candidate; finite-product reindexing, normalization and entropy equality bridges must be proved before marking replaced_by_existing.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSMove.PhysicalMove",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSMove/PhysicalMove.lean",
+      "source_sha256": "e69cea262de9e4af1856dfc5a0a780481cf68b5994815ca5e2b2d43788678554",
+      "declarations_or_anchors": [
+        "OneCopyMoveBound",
+        "one_copy_move_bound"
+      ],
+      "owner_repository": "LionSR/TNLean",
+      "related_issues": [
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Keep q>=2, unit state, pairwise-disjoint X/P/Y, PSD subdensities of trace<=1, a>0 and a*ell<=c. Generic singular interpolation/support estimates belong QICLean; physical reshuffling/region action belongs TNLean.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSSubvolume.RectangleTiling",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSSubvolume/RectangleTiling.lean",
+      "source_sha256": "908c581027a5ac56af6a73cb47996e912c70751745760fbc8d5f1313da4f98b5",
+      "declarations_or_anchors": [
+        "interval_index",
+        "interval_unique",
+        "index_near",
+        "mod_near_unique"
+      ],
+      "owner_repository": "LionSR/TNLean",
+      "related_issues": [
+        8738,
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Split generic integer-division/modular arithmetic (QICLean or Mathlib) from exact finite square-region tiling (TNLean); canonical box geometry must be coordinated with #8738.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSSubvolume.Subvolume",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSSubvolume/Subvolume.lean",
+      "source_sha256": "d0d85f9100ddf557bbdbd3a49758f54b4a041cbb949f9713d1f2307575a8ed58",
+      "declarations_or_anchors": [
+        "power_bound"
+      ],
+      "owner_repository": "LionSR/QICLean",
+      "related_issues": [
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Generic scale-recurrence-to-real-power lemma has no lattice/state argument. Extract only its declaration and precise Mathlib dependencies; current 51-module import closure overstates its proof needs. No extraction is compiled in this audit.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    },
+    {
+      "module": "OAI.MathematicalPhysics.PEPSSubvolume.Subvolume",
+      "source_path": "lean/OAI/MathematicalPhysics/PEPSSubvolume/Subvolume.lean",
+      "source_sha256": "d0d85f9100ddf557bbdbd3a49758f54b4a041cbb949f9713d1f2307575a8ed58",
+      "declarations_or_anchors": [
+        "uniform_subvolume_square"
+      ],
+      "owner_repository": "LionSR/TNLean",
+      "related_issues": [
+        8735,
+        8741
+      ],
+      "decision": "deferred_to_issue",
+      "reuse_boundary": "Existential C and parameter-dependent e in (0,1), square boxes only. Explicit normalized eigenvector, IsGridHamiltonian and FullSystemGap hypotheses; not freely chosen e, e*=2e-6, arbitrary domains/range, boundary area law, or polynomial PEPS.",
+      "downstream_path": null,
+      "verification": "source_review_only; no elaborated replacement or port"
+    }
+  ],
+  "existing_library_candidates": [
+    {
+      "repository": "LionSR/QICLean",
+      "commit": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+      "path": "QICLean/Analysis/Entropy.lean",
+      "sha256": "4214fc56723f81c3a3b819a7d31b8cf3350c1c5981c286c8746d540dd2e3eec8",
+      "declarations": [
+        "vonNeumannEntropy",
+        "vonNeumannEntropy_congr"
+      ],
+      "status": "replacement_candidate_not_verified_equivalence"
+    },
+    {
+      "repository": "LionSR/QICLean",
+      "commit": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+      "path": "QICLean/Channel/PartialTrace.lean",
+      "sha256": "6deff109171281a38a5b60edb671e82ff7667b2a5a7dcf40573309cd1bc28338",
+      "declarations": [
+        "Matrix.partialTraceRight",
+        "Matrix.partialTraceLeft",
+        "Matrix.PosSemidef.partialTraceRight",
+        "Matrix.trace_partialTraceRight"
+      ],
+      "status": "replacement_candidate_not_verified_equivalence"
+    },
+    {
+      "repository": "LionSR/QICLean",
+      "commit": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+      "path": "QICLean/Entropy/StrongSubadditivity.lean",
+      "sha256": "cf61d19e0f87512e8cecfee42437791bf8e47470524b64893211a609079ddda5",
+      "declarations": [
+        "Entropy.strongSubadditivity"
+      ],
+      "status": "replacement_candidate_not_verified_equivalence"
+    }
+  ],
+  "no_port_reason": "Cache access prevents any source or downstream Lean module build. Small generic leaves belong QICLean; physical foundations overlap #8738/#8740. No independent unclaimed physical slice has been validated.",
+  "provenance_shard": "docs/provenance/openai-math.d/8741.json is reserved for actual downstream declaration mappings; no fictitious target declaration is introduced here."
+}

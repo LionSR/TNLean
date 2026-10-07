@@ -43,13 +43,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The tangent-line bound `log x ≤ λ x - 1 - log λ` for `x, λ > 0`. -/
-theorem _root_.Real.log_le_mul_sub_one_sub_log {x l : ℝ} (hx : 0 < x) (hl : 0 < l) :
-    Real.log x ≤ l * x - 1 - Real.log l := by
-  have h := Real.log_le_sub_one_of_pos (mul_pos hl hx)
-  rw [Real.log_mul hl.ne' hx.ne'] at h
-  linarith
-
 /-- **The depth lower bound with the constant `ξ/4`, gauge form.** Let `A` be normal in the
 gauge of arXiv:2307.01696, eq. (5), with the products of `L` matrices spanning the matrix
 algebra, and let `λ₂` be an eigenvalue of `E_A` of largest modulus among those different from
@@ -158,9 +151,9 @@ independent of `N` and `T`, such that a unit vector `ψ` prepared in depth `T` w
 `ε(φ_N, ψ) ≤ 1/2` satisfies `a log N ≤ T + C`.
 
 This absorbs the correction `(ξ/4) log(T + 1)` into the slope, using
-`log x ≤ λ x - 1 - log λ`. It is the bound "any circuit faithfully preparing them requires a
-depth `T=\Omega(\log N)`" of the introduction of arXiv:2307.01696, with every slope below the
-`ξ/4` of the proof of Theorem 1. -/
+`log x ≤ l x - 1 - log l` for `x, l > 0`. It is the bound "any circuit faithfully preparing
+them requires a depth `T=\Omega(\log N)`" of the introduction of arXiv:2307.01696, with every
+slope below the `ξ/4` of the proof of Theorem 1. -/
 theorem exists_mul_log_le_of_infidelity_le_one_half_of_isNormal {A : MPSTensor d D}
     (hA : Kraus.IsNormal A) {lam₁ lam₂ : ℂ}
     (hlam₁ : Module.End.HasEigenvalue (Kraus.transferMap A) lam₁)
@@ -195,7 +188,12 @@ theorem exists_mul_log_le_of_infidelity_le_one_half_of_isNormal {A : MPSTensor d
     rw [e1, e2] at h'
     exact h'
   have h2 : a * Real.log ((T : ℝ) + 1) ≤ (1 - θ) * (T + 1) - a * (1 + Real.log l) := by
-    have ht := Real.log_le_mul_sub_one_sub_log (by positivity : (0 : ℝ) < T + 1) hl
+    have hT1 : (0 : ℝ) < T + 1 := by positivity
+    /- The tangent-line bound `log x = log (l x) - log l ≤ l x - 1 - log l`. -/
+    have ht : Real.log ((T : ℝ) + 1) ≤ l * (T + 1) - 1 - Real.log l := by
+      have h := Real.log_le_sub_one_of_pos (mul_pos hl hT1)
+      rw [Real.log_mul hl.ne' hT1.ne'] at h
+      linarith
     calc a * Real.log ((T : ℝ) + 1) ≤ a * (l * (T + 1) - 1 - Real.log l) :=
           mul_le_mul_of_nonneg_left ht ha.le
       _ = a * l * (T + 1) - a * (1 + Real.log l) := by ring
