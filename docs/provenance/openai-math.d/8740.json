@@ -1,0 +1,1017 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8740-vertex",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.Vertex",
+        "lines": [
+          12,
+          12
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L12-L12"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Vertex",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-forwardadjacent",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.ForwardAdjacent",
+        "lines": [
+          14,
+          14
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L14-L14"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.ForwardAdjacent",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-forwardedge",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.Edge",
+        "lines": [
+          18,
+          18
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L18-L18"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.ForwardEdge",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-pinned-incidentedge",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.IncidentEdge",
+        "lines": [
+          25,
+          25
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L25-L25"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.IncidentEdge",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-pinned-state",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.State",
+        "lines": [
+          30,
+          30
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L30-L30"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.State",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-pinned-localtensor",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.LocalTensor",
+        "lines": [
+          80,
+          80
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L80-L80"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.LocalTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-pinned-contractpeps",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.contractPEPS",
+        "lines": [
+          83,
+          83
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L83-L83"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.contractPEPS",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-vector-incidentedge",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean",
+        "declaration": "OAI.PolynomialPEPS.IncidentEdge",
+        "lines": [
+          22,
+          22
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L22-L22"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Vector.IncidentEdge",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-vector-state",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean",
+        "declaration": "OAI.PolynomialPEPS.State",
+        "lines": [
+          26,
+          26
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L26-L26"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Vector.State",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-vector-peps",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean",
+        "declaration": "OAI.PolynomialPEPS.PEPS",
+        "lines": [
+          68,
+          68
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L68-L68"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Vector.PEPS",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-vector-peps-contract",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean",
+        "declaration": "OAI.PolynomialPEPS.PEPS.contract",
+        "lines": [
+          78,
+          78
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L78-L78"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Vector.PEPS.contract",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-vector-peps-maxbonddim",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean",
+        "declaration": "OAI.PolynomialPEPS.PEPS.maxBondDim",
+        "lines": [
+          83,
+          83
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L83-L83"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+        "declaration": "TNLean.PEPS.Approximation.Vector.PEPS.maxBondDim",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-forwardsquareedgeequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareEdgeEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquareedgeequiv-val",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_val",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquareedgeequiv-symm-val",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_symm_val",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquareincidentequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareIncidentEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-pinnedsquareincidentequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquareincidentequiv-val",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareIncidentEquiv_val",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-pinnedsquareincidentequiv-val",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv_val",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-graphbonddim",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.graphBondDim",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-graphbonddim-forward",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.graphBondDim_forward",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquarevirtualconfigequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquarevirtualconfigequiv-incident",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_incident",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquarevirtualconfigequiv-pinnedincident",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_pinnedIncident",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-vectortensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.vectorTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-pinnedtensortographtensor-component",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_component",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-vectortensortographtensor-component",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.vectorTensorToGraphTensor_component",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-statecoeff-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.stateCoeff_pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-statecoeff-vectortensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.stateCoeff_vectorTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original comparison proof for native square-lattice graph tensors."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
