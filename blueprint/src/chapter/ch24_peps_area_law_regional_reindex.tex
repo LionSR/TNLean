@@ -1,0 +1,49 @@
+\section{Regional states under relabelling}
+\label{sec:area_law_regional_relabelling}
+
+\begin{definition}[Relabelling physical configurations]
+    \label{def:area_law_regional_relabelling}
+    \lean{TNLean.PEPS.AreaLaw.configurationSiteEquiv,
+        TNLean.PEPS.AreaLaw.regionConfigurationEquiv,
+        TNLean.PEPS.AreaLaw.relabelState}
+    \leanok
+    \uses{def:area_law_domain,def:area_law_ground_entropy}
+    Let $e:\Lambda\to\Lambda'$ be a bijection of finite domains, and let
+    $A\subseteq\Lambda$, $A'\subseteq\Lambda'$ satisfy $e(A)=A'$.
+    It induces bijections $e_A:A\to A'$ and
+    $e_B:\Lambda\setminus A\to\Lambda'\setminus A'$.
+    For any physical vector $\Omega$, its relabelled coefficients are
+    \begin{align}
+        \Omega'(\sigma') & =\Omega(\sigma'\circ e).
+    \end{align}
+    Regional configurations transform by the corresponding restricted bijections.
+    The relabelling concerns tensor factors; preservation of lattice adjacency
+    is unnecessary for this definition.
+\end{definition}
+
+\begin{theorem}[Covariance of reductions and invariance of entropy]
+    \label{thm:area_law_regional_relabelling}
+    \lean{TNLean.PEPS.AreaLaw.reducedState_relabel,
+        TNLean.PEPS.AreaLaw.regionalEntropy_relabel}
+    \leanok
+    \uses{def:area_law_regional_relabelling}
+    For every vector and region-preserving site bijection as above,
+    \begin{align}
+        \|\Omega'\|     & =\|\Omega\|,                                     \\
+        \rho_{A'}^{\Omega'}(\sigma',\tau')
+                        & =\rho_A^\Omega(\sigma'\circ e_A,\tau'\circ e_A), \\
+        S_{\Omega'}(A') & =S_\Omega(A).
+    \end{align}
+    These identities hold without normalization or spectral assumptions,
+    including empty regions and complements. They express the finite tensor-factor
+    conventions of \cite[Section~2]{OpenAI2026AreaLaw} in the induced-domain coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    Relabelling permutes the Euclidean configuration coordinates, preserving the
+    norm. The site bijection preserves the region and its complement. Splitting a
+    configuration before or after relabelling therefore gives the same pair of
+    regional configurations. The partial trace changes coordinates on both
+    factors, while its complementary sum is unchanged by the complementary
+    bijection. This gives the reduction formula. Reindexing the regional matrix
+    preserves its eigenvalues and hence its von Neumann entropy.
+\end{proof}

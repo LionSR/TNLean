@@ -304,6 +304,204 @@
         ]
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.configurationsiteequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.configurationSiteEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the configuration-space equivalence induced by an arbitrary bijection of finite-domain sites.",
+        "Formalizes finite tensor-factor relabelling from Section 2, lines 10–25, with no vector normalization, adjacency-preservation, or spectral-gap assumption.",
+        "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.regionconfigurationequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionConfigurationEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the regional configuration-space equivalence induced by a site bijection preserving the specified cut.",
+        "Formalizes finite tensor-factor relabelling from Section 2, lines 10–25, with no vector normalization, adjacency-preservation, or spectral-gap assumption.",
+        "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.relabelstate",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.relabelState",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Expresses the same finite-domain vector after a site relabelling by pullback of its configuration coefficients.",
+        "Formalizes finite tensor-factor relabelling from Section 2, lines 10–25, with no vector normalization, adjacency-preservation, or spectral-gap assumption.",
+        "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.reducedstate_relabel",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.reducedState_relabel",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves covariance of the regional reduced pure-state matrix under a site bijection preserving the cut, using the existing QICLean partial-trace covariance theorem.",
+        "Formalizes finite tensor-factor relabelling from Section 2, lines 10–25, with no vector normalization, adjacency-preservation, or spectral-gap assumption.",
+        "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.regionalentropy_relabel",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_relabel",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves invariance of regional entropy under a site bijection preserving the cut, using the existing QICLean entropy reindexing theorem.",
+        "Formalizes finite tensor-factor relabelling from Section 2, lines 10–25, with no vector normalization, adjacency-preservation, or spectral-gap assumption.",
+        "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.norm_relabelstate",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.norm_relabelState",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves Euclidean norm preservation under arbitrary finite-domain site relabelling by applying the existing Mathlib LinearIsometryEquiv.piLpCongrLeft norm-preservation theorem.",
+        "Formalizes finite tensor-factor coordinate and normalization conventions from Section 2, lines 10–25; requires no normalization, region, adjacency-preservation, or spectral-gap assumption.",
+        "Does not formalize the separate native-PEPS conversion or establish a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }
