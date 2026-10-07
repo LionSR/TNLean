@@ -307,14 +307,14 @@
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellindex",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -334,20 +334,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicparent",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicParent",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -367,20 +385,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -400,20 +436,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellindex_succ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_succ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -433,20 +487,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadiccell_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicCell_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -466,20 +538,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicparent_abs_sub_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicParent_abs_sub_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -499,20 +589,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicparent_mem_ambientdilation_image",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicParent_mem_ambientDilation_image",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -532,20 +640,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.occupiedcellindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -565,20 +691,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.occupiedcellindices_succ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices_succ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -598,20 +742,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -631,20 +793,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadicneighborhood_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicNeighborhood_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -664,20 +844,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_subset_succ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_subset_succ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -697,20 +895,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadicchildren_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicChildren_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -730,20 +946,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayerindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayerIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -763,20 +997,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -796,20 +1048,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_eq_iunion",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -829,20 +1099,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_dyadiclayerindices_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -862,20 +1150,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_dyadiclayerindices_boundary_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_boundary_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -895,20 +1201,38 @@
         "Does not prove exhaustion of the plane, distance or clearance estimates, or the source two-family construction."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_mem_dyadicneighborhood",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicExhaustion.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_mem_dyadicNeighborhood",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -928,20 +1252,38 @@
         "Does not prove closure-distance or clearance estimates, the two-family construction, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.iunion_dyadicneighborhood_eq_univ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicExhaustion.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.iUnion_dyadicNeighborhood_eq_univ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -961,7 +1303,25 @@
         "Does not prove closure-distance or clearance estimates, the two-family construction, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5e863a2ef04989154da0be5fe4be0dfd85a66eb0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-build.log",
+            "sha256": "c1f36bf190a36de969464d91622971d8ae23d1260ca7e848837fdd1f2d84d8a2"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-dyadic-axioms.log",
+            "sha256": "dbd31982561db593a55ca961449002442081e2be5ca8c1b0d50c5b5c584950fb"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
