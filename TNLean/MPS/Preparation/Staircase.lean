@@ -16,8 +16,9 @@ sequential factorization (`MPSPreparation.exists_isometric_chain_polarIsoMatrix`
 bond levels be encoded injectively in the configurations of `r ≥ 2` sites. Then there is a
 unitary `U` on the open chain of `n ≥ r` sites with
 `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}`, where the encoded input occupies
-the last `r` sites, and `U` is a product of at most `n - r + 1` gates, each acting on at most
-`r + 1` consecutive sites (`MPSPreparation.exists_staircase_isWindowProduct`). For `r ≥ 2`
+the last `r` sites. For every unitary `Z` acting on the last `r` sites, `U Z` is a product of
+at most `max 1 (n - r)` gates, each acting on at most `r + 1` consecutive sites, and so is `U`
+(`MPSPreparation.exists_staircase_isWindowProduct`). For `r ≥ 2`
 it is therefore a product of at most `K₀ + (n - r) K₁` gates on neighbouring sites, with `K₀`,
 `K₁` depending only on `d` and `r` (`MPSPreparation.exists_staircase`).
 
@@ -94,10 +95,12 @@ theorem exists_step_unitary (hd : 0 < d) {r D' : ℕ} {enc : Fin D' → Cfg d r}
 Let `enc` encode the bond levels `Fin D'` injectively in the configurations of `r` sites. For
 every `n ≥ r` and every chain `Q₀, …, Q_{n-1}` with bonds `b₀ = 1, b₁, …, b_n`, every site
 vanishing on the rows beyond its left bond and isometric on its right bond, there is a unitary
-`U` on `n` sites, a product of at most `n - r + 1` gates each acting on at most `r + 1`
-consecutive sites, with `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}` for every
-`x < b_n`. The first gate applied extends `Q_{n-1}`, each later one extends the next site to
-the left, and the last one is a unitary on the first `r` sites extending the remaining chain.
+`U` on `n` sites with `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}` for every
+`x < b_n`, such that for every unitary `Z` acting on the last `r` sites, `U Z` is a product of
+at most `max 1 (n - r)` gates each acting on at most `r + 1` consecutive sites. The first gate
+applied extends `Q_{n-1}` and absorbs `Z`, each later one extends the next site to the left,
+and the unitary on the first `r` sites extending the remaining chain is absorbed into the
+last one.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the isometries `V_i` of
 eq. (14) applied in sequence, each acting on the bond register and one site; the successive
