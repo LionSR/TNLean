@@ -70,8 +70,11 @@ theorem Template.exists_latticeRow_profile {Ctpl : ℝ} {n s₀ : ℕ}
     simp only [Finset.mem_Icc, max_le_iff, le_min_iff]
     omega
   · rw [ite_eq_right hy]
-    simp only [Finset.notMem_empty]
-    omega
+    constructor
+    · intro hs
+      exact (hy hs.2.1).elim
+    · intro hx
+      exact (Finset.notMem_empty x hx).elim
 
 /-- Nonempty rows of an actual sampled polygon form an integer interval. -/
 theorem Template.latticeRow_nonempty_between {Ctpl : ℝ} {n s₀ : ℕ}
