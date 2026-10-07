@@ -1787,14 +1787,14 @@
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicancestor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1813,20 +1813,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicrefinement",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicRefinement",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1845,20 +1863,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadicrefinement_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicRefinement_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1877,20 +1913,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_dyadicrefinement",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_dyadicRefinement",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1909,20 +1963,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellindex_of_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_of_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1941,20 +2013,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finelayerindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayerIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1973,20 +2063,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_eq_iunion_fine",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion_fine",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2005,20 +2113,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_finelayerindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2037,20 +2163,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_finelayerindices_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2069,20 +2213,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_finelayerindices_boundary_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_boundary_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2101,20 +2263,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2133,20 +2313,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.pitchscaleindex",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.pitchScaleIndex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2165,20 +2363,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2197,20 +2413,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.le_pitchscaleindex",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.le_pitchScaleIndex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2229,20 +2463,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finescale_dvd_layerscale",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScale_dvd_layerScale",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2261,20 +2513,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.layerscale_dvd_pitchscale",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.layerScale_dvd_pitchScale",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2293,20 +2563,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.layerscale_exponent_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.layerScale_exponent_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2325,20 +2613,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.beltcellindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltCellIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2357,20 +2663,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_fine_belt_shift",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_fine_belt_shift",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2389,20 +2713,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicscale_ratio_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicScale_ratio_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2421,20 +2763,38 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_sparse_dyadic_belt_shift",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_shift",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2453,7 +2813,25 @@
         "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "fc87534a119694461e9c3d3c37a7bfa1bf3ea960",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-build.log",
+            "sha256": "d88ead29e8941d88736f791287c58c3d30b4d2a7bd1afe9d32be00add50c8c30"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-fine-belts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-fine-belts-axioms.log",
+            "sha256": "d147edf52795e3911c08b4990799c455dba500af44ca3595927908cf31b80451"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
