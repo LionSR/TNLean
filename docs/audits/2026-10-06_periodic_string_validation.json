@@ -1,0 +1,203 @@
+{
+  "date": "2026-10-06",
+  "tn_base": "227c905a7456efc4c0cf151bb178081d3a7a272d",
+  "qic_pin": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+  "mathlib_pin": "c55e6e786f49471c72fbddbec5415808896aec1e",
+  "toolchain": "leanprover/lean4:v4.35.0-rc3",
+  "validation_kind": "actual direct Lean elaboration with package options and strict warnings; not a Lake/root build",
+  "results": [
+    {
+      "module": "TNLean.MPS.Preparation.WindowCorrelator",
+      "source": "TNLean/MPS/Preparation/WindowCorrelator.lean",
+      "source_sha256": "b9f75bb238c54497fd1d4a5dc9a07e7375cda3b3874463a89ac04dfc3b26b831",
+      "command": [
+        "timeout",
+        "--signal=INT",
+        "--kill-after=5s",
+        "90s",
+        "lean",
+        "-j1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/53/TNLean/MPS/Preparation/WindowCorrelator.olean",
+        "-i",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/53/TNLean/MPS/Preparation/WindowCorrelator.ilean",
+        "TNLean/MPS/Preparation/WindowCorrelator.lean"
+      ],
+      "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-periodic-string-integration",
+      "exit_code": 0,
+      "elapsed_seconds": 8.014,
+      "artifacts": {
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Preparation/WindowCorrelator.ilean": "5403255c3e694a4a607b56576130010efb0f989e5ea5b838f00ee9a662307f66",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Preparation/WindowCorrelator.olean": "40169d64712f71a8ba54d63704f53755fa283bf98ef1caaa0a67a401d4e61661"
+      },
+      "final_log_empty": true
+    },
+    {
+      "module": "TNLean.MPS.Symmetry.PeriodicPhysicalString",
+      "source": "TNLean/MPS/Symmetry/PeriodicPhysicalString.lean",
+      "source_sha256": "b31fabb7bddb167b10c099e020233b2f24f46bffe19eecc7f69689951d4aa781",
+      "command": [
+        "timeout",
+        "--signal=INT",
+        "--kill-after=5s",
+        "90s",
+        "lean",
+        "-j1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/54/TNLean/MPS/Symmetry/PeriodicPhysicalString.olean",
+        "-i",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/54/TNLean/MPS/Symmetry/PeriodicPhysicalString.ilean",
+        "TNLean/MPS/Symmetry/PeriodicPhysicalString.lean"
+      ],
+      "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-periodic-string-integration",
+      "exit_code": 0,
+      "elapsed_seconds": 8.014,
+      "artifacts": {
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Symmetry/PeriodicPhysicalString.ilean": "1c3b7838f40fe59dc4f2c48f08f1eb27404fb0103bd9b7d2ebd7042864d9c623",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Symmetry/PeriodicPhysicalString.olean": "fed1cdf11f5933b2513bdb16337a1b49910c2812ded7c319f63d7afb21aaefe5"
+      },
+      "final_log_empty": true
+    },
+    {
+      "module": "TNLean.MPS.Symmetry.PeriodicFullRingString",
+      "source": "TNLean/MPS/Symmetry/PeriodicFullRingString.lean",
+      "source_sha256": "910869cc18db1554649ebb081856e67e87ebbda6a7cb733dcdfe095d2ea8223e",
+      "command": [
+        "timeout",
+        "--signal=INT",
+        "--kill-after=5s",
+        "90s",
+        "lean",
+        "-j1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/55/TNLean/MPS/Symmetry/PeriodicFullRingString.olean",
+        "-i",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/55/TNLean/MPS/Symmetry/PeriodicFullRingString.ilean",
+        "TNLean/MPS/Symmetry/PeriodicFullRingString.lean"
+      ],
+      "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-periodic-string-integration",
+      "exit_code": 0,
+      "elapsed_seconds": 8.016,
+      "artifacts": {
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Symmetry/PeriodicFullRingString.olean": "8661a1940f1da703742711b9ad70f285b449243d2b004e46cb76f2f37dc279c3",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Symmetry/PeriodicFullRingString.ilean": "5a62d989b686d624f5ddbc3ef5400a87f02b37561ad8c7bca0dd9f75e456c0ac"
+      },
+      "final_log_empty": true
+    },
+    {
+      "module": "TNLean.MPS.Examples.PeriodicFullRingPhase",
+      "source": "TNLean/MPS/Examples/PeriodicFullRingPhase.lean",
+      "source_sha256": "d973edac7a28706c200a665773d391d496b78d750dbfbdeb900452ddd948a523",
+      "command": [
+        "timeout",
+        "--signal=INT",
+        "--kill-after=5s",
+        "90s",
+        "lean",
+        "-j1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/56/TNLean/MPS/Examples/PeriodicFullRingPhase.olean",
+        "-i",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/56/TNLean/MPS/Examples/PeriodicFullRingPhase.ilean",
+        "TNLean/MPS/Examples/PeriodicFullRingPhase.lean"
+      ],
+      "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-periodic-string-integration",
+      "exit_code": 0,
+      "elapsed_seconds": 6.011,
+      "artifacts": {
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Examples/PeriodicFullRingPhase.olean": "5b902c5d012c4f52bc556239f46f4353b6abf05554ac4a8316f98e65f3b3a810",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLean/MPS/Examples/PeriodicFullRingPhase.ilean": "704f643aba37cbf46ae8427b4bba4706b6999ff7bba51c613e062b4dd66c8ad2"
+      },
+      "final_log_empty": true
+    },
+    {
+      "module": "TNLeanTest.PeriodicStringExpectations",
+      "source": "TNLeanTest/PeriodicStringExpectations.lean",
+      "source_sha256": "603453835aa1be7f9d03d9e0fbe6193aac70438f9a60b9b9c29c06bb28a6700e",
+      "command": [
+        "timeout",
+        "--signal=INT",
+        "--kill-after=5s",
+        "90s",
+        "lean",
+        "-j1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "-DautoImplicit=false",
+        "-o",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/57/TNLeanTest/PeriodicStringExpectations.olean",
+        "-i",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/tmp/57/TNLeanTest/PeriodicStringExpectations.ilean",
+        "TNLeanTest/PeriodicStringExpectations.lean"
+      ],
+      "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-periodic-string-integration",
+      "exit_code": 0,
+      "elapsed_seconds": 6.011,
+      "artifacts": {
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLeanTest/PeriodicStringExpectations.ilean": "379dadf7107921c27b57ecc25cd3fca65d21107c22c15b4a908b885dfa994b0a",
+        "/workspace/scratch/7637e06d0fc2/periodic-string-draft/integration-review/final-lib/TNLeanTest/PeriodicStringExpectations.olean": "2179bb8cbad6b64de4a19f12ad8f1f8cad032a005f8814fcd0b19f461a8083a5"
+      },
+      "final_log_empty": true
+    }
+  ],
+  "durable_axiom_guards": 11,
+  "new_public_blueprint_coverage": 18,
+  "native_tenkz_pin": "08a6493f3605dcf2ca5b512823ccb2698dfc027b",
+  "native_diagram_audit": {
+    "pictures": 1,
+    "hard_findings": 0,
+    "advisories": 0
+  },
+  "remaining_gates": [
+    "WindowClustering and full aggregate/root compilation",
+    "normal Lake/remote CI strict regression",
+    "leanblueprint checkdecls and full web/PDF rendering"
+  ],
+  "local_render_limitations": [
+    "dsfont.sty unavailable",
+    "gap note requires missing pdfLaTeX format",
+    "leanblueprint/plasTeX unavailable"
+  ],
+  "source_scope": [
+    "fixed support and fixed middle length before ambient ring limit",
+    "full-ring complex phase retained",
+    "no exchanged limits or uniform rate",
+    "no Hamiltonian-gap or mixed-FCS decomposition assertion"
+  ],
+  "published": false,
+  "latexindent": {
+    "version": "3.24.7",
+    "binary_sha256": "14a3f56807f9bdfa8b7b654bbfd054a59be79ddb959b57b691edcf39b2dc65e5",
+    "changed_tex_formatted": true,
+    "full_blueprint_check_exit_code": 0,
+    "command": "scripts/check_latexindent_formatting.sh"
+  },
+  "docbuild_manifest_check": {
+    "exit_code": 0,
+    "packages": 12,
+    "command": "python3 scripts/check_docbuild_manifest.py --root ."
+  }
+}

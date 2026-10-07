@@ -234,4 +234,93 @@ theorems.
     Theorem~1 of~\cite{PerezGarcia2008StringOrder}. It has no physical
     string order under the explicit projective convention.
     See~\cite{gap:pgwsvc08_string_order_scalar_phase}.
+
+    On the actual normalized periodic ring, the scalar twist $i\Id$ gives
+    $\langle(i\Id)^{\otimes L}\rangle_L=i^L$ whenever the periodic vector
+    is nonzero. The twist $-\Id$ has no complex full-ring limit, despite
+    unit magnitude on the eventual nonzero tail. These phase-sensitive
+    statements use the same tensor and the periodic closure of
+    Theorem~\ref{thm:periodic_string_exact_phase}; the qualification of
+    display RL is recorded in~\cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    \lean{MPSTensor.stringPhaseTensor_fullRing_I_eq_pow,
+        MPSTensor.stringPhaseTensor_fullRing_neg_one_not_tendsto}
 \end{example}
+\subsection{Exact periodic symmetry overlaps in the AKLT and cluster states}
+
+The periodic examples in~\cite[lines~392--411]{PerezGarcia2008StringOrder}
+concern the full-ring observable of
+Definition~\ref{def:source_periodic_string_overlap}. The following formulas
+include the short lengths under the trace convention for the periodic vector.
+
+\begin{theorem}[Exact periodic AKLT normalization and symmetry overlap]
+    \label{thm:aklt_periodic_string_exact}
+    \lean{MPSTensor.akltPGWSVC08_transferMap_pow,
+        MPSTensor.akltPGWSVC08_mpvState_inner_self,
+        MPSTensor.akltPGWSVC08_mpvState_one,
+        MPSTensor.akltPGWSVC08_mpvState_ne_zero_iff,
+        MPSTensor.akltPGWSVC08_fullRing}
+    \leanok
+    \uses{def:aklt_physical_string_data, def:source_periodic_string_overlap}
+    Let $A$ be the printed AKLT tensor and let $u=e^{i\pi S_z}$.
+    For every $L\geq0$ and $X\in M_2(\C)$,
+    \begin{align}
+        \E_A^L(X)
+         & =\left(-\frac13\right)^L X
+        +\left[1-\left(-\frac13\right)^L\right]
+        \frac{\tr X}{2}\Id,\label{eq:aklt_periodic_transfer_power}            \\
+        Z_L=\|\Phi_L(A)\|^2
+         & =1+3\left(-\frac13\right)^L,\label{eq:aklt_periodic_normalization} \\
+        \langle u^{\otimes L}\rangle_L
+         & =\begin{cases}0,&L=1,\\1,&L\ne1.\end{cases}
+        \label{eq:aklt_periodic_full_ring}
+    \end{align}
+    Thus $L=1$ is exactly the zero-vector exception. Length zero has
+    coefficient two, and every length at least two has positive squared norm.
+    This makes explicit the admissible lengths in the value $R_L(u)=1$
+    stated in~\cite[line~399]{PerezGarcia2008StringOrder}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:aklt_physical_string_order_value, thm:periodic_string_exact_phase,
+        thm:periodic_string_trace_ratio}
+    The transfer map fixes the scalar matrices and multiplies traceless
+    matrices by $-1/3$. Induction proves
+    (\ref{eq:aklt_periodic_transfer_power}), whose endomorphism trace is
+    (\ref{eq:aklt_periodic_normalization}). For $L\geq2$, the absolute value
+    of the correction to one is at most $1/3$, so the norm is nonzero.
+    Direct substitution gives $Z_0=4$ and $Z_1=0$.
+    The virtual symmetry $V=\sigma_z$ has phase one, so
+    Theorem~\ref{thm:periodic_string_exact_phase} applies at all the nonzero
+    lengths. At length one the normalized expectation is zero.
+\end{proof}
+
+\begin{theorem}[Exact periodic cluster normalization and symmetry overlap]
+    \label{thm:cluster_periodic_string_exact}
+    \lean{MPSTensor.clusterTensorRMP_mpvState_norm_sq,
+        MPSTensor.clusterTensorRMP_mpvState_ne_zero,
+        MPSTensor.clusterTensorRMP_fullRing}
+    \leanok
+    \uses{def:cluster_tensor_review, def:source_periodic_string_overlap}
+    Let $A^0=\ket0\bra+$ and $A^1=\ket1\bra-$ be the printed cluster tensor,
+    and let $u=-\sigma_x$. The periodic vector is nonzero for every
+    $L\geq0$, with
+    \begin{align}
+        Z_L=\|\Phi_L(A)\|^2
+                                       & =\begin{cases}4,&L=0,\\1,&L\geq1,\end{cases}
+        \label{eq:cluster_periodic_normalization}                                     \\
+        \langle u^{\otimes L}\rangle_L & =1.
+        \label{eq:cluster_periodic_full_ring}
+    \end{align}
+    At positive lengths the vector is the cyclic product of controlled-$Z$
+    gates applied to $\ket+^{\otimes L}$. This convention gives $\ket-$ at
+    length one and $\ket+\otimes\ket+$ at length two.
+    The overlap is the value stated in~\cite[line~411]{PerezGarcia2008StringOrder}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:cluster_one_site_physical_string_obstruction,
+        thm:periodic_string_exact_phase}
+    Every positive-length coefficient of the controlled-$Z$ state has
+    squared modulus $2^{-L}$, and there are $2^L$ such coefficients.
+    The empty product has trace two. The virtual symmetry $V=\sigma_y$
+    implements $u=-\sigma_x$ with phase one, so
+    Theorem~\ref{thm:periodic_string_exact_phase} gives the overlap.
+\end{proof}
