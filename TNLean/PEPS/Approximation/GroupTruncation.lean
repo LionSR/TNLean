@@ -63,14 +63,16 @@ theorem norm_toEuclideanLin_le_of_isProj (M : Matrix ι ι ℂ) (hH : Mᴴ = M) 
   nlinarith [norm_nonneg (toEuclideanLin M x), norm_nonneg x]
 
 omit [DecidableEq ι] in
-theorem conjTranspose_orthonormalProjector {β : Type*} [Fintype β]
+theorem conjTranspose_orthonormalProjector {β : Type*}
     (f : ι → EuclideanSpace ℂ β) : (orthonormalProjector f)ᴴ = orthonormalProjector f := by
   ext b b'
   simp [orthonormalProjector, conjTranspose_apply, mul_comm]
 
-theorem orthonormalProjector_mul_self {β : Type*} [Fintype β] [DecidableEq β]
+omit [DecidableEq ι] in
+theorem orthonormalProjector_mul_self {β : Type*} [Fintype β]
     {f : ι → EuclideanSpace ℂ β} (hf : Orthonormal ℂ f) :
     orthonormalProjector f * orthonormalProjector f = orthonormalProjector f := by
+  classical
   apply (toEuclideanLin (𝕜 := ℂ) (m := β) (n := β)).injective
   rw [toLpLin_mul_same]
   refine LinearMap.ext fun x ↦ ?_
@@ -102,7 +104,7 @@ theorem orthonormal_conjFamily {β : Type*} [Fintype β] {f : ι → EuclideanSp
     _ = _ := by rw [h]; by_cases hij : i = j <;> simp [hij, eq_comm]
 
 omit [DecidableEq ι] in
-theorem transpose_orthonormalProjector {β : Type*} [Fintype β] (f : ι → EuclideanSpace ℂ β) :
+theorem transpose_orthonormalProjector {β : Type*} (f : ι → EuclideanSpace ℂ β) :
     (orthonormalProjector f)ᵀ = orthonormalProjector (conjFamily f) := by
   ext b b'
   simp [orthonormalProjector, conjFamily, mul_comm]
@@ -486,8 +488,8 @@ end Contraction
 
 section OpenLegs
 
-variable {V : Type*} [DecidableEq V] {O : Type*} [Fintype O] [DecidableEq O] (owner : O → V) (d : O → Type*)
-  [∀ o, Fintype (d o)]
+variable {V : Type*} [DecidableEq V] {O : Type*} [Fintype O] [DecidableEq O] (owner : O → V)
+  (d : O → Type*) [∀ o, Fintype (d o)]
 
 /-- The group of open legs of `v`: the open legs whose original vertex is `v`. Its configurations
 are the configurations of the whole group. -/
@@ -512,7 +514,8 @@ Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`,
 05-frames.tex:125–141; proof 05-frames.tex:143–179. -/
 theorem exists_simultaneous_openLeg_truncation {V E O : Type*} [Fintype V] [DecidableEq V]
     [Fintype E] [DecidableEq E] {tail head : E → V} {D : E → Type*} [∀ e, Fintype (D e)]
-    [Fintype O] [DecidableEq O] {owner : O → V} {d : O → Type*} [∀ o, Fintype (d o)] [∀ o, DecidableEq (d o)]
+    [Fintype O] [DecidableEq O] {owner : O → V} {d : O → Type*} [∀ o, Fintype (d o)]
+    [∀ o, DecidableEq (d o)]
     (A : VertexTensors tail head D (OpenLegGroup owner d)) (hloop : ∀ e, tail e ≠ head e)
     (hA : ∀ v, vertexNormSq A v ≤ 1) (k : ℕ) (hk : 1 ≤ k) :
     ∃ (r : V → ℕ) (e : (v : V) → Fin (r v) → EuclideanSpace ℂ (OpenLegGroup owner d v)),
