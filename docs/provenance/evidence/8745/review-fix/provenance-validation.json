@@ -1,0 +1,53 @@
+{
+  "published_source_revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
+  "metadata_validator_head": "d975c515fdebefb092325f9fe6c4d7b50dc9daac",
+  "result": "passed",
+  "command": "python3 scripts/check_openai_provenance.py --upstream-root \"$OPENAI_MATH_ROOT\"",
+  "environment": {
+    "OPENAI_MATH_ROOT": "checkout containing openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "exit_code": 0,
+  "seconds": 10.818363330006832,
+  "checked_ledger_entries": 194,
+  "refreshed_8745_entries": 43,
+  "source_pin": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "log": "docs/provenance/evidence/8745/review-fix/provenance.log",
+  "log_sha256": "d7dd116e807f538af19eb17ce076c0bb7d8e118ade88dfb197d2a08fcbfc1090",
+  "original_raw_sha256": "4c4c6832a8a2be841fcb887bc0ca9e4d4a7d7dc04c468cca4fe542d448dc1147",
+  "files": [
+    {
+      "path": "docs/provenance/openai-math.d/8740.json",
+      "sha256": "9599d818fb61ccd6ab946e27a14776d8e288de8b0ce949f8af6fda438e945d43"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/8745.json",
+      "sha256": "2873a86789bd660acc4e34653b2909586b3c7adcafdbb2da941f97b320b3b171"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/8769-lifetime.json",
+      "sha256": "cde80fe52ad93afc6d01d79200efdf6ca976cda4336174dee4dd5a6551670c2c"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/8769-operator.json",
+      "sha256": "911a342c7f7145cf7d360661c4c0464d3fb4b25ad058fdb4a306c460ba15f556"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/orthogonalization8767.json",
+      "sha256": "434582d35102297fc6d38e5bb29651cf66ff8ee33d7eac2bce4340f34b553218"
+    },
+    {
+      "path": "docs/provenance/openai-math.json",
+      "sha256": "55a8144bd631ada09f0198814385268ec7ab4b353d66c7b0e3d867b294558f9c"
+    },
+    {
+      "path": "docs/provenance/openai-math.schema.json",
+      "sha256": "a691d8e95b668c968365f2c7e33f614d49635aade8fdd4c2f27cd64f0cd6b459"
+    },
+    {
+      "path": "scripts/check_openai_provenance.py",
+      "sha256": "8183e29f5a339bba37e28e9473aa7a6a42791282ed6877071dfd4096eda7cb65"
+    }
+  ],
+  "scope": "Full current repository provenance validator, all ledger shards, exact recorded source revisions, notices, evidence hashes, named allowed-axiom output and pinned upstream labels/license/source audit. No Lean/Lake command executed."
+}

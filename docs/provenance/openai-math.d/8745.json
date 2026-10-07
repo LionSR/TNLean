@@ -42,21 +42,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -99,21 +99,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -156,21 +156,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -213,21 +213,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -270,21 +270,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -327,21 +327,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -384,21 +384,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -433,21 +433,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -482,21 +482,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -531,21 +531,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -580,21 +580,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -629,21 +629,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -678,21 +678,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -727,21 +727,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -776,249 +776,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
-          }
-        ]
-      },
-      "no_upstream_proof_text_reused": true
-    },
-    {
-      "id": "8745-tnlean.peps.arealaw.card_support_le_square",
-      "status": "ported",
-      "reuse_kind": "original",
-      "upstream": null,
-      "downstream": {
-        "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
-        "declaration": "TNLean.PEPS.AreaLaw.card_support_le_square",
-        "name_status": "declared"
-      },
-      "paper_sources": [
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
-          "labels": [
-            "eq:ball-count"
-          ]
-        },
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
-          "labels": [
-            "eq:quasilocal-budget",
-            "lem:quasilocal-lr"
-          ]
-        }
-      ],
-      "license": "Apache-2.0",
-      "notices": [],
-      "changes": [
-        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
-        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
-      ],
-      "verification": {
-        "result": "passed",
-        "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
-        "commands": [
-          {
-            "kind": "build",
-            "command": "lake build TNLean.PEPS.AreaLaw",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
-          }
-        ]
-      },
-      "no_upstream_proof_text_reused": true
-    },
-    {
-      "id": "8745-tnlean.peps.arealaw.card_supports_containing_le_square",
-      "status": "ported",
-      "reuse_kind": "original",
-      "upstream": null,
-      "downstream": {
-        "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
-        "declaration": "TNLean.PEPS.AreaLaw.card_supports_containing_le_square",
-        "name_status": "declared"
-      },
-      "paper_sources": [
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
-          "labels": [
-            "eq:ball-count"
-          ]
-        },
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
-          "labels": [
-            "eq:quasilocal-budget",
-            "lem:quasilocal-lr"
-          ]
-        }
-      ],
-      "license": "Apache-2.0",
-      "notices": [],
-      "changes": [
-        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
-        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
-      ],
-      "verification": {
-        "result": "passed",
-        "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
-        "commands": [
-          {
-            "kind": "build",
-            "command": "lake build TNLean.PEPS.AreaLaw",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
-          }
-        ]
-      },
-      "no_upstream_proof_text_reused": true
-    },
-    {
-      "id": "8745-tnlean.peps.arealaw.sum_supportweights_containing_le_square",
-      "status": "ported",
-      "reuse_kind": "original",
-      "upstream": null,
-      "downstream": {
-        "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
-        "declaration": "TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_square",
-        "name_status": "declared"
-      },
-      "paper_sources": [
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
-          "labels": [
-            "eq:ball-count"
-          ]
-        },
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
-          "labels": [
-            "eq:quasilocal-budget",
-            "lem:quasilocal-lr"
-          ]
-        }
-      ],
-      "license": "Apache-2.0",
-      "notices": [],
-      "changes": [
-        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
-        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
-      ],
-      "verification": {
-        "result": "passed",
-        "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
-        "commands": [
-          {
-            "kind": "build",
-            "command": "lake build TNLean.PEPS.AreaLaw",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
-          }
-        ]
-      },
-      "no_upstream_proof_text_reused": true
-    },
-    {
-      "id": "8745-tnlean.peps.arealaw.interactionchainweightsum_le_lattice_pow",
-      "status": "ported",
-      "reuse_kind": "original",
-      "upstream": null,
-      "downstream": {
-        "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
-        "declaration": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_lattice_pow",
-        "name_status": "declared"
-      },
-      "paper_sources": [
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
-          "labels": [
-            "eq:ball-count"
-          ]
-        },
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
-          "labels": [
-            "eq:quasilocal-budget",
-            "lem:quasilocal-lr"
-          ]
-        }
-      ],
-      "license": "Apache-2.0",
-      "notices": [],
-      "changes": [
-        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
-        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
-      ],
-      "verification": {
-        "result": "passed",
-        "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
-        "commands": [
-          {
-            "kind": "build",
-            "command": "lake build TNLean.PEPS.AreaLaw",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1031,7 +803,7 @@
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
         "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance",
         "name_status": "declared"
       },
@@ -1053,21 +825,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1080,7 +852,7 @@
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
         "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_self",
         "name_status": "declared"
       },
@@ -1102,21 +874,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1129,7 +901,7 @@
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
         "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_triangle",
         "name_status": "declared"
       },
@@ -1151,21 +923,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1178,7 +950,7 @@
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
         "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_le_walk_length",
         "name_status": "declared"
       },
@@ -1200,21 +972,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1227,7 +999,7 @@
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
         "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le",
         "name_status": "declared"
       },
@@ -1249,168 +1021,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
-          }
-        ]
-      },
-      "no_upstream_proof_text_reused": true
-    },
-    {
-      "id": "8745-tnlean.peps.arealaw.card_le_square_of_latticel1distance_le",
-      "status": "ported",
-      "reuse_kind": "original",
-      "upstream": null,
-      "downstream": {
-        "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
-        "declaration": "TNLean.PEPS.AreaLaw.card_le_square_of_latticeL1Distance_le",
-        "name_status": "declared"
-      },
-      "paper_sources": [
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
-          "labels": [
-            "eq:ball-count"
-          ]
-        }
-      ],
-      "license": "Apache-2.0",
-      "notices": [],
-      "changes": [
-        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
-        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
-      ],
-      "verification": {
-        "result": "passed",
-        "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
-        "commands": [
-          {
-            "kind": "build",
-            "command": "lake build TNLean.PEPS.AreaLaw",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
-          }
-        ]
-      },
-      "no_upstream_proof_text_reused": true
-    },
-    {
-      "id": "8745-tnlean.peps.arealaw.card_le_square_of_walks",
-      "status": "ported",
-      "reuse_kind": "original",
-      "upstream": null,
-      "downstream": {
-        "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
-        "declaration": "TNLean.PEPS.AreaLaw.card_le_square_of_walks",
-        "name_status": "declared"
-      },
-      "paper_sources": [
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
-          "labels": [
-            "eq:ball-count"
-          ]
-        }
-      ],
-      "license": "Apache-2.0",
-      "notices": [],
-      "changes": [
-        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
-        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
-      ],
-      "verification": {
-        "result": "passed",
-        "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
-        "commands": [
-          {
-            "kind": "build",
-            "command": "lake build TNLean.PEPS.AreaLaw",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
-          }
-        ]
-      },
-      "no_upstream_proof_text_reused": true
-    },
-    {
-      "id": "8745-tnlean.peps.arealaw.card_le_square_of_edist_le",
-      "status": "ported",
-      "reuse_kind": "original",
-      "upstream": null,
-      "downstream": {
-        "repository": "LionSR/TNLean",
-        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
-        "declaration": "TNLean.PEPS.AreaLaw.card_le_square_of_edist_le",
-        "name_status": "declared"
-      },
-      "paper_sources": [
-        {
-          "version": "September 24, 2026",
-          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
-          "labels": [
-            "eq:ball-count"
-          ]
-        }
-      ],
-      "license": "Apache-2.0",
-      "notices": [],
-      "changes": [
-        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
-        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
-      ],
-      "verification": {
-        "result": "passed",
-        "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
-        "commands": [
-          {
-            "kind": "build",
-            "command": "lake build TNLean.PEPS.AreaLaw",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1445,21 +1070,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1494,21 +1119,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1543,21 +1168,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1592,21 +1217,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1641,21 +1266,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1690,21 +1315,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1747,21 +1372,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1804,21 +1429,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1861,21 +1486,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1918,21 +1543,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -1975,21 +1600,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2032,21 +1657,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2082,21 +1707,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2132,21 +1757,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2182,21 +1807,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2232,21 +1857,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2282,21 +1907,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2332,21 +1957,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2382,21 +2007,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2432,21 +2057,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2482,21 +2107,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2532,21 +2157,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },
@@ -2582,21 +2207,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "68f708ff111956d832476a9cae2c873375fc3659",
+        "revision": "f100492e57388eacc0eb3a02ba6482183e9cf4b0",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/native.log",
-            "sha256": "867d9653f07f46778d02c799cb7d7a819aa34a9b27cfb9fdf3ee59ec2d55c16d"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-final-d975c51-0.log",
+            "sha256": "4862fafc8ca755b8d10f746cd857fc574133aebb28aed80f872f14cb5aef2fff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/review-fix/axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8745/axioms.log",
-            "sha256": "21eb66e1f13fed10cf7ae479eaf042589cca975c846a17807bce14eb74693c68"
+            "log": "docs/provenance/evidence/8745/review-fix/foundations-raw-9d7b066-1.log",
+            "sha256": "184bb7bae273cd8e526c046c7c89aa9f299ee36b787de39b648817cb6d4ce1f8"
           }
         ]
       },

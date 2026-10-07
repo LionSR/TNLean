@@ -87,35 +87,8 @@ ingredients in \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
     For finite graph distance, choose a shortest walk.
 \end{proof}
 
-\begin{theorem}[A containing-square bound]
-    \label{thm:area_square_count}
-    \uses{thm:area_walk_displacement}
-    \lean{TNLean.PEPS.AreaLaw.card_le_square_of_latticeL1Distance_le,
-        TNLean.PEPS.AreaLaw.card_le_square_of_walks,
-        TNLean.PEPS.AreaLaw.card_le_square_of_edist_le,
-        TNLean.PEPS.AreaLaw.card_support_le_square}
-    \leanok
-    Suppose $\iota$ is injective and every graph edge has displacement at most one.
-    A finite set $S$ with
-    $\ell(\iota(a),\iota(x))\le R$ for every $x\in S$ has cardinality
-    at most $v=(2R+1)^2$. The same bound holds when each $x$ is reached
-    from $a$ by a walk of length at most $R$, or when $d_G(a,x)\le R$.
-    A finite support whose pairs can be joined by walks of length at most $R$ also
-    has cardinality at most $v$, including the empty support.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:area_walk_displacement}
-    The coordinates lie in the product of the two integer intervals
-    $[\iota(a)_j-R,\iota(a)_j+R]$, each of cardinality $2R+1$.
-    Injectivity bounds $|S|$ by the cardinality of this product.
-    For a nonempty support choose an anchor in it; for an empty support
-    the bound holds directly.
-\end{proof}
-
-The containing-square constant is a conservative alternative to the
-diamond constant $v_R=1+2R(R+1)$ of
-\cite[Section~2]{OpenAI2026AreaLaw}. Both depend only on $R$. Theorem~\ref{thm:area_diamond_count} gives the exact count.
+The exact ambient cardinality and its graph-ball consequences are given in
+Theorem~\ref{thm:area_diamond_count}.
 
 \section{Original-support budgets}
 
@@ -204,31 +177,6 @@ diamond constant $v_R=1+2R(R+1)$ of
     Induct on $n$. For the step, bound every $W_n(Y)$ in
     (\ref{eq:area_chain_step}) by $(vb)^n$. The weights of supports meeting
     $X$ sum to at most $|X|b\le vb$, giving the next power.
-\end{proof}
-
-\begin{theorem}[Uniform lattice interaction budgets]
-    \label{thm:area_lattice_budget}
-    \uses{thm:area_square_count,thm:area_support_count,
-        thm:area_site_weight,thm:area_chain_growth}
-    \lean{TNLean.PEPS.AreaLaw.card_supports_containing_le_square,
-        TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_square,
-        TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_lattice_pow}
-    \leanok
-    Let $V$ be finite and embedded injectively in $\Z^2$, with edge
-    displacement at most one. Suppose any pair in each original support
-    admits a graph walk of length at most $R$. Put $v=(2R+1)^2$ and
-    $\mu=2^{v-1}$. At most $\mu$ original supports contain a specified site.
-    If $0\le w_X\le J$ and $J\ge0$, its site budget is at most $\mu J$,
-    and $W_n(X)\le(v\mu J)^n$ for every original support $X$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:area_square_count,thm:area_support_count,
-        thm:area_site_weight,thm:area_chain_growth}
-    The closed graph ball of radius $R$ about the specified site contains
-    each support containing that site. Its cardinality is at most $v$.
-    Apply the power-set count and the site-weight bound, then the
-    chain-growth theorem with $b=\mu J$.
 \end{proof}
 
 \input{chapter/ch34_area_law_diamond_counting}
