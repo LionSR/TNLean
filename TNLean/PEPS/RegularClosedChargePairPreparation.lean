@@ -16,8 +16,11 @@ Uniform preparation of these columns consequently prepares their closed coherent
 contraction. The operation acts only on the chosen region and preserves its
 norm. Source: SCP10, arXiv:1001.3807, lines 2505–2558.
 
-This is a finite-region preparation statement. It does not identify a complete
-geometric charge–flux braid or a subsequent reunion measurement.
+**Scope restriction (finite-region preparation):** The preparation acts on a
+supplied finite region. It does not identify the prescribed flux-string
+background, a complete geometric charge–flux braid, or the subsequent reunion
+measurement of lines 2560–2615. See
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 noncomputable section
 open scoped BigOperators Matrix

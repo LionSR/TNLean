@@ -16,8 +16,11 @@ dimension-normalized character. All boundary labels remain in the literal
 weighted open contraction; no global state decomposition is assumed.
 
 Source: SCP10, arXiv:1001.3807, the interference calculation, lines 2582–2615.
-This auxiliary statement uses a finite block with a specified tree and two
-distinct internal bonds. It does not assert a completed geometric braid.
+**Scope restriction (finite-block return operation):** The statement uses a
+finite block with a specified tree and two distinct internal bonds, and proves
+the return measurement on the literal correlated bond sum. It does not assert
+that a completed geometric braid produces that sum. See
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 noncomputable section
 open scoped BigOperators Matrix ComplexOrder

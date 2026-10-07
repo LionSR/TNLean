@@ -18,10 +18,6 @@
     \label{thm:peps_original_charge_pair_return_measurement}
     \lean{TNLean.PEPS.exists_regularPhysicalChargePairReturnMeasurement}
     \leanok
-    \uses{thm:peps_reference_return_actual_column,
-        thm:peps_original_region_projector_absorption,
-        thm:peps_reference_projection_extension,
-        thm:peps_scaled_projection_transport}
     Let $R$ be a finite region with a chosen spanning tree and root and two
     distinct internal bonds $e_0,e_1$. Assume that every original site map
     is regularly $G$-isometric. Fix a unitary irreducible character $\chi$
@@ -42,7 +38,12 @@
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2582--2615; see
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reference_return_actual_column,
+        thm:peps_original_region_projector_absorption,
+        thm:peps_reference_projection_extension,
+        thm:peps_scaled_projection_transport}
     The local $G$-isometries give $A^\dagger A=cP$ with $c>0$, while
     regular invariance gives $AP=A$. The actual extended reference return
     projector is Hermitian and idempotent and commutes with $P$.
@@ -56,8 +57,6 @@
     \label{thm:peps_torus_six_spin_return_measurement}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalChargePairReturnMeasurement}
     \leanok
-    \uses{thm:peps_original_charge_pair_return_measurement,
-        thm:peps_torus_physical_charge_pair_creation}
     On the actual translated two-column, three-row torus patch, the preceding
     measurement acts on the six original spins. The reference bonds, spanning
     tree and root are derived from the native geometry. The same measurement
@@ -67,7 +66,10 @@
     bond sum; identifying a complete prescribed geometric braid with that
     input remains separate. See \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
+    \leanok
+    \uses{thm:peps_original_charge_pair_return_measurement,
+        thm:peps_torus_physical_charge_pair_creation}
     Apply the finite-region theorem to the actual six-site path tree and its
     two distinct horizontal chords. Native coordinate sorting retains the
     original boundary labels through both seams.

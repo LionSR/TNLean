@@ -73,8 +73,7 @@
         TNLean.PEPS.kitaevNativeCheckerboard_transformed_initialProjection,
         TNLean.PEPS.kitaevNativeCheckerboard_transformed_finalProjection}
     \leanok
-    \uses{thm:peps_kitaev_physical_support,
-        def:peps_kitaev_native_physical_support,thm:peps_kitaev_native_boundary_cnot}
+    \uses{def:peps_kitaev_native_physical_support}
     Let $A_v$ be the actual native open tensor map. The full original-spin unitary
     $R_v$ and the actual boundary CNOT satisfy
     \begin{align}
@@ -93,6 +92,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_kitaev_physical_support,
+        thm:peps_kitaev_native_boundary_cnot}
     Transport the physical parity permutation through the actual four-vertex
     bijection. The already derived native identity $A_vC_v=K_vE_{V,v}^\dagger$
     and $RK=E_PK_3$ give (\ref{eq:peps_kitaev_physical_reduction}).

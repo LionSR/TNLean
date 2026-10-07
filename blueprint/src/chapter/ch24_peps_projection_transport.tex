@@ -34,8 +34,7 @@
     \lean{Matrix.scaledProjectionTransport_properties,
         Matrix.exists_binaryProjectionFamily_transport}
     \leanok
-    \uses{def:peps_scaled_projection_transport,
-        thm:peps_binary_projection_family}
+    \uses{def:peps_scaled_projection_transport}
     Under the preceding hypotheses, $Q$ is a positive Hermitian idempotent
     and $QT=TD$. The pair $Q,I-Q$ is a complete orthogonal measurement on
     the entire original physical space, and
@@ -46,7 +45,9 @@
     any boundary configuration or state decomposition.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}
+    \leanok
+    \uses{thm:peps_binary_projection_family}
     Use $T^*T=cP$, $DP=PD$, and $TP=T$ to obtain $QT=TD$.
     Hermiticity follows from that of $D$, and $D^2=D$ then gives $Q^2=Q$.
     Apply the preceding binary projection identity and expand $(I-Q)T$.
@@ -57,7 +58,6 @@
     \lean{TNLean.PEPS.regularChargePairReturnProjection_mulVec_braidedCoefficient,
         TNLean.PEPS.regularChargePairReturnProjection_commute}
     \leanok
-    \uses{thm:peps_regular_charge_pair_return_projection}
     Let $\chi$ be the character of a unitary irreducible representation of
     $G$, of dimension $d$. Put
     \begin{align}
@@ -71,7 +71,9 @@
     irreducibility or normalization assumption.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regular_charge_pair_return_projection}
     Remove the common normalization from the established projector action.
     Simultaneous left translation fixes $w$, and hence its outer product.
 \end{proof}

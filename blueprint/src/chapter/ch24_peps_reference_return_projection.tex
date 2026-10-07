@@ -29,9 +29,6 @@
     \label{thm:peps_reference_return_actual_column}
     \lean{TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec_braided}
     \leanok
-    \uses{thm:peps_reference_projection_extension,
-        thm:peps_regular_correlated_charge_coordinates,
-        thm:peps_literal_pair_return_projection}
     Retain the same region and two references. Let $\chi$ be the character
     of a unitary irreducible representation of dimension $d$. For $p,k\in G$,
     let $B_k(\alpha,\theta)$ be the actual untwisted canonical open contraction
@@ -51,7 +48,11 @@
     assume a decomposition of the physical state or a completed geometric braid; see
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reference_projection_extension,
+        thm:peps_regular_correlated_charge_coordinates,
+        thm:peps_literal_pair_return_projection}
     The actual weighted coordinate formula writes the column as a sum over
     the common root translation $x$. The two incident labels are
     $x^{-1}a_0,x^{-1}a_1$, so the weight is
