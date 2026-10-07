@@ -50,6 +50,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 noncomputable def setDist (G : SimpleGraph ι) (S₀ : Finset ι) (x : ι) : ℕ∞ :=
   S₀.inf fun y => G.edist x y
 
+omit [Fintype ι] [DecidableEq ι] in
 /-- A finite distance to `S₀` is attained at a point of `S₀`. -/
 theorem exists_mem_edist_eq_setDist {G : SimpleGraph ι} {S₀ : Finset ι} {x : ι}
     (hx : setDist G S₀ x ≠ ⊤) : ∃ y ∈ S₀, G.edist x y = setDist G S₀ x := by
@@ -92,7 +93,7 @@ theorem card_label_shell_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀
     intro x hx
     simp only [T, Finset.mem_filter, Finset.mem_univ, true_and] at hx
     obtain ⟨y, hy, he⟩ := exists_mem_edist_eq_setDist (x := x) (G := G) (S₀ := S₀)
-      (by rw [hx]; exact ENat.coe_ne_top d)
+      (by rw [hx]; exact ENat.natCast_ne_top d)
     refine Finset.mem_biUnion.mpr ⟨y, hy, mem_graphBall.mpr ?_⟩
     rw [SimpleGraph.edist_comm, he, hx]
   have hTcard : (T.card : ℝ) ≤ S₀.card * (Kb * ((d : ℝ) + 1) ^ 2) := by
@@ -113,5 +114,61 @@ theorem card_label_shell_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀
     _ = T.card * μ := by rw [Finset.sum_const, nsmul_eq_mul]
     _ ≤ (S₀.card * (Kb * ((d : ℝ) + 1) ^ 2)) * μ := mul_le_mul_of_nonneg_right hTcard hμ
     _ = μ * (S₀.card * (Kb * ((d : ℝ) + 1) ^ 2)) := by ring
+
+/-- **Volume-free truncation error** (`eq:quasilocal-volume-free`, `03-quasilocal.tex`,
+lines 457–478). Suppose the constraints satisfy `‖kᵢ - E_{N_l(aᵢ)} kᵢ‖ ≤ C e^{-c l^α}`, every
+graph ball of radius `d` has at most `K_b (d + 1)²` sites, every site anchors at most `μ`
+labels, and the shell series is bounded by `A e^{-(c/2) r₀^α}`. Then the truncated sum
+differs from `∑ᵢ kᵢ` by at most `C μ K_b |S₀| A e^{-(c/2) r₀^α}`. -/
+theorem norm_sum_truncatedConstraint_sub_le {q : ℕ} [NeZero q] {κ : Type*} [Fintype κ]
+    (G : SimpleGraph ι) (S₀ : Finset ι) (a : κ → ι)
+    (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) {C c α Kb μ A : ℝ} (hC : 0 ≤ C)
+    (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ)
+    (htail : ∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+      C * Real.exp (-(c * (l : ℝ) ^ α)))
+    (hBall : ∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
+    (hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ)
+    (hA : ∀ r₀ N : ℕ, ∑ d ∈ Finset.range N, ((d : ℝ) + 1) ^ 2 *
+        Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α)) ≤
+      A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α))) (r₀ : ℕ) :
+    ‖∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i) - ∑ i, k i‖ ≤
+      C * μ * Kb * S₀.card * A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) := by
+  classical
+  set D : κ → ℕ := fun i => (setDist G S₀ (a i)).toNat
+  set F := Finset.univ.filter fun i => setDist G S₀ (a i) ≠ ⊤
+  set f : ℕ → ℝ := fun d => C * Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α))
+  have hterm : ∀ i, ‖truncatedConstraint q G S₀ r₀ (a i) (k i) - k i‖ ≤
+      if setDist G S₀ (a i) ≠ ⊤ then f (D i) else 0 := by
+    intro i
+    by_cases hi : setDist G S₀ (a i) = ⊤
+    · simp [truncatedConstraint, hi]
+    · simp only [truncatedConstraint, hi, ite_false, ne_eq, not_false_eq_true, ite_true]
+      rw [norm_sub_rev]
+      exact htail i _
+  calc ‖∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i) - ∑ i, k i‖
+      = ‖∑ i, (truncatedConstraint q G S₀ r₀ (a i) (k i) - k i)‖ := by
+        rw [Finset.sum_sub_distrib]
+    _ ≤ ∑ i, ‖truncatedConstraint q G S₀ r₀ (a i) (k i) - k i‖ := norm_sum_le _ _
+    _ ≤ ∑ i, if setDist G S₀ (a i) ≠ ⊤ then f (D i) else 0 := Finset.sum_le_sum fun i _ => hterm i
+    _ = ∑ i ∈ F, f (D i) := by rw [Finset.sum_filter]
+    _ = ∑ d ∈ F.image D, ((F.filter fun i => D i = d).card : ℝ) * f d := by
+        rw [Finset.sum_comp]; simp [nsmul_eq_mul]
+    _ ≤ ∑ d ∈ Finset.range ((F.image D).sup id + 1),
+          (μ * (S₀.card * (Kb * ((d : ℝ) + 1) ^ 2))) * f d := by
+        refine (Finset.sum_le_sum fun d _ => ?_).trans (Finset.sum_le_sum_of_subset_of_nonneg
+          (fun d hd => ?_) fun d _ _ => ?_)
+        · refine mul_le_mul_of_nonneg_right ?_ (by positivity)
+          refine le_trans ?_ (card_label_shell_le G S₀ a hBall hMult d)
+          exact_mod_cast Finset.card_le_card fun i hi => by
+            simp only [F, Finset.mem_filter, Finset.mem_univ, true_and] at hi ⊢
+            rw [← hi.2]; exact (ENat.natCast_toNat hi.1).symm
+        · exact Finset.mem_range.mpr (Nat.lt_succ_of_le (Finset.le_sup (f := id) hd))
+        · positivity
+    _ = C * μ * Kb * S₀.card * ∑ d ∈ Finset.range ((F.image D).sup id + 1),
+          ((d : ℝ) + 1) ^ 2 * Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α)) := by
+        rw [Finset.mul_sum]; refine Finset.sum_congr rfl fun d _ => ?_; simp only [f]; ring
+    _ ≤ C * μ * Kb * S₀.card * (A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α))) := by
+        gcongr; exact hA r₀ _
+    _ = C * μ * Kb * S₀.card * A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) := by ring
 
 end TNLean.PEPS.AreaLaw
