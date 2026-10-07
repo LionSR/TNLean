@@ -1,0 +1,80 @@
+Direct Lean compilation with package options; no local Lake build was run.
+Source revision: 02ff0a871f6e1847f847f00609ba89c3942ab5c4
+Started: 2026-10-07T21:58:22.077761+00:00
+Completed: 2026-10-07T22:08:40.113209+00:00
+Lean: Lean (version 4.35.0-rc3, arm64-apple-darwin24.6.0, commit 470d5ce1400764999581fd26d5d72b00d990b0f4, Release)
+LEAN_PATH=/private/tmp/tnlean-chronological-source:/private/tmp/tnlean-selective-source-preparation:/private/tmp/tnlean-party-coarsening:/private/tmp/tnlean-source-block-contraction:/private/tmp/tnlean-source-gate-density:/private/tmp/tnlean-common-source:/private/tmp/tnlean-unused-pair:/private/tmp/tnlean-party-factorization:/private/tmp/tnlean-source-preparation:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/checkdecls/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/qiclean/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean
+Every compiled source matches the cited Git revision byte-for-byte.
+The package linter default was supplied explicitly; all warnings were errors.
+
+Source: TNLean/PEPS/Approximation/DistributedSourceComposition.lean
+Source SHA256: 4e8d2653f030eae74c6bdd187b125ed25807cdf21391cf2ea65e1890b4f39770
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean
+Exit code: 0
+Elapsed seconds: 64.423
+Output artifact SHA256: b4708861868d5fe3757b008eb2a99f17d6d62af12b02654764bf408ccfe92251
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/PartialSourceEvaluation.lean
+Source SHA256: 5017a1ffc45cae8195ff09c571b0996d05234dacd142c8554f1b89b5f5e22ffd
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceEvaluation.lean
+Exit code: 0
+Elapsed seconds: 62.805
+Output artifact SHA256: 9873c5fbdca7160b080f394d3432c4cd5615e8ab4b6883b9c3655eae46bb6af5
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/PartialSourceInventory.lean
+Source SHA256: 7bb64e55ac7ede12dd120a579c1d625544ed3a022c9a93703f1ead528b441633
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceInventory.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceInventory.lean
+Exit code: 0
+Elapsed seconds: 60.776
+Output artifact SHA256: 9aa8508ed815c6d243fc691c1aa352da08db1c0bae255ffa2104d2a899728e76
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/SourceChoiceCost.lean
+Source SHA256: 94c0b6221bd717bd15de58a9180142b8b64585723a1a3567a4f01246d25e971b
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/SourceChoiceCost.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/SourceChoiceCost.lean
+Exit code: 0
+Elapsed seconds: 50.706
+Output artifact SHA256: 62e6a692d5b3036a88b71a2d9d5a7e7481e39d84311819feb488c48e81764521
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/SourceCircuitLocations.lean
+Source SHA256: 66854a4d2fd53dd2d5c27ce1f3c031d52cdaa7a7d61e5513fa99464e3f9b1eb7
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/SourceCircuitLocations.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/SourceCircuitLocations.lean
+Exit code: 0
+Elapsed seconds: 47.729
+Output artifact SHA256: 7bcd5581c86d4bf398cdd12c0cdd40602d0cbcbfdda609b92b26eefc3ceb75e9
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/PartialSourceDensity.lean
+Source SHA256: b62113287ea4856c73a0a3d9f00e900597b97da0699c5f787e399073e0f0d226
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceDensity.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceDensity.lean
+Exit code: 0
+Elapsed seconds: 43.24
+Output artifact SHA256: a70074c161f2c502258c023cb286e3cf20686c725ed544501998c0038a188d18
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/SourceCircuitChoiceProduct.lean
+Source SHA256: 8fe89d7aa8fab1ccbcfb6a276d9db54215dc58082bc78b53e7771bd90e1bb033
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/SourceCircuitChoiceProduct.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/SourceCircuitChoiceProduct.lean
+Exit code: 0
+Elapsed seconds: 29.626
+Output artifact SHA256: 64cdbc181b6a3d12e69e51c8d2b981d797e9e74c5c3488fc33a384ae56d386ca
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/SourceCircuitSourceOrder.lean
+Source SHA256: f3b3aa43d81a01629764b68e2b976c72fc2528060a6c6b451d1c70f1969eb720
+Working directory: /private/tmp/tnlean-chronological-source/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/SourceCircuitSourceOrder.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/SourceCircuitSourceOrder.lean
+Exit code: 0
+Elapsed seconds: 17.666
+Output artifact SHA256: 96cc0a9749360a03eebf044c33d6bc8ec4b16a69caef5b7fe7a7d59e7cf02df2
+Diagnostics: none.

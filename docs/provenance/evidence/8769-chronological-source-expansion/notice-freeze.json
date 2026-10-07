@@ -1,0 +1,111 @@
+{
+  "parser_sha256": "8183e29f5a339bba37e28e9473aa7a6a42791282ed6877071dfd4096eda7cb65",
+  "inserted": true,
+  "files": [
+    {
+      "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+      "sha256_before": "89724f97933fa465b6c98ab57cd3cb7144ede5fe136f66ca93f304495c4f0f6a",
+      "sha256": "4e8d2653f030eae74c6bdd187b125ed25807cdf21391cf2ea65e1890b4f39770",
+      "declarations": 8,
+      "notice_max_line_length": 81,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "2ab2d360272041620f81f67be2af72420112d07f0b5c90d8a370836ed5ff34d2",
+      "paper_labels": [
+        "thm:compression"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+      "sha256_before": "24d2bf4ab9ad257bf86c01a9dfa04bc94b49c416339bd80d303a45b85d6f4ea7",
+      "sha256": "5017a1ffc45cae8195ff09c571b0996d05234dacd142c8554f1b89b5f5e22ffd",
+      "declarations": 6,
+      "notice_max_line_length": 82,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "7c97012fb12333094dd55bce642bd7d442961079fa8db24fd1b9787335e54a17",
+      "paper_labels": [
+        "thm:compression"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartialSourceInventory.lean",
+      "sha256_before": "e8b55acf1d17f72bc66d0d2ca9f3fbb74d25e1dce1543c91260d5e47f6e26fc5",
+      "sha256": "7bb64e55ac7ede12dd120a579c1d625544ed3a022c9a93703f1ead528b441633",
+      "declarations": 4,
+      "notice_max_line_length": 84,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "f684a653e769c3a3f302bd16f636250033637b30507db1b88da5ea49477a81c2",
+      "paper_labels": [
+        "eq:compression-subset-expansion"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceChoiceCost.lean",
+      "sha256_before": "a6d6b38f78328d5fd6e8148f5ce8c29e45f08587e4c0c28ae84f105b26efde84",
+      "sha256": "94c0b6221bd717bd15de58a9180142b8b64585723a1a3567a4f01246d25e971b",
+      "declarations": 7,
+      "notice_max_line_length": 98,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "bbca03dcb85593c0d086c254dac3c927f84d7721c5a3621e2e584eb6a65365f7",
+      "paper_labels": [
+        "eq:compression-choice-cost"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceCircuitLocations.lean",
+      "sha256_before": "fbab0f425013d96333e3739c292f5aeafff81ab384322a6fe583fcd9e6c1ad1f",
+      "sha256": "66854a4d2fd53dd2d5c27ce1f3c031d52cdaa7a7d61e5513fa99464e3f9b1eb7",
+      "declarations": 14,
+      "notice_max_line_length": 87,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "60ad7055a416b388e52fa74d4c8e03b3426ab78e1c92c243a19ccf50ab3c7980",
+      "paper_labels": [
+        "eq:compression-subset-expansion"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceProduct.lean",
+      "sha256_before": "1b6463bd5391ecabefeec50e5d996127228bf8c54ee7d92f45f6e7e953c757b1",
+      "sha256": "8fe89d7aa8fab1ccbcfb6a276d9db54215dc58082bc78b53e7771bd90e1bb033",
+      "declarations": 4,
+      "notice_max_line_length": 97,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "e219aa4d78808d615e48a95ccfea7a7de4e124d32838ce2c51fe55916ef467c2",
+      "paper_labels": [
+        "eq:compression-choice-cost"
+      ],
+      "notice_trailing_whitespace_removed": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartialSourceDensity.lean",
+      "sha256_before": "639e8a050494b4efa171bfe5e3e84dc53bc9ce87926bd26f949fce5a1e16e4c2",
+      "sha256": "b62113287ea4856c73a0a3d9f00e900597b97da0699c5f787e399073e0f0d226",
+      "declarations": 3,
+      "notice_max_line_length": 93,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "376adbf0a55098d310012ae20b8d041c3c124063bb42356e4cebfd5ac201efcb",
+      "paper_labels": [
+        "eq:compression-subset-expansion"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceCircuitSourceOrder.lean",
+      "sha256_before": "737edec329a62b0bf016cac5af29aa02b92d472b3fabd9e3d72fd18561421164",
+      "sha256": "f3b3aa43d81a01629764b68e2b976c72fc2528060a6c6b451d1c70f1969eb720",
+      "declarations": 9,
+      "notice_max_line_length": 93,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "ab6a7637cccae50607d8297fd3522f7af7112eb42206887b65b91ae795ea2280",
+      "paper_labels": [
+        "eq:compression-subset-expansion"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+[
+  {
+    "name": "chktex",
+    "command": [
+      "chktex",
+      "-q",
+      "-l",
+      "blueprint/.chktexrc",
+      "blueprint/src/chapter/ch24_peps_chronological_source_expansion.tex"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-chronological-source-expansion",
+    "elapsed_seconds": 0.1293032909889007,
+    "returncode": 0
+  },
+  {
+    "name": "latexindent",
+    "command": [
+      "scripts/check_latexindent_formatting.sh",
+      "--one",
+      "blueprint/src/chapter/ch24_peps_chronological_source_expansion.tex"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-chronological-source-expansion",
+    "elapsed_seconds": 1.2388962080003694,
+    "returncode": 0
+  },
+  {
+    "name": "sync",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod/sync.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-chronological-source-expansion",
+    "elapsed_seconds": 13.570639540994307,
+    "returncode": 0
+  },
+  {
+    "name": "pdf",
+    "command": [
+      "latexmk",
+      "-g",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod/blueprint/src",
+    "elapsed_seconds": 23.417011166005977,
+    "returncode": 0
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod",
+    "elapsed_seconds": 2.3621497499989346,
+    "returncode": 0
+  },
+  {
+    "name": "web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod/blueprint",
+    "elapsed_seconds": 16.167342750006355,
+    "returncode": 0
+  }
+]

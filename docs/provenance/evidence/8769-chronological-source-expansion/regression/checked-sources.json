@@ -1,0 +1,22 @@
+{
+  "source_revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+  "regression_sha256": "9737197966dcf6aa0c68809f0ef6b1481f9cc442984040294531272086ee7577",
+  "production_sources": [
+    {
+      "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+      "sha256": "4e8d2653f030eae74c6bdd187b125ed25807cdf21391cf2ea65e1890b4f39770",
+      "artifact_path": "/private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean",
+      "artifact_sha256": "b4708861868d5fe3757b008eb2a99f17d6d62af12b02654764bf408ccfe92251"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+      "sha256": "5017a1ffc45cae8195ff09c571b0996d05234dacd142c8554f1b89b5f5e22ffd",
+      "artifact_path": "/private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean",
+      "artifact_sha256": "9873c5fbdca7160b080f394d3432c4cd5615e8ab4b6883b9c3655eae46bb6af5"
+    }
+  ],
+  "imported_artifact_count": 4353,
+  "imported_dependencies_sha256": "8d9deaa1dd8163783c1a395e81e667381e88ffdc53967cdba055e4cf76f3b054",
+  "regression_artifact_sha256": "3b51a8008764c9816963b6e2712a1aa78e23abc39b4a1f3500f9f6400e03e80d",
+  "source_and_artifact_hashes_verified_at_pin": true
+}
