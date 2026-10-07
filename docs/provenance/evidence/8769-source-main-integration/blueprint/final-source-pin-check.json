@@ -1,0 +1,17 @@
+{
+  "checked_utc": "2026-10-07T23:48:18.667707+00:00",
+  "tn_proof_revision": "17a29d2363acb4d040ce3360c2aef7c20ec1a645",
+  "qic_source_revision": "4be0ef429c5048cf1bf4f5b7afd5b9f7b9361ca0",
+  "qic_mathematical_source_revision": "035e5cc6f208e7b069132ef8eff8c8afbfa012d9",
+  "rendered_tn_revision": "5b5d83dd93ba9727b3238db48a7ebf6a97dbc04b",
+  "rendered_qic_revision": "035e5cc6f208e7b069132ef8eff8c8afbfa012d9",
+  "scope": "Focused render and full source synchronization were performed on the recorded earlier revisions. Every copied TNLean/QICLean source and tracked blueprint input was compared byte-for-byte with the final commits; only the two dependency-pin files were refreshed. No rerender or compiled full-root checkdecls is claimed by this source synchronization.",
+  "tn_source_files": 2997,
+  "qic_source_files": 828,
+  "unchanged_tracked_blueprint_files": 632,
+  "refreshed_pin_files": {
+    "lakefile.toml": "c1a385de4a84fa2816998363315bef9ef963087729cb43bc1d711eece6c38844",
+    "lake-manifest.json": "9cbc4293ae0f57ea702de0e21bba09213cb7efae9e166cc2ef122e4b6cce0531"
+  },
+  "all_mathematical_source_bytes_unchanged": true
+}

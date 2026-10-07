@@ -1,0 +1,19 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "jsonschema==4.26.0",
+    "python",
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-integration/docs/provenance/evidence/8769-fixed-chronological-sources/replay.py",
+    "--root",
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-integration",
+    "--upstream-root",
+    "/private/tmp/tnlean-openai-math-audit.git"
+  ],
+  "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-integration",
+  "returncode": 1,
+  "seconds": 17.897354375003488,
+  "log_sha256": "e81e654326110e890ee615d3f94c1006e6cdbfa502231cc556b7aa2bc195f881"
+}

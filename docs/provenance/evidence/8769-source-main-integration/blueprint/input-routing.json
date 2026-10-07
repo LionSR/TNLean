@@ -1,0 +1,19 @@
+{
+  "input_count": 55,
+  "duplicates": [],
+  "missing_files": [],
+  "all_incoming_chapters_included": true,
+  "focused_inputs": [
+    "chapter/ch24_peps_pair_effects",
+    "chapter/ch24_peps_source_preparation",
+    "chapter/ch24_peps_party_factorization",
+    "chapter/ch24_peps_unused_pair_sources",
+    "chapter/ch24_peps_common_source_spaces",
+    "chapter/ch24_peps_source_gate_density",
+    "chapter/ch24_peps_source_block_contraction",
+    "chapter/ch24_peps_party_coarsening",
+    "chapter/ch24_peps_selective_source_preparation",
+    "chapter/ch24_peps_chronological_source_expansion",
+    "chapter/ch24_peps_fixed_chronological_sources"
+  ]
+}

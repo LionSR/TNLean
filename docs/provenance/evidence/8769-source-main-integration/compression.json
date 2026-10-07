@@ -1,0 +1,382 @@
+{
+  "full-provenance.log.gz": {
+    "uncompressed_sha256": "3f7bd956eccb689aaf2a60fd596dbc97f162b056302e6c1a05bad0c5563b2864",
+    "uncompressed_bytes": 83
+  },
+  "canonical-replay.log.gz": {
+    "uncompressed_sha256": "e81e654326110e890ee615d3f94c1006e6cdbfa502231cc556b7aa2bc195f881",
+    "uncompressed_bytes": 1328
+  },
+  "blueprint-driver.log.gz": {
+    "uncompressed_sha256": "6f4af5db46f5f0e8a1a2e846668ed9328a8a77b1deaaea6ba5763ae633f5b6b1",
+    "uncompressed_bytes": 296
+  },
+  "independent-preservation-review.json.gz": {
+    "uncompressed_sha256": "9751b8114c6da8f2330d72c7bf2a4b9339f203698e675406fc2c2cea8f7cb354",
+    "uncompressed_bytes": 899310
+  },
+  "strict-checks/unchanged-predecessors.json.gz": {
+    "uncompressed_sha256": "286e170cecfdf9af8508c12ee26abd8e3f3dc5921f99d1fd8fd2faf51be77392",
+    "uncompressed_bytes": 1176820
+  },
+  "strict-checks/TNLean.Algebra.CyclicInsertion.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.Algebra.TensorProductContraction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.Algebra.TensorProductRegrouping.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.Algebra.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourceGateDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.AffectedOwners.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CommonPairSources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CommonPartyMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CommonSourceGate.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CommonSourcePreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CompletePartyMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.DistributedSourceComposition.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.FinitePairSources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.FiniteSourceGate.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.FiniteSourcePreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.GroupedBlockMap.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.LayoutOwnerMap.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.LocalPairSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PairEffectElimination.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PairEffectSourcePreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PairSourceCompletion.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PairSourceExpansion.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PairSourceGrouping.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PairSourceOrdering.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartialSourceDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartialSourceEvaluation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartialSourceInventory.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartialSourcePreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyCoarseningFactorization.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyFactorization.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyGrouping.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyLayout.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyLocalMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyPartition.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyTensorMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyWord.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PreparedMatrixNorm.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PreparedPartyMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PreparedSourceGate.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SelectiveSourceFactorization.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SelectiveSourcePreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceBlockMatrix.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceChoiceCost.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceCircuitChoiceAt.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceCircuitChoiceProduct.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceCircuitLocations.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceCircuitSourceOrder.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceFrameMatrix.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceGateDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceOwnerMap.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourcePairIndex.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourcePairMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourcePreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourcePreparationCoordinates.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceSlotBasis.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceSlotMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.UnitPairSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WordAppendTail.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WordOwnerMap.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WordPermutation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WordRestriction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WordSelectivePartition.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.QICLeanInterface.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/driver.log.gz": {
+    "uncompressed_sha256": "f2d81e050fe8b8f053b3b432bc443187c7050529e329678f33c188636d343011",
+    "uncompressed_bytes": 7933
+  },
+  "final-refresh/TNLean.QICLeanInterface.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "final-refresh/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "imported-audit/axioms.log.gz": {
+    "uncompressed_sha256": "ebad79f2dbf2f97361d3c5dd5478a8b7e4f3f0ac107d259de8521f612872a235",
+    "uncompressed_bytes": 39484
+  },
+  "imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "1e42a350921b04fbd683db1996b29e7ec18361abaa720de4a0e7f298d931bcf8",
+    "uncompressed_bytes": 7558398
+  },
+  "imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "836eae95437084c83311e4d2de6c11419bebf55de60ab79cf8b174a35576e621",
+    "uncompressed_bytes": 598454
+  },
+  "declaration-check/declarations.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "declaration-check/initial-long-lines-declarations.log.gz": {
+    "uncompressed_sha256": "04c649700f399dcdab6e7f0c1e99a52105c08d78c6f22c2aefc9db650e903e83",
+    "uncompressed_bytes": 883
+  },
+  "declaration-check/lean_declarations.txt.gz": {
+    "uncompressed_sha256": "48aeaf9ff780e3faff32cb624fdce81d9358c4847944f8daca5c5fe5cb2a8ea6",
+    "uncompressed_bytes": 1041431
+  },
+  "blueprint/TNLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "226cb307aae76486a2c7f50043635583bfc4113fcf7b9381b10edca83f48e98d",
+    "uncompressed_bytes": 361261
+  },
+  "blueprint/QICLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "73c34189149c4a18ce513e761bb25c5484176ad1f07f3cfcf01319bfc2e891c6",
+    "uncompressed_bytes": 97699
+  },
+  "blueprint/blueprint-source-sha256.json.gz": {
+    "uncompressed_sha256": "7b02c798cfb0c276f612e337d3b996a11b5b924f5705d066ee43e7035f447db3",
+    "uncompressed_bytes": 85904
+  },
+  "blueprint/dependency-graph.json.gz": {
+    "uncompressed_sha256": "df51c30daf62e31fb0ae54759cbde7adf9c16478cbad06dc33579566a1225f65",
+    "uncompressed_bytes": 80
+  },
+  "blueprint/sync.json.gz": {
+    "uncompressed_sha256": "4024c90cf3a0a383b359d2ae99faae51aa20c11c5ba8d821328088b0cd219036",
+    "uncompressed_bytes": 92053
+  },
+  "blueprint/full-lean-decls.txt.gz": {
+    "uncompressed_sha256": "48aeaf9ff780e3faff32cb624fdce81d9358c4847944f8daca5c5fe5cb2a8ea6",
+    "uncompressed_bytes": 1041431
+  },
+  "blueprint/bbl.log.gz": {
+    "uncompressed_sha256": "29bb0fccbc98a7606e016e6b8fda8dba021aaf9135f706157e828f9b2621029f",
+    "uncompressed_bytes": 127
+  },
+  "blueprint/browser.initial-missing-tool.log.gz": {
+    "uncompressed_sha256": "5ec92c42aca2090f8cc1ddc8a60f533e29bbc4f0b3cf34755070f7eb0a540f2b",
+    "uncompressed_bytes": 530
+  },
+  "blueprint/browser.log.gz": {
+    "uncompressed_sha256": "b53b63dfa037a451ac17aa6cbc68b2cac3d9d838c460215f0499fddfe294970d",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/pdf.log.gz": {
+    "uncompressed_sha256": "8237ca9f5170710ca71bc6a1a2452c9eb822c32caae1f89c77681de7c9664738",
+    "uncompressed_bytes": 105314
+  },
+  "blueprint/sync.log.gz": {
+    "uncompressed_sha256": "ca33032477f1b90e4ac5e42042c1d6d476ebd5d004bfe78be56d82039855dbc8",
+    "uncompressed_bytes": 43186
+  },
+  "blueprint/web.focused.log.gz": {
+    "uncompressed_sha256": "54cd8f8ec35ef16f2c68d84d4bdb337977aaea813b937558fde5811d70784f73",
+    "uncompressed_bytes": 3878
+  },
+  "blueprint/web.initial-unrelated-graph.log.gz": {
+    "uncompressed_sha256": "6f3f8af6315ca334a4990076a322a32ffe975cfb9a08b4bd0eeaab34190cee0b",
+    "uncompressed_bytes": 3979
+  },
+  "blueprint/web.log.gz": {
+    "uncompressed_sha256": "6f3f8af6315ca334a4990076a322a32ffe975cfb9a08b4bd0eeaab34190cee0b",
+    "uncompressed_bytes": 3979
+  },
+  "blueprint/final-tex.log.gz": {
+    "uncompressed_sha256": "77423173779579a7b8e5e0d7dcbb22f41fdb9c5c8ee4f1a8caffb0ecd970ff9b",
+    "uncompressed_bytes": 71590
+  }
+}

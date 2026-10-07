@@ -1,0 +1,720 @@
+{
+  "parents": [
+    "80bc49d17e833795fba00bfeaf1bd053649c4070",
+    "4097a00b1"
+  ],
+  "merge_base": "d74d3eedd521257403f5d883754bdd6ac65cdc45",
+  "changed_proof_files": [
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/Algebra/CStarSqrtHolder.lean",
+      "sha256": "e7202b509ad59a3cbe0454bd411790029ff130907abd3198e4508c86f168990f"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/Algebra/CompactGapBounds.lean",
+      "sha256": "d97a07c27d2321507ce0550487c53f84b65d7dc62b637f1dc1b86cecc56f8b47"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/Algebra/NuclearNormTruncation.lean",
+      "sha256": "80020dc978c9503208ff6f54bd433bf0c208ee3207c057f7b118827a50b83d4f"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/Circuit/LiebRobinson/GraphLocalization.lean",
+      "sha256": "8ad268a26022b968e636dd095d39917f8b10ef2fcdf66b812f7dc0e2d4ba3331"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/Circuit/SiteExpectation.lean",
+      "sha256": "70ccc75c4424b53f63e22825c9cb551bda7da73a8ef52f68154e085d5ada5da3"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/Core/PhysicalDimension.lean",
+      "sha256": "d3ff9db279bff39db32ae710f1cdd0e404f0086d3cbb76490be413c201aef475"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/AllLengthOpenInteractionMatrix.lean",
+      "sha256": "cf07017b05cd9de68f67e2f0bc630a375cc19f3a626885b1dfe2151fdaf19d9f"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/BlockBoundaryObservableCompression.lean",
+      "sha256": "3fe532129a690fd2925cba19e2b0e0ebbba0bf58a5826a376a323ee4eea8fc53"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/BlockObservableSectorDecomposition.lean",
+      "sha256": "5cf5a6ccb79078ae1af7b739dbdaa7e6db8663d73683223da8e846a14968dadd"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/BoundaryCrossObservableCompression.lean",
+      "sha256": "4c48591d9195bedc1bf3a00a69a72df6c504f608d385d2900e8aeae060beeb85"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/BoundaryObservableCompression.lean",
+      "sha256": "90abfd954505d21d9b3837df3efc9d62662fd6523e4324f11845cd20e7185c16"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/BulkObservableAlgebra.lean",
+      "sha256": "afedd8f7c4193ada87ec6338ebb8376ea7042a1bfc4f169b9636a7d6bd76171d"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/BulkObservableCommutator.lean",
+      "sha256": "0cd15968537524c949e5f13def1e504ece6f9a102ec090b1db295913054d3a00"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/CanonicalGroundSpaceTransport.lean",
+      "sha256": "40364b1497f85f5f3b3c67cb4a3f3f9d50a14e8c04081092b7655c91389f13e8"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/CanonicalParentInteractionExistence.lean",
+      "sha256": "99e52abe1b6ce605ddf1df8bf71dcd9faf5fb38f83f2335eec44db9cebcbef45"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/CanonicalParentInteractionMatrix.lean",
+      "sha256": "d3290362e8169de684040659687b1059f9504002d7aa63cd66d18409b7b40c90"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/CompactOpenParentGap.lean",
+      "sha256": "2a12695755f4f0b77924e07ba77c4889c0616f3172d0576340a258c6f1f6626d"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/CompactOpenParentInteractionGap.lean",
+      "sha256": "cf01039c4a531a5e4de1777c8a9ab3e9f8fd74b6067c1c2e76e8028ef3218b5a"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/GroundSpaceCompressionNorm.lean",
+      "sha256": "c868ae01d3d502eff41df0ddcad7a8a26ed4230e298bc9dbc68b1a988df9b530"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/GroundSpaceCrossCompressionNorm.lean",
+      "sha256": "c5390a611307ae649f3490ecbf530d7f00e2d89222e8171164c1135e7656486e"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/GroundSpaceSectorCompressionDecay.lean",
+      "sha256": "f882d33e376bdf9be02047fd325c5bdfcf435dbf8a3419e4adbcdf11ab96cbe0"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/InjectiveIsometricDeformationSymmetry.lean",
+      "sha256": "90cc2c80f556ca589c2e7cfca73a728ef06342c6299daada4f90c6a62f6dbe40"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/IsometricDeformation.lean",
+      "sha256": "a86f77ab21d9f90dd89f73ffffd72f1826186583ee60064f1f371ec6d847ffc4"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/IsometricDeformationCovariance.lean",
+      "sha256": "ed62a00c6210c48b6efa076027f3f2dbee607409f562bdbcd1d18f13f9945462"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/IsometricDeformationSymmetry.lean",
+      "sha256": "8a8496a453e5e9143b9598d8848e4c51c22f94c58f13e1f1d38128e846f8bdbb"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/LocalDensitySupport.lean",
+      "sha256": "f410a88942628151af00e0e0a5b3d9a061bf731d08e303067a8b37e386c55fba"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/LocalFaithfulSupport.lean",
+      "sha256": "adf54ff15fbcf905356eef628759d5d3b40ac663ce2a311a8a545ff011d3e3fc"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/LocalObservableExpectation.lean",
+      "sha256": "1c4af2817c6fc0dcfcb9086ed4d9a65ed396f92ba1bdaf32150844c6ed813d15"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/LocalObservableInsertion.lean",
+      "sha256": "61cf473bdc1001e68a26bcb47ea093b4605dbd37b5e17505e87f238b4ded9423"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/LocalObservableState.lean",
+      "sha256": "2b5e63966f8fcc2e428ac64a3175309a7d0db98652828374edb8d72762ba7f6b"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/BlockOpenGapAllLengths.lean",
+      "sha256": "536315556d7a8a962391fa946685bc8ed09a2fb77b215d7dcd0d111a3d8cf93a"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/CanonicalGapToInteractionGap.lean",
+      "sha256": "23ba0b90529e29f0f7f334806cd04f46d35cd366304e2bff53a1ce49371c7d62"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/CanonicalOpenGap.lean",
+      "sha256": "0c4209bd8cdd1833c13a11fc4f46f56a681cc136ab0f7a83e8f642fd090a7acd"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/CompactOpenIntervalGap.lean",
+      "sha256": "1e666e91ae1a7e1eb8fd841794a6aadfd9656b78f9d40ee018cb40d5c9ef35d1"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/CyclicWindowOpenHamiltonian.lean",
+      "sha256": "b723393927ebfc63f98109cc0abaa9f083c02c6a7c05da71e9ee7749284fe1ad"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/EventualKernelOpenGap.lean",
+      "sha256": "eaa3d86bffa48e1e2f654779df2992585a7c345b39547d822e8ecfe1e41be75d"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/GroundExpectationGap.lean",
+      "sha256": "a9e515d46f076c449459066bd1dbe5b75aada7e155865898f30f9ac5cd85acd0"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/NormalBlockOpenGap.lean",
+      "sha256": "7326ed982f63edcb333d60b3d1e4b3d60911d70270f59ea873c798253d64d1ec"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenFiniteRangeKnabeGap.lean",
+      "sha256": "02a0ee4635196fa0b6d9b35eab632c102a2d321f62998217bb1ed5dcbe56a321"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenGapContinuity.lean",
+      "sha256": "dfaad910cd8c64f643d17e3c2d673edd83feacf34fb06174bdfc0ed070281898"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenHamiltonian.lean",
+      "sha256": "82c12a0d692224c559bf15dfa109ea9edb37c8ee15406d2408c82f2f10eaed9a"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenInteraction.lean",
+      "sha256": "316076ff3c1ea23f275c0cc92cbb0ce5a8ca6d35f85addb11f195b5616e5b419"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenInteractionRangeComparison.lean",
+      "sha256": "b3184827f6c0c988d331e5349deb87c0762be12052779d9a2078206ecf0c8af7"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenKnabePadding.lean",
+      "sha256": "d8a1e3f575f01234a25136a874949897144c4a3a652f2be2c9b4a5dad28f25f8"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenParentInteractionGap.lean",
+      "sha256": "c0589304520170a5035cd5dc014c6e6a769f67acea93cdead0c111d6317247db"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/OpenRangeComparison.lean",
+      "sha256": "6d712b81f210763550a5f2b552617611881be3f719a680424e6dbab370319eba"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/PrescribedOpenGap.lean",
+      "sha256": "38a966c12473392935f857bfd022a51d247666df8a5ced5442949f32cfe4f35d"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/SparseGroupedOpenGap.lean",
+      "sha256": "a5385916991dfde31e4aa090c95b117959a1800fcc16978eb7ae322800a78768"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/Martingale/TwoGroundProjectionGap.lean",
+      "sha256": "42a899f25cc731b25fcc802007ae9eacb7f3de49186510029e7c16c5b90d35b3"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/MixedObservableInsertion.lean",
+      "sha256": "74f7dc66bae04ec00ec1a6d0863750265ecaa0a37acb1fb1d749a05a78003521"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/MultiblockLocalCommutatorGap.lean",
+      "sha256": "fb38fcce09cb556bcd99146ed839f72de595fb6ab25e8dc7af7585507737caef"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/NormalBlockInjectiveBlocking.lean",
+      "sha256": "7565f7c882daea6172b9ffa224e6c276a5ad0e011ce3e9b9a3055751e4ab11e3"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/OpenIsometricDeformationGap.lean",
+      "sha256": "a6cf170c0b5017b38818fa03adee8918df0d13109c5fb5c2d84c0c19cea9c513"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/PositiveFunctionalCommutator.lean",
+      "sha256": "4e03f0743bb973a2bf468233dc92f1f4d1abc5bece1e1c9260ecf14aefd2444f"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/PrimitiveBoundaryCommutatorGap.lean",
+      "sha256": "822ab31266d14466f4fa5f8149bf703fc04a8ec64b72a3f9cd1230ad25794282"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/PrimitiveLocalCommutatorGap.lean",
+      "sha256": "d13e0da13ead5c35b8ac210e22ac0e7766adf848db5e48b9dbf5fa81bb9ef1f8"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/PrimitiveLocalParentInteractionGap.lean",
+      "sha256": "ae1701bfec9984f50388c95c15ff575b924f9488d6d3f7bb37c578ac7126ba31"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/SourceOrderedInsertion.lean",
+      "sha256": "79e8c24b8aca76459408ab0118b31311cc14e2efd18806556ac27fef56799dbd"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/ParentHamiltonian/SuppliedIsometryInsertion.lean",
+      "sha256": "5b2f6475dba83b7dc9669fbfbcde48cb98f24af4383bb8cf845a05edc461f8c5"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/Periodic/PhysicalDimension.lean",
+      "sha256": "db98f18bfeac5b8c47ce0c92d7bdd6d5db7103f3666956e868b3f0f576632be0"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/MPS/Symmetry/LocalVirtualGauge.lean",
+      "sha256": "317170641a03d4fe2b97b379ab8f8fa3992dbd17cb1c6132381872106360cf42"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/CorrectedPositionCost.lean",
+      "sha256": "aa1ddbf27cfa61065971c0919d3e5e503a809930d5af9c2cf8902125e6497407"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
+      "sha256": "e8ba146c9d8213de891a8cb4cd97be8dcb979b845c77ba15d811a8c56b116bee"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
+      "sha256": "298ce39dbc74e3ca9af17d1ce360869a43104985edc47f4c5b8a9104343cb7a6"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+      "sha256": "5fcab299dd3f163a4a1d234a25a51b91ae49bcd6619202731d471a82d2046dab"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DyadicAnchors.lean",
+      "sha256": "ddafe20f8f5ee4f837a93da643a3a66d9f00963192f6b2ceea9c84b801e32848"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DyadicEdgeBands.lean",
+      "sha256": "9db3399c3914cac3a1617df5bd247d5ffa4ac4b0e397f4e42d1d049c166116ed"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DyadicHierarchyCounts.lean",
+      "sha256": "6502e5fed27d682e55df96079dfe812025e9b276f26a0067cc421df932174385"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DyadicRepaintingClearance.lean",
+      "sha256": "778182f6a2ae2e0ac71eae056ed91d7fb953d3321602a8a4515932da4c1e9ba6"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DyadicRouting.lean",
+      "sha256": "a96edc78cd84a31f95c8001ddc8606c68f3c7d2b937b33f11770b283e25a871c"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/DyadicRoutingPEPS.lean",
+      "sha256": "da87882d6089b834ffe8ece7b128d9dcedbf80bfa263a44d9640fad9c13f20a1"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/GroupTruncation.lean",
+      "sha256": "d12d7c4a73b7162acd4232340378560b73fb52afbea488ac8e962d5771205072"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/HoleEncoder.lean",
+      "sha256": "fd50cdafa7c36b895294ea2a0e2f7db7f82c8aa591ea1bcb57246c28fec1deed"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/RoutedContraction.lean",
+      "sha256": "d942f18bbbb6ddaaed42d59c8264012b1c8a3f58cdf2cc66f76c7dce9d428b3d"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
+      "sha256": "1d4b0812723aac57fcc31dd84c2ae01819c2b7fef93ec7adc771532a09f499e4"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
+      "sha256": "23c3bb180f87421469dc8c2a69b027ba984bff044093a25ebb72a96d0e4765f8"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/WholeGroupContraction.lean",
+      "sha256": "24eb336ab8e9be5172cb82f01a6c3834d795b7218d6e2d57d340fb71de955e17"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/Approximation/WholeGroupNetwork.lean",
+      "sha256": "a0654fbdc561bb0c679e4d764a6367b8a48e9f3646a980fde88a46e21729cbc7"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+      "sha256": "336e86a619d0bac8eadabb164e8167a913d147adeb6f75b3adc473d134075726"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+      "sha256": "fd4d4eeb0fd86d4d0d6a3e2fffb82db6b662aeb70c5a7fe79a79fea6e9835478"
+    },
+    {
+      "parent": "80bc49d17e833795fba00bfeaf1bd053649c4070",
+      "path": "TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
+      "sha256": "5b54cdc497ec3f0924fb929315d754f6454be1611b00b7048cfea5a364c81fd4"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/Algebra/CyclicInsertion.lean",
+      "sha256": "84ad89352d5e45a3c2a2de046e660c32b6b2fd29fffa6deb23d8a64cc7b8a08f"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/Algebra/TensorProductContraction.lean",
+      "sha256": "790a1787bfd90c3a3bae74651ce550b3148ae63bea79c0c524b691f1968785ce"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/Algebra/TensorProductRegrouping.lean",
+      "sha256": "90d16b4574ca19ccce3a8d0cd71eb9d31068ca3e5b84700a3011f4d2d74ed415"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/ActualSourceGateDensity.lean",
+      "sha256": "ff87a9c037e712faad674e17f1e05e27605bd65ca1e12499e0ac8fde10b1de22"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+      "sha256": "274a05158bf6c6bcf5ea5c4bde3f2e462abf60c85ab9d59e82ecb83c1956c078"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/CommonPairSources.lean",
+      "sha256": "6d8a7daad746f1bf6d0f2c39c73d4833fa0939018bf59d22b169d7a37a87b22b"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/CommonPartyMaps.lean",
+      "sha256": "004fa68341ebf24bbb0dc6e447b4c3f67e5848ae6c6e5dc3833a3619129f16c5"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/CommonSourceGate.lean",
+      "sha256": "7de4cb68d445ae8b3667a7da600e00941c0c49c4aa5be66fdd4d2266146c3f9f"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/CommonSourcePreparation.lean",
+      "sha256": "6beab0a603f2b593db569f42324cf2b996c99f5876447a17777dd1918b745f09"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/CompletePartyMaps.lean",
+      "sha256": "db431995510885abb7100790d3afd7a84363ad9e843e1eebc17de7b44532ce3d"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+      "sha256": "4e8d2653f030eae74c6bdd187b125ed25807cdf21391cf2ea65e1890b4f39770"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/FinitePairSources.lean",
+      "sha256": "cbdcfe0e8030a2218c2abee154e36f8e613e56c258446e20a0d96a53210c2eb5"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/FiniteSourceGate.lean",
+      "sha256": "1715da519544d0d585664ffa8beccec8a08d789151c5fd824a29da172f5e628e"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/FiniteSourcePreparation.lean",
+      "sha256": "ec574a3b64db136b451a99001218917a119dfe1279391198b34cff10c7954668"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+      "sha256": "81f39aeedc0cecd26c0b0a7ee2009d74f4e554c508f8801516425dcbf89ef647"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+      "sha256": "42606809344ce6f596634ea8b83382f25fbbac1db880bf37c6c882aa68e573f2"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/LocalPairSource.lean",
+      "sha256": "3976a047fa5b90238d55d027c25cee675899ee25e1c51a38e21579e4ba151b6b"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PairEffectElimination.lean",
+      "sha256": "00c75018ad3995fc855f568a7518520fad3f935a1d5e7b4b9f1de8bd6cbcb339"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean",
+      "sha256": "b1cc107bbce88e1aadb528e2c4b817c7f5939ca10977bfba455847362c88bb48"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PairSourceCompletion.lean",
+      "sha256": "2727db9a052b053de22a1b60d8a4b0e322dab3f0625e34f115c3f2f469bb8968"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+      "sha256": "5219b79c39068f7b8dc8924e58654087a31ff01a0bfd7cc02eac7a4965d0116d"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+      "sha256": "f6f12c419d2beae124b3fa8480523f2b7fcc82dcadac90077ad4a15c9a0a77d1"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PairSourceOrdering.lean",
+      "sha256": "2f2baa179496c7a9bc12d94d77ef6490f8320867d939b328aa636256dcd5d56b"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartialSourceDensity.lean",
+      "sha256": "b62113287ea4856c73a0a3d9f00e900597b97da0699c5f787e399073e0f0d226"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+      "sha256": "5017a1ffc45cae8195ff09c571b0996d05234dacd142c8554f1b89b5f5e22ffd"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartialSourceInventory.lean",
+      "sha256": "7bb64e55ac7ede12dd120a579c1d625544ed3a022c9a93703f1ead528b441633"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+      "sha256": "22b336c73f420f6c71241a51877f65c06763c70f7704fcf25ef05c7cd98dd2f1"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyCoarseningFactorization.lean",
+      "sha256": "3b879c254c8aa18ec696c17bed4bd2cbbd9524984993055b2828fad290efc26a"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyFactorization.lean",
+      "sha256": "9cefb29215f6c58680fca69553bbbb62c21ada6a2005999288c7f004c50ce65e"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyGrouping.lean",
+      "sha256": "9b97d33654aa13348a5391d9ef8e82903eb6c0efdc97464a2b7fc029dace3cf7"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyLayout.lean",
+      "sha256": "40150b8846f41da0153e5c75813ac248770b2938c09bd6cf9c255bb0bf5b043a"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyLocalMaps.lean",
+      "sha256": "fe9c4649c0e6949b3e6b73b391d753672b735f4661f548febfcf8a665b842676"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyPartition.lean",
+      "sha256": "d9b2be6493775f129cb2cee5c02920c8a45d46b195870de616697ee322eac9a0"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyTensorMaps.lean",
+      "sha256": "baa0a74a882c5209bafc4bea9782bdfd4fabd4d445e52912bb06cee2695647d1"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PartyWord.lean",
+      "sha256": "ddc52ea0d7bfff3352d32c6c6d8ca02e244d1feac396a44fab39df81a6fb5f67"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+      "sha256": "de2d80edfa69824f5e1f042476a9d9ddb83b4fc4b9114d38afbe5fc69a2628f4"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PreparedPartyMaps.lean",
+      "sha256": "16a4fcd8a01f47345981a09295e01bdadf62c757a6b4bebac0b93205c0f6f94e"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+      "sha256": "044a3ac1217e0d13bec17526da2bafb3cd104469490d659751663e037fdff422"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SelectiveSourceFactorization.lean",
+      "sha256": "6a544e4b46158d5e893e7514fbbc69476b0ce9f2060ebf1de7f24206914f84cc"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+      "sha256": "420fc5d75363203473f1e6fa30dd0d90850cffd37369aca4eeeaf5ca98bd0f6d"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+      "sha256": "84fbbac7022879e160df701f8767e5ead4b059932d2a05d8e3fd4aa8cbef0452"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceChoiceCost.lean",
+      "sha256": "94c0b6221bd717bd15de58a9180142b8b64585723a1a3567a4f01246d25e971b"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+      "sha256": "c97cf1d3e6c57251c676cf01264259dc5bca989ac1a32724bab7ca273c8900e5"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceProduct.lean",
+      "sha256": "8fe89d7aa8fab1ccbcfb6a276d9db54215dc58082bc78b53e7771bd90e1bb033"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceCircuitLocations.lean",
+      "sha256": "66854a4d2fd53dd2d5c27ce1f3c031d52cdaa7a7d61e5513fa99464e3f9b1eb7"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceCircuitSourceOrder.lean",
+      "sha256": "f3b3aa43d81a01629764b68e2b976c72fc2528060a6c6b451d1c70f1969eb720"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceFrameMatrix.lean",
+      "sha256": "369d51ac2a6c509b7d842354c26ddd0e75d43ce56407ee2aed9054f9d7db7e2f"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+      "sha256": "c8dac09804ab63cf09ec5ce847dd6a7f5a8251cb3e0d09f4c8f2fcbf4084e35f"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+      "sha256": "fbed21802cfdb1c9e1465ed103dd77965cbc421b780000f3385451ddf31e8ba2"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourcePairIndex.lean",
+      "sha256": "318030057c1142f5acb58d786c132bbcdfadbb336b2fc78a781aed2d1f3c02d6"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourcePairMaps.lean",
+      "sha256": "052f725b029635d14f9209ab95027527585215480459a79e9505d8c9a905f1a9"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+      "sha256": "c0f0cfe9226d2e5853ce45fe25f4583985a5904289e3c0f58796318b28d730a9"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+      "sha256": "bc330b693bb8f7cf3be3347c70f1450936e69052617ab2345362bdb4eb244862"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceSlotBasis.lean",
+      "sha256": "c208dfd64db49b668f815676059266da94b696ac83956272c45defe351a64f93"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+      "sha256": "1ffa239ec33791054c18e1b4981d6fd1546a35e31291672a208f8d71a3869f3f"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+      "sha256": "13bc696dd7cf9990fb999e4c703fe8dbbe6b2d4bb3e8a3353344b2a4f5559899"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/WordAppendTail.lean",
+      "sha256": "527b1579553356e33fad2e87044fe9432400987861ee5bb2a69748d4a86d37ee"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+      "sha256": "3309e91977eaff5fa80e604c7c2e98106be6c8f91a434dca2be58086a7bcf10a"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+      "sha256": "8b9b5d60cafca044be1fa21d8ff071df7242f2737b968c726e911fbe3c088acf"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/WordRestriction.lean",
+      "sha256": "8e5c20658449df39020adcaa4f439799a19759a9768c6b781354b946ab8edfcb"
+    },
+    {
+      "parent": "4097a00b1",
+      "path": "TNLean/PEPS/Approximation/WordSelectivePartition.lean",
+      "sha256": "1bf5a6588df0b28036524462f0c41ddfd6707eb3f72176e829f69563845c5661"
+    }
+  ],
+  "proof_files_preserved": 142
+}
