@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8738-tnlean.peps.arealaw.site",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Site",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -32,20 +32,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.configuration",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Configuration",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -63,20 +81,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.domaingraph",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.domainGraph",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -94,20 +130,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.isadmissiblesupport",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.IsAdmissibleSupport",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -125,20 +179,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.admissiblesupport",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.AdmissibleSupport",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -156,20 +228,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.graphneighborhood",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.graphNeighborhood",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -187,20 +277,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.edgeboundary",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.edgeBoundary",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -218,20 +326,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.ambientdilation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientDilation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -249,20 +375,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.configurationsplit",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.configurationSplit",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -280,20 +424,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.card_configuration",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_configuration",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -311,20 +473,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.edgeboundary_empty",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.edgeBoundary_empty",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -342,20 +522,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.edgeboundary_univ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.edgeBoundary_univ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -373,20 +571,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.isadmissiblesupport_singleton",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.isAdmissibleSupport_singleton",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -404,20 +620,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exists_walk_length_le_iff_edist_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.exists_walk_length_le_iff_edist_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -435,20 +669,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.isadmissiblesupport_zero_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.isAdmissibleSupport_zero_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -466,20 +718,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.isadmissiblesupport_pair_of_adj",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.isAdmissibleSupport_pair_of_adj",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -497,20 +767,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.ambientdilation_zero",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/FiniteDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_zero",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -528,20 +816,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.rectangleembedding",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.rectangleEmbedding",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -566,20 +872,38 @@
         "Uses coordinates starting at zero, differing by translation from the paper convention; transports graph and configuration coordinates only."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.rectangleembedding_injective",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.rectangleEmbedding_injective",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -604,20 +928,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.rectangulardomain",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.rectangularDomain",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -642,20 +984,38 @@
         "Uses coordinates starting at zero, differing by translation from the paper convention; transports graph and configuration coordinates only."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.rectanglesiteequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.rectangleSiteEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -680,20 +1040,38 @@
         "Uses coordinates starting at zero, differing by translation from the paper convention; transports graph and configuration coordinates only."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.rectanglesiteequiv_val",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.rectangleSiteEquiv_val",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -718,20 +1096,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.rectanglegraphiso",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.rectangleGraphIso",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -756,20 +1152,38 @@
         "Uses coordinates starting at zero, differing by translation from the paper convention; transports graph and configuration coordinates only."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.rectangleconfigurationequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.rectangleConfigurationEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -794,20 +1208,38 @@
         "Uses coordinates starting at zero, differing by translation from the paper convention; transports graph and configuration coordinates only."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.isadmissiblesupport_rectangle_pair_of_adj",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
         "declaration": "TNLean.PEPS.AreaLaw.isAdmissibleSupport_rectangle_pair_of_adj",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -832,20 +1264,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.statespace",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.StateSpace",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -863,20 +1313,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.localhamiltonian",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.LocalHamiltonian",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -894,20 +1362,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.localhamiltonian.operator",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.LocalHamiltonian.operator",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -925,20 +1411,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.localhamiltonian.operator_ishermitian",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.LocalHamiltonian.operator_isHermitian",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -956,20 +1460,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.localhamiltonian.zero",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.LocalHamiltonian.zero",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -987,20 +1509,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.locallift",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.localLift",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1018,20 +1558,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.locallift_mem_supportedoperators",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.localLift_mem_supportedOperators",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1049,20 +1607,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.isgappedgroundstate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/LocalHamiltonian.lean",
         "declaration": "TNLean.PEPS.AreaLaw.IsGappedGroundState",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1080,20 +1656,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.reducedstate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
         "declaration": "TNLean.PEPS.AreaLaw.reducedState",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1112,20 +1706,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.reducedstate_ishermitian",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
         "declaration": "TNLean.PEPS.AreaLaw.reducedState_isHermitian",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1144,20 +1756,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.regionalentropy",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1176,20 +1806,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.uniformarealaw",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
         "declaration": "TNLean.PEPS.AreaLaw.UniformAreaLaw",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1208,20 +1856,38 @@
         "Defines the full quantified target proposition; does not prove the source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.boxerror",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.boxError",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1239,20 +1905,38 @@
         "Records the final safe-box exponent as an exact rational; does not identify it with parameter-dependent initial exponents."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.scannermu",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.scannerMu",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1270,20 +1954,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.scannernu",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.scannerNu",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1301,20 +2003,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.scannerell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.scannerEll",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1332,20 +2052,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.scanneromega",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.scannerOmega",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1363,20 +2101,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.scannerkappa",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.scannerKappa",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1394,20 +2150,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.amplificationepsilon",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.amplificationEpsilon",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1425,20 +2199,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.beta",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.beta",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1456,20 +2248,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.amplificationpower",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.amplificationPower",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1487,20 +2297,38 @@
         "Chooses the permissible explicit integer p = 1000000; the strict requirement is proved by the auxiliary alpha_gt lemma."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.alpha",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.alpha",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1518,20 +2346,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.geometrydelta",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.geometryDelta",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1549,20 +2395,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.zeta",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.zeta",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1580,20 +2444,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.rho",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.rho",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1611,20 +2493,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.geometryell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.geometryEll",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1642,20 +2542,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.alpha_gt",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.alpha_gt",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1673,20 +2591,38 @@
         "Auxiliary lemma supporting the cited mathematical model; not a claim to establish the paper-labelled theorem itself."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.exponents.geometry_gaps",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Exponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.geometry_gaps",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1704,20 +2640,38 @@
         "Establishes the displayed geometric exponent inequalities by exact rational arithmetic."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.isallowedslope",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.IsAllowedSlope",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1735,20 +2689,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.templatepolygon",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1766,20 +2738,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.templatepolygon.region",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1797,20 +2787,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.integerpoint",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.integerPoint",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1828,20 +2836,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.template",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1859,20 +2885,38 @@
         "Records sampled nondegenerate closed triangles and rectangles, both diameter conditions, and the uniform scale bound; analytic estimates remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.template.isseparated",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1890,20 +2934,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.template.core",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.core",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1921,20 +2983,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.template.collar",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.collar",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1952,20 +3032,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.orderedtwofamilypartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1983,20 +3081,38 @@
         "Records only finite partition and order data; the entropy cancellation inequality is a separate obligation."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.arealaw.geometry.orderedtwofamilypartition.earliersamefamily",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/Templates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2014,20 +3130,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.configuration",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.Configuration",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2045,20 +3179,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.statespace",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.StateSpace",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2076,20 +3228,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.squarehamiltonian",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.SquareHamiltonian",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2107,20 +3277,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.squarehamiltonian.operator",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.SquareHamiltonian.operator",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2138,20 +3326,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.squarehamiltonian.isgappedgroundstate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.SquareHamiltonian.IsGappedGroundState",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2169,20 +3375,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.pepsvector",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.pepsVector",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2200,20 +3424,38 @@
         "Expresses the cited mathematical datum using existing TNLean, QICLean, or Mathlib types and operations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.haspepsapproximation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.HasPEPSApproximation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2232,20 +3474,38 @@
         "Defines positive edge dimensions, nonzero contraction, and global normalized vector error with an existential phase; the phase-minimizer equivalence remains a separate obligation."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8738-tnlean.peps.approximation.polynomialpepsapproximation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/Basic.lean",
         "declaration": "TNLean.PEPS.Approximation.PolynomialPEPSApproximation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -2263,7 +3523,25 @@
         "Defines the full quantified target proposition; does not prove the source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "39b24b2e07ce0a2558c6b5c0ad8b2a221be74d1e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-build.log",
+            "sha256": "d14fc7885cee164eddb9370d78d62030228d4151a36db2fb99b2727be3726156"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8738-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8738-axioms.log",
+            "sha256": "4f244da404d702d12bdb75a5a57cf692d41bcf3466fa669a61803b498cc81741"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

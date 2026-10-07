@@ -131,8 +131,9 @@ existing QICLean entropy and partial trace and will consume reviewed companion
 revisions for the results tracked in #8739 and #8761–#8763.
 
 Implementation is tracked in [#8738](https://github.com/LionSR/TNLean/issues/8738).
-The issue remains open until its interface checks and the source comparison
-are complete. Build and declaration-audit evidence accompanies the pull request.
+The interface checks and source comparison are complete; the issue remains
+open for maintainer review. Build and declaration-audit evidence accompanies
+the pull request.
 Agent assistance: OpenAI Codex (GPT-6) produced the new definitions, elementary
 proofs, and accompanying documentation. Maintainer review of the mathematical
 choices remains pending under the contribution policy.
