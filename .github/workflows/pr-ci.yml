@@ -571,6 +571,22 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           docs/provenance/evidence/8740-axioms.lean
 
+      - name: Test lattice vertex-boundary conventions strictly
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/AreaLawVertexBoundaries.lean
+
+      - name: Audit vertex-boundary provenance declarations
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          docs/provenance/evidence/8759-axioms.lean
+
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
