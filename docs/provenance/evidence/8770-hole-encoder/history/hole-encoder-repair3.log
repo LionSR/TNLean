@@ -1,0 +1,68 @@
+✖ [2870/2870] Building TNLean.PEPS.Approximation.HoleEncoder (3.8s)
+trace: .> LEAN_PATH=<VALIDATION_WORKTREE>/.lake/packages/Cli/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/batteries/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/Qq/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/aesop/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/proofwidgets/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/importGraph/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/LeanSearchClient/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/plausible/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/checkdecls/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/Gametheory/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/mathlib/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/qiclean/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/build/lib/lean <LEAN_TOOLCHAIN>/bin/lean <VALIDATION_WORKTREE>/TNLean/PEPS/Approximation/HoleEncoder.lean -o <VALIDATION_WORKTREE>/.lake/build/lib/lean/TNLean/PEPS/Approximation/HoleEncoder.olean -i <VALIDATION_WORKTREE>/.lake/build/lib/lean/TNLean/PEPS/Approximation/HoleEncoder.ilean -c <VALIDATION_WORKTREE>/.lake/build/ir/TNLean/PEPS/Approximation/HoleEncoder.c --setup <VALIDATION_WORKTREE>/.lake/build/ir/TNLean/PEPS/Approximation/HoleEncoder.setup.json --json
+error: TNLean/PEPS/Approximation/HoleEncoder.lean:139:4: failed to synthesize instance of type class
+  HMul (Matrix ν (κ × μ) ℂ) (κ × μ → ν → ℂ) ?m.29
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:166:8: declaration uses `sorry`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:245:8: declaration uses `sorry`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:252:2: Unused tactic linter: `rw [stacked_matrix_gram, Fintype.sum_sigma, nestedCylinderInnovation_projector_sum]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:253:2: Unused tactic linter: `apply Finset.sum_congr rfl` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:254:2: Unused tactic linter: `intro j _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:255:2: Unused tactic linter: `simp_rw [dependentRegionOperatorLift_conjTranspose, ← dependentRegionOperatorLift_mul,
+  coordinateResetMatrix_gram]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:257:2: Unused tactic linter: `rw [← dependentRegionOperatorLift_sum, ←
+  coordinateRangeProjector_eq_sum_basis _ (holeEncoderBasis R hR S j)]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:253:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:254:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:255:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:257:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+error: TNLean/PEPS/Approximation/HoleEncoder.lean:356:73: unsolved goals
+V : Type u_2
+inst✝² : Fintype V
+inst✝¹ : LinearOrder V
+Out : V → Type u_3
+inst✝ : (v : V) → Fintype (Out v)
+n : ℕ
+R : Fin n → Finset V
+hR : Monotone R
+zero : (v : V) → Out v
+α : (w : ↥Finset.univ) → Out ↑w
+j : Fin n
+k : Fin (Module.finrank ℂ ↥(coordinateSubspaceES (nestedCylinderInnovation R hR (fun x ↦ ⊥) j)))
+β : (w : ↥Finset.univ) → Out ↑w
+hk :
+  ↑k <
+    Module.finrank ℂ
+      ↥(coordinateSubspaceES
+          (Submodule.map
+            (LinearMap.id - (coordinateRangeProjector (nestedCylinderEarlierInside R hR (fun x ↦ ⊥) j)).mulVecLin) ⊥))
+⊢ holeEncoder R hR (fun x ↦ ⊥) zero (⟨j, k⟩, α) β = 0 (⟨j, k⟩, α) β
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:359:8: This simp argument is unused:
+  finrank_coordinateSubspaceES
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [nestedCylinderInnovation] at hk
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Some required targets logged failures:
+- TNLean.PEPS.Approximation.HoleEncoder
+error: build failed
