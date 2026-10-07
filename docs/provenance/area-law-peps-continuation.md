@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 18:17 UTC.
+Last coordination check: October 7, 2026, 18:30 UTC.
 
 ## Verified mathematical contributions
 
@@ -12,7 +12,7 @@ Last coordination check: October 7, 2026, 18:17 UTC.
 | Polynomial absorption and the numerical series bound | [#8848](https://github.com/LionSR/TNLean/pull/8848) | `5652d02446787ee2b9248db1057df48adbe32492` | `ed84770bf703478d69e4c8625d005c645d1a2529` |
 | Primary birth regions, rectangular fragments and adjacent meshes | [#8851](https://github.com/LionSR/TNLean/pull/8851) | `d469be1a0a7799f4613e64e8139893b0fa2ee11d` | `fd8bf12587482c1db66c8c626a9df57cc4db025f` |
 | Number of actual primary identifiers | [#8856](https://github.com/LionSR/TNLean/pull/8856) | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | `61fd819e7fe4689b8e0893affc9f127238b191ec` |
-| Actual nine-point belt marks and their sparse count | Publication accompanies this record | `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b` | Evidence commit containing this record |
+| Actual nine-point belt marks and their sparse count | [#8857](https://github.com/LionSR/TNLean/pull/8857) | `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b` | `98d26cdad5e212a7e241951618dd3645f3ae6b21` |
 
 All 54 exact imported declarations in these six contributions have passing
 canonical build and standard-axiom evidence. Complete provenance validation
@@ -31,7 +31,7 @@ The first three drafts have passing full Lean builds, compiled blueprint
 checks, rendering and module policies. The polynomial draft's failed timing
 job had no diagnostic log; its failed-only rerun passed. The fine-belt draft
 had two approvals on its exact published head. The parent #8851's latest full
-CI and rendering remain in progress at the last read. Refresh external statuses
+Lean CI build has passed; blueprint rendering remains in progress at the last read. Refresh external statuses
 before acting; all drafts remain open and no main-branch merge was performed.
 
 ## Ownership and remaining mathematics
@@ -114,15 +114,23 @@ not count actual repairs. Both source-faithful headline theorems remain unproved
 - The hot-main worktree belongs to the coordinating owner. Do not reset an
   active peer worktree, interrupt its build or change dependency pins.
 
-The next local action is to publish the completed belt-mark evidence and draft,
-then complete the [quarter-mesh claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044056435)
+The next local action is to verify the reviewed six-declaration mesh and local-layer
+contribution from the [quarter-mesh claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044056435)
 on `feat/area-law-quarter-mesh`. Its new `MeshGeometry.lean` concerns a translated
 mesh, separation of distinct points, clearance from a nonincident affine line
 of an allowed slope, and membership of the actual belt marks at neighboring
 scales. The author owns only this new Lean file; independent reviewers inspect
 the source and prepare provenance, while the root agent owns blueprint and
-canonical verification. The four proposed public names are `affineMesh`,
+canonical verification. Its four mesh names are `affineMesh`,
 `beltMarks_subset_affineMesh`, `affineMesh_dist_ge` and `affineMesh_line_dist_ge`.
+The [locality extension](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044139454)
+adds `LocalLayers.lean`, owned by the root agent, with
+`dyadicLayer_dist_nonadjacent_fineScale` and `dyadicLayer_nearby_indices`.
+For C₀ ≥ 2 and k ≥ 50,000,000, nonadjacent closed layers have distance at
+least 16t_k; a distance below 10t_k forces adjacent indices. Both files pass
+package-option non-mutating elaboration without warnings and independent
+review. Complete static provenance validation passes 221 entries; the six
+new rows remain planned until the combined canonical build and audit pass.
 Source: Section 11, lines 352–359. This numerical contribution does not claim
 the full isolated-star statement or the construction of active interfaces.
 
@@ -134,7 +142,10 @@ At the latest coordination check, the boundary comparisons were ready in
 separate entropy/radius arithmetic in [#8854](https://github.com/LionSR/TNLean/pull/8854)
 and quantum-information results in [QICLean #605](https://github.com/LionSR/QICLean/pull/605).
 Their compressed selected-vector construction is disjoint from the geometry.
-Template owners are testing current main `18a6dd4d` with QICLean `83fdc804`;
+Main has advanced to `e3e3dddb429a61dd710ec9c8a3635ba6460ae222` with
+PEPS whole-group truncation #8799 and exact dyadic routing #8796 merged.
+Their work remains with its owners. Template owners were testing main
+`18a6dd4d` with QICLean `83fdc804`;
 this geometric branch preserves its own verified pins until coordinated
 integration. No model, entropy, scanner, QICLean or PEPS ownership is changed.
 
