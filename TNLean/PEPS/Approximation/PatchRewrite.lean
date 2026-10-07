@@ -375,16 +375,17 @@ theorem exists_norm_le_one_and_refVec_sub_le_of_perm [NeZero q] (hR : R.AvoidsUn
   set eN' := eN.prodCongr (Equiv.refl (ι → Fin q))
   have hKo : Fo.encoder = R.oldFrame.encoder.submatrix eO'.symm id := by
     rw [Frame.encoder, Frame.encoder, ← frameEncoder_submatrix_of_rawProd_eq eO heO,
-      submatrix_submatrix, Equiv.self_comp_symm, submatrix_id_id]
+      submatrix_submatrix, Equiv.self_comp_symm, Function.comp_id, submatrix_id_id]
   have hKn : Fn.encoder = R.newFrame.encoder.submatrix eN'.symm id := by
     rw [Frame.encoder, Frame.encoder, ← frameEncoder_submatrix_of_rawProd_eq eN heN,
-      submatrix_submatrix, Equiv.self_comp_symm, submatrix_id_id]
+      submatrix_submatrix, Equiv.self_comp_symm, Function.comp_id, submatrix_id_id]
   refine ⟨reindex eN' eO' R.rewrite, (l2_opNorm_reindex_le _ _ _).trans R.norm_rewrite_le_one,
     ?_⟩
   have hE : act (reindex eN' eO' R.rewrite) (Fo.refVec Ω) - Fn.refVec Ω =
       act ((R.rewrite * R.oldFrame.encoder - R.newFrame.encoder).submatrix eN'.symm id) Ω := by
     rw [Frame.refVec, Frame.refVec, ← act_mul, ← act_sub, hKo, hKn, reindex_apply,
-      submatrix_mul_equiv, ← submatrix_sub]
+      submatrix_mul_equiv]
+    rfl
   rw [hE, norm_act_submatrix_equiv, act_sub, act_mul]
   exact R.norm_rewrite_refVec_sub_le hR hpatch hold
 
