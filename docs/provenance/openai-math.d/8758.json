@@ -1327,14 +1327,14 @@
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.closure_dyadiccell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicClosure.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.closure_dyadicCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1354,20 +1354,38 @@
         "Does not prove the labelled layer-distance estimate, clearance estimates, the two-family construction, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d1dd8af2bd97fcc76b4aea489adca0ac6f5455ef",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-closure-build.log",
+            "sha256": "a8709435fda66b25ff8dbc904b051939d9efd7e67a16dbd1197e6929e0b956f9"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-closure-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-closure-axioms.log",
+            "sha256": "186185cbb06bbb365e3453ea81948c19ba1ec2e894a11b1ac62dc41b6f983bd3"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.closure_dyadiclayer_eq_iunion",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicClosure.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.closure_dyadicLayer_eq_iUnion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1388,7 +1406,25 @@
         "Does not prove the labelled layer-distance estimate, clearance estimates, the two-family construction, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d1dd8af2bd97fcc76b4aea489adca0ac6f5455ef",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-closure-build.log",
+            "sha256": "a8709435fda66b25ff8dbc904b051939d9efd7e67a16dbd1197e6929e0b956f9"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-closure-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-closure-axioms.log",
+            "sha256": "186185cbb06bbb365e3453ea81948c19ba1ec2e894a11b1ac62dc41b6f983bd3"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
