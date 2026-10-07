@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellside",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellContacts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellSide",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Source: Section 11, lines 299\u2013306. The definition uses the existing actual fan orientation."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
+            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
+            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finelayer_cells_disjoint",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellContacts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_cells_disjoint",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Source: Section 11, lines 173\u2013181 and 299\u2013306. Same-layer indexing and disjoint actual layers establish the two cases."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
+            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
+            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finelayer_closedcell_contact",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellContacts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_closedCell_contact",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -98,20 +134,38 @@
         "Source: Section 11, lines 299\u2013306 and 352\u2013356. Actual disjointness, nearby-layer arithmetic and lattice offsets derive the alternatives. The larger-side halves use the all-midpoint fan; matching under the actual midpoint mask remains a separate composition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
+            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
+            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_corner_on_side",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DummyCorners.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_side",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -131,20 +185,38 @@
         "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. Dummy-contact localization forces k=k\u2080; coarse corners and whole-side endpoints belong to the full fine mesh, whose spacing excludes an interior third point."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
+            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
+            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_corner_on_elementaryside",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DummyCorners.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_elementarySide",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -164,20 +236,38 @@
         "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. The public elementary-side containment and endpoint cases compose the whole-side result for every optional midpoint subdivision."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
+            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
+            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finecell_assignment",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/FineCellPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_unique_fineCell_of_not_mem_dyadicNeighborhood",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -196,20 +286,38 @@
         "Source: Section 11, prop:two-families, lines 154\u2013181 and 200\u2013207. The proof reuses unique layer assignment, exact fine-cell union and the signed floor index."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
+            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
+            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finecell_plane_cover",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/FineCellPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_fineCells_eq_univ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -228,7 +336,25 @@
         "Source: Section 11, prop:two-families, lines 154\u2013181 and 200\u2013207. The proof uses the independently established unique fine-cell assignment."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
+            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
+            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

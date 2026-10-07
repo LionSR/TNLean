@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination refresh: October 7, 2026, 21:02–21:07 UTC.
+Last coordination refresh: October 7, 2026, 21:29–21:38 UTC.
 The goal remains active. Both source-faithful headline theorems remain unproved.
 
 ## Verified geometric contributions
@@ -18,79 +18,82 @@ The goal remains active. Both source-faithful headline theorems remain unproved.
 | Finite initial marks, minimum sides and separation | [#8862](https://github.com/LionSR/TNLean/pull/8862) | `5d2246bb32045fafea826200dd09b3518629ae97` | [initial marks](evidence/8758-initial-mark-family.md) |
 | Actual fans, marked vertices and unique nonbelt primaries | [#8865](https://github.com/LionSR/TNLean/pull/8865) | `8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2` | [cell fans](evidence/8758-cell-fans.md) |
 | Cyclic runs, opposing corners and half-open layer assignment | [#8867](https://github.com/LionSR/TNLean/pull/8867), evidence `41a653ac` | `778149a282158bbb92b4d7bb25fb12339d2f31ca` | [fan runs and layers](evidence/8758-fan-runs.md) |
-| Actual side subdivisions and dummy contacts | `feat/area-law-actual-side-mask`, based on #8867 | `f8b62e1b56c8f7e356c870322aa3418702349a68` | [subdivisions and dummy contacts](evidence/8758-actual-side-mask.md) |
+| Actual side subdivisions and dummy contacts | [#8870](https://github.com/LionSR/TNLean/pull/8870) | `f8b62e1b56c8f7e356c870322aa3418702349a68` | [subdivisions and dummy contacts](evidence/8758-actual-side-mask.md) |
+| Fine-cell contacts, dummy corners and exact fine-cell assignment | `feat/area-law-cell-contacts`, based on #8870 | `0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2` | [contacts, corners and cover](evidence/8758-cell-contacts.md) |
 
-These eleven contributions contain 98 distinct verified declarations.
-The current-policy collection has 259 rows; the old planned root row remains
-planned. The latest eight rows have passing canonical build and imported
-standard-axiom evidence. All 251 parent rows and every original evidence
+These twelve contributions contain 105 distinct verified declarations.
+The current-policy collection has 266 rows; the old planned root row remains
+planned. The latest seven rows have passing canonical build and imported
+standard Lean kernel evidence. All 259 parent rows and every original evidence
 artifact are preserved unchanged. Do not repeat successful canonical checks
 merely because work resumes.
 
-At the latest frozen source, the Geometry target passed in 59.834 seconds and
-the imported eight-name audit in 30.477 seconds, without warnings. Only the
-two new proof modules and the Geometry aggregator were compiled; pinned
+At the latest frozen source, the Geometry target passed in 35.780 seconds and
+the imported seven-name audit in 7.741 seconds, without warnings. Only the
+three new proof modules and their Geometry aggregator compiled; pinned
 Mathlib artifacts were reused. Complete source synchronization passes with
-20,213 distinct public references and 20,207 flattened declaration records,
-including eight new records in six mathematical environments and five checked
-proof tags. Generated imports cover 2,845 production modules in 75 files.
+20,220 distinct public references and 20,214 flattened declaration records.
+The new chapters have seven mathematical environments, seven declaration
+records and six checked proof tags. Generated imports cover 2,848 production
+modules in 75 files. Independent mathematical readers approved all seven
+statements and proofs.
 
-The first seven geometric pull requests have passing full checks. #8862 has
-passing Lean build and module checks, with blueprint rendering still running.
-#8865 and #8867 have passing source/provenance checks and ongoing full CI.
-The latest publication awaits its own full CI and rendering. Refresh statuses
-before acting; local narrow verification is distinct from complete CI.
+Source/provenance/generated-import checks for #8870 pass. Full CI and
+rendering are separate from the completed local targeted verification;
+refresh their statuses before acting. The exact frozen source remains the
+source binding for all seven new verification records after metadata changes.
 
 ## Current mathematical scope and next action
 
-The latest mask ranges over all actual fine cells at indices at least k₀,
-including nonbelt cells. A side is divided exactly when its midpoint is an
-actual opposing corner. Every such corner on a resulting elementary segment
-is one of its endpoints. The reference layer alone has the threshold
-50,000,000; the statement does not impose k≥k₀, an opposing late threshold,
-a distinct-cell premise or a belt premise. Two public geometric lemmas give
-the whole-side/midpoint-half endpoint cases and elementary-side containment
-for every optional midpoint mask.
+Distinct actual fine cells are disjoint as half-open sets. For C≥2 and a
+reference index k≥50,000,000, a closed intersection of two distinct indexed
+fine cells containing two distinct points is a whole side of the smaller
+cell. Its opposing side is a whole side or midpoint half, with reversed
+orientation and size ratio one or two. The opposing index needs no late bound.
+The halves here are from the optional all-midpoint fan.
 
-The closed neighborhood has an endpoint witness at distance at most
-(C+1)2ᵏ. For k≥k₀+1, its distance from the closed layer Dₖ is at least
-(C−1)2ᵏ₀, for every natural C. Thus for C≥2, a shared closure point with
-k≥k₀ forces k=k₀. No late index or nonempty-endpoint-set premise is added.
-These statements do not yet classify dummy corners or opposing identifiers.
+A contributing coarse dummy-cell corner on a whole or optional elementary
+fine side is an endpoint, for C≥2 and k≥k₀, with no late or nonempty-set
+premise. For nonempty Z and C≥2, every point outside Nₖ₀ has a unique actual
+half-open fine-cell pair (k,z) with k≥k₀. These fine cells and the initial
+neighborhood cover the plane exactly.
 
-The contact author retains the
-[positive-length cell-contact claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046503590)
-in uncommitted `CellContacts.lean`. Actual half-open cell disjointness,
-integer-offset classification and midpoint coordinates have passed narrow
-checks. The final opposing-side conversion and assembled theorem remain under
-verification. The intended conclusion is that a nontrivial closed intersection
-of distinct actual cells is a whole side of the smaller cell, with opposite
-side orientations and side ratio one or two. No contact certificate is assumed.
+Two source authors now have disjoint active claims:
 
-After publishing the current evidence, claim and prove the actual dummy-corner
-step in a new module: a contributing coarse-neighborhood corner on a whole
-reference fine side is an endpoint. Shared closure first forces k=k₀; all
-points lie on the full fine mesh, and the two incident mesh-distance bounds
-contradict the segment length unless the corner is an endpoint. Reuse the
-public elementary-side lemmas for arbitrary optional midpoint masks. This step
-has been scouted read-only and has no production claim or edits yet.
+- [Actual elementary matching](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6047145012),
+  in new `ActualSideMatching.lean`: every actual elementary segment having
+  positive-length contact with a distinct actual fine cell must have a segment
+  with reversed endpoints under that cell's actual mask. Equal-size sides must
+  match even when both are split. For ratio two, the larger mask is true and
+  the smaller mask false. No supplied match is assumed.
+- [Actual opponent existence](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6047335975),
+  in new `ElementarySideOpponents.lean`: the whole closed elementary segment
+  must lie in the closed initial neighborhood or a distinct actual fine-cell
+  square at an index at least k₀. Derive endpoint-set nonemptiness from actual
+  reference membership. Use an outward midpoint neighborhood, a finite local
+  cover and corner exclusion; do not assume a contact or covering certificate.
 
-Then combine the exact corner-induced masks with the reviewed cell-contact
-classification to prove reversed matching endpoints. Existence and constancy
-of an opposing primary/dummy identifier on an **open** elementary segment are
-separate obligations. Consistent global labels, active rays and sectors,
-recursive repairs, descendant estimates, the full isolated-star lemma and
-the complete two-family partition remain open. The initial-mark results
-establish point separation only.
+Both files remain outside the current seven-name freeze and imported audit.
+Their authors coordinate direct Lean checks so the group runs at most one
+such process at a time. Once released, review exact hypotheses against the
+source before freezing and verifying each contribution.
+
+For a nonbelt opponent, the existing unique primary theorem supplies its
+primary identifier. For a belt opponent, actual elementary matching supplies
+the reversed side. Opponent uniqueness, consistent global labels, active rays
+and sectors, recursive repairs, descendant estimates, the complete isolated
+star lemma and two-family partition remain open. Initial-mark results establish
+point separation only. Neither headline theorem is established yet.
 
 ## Worktrees and verification discipline
 
-- `worktrees/area-law-peps-models` owns `feat/area-law-actual-side-mask` and the
-  group's only warmed cache. The canonical driver is finished and the shared
-  lock released. Preserve the Lean, Mathlib and QICLean pins and all artifacts.
-- `worktrees/area-law-source-preparation` is detached at `f8b62e1b` and has no
-  `.lake`. Its untracked `CellContacts.lean` is active author work: preserve it
-  when adopting completed evidence and creating the next source branch.
+- `worktrees/area-law-peps-models` owns `feat/area-law-cell-contacts` and the
+  group's warmed cache. The canonical driver is finished and the shared lock
+  released. Preserve the Lean, Mathlib and QICLean pins and existing artifacts.
+- `worktrees/area-law-source-preparation` has no `.lake`. It holds two active
+  untracked source modules for matching and opponent existence. Preserve both
+  when adopting completed evidence or creating the next source branch. Their
+  unfinished imports must remain outside a frozen completed contribution.
 - Canonical builds and cache mutations use the worktree's own locked wrapper;
   the shared kernel lock waits without consuming CPU. Source elaboration uses
   the warm environment and package options. Never rebuild Mathlib from source
@@ -122,22 +125,31 @@ and [coordination handoff](https://github.com/LionSR/TNLean/issues/8754#issuecom
 The owner must correct and recheck the diagnostic files; the verified production
 proof need not be repeated. No peer source, ledger, cache or pin was changed.
 
-Compression owns #8864/#8866/#8868. Latest joint-contraction source is
-`c80913b10d9926f31004705c78f136ade6b8b466`, evidence #8868 at `28bc131e`.
-Actual owner coarsening, selective source preparation and chronological gate
-expansion preserving exterior contractions remain under #8769. QICLean #571
-is open at `0d031f25`, with all six checks passing; its integration contact
-remains requested. No geometry proof assumes the pending source-contraction
-integration or establishes the full circuit error theorem.
+Compression owns #8864, #8866, #8868, #8869 and #8872. The latest owner
+handoff reports #8872 at `c54eb4d685ada6d4f69e2e3dcf81960ec1998027`, with
+mathematical source `8689eafdd`, for actual selective preparation and common
+finite source-gate data derived from the original words. Chronological partial
+gate expansion preserving wholly exterior contractions remains active under
+#8769. QICLean #571 remains open with its integration contact requested. No
+geometry proof assumes that pending integration or proves the full circuit
+error theorem.
 
-The analytic group owns QICLean #618 generic Schur mass, #621 uniform Bell
-occurrence/matching, #622 physical replica gap/cutoff/sectors, independent-copy
-concentration and permutation covariance. It has claimed actual iid/Schur
-entropy-compatible sector selection under #8753. Good-copy factorization,
-native Hamiltonian tail and the complete high-label sequence remain separate.
-The geometry group confirmed no overlap in
-[public coordination](https://github.com/LionSR/TNLean/issues/8753#issuecomment-6046799993).
-No competing analytic model or dependency adoption is introduced.
+The analytic group has published QICLean #618 generic Schur mass, #621
+uniform-pair occurrence and matching, #622 physical replica gap and sectors,
+#624 independent-copy concentration, and #625/#626 good-copy factorization
+and permutation covariance. These are owner-reported independently verified
+contributions. Actual iid/Schur entropy-compatible sector selection remains
+claimed under #8753, with the finite criterion completed and the eventual
+specialization being verified. The complete common sequence, physical
+Hamiltonian tail estimate and area-law conclusion remain separate obligations.
+The geometry group confirms no overlap; no competing analytic model or
+dependency adoption is introduced.
+
+Shared storage briefly filled before the source freeze. The sources were
+preserved, and another owner removed only their disposable published checkout
+and temporary blueprint copies. The geometry group removed no cache or peer
+file. Canonical verification resumed with the same warmed artifacts; avoid
+creating duplicate caches or worktrees merely to resume.
 
 Check coordination approximately every thirty minutes and before each new
 claim or shared-interface change. Direct cross-thread replies are unavailable

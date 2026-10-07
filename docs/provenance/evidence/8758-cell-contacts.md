@@ -1,6 +1,6 @@
 # Fine-cell contacts and dummy-neighborhood corners
 
-Seven planned declarations classify positive-length contacts between actual
+Seven original declarations classify positive-length contacts between actual
 fine cells and locate contributing dummy-cell corners on their whole and
 elementary sides.
 
@@ -55,7 +55,7 @@ The fine-cell partition extension was [also claimed before execution](https://gi
 
 ## Frozen source and actual canonical evidence
 
-Frozen source revision: **Pending**.
+Frozen source revision: `0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2`.
 
 `TNLean/PEPS/AreaLaw/Geometry/CellContacts.lean`:
 
@@ -75,8 +75,8 @@ Frozen source revision: **Pending**.
 
 | Check | Actual command | Exit code | Elapsed seconds |
 |---|---|---|---|
-| Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending |
-| Imported seven-name audit | `lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean` | Pending | Pending |
+| Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | 0 | 35.780 |
+| Imported seven-name audit | `lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean` | 0 | 7.741 |
 
 The released contact source passed direct package-option elaboration in
 13.91 seconds without diagnostics. The released dummy-corner source passed
@@ -84,22 +84,27 @@ the same kind of check in 9.5196 seconds without diagnostics. Independent
 mathematical review approved all seven exact signatures and proofs.
 The released fine-cell partition source passed direct package-option
 elaboration in 5.272664 seconds without diagnostics.
-These direct source checks do not substitute for the pending canonical
-build and imported audit at the final frozen revision.
+The exact frozen canonical target and imported audit both passed without
+warnings. The build compiled only the three new proof modules and their
+Geometry aggregator; every other dependency reused its existing artifact.
+All seven imported reports contain only `propext`, `Classical.choice` and
+`Quot.sound`.
 
-Canonical verification must use the existing warmed worktree under the
+Canonical verification used the existing warmed worktree under the
 shared repository lock and the pinned prebuilt Mathlib artifacts. The
 source-only preparation worktree has no `.lake` directory and performs
 no cache or build operation.
 
 Evidence paths and SHA256 hashes:
 
-- `docs/provenance/evidence/8758-cell-contacts-build.log`: **Pending**;
-- `docs/provenance/evidence/8758-cell-contacts-axioms.log`: **Pending**.
+- `docs/provenance/evidence/8758-cell-contacts-build.log`:
+  `d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db`;
+- `docs/provenance/evidence/8758-cell-contacts-axioms.log`:
+  `2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47`.
 
-Each completed log must record the exact command, frozen revision, elapsed
-time and exit code. Only trailing whitespace may be normalized; actual
-diagnostics and kernel reports must be retained.
+Each completed log records the exact command, frozen revision, elapsed
+time and exit code. Only trailing whitespace was normalized; actual
+diagnostics and kernel reports were retained.
 
 ## Provenance and integration
 
@@ -108,16 +113,23 @@ in [#8870](https://github.com/LionSR/TNLean/pull/8870), with 259 inventory
 entries. All parent shard bytes, proof sources and historical evidence are
 preserved. The existing planned root-ledger entry remains planned.
 
-The seven new rows remain planned until exact-source canonical verification.
+The seven new rows are ported with passed exact-source canonical evidence.
 The strict helper checks all seven public declarations, original-proof
 notices, imported audit names, source labels, licenses, command headers,
 log hashes and the full 266-entry current-policy schema. Its immutable
 259-row byte baseline is checked against the completed parent Git objects.
 No parent row or verification record is replaced.
 
-Strict static validation and promotion: **Pending**.
-Complete blueprint source synchronization and changed-declaration coverage: **Pending**.
-Formatter, prose and generated imports: **Pending**.
+Strict promotion passed the unchanged current policy for all 266 rows, with
+all 259 completed-parent rows byte-identical. Complete blueprint source
+synchronization passes with 20,220 distinct public references and 20,214
+flattened declaration records. The three new chapters contain one definition,
+six theorems, six checked proof tags and seven declaration records, with
+complete changed-declaration coverage and no missing, stale or duplicate tags.
+Pinned formatting is idempotent for the three chapters and their input list.
+Generated imports cover 2,848 production modules in 75 generated files.
+Prose and module-policy checks pass; the final metadata diff is checked
+separately before publication.
 
 The historical local whole-library `leanblueprint checkdecls` failure from
 a missing pre-existing `Fibonacci.olean` artifact remains preserved.

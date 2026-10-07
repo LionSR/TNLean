@@ -1,0 +1,20 @@
+Command: lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean
+Revision: 0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2
+Elapsed seconds: 7.741
+Exit code: 0
+
+'TNLean.PEPS.AreaLaw.Geometry.dyadicCellSide' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.fineLayer_cells_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.fineLayer_closedCell_contact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_side' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_elementarySide' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.exists_unique_fineCell_of_not_mem_dyadicNeighborhood' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_fineCells_eq_univ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
