@@ -14,5 +14,7 @@
     "plasTeX": "3.1",
     "leanblueprint": "0.0.20"
   },
-  "diagrams": 0
+  "diagrams": 0,
+  "reused_for_source_revision": "68f708ff111956d832476a9cae2c873375fc3659",
+  "source_equality_check": "git diff --quiet c369460bb80b17abb974108f843befeed40f48f5 68f708ff111956d832476a9cae2c873375fc3659 -- blueprint/src"
 }

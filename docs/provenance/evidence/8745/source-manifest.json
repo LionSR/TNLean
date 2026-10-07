@@ -1,6 +1,6 @@
 {
-  "published_source_revision": "c369460bb80b17abb974108f843befeed40f48f5",
-  "published_source_tree": "07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb",
+  "published_source_revision": "68f708ff111956d832476a9cae2c873375fc3659",
+  "published_source_tree": "3cfcdb3b250f92ab24f7c9ae6ae5514b457be7cb",
   "base_revision": "e229f204acfedb0634cdcd3968d0a002fb079b59",
   "source_file_count": 19,
   "files": {
@@ -13,36 +13,36 @@
       "git_blob": "c36fe0800ff6f1384cdd0fc4c3421a7d4185ee79"
     },
     "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean": {
-      "sha256": "67c6929b7094f043398f1e4850c57d1e04335f9c33392553320595a34783b70a",
-      "git_blob": "956b8baeec600c35499399e9cdd804f67ca0ba11"
+      "sha256": "ed037f6191d7918925da238ccefdf8ee80217c82b80b749409d4510fae85ca2f",
+      "git_blob": "5df3cecbba0c025c7e28abe02ac00a8268090dc2"
     },
     "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean": {
-      "sha256": "c96e31c35eacbd07b36bd4016d835788900fae3c7e271abf4b147ae5b5eedb7d",
-      "git_blob": "33e40d4901669935bb6e310db059b1a762e46977"
+      "sha256": "d67e2447c40c4de50e98a460187f81248cbc47a225a6024d0597886b6da4600f",
+      "git_blob": "4a62bea9ffb493a419e9a210b52b2b2f02c67700"
     },
     "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean": {
-      "sha256": "14b2e3b28a666efea49c8ae5fffcb50d8d6f3cecd7b252006b0b159a25da860f",
-      "git_blob": "b3a9cfb25e4c2463e5a731f613afebc46418b666"
+      "sha256": "6bca75fbc67f2ab49beec7feb32f38c153efd45c7c9ff408a7c577c14f160834",
+      "git_blob": "cfadde593636d20bd42b242ee60261d4b088aa73"
     },
     "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean": {
-      "sha256": "b2737de846aed1589c8e92da1be4848fb791b4f9e565b0df2cca655d7f5d1315",
-      "git_blob": "9117b7cf16c408db043ab0a19022e0e69e646e95"
+      "sha256": "352196742a8758afbda2cf372bb812072ffa0fb9276b13e1f825a6ec4f0bae72",
+      "git_blob": "7808236b32ea92d666415c673acc00656bc12df5"
     },
     "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean": {
-      "sha256": "6c99abe0b2b75387068dc3590c86494c269df245b5528cb8cc6f3062dedc3b6b",
-      "git_blob": "d546c57a00b1ce4c32cb759fb358bc16de9d82cb"
+      "sha256": "b93ffe00ce63feaa8b748ae0dc87372bf7dbdaebed0ec743e1f1d794ba3934e6",
+      "git_blob": "9a3632ebbbaf8ce5866783b4247647919cfdd11f"
     },
     "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean": {
-      "sha256": "c839b1ef4102f3f1e005229a8212b402eb3b14df6c6840198753a86c69294fe7",
-      "git_blob": "80eee008f7bee2396663addaf1ba8038be6f1c3d"
+      "sha256": "f8438b2d4cdf4153454ab1d44af887cb692255803837efcb7f73430c932745e6",
+      "git_blob": "5eddf8d0551509a54b72dacf8a73861c0e3d5988"
     },
     "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean": {
-      "sha256": "4e460ed93325067fa7c648e8b4e8074b9a743f1422839e3586e057f591b4ac1f",
-      "git_blob": "1fcc7f4feb2ae65c6c713e87758600b6df55459e"
+      "sha256": "4c9633ea196a4dbdb62a79721d9d76e6fee33809fbafa29d0d45f6e1b735b932",
+      "git_blob": "5823fb62fff57c226231c77313bb91e00203d998"
     },
     "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean": {
-      "sha256": "c3f50f59961b42b792d77da9c34c36f0a106dd334b2555e494ebf728fad5eece",
-      "git_blob": "30bb53b094be8ccd854a8ba75bc33c5bc5b17caf"
+      "sha256": "3c4d98e52e34f9c2abe5ced3994f7aac8d8a637ceb9802c652235ffc9b2041c0",
+      "git_blob": "93689facf8be8dd25a698c083418bc0e9e43e6ee"
     },
     "TNLeanTest/AreaLawGraphFoundations.lean": {
       "sha256": "dbf41ee0adfdae1a36090addecec933dbad77bbb04f3088625503ed36f75d04a",
@@ -82,9 +82,30 @@
     }
   },
   "source_tree_equivalence": {
-    "local_tree": "07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb",
-    "remote_tree_reported_by_publisher": "07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb",
+    "local_tree": "3cfcdb3b250f92ab24f7c9ae6ae5514b457be7cb",
+    "immutable_remote_tree": "3cfcdb3b250f92ab24f7c9ae6ae5514b457be7cb",
     "match": true
   },
-  "scope": "Eight production modules, five consumers, two import aggregators, two chapter files, chapter router and bibliography. Evidence changes must not alter these source bytes."
+  "scope": "Nineteen foundation source files plus separately recorded existing CI regression wiring. The 68f revision changes only eight source comment headings. This evidence update changes no source or workflow file.",
+  "comment_only_revision": {
+    "parent": "c95b81e286edc2248d72b9065a9c3f13da70a4e2",
+    "changed_files": [
+      "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
+      "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+      "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean"
+    ],
+    "removed_heading": "Declaration provenance for issue #8745",
+    "replacement_heading": "Declaration provenance",
+    "proof_bodies_and_signatures_unchanged": true
+  },
+  "ci_regression_wiring": {
+    "path": ".github/workflows/pr-ci.yml",
+    "sha256": "c5b291640add45cd15a927175fcaa2f98a15a3754dd1054b152c186dc0d21444",
+    "note": "Existing build job runs all five area-law graph regression files strictly."
+  }
 }

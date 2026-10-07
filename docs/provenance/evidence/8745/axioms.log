@@ -1,12 +1,12 @@
 Published-source validation
-Revision: c369460bb80b17abb974108f843befeed40f48f5
+Revision: 68f708ff111956d832476a9cae2c873375fc3659
 Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean
 Exit code: 0
-Elapsed wall seconds: 2.417805817000044
+Elapsed wall seconds: 2.4007224169981782
 Warnings: none.
 Output:
 
-import took 1.45s
+import took 1.46s
 'TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
 'TNLean.PEPS.AreaLaw.card_supportFamily_le_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
 'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -82,12 +82,12 @@ import took 1.45s
 'TNLean.PEPS.AreaLaw.card_le_diamond_of_walks' depends on axioms: [propext, Classical.choice, Quot.sound]
 'TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le' depends on axioms: [propext, Classical.choice, Quot.sound]
 cumulative profiling times:
-	elaboration 1.95ms
-	import 1.45s
-	initialization 30.4ms
-	interpretation 519ms
-	linting 10.8ms
-	module linting 0.00177ms
-	overlappingInstancesLinter 7.51ms
-	parsing 1.03ms
-	tacticAnalysis 28.7ms
+	elaboration 2.54ms
+	import 1.46s
+	initialization 28.4ms
+	interpretation 419ms
+	linting 9.75ms
+	module linting 0.00141ms
+	overlappingInstancesLinter 4.09ms
+	parsing 1.67ms
+	tacticAnalysis 26.1ms

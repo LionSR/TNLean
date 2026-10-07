@@ -1,9 +1,18 @@
 Published-source validation
-Revision: c369460bb80b17abb974108f843befeed40f48f5
+Revision: 68f708ff111956d832476a9cae2c873375fc3659
 Command (repository-relative replay): lake build TNLean.PEPS.AreaLaw
 Exit code: 0
-Elapsed wall seconds: 1.2541561890029698
+Elapsed wall seconds: 9.356187400997442
 Warnings: none.
 Output:
 
+✔ [1075/1079] Built TNLean.PEPS.AreaLaw.GraphInteractionBudget (1.4s)
+✔ [1076/1080] Built TNLean.PEPS.AreaLaw.GraphLatticeCounting (1.5s)
+✔ [1077/1093] Built TNLean.PEPS.AreaLaw.GraphInteractionChain (1.4s)
+✔ [1091/1295] Built TNLean.PEPS.AreaLaw.GraphInteractionCounting (1.4s)
+✔ [1409/1460] Built TNLean.PEPS.AreaLaw.GraphLatticeDiamond (1.6s)
+✔ [1413/1460] Built TNLean.PEPS.AreaLaw.GraphInteractionTarget (1.3s)
+✔ [2155/2157] Built TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting (1.5s)
+✔ [2156/2157] Built TNLean.PEPS.AreaLaw.GraphInteractionSeries (2.1s)
+✔ [2157/2157] Built TNLean.PEPS.AreaLaw (1.6s)
 Build completed successfully (2157 jobs).

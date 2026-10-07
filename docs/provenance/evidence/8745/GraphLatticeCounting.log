@@ -1,35 +1,35 @@
 Published-source validation
-Revision: c369460bb80b17abb974108f843befeed40f48f5
+Revision: 68f708ff111956d832476a9cae2c873375fc3659
 Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean
 Exit code: 0
-Elapsed wall seconds: 2.337686480001139
+Elapsed wall seconds: 2.0587607479974395
 Warnings: none.
 Output:
 
-import took 1.07s
+import took 973ms
 cumulative profiling times:
-	attribute application 0.501ms
-	compilation (IR) 0.0586ms
-	compilation (LCNF base) 0.644ms
-	compilation (LCNF impure) 0.235ms
-	compilation (LCNF mono) 0.35ms
-	congr simp thm 1.47ms
-	dsimp 3.09ms
-	elaboration 30.3ms
-	fix level params 0.26ms
-	import 1.07s
-	initialization 27ms
-	instantiate metavars 0.503ms
-	interpretation 420ms
-	let-to-have transformation 0.0898ms
-	linting 12.9ms
-	module linting 0.00154ms
-	overlappingInstancesLinter 4.21ms
-	parsing 8.85ms
-	process pre-definitions 3.72ms
-	share common exprs 1.21ms
-	simp 23.2ms
-	tactic execution 95.4ms
-	tacticAnalysis 24.3ms
-	type checking 110ms
-	typeclass inference 60.7ms
+	attribute application 0.227ms
+	compilation (IR) 0.0603ms
+	compilation (LCNF base) 1.18ms
+	compilation (LCNF impure) 0.326ms
+	compilation (LCNF mono) 0.467ms
+	congr simp thm 1.29ms
+	dsimp 2.83ms
+	elaboration 26.3ms
+	fix level params 0.261ms
+	import 973ms
+	initialization 28.2ms
+	instantiate metavars 0.482ms
+	interpretation 373ms
+	let-to-have transformation 0.0865ms
+	linting 11.3ms
+	module linting 0.00169ms
+	overlappingInstancesLinter 3.45ms
+	parsing 8.33ms
+	process pre-definitions 3.91ms
+	share common exprs 1.09ms
+	simp 23ms
+	tactic execution 92.7ms
+	tacticAnalysis 23.4ms
+	type checking 105ms
+	typeclass inference 62.8ms

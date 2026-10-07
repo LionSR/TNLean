@@ -1,7 +1,7 @@
 # Published graph-foundations validation
 
-All 15 targeted checks pass at published source
-[`c369460bb80b17abb974108f843befeed40f48f5`](https://github.com/LionSR/TNLean/commit/c369460bb80b17abb974108f843befeed40f48f5):
+All 15 targeted checks pass at the corrected immutable source checkpoint
+[`68f708ff111956d832476a9cae2c873375fc3659`](https://github.com/LionSR/TNLean/commit/68f708ff111956d832476a9cae2c873375fc3659):
 
 - One native `TNLean.PEPS.AreaLaw` build
 - Eight production checks with explicit package options, standard linters and warnings as errors
@@ -11,7 +11,8 @@ All 15 targeted checks pass at published source
 The package has 45 public theorems, five public definitions and five private
 helpers. All public axiom reports use only `propext`, `Classical.choice` and
 `Quot.sound`, or no axioms. The diamond definition is covered by the raw audit;
-the other 49 declarations also have permanent guards. Full CI is pending.
+the other 49 declarations also have permanent guards. Current-head GitHub CI
+remains pending publication of the source/evidence update.
 
 The [source and declaration inventory](2026-10-07_area_law_graph_foundations_native_validation.json),
 [execution records](../provenance/evidence/8745/validation.json) and
@@ -19,14 +20,30 @@ The [source and declaration inventory](2026-10-07_area_law_graph_foundations_nat
 same published revision. Earlier local revisions do not serve as current
 verification evidence.
 
+## CI result and comment-only correction
+
+At PR #8804 head `c95b81e286edc2248d72b9065a9c3f13da70a4e2`, the
+[full root build and all five strict graph regressions passed](https://github.com/LionSR/TNLean/actions/runs/37602665930/job/112730610469).
+The [blueprint job stopped at its prose gate](https://github.com/LionSR/TNLean/actions/runs/37602665930/job/112730610649): eight provenance headings contained tracker shorthand.
+Later rendering steps were skipped, so this was not a full-book render failure.
+
+The corrected source replaces exactly those eight headings with “Declaration
+provenance”. Proof bodies, declarations and mathematical hypotheses are unchanged.
+The whole-PR prose check against base `e229f204acfedb0634cdcd3968d0a002fb079b59`
+now passes locally, along with all 15 new source checks. The
+[CI record](../provenance/evidence/8745/ci-status.json) distinguishes the earlier
+CI result from the pending new-head run. The local corrected tree and immutable
+remote source tree agree. The [#8745 handoff](https://github.com/LionSR/TNLean/issues/8745#issuecomment-6035364134)
+records the published work.
+
 ## Source identity and scope
 
-The published source tree is `07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb`, identical
+The published source tree is `3cfcdb3b250f92ab24f7c9ae6ae5514b457be7cb`, identical
 to the locally prepared source tree. The
 [19-file manifest](../provenance/evidence/8745/source-manifest.json) records exact
 Git blobs and SHA-256 hashes: eight production modules, five consumers, two
-aggregators, two chapter files, the chapter router and bibliography. This
-follow-up evidence commit changes none of those files.
+aggregators, two chapter files, the chapter router and bibliography. The source repair changes only eight comment headings; this follow-up evidence
+commit changes none of the source or CI workflow files.
 
 Pins remain Lean `v4.35.0-rc3`, Mathlib
 `c55e6e786f49471c72fbddbec5415808896aec1e`, and QICLean
@@ -103,6 +120,7 @@ verification, compile the prepared `print.tex` with XeLaTeX/BibTeX, generate
 `web.bbl`, run plasTeX, and extract PDF text/page images as documented in the
 [render commands](../provenance/evidence/8745/render-commands.txt).
 
-These are targeted native/strict and focused PDF/static HTML checks. Full
-repository CI, full-book generation, live-browser/MathJax runtime and mobile
+These are current-source targeted native/strict checks and reused focused
+PDF/static HTML checks on identical TeX. The prior c95 root/regression CI passed;
+current-head full CI, full-book generation, live-browser/MathJax runtime and mobile
 checks are not claimed. Publishing this evidence does not authorize or imply a merge.

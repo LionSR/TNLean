@@ -1,30 +1,30 @@
 Published-source validation
-Revision: c369460bb80b17abb974108f843befeed40f48f5
+Revision: 68f708ff111956d832476a9cae2c873375fc3659
 Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/AreaLaw/GraphInteractionChain.lean
 Exit code: 0
-Elapsed wall seconds: 1.9466588539944496
+Elapsed wall seconds: 1.9420572349990834
 Warnings: none.
 Output:
 
-import took 1.03s
+import took 970ms
 cumulative profiling times:
-	attribute application 0.0825ms
-	congr simp thm 1.84ms
-	elaboration 60.2ms
-	fix level params 2.08ms
-	import 1.03s
-	initialization 30.4ms
-	instantiate metavars 0.489ms
-	interpretation 458ms
-	let-to-have transformation 0.165ms
-	linting 17.5ms
-	module linting 0.00182ms
-	overlappingInstancesLinter 7.29ms
-	parsing 7.83ms
-	process pre-definitions 3.45ms
-	share common exprs 1.46ms
-	simp 87.6ms
-	tactic execution 23.6ms
-	tacticAnalysis 21.1ms
-	type checking 10.1ms
-	typeclass inference 66.6ms
+	attribute application 0.0716ms
+	congr simp thm 1.52ms
+	elaboration 52.4ms
+	fix level params 0.879ms
+	import 970ms
+	initialization 27.9ms
+	instantiate metavars 0.593ms
+	interpretation 432ms
+	let-to-have transformation 0.152ms
+	linting 17.1ms
+	module linting 0.00152ms
+	overlappingInstancesLinter 4.39ms
+	parsing 6.74ms
+	process pre-definitions 2.62ms
+	share common exprs 1.51ms
+	simp 75.1ms
+	tactic execution 23.3ms
+	tacticAnalysis 24.1ms
+	type checking 9.61ms
+	typeclass inference 56.9ms

@@ -5,7 +5,7 @@
     "ch34_area_law_graph_foundations.tex": "ad7408b008301ba43e6a7e6467268411c97d59d2bd9ad2b8bbed13c639a7f5c0",
     "ch34_area_law_diamond_counting.tex": "ed8b48c4683b4b448db5b3c6dfce7f4a189d3d46428fc585ffacbc6888618a8f"
   },
-  "checked_lean_source_revision": "c369460bb80b17abb974108f843befeed40f48f5",
+  "checked_lean_source_revision": "68f708ff111956d832476a9cae2c873375fc3659",
   "public_declarations": 50,
   "entries": 22,
   "proofs": 17,
@@ -61,5 +61,7 @@
     "path": "docs/provenance/evidence/8745/render-summary.log",
     "sha256": "aca282fba007fbdae874d19c6268c8ec215608a2a9ba171345f48d541cc03500",
     "transformation": "Summarized final successful render checks and retained relevant warning categories; executor paths and first-pass build chatter omitted. Original full logs remain preserved locally."
-  }
+  },
+  "reused_for_source_revision": "68f708ff111956d832476a9cae2c873375fc3659",
+  "reuse_basis": "All blueprint/src bytes equal the source used for the recorded c369 focused render. Only eight Lean provenance comment headings changed. No render is rerun or attributed to the new CI job."
 }

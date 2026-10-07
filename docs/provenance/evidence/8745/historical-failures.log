@@ -1,6 +1,6 @@
 Historical failed attempts; not current verification evidence.
 Diagnostic output is retained below. Absolute execution traces and cumulative profiling tables are omitted.
-Current successful evidence is tied only to published source c369460bb80b17abb974108f843befeed40f48f5.
+Current successful evidence is tied only to source checkpoint 68f708ff111956d832476a9cae2c873375fc3659.
 
 Attempt: foundation-consumer
 The original four production strict checks passed; the first foundation consumer failed before its proof and guard repairs.

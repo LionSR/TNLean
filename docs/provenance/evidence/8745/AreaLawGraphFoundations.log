@@ -1,32 +1,32 @@
 Published-source validation
-Revision: c369460bb80b17abb974108f843befeed40f48f5
+Revision: 68f708ff111956d832476a9cae2c873375fc3659
 Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/AreaLawGraphFoundations.lean
 Exit code: 0
-Elapsed wall seconds: 2.5933467309951084
+Elapsed wall seconds: 2.3994397269998444
 Warnings: none.
 Output:
 
-import took 1.04s
+import took 1.02s
 cumulative profiling times:
-	attribute application 0.12ms
-	blocked (unaccounted) 44.5ms
-	congr simp thm 3.88ms
-	elaboration 65.1ms
-	fix level params 0.767ms
-	import 1.04s
-	initialization 35ms
-	instantiate metavars 0.605ms
-	interpretation 651ms
-	let-to-have transformation 0.0175ms
-	linting 26.8ms
-	module linting 0.00172ms
-	norm_num 0.158ms
-	overlappingInstancesLinter 9.84ms
-	parsing 18ms
-	process pre-definitions 8.77ms
-	share common exprs 2.49ms
-	simp 161ms
-	tactic execution 92.3ms
-	tacticAnalysis 48.3ms
-	type checking 20ms
-	typeclass inference 144ms
+	attribute application 0.127ms
+	blocked (unaccounted) 44.7ms
+	congr simp thm 3.83ms
+	elaboration 56.4ms
+	fix level params 0.724ms
+	import 1.02s
+	initialization 27.9ms
+	instantiate metavars 0.491ms
+	interpretation 546ms
+	let-to-have transformation 0.0249ms
+	linting 22ms
+	module linting 0.0014ms
+	norm_num 0.127ms
+	overlappingInstancesLinter 8.51ms
+	parsing 15.3ms
+	process pre-definitions 5.82ms
+	share common exprs 2.34ms
+	simp 140ms
+	tactic execution 75.7ms
+	tacticAnalysis 39.3ms
+	type checking 17.3ms
+	typeclass inference 115ms

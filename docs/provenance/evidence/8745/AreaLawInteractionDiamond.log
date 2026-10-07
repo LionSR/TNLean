@@ -1,32 +1,32 @@
 Published-source validation
-Revision: c369460bb80b17abb974108f843befeed40f48f5
+Revision: 68f708ff111956d832476a9cae2c873375fc3659
 Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/AreaLawInteractionDiamond.lean
 Exit code: 0
-Elapsed wall seconds: 2.6012559800001327
+Elapsed wall seconds: 2.458496417006245
 Warnings: none.
 Output:
 
-import took 1.22s
+import took 1.11s
 cumulative profiling times:
-	attribute application 0.0904ms
-	blocked (unaccounted) 10.8ms
-	congr simp thm 2.94ms
-	elaboration 49.9ms
-	fix level params 0.656ms
-	import 1.22s
-	initialization 26.8ms
-	instantiate metavars 0.35ms
-	interpretation 404ms
-	let-to-have transformation 0.0227ms
-	linting 15.6ms
-	module linting 0.00152ms
-	norm_num 9.52ms
-	overlappingInstancesLinter 7.49ms
-	parsing 8.72ms
-	process pre-definitions 4.77ms
-	share common exprs 1.98ms
-	simp 149ms
-	tactic execution 59.7ms
-	tacticAnalysis 26.4ms
-	type checking 19ms
-	typeclass inference 155ms
+	attribute application 0.111ms
+	blocked (unaccounted) 11.3ms
+	congr simp thm 3.02ms
+	elaboration 50.1ms
+	fix level params 0.561ms
+	import 1.11s
+	initialization 27.6ms
+	instantiate metavars 0.329ms
+	interpretation 376ms
+	let-to-have transformation 0.0287ms
+	linting 19ms
+	module linting 0.00163ms
+	norm_num 10.7ms
+	overlappingInstancesLinter 6.44ms
+	parsing 8.98ms
+	process pre-definitions 4.82ms
+	share common exprs 1.75ms
+	simp 151ms
+	tactic execution 59.9ms
+	tacticAnalysis 23.1ms
+	type checking 14.6ms
+	typeclass inference 165ms

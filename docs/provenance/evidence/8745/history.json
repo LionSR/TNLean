@@ -132,6 +132,24 @@
     }
   ],
   "diagnostic_log": "docs/provenance/evidence/8745/historical-failures.log",
-  "diagnostic_log_sha256": "aea9452ca8cae65b366be5ab04cbfeddb1f12c90df16e8e60b49743d0d435038",
-  "current_verification": "Only the newly executed published-source checks establish current status; intermediate successful checks are not substituted for them."
+  "diagnostic_log_sha256": "60f15808a3eb08d6ad4cdad757f62c22098ae86a9a0f7364c71d13d580a5b5fe",
+  "current_verification": "The current ledger uses the newly checked source68f only. Historical successes and failures remain history; original raw logs remain preserved.",
+  "publication_validation_history": [
+    {
+      "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+      "outcome": "all 15 targeted checks passed",
+      "original_execution_manifest_sha256": "09031266c5322e2331e8b3e8e05b55e074e08da7af33bf02d182af43ee2ab0a6",
+      "committed_validation_manifest_sha256": "434257d345311688ca198ba9cac00b6ca9cd4f1bb551431e13cb6feb259b78e4",
+      "superseded_by": "68f708ff111956d832476a9cae2c873375fc3659"
+    }
+  ],
+  "ci_heading_correction": {
+    "failed_revision": "c95b81e286edc2248d72b9065a9c3f13da70a4e2",
+    "failed_job": "https://github.com/LionSR/TNLean/actions/runs/37602665930/job/112730610649",
+    "scope": "Prose gate rejected eight comment headings; root and all five graph consumer checks passed.",
+    "corrected_revision": "68f708ff111956d832476a9cae2c873375fc3659",
+    "delta": "Eight heading replacements only; production proof bodies and signatures unchanged.",
+    "local_whole_pr_prose_gate": "passed",
+    "details": "docs/provenance/evidence/8745/ci-status.json"
+  }
 }

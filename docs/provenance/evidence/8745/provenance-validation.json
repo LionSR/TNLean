@@ -1,7 +1,14 @@
 {
   "status": "passed",
+  "verified_source_revision": "68f708ff111956d832476a9cae2c873375fc3659",
   "entries": 50,
   "private_helpers": [
+    {
+      "source_name": "TNLean.PEPS.AreaLaw.exponential_chain_factor",
+      "kind": "theorem",
+      "path": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "line": 49
+    },
     {
       "source_name": "TNLean.PEPS.AreaLaw.latticeDiamondRows",
       "kind": "def",
@@ -25,12 +32,6 @@
       "kind": "theorem",
       "path": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
       "line": 125
-    },
-    {
-      "source_name": "TNLean.PEPS.AreaLaw.exponential_chain_factor",
-      "kind": "theorem",
-      "path": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
-      "line": 49
     }
   ],
   "private_helper_treatment": "The pinned exhaustive lexical-module rule applies to copied/adapted modules only. All rows here are original. Five private helpers remain private, are recorded separately and are compiled in the module; public axiom reports include their transitive dependencies.",
