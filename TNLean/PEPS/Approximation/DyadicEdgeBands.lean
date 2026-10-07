@@ -25,14 +25,14 @@ auxiliary sheets. This file formalizes:
   interval of every elementary birth or death, the surrounding sector, and the main word
   produced by the lens exchange);
 * the disjointness of the bands `-8 < x < 2` along distinct edges, and the containment of
-  the exterior part of a band in the exterior neighbouring square;
-* **Lemma 7.2** (`lem:geometry-angular`): one fixed constant `a₀ = 1/5000` gives the conical
-  clearance `dist(y, {f ≠ P∘}) ≥ a₀ min(n, d_V(y))` for every point `y` of the closed changed
-  region of the central birth and of each elementary edge birth or death, and the clearance
+  the exterior part of a band in the exterior neighboring square;
+* the clearance estimates of the proof of Lemma 7.2 (`lem:geometry-angular`) for guides with
+  the stated properties: one fixed constant `a₀ = 1/5000` gives the conical clearance
+  `dist(y, {f ≠ P∘}) ≥ a₀ min(n, d_V(y))` for every point `y` of the closed changed region of
+  the central birth and of each elementary edge birth or death, and the clearance
   `dist(y, ∂Y) ≥ a₀ min(n, d_V(y))` for every point `y` of the closed noncommon-`C` set of the
-  lens exchange;
-* the Lipschitz enlargement of a clearance from a hole center to its whole outer square, and
-  the logarithmic floor of the clearance outside the treated squares.
+  lens exchange; the changed regions have diameter at most `n`;
+* the Lipschitz step of the outer-hole enlargement used in the point treatment.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -40,17 +40,17 @@ Labels are elements of an arbitrary type `ι`, and nothing assumes `A`, `B`, `C`
 source's nominal labels may coincide (`06-geometry.tex:168–169`), and identifying labels only
 shrinks the obstructing sets (`06-geometry.tex:315–318`).
 
-## Scope
-
-The source states Lemma 7.2 for the specific guides of its schedule. Here each clause is
-stated for every guide whose normal word along the edge band `-8 < x < 2` is the source's
-word and which is unchanged off that band (for edge operations), or which is constant `A`
-on the open square `S` (for the central birth), or constant `C` on the open exterior
-neighbouring square (for the main sheet of the exchange). These are exactly the properties of
-the actual guides that the source's proof uses (`06-geometry.tex:276–299`); the band
-disjointness proved here is the source's reason that the actual guides have them
-(`06-geometry.tex:227–241`). The protocol of Proposition 7.1 itself, with its information
-inputs and change lemmas, is not formalized here.
+**Scope restriction (guide properties assumed; `S` at the origin):** the source states
+Lemma 7.2 for the guides of its schedule. The clearance theorems `BandOperation.clearance`,
+`centralBirth_clearance` and `lensExchange_clearance` are instead stated for every guide with
+the properties the source's proof uses (`06-geometry.tex:276–299`): the source's normal word
+on the band `-8 < x < 2` and no change off it (edge operations), the label `A` on the open
+square (central birth), and the label `C` on the exterior band `-8 < x < 0` (main sheet of the
+exchange). The source derives these properties from the disjointness of the bands
+(`06-geometry.tex:227–241`), proved here as `disjoint_edgeBand`; the schedule itself, and so
+this derivation, is not formalized. The square is `S = [0, n] ^ 2`; an aligned square
+`(n r, n s) + [0, n] ^ 2` is its translate, and sup distances are translation invariant.
+Documented in `docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex`.
 
 ## References
 
@@ -195,10 +195,10 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-lens`,
 `06-geometry.tex:199–202`. -/
 def edgeLens (n : ℝ) (e : SquareEdge) : Set (ℝ × ℝ) := edgeBand n e (-7) (-7 / 2)
 
-/-- The open exterior neighbouring `n`-square across an edge, `{0 < s < n, -n < d < 0}`.
+/-- The open exterior neighboring `n`-square across an edge, `{0 < s < n, -n < d < 0}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:166–168`. -/
-def edgeNeighbour (n : ℝ) (e : SquareEdge) : Set (ℝ × ℝ) :=
+def edgeNeighbor (n : ℝ) (e : SquareEdge) : Set (ℝ × ℝ) :=
   {p | 0 < e.par p ∧ e.par p < n ∧ -n < e.nor n p ∧ e.nor n p < 0}
 
 theorem isOpen_edgeBand (n : ℝ) (e : SquareEdge) (α β : ℝ) : IsOpen (edgeBand n e α β) := by
@@ -216,7 +216,7 @@ theorem isClosed_closedEdgeBand (n : ℝ) (e : SquareEdge) (α β : ℝ) :
   exact (isClosed_le continuous_const hp).inter ((isClosed_le hp continuous_const).inter
     ((isClosed_le (continuous_const.mul hw) hd).inter (isClosed_le hd (continuous_const.mul hw))))
 
-theorem isOpen_edgeNeighbour (n : ℝ) (e : SquareEdge) : IsOpen (edgeNeighbour n e) := by
+theorem isOpen_edgeNeighbor (n : ℝ) (e : SquareEdge) : IsOpen (edgeNeighbor n e) := by
   have hp := e.continuous_par
   have hd := e.continuous_nor n
   exact (isOpen_lt continuous_const hp).inter ((isOpen_lt hp continuous_const).inter
@@ -265,17 +265,17 @@ theorem disjoint_edgeBand {n : ℝ} {e e' : SquareEdge} (h : e ≠ e') :
   obtain ⟨b1, b2, b3, b4, b5, b6, b7⟩ := bandWidth_facts hp'
   cases e <;> cases e' <;> simp only [par, nor, ne_eq, not_true_eq_false] at * <;> linarith
 
-/-- The exterior part `-8 < x < 0` of an edge band lies in the exterior neighbouring square.
+/-- The exterior part `-8 < x < 0` of an edge band lies in the exterior neighboring square.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:234–236`. -/
-theorem edgeBand_neg_subset_edgeNeighbour {n : ℝ} (e : SquareEdge) :
-    edgeBand n e (-8) 0 ⊆ edgeNeighbour n e := by
+theorem edgeBand_neg_subset_edgeNeighbor {n : ℝ} (e : SquareEdge) :
+    edgeBand n e (-8) 0 ⊆ edgeNeighbor n e := by
   intro p hp
   obtain ⟨a1, a2, a3, a4, a5, a6, a7⟩ := bandWidth_facts hp
   exact ⟨a1, a2, by linarith, by linarith⟩
 
 /-- **Diameter.** Two points of a closed band with `-8 ≤ α` and `β ≤ 8` are at sup distance at
-most `n`; so every changed region of an edge operation has diameter `O(n)`.
+most `n`; see `BandOperation.dist_le_of_mem_closure_changed` for the changed regions.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
 `06-geometry.tex:257`. -/
@@ -421,8 +421,10 @@ theorem mem_edgeBand_of_dist_lt_markDist {n : ℝ} {e : SquareEdge} {α β α' �
 /-! ### Normal words of the edge construction -/
 
 /-- A normal word: label `c` below the first interface, then at each interface `t` the label
-switches to the paired label. At an interface itself the label to its right is taken; this is
-one fixed tie convention (`06-geometry.tex:72–77`), and no clearance below depends on it.
+switches to the paired label. On an interface itself the label to its right is taken. The
+source instead samples labels after one generic displacement (`06-geometry.tex:72–77`); the
+two conventions differ only on the interface curves, and no clearance below depends on the
+values there.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:161–170, 193–197`. -/
 noncomputable def bandWord {ι : Type*} (c : ι) : List (ℝ × ι) → ℝ → ι
@@ -534,12 +536,51 @@ structure BandOperation (ι : Type*) where
   lo'_ge : -8 ≤ lo'
   hi'_le : hi' ≤ 2
 
-/-- **Lemma 7.2, edge births and deaths.** For an elementary birth or death of the edge
-construction, every point `y` of the closure of the changed region lies at ambient sup distance
+/-- The changed set of an elementary edge operation lies in the closed band of its changed
+interval, when the guides have the operation's words on the band `-8 < x < 2` and agree off it.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:246–252`. -/
+theorem BandOperation.changed_subset_closedEdgeBand {ι : Type*} (op : BandOperation ι) {n : ℝ}
+    (e : SquareEdge) {fb fa : ℝ × ℝ → ι}
+    (hfb : ∀ p ∈ edgeBand n e (-8) 2, fb p = op.before (bandCoord n e p))
+    (hfa : ∀ p ∈ edgeBand n e (-8) 2, fa p = op.after (bandCoord n e p))
+    (hoff : ∀ p ∉ edgeBand n e (-8) 2, fb p = fa p) :
+    {p | fb p ≠ fa p} ⊆ closedEdgeBand n e op.lo op.hi := by
+  intro p hp
+  by_cases hb : p ∈ edgeBand n e (-8) 2
+  · have hx := op.changed _ (by rwa [← hfb p hb, ← hfa p hb])
+    obtain ⟨h1, h2, -, -⟩ := mem_edgeBand_iff_bandCoord.1 hb
+    have hw := bandWidth_pos h1 h2
+    exact ⟨h1.le, h2.le, (le_div_iff₀ hw).1 hx.1, (div_le_iff₀ hw).1 hx.2⟩
+  · exact absurd (hoff p hb) hp
+
+/-- **Diameter of a changed region.** Two points of the closure of the changed set of an
+elementary edge operation are at sup distance at most `n`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
+`06-geometry.tex:257`. -/
+theorem BandOperation.dist_le_of_mem_closure_changed {ι : Type*} (op : BandOperation ι) {n : ℝ}
+    (e : SquareEdge) {fb fa : ℝ × ℝ → ι}
+    (hfb : ∀ p ∈ edgeBand n e (-8) 2, fb p = op.before (bandCoord n e p))
+    (hfa : ∀ p ∈ edgeBand n e (-8) 2, fa p = op.after (bandCoord n e p))
+    (hoff : ∀ p ∉ edgeBand n e (-8) 2, fb p = fa p) {y z : ℝ × ℝ}
+    (hy : y ∈ closure {p | fb p ≠ fa p}) (hz : z ∈ closure {p | fb p ≠ fa p}) :
+    dist y z ≤ n := by
+  have hsub := closure_minimal (op.changed_subset_closedEdgeBand e hfb hfa hoff)
+    (isClosed_closedEdgeBand n e op.lo op.hi)
+  have := op.margin_lo
+  have := op.margin_hi
+  have := op.lo'_ge
+  have := op.hi'_le
+  exact dist_le_of_mem_closedEdgeBand (by linarith) (by linarith) (hsub hy) (hsub hz)
+
+/-- **Clearance of the edge births and deaths in the proof of Lemma 7.2.** For an elementary
+birth or death of the edge construction, every point `y` of the closure of the changed region lies at ambient sup distance
 at least `a₀ min(n, d_V(y))` from every position of a label other than `P∘` in the surrounding
 guide. Here the guides `fb` (before) and `fa` (after) have the operation's normal words on the
 band `-8 < x < 2` and agree off it, and the surrounding guide `fs` has the surrounding word on
-that band.
+that band. These guide properties are assumed rather than derived from the schedule (see the
+module's scope restriction).
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
 equation `eq:geometry-birth-clearance`, `06-geometry.tex:254–264, 283–293`. -/
@@ -551,15 +592,8 @@ theorem BandOperation.clearance {ι : Type*} (op : BandOperation ι) {n : ℝ} (
     (hfs : ∀ p ∈ edgeBand n e (-8) 2, fs p = op.surrounding (bandCoord n e p))
     {y : ℝ × ℝ} (hy : y ∈ closure {p | fb p ≠ fa p}) {z : ℝ × ℝ} (hz : fs z ≠ op.label) :
     angularConstant * min n (edgeMarkDist n e y) ≤ dist y z := by
-  have hsub : {p | fb p ≠ fa p} ⊆ closedEdgeBand n e op.lo op.hi := by
-    intro p hp
-    by_cases hb : p ∈ edgeBand n e (-8) 2
-    · have hx := op.changed _ (by rwa [← hfb p hb, ← hfa p hb])
-      obtain ⟨h1, h2, -, -⟩ := mem_edgeBand_iff_bandCoord.1 hb
-      have hw := bandWidth_pos h1 h2
-      exact ⟨h1.le, h2.le, (le_div_iff₀ hw).1 hx.1, (div_le_iff₀ hw).1 hx.2⟩
-    · exact absurd (hoff p hb) hp
-  have hyc := closure_minimal hsub (isClosed_closedEdgeBand n e op.lo op.hi) hy
+  have hyc := closure_minimal (op.changed_subset_closedEdgeBand e hfb hfa hoff)
+    (isClosed_closedEdgeBand n e op.lo op.hi) hy
   refine le_of_not_gt fun hlt => ?_
   have hlo := op.margin_lo
   have hhi := op.margin_hi
@@ -775,7 +809,18 @@ private theorem isClosed_closedCentralRegion (n : ℝ) : IsClosed (closedCentral
     ((isClosed_le w1 h2).inter ((isClosed_le w1 (continuous_const.sub h2)).inter
     ((isClosed_le w2 h1).inter (isClosed_le w2 (continuous_const.sub h1))))))))
 
-/-- **Lemma 7.2, central birth.** Every point `y` of the closed central region lies at ambient
+private theorem closure_centralRegion_subset (n : ℝ) :
+    closure (centralRegion n) ⊆ closedCentralRegion n := by
+  refine closure_minimal ?_ (isClosed_closedCentralRegion n)
+  rintro p ⟨h1, h2, h3, h4, h5⟩
+  have b := h5 .bottom
+  have t := h5 .top
+  have l := h5 .left
+  have r := h5 .right
+  simp only [par, nor] at b t l r
+  exact ⟨h1.le, h2.le, h3.le, h4.le, b.le, t.le, l.le, r.le⟩
+
+/-- **Clearance of the central birth in the proof of Lemma 7.2.** Every point `y` of the closed central region lies at ambient
 sup distance at least `a₀ min(n, d_V(y))` from every position of a label other than `A` in any
 guide which is `A` on the open square `(0, n) ^ 2`; here `V` is the set of four corners.
 
@@ -785,16 +830,7 @@ theorem centralBirth_clearance {ι : Type*} {n : ℝ} {f : ℝ × ℝ → ι} {A
     (hf : ∀ p : ℝ × ℝ, 0 < p.1 → p.1 < n → 0 < p.2 → p.2 < n → f p = A)
     {y : ℝ × ℝ} (hy : y ∈ closure (centralRegion n)) {z : ℝ × ℝ} (hz : f z ≠ A) :
     angularConstant * min n (cornerMarkDist n y) ≤ dist y z := by
-  have hsub : centralRegion n ⊆ closedCentralRegion n := by
-    rintro p ⟨h1, h2, h3, h4, h5⟩
-    have b := h5 .bottom
-    have t := h5 .top
-    have l := h5 .left
-    have r := h5 .right
-    simp only [par, nor] at b t l r
-    exact ⟨h1.le, h2.le, h3.le, h4.le, b.le, t.le, l.le, r.le⟩
-  obtain ⟨y1, y2, y3, y4, b, t, l, r⟩ :=
-    closure_minimal hsub (isClosed_closedCentralRegion n) hy
+  obtain ⟨y1, y2, y3, y4, b, t, l, r⟩ := closure_centralRegion_subset n hy
   set u := min y.1 (n - y.1) with hu
   set v := min y.2 (n - y.2) with hv
   have hwu : bandWidth n y.1 = u / 1000 := rfl
@@ -842,6 +878,19 @@ theorem centralBirth_clearance {ι : Type*} {n : ℝ} {f : ℝ × ℝ → ι} {A
   have := min_le_right y.2 (n - y.2)
   exact hz (hf z (by linarith) (by linarith) (by linarith) (by linarith))
 
+/-- **Diameter of the central changed region.** Two points of the closure of the central region
+are at sup distance at most `n`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
+`06-geometry.tex:257`. -/
+theorem dist_le_of_mem_closure_centralRegion {n : ℝ} {y z : ℝ × ℝ}
+    (hy : y ∈ closure (centralRegion n)) (hz : z ∈ closure (centralRegion n)) :
+    dist y z ≤ n := by
+  obtain ⟨y1, y2, y3, y4, -⟩ := closure_centralRegion_subset n hy
+  obtain ⟨z1, z2, z3, z4, -⟩ := closure_centralRegion_subset n hz
+  rw [Prod.dist_eq, Real.dist_eq, Real.dist_eq]
+  exact max_le (abs_le.2 ⟨by linarith, by linarith⟩) (abs_le.2 ⟨by linarith, by linarith⟩)
+
 /-! ### The lens exchange -/
 
 private theorem frontier_edgeLens_subset {n : ℝ} {e : SquareEdge} {z : ℝ × ℝ}
@@ -871,8 +920,8 @@ private theorem frontier_edgeLens_subset {n : ℝ} {e : SquareEdge} {z : ℝ × 
     rw [hw] at z3 z4
     rw [← point_par_nor n e z, ← z1, show e.nor n z = 0 by linarith]
 
-/-- **Lemma 7.2, lens exchange.** Before the exchange the main guide `fm` is `C` on the open
-exterior neighbouring square, and the auxiliary guide `fx` has the word
+/-- **Clearance of the lens exchange in the proof of Lemma 7.2.** Before the exchange the main
+guide `fm` is `C` on the exterior band `-8 < x < 0`, and the auxiliary guide `fx` has the word
 `eq:geometry-aux-word` on the band `-8 < x < 2` and is `C` off it. Then every point `y` of the
 closure of the positions that are not common `C` on the two guides lies at ambient sup distance
 at least `a₀ min(n, d_V(y))` from the boundary of the lens `Y`.
@@ -880,7 +929,7 @@ at least `a₀ min(n, d_V(y))` from the boundary of the lens `Y`.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
 equation `eq:geometry-exchange-clearance`, `06-geometry.tex:265–272, 295–299`. -/
 theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : ι}
-    {fm fx : ℝ × ℝ → ι} (hfm : ∀ p ∈ edgeNeighbour n e, fm p = C)
+    {fm fx : ℝ × ℝ → ι} (hfm : ∀ p ∈ edgeBand n e (-8) 0, fm p = C)
     (hfx : ∀ p ∈ edgeBand n e (-8) 2, fx p = auxWord A B C (bandCoord n e p))
     (hfx' : ∀ p ∉ edgeBand n e (-8) 2, fx p = C)
     {y : ℝ × ℝ} (hy : y ∈ closure {p | fm p ≠ C ∨ fx p ≠ C})
@@ -888,7 +937,7 @@ theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : 
     angularConstant * min n (edgeMarkDist n e y) ≤ dist y z := by
   have ha0 := angularConstant_pos
   have hsub : {p | fm p ≠ C ∨ fx p ≠ C} ⊆
-      (edgeNeighbour n e)ᶜ ∪ (closedEdgeBand n e (-6) (-4) ∪ closedEdgeBand n e (-3) (-1)) := by
+      (edgeBand n e (-8) 0)ᶜ ∪ (closedEdgeBand n e (-6) (-4) ∪ closedEdgeBand n e (-3) (-1)) := by
     rintro p (hp | hp)
     · exact Or.inl fun h => hp (hfm p h)
     · right
@@ -905,9 +954,9 @@ theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : 
         · exact Or.inl ⟨h1.le, h2.le, (le_div_iff₀ hw).1 k1, (div_le_iff₀ hw).1 k2⟩
         · exact Or.inr ⟨h1.le, h2.le, (le_div_iff₀ hw).1 k1, (div_le_iff₀ hw).1 k2⟩
       · exact absurd (hfx' p hb) hp
-  have hcl : IsClosed ((edgeNeighbour n e)ᶜ ∪
+  have hcl : IsClosed ((edgeBand n e (-8) 0)ᶜ ∪
       (closedEdgeBand n e (-6) (-4) ∪ closedEdgeBand n e (-3) (-1))) :=
-    (isOpen_edgeNeighbour n e).isClosed_compl.union
+    (isOpen_edgeBand n e _ _).isClosed_compl.union
       ((isClosed_closedEdgeBand n e _ _).union (isClosed_closedEdgeBand n e _ _))
   have hyc := closure_minimal hsub hcl hy
   have hmarkle : angularConstant * min n (edgeMarkDist n e y) ≤ edgeMarkDist n e y := by
@@ -919,7 +968,7 @@ theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : 
   · exact hmarkle.trans (min_le_right _ _)
   have wz := bandWidth_pos z1 z2
   rcases hyc with hyN | hyb
-  · -- `y` lies outside the open exterior neighbouring square
+  · -- `y` lies outside the open exterior band `-8 < x < 0`
     refine le_of_not_gt fun hlt => ?_
     set mz := min (e.par z) (n - e.par z)
     have hwz : bandWidth n (e.par z) = mz / 1000 := rfl
@@ -934,12 +983,14 @@ theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : 
       unfold angularConstant at h1; nlinarith [dist_nonneg (x := y) (y := z)]
     have hss := e.abs_par_sub_le n y z
     have hdd := e.abs_nor_sub_le n y z
-    rw [abs_le] at hss hdd
+    have hws := (abs_bandWidth_sub_le n (e.par y) (e.par z)).trans
+      (div_le_div_of_nonneg_right hss (by norm_num))
+    rw [abs_le] at hss hdd hws
     have := min_le_left (e.par z) (n - e.par z)
     have := min_le_right (e.par z) (n - e.par z)
     apply hyN
     refine ⟨by linarith, by linarith, ?_, ?_⟩ <;> rcases hzγ with h | h <;> rw [hwz] at h <;>
-      nlinarith
+      rw [hwz] at hws <;> nlinarith
   · -- `y` lies in one of the two closed auxiliary bands
     have hzC : z ∈ closedEdgeBand n e (-7) (-7) ∨ z ∈ closedEdgeBand n e (-7 / 2) (-7 / 2) := by
       rcases hzγ with h | h
@@ -956,21 +1007,14 @@ theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : 
       rcases hzC with ⟨-, -, h1, h2⟩ | ⟨-, -, h1, h2⟩ <;> obtain ⟨-, -, h3, h4⟩ := hzY <;>
         nlinarith
 
-/-! ### Point treatment: the logarithmic floor and the outer-hole enlargement -/
+/-! ### Point treatment: the outer-hole enlargement -/
 
-/-- **Logarithmic floor.** Outside the radius-`t` treated squares, `d_V(y) ≥ t`; if moreover
-`t ≤ n`, the conical clearance `a₀ min(n, d_V(y))` equals `a₀ max(t, min(n, d_V(y)))`.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-floor`,
-`06-geometry.tex:357–367`. -/
-theorem clearance_floor {a n t dV D : ℝ} (ht : t ≤ dV) (htn : t ≤ n)
-    (h : a * min n dV ≤ D) : a * max t (min n dV) ≤ D := by
-  rwa [max_eq_right (le_min htn ht)]
-
-/-- **Outer-hole enlargement.** Let `g` (the distance from the lens boundary) and `h` (the mark
+/-- **Lipschitz step of the outer-hole enlargement.** Let `g` (the distance from the lens boundary) and `h` (the mark
 distance) be `1`-Lipschitz, let `t > 0`, and suppose `2 ε₀ (a + 1) ≤ a / 2`. If a hole center
 `c` has the tapered clearance `g c ≥ a max(t, min(n, h c))`, then every point `x` with
-`|x - c| ≤ 2 ε₀ t` has `g x ≥ (a / 2) max(t, min(n, h x))`.
+`|x - c| ≤ 2 ε₀ t` has `g x ≥ (a / 2) max(t, min(n, h x))`. This is the arithmetic step used
+in the point treatment; the instantiation with the lens-boundary distance and the mark
+distance, and the birth-side enlargement of `06-geometry.tex:368–373`, are not formalized here.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:405–415`. -/
 theorem tapered_clearance_of_center {X : Type*} [PseudoMetricSpace X] {g h : X → ℝ}

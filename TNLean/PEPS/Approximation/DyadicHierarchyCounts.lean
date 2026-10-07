@@ -24,12 +24,14 @@ resized on entering a level.
 This file proves the geometric counts behind Proposition 7.1 (`prop:protocol`), items 1–3:
 
 * the hierarchy has `(4 ^ (k + 1) - 1) / 3` squares, hence `O(L ^ 2)`;
-* the repaintings and the junctions over all scales number `O(N ^ 2) = O(L ^ 2)`, so a schedule
-  using a uniformly bounded number of changes per repainting and per junction has `O(L ^ 2)`,
-  in particular at most `C L ^ 3`, changes;
+* the repaintings and the junctions over all scales number `O(N ^ 2) = O(L ^ 2)`, so `M` times
+  their number is `O(M L ^ 2)`, in particular at most `C M L ^ 3`; the schedule itself is not
+  formalized;
 * the integer address `eq:geometry-addresses` of a square lies in the square and in
-  `{0, …, N - 1}`, and squares at the same or adjacent scales whose closed coordinate intervals
-  are within distance `g` have addresses within `g + 3 n` of each other.
+  `{0, …, N - 1}`, and, one coordinate at a time, blocks at scales `j' ≤ j + 1` whose closed
+  intervals are within distance `g` have address coordinates within `g + 3 · 2 ^ j`;
+* one coordinate of the count of blocks meeting an interval, an ingredient of the bounded
+  lifetime participation; the active-label invariant itself is not formalized.
 
 The address coincides with the dyadic anchor of the routing step (§8.3, `eq:anchors`); the two
 definitions are to be unified when that development lands.
@@ -60,12 +62,12 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:321–322, 5
 abbrev DyadicJunction (k : ℕ) : Type :=
   Σ j : Fin (k + 1), Fin (2 ^ (k - j) + 1) × Fin (2 ^ (k - j) + 1)
 
-theorem three_mul_sum_range_four_pow_add_one (m : ℕ) : 3 * ∑ i ∈ range m, 4 ^ i + 1 = 4 ^ m := by
+private theorem three_mul_sum_range_four_pow_add_one (m : ℕ) : 3 * ∑ i ∈ range m, 4 ^ i + 1 = 4 ^ m := by
   induction m with
   | zero => simp
   | succ m ih => rw [sum_range_succ, pow_succ]; omega
 
-theorem sum_fin_four_pow_sub (k : ℕ) :
+private theorem sum_fin_four_pow_sub (k : ℕ) :
     ∑ j : Fin (k + 1), 4 ^ (k - (j : ℕ)) = ∑ i ∈ range (k + 1), 4 ^ i := by
   rw [Fin.sum_univ_eq_sum_range (fun j => 4 ^ (k - j)) (k + 1)]
   exact sum_range_reflect (fun i => 4 ^ i) (k + 1)
@@ -102,7 +104,7 @@ theorem three_mul_card_dyadicJunction_le (k : ℕ) :
   rw [← sum_fin_four_pow_sub] at this
   linarith
 
-theorem four_pow_lt_of_two_pow_lt {k L : ℕ} (hk : 2 ^ k < 2 * L) : 4 ^ k < L ^ 2 * 4 := by
+private theorem four_pow_lt_of_two_pow_lt {k L : ℕ} (hk : 2 ^ k < 2 * L) : 4 ^ k < L ^ 2 * 4 := by
   have h : 4 ^ k = 2 ^ k * 2 ^ k := by rw [← mul_pow]; norm_num
   rw [h]
   nlinarith [Nat.zero_le (2 ^ k)]
@@ -120,8 +122,8 @@ theorem three_mul_card_dyadicSquare_lt {k L : ℕ} (hk : 2 ^ k < 2 * L) :
   linarith
 
 /-- **Schedule length.** If each repainting of a non-root square and each junction resize uses
-at most `M` changes, the schedule has fewer than `80 M L ^ 2 / 3` changes, in particular at
-most `27 M L ^ 3` for `L ≥ 1`.
+at most `M` changes, the schedule has at most `80 M L ^ 2 / 3` changes: three times `M` times
+the number of squares plus junctions is at most `80 M L ^ 2`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`, item 2,
 `06-geometry.tex:25`, and `06-geometry.tex:576–579, 649–652`. -/
@@ -139,6 +141,11 @@ theorem three_mul_schedule_le {k L : ℕ} (hk : 2 ^ k < 2 * L) (M : ℕ) :
     _ ≤ M * (80 * L ^ 2) := Nat.mul_le_mul_left M this
     _ = 80 * M * L ^ 2 := by ring
 
+/-- **Cubic schedule bound.** The same count is at most `80 M L ^ 3 / 3`, the form `C L ^ 3` of
+Proposition 7.1, item 2.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`, item 2,
+`06-geometry.tex:25`. -/
 theorem three_mul_schedule_le_cube {k L : ℕ} (hk : 2 ^ k < 2 * L) (M : ℕ) :
     3 * (M * (Fintype.card (DyadicSquare k) + Fintype.card (DyadicJunction k))) ≤
       80 * M * L ^ 3 := by
@@ -188,9 +195,11 @@ theorem squareAddress_lt_add {j r j' r' g : ℕ} (h : 2 ^ j * r ≤ 2 ^ j' * r' 
   have h2 := squareAddress_mem j' r'
   linarith [h1.1, h1.2, h2.1, h2.2]
 
-/-- **Same or adjacent scales at distance `O(n)`.** For blocks at the same or adjacent scales
-`j' ≤ j + 1` whose closed intervals are within distance `g` in one coordinate, the address
-coordinates differ by less than `g + 3 · 2 ^ j`.
+/-- **Address coordinates of nearby blocks at scales `j' ≤ j + 1`.** If two blocks of sides
+`2 ^ j` and `2 ^ j'`, with `j' ≤ j + 1`, have closed intervals within distance `g` in one
+coordinate, their address coordinates differ by less than `g + 3 · 2 ^ j`. It is an ingredient
+of Proposition 7.1, item 3; that linked parties are at the same or adjacent scales and within
+distance `O(n)` is not proved here.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`, item 3,
 `06-geometry.tex:34–37`, and `06-geometry.tex:643–645`. -/
@@ -206,10 +215,11 @@ theorem squareAddress_dist_lt {j r j' r' g : ℕ} (hj : j' ≤ j + 1)
 
 /-! ### Bounded lifetime incidence -/
 
-/-- **Blocks near a block.** The blocks of side `b` (indices `r < M`) whose closed intervals
-`[b r, b (r + 1)]` meet `[V, U]` number at most `⌊U / b⌋ + 2 - ⌊V / b⌋`. Applied in each
-coordinate with `b ∈ {m, m / 2}` and `U - V = O(m)`, it bounds by a constant the repaintings and
-junctions at levels `m` and `m / 2` within distance `O(m)` of a block of side `m`.
+/-- **Blocks near a block, one coordinate.** The blocks of side `b` (indices `r < M`) whose
+closed intervals `[b r, b (r + 1)]` meet `[V, U]` number at most `⌊U / b⌋ + 2 - ⌊V / b⌋`. This is
+the one-coordinate counting step: applied in each coordinate with `b ∈ {m, m / 2}` and
+`U - V = O(m)`, it bounds by a constant the repaintings and junctions at levels `m` and `m / 2`
+within distance `O(m)` of a block of side `m`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:611–618`: “At these scales
 there are only a fixed number of repaintings or junctions within distance `O(m)` of its
