@@ -132,7 +132,7 @@ theorem mem_ambientBoundary_iff {S : Finset (ℤ × ℤ)} {e : Sym2 (ℤ × ℤ)
     apply Finset.mem_filter.mpr
     constructor
     · apply SimpleGraph.mem_edgeFinset.mpr
-      apply SimpleGraph.mem_edgeSet.mpr
+      change (domainGraph (ambientDilation S 1)).Adj a b
       exact mem_latticeNeighbors_iff.mp hpq
     · exact ⟨a, by simpa [ambientBoundaryRegion, a] using hp,
         b, by simpa [ambientBoundaryRegion, b] using hq, rfl⟩
