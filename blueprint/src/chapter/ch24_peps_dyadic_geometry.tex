@@ -1,0 +1,244 @@
+\section{Geometry of the dyadic distribution protocol}
+\label{sec:peps_dyadic_geometry}
+This section treats the geometric part of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+September 24, 2026, \texttt{06-geometry.tex}: the bands along the edges of a
+repainted dyadic square, the angular separation of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}
+(lines 254--319), the point-treatment estimates (lines 357--415), and the counts
+of the padded dyadic hierarchy behind items 1--3
+of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (lines 12--53 and 633--652).
+The protocol of Proposition~7.1 itself, whose changes are implemented by the
+information estimate and the contraction gates of the earlier sections, is not
+treated here. Distances are sup distances in the plane, and labels are elements
+of an arbitrary set; the labels $A$, $B$, $C$ below are permitted to coincide.
+
+\begin{definition}[Edge coordinates, bands and the lens]
+    \label{def:peps_dyadic_edge_band}
+    \lean{TNLean.PEPS.Approximation.SquareEdge, TNLean.PEPS.Approximation.bandWidth, TNLean.PEPS.Approximation.edgeBand, TNLean.PEPS.Approximation.closedEdgeBand, TNLean.PEPS.Approximation.bandCoord, TNLean.PEPS.Approximation.edgeLens, TNLean.PEPS.Approximation.edgeNeighbour, TNLean.PEPS.Approximation.edgeMarkDist, TNLean.PEPS.Approximation.cornerMarkDist}
+    \leanok
+    Let $S=[0,n]^2$. For an edge of $S$ let $s$ be the coordinate parallel to the
+    edge, measured from one endpoint, and $d$ the normal coordinate, positive
+    into $S$. Put
+    \begin{align}
+        w(s)=10^{-3}\min(s,n-s),\quad x=d/w(s).
+        \label{eq:pdg_band}
+    \end{align}
+    The band $\{\alpha<x<\beta\}$ is the set of points with $0<s<n$ and
+    $\alpha w(s)<d<\beta w(s)$; its closed version has $0\le s\le n$ and
+    $\alpha w(s)\le d\le\beta w(s)$. The lens of the edge is the band
+    $Y=\{-7<x<-7/2\}$, and the exterior neighbouring square is
+    $\{0<s<n,\ -n<d<0\}$. For a point $y$, $d_{\mathcal V}(y)$ is its distance from
+    the two endpoints of the edge, or from the four corners of $S$.
+\end{definition}
+
+\begin{lemma}[Disjointness of the edge bands]
+    \label{lem:peps_dyadic_band_disjoint}
+    \lean{TNLean.PEPS.Approximation.disjoint_edgeBand, TNLean.PEPS.Approximation.edgeBand_neg_subset_edgeNeighbour, TNLean.PEPS.Approximation.dist_le_of_mem_closedEdgeBand}
+    \leanok
+    \uses{def:peps_dyadic_edge_band}
+    The bands $\{-8<x<2\}$ along distinct edges of $S$ are disjoint, and the band
+    $\{-8<x<0\}$ lies in the exterior neighbouring square of its edge. Two points
+    of a closed band with $-8\le\alpha\le\beta\le8$ are at distance at most $n$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $w\le s/1000$ and $w\le(n-s)/1000$. For opposite edges the bands lie
+    within $n/250$ of their edges. For adjacent edges a common point at distances
+    $r_1,r_2>0$ from the two edge lines would satisfy $r_1<0.002\,r_2$ and
+    $r_2<0.002\,r_1$. On $\{-8<x<0\}$ one has $0>d>-8w\ge-n/250$. The diameter
+    bound follows from $|d|\le8w\le n/250$ in each closed band.
+\end{proof}
+
+\begin{definition}[Normal words of the edge construction]
+    \label{def:peps_dyadic_normal_words}
+    \lean{TNLean.PEPS.Approximation.bandWord, TNLean.PEPS.Approximation.edgeStartWord, TNLean.PEPS.Approximation.auxWord, TNLean.PEPS.Approximation.mainWordOne, TNLean.PEPS.Approximation.edgeOperations, TNLean.PEPS.Approximation.BandOperation}
+    \leanok
+    \uses{def:peps_dyadic_edge_band}
+    A normal word lists labels in increasing $x$ separated by interfaces; at an
+    interface the label on its right is taken. An edge operation starts from the
+    main word $C\mid A\mid B$ with interfaces $0,1$. On an auxiliary sheet, uniform
+    at $C$, the births of $B$ in $(-6,-1)$, of $A$ in $(-5,-2)$ and of $C$ in
+    $(-4,-3)$ give
+    \begin{align}
+        C\mid B\mid A\mid C\mid A\mid B\mid C\quad\text{at } -6,-5,-4,-3,-2,-1.
+        \label{eq:pdg_aux_word}
+    \end{align}
+    After the lens exchange the main word is $C\mid B\mid A\mid C\mid A\mid B$ at
+    $-6,-5,-4,0,1$. The $C$ band $(-4,0)$ then dies into $A$, the $A$ band
+    $(-5,1)$ dies into $B$, $C$ is born in $(-3,0)$, and the $B$ band $(-6,-3)$
+    dies into $C$, leaving $C\mid B$ at $0$. Each of these seven births and deaths
+    changes its word only on a closed interval, and its surrounding word (the word
+    before a birth, after a death) carries one label on a strictly larger open
+    interval inside $(-8,2)$, with margins at least $1/2$.
+\end{definition}
+
+\begin{lemma}[The lens exchange produces the main word]
+    \label{lem:peps_dyadic_lens_word}
+    \lean{TNLean.PEPS.Approximation.lens_exchange_word}
+    \leanok
+    \uses{def:peps_dyadic_normal_words}
+    Replacing the starting main word by the auxiliary word (\ref{eq:pdg_aux_word})
+    on $-7<x<-7/2$ gives the main word $C\mid B\mid A\mid C\mid A\mid B$ at
+    $-6,-5,-4,0,1$, at every value of $x$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both thresholds $-7$ and $-7/2$ lie in $C$ intervals of both words; compare
+    the two words on each interval.
+\end{proof}
+
+\begin{lemma}[Conical band estimate]
+    \label{lem:peps_dyadic_conical_band}
+    \lean{TNLean.PEPS.Approximation.mem_edgeBand_of_dist_lt, TNLean.PEPS.Approximation.mem_edgeBand_of_dist_lt_markDist, TNLean.PEPS.Approximation.edgeMarkDist_le_of_mem_closedEdgeBand}
+    \leanok
+    \uses{def:peps_dyadic_edge_band}
+    Let $a_0=1/5000$, $\alpha\le\beta$, $\alpha'+1/2\le\alpha$, $\beta+1/2\le\beta'$
+    and $-8\le\alpha'$, $\beta'\le8$. If $y$ lies in the closed band
+    $\{\alpha\le x\le\beta\}$ and $|y-z|<a_0\min(n,d_{\mathcal V}(y))$, then $z$
+    lies in the open band $\{\alpha'<x<\beta'\}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Put $m=\min(s,n-s)$ at $y$, so $w=m/1000$ and $|d|\le m$; hence
+    $d_{\mathcal V}(y)\le m$. If $|y-z|<m/5000$, the parallel and normal
+    coordinates move by less than $m/5000$, and $w$ is $10^{-3}$-Lipschitz, so
+    $|\beta'(w(s_z)-w(s_y))|\le8m/(5\cdot10^{6})$. Then
+    $d_z<\beta w(s_y)+m/5000\le\beta' w(s_z)-m/2000+m/5000+8m/(5\cdot10^6)$, and
+    symmetrically at $\alpha'$.
+\end{proof}
+
+\begin{theorem}[Angular separation of the central birth]
+    \label{thm:peps_dyadic_central_clearance}
+    \lean{TNLean.PEPS.Approximation.centralRegion, TNLean.PEPS.Approximation.centralBirth_clearance}
+    \leanok
+    \uses{def:peps_dyadic_edge_band}
+    Let $R$ be the set of points of $(0,n)^2$ with $x>1$ for every edge, and let
+    $f$ be a labelling of the plane equal to $A$ on $(0,n)^2$. For every $y$ in
+    the closure of $R$ and every $z$ with $f(z)\ne A$,
+    \begin{align}
+        |y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\},
+        \label{eq:pdg_central}
+    \end{align}
+    where $\mathcal V$ is the set of corners of $S$ and $a_0=1/5000$. This is the
+    central-birth case of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}, whose
+    surrounding guide is $A$ on the interior of $S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    With $u=\min(y_1,n-y_1)$ and $v=\min(y_2,n-y_2)$, the four conditions $d\ge w$
+    give $v\ge u/1000$ and $u\ge v/1000$. The nearest corner is at distance
+    $\max(u,v)\le1000\min(u,v)$, so a point within $a_0\min(n,d_{\mathcal V}(y))$
+    of $y$ is within $\min(u,v)/5$ of $y$ and lies in $(0,n)^2$.
+\end{proof}
+
+\begin{theorem}[Angular separation of the edge births and deaths]
+    \label{thm:peps_dyadic_band_clearance}
+    \lean{TNLean.PEPS.Approximation.BandOperation.clearance, TNLean.PEPS.Approximation.auxBirthB, TNLean.PEPS.Approximation.auxBirthA, TNLean.PEPS.Approximation.auxBirthC, TNLean.PEPS.Approximation.mainDeathC, TNLean.PEPS.Approximation.mainDeathA, TNLean.PEPS.Approximation.mainBirthC, TNLean.PEPS.Approximation.mainDeathB}
+    \leanok
+    \uses{lem:peps_dyadic_conical_band, def:peps_dyadic_normal_words}
+    Consider one of the seven elementary births and deaths of an edge operation,
+    and labellings $f_b$, $f_a$ and $f_s$ of the plane whose normal words on
+    $\{-8<x<2\}$ are its words before, after and surrounding, with $f_b=f_a$ off
+    that band. Let $P_\circ$ be its surrounding label. For every $y$ in the closure
+    of $\{f_b\ne f_a\}$ and every $z$ with $f_s(z)\ne P_\circ$,
+    $|y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\}$, with $\mathcal V$ the two endpoints
+    of the edge. These are the edge-band cases of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The set $\{f_b\ne f_a\}$ lies in the closed band of the changed interval,
+    which is closed. If $|y-z|<a_0\min\{n,d_{\mathcal V}(y)\}$, the conical band
+    estimate puts $z$ in the open band of the surrounding sector, where $f_s$
+    equals $P_\circ$.
+\end{proof}
+
+\begin{theorem}[Angular separation of the lens exchange]
+    \label{thm:peps_dyadic_lens_clearance}
+    \lean{TNLean.PEPS.Approximation.lensExchange_clearance}
+    \leanok
+    \uses{lem:peps_dyadic_conical_band, def:peps_dyadic_normal_words}
+    Let the main labelling be $C$ on the exterior neighbouring square, and let the
+    auxiliary labelling have the word (\ref{eq:pdg_aux_word}) on $\{-8<x<2\}$ and
+    be $C$ off it. Every point $y$ in the closure of the positions that are not
+    $C$ on both labellings satisfies
+    $|y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\}$ for every $z$ on the boundary of the
+    lens $Y$. This is the exchange case of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A boundary point of $Y$ is an endpoint of the edge, where the bound is
+    immediate, or satisfies $d=-7w$ or $d=-\tfrac72w$ with $0<s<n$. If $y$ lies
+    outside the exterior neighbouring square, then $d_{\mathcal V}(y)\le
+    d_{\mathcal V}(z)+|y-z|$ and $d_{\mathcal V}(z)\le m_z=\min(s_z,n-s_z)$; a
+    distance below $a_0d_{\mathcal V}(y)$ is then below $m_z/2000$, which keeps
+    $y$ in that square because $d_z\le-\tfrac72m_z/1000$. If $y$ lies in one of
+    the closed auxiliary bands $\{-6\le x\le-4\}$ or $\{-3\le x\le-1\}$, apply the
+    conical band estimate with the open bands $\{-\tfrac{13}2<x<-\tfrac72\}$ or
+    $\{-\tfrac72<x<-\tfrac12\}$, neither of which meets the two boundary curves.
+\end{proof}
+
+\begin{lemma}[Logarithmic floor and outer-hole enlargement]
+    \label{lem:peps_dyadic_hole_enlargement}
+    \lean{TNLean.PEPS.Approximation.clearance_floor, TNLean.PEPS.Approximation.tapered_clearance_of_center}
+    \leanok
+    If $a\min(n,d_{\mathcal V}(y))\le D$, $t\le d_{\mathcal V}(y)$ and $t\le n$,
+    then $a\max\{t,\min(n,d_{\mathcal V}(y))\}\le D$. Let $g$ and $h$ be
+    $1$-Lipschitz functions, $a,t>0$ and $2\epsilon_0(a+1)\le a/2$. If a center $c$
+    satisfies $g(c)\ge aQ_c$ with $Q_x=\max\{t,\min(n,h(x))\}$, then every $x$ with
+    $|x-c|\le2\epsilon_0t$ satisfies $g(x)\ge\tfrac a2Q_x$.
+    This is~\cite[Section~7.4]{OpenAI2026PolynomialPEPS}, lines 357--367 and
+    405--415.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first claim holds because $\min(n,d_{\mathcal V}(y))\ge t$. For the
+    second, with $\delta=|x-c|$ one has $Q_x\le Q_c+\delta$ and
+    $g(x)\ge g(c)-\delta$, so
+    $g(x)\ge aQ_x-(a+1)\delta\ge aQ_x-2\epsilon_0(a+1)t\ge aQ_x-\tfrac a2Q_x$.
+\end{proof}
+
+\begin{definition}[Padded dyadic hierarchy, junctions and addresses]
+    \label{def:peps_dyadic_hierarchy}
+    \lean{TNLean.PEPS.Approximation.DyadicSquare, TNLean.PEPS.Approximation.DyadicJunction, TNLean.PEPS.Approximation.squareAddress}
+    \leanok
+    For $N=2^k$ the hierarchy consists of the aligned squares of $[0,N]^2$ of side
+    $2^j$, $0\le j\le k$, indexed by $j$ and two block indices below $2^{k-j}$; the
+    junctions at scale $j$ are the grid corners, indexed by two integers at most
+    $2^{k-j}$. A square of side $2^j$ with block index $r$ has address coordinate
+    $2^jr+2^{j-1}$ for $j\ge1$ and $r$ for $j=0$.
+\end{definition}
+
+\begin{theorem}[Counts of the hierarchy and the schedule]
+    \label{thm:peps_dyadic_hierarchy_counts}
+    \lean{TNLean.PEPS.Approximation.three_mul_card_dyadicSquare_add_one, TNLean.PEPS.Approximation.three_mul_card_dyadicSquare_lt, TNLean.PEPS.Approximation.three_mul_card_dyadicJunction_le, TNLean.PEPS.Approximation.three_mul_schedule_le, TNLean.PEPS.Approximation.three_mul_schedule_le_cube}
+    \leanok
+    \uses{def:peps_dyadic_hierarchy}
+    The hierarchy has $(4^{k+1}-1)/3$ squares, and three times the number of
+    junctions over all scales is at most $4^{k+2}$. If $2^k<2L$, the hierarchy has
+    fewer than $16L^2/3$ squares, and a schedule using at most $M$ changes for each
+    repainting of a square and each junction resize has at most $80ML^2/3$, and
+    for $L\ge1$ at most $80ML^3/3$, changes.
+\end{theorem}
+
+\begin{proof}\leanok
+    The scale $j$ contributes $4^{k-j}$ squares and $(2^{k-j}+1)^2\le4\cdot4^{k-j}$
+    junctions, and $3\sum_{i<k+1}4^i+1=4^{k+1}$ by induction. Finally
+    $4^k=(2^k)^2<4L^2$.
+\end{proof}
+
+\begin{lemma}[Addresses and locality]
+    \label{lem:peps_dyadic_address_locality}
+    \lean{TNLean.PEPS.Approximation.squareAddress_mem, TNLean.PEPS.Approximation.squareAddress_lt, TNLean.PEPS.Approximation.squareAddress_lt_add, TNLean.PEPS.Approximation.squareAddress_dist_lt, TNLean.PEPS.Approximation.card_blocks_meeting_le}
+    \leanok
+    \uses{def:peps_dyadic_hierarchy}
+    An address coordinate lies in $[2^jr,2^jr+2^j)$, hence below $2^k$. If the
+    blocks $[2^jr,2^j(r+1)]$ and $[2^{j'}r',2^{j'}(r'+1)]$ are within distance $g$
+    and $j'\le j+1$, their address coordinates differ by less than $g+3\cdot2^j$.
+    The blocks of side $b$ meeting $[V,U]$ number at most
+    $\lfloor U/b\rfloor+2-\lfloor V/b\rfloor$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first two claims follow from the position of the address in its block and
+    $2^{j'}\le2\cdot2^j$. For the count, $r\mapsto r+1$ maps the meeting blocks
+    injectively into $[\lfloor V/b\rfloor,\lfloor U/b\rfloor+1]$.
+\end{proof}
