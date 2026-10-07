@@ -307,14 +307,14 @@
     },
     {
       "id": "8739-tnlean.peps.arealaw.configurationsiteequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
         "declaration": "TNLean.PEPS.AreaLaw.configurationSiteEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -334,20 +334,38 @@
         "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "19521214f674c3e8c375f89e4f76ac788ad6eea3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-build.log",
+            "sha256": "3f52daf6d9d928d7dce71e57acdbe20373b84e4df942270ab921876a833eb02e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-reindex-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-axioms.log",
+            "sha256": "21a3b9fe2347413e9bdd5bf26701f4bfa8303c809c3d311c1c4e2ba5c0d522a1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.regionconfigurationequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionConfigurationEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -367,20 +385,38 @@
         "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "19521214f674c3e8c375f89e4f76ac788ad6eea3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-build.log",
+            "sha256": "3f52daf6d9d928d7dce71e57acdbe20373b84e4df942270ab921876a833eb02e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-reindex-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-axioms.log",
+            "sha256": "21a3b9fe2347413e9bdd5bf26701f4bfa8303c809c3d311c1c4e2ba5c0d522a1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.relabelstate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
         "declaration": "TNLean.PEPS.AreaLaw.relabelState",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -400,20 +436,38 @@
         "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "19521214f674c3e8c375f89e4f76ac788ad6eea3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-build.log",
+            "sha256": "3f52daf6d9d928d7dce71e57acdbe20373b84e4df942270ab921876a833eb02e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-reindex-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-axioms.log",
+            "sha256": "21a3b9fe2347413e9bdd5bf26701f4bfa8303c809c3d311c1c4e2ba5c0d522a1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.reducedstate_relabel",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
         "declaration": "TNLean.PEPS.AreaLaw.reducedState_relabel",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -433,20 +487,38 @@
         "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "19521214f674c3e8c375f89e4f76ac788ad6eea3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-build.log",
+            "sha256": "3f52daf6d9d928d7dce71e57acdbe20373b84e4df942270ab921876a833eb02e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-reindex-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-axioms.log",
+            "sha256": "21a3b9fe2347413e9bdd5bf26701f4bfa8303c809c3d311c1c4e2ba5c0d522a1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.regionalentropy_relabel",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_relabel",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -466,20 +538,38 @@
         "Uses the pinned existing Mathlib and QICLean APIs; does not formalize the separate native-PEPS conversion or establish a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "19521214f674c3e8c375f89e4f76ac788ad6eea3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-build.log",
+            "sha256": "3f52daf6d9d928d7dce71e57acdbe20373b84e4df942270ab921876a833eb02e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-reindex-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-axioms.log",
+            "sha256": "21a3b9fe2347413e9bdd5bf26701f4bfa8303c809c3d311c1c4e2ba5c0d522a1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.norm_relabelstate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalReindex.lean",
         "declaration": "TNLean.PEPS.AreaLaw.norm_relabelState",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -499,7 +589,25 @@
         "Does not formalize the separate native-PEPS conversion or establish a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "19521214f674c3e8c375f89e4f76ac788ad6eea3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-build.log",
+            "sha256": "3f52daf6d9d928d7dce71e57acdbe20373b84e4df942270ab921876a833eb02e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-reindex-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-reindex-axioms.log",
+            "sha256": "21a3b9fe2347413e9bdd5bf26701f4bfa8303c809c3d311c1c4e2ba5c0d522a1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
