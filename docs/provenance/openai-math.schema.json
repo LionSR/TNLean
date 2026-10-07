@@ -1,0 +1,502 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repository": {
+          "const": "openai/math"
+        },
+        "commit": {
+          "const": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+        }
+      },
+      "required": [
+        "repository",
+        "commit"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "status": {
+            "enum": [
+              "planned",
+              "ported",
+              "replaced",
+              "excluded"
+            ]
+          },
+          "reuse_kind": {
+            "enum": [
+              "copied",
+              "adapted",
+              "original",
+              "existing_library"
+            ]
+          },
+          "upstream": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/source"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "downstream": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "repository": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+              },
+              "declaration": {
+                "type": "string",
+                "pattern": "^[^\\W\\d][\\w']*(?:\\.[^\\W\\d][\\w']*)*$"
+              },
+              "name_status": {
+                "enum": [
+                  "proposed",
+                  "declared"
+                ]
+              }
+            },
+            "required": [
+              "repository",
+              "path",
+              "declaration",
+              "name_status"
+            ]
+          },
+          "paper_sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "version": {
+                  "const": "September 24, 2026"
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+                },
+                "labels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "version",
+                "path",
+                "labels"
+              ]
+            },
+            "minItems": 1
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "notices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source_path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "source_path",
+                "text"
+              ]
+            },
+            "minItems": 0
+          },
+          "changes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "minItems": 1
+          },
+          "verification": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "result": {
+                    "const": "pending"
+                  }
+                },
+                "required": [
+                  "result"
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "result": {
+                    "const": "passed"
+                  },
+                  "repository": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+                  },
+                  "revision": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{40}$"
+                  },
+                  "commands": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "build",
+                            "axioms",
+                            "source-audit"
+                          ]
+                        },
+                        "command": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        },
+                        "exit_code": {
+                          "const": 0
+                        },
+                        "log": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+                        },
+                        "sha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "command",
+                        "exit_code",
+                        "log",
+                        "sha256"
+                      ]
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "result",
+                  "repository",
+                  "revision",
+                  "commands"
+                ]
+              }
+            ]
+          },
+          "library": {
+            "$ref": "#/$defs/source"
+          },
+          "no_upstream_proof_text_reused": {
+            "const": true
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "reuse_kind",
+          "upstream",
+          "downstream",
+          "paper_sources",
+          "license",
+          "notices",
+          "changes",
+          "verification"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "reuse_kind": {
+                  "enum": [
+                    "copied",
+                    "adapted"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "upstream": {
+                  "$ref": "#/$defs/source"
+                },
+                "license": {
+                  "const": "Apache-2.0"
+                }
+              },
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "library"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "no_upstream_proof_text_reused"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reuse_kind": {
+                  "const": "original"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "upstream": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "no_upstream_proof_text_reused"
+              ],
+              "not": {
+                "required": [
+                  "library"
+                ]
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reuse_kind": {
+                  "const": "existing_library"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "library"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "planned",
+                    "replaced",
+                    "excluded"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "ported",
+                    "replaced"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "verification": {
+                  "properties": {
+                    "result": {
+                      "const": "passed"
+                    }
+                  }
+                },
+                "downstream": {
+                  "properties": {
+                    "name_status": {
+                      "const": "declared"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "planned"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "verification": {
+                  "properties": {
+                    "result": {
+                      "const": "pending"
+                    }
+                  }
+                },
+                "downstream": {
+                  "properties": {
+                    "name_status": {
+                      "const": "proposed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "replaced"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reuse_kind": {
+                  "const": "existing_library"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "excluded"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "verification": {
+                  "properties": {
+                    "result": {
+                      "const": "pending"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "source",
+    "entries"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenAI mathematics source provenance ledger v1",
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+        },
+        "declaration": {
+          "type": "string",
+          "pattern": "^[^\\W\\d][\\w']*(?:\\.[^\\W\\d][\\w']*)*$"
+        },
+        "lines": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "repository",
+        "commit",
+        "path",
+        "declaration",
+        "lines",
+        "url"
+      ]
+    }
+  }
+}

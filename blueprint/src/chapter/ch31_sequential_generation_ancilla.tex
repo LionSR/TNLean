@@ -1559,8 +1559,10 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
     Let $Q_0,\dots,Q_{n-1}$ be square matrices of size $D'$ indexed by the
     physical index, with bonds $b_0=1,b_1,\dots,b_n$, such that $Q_p^i$ vanishes
     on the rows $\alpha\ge b_p$ and $Q_p$ is isometric on its first $b_{p+1}$
-    bond levels. Then there is a unitary $U$ on the open chain of $n$ sites,
-    a product of at most $n-r+1$ gates on windows of $r+1$ sites, with
+    bond levels. Then there is a unitary $U$ on the open chain of $n$ sites
+    such that, for every unitary $Z$ acting on the last $r$ sites, $UZ$ is a
+    product of at most $\max(1,n-r)$ gates on windows of $r+1$ sites (in
+    particular, so is $U$), with
     \begin{align}
         \bra{\sigma}U\ket{0\cdots0,e(x)} & =\bigl(Q^\sigma\bigr)_{0x}
         \qquad\text{for every } x<b_n,
@@ -1584,8 +1586,10 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
     them. Applying it first and the unitary of the shorter chain on the first
     $n$ sites afterwards gives~(\ref{eq:seqanc_staircase}) by the product rule
     $Q^\sigma=Q^{\sigma_0\cdots\sigma_{n-1}}Q_n^{\sigma_n}$ and the row support
-    of $Q_n$. The count of two-site gates follows from
-    Lemma~\ref{lem:qc_window_products}.
+    of $Q_n$. A unitary $Z$ on the last $r$ sites acts inside the window of
+    the new unitary, so their product is one gate; if $n=r$, the whole
+    product acts on the $r+1$ sites of the chain and is one gate. The count
+    of two-site gates follows from Lemma~\ref{lem:qc_window_products}.
 \end{proof}
 
 \begin{theorem}[Exact preparation by gates on $k+1$ consecutive sites]
@@ -1598,10 +1602,11 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
     Let $d\ge1$, and let $\psi$ be a unit vector of $(\C^d)^{\otimes N}$ with an
     open-boundary representation of bond dimension $D\le d^k$. Then
     $\psi=U\ket{0}^{\otimes N}$ for a unitary $U$ that is a product of at most
-    $N-k+2$ gates, each acting on at most $k+1$ consecutive sites of the open
-    chain (with $N-k$ read as $0$ when $N<k$). In particular, if $D\le d$ and
-    $N\ge2$, then $U$ is a product of at most $N+1$ gates on two neighbouring
-    sites. This is the sequential preparation
+    $\max(1,N-k)$ gates, each acting on at most $k+1$ consecutive sites of the
+    open chain (with $N-k$ read as $0$ when $N<k$). In particular, if $D\le d$
+    and $N\ge2$, then $U$ is a product of at most $N-1$ gates on two
+    neighbouring sites, as in the scheme without an ancilla of
+    Theorem~\ref{thm:seqanc_no_ancilla}. This is the sequential preparation
     of~\cite{Schoen2005Sequential} and~\cite[paragraph ``The sequential-RG
         circuit'']{Malz2024Preparation}, with each isometry embedded into a
     unitary on consecutive sites.
@@ -1620,8 +1625,9 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
     configurations of $k$ sites by some $e$. A unitary on the last $k$ sites
     sends $\ket{0\cdots0}$ to $\sum_x r'_x\ket{e(x)}$, and the staircase of
     Lemma~\ref{lem:seqanc_staircase} with $r=k$, applied afterwards, gives
-    $\sum_x r'_x(Q^\sigma)_{0x}=\psi(\sigma)$ by~(\ref{eq:seqanc_staircase}).
-    These are $1+(N-k+1)$ gates. For $k=1$, gates on windows of two sites are
+    $\sum_x r'_x(Q^\sigma)_{0x}=\psi(\sigma)$ by~(\ref{eq:seqanc_staircase}),
+    and with $Z$ this unitary the lemma gives at most $\max(1,N-k)$ gates. For
+    $k=1$, gates on windows of two sites are
     gates on neighbouring sites by Lemma~\ref{lem:qc_window_products}.
 \end{proof}
 

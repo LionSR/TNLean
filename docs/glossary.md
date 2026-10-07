@@ -1209,6 +1209,30 @@ The following notions use different transfer objects and are not interchangeable
   CZX four-domain instance are recorded in
   `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
 
+## States of the quasi-local algebra
+
+### `SpinChain.IsPureQuasiLocalState`
+
+- **Declaration:** `SpinChain.IsPureQuasiLocalState d ω : Prop`, for a continuous
+  complex-linear functional `ω` on `SpinChain.QuasiLocalAlgebra d` with `d > 0`.
+- **Defined in:** `TNLean/QCA/StateSpace.lean`.
+- **Meaning:** `ω` is an extreme point, over the real numbers, of
+  `SpinChain.quasiLocalStateSpace d`: the functionals of norm one with
+  $\omega(I)=1$ and $\omega(X^*X)\geq0$ for every quasi-local observable $X$.
+- **Source:** Nachtergaele, Commun. Math. Phys. 175 (1996),
+  arXiv:cond-mat/9410110, lines 854--887 and 1469--1482.
+- **Sanctioned bridges:**
+  `SpinChain.isPureQuasiLocalState_of_unique_supported_state` proves purity from
+  unique determination by expectation-one projections;
+  `SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition` reads off
+  a constituent of a finite convex decomposition; and
+  `SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff` and
+  `SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff` transport
+  purity along star-algebra isomorphisms and site grouping.
+- **Caveat:** purity is extremality among all states, not among
+  translation-invariant states; a state that is extremal only among
+  translation-invariant states need not satisfy this predicate.
+
 ## Gauge relations between blocks
 
 ### `MPSTensor.IsGaugeRelated`
@@ -1986,6 +2010,55 @@ in `MPS/Preparation/` uses it.
   feedforward differ from the source model; no inclusion in its phase
   relation or source `QCcc` classification is asserted. See
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+### Lieb–Robinson propagation on finite graphs
+
+#### `QuantumCircuit.heisenbergCommutatorNorm`
+
+- **Declaration:**
+  `QuantumCircuit.heisenbergCommutatorNorm (H B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (X : Set ι) (t : ℝ) : ℝ`,
+  with `QuantumCircuit.heisenbergEvolution H t A = e^{itH} A e^{-itH}`.
+- **Defined in:** `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Meaning:** the operator norm of `A ↦ [τ_t(A), B]` restricted to
+  `supportedOperators q X`, for any finite type of sites `ι`.
+- **Source:** Hastings–Koma, arXiv:math-ph/0507008, Appendix A, (A.13); the
+  function `F(X, t)` of OpenAI, *A two-dimensional area law from a global
+  spectral gap*, Lemma 4.1 (`03-quasilocal.tex`, lines 70–74).
+- **Sanctioned bridges:**
+  `QuantumCircuit.heisenbergCommutatorNorm_le_integral` (the local commutator
+  recursion for an arbitrary finite interaction family),
+  `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance` and
+  `QuantumCircuit.exists_graph_lieb_robinson` (graph-distance propagation with
+  constants depending only on the support diameter, support size and per-site
+  interaction budget), and
+  `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
+  vanishing between connected components). The finite-ring estimate
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
+  nearest-neighbor ring consumer of the same recursion.
+- **Caveat:** the graph theorems take the per-support size bound and the
+  per-site norm budget as hypotheses; deriving them from the one-term-per-support
+  convention on an induced square-lattice domain is a separate step.
+
+#### `QuantumCircuit.siteExpectation`
+
+- **Declaration:**
+  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
+  with the linear map `QuantumCircuit.siteExpectationLM`.
+- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+- **Meaning:** the normalized partial trace
+  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  original sites.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
+- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
+  average over products of on-site Weyl operators outside `K`),
+  `siteExpectation_mem_supportedOperators`,
+  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
+  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
+  `norm_sub_siteExpectation_le` (error through on-site commutators), and
+  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
+  dynamics onto graph balls under a sphere-growth hypothesis).
+- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
 
 ## Inhomogeneous short-range correlated chains
 
@@ -2894,3 +2967,47 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
 | `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
 | `TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood`, `dyadicLayer` | Actual translated half-open cell unions and their successive differences at nonnegative dyadic scales | Area-law Section 11; nesting, exact layer-cell unions, and uniform cell counts proved; exhaustion holds for a nonempty endpoint set and radius at least two. Closure-distance bounds remain open. |
+
+## Nested regional cylinders
+
+### `TNLean.PEPS.dependentRegionCylinder`
+
+- **Declaration:** `dependentRegionCylinder R S`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Cylinder.lean`.
+- **Meaning:** the global vectors all of whose complementary coordinate slices
+  lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
+- **Source:** the September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 563–603](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L563-L603).
+- **Sanctioned identifications:** `range_dependentRegionOperatorLift` identifies
+  the range of an identity extension with a cylinder;
+  `coordinateRangeProjector_dependentRegionCylinder` identifies the orthogonal
+  projector. The `sup`, `iSup`, `subregion`, and `map` theorems give finite-sum,
+  containing-region, and image identities in the existing physical coordinates.
+- **Caveat:** inside rank means `dim S`, not the global dimension of the
+  cylinder. No cancellation of a possibly zero-dimensional outside factor
+  is used. The empty region still has inside Hilbert space `ℂ`.
+
+### `TNLean.PEPS.nestedCylinderInnovation`
+
+- **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
+  that the finite family of regions is monotone.
+- **Defined in:** `TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean`.
+- **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
+  `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
+  inside projectors into the current region and taking the sum of their ranges.
+- **Source:** the variable-radius orthogonalization at the manuscript passage
+  linked above.
+- **Sanctioned consequences:** `nestedCylinderInnovation_prefix_span` and
+  `nestedCylinderInnovation_span` identify all prefix and total spans;
+  `nestedCylinderInnovation_pairwise_orthogonal` proves orthogonality in the
+  actual global Hilbert space; `nestedCylinderInnovation_projector_sum` gives
+  the sum of the lifted inside projectors. The individual and summed
+  `finrank` bounds compare inside dimensions directly, in natural and integer
+  form. `nestedCylinder_projector_supported` gives support on any containing
+  region, and that support result does not require nesting.
+- **Caveat:** the image need not equal `Sⱼ ∩ Wⱼ⊥`; the sandwich
+  `(I − P_(Wⱼ)) P_(Sⱼ) (I − P_(Wⱼ))` need not be a projector. Neither
+  commutation of the original projectors nor a spectral rank estimate is
+  assumed. This is the orthogonalization step, not the approximation-error
+  or full adaptive-patch theorem. See
+  [the construction and scope note](formalization/peps-nested-cylinder-orthogonalization.md).
