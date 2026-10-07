@@ -22,12 +22,18 @@ Every one of the fifteen declaration names was searched across `TNLean`, `docs`,
 `blueprint` and `scripts`, and each external match was attributed by the
 namespace in scope at its declaration site. Seven of the names are declared a
 second time in the tree as `ThreeBlockGeometry`-namespaced members of
-`UnionInjectivityGeneralBlue.lean`, and the forty-odd consumers of those names
-all resolve to the namespaced member through dot notation on a geometry:
+`UnionInjectivityGeneralBlue.lean`:
 `complProd_eq_regionMerge_blue`, `hostLabel_p2_eq_hostLabel_regionMerge_blue`,
 `threeBlockBlueFiber_card`, `threeBlockDoubleSum_eq_smul_single_blue`,
 `threeBlockComplCoeff`, `threeBlockDoubleSum_eq_complCoeff_sum_blue` and
 `regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`.
+The forty-odd consumers behind those short-name matches resolve to the
+namespaced member through dot notation on a geometry, but only for two of the
+seven, `threeBlockComplCoeff` and the capstone
+`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`;
+the other five namespaced twins had no consumer either and are deleted by the
+follow-up recorded in
+`docs/audits/2026-10-07_peps_union_injectivity_blue_dead_blocks.md`.
 The remaining eight names have no match at all outside the file except two prose
 pointers, corrected below. No removed name carries an attribute or an instance
 declaration.
@@ -41,18 +47,21 @@ which tags a different surviving declaration, so `checkdecls` is unaffected.
 
 ## Removed declarations and their replacements
 
-The seven names with a `ThreeBlockGeometry` twin are replaced by that twin,
-which states the same identity over a bare geometry instead of an
-edge-centred blocking datum.
+At the time of this deletion the seven names with a `ThreeBlockGeometry` twin
+were replaced by that twin, which states the same identity over a bare geometry
+instead of an edge-centred blocking datum. The follow-up recorded in
+`docs/audits/2026-10-07_peps_union_injectivity_blue_dead_blocks.md` found five
+of the seven twins as consumer-free as the declarations they replaced and
+deleted them; the affected rows are marked.
 
 | Removed declaration | Replacement |
 |---|---|
-| `TNLean.PEPS.complProd_eq_regionMerge_blue` | `TNLean.PEPS.ThreeBlockGeometry.complProd_eq_regionMerge_blue` (`UnionInjectivityGeneralBlue.lean`) |
-| `TNLean.PEPS.hostLabel_p2_eq_hostLabel_regionMerge_blue` | `TNLean.PEPS.ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_blue` (same file) |
-| `TNLean.PEPS.threeBlockBlueFiber_card` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueFiber_card` (same file) |
-| `TNLean.PEPS.threeBlockDoubleSum_eq_smul_single_blue` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single_blue` (same file) |
+| `TNLean.PEPS.complProd_eq_regionMerge_blue` | none needed: the namespaced twin in `UnionInjectivityGeneralBlue.lean` had no consumer either and is deleted with it (`docs/audits/2026-10-07_peps_union_injectivity_blue_dead_blocks.md`) |
+| `TNLean.PEPS.hostLabel_p2_eq_hostLabel_regionMerge_blue` | none needed: the namespaced twin had no consumer either and is deleted with it (same note) |
+| `TNLean.PEPS.threeBlockBlueFiber_card` | none needed: the namespaced twin had no consumer either and is deleted with it (same note) |
+| `TNLean.PEPS.threeBlockDoubleSum_eq_smul_single_blue` | none needed: the namespaced twin had no consumer either and is deleted with it (same note) |
 | `TNLean.PEPS.threeBlockComplCoeff` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockComplCoeff` (same file) |
-| `TNLean.PEPS.threeBlockDoubleSum_eq_complCoeff_sum_blue` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_complCoeff_sum_blue` (same file) |
+| `TNLean.PEPS.threeBlockDoubleSum_eq_complCoeff_sum_blue` | none needed: the namespaced twin had no consumer either and is deleted with it (same note) |
 | `TNLean.PEPS.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` | `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` (same file) |
 | `TNLean.PEPS.regionInteriorBondProd_smul_threeBlockBlueWeight_eq` | `TNLean.PEPS.regionInteriorBondProd_smul_geometryBlueWeight_eq` (same file), the geometry-native form of the same blue smul-factorization and the form the overlapping-descent bridge actually calls |
 | `TNLean.PEPS.threeBlockComplRow` | none needed: the explicit preimage witness of the complement row, a proof step of the stripped middle |
