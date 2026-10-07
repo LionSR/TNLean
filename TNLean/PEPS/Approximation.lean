@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
+import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.CommonPairSources
 import TNLean.PEPS.Approximation.CommonPartyMaps
 import TNLean.PEPS.Approximation.CommonSourceGate
@@ -17,6 +18,7 @@ import TNLean.PEPS.Approximation.CompletePartyMaps
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
+import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.PairEffectElimination
@@ -35,6 +37,9 @@ import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
+import TNLean.PEPS.Approximation.PreparedSourceGate
+import TNLean.PEPS.Approximation.SelectiveSourceFactorization
+import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SourceBlockMatrix
 import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceGateDensity
@@ -46,6 +51,7 @@ import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.SourceSlotBasis
 import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.UnitPairSource
+import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction

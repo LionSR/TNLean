@@ -5614,3 +5614,29 @@ spectral split → block extraction → MPV calculation → strict bounds
   a tensor-map identity first would require additional equalities without
   simplifying the proof. The common mathematical operation is ordinary
   congruence after the memory types have been identified.
+
+
+### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
+
+- **Pattern:** Identify the vector-independent slot layout with an actual source
+  inventory, then express preparation of a nonempty list as preparation of the
+  tail followed by its head source.
+- **Seen:** `prepareSlots_cons_heq` in `SourceSlotMaps.lean` and
+  `SelectiveSourcePreparation.lean` under `PEPS/Approximation` (two occurrences).
+- **Abstraction:** Before a third consumer, export the cons identity from a
+  shared preparation module. Tensor calculations already reuse
+  `eval_frameList_prepare`; the remaining argument identifies equal layouts.
+- **Notes:** Short equality transports follow the existing congruence decision
+  above. No additional tactic is needed.
+
+### Grouped operators and spectator memories — candidate (2026-10-07)
+
+- **Pattern:** Evaluate an operator on a block tensored with an untouched memory,
+  and transport both layouts through the canonical owner-grouping isometries.
+- **Seen:** `localMap_owner_naturality` in `WordOwnerMap.lean` and
+  `eval_groupedBlockMap` in `GroupedBlockMap.lean` under `PEPS/Approximation`.
+- **Abstraction:** Both calculations use `Layout.mapOwnerIso_append_tmul` and
+  `clm_ext_tmul`. At a third occurrence, move the block-operator identity to a
+  lower-level lemma, then derive the local and aggregate cases from it.
+- **Notes:** The aggregate case permits several original owners on the block;
+  it retains the full operator after those owners are grouped together.
