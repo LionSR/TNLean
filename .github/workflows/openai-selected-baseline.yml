@@ -25,7 +25,6 @@ jobs:
       SOURCE_PIN: adc7f1241b42e322a6451854ab7e4b4c146bf78a
       MATHLIB_PIN: d13f23b723b8a846827a245b89c10fc7d3f11612
       LEAN_NUM_THREADS: '2'
-      MATHLIB_CACHE_DIR: ${{ runner.temp }}/mathlib-cache-original
     steps:
       - uses: actions/checkout@v7
         with:
@@ -57,6 +56,8 @@ jobs:
           "$RUNNER_TEMP/lean-4.34.1-linux/bin/lean" --version
 
       - name: Fetch prebuilt cache, refuse stale dependencies, build only the three roots
+        env:
+          MATHLIB_CACHE_DIR: ${{ runner.temp }}/mathlib-cache-original
         shell: bash
         run: |
           set -euo pipefail
