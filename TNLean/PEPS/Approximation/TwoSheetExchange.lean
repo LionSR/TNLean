@@ -844,6 +844,90 @@ theorem commute_correction [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P
   exact Finset.disjoint_coe.mpr (Finset.disjoint_of_subset_right (X.aSet_subset_compl P)
     disjoint_compl_right)
 
+/-- **The net map on the sheets (`eq:exchange-net-map`).** `D_U F_T = (𝒱^{⊗2})ᴴ F_{T B_T}
+𝒱^{⊗2}`, in the coordinates `((t, e), u)` of both sheets.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 516–526. -/
+theorem sheetBufferCorrection_mul_sheetSwapOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
+    sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P) =
+      Matrix.submatrix ((((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V))ᴴ *
+          ((tbSwap (X.tSet P → Fin q) (X.eSet P → Fin q) (X.tSet P → Fin q)
+            ((X.eSet P → Fin q) ⊕ (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q))).toPEquiv.toMatrix :
+              Matrix _ _ ℂ) *
+          (((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V)))
+        (threeSplit₂ (X.disjoint_tSet_eSet P)) (threeSplit₂ (X.disjoint_tSet_eSet P)) := by
+  rw [sheetSwapOp_eq_submatrix (X.disjoint_tSet_eSet P), sheetBufferCorrection,
+    submatrix_mul_equiv, bufferCorrection_mul_tSwap]
+
+/-- **The exact map (`eq:exchange-exact-map`).** `C K_in = K_out D_U F_T`, and
+`D_U F_T = (𝒱^{⊗2})ᴴ F_{T B_T} 𝒱^{⊗2}` (`sheetBufferCorrection_mul_sheetSwapOp`).
+
+Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 512–532. -/
+theorem exchangeOp_mul_encoder [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P)) :
+    X.exchangeOp P σ * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
+      (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) *
+        (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P)) := by
+  rw [exchangeOp, Matrix.mul_assoc, rename_mul_encoder, ← Matrix.mul_assoc]
+  rw [show X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder =
+    frameEncoder (X.out₁ ++ X.in₂) ⊗ₖ frameEncoder (X.out₂ ++ X.in₁) from rfl,
+    liftTags_mul_kronecker (X.commute_correction P σ), Matrix.mul_assoc, Matrix.mul_assoc,
+    sheetSwapOp_mul_sheetSwapOp (X.mem_tSet_iff P) (X.aSet_subset_region P)]
+
+/-- **Lemma 6.6 (two-sheet exchange).** Consider two encoded frames and a region `Y` such that
+every hole's entire outer square lies on one side of `∂Y`. Inside `Y`, exchange the two raw
+ownership assignments and the two lists of encoded holes, with their tag owners. Let `P∘` be a
+party and `Z`, `T`, `E`, `U` as in `eq:exchange-Z` and `eq:exchange-partition`. If
+`I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, there are splitting data such that the map
+`C = D_U F_A ℛ`, a register renaming followed by a private swap and a private buffer correction
+on the registers of `U` (all held by `P∘` before and after, `owner_eq_of_notMem_exchangeEnv`,
+`newOwner_eq_of_notMem_exchangeEnv`), is a contraction with
+`C K_in = K_out D_U F_T` and
+`‖C (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`. No raw register is transferred: the
+renaming keeps every register at its party (`newFrame₁_owner_of_mem`).
+
+Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479; proof
+lines 481–561. -/
+theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
+    (hL : 0 < L)
+    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω (X.tSet P) (X.eSet P) ≤
+      L ^ (-60 : ℤ)) :
+    ∃ σ : SplittingData q (X.tSet P) (X.eSet P),
+      σ.error (X.disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
+      ‖X.exchangeOp P σ‖ ≤ 1 ∧
+      X.exchangeOp P σ * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
+        (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) *
+          (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P)) ∧
+      ‖act (X.exchangeOp P σ) (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω)) -
+        vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω)‖ ≤ 4 * L ^ (-30 : ℤ) := by
+  set h := X.disjoint_tSet_eSet P
+  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow h hΩ hL hI
+  refine ⟨σ, hσ, X.norm_exchangeOp_le_one P σ, X.exchangeOp_mul_encoder P σ, ?_⟩
+  have hKout : ‖X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder‖ ≤ 1 :=
+    l2_opNorm_kronecker_le_one X.newFrame₁.norm_encoder_le_one X.newFrame₂.norm_encoder_le_one
+  have hin : vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω) =
+      act (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) (vecKron Ω Ω) :=
+    (act_kronecker_vecKron _ _ _ _).symm
+  have hout : vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω) =
+      act (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) (vecKron Ω Ω) :=
+    (act_kronecker_vecKron _ _ _ _).symm
+  rw [hin, hout, ← act_mul, X.exchangeOp_mul_encoder P σ, act_mul, ← act_sub_right]
+  refine (norm_act_le_of_norm_le_one hKout _).trans ?_
+  rw [sheetSwapOp_eq_submatrix h, sheetBufferCorrection, submatrix_mul_equiv,
+    norm_act_submatrix_sub]
+  set ω : EuclideanSpace ℂ _ := WithLp.toLp 2 (splitVec h Ω)
+  have hω : (WithLp.toLp 2 (⇑(vecKron Ω Ω) ∘ (threeSplit₂ h).symm) : EuclideanSpace ℂ _) =
+      vecKron ω ω := rfl
+  have hω1 : ‖ω‖ = 1 := by
+    have h2 := norm_toLp_sq (splitVec h Ω)
+    rw [star_splitVec_dotProduct_splitVec h hΩ, Complex.one_re] at h2
+    nlinarith [norm_nonneg ω]
+  rw [hω]
+  refine (norm_act_bufferCorrection_mul_tSwap_sub_le σ.isIsometry σ.star_s σ.star_s' hω1).trans ?_
+  have he : ‖act ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ω - WithLp.toLp 2 (tensorPurification σ.s σ.s')‖ =
+      σ.error h Ω := rfl
+  rw [he]
+  linarith
+
 end TwoSheetExchange
 
 end TNLean.PEPS.EncodedFrame
