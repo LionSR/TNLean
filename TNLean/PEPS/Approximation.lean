@@ -10,5 +10,9 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.ConditionalTwoFamilies
+import TNLean.PEPS.Approximation.CorrectedPositionCost
+import TNLean.PEPS.Approximation.DistributedLifetime
+import TNLean.PEPS.Approximation.DistributedLinks
+import TNLean.PEPS.Approximation.DistributedOperatorContraction
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
