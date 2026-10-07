@@ -38,6 +38,26 @@ These proofs are newly written from the paper's mathematical argument. No OpenAI
 Lean code is copied or adapted.
 -/
 
+/-!
+Original proof provenance.
+Source: September 24, 2026.
+Paper file: https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex
+Labels: thm:compression, eq:compression-polynomial-bounds, eq:compression-choice-cost;
+independently formalized; no upstream Lean proof text reused.
+Mathematical source commit: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+Provenance-ID: 8769-lifetime-ket-bra-coefficient-cost
+Downstream declaration: TNLean.PEPS.Approximation.ketBraCoefficientCost
+Provenance-ID: 8769-lifetime-ket-bra-coefficient-cost-eq-sum
+Downstream declaration: TNLean.PEPS.Approximation.ketBraCoefficientCost_eq_sum
+Provenance-ID: 8769-lifetime-corrected-position-choice-cost
+Downstream declaration: TNLean.PEPS.Approximation.correctedPositionChoiceCost
+Provenance-ID: 8769-lifetime-corrected-position-choice-cost-le
+Downstream declaration: TNLean.PEPS.Approximation.correctedPositionChoiceCost_le
+Provenance-ID: 8769-lifetime-compression-choice-base-le-of-monomial-bounds
+Downstream declaration: TNLean.PEPS.Approximation.compressionChoiceBase_le_of_monomial_bounds
+-/
+
 namespace TNLean.PEPS.Approximation
 
 open scoped BigOperators NNReal
