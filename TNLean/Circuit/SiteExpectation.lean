@@ -434,4 +434,123 @@ theorem siteExpectationLM_isKrausCPTP [NeZero q] (K : Finset ι) :
     rw [show ((Fintype.card P : ℕ) : ℂ) = (q : ℂ) ^ (2 * Fintype.card ι) from card_weylLabels q,
       mul_inv_cancel₀ (pow_ne_zero _ hq'), one_smul]
 
+/-! ### Localization error through on-site commutators -/
+
+/-- The product of the on-site Weyl operators at the sites of `S`. -/
+private noncomputable def partialWeyl [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
+    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  rectKronecker fun x => if x ∈ S then localWeyl q (p x) else 1
+
+private theorem partialWeyl_mem_unitary [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
+    partialWeyl S p ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) := by
+  have hU := fun x => localWeyl_mem_unitaryGroup (q := q) (p x)
+  rw [Unitary.mem_iff]
+  simp only [partialWeyl, star_eq_conjTranspose, rectKronecker_conjTranspose, rectKronecker_mul]
+  constructor
+  · convert rectKronecker_one (ν := ι) (ι := Fin q) using 2
+    funext x
+    split_ifs
+    · exact Matrix.mem_unitaryGroup_iff'.mp (hU x)
+    · simp
+  · convert rectKronecker_one (ν := ι) (ι := Fin q) using 2
+    funext x
+    split_ifs
+    · exact Matrix.mem_unitaryGroup_iff.mp (hU x)
+    · simp
+
+private theorem partialWeyl_insert [NeZero q] {S : Finset ι} {y : ι} (hy : y ∉ S)
+    (p : ι → ZMod q × ZMod q) :
+    partialWeyl (insert y S) p = partialWeyl {y} p * partialWeyl S p := by
+  simp only [partialWeyl, rectKronecker_mul]
+  congr 1
+  funext x
+  by_cases hxy : x = y
+  · subst hxy; simp [hy]
+  · by_cases hxS : x ∈ S <;> simp [hxy, hxS]
+
+private theorem partialWeyl_singleton_mem [NeZero q] (y : ι) (p : ι → ZMod q × ZMod q) :
+    partialWeyl {y} p ∈ supportedOperators q ({y} : Set ι) :=
+  rectKronecker_mem_supportedOperators fun x hx => by
+    simp only [Set.mem_singleton_iff] at hx
+    simp [hx]
+
+private theorem outsideWeyl_eq_partialWeyl [NeZero q] (K : Finset ι)
+    (p : ι → ZMod q × ZMod q) : outsideWeyl q K p = partialWeyl Kᶜ p := by
+  simp only [outsideWeyl, partialWeyl, Finset.mem_compl]
+  congr 1
+  funext x
+  by_cases hx : x ∈ K <;> simp [hx]
+
+/-- The commutator with a product of unitaries is bounded by the sum of the
+commutators with the factors. -/
+private theorem norm_commutator_mul_le {R : Type*} [NormedRing R] [StarRing R] [CStarRing R]
+    (B U V : R) (hU : U ∈ unitary R) (hV : V ∈ unitary R) :
+    ‖B * (U * V) - U * V * B‖ ≤ ‖B * U - U * B‖ + ‖B * V - V * B‖ := by
+  have h : B * (U * V) - U * V * B = (B * U - U * B) * V + U * (B * V - V * B) := by
+    noncomm_ring
+  rw [h]
+  refine (norm_add_le _ _).trans (le_of_eq ?_)
+  rw [CStarRing.norm_mul_mem_unitary _ hV, CStarRing.norm_mem_unitary_mul _ hU]
+
+private theorem norm_commutator_partialWeyl_le [NeZero q]
+    (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (ε : ι → ℝ) (p : ι → ZMod q × ZMod q) (S : Finset ι)
+    (hε : ∀ y ∈ S, ∀ U ∈ supportedOperators q ({y} : Set ι),
+      U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) → ‖B * U - U * B‖ ≤ ε y) :
+    ‖B * partialWeyl S p - partialWeyl S p * B‖ ≤ ∑ y ∈ S, ε y := by
+  induction S using Finset.induction_on with
+  | empty =>
+    have h1 : partialWeyl (∅ : Finset ι) p = 1 := by
+      simp [partialWeyl]
+    simp [h1]
+  | insert y S hy ih =>
+    rw [partialWeyl_insert hy, Finset.sum_insert hy]
+    refine (norm_commutator_mul_le B _ _ (partialWeyl_mem_unitary _ p)
+      (partialWeyl_mem_unitary _ p)).trans (add_le_add ?_ ?_)
+    · exact hε y (Finset.mem_insert_self y S) _ (partialWeyl_singleton_mem y p)
+        (partialWeyl_mem_unitary _ p)
+    · exact ih fun z hz => hε z (Finset.mem_insert_of_mem hz)
+
+/-- **Localization error through on-site commutators.** If, for every site `y`
+outside `K`, the commutator of `B` with every on-site unitary at `y` has norm at
+most `ε y`, then `‖B - E_K(B)‖ ≤ ∑_{y ∉ K} ε y`. Source: OpenAI area law,
+proof of Lemma 4.1 (`03-quasilocal.tex`, lines 117–124), where the expectation
+is written as a product of commuting on-site twirls and the product is
+telescoped. -/
+theorem norm_sub_siteExpectation_le [NeZero q] (K : Finset ι)
+    (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (ε : ι → ℝ)
+    (hε : ∀ y ∉ K, ∀ U ∈ supportedOperators q ({y} : Set ι),
+      U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) → ‖B * U - U * B‖ ≤ ε y) :
+    ‖B - siteExpectation q K B‖ ≤ ∑ y ∈ Kᶜ, ε y := by
+  have hq : (q : ℂ) ≠ 0 := by exact_mod_cast NeZero.ne q
+  have hqr : (0 : ℝ) < q := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne q)
+  set c : ℂ := ((q : ℂ) ^ (2 * Fintype.card ι))⁻¹ with hc
+  have hN : c * (Fintype.card (ι → ZMod q × ZMod q) : ℂ) = 1 := by
+    rw [card_weylLabels, hc, inv_mul_cancel₀ (pow_ne_zero _ hq)]
+  have hB : B = c • ∑ _p : ι → ZMod q × ZMod q, B := by
+    rw [Finset.sum_const, Finset.card_univ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul, hN, one_smul]
+  have hterm (p : ι → ZMod q × ZMod q) :
+      ‖B - outsideWeyl q K p * B * (outsideWeyl q K p)ᴴ‖ ≤ ∑ y ∈ Kᶜ, ε y := by
+    have hU := outsideWeyl_mem_unitary K p
+    have heq : B - outsideWeyl q K p * B * (outsideWeyl q K p)ᴴ =
+        (B * outsideWeyl q K p - outsideWeyl q K p * B) * (outsideWeyl q K p)ᴴ := by
+      rw [sub_mul, ← star_eq_conjTranspose, mul_assoc B, Unitary.mul_star_self_of_mem hU,
+        mul_one]
+    rw [heq, ← star_eq_conjTranspose, CStarRing.norm_mul_mem_unitary _ (Unitary.star_mem hU),
+      outsideWeyl_eq_partialWeyl]
+    exact norm_commutator_partialWeyl_le B ε p Kᶜ fun y hy => hε y (Finset.mem_compl.mp hy)
+  have hdiff : B - siteExpectation q K B = c • ∑ p : ι → ZMod q × ZMod q,
+      (B - outsideWeyl q K p * B * (outsideWeyl q K p)ᴴ) := by
+    rw [Finset.sum_sub_distrib, smul_sub, ← hB, siteExpectation_eq_average]
+  rw [hdiff, norm_smul]
+  calc
+    _ ≤ ‖c‖ * ∑ p : ι → ZMod q × ZMod q, ∑ y ∈ Kᶜ, ε y :=
+      mul_le_mul_of_nonneg_left ((norm_sum_le _ _).trans (Finset.sum_le_sum fun p _ => hterm p))
+        (norm_nonneg _)
+    _ = ∑ y ∈ Kᶜ, ε y := by
+      rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, ← mul_assoc]
+      have : ‖c‖ * (Fintype.card (ι → ZMod q × ZMod q) : ℝ) = 1 := by
+        have h := congrArg norm hN
+        rwa [norm_mul, norm_one, Complex.norm_natCast] at h
+      rw [this, one_mul]
+
 end QuantumCircuit
