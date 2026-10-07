@@ -13,6 +13,9 @@ import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
 import TNLean.PEPS.AreaLaw.Geometry.DyadicClosure
 import TNLean.PEPS.AreaLaw.Geometry.DyadicExhaustion
 import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
+import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
+import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
+import TNLean.PEPS.AreaLaw.Geometry.FineBelts
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
 import TNLean.PEPS.AreaLaw.Geometry.Templates

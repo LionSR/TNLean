@@ -125,6 +125,25 @@ source's `geometry:layer-distance` and `geometry:nonadjacent` estimates;
 contacts, simultaneous repairs, and the two-family construction remain
 separate proof obligations.
 
+`Geometry.fineLayerIndices` subdivides each actual half-open layer cell
+into cells at a finer dyadic scale. For fine exponent `ℓ ≤ k`, its set of
+indices is exactly the set of fine cells meeting the layer, with cardinality
+`4^(k−ℓ)` times the coarse-cell count. The fixed fine and pitch exponents
+are `floor(ζk)` and `floor((1+δ₀)k)`. Both arguments are nonnegative, so
+these are ordinary integer floors. The fine-cell side divides the layer
+side, which divides the pitch, at every nonnegative scale.
+
+Coordinate-residue averaging acts on this predetermined fine-cell set.
+The modulus is the exact pitch-to-cell ratio. The endpoint count and
+averaging give coefficient `16*(2*C₀+1)^2`; the two floor losses cost a
+factor of four. Thus `exists_sparse_dyadic_belt_shift` proves the source's
+`geometry:belt-count` estimate with the explicit bound
+`64*(2*C₀+1)^2*b*2^(-δ₀*k/2)`. The coefficient is fixed after the radius
+and before the domain, cut, origin, and scale. Empty endpoint sets and
+layers are included. Strict scale asymptotics, absorption of polynomial
+factors, primary-tile geometry, contacts, repairs, birth separation, and
+the two-family construction remain open.
+
 ## Mathematical coverage
 
 | Source label | Present status | Remaining mathematical work |
@@ -135,7 +154,7 @@ separate proof obligations.
 | Area-law `scanner:template` | Template data defined | Geometric and entropy bounds, #8754 and #8758. |
 | Area-law `geometry:cancellation` | Ordered partition data defined | Generic entropy cancellation, #8760. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
-| Area-law `geometry:belt-count` | Finite residue selection proved | Fine-cell count, scale divisibility, and dyadic decay. |
+| Area-law `geometry:belt-count` | Actual fine-cell layer refinement and count, dyadic scale divisibility, residue selection, and sparse-belt decay with the fixed exponents proved | Strict scale asymptotics; primary-tile geometry, contacts, and repairs. |
 | Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved | Use in the later region construction. |
 | Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved | Use in contact and repair estimates. |
 | Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, and nonadjacent-layer separation proved | Contacts, simultaneous repairs, and the full partition. |

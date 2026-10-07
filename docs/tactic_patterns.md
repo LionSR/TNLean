@@ -5552,3 +5552,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   it never cancels an identity extension or assumes that the outside factor is
   nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
   its default thresholds.
+
+### Dyadic refinement cardinality bounds — candidate (2026-10-07)
+
+- **Pattern:** Rewrite an exact refined-cell cardinality as the coarse count
+  times the number of descendants, multiply a coarse-cell bound by that
+  nonnegative factor, and rearrange the scalar factors.
+- **Seen:** `card_fineLayerIndices_le` and
+  `card_fineLayerIndices_boundary_le` in
+  `PEPS/AreaLaw/Geometry/DyadicRefinement.lean` (two occurrences).
+- **Abstraction:** `card_fineLayerIndices` already contains the exact
+  subdivision formula. The two inequalities use the existing coarse bounds
+  and `Nat.mul_le_mul_left`; no further helper is needed at present.
+- **Notes:** Both occurrences lie in one file, below the promotion threshold.
+  The proof-session scan reports no exact repeated block in the three new
+  fine-belt modules at its default thresholds.

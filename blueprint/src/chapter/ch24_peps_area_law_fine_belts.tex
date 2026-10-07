@@ -1,0 +1,222 @@
+\section{Fine cells and sparse belts}
+\label{sec:area_law_fine_belts}
+
+The origin $o\in\mathbb R^2$ remains arbitrary. All scale indices and
+refinement depths are nonnegative integers. Let $Z\subset\mathbb Z^2$ be
+finite, and let $C_0\ge0$ be an integer. Retain the layer $D_k$ and its
+index set $I_k$ from Definition~\ref{def:area_law_dyadic_layers}.
+
+\begin{definition}[Dyadic refinement]
+    \label{def:area_law_dyadic_refinement}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor,
+        TNLean.PEPS.AreaLaw.Geometry.dyadicRefinement}
+    \leanok
+    For every refinement depth $d$ and fine index $u\in\mathbb Z^2$, define
+    its coarse ancestor by
+    \begin{align}
+        A_d(u) & =\left(\left\lfloor\frac{u_1}{2^d}\right\rfloor,
+        \left\lfloor\frac{u_2}{2^d}\right\rfloor\right).
+    \end{align}
+    For every finite set $P\subset\mathbb Z^2$, define its refinement by
+    \begin{align}
+        R_d(P) & =\{2^d z+a:z\in P,\ a\in\{0,\ldots,2^d-1\}^2\}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Ancestors and refinement counts]
+    \label{thm:area_law_dyadic_refinement}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.mem_dyadicRefinement_iff,
+        TNLean.PEPS.AreaLaw.Geometry.card_dyadicRefinement,
+        TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_of_le}
+    \leanok
+    \uses{def:area_law_dyadic_refinement,def:area_law_dyadic_cells}
+    For every finite $P$, depth $d$, and index $u\in\mathbb Z^2$,
+    \begin{align}
+        u\in R_d(P) & \quad\Longleftrightarrow\quad A_d(u)\in P, \\
+        |R_d(P)|    & =4^d|P|.
+    \end{align}
+    For every pair of scales $\ell\le k$ and every $x\in\mathbb R^2$,
+    \begin{align}
+        A_{k-\ell}(c_\ell(x)) & =c_k(x).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Euclidean division by $2^d$ gives a unique integer quotient and a
+    remainder in $\{0,\ldots,2^d-1\}$ in each coordinate. This proves the
+    membership criterion and the cardinality formula, including negative
+    indices. The identity $\lfloor t/n\rfloor=\lfloor\lfloor t\rfloor/n\rfloor$
+    for a positive integer $n$ gives the point-index identity.
+\end{proof}
+
+\begin{definition}[Fine indices of a layer]
+    \label{def:area_law_fine_layer_indices}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerIndices}
+    \leanok
+    \uses{def:area_law_dyadic_refinement,def:area_law_dyadic_layers}
+    For every fine scale $\ell\le k$, set
+    \begin{align}
+        F_{k,\ell} & =R_{k-\ell}(I_k).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Exact fine-cell layer union]
+    \label{thm:area_law_fine_layer_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion_fine,
+        TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices,
+        TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_boundary_le}
+    \leanok
+    \uses{def:area_law_fine_layer_indices,def:area_law_dyadic_cells}
+    For every $\ell\le k$, the actual layer and its fine-cell count satisfy
+    \begin{align}
+        D_k          & =\bigcup_{u\in F_{k,\ell}} C_{\ell,u}, \\
+        |F_{k,\ell}| & =4^{k-\ell}|I_k|,                      \\
+        |F_{k,\ell}| & \le4(2C_0+1)^2|Z|\,4^{k-\ell}.
+    \end{align}
+    If $Z$ is the set of endpoints of the crossing edges of a cut in a
+    finite induced domain and $b$ is the number of those edges, then
+    \begin{align}
+        |F_{k,\ell}| & \le8(2C_0+1)^2b\,4^{k-\ell}.
+    \end{align}
+    These formulas include empty layers and equal scales. The half-open
+    fine cells are disjoint and nonempty, so $F_{k,\ell}$ is exactly the
+    set of fine indices whose cells meet $D_k$. These are the predetermined
+    cells used in the belt count of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_refinement,thm:area_law_dyadic_indices,
+        thm:area_law_dyadic_nesting,thm:area_law_dyadic_layer_count}
+    A point's fine index belongs to $R_{k-\ell}(I_k)$ precisely when its
+    coarse index belongs to $I_k$. The cell-membership criterion therefore
+    proves the exact union. Multiply the coarse-cell count by $4^{k-\ell}$
+    and apply the endpoint and crossing-edge bounds.
+\end{proof}
+
+\begin{definition}[Fine scale and belt pitch]
+    \label{def:area_law_fine_belt_scales}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex,
+        TNLean.PEPS.AreaLaw.Geometry.pitchScaleIndex}
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    With the fixed exponents $\delta_0$ and $\zeta=1-\delta_0/2$, define,
+    for every scale $k$,
+    \begin{align}
+        \ell_k & =\lfloor\zeta k\rfloor,       \\
+        p_k    & =\lfloor(1+\delta_0)k\rfloor, \\
+        r_k    & =2^k,                         \\
+        t_k    & =2^{\ell_k},                  \\
+        s_k    & =2^{p_k}.
+    \end{align}
+    Both floor arguments are nonnegative, so the displayed floors are
+    the ordinary integer floors. The fine cells have side $t_k$, while
+    $s_k$ is the belt pitch, as in
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Scale order, divisibility and rounding]
+    \label{thm:area_law_fine_belt_scales}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_le,
+        TNLean.PEPS.AreaLaw.Geometry.le_pitchScaleIndex,
+        TNLean.PEPS.AreaLaw.Geometry.fineScale_dvd_layerScale,
+        TNLean.PEPS.AreaLaw.Geometry.layerScale_dvd_pitchScale,
+        TNLean.PEPS.AreaLaw.Geometry.layerScale_exponent_le}
+    \leanok
+    \uses{def:area_law_fine_belt_scales}
+    For every scale $k$,
+    \begin{align}
+        \ell_k        & \le k\le p_k,              \\
+        t_k           & \mid r_k,                  \\
+        r_k           & \mid s_k,                  \\
+        2k-p_k-\ell_k & \le2-\frac{\delta_0 k}{2}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_exponent_gaps}
+    The inequalities $\zeta\le1$ and $\delta_0\ge0$ give the scale order.
+    Ordered exponents give divisibility of the corresponding powers of
+    two. Each floor is greater than its argument minus one. Adding the
+    two floor bounds and using $\zeta=1-\delta_0/2$ proves the last inequality.
+\end{proof}
+
+\begin{definition}[Belt cells]
+    \label{def:area_law_belt_cells}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellIndices}
+    \leanok
+    Let $F\subset\mathbb Z^2$ be finite and let $m\ge1$ be an integer.
+    For every pair of residues $a,b\in\{0,\ldots,m-1\}$, define
+    \begin{align}
+        B(F;m,a,b) & =\{u\in F:u_1\equiv a\pmod m\ \text{or}\ u_2\equiv b\pmod m\}.
+    \end{align}
+    For a fine layer with pitch exponent $p\ge k\ge\ell$, the modulus is
+    $m=2^{p-\ell}$, the ratio of pitch to fine-cell side.
+\end{definition}
+
+\begin{theorem}[Sparse shift in the actual fine-cell layer]
+    \label{thm:area_law_fine_belt_shift}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_fine_belt_shift}
+    \leanok
+    \uses{def:area_law_belt_cells,def:area_law_fine_layer_indices}
+    Let $Z$ be the crossing-edge endpoint set of a finite induced-domain
+    cut, with crossing-edge count $b$. For every pair of scales
+    $\ell\le k$ and pitch exponent $p\ge k$, put $F=F_{k,\ell}$ and
+    $m=2^{p-\ell}$. There are residues $a,b'\in\{0,\ldots,m-1\}$ such that
+    \begin{align}
+        m\,|B(F;m,a,b')| & \le16(2C_0+1)^2b\,4^{k-\ell}.
+    \end{align}
+    Thus, with $r=2^k$, $t=2^\ell$, and $s=2^p$,
+    \begin{align}
+        |B(F;m,a,b')| & \le16(2C_0+1)^2b\,\frac{r^2}{st}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_sparse_belt_shift,thm:area_law_fine_layer_count}
+    Apply coordinate-residue averaging to the fixed set $F$. The selected
+    belt cells satisfy $m|B|\le2|F|$. The actual fine-cell count gives the
+    first inequality. Divide by the positive modulus and use
+    $4^{k-\ell}/2^{p-\ell}=r^2/(st)$ for the second.
+\end{proof}
+
+\begin{theorem}[Geometric decay of the scale ratio]
+    \label{thm:area_law_fine_belt_ratio}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicScale_ratio_le}
+    \leanok
+    \uses{def:area_law_fine_belt_scales}
+    For every scale $k$,
+    \begin{align}
+        \frac{r_k^2}{s_k t_k} & \le4\,2^{-\delta_0 k/2}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fine_belt_scales}
+    The ratio equals $2^{2k-p_k-\ell_k}$. The exponent bound gives
+    $2^{2k-p_k-\ell_k}\le2^{2-\delta_0 k/2}=4\,2^{-\delta_0 k/2}$.
+    The factor four accounts for the two floor-rounding losses.
+\end{proof}
+
+% Source: geometry:belt-count in Section 11.
+\begin{theorem}[Sparse dyadic belts]
+    \label{thm:area_law_sparse_dyadic_belts}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_shift}
+    \leanok
+    \uses{def:area_law_belt_cells,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    Let $Z$ be the crossing-edge endpoint set of a finite induced-domain
+    cut, with crossing-edge count $b$. For every scale $k$, put
+    $F=F_{k,\ell_k}$ and $m=2^{p_k-\ell_k}=s_k/t_k$. There are residues
+    $a,b'\in\{0,\ldots,m-1\}$ such that
+    \begin{align}
+        |B(F;m,a,b')| & \le64(2C_0+1)^2b\,2^{-\delta_0 k/2}.
+    \end{align}
+    This is the sparse-belt estimate in \cite[Section~11]{OpenAI2026AreaLaw}.
+    The constant is fixed after the radius $C_0$ and is independent of the
+    domain, cut, origin and scale. The residues are chosen separately in
+    each layer. Empty endpoint sets and layers are included.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fine_belt_shift,thm:area_law_fine_belt_scales,
+        thm:area_law_fine_belt_ratio}
+    The scale order permits the fine-cell shift theorem with
+    $\ell=\ell_k$ and $p=p_k$. Its coefficient $16(2C_0+1)^2$ multiplied
+    by the scale-ratio factor four gives $64(2C_0+1)^2$.
+\end{proof}

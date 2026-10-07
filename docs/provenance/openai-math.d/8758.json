@@ -1784,6 +1784,678 @@
         ]
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicancestor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the coarse ancestor of a fine dyadic cell index after a natural number of subdivisions.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicrefinement",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicRefinement",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the finite collection of all fine dyadic cell indices subdividing a specified finite coarse collection.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.mem_dyadicrefinement_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_dyadicRefinement_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Identifies refinement membership with membership of the coarse ancestor.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_dyadicrefinement",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_dyadicRefinement",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Counts exactly four to the subdivision depth fine cells for each coarse cell.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellindex_of_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_of_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Identifies the ancestor of the actual fine index of a point with its actual coarse index, for ordered nonnegative scales.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finelayerindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayerIndices",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the fine-cell index set by subdividing the actual dyadic layer indices.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_eq_iunion_fine",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion_fine",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Expresses the actual dyadic layer as the union of its fine cells when the fine scale does not exceed the layer scale.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_finelayerindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Gives the exact fine-layer index cardinality, including zero depth and empty index sets.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_finelayerindices_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Bounds the fine-layer cell count by the endpoint count, the squared neighborhood width, and the squared ratio of cell sides.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_finelayerindices_boundary_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicRefinement.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_boundary_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Bounds the fine-layer cell count by the actual crossing-edge count and the squared ratio of cell sides.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the fine-cell scale exponent as the natural floor of zeta times the layer exponent.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.pitchscaleindex",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.pitchScaleIndex",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the belt-pitch exponent as the natural floor of one plus geometryDelta times the layer exponent.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Shows that the fine-cell exponent does not exceed the layer exponent at every nonnegative scale.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.le_pitchscaleindex",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.le_pitchScaleIndex",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Shows that the layer exponent does not exceed the belt-pitch exponent at every nonnegative scale.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finescale_dvd_layerscale",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScale_dvd_layerScale",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves divisibility of the fine-cell side length into the layer-cell side length.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.layerscale_dvd_pitchscale",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.layerScale_dvd_pitchScale",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves divisibility of the layer-cell side length into the belt pitch.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.layerscale_exponent_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.layerScale_exponent_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Accounts for both floor losses in the fixed-exponent decay inequality, with an additive constant of two.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.beltcellindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltCellIndices",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Defines the finite fine-cell indices selected by either of two coordinate residue classes.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_fine_belt_shift",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_fine_belt_shift",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Selects coordinate residue classes by finite averaging on the actual fine-cell index set.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicscale_ratio_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicScale_ratio_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Converts the rounded dyadic-scale ratio into the fixed-exponent geometric decay bound.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_sparse_dyadic_belt_shift",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FineBelts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_shift",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Combines actual fine-cell counting, finite residue averaging and rounded-scale decay for a sparse dyadic belt shift.",
+        "Source: Section 11, lines 200\u2013237. Uses actual finite dyadic-cell indices at nonnegative scales; does not assert the contact, repair, birth-separation or complete two-family construction, or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }
