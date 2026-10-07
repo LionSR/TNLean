@@ -42,9 +42,23 @@ example (A : (v : Vertex 2) → Pinned.LocalTensor 0 (fun _ => 0) v)
       Pinned.contractPEPS (fun _ => 0) A x := stateCoeff_pinnedTensorToGraphTensor _ _ _
 
 -- The separate virtual-first adapter uses the source's positive-dimension structure.
-example {q L : ℕ} (P : Vector.PEPS q L) (x : Vertex L → Fin q) :
+example {q L : ℕ} (P : Vector.Tensor q L) (x : Vertex L → Fin q) :
     stateCoeff (vectorTensorToGraphTensor P) x = P.contract x :=
   stateCoeff_vectorTensorToGraphTensor P x
 
 #print axioms stateCoeff_pinnedTensorToGraphTensor
 #print axioms stateCoeff_vectorTensorToGraphTensor
+
+-- Bond-one contraction is the product of the arbitrary local physical coefficients.
+example {L q : ℕ} (A : (v : Vertex L) → Pinned.LocalTensor q (fun _ => 1) v)
+    (x : Vertex L → Fin q) :
+    Pinned.contractPEPS (fun _ => 1) A x = ∏ v, A v (x v) (fun _ => 0) := by
+  classical
+  simp [Pinned.contractPEPS]
+
+-- The empty lattice contracts to the scalar one even with nominally zero dimensions.
+example {q : ℕ} (A : (v : Vertex 0) → Pinned.LocalTensor q (fun _ => 0) v)
+    (x : Vertex 0 → Fin q) : Pinned.contractPEPS (fun _ => 0) A x = 1 := by
+  classical
+  letI : IsEmpty (ForwardEdge 0) := ⟨fun e => Fin.elim0 e.val.1.1⟩
+  simp [Pinned.contractPEPS]

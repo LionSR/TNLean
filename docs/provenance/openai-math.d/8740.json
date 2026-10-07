@@ -38,7 +38,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -77,7 +77,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -116,7 +116,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -155,7 +155,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -194,7 +194,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -233,7 +233,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -272,7 +272,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -311,7 +311,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
@@ -350,14 +350,14 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
       }
     },
     {
-      "id": "8740-vector-peps",
+      "id": "8740-vector-tensor",
       "status": "planned",
       "reuse_kind": "adapted",
       "upstream": {
@@ -374,7 +374,7 @@
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
-        "declaration": "TNLean.PEPS.Approximation.Vector.PEPS",
+        "declaration": "TNLean.PEPS.Approximation.Vector.Tensor",
         "name_status": "proposed"
       },
       "paper_sources": [
@@ -389,14 +389,14 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
       }
     },
     {
-      "id": "8740-vector-peps-contract",
+      "id": "8740-vector-tensor-contract",
       "status": "planned",
       "reuse_kind": "adapted",
       "upstream": {
@@ -413,7 +413,7 @@
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
-        "declaration": "TNLean.PEPS.Approximation.Vector.PEPS.contract",
+        "declaration": "TNLean.PEPS.Approximation.Vector.Tensor.contract",
         "name_status": "proposed"
       },
       "paper_sources": [
@@ -428,14 +428,14 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
       }
     },
     {
-      "id": "8740-vector-peps-maxbonddim",
+      "id": "8740-vector-tensor-maxbonddim",
       "status": "planned",
       "reuse_kind": "adapted",
       "upstream": {
@@ -452,7 +452,7 @@
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
-        "declaration": "TNLean.PEPS.Approximation.Vector.PEPS.maxBondDim",
+        "declaration": "TNLean.PEPS.Approximation.Vector.Tensor.maxBondDim",
         "name_status": "proposed"
       },
       "paper_sources": [
@@ -467,7 +467,7 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances."
+        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
       ],
       "verification": {
         "result": "pending"
