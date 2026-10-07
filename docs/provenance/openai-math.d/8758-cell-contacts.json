@@ -30,26 +30,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Defines a whole side of the actual translated dyadic cell as the segment between its corresponding unsplit fan endpoints, for arbitrary origin, scale, integer cell index and side index.",
-        "Source: Section 11, lines 299\u2013306. The definition uses the existing actual fan orientation."
+        "Source: Section 11, lines 299\u2013306. The definition uses the existing actual fan orientation.",
+        "Reverified after the common unsplit side-endpoint coordinate and corner proofs were extracted to SideEndpoints.lean. The public statement is unchanged. The original exact-source verification at 0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-contacts.md and the ledger at completed parent 863405980e1ebca928f76bb883ed794d2fc32e5a. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
-            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
-            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
           }
         ]
       },
@@ -80,26 +81,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For actual fineLayerIndices members at k and h with (k,z) \u2260 (h,w), proves that their actual half-open fine cells are disjoint. No radius, late-layer, endpoint nonemptiness or belt hypothesis is imposed.",
-        "Source: Section 11, lines 173\u2013181 and 299\u2013306. Same-layer indexing and disjoint actual layers establish the two cases."
+        "Source: Section 11, lines 173\u2013181 and 299\u2013306. Same-layer indexing and disjoint actual layers establish the two cases.",
+        "Reverified after the common unsplit side-endpoint coordinate and corner proofs were extracted to SideEndpoints.lean. The public statement is unchanged. The original exact-source verification at 0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-contacts.md and the ledger at completed parent 863405980e1ebca928f76bb883ed794d2fc32e5a. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
-            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
-            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
           }
         ]
       },
@@ -131,26 +133,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For C \u2265 2, reference k \u2265 50000000, actual fine-cell memberships at k and h, distinct indexed pairs and a closed-cell intersection containing two distinct points, proves opposite sides and three exact alternatives: equal fine exponents with a whole side of each cell, or exponents differing by one with a whole side of the smaller cell equal to a midpoint half of the larger side. No late-h, nonempty-Z, belt, actual-mask or label assumption is imposed.",
-        "Source: Section 11, lines 299\u2013306 and 352\u2013356. Actual disjointness, nearby-layer arithmetic and lattice offsets derive the alternatives. The larger-side halves use the all-midpoint fan; matching under the actual midpoint mask remains a separate composition."
+        "Source: Section 11, lines 299\u2013306 and 352\u2013356. Actual disjointness, nearby-layer arithmetic and lattice offsets derive the alternatives. The larger-side halves use the all-midpoint fan; matching under the actual midpoint mask remains a separate composition.",
+        "Reverified after the common unsplit side-endpoint coordinate and corner proofs were extracted to SideEndpoints.lean. The public statement is unchanged. The original exact-source verification at 0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-contacts.md and the ledger at completed parent 863405980e1ebca928f76bb883ed794d2fc32e5a. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
-            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
-            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
           }
         ]
       },
@@ -182,26 +185,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For C \u2265 2, k\u2080 \u2264 k, an actual fineLayerIndices member z and a contributing coarse dummy-cell index w in ambientDilation (occupiedCellIndices o k\u2080 Z) C, a corner of that actual coarse cell on a whole reference fine-cell side equals its start or end. No late-layer, nonempty-Z or distinct-cell assumption is imposed.",
-        "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. Dummy-contact localization forces k=k\u2080; coarse corners and whole-side endpoints belong to the full fine mesh, whose spacing excludes an interior third point."
+        "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. Dummy-contact localization forces k=k\u2080; coarse corners and whole-side endpoints belong to the full fine mesh, whose spacing excludes an interior third point.",
+        "Reverified after the common unsplit side-endpoint coordinate and corner proofs were extracted to SideEndpoints.lean. The public statement is unchanged. The original exact-source verification at 0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-contacts.md and the ledger at completed parent 863405980e1ebca928f76bb883ed794d2fc32e5a. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
-            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
-            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
           }
         ]
       },
@@ -233,26 +237,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Under the same C \u2265 2, k\u2080 \u2264 k and two actual cell-membership assumptions, a contributing coarse dummy-cell corner on any elementary segment under an arbitrary optional midpoint mask equals that segment\u2019s start or end. No late-layer, nonempty-Z, distinct-cell or actual-mask assumption is imposed.",
-        "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. The public elementary-side containment and endpoint cases compose the whole-side result for every optional midpoint subdivision."
+        "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. The public elementary-side containment and endpoint cases compose the whole-side result for every optional midpoint subdivision.",
+        "Reverified after the common unsplit side-endpoint coordinate and corner proofs were extracted to SideEndpoints.lean. The public statement is unchanged. The original exact-source verification at 0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-contacts.md and the ledger at completed parent 863405980e1ebca928f76bb883ed794d2fc32e5a. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-build.log",
-            "sha256": "d93468256204da606ad06c7b2adfa73a1435545e011722c91912c4636cad40db"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-contacts-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-contacts-axioms.log",
-            "sha256": "2646fe4b10b0b9be928b8814ac454d3d97446c8a9e9266a2133c9a7ea89baa47"
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
           }
         ]
       },

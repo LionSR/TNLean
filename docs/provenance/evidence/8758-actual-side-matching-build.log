@@ -1,0 +1,12 @@
+Command: lake build TNLean.PEPS.AreaLaw.Geometry
+Revision: 93c807b97f45312bab807ba47abb06f11d686f18
+Elapsed seconds: 35.475
+Exit code: 0
+
+✔ [2447/2452] Built TNLean.PEPS.AreaLaw.Geometry.SideEndpoints (10s)
+✔ [2448/2452] Built TNLean.PEPS.AreaLaw.Geometry.DummyCorners (4.8s)
+✔ [2449/2452] Built TNLean.PEPS.AreaLaw.Geometry.CellContacts (11s)
+✔ [2450/2452] Built TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents (4.3s)
+✔ [2451/2452] Built TNLean.PEPS.AreaLaw.Geometry.ActualSideMatching (5.9s)
+✔ [2452/2452] Built TNLean.PEPS.AreaLaw.Geometry (2.7s)
+Build completed successfully (2452 jobs).

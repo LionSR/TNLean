@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.unsplit_endpoint_coordinates",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/SideEndpoints.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_coordinates",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Section 11, lines 299\u2013306; the common endpoint formulas are extracted to avoid repeating the same side-coordinate proof in several geometry modules."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.unsplit_endpoint_corners",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/SideEndpoints.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_are_corners",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Section 11, lines 299\u2013306; this statement supplies actual corner witnesses without adding a geometric certificate premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.elementary_contact_match",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ActualSideMatching.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementary_contact_match",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -98,20 +134,38 @@
         "Section 11, lines 299\u2013306 and 352\u2013356. This is a matching theorem conditional on actual contact; opponent existence is established separately in this contribution; the global two-family partition remains open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideOpponents.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -130,7 +184,25 @@
         "Section 11, lines 154\u2013181 and 299\u2013310. The actual plane cover in an outward neighborhood provides a member of a finite family of potential opponents. Actual fine-cell or dummy-cell corner exclusion extends midpoint contact across the whole elementary segment. Opponent uniqueness and region labels remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "93c807b97f45312bab807ba47abb06f11d686f18",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-build.log",
+            "sha256": "2b7fd47586ea1bf7da6c571cf3be91e3bce16020f84e0d56ff73fdab564e763b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-matching-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-matching-axioms.log",
+            "sha256": "aff033950f86160e42250ecfd19672fdc60a2f87552127cf3d10a612cca946cf"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
