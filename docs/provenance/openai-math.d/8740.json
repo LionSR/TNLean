@@ -1012,6 +1012,714 @@
         "result": "pending"
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-squaregridstateisometry",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.squareGridStateIsometry",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-vector-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.vector_pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-vector-vectortensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.vector_vectorTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-norm-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.norm_pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-nonzero-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.nonzero_pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-normalized-error-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.normalized_error_pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-normalized-error-vectortensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.normalized_error_vectorTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-graphbonddim-forall",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.graphBondDim_forall",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-vectortensortographtensor-bonddim-pos",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim_pos",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-maxbonddim-le-iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.maxBondDim_le_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquareboundaryequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-forwardsquareboundary-card",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.forwardSquareBoundary_card",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-squarecomplementconfigequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.squareComplementConfigEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-regionreduceddensity-eq-pisubtype",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-regionreduceddensity-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-regionreduceddensity-vectortensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-entropy-pinnedtensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-entropy-vectortensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-pinned-haspepsapproximation",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.HasPEPSApproximation",
+        "lines": [
+          88,
+          88
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L88-L88"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceApproximation.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.HasPEPSApproximation",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: namespaces changed; phase and normalization helpers unfolded; source quantifiers retained."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-vector-phaseerroratmost",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean",
+        "declaration": "OAI.PolynomialPEPS.PhaseErrorAtMost",
+        "lines": [
+          91,
+          91
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L91-L91"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceApproximation.lean",
+        "declaration": "TNLean.PEPS.Approximation.Vector.PhaseErrorAtMost",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: namespaces changed; phase and normalization helpers unfolded; source quantifiers retained."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-phaseerroratmost-vectortensortographtensor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceApproximation.lean",
+        "declaration": "TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-haspepsapproximation-of-pinned",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceApproximation.lean",
+        "declaration": "TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-haspepsapproximation-of-vector",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceApproximation.lean",
+        "declaration": "TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original consequence of the exact contraction comparison, using existing native APIs."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }

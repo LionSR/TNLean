@@ -1,0 +1,82 @@
+\section{Physical consequences of the square-grid correspondence}
+
+\begin{theorem}[Equality of physical vectors and errors]
+    \label{thm:peps_square_vector_error}
+    \lean{TNLean.PEPS.Approximation.squareGridStateIsometry,TNLean.PEPS.Approximation.vector_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.vector_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.norm_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.nonzero_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.normalized_error_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.normalized_error_vectorTensorToGraphTensor}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    The physical coordinates are identical in both presentations, so the coordinate
+    identification is a linear isometry. The transported contraction equals the
+    original vector $\Phi$. In particular its norm, nonvanishing, and every error
+    $\|\|\Phi\|^{-1}\Phi-z\Omega\|$ are unchanged, for every $z\in\C$.
+    The equality includes $\Phi=0$ with the convention $0^{-1}=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    Apply coordinatewise equality of the contractions in their common Euclidean space.
+\end{proof}
+
+\begin{theorem}[Dimension constraints and crossing edges]
+    \label{thm:peps_square_bonds_boundary}
+    \lean{TNLean.PEPS.Approximation.graphBondDim_forall,TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim_pos,TNLean.PEPS.Approximation.maxBondDim_le_iff,TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv,TNLean.PEPS.Approximation.forwardSquareBoundary_card}
+    \leanok
+    \uses{def:peps_square_edge_correspondence}
+    Any pointwise condition on $D_e$ is equivalent to the same condition on the
+    transported dimensions. For $B\in\N$, the maximum bond dimension is at most
+    $B$ exactly when each transported bond dimension is at most $B$.
+    For every region $R\subseteq\Lambda$, the edge correspondence restricts to
+    a bijection of crossing edges and preserves their cardinality.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_square_edge_correspondence}
+    Every edge retains its dimension and its two endpoints. The empty maximum is zero.
+\end{proof}
+
+\begin{theorem}[Regional density and entropy]
+    \label{thm:peps_square_regional_density}
+    \lean{TNLean.PEPS.Approximation.squareComplementConfigEquiv,TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype,TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    For every region $R$, the two contractions have equal unnormalized reduced
+    densities $\tr_{R^c}|\Phi\rangle\langle\Phi|$ and equal von Neumann entropies.
+    Writing the complement as a finite-set difference or as nonmembership gives
+    the same partial trace after the coordinatewise identification of complement
+    configurations.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    Substitute the coefficient equality into the outer product and its partial trace.
+    The change of complement coordinates is a bijective reindexing of the finite sum.
+    Apply congruence of von Neumann entropy in its matrix argument.
+\end{proof}
+
+\begin{definition}[The source approximation constraints]
+    \label{def:peps_source_approximation_constraints}
+    \lean{TNLean.PEPS.Approximation.Pinned.HasPEPSApproximation,TNLean.PEPS.Approximation.Vector.PhaseErrorAtMost}
+    \leanok
+    \uses{def:peps_square_local_presentations}
+    The physical-first approximation constraint asks for positive $D_e\le CL^c$,
+    a nonzero contraction $\Phi$, and a phase $\theta$ with normalized vector error
+    at most $L^{-1}$. The virtual-first phase-error constraint additionally requires
+    that the chosen phase minimize the error over all real phases.
+\end{definition}
+
+\begin{theorem}[Transfer of supplied approximation witnesses]
+    \label{thm:peps_square_approximation_transfer}
+    \lean{TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector}
+    \leanok
+    \uses{def:peps_source_approximation_constraints,thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
+    An approximation witness in either source presentation gives a graph PEPS on
+    the original open square with the same positive dimensions, bound $CL^c$,
+    and error $L^{-1}$. The entire minimizing-phase condition is preserved for the
+    virtual-first presentation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
+    Use the transported tensor. Its dimensions are identical edge by edge; substitute
+    the equality of its vector in the nonzero and phase-error conditions.
+\end{proof}
