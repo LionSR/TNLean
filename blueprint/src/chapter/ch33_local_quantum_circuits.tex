@@ -110,7 +110,8 @@ preparation of matrix product states.
     the chain, and for the edges of a graph it is contained in the set of
     vertices at graph distance at most $r$ from $X$. In each case, sets of
     sites at distance larger than $2r$ have disjoint light cones of radius
-    $r$.
+    $r$. For every bond geometry, the light cone of radius $s$ of the light
+    cone of radius $r$ of $X$ is the light cone of radius $r+s$ of $X$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -121,7 +122,9 @@ preparation of matrix product states.
     two cases, two sites on a common bond are at distance at most $1$, and the
     inclusion follows by induction on $r$ and the triangle inequality. A site
     in both light cones would give, by the triangle inequality, two points of
-    the two sets at distance at most $2r$.
+    the two sets at distance at most $2r$. The composition law holds because
+    the light cone of radius $r$ is the $r$-fold iterate of the one-step
+    neighbourhood.
 \end{proof}
 
 \begin{lemma}[Light cone of a local circuit]
