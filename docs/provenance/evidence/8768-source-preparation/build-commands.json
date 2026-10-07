@@ -1,0 +1,273 @@
+{
+  "started_utc": "2026-10-07T17:17:13.714017+00:00",
+  "source_repository": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-preparation",
+  "git_head_at_start": "f8f30e09332c69b353c363af2c31b7e92a1b46aa",
+  "lean_executable": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+  "lean_executable_sha256": "d1d9c26a539f54fe839d2aa7760bf1ac1dd76a30b26e2c9684bebf2900038fcf",
+  "lean_version": "Lean (version 4.35.0-rc3, arm64-apple-darwin24.6.0, commit 470d5ce1400764999581fd26d5d72b00d990b0f4, Release)",
+  "lean_path": "/private/tmp/tnlean-source-preparation:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/checkdecls/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/qiclean/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "manifest_sha256": "954ab1e0213ca4e2d5a6bdf37f4d456c16abe1a01c08c1b27b10fe901c5804d1",
+  "builds": [
+    {
+      "module": "TNLean.PEPS.Approximation.PartyLayout",
+      "source_path": "TNLean/PEPS/Approximation/PartyLayout.lean",
+      "source_sha256": "40150b8846f41da0153e5c75813ac248770b2938c09bd6cf9c255bb0bf5b043a",
+      "snapshot": "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PartyLayout.lean",
+      "cwd": "/private/tmp/tnlean-source-preparation/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PartyLayout.olean",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PartyLayout.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PartyLayout.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PartyWord.olean",
+          "sha256": "c0471fa1db9517bc776ae3d588dd5fd3dda6aaebf70a9806e57247580e731d7c"
+        }
+      ],
+      "started_utc": "2026-10-07T17:17:13.941493+00:00",
+      "seconds": 67.337,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-preparation/final-verification-20261007/PartyLayout.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "b1177d3d0474536dcdec0d8b1ecc7f0abbc601f5426889b1c1b6c6008040c314",
+      "source_sha256_after": "40150b8846f41da0153e5c75813ac248770b2938c09bd6cf9c255bb0bf5b043a"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.WordPermutation",
+      "source_path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+      "source_sha256": "8b9b5d60cafca044be1fa21d8ff071df7242f2737b968c726e911fbe3c088acf",
+      "snapshot": "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+      "cwd": "/private/tmp/tnlean-source-preparation/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PartyWord.olean",
+          "sha256": "c0471fa1db9517bc776ae3d588dd5fd3dda6aaebf70a9806e57247580e731d7c"
+        }
+      ],
+      "started_utc": "2026-10-07T17:18:21.401803+00:00",
+      "seconds": 17.866,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-preparation/final-verification-20261007/WordPermutation.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "65cdf86824d269575625c09320dcaa3ee7a05076d378ff996463547c39d7e10b",
+      "source_sha256_after": "8b9b5d60cafca044be1fa21d8ff071df7242f2737b968c726e911fbe3c088acf"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.SourcePreparation",
+      "source_path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+      "source_sha256": "c0f0cfe9226d2e5853ce45fe25f4583985a5904289e3c0f58796318b28d730a9",
+      "snapshot": "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+      "cwd": "/private/tmp/tnlean-source-preparation/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean",
+          "sha256": "65cdf86824d269575625c09320dcaa3ee7a05076d378ff996463547c39d7e10b"
+        }
+      ],
+      "started_utc": "2026-10-07T17:18:39.370618+00:00",
+      "seconds": 29.789,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-preparation/final-verification-20261007/SourcePreparation.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "0d2710d3a6582c62ab0d274307f363ab1c4762fb06916687ffdfa401effe0ee1",
+      "source_sha256_after": "c0f0cfe9226d2e5853ce45fe25f4583985a5904289e3c0f58796318b28d730a9"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PairSourceExpansion",
+      "source_path": "TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+      "source_sha256": "5219b79c39068f7b8dc8924e58654087a31ff01a0bfd7cc02eac7a4965d0116d",
+      "snapshot": "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+      "cwd": "/private/tmp/tnlean-source-preparation/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceExpansion.olean",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceExpansion.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceExpansion.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PartyLayout.olean",
+          "sha256": "b1177d3d0474536dcdec0d8b1ecc7f0abbc601f5426889b1c1b6c6008040c314"
+        }
+      ],
+      "started_utc": "2026-10-07T17:19:09.249889+00:00",
+      "seconds": 24.737,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-preparation/final-verification-20261007/PairSourceExpansion.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "e98235da870a99501df98b370f5a1192864c40c34741b786053f585a3cc1cc63",
+      "source_sha256_after": "5219b79c39068f7b8dc8924e58654087a31ff01a0bfd7cc02eac7a4965d0116d"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PairSourceGrouping",
+      "source_path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+      "source_sha256": "f6f12c419d2beae124b3fa8480523f2b7fcc82dcadac90077ad4a15c9a0a77d1",
+      "snapshot": "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+      "cwd": "/private/tmp/tnlean-source-preparation/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean",
+          "sha256": "0d2710d3a6582c62ab0d274307f363ab1c4762fb06916687ffdfa401effe0ee1"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceExpansion.olean",
+          "sha256": "e98235da870a99501df98b370f5a1192864c40c34741b786053f585a3cc1cc63"
+        },
+        {
+          "path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Sym/Sym2.olean",
+          "sha256": "b3a0c70079915f33fd3d7ac232a665b8e81a33dbbe7f117d4cd1f7c4fbeb5f72"
+        }
+      ],
+      "started_utc": "2026-10-07T17:19:34.078650+00:00",
+      "seconds": 19.474,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-preparation/final-verification-20261007/PairSourceGrouping.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "674725f22598e4de59575afba2026dbac5e2ff00683f5e2dd4703f27503cfc3d",
+      "source_sha256_after": "f6f12c419d2beae124b3fa8480523f2b7fcc82dcadac90077ad4a15c9a0a77d1"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PairEffectSourcePreparation",
+      "source_path": "TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean",
+      "source_sha256": "b1cc107bbce88e1aadb528e2c4b817c7f5939ca10977bfba455847362c88bb48",
+      "snapshot": "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean",
+      "cwd": "/private/tmp/tnlean-source-preparation/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairEffectSourcePreparation.olean",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PartyLayout.olean",
+          "sha256": "b1177d3d0474536dcdec0d8b1ecc7f0abbc601f5426889b1c1b6c6008040c314"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean",
+          "sha256": "674725f22598e4de59575afba2026dbac5e2ff00683f5e2dd4703f27503cfc3d"
+        }
+      ],
+      "started_utc": "2026-10-07T17:19:53.652389+00:00",
+      "seconds": 18.979,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-preparation/final-verification-20261007/PairEffectSourcePreparation.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "14bd458bd602aa9664672b7b3f0e0e686a7fbc391fd099aa92481ed014ccf067",
+      "source_sha256_after": "b1cc107bbce88e1aadb528e2c4b817c7f5939ca10977bfba455847362c88bb48"
+    }
+  ],
+  "completed_utc": "2026-10-07T17:20:12.633056+00:00",
+  "source_commit": "75d3f124406bf0f5b6935f77d26a818c171f3807"
+}

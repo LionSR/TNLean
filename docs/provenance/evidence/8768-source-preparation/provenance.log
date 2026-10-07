@@ -1,0 +1,6 @@
+PASS: 60 new entries; canonical checker completed all entry checks and the full branch notice scan.
+PASS: new IDs and declarations are disjoint from 151 canonical entries.
+Policy revision: 18a6dd4d2683cea18b585ffe0467910f76eb23ff
+Policy SHA-256: scripts/check_openai_provenance.py: 8183e29f5a339bba37e28e9473aa7a6a42791282ed6877071dfd4096eda7cb65
+Policy SHA-256: docs/provenance/openai-math.schema.json: a691d8e95b668c968365f2c7e33f614d49635aade8fdd4c2f27cd64f0cd6b459
+Scope: shard validation; the canonical CLI license/source-audit checks and historical canonical evidence were not rerun.
