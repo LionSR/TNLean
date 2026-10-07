@@ -36,8 +36,8 @@
     For $x\in[-R,R]\cap\Z$, its vertical fiber has
     $2(R-|x|)+1$ sites, and distinct fibers are disjoint. Thus
     \begin{align}
-        |D_R(0)|&=\sum_{x=-R}^R\bigl(2(R-|x|)+1\bigr)
-                  =1+2R(R+1).
+        |D_R(0)| & =\sum_{x=-R}^R\bigl(2(R-|x|)+1\bigr)
+        =1+2R(R+1).
         \label{eq:area_diamond_rows}
     \end{align}
     For the last equality, induct on $R$. The initial sum is one.
@@ -67,12 +67,12 @@
     at most $v_R$ sites, and at most $\mu_R$ original supports contain
     any specified site. For $J\ge0$ and real weights $w_X\le J$,
     \begin{align}
-        \sum_{X\in\mathcal F:\,a\in X}w_X&\le\mu_RJ.
+        \sum_{X\in\mathcal F:\,a\in X}w_X & \le\mu_RJ.
         \label{eq:area_diamond_site}
     \end{align}
     If also $w_X\ge0$ for each $X\in\mathcal F$, then
     \begin{align}
-        W_n(X)&\le(v_R\mu_RJ)^n.
+        W_n(X) & \le(v_R\mu_RJ)^n.
         \label{eq:area_diamond_chain}
     \end{align}
     The continuation bound holds for each original support $X$ and
@@ -108,12 +108,12 @@ individual support. The graph itself need not be finite or connected.
     \leanok
     For a target $y\in V$ and a finite support $X$, define
     \begin{align}
-        T_0^y(X)&=\mathbf1_{\{y\in X\}},
+        T_0^y(X) & =\mathbf1_{\{y\in X\}},
         \label{eq:area_target_initial}
     \end{align}
     \begin{align}
-        T_{n+1}^y(X)&=
-          \sum_{Y\in\mathcal F:\,Y\cap X\ne\varnothing}w_YT_n^y(Y).
+        T_{n+1}^y(X) & =
+        \sum_{Y\in\mathcal F:\,Y\cap X\ne\varnothing}w_YT_n^y(Y).
         \label{eq:area_target_step}
     \end{align}
     Thus the initial support is tested at $n=0$, and a support may be
@@ -174,7 +174,7 @@ individual support. The graph itself need not be finite or connected.
     $v$ is a nonnegative integer and $b\ge0$. For $X\in\mathcal F$,
     $a\in X$, and $n\ge0$,
     \begin{align}
-        T_n^y(X)&\le(vb)^n\mathbf1_{\{d_G(a,y)\le(n+1)R\}}.
+        T_n^y(X) & \le(vb)^n\mathbf1_{\{d_G(a,y)\le(n+1)R\}}.
         \label{eq:area_target_indicator}
     \end{align}
     In the finite lattice setting of Theorem~\ref{thm:area_diamond_budget},
@@ -200,7 +200,7 @@ individual support. The graph itself need not be finite or connected.
     $d_G(a,y)=D$ for a nonnegative integer $D$, and let $\mu\ge0$.
     Put $\kappa=vb$. Then
     \begin{align}
-        T_n^y(X)&\le e^{\mu R-\mu D}(\kappa e^{\mu R})^n.
+        T_n^y(X) & \le e^{\mu R-\mu D}(\kappa e^{\mu R})^n.
         \label{eq:area_chain_exponential}
     \end{align}
 \end{theorem}
@@ -221,7 +221,7 @@ individual support. The graph itself need not be finite or connected.
     For real $t$, the exponential generating series of the target-chain
     coefficients is
     \begin{align}
-        S_t^y(X)&=\sum_{n=0}^{\infty}\frac{(2|t|)^n}{n!}T_n^y(X).
+        S_t^y(X) & =\sum_{n=0}^{\infty}\frac{(2|t|)^n}{n!}T_n^y(X).
         \label{eq:area_chain_series}
     \end{align}
     The absolute value of time gives the same series for $t$ and $-t$.
@@ -235,8 +235,8 @@ individual support. The graph itself need not be finite or connected.
     Under the hypotheses of Theorem~\ref{thm:area_chain_exponential},
     the series in~(\ref{eq:area_chain_series}) converges and satisfies
     \begin{align}
-        S_t^y(X)&\le e^{\mu R-\mu D}
-                    \exp\!\bigl(2|t|\,vb\,e^{\mu R}\bigr).
+        S_t^y(X) & \le e^{\mu R-\mu D}
+        \exp\!\bigl(2|t|\,vb\,e^{\mu R}\bigr).
         \label{eq:area_chain_series_bound}
     \end{align}
     This is the interaction-chain series estimate in the proof of
@@ -249,7 +249,7 @@ individual support. The graph itself need not be finite or connected.
     Set $C=e^{\mu R-\mu D}$ and $A=vb\,e^{\mu R}$. The coefficient bound gives
     \begin{align}
         0\le\frac{(2|t|)^n}{n!}T_n^y(X)
-        &\le C\frac{(2|t|A)^n}{n!}.
+         & \le C\frac{(2|t|A)^n}{n!}.
         \label{eq:area_series_comparison}
     \end{align}
     The terms on the right sum to $C\exp(2|t|A)$ by the exponential

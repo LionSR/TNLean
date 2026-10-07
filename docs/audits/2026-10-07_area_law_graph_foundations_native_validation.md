@@ -124,3 +124,17 @@ These are current-source targeted native/strict checks and reused focused
 PDF/static HTML checks on identical TeX. The prior c95 root/regression CI passed;
 current-head full CI, full-book generation, live-browser/MathJax runtime and mobile
 checks are not claimed. Publishing this evidence does not authorize or imply a merge.
+
+**2026-10-07 formatting-only rerender.** The two chapter leaves now include
+16 whitespace-only alignment corrections from the pinned formatter. The new
+[formatting render record](../provenance/evidence/8745/formatting-render.json)
+identifies their exact SHA-256 hashes over base `82bf60cf406f0ff20ef8a831be7e5db618432a29`.
+Fresh focused PDF and static HTML checks pass with eight pages, 22 entries,
+17 proofs, 39 checked markers and all 50 declaration links in each format.
+All eight new page images were directly inspected and are byte-identical to
+the historical render; no missing anchors, duplicate IDs or final PDF errors
+were found. All 15 inventoried Lean files remain byte-identical to `68f708ff`.
+No Lean checks or cache mutations were performed for this formatting-only
+update. The historical native and render records above are preserved;
+full-book generation, live-browser checks and current-head full CI are not
+claimed by this local rerender.

@@ -161,7 +161,7 @@ diamond constant $v_R=1+2R(R+1)$ of
     any finite region $S$,
     \begin{align}
         \sum_{X\in\mathcal F:\,X\cap S\ne\varnothing}w_X
-        &\le\sum_{a\in S}\sum_{X\in\mathcal F:\,a\in X}w_X.
+         & \le\sum_{a\in S}\sum_{X\in\mathcal F:\,a\in X}w_X.
         \label{eq:area_region_weight}
     \end{align}
     If each inner site sum is at most $b$, the left side of
@@ -180,10 +180,10 @@ diamond constant $v_R=1+2R(R+1)$ of
     \leanok
     For a finite family $\mathcal F$ and weights $w_X$, define recursively
     \begin{align}
-        W_0(X)&=1,\label{eq:area_chain_initial}
+        W_0(X) & =1,\label{eq:area_chain_initial}
     \end{align}
     \begin{align}
-        W_{n+1}(X)&=\sum_{Y\in\mathcal F:\,Y\cap X\ne\varnothing}w_YW_n(Y).
+        W_{n+1}(X) & =\sum_{Y\in\mathcal F:\,Y\cap X\ne\varnothing}w_YW_n(Y).
         \label{eq:area_chain_step}
     \end{align}
     Repeated supports are permitted in the chain.
