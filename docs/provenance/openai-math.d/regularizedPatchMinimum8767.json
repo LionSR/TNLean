@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.norm_dependentregionoperatorlift_mulvec_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.norm_dependentRegionOperatorLift_mulVec_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -35,19 +35,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.continuous_dependentregionoperatorlift",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.continuous_dependentRegionOperatorLift",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -68,19 +86,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchdomain",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchDomain",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -101,19 +137,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchfilter",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchFilter",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -134,19 +188,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchoperator",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchOperator",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -167,19 +239,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchoutput",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchOutput",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -200,19 +290,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchObjective",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -233,19 +341,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.iscompact_regularizedpatchdomain",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.isCompact_regularizedPatchDomain",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -266,19 +392,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchdomain_nonempty",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchDomain_nonempty",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -299,19 +443,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.continuouson_regularizedpatchfilter",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.continuousOn_regularizedPatchFilter",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -332,19 +494,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.continuouson_regularizedpatchobjective",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.continuousOn_regularizedPatchObjective",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -365,19 +545,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.exists_isminon_regularizedpatchobjective",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.exists_isMinOn_regularizedPatchObjective",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -398,19 +596,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchfilter_norm_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchFilter_norm_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -431,19 +647,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchObjective_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -464,19 +698,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchMinimum",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -497,19 +749,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_eq_minimum",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchObjective_eq_minimum",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -530,19 +800,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchMinimum_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -563,19 +851,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_pos",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchObjective_pos",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -596,19 +902,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum_pos",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchMinimum_pos",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -629,19 +953,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.normalizedregularizedpatchoutput",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.normalizedRegularizedPatchOutput",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -662,19 +1004,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.norm_normalizedregularizedpatchoutput",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.norm_normalizedRegularizedPatchOutput",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -695,19 +1055,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-normalized-output-minimum-smul",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.normalizedRegularizedPatchOutput_eq_minimum_smul",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -728,19 +1106,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_exp_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchObjective_exp_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -761,19 +1157,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum_exp_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
         "declaration": "TNLean.PEPS.regularizedPatchMinimum_exp_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -794,7 +1208,25 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+          }
+        ]
       }
     }
   ]

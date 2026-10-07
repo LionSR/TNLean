@@ -1,0 +1,1 @@
+/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLeanTest/QICConjugatorCompatibility.lean:6:0: error: import TNLean.MPS.Symmetry.LocalVirtualGauge failed, environment already contains 'Matrix.matrixUnitConjugator' from QICLean.Algebra.MatrixUnitConjugator

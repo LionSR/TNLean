@@ -1,0 +1,248 @@
+[
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Analysis/DifferentiableInnerAction.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Analysis/DifferentiableInnerAction.lean",
+    "sha256": "f80dac9ff36608ab696e363ea1effe7f93542653334132825ad485d1dd0e2a84",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/MatrixUnitConjugator.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/MatrixUnitConjugator.lean",
+    "sha256": "1521a4d6320e0df379c2ff6580e6dd835cf3667f068e7db12ab7387b06820493",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/GlobalVirtualGauge.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/GlobalVirtualGauge.lean",
+    "sha256": "6aa0983dc851d1db5a01cca6e53b650c83795c76303a418d0940aee5587aa00b",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/LocalVirtualGauge.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/LocalVirtualGauge.lean",
+    "sha256": "2b3f128ec42da770ebe8cef08361b1e62e76983816ae8162bafc6ed786b2cbc6",
+    "patched_local_virtual_gauge": true
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/Defs.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/Defs.lean",
+    "sha256": "b28024d174cd2cc87700dfa361618c965db8f89034b74475b466f62a8913acf4",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/Algebra/ListProduct.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/Algebra/ListProduct.lean",
+    "sha256": "8f460135d464048fc5a6cdd4fef8660440afc6d67b13ce699210a98d65fc2a9b",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Core/CyclicTrace.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Core/CyclicTrace.lean",
+    "sha256": "67e8d968988035d212fe977e7b8f27fe46c0e5ebf411e8ba10ffd1fc6afc8010",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Defs.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Defs.lean",
+    "sha256": "e12c85140ff30cbace18bd0cdd7054ea35b75bfa4065b7acc96b98057dfbe3b3",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/MatrixKernelRigidity.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/MatrixKernelRigidity.lean",
+    "sha256": "057c87996e417ff435c2d24bf5666c1dbb13e863385a6c7d292363abc1b2dc00",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/Word.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/Word.lean",
+    "sha256": "757605ab7384a5f74a64a095aa754c1fe99986f567ea0e77ac70c8e646678d87",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/Injectivity.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/Injectivity.lean",
+    "sha256": "c38dda3000b4dde0c17e593243e14f8f6485c9674e5dd2355e9d15e3bde5a5da",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/WordSpan.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/WordSpan.lean",
+    "sha256": "263feefd293fbb7a97c191bf4953e1259810a00f6eaced9d6a93922509dd6b1c",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Channel/Schwarz/Basic.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Channel/Schwarz/Basic.lean",
+    "sha256": "58debb619d5ac490540c359e94c5ab37d5c66354e575cc2033618b0f271a0b96",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/MatrixAux.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/MatrixAux.lean",
+    "sha256": "d63b6bf4ae5cc9aa51bc7ec59acba95858b64a7ee280c657fac5e7feb31e052c",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/FundamentalTheorem/Basic.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/FundamentalTheorem/Basic.lean",
+    "sha256": "d96d92100de1012d80335cfca0f7babbb271c1fbfbb548f1f64d0ee1605758f3",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Structure/LinearExtension.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Structure/LinearExtension.lean",
+    "sha256": "d4ec2e880b2841f38959473505604aba50fa5cc8bf155a6391fd581f8cfb28b8",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Chain/OneSidedInverse.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Chain/OneSidedInverse.lean",
+    "sha256": "17dce7b49b0cee873298128d59c4475041eb82720014ec01ea2d89e4caee633d",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Core/TracePairing.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Core/TracePairing.lean",
+    "sha256": "5a12f8ca2ab8c77435680c7d80ab1a26364df5cde23ea189c827502e20f3e080",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/MatrixTracePairing.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/MatrixTracePairing.lean",
+    "sha256": "bd489dfc79f0b4d038ea42b959bd5f4252c5ecc842e6b9c6d09b08e697ee07aa",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/SkolemNoether.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/SkolemNoether.lean",
+    "sha256": "71a93edff695f986b2d1b4e6507f0afea25b12ecc7bb1fd31f99ff7cc447a9f5",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Core/Blocking.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Core/Blocking.lean",
+    "sha256": "cc09be466aa6b84a90ea72aae82137a5154662b90ea8eb44b9c36126b386a889",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Core/PhysicalRotation.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Core/PhysicalRotation.lean",
+    "sha256": "30bde3b9072062dec91b6b9f421bb41b8e9edd6810d8c2001b53266a1a67d944",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/Blocking.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/Blocking.lean",
+    "sha256": "b375639b3ee4fcfef4a4cb48258e2680ba945b400e988e2971c9466d2d979da6",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Preparation/BlockedPolar.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Preparation/BlockedPolar.lean",
+    "sha256": "d75d55bbff14f0bdda8510572e99bbf071b2d2e30966bb1db6be595e598108f8",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Core/BlockingTransfer.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Core/BlockingTransfer.lean",
+    "sha256": "9b5f2c450e32a71c690d302efcaea8be71c465f8e0e7b06e80c5a07fc9c08a7e",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/Transfer.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/Transfer.lean",
+    "sha256": "239a588a1fe21b803dc6f2ae667491c16e136a4946940ac66e178dcc538f3d5a",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/Tactic/Attr.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/Tactic/Attr.lean",
+    "sha256": "1b107d9866eb01581aeb7799da97e8a2a237f3408d948f1a9383f724856919dd",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/MapIterate.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/MapIterate.lean",
+    "sha256": "597835997d41c9c9e34b75562d3b708fe50c44e5e1c8f8b1be58b8f15548f379",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Kraus/MixedMap.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Kraus/MixedMap.lean",
+    "sha256": "fbe4b94da2aa13ca5bd2f209ac1ba5a35f104a1b3a59e83f74ff43559fd04050",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Core/PhysicalMatrix.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Core/PhysicalMatrix.lean",
+    "sha256": "afa268e7b73c444b003ae15133e61342c4851b1fac8b521d37df2bb430138595",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Preparation/MatrixPolar.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Preparation/MatrixPolar.lean",
+    "sha256": "45154d4ee88357f0982241b35cc782f4e3b395e92404c3d49ffa8bb20afa9bce",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/MatrixUnitaryBetween.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/MatrixUnitaryBetween.lean",
+    "sha256": "59573146ed4419ccc2b12d2a95fae10196e3d9a6788abca6df43ac76d6c0aaa1",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/CocycleCoboundary.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/CocycleCoboundary.lean",
+    "sha256": "1dba4ffe7866d99ea1add297539f4999e4b39bc02a2db709c6c152dab9fccd35",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/VirtualRepresentation.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/VirtualRepresentation.lean",
+    "sha256": "f0b0e8362355e15cc1a32d873247bf4b6745c3a2ed79719ccf82f65b7350d87a",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/GaugeUniqueness.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/GaugeUniqueness.lean",
+    "sha256": "2bdade407a972e1146c0b2af2dd35669231b6a703404b6c10772be6da18538e8",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/ScalarCommutant.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/ScalarCommutant.lean",
+    "sha256": "e1603f12c84b503befc41003523e85736f54c0a2102449d4f1fa83563b1ccf2d",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/.lake/packages/qiclean/QICLean/Algebra/DependentBlockDiagonal.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/.lake/packages/qiclean/QICLean/Algebra/DependentBlockDiagonal.lean",
+    "sha256": "8f302b933f5efdf5915e094586fa74cc30c7e5922adae9807863b304ce7287d0",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/Algebra/ProjectiveRepresentation.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/Algebra/ProjectiveRepresentation.lean",
+    "sha256": "0b4efe1d65d00a0e43d3c6946bea7927b4a5a3b6061375de3e0d785fdf1b659e",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/Algebra/CocycleCohomology.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/Algebra/CocycleCohomology.lean",
+    "sha256": "acff78996b8d9e439ee2e3884c0f668e9ffbba89a13f7cb09e38c26bbd9098c9",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/InvertibleProjectivePathInvariance.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/InvertibleProjectivePathInvariance.lean",
+    "sha256": "e2c54f74c5f79ab01a6971f35c541999d331e0dcfecd2f390f2f5eafb215572c",
+    "patched_local_virtual_gauge": false
+  },
+  {
+    "source": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLean/MPS/Symmetry/ProjectivePathInvariance.lean",
+    "regularized_source": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/MPS/Symmetry/ProjectivePathInvariance.lean",
+    "sha256": "e4a06f2dc7b354ca5e3ad76c22b309337204a78581ca3a2ed5439cf3c0344cf1",
+    "patched_local_virtual_gauge": false
+  }
+]

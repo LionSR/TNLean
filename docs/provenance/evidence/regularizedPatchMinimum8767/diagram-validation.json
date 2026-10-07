@@ -1,0 +1,30 @@
+{
+  "result": "passed",
+  "production_renderer": "blueprint/src/Packages/tenkz_pic.py",
+  "route": "pdf",
+  "tenkz_pin": "08a6493f3605dcf2ca5b512823ccb2698dfc027b",
+  "unit_hash": "40f3ffea4415c103",
+  "svg": "/workspace/scratch/7637e06d0fc2/regularized-patch-validation/docs/tn/diagram/final-svg/tenkz-40f3ffea4415c103.svg",
+  "svg_sha256": "240dcbd8963853bb554fc241eeeb679d8fba40957f10ac285fda1717fc995091",
+  "cold_render_cache_hit": false,
+  "warm_render_cache_hit": true,
+  "warm_file_unchanged": true,
+  "event_log": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/blueprint/src/.tenkz_svg_cache/tenkz-40f3ffea4415c103.tnlog",
+  "picture_count": 1,
+  "atom_count": 5,
+  "wire_count": 6,
+  "boundary_signature": "phys:w, phys:w",
+  "audit_findings": [],
+  "semantic_checks": [
+    "K0 adjacent to Omega; K1 follows it in the action order",
+    "each factor has its own explicit complementary identity",
+    "exact two physical open output indices; four internal contractions",
+    "repeated-support illustration explicitly specialized; complement may have dimension one",
+    "exact rational inverses for both regression densities at b=1 and weights2",
+    "(K1K0)[0,1]=-1/4 differs from (K0K1)[0,1]=-1/8"
+  ],
+  "limits": [
+    "Actual production SVG renderer exercised directly; not a full plasTeX web build.",
+    "No Lean compiler run."
+  ]
+}

@@ -1,0 +1,22 @@
+import QICLean.Analysis.DifferentiableInnerAction
+import TNLean.MPS.Symmetry.GlobalVirtualGauge
+
+#print axioms Matrix.matrixUnitConjugator
+#print axioms Matrix.matrixUnitConjugator_eq_smul
+#print axioms Matrix.matrixUnitConjugator_intertwines
+#print axioms Matrix.exists_continuous_local_matrixConjugator
+#print axioms MPSTensor.coefficientInverseMatrix
+#print axioms MPSTensor.physicalMatrix_transpose_mul_coefficientInverseMatrix
+#print axioms MPSTensor.continuous_coefficientInverseMatrix_family
+#print axioms MPSTensor.coefficientInverseMatrix_reconstruct
+#print axioms MPSTensor.virtualActionOfTensors
+#print axioms MPSTensor.virtualActionOfTensors_eq_conj
+#print axioms MPSTensor.continuous_virtualActionOfTensors_family
+#print axioms MPSTensor.exists_continuous_local_gauge_of_gaugeEquiv
+#print axioms MPSTensor.exists_continuous_local_virtualGauge_of_isOnSiteSymmetric
+#print axioms MPSTensor.gauge_covariance_of_invertible_intertwiner
+#print axioms MPSTensor.exists_units_smul_of_invertible_intertwiners
+#print axioms MPSTensor.exists_continuous_gauge_on_unitInterval
+#print axioms MPSTensor.exists_continuous_virtualGauge_of_isOnSiteSymmetric
+#print axioms MPSTensor.exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric
+#print axioms MPSTensor.cohomologousTo_of_continuous_isOnSiteSymmetric_tensorPath

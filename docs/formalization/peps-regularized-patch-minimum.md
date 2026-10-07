@@ -94,11 +94,13 @@ bounds, not those subsequent arguments.
 
 The distinct issue-owned ledger
 `docs/provenance/openai-math.d/regularizedPatchMinimum8767.json` records all
-24 public declarations as original proofs. Every row remains `planned`, with
-`name_status: proposed` and `verification: {"result": "pending"}`, until the
-native source revision and its exact build and axiom evidence are published.
-No proof or build evidence from another issue or module is copied into this
-ledger.
+24 public declarations as original proofs. The evidence child records them as
+`ported`/`declared` with passing exact-source verification at immutable native
+source revision `38a4fa419eed06cf19777728f684a9caa69ba925`. The source commit itself retained planned rows until
+that revision existed. Unmodified compiler logs, all 24 public axiom reports,
+source/artifact closure audits and the source-tree attestation are archived in
+`docs/provenance/evidence/regularizedPatchMinimum8767/`. These records cover the
+actual native source and do not substitute evidence from another issue.
 
 TNLean now pins accepted QICLean revision
 `378bef486fc0241dee8ad875ccaf659d51d33ac9`, merged in
@@ -128,8 +130,18 @@ Those source-only checks are superseded for dependency synchronization by the
 accepted pin. A source declaration check alone does not establish elaboration,
 axiom dependencies, or CI success.
 
-Acceptance still requires final source-revision evidence, the exported-name
-axiom audit, focused regressions, a full Lake build, aggregate declaration
-check, and exact-head CI. These gates are distinct from the completed local
-strict minimum-module check and blueprint source synchronization. Neither the
-local checks nor these auxiliary results complete Proposition 4.1.
+The accepted-pin core, router, both minimum regression modules and all 24
+exported-name axiom reports passed exact-source checks. The canonical QIC
+matrix-unit conjugator migration also has a mixed-import regression, 19 clean
+axiom reports and a negative control reproducing the former collision. Its
+41-source production closure matches the integrated repair byte for byte.
+The final cache guard and fixtures pass 36 tests and the parent-executed full
+dependency-free Lake invalidation experiment; all three scripts match that
+execution record. No compatibility or experiment rerun by the minimum author
+is claimed.
+
+Acceptance still requires a full Lake build, aggregate declaration check,
+full blueprint validation and exact-head CI, together with stack-base
+integration. Those gates are distinct from the completed local strict checks,
+immutable source evidence and blueprint source synchronization. Neither these
+checks nor the auxiliary results complete Proposition 4.1.

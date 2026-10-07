@@ -1,0 +1,28 @@
+{
+  "command": [
+    "python3",
+    "scripts/test_ci_cache_lake_invalidation.py",
+    "--lake",
+    "../toolchains/lean-4.35.0-rc3-linux/bin/lake",
+    "--sole-lean-slot"
+  ],
+  "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration",
+  "exit_code": 0,
+  "executor_session_id": 6468,
+  "raw_log": "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/integrated-invalidation-final.log",
+  "raw_log_sha256": "c0786b22cc3643bbccd7e1563e1aba1becec2dc4722bb14c69921c4c3a42ca22",
+  "script_sha256": {
+    "scripts/ci_compatible_cache.py": "c39db039b188d52853ad20ada74beb9b33fca69f953de6896d29160eec81aeef",
+    "scripts/test_ci_compatible_cache.py": "8357dcf4a54c1a2bdb4df74c146d9bbad5e263d4dbb0269d5a16c09e2ff94eb6",
+    "scripts/test_ci_cache_lake_invalidation.py": "6525c8983358145105c84a574ce93e4cde5cf840cc5c2ee42042cef3b656000f"
+  },
+  "lake_version": "Lake version 5.0.0-src+470d5ce (Lean version 4.35.0-rc3)",
+  "cases": [
+    "PASS: unchanged seed reused",
+    "PASS: changed upstream/dependent rebuilt; independent reused",
+    "PASS: missing trace rebuilt",
+    "PASS: broken source cannot pass the mandatory full build",
+    "PASS: removed module refused despite surviving compiled artifact"
+  ],
+  "scope": "Temporary dependency-free fixture only; no TNLean, QICLean or Mathlib build directories read or written by the experiment."
+}

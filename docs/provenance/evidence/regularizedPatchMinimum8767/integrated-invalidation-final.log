@@ -1,0 +1,29 @@
+info: fixture: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+✔ [2/2] Built Fixture.Upstream (209ms)
+Build completed successfully (2 jobs).
+✔ [3/3] Built Fixture.Dependent (251ms)
+Build completed successfully (3 jobs).
+✔ [2/2] Built Fixture.Independent (214ms)
+Build completed successfully (2 jobs).
+✔ [5/6] Built Fixture (197ms)
+Build completed successfully (6 jobs).
+Build completed successfully (6 jobs).
+PASS: unchanged seed reused
+✔ [2/3] Built Fixture.Upstream (202ms)
+✔ [3/3] Built Fixture.Dependent (246ms)
+Build completed successfully (3 jobs).
+✔ [5/6] Built Fixture (195ms)
+Build completed successfully (6 jobs).
+PASS: changed upstream/dependent rebuilt; independent reused
+✔ [2/3] Built Fixture.Upstream (188ms)
+Build completed successfully (3 jobs).
+PASS: missing trace rebuilt
+✖ [2/6] Building Fixture.Upstream (186ms)
+trace: .> LEAN_PATH=/tmp/tnlean-lake-invalidation-jot5k848/seeded/.lake/build/lib/lean /workspace/scratch/7637e06d0fc2/toolchains/lean-4.35.0-rc3-linux/bin/lean /tmp/tnlean-lake-invalidation-jot5k848/seeded/Fixture/Upstream.lean -o /tmp/tnlean-lake-invalidation-jot5k848/seeded/.lake/build/lib/lean/Fixture/Upstream.olean -i /tmp/tnlean-lake-invalidation-jot5k848/seeded/.lake/build/lib/lean/Fixture/Upstream.ilean -c /tmp/tnlean-lake-invalidation-jot5k848/seeded/.lake/build/ir/Fixture/Upstream.c --setup /tmp/tnlean-lake-invalidation-jot5k848/seeded/.lake/build/ir/Fixture/Upstream.setup.json --json
+error: Fixture/Upstream.lean:1:22: Unknown identifier `doesNotExist`
+Some required targets logged failures:
+- Fixture.Upstream
+error: build failed
+PASS: broken source cannot pass the mandatory full build
+PASS: removed module refused despite surviving compiled artifact

@@ -1,0 +1,31 @@
+{
+  "files": [
+    {
+      "path": "docs/formalization/peps-regularized-patch-minimum.md",
+      "sha256": "cc08443bf247d69ac434a4103cac282bb21439ddaad81b6489ddd85eddc3b53f"
+    },
+    {
+      "path": "docs/glossary.md",
+      "sha256": "3dab526806b8eb685ec393935aebdfdb4c89c79d0925cecc58a30c374090366f"
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_regularized_patch_minimum.tex",
+      "sha256": "ef92a9bdf1e9ae42a0de1e58fa8ed449240aa39c2d1d491bf2b833a24d3232cd"
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_regions.tex",
+      "sha256": "e3ba2d3af402a67e8c4b0bbb9af0e2ef455bfaaedf41f68cc94e19b6db55d6eb"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/regularizedPatchMinimum8767.json",
+      "sha256": "f7fe8843326b319783dbdceaeca9bf074f38671a94dcb93f4565a50484b91054"
+    }
+  ],
+  "accepted_qic_pin": "378bef486fc0241dee8ad875ccaf659d51d33ac9",
+  "unmerged_stack_base": "c8a2fdfc19895245cc71f6f6c0fdff8f5da32592",
+  "declarations": 24,
+  "planned_original_rows": 24,
+  "docs_validation_sha256": "cb496ff1e2ed1f190475375d76f0dbb081d1ff88928c9295ee49508703c09741",
+  "diagram_validation_sha256": "cdcdefd9fbdfda8ba9670dd4b3d17fc6fa79350046380c69483aed197ad50033",
+  "core_unchanged_sha256": "a920898853c19a7c25ebd338a0a906de2360771ec6113bf9c079185244fbd01a"
+}

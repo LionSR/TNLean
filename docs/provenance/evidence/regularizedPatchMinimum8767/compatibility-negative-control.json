@@ -1,0 +1,53 @@
+[
+  {
+    "label": "negative-old-local",
+    "command": [
+      "timeout",
+      "--signal=INT",
+      "--kill-after=5s",
+      "90s",
+      "lean",
+      "-j1",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "-o",
+      "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/negative-lib/TNLean/MPS/Symmetry/LocalVirtualGauge.olean",
+      "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/negative-source/TNLean/MPS/Symmetry/LocalVirtualGauge.lean"
+    ],
+    "cwd": "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/negative-source",
+    "lean_path": "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/lib:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/importGraph/.lake/build/lib/lean",
+    "exit_code": 0,
+    "elapsed_seconds": 4.010743117003585,
+    "log": "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/negative-old-local.log",
+    "output": "",
+    "source_sha256": "35c99eb55e5fa2ce4eafdd27673183fd0a4f3d57aa89c58856f44a532b168953",
+    "artifact_sha256": "b3459d4cfab81e7e34f77974de8b4da93f78921c508541d564391606f07e5452"
+  },
+  {
+    "label": "negative-mixed-import",
+    "command": [
+      "timeout",
+      "--signal=INT",
+      "--kill-after=5s",
+      "90s",
+      "lean",
+      "-j1",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "-DautoImplicit=false",
+      "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLeanTest/QICConjugatorCompatibility.lean"
+    ],
+    "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility",
+    "lean_path": "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/negative-lib:/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/lib:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/importGraph/.lake/build/lib/lean",
+    "exit_code": 1,
+    "elapsed_seconds": 1.3141549779975321,
+    "log": "/workspace/scratch/7637e06d0fc2/qic-conjugator-validation/negative-mixed-import.log",
+    "output": "/workspace/scratch/7637e06d0fc2/TNLean-qic-conjugator-compatibility/TNLeanTest/QICConjugatorCompatibility.lean:6:0: error: import TNLean.MPS.Symmetry.LocalVirtualGauge failed, environment already contains 'Matrix.matrixUnitConjugator' from QICLean.Algebra.MatrixUnitConjugator\n"
+  }
+]
