@@ -1,0 +1,6 @@
+'TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.conditionalMutualInformation_le_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_residual_add_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

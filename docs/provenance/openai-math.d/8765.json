@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8765-tn-conditional-01",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/ConditionalTwoFamilies.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.conditionalMutualInformation_le_sum",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -32,19 +32,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "422315a7315d33f110722443bd7e2430b1bab698",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109888060091230/TNLean/PEPS/Approximation/ConditionalTwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109888060091230/TNLean/PEPS/Approximation/ConditionalTwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/TNLean/PEPS/Approximation/ConditionalTwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8765/TNLean.PEPS.Approximation.ConditionalTwoFamilies.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109895448259219/TNConditionalAxioms.olean -i /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109895448259219/TNConditionalAxioms.ilean /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/TNConditionalAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8765/TNConditionalAxioms.log",
+            "sha256": "391e9781e8eca73e173c7a4ee125abb9474e640f167ae319c2687331c01e5ae7"
+          }
+        ]
       }
     },
     {
       "id": "8765-tn-conditional-02",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/ConditionalTwoFamilies.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_residual_add_sum",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -62,7 +80,25 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "422315a7315d33f110722443bd7e2430b1bab698",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109888060091230/TNLean/PEPS/Approximation/ConditionalTwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109888060091230/TNLean/PEPS/Approximation/ConditionalTwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-conditional-two-family-integration/TNLean/PEPS/Approximation/ConditionalTwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8765/TNLean.PEPS.Approximation.ConditionalTwoFamilies.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109895448259219/TNConditionalAxioms.olean -i /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/tmp/109895448259219/TNConditionalAxioms.ilean /workspace/scratch/7637e06d0fc2/conditional-two-family-validation/TNConditionalAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8765/TNConditionalAxioms.log",
+            "sha256": "391e9781e8eca73e173c7a4ee125abb9474e640f167ae319c2687331c01e5ae7"
+          }
+        ]
       }
     }
   ]
