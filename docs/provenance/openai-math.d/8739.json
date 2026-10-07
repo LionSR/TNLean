@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8739-tnlean.peps.arealaw.reducedstate_possemidef",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.reducedState_posSemidef",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "29d6530e0be369f8b18ffbc61552ae99acf2f224",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-build.log",
+            "sha256": "c2df4ccc91321f0c459cfd8735b299501630176a834c2ddbad9efc9e0f94618e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-axioms.log",
+            "sha256": "bd47387342241705e343fbe4bb3a80fe629f4b617292d2c120e9ed1b02a94ca7"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.trace_reducedstate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.trace_reducedState",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "29d6530e0be369f8b18ffbc61552ae99acf2f224",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-build.log",
+            "sha256": "c2df4ccc91321f0c459cfd8735b299501630176a834c2ddbad9efc9e0f94618e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-axioms.log",
+            "sha256": "bd47387342241705e343fbe4bb3a80fe629f4b617292d2c120e9ed1b02a94ca7"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.trace_reducedstate_eq_one",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.trace_reducedState_eq_one",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,20 +133,38 @@
         "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "29d6530e0be369f8b18ffbc61552ae99acf2f224",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-build.log",
+            "sha256": "c2df4ccc91321f0c459cfd8735b299501630176a834c2ddbad9efc9e0f94618e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-axioms.log",
+            "sha256": "bd47387342241705e343fbe4bb3a80fe629f4b617292d2c120e9ed1b02a94ca7"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.regionalentropy_nonneg",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_nonneg",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -129,20 +183,38 @@
         "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "29d6530e0be369f8b18ffbc61552ae99acf2f224",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-build.log",
+            "sha256": "c2df4ccc91321f0c459cfd8735b299501630176a834c2ddbad9efc9e0f94618e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-axioms.log",
+            "sha256": "bd47387342241705e343fbe4bb3a80fe629f4b617292d2c120e9ed1b02a94ca7"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.regionalentropy_empty",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_empty",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -161,20 +233,38 @@
         "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "29d6530e0be369f8b18ffbc61552ae99acf2f224",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-build.log",
+            "sha256": "c2df4ccc91321f0c459cfd8735b299501630176a834c2ddbad9efc9e0f94618e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-axioms.log",
+            "sha256": "bd47387342241705e343fbe4bb3a80fe629f4b617292d2c120e9ed1b02a94ca7"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8739-tnlean.peps.arealaw.regionalentropy_univ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_univ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -193,7 +283,25 @@
         "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "29d6530e0be369f8b18ffbc61552ae99acf2f224",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-build.log",
+            "sha256": "c2df4ccc91321f0c459cfd8735b299501630176a834c2ddbad9efc9e0f94618e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8739-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8739-axioms.log",
+            "sha256": "bd47387342241705e343fbe4bb3a80fe629f4b617292d2c120e9ed1b02a94ca7"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
