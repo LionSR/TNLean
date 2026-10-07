@@ -1,0 +1,53 @@
+Direct Lean compilation with package options; no local Lake build was run.
+Source revision: 2609edd456a91c7d5b34e23b0b8a7e3d8626f54f
+Started: 2026-10-07T21:00:36.805098+00:00
+Completed: 2026-10-07T21:02:33.673773+00:00
+Lean: Lean (version 4.35.0-rc3, arm64-apple-darwin24.6.0, commit 470d5ce1400764999581fd26d5d72b00d990b0f4, Release)
+LEAN_PATH=/private/tmp/tnlean-party-coarsening:/private/tmp/tnlean-source-block-contraction:/private/tmp/tnlean-source-gate-density:/private/tmp/tnlean-common-source:/private/tmp/tnlean-unused-pair:/private/tmp/tnlean-party-factorization:/private/tmp/tnlean-source-preparation:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/checkdecls/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/qiclean/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean
+Every compiled source matches the cited Git revision byte-for-byte.
+The package linter default was supplied explicitly; all warnings were errors.
+
+Source: TNLean/PEPS/Approximation/LayoutOwnerMap.lean
+Source SHA256: 42606809344ce6f596634ea8b83382f25fbbac1db880bf37c6c882aa68e573f2
+Working directory: /private/tmp/tnlean-party-coarsening/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean
+Exit code: 0
+Elapsed seconds: 23.954
+Output artifact SHA256: 789b7c1bf05518d96b0f2f6d643761dcd7dec4f263bcafe55f41169fa81becd5
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/LocalPairSource.lean
+Source SHA256: 3976a047fa5b90238d55d027c25cee675899ee25e1c51a38e21579e4ba151b6b
+Working directory: /private/tmp/tnlean-party-coarsening/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LocalPairSource.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LocalPairSource.lean
+Exit code: 0
+Elapsed seconds: 18.071
+Output artifact SHA256: 168ec3326bb60b7090a0443814e4d0036a2211a77a63a9e278efe9d4cc19737f
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/SourceOwnerMap.lean
+Source SHA256: fbed21802cfdb1c9e1465ed103dd77965cbc421b780000f3385451ddf31e8ba2
+Working directory: /private/tmp/tnlean-party-coarsening/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean
+Exit code: 0
+Elapsed seconds: 22.704
+Output artifact SHA256: 42d95b2632015bb6719ea937f5a6eaf575c52cacfe4cc6aed584d38429a94cc8
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/WordOwnerMap.lean
+Source SHA256: 3309e91977eaff5fa80e604c7c2e98106be6c8f91a434dca2be58086a7bcf10a
+Working directory: /private/tmp/tnlean-party-coarsening/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/WordOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/WordOwnerMap.lean
+Exit code: 0
+Elapsed seconds: 24.222
+Output artifact SHA256: c0ffb3255f18a68c512af9fdbd08a85a8827b91457927301c2040044a5ddeafb
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/PartyCoarseningFactorization.lean
+Source SHA256: 3b879c254c8aa18ec696c17bed4bd2cbbd9524984993055b2828fad290efc26a
+Working directory: /private/tmp/tnlean-party-coarsening/src
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/PartyCoarseningFactorization.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/PartyCoarseningFactorization.lean
+Exit code: 0
+Elapsed seconds: 27.23
+Output artifact SHA256: 571cce3cf1468139a2086a3d2b52afe52a8630c64afae1c3cc6d7c1e132c8ea1
+Diagnostics: none.

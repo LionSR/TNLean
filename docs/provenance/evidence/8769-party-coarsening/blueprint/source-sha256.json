@@ -1,0 +1,11 @@
+{
+  "TNLean/PEPS/Approximation/LayoutOwnerMap.lean": "42606809344ce6f596634ea8b83382f25fbbac1db880bf37c6c882aa68e573f2",
+  "TNLean/PEPS/Approximation/LocalPairSource.lean": "3976a047fa5b90238d55d027c25cee675899ee25e1c51a38e21579e4ba151b6b",
+  "TNLean/PEPS/Approximation/SourceOwnerMap.lean": "fbed21802cfdb1c9e1465ed103dd77965cbc421b780000f3385451ddf31e8ba2",
+  "TNLean/PEPS/Approximation/WordOwnerMap.lean": "3309e91977eaff5fa80e604c7c2e98106be6c8f91a434dca2be58086a7bcf10a",
+  "TNLean/PEPS/Approximation/PartyCoarseningFactorization.lean": "3b879c254c8aa18ec696c17bed4bd2cbbd9524984993055b2828fad290efc26a",
+  "blueprint/src/chapter/ch24_peps_party_coarsening.tex": "9ed01faa8a6f3a0eb233001a90a88c661d1ec07eaf0feedd6712a7fa0f75dacc",
+  "blueprint/src/content.tex": "b0cd2d986fd78f9018839ad783c9402416637615e03f0b335d147148ff15f00c",
+  "TNLean.lean": "9ab4dd293ef89b70bc7d650db97440837a42c4852f1fb5282925372e551f754a",
+  "TNLean/PEPS/Approximation.lean": "baa8b07b19a546e44e9326f20eed93cd13f0ec9ea77c21d11d9d5d2a3c6f5f2c"
+}

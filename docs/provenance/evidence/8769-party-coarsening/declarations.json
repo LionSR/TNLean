@@ -1,0 +1,142 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner",
+    "id": "8769-party-coarsening-layout-layout.mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner_nil",
+    "id": "8769-party-coarsening-layout-layout.mapowner_nil"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner_cons",
+    "id": "8769-party-coarsening-layout-layout.mapowner_cons"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner_append",
+    "id": "8769-party-coarsening-layout-layout.mapowner_append"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso",
+    "id": "8769-party-coarsening-layout-layout.mapowneriso"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_nil_apply",
+    "id": "8769-party-coarsening-layout-layout.mapowneriso_nil_apply"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_cons_tmul",
+    "id": "8769-party-coarsening-layout-layout.mapowneriso_cons_tmul"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append_tmul",
+    "id": "8769-party-coarsening-layout-layout.mapowneriso_append_tmul"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append",
+    "id": "8769-party-coarsening-layout-layout.mapowneriso_append"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PairSource.mapOwner",
+    "id": "8769-party-coarsening-inventory-pairsource.mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner",
+    "id": "8769-party-coarsening-inventory-sourceinventory.mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_nil",
+    "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_nil"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_cons",
+    "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_cons"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_append",
+    "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_append"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner",
+    "id": "8769-party-coarsening-inventory-sourceinventory.mem_mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.IsNormalized.mapOwner",
+    "id": "8769-party-coarsening-inventory-sourceinventory.isnormalized.mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_eq_nil_iff",
+    "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_eq_nil_iff"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_mapOwner",
+    "id": "8769-party-coarsening-inventory-sourceinventory.map_partypair_mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_partyPair_mapOwner",
+    "id": "8769-party-coarsening-inventory-sourceinventory.mem_partypair_mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LocalPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.localPairSource",
+    "id": "8769-party-coarsening-local-word.localpairsource"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LocalPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.localPairSource_spec",
+    "id": "8769-party-coarsening-local-word.localpairsource_spec"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/LocalPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_localPairSource",
+    "id": "8769-party-coarsening-local-word.eval_localpairsource"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.mapOwner",
+    "id": "8769-party-coarsening-word-word.mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_mapOwner",
+    "id": "8769-party-coarsening-word-word.isallowed_mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.sources_mapOwner",
+    "id": "8769-party-coarsening-word-word.sources_mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_mapOwner",
+    "id": "8769-party-coarsening-word-word.eval_mapowner"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_mapOwner_comp",
+    "id": "8769-party-coarsening-word-word.eval_mapowner_comp"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartyCoarseningFactorization.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.exists_partition_of_sources_internal",
+    "id": "8769-party-coarsening-factorization-word.exists_partition_of_sources_internal"
+  }
+]

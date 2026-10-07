@@ -1,0 +1,6 @@
+'TNLean.PEPS.PairEffect.PartyCoarseningRegression.two_occurrences_one_pair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.PartyCoarseningRegression.internal_phase_source' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
