@@ -546,7 +546,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -eo pipefail
-          lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds:olean \
+          lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings

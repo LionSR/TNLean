@@ -30,8 +30,10 @@ constructors, its reduction to four strips, rounded integer row profiles,
 consecutive occupied rows and columns in a vertical window, and one-step
 endpoint and point-transport bounds. These new declarations have no proof
 holes but are awaiting Lean compilation. They are not yet included among
-the verified milestones above. The ambient dilation layer count is still
-unimplemented.
+the verified milestones above. `TemplateLayers.lean` now also contains an
+unvalidated candidate for the complete ambient depth-layer estimate with
+`Ctpl ≥ 24`, including empty pieces and arbitrary unions. Compiler validation
+and repairs remain in progress; the desired theorem is not yet claimed proved.
 
 ## Remaining mathematical argument
 
@@ -71,9 +73,14 @@ informal proof plan, not an elaborated Lean theorem or a completed source label.
    proved union reduction, and applying the template scale would give the
    desired estimate for every Ctpl≥24.
 
-The first two steps now have candidate implementations awaiting validation.
-Step 3, the formal counting in step 4, and their assembly from the model
-remain to be implemented. In particular, the verified compact-section
+All four steps now have candidate implementations awaiting validation.
+The dilation proof uses the equivalent windowed-column argument: clipping the
+original sample to a vertical window preserves consecutive occupied columns,
+and horizontal extension then produces an interval. A point in the enlarged
+window can be moved to the smaller window with horizontal displacement at most
+one; adding one unit of horizontal radius gives the endpoint bound of two.
+The final theorem sums the per-piece count and applies the scale field.
+In particular, the previously verified compact-section
 ceil/floor theorem already implemented does not assert that these real
 endpoints have the required slope formulas. Empty samples, overlaps and
 disconnected unions require no removal or disjointness assumption in the

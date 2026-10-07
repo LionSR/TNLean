@@ -1,4 +1,4 @@
-import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds
+import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import Mathlib.Data.Rat.Floor
 
 /-!
@@ -127,6 +127,11 @@ example : latticeRow
 
 example : thinDiagonalTemplate.points.card ≤ 9 * 96 * 3 :=
   template_card_le thinDiagonalTemplate (by norm_num)
+
+example (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ 3) :
+    (ambientDilation thinDiagonalTemplate.points j \
+      ambientDilation thinDiagonalTemplate.points (j - 1)).card ≤ 96 :=
+  template_layer_card_le thinDiagonalTemplate (by norm_num) j hj hjs
 
 -- A disconnected union may have a disconnected horizontal row.
 example : latticeRow {(-3, 0), (3, 0)} 0 = {-3, 3} := by decide
@@ -330,5 +335,14 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
+
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
+#print axioms TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le
 
 end AxiomChecks

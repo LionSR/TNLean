@@ -165,7 +165,61 @@
     most one in one row step, as do its maximum or minimum.
 \end{proof}
 
-The two new geometric proofs above are awaiting Lean validation in this draft.
-The preservation and counting argument under dilation, and the estimate
-$|T_j\setminus T_{j-1}|\le n$ in Lemma~9.4 of \cite{OpenAI2026AreaLaw},
-remain to be established here.
+\begin{lemma}[Single-piece ambient dilation layers]
+    \label{lem:area_law_piece_depth_layers}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between,
+        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc,
+        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le,
+        TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
+    }
+    \uses{lem:area_law_affine_row_profiles,lem:area_law_dilation_rows_union}
+    Let $S$ be one actual sampled piece. Its dilated horizontal rows are
+    intervals. Increasing the radius from $r$ to $r+1$ adds at most four
+    sites to each old nonempty row. Every radius-$r$ row has at most
+    $2s_0+2r+1$ sites. If $S$ is nonempty, there are integers $a\le b$ with
+    $b-a\le2s_0$ such that its radius-$r$ occupied rows are exactly
+    $[a-r,b+r]\cap\mathbb Z$.
+    For $1\le j\le s_0$, including empty samples,
+    \[
+        |S_j\setminus S_{j-1}|\le24(s_0+1).
+    \]
+\end{lemma}
+\begin{proof}
+    Intersect the original sample with a vertical radius window. Its occupied
+    columns are consecutive, so horizontal radius extension gives an interval.
+    Compare adjacent windows by clamping an original row index to the smaller
+    window. An occupied adjacent row supplies a sampled point with horizontal
+    displacement at most one. The additional horizontal radius adds one more,
+    so each old endpoint extends by at most two.
+    The piece diameter bounds every row width. Count the old occupied rows,
+    each contributing at most four sites, and the two new extreme rows.
+    Their total is at most $12s_0+12j-2\le24(s_0+1)$.
+\end{proof}
+
+\begin{lemma}[Template depth layers with an explicit constant]
+    \label{lem:area_law_template_depth_layers}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le}
+    \uses{def:area_law_template,lem:area_law_piece_depth_layers,
+        lem:area_law_dilation_rows_union}
+    If $C_{\rm tpl}\ge24$ and $1\le j\le s_0$, the actual template satisfies
+    \[
+        |T_j\setminus T_{j-1}|\le n.
+    \]
+\end{lemma}
+\begin{proof}
+    Apply union-layer subadditivity to the pieces and then the scale bound:
+    \[
+        |T_j\setminus T_{j-1}|
+        \le24N_0(s_0+1)
+        \le C_{\rm tpl}N_0(s_0+1)\le n.
+    \]
+    Overlap, empty pieces, and disconnected unions require no extra condition.
+\end{proof}
+
+The new supporting-strip, row-regularity, and depth-layer proofs are candidate
+implementations awaiting Lean validation in this draft. Their blueprint entries
+are not marked complete. No entropy or physical area-law conclusion is claimed.

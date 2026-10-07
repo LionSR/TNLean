@@ -1472,6 +1472,254 @@
         "result": "pending"
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_of_between",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_eq_icc",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_succ_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_latticerow_layer_le_four",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_latticerow_dilation_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_dilation_row_domain",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_dilation_layer_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template_layer_card_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
+        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }

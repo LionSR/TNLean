@@ -181,9 +181,9 @@ private theorem cross_ne_zero_of_orthogonal {u v : ℝ × ℝ}
     ring
   intro hzero
   rw [hzero, huv] at hid
-  have hid' : 0 = planeDot u u * planeDot v v := by
-    simpa only [zero_pow, zero_add] using hid
-  exact (ne_of_gt hpos) hid'.symm
+  have hz : (0 : ℝ) ^ 2 + 0 ^ 2 = 0 := by norm_num
+  rw [hz] at hid
+  exact (ne_of_gt hpos) hid.symm
 
 private theorem basis_reconstruct (a u v p : ℝ × ℝ) (hd : planeCross u v ≠ 0) :
     a + (planeCross (p - a) v / planeCross u v) • u +
@@ -234,10 +234,10 @@ private theorem rectangle_mem_of_normal_bounds (a u v p : ℝ × ℝ)
     constructor <;> nlinarith only [hb.1, hb.2]
   rw [hpu] at hU
   rw [hpv] at hV
-  have hα₀ : 0 ≤ α := (mul_le_mul_right hu').mp (by simpa using hU.1)
-  have hα₁ : α ≤ 1 := (mul_le_mul_right hu').mp (by simpa using hU.2)
-  have hβ₀ : 0 ≤ β := (mul_le_mul_right hv').mp (by simpa using hV.1)
-  have hβ₁ : β ≤ 1 := (mul_le_mul_right hv').mp (by simpa using hV.2)
+  have hα₀ : 0 ≤ α := (mul_le_mul_iff_of_pos_right hu').mp (by simpa using hU.1)
+  have hα₁ : α ≤ 1 := (mul_le_mul_iff_of_pos_right hu').mp (by simpa using hU.2)
+  have hβ₀ : 0 ≤ β := (mul_le_mul_iff_of_pos_right hv').mp (by simpa using hV.1)
+  have hβ₁ : β ≤ 1 := (mul_le_mul_iff_of_pos_right hv').mp (by simpa using hV.2)
   have hαc : 0 ≤ 1 - α := sub_nonneg.mpr hα₁
   have hβc : 0 ≤ 1 - β := sub_nonneg.mpr hβ₁
   have hpoint : ((1 - α) * (1 - β)) • a + (α * (1 - β)) • (a + u) +
@@ -354,8 +354,11 @@ theorem TemplatePolygon.exists_four_strip_bounds (P : TemplatePolygon) :
         (by simpa [← hu, mul_add] using hv)
       simpa [← hu, mul_add] using ht
     · have hu' : u.2 = -u.1 := by linarith
+      have hform (q : ℝ × ℝ) : u.1 * q.1 + u.2 * q.2 = u.1 * (q.1 - q.2) := by
+        rw [hu']
+        ring
       have ht := transfer (fun q ↦ q.1 - q.2) ld ud hld hud hpd u.1
-        (by simpa [hu', mul_sub, sub_eq_add_neg] using hv)
-      simpa [hu', mul_sub, sub_eq_add_neg] using ht
+        (by intro q hq; simpa only [hform q] using hv q hq)
+      simpa only [hform p] using ht
 
 end TNLean.PEPS.AreaLaw.Geometry
