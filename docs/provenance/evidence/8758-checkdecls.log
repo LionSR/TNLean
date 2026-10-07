@@ -1,0 +1,4 @@
+Command: lake exe checkdecls blueprint/lean_decls
+Revision: 07f4c1e07a497f80e1e9bdf10fe94d5f121be70f
+Elapsed seconds: 10.674
+Exit code: 0
