@@ -1,0 +1,37 @@
+{
+  "TNLean.PEPS.PairEffect.Word.freeSourceMatrix": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.freeSourceMatrix_conjTranspose_mul_apply": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ]
+}
