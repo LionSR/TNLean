@@ -176,7 +176,7 @@ theorem exists_eq_mul_of_gap {HA : Matrix α α ℂ} {HB : Matrix β β ℂ} (hA
     simp only [smul_eq_mul, mul_one] at h
     norm_cast at h
   have hz1 : 1 ≤ Complex.normSq z := by nlinarith
-  -- `ω` is the multiple `z̄ ψ` of the product vector.
+  -- `ω` is the multiple `conj z • ψ` of the product vector.
   refine ⟨fun i ↦ star z * u i, v, ?_⟩
   have hdiff : star (ω - star z • ψ) ⬝ᵥ (ω - star z • ψ) = 1 - (Complex.normSq z : ℂ) := by
     rw [star_sub, star_smul, star_star, sub_dotProduct, dotProduct_sub, dotProduct_sub,
