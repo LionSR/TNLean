@@ -27,9 +27,19 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 /-
 Source: September 24, 2026.
 Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: cor:rectangles.
-Manuscript: preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: sec:introduction.
 Provenance-ID: 8738-tnlean.peps.arealaw.rectangleembedding
 Downstream declaration: TNLean.PEPS.AreaLaw.rectangleEmbedding

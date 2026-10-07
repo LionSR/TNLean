@@ -36,11 +36,26 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 /-
 Source: September 24, 2026.
 Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: eq:hamiltonian.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  01-preliminaries.tex
 Labels: sec:prelim.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  08-scanner.tex
 Labels: scanner:template.
 Provenance-ID: 8738-tnlean.peps.arealaw.site
 Downstream declaration: TNLean.PEPS.AreaLaw.Site

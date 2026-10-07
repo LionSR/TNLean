@@ -31,9 +31,19 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 /-
 Source: September 24, 2026.
 Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  08-scanner.tex
 Labels: scanner:template.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  10-geometry.tex
 Labels: geometry:cancellation.
 Provenance-ID: 8738-tnlean.peps.arealaw.geometry.isallowedslope
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.IsAllowedSlope

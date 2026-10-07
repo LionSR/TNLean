@@ -38,13 +38,33 @@ open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 /-
 Source: September 24, 2026.
 Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: eq:global-gap.
-Manuscript: preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: eq:model.
-Manuscript: preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: thm:main.
-Manuscript: preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: thm:main, eq:target-error.
 Provenance-ID: 8738-tnlean.peps.approximation.configuration
 Downstream declaration: TNLean.PEPS.Approximation.Configuration

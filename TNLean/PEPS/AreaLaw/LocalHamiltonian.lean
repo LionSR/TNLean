@@ -35,9 +35,19 @@ open scoped BigOperators Matrix Matrix.Norms.L2Operator ComplexOrder
 /-
 Source: September 24, 2026.
 Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: eq:hamiltonian.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex
+Manuscript:
+  preprints/
+  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+  build/
+  sections/
+  00-introduction.tex
 Labels: thm:area.
 Provenance-ID: 8738-tnlean.peps.arealaw.statespace
 Downstream declaration: TNLean.PEPS.AreaLaw.StateSpace
