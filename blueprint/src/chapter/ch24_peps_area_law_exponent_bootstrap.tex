@@ -12,7 +12,8 @@
     }
     \leanok
     \uses{thm:area_law_exponent_gaps}
-    Fix $0<e_0<1$ and set $e_*=2\cdot10^{-6}$. The parameters in the proof of
+    For $e_0\in\mathbb R$, set $e_*=2\cdot10^{-6}$ and define the parameters
+    used in the proof of
     \cite[Proposition~9.5]{OpenAI2026AreaLaw} are
     \begin{align}
         g_0  & =\frac{1-e_0}{2}, & \mu    & =1-g_0,                                 & \nu & =\frac{g_0}{1000},
@@ -34,9 +35,9 @@
     \leanok
     \uses{def:area_law_bootstrap_parameters}
     With the parameters of (\ref{eq:area_law_bootstrap_parameters}) and
-    (\ref{eq:area_law_bootstrap_separation}), one has
+    (\ref{eq:area_law_bootstrap_separation}), the condition $0<e_0<1$ gives
     $0<g_0<1/2$, $0<\ell<1$, and $\kappa>0$.
-    For every $e_*<e\le e_0$, the density-error exponents satisfy
+    If $e_0<1$ and $e\le e_0$, the density-error exponents satisfy
     \begin{align}
         e_0-\mu+\nu & =-0.999g_0,
                     & -\frac{g_0-\ell}{4}+\nu & =-0.2489975g_0,
@@ -45,17 +46,23 @@
                     & -\frac{g_0-\ell}{4}+\nu & <-0.24g_0.
         \label{eq:area_law_bootstrap_density_margin}
     \end{align}
-    Writing $p=\ell+2\kappa$ for the energy-prefactor exponent, one has
+    For $e_0<1$, write $p=\ell+2\kappa$ for the energy-prefactor exponent. Then
     \begin{align}
         p & \le0.00003g_0, & p-\nu & <-\nu/2, & p-0.03g_0 & <-\nu/2.
         \label{eq:area_law_bootstrap_energy_margin}
     \end{align}
-    Finally, $\kappa<(1-\ell)e$ and $g_0-\ell-\nu/4<1$.
+    For $e_0>0$ and $e>e_*$, one has $\kappa<(1-\ell)e$ and
+    $g_0-\ell-\nu/4<1$.
 \end{theorem}
 \begin{proof}\leanok
-    Substitute the parameter values, using $e_0=1-2g_0$ and
-    $\kappa\le\ell$ for the energy estimates. The last two inequalities follow
-    from $\kappa\le e_*/4$, $e>e_*$, and $0<g_0<1/2$.
+    Substituting (\ref{eq:area_law_bootstrap_parameters}) and
+    (\ref{eq:area_law_bootstrap_separation}) gives
+    (\ref{eq:area_law_bootstrap_density_values}). Since $g_0>0$ when $e_0<1$,
+    the identities imply (\ref{eq:area_law_bootstrap_density_margin}) for
+    $e\le e_0$. The bound $\kappa\le\ell$ gives
+    (\ref{eq:area_law_bootstrap_energy_margin}). For the comparison bounds,
+    substitute the same formulas and use $\kappa\le e_*/4$, $e>e_*$, and
+    $e_0>0$.
 \end{proof}
 
 \begin{theorem}[Uniform bounds after finitely many exponent improvements]

@@ -68,6 +68,8 @@ private theorem exists_uniform_power_bound_of_eventually {V e C : ℝ}
         le_mul_of_one_le_right (add_nonneg hC.le hVN)
           (Real.one_le_rpow (by exact_mod_cast hn) (add_nonneg zero_le_one he))
 
+/-- A uniform power bound remains valid after increasing its exponent on scales `n ≥ 1`.
+Source: the final exponent comparison in `08-scanner.tex`, lines 788–803. -/
 private theorem exists_uniform_power_bound_mono {e e' : ℝ} (hee' : e ≤ e')
     (hbound : ∃ C : ℝ, 0 < C ∧ ∀ i n, 1 ≤ n → F i n ≤ C * (n : ℝ) ^ (1 + e)) :
     ∃ C : ℝ, 0 < C ∧ ∀ i n, 1 ≤ n → F i n ≤ C * (n : ℝ) ^ (1 + e') := by
