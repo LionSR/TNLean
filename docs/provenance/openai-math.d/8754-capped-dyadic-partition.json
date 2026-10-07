@@ -14,7 +14,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -46,7 +46,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor_eq_cellIndex",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -78,7 +78,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -110,7 +110,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_mem_cell",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -142,7 +142,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_latticeDyadicCell",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -174,7 +174,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_zero",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -206,7 +206,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_of_common_mem",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -238,7 +238,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_parent",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -270,7 +270,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -302,7 +302,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_cappedDyadicPartition",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -334,7 +334,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_mem_cappedDyadicPartition",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -366,7 +366,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.biUnion_cappedDyadicPartition",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -398,7 +398,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_cappedDyadicPartition",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -430,7 +430,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_card_cappedDyadicPartition",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -462,7 +462,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_pow_cappedDyadicPartition",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -494,7 +494,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_at_cap_le",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -526,7 +526,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -558,7 +558,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_mixedDyadicIndices",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -590,7 +590,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.parent_mem_mixedDyadicIndices",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -622,7 +622,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_subset_mixed_refinement",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -654,7 +654,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_below_cap_le",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -686,7 +686,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_empty",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -718,7 +718,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_zero",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {

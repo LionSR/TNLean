@@ -22,7 +22,7 @@ entropy conclusion of Lemma 9.4.
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
-  September 24, 2026, Section 9, `scanner:templates`, lines 639–649.
+  September 24, 2026, Section 9, `scanner:templates`, lines 641–649.
   Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
@@ -89,7 +89,7 @@ open scoped BigOperators
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The lattice sites of an origin-zero dyadic square, obtained by refining its
-index down to unit scale. Source: `scanner:templates`, lines 639–649. -/
+index down to unit scale. Source: `scanner:templates`, lines 641–649. -/
 def latticeDyadicCell (k : ℕ) (z : ℤ × ℤ) : Finset (ℤ × ℤ) :=
   dyadicRefinement {z} k
 
@@ -150,7 +150,7 @@ theorem latticeDyadicCell_subset_parent (k : ℕ) (z : ℤ × ℤ) :
   rw [mem_latticeDyadicCell, ancestor_succ, (mem_latticeDyadicCell k z x).mp hx]
 
 /-- Contained squares up to scale `K`, maximal unless they are at the cap.
-Source: `scanner:templates`, lines 639–649. -/
+Source: `scanner:templates`, lines 641–649. -/
 def cappedDyadicPartition (S : Finset (ℤ × ℤ)) (K : ℕ) : Finset (ℕ × (ℤ × ℤ)) :=
   ((Finset.range (K + 1)).biUnion fun k ↦
     (S.image (dyadicAncestor k)).image (Prod.mk k)).filter fun c ↦
@@ -179,7 +179,7 @@ theorem mem_cappedDyadicPartition (S : Finset (ℤ × ℤ)) (K k : ℕ) (z : ℤ
         ⟨x, hs hx, (mem_latticeDyadicCell k z x).mp hx⟩, rfl⟩
 
 /-- Every site of `S` lies in a selected square, by taking its largest contained
-scale up to the cap. Source: `scanner:templates`, lines 639–642. -/
+scale up to the cap. Source: `scanner:templates`, lines 641–644. -/
 theorem exists_mem_cappedDyadicPartition (S : Finset (ℤ × ℤ)) (K : ℕ)
     {x : ℤ × ℤ} (hx : x ∈ S) :
     ∃ c ∈ cappedDyadicPartition S K, x ∈ latticeDyadicCell c.1 c.2 := by

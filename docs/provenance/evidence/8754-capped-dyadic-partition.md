@@ -1,7 +1,7 @@
 # Capped dyadic partition verification
 
 Scope: the finite maximal-contained dyadic-square partition step in
-`scanner:templates`, source lines 639–649 of `08-scanner.tex`, pinned to
+`scanner:templates`, source lines 641–649 of `08-scanner.tex`, pinned to
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 These are original proofs from the manuscript. The existing TNLean dyadic
@@ -13,7 +13,7 @@ Claims on #8754, #8758 and #8837 were inspected; scope was announced in
 
 ## Current evidence
 
-Kernel verification, regression elaboration and exported axiom results are
+Kernel verification, regression elaboration and exported dependency audits are
 pending normal draft-PR CI. The new provenance records are `planned` with
 pending verification, and the separate blueprint entries have no `leanok`.
 
@@ -27,9 +27,9 @@ started. No local Lean proof success is claimed.
 
 The CI workflow first builds the new production module with package options,
 then retains the full library build and runs strict regressions and all 23
-exported declaration axiom prints. Regressions cover empty sets, zero cap,
+exported declaration dependency prints. Regressions cover empty sets, zero cap,
 negative coordinates, mixed scales, disconnected sets, holes, and containment
-of parents above the cap. Exact guarded axiom output will be added only after
+of parents above the cap. Exact guarded dependency output will be added only after
 observing a successful audit.
 
 The mixed-square count for actual templates, safe-square clearance, entropy
