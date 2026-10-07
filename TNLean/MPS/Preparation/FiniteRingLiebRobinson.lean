@@ -377,7 +377,7 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
   have hBound : ∀ s ∈ Set.Icc 0 t, ∀ Z,
       f s Z ≤ b Z + ∑ j, coeff Z j * ∫ u in (0 : ℝ)..s, f u (e j) := by
     intro s hs Z
-    have hRec := heisenbergCommutatorNorm_le_integral h bond hHerm hSupport B Z.val s hs.1
+    have hRec := heisenbergCommutatorNorm_le_integral h ringBond hHerm hSupport B Z.val s hs.1
     have hEq : (∑ j, coeff Z j * ∫ u in (0 : ℝ)..s, f u (e j)) =
         2 * ∑ j, if Disjoint (Z.val : Set (Fin N)) (ringBond j) then 0 else
           ‖h j‖ * ∫ u in (0 : ℝ)..s,

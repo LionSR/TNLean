@@ -116,7 +116,7 @@ theorem dataChannelLift_channelLayer (hd : 0 < d) (hN : 2 ≤ N)
     (L : ChannelLayer (d ^ k) N) :
     IsPhysicalPortProtocol (layout N k) (2 * k) (dataChannelLift N k d L.map) := by
   classical
-  rw [ChannelLayer.map, Finset.map_noncommProd]
+  rw [BondChannelLayer.map, Finset.map_noncommProd]
   apply IsPhysicalPortProtocol.of_routed_family (layout N k) L.bonds
     (fun i => dataChannelLift N k d (L.gateMap i)) _
     (routingPermutation L.bonds L.pairwiseDisjoint)
