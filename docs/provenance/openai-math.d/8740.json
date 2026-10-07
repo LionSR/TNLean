@@ -38,7 +38,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -77,7 +78,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -116,7 +118,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -155,7 +158,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -194,7 +198,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -233,7 +238,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -272,7 +278,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -311,7 +318,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -350,7 +358,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -389,7 +398,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -428,7 +438,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
@@ -467,7 +478,8 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances."
+        "Changes: renamed namespaces, shared edge spelling and narrowed imports.",
+        "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
         "result": "pending"
