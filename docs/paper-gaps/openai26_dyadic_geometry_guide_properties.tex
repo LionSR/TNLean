@@ -1,0 +1,75 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Guide Properties in the Angular Separation of Dyadic Repaintings}
+\author{}
+\date{2026-10-07}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Section~7 of the September 24, 2026 polynomial PEPS manuscript\footnote{%
+\url{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/main.tex},
+file \texttt{06-geometry.tex}, lines 254--319.}
+repaints an aligned square $S=(nr,ns)+[0,n]^2$ of the dyadic hierarchy from its
+old label $A$ to its final label $B$. Along each edge it uses the normal ratio
+$x=d/w(s)$ with $w(s)=10^{-3}\min(s,n-s)$, and it runs a central birth, seven
+elementary births and deaths per edge, and one lens exchange per edge. Lemma~7.2
+asserts that there is one constant $a_0>0$ such that, for every one of these
+operations and for every point $y$ of the closure of its changed region,
+\begin{align}
+    \operatorname{dist}(y,\{f\ne P_\circ\})
+        &\ge a_0\min\{n,d_{\mathcal V}(y)\},
+    \label{eq:openai26_dyadic_geometry_guide_properties_clearance}
+\end{align}
+where $f$ is the surrounding guide of the schedule, $P_\circ$ the surrounding
+label, and $d_{\mathcal V}$ the distance from the marked points; for the exchange
+the obstructing set is the boundary of the lens $Y=\{-7<x<-7/2\}$.
+
+\section{The formal statement}
+
+The schedule of guides is not constructed in the formal development. The
+estimate~(\ref{eq:openai26_dyadic_geometry_guide_properties_clearance}) is
+instead proved with $a_0=1/5000$ for every guide having the properties that the
+source's proof uses:
+\begin{itemize}
+    \item for an edge birth or death, the guides before, after and surrounding
+    the operation carry the source's normal words on the band $\{-8<x<2\}$, and
+    the guides before and after agree off that band;
+    \item for the central birth, the surrounding guide equals $A$ on the open
+    square;
+    \item for the lens exchange, the main guide equals $C$ on the exterior band
+    $\{-8<x<0\}$, and the auxiliary guide carries the auxiliary word on
+    $\{-8<x<2\}$ and equals $C$ off it.
+\end{itemize}
+The square is placed at the origin. These are the
+declarations \leanid{TNLean.PEPS.Approximation.BandOperation.clearance},
+\leanid{TNLean.PEPS.Approximation.centralBirth_clearance} and
+\leanid{TNLean.PEPS.Approximation.lensExchange_clearance}.
+
+The source derives the listed properties at lines 227--241: the bands
+$\{-8<x<2\}$ along distinct edges are disjoint, so the operations along one edge
+do not meet those along another, and the exterior part of a band stays in one
+neighboring square, which carries a constant label. The disjointness is proved
+as \leanid{TNLean.PEPS.Approximation.disjoint_edgeBand}. The formal statements
+therefore cover the source's operations once the guides are built, and no
+hypothesis absent from the source's argument is used. A translate of $S$ only
+translates the coordinates, and sup distances are translation invariant.
+
+\section{Elimination}
+
+Construct the schedule of guides of the large-scale repainting, prove from the
+band disjointness that each of its guides has the listed properties, and
+transport the three estimates along the translation to $(nr,ns)+[0,n]^2$. This
+belongs to the formalization of Proposition~7.1 in Section~7 of the manuscript.
+
+\end{document}
