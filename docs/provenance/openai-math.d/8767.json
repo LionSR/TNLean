@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8767-tnlean.peps.arealaw.geometry.closedsquaresample",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.closedSquareSample",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,19 +33,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -64,19 +82,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.closedsquaresample_mono",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.closedSquareSample_mono",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -95,19 +131,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_iff_int",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_int",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -126,19 +180,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.card_edgeboundary_closedsquaresample_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -157,19 +229,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.squareradius",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.squareRadius",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -188,19 +278,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_iff_radius",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_radius",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -219,19 +327,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.abs_coordinate_sub_le_one_of_adj",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.abs_coordinate_sub_le_one_of_adj",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -250,19 +376,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_of_adj",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_of_adj",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -281,19 +425,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.abs_squareradius_sub_le_one_of_adj",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_one_of_adj",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -312,19 +474,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.mem_edgeboundary_pair_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_pair_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -343,19 +523,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.mem_edgeboundary_closedsquaresample_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_closedSquareSample_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -374,19 +572,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.card_closedsquaresample_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -405,19 +621,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.card_closedsquaresample_le_eightyone",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le_eightyOne",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -436,19 +670,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.ClosedSquare",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/closed-square-build.txt",
+            "sha256": "41f2d4d1112babdd6cb47f71a40b2c062b8a9c0a3f7805d0cdc96bdc1b3da4b6"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchcount",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -467,19 +719,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchradius",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -498,19 +768,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -529,19 +817,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchcount_pos",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount_pos",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -560,19 +866,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.half_lt_nestedpatchcount",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.half_lt_nestedPatchCount",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -591,19 +915,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.le_nestedpatchradius",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.le_nestedPatchRadius",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -622,19 +964,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchradius_le_two_mul",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_le_two_mul",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -653,19 +1013,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchradius_add_two_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_add_two_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -684,19 +1062,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_mono",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_mono",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -715,19 +1111,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.edgeboundary_support_disjoint_of_add_one_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_disjoint_of_add_one_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -746,19 +1160,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.edgeboundary_support_subset_of_add_one_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_subset_of_add_one_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -777,19 +1209,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_crossing_disjoint_earlier",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_disjoint_earlier",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -808,19 +1258,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_crossing_subset_later",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_subset_later",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -839,19 +1307,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_crossing_unique",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_unique",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -870,19 +1356,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.disjoint_edgeboundary_nestedpatch",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.disjoint_edgeBoundary_nestedPatch",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -901,19 +1405,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.card_edgeboundary_nestedpatch_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_nestedPatch_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -932,19 +1454,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_quadratic_budget",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_quadratic_budget",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -964,19 +1504,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     },
     {
       "id": "8767-tnlean.peps.arealaw.geometry.sum_card_edgeboundary_nestedpatch_mul_sq_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_card_edgeBoundary_nestedPatch_mul_sq_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -996,7 +1554,25 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "42a454da694a5bc23aed4a693b810b5c8e879cfd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 nested-patch-geometry-validation/check.py TNLean.PEPS.AreaLaw.Geometry.NestedPatches",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/nested-patches-build.txt",
+            "sha256": "d31249d0566db9478497a314669f482cfaa07ec607311a32abc6d360fa283ab3"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 nested-patch-geometry-validation/check.py NestedPatchGeometryProvenanceAxioms nested-patch-geometry-validation/NestedPatchGeometryProvenanceAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8767-nested-patch-geometry/dependency-report.txt",
+            "sha256": "f43fcc47e01c0133562c701210a66d59bc4908d74160980ba0885979f74af282"
+          }
+        ]
       }
     }
   ]

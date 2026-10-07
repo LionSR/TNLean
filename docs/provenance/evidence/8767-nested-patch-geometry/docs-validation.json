@@ -1,0 +1,84 @@
+{
+  "scope": "Documentation, source-level declaration coverage, native diagram, and planned issue8767 provenance only",
+  "public_declarations": 32,
+  "blueprint_entries": 10,
+  "checks": {
+    "blueprint_source_sync": {
+      "result": "passed",
+      "references": 19893,
+      "report": "blueprint-sync-with-source.json",
+      "command": "python3 scripts/blueprint_lean_sync.py --ci --warn-missing-blueprint --diff-base HEAD --diff-head=--cached --changed-files TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean --report ../nested-patch-geometry-validation/blueprint-sync-with-source.json"
+    },
+    "source_restoration": {
+      "qiclean_pin": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+      "method": "source-only git archive from existing local QICLean objects into ignored .lake/packages/qiclean; no build artifacts or dependency-pin changes"
+    },
+    "diagram_static_tests": {
+      "result": "passed",
+      "tests": 4,
+      "command": "python3 scripts/test_nested_patch_geometry_diagram.py"
+    },
+    "native_diagram": {
+      "result": "passed",
+      "engine": "xelatex",
+      "tenkz_pin": "08a6493f3605dcf2ca5b512823ccb2698dfc027b",
+      "hard_findings": 0,
+      "advisories": 0,
+      "atoms": 33,
+      "edges": 52,
+      "visual_review": "passed, region labels match their outline colours; no overlap",
+      "render": "diagram/nested-patches.pdf"
+    },
+    "selected_chapter_render": {
+      "result": "passed",
+      "pages": 3,
+      "preamble": "repository print.tex and macros",
+      "aggregate_blueprint_build": false
+    },
+    "latexindent": {
+      "result": "passed",
+      "version": "3.24.7",
+      "cache": "setup-downloads/tool-cache",
+      "scope": [
+        "new chapter",
+        "chapter inclusion router"
+      ]
+    },
+    "reader_prose": {
+      "result": "passed",
+      "scope": "owned blueprint files"
+    },
+    "provenance": {
+      "result": "passed",
+      "rows": 32,
+      "status": "planned",
+      "source_status": "pending",
+      "checker": "published #8784 contract",
+      "script": "validate_geometry_ledger.py",
+      "excluded": "inherited8738 shard and repository-wide unledgered-source scan",
+      "paper_blob": "b4b45e7d3c6c2a8a2abcdc85df0bb72ea51edbb5"
+    },
+    "tactic_pattern_record": {
+      "result": "recorded",
+      "occurrences": 4,
+      "files": 1,
+      "promotion": "deferred until multi-file reuse",
+      "source": "tactic-pattern-scan.txt"
+    }
+  },
+  "limits": [
+    "No local Lean compiler invoked by documentation worker.",
+    "No full Lean build or leanblueprint checkdecls run by documentation worker.",
+    "Provenance stays planned until root supplies actual published immutable source and matched build evidence."
+  ],
+  "files": {
+    "blueprint/src/chapter/ch24_peps_nested_patch_geometry.tex": "b0f470bab2596655e969d30aa32cf58537586f5b58361d7e7868b50cf1655331",
+    "blueprint/src/chapter/ch24_peps_regions.tex": "b56d793f059a43d4df4c16716b513696cc71190f1603d2717d7c0ad693ae0cbf",
+    "docs/formalization/peps-nested-patch-geometry.md": "72ac4f8ced93d6e401cf0782fd2afab005704c2dfe8bee45e5671502c352cf03",
+    "docs/formalization/openai-area-law-peps.md": "fa447e64fc22a3ac38ef00d2a4de26b093e20246b0c1cbf0e60e56e06e08fef3",
+    "docs/glossary.md": "f955c74f4cb348d1a82b17f9131d3cb22e41560556f3ee233a2e0f66540e37d5",
+    "docs/provenance/openai-math.d/8767.json": "f92f9364f00bf33eef615d226f3d1e5c14763050ba7b3c3843f39cf8fc2a6f9b",
+    "scripts/test_nested_patch_geometry_diagram.py": "24c9d9749c436d36c8443e132ff3c28e62483a16d97efe253127eb8042f37876",
+    "docs/tactic_patterns.md": "48e6727ae3dec3f0ba27c03291f3a81f3e01870c37308e9b95de40d2cde562e3"
+  }
+}

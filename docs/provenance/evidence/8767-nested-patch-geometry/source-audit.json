@@ -1,0 +1,93 @@
+{
+  "base": "158bc6bb178ee53a2c981ba751fadf6e7a3ff0a2",
+  "seed": {
+    "record": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/actual-runs.json",
+    "source_sha256": "902fdfe0c449a1716fc695fa5116f3ada0ebd6c82c338bbf21d6cec8c5347e12",
+    "artifact_sha256": "310ae758af4c95943f2ead8f9d24c2a7dcc483da6ab71f84c85d7b88180c8a71",
+    "artifact": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/105707207254002/TNLean/PEPS/AreaLaw/FiniteDomain.olean"
+  },
+  "root_inputs": {
+    "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+    "lake-manifest.json": "6f4a233b2a3b3390b4e7a99953713a141c773c80bfac2cb4731c5900dfc7becb",
+    "lakefile.toml": "21117ca7398674a05632729accd439312d1ad88c3c7ba4b27782c6efa53b6d30"
+  },
+  "strict_flags": [
+    "-j1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true"
+  ],
+  "regression_extra_flag": "-DautoImplicit=false",
+  "timeout_seconds": 90,
+  "non_qic_dependency_pins": [
+    {
+      "name": "mathlib",
+      "resolved_revision": "c55e6e786f49471c72fbddbec5415808896aec1e",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "Gametheory",
+      "resolved_revision": "ec93e4daed4ad8b4784a9d760e492832e7711433",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "checkdecls",
+      "resolved_revision": "3d425859e73fcfbef85b9638c2a91708ef4a22d4",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "plausible",
+      "resolved_revision": "fb13df72ecefd8ddbf9291021d7f33a8673eb57b",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "LeanSearchClient",
+      "resolved_revision": "29ff470276c725ae01505d55b17148c18fc7dfd3",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "importGraph",
+      "resolved_revision": "7e81a29bda33a6b257bd37557a6aa6aebe175d96",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "proofwidgets",
+      "resolved_revision": "c643bbb3c24f8a25f9c14e3a6b1ceb13d01f3de1",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "aesop",
+      "resolved_revision": "a90fbf7b02ff06a0deebf74088dff9e5fe02c9ea",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "Qq",
+      "resolved_revision": "37b0ba0b26109cf9f9c541f0f9557e50cfa1a3b9",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "batteries",
+      "resolved_revision": "3b7c8101932390d60e92a3f3d917901d5b5a773b",
+      "tracked_source_clean": true
+    },
+    {
+      "name": "Cli",
+      "resolved_revision": "843844fa601dd56767b1eb22b7ada5b64d5e567a",
+      "tracked_source_clean": true
+    }
+  ],
+  "qic_note": "No QICLean module is in the new modules import closure.",
+  "mathlib_root_olean_sha256": "9a387323c3dc0909926e9b8e73e1a95905f6666e6a811a44a8fecd8c35f12230",
+  "toolchain_stdout": "Lean (version 4.35.0-rc3, x86_64-unknown-linux-gnu, commit 470d5ce1400764999581fd26d5d72b00d990b0f4, Release)",
+  "additional_seeds": [
+    {
+      "module": "TNLean.PEPS.AreaLaw.Geometry.Templates",
+      "source_sha256": "800a4f2f0507b9df9a485891bc715d0cdeb9ee26001c874d6226d26bd0700b1d",
+      "artifact_sha256": "b9cb21c28509adc8a487093640aa2c2c4943944cc1b23654dd0e0e4a1ae43c61",
+      "artifact": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/105709435996997/TNLean/PEPS/AreaLaw/Geometry/Templates.olean",
+      "record": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/actual-runs.json"
+    }
+  ]
+}
