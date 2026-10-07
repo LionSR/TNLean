@@ -412,9 +412,14 @@ normalizations.
   normalized `G` with one source for each unordered pair occurring in `S`.
   `Word.exists_grouped_source_preparation` gives the resulting exact
   factorization of an arbitrary allowed composition.
-- **Caveat:** the remaining operations are local contractions and exchanges;
-  collecting them into one tensor product of maps indexed by parties is a
-  separate assertion needed later in Theorem 5.2.
+- **Further consequence:** `Word.exists_tensorPartyMaps_parties` collects the
+  remaining operations into one contraction per party under canonical register
+  identifications. `Word.exists_prepared_tensorPartyMaps` combines this with
+  grouped preparation for a prescribed finite gate party type.
+- **Caveat:** in the latter theorem the finite type is the party set of the
+  gate, not necessarily all parties in a larger construction. A bound on its
+  cardinality, common source spaces across branches and unused-pair padding
+  are separate data or constructions.
 
 #### `TNLean.PEPS.IsVertexInjective`
 
