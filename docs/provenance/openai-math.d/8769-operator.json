@@ -1,0 +1,2704 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "p09-tn-operator-activegate",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.ActiveGate",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The active gate occurrences, retaining repeated uses of the same operation."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-link",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.Link",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The actual star/sample link family, with its gate occurrence and kind tags."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-gateat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.GateAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Gates whose local branch label is visible at party `p`."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-sample",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.Sample",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A sample position for each unordered pair of distinct gate participants."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-sampleat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.SampleAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Sample positions incident to a party, without selecting any gate branch."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-starlink",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.starLink",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The star link from an active gate's root to one other participant."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-samplelink",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.sampleLink",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The tagged sample link of one pair position."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-src",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.src",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The first endpoint, orienting unordered sample pairs by a quotient representative."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-tgt",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.tgt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The second endpoint of a star or sample link."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-endpoints_eq",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.endpoints_eq",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The oriented endpoints are exactly the already constructed party set."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-linkat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Local link incidences read each actual link once."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-alphabet",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.alphabet",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A star carries one complete gate label, a sample link one index in `Fin k`."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-stargateat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.starGateAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Either endpoint of a star is a participant of its owner gate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-rootgateat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.rootGateAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The participating root's local occurrence of its gate label."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-starlinkat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.starLinkAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A star read at either endpoint as a local virtual incidence."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-samplelinkat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.sampleLinkAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A sample position read through its actual local sample link."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-gatelabelsat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.GateLabelsAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The local gate-label assignment, including the full ket/bra pair in density applications."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-linklabelsat",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkLabelsAt",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A local virtual assignment with no private-memory or garbage indices."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-starconsistent",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.StarConsistent",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Gate-label equality at every incident star edge. No sample or physical condition is imposed."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-localsamples",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The independent sample indices visible at one party."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-rootcoefficient",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.rootCoefficient",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Scalar gate coefficients inserted only at their participating root. A singleton gate has no star but its label is still summed at this root."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-localtensor",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.localTensor",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The actual local operator tensor: sum the party's gate labels, enforce star equalities, insert root-owned coefficients, and evaluate the supplied locally contracted matrix. Any per-slot averaging factor belongs in `c` once, rather than at both endpoints."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-alphabetfintype",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.alphabetFintype",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Finite virtual alphabets are determined solely by branch labels and sample indices."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-gatelabels",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.GateLabels",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: One global branch label per active gate occurrence."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-linklabels",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkLabels",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: One global virtual label per actual star/sample link."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-restrictgates",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictGates",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Restrict global gate labels to the occurrences involving party `p`."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-restrictlinks",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictLinks",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Restrict global link labels to those incident to a party."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-restrictsamples",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictSamples",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Restrict a global sample assignment to the sample positions at a party."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-sharedlinklabels",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Replicate each gate's common label on its star and each sample on its tagged pair link."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-sharedlinklabels_consistent",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels_consistent",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A replicated gate assignment satisfies every local star equality."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-consistentconfig",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.ConsistentConfig",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Consistent virtual assignments and all party-local gate labels."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-gatelabelsofconfig",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.gateLabelsOfConfig",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The common gate assignment recovered at the participating roots."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-samplesofconfig",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.samplesOfConfig",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Recover one sample value from each actual pair link."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-gatelabel_eq_root",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.gateLabel_eq_root",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A star forces each participant's gate label to equal the participating root's label."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-sharedlinklabels_recover",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels_recover",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The recovered global labels reconstruct every actual virtual label."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-consistentconfigequiv",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.consistentConfigEquiv",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Consistent local labels are exactly global gate labels and independent sample choices. This bijection also covers empty labels, empty link families and singleton gates."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-endpointlabels",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointLabels",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Select the endpoint label at a party from an independent-endpoint configuration."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-endpointlabels_diagonal",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointLabels_diagonal",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Reading diagonal endpoint labels is restriction of the same global virtual assignment."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-localsamples_sharedlinklabels",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples_sharedLinkLabels",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Shared global link labels expose exactly the party's incident sample assignment."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-prod_rootcoefficient",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.prod_rootCoefficient",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Every gate coefficient occurs once in the product of the local root-owned factors."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-endpointtensor",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointTensor",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The local operator tensor read on the two endpoint incidences of the existing network. All sums over private coordinates have already been supplied in the local matrices."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-contractedoperator",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The actual rectangular operator contracted from the constructed star/sample tensors."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-contractedoperator_eq_linksum",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_linkSum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Identity bonds reduce the constructed operator to one label per actual star/sample link."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-contractedoperator_eq_branchsamplesum",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Exact star/sample operator evaluation: one common gate branch and one sample index per position. The equality is derived from the constructed tensors, not assumed as circuit data. It includes singleton gates, empty alphabets, empty links and `k = 0`."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-contractedoperator_eq_sum_productmatrix",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Matrix form of exact evaluation, using the existing dependent rectangular product matrix."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-card_alphabet",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.card_alphabet",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: Exact alphabet dimensions: the gate's branch count on a star and `k` on a sample link. Private-memory and source-support dimensions do not occur in this formula."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-card_alphabet_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.card_alphabet_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: A supplied bound on the actual branch alphabets bounds every constructed virtual link. Uniform polynomial branch bounds for a circuit family remain an external obligation."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-densitypaircoefficient",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.densityPairCoefficient",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The common density-branch scalar, with bra conjugation and one gate-owned weight. The weight may contain that gate's per-slot averaging factors, each included once."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "p09-tn-operator-contractedoperator_densitypair_eq",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean",
+        "declaration": "TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_densityPair_eq",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently defined or proved: The density specialization shares the entire ordered ket/bra pair on each star. The actual network represents the literal branch/sample product-matrix sum, with bra coefficients conjugated and each gate's scalar weight appearing once at its root."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedOperatorContraction TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/build.log",
+            "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true scripts/distributed_operator_contraction_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/axioms.log",
+            "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_distributed_operator_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+            "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

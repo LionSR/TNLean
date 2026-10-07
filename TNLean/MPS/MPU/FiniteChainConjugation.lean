@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Data.Finset.Sort
 import TNLean.MPS.MPU.Basic
+import TNLean.QCA.IntervalCoordinates
 import TNLean.QCA.LocalLimit
 
 /-!
@@ -29,33 +29,6 @@ automorphism, or QCA is asserted here.
 open scoped Matrix
 
 namespace SpinChain
-
-/-- The half-open integer interval of `N` consecutive sites beginning at `a`.
-
-This is the chosen finite chain used to interpret the finite-size operator
-\(U^{(N)}\) in arXiv:1703.09188, equation `eq:appendix-1`, lines 2300--2306. -/
-noncomputable def finiteChainRegion (a : ℤ) (N : ℕ) : Finset ℤ :=
-  Finset.Ico a (a + N)
-
-@[simp]
-lemma card_finiteChainRegion (a : ℤ) (N : ℕ) : (finiteChainRegion a N).card = N := by
-  simp [finiteChainRegion, Int.card_Ico]
-
-/-- The increasing identification of the cyclic site labels `Fin N` with the
-chosen integer interval of length `N`.
-
-Source: arXiv:1703.09188, equation `eq:appendix-1`, lines 2300--2306. -/
-noncomputable def finiteChainSiteEquiv (a : ℤ) (N : ℕ) :
-    Fin N ≃ finiteChainRegion a N :=
-  ((finiteChainRegion a N).orderIsoOfFin (card_finiteChainRegion a N)).toEquiv
-
-/-- Reindex a periodic length-`N` configuration as a configuration on the
-chosen integer interval.
-
-Source: arXiv:1703.09188, equation `eq:appendix-1`, lines 2300--2306. -/
-noncomputable def finiteChainConfigEquiv (d N : ℕ) (a : ℤ) :
-    (Fin N → Fin d) ≃ Config d (finiteChainRegion a N) :=
-  Equiv.arrowCongr (finiteChainSiteEquiv a N) (Equiv.refl (Fin d))
 
 /-- The periodic matrix-product operator \(U^{(N)}\), reindexed to the
 configuration basis of the chosen finite integer interval.

@@ -52,9 +52,8 @@ if [ "$kept" != "$expected" ]; then
   exit 1
 fi
 
-# Same engine and flags as the leanblueprint-generated latexmkrc
-# ($pdflatex = 'xelatex -synctex=1'), passed explicitly because that rc is
-# an untracked artifact not present on a fresh checkout.
+# The copied, tracked latexmkrc supplies the shared string-pool budget. Select
+# the XeLaTeX route explicitly, with the same flags as the complete volume.
 echo "==> Building with latexmk (XeLaTeX)..."
 (cd "$WORK_DIR/blueprint/src" \
   && TENKZ_ROOT="$WORK_DIR/.deps/tenkz" \

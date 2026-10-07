@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian
 
+import TNLean.MPS.ParentHamiltonian.AllLengthOpenInteractionMatrix
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalBoundaryClosing
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChainBoundary
@@ -56,11 +57,16 @@ import TNLean.MPS.ParentHamiltonian.BoundaryMatrixBlock
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.ParentHamiltonian.BoundaryOverlap
 import TNLean.MPS.ParentHamiltonian.BoundaryStripping
+import TNLean.MPS.ParentHamiltonian.BulkObservableAlgebra
+import TNLean.MPS.ParentHamiltonian.BulkObservableCommutator
 import TNLean.MPS.ParentHamiltonian.C3CorrectionBounds
 import TNLean.MPS.ParentHamiltonian.CPSVBlockedNearestNeighbor
 import TNLean.MPS.ParentHamiltonian.CPSVOriginalRange
 import TNLean.MPS.ParentHamiltonian.CanonicalBlockGroundSpaceAtInjectivityLength
 import TNLean.MPS.ParentHamiltonian.CanonicalBoundedRangeGroundSpace
+import TNLean.MPS.ParentHamiltonian.CanonicalGroundSpaceTransport
+import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionExistence
+import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
 import TNLean.MPS.ParentHamiltonian.CenteredOverlapFactor
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.CoefficientPairing
@@ -69,6 +75,8 @@ import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.CompactBlockBoundaryInjectivity
 import TNLean.MPS.ParentHamiltonian.CompactBlockParentGap
 import TNLean.MPS.ParentHamiltonian.CompactNormalParentGap
+import TNLean.MPS.ParentHamiltonian.CompactOpenParentGap
+import TNLean.MPS.ParentHamiltonian.CompactOpenParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
 import TNLean.MPS.ParentHamiltonian.CompactParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntertwining
@@ -106,21 +114,28 @@ import TNLean.MPS.ParentHamiltonian.HalfChainSchmidt
 import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
+import TNLean.MPS.ParentHamiltonian.InjectiveIsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.IsometricDeformation
+import TNLean.MPS.ParentHamiltonian.IsometricDeformationCovariance
+import TNLean.MPS.ParentHamiltonian.IsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.KnabeGapNeighborhood
 import TNLean.MPS.ParentHamiltonian.LeftPolar
+import TNLean.MPS.ParentHamiltonian.LocalObservableInsertion
 import TNLean.MPS.ParentHamiltonian.LocalSupport
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale
 import TNLean.MPS.ParentHamiltonian.MatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.MixedBoundaryGram
 import TNLean.MPS.ParentHamiltonian.MixedGram
+import TNLean.MPS.ParentHamiltonian.MixedObservableInsertion
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.NormalBlockC1Normalization
+import TNLean.MPS.ParentHamiltonian.NormalBlockInjectiveBlocking
 import TNLean.MPS.ParentHamiltonian.NormalBlockPrimitiveGauges
 import TNLean.MPS.ParentHamiltonian.OpenGapContinuity
+import TNLean.MPS.ParentHamiltonian.OpenIsometricDeformationGap
 import TNLean.MPS.ParentHamiltonian.PGVWC07CutRank
 import TNLean.MPS.ParentHamiltonian.PGVWCCDEIdentities
 import TNLean.MPS.ParentHamiltonian.ParentInteractionComparison
@@ -129,6 +144,7 @@ import TNLean.MPS.ParentHamiltonian.PeriodicShortGapContinuity
 import TNLean.MPS.ParentHamiltonian.PhysicalActionWordTupleSpan
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PhysicalEmbedding
+import TNLean.MPS.ParentHamiltonian.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
@@ -141,11 +157,13 @@ import TNLean.MPS.ParentHamiltonian.ShiftedParentHamiltonian
 import TNLean.MPS.ParentHamiltonian.ShortRangeHeisenbergGap
 import TNLean.MPS.ParentHamiltonian.ShortRangeHeisenbergTensor
 import TNLean.MPS.ParentHamiltonian.SingletChain
+import TNLean.MPS.ParentHamiltonian.SourceOrderedInsertion
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundary
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 import TNLean.MPS.ParentHamiltonian.SpectatorOverlap
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
+import TNLean.MPS.ParentHamiltonian.SuppliedIsometryInsertion
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
 import TNLean.MPS.ParentHamiltonian.UncleParentLimit
