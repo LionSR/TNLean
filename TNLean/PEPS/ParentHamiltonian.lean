@@ -48,6 +48,7 @@ import TNLean.PEPS.ParentHamiltonian.RegionFullGroundSpace
 import TNLean.PEPS.ParentHamiltonian.RegionGroundSpace
 import TNLean.PEPS.ParentHamiltonian.RegionGroundSpaceNesting
 import TNLean.PEPS.ParentHamiltonian.RegionOperatorBlocks
+import TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding
 import TNLean.PEPS.ParentHamiltonian.RegionParentBondCoefficients
 import TNLean.PEPS.ParentHamiltonian.RegionParentComparison
 import TNLean.PEPS.ParentHamiltonian.RegionParentDependentCut
