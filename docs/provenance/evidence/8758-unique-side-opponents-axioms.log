@@ -1,0 +1,10 @@
+Command: lake env lean docs/provenance/evidence/8758-unique-side-opponents-axioms.lean
+Revision: 9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a
+Elapsed seconds: 20.998
+Exit code: 0
+
+'TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.exists_unique_elementarySide_opponent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent' depends on axioms: [propext, Classical.choice, Quot.sound]

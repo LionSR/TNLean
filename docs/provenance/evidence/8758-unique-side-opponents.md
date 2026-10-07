@@ -1,10 +1,8 @@
 # Uniqueness of the region opposing an elementary side
 
-The two new proofs are complete and independently reviewed. Their provenance
-records remain planned until a frozen source revision has actual canonical
-build and imported kernel reports. The completed parent is
-`eda992e719dd7161906b54b20a057992037b44cb` (PR #8888). No new canonical
-verification is recorded.
+The two new theorems and the unchanged opponent-existence statement have
+passed exact-source canonical verification and independent mathematical
+review. The original prior evidence remains preserved.
 
 ## Mathematical scope
 
@@ -59,8 +57,8 @@ All names are in `TNLean.PEPS.AreaLaw.Geometry`.
 
 | Module | New theorem | State |
 | --- | --- | --- |
-| `ElementarySideOpponents.lean` | `cellFan_elementary_geometry` | Proof complete and reviewed; canonical verification pending |
-| `ElementarySideOpponentUniqueness.lean` | `exists_unique_elementarySide_opponent` | Proof complete and reviewed; canonical verification pending |
+| `ElementarySideOpponents.lean` | `cellFan_elementary_geometry` | Verified at the exact source below |
+| `ElementarySideOpponentUniqueness.lean` | `exists_unique_elementarySide_opponent` | Verified at the exact source below |
 
 The older opponent file also exports `exists_elementarySide_opponent`.
 That existing theorem is included in the same imported report and receives
@@ -68,27 +66,44 @@ fresh verification because its complete source file changes. Its public
 statement, identity, source mapping, license and original notice remain
 unchanged.
 
-## Verification
+## Exact-source verification
 
-Completed parent revision: `eda992e719dd7161906b54b20a057992037b44cb`.
-Frozen source revision: **unbound**.
+Completed parent: `eda992e719dd7161906b54b20a057992037b44cb`, PR [8888](https://github.com/LionSR/TNLean/pull/8888).
+Frozen source: `9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a`.
 
 | Check | Command | Outcome | Time | Log SHA-256 |
 | --- | --- | --- | --- | --- |
-| Canonical geometry build | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending | Pending |
-| Imported three-name report | `lake env lean docs/provenance/evidence/8758-unique-side-opponents-axioms.lean` | Pending | Pending | Pending |
+| Canonical geometry build | `lake build TNLean.PEPS.AreaLaw.Geometry` | Passed, exit 0 | 27.361 s | `ad15eb10a27b717528f53332014c8a476fce75f45261cd66e038e12a607f1de9` |
+| Imported three-name report | `lake env lean docs/provenance/evidence/8758-unique-side-opponents-axioms.lean` | Passed, exit 0 | 20.998 s | `ba0acf2b658b36f431a98ca3d40e562492f3eacac54d68dd7330c186136416ec` |
 
-Released-source direct elaboration and independent mathematical review have
-passed. Canonical checks, complete source synchronization and reverse coverage,
-generated imports, full CI and rendering remain pending. Pinned chapter formatting is complete and idempotent. The scoped chapter
-contains two theorem environments, two declaration records and two proofs;
-all references to prior statements resolve. Static validation against the
-unchanged current policy passed all 272 entries, projecting only the changed
-old existence record to pending in memory. All 270 production parent ledger
-entries remain byte-identical at this preparation stage. The other 269
-entries and all 112 historical evidence files are immutable through promotion. The historical local
-whole-library blueprint limitation due to the missing pre-existing
-`TNLean/MPS/Examples/Fibonacci.olean` must remain recorded.
+The actual command headers, exact source, elapsed times, exit codes and complete
+output are retained in [the build log](8758-unique-side-opponents-build.log) and
+[the imported kernel log](8758-unique-side-opponents-axioms.log). All three
+reports list only `propext`, `Classical.choice` and `Quot.sound`. Neither command reports
+a warning. The coordinating agent retained the existing warm artifacts and
+used the repository's shared locked verification protocol.
+
+Strict promotion passes 272 rows with two new records and only the old
+existence record reverified. All 269 other parent records and all 112 tracked
+historical evidence files are preserved. The unchanged normal provenance policy also passes the complete 272-row collection.
+
+Complete source synchronization passes with 20,226 distinct references and
+20,220 flattened declaration records, with no missing, stale or duplicate
+references and complete changed-declaration reverse coverage. Generated imports
+cover 2,852 production modules in
+75 files. The new scoped chapter contains two
+statements, two declaration records and two proofs. Pinned formatting is
+idempotent; reader-facing prose and module guards pass. Independent review
+approved both new results, the unchanged old statement and the exact private
+geometry proof promotion. The repeated proof has been reused through the public
+helper and recorded in the existing pattern ledger.
+
+QICLean remains pinned to `8d5389d23c8e675a0117442e1a0d2c683a4bad41`; toolchain and dependency files
+match the completed parent. Full CI and compiled whole-book checking remain
+pending. The historical local whole-library declaration check encountered a
+missing pre-existing `TNLean/MPS/Examples/Fibonacci.olean`; its evidence and
+limitation are retained. The narrow geometry build establishes no whole-book
+compiled result.
 
 ## Parent evidence retention
 
@@ -122,5 +137,6 @@ Original imported-report-log SHA-256:
 
 The mixed-file validation must recognize both public names and both
 original notices in `ElementarySideOpponents.lean`; only the promoted
-geometry theorem is a new row. No parent record is replaced by this
-prospective preparation.
+geometry theorem is a new row. The strict helper produced only the two promoted new records and the
+single permitted reverified prior record, with its appended explanation.
+Every other parent record and historical evidence file is retained.
