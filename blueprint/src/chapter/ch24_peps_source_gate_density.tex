@@ -1,0 +1,303 @@
+\section{Density expansions of source gates}
+\label{sec:peps_source_gate_density}
+
+Fix the ordered pair slots of Definition~\ref{def:peps_source_slots},
+with halfspaces $U_e,V_e$, and write $\mathcal S$ for their joint
+register space. All tensor products below use this order and its
+canonical associativity identifications. The slot set and all finite
+index sets may be empty. These are the source-coordinate identities
+used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 279--355.
+
+% This section proves exact preparation, matrix, and density identities.
+% It does not assert that the actual Schmidt decomposition has yet been
+% substituted into the finite-family identities. Gaussian moment estimates,
+% simultaneous source replacement, and the circuit trace-norm error bound
+% remain separate from these statements. No tag here certifies all of
+% Theorem 5.2 of the source manuscript.
+
+\begin{definition}[The joint source vector]
+    \label{def:peps_joint_source_vector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotLayout_cons}
+    \leanok
+    \uses{def:peps_source_slots}
+    The joint source vector is the multilinear map
+    $\Phi:\prod_e(U_e\otimes V_e)\to\mathcal S$ defined recursively
+    by $\Phi_{\varnothing}=1\in\C$ and
+    $\Phi_{e::E}(\eta)=\eta_e\otimes\Phi_E(\eta|_E)$, with the
+    first pair separated into its two registers. Thus $\Phi(\eta)$
+    is the ordered tensor product of the pair vectors, including the
+    terminal scalar factor.
+\end{definition}
+
+\begin{theorem}[Preparation and finite sums of sources]
+    \label{thm:peps_source_preparation_sums}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_vector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_appendIso_symm}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_sum_smul}
+    \leanok
+    \uses{def:peps_joint_source_vector}
+    For every original memory $\mathcal H$, the actual source
+    preparation satisfies
+    $Q_{\eta,\mathcal H}x=\Phi(\eta)\otimes x$.
+    In particular, let $J_e$ be finite, let $d_e:J_e\to\C$, and let
+    $\theta_{e,j}\in U_e\otimes V_e$. Then
+    \begin{align}
+        Q_{(\sum_{j\in J_e}d_e(j)\theta_{e,j})_e,\mathcal H}
+         & =\sum_{a\in\prod_e J_e}
+        \left(\prod_e d_e(a_e)\right)
+        Q_{(\theta_{e,a_e})_e,\mathcal H}.
+        \label{eq:peps_source_preparation_sum}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_joint_source_vector,def:peps_source_inventory}
+    Induction on the source list identifies $\Phi(\eta)$ with its
+    actual joint vector: the empty list contributes $1$, and the
+    induction step prepares $\eta_e$ in front of the remaining
+    sources. Changing to the fixed register layout preserves this
+    identity and its tensor product with $x$.
+    Expand each argument of the multilinear map $\Phi$ as a finite
+    sum. Its value on a scalar multiple in every argument is
+    $\Phi((d_e\theta_e)_e)=(\prod_e d_e)\Phi((\theta_e)_e)$.
+    Tensoring with $x$ gives (\ref{eq:peps_source_preparation_sum}).
+\end{proof}
+
+\begin{definition}[Matrices of prepared branches]
+    \label{def:peps_prepared_matrix}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_party_layout}
+    Let $T:\mathcal S\otimes\mathcal H_{\rm in}
+        \to\mathcal H_{\rm out}$ be the operator of a source-only
+    composition as in Definition~\ref{def:peps_party_layout}, without
+    imposing normalization or contraction bounds.
+    Choose finite orthonormal bases $f_j$ and $g_i$ of the input and
+    output memories. Denote the matrix of the prepared branch by
+    \begin{align}
+        K_T(\eta)_{ij}
+         & =\langle g_i,TQ_{\eta,\mathcal H_{\rm in}}f_j\rangle.
+        \label{eq:peps_prepared_matrix}
+    \end{align}
+    The input and output bases are fixed throughout the density
+    expansions below. No finite-dimensionality assumption on the
+    private spaces is required for this definition.
+\end{definition}
+
+\begin{theorem}[Coordinates of source preparation]
+    \label{thm:peps_prepared_matrix_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_sum_smul}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_eq_sum_basis}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_sum_basis}
+    \leanok
+    \uses{def:peps_prepared_matrix}
+    For finite families as in
+    Theorem~\ref{thm:peps_source_preparation_sums},
+    \begin{align}
+        K_T\bigl((\sum_j d_e(j)\theta_{e,j})_e\bigr)
+         & =\sum_{a\in\prod_e J_e}
+        \left(\prod_e d_e(a_e)\right)K_T((\theta_{e,a_e})_e).
+        \label{eq:peps_prepared_matrix_sum}
+    \end{align}
+    In particular, choose finite orthonormal bases $(u_{e,r})_r$ of
+    $U_e$ and $(v_{e,s})_s$ of $V_e$, and put
+    $\eta_e(r,s)=\langle u_{e,r}\otimes v_{e,s},\eta_e\rangle$.
+    For $a_e=(r_e,s_e)$, set
+    $\theta_{e,a_e}=u_{e,r_e}\otimes v_{e,s_e}$.
+    Formula~(\ref{eq:peps_prepared_matrix_sum}) then holds with
+    $d_e(a_e)=\eta_e(a_e)$ and left-hand side $K_T(\eta)$.
+    The identical expansion holds for $Q_{\eta,\mathcal H}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_source_preparation_sums}
+    Compose (\ref{eq:peps_source_preparation_sum}) with $T$ and take
+    matrices in the prescribed bases. Both operations are linear.
+    For the basis specialization, use
+    $\eta_e=\sum_{r,s}\eta_e(r,s)u_{e,r}\otimes v_{e,s}$
+    in each slot.
+\end{proof}
+
+\begin{definition}[Density coefficients of actual branches]
+    \label{def:peps_prepared_density_coefficient}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient}
+    \leanok
+    \uses{def:peps_prepared_matrix}
+    Choose vector families $u_{e,r}\in U_e$, $v_{e,s}\in V_e$ for
+    a ket branch $T$, and independent families
+    $\widetilde u_{e,r}\in U_e$, $\widetilde v_{e,s}\in V_e$
+    for a bra branch $T'$. Their index sets may differ. Write
+    $K_T(a)=K_T((u_{e,a_e^{(1)}}\otimes v_{e,a_e^{(2)}})_e)$
+    and define $K_{T'}(b)$ using the second families.
+    For any complex input matrix $\rho$, define
+    \begin{align}
+        C_{T,T'}(\rho;a,b) & =K_T(a)\rho K_{T'}(b)^\dagger.
+        \label{eq:peps_prepared_density_coefficient}
+    \end{align}
+    The families need not span the private spaces or be orthogonal.
+\end{definition}
+
+\begin{theorem}[Density expansion for finite component families]
+    \label{thm:peps_prepared_density_components}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_density_sum_smul}
+    \leanok
+    \uses{def:peps_prepared_density_coefficient}
+    Suppose the families in
+    Definition~\ref{def:peps_prepared_density_coefficient} have finite
+    index sets. Choose complex coefficients $d_e(r,s)$ and
+    $\widetilde d_e(r,s)$, and put
+    \begin{align}
+        \eta_e  & =\sum_{r,s}d_e(r,s)u_{e,r}\otimes v_{e,s}, \\
+        \zeta_e & =\sum_{r,s}\widetilde d_e(r,s)
+        \widetilde u_{e,r}\otimes\widetilde v_{e,s}.
+    \end{align}
+    For every input matrix $\rho$,
+    \begin{align}
+        K_T(\eta)\rho K_{T'}(\zeta)^\dagger
+         & =\sum_{a,b}\left(\prod_e
+        d_e(a_e)\overline{\widetilde d_e(b_e)}\right)
+        C_{T,T'}(\rho;a,b).
+        \label{eq:peps_prepared_density_components}
+    \end{align}
+    This identity also applies to vector families contained in proper
+    subspaces of the private halfspaces.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_prepared_matrix_coordinates}
+    Expand the two prepared matrices using
+    (\ref{eq:peps_prepared_matrix_sum}). The adjoint conjugates each
+    scalar coefficient on the bra side. Distributing both finite sums
+    yields (\ref{eq:peps_prepared_density_components}), since
+    \begin{align*}
+        \left(\prod_e d_e(a_e)\right)
+        \overline{\prod_e\widetilde d_e(b_e)}
+         & =\prod_e d_e(a_e)\overline{\widetilde d_e(b_e)}.
+    \end{align*}
+\end{proof}
+
+\begin{theorem}[Coordinate density expansion of a weighted gate]
+    \label{thm:peps_prepared_gate_density}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_density_eq_sum_basis}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_gate_density_eq_sum_basis}
+    \leanok
+    \uses{def:peps_prepared_density_coefficient}
+    Let $\Xi$ be finite. For each $\xi\in\Xi$, choose a branch
+    $T_\xi$, source vectors $\eta_{\xi,e}$, and finite orthonormal
+    bases $(u_{\xi,e,r})_r$, $(v_{\xi,e,s})_s$ of the two halfspaces.
+    The bases and their index sets may depend on $\xi$.
+    Set $K_\xi=K_{T_\xi}(\eta_\xi)$ and
+    $\kappa_\xi(a)=\prod_e\langle u_{\xi,e,a_e^{(1)}}\otimes
+        v_{\xi,e,a_e^{(2)}},\eta_{\xi,e}\rangle$.
+    For any input matrix $\rho$ and any two branches,
+    \begin{align}
+        K_\xi\rho K_\zeta^\dagger
+         & =\sum_{a,b}\kappa_\xi(a)\overline{\kappa_\zeta(b)}
+        C_{T_\xi,T_\zeta}(\rho;a,b).
+        \label{eq:peps_prepared_density_basis}
+    \end{align}
+    If $G=\sum_\xi c_\xi K_\xi$, then
+    \begin{align}
+        G\rho G^\dagger
+         & =\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
+        \sum_{a,b}\kappa_\xi(a)\overline{\kappa_\zeta(b)}
+        C_{T_\xi,T_\zeta}(\rho;a,b).
+        \label{eq:peps_prepared_gate_density}
+    \end{align}
+    Neither identity requires positivity or normalization of $\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_prepared_matrix_coordinates}
+    Expand each source in its branch's endpoint bases and distribute
+    the ket and bra sums, conjugating only the bra coefficients. This
+    gives (\ref{eq:peps_prepared_density_basis}). Expand
+    $G\rho G^\dagger=\sum_{\xi,\zeta}
+        c_\xi\overline{c_\zeta}K_\xi\rho K_\zeta^\dagger$ and substitute
+    (\ref{eq:peps_prepared_density_basis}) to obtain
+    (\ref{eq:peps_prepared_gate_density}).
+\end{proof}
+
+\begin{theorem}[Operator norm of a prepared branch]
+    \label{thm:peps_prepared_matrix_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_preparedMatrix_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_preparedMatrix_tmul_le_one}
+    \leanok
+    \uses{def:peps_prepared_matrix}
+    If $T$ is an allowed composition and $\|\eta_e\|=1$ in every
+    slot, then $\|K_T(\eta)\|\le1$ in the Euclidean operator norm.
+    In particular, if every $u_{e,r}$ and $v_{e,s}$ has norm one,
+    then $\|K_T(a)\|\le1$ for every coordinate assignment $a$.
+    The unit-vector families need not span their halfspaces.
+    These are the coefficient contractions in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 409--427.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_inventory,def:peps_party_layout}
+    The normalization of each source makes its preparation allowed,
+    hence contractive. Composing with $T$ gives
+    $\|TQ_{\eta,\mathcal H_{\rm in}}\|\le1$.
+    Orthonormal coordinate maps are isometries, so the matrix in
+    (\ref{eq:peps_prepared_matrix}) has the same operator norm.
+    For the last assertion, use
+    $\|u_{e,r}\otimes v_{e,s}\|=\|u_{e,r}\|\|v_{e,s}\|=1$.
+\end{proof}
+
+\begin{theorem}[Density coefficients constructed from a gate]
+    \label{thm:peps_actual_gate_density}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_density_expansion}
+    \leanok
+    \uses{def:peps_prepared_density_coefficient,def:peps_party_layout}
+    Let $P$ and $\Xi$ be finite. For every $\xi\in\Xi$, let $F_\xi$
+    be an allowed source-only composition on the parties $P$, with
+    fixed input and output memories. Fix finite orthonormal bases of
+    these memories and complex coefficients $c_\xi$, and let $M_\xi$
+    be the matrix of $F_\xi$ in these bases.
+
+    There is one ordered slot for each unordered pair of distinct
+    parties, with common finite halfspaces $U_e=\C^{d_e}$ and
+    $V_e=\C^{d'_e}$, normalized vectors
+    $\eta_{\xi,e}\in U_e\otimes V_e$, and allowed compositions
+    $T_\xi$ containing no sources such that
+    $F_\xi=T_\xi Q_{\eta_\xi,\mathcal H_{\rm in}}$.
+    Use the standard orthonormal bases of these halfspaces to define
+    $K_\xi(a)$ as in
+    Definition~\ref{def:peps_prepared_density_coefficient}, and put
+    $\kappa_\xi(a)=\prod_e\eta_{\xi,e}(a_e)$.
+    Each $K_\xi(a)$ has Euclidean operator norm at most one.
+
+    These choices are independent of the input matrix $\rho$.
+    For every complex input matrix $\rho$, writing
+    $G=\sum_\xi c_\xi M_\xi$, one has
+    \begin{align}
+        G\rho G^\dagger
+         & =\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
+        \sum_{a,b}\kappa_\xi(a)\overline{\kappa_\zeta(b)}
+        K_\xi(a)\rho K_\zeta(b)^\dagger.
+        \label{eq:peps_actual_gate_density}
+    \end{align}
+    The halfspaces, source vectors, and coefficient matrices are
+    obtained from the original compositions. This is the exact
+    source-coordinate density identity preceding the random
+    replacement in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--355.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_finite_source_gate,thm:peps_prepared_gate_density,
+        thm:peps_prepared_matrix_contraction}
+    Theorem~\ref{thm:peps_finite_source_gate} constructs the common
+    finite source spaces, their normalized vectors, and the exact
+    source-free compositions $T_\xi$. Replacing every source half by
+    a standard basis vector gives normalized elementary preparations;
+    Theorem~\ref{thm:peps_prepared_matrix_contraction} therefore proves
+    $\|K_\xi(a)\|\le1$.
+    Taking matrices of $F_\xi=T_\xi Q_{\eta_\xi,\mathcal H_{\rm in}}$
+    identifies $M_\xi$ with the prepared branch matrix.
+    Apply Theorem~\ref{thm:peps_prepared_gate_density} to obtain
+    (\ref{eq:peps_actual_gate_density}) for every $\rho$.
+\end{proof}

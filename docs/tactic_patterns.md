@@ -5573,3 +5573,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   eliminating the two layout equalities by `cases` and closing by reflexivity,
   all in `WordRestriction.lean`. These express the defining equations of the
   equality transport; there is no repeated proof argument across files.
+
+### Congruence after identifying layout memories — reuse (2026-10-07)
+
+- **Pattern:** After identifying two equal register layouts, apply the same
+  dependent construction to heterogeneously equal vectors.
+- **Seen:** The focused scan found `cases h; cases hxy; rfl` in
+  `SourcePreparation.eval_source_heq`, `Word.eval_castInput_of_heq`, and the
+  new `SourcePreparationCoordinates.assocL_tmul_heq` under
+  `TNLean/PEPS/Approximation` (three occurrences across two files).
+- **Decision:** Reuse core `congrArg`, `eq_of_heq`, and `heq_of_eq` in the new
+  associator helper after identifying the layouts. These are defining
+  equations of three distinct dependent constructions, not repeated tensor
+  calculations. A new generic congruence lemma would restate the existing
+  equality lemmas, so no additional theorem or tactic is promoted. Previously
+  audited source-preparation proofs are unchanged.
+- **Relation to the tensor-map candidate:** The two existing private
+  `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
+  with four changing spaces. The new helper instead compares an associator
+  applied to a fixed pair vector and a changing spectator vector; obtaining
+  a tensor-map identity first would require additional equalities without
+  simplifying the proof. The common mathematical operation is ordinary
+  congruence after the memory types have been identified.

@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.ActualSourceGateDensity
 import TNLean.PEPS.Approximation.CommonPairSources
 import TNLean.PEPS.Approximation.CommonPartyMaps
 import TNLean.PEPS.Approximation.CommonSourceGate
@@ -29,9 +30,12 @@ import TNLean.PEPS.Approximation.PartyLocalMaps
 import TNLean.PEPS.Approximation.PartyPartition
 import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
+import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
+import TNLean.PEPS.Approximation.SourceGateDensity
 import TNLean.PEPS.Approximation.SourcePairMaps
 import TNLean.PEPS.Approximation.SourcePreparation
+import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
