@@ -18,7 +18,7 @@ import tomllib
 import urllib.parse
 import urllib.request
 
-from lean_import_syntax import pure_import_modules
+from lean_import_syntax import pure_import_modules, strip_lean_comments
 
 INPUTS = ("lean-toolchain", "lake-manifest.json", "lakefile.toml")
 PATHS = (".lake/build", *(f".lake/packages/{p}/.lake/build" for p in
@@ -30,6 +30,8 @@ MANIFEST_FIELDS = {"version", "packagesDir", "packages", "name", "lakeDir", "fix
 PACKAGE_FIELDS = {"url", "type", "subDir", "scope", "rev", "name", "manifestFile",
                   "inputRev", "inherited", "configFile"}
 WINDOW = 64
+QIC_CONFIG_FIELDS = {"name", "version", "keywords", "defaultTargets", "releaseRepo",
+                     "preferReleaseBuild", "leanOptions", "require", "lean_lib", "lean_exe"}
 
 
 class Refusal(ValueError):
@@ -123,6 +125,52 @@ def tree(repo, commit):
     return entries
 
 
+def non_build_qic_path(path):
+    """Reviewed data/test paths, never a blanket exception for non-library files."""
+    return ((path.startswith("docs/") and path.endswith(".md"))
+            or (path.startswith("blueprint/") and path.endswith((".md", ".tex")))
+            or path in {".github/workflows/pr-ci.yml", "blueprint/src/references.bib"}
+            or re.fullmatch(r"QICLeanTest/[A-Za-z_][A-Za-z_0-9]*\.lean", path) is not None
+            or re.fullmatch(r"docs/audits/[A-Za-z_0-9-]+_validation\.json", path) is not None
+            or re.fullmatch(r"docs/provenance/openai-math\.d/[A-Za-z_0-9-]+\.json", path) is not None
+            or re.fullmatch(r"docs/provenance/evidence/[A-Za-z_0-9-]+/"
+                            r"[A-Za-z_0-9.-]+\.(?:md|json|log|lean)", path) is not None)
+
+
+def require_non_build_qic_scope(repo, old, new, trees):
+    """Certify the fixed library layout before ignoring source-only evidence.
+
+    Unknown roots, executable targets and build hooks refuse reuse. The reference
+    screen below is conservative, not a proof against arbitrary dynamic Lean IO.
+    """
+    config = tomllib.loads(file_at(repo, new, "lakefile.toml").decode())
+    require(set(config) <= QIC_CONFIG_FIELDS
+            and config.get("name") == "QICLean"
+            and config.get("defaultTargets") == ["QICLean"]
+            and config.get("lean_lib") == [{"name": "QICLean"}]
+            and config.get("lean_exe") == [{"name": "lint_style", "srcDir": "scripts",
+                                          "root": "LintStyle", "supportInterpreter": True}],
+            "unvalidated QIC non-build path scope")
+    seen = set()
+    for revision, entries in zip((old, new), trees):
+        for path, entry in sorted(entries.items()):
+            if not (path == "QICLean.lean" or
+                    (path.startswith("QICLean/") and path.endswith(".lean"))):
+                continue
+            require(entry[:2] == ("100644", "blob"), f"non-regular QIC source: {path}")
+            if entry[2] in seen:
+                continue
+            seen.add(entry[2])
+            source = file_at(repo, revision, path).decode()
+            # The reviewed sources have no external-input IO or imports from
+            # these trees. Recognizable counterexamples require separate review.
+            require(not re.search(r"\b(?:IO\.FS|IO\.Process|include_str|readFile|readBinFile)\b", source),
+                    f"QIC source may read non-build inputs: {path}")
+            clean, error = strip_lean_comments(source)
+            require(not error and not re.search(r"\b(?:docs|blueprint|QICLeanTest)\b|\.github", clean),
+                    f"QIC source references non-build paths: {path}")
+
+
 def additive_qic(repo, old, new):
     """Existing proof source is identical; aggregators may only import additions."""
     require(SHA.fullmatch(old) and SHA.fullmatch(new), "QIC revisions must be full SHAs")
@@ -131,15 +179,18 @@ def additive_qic(repo, old, new):
         require(p in a and p in b and a[p] == b[p], f"QIC metadata differs/missing: {p}")
     require("lakefile.lean" not in a and "lakefile.lean" not in b,
             "unvalidated QIC lakefile.lean")
+    require_non_build_qic_scope(repo, old, new, (a, b))
     added = {p[:-5].replace("/", ".") for p in b.keys() - a.keys()
              if p.startswith("QICLean/") and p.endswith(".lean")}
     require(added, "no added QIC module")
     aggregators = []
-    for p in a.keys() | b.keys():
+    for p in sorted(a.keys() | b.keys()):
         if a.get(p) == b.get(p):
             continue
-        if ((p.startswith("docs/") and p.endswith(".md"))
-                or (p.startswith("blueprint/") and p.endswith((".md", ".tex")))):
+        if non_build_qic_path(p):
+            require(p in b and b[p][:2] == ("100644", "blob")
+                    and (p not in a or a[p][:2] == ("100644", "blob")),
+                    f"QIC non-build change is not a regular file: {p}")
             continue
         require(p.startswith("QICLean/") and p.endswith(".lean")
                 and p in b and b[p][:2] == ("100644", "blob"),
@@ -258,12 +309,44 @@ def source_workflow(raw):
             "source does not follow successful-main-only exact-input save policy")
 
 
-def validate_provenance(key, commit, caches, runs, jobs):
+def cache_record(key, caches):
     require(caches.get("total_count") == 1 and len(caches.get("actions_caches", [])) == 1,
             "cache key has missing/ambiguous scope or version")
     cache = caches["actions_caches"][0]
     require(cache.get("key") == key and cache.get("ref") == "refs/heads/main",
             "cache is not uniquely main-scoped")
+    require(isinstance(cache.get("version"), str)
+            and re.fullmatch(r"[0-9a-f]{64}", cache["version"]),
+            "cache archive version is missing or malformed")
+    return cache
+
+
+def provenance_diagnostics(commit, runs, jobs):
+    """Public predicate values only: no credentials, headers, or restored files."""
+    fields = ("id", "run_id", "run_attempt", "head_sha", "head_branch", "event",
+              "path", "status", "conclusion", "name", "labels", "updated_at")
+    summary = []
+    for run in runs.get("workflow_runs", [])[:20]:
+        record = {k: run[k] for k in fields if k in run}
+        collection = jobs.get(run.get("id"), {})
+        record["jobs_total_count"] = collection.get("total_count")
+        record["job_names"] = [j.get("name") for j in collection.get("jobs", [])]
+        record["build_jobs"] = []
+        for job in collection.get("jobs", []):
+            if job.get("name") == "build":
+                build = {k: job[k] for k in fields if k in job}
+                build["saves"] = [s for s in job.get("steps", [])
+                                  if s.get("name") == "Save Lean build cache (main only)"]
+                record["build_jobs"].append(build)
+        summary.append(record)
+    print("Compatible cache run/job evidence: " + json.dumps({
+        "expected_commit": commit, "runs_total_count": runs.get("total_count"),
+        "runs": summary}, sort_keys=True), file=sys.stderr)
+
+
+def validate_provenance(key, commit, caches, runs, jobs, version):
+    require(cache_record(key, caches)["version"] == version,
+            "cache archive version differs from lookup")
     trusted_runs = [r for r in runs.get("workflow_runs", [])
                     if r.get("head_sha") == commit and r.get("head_branch") == "main"
                     and r.get("event") == "push" and r.get("status") == "completed"
@@ -277,13 +360,19 @@ def validate_provenance(key, commit, caches, runs, jobs):
                          if s.get("name") == "Save Lean build cache (main only)"]
                 if len(saves) == 1 and saves[0].get("conclusion") == "success":
                     return
+    provenance_diagnostics(commit, runs, jobs)
     raise Refusal("no successful main build/save on the same runner platform")
 
 
-def validate(root, state, prefix, matched):
+def validate_key(prefix, matched):
     require(re.fullmatch(r"tnlean-build-[0-9a-f]{64}-", prefix), "invalid baseline prefix")
     require(matched.startswith(prefix) and SHA.fullmatch(matched[len(prefix):]),
             "lookup key is not an exact baseline prefix plus full commit")
+
+
+def validate(root, state, prefix, matched, version):
+    validate_key(prefix, matched)
+    require(isinstance(version, str) and version, "lookup archive version is missing")
     require(os.environ.get("RUNNER_OS") == "Linux" and os.environ.get("RUNNER_ARCH") == "X64",
             "current runner platform differs")
     require_qic_build(root)
@@ -291,20 +380,47 @@ def validate(root, state, prefix, matched):
             "working root configuration changed since checkout")
     data = json.loads(state.read_text())
     commit = matched[len(prefix):]
-    require(commit in data["commits"], "cache commit is not in frozen main first-parent window")
+    require(commit in data["commits"][:WINDOW], "cache commit is not in frozen main first-parent window")
     require(config_at(root, commit) == config_at(root, data["baseline"]),
             "matched commit inputs differ from verified baseline bytes")
     compatible_configs(config_at(root, commit), config_at(root, "HEAD"))
     source_workflow(file_at(root, commit, ".github/workflows/pr-ci.yml"))
+    # REST key matching also accepts prefixes. Reject extra suffixes, scopes,
+    # versions, and truncated/ambiguous results before fetching run metadata.
     caches = api("actions/caches?" + urllib.parse.urlencode({"key": matched, "per_page": 100}))
+    require(cache_record(matched, caches)["version"] == version,
+            "cache archive version differs from lookup")
     runs = api("actions/workflows/pr-ci.yml/runs?" + urllib.parse.urlencode(
         {"head_sha": commit, "event": "push", "per_page": 20}))
     jobs = {r["id"]: api(f"actions/runs/{r['id']}/jobs?per_page=100")
             for r in runs.get("workflow_runs", [])[:20]
             if r.get("head_sha") == commit and r.get("event") == "push"}
-    validate_provenance(matched, commit, caches, runs, jobs)
-    output(key=matched)
+    validate_provenance(matched, commit, caches, runs, jobs, version)
+    output(key=matched, version=version)
     print(f"Validated uniquely main-scoped cache {matched}; full build still required")
+
+
+def select(root, state, prefix, matched):
+    """Try bounded exact keys, using lookup-only's matching archive version.
+
+    The REST API's key filter is also a prefix filter; querying full keys and
+    requiring exactly one exact/main-scoped record deliberately fails closed.
+    No ref filter: a shadow cache on another ref must remain visible.
+    """
+    validate_key(prefix, matched)
+    commits = json.loads(state.read_text())["commits"][:WINDOW]
+    require(matched[len(prefix):] in commits,
+            "lookup commit is not in frozen main first-parent window")
+    caches = api("actions/caches?" + urllib.parse.urlencode({"key": matched, "per_page": 100}))
+    version = cache_record(matched, caches)["version"]
+    candidates = dict.fromkeys([matched, *(prefix + c for c in commits)])
+    for candidate in candidates:
+        try:
+            validate(root, state, prefix, candidate, version)
+            return
+        except Refusal as error:
+            print(f"Compatible cache candidate refused: {candidate}: {error}", file=sys.stderr)
+    raise Refusal(f"no validated cache in frozen {len(commits)}-commit main window")
 
 
 def discard_unvalidated(root):
@@ -373,19 +489,22 @@ def discard_unvalidated(root):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("phase", choices=("prepare", "validate", "prune"))
+    parser.add_argument("phase", choices=("prepare", "select", "validate", "prune"))
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--state", type=Path)
     parser.add_argument("--inputs", type=Path)
     parser.add_argument("--qic", type=Path)
     parser.add_argument("--prefix", default="")
     parser.add_argument("--matched", default="")
+    parser.add_argument("--version", default="")
     args = parser.parse_args()
     try:
         if args.phase == "prepare":
             prepare(args.root, args.state, args.inputs, args.qic)
+        elif args.phase == "select":
+            select(args.root, args.state, args.prefix, args.matched)
         elif args.phase == "validate":
-            validate(args.root, args.state, args.prefix, args.matched)
+            validate(args.root, args.state, args.prefix, args.matched, args.version)
         else:
             discard_unvalidated(args.root)
     except (Refusal, OSError, ValueError, KeyError, TypeError, subprocess.CalledProcessError) as error:
