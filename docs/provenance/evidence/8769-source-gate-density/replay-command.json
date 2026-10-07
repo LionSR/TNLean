@@ -1,0 +1,20 @@
+{
+  "source_revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "jsonschema==4.26.0",
+    "python",
+    "docs/provenance/evidence/8769-source-gate-density/replay.py",
+    "--root",
+    ".",
+    "--upstream-root",
+    "/private/tmp/tnlean-openai-math-audit.git"
+  ],
+  "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+  "exit_code": 0,
+  "elapsed_seconds": 12.906287541001802,
+  "log_sha256": "e6f88d9bd1a4cb4efa5aa4e2dc27f4b2743d964291a32992e1385a0636b2eb93"
+}

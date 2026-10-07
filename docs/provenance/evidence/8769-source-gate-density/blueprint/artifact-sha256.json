@@ -1,0 +1,19 @@
+{
+  "source-revision.json": "1c286469b76af8724b1a63faf682bf89e359003b94b97568a24f69de0b53d88b",
+  "source-sha256.json": "129de3c7393218c0b5e08505ed7486a1999077f69f979ec97e766bb8f0a01ad0",
+  "tag-coverage.json": "90859f92e762bfc88ff7e381610a27627b608364d1f0420abe5aaa17c36ea370",
+  "prose.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+  "commands.json": "4dd0c9cad46128291ee88e7639973ea77b2b0eae872974d9402cd85c68ea690f",
+  "chktex.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "latexindent.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "sync.json": "6adca97ac392edadbd7bdd3e8ef25837f4966d116a6cd16542fff8247349347c",
+  "sync.log": "1c9a2b2c2ad79a09fd3c7ad3f5042676cfed66cea66d794d9bf8d14cefab2808",
+  "dependency-graph.json": "3990103ac8ef55dd79085eeb986cd9f4daefd50c47233d7a15ffe5888e9b3641",
+  "pdf.log": "52ab7237e339ed2375c4217e2230f3f1f18be9e877954304888438ad008aea1c",
+  "bbl.log": "2e8e3bd5e48eb78cbc0eed2ae6f3913a743721da06b98ab9c6e1aca2e15241e6",
+  "web.log": "ac2a63173dae79ef122db954afeb929315ab35b2af64ec6639cedd94c298438b",
+  "browser.log": "36f39cc2ec3a163a219427061804b69f55fb22bddc6aa4d33f2ed046e7df9720",
+  "verification.md": "3227f2117579ce0208a1ca323dc04de7b176f492589c9e52aac904f419da52c3",
+  "scoped_web_check.py": "5c2c37d79c8d46d9466ae53ac7ac5d72735162cafe5aa4f2beef2c1dfdd50882",
+  "blueprint/src/focused.pdf": "fb3544ed71bbaed7af9ef00df8a6d2f43313fd6d98e84961000aaaff84ef0634"
+}

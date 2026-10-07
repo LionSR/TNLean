@@ -1,0 +1,793 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8769-source-density-coordinates-sourceinventory.slotlayout_cons",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.slotLayout_cons",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-coordinates-sourceinventory.slotvector",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.slotVector",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-coordinates-sourceinventory.slotvector_eq_vector",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_vector",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-coordinates-sourceinventory.eval_prepareslots_eq_appendiso_symm",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_appendIso_symm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-coordinates-sourceinventory.eval_prepareslots_sum_smul",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_sum_smul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-coordinates-sourceinventory.eval_prepareslots_eq_sum_basis",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_sum_basis",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-density-word.preparedmatrix",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-density-word.preparedmatrix_sum_smul",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_sum_smul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-density-word.preparedmatrix_eq_sum_basis",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_eq_sum_basis",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-density-word.prepareddensitycoefficient",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-density-word.preparedmatrix_density_sum_smul",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_density_sum_smul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-density-word.preparedmatrix_density_eq_sum_basis",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_density_eq_sum_basis",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-density-word.preparedmatrix_gate_density_eq_sum_basis",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_gate_density_eq_sum_basis",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-norms-word.norm_preparedmatrix_le_one",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.norm_preparedMatrix_le_one",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-norms-word.norm_preparedmatrix_tmul_le_one",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.norm_preparedMatrix_tmul_le_one",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-density-actualgate-word.exists_finite_density_expansion",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/ActualSourceGateDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.exists_finite_density_expansion",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs exact source-coordinate matrices and ket-bra density coefficients from the original allowed gate, with unchanged branch coefficients and derived contraction bounds. Finite component identities accept proper subspace families; the actual-gate theorem uses full coordinate bases. Substitution of actual Schmidt frames, separated affected-side joint contraction estimates, Gaussian replacement and circuit trace-norm error estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/ActualSourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/ActualSourceGateDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

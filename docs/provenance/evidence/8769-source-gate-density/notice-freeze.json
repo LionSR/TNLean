@@ -1,0 +1,34 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+    "sha256_before": "aec0bf527d39fd8bef402d572636d7d298d4e892c5c4f60d0cfe49120a47ab92",
+    "sha256": "bc330b693bb8f7cf3be3347c70f1450936e69052617ab2345362bdb4eb244862",
+    "declarations": 6,
+    "notice_max_line_length": 98,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+    "sha256_before": "604e6421c5d301827e00714c8fdf8926c293b5f4debd79ed32fc0e1f43a194d7",
+    "sha256": "c8dac09804ab63cf09ec5ce847dd6a7f5a8251cb3e0d09f4c8f2fcbf4084e35f",
+    "declarations": 7,
+    "notice_max_line_length": 92,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+    "sha256_before": "6f492699e45d6f6775f86697f924e9e465ab509d9ddb0e5a27e41f5807d4753c",
+    "sha256": "de2d80edfa69824f5e1f042476a9d9ddb83b4fc4b9114d38afbe5fc69a2628f4",
+    "declarations": 2,
+    "notice_max_line_length": 83,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/ActualSourceGateDensity.lean",
+    "sha256_before": "ddad9286a738ce1e0742aac3eaf5a5007599cb671cde1e989b797d186777a1eb",
+    "sha256": "ff87a9c037e712faad674e17f1e05e27605bd65ca1e12499e0ac8fde10b1de22",
+    "declarations": 1,
+    "notice_max_line_length": 83,
+    "noncomment_tokens_unchanged": true
+  }
+]

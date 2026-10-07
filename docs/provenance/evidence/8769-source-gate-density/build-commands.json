@@ -1,0 +1,269 @@
+{
+  "started_utc": "2026-10-07T20:14:19.006366+00:00",
+  "source_repository": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+  "git_head_at_start": "06dc884a49c724eee67cf18fdcc14f0f0809ab3d",
+  "lean_executable": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+  "lean_executable_sha256": "d1d9c26a539f54fe839d2aa7760bf1ac1dd76a30b26e2c9684bebf2900038fcf",
+  "lean_version": "Lean (version 4.35.0-rc3, arm64-apple-darwin24.6.0, commit 470d5ce1400764999581fd26d5d72b00d990b0f4, Release)",
+  "lean_path": "/private/tmp/tnlean-source-gate-density:/private/tmp/tnlean-common-source:/private/tmp/tnlean-unused-pair:/private/tmp/tnlean-party-factorization:/private/tmp/tnlean-source-preparation:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/checkdecls/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/qiclean/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "manifest_sha256": "9628cbefc227721f1323ea65a94c1d7143d8a644c2b448c8cbf87b2ca71cb758",
+  "freeze_sha256": "c44fd4d35ee339e97a78a31d97de95201aa6c0214884ff472b879c9a96923f52",
+  "builds": [
+    {
+      "module": "TNLean.PEPS.Approximation.SourcePreparationCoordinates",
+      "source_path": "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+      "source_sha256": "bc330b693bb8f7cf3be3347c70f1450936e69052617ab2345362bdb4eb244862",
+      "snapshot": "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+      "archive": "/tmp/tnlean-source-gate-density/final-verification-20261007/sources/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean",
+      "cwd": "/private/tmp/tnlean-source-gate-density/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "resolved_path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/CommonSourcePreparation.olean",
+          "resolved_path": "/private/tmp/tnlean-common-source/TNLean/PEPS/Approximation/CommonSourcePreparation.olean",
+          "sha256": "553dc13ee1d13f261c7365918d3e82e7b695feffd1b28a43d5dce63cd69f7a46"
+        },
+        {
+          "path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Multilinear/Curry.olean",
+          "resolved_path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Multilinear/Curry.olean",
+          "sha256": "6ef9ef6c051f3447d27ffea8420d85c7ca03fb56faa3810a614882b55b783e45"
+        }
+      ],
+      "started_utc": "2026-10-07T20:14:19.136222+00:00",
+      "seconds": 4.399,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-gate-density/final-verification-20261007/SourcePreparationCoordinates.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "910888df9d18732d3e8f78d55b57a6597e715d843c4ae69e18df70d246542076",
+      "source_sha256_after": "bc330b693bb8f7cf3be3347c70f1450936e69052617ab2345362bdb4eb244862"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.SourceGateDensity",
+      "source_path": "TNLean/PEPS/Approximation/SourceGateDensity.lean",
+      "source_sha256": "c8dac09804ab63cf09ec5ce847dd6a7f5a8251cb3e0d09f4c8f2fcbf4084e35f",
+      "snapshot": "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+      "archive": "/tmp/tnlean-source-gate-density/final-verification-20261007/sources/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+      "cwd": "/private/tmp/tnlean-source-gate-density/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "resolved_path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/FiniteSourceGate.olean",
+          "resolved_path": "/private/tmp/tnlean-common-source/TNLean/PEPS/Approximation/FiniteSourceGate.olean",
+          "sha256": "4a44e99450629ff0827a5d19b06b7e99935e04f1c8bcd7bdd823b3e6d9c8fdaa"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean",
+          "resolved_path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourcePreparationCoordinates.olean",
+          "sha256": "910888df9d18732d3e8f78d55b57a6597e715d843c4ae69e18df70d246542076"
+        },
+        {
+          "path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Matrix/ConjTranspose.olean",
+          "resolved_path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Matrix/ConjTranspose.olean",
+          "sha256": "b2395f1de8693ad10bc857d1702200ef8cf9e5421440b3993905e1ea78fa5bf6"
+        },
+        {
+          "path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Fintype/Pi.olean",
+          "resolved_path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Fintype/Pi.olean",
+          "sha256": "2fa8f9f352251c1998c0c37759f3121163cd58b149c6c6d801cd523e66e5b1b8"
+        }
+      ],
+      "started_utc": "2026-10-07T20:14:23.595986+00:00",
+      "seconds": 3.993,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-gate-density/final-verification-20261007/SourceGateDensity.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "6c600900d2c9f5aedfea40aec1f1062dd71560e2e8bee529d9306f179101ea83",
+      "source_sha256_after": "c8dac09804ab63cf09ec5ce847dd6a7f5a8251cb3e0d09f4c8f2fcbf4084e35f"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PreparedMatrixNorm",
+      "source_path": "TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+      "source_sha256": "de2d80edfa69824f5e1f042476a9d9ddb83b4fc4b9114d38afbe5fc69a2628f4",
+      "snapshot": "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+      "archive": "/tmp/tnlean-source-gate-density/final-verification-20261007/sources/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+      "cwd": "/private/tmp/tnlean-source-gate-density/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "resolved_path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean",
+          "resolved_path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean",
+          "sha256": "6c600900d2c9f5aedfea40aec1f1062dd71560e2e8bee529d9306f179101ea83"
+        },
+        {
+          "path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/CStarAlgebra/Matrix.olean",
+          "resolved_path": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/CStarAlgebra/Matrix.olean",
+          "sha256": "8cd7fb638513abc7d80229cadc4cd68dbb1224b41ec59f58b0e2a6bd1b5e69ac"
+        }
+      ],
+      "started_utc": "2026-10-07T20:14:27.648443+00:00",
+      "seconds": 5.004,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-gate-density/final-verification-20261007/PreparedMatrixNorm.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "c3d02dfdda759813eb63470bfac44f8701875810a7628ca1e8a2656a04818542",
+      "source_sha256_after": "de2d80edfa69824f5e1f042476a9d9ddb83b4fc4b9114d38afbe5fc69a2628f4"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.ActualSourceGateDensity",
+      "source_path": "TNLean/PEPS/Approximation/ActualSourceGateDensity.lean",
+      "source_sha256": "ff87a9c037e712faad674e17f1e05e27605bd65ca1e12499e0ac8fde10b1de22",
+      "snapshot": "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/ActualSourceGateDensity.lean",
+      "archive": "/tmp/tnlean-source-gate-density/final-verification-20261007/sources/TNLean/PEPS/Approximation/ActualSourceGateDensity.lean",
+      "cwd": "/private/tmp/tnlean-source-gate-density/src",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/ActualSourceGateDensity.olean",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/ActualSourceGateDensity.lean"
+      ],
+      "dependency_command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "--deps",
+        "/private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/ActualSourceGateDensity.lean"
+      ],
+      "direct_dependency_artifacts": [
+        {
+          "path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "resolved_path": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean/Init.olean",
+          "sha256": "6916d32560d14864f283d9603938c967883a10109fe36d3714e4cc313389fe1c"
+        },
+        {
+          "path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean",
+          "resolved_path": "/private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean",
+          "sha256": "c3d02dfdda759813eb63470bfac44f8701875810a7628ca1e8a2656a04818542"
+        }
+      ],
+      "started_utc": "2026-10-07T20:14:32.709756+00:00",
+      "seconds": 4.455,
+      "exit_code": 0,
+      "log": "/tmp/tnlean-source-gate-density/final-verification-20261007/ActualSourceGateDensity.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_sha256": "e3a9f5977abe7023c29dff30b849640d267ae6f62ce3bc69224430efbfbd56db",
+      "source_sha256_after": "ff87a9c037e712faad674e17f1e05e27605bd65ca1e12499e0ac8fde10b1de22"
+    }
+  ],
+  "completed_utc": "2026-10-07T20:14:37.166782+00:00",
+  "source_commit": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+  "source_commit_verification": [
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+        "show",
+        "86ed134591132d21ab3046d504e84196e2ee5ec6:TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean"
+      ],
+      "sha256": "bc330b693bb8f7cf3be3347c70f1450936e69052617ab2345362bdb4eb244862",
+      "output_unchanged": true,
+      "direct_dependencies_unchanged": true
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+        "show",
+        "86ed134591132d21ab3046d504e84196e2ee5ec6:TNLean/PEPS/Approximation/SourceGateDensity.lean"
+      ],
+      "sha256": "c8dac09804ab63cf09ec5ce847dd6a7f5a8251cb3e0d09f4c8f2fcbf4084e35f",
+      "output_unchanged": true,
+      "direct_dependencies_unchanged": true
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+        "show",
+        "86ed134591132d21ab3046d504e84196e2ee5ec6:TNLean/PEPS/Approximation/PreparedMatrixNorm.lean"
+      ],
+      "sha256": "de2d80edfa69824f5e1f042476a9d9ddb83b4fc4b9114d38afbe5fc69a2628f4",
+      "output_unchanged": true,
+      "direct_dependencies_unchanged": true
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+        "show",
+        "86ed134591132d21ab3046d504e84196e2ee5ec6:TNLean/PEPS/Approximation/ActualSourceGateDensity.lean"
+      ],
+      "sha256": "ff87a9c037e712faad674e17f1e05e27605bd65ca1e12499e0ac8fde10b1de22",
+      "output_unchanged": true,
+      "direct_dependencies_unchanged": true
+    }
+  ]
+}

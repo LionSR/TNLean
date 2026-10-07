@@ -1,0 +1,6 @@
+{
+  "parent_revision": "06dc884a49c724eee67cf18fdcc14f0f0809ab3d",
+  "qiclean_revision": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+  "note": "All four production modules, the final chapter, its router and aggregator were byte-compared with this exact committed revision.",
+  "source_revision": "86ed134591132d21ab3046d504e84196e2ee5ec6"
+}
