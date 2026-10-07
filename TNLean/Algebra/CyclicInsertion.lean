@@ -19,9 +19,12 @@ agree.  The estimate is unchanged when the map is tensored with the identity on 
 space.
 
 Product vectors on the configurations `κ → ι` represent the tensor power `(ℂ^ι)^{⊗ κ}`
-coordinatewise.  Moving the insertion position is a permutation of the registers; for a pair
-space `ι = α × β`, a permutation of the pair registers is the same permutation of the `α`
-registers together with the same permutation of the `β` registers.
+coordinatewise; `EuclideanSpace.piTensor` is the `EuclideanSpace` form, over an arbitrary
+finite alphabet, of the coordinate formula of `QuantumCircuit.productVector`.  Moving the
+insertion position is a permutation of the registers.  For a pair space `ι = α × β`, the index
+map of a register permutation is the same permutation of the `α` indices together with the
+same permutation of the `β` indices (`CyclicInsertion.registerPerm_pair_index`); the operator
+factorization through `(ℂ^{α × β})^{⊗ κ} ≅ (ℂ^α)^{⊗ κ} ⊗ (ℂ^β)^{⊗ κ}` is not formalized.
 
 This generic finite-dimensional statement is a candidate for QICLean.
 
@@ -64,7 +67,8 @@ namespace EuclideanSpace
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
 
 /-- The product vector `⊗ⱼ vⱼ` in `(ℂ^ι)^{⊗ κ}`, written on configurations `κ → ι`: its
-coefficient on `f` is `∏ⱼ vⱼ (f j)`.  The vector depends multilinearly on the family `v`. -/
+coefficient on `f` is `∏ⱼ vⱼ (f j)`.  The vector depends multilinearly on the family `v`.
+For `ι = Fin d` this is the coordinate formula of `QuantumCircuit.productVector`. -/
 def piTensorMultilinear :
     MultilinearMap ℂ (fun _ : κ => EuclideanSpace ℂ ι) (EuclideanSpace ℂ (κ → ι)) :=
   (WithLp.linearEquiv 2 ℂ ((κ → ι) → ℂ)).symm.toLinearMap.compMultilinearMap
@@ -123,7 +127,7 @@ def pairCombine (η : EuclideanSpace ℂ (α × β)) (η' : EuclideanSpace ℂ (
 one pair of parties combine into one normalized pair source.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`, last sentence of
-the statement and of the proof, `04-compression.tex`, lines 70–71 and 124–126. -/
+the statement and of the proof, `04-compression.tex`, lines 68–70 and 125–127. -/
 theorem norm_pairCombine (η : EuclideanSpace ℂ (α × β)) (η' : EuclideanSpace ℂ (α' × β')) :
     ‖pairCombine η η'‖ = ‖η‖ * ‖η'‖ := by
   have h : ‖pairCombine η η'‖ ^ 2 = (‖η‖ * ‖η'‖) ^ 2 := by
@@ -223,8 +227,10 @@ theorem insertAt_perm (η : EuclideanSpace ℂ ι) (σ : Equiv.Perm κ) (k : κ)
   rfl
 
 omit [Fintype κ] [DecidableEq κ] in
-/-- For pair registers `ι = α × β`, a register permutation acts by the same permutation on
-the `α` registers and on the `β` registers. -/
+/-- Index-level form of the locality of register permutations: for pair registers
+`ι = α × β`, the index map of a register permutation acts by the same permutation on the `α`
+indices and on the `β` indices.  This is a statement about index bijections only; the
+corresponding operator factorization is not formalized. -/
 theorem registerPerm_pair_index {α β : Type*} (σ : Equiv.Perm κ) (f : κ → α × β) :
     Equiv.arrowProdEquivProdArrow κ (fun _ => α) (fun _ => β)
         ((Equiv.arrowCongr σ (Equiv.refl (α × β))) f) =
