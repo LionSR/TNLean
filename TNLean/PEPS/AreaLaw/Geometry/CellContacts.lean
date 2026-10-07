@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
+import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import Mathlib.Order.Interval.Set.Disjoint
 
 /-!
@@ -90,44 +90,6 @@ private theorem horizontal_segment (a b c : ℝ) (hbc : a ≤ b) :
   · rintro ⟨hx, hy⟩
     exact ⟨x.1, hx, Prod.ext rfl hy.symm⟩
 
-private theorem whole_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) (s : Fin 4) :
-    (cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩,
-      cellFanEnd o ℓ z (fun _ ↦ false) ⟨s, 0⟩) =
-    match s.val with
-    | 0 => ((o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * z.2),
-        (o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * (z.2 + 1)))
-    | 1 => ((o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * (z.2 + 1)),
-        (o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * (z.2 + 1)))
-    | 2 => ((o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * (z.2 + 1)),
-        (o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * z.2))
-    | _ => ((o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * z.2),
-        (o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * z.2)) := by
-  fin_cases s
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1)) = _
-    norm_num
-    constructor <;> ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1)),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1)) = _
-    norm_num
-    constructor <;> ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1))),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1))) = _
-    norm_num
-    ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1))) = _
-    norm_num
-    ring
-
 private theorem whole_side_rectangle (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) (s : Fin 4) :
     dyadicCellSide o ℓ z s =
     match s.val with
@@ -139,8 +101,8 @@ private theorem whole_side_rectangle (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × �
         Set.Icc (o.2 + 2 ^ ℓ * z.2) (o.2 + 2 ^ ℓ * (z.2 + 1))
     | _ => Set.Icc (o.1 + 2 ^ ℓ * z.1) (o.1 + 2 ^ ℓ * (z.1 + 1)) ×ˢ
         {o.2 + 2 ^ ℓ * z.2} := by
-  have hs := congrArg Prod.fst (whole_endpoints o ℓ z s)
-  have he := congrArg Prod.snd (whole_endpoints o ℓ z s)
+  have hs := congrArg Prod.fst (cellFan_unsplit_endpoints_coordinates o ℓ z s)
+  have he := congrArg Prod.snd (cellFan_unsplit_endpoints_coordinates o ℓ z s)
   dsimp only at hs he
   rw [dyadicCellSide, hs, he]
   have hbound (a : ℝ) (i : ℤ) : a + (2 : ℝ) ^ ℓ * i ≤ a + 2 ^ ℓ * (i + 1) := by

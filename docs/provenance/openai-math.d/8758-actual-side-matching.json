@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.unsplit_endpoint_coordinates",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/SideEndpoints.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_coordinates",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Planned exact coordinate formulas for the start and end of each counterclockwise unsplit side of an actual translated dyadic cell, for every origin o, natural scale \u2113, integer cell index z and side s : Fin 4, with no additional hypothesis. The final released signature and proof remain pending.",
+        "Section 11, lines 299\u2013306; the common endpoint formulas are extracted to avoid repeating the same side-coordinate proof in several geometry modules."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.unsplit_endpoint_corners",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/SideEndpoints.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_are_corners",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Planned identification of the two unsplit side endpoints as actual dyadic cell corners: for every o, \u2113, z and s : Fin 4, provides \u03b5 and \u03b7 in Fin 2 \u00d7 Fin 2 with the start equal to the \u03b5 corner and the end equal to the \u03b7 corner, with no additional hypothesis. The final released signature and proof remain pending.",
+        "Section 11, lines 299\u2013306; this statement supplies actual corner witnesses without adding a geometric certificate premise."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.elementary_contact_match",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ActualSideMatching.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementary_contact_match",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Planned matching of an elementary side under the exact actual midpoint mask when it has contact containing two distinct points with another actual closed fine cell. The proposed assumptions are C \u2265 2, reference k \u2265 50000000, k\u2080 \u2264 k and k\u2080 \u2264 h, both actual fine-layer memberships and distinct indexed cells. The proposed conclusion supplies an actual opposing mask slot with opposite facing side index and reversed endpoint equalities. The final released signature and proof remain pending.",
+        "Section 11, lines 299\u2013306 and 352\u2013356. This is a matching theorem conditional on actual contact; opponent existence is established separately in this contribution; the global two-family partition remains open."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideOpponents.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For C \u2265 2, reference k \u2265 50000000, k\u2080 \u2264 k and an actual fine-layer membership, every elementary slot of the exact actual midpoint mask has its entire closed segment contained either in the closure of the initial dummy neighborhood or in the closure of one actual distinct fine cell at h \u2265 k\u2080. Nonemptiness of Z is derived. No contact, plane-cover, label, sparsity or nonempty-Z premise is imposed. The source is released; exact-source canonical verification remains pending.",
+        "Section 11, lines 154\u2013181 and 299\u2013310. The actual plane cover in an outward neighborhood provides a member of a finite family of potential opponents. Actual fine-cell or dummy-cell corner exclusion extends midpoint contact across the whole elementary segment. Opponent uniqueness and region labels remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

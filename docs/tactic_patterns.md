@@ -24,6 +24,26 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Four orientations of fine-cell endpoints — promoted (2026-10-07)
+
+- **Pattern:** Identify the ordered whole-side endpoints from the cell center
+  and side vectors, then recognize the two endpoints as binary cell corners.
+- **Seen:** The coordinate calculation in `CellContacts`, the full-mesh
+  witnesses in `DummyCorners`, and the corner witnesses in `ActualSideMatching`.
+- **Abstraction:** `cellFan_unsplit_endpoints_coordinates` and
+  `cellFan_unsplit_endpoints_are_corners` in `SideEndpoints.lean`. The existing
+  coordinate statement and proof move unchanged to their shared owner; the
+  corner witnesses follow from that formula.
+- **Refactor:** All three callers use the shared lemmas. The promotion removes
+  38 net lines from `CellContacts`, 30 from `DummyCorners`, and the 25-line
+  private corner table from `ActualSideMatching`; the shared owner has 88 lines
+  before provenance notices. The five older public statements stay unchanged.
+  Their source-bound verification is renewed with the new matching theorem.
+- **Notes:** A scoped pattern scan of the five completed proof modules finds
+  the remaining whole-side and half-side rectangle conversions only within
+  `CellContacts`, below the threshold across two files. No new tactic or
+  compatibility alias is introduced.
+
 ### Actual fine-cell containment in a layer — promoted (2026-10-07)
 
 - **Pattern:** Rewrite the exact union over actual fine-layer indices and insert
@@ -3445,22 +3465,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   comparison matrix is not needed.
 
 ## Candidates
-
-### Four orientations of fine-cell endpoints — candidate (2026-10-07)
-
-- **Pattern:** Enumerate the four square sides, identify their endpoint coordinates,
-  and simplify the resulting scalar equalities.
-- **Seen:** `CellContacts.whole_endpoints`, `CellContacts.midpoint_endpoints`,
-  and `DummyCorners.whole_endpoints_mem_fullMesh` in two new geometry files.
-  The scoped scan also finds repeated whole-side and half-side rectangle
-  conversions within `CellContacts`.
-- **Abstraction:** A common endpoint-coordinate formula may replace the initial
-  orientation calculation; the rectangle and mesh conclusions would then
-  remain separate short corollaries.
-- **Notes:** The three conclusions and proof blocks differ. The repeated exact
-  conversions occur within one file and do not yet meet the promotion rule
-  across two files. Existing private normalization lemmas and the public
-  elementary-side endpoint lemmas are reused; no new tactic is warranted.
 
 ### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
 

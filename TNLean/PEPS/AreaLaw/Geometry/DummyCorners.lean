@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.DummyContacts
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
+import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import Mathlib.Analysis.Normed.Affine.Convex
 
 /-!
@@ -64,41 +65,10 @@ private theorem whole_endpoints_mem_fullMesh (o : ℝ × ℝ) (ℓ : ℕ)
     (z : ℤ × ℤ) (s : Fin 4) :
     cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩ ∈ affineMesh o ((2 : ℝ) ^ ℓ) ∧
       cellFanEnd o ℓ z (fun _ ↦ false) ⟨s, 0⟩ ∈ affineMesh o ((2 : ℝ) ^ ℓ) := by
-  let c := cellFanCenter o ℓ z
-  let r := (2 : ℝ) ^ ℓ / 2
-  constructor
-  · refine ⟨z + (match s.val with
-      | 0 => (1, 0)
-      | 1 => (1, 1)
-      | 2 => (0, 1)
-      | _ => (0, 0)), ?_⟩
-    change o + (2 : ℝ) ^ ℓ • integerPoint (z + (match s.val with
-        | 0 => (1, 0)
-        | 1 => (1, 1)
-        | 2 => (0, 1)
-        | _ => (0, 0))) = c + r • (match s.val with
-        | 0 => (1, -1)
-        | 1 => (-(-1), 1)
-        | 2 => (-1, -(-1))
-        | _ => (-1, -1))
-    fin_cases s <;> apply Prod.ext <;> dsimp [c, r, cellFanCenter, integerPoint] <;>
-      push_cast <;> norm_num <;> ring
-  · refine ⟨z + (match s.val with
-      | 0 => (1, 1)
-      | 1 => (0, 1)
-      | 2 => (0, 0)
-      | _ => (1, 0)), ?_⟩
-    change o + (2 : ℝ) ^ ℓ • integerPoint (z + (match s.val with
-        | 0 => (1, 1)
-        | 1 => (0, 1)
-        | 2 => (0, 0)
-        | _ => (1, 0))) = c + r • (match s.val with
-        | 0 => (1, 1)
-        | 1 => (-1, 1)
-        | 2 => (-1, -1)
-        | _ => (1, -1))
-    fin_cases s <;> apply Prod.ext <;> dsimp [c, r, cellFanCenter, integerPoint] <;>
-      push_cast <;> norm_num <;> ring
+  obtain ⟨ε, η, ha, hb⟩ := cellFan_unsplit_endpoints_are_corners o ℓ z s
+  rw [ha, hb]
+  exact ⟨corner_mem_fullMesh o ℓ ℓ z ε le_rfl,
+    corner_mem_fullMesh o ℓ ℓ z η le_rfl⟩
 
 private theorem corner_mem_closure (o : ℝ × ℝ) (j : ℕ)
     (w : ℤ × ℤ) (ε : Fin 2 × Fin 2) :
