@@ -257,11 +257,13 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
 
 \begin{corollary}[Column extraction for the main theorem]
     \label{cor:peps_ket_column_square_main}
-    \lean{TNLean.PEPS.Approximation.Pinned.exists_peps_of_traceNorm_sub_pure_le}
+    \lean{TNLean.PEPS.Approximation.Pinned.pos_of_contractPEPS_ne_zero,
+        TNLean.PEPS.Approximation.Pinned.exists_peps_of_traceNorm_sub_pure_le,
+        TNLean.PEPS.Approximation.Vector.Tensor.exists_peps_of_traceNorm_sub_pure_le}
     \leanok
     \uses{thm:peps_ket_column_square}
     Let an operator network on the open $L\times L$ square have edge
-    dimensions $0<D_e\le B$, and let its operator $\sigma$ satisfy
+    dimensions $D_e\le B$, and let its operator $\sigma$ satisfy
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$ for a unit
     vector $\Omega$. Then for every $\varepsilon\ge2\eta$ there is a nonzero
     PEPS $\Phi$ on the same grid with edge dimensions $0<D_e\le B$ and
@@ -269,14 +271,23 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
         \min_{\theta}\Big\lVert\frac{\Phi}{\lVert\Phi\rVert}
             -e^{i\theta}\Omega\Big\rVert\le\varepsilon .
     \]
-    With $B=CL^c$ and $\varepsilon=L^{-1}$ this is the conclusion of
+    With $B=CL^c$ and $\varepsilon=L^{-1}$ the conclusion is that of
     \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}
-    (\texttt{00-introduction.tex}, lines 36--57); the last step of its proof
-    (\texttt{07-assembly.tex}, lines 203--214) thus reduces to the operator
-    network with polynomial edge dimensions and the bound $2\eta\le L^{-1}$.
+    (\texttt{00-introduction.tex}, lines 36--57) for one lattice size.
+    The source applies the column lemma on the party graph and then routes
+    the ket network onto the grid (\texttt{07-assembly.tex}, lines
+    96--177). To use the corollary instead, the routing must be applied to
+    the operator network before the column is fixed. The two steps commute:
+    fixing the inputs acts site by site on physical indices, and the
+    routing leaves physical coordinates unchanged (\texttt{07-assembly.tex},
+    lines 125--126 and 159--160). Sizes $L<L_0$ are treated separately in
+    the source by an exact spanning-tree PEPS (\texttt{07-assembly.tex},
+    lines 205--212) and do not pass through the corollary.
 \end{corollary}
 
 \begin{proof}\leanok
     Take the fixed-input tensors of the preceding theorem; their edge
-    dimensions are those of the operator network.
+    dimensions are those of the operator network. These dimensions are
+    positive because the column is nonzero: if some $D_e$ vanished, the
+    contraction would be an empty sum.
 \end{proof}

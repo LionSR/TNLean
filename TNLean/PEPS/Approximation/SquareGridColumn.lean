@@ -36,10 +36,11 @@ reused.
 * `TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le`
   and `TNLean.PEPS.Approximation.Vector.Tensor.exists_fixInput_contract_of_traceNorm_sub_pure_le`
   — Lemma 8.1 on the open square.
-* `TNLean.PEPS.Approximation.Pinned.exists_peps_of_traceNorm_sub_pure_le` — the
-  form consumed by the final theorem: a nonzero PEPS whose bond dimensions obey
-  every bound the operator network obeys, with normalized phase error at most
-  any `ε ≥ 2η`.
+* `TNLean.PEPS.Approximation.Pinned.exists_peps_of_traceNorm_sub_pure_le` and
+  `TNLean.PEPS.Approximation.Vector.Tensor.exists_peps_of_traceNorm_sub_pure_le`
+  — the form used by the final theorem: a nonzero PEPS whose bond dimensions
+  obey every bound the operator network obeys, with normalized phase error at
+  most any `ε ≥ 2η`.
 
 ## References
 
@@ -130,22 +131,44 @@ theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le (D : ForwardEdge L
   rw [← contractPEPS_fixInput] at hz hθ
   exact ⟨z, contractPEPS_fixInput D A z, hz, θ, hθ⟩
 
+/-- A nonzero contraction on the open square forces every edge dimension to be
+positive: if some `D e` were zero, the sum over virtual configurations would be
+empty. Theorem 1.1 `thm:main` asks for a nonzero PEPS
+(`00-introduction.tex`, lines 36–37), so positive bond dimensions are part of
+its conclusion and need not be assumed of the operator network. -/
+theorem pos_of_contractPEPS_ne_zero (D : ForwardEdge L → ℕ)
+    (A : (v : Vertex L) → LocalTensor q D v) (h : contractPEPS D A ≠ 0)
+    (e : ForwardEdge L) : 0 < D e := by
+  refine Nat.pos_of_ne_zero fun hD ↦ h ?_
+  have : IsEmpty ((e : ForwardEdge L) → Fin (D e)) :=
+    ⟨fun a ↦ absurd (a e).isLt (by omega)⟩
+  ext x
+  simp [contractPEPS]
+
 /-- **Column extraction in the form used by the final theorem.**
 
-Let an operator network on the open `L × L` square have positive edge
-dimensions `D e ≤ B`, and let its operator `σ` satisfy
-`‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1` for a unit vector `Ω`. Then for every `ε ≥ 2η` there is
-a nonzero PEPS on the same grid, with positive edge dimensions at most `B`,
-whose normalized contraction is within `ε` of `Ω` up to a phase. With
-`B = C L^c` and `ε = L⁻¹` this is the conclusion of Theorem 1.1, so the last
-step of the assembly reduces to the bound `2η ≤ L⁻¹`.
+Let an operator network on the open `L × L` square have edge dimensions
+`D e ≤ B`, and let its operator `σ` satisfy `‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1` for a unit
+vector `Ω`. Then for every `ε ≥ 2η` there is a nonzero PEPS on the same grid,
+with positive edge dimensions at most `B`, whose normalized contraction is
+within `ε` of `Ω` up to a phase. Positivity of the edge dimensions is not a
+hypothesis: it follows from the contraction being nonzero.
+
+With `B = C L^c` and `ε = L⁻¹` the conclusion is that of Theorem 1.1 for one
+lattice size. The source applies Lemma 8.1 on the party graph and then routes
+the resulting ket network onto the grid (`07-assembly.tex`, lines 96–177).
+To use this statement instead, the routing must be applied to the operator
+network before the column is fixed; the two steps commute, since column
+fixing acts sitewise on physical indices and routing leaves physical
+coordinates unchanged (`07-assembly.tex`, lines 125–126 and 159–160). Sizes
+`L < L_0` are handled separately in the source by an exact spanning-tree PEPS
+(`07-assembly.tex`, lines 205–212) and do not pass through this statement.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 8.1 `lem:columns`,
-`07-assembly.tex`, lines 67–99, and its use in the proof of Theorem 1.1
-`thm:main`, `07-assembly.tex`, lines 203–214; the PEPS convention and the
-target error of `00-introduction.tex`, lines 27–56. -/
+`07-assembly.tex`, lines 67–94; the PEPS convention and the target error of
+Theorem 1.1 `thm:main`, `00-introduction.tex`, lines 27–56. -/
 theorem exists_peps_of_traceNorm_sub_pure_le (D : ForwardEdge L → ℕ)
-    (A : (v : Vertex L) → LocalTensor (q * q) D v) {B : ℝ} (hDpos : ∀ e, 0 < D e)
+    (A : (v : Vertex L) → LocalTensor (q * q) D v) {B : ℝ}
     (hDB : ∀ e, (D e : ℝ) ≤ B) {n : ℕ} (e : (Vertex L → Fin q) ≃ Fin n)
     (Ω : State L q) (hΩ : ‖Ω‖ = 1) {η ε : ℝ}
     (hσ : Matrix.traceNorm (Matrix.reindex e e
@@ -157,7 +180,7 @@ theorem exists_peps_of_traceNorm_sub_pure_le (D : ForwardEdge L → ℕ)
         Complex.exp (θ * Complex.I) • Ω‖ ≤ ε := by
   obtain ⟨z, -, hz, θ, hθ⟩ :=
     exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le D A e Ω hΩ hσ hη
-  refine ⟨D, fixInput D A z, hDpos, hDB, hz, θ, ?_⟩
+  refine ⟨D, fixInput D A z, pos_of_contractPEPS_ne_zero D _ hz, hDB, hz, θ, ?_⟩
   rw [Complex.ofReal_inv]
   exact hθ.trans hε
 
@@ -267,6 +290,35 @@ theorem Tensor.exists_fixInput_contract_of_traceNorm_sub_pure_le (P : Tensor (q 
     exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
   rw [← Tensor.contract_fixInput] at hz hθ
   exact ⟨z, rfl, Tensor.contract_fixInput P z, hz, θ, hθ⟩
+
+/-- **Column extraction in the form used by the final theorem, virtual-first
+presentation.**
+
+If the bond dimensions of an operator tensor `P` on the open `L × L` square are
+at most `B` and its operator `σ` satisfies `‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1` for a unit
+vector `Ω`, then for every `ε ≥ 2η` there is a nonzero PEPS on the same grid,
+with bond dimensions at most `B`, whose normalized contraction is within `ε`
+of `Ω` up to a phase. The bond dimensions are positive by the definition of
+the virtual-first presentation. The remarks on routing and small sizes made
+for `Pinned.exists_peps_of_traceNorm_sub_pure_le` apply unchanged.
+
+Polynomial-PEPS manuscript (September 24, 2026), Lemma 8.1 `lem:columns`,
+`07-assembly.tex`, lines 67–94; the PEPS convention and the target error of
+Theorem 1.1 `thm:main`, `00-introduction.tex`, lines 27–56. -/
+theorem Tensor.exists_peps_of_traceNorm_sub_pure_le (P : Tensor (q * q) L) {B : ℝ}
+    (hPB : ∀ e, (P.bondDim e : ℝ) ≤ B) {n : ℕ} (e : (Vertex L → Fin q) ≃ Fin n)
+    (Ω : State q L) (hΩ : ‖Ω‖ = 1) {η ε : ℝ}
+    (hσ : Matrix.traceNorm (Matrix.reindex e e
+      (P.operatorMatrix - Matrix.vecMulVec (⇑Ω) (star ⇑Ω))) ≤ η)
+    (hη : η < 1) (hε : 2 * η ≤ ε) :
+    ∃ P' : Tensor q L, (∀ e, (P'.bondDim e : ℝ) ≤ B) ∧ P'.contract ≠ 0 ∧
+      ∃ θ : ℝ, ‖((‖P'.contract‖⁻¹ : ℝ) : ℂ) • P'.contract -
+        Complex.exp (θ * Complex.I) • Ω‖ ≤ ε := by
+  obtain ⟨z, -, -, hz, θ, hθ⟩ :=
+    P.exists_fixInput_contract_of_traceNorm_sub_pure_le e Ω hΩ hσ hη
+  refine ⟨P.fixInput z, hPB, hz, θ, ?_⟩
+  rw [Complex.ofReal_inv]
+  exact hθ.trans hε
 
 end Vector
 

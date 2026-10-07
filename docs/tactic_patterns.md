@@ -3433,6 +3433,29 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Column selection identified with a fixed-input contraction — candidate (2026-10-07)
+
+- **Pattern:**
+
+  ```lean
+  obtain ⟨z, hz, θ, hθ⟩ :=
+    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
+  rw [← contract_fixInput] at hz hθ   -- or: rw [toEuclideanLin_single_one_apply, …]
+  exact ⟨z, …, hz, θ, hθ⟩
+  ```
+
+- **Seen:** 4 occurrences in 2 files:
+  `TNLean/PEPS/Approximation/VectorColumn.lean` (the generic multigraph and the
+  graph-tensor instances) and `TNLean/PEPS/Approximation/SquareGridColumn.lean`
+  (the physical-first and virtual-first square-grid instances).
+- **Abstraction:** a lemma in `TNLean/PEPS/Approximation/ColumnSelection.lean`
+  taking a family `ψ z` with `ψ z = Matrix.toEuclideanLin σ (EuclideanSpace.single z 1)`
+  and returning `∃ z, ψ z ≠ 0 ∧ ∃ θ, ‖(‖ψ z‖⁻¹ : ℂ) • ψ z - e^{iθ} • Ω‖ ≤ 2η`.
+- **Notes:** the threshold is met, but `VectorColumn.lean` and
+  `ColumnSelection.lean` belong to a stacked pull request still under review;
+  promote and refactor all four sites once that branch has merged. Each call
+  site is three lines, so the expected saving is small.
+
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
 - **Sites:** `ThetaBondCoordinates` and `ThetaBondOrthonormalCoordinates`.
