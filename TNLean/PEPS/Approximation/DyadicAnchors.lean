@@ -154,7 +154,7 @@ theorem foldCoord_succ {L x : ℕ} (hx : x + 2 < 2 * L) :
 /-- Every coordinate has at most two padded preimages: `x` and `2 (L - 1) - x`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:155–156`. -/
-theorem foldCoord_eq_iff {L x u : ℕ} (hx : x + 1 < 2 * L) (h : foldCoord L x = u) :
+theorem eq_or_eq_of_foldCoord_eq {L x u : ℕ} (hx : x + 1 < 2 * L) (h : foldCoord L x = u) :
     x = u ∨ x = 2 * (L - 1) - u := by
   unfold foldCoord at h; split_ifs at h <;> omega
 
@@ -162,7 +162,7 @@ theorem foldCoord_eq_iff {L x u : ℕ} (hx : x + 1 < 2 * L) (h : foldCoord L x =
 left endpoints `u` and `2 L - 3 - u`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:155–156`. -/
-theorem foldCoord_interval_eq {L x u : ℕ} (hx : x + 2 < 2 * L)
+theorem eq_or_eq_of_foldCoord_interval {L x u : ℕ} (hx : x + 2 < 2 * L)
     (h : (foldCoord L x = u ∧ foldCoord L (x + 1) = u + 1) ∨
       (foldCoord L x = u + 1 ∧ foldCoord L (x + 1) = u)) :
     x = u ∨ x = 2 * L - 3 - u := by

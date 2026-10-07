@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Defs
+import TNLean.PEPS.DependentBondNetwork
 import Mathlib.Algebra.BigOperators.GroupWithZero.Finset
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
@@ -31,7 +32,16 @@ dimension at most `D ^ m`.
 
 No injectivity, isometry, translation-invariance, or uniform-dimension assumption is made.
 
+A link joining a party to itself is read once by that party's tensor, so it contributes a
+diagonal trace. The coefficient of a party network is the endpoint contraction
+`TNLean.PEPS.DependentBondNetwork.network` on the party graph with identity bond matrices,
+which forces the two endpoint labels of every link, including a self-link, to agree
+(`TNLean.PEPS.Approximation.PartyNetwork.coeff_eq_network`).
+
 ## Main results
+
+* `TNLean.PEPS.Approximation.PartyNetwork.coeff_eq_network`: the party-network coefficient
+  is the endpoint contraction of the party graph with identity bond matrices.
 
 * `TNLean.PEPS.Approximation.Routing.toTensor_stateCoeff`: the routed PEPS has the
   coefficients of the party network.
@@ -63,8 +73,9 @@ Every link `ℓ` joins the parties `src ℓ` and `tgt ℓ` and carries the virtu
 `Fin (dim ℓ)`; the orientation is arbitrary bookkeeping. Every party tensor reads the labels
 of its incident links and one physical index.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, the ket network on the party graph
-obtained from Lemma 8.1 `lem:columns`, `07-assembly.tex:56–99`. -/
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1–8.2, the party operator network and
+the ket network on the party graph obtained from it by Lemma 8.1 `lem:columns`,
+`07-assembly.tex:53–99`. -/
 structure PartyNetwork (P Λ : Type*) (d : ℕ) where
   /-- The dimension of the virtual alphabet of a link. -/
   dim : Λ → ℕ
@@ -85,6 +96,39 @@ the site `site p`: the sum over all link labellings of the product of the party 
 def coeff (N : PartyNetwork P Λ d) (site : P → V) (σ : V → Fin d) : ℂ :=
   ∑ lab : (ℓ : Λ) → Fin (N.dim ℓ), ∏ p, N.tensor p (fun i => lab i.1) (σ (site p))
 
+open DependentBondNetwork Classical in
+/-- The party tensors read on endpoint incidences of the party graph: a link incident to `p`
+reads the label at its first endpoint when `p` is its first party, and the label at its second
+endpoint otherwise. -/
+def endpointTensor (N : PartyNetwork P Λ d) (p : P)
+    (η : LocalConfig N.src N.tgt (fun ℓ => Fin (N.dim ℓ)) p) (s : Fin d) : ℂ :=
+  N.tensor p (fun i => if h : N.src i.1 = p then η ⟨(i.1, false), by simp [endpointVertex, h]⟩
+    else η ⟨(i.1, true), by simpa [endpointVertex] using i.2.resolve_left h⟩) s
+
+open DependentBondNetwork in
+/-- The coefficient of a party network is the endpoint contraction of the party graph, in
+which both endpoints of every link carry independent labels, joined by identity bond
+matrices. -/
+theorem coeff_eq_network (N : PartyNetwork P Λ d) (site : P → V) (σ : V → Fin d) :
+    N.coeff site σ = network N.src N.tgt (fun ℓ => Fin (N.dim ℓ)) N.endpointTensor
+      (fun _ => 1) (fun p => σ (site p)) := by
+  classical
+  unfold network bondWeight coeff
+  simp only [Matrix.one_apply, Fintype.prod_ite_zero, Finset.prod_const_one, ite_mul,
+    one_mul, zero_mul]
+  rw [← Finset.sum_filter]
+  refine Finset.sum_nbij' (fun lab pt => lab pt.1) (fun β ℓ => β (ℓ, false))
+    (fun _ _ => by simp) (fun _ _ => Finset.mem_univ _) (fun _ _ => rfl) ?_ ?_
+  · intro β hβ
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hβ
+    funext pt
+    rcases pt with ⟨ℓ, _ | _⟩
+    · rfl
+    · exact (hβ ℓ).symm
+  · intro lab _
+    refine Finset.prod_congr rfl fun p _ => ?_
+    simp [endpointTensor]
+
 end PartyNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
@@ -92,11 +136,11 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj]
 variable {P Λ : Type*} [Fintype P] [Fintype Λ] [DecidableEq Λ] {d : ℕ}
 
 /-- The step from `a` to `b` traverses the edge `e` in one of its two directions. -/
-def Crosses (a b : V) (e : Edge G) : Prop :=
+def IsCrossing (a b : V) (e : Edge G) : Prop :=
   (a = e.1.1 ∧ b = e.1.2) ∨ (a = e.1.2 ∧ b = e.1.1)
 
-instance (a b : V) (e : Edge G) : Decidable (Crosses a b e) := by
-  unfold Crosses; infer_instance
+instance (a b : V) (e : Edge G) : Decidable (IsCrossing a b e) := by
+  unfold IsCrossing; infer_instance
 
 /-- A routing of a party network through `G`.
 
@@ -122,7 +166,8 @@ variable {N : PartyNetwork P Λ d} {site : P → V} (R : Routing G N site)
 /-- The traversals of an edge `e`: the walk steps, over all links, that traverse `e`.
 Their number is the traversal multiplicity of `e`, counted with repetition. -/
 abbrev Traversal (e : Edge G) : Type _ :=
-  {t : Σ ℓ : Λ, Fin (R.len ℓ) // Crosses (R.route t.1 t.2.castSucc) (R.route t.1 t.2.succ) e}
+  {t : Σ ℓ : Λ, Fin (R.len ℓ) //
+    IsCrossing (R.route t.1 t.2.castSucc) (R.route t.1 t.2.succ) e}
 
 /-- The bond alphabet of an edge: one label of the link of every traversal. -/
 abbrev BondAlphabet (e : Edge G) : Type _ :=
@@ -140,7 +185,7 @@ theorem traversal_visits {v : V} (ie : IncidentEdge G v) (t : R.Traversal ie.1) 
     ∃ i, R.route t.1.1 i = v := by
   rcases t with ⟨⟨ℓ, i⟩, ht⟩
   rcases ie with ⟨e, he⟩
-  simp only [Crosses] at ht
+  simp only [IsCrossing] at ht
   rcases he with rfl | rfl <;> rcases ht with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · exact ⟨_, h1⟩
   · exact ⟨_, h2⟩
@@ -196,7 +241,7 @@ theorem consistent_route_eq (x : R.ConsistentConfig) (ℓ : Λ) (i : Fin (R.len 
   | succ i ih =>
     have hadj := R.route_adj ℓ i
     let e : Edge G := Edge.ofAdj hadj
-    have hcr : Crosses (R.route ℓ i.castSucc) (R.route ℓ i.succ) e := by
+    have hcr : IsCrossing (R.route ℓ i.castSucc) (R.route ℓ i.succ) e := by
       rcases Edge.ofAdj_endpoints hadj with ⟨h1, h2⟩ | ⟨h1, h2⟩
       · exact Or.inl ⟨h1.symm, h2.symm⟩
       · exact Or.inr ⟨h2.symm, h1.symm⟩
@@ -302,17 +347,19 @@ theorem toTensor_bondDim_le {D : ℕ} (hdim : ∀ ℓ, N.dim ℓ ≤ D) (e : Edg
   rw [toTensor_bondDim]
   exact Finset.prod_le_pow_card _ _ _ fun t _ => hdim t.1.1
 
-/-- **Routing to a PEPS.** If every link has dimension at most `D ≥ 1` and every edge is
-traversed at most `χ` times, the party network is exactly a PEPS on `G` with every bond
-dimension at most `D ^ χ`. Unused edges carry bond dimension one.
+/-- **Routing to a PEPS.** If every link has dimension at most `D` and every edge is traversed
+at most `χ` times, the party network is exactly a PEPS on `G` with every bond dimension at most
+`(max D 1) ^ χ`, which is `D ^ χ` whenever `D ≥ 1`. Unused edges carry bond dimension one.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:final-bond` and the
 following paragraph, `07-assembly.tex:164–177`. -/
-theorem exists_tensor_of_congestion_le {D χ : ℕ} (hD : 1 ≤ D) (hdim : ∀ ℓ, N.dim ℓ ≤ D)
+theorem exists_tensor_of_congestion_le {D χ : ℕ} (hdim : ∀ ℓ, N.dim ℓ ≤ D)
     (hχ : ∀ e, Fintype.card (R.Traversal e) ≤ χ) :
-    ∃ A : Tensor G d, (∀ σ, stateCoeff A σ = N.coeff site σ) ∧ ∀ e, A.bondDim e ≤ D ^ χ :=
+    ∃ A : Tensor G d, (∀ σ, stateCoeff A σ = N.coeff site σ) ∧
+      ∀ e, A.bondDim e ≤ (max D 1) ^ χ :=
   ⟨R.toTensor, R.toTensor_stateCoeff, fun e =>
-    (R.toTensor_bondDim_le hdim e).trans (Nat.pow_le_pow_right hD (hχ e))⟩
+    (R.toTensor_bondDim_le (fun ℓ => (hdim ℓ).trans (le_max_left D 1)) e).trans
+      (Nat.pow_le_pow_right (le_max_right D 1) (hχ e))⟩
 
 end Routing
 

@@ -19,7 +19,7 @@ four times the padded congestion, counting repeated folded traversals.
 Combined with the exact routed contraction, a party network on dyadic anchors with boundedly
 many parties per block, bounded degree, and link separation bounded by a fixed multiple of the
 endpoint scales is exactly a PEPS on the open `L × L` square-lattice graph. Its bond dimensions
-are at most `D ^ χ` when every link has dimension at most `D`, with
+are at most `(max D 1) ^ χ` when every link has dimension at most `D`, with
 `χ = 8 (2 c + 1) B Δ` depending only on the separation constant `c`, the block bound `B` and
 the degree bound `Δ`.
 
@@ -98,14 +98,16 @@ theorem exists_padded_horizontal {p q : ℕ × ℕ} (hp : p.1 + 1 < 2 * L ∧ p.
       (foldCoord L p.1 = u + 1 ∧ foldCoord L p.2 = v ∧
         foldCoord L q.1 = u ∧ foldCoord L q.2 = v)) :
     ∃ xy ∈ ({u, 2 * L - 3 - u} : Finset ℕ) ×ˢ ({v, 2 * (L - 1) - v} : Finset ℕ),
-      UCross p q (xy.1, xy.2) (xy.1 + 1, xy.2) := by
-  have hy := foldCoord_eq_iff (L := L) (x := p.2) (u := v) (by omega) (by tauto)
+      IsUnitCrossing p q (xy.1, xy.2) (xy.1 + 1, xy.2) := by
+  have hy := eq_or_eq_of_foldCoord_eq (L := L) (x := p.2) (u := v) (by omega) (by tauto)
   rcases hs with ⟨hpq, hx | hx⟩ | ⟨hx, _⟩
-  · have := foldCoord_interval_eq (L := L) (x := p.1) (u := u) (by omega) (by rw [hx]; tauto)
+  · have := eq_or_eq_of_foldCoord_interval (L := L) (x := p.1) (u := u) (by omega)
+      (by rw [hx]; tauto)
     refine ⟨(p.1, p.2), ?_, Or.inl ⟨rfl, ?_⟩⟩
     · simp only [mem_product, mem_insert, mem_singleton]; omega
     · ext <;> simp [← hx, hpq]
-  · have := foldCoord_interval_eq (L := L) (x := q.1) (u := u) (by omega) (by rw [hx]; tauto)
+  · have := eq_or_eq_of_foldCoord_interval (L := L) (x := q.1) (u := u) (by omega)
+      (by rw [hx]; tauto)
     refine ⟨(q.1, p.2), ?_, Or.inr ⟨?_, ?_⟩⟩
     · simp only [mem_product, mem_insert, mem_singleton]; omega
     · ext <;> simp [← hx]
@@ -123,21 +125,24 @@ theorem exists_padded_vertical {p q : ℕ × ℕ} (hp : p.1 + 1 < 2 * L ∧ p.2 
       (foldCoord L p.1 = u ∧ foldCoord L p.2 = v + 1 ∧
         foldCoord L q.1 = u ∧ foldCoord L q.2 = v)) :
     ∃ xy ∈ ({u, 2 * (L - 1) - u} : Finset ℕ) ×ˢ ({v, 2 * L - 3 - v} : Finset ℕ),
-      UCross p q (xy.1, xy.2) (xy.1, xy.2 + 1) := by
-  have hx' := foldCoord_eq_iff (L := L) (x := p.1) (u := u) (by omega) (by tauto)
+      IsUnitCrossing p q (xy.1, xy.2) (xy.1, xy.2 + 1) := by
+  have hx' := eq_or_eq_of_foldCoord_eq (L := L) (x := p.1) (u := u) (by omega) (by tauto)
   rcases hs with ⟨hy, _⟩ | ⟨hpq, hy | hy⟩
   · rw [hy] at h; omega
-  · have := foldCoord_interval_eq (L := L) (x := p.2) (u := v) (by omega) (by rw [hy]; tauto)
+  · have := eq_or_eq_of_foldCoord_interval (L := L) (x := p.2) (u := v) (by omega)
+      (by rw [hy]; tauto)
     refine ⟨(p.1, p.2), ?_, Or.inl ⟨rfl, ?_⟩⟩
     · simp only [mem_product, mem_insert, mem_singleton]; omega
     · ext <;> simp [← hy, hpq]
-  · have := foldCoord_interval_eq (L := L) (x := q.2) (u := v) (by omega) (by rw [hy]; tauto)
+  · have := eq_or_eq_of_foldCoord_interval (L := L) (x := q.2) (u := v) (by omega)
+      (by rw [hy]; tauto)
     refine ⟨(p.1, q.2), ?_, Or.inr ⟨?_, ?_⟩⟩
     · simp only [mem_product, mem_insert, mem_singleton]; omega
     · ext <;> simp [← hy]
     · ext <;> simp [hpq]
 
-theorem card_fold_preimage_le (a b c' e : ℕ) :
+/-- A product of two sets with at most two elements each has at most four elements. -/
+private theorem card_pair_product_pair_le (a b c' e : ℕ) :
     #(({a, b} : Finset ℕ) ×ˢ ({c', e} : Finset ℕ)) ≤ 4 := by
   rw [card_product]
   exact le_trans (Nat.mul_le_mul (card_insert_le _ _) (card_insert_le _ _)) (by simp)
@@ -154,6 +159,7 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:105–114`. 
 def InGrid (M : ℕ) : Prop :=
   ∀ p, 2 ^ A.scale p * (A.blockX p + 1) ≤ M ∧ 2 ^ A.scale p * (A.blockY p + 1) ≤ M
 
+/-- The anchor of a party whose block lies in the square of side `M` lies in that square. -/
 theorem anchor_lt {M : ℕ} (h : A.InGrid M) (p : P) :
     (A.anchor p).1 < M ∧ (A.anchor p).2 < M :=
   ⟨dyadicAnchor_lt (h p).1, dyadicAnchor_lt (h p).2⟩
@@ -206,7 +212,7 @@ theorem foldedRouting_card_traversal_le (hL : 0 < L) (N : PartyNetwork P Λ d)
   classical
   have hcard : Fintype.card ((foldedRouting hL N A hgrid).Traversal e) =
       #{t : Σ ℓ, Fin (A.linkLength N.src N.tgt ℓ) |
-        Crosses (foldVertex hL (A.linkRoute N.src N.tgt t.1 t.2))
+        IsCrossing (foldVertex hL (A.linkRoute N.src N.tgt t.1 t.2))
           (foldVertex hL (A.linkRoute N.src N.tgt t.1 (t.2 + 1))) e} := by
     rw [Fintype.card_subtype]; rfl
   rw [hcard]
@@ -224,14 +230,15 @@ theorem foldedRouting_card_traversal_le (hL : 0 < L) (N : PartyNetwork P Λ d)
     let S := ({e.1.1.1.1, 2 * L - 3 - e.1.1.1.1} : Finset ℕ) ×ˢ
       ({e.1.1.2.1, 2 * (L - 1) - e.1.1.2.1} : Finset ℕ)
     calc _ ≤ #(S.biUnion fun xy => ({t : Σ ℓ, Fin (A.linkLength N.src N.tgt ℓ) |
-            UCross (A.linkRoute N.src N.tgt t.1 t.2) (A.linkRoute N.src N.tgt t.1 (t.2 + 1))
+            IsUnitCrossing (A.linkRoute N.src N.tgt t.1 t.2)
+              (A.linkRoute N.src N.tgt t.1 (t.2 + 1))
               (xy.1, xy.2) (xy.1 + 1, xy.2)} : Finset _)) := by
           refine card_le_card fun t ht => ?_
           simp only [mem_filter, mem_univ, true_and] at ht
           simp only [mem_biUnion, mem_filter, mem_univ, true_and]
           obtain ⟨h1, h2, h3⟩ := hb t
           refine exists_padded_horizontal h1 h2 h3 ?_
-          simp only [Crosses, foldVertex, Prod.ext_iff, Fin.ext_iff] at ht
+          simp only [IsCrossing, foldVertex, Prod.ext_iff, Fin.ext_iff] at ht
           rw [← hx, ← hy] at ht
           tauto
       _ ≤ ∑ xy ∈ S, A.load N.src N.tgt (xy.1, xy.2) (xy.1 + 1, xy.2) := card_biUnion_le
@@ -239,20 +246,21 @@ theorem foldedRouting_card_traversal_le (hL : 0 < L) (N : PartyNetwork P Λ d)
           sum_le_sum fun xy _ => A.load_horizontal_le _ _ hB hΔ hsep _ _
       _ ≤ 4 * (2 * (2 * c + 1) * B * Δ) := by
           rw [sum_const, smul_eq_mul]
-          exact Nat.mul_le_mul_right _ (card_fold_preimage_le _ _ _ _)
+          exact Nat.mul_le_mul_right _ (card_pair_product_pair_le _ _ _ _)
       _ = 8 * (2 * c + 1) * B * Δ := by ring
   · obtain ⟨hx, hy⟩ := verticalSquareLatticeEdge_coords e he
     let S := ({e.1.1.1.1, 2 * (L - 1) - e.1.1.1.1} : Finset ℕ) ×ˢ
       ({e.1.1.2.1, 2 * L - 3 - e.1.1.2.1} : Finset ℕ)
     calc _ ≤ #(S.biUnion fun xy => ({t : Σ ℓ, Fin (A.linkLength N.src N.tgt ℓ) |
-            UCross (A.linkRoute N.src N.tgt t.1 t.2) (A.linkRoute N.src N.tgt t.1 (t.2 + 1))
+            IsUnitCrossing (A.linkRoute N.src N.tgt t.1 t.2)
+              (A.linkRoute N.src N.tgt t.1 (t.2 + 1))
               (xy.1, xy.2) (xy.1, xy.2 + 1)} : Finset _)) := by
           refine card_le_card fun t ht => ?_
           simp only [mem_filter, mem_univ, true_and] at ht
           simp only [mem_biUnion, mem_filter, mem_univ, true_and]
           obtain ⟨h1, h2, h3⟩ := hb t
           refine exists_padded_vertical h1 h2 h3 ?_
-          simp only [Crosses, foldVertex, Prod.ext_iff, Fin.ext_iff] at ht
+          simp only [IsCrossing, foldVertex, Prod.ext_iff, Fin.ext_iff] at ht
           rw [← hx, ← hy] at ht
           tauto
       _ ≤ ∑ xy ∈ S, A.load N.src N.tgt (xy.1, xy.2) (xy.1, xy.2 + 1) := card_biUnion_le
@@ -260,15 +268,16 @@ theorem foldedRouting_card_traversal_le (hL : 0 < L) (N : PartyNetwork P Λ d)
           sum_le_sum fun xy _ => A.load_vertical_le _ _ hB hΔ hsep _ _
       _ ≤ 4 * (2 * (2 * c + 1) * B * Δ) := by
           rw [sum_const, smul_eq_mul]
-          exact Nat.mul_le_mul_right _ (card_fold_preimage_le _ _ _ _)
+          exact Nat.mul_le_mul_right _ (card_pair_product_pair_le _ _ _ _)
       _ = 8 * (2 * c + 1) * B * Δ := by ring
 
 /-- **Lemma 8.2 with the PEPS assembly.** A party network on dyadic anchors of the padded
 square, with at most `B` parties per dyadic block, at most `Δ` links per party, link
-separation at most `c` times either endpoint scale, and link dimensions at most `D ≥ 1`, is
+separation at most `c` times either endpoint scale, and link dimensions at most `D`, is
 exactly a PEPS on the open `L × L` square-lattice graph. Every party's physical index is read
 at the fold of its anchor, which is the anchor itself whenever the anchor is a genuine site
-(`foldVertex_of_lt`). Every bond dimension is at most `D ^ χ` with `χ = 8 (2 c + 1) B Δ`,
+(`foldVertex_of_lt`). Every bond dimension is at most `(max D 1) ^ χ`, which is `D ^ χ` whenever
+`D ≥ 1`, with `χ = 8 (2 c + 1) B Δ`,
 independent of `L` and of the number of dyadic levels. No injectivity, isometry, or
 translation-invariance assumption is made.
 
@@ -277,11 +286,11 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 8.2 `lem:routing` and e
 theorem exists_squarePEPS_of_dyadicRouting (hL : 0 < L) (N : PartyNetwork P Λ d)
     (A : DyadicPlacement P) (hgrid : A.InGrid (paddedSide L)) {B Δ c D : ℕ}
     (hB : A.BlockBounded B) (hΔ : DyadicPlacement.DegreeBounded N.src N.tgt Δ)
-    (hsep : A.SeparationBounded N.src N.tgt c) (hD : 1 ≤ D) (hdim : ∀ ℓ, N.dim ℓ ≤ D) :
+    (hsep : A.SeparationBounded N.src N.tgt c) (hdim : ∀ ℓ, N.dim ℓ ≤ D) :
     ∃ T : Tensor (squareLatticeGraph L L) d,
       (∀ σ, stateCoeff T σ = N.coeff (fun p => foldVertex hL (A.anchor p)) σ) ∧
-        ∀ e, T.bondDim e ≤ D ^ (8 * (2 * c + 1) * B * Δ) :=
-  (foldedRouting hL N A hgrid).exists_tensor_of_congestion_le hD hdim
+        ∀ e, T.bondDim e ≤ (max D 1) ^ (8 * (2 * c + 1) * B * Δ) :=
+  (foldedRouting hL N A hgrid).exists_tensor_of_congestion_le hdim
     (foldedRouting_card_traversal_le hL N A hgrid hB hΔ hsep)
 
 end TNLean.PEPS.Approximation

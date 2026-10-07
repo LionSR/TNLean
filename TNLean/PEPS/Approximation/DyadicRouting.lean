@@ -54,7 +54,7 @@ open Finset
 /-! ### Monotone walks on the padded square -/
 
 /-- The monotone walk from `a` towards `b` on a line, after `n` unit steps. -/
-def segment (a b n : ℕ) : ℕ := if a ≤ b then a + n else a - n
+def lineWalk (a b n : ℕ) : ℕ := if a ≤ b then a + n else a - n
 
 /-- The number of unit steps of the horizontal-then-vertical walk from `a` to `b`. -/
 def hvLength (a b : ℕ × ℕ) : ℕ := Nat.dist a.1 b.1 + Nat.dist a.2 b.2
@@ -65,54 +65,56 @@ along the column of `b`.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), proof of Lemma 8.2 `lem:routing`,
 `07-assembly.tex:129–130`. -/
 def hvRoute (a b : ℕ × ℕ) (i : ℕ) : ℕ × ℕ :=
-  if i ≤ Nat.dist a.1 b.1 then (segment a.1 b.1 i, a.2)
-  else (b.1, segment a.2 b.2 (i - Nat.dist a.1 b.1))
+  if i ≤ Nat.dist a.1 b.1 then (lineWalk a.1 b.1 i, a.2)
+  else (b.1, lineWalk a.2 b.2 (i - Nat.dist a.1 b.1))
 
-/-- The step from `p` to `q` traverses the unit edge with endpoints `c` and `c'`. -/
-def UCross (p q c c' : ℕ × ℕ) : Prop := (p = c ∧ q = c') ∨ (p = c' ∧ q = c)
+/-- The step from `p` to `q` traverses the unit edge with endpoints `e₁` and `e₂`. -/
+def IsUnitCrossing (p q e₁ e₂ : ℕ × ℕ) : Prop := (p = e₁ ∧ q = e₂) ∨ (p = e₂ ∧ q = e₁)
 
-instance (p q c c' : ℕ × ℕ) : Decidable (UCross p q c c') := by
-  unfold UCross; infer_instance
+instance (p q e₁ e₂ : ℕ × ℕ) : Decidable (IsUnitCrossing p q e₁ e₂) := by
+  unfold IsUnitCrossing; infer_instance
 
 /-- The steps from `p` to `q` are unit steps of the square lattice. -/
 def IsUnitStep (p q : ℕ × ℕ) : Prop :=
   (p.2 = q.2 ∧ (p.1 + 1 = q.1 ∨ q.1 + 1 = p.1)) ∨ (p.1 = q.1 ∧ (p.2 + 1 = q.2 ∨ q.2 + 1 = p.2))
 
+/-- The walk starts at `a`. -/
 @[simp] theorem hvRoute_zero (a b : ℕ × ℕ) : hvRoute a b 0 = a := by
-  simp [hvRoute, segment]
+  simp [hvRoute, lineWalk]
 
+/-- The walk ends at `b` after `hvLength a b` steps. -/
 theorem hvRoute_hvLength (a b : ℕ × ℕ) : hvRoute a b (hvLength a b) = b := by
-  unfold hvRoute hvLength segment Nat.dist
+  unfold hvRoute hvLength lineWalk Nat.dist
   ext <;> split_ifs <;> simp <;> omega
 
 /-- Every step of the walk is a unit step. -/
 theorem hvRoute_isUnitStep (a b : ℕ × ℕ) {i : ℕ} (hi : i < hvLength a b) :
     IsUnitStep (hvRoute a b i) (hvRoute a b (i + 1)) := by
-  unfold IsUnitStep hvRoute hvLength segment Nat.dist at *
+  unfold IsUnitStep hvRoute hvLength lineWalk Nat.dist at *
   split_ifs <;> simp <;> omega
 
 /-- The walk stays below any bound satisfied by both endpoints. -/
 theorem hvRoute_lt {a b : ℕ × ℕ} {M : ℕ} (ha : a.1 < M ∧ a.2 < M) (hb : b.1 < M ∧ b.2 < M)
     {i : ℕ} (hi : i ≤ hvLength a b) : (hvRoute a b i).1 < M ∧ (hvRoute a b i).2 < M := by
-  unfold hvRoute hvLength segment Nat.dist at *
+  unfold hvRoute hvLength lineWalk Nat.dist at *
   split_ifs <;> simp <;> omega
 
 /-- A step of the walk traversing a horizontal unit edge lies on the row of the first
 endpoint, inside the horizontal travel range, and is unique. -/
 theorem hvRoute_cross_horizontal {a b : ℕ × ℕ} {x y i : ℕ}
-    (h : UCross (hvRoute a b i) (hvRoute a b (i + 1)) (x, y) (x + 1, y)) :
+    (h : IsUnitCrossing (hvRoute a b i) (hvRoute a b (i + 1)) (x, y) (x + 1, y)) :
     a.2 = y ∧ Nat.dist a.1 x ≤ Nat.dist a.1 b.1 ∧
       i = if a.1 ≤ b.1 then x - a.1 else a.1 - x - 1 := by
-  unfold UCross hvRoute segment Nat.dist at *
+  unfold IsUnitCrossing hvRoute lineWalk Nat.dist at *
   split_ifs at h ⊢ <;> simp only [Prod.mk.injEq] at h <;> omega
 
 /-- A step of the walk traversing a vertical unit edge lies on the column of the second
 endpoint, inside the vertical travel range, and is unique. -/
 theorem hvRoute_cross_vertical {a b : ℕ × ℕ} {x y i : ℕ} (hi : i < hvLength a b)
-    (h : UCross (hvRoute a b i) (hvRoute a b (i + 1)) (x, y) (x, y + 1)) :
+    (h : IsUnitCrossing (hvRoute a b i) (hvRoute a b (i + 1)) (x, y) (x, y + 1)) :
     b.1 = x ∧ Nat.dist b.2 y ≤ Nat.dist a.2 b.2 ∧
       i = Nat.dist a.1 b.1 + if a.2 ≤ b.2 then y - a.2 else a.2 - y - 1 := by
-  unfold UCross hvRoute hvLength segment Nat.dist at *
+  unfold IsUnitCrossing hvRoute hvLength lineWalk Nat.dist at *
   split_ifs at h ⊢ <;> simp only [Prod.mk.injEq] at h <;> omega
 
 /-! ### Counting anchors near an edge -/
@@ -246,12 +248,14 @@ def DegreeBounded (Δ : ℕ) : Prop := ∀ p, #{ℓ | src ℓ = p ∨ tgt ℓ = 
 
 omit [Fintype P] in
 variable {src tgt} in
+/-- Under a degree bound, every party is the first endpoint of at most `Δ` links. -/
 theorem DegreeBounded.src_le {Δ : ℕ} (h : DegreeBounded src tgt Δ) (p : P) :
     #{ℓ | src ℓ = p} ≤ Δ :=
   le_trans (card_le_card fun ℓ => by simp +contextual) (h p)
 
 omit [Fintype P] in
 variable {src tgt} in
+/-- Under a degree bound, every party is the second endpoint of at most `Δ` links. -/
 theorem DegreeBounded.tgt_le {Δ : ℕ} (h : DegreeBounded src tgt Δ) (p : P) :
     #{ℓ | tgt ℓ = p} ≤ Δ :=
   le_trans (card_le_card fun ℓ => by simp +contextual) (h p)
@@ -276,10 +280,10 @@ def linkLength (ℓ : Λ) : ℕ := hvLength (A.anchor (src ℓ)) (A.anchor (tgt 
 def linkRoute (ℓ : Λ) (i : ℕ) : ℕ × ℕ := hvRoute (A.anchor (src ℓ)) (A.anchor (tgt ℓ)) i
 
 /-- The number of walk steps, over all links and counted with repetition, traversing the unit
-edge with endpoints `c` and `c'`. -/
-def load (c c' : ℕ × ℕ) : ℕ :=
+edge with endpoints `e₁` and `e₂`. -/
+def load (e₁ e₂ : ℕ × ℕ) : ℕ :=
   #{t : Σ ℓ, Fin (A.linkLength src tgt ℓ) |
-    UCross (A.linkRoute src tgt t.1 t.2) (A.linkRoute src tgt t.1 (t.2 + 1)) c c'}
+    IsUnitCrossing (A.linkRoute src tgt t.1 t.2) (A.linkRoute src tgt t.1 (t.2 + 1)) e₁ e₂}
 
 /-- **Horizontal congestion.** Every horizontal unit edge of the padded square is traversed
 by at most `2 (2 c + 1) B Δ` walk steps.
