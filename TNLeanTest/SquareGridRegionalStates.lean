@@ -1,5 +1,10 @@
 import TNLean.PEPS.Approximation.SourceApproximation
 
+/-! Regression cases and kernel dependency reports for regional square-grid transport. -/
+
+-- Kernel dependency reports are intentional in this regression module.
+set_option linter.hashCommand false
+
 open TNLean.PEPS TNLean.PEPS.Approximation
 
 -- Both source conventions have the same exact physical vector and regional density.
