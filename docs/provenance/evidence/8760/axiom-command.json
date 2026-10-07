@@ -1,0 +1,31 @@
+{
+  "module": "TNAxioms",
+  "source": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+  "cwd": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation",
+  "unchanged_dependency": false,
+  "source_sha256": "785e7106d7bdad1a2a4f083e230e666086233d1fc7802e95702800d314e10dae",
+  "command": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=5s",
+    "90s",
+    "lean",
+    "-j1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "-o",
+    "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean",
+    "-i",
+    "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean",
+    "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean"
+  ],
+  "lean_path": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/importGraph/.lake/build/lib/lean",
+  "start": "2026-10-07T08:54:02.059402+00:00",
+  "elapsed_seconds": 2.0146364990068832,
+  "exit_code": 0,
+  "log": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/logs/TNAxioms.107609094925778.log",
+  "artifact_sha256": "9460e0e1d39771090e69b89d4e16066cd10e3548aa7a3ecc3a2a1716fa32ec19"
+}

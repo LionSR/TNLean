@@ -1,0 +1,45 @@
+{
+  "published_qic_revision": "e0d95bff81c11eab7db872a927d1d69f820d4f47",
+  "current_model_revision": "158bc6bb178ee53a2c981ba751fadf6e7a3ff0a2",
+  "previous_model_revision": "0db97621a2733f87a752df63c8bb85b439fdd845",
+  "model_delta": [
+    "blueprint/src/chapter/ch24_peps_area_law_models.tex"
+  ],
+  "model_api_unchanged": true,
+  "qic_production_bytes_match_checked_snapshot": true,
+  "qic_dependency_closure_source_hashes_match": true,
+  "qic_configs_unchanged": true,
+  "toolchains_match": true,
+  "pin_changes": [
+    {
+      "file": "lakefile.toml",
+      "replaced_occurrences": 1,
+      "old_revision": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+      "new_revision": "e0d95bff81c11eab7db872a927d1d69f820d4f47"
+    },
+    {
+      "file": "lake-manifest.json",
+      "replaced_occurrences": 2,
+      "old_revision": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+      "new_revision": "e0d95bff81c11eab7db872a927d1d69f820d4f47"
+    },
+    {
+      "file": "docbuild/lake-manifest.json",
+      "replaced_occurrences": 2,
+      "old_revision": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+      "new_revision": "e0d95bff81c11eab7db872a927d1d69f820d4f47"
+    }
+  ],
+  "previous_published_qic_revision": "52de74ce171fdafcff052e84bf202e7209e68f3e",
+  "accepted_qic_revision": "e0d95bff81c11eab7db872a927d1d69f820d4f47",
+  "accepted_qic_tree": "c149cffd4786d3b4ea5f7a450e98c28f7aa48f3e",
+  "accepted_tree_identical_to_published_checked_tree": false,
+  "accepted_merge_delta_from_pr_head": [
+    "M\tQICLean/Analysis.lean",
+    "A\tQICLean/Analysis/OperatorMean.lean",
+    "A\tQICLean/Analysis/OperatorMean/MatrixPowers.lean",
+    "A\tQICLean/Analysis/OperatorMean/WeightedGeometricMean.lean"
+  ],
+  "accepted_entropy_and_import_closure_bytes_match_checked_snapshot": true,
+  "accepted_configs_and_toolchain_match": true
+}
