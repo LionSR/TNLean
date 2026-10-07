@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.WholeGroupContraction
+import TNLean.PEPS.Approximation.WholeGroupNetwork
