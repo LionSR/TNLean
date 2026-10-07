@@ -1,8 +1,9 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination refresh: October 7, 2026, 22:40–22:46 UTC.
 The goal remains active. Both source-faithful headline theorems remain unproved.
+The current reciprocal contribution has completed local verification.
+Its full CI and PDF/web checks remain pending.
 
 ## Verified geometric contributions
 
@@ -21,39 +22,43 @@ The goal remains active. Both source-faithful headline theorems remain unproved.
 | Actual side subdivisions and dummy contacts | [#8870](https://github.com/LionSR/TNLean/pull/8870) | `f8b62e1b56c8f7e356c870322aa3418702349a68` | [subdivisions and dummy contacts](evidence/8758-actual-side-mask.md) |
 | Fine-cell contacts, dummy corners and exact fine-cell assignment | [#8876](https://github.com/LionSR/TNLean/pull/8876) | `0ac139a04b8d2519f1199bfe8e2f78a5f1fd63c2` | [contacts, corners and cover](evidence/8758-cell-contacts.md) |
 | Common side endpoints, actual elementary matching and opponent existence | [#8888](https://github.com/LionSR/TNLean/pull/8888), evidence `eda992e719dd7161906b54b20a057992037b44cb` | `93c807b97f45312bab807ba47abb06f11d686f18` | [matching and opponents](evidence/8758-actual-side-matching.md) |
-| Unique actual opposing region and common elementary-side geometry | `feat/area-law-unique-side-opponents`, based on #8888 | `9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a` | [unique opponents](evidence/8758-unique-side-opponents.md) |
+| Unique actual opposing region and common elementary-side geometry | [#8892](https://github.com/LionSR/TNLean/pull/8892), evidence `26786e53a29e1804aae6302916b3068ef6cf12e4` | `9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a` | [unique opponents](evidence/8758-unique-side-opponents.md) |
+| Selected opponents, contact characterization and reciprocity | `feat/area-law-reciprocal-side-opponents`, locally verified draft contribution | `b8c1e59e88eadf8694530d1a6fc470d8348c237e` | [reciprocal opponents](evidence/8758-reciprocal-opponents.md) |
 
-These fourteen contributions contain 111 distinct verified declarations.
-The current-policy collection has 272 rows; the original planned root row
-remains planned. The latest two public theorems and the unchanged old existence
-statement have exact-source canonical build and standard Lean kernel evidence.
-All other 269 parent records and all 112 tracked historical evidence files
-remain unchanged. The existence record receives fresh verification because its
-complete source file now exports the unchanged elementary-boundary helper.
-Its original evidence at 93c807b97f45312bab807ba47abb06f11d686f18 is retained.
+These fifteen contributions contain 114 distinct verified declarations.
+The unchanged current-policy validator passes all 275 records; the original
+planned root record remains planned. The reciprocal contribution adds three
+verified records, without reverifying any parent declaration. All 272 parent
+records and shard bytes, and all 116 tracked historical evidence files, remain
+unchanged.
 
-At frozen source 9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a, the Geometry
-build passed in 27.361 seconds and the three-name imported report in 20.998
-seconds, without warnings. Only the changed old opponent module, new uniqueness
-module and their aggregator compiled. Prebuilt Mathlib and existing TNLean
-artifacts were reused. Complete source synchronization passes with 20,226
-distinct references and 20,220 flattened declaration records. The new chapter
-contains two mathematical statements, two declaration records and two proofs.
-Generated imports cover 2,852 production modules in 75 files. Independent
-review approves both new results and the unchanged old existence signature.
-Do not repeat successful canonical checks merely because work resumes.
+At exact frozen source `b8c1e59e88eadf8694530d1a6fc470d8348c237e`, the
+Geometry build passed in 16.406 seconds and the three-name imported kernel
+report in 4.288 seconds, without diagnostics. Only the new reciprocity module
+and Geometry aggregator compiled; existing artifacts and the prebuilt Mathlib
+cache were reused. All three reports use only `propext`, `Classical.choice`
+and `Quot.sound`. Strict promotion and the post-copy normal policy check both
+pass all 275 records. The six frozen source, audit and blueprint files remain
+byte-identical.
+
+Complete source synchronization and changed-declaration reverse coverage pass
+with 20,229 distinct references and 20,223 flattened declaration records,
+without missing, stale or duplicate references. Generated imports cover 2,853
+production modules in 75 files. The new chapter contains one definition,
+two theorems, three declaration records and two proofs. Independent review,
+pinned formatter idempotence, module guards and reader-facing prose checks
+pass. The older matching chapter's closing paragraph now points to opponent
+uniqueness; its mathematical statements and proofs are unchanged. Successful
+canonical checks need no repetition merely because work resumes.
 
 Full Lean CI and every required check for #8870 pass. For #8876, full Lean,
-provenance, imports, module and compile-time checks pass at 863405980. Its
-blueprint lint failed on repeated half-open interval brackets, before PDF/web
-compilation. A one-line notation correction at 3da5bcf7053423f16162ad98e126379082d63dff
-uses the standard left-bracket macro. The exact CI PCRE warning pattern
-matches the original and excludes the corrected file and the three new chapters.
-Local ChkTeX uses a different regex implementation; remote book retry remains
-pending. Local source
-synchronization does not replace PDF/web compilation. The older local
-whole-library declaration check failed at a missing pre-existing
-Fibonacci.olean; its historical log remains preserved.
+provenance, imports, module and diagram checks pass; the corrected book
+retry is running and the compilation-time check is queued. Its one-line interval-notation correction is preserved at
+`3da5bcf7053423f16162ad98e126379082d63dff`. The #8888 full Lean and book checks pass, with its compilation-time check
+queued. The #8892 checks remain queued. Source synchronization does not replace PDF/web
+compilation. The older local whole-library declaration check failed at the
+pre-existing missing `TNLean/MPS/Examples/Fibonacci.olean`; its historical
+log and limitation remain preserved.
 
 ## Current mathematical scope
 
@@ -76,164 +81,103 @@ side indices differ by two. Equal-sized divided sides match half by half;
 for size ratio two, the larger side is divided and the smaller is undivided.
 
 Under C ≥ 2, reference k ≥ 50,000,000, k₀ ≤ k and actual reference membership,
-every actual elementary segment lies in the closed initial neighborhood or
-one distinct actual closed fine cell at an index h ≥ k₀. The finite outward
-cover supplies the opponent; corner exclusion extends contact across the
-whole segment. Endpoint-set nonemptiness is derived. No contact, cover,
-opposing label or sparsity certificate is supplied.
+every actual elementary segment has a unique dummy-or-fine identifier.
+The dummy identifier means containment of the whole segment in the closed
+initial neighborhood. A fine identifier specifies an actual distinct cell
+at h ≥ k₀ containing the whole segment in its closure. The initial
+neighborhood is one region even when several coarse cells contribute.
+No contact, cover, opposing label, nonempty-set or sparsity premise is supplied.
+The generic elementary-side geometry theorem gives distinct endpoints and
+the square's boundary coordinate for arbitrary optional midpoint masks.
 
-## Unique opposing regions and next action
+The new noncomputable choice selects this unique identifier. For an actual
+candidate cell at h ≥ k₀, the choice equals that candidate precisely when
+the candidate is distinct from the reference and its closed intersection
+with the elementary segment contains two distinct points. This contact
+characterization uses the same reference hypotheses and no opposing late
+bound. Reciprocity assumes k₀ ≥ 50,000,000, so both reference choices are
+available. Selection of the actual candidate is equivalent to distinctness
+and the existence of an actual opposing slot with opposite facing side,
+reversed endpoints and the reference cell as its selected opponent.
+Matching and the return selection are conclusions.
 
-The [opponent-uniqueness claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6047895365)
-and [shared-geometry extension](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6047933668)
-are implemented and independently approved. At frozen source
-`9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a`, the canonical Geometry build
-passed in 27.361 seconds and the three-name imported report in 20.998
-seconds, both without diagnostics. The three reports use only the standard
-logical foundations. The strict helper produced two new verified records
-and fresh verification for the unchanged opponent-existence statement.
-The unchanged normal current-policy check also passes all 272 records.
-The contribution is prepared for draft publication; its public handoff
-records the publication and exact evidence head.
+## Claimed color successor and next action
 
-With exactly the existence hypotheses—C ≥ 2, reference k ≥ 50,000,000,
-k₀ ≤ k and actual reference membership—every actual elementary segment
-has a unique identifier in Option (ℕ × (ℤ × ℤ)). The dummy identifier
-means containment of the whole segment in the closed initial neighborhood.
-An actual fine-cell identifier has h ≥ k₀, actual membership, distinctness
-from the reference pair and whole-segment closed-cell containment. The dummy
-neighborhood is one region, even when several coarse cells contribute.
-Uniqueness follows from actual disjointness and the impossibility of three
-rectangles with disjoint interiors sharing an interior side midpoint, with
-corner exclusion preventing a tangential endpoint there.
+The [four-result color contribution](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6048615708)
+is claimed in the source-only branch `feat/area-law-belt-fan-colors`, based
+on the reciprocal source above. Its author owns only the new BeltFanColors.lean
+module and the group's sole direct source-check slot. These unfinished results
+remain outside the completed reciprocal source freeze, imports and report.
+Root owns publication of the reciprocal evidence and the eventual aggregate
+imports and verification of the successor. Adopt the completed reciprocal
+evidence while preserving the author's separate source work.
 
-The common elementary-side geometry theorem is the parent private statement
-and proof exported unchanged as cellFan_elementary_geometry; its two callers
-use the new name without an alias. For arbitrary optional midpoint masks,
-every elementary side has distinct endpoints and a constant coordinate equal
-to a boundary coordinate of its square. It needs no layer or late hypothesis.
-The old existence statement and all its other proof steps are unchanged.
-
-The completed parent is #8888 at `eda992e719dd7161906b54b20a057992037b44cb`.
-The verified full collection contains 272 entries: two new records and
-one reverified old record, with the other 269 parent records unchanged. The
-stronger immutable baseline preserves every one of the 112 tracked historical
-files recursively under docs/provenance/evidence, including all notes and
-imported reports. Original existence evidence at source
-`93c807b97f45312bab807ba47abb06f11d686f18` is retained. Full source
-synchronization and changed-declaration reverse coverage pass with 20,226
-distinct references and 20,220 declaration records. Generated imports cover
-2,852 production modules in 75 files. The new scoped chapter has two
-statements, two declaration records and two proofs; formatting is idempotent.
-Source guards and reader-facing prose pass. Full CI and book compilation
-remain pending. The historical missing-Fibonacci local limitation remains
-recorded.
-
-The [claimed successor](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6048409373)
-is a new ElementarySideReciprocity.lean module with elementarySideOpponent,
-elementarySideOpponent_eq_some_iff_contact and elementarySideOpponent_reciprocal_iff.
-The choice and contact characterization use exactly the existing reference
-hypotheses; the candidate contact theorem adds actual candidate membership
-and h ≥ k₀, without an opposing late bound. Reciprocity uses k₀ ≥ 50,000,000
-to make both reference choices available and derives an actual opposing slot
-with reversed endpoints and the reference cell as its selected opponent.
-Matching and the return identifier are conclusions. The reverse direction
-uses endpoint contact without circular dependence on reciprocity.
-
-One author owns only this successor module and the group's sole direct Lean
-check slot. Root owns the completed uniqueness sources, imports, notices,
-blueprint and evidence. The successor remains outside the current source
-freeze, aggregate import and three-name report. Once released, review its
-exact statement and proof, then freeze and verify one combined contribution.
-No old subdivision-mask promotion or slot-uniqueness machinery is required.
-
-Actual-cell uniqueness does not yet assign a primary identifier to each
-opponent. For a nonbelt opponent, the existing unique-primary theorem supplies
-that identifier. Compose these data with actual fan runs and consistent global
-labels, then construct the active interfaces and local sectors. Reuse the
-existing affine-mesh supporting-line clearance. Recursive repairs, descendant
-estimates, isolated stars, the full two-family proposition and both headline
-theorems remain open. QICLean remains pinned to
-`8d5389d23c8e675a0117442e1a0d2c683a4bad41`; dependency integration stays with
-its coordinating owner. The latest compression clarification separates
-[future integration ownership](https://github.com/LionSR/TNLean/issues/8769#issuecomment-6048356774)
-from the physical/discarded-register producer, whose owner is still unidentified.
+Consistent primary and dummy labels, active interfaces, local sectors,
+isolated stars, recursive repairs and descendant estimates remain further
+obligations. The full two-family proposition and both headline theorems remain
+open. QICLean remains pinned to
+`8d5389d23c8e675a0117442e1a0d2c683a4bad41`; this geometric contribution
+neither merges main nor adopts a new dependency pin.
 
 ## Worktrees and verification discipline
 
-- worktrees/area-law-peps-models owns feat/area-law-unique-side-opponents and
-  the group's only warm cache. Its canonical build and imported reports are
-  finished at 9e31e29bd, and the shared lock is released. Metadata changes preserve every frozen production,
-  audit and new blueprint byte. Preserve all toolchain and dependency pins.
-- worktrees/area-law-source-preparation has no .lake and was detached clean
-  at frozen source 9e31e29bd when the successor branch was created. It now owns
-  feat/area-law-reciprocal-side-opponents and the separate new reciprocal
-  module. Fast-forward completed evidence while preserving that untracked
-  successor. Keep it outside current imports and verification until release.
+- `worktrees/area-law-peps-models` owns
+  `feat/area-law-reciprocal-side-opponents` and the group's only warm cache.
+  Its canonical checks are finished at the frozen source above and the shared
+  lock is released. Metadata changes preserve all six frozen files.
+- `worktrees/area-law-source-preparation` has no `.lake` and owns the
+  color successor branch, based on the same frozen source, with the author's
+  separate new module. Keep unfinished work outside current verification.
 - Canonical builds and cache mutations use the worktree's own locked wrapper.
-  The shared kernel lock waits without consuming CPU. Direct source checks
-  use the warm environment and package options, one process at a time.
-  Do not rebuild Mathlib, clear artifacts or create a second warm cache.
-- Hot-main and dependency integration remain with their coordinating owner.
+  The shared lock waits without consuming CPU. Direct source checks use the
+  warm environment and package options, one process at a time. Do not rebuild
+  Mathlib, clear artifacts or create a second warm cache.
+- Hot-main and dependency integration remain with their coordinating owners.
   Do not reset peer worktrees, interrupt builds, merge main or change pins.
 
 ## Other owners and coordination
 
-Main was observed at 80bc49d17e833795fba00bfeaf1bd053649c4070. Template
-integration #8798 (077f62c33) and boundary integration #8826 (2ed6f6ed) retain
-model cd7271b9 and QICLean 83fdc804. All required #8826 checks now pass;
-#8798 has passing book checks and an active Lean build.
-This group retains QICLean 8d5389d2 until coordinated adoption. Boundary
-#8849 has passing checks; scanner #8834 has passing Lean/policy checks with
-rendering separately tracked. Their entropy conclusions remain separate.
+Main was observed at `80bc49d17e833795fba00bfeaf1bd053649c4070`.
+All required #8826 checks pass. The #8798 book checks pass and its Lean build
+remains pending. Their model and dependency integration remain separate from
+this group's fixed QICLean pin. Boundary #8849 has passing checks; scanner
+#8834 has passing Lean/policy checks with rendering separately tracked.
 
-Capped-partition #8863 remains at b6f1f462. Compatible warm review passed the
-production target in 9.080 seconds. Strict regression failed in 11.971 seconds
-at missing documentation and concrete resource limits; the strict audit exited
-1 in 7.658 seconds at documentation/hash-command linters. All 23 printed reports
-satisfy the unchanged standard logical-foundation policy. The precise logs and
-repairs are in [the review](https://github.com/LionSR/TNLean/pull/8863#issuecomment-6046537485)
+Capped-partition #8863 remains at `b6f1f462`. Earlier compatible warm review
+passed its production target. Strict regression and imported-report commands
+encountered documentation or resource-limit diagnostics; all 23 printed
+reports satisfy the standard logical-foundation policy. The exact findings
+remain in the [review](https://github.com/LionSR/TNLean/pull/8863#issuecomment-6046537485)
 and [handoff](https://github.com/LionSR/TNLean/issues/8754#issuecomment-6046800493).
-The owner must correct and recheck those diagnostic files. No repeat of the
-unchanged production proof or peer source/cache/ledger mutation is required.
+Its owner retains the corrective work; no repeated production check is needed.
 
 Compression retains #8864, #8866, #8868, #8869, #8872 and
-[#8887](https://github.com/LionSR/TNLean/pull/8887), whose published head is
-cc0a19f9b2f35b5bd843bd82e9b0e2cecbdcdccb. The owner reports checked actual
-chronological expansion, common fixed source slots, original source occurrences
-and exact operator identities. The fixed-slot producer and actual separated
-source contractions remain active. Geometry has no competing integration
-branch. The compression owner may coordinate additive integration with the
-hot-main owner after its next fixed-source freeze. The concrete physical-output
-and discarded-register protocol producer, and its local tensor-network T,
-remain [queried](https://github.com/LionSR/TNLean/issues/8769#issuecomment-6048356774).
-These developments do not establish the full compression theorem.
+[#8887](https://github.com/LionSR/TNLean/pull/8887), published at
+`cc0a19f9b2f35b5bd843bd82e9b0e2cecbdcdccb`. The owner reports checked
+chronological expansion and fixed-source operator identities. Its next
+19-declaration source is `6246647741ce41a55a3897329336055330dd7e6f`;
+it is published as [#8893](https://github.com/LionSR/TNLean/pull/8893),
+with exact head `4097a00b1ea14529fad15cb6d22d1b82c273e2db`.
+Its owner reports the completed source checks; full PR checks remain separate. Compression owns the
+future isolated TNLean integration after that source is fixed. The physical
+output and discarded-register protocol producer is still unidentified.
+These owner reports do not establish the compression headline theorem.
 
-The analytic group retains QICLean #618, #621, #622, #624–627 and the newly
-published [#628](https://github.com/LionSR/QICLean/pull/628),
-[#629](https://github.com/LionSR/QICLean/pull/629) and
-[#630](https://github.com/LionSR/QICLean/pull/630). Their reported exact heads
-are d94e6c04ad860ace732ad0099828bbc62e5f391c,
-8042dcf9c8d8c659599fd1130740ca9d21088a9a and
-18155980ade0fce287c18e84a5b6ba3d5a8de185, respectively. Actual marginal and
-projection identities, the common entropy-compatible high-label sequence and
-grouped-label inequalities have reported complete source-bound build, kernel
-and PDF/web checks. The sequence has eventual inverse-polynomial mass and
-log dimension k S(ρ) + o(k), including singular densities.
+The analytic group's actual prevector contribution is published as
+[QICLean #631](https://github.com/LionSR/QICLean/pull/631) at exact head
+`859f992782a0b78c48a397b957012749936c4837`. Its owner reports complete
+source-bound verification of one sequence with the required properties at
+every positive index after a finite initial repair. Earlier marginal,
+projection and entropy-sequence contributions remain with that group.
+The analytic owner has the separate QICLean source integration against main
+`48425ea8` and the assigned #571 source, preserving theorem statements and
+proofs. Neither that integration nor compression's TNLean integration is
+adopted by geometry. No completed comparator, inverse-metric comparison,
+physical tail bound or area-law theorem is claimed.
 
-The actual prevector source f0c7d137371f6b11ca1dd61692be37581c8adbaf has
-passed reported strict checking and independent review, with full source-bound
-verification underway. Its single sequence now has the required properties
-at every positive index after a finite initial repair. Bad-copy dimensions,
-Bell-data instantiation and exact-excitation component symmetry remain with
-that owner. No completed comparator, inverse-metric comparison, physical tail
-bound or area-law theorem is claimed. Geometry has no overlapping analytic
-implementation and preserves its dependency pin. The latest
-[coordination refresh](https://github.com/LionSR/TNLean/issues/8753#issuecomment-6048383780)
-records these separate responsibilities.
-
-Check coordination approximately every thirty minutes and before each new
-claim or shared-interface change. Direct cross-thread replies are unavailable;
-public issue coordination is authorized. Use a small team with disjoint
-ownership. Continue the active goal without routine permission requests and
-report unfinished mathematics accurately.
+The [latest ownership relay](https://github.com/LionSR/TNLean/issues/8769#issuecomment-6048586138)
+records the separate analytic QICLean and compression TNLean integration
+responsibilities. Check coordination approximately every thirty minutes and
+before each new claim or shared-interface change. Public issue coordination
+is authorized. Use a small team with disjoint ownership and continue the
+active goal while reporting unfinished mathematics accurately.

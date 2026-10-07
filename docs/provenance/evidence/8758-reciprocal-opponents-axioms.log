@@ -1,0 +1,12 @@
+Command: lake env lean docs/provenance/evidence/8758-reciprocal-opponents-axioms.lean
+Revision: b8c1e59e88eadf8694530d1a6fc470d8348c237e
+Elapsed seconds: 4.288
+Exit code: 0
+
+'TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_eq_some_iff_contact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_reciprocal_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

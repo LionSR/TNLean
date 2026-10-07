@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_choice",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideReciprocity.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Section 11, lines 299\u2013316. The released proofs passed the reported direct package-option check without diagnostics in 4.62 seconds and independent full mathematical review. Exact-source canonical verification remains pending. Primary identifiers, colors, global labels and the full source proposition are separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b8c1e59e88eadf8694530d1a6fc470d8348c237e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-reciprocal-opponents-build.log",
+            "sha256": "2ef020f19813f2568afadf5823f3584df80bb7c1bf94a01da9a3718775ac1f8c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-reciprocal-opponents-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-reciprocal-opponents-axioms.log",
+            "sha256": "2670ec6cd99a52b1b23002aabc41902b4bf8049e910b804c2b2d5776bdef4d6a"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_contact",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideReciprocity.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_eq_some_iff_contact",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Section 11, lines 299\u2013316. The released proofs passed the reported direct package-option check without diagnostics in 4.62 seconds and independent full mathematical review. Exact-source canonical verification remains pending. Primary identifiers, colors, global labels and the full source proposition are separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b8c1e59e88eadf8694530d1a6fc470d8348c237e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-reciprocal-opponents-build.log",
+            "sha256": "2ef020f19813f2568afadf5823f3584df80bb7c1bf94a01da9a3718775ac1f8c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-reciprocal-opponents-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-reciprocal-opponents-axioms.log",
+            "sha256": "2670ec6cd99a52b1b23002aabc41902b4bf8049e910b804c2b2d5776bdef4d6a"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_reciprocity",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideReciprocity.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_reciprocal_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,7 +133,25 @@
         "Section 11, lines 299\u2013323. The released proofs passed the reported direct package-option check without diagnostics in 4.62 seconds and independent full mathematical review. Exact-source canonical verification remains pending. Primary identifiers, colors, global labels and the full source proposition are separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b8c1e59e88eadf8694530d1a6fc470d8348c237e",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-reciprocal-opponents-build.log",
+            "sha256": "2ef020f19813f2568afadf5823f3584df80bb7c1bf94a01da9a3718775ac1f8c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-reciprocal-opponents-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-reciprocal-opponents-axioms.log",
+            "sha256": "2670ec6cd99a52b1b23002aabc41902b4bf8049e910b804c2b2d5776bdef4d6a"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
