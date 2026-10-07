@@ -1,6 +1,6 @@
 # Ground-state area laws and polynomial PEPS approximation
 
-Assessment dated 7 October 2026. The complete ground-state area law
+Assessment dated 8 October 2026. The complete ground-state area law
 (Theorem 1.1 of *A two-dimensional area law from a global spectral gap*) and the
 polynomial PEPS approximation theorem (Theorem 1.1 of *Polynomial PEPS
 approximation of gapped square-grid ground states*) remain unfinished. The
@@ -240,17 +240,18 @@ provenance and complete PDF/web/native declaration checks passed. The bound
 for occurring bad-copy labels and the good auxiliary support comparison
 remain separate steps.
 
-A further prevector construction has source and exposition frozen at
-`f0c7d137`. It proves that one label sequence gives, for every positive copy
+[QICLean #631](https://github.com/LionSR/QICLean/pull/631) has source and
+exposition frozen at `f0c7d137`. It proves that one label sequence gives, for every positive copy
 number, a nonzero vector of norm at most one, the correct physical mean
 energy, matching labels on the two auxiliary systems and simultaneous
 permutation symmetry. The same sequence retains the selected state's
 eventual inverse-polynomial projected mass and entropy asymptotic. A
 positive-mass sector of the actual marginal repairs only finitely many
 initial terms. Strict Lean checking and an independent mathematical review
-passed; source-bound full verification is in progress. The physical
-Schmidt-truncation instantiation and later comparator estimates remain
-separate.
+passed. The complete 9,716-job library build, two exact standard-kernel
+reports, provenance and complete PDF/web/native declaration checks also
+passed. The physical Schmidt-truncation instantiation and later comparator
+estimates remain separate.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
@@ -289,3 +290,22 @@ still needs a concrete composition of the circuit, branch and local tensor
 constructions with uniform polynomial bounds. Those steps must connect the
 proved splitting, truncation and compression estimates to a nonzero PEPS whose
 normalized vector has phase-minimized error at most \(L^{-1}\).
+
+
+The chronological source-gate expansion for PEPS compression is separately
+published in [TNLean #8887](https://github.com/LionSR/TNLean/pull/8887),
+with mathematical source frozen at
+`02ff0a871f6e1847f847f00609ba89c3942ab5c4` and evidence head
+`cc0a19f9b2f35b5bd843bd82e9b0e2cecbdcdccb`. It retains exterior aggregate
+contractions, original occurrences and source positions, and the full complex
+coefficients in the operator and density identities. Strict checking,
+55 standard-kernel reports, blueprint checks and a canonical provenance
+replay covering 323 declarations passed. These checks are distinguished from
+a complete Lake build. The actual corrected-density estimate, source sampling,
+physical protocol and local tensor-network construction remain separate.
+
+The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
+at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
+commutant and highest-weight development for reuse in subsequent proofs.
+This later accepted contribution has not changed the dependency pin of the
+verified TNLean results above.
