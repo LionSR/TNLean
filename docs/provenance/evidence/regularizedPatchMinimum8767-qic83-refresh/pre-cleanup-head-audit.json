@@ -1,0 +1,1150 @@
+{
+  "head": "9953e6d11dfe9fa1fb68932fd73e3ef5427911f9",
+  "tree": "8db1a88f3b26f43d255af082cd9c5dd5e5256471",
+  "parents": [
+    "a5ae1ba4f0238984e0e81eb81312ebdf6b6f9d27",
+    "27f53fdfd2d2582259792075386ef4a96e4cd027"
+  ],
+  "captured_tn_main": "18a6dd4d2683cea18b585ffe0467910f76eb23ff",
+  "old_qic": "378bef486fc0241dee8ad875ccaf659d51d33ac9",
+  "new_qic": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c",
+  "verified_qic_main": "4fdc34b2c2cd244def11cdccdc8bf79aaf3a12ca",
+  "new_qic_is_ancestor_of_main": true,
+  "five_pin_fields": {
+    "lakefile.require.qiclean.rev": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c",
+    "lake-manifest.json.rev": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c",
+    "lake-manifest.json.inputRev": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c",
+    "docbuild/lake-manifest.json.rev": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c",
+    "docbuild/lake-manifest.json.inputRev": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c"
+  },
+  "qic_build_inputs": [
+    {
+      "path": "lean-toolchain",
+      "old_sha256": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+      "new_sha256": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+      "unchanged": true
+    },
+    {
+      "path": "lakefile.toml",
+      "old_sha256": "c40e0bb3a1ee5f9025d5c752d25c7c2f61622db813f79d6bee7d2412d8760907",
+      "new_sha256": "c40e0bb3a1ee5f9025d5c752d25c7c2f61622db813f79d6bee7d2412d8760907",
+      "unchanged": true
+    },
+    {
+      "path": "lake-manifest.json",
+      "old_sha256": "8ee65a668c3fdb00702c728eee7b0b9ebd02d97a6363f23b43036d6236cda7cf",
+      "new_sha256": "8ee65a668c3fdb00702c728eee7b0b9ebd02d97a6363f23b43036d6236cda7cf",
+      "unchanged": true
+    }
+  ],
+  "closure_comparison_before_prose_patch": {
+    "native_closure": [
+      {
+        "path": "TNLean/PEPS/AreaLaw.lean",
+        "recorded_sha256": "803ed3df07add9fd520219728e4deea62e8a68af3cd6e38c6a8ede189e48b16f",
+        "current_sha256": "803ed3df07add9fd520219728e4deea62e8a68af3cd6e38c6a8ede189e48b16f",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "recorded_sha256": "336e86a619d0bac8eadabb164e8167a913d147adeb6f75b3adc473d134075726",
+        "current_sha256": "336e86a619d0bac8eadabb164e8167a913d147adeb6f75b3adc473d134075726",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/DependentRegionOperatorLift.lean",
+        "recorded_sha256": "88c8913891e186b4b5b34f1cefebfd536a12b752cfb82b1415e7a64401f378f1",
+        "current_sha256": "88c8913891e186b4b5b34f1cefebfd536a12b752cfb82b1415e7a64401f378f1",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/VertexVirtualParentTransport.lean",
+        "recorded_sha256": "253006d3219ecc121648f9dcebb5e9623aa9c38c4a5d945e731fec37c2995146",
+        "current_sha256": "253006d3219ecc121648f9dcebb5e9623aa9c38c4a5d945e731fec37c2995146",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/Algebra/FinSumPermutation.lean",
+        "recorded_sha256": "ba055cb3ed6bcb88c94d18a1d697d13903ed07b45da5a0bc3945f7558cddaff4",
+        "current_sha256": "ba055cb3ed6bcb88c94d18a1d697d13903ed07b45da5a0bc3945f7558cddaff4",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/VertexInverseRegionSlice.lean",
+        "recorded_sha256": "e960266e5895a1dc95ccf0528c19db1d4dc72223a342ce9b683f6ece52eca634",
+        "current_sha256": "e960266e5895a1dc95ccf0528c19db1d4dc72223a342ce9b683f6ece52eca634",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/VertexImageGroundSpace.lean",
+        "recorded_sha256": "dfcb3a29bd2d2b411517cd791a56d319e1b229031a98102fcc92dfb6aa557f1c",
+        "current_sha256": "dfcb3a29bd2d2b411517cd791a56d319e1b229031a98102fcc92dfb6aa557f1c",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/InjectiveVertexCoordinates.lean",
+        "recorded_sha256": "1dc0416bfc96ba606b88ddbc0af89474e57817e60a6703687eb63f32e1076447",
+        "current_sha256": "1dc0416bfc96ba606b88ddbc0af89474e57817e60a6703687eb63f32e1076447",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/RegionGroundSpace.lean",
+        "recorded_sha256": "a7e17d498b0e608ddd2b2a9c04e5b86b5da375eccfcd25ee91e54daec463290c",
+        "current_sha256": "a7e17d498b0e608ddd2b2a9c04e5b86b5da375eccfcd25ee91e54daec463290c",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/OpenRegionContraction.lean",
+        "recorded_sha256": "be485853c5a6bee9ccfe5361badcf98a16c28308c459fcc513bde6a43907c3c9",
+        "current_sha256": "be485853c5a6bee9ccfe5361badcf98a16c28308c459fcc513bde6a43907c3c9",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/BlockRangeCoincidence.lean",
+        "recorded_sha256": "f1f124e8311f4bc87b4df4d5066907fd3054ff39dfb676ab011c77304c5f4be2",
+        "current_sha256": "f1f124e8311f4bc87b4df4d5066907fd3054ff39dfb676ab011c77304c5f4be2",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/RecoveryOutRegionEndpoint.lean",
+        "recorded_sha256": "9c1bf73c34d12292331197eae85899b9b13be36c3943a3e119eac7a417568bb8",
+        "current_sha256": "9c1bf73c34d12292331197eae85899b9b13be36c3943a3e119eac7a417568bb8",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Recovery4.lean",
+        "recorded_sha256": "7c24a795271cd09abe29ea1911e049034d53c375dd0da8ffa446fb0a6143834a",
+        "current_sha256": "7c24a795271cd09abe29ea1911e049034d53c375dd0da8ffa446fb0a6143834a",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Recovery3.lean",
+        "recorded_sha256": "0396b35a681cb832eb8df98484cf1754f014c847c2c938f98a1b4d5bef98bf58",
+        "current_sha256": "0396b35a681cb832eb8df98484cf1754f014c847c2c938f98a1b4d5bef98bf58",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Recovery2.lean",
+        "recorded_sha256": "1a247aff69da060165c157f5974773a89de99c861682c148cee3191f72e6de4d",
+        "current_sha256": "1a247aff69da060165c157f5974773a89de99c861682c148cee3191f72e6de4d",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Realization.lean",
+        "recorded_sha256": "572a4dc245d7263eb86f34fba7ef748f1a0aad3579a717de56964c7e9765612d",
+        "current_sha256": "572a4dc245d7263eb86f34fba7ef748f1a0aad3579a717de56964c7e9765612d",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Recovery.lean",
+        "recorded_sha256": "6d9b28f8296d1da65f495845be530b75aa295b69d8d890ae934a5ad0a96fadcd",
+        "current_sha256": "6d9b28f8296d1da65f495845be530b75aa295b69d8d890ae934a5ad0a96fadcd",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Algebra.lean",
+        "recorded_sha256": "965ce598e90ee1a8a25674dd4d7cbba86055f7af620406a3fcbd623e29c21ec3",
+        "current_sha256": "965ce598e90ee1a8a25674dd4d7cbba86055f7af620406a3fcbd623e29c21ec3",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Insertion.lean",
+        "recorded_sha256": "18c9db9b24f8aefa291e8037ee172b35d7d2a1ac3e2e2d124a3560177eef7e30",
+        "current_sha256": "18c9db9b24f8aefa291e8037ee172b35d7d2a1ac3e2e2d124a3560177eef7e30",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/NormalEdgeGauge.lean",
+        "recorded_sha256": "5c749b012aa7f45a537ac160db782e89adc24e1444c163605e3f7d8c42cca409",
+        "current_sha256": "5c749b012aa7f45a537ac160db782e89adc24e1444c163605e3f7d8c42cca409",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/NormalBlocking.lean",
+        "recorded_sha256": "ef39e23f0c331541e5abe7955bec18d1e79919bfd2996fd493a519ae3af51998",
+        "current_sha256": "ef39e23f0c331541e5abe7955bec18d1e79919bfd2996fd493a519ae3af51998",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/NormalEdgeBlockingData.lean",
+        "recorded_sha256": "342ea05227326e5bde49830e591aadfb9d668dbcbd27220bffc9ef0bf96f3263",
+        "current_sha256": "342ea05227326e5bde49830e591aadfb9d668dbcbd27220bffc9ef0bf96f3263",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/Defs.lean",
+        "recorded_sha256": "4a600521644a8fb2e268ce8f4b175ac061ee882b8de3362468fbe27a6a642d3f",
+        "current_sha256": "4a600521644a8fb2e268ce8f4b175ac061ee882b8de3362468fbe27a6a642d3f",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/InjectiveRegion.lean",
+        "recorded_sha256": "9cecec0ec02294341c5aeb65b9b66c002ea5b642e4ce1387ca946888db8902e3",
+        "current_sha256": "9cecec0ec02294341c5aeb65b9b66c002ea5b642e4ce1387ca946888db8902e3",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/UnionClosure.lean",
+        "recorded_sha256": "f4aa0e22904e0a895d73aff392dff65e5edd00d86c8175e6fc4f386c8739004f",
+        "current_sha256": "f4aa0e22904e0a895d73aff392dff65e5edd00d86c8175e6fc4f386c8739004f",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/KernelDescent.lean",
+        "recorded_sha256": "a79c7004829e35d68f1bfcef28fb4cede6c9924bc9ecabaa87a75b30a41fd691",
+        "current_sha256": "a79c7004829e35d68f1bfcef28fb4cede6c9924bc9ecabaa87a75b30a41fd691",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ConfigurationCalculus.lean",
+        "recorded_sha256": "be88bb4f87ab924667fc3fd95ed74bfd38d9b18f9bba51b1e37f3d0d6c9dc004",
+        "current_sha256": "be88bb4f87ab924667fc3fd95ed74bfd38d9b18f9bba51b1e37f3d0d6c9dc004",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionBlock/Basic.lean",
+        "recorded_sha256": "b9bd6cd62e4c71d25a6ffe112ae26b4aafcbb70e02f3327de585c2a604009703",
+        "current_sha256": "b9bd6cd62e4c71d25a6ffe112ae26b4aafcbb70e02f3327de585c2a604009703",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/VertexComplement/Basic.lean",
+        "recorded_sha256": "1fca0e9f2fe7454266cec563cbfbb204a6df322c44eea3111627838aeb21d7d4",
+        "current_sha256": "1fca0e9f2fe7454266cec563cbfbb204a6df322c44eea3111627838aeb21d7d4",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/Blocking.lean",
+        "recorded_sha256": "2ef58ca3a91bf45827abf20456d77ce50ec9a12256b5198ed7d25b6115fafdda",
+        "current_sha256": "2ef58ca3a91bf45827abf20456d77ce50ec9a12256b5198ed7d25b6115fafdda",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/VirtualInsertion.lean",
+        "recorded_sha256": "93dd089df1844c3612a433556ccf0e14821f1b1c9fe85926811929198e89c364",
+        "current_sha256": "93dd089df1844c3612a433556ccf0e14821f1b1c9fe85926811929198e89c364",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/FiniteKernelDescent.lean",
+        "recorded_sha256": "0cc7edbfac61f45e93c060359c2ffd26ce681bce6f715a810009b3aa69c7d2ec",
+        "current_sha256": "0cc7edbfac61f45e93c060359c2ffd26ce681bce6f715a810009b3aa69c7d2ec",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/SingletonRegion.lean",
+        "recorded_sha256": "11b3781561210f2b4db9399cbd3e5e410423264dab7edabb8ced693db656211a",
+        "current_sha256": "11b3781561210f2b4db9399cbd3e5e410423264dab7edabb8ced693db656211a",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/TwoInjectiveComparison.lean",
+        "recorded_sha256": "df84c10f9911fe4ef4cc4463acce313ba24cf09a316798559949a926a221a80d",
+        "current_sha256": "df84c10f9911fe4ef4cc4463acce313ba24cf09a316798559949a926a221a80d",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/TwoInjectiveComparison/Basic.lean",
+        "recorded_sha256": "952faa39fb77f2b9664d4bd5a2a4545be4bc608e3a7434ea39876f2638ffd905",
+        "current_sha256": "952faa39fb77f2b9664d4bd5a2a4545be4bc608e3a7434ea39876f2638ffd905",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/Algebra/OperatorSchmidt.lean",
+        "recorded_sha256": "7d769acd6c7043c7942addd82f9a39bf581a8ede2288792bee14f3d4f5464386",
+        "current_sha256": "7d769acd6c7043c7942addd82f9a39bf581a8ede2288792bee14f3d4f5464386",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/TwoInjectiveComparison/EndOperationComposition.lean",
+        "recorded_sha256": "69b5d874089501f97080917eb99a381e29a216e6b380d1549d74bf8fddeaa97c",
+        "current_sha256": "69b5d874089501f97080917eb99a381e29a216e6b380d1549d74bf8fddeaa97c",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/FundamentalTheorem/OneVertexComparison.lean",
+        "recorded_sha256": "9bec70755ee6d6074dff73288ab14feffc35544444361de64ddbb38a32dc1c34",
+        "current_sha256": "9bec70755ee6d6074dff73288ab14feffc35544444361de64ddbb38a32dc1c34",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/FundamentalTheorem/EdgeInsertion.lean",
+        "recorded_sha256": "76ee5ca5980d8c4bed2ad04644f84e00cd9fc66a6cf4b73b524fa7a992c4dfb6",
+        "current_sha256": "76ee5ca5980d8c4bed2ad04644f84e00cd9fc66a6cf4b73b524fa7a992c4dfb6",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/FundamentalTheorem/GaugeAction.lean",
+        "recorded_sha256": "7b7d746ab72d249fee0ea104c33df4f953d76406b753cd79615bf83701d5596b",
+        "current_sha256": "7b7d746ab72d249fee0ea104c33df4f953d76406b753cd79615bf83701d5596b",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/InsertionAlgebra.lean",
+        "recorded_sha256": "262d7d6860ce003024aebe9d6c4617a79c386b8864b37c1a8511277381912133",
+        "current_sha256": "262d7d6860ce003024aebe9d6c4617a79c386b8864b37c1a8511277381912133",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/EdgeMiddlePhysical/Basic.lean",
+        "recorded_sha256": "11320fdd2695ee3a6e8937c4a41838d013df1a1573346e316e43e1ce486a2ad0",
+        "current_sha256": "11320fdd2695ee3a6e8937c4a41838d013df1a1573346e316e43e1ce486a2ad0",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/IdentityInsertion.lean",
+        "recorded_sha256": "aa9da70649ee26b9333b112025fb75cd44ec7d82cfbc32950ec6c61c4dc0bf75",
+        "current_sha256": "aa9da70649ee26b9333b112025fb75cd44ec7d82cfbc32950ec6c61c4dc0bf75",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/InsertionCoefficientRealization.lean",
+        "recorded_sha256": "f515f18a4f72a96eacf72f0aa8ff935fc93b848b9b62321dfb41899c2841db9c",
+        "current_sha256": "f515f18a4f72a96eacf72f0aa8ff935fc93b848b9b62321dfb41899c2841db9c",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/InsertionRealization.lean",
+        "recorded_sha256": "12ba4b49bfd0e5d20c3002342a1f0a08e08a3cdfd51d7b032496b7319d7b382a",
+        "current_sha256": "12ba4b49bfd0e5d20c3002342a1f0a08e08a3cdfd51d7b032496b7319d7b382a",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/LocalGauge.lean",
+        "recorded_sha256": "6d13b70c405da47939c641fbe686a0f62e02041252639869f11a38fe7fbcac67",
+        "current_sha256": "6d13b70c405da47939c641fbe686a0f62e02041252639869f11a38fe7fbcac67",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/VertexComplement/Injective.lean",
+        "recorded_sha256": "540da7164366da45641653c04645a506d6c266ee739fb279312b8afa5703c5ec",
+        "current_sha256": "540da7164366da45641653c04645a506d6c266ee739fb279312b8afa5703c5ec",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/EdgeGaugeExtraction.lean",
+        "recorded_sha256": "21189d9a3d2821d80f598f91578bcc35698b80c3cb2eee326f4bf533e5572474",
+        "current_sha256": "21189d9a3d2821d80f598f91578bcc35698b80c3cb2eee326f4bf533e5572474",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixAlgEquiv.lean",
+        "recorded_sha256": "4bf86e88b3059829c225ad78e6705cf75792fc9a792cdbb331105821f4671293",
+        "current_sha256": "4bf86e88b3059829c225ad78e6705cf75792fc9a792cdbb331105821f4671293",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/SkolemNoether.lean",
+        "recorded_sha256": "71a93edff695f986b2d1b4e6507f0afea25b12ecc7bb1fd31f99ff7cc447a9f5",
+        "current_sha256": "71a93edff695f986b2d1b4e6507f0afea25b12ecc7bb1fd31f99ff7cc447a9f5",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/NormalFundamentalTheorem.lean",
+        "recorded_sha256": "94675dd0730cc5324c5f55cf04608c9566dbd3e98befb3fe81178b2066a30dbf",
+        "current_sha256": "94675dd0730cc5324c5f55cf04608c9566dbd3e98befb3fe81178b2066a30dbf",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/FundamentalTheorem.lean",
+        "recorded_sha256": "492c354c904c51ac3028fa48763e4b67aa42d7020aba3e24ce1681980a73dccb",
+        "current_sha256": "492c354c904c51ac3028fa48763e4b67aa42d7020aba3e24ce1681980a73dccb",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/FundamentalTheorem/LocalGaugeExtraction.lean",
+        "recorded_sha256": "cf9128a6b89a7a3f48844de014ab12a055117d0af28f489d1a70e333091586fe",
+        "current_sha256": "cf9128a6b89a7a3f48844de014ab12a055117d0af28f489d1a70e333091586fe",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/EdgeGaugeFamily.lean",
+        "recorded_sha256": "0dccde237ceb7849c6084ea3ff8fea06945b6baf82832eed733ba0502268d5d4",
+        "current_sha256": "0dccde237ceb7849c6084ea3ff8fea06945b6baf82832eed733ba0502268d5d4",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/EdgeMiddlePhysical/KernelDescent.lean",
+        "recorded_sha256": "b50bd3cf0dd9cdaa6ae07270c4729ffc04169998306eeb35061a8b73949dc874",
+        "current_sha256": "b50bd3cf0dd9cdaa6ae07270c4729ffc04169998306eeb35061a8b73949dc874",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/EdgeScalarSolve.lean",
+        "recorded_sha256": "06da4ec8e4d228abd907bc7d1f83716d75c0bbfe6d379e337dac83dca2b2b5fd",
+        "current_sha256": "06da4ec8e4d228abd907bc7d1f83716d75c0bbfe6d379e337dac83dca2b2b5fd",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/TensorFactorScalar.lean",
+        "recorded_sha256": "56cf0bfd3f8ad8a2ae3e6d2ea023b8515b34fd61942e2fcf606e78ae07451d16",
+        "current_sha256": "56cf0bfd3f8ad8a2ae3e6d2ea023b8515b34fd61942e2fcf606e78ae07451d16",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/SquareLatticeGraph.lean",
+        "recorded_sha256": "a6b92a2c78e05ad2269830b8513e5d5c4af76ba5c070c1204c7e0dbeffe30290",
+        "current_sha256": "a6b92a2c78e05ad2269830b8513e5d5c4af76ba5c070c1204c7e0dbeffe30290",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/RegionPhysicalMap.lean",
+        "recorded_sha256": "0e0cc5e19fb7bc7a23c787ce00ce1640ad8e20e1a4a0614fb949e54de041b9f9",
+        "current_sha256": "0e0cc5e19fb7bc7a23c787ce00ce1640ad8e20e1a4a0614fb949e54de041b9f9",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixUnitaryBetween.lean",
+        "recorded_sha256": "59573146ed4419ccc2b12d2a95fae10196e3d9a6788abca6df43ac76d6c0aaa1",
+        "current_sha256": "59573146ed4419ccc2b12d2a95fae10196e3d9a6788abca6df43ac76d6c0aaa1",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean",
+        "recorded_sha256": "a8a93c257371ccbad492083b5d1543e1938ccc0e8f49cd56c60776d84591047f",
+        "current_sha256": "a8a93c257371ccbad492083b5d1543e1938ccc0e8f49cd56c60776d84591047f",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/RegionPhysicalDeformation.lean",
+        "recorded_sha256": "59ab53b581444fc11d75425fadf476e8914f527f74104fa466aeb60d9c056c6f",
+        "current_sha256": "59ab53b581444fc11d75425fadf476e8914f527f74104fa466aeb60d9c056c6f",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/RegionParentHamiltonian.lean",
+        "recorded_sha256": "b97e9429c3dfcfbf50b5ac9ccab86505adab02a7ac9b6fb0a71f3a7151a24e18",
+        "current_sha256": "b97e9429c3dfcfbf50b5ac9ccab86505adab02a7ac9b6fb0a71f3a7151a24e18",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixAux.lean",
+        "recorded_sha256": "d63b6bf4ae5cc9aa51bc7ec59acba95858b64a7ee280c657fac5e7feb31e052c",
+        "current_sha256": "d63b6bf4ae5cc9aa51bc7ec59acba95858b64a7ee280c657fac5e7feb31e052c",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/CoordinateRangeProjector.lean",
+        "recorded_sha256": "d09cb122013eb0abf6c450ebefc8fba1e63b3910b091745e527e23ff3030fd22",
+        "current_sha256": "d09cb122013eb0abf6c450ebefc8fba1e63b3910b091745e527e23ff3030fd22",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/ParentHamiltonian/IsometricProjectorTransport.lean",
+        "recorded_sha256": "6ed67b4918a78686c0ad73f866dfd2f970caf690b43a11aa7eeb72f2af47bc1e",
+        "current_sha256": "6ed67b4918a78686c0ad73f866dfd2f970caf690b43a11aa7eeb72f2af47bc1e",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "recorded_sha256": "fd4d4eeb0fd86d4d0d6a3e2fffb82db6b662aeb70c5a7fe79a79fea6e9835478",
+        "current_sha256": "fd4d4eeb0fd86d4d0d6a3e2fffb82db6b662aeb70c5a7fe79a79fea6e9835478",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "recorded_sha256": "a920898853c19a7c25ebd338a0a906de2360771ec6113bf9c079185244fbd01a",
+        "current_sha256": "a920898853c19a7c25ebd338a0a906de2360771ec6113bf9c079185244fbd01a",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Analysis/ShiftedDensityPowers.lean",
+        "recorded_sha256": "a20b2de5397aa550a6b0e830d68112af8092cf285509fdb75e14176ed5b7c4f3",
+        "current_sha256": "a20b2de5397aa550a6b0e830d68112af8092cf285509fdb75e14176ed5b7c4f3",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Channel/Basic.lean",
+        "recorded_sha256": "b71d13f5259e28d26b97f2bec53d4977e933c154969007409d0d5b359fa2d7a9",
+        "current_sha256": "b71d13f5259e28d26b97f2bec53d4977e933c154969007409d0d5b359fa2d7a9",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Analysis/MatrixTraceInequalities.lean",
+        "recorded_sha256": "b3a31dc40f3476143d3c2f120a227a19132bc008f7383a8a0096d83c9946f5ec",
+        "current_sha256": "b3a31dc40f3476143d3c2f120a227a19132bc008f7383a8a0096d83c9946f5ec",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/PerronFrobenius/RankOne.lean",
+        "recorded_sha256": "e98bd1def2b81ee1c6b1f458404360db9087c18a23876cc847ec7e612613be53",
+        "current_sha256": "e98bd1def2b81ee1c6b1f458404360db9087c18a23876cc847ec7e612613be53",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Analysis/MatrixFramePerturbation.lean",
+        "recorded_sha256": "f160ed33060d6de810e72ec5ff4a5c8f5b88e8ee41ee82bb7d31c57297914bc9",
+        "current_sha256": "f160ed33060d6de810e72ec5ff4a5c8f5b88e8ee41ee82bb7d31c57297914bc9",
+        "unchanged": true
+      },
+      {
+        "path": "TNLeanTest/RegularizedPatchMinimum.lean",
+        "recorded_sha256": "3558a2472cc2e67b096601bf5d36ce8bb785e6524503ae0e50c3a8fcad4a4b03",
+        "current_sha256": "3558a2472cc2e67b096601bf5d36ce8bb785e6524503ae0e50c3a8fcad4a4b03",
+        "unchanged": true
+      },
+      {
+        "path": "TNLeanTest/RegularizedPatchNoncommuting.lean",
+        "recorded_sha256": "c4676fe8375cdfac5e10120a64e55dde467b13ebe3b01213260867418c68bde3",
+        "current_sha256": "c4676fe8375cdfac5e10120a64e55dde467b13ebe3b01213260867418c68bde3",
+        "unchanged": true
+      }
+    ],
+    "compatibility_closure": [
+      {
+        "path": "TNLeanTest/QICConjugatorCompatibility.lean",
+        "recorded_sha256": "a2535914a549ec79fa82c44a9a464833285f1670e06e7285f41f4f59b820d6d1",
+        "current_sha256": "a2535914a549ec79fa82c44a9a464833285f1670e06e7285f41f4f59b820d6d1",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Analysis/DifferentiableInnerAction.lean",
+        "recorded_sha256": "f80dac9ff36608ab696e363ea1effe7f93542653334132825ad485d1dd0e2a84",
+        "current_sha256": "f80dac9ff36608ab696e363ea1effe7f93542653334132825ad485d1dd0e2a84",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixUnitConjugator.lean",
+        "recorded_sha256": "1521a4d6320e0df379c2ff6580e6dd835cf3667f068e7db12ab7387b06820493",
+        "current_sha256": "1521a4d6320e0df379c2ff6580e6dd835cf3667f068e7db12ab7387b06820493",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/GlobalVirtualGauge.lean",
+        "recorded_sha256": "6aa0983dc851d1db5a01cca6e53b650c83795c76303a418d0940aee5587aa00b",
+        "current_sha256": "6aa0983dc851d1db5a01cca6e53b650c83795c76303a418d0940aee5587aa00b",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/LocalVirtualGauge.lean",
+        "recorded_sha256": "2b3f128ec42da770ebe8cef08361b1e62e76983816ae8162bafc6ed786b2cbc6",
+        "current_sha256": "f88971c528480b740548cf98e3b587fc2d55c50857db72df725d1d2941f34cb8",
+        "unchanged": false
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/Defs.lean",
+        "recorded_sha256": "b28024d174cd2cc87700dfa361618c965db8f89034b74475b466f62a8913acf4",
+        "current_sha256": "b28024d174cd2cc87700dfa361618c965db8f89034b74475b466f62a8913acf4",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/Algebra/ListProduct.lean",
+        "recorded_sha256": "8f460135d464048fc5a6cdd4fef8660440afc6d67b13ce699210a98d65fc2a9b",
+        "current_sha256": "8f460135d464048fc5a6cdd4fef8660440afc6d67b13ce699210a98d65fc2a9b",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Core/CyclicTrace.lean",
+        "recorded_sha256": "67e8d968988035d212fe977e7b8f27fe46c0e5ebf411e8ba10ffd1fc6afc8010",
+        "current_sha256": "67e8d968988035d212fe977e7b8f27fe46c0e5ebf411e8ba10ffd1fc6afc8010",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Defs.lean",
+        "recorded_sha256": "e12c85140ff30cbace18bd0cdd7054ea35b75bfa4065b7acc96b98057dfbe3b3",
+        "current_sha256": "e12c85140ff30cbace18bd0cdd7054ea35b75bfa4065b7acc96b98057dfbe3b3",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixKernelRigidity.lean",
+        "recorded_sha256": "057c87996e417ff435c2d24bf5666c1dbb13e863385a6c7d292363abc1b2dc00",
+        "current_sha256": "057c87996e417ff435c2d24bf5666c1dbb13e863385a6c7d292363abc1b2dc00",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/Word.lean",
+        "recorded_sha256": "757605ab7384a5f74a64a095aa754c1fe99986f567ea0e77ac70c8e646678d87",
+        "current_sha256": "757605ab7384a5f74a64a095aa754c1fe99986f567ea0e77ac70c8e646678d87",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/Injectivity.lean",
+        "recorded_sha256": "c38dda3000b4dde0c17e593243e14f8f6485c9674e5dd2355e9d15e3bde5a5da",
+        "current_sha256": "c38dda3000b4dde0c17e593243e14f8f6485c9674e5dd2355e9d15e3bde5a5da",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/WordSpan.lean",
+        "recorded_sha256": "263feefd293fbb7a97c191bf4953e1259810a00f6eaced9d6a93922509dd6b1c",
+        "current_sha256": "263feefd293fbb7a97c191bf4953e1259810a00f6eaced9d6a93922509dd6b1c",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Channel/Schwarz/Basic.lean",
+        "recorded_sha256": "58debb619d5ac490540c359e94c5ab37d5c66354e575cc2033618b0f271a0b96",
+        "current_sha256": "58debb619d5ac490540c359e94c5ab37d5c66354e575cc2033618b0f271a0b96",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixAux.lean",
+        "recorded_sha256": "d63b6bf4ae5cc9aa51bc7ec59acba95858b64a7ee280c657fac5e7feb31e052c",
+        "current_sha256": "d63b6bf4ae5cc9aa51bc7ec59acba95858b64a7ee280c657fac5e7feb31e052c",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/FundamentalTheorem/Basic.lean",
+        "recorded_sha256": "d96d92100de1012d80335cfca0f7babbb271c1fbfbb548f1f64d0ee1605758f3",
+        "current_sha256": "d96d92100de1012d80335cfca0f7babbb271c1fbfbb548f1f64d0ee1605758f3",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Structure/LinearExtension.lean",
+        "recorded_sha256": "d4ec2e880b2841f38959473505604aba50fa5cc8bf155a6391fd581f8cfb28b8",
+        "current_sha256": "d4ec2e880b2841f38959473505604aba50fa5cc8bf155a6391fd581f8cfb28b8",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Chain/OneSidedInverse.lean",
+        "recorded_sha256": "17dce7b49b0cee873298128d59c4475041eb82720014ec01ea2d89e4caee633d",
+        "current_sha256": "17dce7b49b0cee873298128d59c4475041eb82720014ec01ea2d89e4caee633d",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Core/TracePairing.lean",
+        "recorded_sha256": "5a12f8ca2ab8c77435680c7d80ab1a26364df5cde23ea189c827502e20f3e080",
+        "current_sha256": "5a12f8ca2ab8c77435680c7d80ab1a26364df5cde23ea189c827502e20f3e080",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixTracePairing.lean",
+        "recorded_sha256": "bd489dfc79f0b4d038ea42b959bd5f4252c5ecc842e6b9c6d09b08e697ee07aa",
+        "current_sha256": "bd489dfc79f0b4d038ea42b959bd5f4252c5ecc842e6b9c6d09b08e697ee07aa",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/SkolemNoether.lean",
+        "recorded_sha256": "71a93edff695f986b2d1b4e6507f0afea25b12ecc7bb1fd31f99ff7cc447a9f5",
+        "current_sha256": "71a93edff695f986b2d1b4e6507f0afea25b12ecc7bb1fd31f99ff7cc447a9f5",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Core/Blocking.lean",
+        "recorded_sha256": "cc09be466aa6b84a90ea72aae82137a5154662b90ea8eb44b9c36126b386a889",
+        "current_sha256": "cc09be466aa6b84a90ea72aae82137a5154662b90ea8eb44b9c36126b386a889",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Core/PhysicalRotation.lean",
+        "recorded_sha256": "30bde3b9072062dec91b6b9f421bb41b8e9edd6810d8c2001b53266a1a67d944",
+        "current_sha256": "30bde3b9072062dec91b6b9f421bb41b8e9edd6810d8c2001b53266a1a67d944",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/Blocking.lean",
+        "recorded_sha256": "b375639b3ee4fcfef4a4cb48258e2680ba945b400e988e2971c9466d2d979da6",
+        "current_sha256": "b375639b3ee4fcfef4a4cb48258e2680ba945b400e988e2971c9466d2d979da6",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Preparation/BlockedPolar.lean",
+        "recorded_sha256": "d75d55bbff14f0bdda8510572e99bbf071b2d2e30966bb1db6be595e598108f8",
+        "current_sha256": "d75d55bbff14f0bdda8510572e99bbf071b2d2e30966bb1db6be595e598108f8",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Core/BlockingTransfer.lean",
+        "recorded_sha256": "9b5f2c450e32a71c690d302efcaea8be71c465f8e0e7b06e80c5a07fc9c08a7e",
+        "current_sha256": "9b5f2c450e32a71c690d302efcaea8be71c465f8e0e7b06e80c5a07fc9c08a7e",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/Transfer.lean",
+        "recorded_sha256": "239a588a1fe21b803dc6f2ae667491c16e136a4946940ac66e178dcc538f3d5a",
+        "current_sha256": "239a588a1fe21b803dc6f2ae667491c16e136a4946940ac66e178dcc538f3d5a",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/Tactic/Attr.lean",
+        "recorded_sha256": "1b107d9866eb01581aeb7799da97e8a2a237f3408d948f1a9383f724856919dd",
+        "current_sha256": "1b107d9866eb01581aeb7799da97e8a2a237f3408d948f1a9383f724856919dd",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/MapIterate.lean",
+        "recorded_sha256": "597835997d41c9c9e34b75562d3b708fe50c44e5e1c8f8b1be58b8f15548f379",
+        "current_sha256": "597835997d41c9c9e34b75562d3b708fe50c44e5e1c8f8b1be58b8f15548f379",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Kraus/MixedMap.lean",
+        "recorded_sha256": "fbe4b94da2aa13ca5bd2f209ac1ba5a35f104a1b3a59e83f74ff43559fd04050",
+        "current_sha256": "fbe4b94da2aa13ca5bd2f209ac1ba5a35f104a1b3a59e83f74ff43559fd04050",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Core/PhysicalMatrix.lean",
+        "recorded_sha256": "afa268e7b73c444b003ae15133e61342c4851b1fac8b521d37df2bb430138595",
+        "current_sha256": "afa268e7b73c444b003ae15133e61342c4851b1fac8b521d37df2bb430138595",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Preparation/MatrixPolar.lean",
+        "recorded_sha256": "45154d4ee88357f0982241b35cc782f4e3b395e92404c3d49ffa8bb20afa9bce",
+        "current_sha256": "45154d4ee88357f0982241b35cc782f4e3b395e92404c3d49ffa8bb20afa9bce",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/MatrixUnitaryBetween.lean",
+        "recorded_sha256": "59573146ed4419ccc2b12d2a95fae10196e3d9a6788abca6df43ac76d6c0aaa1",
+        "current_sha256": "59573146ed4419ccc2b12d2a95fae10196e3d9a6788abca6df43ac76d6c0aaa1",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/CocycleCoboundary.lean",
+        "recorded_sha256": "1dba4ffe7866d99ea1add297539f4999e4b39bc02a2db709c6c152dab9fccd35",
+        "current_sha256": "1dba4ffe7866d99ea1add297539f4999e4b39bc02a2db709c6c152dab9fccd35",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/VirtualRepresentation.lean",
+        "recorded_sha256": "f0b0e8362355e15cc1a32d873247bf4b6745c3a2ed79719ccf82f65b7350d87a",
+        "current_sha256": "f0b0e8362355e15cc1a32d873247bf4b6745c3a2ed79719ccf82f65b7350d87a",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/GaugeUniqueness.lean",
+        "recorded_sha256": "2bdade407a972e1146c0b2af2dd35669231b6a703404b6c10772be6da18538e8",
+        "current_sha256": "2bdade407a972e1146c0b2af2dd35669231b6a703404b6c10772be6da18538e8",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/ScalarCommutant.lean",
+        "recorded_sha256": "e1603f12c84b503befc41003523e85736f54c0a2102449d4f1fa83563b1ccf2d",
+        "current_sha256": "e1603f12c84b503befc41003523e85736f54c0a2102449d4f1fa83563b1ccf2d",
+        "unchanged": true
+      },
+      {
+        "path": ".lake/packages/qiclean/QICLean/Algebra/DependentBlockDiagonal.lean",
+        "recorded_sha256": "8f302b933f5efdf5915e094586fa74cc30c7e5922adae9807863b304ce7287d0",
+        "current_sha256": "8f302b933f5efdf5915e094586fa74cc30c7e5922adae9807863b304ce7287d0",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/Algebra/ProjectiveRepresentation.lean",
+        "recorded_sha256": "0b4efe1d65d00a0e43d3c6946bea7927b4a5a3b6061375de3e0d785fdf1b659e",
+        "current_sha256": "0b4efe1d65d00a0e43d3c6946bea7927b4a5a3b6061375de3e0d785fdf1b659e",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/Algebra/CocycleCohomology.lean",
+        "recorded_sha256": "acff78996b8d9e439ee2e3884c0f668e9ffbba89a13f7cb09e38c26bbd9098c9",
+        "current_sha256": "acff78996b8d9e439ee2e3884c0f668e9ffbba89a13f7cb09e38c26bbd9098c9",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/InvertibleProjectivePathInvariance.lean",
+        "recorded_sha256": "e2c54f74c5f79ab01a6971f35c541999d331e0dcfecd2f390f2f5eafb215572c",
+        "current_sha256": "e2c54f74c5f79ab01a6971f35c541999d331e0dcfecd2f390f2f5eafb215572c",
+        "unchanged": true
+      },
+      {
+        "path": "TNLean/MPS/Symmetry/ProjectivePathInvariance.lean",
+        "recorded_sha256": "e4a06f2dc7b354ca5e3ad76c22b309337204a78581ca3a2ed5439cf3c0344cf1",
+        "current_sha256": "e4a06f2dc7b354ca5e3ad76c22b309337204a78581ca3a2ed5439cf3c0344cf1",
+        "unchanged": true
+      }
+    ]
+  },
+  "protected_files": [
+    {
+      "path": "TNLean/MPS/Symmetry/LocalVirtualGauge.lean",
+      "unchanged": false,
+      "current_sha256": "f88971c528480b740548cf98e3b587fc2d55c50857db72df725d1d2941f34cb8"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+      "unchanged": true,
+      "current_sha256": "a920898853c19a7c25ebd338a0a906de2360771ec6113bf9c079185244fbd01a"
+    },
+    {
+      "path": "TNLeanTest/QICConjugatorCompatibility.lean",
+      "unchanged": true,
+      "current_sha256": "a2535914a549ec79fa82c44a9a464833285f1670e06e7285f41f4f59b820d6d1"
+    },
+    {
+      "path": "TNLeanTest/RegularizedPatchMinimum.lean",
+      "unchanged": true,
+      "current_sha256": "3558a2472cc2e67b096601bf5d36ce8bb785e6524503ae0e50c3a8fcad4a4b03"
+    },
+    {
+      "path": "TNLeanTest/RegularizedPatchNoncommuting.lean",
+      "unchanged": true,
+      "current_sha256": "c4676fe8375cdfac5e10120a64e55dde467b13ebe3b01213260867418c68bde3"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/NestedCylinderAxioms.lean",
+      "unchanged": true,
+      "current_sha256": "8e8e679215d57cfe7f522cce6d7207230ca5ab7f20bde05ecabee1b5f796caaf"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/area-law-aggregator-build.txt",
+      "unchanged": true,
+      "current_sha256": "0820260dcfcaadfd3395e1510404061b51f3cd1f44d2323da2f4d4182bb371fe"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/axiom-audit.json",
+      "unchanged": true,
+      "current_sha256": "b3030ec2be989cc4fcd12dc7411af94807dbb4df19a5b821cd93ca26ed9b2a5f"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/build-hotspot-tests.txt",
+      "unchanged": true,
+      "current_sha256": "74c03fc16fde9a2dfeff03db0ec8f472a5a8dfed04e9e982a912b4b7f64faee3"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/check.py",
+      "unchanged": true,
+      "current_sha256": "e6cd125f995da530a37a4297fc15807adc2294079737bdad9820b47dc7977a90"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/compatible-cache-tests-final.txt",
+      "unchanged": true,
+      "current_sha256": "fdb8fc0e350a117e64a524706fda3c00a5fb259846447d39c669b0947e528746"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/counterexamples.txt",
+      "unchanged": true,
+      "current_sha256": "03d7c6e2ea9c2b04d47cfab26dd71a39f429f96284fabf1c59b133759f2620cc"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/cylinder-build.txt",
+      "unchanged": true,
+      "current_sha256": "27cf07b221831f6ca06e7690cf306bb767fc849a9ca0717752548a2090dee097"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/dependency-report.txt",
+      "unchanged": true,
+      "current_sha256": "6d974577c3bd0f18feb1a74a43cdc7f2cb128429346f8baefc2f2406915d182f"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/diagram-audit.json",
+      "unchanged": true,
+      "current_sha256": "1b71e16b45fa172f73a4c1322ddf46443f7be7fd4f1c046fee26984ffc90c1a6"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/docs-freeze.json",
+      "unchanged": true,
+      "current_sha256": "dc7794cf3b83c6ed8057d12ed1775f183c7e7e74365d8c569fb2179248756eaf"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/docs-validation.json",
+      "unchanged": true,
+      "current_sha256": "769f9d23217bf136604f7b447cacbc7c02e139f062fe70c6d817bfb80cf82cd0"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/edge-cases.txt",
+      "unchanged": true,
+      "current_sha256": "67acc3ff79eb172feedf3d31fb78b77f0df92defdbcec21190c5abf67125641a"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/final-runs.json",
+      "unchanged": true,
+      "current_sha256": "be8798eb6912c698af265f8851e3861e3792b2ad5f883693c87f6af4a25d99bd"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/import-aggregator-tests.txt",
+      "unchanged": true,
+      "current_sha256": "15f6dc6580ba907260e8900ada5bd0cb38044dfc7c956968f3af599fcf0ebd12"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/lake-invalidation.txt",
+      "unchanged": true,
+      "current_sha256": "e9ababa7a31de9ad257267e798861c54f0ecd83e867efc6a3869abedc6404861"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/lean-freeze.json",
+      "unchanged": true,
+      "current_sha256": "e5d0ecea70cbe53da9d5b3014792d67658b8aa3b9d57e86f50cda01fb0d28cd3"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/orthogonalization-build.txt",
+      "unchanged": true,
+      "current_sha256": "7a54d85d9842e6ef99b2dccc15f015743d745d1c9b30e9c90dd5f2783154cc64"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/overlay-source-audit.json",
+      "unchanged": true,
+      "current_sha256": "ede1fcc3f7eb17af2ca448ac0364e3c2d283fbc63bf95ea65657326ec8b4315f"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/public-axioms.raw.txt",
+      "unchanged": true,
+      "current_sha256": "c4f44d4550f4e50aa100995f8b9d5991cf48328a42a58b0a5a59684e52134446"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/published-source-identity.json",
+      "unchanged": true,
+      "current_sha256": "e11e93f2b94f253b6f178687e5c109a1bcf0c6dcd8d181fcf4e003d9fb483a60"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/reader-prose.txt",
+      "unchanged": true,
+      "current_sha256": "d39c2b93f7b3558c79cdece49fc662676154c593925a7e54d992218ac5c360e2"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/source-audit.json",
+      "unchanged": true,
+      "current_sha256": "2e5a6788574e7e1d6d21ab175abcf690aead75f701d225448c43e00613430b63"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/tactic-pattern-scan.txt",
+      "unchanged": true,
+      "current_sha256": "eaf48eec7fd8ce17ad105b9714500bf8ba25f7b1618ba81504a77710c2d1d6e8"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/text-style.txt",
+      "unchanged": true,
+      "current_sha256": "95d142813e1666b8ec9853fef60803e57323e2941464c7c0df88a417df861632"
+    },
+    {
+      "path": "docs/provenance/evidence/8767-nested-cylinder-orthogonalization/workflow-audit.json",
+      "unchanged": true,
+      "current_sha256": "3a429e93e71d63fc8dd9670d4010c052e91a7d3bc9ac5dd38ce211b33e6004be"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/QICConjugatorAxioms.118444032081907.log",
+      "unchanged": true,
+      "current_sha256": "67e1d32153e69f6ca73b2e6876bb3ce52f0bcffeedac49a311c481186b3a10e5"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/QICLean.Algebra.MatrixUnitConjugator.118243499663110.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/QICLean.Analysis.DifferentiableInnerAction.118470810594999.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/README.md",
+      "unchanged": true,
+      "current_sha256": "36bdb081d00dceddc7fbcc28e34b091f25a4cd3466f93348b3d9f4374c9a0b8c"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.lean",
+      "unchanged": true,
+      "current_sha256": "ab1343a4845734bd5df42f3bcbef800ebcdb219ba37acd8b2c91dd52204f64f8"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+      "unchanged": true,
+      "current_sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.MPS.Symmetry.GlobalVirtualGauge.118249406844206.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.MPS.Symmetry.LocalVirtualGauge.118245819366519.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLeanTest.QICConjugatorCompatibility.118295933849800.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLeanTest.QICConjugatorCompatibility.118526443372951.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLeanTest.RegularizedPatchMinimum.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLeanTest.RegularizedPatchNoncommuting.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/active-provenance.log",
+      "unchanged": true,
+      "current_sha256": "7e1e46e7277cfab0ed7711abd0ea59783181a7146cfcfe07264d947386e95614"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/cache-refusal-audit.json",
+      "unchanged": true,
+      "current_sha256": "1b1ea124610cf0d344f46dfcd62d1b040ea3fb82386310c6ba093ddb44dd9ae8"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/checks.json",
+      "unchanged": true,
+      "current_sha256": "6228ac033fd062def39589246e85085485848a230fb476e2f63ed9f27130c4f6"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-QICConjugatorAxioms.lean",
+      "unchanged": true,
+      "current_sha256": "753931f52218b814f1a26d95e3a92beda95adf6ded1e86556ab1420d771a106a"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-checks.json",
+      "unchanged": true,
+      "current_sha256": "edf946a2836c628c8c11f444df1365a3b7bc7711e58a39f921b4d53b1d754abc"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-negative-control.json",
+      "unchanged": true,
+      "current_sha256": "1cbeab94f949a40625181ad9670197317d4910854eacc201c8b672d9720b3afb"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-negative-mixed-import.log",
+      "unchanged": true,
+      "current_sha256": "715856c4006a10a1f833db696d5581b81ae2884527227a60c094a029e2c3e6b2"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-negative-old-local.log",
+      "unchanged": true,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-public-axioms.raw.txt",
+      "unchanged": true,
+      "current_sha256": "67e1d32153e69f6ca73b2e6876bb3ce52f0bcffeedac49a311c481186b3a10e5"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-regularized-closure-audit.json",
+      "unchanged": true,
+      "current_sha256": "fb524b17cb60335be4b1c79d792f7ee87f12f82a28812c255411c0b0a42853e8"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-repair-summary.json",
+      "unchanged": true,
+      "current_sha256": "5b5da53ceb9c9961e2f050fc0f309d9a33b5581829b2c6a7d6e251b0749dcd90"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/compatibility-seed-audit.json",
+      "unchanged": true,
+      "current_sha256": "5b8d131dbbdb870a1f269b458ba73c325d035700d07cdb6729e36e4c98272d85"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/diagram-validation.json",
+      "unchanged": true,
+      "current_sha256": "cdcdefd9fbdfda8ba9670dd4b3d17fc6fa79350046380c69483aed197ad50033"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/docs-freeze.json",
+      "unchanged": true,
+      "current_sha256": "b1904dcd16b05e80e7d59bc1b56539d6869bd8baf6e62ba3cb8723efdfd83bd3"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/docs-validation.json",
+      "unchanged": true,
+      "current_sha256": "cb496ff1e2ed1f190475375d76f0dbb081d1ff88928c9295ee49508703c09741"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/integrated-invalidation-final.json",
+      "unchanged": true,
+      "current_sha256": "a35a8ed2a5d364666120bc9e589c502c11cc6f3b8d1993910030ad61d4fc53b4"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/integrated-invalidation-final.log",
+      "unchanged": true,
+      "current_sha256": "c0786b22cc3643bbccd7e1563e1aba1becec2dc4722bb14c69921c4c3a42ca22"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/preflight.log",
+      "unchanged": true,
+      "current_sha256": "d1feae62f49f8261c4f1b826d9fc511d2f31d81abe42910a0f705110fa63c740"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/source-tree-attestation.json",
+      "unchanged": true,
+      "current_sha256": "0d79d7c447829ef73eb7b55c15274d3179ce460a5db41408287f248a36838f73"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/tn-accepted-qic-source-view.json",
+      "unchanged": true,
+      "current_sha256": "2b0ca4291ebe74a13476b9a09466645c7af97e89f25e6a8725d4e3a7a3a78307"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/tn-integrated-repairs-audit.json",
+      "unchanged": true,
+      "current_sha256": "dd773343c9e9bcaf460d983df2ba2509239bfe4530356d90323b1d274efbb977"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/tn-overlay-source-audit.json",
+      "unchanged": true,
+      "current_sha256": "1889ac607e13bc4274b342e2c967e63dd5a1b119153afa095989038d6023182e"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/tn-text-style-check.json",
+      "unchanged": true,
+      "current_sha256": "c104b9d9dbff54bfb88045978c8c1d151b1cb8f2ab7ec4aa2e36097f394b4321"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/tn-text-style.log",
+      "unchanged": true,
+      "current_sha256": "57aad8ead28b80af8b23a8b1a0f3c45c9781e645da38112ac62b9e2881e74cf1"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchMinimum8767/tn-validation-summary.json",
+      "unchanged": true,
+      "current_sha256": "77071656c691389325ee12af41e1dc05e325b96f807aca5f0514f428bcfde80c"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/orthogonalization8767.json",
+      "unchanged": true,
+      "current_sha256": "434582d35102297fc6d38e5bb29651cf66ff8ee33d7eac2bce4340f34b553218"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/regularizedPatchMinimum8767.json",
+      "unchanged": true,
+      "current_sha256": "68fc2cbc3fa83c44887a1dacbd96073828f8ab1c08e31d406c0dba734344b1b1"
+    }
+  ],
+  "current_minus_held_merge": [
+    "M\tTNLean/MPS/Symmetry/LocalVirtualGauge.lean",
+    "M\tdocbuild/lake-manifest.json",
+    "M\tlake-manifest.json",
+    "M\tlakefile.toml"
+  ],
+  "qic_changed_paths": [
+    "M\t.github/workflows/pr-ci.yml",
+    "M\tQICLean/Algebra.lean",
+    "A\tQICLean/Algebra/HermitianPartSum.lean",
+    "M\tQICLean/Analysis.lean",
+    "A\tQICLean/Analysis/GlobalGap.lean",
+    "M\tQICLean/Analysis/OperatorMean.lean",
+    "A\tQICLean/Analysis/OperatorMean/FiniteTree.lean",
+    "A\tQICLean/Analysis/OperatorMean/PowerDerivative.lean",
+    "A\tQICLean/Analysis/PhaseError.lean",
+    "M\tQICLean/Analysis/ResolventFunctionalCalculus.lean",
+    "A\tQICLean/Analysis/RootFidelity.lean",
+    "A\tQICLean/Analysis/RootFidelityRelativeEntropy.lean",
+    "A\tQICLean/Analysis/SpectralFilter.lean",
+    "A\tQICLean/Analysis/SpectralFilter/Cutoff.lean",
+    "A\tQICLean/Analysis/SpectralFilter/Decay.lean",
+    "A\tQICLean/Analysis/SpectralFilter/Inversion.lean",
+    "A\tQICLean/Analysis/SpectralFilter/Kernel.lean",
+    "A\tQICLean/Analysis/SpectralFilter/MatrixFilter.lean",
+    "A\tQICLean/Analysis/SpectralFilter/Profile.lean",
+    "M\tQICLean/Channel.lean",
+    "A\tQICLean/Channel/NPositiveIntegral.lean",
+    "A\tQICLean/Channel/UhlmannIsometry.lean",
+    "M\tQICLean/Entropy.lean",
+    "A\tQICLean/Entropy/PurificationSplitting.lean",
+    "A\tQICLeanTest/GlobalGap.lean",
+    "M\tblueprint/src/chapter/ch06_operator_convexity.tex",
+    "A\tblueprint/src/chapter/ch06_operator_convexity_matrix_means.tex",
+    "A\tblueprint/src/chapter/ch13_spectral_filter.tex",
+    "M\tblueprint/src/content.tex",
+    "M\tblueprint/src/references.bib"
+  ],
+  "proof_evidence_historical_pin": "378bef486fc0241dee8ad875ccaf659d51d33ac9",
+  "no_lean_or_lake_run": true
+}

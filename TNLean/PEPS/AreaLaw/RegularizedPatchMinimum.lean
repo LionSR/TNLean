@@ -165,12 +165,12 @@ noncomputable def regularizedPatchObjective (a : Fin m → ℝ) (b : ℝ)
   ‖regularizedPatchOutput regions a b Ω x‖
 
 omit [Fintype V] in
-/-- The actual feasible space of independent regional densities is compact. -/
+/-- The feasible space of independent regional densities is compact. -/
 theorem isCompact_regularizedPatchDomain :
     IsCompact (regularizedPatchDomain (Out := Out) regions) :=
   isCompact_pi_infinite fun _ ↦ Matrix.isCompact_setOf_posSemidef_trace_eq_one
 
-/-- A unit global vector supplies a configuration in every region, so the actual
+/-- A unit global vector supplies a configuration in every region, so the
 feasible space is nonempty without an extra local-dimension hypothesis. -/
 theorem regularizedPatchDomain_nonempty
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
@@ -196,7 +196,7 @@ theorem continuousOn_regularizedPatchFilter (a : Fin m → ℝ) {b : ℝ} (hb : 
     ((Matrix.continuousOn_add_smul_one_rpow hb (-(a j) / 2)).comp
       (continuous_apply j).continuousOn fun x hx ↦ (hx j).1)
 
-/-- The actual norm objective is continuous on the density-matrix feasible set. -/
+/-- The norm objective is continuous on the density-matrix feasible set. -/
 theorem continuousOn_regularizedPatchObjective (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
     ContinuousOn (regularizedPatchObjective regions a b Ω) (regularizedPatchDomain regions) := by
@@ -213,7 +213,7 @@ theorem continuousOn_regularizedPatchObjective (a : Fin m → ℝ) {b : ℝ} (hb
     (PiLp.continuous_toLp _ _).comp (continuous_id.matrix_mulVec continuous_const)
   exact hc.norm.comp_continuousOn hp
 
-/-- The actual feasible minimum exists; continuity and nonemptiness are proved,
+/-- The feasible minimum exists; continuity and nonemptiness are proved,
 not assumed. Source: OpenAI `03-patches.tex`, lines 68–99. -/
 theorem exists_isMinOn_regularizedPatchObjective (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
@@ -343,7 +343,7 @@ theorem regularizedPatchObjective_pos (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j
   (Real.rpow_pos_of_pos (by positivity) _).trans_le
     (regularizedPatchObjective_bounds regions a ha hb Ω hΩ hx).1
 
-/-- The actual minimum is strictly positive. -/
+/-- The minimum is strictly positive. -/
 theorem regularizedPatchMinimum_pos (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
@@ -351,7 +351,7 @@ theorem regularizedPatchMinimum_pos (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
   (Real.rpow_pos_of_pos (by positivity) _).trans_le
     (regularizedPatchMinimum_bounds regions a ha hb Ω hΩ).1
 
-/-- Normalize a filtered vector by its actual positive norm.
+/-- Normalize a filtered vector by its positive norm.
 Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def normalizedRegularizedPatchOutput (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))

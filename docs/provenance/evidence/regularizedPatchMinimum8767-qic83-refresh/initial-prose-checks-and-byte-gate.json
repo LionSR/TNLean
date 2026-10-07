@@ -1,0 +1,94 @@
+{
+  "base": "9953e6d11dfe9fa1fb68932fd73e3ef5427911f9",
+  "source_changes": [
+    {
+      "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+      "before_sha256": "a920898853c19a7c25ebd338a0a906de2360771ec6113bf9c079185244fbd01a",
+      "after_sha256": "4786445285a09387e5836598abc3606c8212d885c4e9743ee0169a572af9ced6",
+      "noncomment_tokens_identical": true,
+      "noncomment_token_sha256": "702d851de82f757cf288a47bfd4f56a67e121611aca20e2baf911fc7b498bd08",
+      "change": "Remove only six filler occurrences in docstrings."
+    },
+    {
+      "path": "TNLean/MPS/Symmetry/LocalVirtualGauge.lean",
+      "before_sha256": "f88971c528480b740548cf98e3b587fc2d55c50857db72df725d1d2941f34cb8",
+      "after_sha256": "2b3f128ec42da770ebe8cef08361b1e62e76983816ae8162bafc6ed786b2cbc6",
+      "declaration_and_proof_tokens_identical": true,
+      "import_set_identical": true,
+      "restores_exact_a5_source_bytes": true,
+      "change": "Remove the second byte-identical MatrixUnitConjugator import introduced by the independent merge."
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_regularized_patch_minimum.tex",
+      "before_sha256": "ef92a9bdf1e9ae42a0de1e58fa8ed449240aa39c2d1d491bf2b833a24d3232cd",
+      "after_sha256": "4d88bcbf1365493e33a610403cae61e63e4aca2685857c57df834462f7999a62",
+      "all_noncomment_tex_identical": true,
+      "change": "Remove only three CI-status comment lines; all mathematics, tags and diagram source unchanged."
+    }
+  ],
+  "checks": [
+    {
+      "label": "imports",
+      "command": [
+        "python3",
+        "scripts/generate_import_aggregators.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.9606966419960372,
+      "log_sha256": "ab5147996612ed5a358b9be5914864f64b1e2babee6371695c55749c8683990e"
+    },
+    {
+      "label": "docbuild",
+      "command": [
+        "python3",
+        "scripts/check_docbuild_manifest.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.048295518005033955,
+      "log_sha256": "9dc6570f1ec606c0ad9ad64df85a8361a3493bec1f95f01e0a0d511636a03034"
+    },
+    {
+      "label": "blueprint-sync",
+      "command": [
+        "python3",
+        "scripts/blueprint_lean_sync.py",
+        "--root",
+        ".",
+        "--ci",
+        "--report-duplicate-tags",
+        "--report",
+        "/workspace/scratch/7637e06d0fc2/regularized-9953-audit/blueprint-sync.json"
+      ],
+      "exit_code": 0,
+      "seconds": 3.839052818977507,
+      "log_sha256": "b995234b5998ffa07ad87eee931d17146d27afe601b9db92c3b12053e4447ae8"
+    },
+    {
+      "label": "provenance",
+      "command": [
+        "python3",
+        "scripts/check_openai_provenance.py",
+        "--upstream-root",
+        "/workspace/scratch/7637e06d0fc2/openai-math-selected-objects.git"
+      ],
+      "exit_code": 1,
+      "seconds": 1.6338852719927672,
+      "log_sha256": "2090cf6cc04a42be715071608bf9ab36fb5710e20fbfbd64e46b61c175cd64d8"
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.17642246498144232,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "old_attestations_and_provenance_unchanged": true,
+  "source_hash_change_is_not_new_compilation_evidence": true,
+  "no_lean_or_lake_run": true
+}

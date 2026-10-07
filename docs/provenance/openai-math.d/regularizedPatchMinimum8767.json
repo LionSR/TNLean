@@ -37,20 +37,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -88,20 +88,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -139,20 +139,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -190,20 +190,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -241,20 +241,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -292,20 +292,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -343,20 +343,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -394,20 +394,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -445,20 +445,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -496,20 +496,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -547,20 +547,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -598,20 +598,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -649,20 +649,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -700,20 +700,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -751,20 +751,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -802,20 +802,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -853,20 +853,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -904,20 +904,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -955,20 +955,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -1006,20 +1006,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -1057,20 +1057,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -1108,20 +1108,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -1159,20 +1159,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
@@ -1210,20 +1210,20 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "38a4fa419eed06cf19777728f684a9caa69ba925",
+        "revision": "bb3043de9849792685781949ddc2aca8e711fda5",
         "commands": [
           {
             "kind": "build",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117503275243031/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-patch-minimum/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133786924282808/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.ilean /workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose/TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMinimum.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-patch-validation/tmp/117562487820665/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-patch-validation/RegularizedPatchAxioms.lean",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.olean -i /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/tmp/133900599272111/RegularizedPatchAxioms.ilean /workspace/scratch/7637e06d0fc2/regularized-qic83-validation/RegularizedPatchAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/regularizedPatchMinimum8767/RegularizedPatchAxioms.log",
+            "log": "docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/logs/RegularizedPatchAxioms.log",
             "sha256": "b4cc2d14f968109048cf31039dc7d76887aa87103d1dddf64db34bf84242dae3"
           }
         ]
