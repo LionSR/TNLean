@@ -191,13 +191,34 @@ actual pure-state marginals. For unit input, the resulting expression is
 nonnegative by subadditivity and complementary entropy. Both proofs and
 complete library and blueprint checks passed.
 
-The independent-copy surprisal estimate and replica permutation covariance
-are proved and undergoing complete verification. They include singular
-one-copy densities and invariance of their actual tensor powers. Combining
-their concentration bound with the Schur remainder to select a single label
+[QICLean #624](https://github.com/LionSR/QICLean/pull/624) proves independent-copy
+surprisal concentration for actual tensor-power densities, including singular
+one-copy states. A window of width \(k^{3/4}\) has tail mass at most
+\(V_\rho/\sqrt{k}\), with the variance computed from the actual one-copy
+spectrum. Four kernel reports and complete library and blueprint checks passed.
+[QICLean #626](https://github.com/LionSR/QICLean/pull/626) proves actual replica
+permutation covariance, including invariance of the literal tensor-power
+density and preservation of fixed auxiliary sectors by the actual physical
+cutoff. Five kernel reports and complete library and blueprint checks passed.
+[QICLean #625](https://github.com/LionSR/QICLean/pull/625) extracts the actual
+ground-state tensor from the complementary copies of each excitation
+component by explicit contraction and proves equality of the remainder's norm.
+Four kernel reports and complete library and blueprint checks passed.
+Combining concentration with the Schur remainder to select a single label
 with both polynomial mass and the required logarithmic dimension remains
 active work. None of these draft results has yet changed TNLean's dependency
 pin.
+
+The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
+contains the compatible merge and grouped-copy dimension inequalities of
+Lemma 6.1. Their application to the actual good-copy component and the
+logarithmic dimension comparison remains separate. The accepted
+[QICLean #613](https://github.com/LionSR/QICLean/pull/613) supplies a maximizing
+nested feasible filter family, commutation with its marginals, and the
+floor-clipped spectral form in the area-law initial-buffer argument.
+The floor-to-zero limit and physical energy assembly remain to be established.
+These nested-filter results do not by themselves complete the separate PEPS
+patch-minimum proposition.
 
 [QICLean #607](https://github.com/LionSR/QICLean/pull/607) proves that a positive
 definite matrix and any nonzero real power have the same commutant. In
