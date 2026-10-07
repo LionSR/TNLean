@@ -58,11 +58,12 @@ proved nonempty remote cut boundary, proved separation, and a proved nonempty
 local template boundary; the final core and shell bounds are instantiated
 without additional hypotheses.
 
-Remaining validation: the separate blueprint-render job 112863110027 reported
-failure without any step records; its log download returned `BlobNotFound`.
-The job-retry API and two PR-comment attempts returned connector internal
-errors. This is not a diagnosed LaTeX/source error. The evidence update triggers
-fresh final-head CI; the rendering result must be checked before merge.
+Rendering validation: the first separate render job exposed no step records or
+log. The fresh run 37642805340 supplied a concrete diagnosis: only this new
+chapter failed the pinned latexindent formatting gate. The chapter was formatted
+with the repository's checksum-verified latexindent 3.24.7 wrapper and passes its
+single-file idempotence check. The change is whitespace only. Fresh final-head
+CI must confirm the complete render before merge.
 Local toolchain retrieval returned HTTP 403, so no local Mathlib proof-source
 build was attempted. The blueprint completion marks refer only to these seven
 compiled, source-faithful geometric results, not the full Lemma 9.4.
