@@ -15,6 +15,7 @@ import TNLean.PEPS.Approximation.CommonPartyMaps
 import TNLean.PEPS.Approximation.CommonSourceGate
 import TNLean.PEPS.Approximation.CommonSourcePreparation
 import TNLean.PEPS.Approximation.CompletePartyMaps
+import TNLean.PEPS.Approximation.DistributedSourceComposition
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
@@ -27,6 +28,9 @@ import TNLean.PEPS.Approximation.PairSourceCompletion
 import TNLean.PEPS.Approximation.PairSourceExpansion
 import TNLean.PEPS.Approximation.PairSourceGrouping
 import TNLean.PEPS.Approximation.PairSourceOrdering
+import TNLean.PEPS.Approximation.PartialSourceDensity
+import TNLean.PEPS.Approximation.PartialSourceEvaluation
+import TNLean.PEPS.Approximation.PartialSourceInventory
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGrouping
@@ -41,6 +45,10 @@ import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SourceBlockMatrix
+import TNLean.PEPS.Approximation.SourceChoiceCost
+import TNLean.PEPS.Approximation.SourceCircuitChoiceProduct
+import TNLean.PEPS.Approximation.SourceCircuitLocations
+import TNLean.PEPS.Approximation.SourceCircuitSourceOrder
 import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceGateDensity
 import TNLean.PEPS.Approximation.SourceOwnerMap

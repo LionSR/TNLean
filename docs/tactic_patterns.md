@@ -5640,3 +5640,28 @@ spectral split → block extraction → MPV calculation → strict bounds
   lower-level lemma, then derive the local and aggregate cases from it.
 - **Notes:** The aggregate case permits several original owners on the block;
   it retains the full operator after those owners are grouped together.
+
+### Weighted ket–bra matrix sums — candidate (2026-10-08)
+
+- **Pattern:** Distribute a matrix product through two finite weighted sums,
+  conjugate the bra coefficients, and exchange the two summations.
+- **Seen:** `sum_density_expansion` in `SourceGateDensity.lean` and
+  `density_eval_eq_sum_partialWord` in `PartialSourceDensity.lean` under
+  `PEPS/Approximation` (two occurrences).
+- **Abstraction:** Before a third consumer, expose the rectangular matrix
+  identity as a shared lemma. Its two coefficient families and output index
+  types should remain independent.
+- **Scan:** The full repository scan was run. A focused scan of the eight
+  chronological-expansion modules with minimum count two found no repeated
+  tactic blocks at the default window lengths.
+
+### Exterior ownership of a placed block — candidate (2026-10-08)
+
+- **Pattern:** If no participant of a placed gate is affected, every register
+  in its transported layout has the exterior owner.
+- **Seen:** `exterior_layout` in `DistributedSourceComposition.lean` and
+  the corresponding local assertion in `PartialSourceEvaluation.lean` under
+  `PEPS/Approximation` (two occurrences).
+- **Abstraction:** A third consumer should use one public layout-membership
+  lemma. The existing `affectedOwner_eq_none` already supplies the pointwise
+  fact; no new tactic is needed.
