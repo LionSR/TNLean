@@ -5567,3 +5567,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Both occurrences lie in one file, below the promotion threshold.
   The proof-session scan reports no exact repeated block in the three new
   fine-belt modules at its default thresholds.
+
+
+### Normalizing the three nonvertical allowed slopes — candidate (2026-10-07)
+
+- **Pattern:** After specializing an integer line slope to zero, one or minus one,
+  unfold the coordinate equality and close the scalar equation with
+  `dsimp at hs; norm_num; linarith`.
+- **Seen:** Three occurrences in `Geometry/MeshGeometry.lean`, in the horizontal
+  and two diagonal cases of `affineMesh_line_dist_ge`.
+- **Abstraction:** The shared line-distance argument already uses
+  `nonvertical_mesh_line_dist_ge`. Consider consolidating the remaining slope
+  normalization if it recurs in another file; the current occurrences are in
+  one file and do not meet the two-file promotion condition.
+- **Notes:** The October 7 Geometry scan detected these three short blocks.
