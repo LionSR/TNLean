@@ -1,0 +1,74 @@
+{
+  "repository": "LionSR/TNLean",
+  "issue": 8769,
+  "agent": "/root/compression_layout",
+  "branch": "codex/peps-compression-layout",
+  "base_commit": "e229f204acfedb0634cdcd3968d0a002fb079b59",
+  "head_commit": "8c804b89dfce5db46cf02ed45ca0fcdd4162ef9c",
+  "commits": [
+    "a1ce5caa35dee4a3cdf247c7d70e38bd53b69018",
+    "8c804b89dfce5db46cf02ed45ca0fcdd4162ef9c"
+  ],
+  "worktree": "/workspace/worktrees/tn-compression-layout",
+  "claim_url": "https://github.com/LionSR/TNLean/issues/8769#issuecomment-6034400328",
+  "progress_url": "https://github.com/LionSR/TNLean/issues/8769#issuecomment-6034803589",
+  "upstream_paper_commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "source": {
+    "file": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+    "labels": [
+      "thm:compression",
+      "eq:compression-subset-expansion",
+      "eq:compression-choice-cost"
+    ],
+    "line_ranges": [
+      "342-381",
+      "565-588"
+    ],
+    "B_d_at_least_one_source_line": 277
+  },
+  "openai_lean_reuse": false,
+  "production_modules": [
+    "TNLean.PEPS.Approximation.DistributedLifetime",
+    "TNLean.PEPS.Approximation.DistributedLinks",
+    "TNLean.PEPS.Approximation.CorrectedPositionCost"
+  ],
+  "proved": [
+    "Corrected source positions touch at most 2 times their cardinality parties.",
+    "Every nonprivate gate touching corrected parties is included, with count at most 2*b*|S| from entire-lifetime participation.",
+    "Exterior nonprivate gate participant sets are disjoint from corrected parties.",
+    "Actual star/sample link families preserve gate occurrences and parallel link kinds.",
+    "Each link has exactly two distinct endpoints and derived original-gate co-participation.",
+    "Per-party link incidence is at most 2*b*(b-1).",
+    "Actual affected-gate squared coefficient sums and affected-party squared physical dimensions cost at most (B^(4b)*d^4)^|S|.",
+    "B<=C*L^a and d<=D*L^c imply Q<=C^(4b)*D^4*L^(4*b*a+4*c)."
+  ],
+  "validation": {
+    "focused_production_build": "passed with package Lean/linter options; 1163 jobs; no warnings",
+    "lean_toolchain": "leanprover/lean4:v4.35.0-rc3",
+    "mathlib_cache": "Official prebuilt cache, independent writable dependency checkouts; exact added NNReal closure fetched before build.",
+    "cache_preflight": "lake --no-build build Mathlib.Basic.NNReal.Basic Mathlib.Algebra.Order.BigOperators.Group.Finset Mathlib.Data.Sym.Card: all targets up-to-date",
+    "regressions": [
+      "scripts/distributed_compression_layout_regression.lean",
+      "scripts/distributed_compression_choice_cost_regression.lean"
+    ],
+    "regression_option": "-DrelaxedAutoImplicit=false",
+    "axiom_audit": "19 selected definitions and main lemmas audited; union only propext, Classical.choice, Quot.sound",
+    "production_integrity_scan": "No sorry, admit, axiom, native_decide or unsafeCast tokens",
+    "tactic_pattern_scan": "No repeated tactic patterns at current thresholds",
+    "git_diff_check": "passed",
+    "independent_mathematical_review": "approved by /root/compression_proof_review",
+    "logs": [
+      "/workspace/proof-build-logs/compression-layout-final-build.log",
+      "/workspace/proof-build-logs/compression-layout-final-regression.log",
+      "/workspace/proof-build-logs/compression-layout-final-choice-cost-regression.log"
+    ]
+  },
+  "remaining": [
+    "Actual circuit/density correction-subset expansion and identification with the finite coefficient choice cost.",
+    "Local tensor evaluation and virtual dimension bounds.",
+    "Composition with source reduction, Gaussian covariance, weighted rectangular estimates and sampling.",
+    "Full Theorem 5.2 including approximate expansions.",
+    "Root integration of generated imports, glossary/blueprint, and PR; no shared integration files edited by this agent."
+  ],
+  "working_tree_clean": true
+}

@@ -1,0 +1,7 @@
+.............................
+----------------------------------------------------------------------
+Ran 29 tests in 0.666s
+
+OK
+Validated uniquely main-scoped cache tnlean-build-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; full build still required
+Dropped cross-commit TNLean, QIC aggregators, orphan and unknown cached artifacts
