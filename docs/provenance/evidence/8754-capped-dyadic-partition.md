@@ -44,3 +44,25 @@ observing a successful audit.
 The mixed-square count for actual templates, safe-square clearance, entropy
 subadditivity and dyadic entropy summation remain separate. This contribution
 does not complete Lemma 9.4, #8754 or either headline manuscript theorem.
+
+## Reviewed source corrections
+
+The reviewer in #8863 comment 6045767900 checked two corrections in a temporary
+copy of source `2b639859360e28322f83702d82a33b1b064a2ab9`, after comparing the
+toolchain, dependency pins and recursive import sources. The reported check
+used TNLean's package options and produced no warnings. The reviewer did not
+modify the production branch or its provenance.
+
+The owner reviewed and applied the explicit search bound `(n := K)` and
+`Nat.lt_succ_self k` in the maximal-scale argument, and removed `not_imp` from
+the mixedness simplification. These preserve the statements and mathematical
+proofs. The reviewer's temporary-copy elaboration is not canonical production
+build or regression evidence. Production provenance remains pending.
+
+The imported dependency script prints all 23 exact export names. CI now saves
+the actual output and applies the existing `check_axiom_output` validator to
+every name in this contribution's ledger. The validator rejects missing or
+malformed records, inconsistent repeated output, and any dependency beyond
+`propext`, `Classical.choice` and `Quot.sound`. This makes successful execution
+alone insufficient for an audit pass. No successful production output has yet
+been observed or recorded; all verification statuses remain pending.

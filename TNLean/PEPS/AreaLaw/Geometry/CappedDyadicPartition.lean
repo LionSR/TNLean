@@ -194,7 +194,8 @@ theorem exists_mem_cappedDyadicPartition (S : Finset (ℤ × ℤ)) (K : ℕ)
   by_cases he : k = K
   · exact Or.inl he
   · right
-    have hp : ¬P (k + 1) := Nat.findGreatest_is_greatest (by omega) (by omega)
+    have hp : ¬P (k + 1) :=
+      Nat.findGreatest_is_greatest (n := K) (Nat.lt_succ_self k) (by omega)
     simpa only [P, ancestor_succ] using hp
 
 /-- The selected squares cover exactly the given finite set. -/
@@ -274,7 +275,7 @@ theorem mem_mixedDyadicIndices (S : Finset (ℤ × ℤ)) (k : ℕ) (z : ℤ × �
       (∃ x ∈ latticeDyadicCell k z, x ∈ S) ∧
         ∃ y ∈ latticeDyadicCell k z, y ∉ S := by
   simp only [mixedDyadicIndices, Finset.mem_filter, Finset.mem_image,
-    Finset.subset_iff, not_forall, not_imp, mem_latticeDyadicCell]
+    Finset.subset_iff, not_forall, mem_latticeDyadicCell]
   aesop
 
 /-- Below the cap, every selected square has a mixed parent. Both the inside

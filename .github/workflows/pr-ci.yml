@@ -564,6 +564,7 @@ jobs:
       - name: Test capped dyadic partition and audit axioms strictly
         timeout-minutes: 3
         run: |
+          set -eo pipefail
           lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
             -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
             -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -571,7 +572,22 @@ jobs:
           lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
             -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
             -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            docs/provenance/evidence/8754-capped-dyadic-axioms.lean
+            docs/provenance/evidence/8754-capped-dyadic-axioms.lean \
+            2>&1 | tee "$RUNNER_TEMP/capped-dyadic-axioms.log"
+          python3 -m pip install --disable-pip-version-check jsonschema==4.26.0
+          python3 - "$RUNNER_TEMP/capped-dyadic-axioms.log" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          from scripts.check_openai_provenance import check_axiom_output
+
+          output = Path(sys.argv[1]).read_text()
+          ledger = Path("docs/provenance/openai-math.d/8754-capped-dyadic-partition.json")
+          entries = json.loads(ledger.read_text())["entries"]
+          for entry in entries:
+              check_axiom_output(output, entry["downstream"]["declaration"])
+          print(f"Checked standard logical dependencies for all {len(entries)} exports.")
+          PY
 
       - name: Test exact square-grid PEPS contraction and audit axioms
         timeout-minutes: 2
