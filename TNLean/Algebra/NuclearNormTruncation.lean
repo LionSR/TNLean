@@ -5,15 +5,16 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Normed.Lp.Matrix
 
 /-!
 # Nuclear norms of rectangular matrices and low-rank truncation
 
-For a finite rectangular complex matrix `M`, the nuclear norm is the sum of its singular values,
-and the squared Hilbert--Schmidt norm is the sum of the squared moduli of its entries. This file
-proves the two finite-dimensional estimates used in the whole-group tensor bound of the
-polynomial-PEPS manuscript:
+For a finite rectangular complex matrix `M`, the nuclear norm is the sum of its singular values.
+The Hilbert--Schmidt norm is Mathlib's Frobenius norm `‖M‖` (under
+`open scoped Matrix.Norms.Frobenius`). This file proves the two finite-dimensional estimates used
+in the whole-group tensor bound of the polynomial-PEPS manuscript:
 
 * the Hölder bound `‖A Bᵀ‖₁ ≤ ‖A‖₂ ‖B‖₂`;
 * if `s₀ ≥ s₁ ≥ ⋯` are the singular values, then projecting onto the first `k` right singular
@@ -21,12 +22,11 @@ polynomial-PEPS manuscript:
 
 Both estimates are dimension free. The singular values are Mathlib's
 `LinearMap.singularValues` of the Euclidean action of `M`, so the nuclear norm defined here
-agrees with QICLean's square `Matrix.schattenOneNorm`. These generic matrix statements are
-candidates for QICLean.
+agrees with QICLean's square `Matrix.schattenOneNorm`. QICLean has no rectangular nuclear norm
+yet; the nuclear norm and the two estimates are candidates for QICLean.
 
 ## Main definitions
 
-* `Matrix.hsNormSq`: the squared Hilbert--Schmidt norm.
 * `Matrix.nuclearNorm`: the sum of the singular values.
 * `Matrix.orthonormalProjector`: the orthogonal projector onto the span of an orthonormal family.
 
@@ -38,11 +38,12 @@ candidates for QICLean.
 
 ## References
 
-* Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, proof,
-  equation `eq:group-nuclear` and the singular-value tail estimate, 05-frames.tex:143–179.
+* Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, proof:
+  equation `eq:group-nuclear`, 05-frames.tex:157–164, and the singular-value tail estimate,
+  05-frames.tex:166–174.
 -/
 
-open scoped InnerProductSpace
+open scoped InnerProductSpace Matrix.Norms.Frobenius
 open Module
 
 noncomputable section
@@ -51,49 +52,19 @@ namespace Matrix
 
 variable {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
 
-/-- The squared Hilbert--Schmidt norm `∑ a b, |M a b|²` of a rectangular complex matrix. -/
-def hsNormSq (M : Matrix α β ℂ) : ℝ := ∑ a, ∑ b, ‖M a b‖ ^ 2
+/-- The squared Frobenius (Hilbert--Schmidt) norm is the sum of the squared moduli of the
+entries. -/
+theorem frobenius_norm_sq_eq_sum (M : Matrix α β ℂ) : ‖M‖ ^ 2 = ∑ a, ∑ b, ‖M a b‖ ^ 2 := by
+  simp only [frobenius_norm_def, Real.rpow_two]
+  rw [← Real.sqrt_eq_rpow, Real.sq_sqrt (by positivity)]
 
-theorem hsNormSq_nonneg (M : Matrix α β ℂ) : 0 ≤ hsNormSq M :=
-  Finset.sum_nonneg fun _ _ ↦ Finset.sum_nonneg fun _ _ ↦ sq_nonneg _
-
-theorem hsNormSq_transpose (M : Matrix α β ℂ) : hsNormSq Mᵀ = hsNormSq M := by
-  unfold hsNormSq
-  rw [Finset.sum_comm]
-  rfl
-
-theorem hsNormSq_conjTranspose (M : Matrix α β ℂ) : hsNormSq Mᴴ = hsNormSq M := by
-  unfold hsNormSq
-  rw [Finset.sum_comm]
-  simp [conjTranspose_apply]
-
-/-- Reindexing rows and columns by equivalences does not change the Hilbert--Schmidt norm. -/
-theorem hsNormSq_submatrix {α' β' : Type*} [Fintype α'] [Fintype β'] (M : Matrix α β ℂ)
-    (e₁ : α' ≃ α) (e₂ : β' ≃ β) : hsNormSq (M.submatrix e₁ e₂) = hsNormSq M := by
-  unfold hsNormSq
-  rw [← e₁.sum_comp]
+/-- Reindexing rows and columns by equivalences does not change the Frobenius norm. -/
+theorem frobenius_norm_submatrix_equiv {α' β' : Type*} [Fintype α'] [Fintype β']
+    (M : Matrix α β ℂ) (e₁ : α' ≃ α) (e₂ : β' ≃ β) : ‖M.submatrix e₁ e₂‖ = ‖M‖ := by
+  refine (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp ?_
+  rw [frobenius_norm_sq_eq_sum, frobenius_norm_sq_eq_sum, ← e₁.sum_comp]
   refine Finset.sum_congr rfl fun a _ ↦ ?_
   exact e₂.sum_comp fun b ↦ ‖M (e₁ a) b‖ ^ 2
-
-omit [Fintype α] in
-/-- Submultiplicativity of the Hilbert--Schmidt norm, `‖A B‖₂² ≤ ‖A‖₂² ‖B‖₂²`. -/
-theorem hsNormSq_mul_le {δ : Type*} [Fintype δ] [Fintype α] (A : Matrix α γ ℂ)
-    (B : Matrix γ δ ℂ) : hsNormSq (A * B) ≤ hsNormSq A * hsNormSq B := by
-  unfold hsNormSq
-  have hpt : ∀ a d, ‖(A * B) a d‖ ^ 2 ≤ (∑ c, ‖A a c‖ ^ 2) * ∑ c, ‖B c d‖ ^ 2 := by
-    intro a d
-    calc ‖(A * B) a d‖ ^ 2 ≤ (∑ c, ‖A a c‖ * ‖B c d‖) ^ 2 := by
-          rw [mul_apply]
-          gcongr
-          exact (norm_sum_le _ _).trans (Finset.sum_le_sum fun c _ ↦ (norm_mul _ _).le)
-      _ ≤ _ := Finset.sum_mul_sq_le_sq_mul_sq _ _ _
-  calc ∑ a, ∑ d, ‖(A * B) a d‖ ^ 2
-      ≤ ∑ a, ∑ d, (∑ c, ‖A a c‖ ^ 2) * ∑ c, ‖B c d‖ ^ 2 :=
-        Finset.sum_le_sum fun a _ ↦ Finset.sum_le_sum fun d _ ↦ hpt a d
-    _ = (∑ a, ∑ c, ‖A a c‖ ^ 2) * ∑ c, ∑ d, ‖B c d‖ ^ 2 := by
-        rw [Finset.sum_mul]
-        refine Finset.sum_congr rfl fun a _ ↦ ?_
-        rw [← Finset.mul_sum, Finset.sum_comm]
 
 section Euclidean
 
@@ -117,7 +88,7 @@ theorem ofLp_toEuclideanLin_apply (X : Matrix α β ℂ) (x : EuclideanSpace ℂ
 have total size at most the squared Hilbert--Schmidt norm. -/
 theorem sum_norm_sq_toEuclideanLin_le {ι : Type*} (s : Finset ι) (X : Matrix α β ℂ)
     {u : ι → EuclideanSpace ℂ β} (hu : Orthonormal ℂ u) :
-    ∑ i ∈ s, ‖toEuclideanLin X (u i)‖ ^ 2 ≤ hsNormSq X := by
+    ∑ i ∈ s, ‖toEuclideanLin X (u i)‖ ^ 2 ≤ ‖X‖ ^ 2 := by
   have hrow : ∀ x : EuclideanSpace ℂ β, ‖toEuclideanLin X x‖ ^ 2 =
       ∑ a, ‖⟪x, (WithLp.toLp 2 fun b ↦ star (X a b) : EuclideanSpace ℂ β)⟫_ℂ‖ ^ 2 := by
     intro x
@@ -125,7 +96,7 @@ theorem sum_norm_sq_toEuclideanLin_le {ι : Type*} (s : Finset ι) (X : Matrix �
     refine Finset.sum_congr rfl fun a _ ↦ ?_
     rw [ofLp_toEuclideanLin_apply, norm_inner_symm]
   simp_rw [hrow]
-  rw [Finset.sum_comm]
+  rw [Finset.sum_comm, frobenius_norm_sq_eq_sum]
   refine Finset.sum_le_sum fun a _ ↦ ?_
   refine (hu.sum_inner_products_le _).trans_eq ?_
   rw [EuclideanSpace.norm_sq_eq]
@@ -134,7 +105,7 @@ theorem sum_norm_sq_toEuclideanLin_le {ι : Type*} (s : Finset ι) (X : Matrix �
 /-- Parseval's identity for the Hilbert--Schmidt norm in an orthonormal basis. -/
 theorem sum_norm_sq_toEuclideanLin_basis {ι : Type*} [Fintype ι] (X : Matrix α β ℂ)
     (w : OrthonormalBasis ι ℂ (EuclideanSpace ℂ β)) :
-    ∑ i, ‖toEuclideanLin X (w i)‖ ^ 2 = hsNormSq X := by
+    ∑ i, ‖toEuclideanLin X (w i)‖ ^ 2 = ‖X‖ ^ 2 := by
   have hrow : ∀ x : EuclideanSpace ℂ β, ‖toEuclideanLin X x‖ ^ 2 =
       ∑ a, ‖⟪x, (WithLp.toLp 2 fun b ↦ star (X a b) : EuclideanSpace ℂ β)⟫_ℂ‖ ^ 2 := by
     intro x
@@ -142,7 +113,7 @@ theorem sum_norm_sq_toEuclideanLin_basis {ι : Type*} [Fintype ι] (X : Matrix �
     refine Finset.sum_congr rfl fun a _ ↦ ?_
     rw [ofLp_toEuclideanLin_apply, norm_inner_symm]
   simp_rw [hrow]
-  rw [Finset.sum_comm]
+  rw [Finset.sum_comm, frobenius_norm_sq_eq_sum]
   refine Finset.sum_congr rfl fun a _ ↦ ?_
   rw [w.sum_sq_norm_inner_right, EuclideanSpace.norm_sq_eq]
   simp
@@ -209,9 +180,9 @@ theorem nuclearNorm_nonneg (M : Matrix α β ℂ) : 0 ≤ nuclearNorm M := by
 /-- Hölder's inequality `‖A Bᵀ‖₁ ≤ ‖A‖₂ ‖B‖₂`. No dimension enters.
 
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, equation
-`eq:group-nuclear`, 05-frames.tex:162–169. -/
+`eq:group-nuclear`, 05-frames.tex:157–164. -/
 theorem nuclearNorm_mul_transpose_le (A : Matrix α γ ℂ) (B : Matrix β γ ℂ) :
-    nuclearNorm (A * Bᵀ) ≤ √(hsNormSq A) * √(hsNormSq B) := by
+    nuclearNorm (A * Bᵀ) ≤ ‖A‖ * ‖B‖ := by
   classical
   set M := A * Bᵀ with hM
   set T := toEuclideanLin M
@@ -265,34 +236,34 @@ theorem nuclearNorm_mul_transpose_le (A : Matrix α γ ℂ) (B : Matrix β γ �
       field_simp
     · have hij' : (i : Fin (Fintype.card β)) ≠ j := fun h ↦ hij (Subtype.ext h)
       simp [hij, hij']
-  have hsumA : ∑ i, ‖toEuclideanLin Aᴴ (u i)‖ ^ 2 ≤ hsNormSq A := by
+  have hsumA : ∑ i, ‖toEuclideanLin Aᴴ (u i)‖ ^ 2 ≤ ‖A‖ ^ 2 := by
     have hzero : ∀ i ∉ s, ‖toEuclideanLin Aᴴ (u i)‖ ^ 2 = 0 := by
       intro i hi
       have : t i = 0 := by simpa [hs] using hi
       simp [hu, this]
     rw [← Finset.sum_subset (Finset.subset_univ s) fun i _ hi ↦ hzero i hi,
-      ← Finset.sum_coe_sort s, ← hsNormSq_conjTranspose A]
+      ← Finset.sum_coe_sort s, ← frobenius_norm_conjTranspose A]
     exact sum_norm_sq_toEuclideanLin_le Finset.univ Aᴴ (u := fun i : s ↦ u i) horth
-  have hsumB : ∑ i, ‖toEuclideanLin Bᵀ (w i)‖ ^ 2 = hsNormSq B := by
-    rw [sum_norm_sq_toEuclideanLin_basis, hsNormSq_transpose]
+  have hsumB : ∑ i, ‖toEuclideanLin Bᵀ (w i)‖ ^ 2 = ‖B‖ ^ 2 := by
+    rw [sum_norm_sq_toEuclideanLin_basis, frobenius_norm_transpose]
   rw [nuclearNorm_eq_sum_norm]
   calc ∑ i, t i ≤ ∑ i, ‖toEuclideanLin Aᴴ (u i)‖ * ‖toEuclideanLin Bᵀ (w i)‖ :=
         Finset.sum_le_sum fun i _ ↦ hpt i
     _ ≤ √(∑ i, ‖toEuclideanLin Aᴴ (u i)‖ ^ 2) * √(∑ i, ‖toEuclideanLin Bᵀ (w i)‖ ^ 2) :=
         Real.sum_mul_le_sqrt_mul_sqrt _ _ _
-    _ ≤ √(hsNormSq A) * √(hsNormSq B) := by
-        rw [hsumB]
+    _ ≤ ‖A‖ * ‖B‖ := by
+        rw [hsumB, Real.sqrt_sq (norm_nonneg B)]
         gcongr
+        exact Real.sqrt_le_iff.mpr ⟨norm_nonneg _, hsumA⟩
 
 /-! ### Truncation to the leading right singular directions -/
 
-omit [Fintype α] [Fintype β] [Fintype γ] [DecidableEq β] in
 /-- The singular-value tail estimate: for a decreasing nonnegative sequence `s`,
 `(k + 1) ∑_{i ≥ k} sᵢ² ≤ (∑ᵢ sᵢ)²`.
 
 Polynomial-PEPS manuscript (Sept 24 2026), proof of Lemma 6.2 `lem:group-tensor`,
-05-frames.tex:170–176. -/
-theorem tail_sq_sum_le (s : ℕ → ℝ) (hs : Antitone s) (h0 : ∀ i, 0 ≤ s i) (n k : ℕ) :
+05-frames.tex:166–174. -/
+private theorem tail_sq_sum_le (s : ℕ → ℝ) (hs : Antitone s) (h0 : ∀ i, 0 ≤ s i) (n k : ℕ) :
     (k + 1) * ∑ i ∈ Finset.range n, (if k ≤ i then s i ^ 2 else 0) ≤
       (∑ i ∈ Finset.range n, s i) ^ 2 := by
   set C := ∑ i ∈ Finset.range n, s i with hCdef
@@ -349,11 +320,11 @@ of at most `k` vectors has projector `P` with `(k + 1) ‖M - M P‖₂² ≤ �
 space has dimension at most `k`, the error vanishes. No dimension enters the estimate.
 
 Polynomial-PEPS manuscript (Sept 24 2026), proof of Lemma 6.2 `lem:group-tensor`,
-05-frames.tex:170–176. -/
+05-frames.tex:166–174. -/
 theorem exists_orthonormal_truncation (M : Matrix α β ℂ) (k : ℕ) :
     ∃ r ≤ k, ∃ f : Fin r → EuclideanSpace ℂ β, Orthonormal ℂ f ∧
-      (k + 1) * hsNormSq (M - M * orthonormalProjector f) ≤ nuclearNorm M ^ 2 ∧
-      (Fintype.card β ≤ k → hsNormSq (M - M * orthonormalProjector f) = 0) := by
+      (k + 1) * ‖M - M * orthonormalProjector f‖ ^ 2 ≤ nuclearNorm M ^ 2 ∧
+      (Fintype.card β ≤ k → M - M * orthonormalProjector f = 0) := by
   classical
   set n := Fintype.card β
   set w := rightSingularBasis M
@@ -382,7 +353,7 @@ theorem exists_orthonormal_truncation (M : Matrix α β ℂ) (k : ℕ) :
         have := i.2
         omega
       simp [this]
-  have herr : hsNormSq (M - M * orthonormalProjector f) =
+  have herr : ‖M - M * orthonormalProjector f‖ ^ 2 =
       ∑ i ∈ Finset.range n, (if k ≤ i then (T.singularValues i) ^ 2 else 0) := by
     rw [← sum_norm_sq_toEuclideanLin_basis _ w, Finset.sum_range]
     refine Finset.sum_congr rfl fun j _ ↦ ?_
@@ -400,7 +371,7 @@ theorem exists_orthonormal_truncation (M : Matrix α β ℂ) (k : ℕ) :
     exact tail_sq_sum_le _ (LinearMap.singularValues_antitone _)
       (LinearMap.singularValues_nonneg _) n k
   · intro hnk
-    rw [herr]
+    rw [← norm_eq_zero, ← sq_eq_zero_iff, herr]
     exact Finset.sum_eq_zero fun i hi ↦ by
         rw [Finset.mem_range] at hi
         exact ite_eq_right_iff.mpr fun h ↦ absurd h (by omega)

@@ -34,7 +34,7 @@ most `1 / √k`, and groups with a one-point configuration space contribute noth
   05-frames.tex:125–179.
 -/
 
-open scoped BigOperators Matrix InnerProductSpace
+open scoped BigOperators Matrix InnerProductSpace Matrix.Norms.Frobenius
 
 noncomputable section
 
@@ -48,19 +48,16 @@ section Projectors
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- A Hermitian idempotent matrix does not increase Euclidean norms. -/
+/-- A Hermitian idempotent matrix acts as an orthogonal projection, so it does not increase
+Euclidean norms. -/
 theorem norm_toEuclideanLin_le_of_isProj (M : Matrix ι ι ℂ) (hH : Mᴴ = M) (hI : M * M = M)
     (x : EuclideanSpace ℂ ι) : ‖toEuclideanLin M x‖ ≤ ‖x‖ := by
-  have hsq : ‖toEuclideanLin M x‖ ^ 2 ≤ ‖x‖ * ‖toEuclideanLin M x‖ := by
-    have h1 : ⟪toEuclideanLin M x, toEuclideanLin M x⟫_ℂ = ⟪x, toEuclideanLin M x⟫_ℂ := by
-      rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint, hH,
-        ← LinearMap.comp_apply, ← toLpLin_mul_same, hI]
-    have h2 : ‖toEuclideanLin M x‖ ^ 2 = ‖⟪x, toEuclideanLin M x⟫_ℂ‖ := by
-      rw [← h1, inner_self_eq_norm_sq_to_K]
-      simp
-    rw [h2]
-    exact norm_inner_le_norm _ _
-  nlinarith [norm_nonneg (toEuclideanLin M x), norm_nonneg x]
+  have hp : (toEuclideanLin M).IsSymmetricProjection :=
+    ⟨by rw [IsIdempotentElem, Module.End.mul_eq_comp, ← toLpLin_mul_same, hI],
+      isSymmetric_toEuclideanLin_iff.mpr hH⟩
+  obtain ⟨_, hp⟩ := LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range.mp hp
+  rw [hp]
+  exact Submodule.norm_starProjection_apply_le _ x
 
 omit [DecidableEq ι] in
 theorem conjTranspose_orthonormalProjector {β : Type*}
@@ -168,13 +165,13 @@ def groupFlattening (Z : ((v : V) → P v) → ℂ) (w : V) :
 
 omit [Fintype V] [∀ v, Fintype (P v)] [∀ v, DecidableEq (P v)] in
 @[simp]
-theorem piSplitAt_symm_apply_self (w : V) (p : P w) (x : (v : {v // v ≠ w}) → P v) :
+private theorem piSplitAt_symm_apply_self (w : V) (p : P w) (x : (v : {v // v ≠ w}) → P v) :
     (Equiv.piSplitAt w P).symm (p, x) w = p := by
   simp [Equiv.piSplitAt_symm_apply]
 
 omit [Fintype V] [∀ v, Fintype (P v)] [∀ v, DecidableEq (P v)] in
 @[simp]
-theorem piSplitAt_symm_apply_ne (w : V) (p : P w) (x : (v : {v // v ≠ w}) → P v)
+private theorem piSplitAt_symm_apply_ne (w : V) (p : P w) (x : (v : {v // v ≠ w}) → P v)
     (v : {v // v ≠ w}) : (Equiv.piSplitAt w P).symm (p, x) v = x v := by
   simp [Equiv.piSplitAt_symm_apply, v.2]
 
@@ -213,8 +210,8 @@ theorem onFactor_mulVec (Z : ((v : V) → P v) → ℂ) (w : V) (Q : Matrix (P w
 theorem norm_sq_sub_onFactor (Z : EuclideanSpace ℂ ((v : V) → P v)) (w : V)
     (Q : Matrix (P w) (P w) ℂ) :
     ‖Z - toEuclideanLin (onFactor w Q) Z‖ ^ 2 =
-      hsNormSq (groupFlattening Z.ofLp w - groupFlattening Z.ofLp w * Qᵀ) := by
-  rw [EuclideanSpace.norm_sq_eq, hsNormSq, ← (Equiv.piSplitAt w P).symm.sum_comp,
+      ‖groupFlattening Z.ofLp w - groupFlattening Z.ofLp w * Qᵀ‖ ^ 2 := by
+  rw [EuclideanSpace.norm_sq_eq, frobenius_norm_sq_eq_sum, ← (Equiv.piSplitAt w P).symm.sum_comp,
     Fintype.sum_prod_type, Finset.sum_comm]
   refine Finset.sum_congr rfl fun x _ ↦ Finset.sum_congr rfl fun p _ ↦ ?_
   simp only [WithLp.ofLp_sub, Pi.sub_apply, toLpLin_apply, onFactor_mulVec, Matrix.sub_apply]
@@ -224,7 +221,7 @@ theorem norm_sq_sub_onFactor (Z : EuclideanSpace ℂ ((v : V) → P v)) (w : V)
 error of their product is at most the sum of the separate errors.
 
 Polynomial-PEPS manuscript (Sept 24 2026), proof of Lemma 6.2 `lem:group-tensor`,
-05-frames.tex:170–176. -/
+05-frames.tex:174–176. -/
 theorem norm_sub_factorMatrix_le (Q : (v : V) → Matrix (P v) (P v) ℂ)
     (hH : ∀ v, (Q v)ᴴ = Q v) (hI : ∀ v, Q v * Q v = Q v)
     (Z : EuclideanSpace ℂ ((v : V) → P v)) (F : Finset V) :
@@ -306,7 +303,7 @@ than one configuration. In those bases `Z_k` has at most `k ^ g` product terms, 
 of modulus at most one.
 
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, equation
-`eq:group-truncation`, 05-frames.tex:134–141; proof 05-frames.tex:170–179. -/
+`eq:group-truncation`, 05-frames.tex:133–141; proof 05-frames.tex:166–179. -/
 theorem exists_group_truncation (Z : EuclideanSpace ℂ ((v : V) → P v)) (hZ : ‖Z‖ ≤ 1)
     (hnuc : ∀ w, nuclearNorm (groupFlattening Z.ofLp w) ≤ 1) (G : Finset V)
     (hG : ∀ v ∉ G, Fintype.card (P v) ≤ 1) (k : ℕ) (hk : 1 ≤ k) :
@@ -354,13 +351,13 @@ theorem exists_group_truncation (Z : EuclideanSpace ℂ ((v : V) → P v)) (hZ :
         have hle : ‖Z - toEuclideanLin (onFactor v (Q v)) Z‖ ^ 2 ≤ (1 / √k) ^ 2 := by
           rw [hsq, div_pow, one_pow, Real.sq_sqrt hkpos.le, le_div_iff₀ hkpos]
           have hnsq : nuclearNorm (groupFlattening Z.ofLp v) ^ 2 ≤ 1 := by nlinarith
-          have hhs := hsNormSq_nonneg
-            (groupFlattening Z.ofLp v - groupFlattening Z.ofLp v * orthonormalProjector (f v))
+          have hhs := sq_nonneg
+            ‖groupFlattening Z.ofLp v - groupFlattening Z.ofLp v * orthonormalProjector (f v)‖
           have hk1 : (k : ℝ) ≤ k + 1 := by linarith
           nlinarith
         exact (pow_le_pow_iff_left₀ (norm_nonneg _) (by positivity) two_ne_zero).mp hle
       · have h0 := hzero v ((hG v hv).trans hk)
-        rw [h0] at hsq
+        rw [h0, norm_zero, zero_pow two_ne_zero] at hsq
         exact (pow_eq_zero_iff two_ne_zero).mp hsq |>.le
     calc ∑ v, ‖Z - toEuclideanLin (onFactor v (Q v)) Z‖
         ≤ ∑ v, (if v ∈ G then 1 / √k else 0) := Finset.sum_le_sum fun v _ ↦ hbound v
@@ -397,25 +394,25 @@ variable {V E : Type*} [Fintype V] [DecidableEq V] [Fintype E] [DecidableEq E]
 
 /-- The complement of the complement of a singleton has exactly one element. -/
 @[instance_reducible]
-def uniqueComplSingletonCompl (w : V) : Unique {v // v ∉ ({w} : Finset V)ᶜ} where
+private def uniqueComplSingletonCompl (w : V) : Unique {v // v ∉ ({w} : Finset V)ᶜ} where
   default := ⟨w, by simp⟩
   uniq v := Subtype.ext (by simpa using v.2)
 
 omit [∀ v, Fintype (P v)] [∀ v, DecidableEq (P v)] in
 variable (P) in
 /-- The group space of `w`, seen as configurations on the complement of the complement of `w`. -/
-def groupEquiv (w : V) : P w ≃ ((v : {v // v ∉ ({w} : Finset V)ᶜ}) → P v) :=
+private def groupEquiv (w : V) : P w ≃ ((v : {v // v ∉ ({w} : Finset V)ᶜ}) → P v) :=
   (@Equiv.piUnique _ (uniqueComplSingletonCompl w) fun v ↦ P v).symm
 
 omit [∀ v, Fintype (P v)] [∀ v, DecidableEq (P v)] in
 variable (P) in
 /-- The configurations away from `w`, seen on the complement of the singleton `{w}`. -/
-def awayEquiv (w : V) :
+private def awayEquiv (w : V) :
     ((v : {v // v ≠ w}) → P v) ≃ ((v : {v // v ∈ ({w} : Finset V)ᶜ}) → P v) :=
   piSubtypeCongr P _ _ fun v ↦ by simp
 
 omit [∀ v, Fintype (P v)] [∀ v, DecidableEq (P v)] in
-theorem piSplitAt_symm_eq (w : V) (p : P w) (x : (v : {v // v ≠ w}) → P v) :
+private theorem piSplitAt_symm_eq (w : V) (p : P w) (x : (v : {v // v ≠ w}) → P v) :
     (Equiv.piSplitAt w P).symm (p, x) =
       (Equiv.piEquivPiSubtypeProd (· ∈ ({w} : Finset V)ᶜ) P).symm
         (awayEquiv P w x, groupEquiv P w p) := by
@@ -446,12 +443,12 @@ theorem nuclearNorm_groupFlattening_contraction_le_one (hloop : ∀ e, tail e �
     nuclearNorm (groupFlattening (contraction A) w) ≤ 1 := by
   rw [groupFlattening_contraction]
   refine (nuclearNorm_mul_transpose_le _ _).trans ?_
-  rw [hsNormSq_submatrix, hsNormSq_submatrix, hsNormSq_bipartitionLeft, hsNormSq_bipartitionRight]
-  have h₁ := partialNormSq_le_one A hloop hA ({w} : Finset V)ᶜ
-  have h₂ := partialNormSq_le_one A hloop hA ({w} : Finset V)ᶜᶜ
-  calc √(partialNormSq A ({w} : Finset V)ᶜ) * √(partialNormSq A ({w} : Finset V)ᶜᶜ)
-      ≤ 1 * 1 := by gcongr <;> exact Real.sqrt_le_one.mpr ‹_›
-    _ = 1 := one_mul 1
+  rw [frobenius_norm_submatrix_equiv, frobenius_norm_submatrix_equiv]
+  have h₁ : ‖bipartitionLeft A ({w} : Finset V)ᶜ‖ ≤ 1 := (sq_le_one_iff₀ (norm_nonneg _)).mp
+    ((norm_sq_bipartitionLeft A _).trans_le (partialNormSq_le_one A hloop hA _))
+  have h₂ : ‖bipartitionRight A ({w} : Finset V)ᶜ‖ ≤ 1 := (sq_le_one_iff₀ (norm_nonneg _)).mp
+    ((norm_sq_bipartitionRight A _).trans_le (partialNormSq_le_one A hloop hA _))
+  exact (mul_le_mul h₁ h₂ (norm_nonneg _) zero_le_one).trans_eq (one_mul 1)
 
 /-- **Whole-group tensor bound (Lemma 6.2).** Let a finite graph without edges from a vertex to
 itself carry at each vertex a tensor of norm at most one, and contract its edges by the coordinate

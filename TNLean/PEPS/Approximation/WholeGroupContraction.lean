@@ -26,9 +26,9 @@ functions on `P v`. A vertex without open legs has a one-point configuration typ
 
 ## Main statements
 
-* `WholeGroup.partialContraction_normSq_le`: every partially contracted subgraph has squared norm
-  at most the product of the squared vertex norms.
-* `WholeGroup.contraction_normSq_le_one`: the contracted tensor has norm at most one.
+* `WholeGroup.partialNormSq_le_prod`: every partially contracted subgraph has squared norm at
+  most the product of the squared vertex norms.
+* `WholeGroup.contraction_norm_le_one`: the contracted tensor has norm at most one.
 * `WholeGroup.nuclearNorm_flattening_le_one`: across every bipartition into whole open-leg groups,
   the flattening has nuclear norm at most one.
 
@@ -38,7 +38,7 @@ functions on `P v`. A vertex without open legs has a one-point configuration typ
   05-frames.tex:125–179.
 -/
 
-open scoped BigOperators Matrix
+open scoped BigOperators Matrix Matrix.Norms.Frobenius
 
 noncomputable section
 
@@ -379,30 +379,33 @@ def mergeRight (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :
   fun c y ↦ partialContraction A S₂ y.1 ((cutSplitRight D hd).symm (c, y.2))
 
 omit [Fintype V] in
-theorem hsNormSq_mergeLeft (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :
-    Matrix.hsNormSq (mergeLeft A hd) = partialNormSq A S₁ := by
+theorem norm_sq_mergeLeft (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :
+    ‖mergeLeft A hd‖ ^ 2 = partialNormSq A S₁ := by
   classical
-  unfold Matrix.hsNormSq partialNormSq mergeLeft
+  rw [Matrix.frobenius_norm_sq_eq_sum]
+  unfold partialNormSq mergeLeft
   rw [Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun σ₁ _ ↦ ?_
   rw [← (cutSplitLeft D hd).symm.sum_comp, Fintype.sum_prod_type, Finset.sum_comm]
 
 omit [Fintype V] in
-theorem hsNormSq_mergeRight (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :
-    Matrix.hsNormSq (mergeRight A hd) = partialNormSq A S₂ := by
+theorem norm_sq_mergeRight (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :
+    ‖mergeRight A hd‖ ^ 2 = partialNormSq A S₂ := by
   classical
-  unfold Matrix.hsNormSq partialNormSq mergeRight
+  rw [Matrix.frobenius_norm_sq_eq_sum]
+  unfold partialNormSq mergeRight
   rw [Finset.sum_comm, Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun σ₂ _ ↦ ?_
   rw [← (cutSplitRight D hd).symm.sum_comp, Fintype.sum_prod_type, Finset.sum_comm]
 
 omit [Fintype V] in
 /-- The partial contraction of `S₁ ∪ S₂` is the product of the two merge factors. -/
-theorem partialNormSq_eq_hsNormSq_mul (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S₂)
+theorem partialNormSq_eq_norm_sq_mul (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S₂)
     (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :
-    partialNormSq A S = Matrix.hsNormSq (mergeLeft A hd * mergeRight A hd) := by
+    partialNormSq A S = ‖mergeLeft A hd * mergeRight A hd‖ ^ 2 := by
   classical
-  unfold partialNormSq Matrix.hsNormSq
+  rw [Matrix.frobenius_norm_sq_eq_sum]
+  unfold partialNormSq
   have hcut : ∀ σ, ∑ b, ‖partialContraction A S σ b‖ ^ 2 =
       ∑ b₁, ∑ b₂, ‖partialContraction A S σ ((cutSplit D hS hd).symm (b₁, b₂))‖ ^ 2 := by
     intro σ
@@ -423,9 +426,10 @@ Polynomial-PEPS manuscript (Sept 24 2026), proof of Lemma 6.2 `lem:group-tensor`
 theorem partialNormSq_merge_le (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S₂)
     (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :
     partialNormSq A S ≤ partialNormSq A S₁ * partialNormSq A S₂ := by
-  rw [partialNormSq_eq_hsNormSq_mul A hS hd, ← hsNormSq_mergeLeft A hd,
-    ← hsNormSq_mergeRight A hd]
-  exact Matrix.hsNormSq_mul_le _ _
+  rw [partialNormSq_eq_norm_sq_mul A hS hd, ← norm_sq_mergeLeft A hd,
+    ← norm_sq_mergeRight A hd, ← mul_pow]
+  gcongr
+  exact Matrix.frobenius_norm_mul _ _
 
 end Merge
 
@@ -605,7 +609,7 @@ bipartition into whole open-leg groups is `A Bᵀ`, with `A` and `B` the contrac
 sides.
 
 Polynomial-PEPS manuscript (Sept 24 2026), proof of Lemma 6.2 `lem:group-tensor`,
-05-frames.tex:159–169. -/
+05-frames.tex:157–164. -/
 theorem flattening_contraction (T : Finset V) :
     flattening (contraction A) T = bipartitionLeft A T * (bipartitionRight A T)ᵀ := by
   classical
@@ -625,22 +629,24 @@ theorem flattening_contraction (T : Finset V) :
   rw [hσ, partialContraction_merge A hS (mem_compl_disjoint T), Matrix.mul_apply]
   rfl
 
-theorem hsNormSq_bipartitionLeft (T : Finset V) :
-    Matrix.hsNormSq (bipartitionLeft A T) = partialNormSq A T := by
+theorem norm_sq_bipartitionLeft (T : Finset V) :
+    ‖bipartitionLeft A T‖ ^ 2 = partialNormSq A T := by
   classical
   let _ := piSubtypeUniqueOfForallNot D (IsExit tail head T Tᶜ) (not_isExit_compl_left T)
-  unfold Matrix.hsNormSq partialNormSq bipartitionLeft
+  rw [Matrix.frobenius_norm_sq_eq_sum]
+  unfold partialNormSq bipartitionLeft
   refine Finset.sum_congr rfl fun x _ ↦ ?_
   rw [← (cutSplitLeft D (mem_compl_disjoint T)).symm.sum_comp, Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun c _ ↦ ?_
   rw [Fintype.sum_unique]
   congr 4
 
-theorem hsNormSq_bipartitionRight (T : Finset V) :
-    Matrix.hsNormSq (bipartitionRight A T) = partialNormSq A Tᶜ := by
+theorem norm_sq_bipartitionRight (T : Finset V) :
+    ‖bipartitionRight A T‖ ^ 2 = partialNormSq A Tᶜ := by
   classical
   let _ := piSubtypeUniqueOfForallNot D (IsExit tail head Tᶜ T) (not_isExit_compl_right T)
-  unfold Matrix.hsNormSq partialNormSq bipartitionRight
+  rw [Matrix.frobenius_norm_sq_eq_sum]
+  unfold partialNormSq bipartitionRight
   rw [← (piSubtypeCongr P (· ∈ Tᶜ) (· ∉ T) fun v ↦ Finset.mem_compl).sum_comp]
   refine Finset.sum_congr rfl fun x _ ↦ ?_
   rw [← (cutSplitRight D (mem_compl_disjoint T)).symm.sum_comp, Fintype.sum_prod_type]
@@ -653,18 +659,17 @@ itself, whose vertex tensors have norm at most one, the contraction has nuclear 
 across every bipartition into whole open-leg groups. No dimension enters.
 
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, 05-frames.tex:125–141;
-proof and equation `eq:group-nuclear`, 05-frames.tex:159–169. -/
+proof and equation `eq:group-nuclear`, 05-frames.tex:157–164. -/
 theorem nuclearNorm_flattening_le_one [∀ v, DecidableEq (P v)]
     (hloop : ∀ e, tail e ≠ head e) (hA : ∀ v, vertexNormSq A v ≤ 1) (T : Finset V) :
     Matrix.nuclearNorm (flattening (contraction A) T) ≤ 1 := by
   rw [flattening_contraction]
   refine (Matrix.nuclearNorm_mul_transpose_le _ _).trans ?_
-  rw [hsNormSq_bipartitionLeft, hsNormSq_bipartitionRight]
-  have h₁ := partialNormSq_le_one A hloop hA T
-  have h₂ := partialNormSq_le_one A hloop hA Tᶜ
-  calc √(partialNormSq A T) * √(partialNormSq A Tᶜ) ≤ 1 * 1 := by
-        gcongr <;> exact Real.sqrt_le_one.mpr ‹_›
-    _ = 1 := one_mul 1
+  have h₁ : ‖bipartitionLeft A T‖ ≤ 1 := (sq_le_one_iff₀ (norm_nonneg _)).mp
+    ((norm_sq_bipartitionLeft A T).trans_le (partialNormSq_le_one A hloop hA T))
+  have h₂ : ‖bipartitionRight A T‖ ≤ 1 := (sq_le_one_iff₀ (norm_nonneg _)).mp
+    ((norm_sq_bipartitionRight A T).trans_le (partialNormSq_le_one A hloop hA Tᶜ))
+  exact (mul_le_mul h₁ h₂ (norm_nonneg _) zero_le_one).trans_eq (one_mul 1)
 
 end Bipartition
 
