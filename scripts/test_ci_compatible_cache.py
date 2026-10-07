@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import copy
+import contextlib
+import io
+import subprocess
 import json
 import os
 from pathlib import Path
@@ -17,6 +20,7 @@ import ci_compatible_cache as guard
 ROOT = Path(__file__).resolve().parents[1]
 OLD = 'a' * 40
 NEW = 'b' * 40
+VERSION = 'f' * 64
 QIC_LAYOUT = '''name = "QICLean"
 defaultTargets = ["QICLean"]
 [[lean_lib]]
@@ -310,7 +314,7 @@ class ProvenanceTests(unittest.TestCase):
     def setUp(self):
         self.key = 'tnlean-build-' + 'e' * 64 + '-' + OLD
         self.caches = {'total_count': 1, 'actions_caches': [
-            {'key': self.key, 'ref': 'refs/heads/main'}]}
+            {'key': self.key, 'ref': 'refs/heads/main', 'version': VERSION}]}
         self.runs = {'workflow_runs': [{'id': 1, 'head_sha': OLD, 'head_branch': 'main',
                      'event': 'push', 'status': 'completed', 'path': '.github/workflows/pr-ci.yml'}]}
         self.jobs = {1: {'jobs': [{'name': 'build', 'conclusion': 'success', 'head_sha': OLD,
@@ -318,7 +322,7 @@ class ProvenanceTests(unittest.TestCase):
                                     {'name': 'Save Lean build cache (main only)', 'conclusion': 'success'}]}]}}
 
     def check(self):
-        guard.validate_provenance(self.key, OLD, self.caches, self.runs, self.jobs)
+        guard.validate_provenance(self.key, OLD, self.caches, self.runs, self.jobs, VERSION)
 
     def test_verified_main_success(self):
         self.check()
@@ -341,7 +345,7 @@ class ProvenanceTests(unittest.TestCase):
                 jobs = copy.deepcopy(self.jobs)
                 jobs[1]['jobs'][0][key] = value
                 with self.assertRaises(guard.Refusal):
-                    guard.validate_provenance(self.key, OLD, self.caches, self.runs, jobs)
+                    guard.validate_provenance(self.key, OLD, self.caches, self.runs, jobs, VERSION)
 
     def test_wrong_run(self):
         for key, value in [('head_sha', NEW), ('event', 'pull_request'),
@@ -351,7 +355,7 @@ class ProvenanceTests(unittest.TestCase):
                 runs = copy.deepcopy(self.runs)
                 runs['workflow_runs'][0][key] = value
                 with self.assertRaises(guard.Refusal):
-                    guard.validate_provenance(self.key, OLD, self.caches, runs, self.jobs)
+                    guard.validate_provenance(self.key, OLD, self.caches, runs, self.jobs, VERSION)
 
     def test_validate_exact_key_window_platform_and_missing_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -369,8 +373,8 @@ class ProvenanceTests(unittest.TestCase):
                  patch.object(guard, 'config_at', side_effect=lambda _, c: new if c == 'HEAD' else old), \
                  patch.object(guard, 'file_at', return_value=workflow), \
                  patch.object(guard, 'api', side_effect=lambda _: next(calls)):
-                guard.validate(root, state, self.key[:-40], self.key)
-                self.assertEqual((root / 'out').read_text(), 'key=' + self.key + '\n')
+                guard.validate(root, state, self.key[:-40], self.key, VERSION)
+                self.assertEqual((root / 'out').read_text(), 'key=' + self.key + '\nversion=' + VERSION + '\n')
             for platform, arch, prefix, key in [
                 ('Windows', 'X64', self.key[:-40], self.key),
                 ('Linux', 'ARM64', self.key[:-40], self.key),
@@ -382,13 +386,13 @@ class ProvenanceTests(unittest.TestCase):
                      patch.dict(os.environ, {**env, 'RUNNER_OS': platform, 'RUNNER_ARCH': arch}), \
                      patch.object(guard, 'config_at', side_effect=lambda _, c: new if c == 'HEAD' else old), \
                      self.assertRaises(guard.Refusal):
-                    guard.validate(root, state, prefix, key)
+                    guard.validate(root, state, prefix, key, VERSION)
             with patch.dict(os.environ, env), \
                  patch.object(guard, 'config_at', side_effect=lambda _, c: new if c == 'HEAD' else old), \
                  patch.object(guard, 'file_at', return_value=workflow), \
                  patch.object(guard, 'api', side_effect=OSError('missing API evidence')), \
                  self.assertRaises(OSError):
-                guard.validate(root, state, self.key[:-40], self.key)
+                guard.validate(root, state, self.key[:-40], self.key, VERSION)
 
     def test_source_workflow_policy(self):
         raw = (ROOT / '.github/workflows/pr-ci.yml').read_text()
@@ -400,6 +404,204 @@ class ProvenanceTests(unittest.TestCase):
         ]:
             with self.subTest(after=after), self.assertRaises(guard.Refusal):
                 guard.source_workflow(raw.replace(before, after))
+
+
+class CandidateTests(unittest.TestCase):
+    """Exercise real validation for each candidate; only Git/API reads are faked."""
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.old, self.new = pinned_inputs(), updated(pinned_inputs())
+        for path, raw in self.new.items():
+            (self.root / path).write_bytes(raw)
+        put(self.root, 'TNLean.lean', 'import QICLean\n')
+        self.latest = 'c' * 40
+        self.prefix = 'tnlean-build-' + 'e' * 64 + '-'
+        self.matched = self.prefix + self.latest
+        self.state = self.root / 'state.json'
+        self.state.write_text(json.dumps({'commits': [self.latest, OLD], 'baseline': OLD}))
+        self.workflow = (ROOT / '.github/workflows/pr-ci.yml').read_bytes()
+        self.env = {'RUNNER_OS': 'Linux', 'RUNNER_ARCH': 'X64',
+                    'GITHUB_OUTPUT': str(self.root / 'out')}
+        self.responses = {}
+        for id, commit in enumerate((self.latest, OLD), 1):
+            key = self.prefix + commit
+            self.responses[self.cache_path(key)] = {'total_count': 1, 'actions_caches': [
+                {'key': key, 'ref': 'refs/heads/main', 'version': VERSION}]}
+            self.responses[self.run_path(commit)] = {'total_count': 1, 'workflow_runs': [{
+                'id': id, 'run_attempt': 1, 'head_sha': commit, 'head_branch': 'main',
+                'event': 'push', 'path': '.github/workflows/pr-ci.yml',
+                'status': 'in_progress' if id == 1 else 'completed',
+                'conclusion': None if id == 1 else 'success'}]}
+            self.responses[f'actions/runs/{id}/jobs?per_page=100'] = {
+                'total_count': 1, 'jobs': [{'id': id + 10, 'run_id': id, 'run_attempt': 1,
+                    'name': 'build', 'status': 'completed', 'conclusion': 'success',
+                    'head_sha': commit, 'labels': ['ubuntu-latest'], 'steps': [{
+                        'name': 'Save Lean build cache (main only)', 'status': 'completed',
+                        'conclusion': 'success'}]}]}
+        self.stack = contextlib.ExitStack()
+        self.addCleanup(self.stack.close)
+        self.stack.enter_context(patch.dict(os.environ, self.env))
+        self.config = self.stack.enter_context(patch.object(
+            guard, 'config_at', side_effect=lambda _, c: self.new if c == 'HEAD' else self.old))
+        self.source = self.stack.enter_context(patch.object(guard, 'file_at', return_value=self.workflow))
+        self.api = self.stack.enter_context(patch.object(
+            guard, 'api', side_effect=lambda path: copy.deepcopy(self.responses[path])))
+        self.stderr = io.StringIO()
+        self.stack.enter_context(contextlib.redirect_stderr(self.stderr))
+        self.stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+
+    def cache_path(self, key):
+        return 'actions/caches?' + guard.urllib.parse.urlencode({'key': key, 'per_page': 100})
+
+    def run_path(self, commit):
+        return 'actions/workflows/pr-ci.yml/runs?' + guard.urllib.parse.urlencode(
+            {'head_sha': commit, 'event': 'push', 'per_page': 20})
+
+    def select(self):
+        guard.select(self.root, self.state, self.prefix, self.matched)
+
+    def assert_no_selection(self):
+        with self.assertRaises(guard.Refusal):
+            self.select()
+        self.assertFalse((self.root / 'out').exists())
+
+    def test_newest_incomplete_older_valid_fallback(self):
+        self.select()
+        self.assertEqual((self.root / 'out').read_text(),
+                         f'key={self.prefix + OLD}\nversion={VERSION}\n')
+        # Only full candidate keys are queried, without hiding branch shadows.
+        keys = [guard.urllib.parse.parse_qs(call.args[0].split('?', 1)[1])
+                for call in self.api.call_args_list if call.args[0].startswith('actions/caches?')]
+        self.assertEqual(keys, [{'key': [k], 'per_page': ['100']}
+                              for k in (self.matched, self.matched, self.prefix + OLD)])
+        line = next(line for line in self.stderr.getvalue().splitlines()
+                    if line.startswith('Compatible cache run/job evidence: '))
+        evidence = json.loads(line.split(': ', 1)[1])
+        run = evidence['runs'][0]
+        self.assertEqual((run['id'], run['run_attempt'], run['status']), (1, 1, 'in_progress'))
+        self.assertEqual(run['build_jobs'][0]['saves'][0]['conclusion'], 'success')
+        self.assertEqual(run['build_jobs'][0]['labels'], ['ubuntu-latest'])
+
+    def test_valid_lookup_match_needs_no_older_candidate(self):
+        self.responses[self.run_path(self.latest)]['workflow_runs'][0]['status'] = 'completed'
+        self.select()
+        self.assertEqual((self.root / 'out').read_text(),
+                         f'key={self.matched}\nversion={VERSION}\n')
+        self.assertNotIn(self.cache_path(self.prefix + OLD), [c.args[0] for c in self.api.call_args_list])
+
+    def test_lookup_match_outside_frozen_window_refuses(self):
+        self.state.write_text(json.dumps({'commits': [OLD], 'baseline': OLD}))
+        self.assert_no_selection()
+        self.api.assert_not_called()
+
+    def test_no_completed_candidate_emits_no_key(self):
+        self.responses[self.run_path(OLD)]['workflow_runs'][0]['status'] = 'in_progress'
+        self.assert_no_selection()
+        self.assertIn('no successful main build/save', self.stderr.getvalue())
+
+    def test_candidate_cache_scope_version_key_missing_and_ambiguity(self):
+        original = copy.deepcopy(self.responses[self.cache_path(self.prefix + OLD)])
+        changes = {
+            'wrong_scope': lambda c: c['actions_caches'][0].update(ref='refs/pull/1/merge'),
+            'wrong_version': lambda c: c['actions_caches'][0].update(version='d' * 64),
+            'missing_version': lambda c: c['actions_caches'][0].pop('version'),
+            'malformed_version': lambda c: c['actions_caches'][0].update(version='x\ninjected=true'),
+            'prefix_suffix': lambda c: c['actions_caches'][0].update(key=self.prefix + OLD + '-extra'),
+            'missing': lambda c: c.update(total_count=0, actions_caches=[]),
+            'ambiguous_scope_or_version': lambda c: c.update(total_count=2),
+            'truncated': lambda c: c.update(total_count=101),
+        }
+        for label, change in changes.items():
+            with self.subTest(label=label):
+                entry = copy.deepcopy(original)
+                change(entry)
+                self.responses[self.cache_path(self.prefix + OLD)] = entry
+                self.api.reset_mock()
+                self.assert_no_selection()
+                self.assertNotIn(self.run_path(OLD), [c.args[0] for c in self.api.call_args_list])
+
+    def test_untrusted_lookup_anchor_cannot_supply_a_version(self):
+        self.responses[self.cache_path(self.matched)]['total_count'] = 2
+        self.assert_no_selection()
+        self.api.assert_called_once_with(self.cache_path(self.matched))
+
+    def test_wrong_current_platform(self):
+        for platform, arch in [('Windows', 'X64'), ('Linux', 'ARM64')]:
+            with self.subTest(platform=platform), patch.dict(
+                    os.environ, {'RUNNER_OS': platform, 'RUNNER_ARCH': arch}):
+                self.assert_no_selection()
+
+    def test_wrong_candidate_inputs(self):
+        changed = {**self.old, 'lean-toolchain': b'wrong toolchain'}
+        # Baseline is the newer commit; older candidate must match it byte for byte.
+        self.state.write_text(json.dumps({'commits': [self.latest, OLD], 'baseline': self.latest}))
+        self.config.side_effect = lambda _, c: self.new if c == 'HEAD' else changed if c == OLD else self.old
+        self.assert_no_selection()
+        self.assertIn('inputs differ from verified baseline bytes', self.stderr.getvalue())
+
+    def test_wrong_candidate_source_workflow(self):
+        self.source.side_effect = lambda _, c, p: self.workflow.replace(
+            b'runs-on: ubuntu-latest', b'runs-on: windows-latest') if c == OLD else self.workflow
+        self.assert_no_selection()
+        self.assertIn('source runner platform differs', self.stderr.getvalue())
+
+    def test_wrong_candidate_run_and_build_or_save(self):
+        path = 'actions/runs/2/jobs?per_page=100'
+        original = copy.deepcopy(self.responses[path])
+        changes = {
+            'wrong_job_source': lambda j: j.update(head_sha=NEW),
+            'wrong_job_runner': lambda j: j.update(labels=['windows-latest']),
+            'unsuccessful_build': lambda j: j.update(conclusion='failure'),
+            'missing_save': lambda j: j.update(steps=[]),
+            'unsuccessful_save': lambda j: j['steps'][0].update(conclusion='failure'),
+        }
+        for label, change in changes.items():
+            with self.subTest(label=label):
+                self.responses[path] = copy.deepcopy(original)
+                change(self.responses[path]['jobs'][0])
+                self.assert_no_selection()
+        self.responses[path] = original
+        self.responses[self.run_path(OLD)]['workflow_runs'][0]['head_branch'] = 'topic'
+        self.assert_no_selection()
+
+    def test_only_frozen_window_is_searched_without_retries(self):
+        commits = [self.latest, *[f'{i:040x}' for i in range(guard.WINDOW)]]
+        self.state.write_text(json.dumps({'commits': commits, 'baseline': self.latest}))
+        with patch.object(guard, 'validate', side_effect=guard.Refusal('fixture refusal')) as validate:
+            self.assert_no_selection()
+        self.assertEqual([c.args[3] for c in validate.call_args_list],
+                         [self.prefix + c for c in commits[:guard.WINDOW]])
+
+    def test_api_error_does_not_retry_or_emit_key(self):
+        self.api.side_effect = OSError('API unavailable')
+        with self.assertRaises(OSError):
+            self.select()
+        self.assertFalse((self.root / 'out').exists())
+        self.assertEqual(self.api.call_count, 1)
+
+    def test_postrestore_metadata_change_refuses_without_fallback_or_pruning(self):
+        self.select()
+        (self.root / 'out').unlink()
+        self.responses[self.run_path(OLD)]['workflow_runs'][0]['status'] = 'in_progress'
+        with patch.object(guard, 'select') as select, patch.object(guard, 'discard_unvalidated') as prune, \
+                patch('sys.argv', ['ci_compatible_cache.py', 'validate', '--root', str(self.root),
+                      '--state', str(self.state), '--prefix', self.prefix,
+                      '--matched', self.prefix + OLD, '--version', VERSION]):
+            self.assertEqual(guard.main(), 1)
+            select.assert_not_called()
+            prune.assert_not_called()
+        self.assertFalse((self.root / 'out').exists())
+        self.assertIn('"status": "in_progress"', self.stderr.getvalue())
+
+    def test_postrestore_archive_version_change_refuses(self):
+        self.select()
+        (self.root / 'out').unlink()
+        self.responses[self.cache_path(self.prefix + OLD)]['actions_caches'][0]['version'] = 'd' * 64
+        with self.assertRaisesRegex(guard.Refusal, 'archive version differs'):
+            guard.validate(self.root, self.state, self.prefix, self.prefix + OLD, VERSION)
+        self.assertFalse((self.root / 'out').exists())
 
 
 class WorkflowTests(unittest.TestCase):
@@ -444,13 +646,40 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn('continue-on-error', self.steps[prune])
         self.assertEqual(self.steps[prune]['if'], restore['if'])
         self.assertIn('test "$MATCHED_KEY" = "$VERIFIED_KEY"', self.steps[prune]['run'])
+        self.assertIn(' select ', self.ids['compatible-cache']['run'])
+        self.assertNotIn(' select ', self.steps[prune]['run'])
         self.assertIn(' validate ', self.steps[prune]['run'])
+        self.assertIn('--version "$VERIFIED_VERSION"', self.steps[prune]['run'])
+        self.assertEqual(self.steps[prune]['env']['VERIFIED_VERSION'],
+                         '${{ steps.compatible-cache.outputs.version }}')
+        self.assertLess(self.steps[prune]['run'].index(' validate '),
+                        self.steps[prune]['run'].index(' prune'))
+        self.assertNotIn('always()', self.steps[build].get('if', ''))
         for i, step in enumerate(self.steps):
             if 'lake env lean' in step.get('run', ''):
                 self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
         self.assertIs(setup['with']['build'], False)
         self.assertIs(setup['with']['use-github-cache'], False)
+
+    def test_postrestore_shell_stops_before_prune_or_build(self):
+        step = next(s for s in self.steps if s.get('name') == 'Discard unvalidated cross-commit artifacts')
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            # No Lean or cache mutation: a failed validator stand-in records
+            # whether the workflow shell erroneously continues to pruning.
+            python = root / 'python3'
+            python.write_text('#!/bin/sh\nprintf "%s\\n" "$2" >> "$CALLS"\nexit 1\n')
+            python.chmod(0o755)
+            env = {**os.environ, 'PATH': f'{root}:' + os.environ['PATH'],
+                   'CALLS': str(root / 'calls'), 'MATCHED_KEY': 'exact',
+                   'VERIFIED_KEY': 'exact', 'PRIMARY_KEY': 'exact',
+                   'PREFIX': 'unused', 'VERIFIED_VERSION': VERSION, 'RUNNER_TEMP': tmp}
+            result = subprocess.run(['bash', '-e', '-o', 'pipefail', '-c',
+                                     step['run'] + '\nprintf "build\\n" >> "$CALLS"\n'],
+                                    env=env, capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual((root / 'calls').read_text(), 'validate\n')
 
     def test_failure_to_establish_evidence_skips_fallback(self):
         for id in ('compatible-config', 'compatible-lookup', 'compatible-cache'):
@@ -492,6 +721,7 @@ class PruningTests(unittest.TestCase):
                 build = root / '.lake/packages' / package / '.lake/build'
                 self.assertTrue((build / 'lib/lean/Existing.olean').exists())
                 self.assertEqual((build / 'lib/lean/Existing.trace').read_text(), 'cached')
+                self.assertEqual((build / 'lib/lean/Existing.olean.hash').read_text(), 'cached')
                 self.assertFalse((build / 'lib/lean/Removed.olean').exists())
                 self.assertFalse((build / 'lib/lean/Removed.olean.private').exists())
                 self.assertFalse((build / 'ir/Removed.c').exists())

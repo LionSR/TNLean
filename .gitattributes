@@ -2,3 +2,5 @@
 Papers/**/*.eps binary
 Papers/quant-ph_0405174/qca.tex binary
 docs/provenance/evidence/regularizedPatchStationarity8767/docs/chapter-pass2.log -whitespace
+# Preserve the pinned upstream excerpt byte-for-byte, including its whitespace.
+scripts/fixtures/openai_provenance/Source.lean.txt -whitespace

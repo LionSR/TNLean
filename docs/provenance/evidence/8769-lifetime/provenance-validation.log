@@ -1,0 +1,10 @@
+Policy snapshot: LionSR/TNLean PR #8789 at 4e9d9c898a4401d51cf1eeeabcea8572242387fe
+Command: python3 -c 'import importlib.util; from pathlib import Path; s=importlib.util.spec_from_file_location('"'"'policy'"'"','"'"'/workspace/proof-build-logs/provenance-head8789/scripts/check_openai_provenance.py'"'"'); p=importlib.util.module_from_spec(s); s.loader.exec_module(p); n=p.validate([p.read_json(Path('"'"'docs/provenance/openai-math.d/8769-lifetime.json'"'"'))],p.read_json(Path('"'"'/workspace/proof-build-logs/provenance-head8789/docs/provenance/openai-math.schema.json'"'"')),{'"'"'LionSR/TNLean'"'"':Path.cwd(),'"'"'openai/math'"'"':Path('"'"'/tmp/openai-math-verification-20261007'"'"')}); print('"'"'PASS: '"'"'+str(n)+'"'"' original completed mappings; exact proof bytes, log hashes, notices and axiom outputs checked.'"'"')'
+Proof revision: d4eb94035d4905c9d243fb1739966a198e266c09
+Started UTC: 2026-10-07T09:42:17.333691+00:00
+
+PASS: 47 original completed mappings; exact proof bytes, log hashes, notices and axiom outputs checked.
+
+Elapsed seconds: 6.320203
+Warnings: 0
+Exit code: 0
