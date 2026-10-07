@@ -226,28 +226,20 @@ nested regions and inside subspaces.
         Then $(I-P_W)S=\spn\{e_2\}$, whereas $S\cap W^\perp=0$.
         The compression $(I-P_W)P_S(I-P_W)=\tfrac12 P_{\spn\{e_2\}}$
         is not idempotent, so it is not the projector onto the projected image.
-        The picture shows the real coordinate plane of this example.
-        % Formula represented: (I-P_W)(e_1+e_2)=e_2, with W=span(e_1).
-        % Ink-to-coordinate correspondence: blue horizontal line is W; violet
-        % diagonal is S; orange vertical line is (I-P_W)S. Dashed segments show
-        % orthogonal coordinate projection of (1,1) onto the two axes.
-        % This is a subspace diagram, not a tensor network. There are no
+        The diagram records the restrictions of the two orthogonal projections.
+        The generator $e_1+e_2$ maps to $e_1$ and $e_2$, respectively.
+        % Formula represented: P_W(e_1+e_2)=e_1 and (I-P_W)(e_1+e_2)=e_2;
+        % both subsequent projections are zero, so the square commutes.
+        % Ink-to-map correspondence: each node is the labelled subspace;
+        % each arrow is the restriction of its labelled orthogonal projection.
+        % This is a commutative diagram, not a tensor network. There are no
         % contracted or open tensor legs; no tensor boundary signature is asserted.
         \begin{center}
-            \begin{tikzpicture}[x=2cm,y=2cm,>=stealth]
-                \draw[blue!70!black,thick,->] (-.4,0)--(1.65,0)
-                node[right] {$W$};
-                \draw[orange!80!black,thick,->] (0,-.25)--(0,1.55)
-                node[above] {$(I-P_W)S$};
-                \draw[violet,thick] (-.25,-.25)--(1.3,1.3)
-                node[above right] {$S$};
-                \draw[gray,dashed] (1,0)--(1,1)--(0,1);
-                \draw[->,thick] (0,0)--(1,1);
-                \fill (1,1) circle (1.3pt) node[right] {$e_1+e_2$};
-                \fill (1,0) circle (1.3pt) node[below] {$e_1$};
-                \fill (0,1) circle (1.3pt) node[left] {$e_2$};
-                \node[below right] at (0,0) {$0$};
-            \end{tikzpicture}
+            \begin{tikzcd}[column sep=huge,row sep=large]
+                W=\spn\{e_1\} \arrow[d,"I-P_W"'] &
+                S=\spn\{e_1+e_2\} \arrow[l,"P_W"'] \arrow[d,"I-P_W"] \\
+                \{0\} & (I-P_W)S=\spn\{e_2\} \arrow[l,"P_W"]
+            \end{tikzcd}
         \end{center}
     \end{remark}
 \end{samepage}

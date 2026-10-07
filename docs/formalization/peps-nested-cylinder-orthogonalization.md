@@ -71,8 +71,10 @@ Let `W = span(e₁)` and `S = span(e₁ + e₂)` in `ℂ²`. Then:
 - `(I − P_W)P_S(I − P_W) = (1/2)P_(span(e₂))`; its square is
   `(1/4)P_(span(e₂))`, so it is not a projector.
 
-The blueprint includes the real coordinate plane of this exact example.
-It is a linear-subspace diagram with no tensor-contraction interpretation.
+The blueprint includes a commutative square of the restricted projections:
+`S → W → {0}` and `S → (I − P_W)S → {0}`. The first arrows send `e₁ + e₂`
+to `e₁` and `e₂`, respectively. Both composites vanish. This uses the shared
+`tikzcd` print/web renderer and has no tensor-contraction interpretation.
 The projector used by the construction is the projector onto the image, not
 the sandwich of the old projector by the complementary projection.
 
