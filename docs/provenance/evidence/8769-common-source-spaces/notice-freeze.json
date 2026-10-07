@@ -1,0 +1,74 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/PairSourceOrdering.lean",
+    "sha256_before": "37a7bf392b448edd32ff783ef90757a8ab33d67a10f146499f692f13ada6dacc",
+    "sha256": "2f2baa179496c7a9bc12d94d77ef6490f8320867d939b328aa636256dcd5d56b",
+    "declarations": 8,
+    "notice_max_line_length": 85,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CommonPairSources.lean",
+    "sha256_before": "1326565445a00aa24fa2ab8b1061053737ee20de9b54933ddeeb8e235be1e5bb",
+    "sha256": "6d8a7daad746f1bf6d0f2c39c73d4833fa0939018bf59d22b169d7a37a87b22b",
+    "declarations": 8,
+    "notice_max_line_length": 92,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourcePairMaps.lean",
+    "sha256_before": "8657614028f47e26b5334bf43c51e3f6ffbb8d9c7e6200f38381fbeeca8a5bfa",
+    "sha256": "052f725b029635d14f9209ab95027527585215480459a79e9505d8c9a905f1a9",
+    "declarations": 4,
+    "notice_max_line_length": 81,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CommonSourcePreparation.lean",
+    "sha256_before": "c0f171a5cdcbb838887d90121be24890065b8ab1a3282d2f9ec6d0f85b5e9c07",
+    "sha256": "6beab0a603f2b593db569f42324cf2b996c99f5876447a17777dd1918b745f09",
+    "declarations": 3,
+    "notice_max_line_length": 85,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CommonPartyMaps.lean",
+    "sha256_before": "c696bbc436c7b93533b14d2377e37fb3051f6d5cb117089e3c45749db1f80701",
+    "sha256": "004fa68341ebf24bbb0dc6e447b4c3f67e5848ae6c6e5dc3833a3619129f16c5",
+    "declarations": 4,
+    "notice_max_line_length": 91,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CommonSourceGate.lean",
+    "sha256_before": "4941de72e89624b34e9dd80f9245d03cee41df4201f3cc3d1e35440642f8970d",
+    "sha256": "7de4cb68d445ae8b3667a7da600e00941c0c49c4aa5be66fdd4d2266146c3f9f",
+    "declarations": 1,
+    "notice_max_line_length": 81,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/FinitePairSources.lean",
+    "sha256_before": "32bb2e8074fb2fd0d19c5355719e37521a50e62545fc3cb9d0a1c57cbf8ada93",
+    "sha256": "cbdcfe0e8030a2218c2abee154e36f8e613e56c258446e20a0d96a53210c2eb5",
+    "declarations": 1,
+    "notice_max_line_length": 83,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/FiniteSourcePreparation.lean",
+    "sha256_before": "5a208d486f65858703ac5932dc4ea696eda00bbb090395caf5e9280701b97644",
+    "sha256": "ec574a3b64db136b451a99001218917a119dfe1279391198b34cff10c7954668",
+    "declarations": 2,
+    "notice_max_line_length": 98,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/FiniteSourceGate.lean",
+    "sha256_before": "c81dd1b43ee8b8c0e0cbccf1effe9426843c1f073c443460269ea1137fa608de",
+    "sha256": "1715da519544d0d585664ffa8beccec8a08d789151c5fd824a29da172f5e628e",
+    "declarations": 3,
+    "notice_max_line_length": 90,
+    "noncomment_tokens_unchanged": true
+  }
+]

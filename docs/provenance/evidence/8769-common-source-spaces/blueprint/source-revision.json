@@ -1,0 +1,11 @@
+{
+  "lean_source_revision": "b8864ae6ca2a3fbd5ecf0989e682a38d33ee02a6",
+  "qiclean_revision": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+  "fragment_sha256": "d5da9b36ba1efd773618f6e871843cfc1e49a334db8f538e8729031f7672ccbf",
+  "note": "Chapter prose correction follows the Lean source commit; final enclosing commit will be recorded separately.",
+  "prose_parent_revision": "53630b1f37940bc5c8f3eadd3aa527d5ea99b3e8",
+  "refreshed_predecessor_sha256": {
+    "blueprint/src/chapter/ch24_peps_source_preparation.tex": "08e86d3877e1c4e4c690cfb4618efd2b369282f64012de9803530a59ab6f58fd",
+    "docs/paper-gaps/polypeps_pair_effects_party_layout.tex": "1465624c3ddd79e8cdee3f52ffeddd3d8f18b0eac2ca4fee4d391ef68628922a"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "source_revision": "b8864ae6ca2a3fbd5ecf0989e682a38d33ee02a6",
+  "modules": 9,
+  "public_declarations": 34,
+  "all_sources_match_commit": true,
+  "manifest_matches_public_declarations": true,
+  "standalone_notices_match_shard": true,
+  "verification_log_hashes_match": true,
+  "all_public_axioms_standard": true,
+  "all_blueprint_tags_exactly_once": true,
+  "proof_hazards": [],
+  "review": "Common branch slots derive from actual sources by ordering/orientation and local projections. Finite coordinates derive from joint finite algebraic tensor support; no ambient finite-dimensionality premise, private dimension bound, or full sampling/compression claim is introduced. Weighted identities retain exact coefficients and fixed external layouts."
+}
