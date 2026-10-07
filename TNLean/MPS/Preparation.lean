@@ -47,7 +47,6 @@ import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
 import TNLean.MPS.Preparation.ExactFixedPointPolar
 import TNLean.MPS.Preparation.ExactSectorEncoder
 import TNLean.MPS.Preparation.ExplicitPreparationScale
-import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
