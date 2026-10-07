@@ -55,8 +55,9 @@ manuscript's proposition \texttt{prop:angular}.
 Both lemmas are formalized with exactly their source hypotheses, the information
 bound included.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.Frame.birth},
-\leanid{TNLean.PEPS.EncodedFrame.Frame.death} and
-\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange}.}
+\leanid{TNLean.PEPS.EncodedFrame.Frame.death},
+\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange} and
+\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames}.}
 The formal statements produce the canonical maps of the proofs and prove:
 \begin{enumerate}
 \item for the birth and the death, that the canonical map
@@ -67,7 +68,9 @@ The formal statements produce the canonical maps of the proofs and prove:
   $B=(\mathcal V^\dagger S)(S^\dagger\mathcal V)$, where $S$ inserts the single
   normalized vector $s$ on $T\mathcal B_T$, and every register on which $B$ acts
   lies outside $E$, so it is held by $P_\circ$ before the birth and by $P_\circ$
-  or $Q_\circ$ after it;
+  or $Q_\circ$ after it; since the frames before and after differ only in raw
+  owners, their encodings and reference vectors coincide, so the change of owner
+  itself is carried entirely by the bounded-change clause below;
 \item for the exchange, the exact identity $\mathcal RK_{\rm in}=K_{\rm out}F_{Y\cap
   \Lambda}$ for the renaming $\mathcal R$, the identity $D_UF_T=(\mathcal
   V^{\otimes2})^\dagger F_{T\mathcal B_T}\mathcal V^{\otimes2}$, the identity
@@ -91,12 +94,18 @@ same missing layer is recorded for Lemma~6.3 in
 \path{polypeps_small_rewrite_monomials.tex}.
 
 The formal frames record the outer footprints of holes by their physical
-samples; the source's condition that every outer square lies on one side of
-$\partial Y$ implies the corresponding condition on samples. The exchange is
-stated for two frames whose holes are listed in any order: the holes are
-regrouped as those outside $Y$ followed by those inside $Y$ through the
-canonical identification of tag orderings, since encoders of holes with disjoint
-footprints commute.
+samples. The source's condition that every outer square lies on one side of
+$\partial Y$ enters as a classification of the holes as outside or inside $Y$,
+which is part of the data, together with its consequence for the samples: the
+sample of a hole classified as outside avoids $Y$, and that of a hole classified
+as inside lies in $Y$. A hole whose outer square has empty sample is compatible
+with both sides, so the side read from the plane must be supplied, and the
+formal statement accepts it. The exchange is also stated for two frames whose
+holes are listed in any order: a relabelling $G$ of the tags identifies their
+encodings with those of the listings by side (\path{05-frames.tex},
+lines~84--85), and the statement concerns the explicit map $CG$, with
+$CG(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm out}D_UF_T$ and the
+same error bound.
 
 \section{Elimination plan}
 

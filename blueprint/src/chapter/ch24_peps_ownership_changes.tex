@@ -29,9 +29,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_one_kronecker_kronecker_one}
     \leanok
     Identify $\mathcal H_\Lambda$ with $\mathcal H_S\otimes\mathcal
-    H_{\Lambda\setminus S}$, and, for disjoint $T$ and $E$ with
+        H_{\Lambda\setminus S}$, and, for disjoint $T$ and $E$ with
     $U=\Lambda\setminus(T\cup E)$, with $\mathcal H_T\otimes\mathcal H_E\otimes
-    \mathcal H_U$. An operator acting on the sites of $S$ is $A'\otimes\id$, an
+        \mathcal H_U$. An operator acting on the sites of $S$ is $A'\otimes\id$, an
     operator acting on a set disjoint from $S$ is $\id\otimes A'$, an operator
     acting on $T\cup E$ is $A'\otimes\id_U$, and an operator acting on a subset
     of $E$ is $\id_T\otimes A'\otimes\id_U$.
@@ -59,10 +59,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     spaces $\mathcal B_T,\mathcal B_E$, an isometry
     $V\colon\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$ and unit vectors
     $s\in\mathcal H_T\otimes\mathcal B_T$, $s'\in\mathcal H_E\otimes\mathcal
-    B_E$ with
+        B_E$ with
     \[
         \lVert(\id_{TE}\otimes V)\Omega-s\otimes s'\rVert
-            \le\sqrt{2(1-e^{-b/2})}\le\sqrt b .
+        \le\sqrt{2(1-e^{-b/2})}\le\sqrt b .
     \]
     In particular, if $b\le L^{-60}$ the error is at most $L^{-30}$. This is
     \cite[Lemma~6.4]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
@@ -73,8 +73,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     The relative entropy of $\rho_{TE}$ with respect to $\rho_T\otimes\rho_E$
     is $b$. The splitting estimate for a unit vector on three systems, with
     $\mathcal B_T=\mathcal H_T$ and $\mathcal B_E=\mathcal H_E\oplus\mathcal
-    H_U$, applies in the coordinates $\mathcal H_T\otimes\mathcal
-    H_E\otimes\mathcal H_U$.
+        H_U$, applies in the coordinates $\mathcal H_T\otimes\mathcal
+        H_E\otimes\mathcal H_U$.
 \end{proof}
 
 \subsection{Homogeneous birth and death}
@@ -92,12 +92,12 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{lem:peps_frame_splitting}
     With the data of the splitting lemma put $\mathcal V=\id_{TE}\otimes V$ and
     let $S\colon\mathcal H_E\otimes\mathcal B_E\to\mathcal
-    H_{TE}\otimes\mathcal B_T\otimes\mathcal B_E$ insert $s$ on
+        H_{TE}\otimes\mathcal B_T\otimes\mathcal B_E$ insert $s$ on
     $T\mathcal B_T$. The canonical map of the birth is
     \[
         B=\mathcal V^\dagger SS^\dagger\mathcal V
-          =\mathcal V^\dagger\bigl(\ket s\bra s_{T\mathcal B_T}
-              \otimes\id_{E\mathcal B_E}\bigr)\mathcal V
+        =\mathcal V^\dagger\bigl(\ket s\bra s_{T\mathcal B_T}
+        \otimes\id_{E\mathcal B_E}\bigr)\mathcal V
     \]
     (\texttt{05-frames.tex}, equation (birth-map), lines 414--426). It is the
     effect $S^\dagger\mathcal V$, which applies $V$ on $U$ and contracts
@@ -149,9 +149,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame}
     If a raw operator $B$ commutes with the raw part of the encoding of a
     frame on every tag configuration, then $(\id_{\rm tags}\otimes
-    B)K_{\mathcal F}=K_{\mathcal F}B$ and
+        B)K_{\mathcal F}=K_{\mathcal F}B$ and
     $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F}\rVert
-    \le\lVert B\Omega-\Omega\rVert$.
+        \le\lVert B\Omega-\Omega\rVert$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -185,8 +185,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Homogeneous birth and death: canonical map]
     \label{thm:peps_frame_birth}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth,
-        TNLean.PEPS.EncodedFrame.Frame.death,
-        TNLean.PEPS.EncodedFrame.Frame.rawProd_mem_supportedOperators_outerHoles}
+        TNLean.PEPS.EncodedFrame.Frame.death}
     \leanok
     \uses{lem:peps_frame_birth_map,lem:peps_frame_pass_encoding,
         def:peps_frame_birth_partition}
@@ -198,10 +197,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     satisfies $(\id\otimes B)K_{\mathcal F}=K_{\mathcal F'}B$, and
     \[
         \lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F'}\rVert
-            \le L^{-30}.
+        \le L^{-30}.
     \]
-    The death is the same map with the reverse input and output ownership;
-    its conditions are those of the frame after the death. This is the
+    Since $\mathcal F$ and $\mathcal F'$ differ only in raw owners,
+    $K_{\mathcal F'}=K_{\mathcal F}$ and $\Omega_{\mathcal
+            F'}=\Omega_{\mathcal F}$, so the intertwining identity says that $B$
+    commutes with the encoding; the change of owner is the content of the
+    bounded-change assertion below. The death is the same map with the
+    reverse input and output ownership; its conditions are those of the frame
+    after the death. This is the
     content of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS} for the canonical
     map, with its hypotheses.
 \end{theorem}
@@ -209,8 +213,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     Every hole encoder acts on $H^+(\mathcal F)\subseteq E$, so it commutes
     with $B$. Hence $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal
-    F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
-    s'\rVert\le L^{-30}$, and $\Omega_{\mathcal F'}=\Omega_{\mathcal F}$ in
+            F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
+        s'\rVert\le L^{-30}$, and $\Omega_{\mathcal F'}=\Omega_{\mathcal F}$ in
     canonical coordinates, since only raw owners change.
 \end{proof}
 
@@ -259,7 +263,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.rename,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₁_owner_of_mem,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₂_owner_of_mem,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.outsideRegion,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.ofFrames,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_footprint_perm,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_ofFrames_exchangeEnv}
@@ -267,9 +270,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame,def:peps_frame_sheet_swap}
     Consider two encoded frames $\mathcal F_1,\mathcal F_2$ and the physical
     sample of a plane region $Y$, such that every hole's outer square lies on
-    one side of $\partial Y$. After the canonical identification of tag
-    orderings, the holes of each frame are listed as those outside $Y$
-    followed by those inside $Y$, each in its original order. The exchanged
+    one side of $\partial Y$; that side classifies the hole as outside or
+    inside $Y$. The holes of each frame are listed as those outside $Y$
+    followed by those inside $Y$, each in its original order, which differs
+    from the given listing by the canonical identification of tag orderings
+    (\texttt{05-frames.tex}, lines 84--85). The exchanged
     frames
     $\mathcal F_1',\mathcal F_2'$ carry, inside $Y$, the raw ownership
     assignment and the holes, with their tag owners, of the other frame
@@ -302,14 +307,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     On every pair of tags the raw part of each encoding is the product of an
     operator acting outside $Y$ and an operator acting on $Y$, which is a
     tensor product in the coordinates $\mathcal H_Y\otimes\mathcal
-    H_{\Lambda\setminus Y}$. Swapping the sheets at $Y$ exchanges the
+        H_{\Lambda\setminus Y}$. Swapping the sheets at $Y$ exchanges the
     $Y$-parts, and the four factors match.
 \end{proof}
 
 \begin{definition}[Buffer correction]
     \label{def:peps_frame_buffer_correction}
-    \lean{TNLean.PEPS.EncodedFrame.pairShuffle,
-        TNLean.PEPS.EncodedFrame.tSwap,
+    \lean{TNLean.PEPS.EncodedFrame.tSwap,
         TNLean.PEPS.EncodedFrame.tSwapW,
         TNLean.PEPS.EncodedFrame.bufferSwap,
         TNLean.PEPS.EncodedFrame.tbSwap,
@@ -332,9 +336,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{lem:peps_frame_exchange_net_map}
     \lean{TNLean.PEPS.EncodedFrame.tSwapW_toMatrix,
         TNLean.PEPS.EncodedFrame.tbSwap_toMatrix,
-        TNLean.PEPS.EncodedFrame.kronecker_kronecker_eq_submatrix,
-        TNLean.PEPS.EncodedFrame.toMatrix_toPEquiv_prodCongr,
-        TNLean.PEPS.EncodedFrame.toMatrix_toPEquiv_submatrix,
+        Matrix.kronecker_kronecker_eq_submatrix,
+        Matrix.toMatrix_toPEquiv_prodCongr,
+        Matrix.toMatrix_toPEquiv_submatrix,
         TNLean.PEPS.EncodedFrame.bufferCorrection_mul_tSwap,
         TNLean.PEPS.EncodedFrame.sheetSwapOp_eq_submatrix,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.sheetBufferCorrection_mul_sheetSwapOp}
@@ -343,24 +347,24 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     With $\mathcal V=\id_{TE}\otimes V$,
     \[
         D_UF_T=(\mathcal V^{\otimes2})^\dagger F_{T\mathcal B_T}
-            \mathcal V^{\otimes2}
+        \mathcal V^{\otimes2}
     \]
     (\texttt{05-frames.tex}, equation (exchange-net-map), lines 516--526).
 \end{lemma}
 
 \begin{proof}\leanok
     In the coordinates in which the two copies of $\mathcal H_T\otimes\mathcal
-    H_E$ come first, $\mathcal V^{\otimes2}=\id\otimes V^{\otimes2}$,
+        H_E$ come first, $\mathcal V^{\otimes2}=\id\otimes V^{\otimes2}$,
     $F_{T\mathcal B_T}=F_T\otimes F_{\mathcal B_T}$, $F_T=F_T\otimes\id$ and
     $D_U=\id\otimes D_U$, so both sides equal $F_T\otimes D_U$.
 \end{proof}
 
 \begin{lemma}[Exchange error on the reference]
     \label{lem:peps_frame_exchange_error}
-    \lean{TNLean.PEPS.EncodedFrame.vecKron,
+    \lean{EuclideanSpace.vecKron,
         TNLean.PEPS.EncodedFrame.act_kronecker_vecKron,
-        TNLean.PEPS.EncodedFrame.norm_vecKron,
-        TNLean.PEPS.EncodedFrame.norm_vecKron_self_sub_le,
+        EuclideanSpace.norm_vecKron,
+        EuclideanSpace.norm_vecKron_self_sub_le,
         TNLean.PEPS.EncodedFrame.act_tbSwap_vecKron_tensorPurification,
         TNLean.PEPS.EncodedFrame.norm_toLp_tensorPurification,
         TNLean.PEPS.EncodedFrame.norm_bufferCorrection_le_one,
@@ -368,7 +372,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{lem:peps_frame_exchange_net_map}
     For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes
-    s'\rVert$,
+        s'\rVert$,
     \[
         \lVert D_UF_T\,\omega^{\otimes2}-\omega^{\otimes2}\rVert\le4\delta .
     \]
@@ -380,7 +384,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     The swap $F_{T\mathcal B_T}$ exchanges the two identical factors $s$ of
     $\zeta^{\otimes2}$ and fixes it, so by the net map the difference is
     $(\mathcal V^{\otimes2})^\dagger(F_{T\mathcal
-    B_T}-\id)\bigl((\mathcal V\omega)^{\otimes2}-\zeta^{\otimes2}\bigr)$,
+            B_T}-\id)\bigl((\mathcal V\omega)^{\otimes2}-\zeta^{\otimes2}\bigr)$,
     of norm at most $2\cdot2\delta$ (\texttt{05-frames.tex}, lines 534--553).
 \end{proof}
 
@@ -400,7 +404,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     For a party $P_\circ$ put
     \[
         Z=\{x:\text{the two old raw owners of }x\text{ are not both }P_\circ\}
-            \cup H^+(\mathcal F_1)\cup H^+(\mathcal F_2),
+        \cup H^+(\mathcal F_1)\cup H^+(\mathcal F_2),
     \]
     $T=Z\cap Y$, $E=Z\setminus Y$, $U=\Lambda\setminus Z$ and $A=Y\cap U$
     (\texttt{05-frames.tex}, equations (exchange-Z) and (exchange-partition),
@@ -413,7 +417,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Two-sheet exchange: canonical map]
     \label{thm:peps_frame_exchange}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_exchange_ofFrames,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp_mul_encoder,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.commute_correction,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.norm_exchangeOp_le_one,
@@ -428,13 +431,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $CK_{\rm in}=K_{\rm out}D_UF_T$, and
     \[
         \lVert C(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
-            -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
-            \le4L^{-30}.
+        -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
+        \le4L^{-30}.
     \]
-    The encoded reference vectors are not assumed normalized, and the holes of
-    the two frames may be listed in any order. This is the content of
-    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} for the implemented map, with
-    its hypotheses.
+    The encoded reference vectors are not assumed normalized. This is the
+    content of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} for the implemented
+    map, with its hypotheses, when the holes of each frame are listed as those
+    outside $Y$ followed by those inside $Y$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -442,13 +445,42 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     commute with $K_{\rm out}$; with $F_AF_Y=F_T$ and the intertwining of the
     renaming, $CK_{\rm in}=K_{\rm out}D_UF_T$. The encoding $K_{\rm out}$ is a
     contraction, and the exchange error on the reference with
-    $\delta\le L^{-30}$ gives the bound. For frames listed in another order,
-    compose with the relabelling of tags that identifies the encodings.
+    $\delta\le L^{-30}$ gives the bound.
+\end{proof}
+
+\begin{theorem}[Two-sheet exchange: holes listed in any order]
+    \label{thm:peps_frame_exchange_any_order}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.tagReorder,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.tagReorder_mul_kronecker,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.norm_tagReorder_le_one}
+    \leanok
+    \uses{thm:peps_frame_exchange}
+    Let $\mathcal F_1,\mathcal F_2$ be encoded frames whose holes are listed in
+    any order, each hole classified as outside or inside $Y$ as in the
+    exchange data, and let $\lVert\Omega\rVert=1$ and $I_\Omega(T:E)\le
+        L^{-60}$. There are a relabelling $G$ of the tags of both frames with
+    $G(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm in}$, the encodings
+    of the regrouped listings, and splitting data with error at most
+    $L^{-30}$, such that $CG$ is a contraction,
+    $CG(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm out}D_UF_T$, and
+    \[
+        \lVert CG(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
+        -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
+        \le4L^{-30}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Encodings of distinct holes commute after the canonical identification of
+    tag orderings (\texttt{05-frames.tex}, lines 84--85), which gives $G$.
+    Apply the exchange to the regrouped listings and compose with $G$, a
+    contraction.
 \end{proof}
 
 \begin{theorem}[Two-sheet exchange: bounded change]
     \label{thm:peps_frame_exchange_bounded}
-    \uses{thm:peps_frame_exchange}
+    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order}
     The exchange is implemented by private contractions and a register
     renaming, using $P_\circ$ and the owners of the renamed registers and
     tags; when these form a bounded list it is a bounded change in the sense

@@ -641,14 +641,14 @@ theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset
   refine ⟨e₁, e₂, he₁, he₂, σ, hσ, l2_opNorm_mul_le_one hC (norm_tagReorder_le_one e₁ e₂), ?_, ?_⟩
   · rw [Matrix.mul_assoc]
     exact (congrArg _ hG).trans hK
-  · have hv : act (tagReorder e₁ e₂) (vecKron (F₁.refVec Ω) (F₂.refVec Ω)) =
+  · have hv : act (tagReorder e₁ e₂ :
+          Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ)
+          (vecKron (F₁.refVec Ω) (F₂.refVec Ω)) =
         vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω) := by
       rw [Frame.refVec, Frame.refVec, Frame.refVec, Frame.refVec, ← act_kronecker_vecKron,
-        ← act_kronecker_vecKron, ← act_mul, hG]
-      rfl
-    rw [act_mul]
-    erw [hv]
-    exact herr
+        ← act_kronecker_vecKron, ← act_mul]
+      exact congrArg (fun M => act M (vecKron Ω Ω)) hG
+    rwa [act_mul, hv]
 
 end TwoSheetExchange
 
