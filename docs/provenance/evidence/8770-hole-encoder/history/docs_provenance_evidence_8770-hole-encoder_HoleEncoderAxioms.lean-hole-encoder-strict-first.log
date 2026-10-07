@@ -1,0 +1,61 @@
+import took 1.95s
+'TNLean.PEPS.coordinateResetMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+docs/provenance/evidence/8770-hole-encoder/HoleEncoderAxioms.lean:3:0: error: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string (`/-! ... -/`) before `#print axioms TNLean.PEPS.coordinateResetMatrix`.
+
+Hint: Type `m(odule docstring) + [tab]` to insert a template via snippet.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.coordinateResetMatrix_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.finrank_coordinateSubspaceES' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.coordinateRangeProjector_eq_sum_basis' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.identityHoleEncoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.identityHoleEncoder_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.identityHoleEncoder_mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.identityHoleEncoder_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.HoleEncoderTag' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoderBasis' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.card_holeEncoderTag' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.card_holeEncoderTag_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_eq_zero_of_not_reset' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_eq_zero_of_complement_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_opNorm_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_norm_eq_projector' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_norm_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.holeEncoder_zero_spaces' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+cumulative profiling times:
+	elaboration 1.21ms
+	import 1.95s
+	initialization 31.1ms
+	interpretation 406ms
+	linting 6.37ms
+	module linting 0.00186ms
+	overlappingInstancesLinter 3.73ms
+	parsing 0.82ms
+	tacticAnalysis 14.6ms
