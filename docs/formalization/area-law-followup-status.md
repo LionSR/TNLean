@@ -41,9 +41,20 @@ are published in [QICLean #608](https://github.com/LionSR/QICLean/pull/608),
 at mathematical source revision
 `79b9d503971a4ff2409fa557e174b46b13fdbbda`. The complete library build, strict
 kernel and provenance checks, and full blueprint PDF, web and declaration
-checks have passed. They assume the tail estimate. The physical
-specialization \(w=n^{3/5}\), \(z\ge1-n^{-100}\) and the sector norm
-comparisons of Proposition 8.1 are not established by these results.
+checks have passed. They assume the tail estimate.
+[QICLean #611](https://github.com/LionSR/QICLean/pull/611) proves its uniform
+numerical specialization: for fixed \(\theta\ge0\) and \(C>0\), there is
+\(N\ge2\) such that, for every \(n\ge N\) and \(0<B\le Cn\),
+\[
+2e^{e/2}\exp\!\left(-\frac{n^{3/5}}{32\sqrt{(1+\theta)B}}\right)
+\le n^{-100}.
+\]
+The mathematical source is frozen at
+`317ecbd4478f243b844fb8d4a1d70fbbfd9c1f9a`; its complete library build,
+57 combined kernel reports and full blueprint checks passed.
+Deriving the boundary budget for the physical cut remains necessary before
+these results yield \(z\ge1-n^{-100}\). The sector norm comparisons of
+Proposition 8.1 also remain open.
 
 For any normalized finite-product pure state and disjoint regions \(T,E\),
 QICLean now supplies an isometry on the entire complementary Hilbert space and
@@ -125,9 +136,24 @@ Its actual spectral isometry satisfies \(J^\dagger J=I\) and
 the typical truncation, has diagonal first marginal with entries \(p_i/z\),
 and preserves the complementary marginal. Positive selected mass suffices;
 the original vector need not be unit. The complete library, all eight new
-kernel audits, provenance and full blueprint checks have passed. This provides
-the vector construction preceding the Bell projection calculation, which
-remains a separate proof.
+kernel audits, provenance and full blueprint checks have passed.
+
+[QICLean #610](https://github.com/LionSR/QICLean/pull/610) proves the actual
+one-copy Bell contraction. With \(d=|E|\), let
+\(u=d^{-1/2}\sum_{i\in E}|i\rangle_C|i\rangle_R\) and
+\(\beta=d^{-1/2}\sum_{i\in E}J|i\rangle_A|i\rangle_C\).
+Positive selected mass gives \(\|\beta\|=1\), and the orthogonal projection
+\(P=|\beta\rangle\langle\beta|\) satisfies
+\[
+(P\otimes I_{RB})(\psi_{AB}\otimes u_{CR})
+=\frac{\sqrt z}{d}\,\beta_{AC}\otimes\chi_{RB},
+\]
+after the indicated regrouping of tensor factors.
+The mathematical source is frozen at
+`90e6071e32453006906390bd4e4f71ff4c5251a0`; the complete library build,
+69 combined kernel reports and full blueprint checks passed. Repeated-copy
+identities are under verification. The label probabilities, defect-mass
+estimate and inverse metric comparison remain separate steps.
 
 [QICLean #607](https://github.com/LionSR/QICLean/pull/607) proves that a positive
 definite matrix and any nonzero real power have the same commutant. In
