@@ -18,7 +18,7 @@ import TNLean.PEPS.SquareLatticeGraph
 Provenance ledger: docs/provenance/openai-math.d/8740.json.
 Adapted from OpenAI's openai/math repository (Apache-2.0).
 Upstream revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Changes: renamed namespaces, shared forward-edge spelling, narrowed imports and explicit finite instances.
+Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances.
 Retained both incidence conventions, tensor argument orders, State parameter orders and positivity.
 No upstream Lean proofs are copied.
 Provenance-ID: 8740-vertex
@@ -57,16 +57,16 @@ Provenance-ID: 8740-vector-state
 Downstream: TNLean.PEPS.Approximation.Vector.State
 Upstream: OAI.PolynomialPEPS.State
 https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L26-L26
-Provenance-ID: 8740-vector-peps
-Downstream: TNLean.PEPS.Approximation.Vector.PEPS
+Provenance-ID: 8740-vector-tensor
+Downstream: TNLean.PEPS.Approximation.Vector.Tensor
 Upstream: OAI.PolynomialPEPS.PEPS
 https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L68-L68
-Provenance-ID: 8740-vector-peps-contract
-Downstream: TNLean.PEPS.Approximation.Vector.PEPS.contract
+Provenance-ID: 8740-vector-tensor-contract
+Downstream: TNLean.PEPS.Approximation.Vector.Tensor.contract
 Upstream: OAI.PolynomialPEPS.PEPS.contract
 https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L78-L78
-Provenance-ID: 8740-vector-peps-maxbonddim
-Downstream: TNLean.PEPS.Approximation.Vector.PEPS.maxBondDim
+Provenance-ID: 8740-vector-tensor-maxbonddim
+Downstream: TNLean.PEPS.Approximation.Vector.Tensor.maxBondDim
 Upstream: OAI.PolynomialPEPS.PEPS.maxBondDim
 https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L83-L83
 -/
@@ -135,19 +135,19 @@ abbrev State (q L : ℕ) := EuclideanSpace ℂ (Vertex L → Fin q)
 
 /-- Adapted from `PolynomialPEPS.PEPS`, VectorColumn.lean lines 66–71.
 Unlike a native graph tensor, this source structure requires positive dimensions. -/
-structure PEPS (q L : ℕ) where
+structure Tensor (q L : ℕ) where
   bondDim : ForwardEdge L → ℕ
   bondDim_pos : ∀ e, 0 < bondDim e
   tensor : ∀ v : Vertex L,
     ((e : IncidentEdge L v) → Fin (bondDim e.val)) → Fin q → ℂ
 
 /-- Adapted from `PolynomialPEPS.PEPS.contract`, VectorColumn.lean lines 77–81. -/
-def PEPS.contract {q L : ℕ} (P : PEPS q L) : State q L :=
+def Tensor.contract {q L : ℕ} (P : Tensor q L) : State q L :=
   WithLp.toLp 2 (fun x => ∑ a : (e : ForwardEdge L) → Fin (P.bondDim e),
     ∏ v : Vertex L, P.tensor v (fun e => a e.val) (x v))
 
 /-- Adapted from `PolynomialPEPS.PEPS.maxBondDim`; the empty supremum is zero. -/
-def PEPS.maxBondDim {q L : ℕ} (P : PEPS q L) : ℕ := by
+def Tensor.maxBondDim {q L : ℕ} (P : Tensor q L) : ℕ := by
   classical
   exact Finset.univ.sup P.bondDim
 

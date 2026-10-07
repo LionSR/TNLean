@@ -162,7 +162,7 @@ def pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
   component v a p := A v p (fun e => a (pinnedSquareIncidentEquiv v e))
 
 /-- Convert the virtual-first source structure, preserving its local tensor coefficients. -/
-def vectorTensorToGraphTensor (P : Vector.PEPS q L) : Tensor (squareLatticeGraph L L) q where
+def vectorTensorToGraphTensor (P : Vector.Tensor q L) : Tensor (squareLatticeGraph L L) q where
   bondDim := graphBondDim P.bondDim
   component v a p := P.tensor v (fun e => a (forwardSquareIncidentEquiv v e)) p
 
@@ -175,7 +175,7 @@ theorem pinnedTensorToGraphTensor_component (D : ForwardEdge L → ℕ)
       A v p (fun e => a e.val) := rfl
 
 /-- Pointwise virtual-first component identity for every global assignment. -/
-theorem vectorTensorToGraphTensor_component (P : Vector.PEPS q L)
+theorem vectorTensorToGraphTensor_component (P : Vector.Tensor q L)
     (a : (e : ForwardEdge L) → Fin (P.bondDim e)) (v : Vertex L) (p : Fin q) :
     (vectorTensorToGraphTensor P).component v
       (fun e => forwardSquareVirtualConfigEquiv P.bondDim a e.val) p =
@@ -190,10 +190,10 @@ theorem stateCoeff_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
   exact (Fintype.sum_equiv (forwardSquareVirtualConfigEquiv D) _ _ (fun _ => rfl)).symm
 
 /-- Exact coefficient equality for the separate virtual-first presentation. -/
-theorem stateCoeff_vectorTensorToGraphTensor (P : Vector.PEPS q L) (x : Vertex L → Fin q) :
+theorem stateCoeff_vectorTensorToGraphTensor (P : Vector.Tensor q L) (x : Vertex L → Fin q) :
     stateCoeff (vectorTensorToGraphTensor P) x = P.contract x := by
   classical
-  unfold stateCoeff Vector.PEPS.contract
+  unfold stateCoeff Vector.Tensor.contract
   exact (Fintype.sum_equiv (forwardSquareVirtualConfigEquiv P.bondDim) _ _
     (fun _ => rfl)).symm
 
