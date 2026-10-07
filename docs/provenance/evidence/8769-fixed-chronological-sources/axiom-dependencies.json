@@ -1,0 +1,97 @@
+{
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialPositions": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.mem_partialPositions_iff": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSlots": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv_apply": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSlot_spec": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots_eq": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.choiceAt": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_norm": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.isTouched_of_source_endpoint": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_mapOwner_sourceVectorAt": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotChoice": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotVector": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.eq_partialSlotVector_of_inventory_eq": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation_with_original_vectors": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.exists_selective_partition_of_word": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ]
+}

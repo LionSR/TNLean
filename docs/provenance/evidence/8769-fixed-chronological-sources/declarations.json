@@ -1,0 +1,97 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialPositions",
+    "id": "8769-fixed-preparation-partialpositions"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.mem_partialPositions_iff",
+    "id": "8769-fixed-preparation-mem_partialpositions_iff"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSlots",
+    "id": "8769-fixed-preparation-partialslots"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv",
+    "id": "8769-fixed-preparation-partialslotequiv"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv_apply",
+    "id": "8769-fixed-preparation-partialslotequiv_apply"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots",
+    "id": "8769-fixed-preparation-layout_partialslots"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSlot_spec",
+    "id": "8769-fixed-preparation-partialslot_spec"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots_eq",
+    "id": "8769-fixed-preparation-layout_partialslots_eq"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation",
+    "id": "8769-fixed-preparation-exists_partial_source_preparation"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.choiceAt",
+    "id": "8769-fixed-vectors-choiceat"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt",
+    "id": "8769-fixed-vectors-sourcevectorat"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_norm",
+    "id": "8769-fixed-vectors-sourcevectorat_norm"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.isTouched_of_source_endpoint",
+    "id": "8769-fixed-vectors-istouched_of_source_endpoint"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_mapOwner_sourceVectorAt",
+    "id": "8769-fixed-vectors-sourceat_eq_mapowner_sourcevectorat"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotChoice",
+    "id": "8769-fixed-vectors-partialslotchoice"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSlotVector",
+    "id": "8769-fixed-vectors-partialslotvector"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eq_partialSlotVector_of_inventory_eq",
+    "id": "8769-fixed-vectors-eq_partialslotvector_of_inventory_eq"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation_with_original_vectors",
+    "id": "8769-fixed-vectors-exists_partial_source_preparation_with_original_vectors"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/WordSelectivePartition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.exists_selective_partition_of_word",
+    "id": "8769-fixed-selective-exists_selective_partition_of_word"
+  }
+]
