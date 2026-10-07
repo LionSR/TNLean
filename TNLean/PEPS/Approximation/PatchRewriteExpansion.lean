@@ -367,8 +367,8 @@ section Rescale
 
 variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq n]
 
-/-- **Rescaling restores contractivity.** If `‖M‖ ≤ 1` and `‖M̃ - M‖ ≤ δ / 2` with `δ ≥ 0`, then
-`M_a = M̃ / (1 + δ / 2)` satisfies `‖M_a‖ ≤ 1` and `‖M_a - M‖ ≤ δ`.
+/-- **Rescaling restores contractivity.** If `‖M‖ ≤ 1` and `‖M' - M‖ ≤ δ / 2` with `δ ≥ 0`, then
+`M_a = M' / (1 + δ / 2)` satisfies `‖M_a‖ ≤ 1` and `‖M_a - M‖ ≤ δ`.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 335–341. -/
 theorem norm_rescale_le {M M' : Matrix m n ℂ} (hM : ‖M‖ ≤ 1) {δ : ℝ} (hδ : 0 ≤ δ)
@@ -409,8 +409,8 @@ theorem norm_rescale_le {M M' : Matrix m n ℂ} (hM : ‖M‖ ≤ 1) {δ : ℝ} 
       _ ≤ δ := div_le_self hδ (by linarith)
 
 /-- **Assembling `M_a` from branchwise approximations.** Let `M = ∑_β M_β` be a contraction
-with `N` branches, and let every branch operator have an approximation `M̃_β` with
-`‖M_β - M̃_β‖ ≤ η`. If `N η ≤ δ / 2`, then `M_a = (∑_β M̃_β) / (1 + δ / 2)` is a contraction with
+with `N` branches, and let every branch operator have an approximation `M'_β` with
+`‖M_β - M'_β‖ ≤ η`. If `N η ≤ δ / 2`, then `M_a = (∑_β M'_β) / (1 + δ / 2)` is a contraction with
 `‖M_a - M‖ ≤ δ`.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 331–341. -/

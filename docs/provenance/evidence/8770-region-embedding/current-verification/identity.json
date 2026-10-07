@@ -1,0 +1,161 @@
+{
+  "public_source_revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
+  "actual_local_execution_revision": "22452861589bfb0717cad045c390736147ee94d7",
+  "public_source_url": "https://github.com/LionSR/TNLean/commit/bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
+  "identical_complete_tree": "f9c47755e594c742e64d1b039a67bad676a1977a",
+  "identity_scope": "The public source commit and the actual local execution revision have identical complete Git trees. Publication is a commit identity change, not a new compiler run. The final ledger migration changes only documentation and evidence. Historical author and integration runs remain unchanged.",
+  "source_files": [
+    {
+      "path": "TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
+      "sha256": "3d96a079555ccf4d3c5ba8911b306d5713d26b7826119c4fa8439810c90e7d5a",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    },
+    {
+      "path": "TNLeanTest/RegionOperatorEmbedding.lean",
+      "sha256": "bd46791357af01a2af77a006cf59f787691e9d322039a736e01d209f86773a76",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    },
+    {
+      "path": "TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
+      "sha256": "ba047a05afca2bdb001e7bd0b10f08869611e8d33bc211acf5a8521747e17641",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    },
+    {
+      "path": "docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
+      "sha256": "af01153727733e4218c604180e009c4ec0828cd54951210c13077ccbe27bae4b",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/HoleEncoder.lean",
+      "sha256": "fd50cdafa7c36b895294ea2a0e2f7db7f82c8aa591ea1bcb57246c28fec1deed",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    },
+    {
+      "path": "TNLeanTest/HoleEncoder.lean",
+      "sha256": "3ac91939075f2db74f6f160b2ee7c30381c1e8fb58bfd182a9acc3e7aad49d59",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    },
+    {
+      "path": "TNLeanTest/HoleEncoderAxioms.lean",
+      "sha256": "84150889b6ef2f9642fa141cbd58f53dd9c2fddde925cc607770837e537f7dfb",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    },
+    {
+      "path": "docs/provenance/evidence/8770-hole-encoder/HoleEncoderAxioms.lean",
+      "sha256": "319b2000498f053b6723f1983ae971ddaa327697ea46df08032fe2fe5aef9d98",
+      "identical_revisions": [
+        "61f76928032b1eef7417ae9d79dda93796019eb6",
+        "22452861589bfb0717cad045c390736147ee94d7",
+        "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7"
+      ]
+    }
+  ],
+  "execution_pin_files": [
+    {
+      "path": "lean-toolchain",
+      "sha256": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47"
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b219a7786c9affe607aa70c6dcf7266f836099b5143c3d81f15b38b21b6440aa"
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "7d3d5a57cfdbfa2b751f9810b84da3d8497de1bee757c99c8e1ab7ad1569be4c"
+    },
+    {
+      "path": "docbuild/lake-manifest.json",
+      "sha256": "14c25f6ccdded847364acc442c2a27ae37f45f0f79027ef5b77f111fcb0a2e70"
+    }
+  ],
+  "qiclean_pin": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c",
+  "historical_qiclean_pin": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+  "dependency_transition": "The new QICLean pin is inherited from main #8811. Lean, Mathlib, and all other dependency pins are unchanged. The eight retained checks actually ran with the new QICLean pin; the original author and 8602 integration checks used the old pin.",
+  "historical_author_revision": "61f76928032b1eef7417ae9d79dda93796019eb6",
+  "historical_ledger": "docs/provenance/evidence/8770-region-embedding/historical/author-checkpoint-ledger.json",
+  "historical_ledger_sha256": "1b9899d5a8d9f766d7897f083261ceeb468c7557b5b459f5c21248fe6873a1ac",
+  "original_manifest_sha256": "e391078e007ff581308e4020acda83052f353a0b90fcaae2875e0eb201f4ef06",
+  "retained_checks_sha256": "ca60f53329bb6152fe7cf817eb3a01e6f01729177444e27b1ef83c4370d35d44",
+  "log_normalization": [
+    {
+      "original_sha256": "571540d8117bd96481c35d46a2a76554312d411e2b17e76c20226b18fb0501b9",
+      "retained_sha256": "3d44a265904a911a744540f1b4a5ec02cee16657c061ca978404c1b23fdb7c7f",
+      "byte_identical": false
+    },
+    {
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical": true
+    },
+    {
+      "original_sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63",
+      "retained_sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63",
+      "byte_identical": true
+    },
+    {
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical": true
+    },
+    {
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical": true
+    },
+    {
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical": true
+    },
+    {
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical": true
+    },
+    {
+      "original_sha256": "a10e170892978fcdafd504e3a947b083825c7d7df88df5f1bbe4c6c142b47ea6",
+      "retained_sha256": "a10e170892978fcdafd504e3a947b083825c7d7df88df5f1bbe4c6c142b47ea6",
+      "byte_identical": true
+    }
+  ],
+  "normalization": "Only absolute log destinations are replaced by repository-relative basenames, and log hashes are added. The native build log replaces one private local cache-source path with <prior-local-qiclean-source>; its original and retained hashes are recorded. The other seven logs are copied byte-for-byte. Commands, source hashes, revisions, durations and exit codes are unchanged.",
+  "validation_summary": {
+    "native_build_jobs": 3205,
+    "strict_checks": 7,
+    "raw_adapter_axiom_reports": 3,
+    "raw_encoder_axiom_reports": 22,
+    "permitted_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+}

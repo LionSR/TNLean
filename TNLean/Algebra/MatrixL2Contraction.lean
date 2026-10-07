@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAux
 import QICLean.Analysis.MatrixFramePerturbation
+import QICLean.Analysis.RootChannel
 
 /-!
 # Contractions in the `L²` operator norm
@@ -17,7 +18,6 @@ contraction, and products of contractions are contractions.
 ## Main declarations
 
 * `Matrix.l2_opNorm_reindex_le`: relabelling rows and columns of a rectangular matrix.
-* `Matrix.l2_opNorm_kronecker_one_le`: `‖A ⊗ 1‖ ≤ ‖A‖`.
 * `Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_le_one`: `‖Aᴴ A‖ ≤ 1` gives `‖A‖ ≤ 1`.
 * `Matrix.l2_opNorm_mul_le_one`, `Matrix.l2_opNorm_list_prod_le_one`: products of contractions.
 * `Matrix.kronecker_one_mul_apply`: the entries of `(N ⊗ 1) C` on one identity slice.
@@ -53,12 +53,6 @@ theorem l2_opNorm_reindex_le (e : m ≃ m') (f : n ≃ n') (A : Matrix m n ℂ) 
     simp
   rw [hA, ← hv]
   exact h
-
-/-- Tensoring with the identity on a finite reference does not increase the operator norm. -/
-theorem l2_opNorm_kronecker_one_le {κ : Type*} [Fintype κ] [DecidableEq κ] (A : Matrix m n ℂ) :
-    ‖A ⊗ₖ (1 : Matrix κ κ ℂ)‖ ≤ ‖A‖ :=
-  l2_opNorm_le_of_forall (norm_nonneg _) fun v =>
-    l2_opNorm_kronecker_one_mulVec_le A (WithLp.toLp 2 v)
 
 /-- A matrix whose Gram matrix has operator norm at most one is a contraction. -/
 theorem l2_opNorm_le_one_of_conjTranspose_mul_self_le_one {A : Matrix m n ℂ}
