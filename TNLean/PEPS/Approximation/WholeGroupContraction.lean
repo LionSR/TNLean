@@ -38,7 +38,7 @@ functions on `P v`. A vertex without open legs has a one-point configuration typ
   05-frames.tex:125–179.
 -/
 
-open scoped BigOperators
+open scoped BigOperators Matrix
 
 noncomputable section
 
@@ -503,27 +503,19 @@ theorem partialNormSq_le_one (hloop : ∀ e, tail e ≠ head e)
   (partialNormSq_le_prod A hloop S).trans
     (Finset.prod_le_one₀ (fun v _ ↦ vertexNormSq_nonneg A v) fun v _ ↦ hA v)
 
-/-- The full contraction is the partial contraction of the whole vertex set. -/
-theorem sum_norm_sq_contraction : ∑ σ, ‖contraction A σ‖ ^ 2 = partialNormSq A Finset.univ := by
+omit [∀ v, Fintype (P v)] in
+/-- The full contraction is the partial contraction of the whole vertex set; there are no
+boundary edges. -/
+theorem contraction_eq_partialContraction_univ (σ : (v : V) → P v)
+    (b : (e : {e // IsCut tail head (Finset.univ : Finset V) e}) → D e) :
+    contraction A σ = partialContraction A Finset.univ (fun v ↦ σ v) b := by
   classical
-  let _ := piSubtypeUniqueOfForallNot D (IsCut tail head (Finset.univ : Finset V))
-    (by simp [IsCut])
   let eE : ((e : {e // IsInternal tail head (Finset.univ : Finset V) e}) → D e) ≃
       ((e : E) → D e) :=
-    { toFun := fun γ e ↦ γ ⟨e, by simp [IsInternal]⟩
+    { toFun := fun γ e ↦ γ ⟨e, ⟨Finset.mem_univ _, Finset.mem_univ _⟩⟩
       invFun := fun β e ↦ β e
       left_inv := fun _ ↦ rfl
       right_inv := fun _ ↦ rfl }
-  let eV : ((v : {v // v ∈ (Finset.univ : Finset V)}) → P v) ≃ ((v : V) → P v) :=
-    { toFun := fun σ v ↦ σ ⟨v, Finset.mem_univ v⟩
-      invFun := fun σ v ↦ σ v
-      left_inv := fun _ ↦ rfl
-      right_inv := fun _ ↦ rfl }
-  unfold partialNormSq
-  rw [← eV.symm.sum_comp]
-  refine Finset.sum_congr rfl fun σ _ ↦ ?_
-  rw [Fintype.sum_unique]
-  congr 2
   unfold partialContraction contraction
   rw [← eE.sum_comp]
   refine Finset.sum_congr rfl fun γ _ ↦ ?_
@@ -534,6 +526,23 @@ theorem sum_norm_sq_contraction : ∑ σ, ‖contraction A σ‖ ^ 2 = partialNo
   have h : IsInternal tail head Finset.univ e := ⟨Finset.mem_univ _, Finset.mem_univ _⟩
   simp only [localConfig]
   rw [piSubtypeSplit_symm_apply_left (hq := h)]
+  rfl
+
+/-- The squared norm of the full contraction is that of the partial contraction of the whole
+vertex set. -/
+theorem sum_norm_sq_contraction : ∑ σ, ‖contraction A σ‖ ^ 2 = partialNormSq A Finset.univ := by
+  classical
+  let _ := piSubtypeUniqueOfForallNot D (IsCut tail head (Finset.univ : Finset V))
+    (by simp [IsCut])
+  let eV : ((v : {v // v ∈ (Finset.univ : Finset V)}) → P v) ≃ ((v : V) → P v) :=
+    { toFun := fun σ v ↦ σ ⟨v, Finset.mem_univ v⟩
+      invFun := fun σ v ↦ σ v
+      left_inv := fun _ ↦ rfl
+      right_inv := fun _ ↦ rfl }
+  unfold partialNormSq
+  rw [← eV.symm.sum_comp]
+  refine Finset.sum_congr rfl fun σ _ ↦ ?_
+  rw [Fintype.sum_unique, contraction_eq_partialContraction_univ A σ default]
   rfl
 
 /-- **Whole-group tensor bound, norm part.** For a finite graph without edges from a vertex to
@@ -549,5 +558,114 @@ theorem contraction_norm_le_one (hloop : ∀ e, tail e ≠ head e)
   simpa [sum_norm_sq_contraction] using partialNormSq_le_one A hloop hA Finset.univ
 
 end NormBound
+
+/-! ### Bipartitions into whole open-leg groups -/
+
+section Bipartition
+
+/-- The matrix reshaping of a tensor on the open-leg groups across the bipartition of the vertices
+into `T` and its complement. Each open-leg group stays whole. -/
+def flattening (Z : ((v : V) → P v) → ℂ) (T : Finset V) :
+    Matrix ((v : {v // v ∈ T}) → P v) ((v : {v // v ∉ T}) → P v) ℂ :=
+  fun x y ↦ Z ((Equiv.piEquivPiSubtypeProd (· ∈ T) P).symm (x, y))
+
+omit [Fintype E] [DecidableEq E] in
+theorem mem_compl_disjoint (T : Finset V) : ∀ v, v ∈ T → v ∉ Tᶜ :=
+  fun _ h h' ↦ Finset.mem_compl.mp h' h
+
+omit [Fintype E] [DecidableEq E] in
+theorem not_isExit_compl_left (T : Finset V) (e : E) : ¬IsExit tail head T Tᶜ e := by
+  simp only [IsExit, IsCut, IsLink, Finset.mem_compl]
+  tauto
+
+omit [Fintype E] [DecidableEq E] in
+theorem not_isExit_compl_right (T : Finset V) (e : E) : ¬IsExit tail head Tᶜ T e := by
+  simp only [IsExit, IsCut, IsLink, Finset.mem_compl]
+  tauto
+
+/-- The partial contraction of `T`, as a matrix from the open legs of `T` to the labels of the
+edges crossing the bipartition. -/
+def bipartitionLeft (T : Finset V) :
+    Matrix ((v : {v // v ∈ T}) → P v) ((e : {e // IsLink tail head T Tᶜ e}) → D e) ℂ :=
+  fun x c ↦ partialContraction A T x
+    ((cutSplitLeft D (mem_compl_disjoint T)).symm
+      (c, fun e ↦ absurd e.2 (not_isExit_compl_left (tail := tail) (head := head) T e)))
+
+/-- The partial contraction of the complement of `T`, as a matrix from its open legs to the labels
+of the edges crossing the bipartition. -/
+def bipartitionRight (T : Finset V) :
+    Matrix ((v : {v // v ∉ T}) → P v) ((e : {e // IsLink tail head T Tᶜ e}) → D e) ℂ :=
+  fun y c ↦ partialContraction A Tᶜ (fun v ↦ y ⟨v, Finset.mem_compl.mp v.2⟩)
+    ((cutSplitRight D (mem_compl_disjoint T)).symm
+      (c, fun e ↦ absurd e.2 (not_isExit_compl_right (tail := tail) (head := head) T e)))
+
+omit [∀ v, Fintype (P v)] in
+/-- Grouping all crossing edges into one index, the flattening of the contraction across a
+bipartition into whole open-leg groups is `A Bᵀ`, with `A` and `B` the contractions of the two
+sides.
+
+Polynomial-PEPS manuscript (Sept 24 2026), proof of Lemma 6.2 `lem:group-tensor`,
+05-frames.tex:159–169. -/
+theorem flattening_contraction (T : Finset V) :
+    flattening (contraction A) T = bipartitionLeft A T * (bipartitionRight A T)ᵀ := by
+  classical
+  have hS : ∀ v, v ∈ (Finset.univ : Finset V) ↔ v ∈ T ∨ v ∈ Tᶜ := fun v ↦ by
+    simp [Finset.mem_compl, em]
+  ext x y
+  rw [flattening, contraction_eq_partialContraction_univ A _
+      ((cutSplit D hS (mem_compl_disjoint T)).symm
+        (fun e ↦ absurd e.2 (not_isExit_compl_left (tail := tail) (head := head) T e),
+          fun e ↦ absurd e.2 (not_isExit_compl_right (tail := tail) (head := head) T e)))]
+  have hσ : (fun v : {v // v ∈ (Finset.univ : Finset V)} ↦
+      (Equiv.piEquivPiSubtypeProd (· ∈ T) P).symm (x, y) v) =
+      (vertexSplit P hS (mem_compl_disjoint T)).symm
+        (x, fun v ↦ y ⟨v, Finset.mem_compl.mp v.2⟩) := by
+    funext v
+    by_cases hv : (v : V) ∈ T <;> simp [vertexSplit, piSubtypeSplit, hv]
+  rw [hσ, partialContraction_merge A hS (mem_compl_disjoint T), Matrix.mul_apply]
+  rfl
+
+theorem hsNormSq_bipartitionLeft (T : Finset V) :
+    Matrix.hsNormSq (bipartitionLeft A T) = partialNormSq A T := by
+  classical
+  let _ := piSubtypeUniqueOfForallNot D (IsExit tail head T Tᶜ) (not_isExit_compl_left T)
+  unfold Matrix.hsNormSq partialNormSq bipartitionLeft
+  refine Finset.sum_congr rfl fun x _ ↦ ?_
+  rw [← (cutSplitLeft D (mem_compl_disjoint T)).symm.sum_comp, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl fun c _ ↦ ?_
+  rw [Fintype.sum_unique]
+  congr 4
+
+theorem hsNormSq_bipartitionRight (T : Finset V) :
+    Matrix.hsNormSq (bipartitionRight A T) = partialNormSq A Tᶜ := by
+  classical
+  let _ := piSubtypeUniqueOfForallNot D (IsExit tail head Tᶜ T) (not_isExit_compl_right T)
+  unfold Matrix.hsNormSq partialNormSq bipartitionRight
+  rw [← (piSubtypeCongr P (· ∈ Tᶜ) (· ∉ T) fun v ↦ Finset.mem_compl).sum_comp]
+  refine Finset.sum_congr rfl fun x _ ↦ ?_
+  rw [← (cutSplitRight D (mem_compl_disjoint T)).symm.sum_comp, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl fun c _ ↦ ?_
+  rw [Fintype.sum_unique]
+  congr 4
+
+/-- **Whole-group tensor bound, nuclear part.** For a finite graph without edges from a vertex to
+itself, whose vertex tensors have norm at most one, the contraction has nuclear norm at most one
+across every bipartition into whole open-leg groups. No dimension enters.
+
+Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, 05-frames.tex:125–141;
+proof and equation `eq:group-nuclear`, 05-frames.tex:159–169. -/
+theorem nuclearNorm_flattening_le_one [∀ v, DecidableEq (P v)]
+    (hloop : ∀ e, tail e ≠ head e) (hA : ∀ v, vertexNormSq A v ≤ 1) (T : Finset V) :
+    Matrix.nuclearNorm (flattening (contraction A) T) ≤ 1 := by
+  rw [flattening_contraction]
+  refine (Matrix.nuclearNorm_mul_transpose_le _ _).trans ?_
+  rw [hsNormSq_bipartitionLeft, hsNormSq_bipartitionRight]
+  have h₁ := partialNormSq_le_one A hloop hA T
+  have h₂ := partialNormSq_le_one A hloop hA Tᶜ
+  calc √(partialNormSq A T) * √(partialNormSq A Tᶜ) ≤ 1 * 1 := by
+        gcongr <;> exact Real.sqrt_le_one.mpr ‹_›
+    _ = 1 := one_mul 1
+
+end Bipartition
 
 end TNLean.PEPS.WholeGroup
