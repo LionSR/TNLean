@@ -43,3 +43,5 @@ example {L q : ℕ} {Ω : Pinned.State L q} {C c : ℝ}
 #print axioms entropy_pinnedTensorToGraphTensor
 #print axioms hasPEPSApproximation_of_pinned
 #print axioms hasPEPSApproximation_of_vector
+
+#print axioms regionReducedDensity_eq_pinnedReducedDensity

@@ -1732,6 +1732,192 @@
         "result": "pending"
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-pinned-regionconfiguration",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.RegionConfiguration",
+        "lines": [
+          32,
+          32
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L32-L32"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PinnedRegionalState.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.RegionConfiguration",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: namespace and imports narrowed; complement and Gram-matrix conventions retained."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-pinned-joinconfigurations",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.joinConfigurations",
+        "lines": [
+          109,
+          109
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L109-L109"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PinnedRegionalState.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.joinConfigurations",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: namespace and imports narrowed; complement and Gram-matrix conventions retained."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-pinned-coefficientmatrix",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.coefficientMatrix",
+        "lines": [
+          115,
+          115
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L115-L115"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PinnedRegionalState.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.coefficientMatrix",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: namespace and imports narrowed; complement and Gram-matrix conventions retained."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-pinned-reduceddensity",
+      "status": "planned",
+      "reuse_kind": "adapted",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean",
+        "declaration": "OAI.PolynomialPEPS.PinnedEntropy.reducedDensity",
+        "lines": [
+          119,
+          119
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L119-L119"
+      },
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PinnedRegionalState.lean",
+        "declaration": "TNLean.PEPS.Approximation.Pinned.reducedDensity",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Changes: namespace and imports narrowed; complement and Gram-matrix conventions retained."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-regionreduceddensity-eq-pinnedreduceddensity",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original equality of source Gram matrix and native regional partial trace."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }

@@ -36,7 +36,7 @@
 
 \begin{theorem}[Regional density and entropy]
     \label{thm:peps_square_regional_density}
-    \lean{TNLean.PEPS.Approximation.squareComplementConfigEquiv,TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype,TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor}
+    \lean{TNLean.PEPS.Approximation.squareComplementConfigEquiv,TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype,TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity,TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor}
     \leanok
     \uses{thm:peps_square_grid_contraction}
     For every region $R$, the two contractions have equal unnormalized reduced
@@ -80,3 +80,14 @@
     Use the transported tensor. Its dimensions are identical edge by edge; substitute
     the equality of its vector in the nonzero and phase-error conditions.
 \end{proof}
+
+
+\begin{definition}[Physical-first regional coefficient matrix]
+    \label{def:peps_pinned_regional_matrix}
+    \lean{TNLean.PEPS.Approximation.Pinned.RegionConfiguration,TNLean.PEPS.Approximation.Pinned.joinConfigurations,TNLean.PEPS.Approximation.Pinned.coefficientMatrix,TNLean.PEPS.Approximation.Pinned.reducedDensity}
+    \leanok
+    For configurations $x$ on $R$ and $z$ on $R^c$, let $x\cup z$ be their
+    joined configuration and set $M_{x,z}=\Phi(x\cup z)$. The unnormalized regional
+    density is $MM^\dagger$, which equals the partial trace in
+    Theorem~\ref{thm:peps_square_regional_density}.
+\end{definition}

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
 import QICLean.Analysis.Entropy
@@ -49,6 +50,13 @@ Provenance-ID: 8740-entropy-vectortensortographtensor
 Downstream: TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor
 -/
 
+/-
+Original proof; no upstream Lean proof text reused.
+September 24, 2026 manuscript, sec:introduction, regional density of its PEPS definition.
+Provenance-ID: 8740-regionreduceddensity-eq-pinnedreduceddensity
+Downstream: TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity
+-/
+
 /-!
 # Vector and regional consequences of exact square-grid conversion
 
@@ -63,7 +71,7 @@ September 24 polynomial PEPS manuscript, introduction lines 20–34.
 -/
 
 noncomputable section
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace TNLean.PEPS.Approximation
 
@@ -79,14 +87,14 @@ theorem vector_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) :
     pepsVector (pinnedTensorToGraphTensor D A) =
       Pinned.contractPEPS D A := by
-  apply WithLp.ext_iff.mpr
+  apply (WithLp.ext_iff 2).mpr
   funext x
   exact stateCoeff_pinnedTensorToGraphTensor D A x
 
 /-- Exact equality of Euclidean vectors for virtual-first tensors. -/
 theorem vector_vectorTensorToGraphTensor (P : Vector.Tensor q L) :
     pepsVector (vectorTensorToGraphTensor P) = P.contract := by
-  apply WithLp.ext_iff.mpr
+  apply (WithLp.ext_iff 2).mpr
   funext x
   exact stateCoeff_vectorTensorToGraphTensor P x
 
@@ -142,7 +150,7 @@ theorem maxBondDim_le_iff (P : Vector.Tensor q L) (B : ℕ) :
     P.maxBondDim ≤ B ↔ ∀ e, (vectorTensorToGraphTensor P).bondDim e ≤ B := by
   classical
   change Finset.univ.sup P.bondDim ≤ B ↔ ∀ e, graphBondDim P.bondDim e ≤ B
-  rw [graphBondDim_forall]
+  rw [graphBondDim_forall P.bondDim (fun n => n ≤ B)]
   simp only [Finset.sup_le_iff, Finset.mem_univ, forall_const]
 
 /-- Crossing edges correspond bijectively, for every region including empty and full regions. -/
@@ -193,6 +201,25 @@ theorem regionReducedDensity_pinnedTensorToGraphTensor (D : ForwardEdge L → �
         (star (Pinned.contractPEPS D A ∘ (regionConfigEquiv (d := q) R).symm))) := by
   have h := funext (stateCoeff_pinnedTensorToGraphTensor D A)
   simp only [regionReducedDensity, h]
+
+/-- The adapted upstream Gram matrix equals the native partial trace, with no
+normalization or scalar factor. The complement conventions agree coordinatewise. -/
+theorem regionReducedDensity_eq_pinnedReducedDensity (D : ForwardEdge L → ℕ)
+    (A : (v : Vertex L) → Pinned.LocalTensor q D v) (R : Finset (Vertex L)) :
+    regionReducedDensity (pinnedTensorToGraphTensor D A) R =
+      Pinned.reducedDensity (Pinned.contractPEPS D A) R := by
+  classical
+  rw [regionReducedDensity_eq_mul_conjTranspose]
+  have h : (fun σ τ => stateCoeff (pinnedTensorToGraphTensor D A) (assembleRegionσ R σ τ)) =
+      Pinned.coefficientMatrix (Pinned.contractPEPS D A) R := by
+    funext σ τ
+    change stateCoeff (pinnedTensorToGraphTensor D A) (assembleRegionσ R σ τ) =
+      Pinned.contractPEPS D A (Pinned.joinConfigurations R σ τ)
+    rw [stateCoeff_pinnedTensorToGraphTensor]
+    congr 1
+    funext v
+    by_cases hv : v ∈ R <;> simp [assembleRegionσ, Pinned.joinConfigurations, hv]
+  simp only [Pinned.reducedDensity, h]
 
 /-- The same reduction identity for the separate virtual-first contraction. -/
 theorem regionReducedDensity_vectorTensorToGraphTensor (P : Vector.Tensor q L)
