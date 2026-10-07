@@ -37,41 +37,41 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
+        "revision": "61f76928032b1eef7417ae9d79dda93796019eb6",
         "commands": [
           {
             "kind": "build",
-            "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding TNLean.PEPS.Approximation",
+            "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-00.log",
-            "sha256": "3d44a265904a911a744540f1b4a5ec02cee16657c061ca978404c1b23fdb7c7f"
+            "log": "docs/provenance/evidence/8770-region-embedding/module-build.log",
+            "sha256": "fb5d2e36d639a3ff2376127c34ec24aa043a4751e782298532628d381a840bbe"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-01.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/source-strict.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-02.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/raw-axioms.log",
             "sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-03.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/axiom-guards.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-04.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/consumers-strict.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           }
         ]
@@ -109,41 +109,41 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
+        "revision": "61f76928032b1eef7417ae9d79dda93796019eb6",
         "commands": [
           {
             "kind": "build",
-            "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding TNLean.PEPS.Approximation",
+            "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-00.log",
-            "sha256": "3d44a265904a911a744540f1b4a5ec02cee16657c061ca978404c1b23fdb7c7f"
+            "log": "docs/provenance/evidence/8770-region-embedding/module-build.log",
+            "sha256": "fb5d2e36d639a3ff2376127c34ec24aa043a4751e782298532628d381a840bbe"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-01.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/source-strict.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-02.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/raw-axioms.log",
             "sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-03.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/axiom-guards.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-04.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/consumers-strict.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           }
         ]
@@ -181,41 +181,41 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
+        "revision": "61f76928032b1eef7417ae9d79dda93796019eb6",
         "commands": [
           {
             "kind": "build",
-            "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding TNLean.PEPS.Approximation",
+            "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-00.log",
-            "sha256": "3d44a265904a911a744540f1b4a5ec02cee16657c061ca978404c1b23fdb7c7f"
+            "log": "docs/provenance/evidence/8770-region-embedding/module-build.log",
+            "sha256": "fb5d2e36d639a3ff2376127c34ec24aa043a4751e782298532628d381a840bbe"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-01.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/source-strict.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-02.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/raw-axioms.log",
             "sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-03.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/axiom-guards.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-04.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/consumers-strict.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           }
         ]

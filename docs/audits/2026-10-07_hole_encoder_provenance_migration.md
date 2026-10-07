@@ -1,5 +1,9 @@
 # Encoder provenance migration after the validator update
 
+This records the earlier local migration checkpoint. The adapter publication
+blocker described below is resolved by the subsequent
+[public-reference migration](2026-10-07_region_embedding_public_provenance.md).
+
 The current provenance schema accepts `build`, `axioms`, and `source-audit`
 command kinds. The original twenty-two encoder records used `elaboration`
 and `test`, and referred to the local author checkpoint

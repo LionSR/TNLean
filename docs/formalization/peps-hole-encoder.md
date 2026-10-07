@@ -146,8 +146,11 @@ nested-cylinder leaf retains six static-anchor gaps, listed separately in the
 report; its PDF labels resolve. Generated documents and images are not part
 of the source-tree evidence packet.
 
-These are local individual-module and focused-render checks. No full-root or
-import-aggregator build, full-book rendering, live-browser/MathJax execution,
-remote declaration availability, CI, publication, provenance ownership, or
-completion of issue #8770 is asserted. Import and CI registration remain
-separate work.
+The later [integration packet](../provenance/evidence/8770-region-embedding/current-verification/README.md)
+records the regional embedding adapter and the encoder checks after syncing
+main and its QICLean pin. The native adapter and approximation aggregate build
+passed 3,205 jobs; all seven strict checks and 25 raw axiom reports passed.
+The checked integration tree is identical to its published source commit.
+Import and CI registration are included. These targeted results do not establish
+full-root verification or final-head remote CI, nor completion of issue #8770.
+The focused-render report above remains a separate, earlier rendering record.
