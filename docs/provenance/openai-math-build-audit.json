@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "source_commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "downstream_base_commit": "b7a0184ce22b29102fe17a6e96a9ba83b98d5510",
+  "source_mathlib_revision": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+  "downstream_mathlib_revision": "c55e6e786f49471c72fbddbec5415808896aec1e",
+  "qiclean_revision": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+  "status": "cache_blocked_no_library_or_axiom_verification",
+  "runs": [
+    {
+      "worktree": "/workspace/oai-baseline",
+      "lake": "/workspace/toolchains/lean-4.34.1-linux/bin/lake",
+      "attempts": [
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.34.1-linux/bin/lake",
+            "--version"
+          ],
+          "cwd": "/workspace/oai-baseline",
+          "timeout_seconds": 300,
+          "exit_code": 0,
+          "elapsed_seconds": 0.048,
+          "finished_at": "2026-10-07T07:44:18.425618+00:00",
+          "log": "lake-version.log",
+          "log_sha256": "36526a338068c343bedff5daa38fec328b4f722df1e8f0b5d026d4f0f908f3a3",
+          "compressed_log": "docs/provenance/openai-math-build-logs/original-pin-lake-version.log.gz"
+        },
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.34.1-linux/bin/lake",
+            "exe",
+            "cache",
+            "get"
+          ],
+          "cwd": "/workspace/oai-baseline",
+          "timeout_seconds": 300,
+          "exit_code": 1,
+          "elapsed_seconds": 95.311,
+          "finished_at": "2026-10-07T07:45:53.737013+00:00",
+          "log": "cache-get.log",
+          "log_sha256": "33f15cbef240516d87e8675e74808b73744379b33c64fb9a309ac27279016e15",
+          "compressed_log": "docs/provenance/openai-math-build-logs/original-pin-cache-get.log.gz"
+        }
+      ],
+      "configuration_sha256": {
+        "lean-toolchain": "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+        "lake-manifest.json": "3c9bedce040b7cc0804fc7e07fbcb871d9c87d1f61b22ebf5df2429235ebfaf2"
+      },
+      "library_build_status": "not_attempted",
+      "axiom_status": "not_attempted",
+      "cache_gate": "failed_cache_command",
+      "name": "original-pin"
+    },
+    {
+      "worktree": "/workspace/oai-baseline",
+      "lake": "/workspace/toolchains/lean-4.34.1-linux/bin/lake",
+      "attempts": [
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.34.1-linux/bin/lake",
+            "--version"
+          ],
+          "cwd": "/workspace/oai-baseline",
+          "timeout_seconds": 300,
+          "exit_code": 0,
+          "elapsed_seconds": 0.038,
+          "finished_at": "2026-10-07T07:46:20.318524+00:00",
+          "log": "lake-version.log",
+          "log_sha256": "36526a338068c343bedff5daa38fec328b4f722df1e8f0b5d026d4f0f908f3a3",
+          "compressed_log": "docs/provenance/openai-math-build-logs/original-pin-writable-cache-lake-version.log.gz"
+        },
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.34.1-linux/bin/lake",
+            "exe",
+            "cache",
+            "get"
+          ],
+          "cwd": "/workspace/oai-baseline",
+          "timeout_seconds": 300,
+          "exit_code": 124,
+          "elapsed_seconds": 300.02,
+          "finished_at": "2026-10-07T07:51:20.339143+00:00",
+          "log": "cache-get.log",
+          "log_sha256": "008acad502bc77a630fbc8c9b55aa9d9d16a0a33d3c6277c573b8847e885409e",
+          "compressed_log": "docs/provenance/openai-math-build-logs/original-pin-writable-cache-cache-get.log.gz"
+        }
+      ],
+      "configuration_sha256": {
+        "lean-toolchain": "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+        "lake-manifest.json": "3c9bedce040b7cc0804fc7e07fbcb871d9c87d1f61b22ebf5df2429235ebfaf2"
+      },
+      "environment": {
+        "MATHLIB_CACHE_DIR": "/workspace/mathlib-cache-original"
+      },
+      "library_build_status": "not_attempted",
+      "axiom_status": "not_attempted",
+      "cache_gate": "failed_cache_command",
+      "name": "original-pin-writable-cache"
+    },
+    {
+      "worktree": "/workspace/TNLean",
+      "lake": "/workspace/toolchains/lean-4.35.0-rc3-linux/bin/lake",
+      "attempts": [
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.35.0-rc3-linux/bin/lake",
+            "--version"
+          ],
+          "cwd": "/workspace/TNLean",
+          "timeout_seconds": 300,
+          "exit_code": 0,
+          "elapsed_seconds": 0.045,
+          "finished_at": "2026-10-07T07:44:19.661144+00:00",
+          "log": "lake-version.log",
+          "log_sha256": "e35d3608d07cf59f7870878491e6b275a359bb34ea901c9e8086aed6bec6e07a",
+          "compressed_log": "docs/provenance/openai-math-build-logs/downstream-lake-version.log.gz"
+        },
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.35.0-rc3-linux/bin/lake",
+            "exe",
+            "cache",
+            "get"
+          ],
+          "cwd": "/workspace/TNLean",
+          "timeout_seconds": 300,
+          "exit_code": 1,
+          "elapsed_seconds": 52.552,
+          "finished_at": "2026-10-07T07:45:12.212935+00:00",
+          "log": "cache-get.log",
+          "log_sha256": "cb018dc440aed2f53ade35f6d4e467c5764c7e561640a018e94ab00a4f4fc913",
+          "compressed_log": "docs/provenance/openai-math-build-logs/downstream-cache-get.log.gz"
+        }
+      ],
+      "configuration_sha256": {
+        "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+        "lake-manifest.json": "6f4a233b2a3b3390b4e7a99953713a141c773c80bfac2cb4731c5900dfc7becb"
+      },
+      "library_build_status": "not_attempted",
+      "axiom_status": "not_attempted",
+      "cache_gate": "failed_cache_command",
+      "name": "downstream"
+    },
+    {
+      "worktree": "/workspace/TNLean",
+      "lake": "/workspace/toolchains/lean-4.35.0-rc3-linux/bin/lake",
+      "attempts": [
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.35.0-rc3-linux/bin/lake",
+            "--version"
+          ],
+          "cwd": "/workspace/TNLean",
+          "timeout_seconds": 300,
+          "exit_code": 0,
+          "elapsed_seconds": 0.041,
+          "finished_at": "2026-10-07T07:45:50.953350+00:00",
+          "log": "lake-version.log",
+          "log_sha256": "e35d3608d07cf59f7870878491e6b275a359bb34ea901c9e8086aed6bec6e07a",
+          "compressed_log": "docs/provenance/openai-math-build-logs/downstream-writable-cache-lake-version.log.gz"
+        },
+        {
+          "command": [
+            "/workspace/toolchains/lean-4.35.0-rc3-linux/bin/lake",
+            "exe",
+            "cache",
+            "get"
+          ],
+          "cwd": "/workspace/TNLean",
+          "timeout_seconds": 300,
+          "exit_code": 124,
+          "elapsed_seconds": 300.027,
+          "finished_at": "2026-10-07T07:50:50.980091+00:00",
+          "log": "cache-get.log",
+          "log_sha256": "4b732ee1d1e212035db8e1cd8c83377b41ae7ef8faccb7b6fbcd6ea6beac965b",
+          "compressed_log": "docs/provenance/openai-math-build-logs/downstream-writable-cache-cache-get.log.gz"
+        }
+      ],
+      "configuration_sha256": {
+        "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+        "lake-manifest.json": "6f4a233b2a3b3390b4e7a99953713a141c773c80bfac2cb4731c5900dfc7becb"
+      },
+      "environment": {
+        "MATHLIB_CACHE_DIR": "/workspace/mathlib-cache-downstream"
+      },
+      "library_build_status": "not_attempted",
+      "axiom_status": "not_attempted",
+      "cache_gate": "failed_cache_command",
+      "name": "downstream-writable-cache"
+    }
+  ],
+  "access_probes": [
+    {
+      "label": "cache-default",
+      "command": [
+        "curl",
+        "-I",
+        "--max-time",
+        "20",
+        "--silent",
+        "--show-error",
+        "https://cache.mathlib.org/mathlib4-master"
+      ],
+      "environment": {},
+      "exit_code": 56,
+      "elapsed_seconds": 0.013,
+      "log": "docs/provenance/openai-math-build-logs/cache-default.txt",
+      "log_sha256": "6a25bfc8fcea45bd9ddd523670d549519d81d2de89670ce28372f6b7b0b74abf"
+    },
+    {
+      "label": "cache-azure",
+      "command": [
+        "curl",
+        "-I",
+        "--max-time",
+        "20",
+        "--silent",
+        "--show-error",
+        "https://lakecache.blob.core.windows.net/mathlib4-master"
+      ],
+      "environment": {},
+      "exit_code": 56,
+      "elapsed_seconds": 0.011,
+      "log": "docs/provenance/openai-math-build-logs/cache-azure.txt",
+      "log_sha256": "6a25bfc8fcea45bd9ddd523670d549519d81d2de89670ce28372f6b7b0b74abf"
+    },
+    {
+      "label": "elan-original",
+      "command": [
+        "/workspace/elan/bin/elan",
+        "toolchain",
+        "install",
+        "leanprover/lean4:v4.34.1"
+      ],
+      "environment": {
+        "ELAN_HOME": "/workspace/elan"
+      },
+      "exit_code": 1,
+      "elapsed_seconds": 0.848,
+      "log": "docs/provenance/openai-math-build-logs/elan-original.txt",
+      "log_sha256": "3115468e7e339571467add66c497a1bad685f98a932d6c769fc3d5714de39931"
+    },
+    {
+      "label": "elan-downstream",
+      "command": [
+        "/workspace/elan/bin/elan",
+        "toolchain",
+        "install",
+        "leanprover/lean4:v4.35.0-rc3"
+      ],
+      "environment": {
+        "ELAN_HOME": "/workspace/elan"
+      },
+      "exit_code": 1,
+      "elapsed_seconds": 0.499,
+      "log": "docs/provenance/openai-math-build-logs/elan-downstream.txt",
+      "log_sha256": "3115468e7e339571467add66c497a1bad685f98a932d6c769fc3d5714de39931"
+    }
+  ],
+  "toolchains": [
+    {
+      "version": "4.34.1",
+      "release_url": "https://github.com/leanprover/lean4/releases/download/v4.34.1/lean-4.34.1-linux.tar.zst",
+      "archive_sha256": "47bf4bbd78f70c2e9670598ab7124d92b6efb7330ff33e5fbb4030f6fd72e4e4",
+      "lean_version_output": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)",
+      "download_exit_code": 0,
+      "download_elapsed_seconds": null,
+      "note": "Official curl -fL download followed by tar --zstd extraction succeeded; initial download duration was not instrumented."
+    },
+    {
+      "version": "4.35.0-rc3",
+      "release_url": "https://github.com/leanprover/lean4/releases/download/v4.35.0-rc3/lean-4.35.0-rc3-linux.tar.zst",
+      "archive_sha256": "1526de16c0496f16b46a168f26c990af4e3796505273c3342fec17d72d763997",
+      "lean_version_output": "Lean (version 4.35.0-rc3, x86_64-unknown-linux-gnu, commit 470d5ce1400764999581fd26d5d72b00d990b0f4, Release)",
+      "download_exit_code": 0,
+      "download_elapsed_seconds": null,
+      "note": "Official curl -fL download followed by tar --zstd extraction succeeded; initial download duration was not instrumented."
+    }
+  ],
+  "sentinels": {
+    "/workspace/oai-baseline/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean": false,
+    "/workspace/TNLean/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean": false
+  },
+  "source_staging_manifest": {
+    "source_commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+    "adaptations": [
+      "Lake configuration reduced to Mathlib closure",
+      "Mathlib standard linter option added; source autoImplicit=false retained"
+    ],
+    "files": {
+      "AuditAxioms.lean": "fd4fe4b956065065d5b73b15de4c02c8825866e6de54b9129a9eb705df362ab5",
+      "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "OAI/MathematicalPhysics/PEPSFilters/Basic.lean": "a23b4b07c5bf2af982105f9bc987f568c7223d111fd9b04d2f9b7b5de517a50e",
+      "OAI/MathematicalPhysics/PEPSFilters/Bipartite.lean": "d4dfab319944f43d1c272b96daeca88c94232e4cc12e7e590706a6890a54db81",
+      "OAI/MathematicalPhysics/PEPSFilters/Clipping.lean": "dce598fc2a5c2442dca8c27de1965e2466079eec64ca1bbf03eb2a034627673e",
+      "OAI/MathematicalPhysics/PEPSFilters/CollarWeights.lean": "b1b469f5d58a8dc9bdf5b79a311f7c592597ded0ca0b3c44363679045a1f549d",
+      "OAI/MathematicalPhysics/PEPSFilters/ContourEnergy.lean": "3260a0ecc01f748c71771eb1e5d8f2beee7a856a00d2719514ad0904c8a51b89",
+      "OAI/MathematicalPhysics/PEPSFilters/ContourReduction.lean": "9414bf20fa801b3d207baf8f608859aa2ad50fe99c2e70a01b6ac8e0d4a55500",
+      "OAI/MathematicalPhysics/PEPSFilters/Coordinates.lean": "76867251ce3fed6f1f5c886cda9c014afc9e0a9ef764e114b20bb17b9c85ff3d",
+      "OAI/MathematicalPhysics/PEPSFilters/CrossingEnergy.lean": "b391c41afa1d051726f7789fe1fb314e06b2d38b80705ce66b9989517babf000",
+      "OAI/MathematicalPhysics/PEPSFilters/EnergyOptimizer.lean": "274f8340f5aabfa9f18d1c6b9e91d780d6859f37a95b8ae3b193c7d6056db170",
+      "OAI/MathematicalPhysics/PEPSFilters/FilterStationarity.lean": "c4bf78671476a94f02e909e45c894e37a8ff818bfbef182c1a52c54767a1f576",
+      "OAI/MathematicalPhysics/PEPSFilters/GeometricOptimizer.lean": "c06368af120acb94e16d263d8a5b4204b6ffa576ab12259b9333c877b1c3e102",
+      "OAI/MathematicalPhysics/PEPSFilters/GridCollar.lean": "9973f810f4189467f653704dc058eec49d7f7b43cffbbb891759ccb0ffffad2f",
+      "OAI/MathematicalPhysics/PEPSFilters/HamiltonianEnergy.lean": "9053aa9911804ee50d6c06cfb8b0c78da0c16f2dee526a2ac2236d02ee87caf9",
+      "OAI/MathematicalPhysics/PEPSFilters/Interpolation.lean": "6238b588561967e9f1493c57056715d91a49bf56a8423cfeeb4c9a355ed3043c",
+      "OAI/MathematicalPhysics/PEPSFilters/JointCoordinates.lean": "cea6e3aa889d5147d8ec7e147a07bf4538a5f85215e1868e49a13db0cf0d7f1c",
+      "OAI/MathematicalPhysics/PEPSFilters/JointSpectrum.lean": "a448761971f2fd5fd3580d8ee58ae8f970cf0527dc46a332e30c9aeba530252a",
+      "OAI/MathematicalPhysics/PEPSFilters/LocalOperators.lean": "c6601addf00f488e5f60cbcc26f381c90b9aba0e04124009a426e2252626a93e",
+      "OAI/MathematicalPhysics/PEPSFilters/MarginalLimit.lean": "f0ac5b1fabe1af31972fde84a646fe69ff386df66d5bc0408e644ba7dff9083a",
+      "OAI/MathematicalPhysics/PEPSFilters/Phases.lean": "d5f7322b4e71993149680d8daa5f5a62a02b7686f4dd7acb8c57597085711075",
+      "OAI/MathematicalPhysics/PEPSFilters/PinnedEntropy.lean": "ee54a478e4633bd1ef72044febf5939ac85b846f2aa74f049173918049aa4d18",
+      "OAI/MathematicalPhysics/PEPSFilters/Regularized.lean": "82e126f00f956e484c58cc7c67830632658039dab36f95cee799f911fe1f3fcc",
+      "OAI/MathematicalPhysics/PEPSFilters/SchmidtPairing.lean": "bb1fcadef981f91667657e71f8cc0d8e3a0325d8cb01cc133dbdaf12174292d8",
+      "OAI/MathematicalPhysics/PEPSFilters/SiteBlocks.lean": "31ce023ca47db2ac7a70df49fae2d9cf351b17c26fc5b0dac8263880ecd8a75b",
+      "OAI/MathematicalPhysics/PEPSFilters/SpectralPowers.lean": "efb279e9fb30758fa623c8ac87a9ca3eff7266f818415540cdf8f9708a47f38b",
+      "OAI/MathematicalPhysics/PEPSFilters/UnitaryVariation.lean": "64d1332820cc1d8af8f5e445edd39c8e4f2f50d42ba9c46de66a050b310b296e",
+      "OAI/MathematicalPhysics/PEPSMove/BoundaryEnergy.lean": "25e75d1d0f90d3ce11cb55a0e2d559a8175ea9902184ebf958e6eaf1b83153f9",
+      "OAI/MathematicalPhysics/PEPSMove/ConditionalCollision.lean": "632865944195cf56f189d7e90af64f97b4d4148ec23673a74e5baf4a9154ba66",
+      "OAI/MathematicalPhysics/PEPSMove/ConditionalPhase.lean": "b15d8ff180e5b7a2037090d766a3e61bd213f530a648d3d7f71b48d6120b66d8",
+      "OAI/MathematicalPhysics/PEPSMove/DoubleCurve.lean": "a08f0c2df77c14611deb5735757bafc1385353a1d573bc9b932654ee3d338fed",
+      "OAI/MathematicalPhysics/PEPSMove/EntropyBounds.lean": "56758357ac8ac9d0a6cf0d35241f94d45b00bf82787600d0d39c025c6ee8b621",
+      "OAI/MathematicalPhysics/PEPSMove/EntropyContinuity.lean": "9a0add0735a573aa531916a4ba434052b8d3ef2b628975b9dd3c58c55456535c",
+      "OAI/MathematicalPhysics/PEPSMove/EntropyHolder.lean": "27b2939a1eddca94c8261cb190c480575f2c64aec2386362b8a6a4cda6fa8349",
+      "OAI/MathematicalPhysics/PEPSMove/FilterEntropy.lean": "ebacbcab5b018c8e35a23a149e1fb298b5e053d368864a0450bbd2117eeefbbd",
+      "OAI/MathematicalPhysics/PEPSMove/FilterSlack.lean": "dbe26d56aeb85c7e819fa631bc6c85e89da47cb950f938d619e7a1350fbcd302",
+      "OAI/MathematicalPhysics/PEPSMove/GridStates.lean": "48d61cbe8b5613be1b8251e034c6cd833775558be8a1c539d762bf0024cae34d",
+      "OAI/MathematicalPhysics/PEPSMove/Interpolation.lean": "e0864af186c803b85fef61a055651c8ae445f4368af658f80f1cebc3b5af0419",
+      "OAI/MathematicalPhysics/PEPSMove/LocalOperators.lean": "7d033a62a5890c0e242d2fa327fe7e3285d255c8696725eaba2858aeedb89bea",
+      "OAI/MathematicalPhysics/PEPSMove/LogCompression.lean": "2964eb8913daf761c44fac8077853a8dfe7c957058e30c271cd27a00a82d4d4d",
+      "OAI/MathematicalPhysics/PEPSMove/LogMoments.lean": "62e00459957da912ab06d7028707dba6b4c9e4eebcb2178b6255c3a20819c515",
+      "OAI/MathematicalPhysics/PEPSMove/ModularDistance.lean": "5fc12fab9aea4b923a25fc44588ee5ad29e67275f0cbd1d155442bdd45386246",
+      "OAI/MathematicalPhysics/PEPSMove/MoveBounds.lean": "7f1f709f444a3362a00e0b699e495f73acad76477b48dafd5e45eb1f11c14b94",
+      "OAI/MathematicalPhysics/PEPSMove/NormalizedRows.lean": "021414ab4147ea27b6de0a8dc6ca9d3cfe6532d702e775d79e053c682a0e42bf",
+      "OAI/MathematicalPhysics/PEPSMove/Optimizer.lean": "7fd642277219383e73943fd6012cd3874ee59c80fe47e1f8b49a88daeda390bf",
+      "OAI/MathematicalPhysics/PEPSMove/OptimizerStability.lean": "2d336ab014bedff20fd2ba4d8da99b6e54f5d9c46f76cfa2c7929a79883901e7",
+      "OAI/MathematicalPhysics/PEPSMove/PartialTrace.lean": "654a177d6a741741aaf0e10a47782a48b31056ca89a93d2132fd46568b4610a6",
+      "OAI/MathematicalPhysics/PEPSMove/PhaseContinuity.lean": "947626a27d8577cd35115ff489549bdc1d831b18872a0eb8a4189de653c5a2f6",
+      "OAI/MathematicalPhysics/PEPSMove/PhaseTransfer.lean": "fcb577501ebc73aeb8703511ddaee116504179898ffb8f506d0d26cdfb0dc8bd",
+      "OAI/MathematicalPhysics/PEPSMove/PhysicalCoordinates.lean": "f42545902f3625910865c593833504ce8c280e607ed5c34f1c2f491a8770f817",
+      "OAI/MathematicalPhysics/PEPSMove/PhysicalMove.lean": "e69cea262de9e4af1856dfc5a0a780481cf68b5994815ca5e2b2d43788678554",
+      "OAI/MathematicalPhysics/PEPSMove/PureEntropy.lean": "481f0f5e48b8e23f71535aaa6f28cbc035c8ef85978e9777dff953a34feb28f1",
+      "OAI/MathematicalPhysics/PEPSMove/Purification.lean": "7dac654339250f7757319f13c322132a6d2db2d44c75fa2f65aecfb748dd3e5a",
+      "OAI/MathematicalPhysics/PEPSMove/RenyiSlack.lean": "7a0a10546c3d5171d31cdca1d8a48a845e4a037f9ba6418283c0d3e9128487c4",
+      "OAI/MathematicalPhysics/PEPSMove/SingularInterpolation.lean": "c380773aa0380b23ebfef35bfbfe8e2bb16910801befa8e1e616e6be2001dc70",
+      "OAI/MathematicalPhysics/PEPSMove/SpectralPhase.lean": "00e309e032b61dc801fcb46c1a9cd45e0d8ccfcae8ffa3fc774ae2ae6429fca7",
+      "OAI/MathematicalPhysics/PEPSMove/SpectralPowers.lean": "c0a58dc758058bf98835e35e0a0a637494a036b8f8f14a70b367d3396fe8edaa",
+      "OAI/MathematicalPhysics/PEPSMove/StrongSubadditivity.lean": "0ba64db566701f8311724ac040162bae19505e8f1b8a176e15390b176409ac8f",
+      "OAI/MathematicalPhysics/PEPSMove/ThreeLines.lean": "89fd78c4981795e9ade9f8c5a54fb0b86934021025ef283b6eb03936bc7111bc",
+      "OAI/MathematicalPhysics/PEPSMove/UnitaryCovariance.lean": "28764a25a18b1f9913c153d2182643ef5c4b50bcd5def62c832f7745c0f7b97b",
+      "OAI/MathematicalPhysics/PEPSSubvolume/BipartiteEnergy.lean": "3f6b72d0a79976382df5d0ea0d5e3b27ca6972d707654ed234126555152bc7fb",
+      "OAI/MathematicalPhysics/PEPSSubvolume/ContourEnergy.lean": "f6e8a8c31cc9f865c34f29eec83b433c9f543efb86fbc07b51411585a34eb23f",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Crossing.lean": "7f18897a292a265958de58eeb22162aba475432d888c8e343f3f3e69d11b04df",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Diagonal.lean": "fc533949b27ff95aab29ad2454ba24091287ae08bb8c05a5aa63388f59780f68",
+      "OAI/MathematicalPhysics/PEPSSubvolume/EntropyComparison.lean": "b8ccbdf8ce7007f0868c66b8578751fb1af71fed375e015fa469b64c1e547914",
+      "OAI/MathematicalPhysics/PEPSSubvolume/EntropyDimension.lean": "6f7c4d8c759b57c4e33fbe15e2354cd7adb3b628466074c7a4b5c72c9cf62b93",
+      "OAI/MathematicalPhysics/PEPSSubvolume/EntropyHolder.lean": "93f43ff3f5171cfcab427d2258820ea1f544baa7052cedc0392e41258f34049d",
+      "OAI/MathematicalPhysics/PEPSSubvolume/EntropyMoments.lean": "2508d5a0ea66b7b90b35afb3d2f37ce59ffea5bdb0a588de6f726a2721f9efcd",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Filters.lean": "d9f5f3cb2d798ddd70cbc10c283c778bc2fd52dac79c07f2a6095f12ae6680d5",
+      "OAI/MathematicalPhysics/PEPSSubvolume/FlatDirection.lean": "11800b88ef2854915ce9e5187927b86365b01fd286921393b9f8b0293c16efe6",
+      "OAI/MathematicalPhysics/PEPSSubvolume/GeometricLower.lean": "df21fcbe53a28e0dd099e62b3452e621d6f24f79498f2a10ac892dfb789d0fe9",
+      "OAI/MathematicalPhysics/PEPSSubvolume/GroundTilt.lean": "ce5bae57d1e7db86245e64073be88519e9778e2f4da72cb5fbab4de9cdb72665",
+      "OAI/MathematicalPhysics/PEPSSubvolume/HarmonicWeights.lean": "8eeba213ba2d8315ab6a5c5dd1740f1376583256fcf6a48e42a737efe6b2f60d",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Interpolation.lean": "525b38e4fe5895a257f5f48e299b8e1b3c11bd695200185149f7efead2a8d485",
+      "OAI/MathematicalPhysics/PEPSSubvolume/JointSpectrum.lean": "294e70596efb47ab34a04969ba3856ca7e5605538dc2ab25faf8a61730eb54f9",
+      "OAI/MathematicalPhysics/PEPSSubvolume/KernelPerturbation.lean": "9bbfeaea23900ec0babff7694d9063904953f9febeec817aad064ed5e141c4f9",
+      "OAI/MathematicalPhysics/PEPSSubvolume/LocalBlocks.lean": "9bb63bb7dab1656c2a5dd679be6e0df603d0e6a4b027adb40670ba2045b3c4a3",
+      "OAI/MathematicalPhysics/PEPSSubvolume/LocalOperators.lean": "6b762cd495f72e1d6339edff2011e9bb84e75c36e48e07958c981b4bdd8b4e80",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Marginal.lean": "49609b8344bf44ab435fba96bda5b2227316067ed261d0b71dc432f92414cb87",
+      "OAI/MathematicalPhysics/PEPSSubvolume/MixedKernel.lean": "99c6973e543baf9e852be23c61804ce7f47f843be4cbdc19eab0a17b0337a506",
+      "OAI/MathematicalPhysics/PEPSSubvolume/ModularScalar.lean": "6aae250cf57aa1538a061a7ed71839c542d60fefbe3a561f5d67c9a9d975ef64",
+      "OAI/MathematicalPhysics/PEPSSubvolume/NestedLower.lean": "4949a1befc780214dbef72a5df6b0a828ee62228a3e6a2a1e10c1c19c702b032",
+      "OAI/MathematicalPhysics/PEPSSubvolume/NeutralEnergy.lean": "bd9ff207b0bf2038575e28c52ea51bbe90999932a45625fc28e83422594d2a50",
+      "OAI/MathematicalPhysics/PEPSSubvolume/OptimizerEnergy.lean": "b4273d5715624bbf387fc662a54c18456765eba8d3a79250ff5da14dcdf3e65a",
+      "OAI/MathematicalPhysics/PEPSSubvolume/OptimizerExistence.lean": "2648a3e8821a1b10331b00ba713594ce8008615ea265ca07961c72a4ef62b23b",
+      "OAI/MathematicalPhysics/PEPSSubvolume/PhysicalCurve.lean": "91f16a86cc58c1105db9b442f2629245a9732b4ba840de34ed6a90145ec898c0",
+      "OAI/MathematicalPhysics/PEPSSubvolume/PhysicalModular.lean": "b6e10c9abf46e344e44550ee8fb509f31d47036d3204ec72a41458708fb27f82",
+      "OAI/MathematicalPhysics/PEPSSubvolume/PinnedCosts.lean": "a60c38ac451d73e195d788c3c31de5278b01e30707fdee0c3f3e2f114eab6399",
+      "OAI/MathematicalPhysics/PEPSSubvolume/PinnedEntropy.lean": "cc37a16f99a8b8b7b73267dd6d4751f837ca20d768a9acde46c7495e6af885e0",
+      "OAI/MathematicalPhysics/PEPSSubvolume/PinnedSpectral.lean": "a6c7f035652a8ebd7837931f7f08680df3104c8cea4c8970e054bbc1c338c170",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Pinning.lean": "9c0844231014cfea9eec750eb177cbd65ee7ff9382bd65e324a445fe6db8f482",
+      "OAI/MathematicalPhysics/PEPSSubvolume/QuantumSSA.lean": "3858dd3a3eb066cc94c59638ecb36ac6450db315ad6055416ba02555e8c89858",
+      "OAI/MathematicalPhysics/PEPSSubvolume/RectangleContours.lean": "62133706845d0c49dcb11d32f421b1e1a73db21902d4aa4fdc65a76024f07c7f",
+      "OAI/MathematicalPhysics/PEPSSubvolume/RectangleTiling.lean": "908c581027a5ac56af6a73cb47996e912c70751745760fbc8d5f1313da4f98b5",
+      "OAI/MathematicalPhysics/PEPSSubvolume/RegionSSA.lean": "c6396b34fdc381d5faff3a573ffb183bee9d8e42945afc0d44f825d697280f5d",
+      "OAI/MathematicalPhysics/PEPSSubvolume/SSARegularized.lean": "faaeaa24c16b13045ee0cc5aeb3f0fc6d056d813c5aa063fc0cc080dfd2182da",
+      "OAI/MathematicalPhysics/PEPSSubvolume/ScaleTiling.lean": "d40d64ea443304731db9b2dd24dceeed69c6a7c71d2b4022e2b927d3707e4379",
+      "OAI/MathematicalPhysics/PEPSSubvolume/SchmidtRows.lean": "62e4bf8426403a29d98fe3bf83ac590f953cc0b1ce12190e5dcda7d4b064c74c",
+      "OAI/MathematicalPhysics/PEPSSubvolume/SpectralPowers.lean": "4e5f4aaff401d224fb3b3f4d2f14149602ec06c6978a574f43c429550af388c0",
+      "OAI/MathematicalPhysics/PEPSSubvolume/SquareRecurrence.lean": "43b7d6e1292edb9470a712421e95dba3a148d47480e4c8160dc5675b3997bf55",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Subvolume.lean": "d0d85f9100ddf557bbdbd3a49758f54b4a041cbb949f9713d1f2307575a8ed58",
+      "OAI/MathematicalPhysics/PEPSSubvolume/TensorDecomposition.lean": "7391d2fd63c06ba629fe49c973092983dd44b1b783e10ea963508c095b7aeaf6",
+      "OAI/MathematicalPhysics/PEPSSubvolume/TilingEntropy.lean": "99f64876dc14c437109bfbfcde8999a1ad65f7c9b036468eadfa2566335fdd8f",
+      "OAI/MathematicalPhysics/PEPSSubvolume/TiltEnergy.lean": "44e70b2cbd65e3ae294c6784f4e12bc462376b0b9dbd23b0a049f43cb1603330",
+      "OAI/MathematicalPhysics/PEPSSubvolume/TraceFunctionals.lean": "13f89db908434fd0b8e8a69c9d168e07be6222f19a043a82ce36ef32a7dfcf07",
+      "OAI/MathematicalPhysics/PEPSSubvolume/Transition.lean": "5f7617f1e93a4a4d683c70fc878df5ce5c2cb52fbf644c7bf4371eda1f6f2d53",
+      "OAI/MathematicalPhysics/PEPSSubvolume/TwoFactors.lean": "1bd769ffb65b15e7fb1850fc5d4811b9016c7adac9487df355c644a352c13d05",
+      "OAI/MathematicalPhysics/PEPSSubvolume/UnitaryGauge.lean": "51d8d485fc57b4d13e5b8004a3abb9e30bd3c10170503bd0b168a3f1e5166157",
+      "OAI/MathematicalPhysics/PEPSSubvolume/UnitaryVariation.lean": "9eba931586a9f5374040123d31c5bf103d8aa589534bc59217fb93e7ee894562",
+      "lake-manifest.json": "3c9bedce040b7cc0804fc7e07fbcb871d9c87d1f61b22ebf5df2429235ebfaf2",
+      "lakefile.toml": "6f54411477f1612f5227d8e32c94139be54789d150462b3b5b2023383133f01f",
+      "lean-toolchain": "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b"
+    }
+  },
+  "limitations": [
+    "No linter-bearing OAI or TNLean module build ran; no #print axioms ran.",
+    "Original baseline uses reduced Mathlib-only configuration; original whole OAI package configuration was not run.",
+    "No source compatibility failure is inferred from HTTP access failures.",
+    "No downstream port target exists in this batch."
+  ]
+}
