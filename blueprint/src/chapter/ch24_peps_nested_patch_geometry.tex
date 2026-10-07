@@ -1,0 +1,270 @@
+\section{Nested square patches}
+\label{sec:peps_nested_patch_geometry}
+
+Fix a finite induced lattice domain $\Lambda\subset\mathbb Z^2$ and a centre
+$c\in\mathbb R^2$. The square patches in the proof of
+\cite[Proposition~4.1]{OpenAI2026PolynomialPEPS} are samples of closed ambient
+squares. Intersecting with $\Lambda$ permits clipping at the physical boundary
+and does not add edges to the induced graph.
+% This section covers the geometric part of 03-patches.tex only. It does not
+% mark Proposition 4.1, its energy estimate, or its rank conclusion as proved.
+
+\begin{definition}[Closed square sample]
+    \label{def:peps_closed_square_sample}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.closedSquareSample,
+        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample,
+        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_int,
+        TNLean.PEPS.AreaLaw.Geometry.closedSquareSample_mono
+    }
+    \leanok
+    \uses{def:area_law_domain}
+    For $r\in\mathbb R$, define
+    \begin{align}
+        K(c,r) & =\Lambda\cap
+        \bigl([c_1-r,c_1+r]\times[c_2-r,c_2+r]\bigr).
+        \label{eq:peps_closed_square_sample}
+    \end{align}
+    Thus $x\in K(c,r)$ exactly when $x\in\Lambda$ and
+    $|x_1-c_1|\le r$, $|x_2-c_2|\le r$. Sites on the square boundary are
+    included. Equivalently, each integer coordinate lies between
+    $\lceil c_a-r\rceil$ and $\lfloor c_a+r\rfloor$, for $a=1,2$.
+    The sample is empty for $r<0$ and increases with $r$.
+\end{definition}
+
+\begin{definition}[Distance from the square centre]
+    \label{def:peps_square_radius}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.squareRadius,
+        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_radius
+    }
+    \leanok
+    \uses{def:peps_closed_square_sample}
+    For a lattice point $x$, set
+    $\rho(x)=\max\{|x_1-c_1|,|x_2-c_2|\}$.
+    Then $K(c,r)=\{x\in\Lambda:\rho(x)\le r\}$.
+\end{definition}
+
+\begin{theorem}[Nearest neighbours and closed-square crossing]
+    \label{thm:peps_square_crossing_interval}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.abs_coordinate_sub_le_one_of_adj,
+        TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_of_adj,
+        TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_one_of_adj,
+        TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_pair_iff,
+        TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_closedSquareSample_iff
+    }
+    \leanok
+    \uses{def:peps_square_radius,def:area_law_hamiltonian}
+    Adjacent sites $x,y$ satisfy $|x_a-y_a|\le1$ for $a=1,2$ and
+    $|\rho(x)-\rho(y)|\le1$. In particular, if $x\in K(c,r)$, then
+    $y\in K(c,r+1)$. For any cut $A$, an unordered pair belongs to
+    $\partial_\Lambda A$ precisely when its sites are adjacent and exactly
+    one belongs to $A$. Consequently, for adjacent $x,y$,
+    \begin{align}
+        \{x,y\}\in\partial_\Lambda K(c,r)
+         & \quad\Longleftrightarrow\quad
+        \min\{\rho(x),\rho(y)\}\le r<\max\{\rho(x),\rho(y)\}.
+        \label{eq:peps_square_crossing_interval}
+    \end{align}
+    The interval is closed at the smaller radial distance and open at the
+    larger radial distance.
+\end{theorem}
+\begin{proof}\leanok
+    One coordinate of adjacent sites differs by one and the other is equal.
+    The triangle inequality bounds each coordinate distance from $c$ at $y$
+    by its value at $x$ plus one. Apply the same inequality with $x,y$
+    interchanged to bound the radial difference. The definition of an
+    unordered crossing edge gives the two opposite membership alternatives;
+    substituting $\rho(x)\le r$ for membership yields
+    (\ref{eq:peps_square_crossing_interval}).
+\end{proof}
+
+\begin{theorem}[Number of sites in a sampled square]
+    \label{thm:peps_closed_square_card}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le_eightyOne
+    }
+    \leanok
+    \uses{def:peps_closed_square_sample}
+    If $r\ge0$, then $|K(c,r)|\le(2r+1)^2$.
+    If also $r\le4$, then $|K(c,r)|\le81$.
+\end{theorem}
+\begin{proof}\leanok
+    Each coordinate interval has at most $2r+1$ integer points. The sample
+    is a subset of their Cartesian product. When $r\le4$, its cardinality is
+    at most $9^2=81$.
+\end{proof}
+
+\begin{theorem}[Crossing edges of a sampled square]
+    \label{thm:peps_closed_square_boundary}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le}
+    \leanok
+    \uses{def:peps_closed_square_sample,def:area_law_hamiltonian}
+    For every $r\ge0$, the number of unordered induced edges crossing the
+    sampled square satisfies
+    $|\partial_\Lambda K(c,r)|\le8r+4$.
+    If $0\le r\le2u$, then $|\partial_\Lambda K(c,r)|\le16u+4$.
+\end{theorem}
+\begin{proof}\leanok
+    A horizontal crossing edge lies on an integer row meeting
+    $[c_2-r,c_2+r]$. On each such row there are at most two crossing edges,
+    one at each end of the integer interval inside the square. An interval of
+    length $2r$ contains at most $2r+1$ integers. The same argument applies to
+    vertical edges. Hence the total is at most
+    $2(2r+1)+2(2r+1)=8r+4$; replacing $r$ by its bound $2u$ gives the second
+    assertion. Removing sites outside $\Lambda$ cannot create an induced
+    crossing edge.
+\end{proof}
+
+\begin{definition}[Nested square patches]
+    \label{def:peps_nested_patches}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount,
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius,
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatch
+    }
+    \leanok
+    \uses{def:peps_closed_square_sample}
+    For $u\ge0$, put $m=\lfloor u/2\rfloor+1$. For each integer
+    $0\le j<m$, define
+    \begin{align}
+        r_j & =u+2j,\qquad K_j=K(c,r_j).
+        \label{eq:peps_nested_patches}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Number, radii, and boundary size of the patches]
+    \label{thm:peps_nested_patch_sizes}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount_pos,
+        TNLean.PEPS.AreaLaw.Geometry.half_lt_nestedPatchCount,
+        TNLean.PEPS.AreaLaw.Geometry.le_nestedPatchRadius,
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_le_two_mul,
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_add_two_le,
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_mono,
+        TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_nestedPatch_le
+    }
+    \leanok
+    \uses{def:peps_nested_patches,def:area_law_hamiltonian}
+    The family contains $m\ge1$ patches and $m>u/2$. Every selected radius
+    satisfies $u\le r_j\le2u$ and every selected patch satisfies
+    $|\partial_\Lambda K_j|\le16u+4$.
+    For indices $i<j$, one has $r_i+2\le r_j$. For $i\le j$, one has
+    $K_i\subseteq K_j$; clipping can make these inclusions equalities.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_closed_square_boundary}
+    The floor inequalities give $u/2<m$ and $j\le\lfloor u/2\rfloor\le u/2$.
+    Thus $u\le u+2j\le2u$, and the crossing-edge estimate applies.
+    Increasing an integer index by at least one increases the radius by at
+    least two; inclusion follows from the closed coordinate inequalities.
+\end{proof}
+
+\begin{theorem}[Supports of crossing edges under radius separation]
+    \label{thm:peps_square_crossing_support}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_disjoint_of_add_one_le,
+        TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_subset_of_add_one_le
+    }
+    \leanok
+    \uses{def:peps_closed_square_sample,def:area_law_hamiltonian}
+    Suppose $e\in\partial_\Lambda K(c,r)$. If $s+1\le r$, then the two
+    sites of $e$ are disjoint from $K(c,s)$. If $r+1\le t$, then both sites
+    belong to $K(c,t)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_square_crossing_interval}
+    Write $e=\{x,y\}$ with $x\in K(c,r)$ and $y\notin K(c,r)$.
+    If either site belonged to $K(c,s)$, the nearest-neighbour enlargement
+    would put $y$ in $K(c,s+1)\subseteq K(c,r)$, a contradiction.
+    Conversely, $x\in K(c,r)$ implies $y\in K(c,r+1)$, so both sites
+    belong to every $K(c,t)$ with $r+1\le t$.
+\end{proof}
+
+\begin{theorem}[A single crossing among nested patches]
+    \label{thm:peps_nested_patch_crossing}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_disjoint_earlier,
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_subset_later,
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_unique,
+        TNLean.PEPS.AreaLaw.Geometry.disjoint_edgeBoundary_nestedPatch
+    }
+    \leanok
+    \uses{def:peps_nested_patches,def:area_law_hamiltonian}
+    Let $e=\{x,y\}$ be an induced nearest-neighbour edge. If
+    $e\in\partial_\Lambda K_j$, then, for every $i<j$,
+    $\{x,y\}\cap K_i=\varnothing$, and, for every $j<k$,
+    $\{x,y\}\subseteq K_k$. Consequently, an edge crosses at most one patch
+    in the family, and the crossing-edge sets of distinct patches are disjoint.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_nested_patch_sizes,thm:peps_square_crossing_support}
+    Earlier and later radii differ from $r_j$ by at least two, so the
+    separated-radius support statements apply. If an edge crossed two
+    patches, order their distinct indices. Crossing the earlier patch places
+    both sites in the later patch, contradicting crossing of the later one.
+\end{proof}
+
+The following finite example uses
+$\Lambda=\{0,\ldots,10\}\times\{0,1,2\}$,
+$c=(5/4,3/2)$, and $u=4$. Its three clipped samples are
+$K_0=\{0,\ldots,5\}\times\{0,1,2\}$,
+$K_1=\{0,\ldots,7\}\times\{0,1,2\}$, and
+$K_2=\{0,\ldots,9\}\times\{0,1,2\}$.
+The marked edge $e=\{(7,1),(8,1)\}$ crosses $K_1$; it is disjoint from $K_0$
+and contained in $K_2$. The rounded outlines enclose the clipped sets of
+physical sites; they are not the boundaries of the ambient real squares.
+% Formula verdict: exact samples of the three closed squares at the stated
+% nonintegral centre, with radii 4, 6, 8. The finite domain clips every square.
+% Ink-to-index verdict: dots denote lattice sites and lines denote adjacency;
+% this is a graph illustration, not a tensor contraction or an operator.
+% Contraction/boundary verdict: 33 sites, 52 distinct internal adjacency
+% segments, no periodic edges, physical legs, or edges outside the domain.
+% Source verdict: original finite example of the geometric step in
+% September 24, 2026, 03-patches.tex, Proposition 4.1.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=11, metrics=compact,
+            west=none, east=none, north=none, south=none]
+        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[at=(2,8), name=inside, skin=dot, species=marked]{} & \tn[at=(2,9), name=outside, skin=dot, species=marked]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{}
+        \tnwire[name=crossing, species=marked]{inside.0}{outside.180}
+        \tnmark[form=enclosure, species=selected, label pos=s]
+        {(1,1) .. (3,6)}{$\textcolor{tenkzAction}{K_0}$}
+        \tnmark[form=enclosure, species=secondary, label pos=n]
+        {(1,1) .. (3,8)}{$\textcolor{tenkzMarked}{K_1}$}
+        \tnmark[form=enclosure, species=collar, label pos=se]
+        {(1,1) .. (3,10)}{$\textcolor{tenkzExtra}{K_2}$}
+        \tnmark[form=label, label pos=n]{on crossing 0.65}{$e$}
+    \end{tenkz}
+\end{center}
+
+
+\begin{theorem}[Uniform quadratic boundary sum]
+    \label{thm:peps_nested_patch_quadratic_sum}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.nestedPatch_quadratic_budget,
+        TNLean.PEPS.AreaLaw.Geometry.sum_card_edgeBoundary_nestedPatch_mul_sq_le
+    }
+    \leanok
+    \uses{def:peps_nested_patches,def:area_law_hamiltonian}
+    Let $u\ge4$, $\kappa\in\mathbb R$, and assign each selected patch the
+    same weight $t_j=\kappa/m$. Then
+    \begin{align}
+        \sum_{j=0}^{m-1}|\partial_\Lambda K_j|t_j^2
+         & \le (16u+4)\sum_{j=0}^{m-1}t_j^2
+        \le36\kappa^2.
+        \label{eq:peps_nested_patch_quadratic_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_nested_patch_sizes}
+    Bound each boundary size by $16u+4$. Since $m>u/2$ and $u\ge4$,
+    one has $16u+4\le36m$. The constant weights satisfy
+    $\sum_{j=0}^{m-1}t_j^2=\kappa^2/m$, which gives the result.
+\end{proof}
+% The uniform quadratic sum establishes a geometric coefficient only. It
+% does not identify this sum with a Hamiltonian energy increment.

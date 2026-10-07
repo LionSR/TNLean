@@ -2893,3 +2893,16 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; a target proposition, not a proved theorem. |
 | `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
 | `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
+
+### Nested closed-square patches
+
+The [nested-square geometry audit](formalization/peps-nested-patch-geometry.md)
+records the geometric part of the polynomial-PEPS patch construction. For the
+existing finite induced lattice domain, `Geometry.closedSquareSample Λ c r`
+samples the closed coordinate square at any real centre and clips it to `Λ`.
+`Geometry.nestedPatch Λ c u j` uses radius `u + 2j`, with
+`Geometry.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
+These patches use `AreaLaw.domainGraph` and the unordered `AreaLaw.edgeBoundary`;
+they are not graph-distance balls. The crossing-edge and two-site-support
+results are geometric statements, not an energy estimate or a proof of the
+source's Proposition 4.1.

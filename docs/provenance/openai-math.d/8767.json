@@ -1,0 +1,1003 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.closedsquaresample",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.closedSquareSample",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.closedsquaresample_mono",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.closedSquareSample_mono",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_iff_int",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_int",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.card_edgeboundary_closedsquaresample_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.squareradius",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.squareRadius",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_iff_radius",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_radius",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.abs_coordinate_sub_le_one_of_adj",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.abs_coordinate_sub_le_one_of_adj",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_of_adj",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_of_adj",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.abs_squareradius_sub_le_one_of_adj",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_one_of_adj",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.mem_edgeboundary_pair_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_pair_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.mem_edgeboundary_closedsquaresample_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_closedSquareSample_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.card_closedsquaresample_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.card_closedsquaresample_le_eightyone",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ClosedSquare.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le_eightyOne",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize closed real-centred square samples, their unordered induced crossing edges, and nearest-neighbour geometry on the existing finite-domain model. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchcount",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchradius",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchcount_pos",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount_pos",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.half_lt_nestedpatchcount",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.half_lt_nestedPatchCount",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.le_nestedpatchradius",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.le_nestedPatchRadius",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchradius_le_two_mul",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_le_two_mul",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatchradius_add_two_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatchRadius_add_two_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_mono",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_mono",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.edgeboundary_support_disjoint_of_add_one_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_disjoint_of_add_one_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.edgeboundary_support_subset_of_add_one_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_subset_of_add_one_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_crossing_disjoint_earlier",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_disjoint_earlier",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_crossing_subset_later",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_subset_later",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_crossing_unique",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_unique",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.disjoint_edgeboundary_nestedpatch",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.disjoint_edgeBoundary_nestedPatch",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.card_edgeboundary_nestedpatch_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_nestedPatch_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.nestedpatch_quadratic_budget",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nestedPatch_quadratic_budget",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-energy-bound"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8767-tnlean.peps.arealaw.geometry.sum_card_edgeboundary_nestedpatch_mul_sq_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_card_edgeBoundary_nestedPatch_mul_sq_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-energy-bound"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize the selected radii, nested sampled patches, separated crossing supports, and boundary-weighted scalar arithmetic using the existing finite-domain graph. No Hamiltonian energy estimate or full patch proposition is asserted."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    }
+  ]
+}
