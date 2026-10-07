@@ -99,10 +99,16 @@ theorem act_add (A B : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
   simp [act, Matrix.add_mulVec]
 
 omit [Fintype m] in
+theorem act_sub_right (A : Matrix m n ℂ) (x y : EuclideanSpace ℂ n) :
+    act A (x - y) = act A x - act A y := by
+  simp [act, Matrix.mulVec_sub]
+
+omit [Fintype m] in
 theorem act_one [DecidableEq n] (ψ : EuclideanSpace ℂ n) : act (1 : Matrix n n ℂ) ψ = ψ := by
   simp [act]
 
-theorem norm_act_le [DecidableEq n] (A : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) : ‖act A ψ‖ ≤ ‖A‖ * ‖ψ‖ :=
+theorem norm_act_le [DecidableEq n] (A : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
+    ‖act A ψ‖ ≤ ‖A‖ * ‖ψ‖ :=
   A.l2_opNorm_mulVec ψ
 
 theorem norm_act_le_of_norm_le_one [DecidableEq n] {A : Matrix m n ℂ} (hA : ‖A‖ ≤ 1)
@@ -135,6 +141,11 @@ theorem norm_le_one_of_gram [DecidableEq n] {A : Matrix m n ℂ} (h : ‖Aᴴ * 
 theorem norm_one_le [DecidableEq n] : ‖(1 : Matrix n n ℂ)‖ ≤ 1 := by
   rw [← Matrix.diagonal_one, Matrix.l2_opNorm_diagonal]
   exact (pi_norm_le_iff_of_nonneg zero_le_one).2 fun _ => by simp
+
+/-- The product of two contractions is a contraction. -/
+theorem norm_mul_le_one {l : Type*} [Fintype l] [DecidableEq n] [DecidableEq l]
+    {A : Matrix m n ℂ} {B : Matrix n l ℂ} (hA : ‖A‖ ≤ 1) (hB : ‖B‖ ≤ 1) : ‖A * B‖ ≤ 1 :=
+  (l2_opNorm_mul A B).trans (by nlinarith [norm_nonneg A, norm_nonneg B])
 
 /-- A star projection matrix has operator norm at most one. -/
 theorem norm_le_one_of_isStarProjection [DecidableEq n] {P : Matrix n n ℂ}
@@ -181,10 +192,6 @@ theorem norm_act_list_prod_sub_le [DecidableEq n] :
       _ ≤ ‖act l.prod ψ - ψ‖ + ‖act A ψ - ψ‖ :=
           add_le_add (norm_act_le_of_norm_le_one hA _) le_rfl
       _ ≤ _ := by linarith
-where
-  act_sub_right (A : Matrix n n ℂ) (x y : EuclideanSpace ℂ n) :
-      act A (x - y) = act A x - act A y := by
-    simp [act, Matrix.mulVec_sub]
 
 end Euclidean
 
@@ -391,14 +398,14 @@ theorem stack_apply (R : T → Matrix m n ℂ) (t : T) (σ : m) (τ : n) :
     stack R (t, σ) τ = R t σ τ := rfl
 
 omit [Fintype n] in
-theorem stack_conjTranspose_mul_stack {n' : Type*} [Fintype n'] (R : T → Matrix m n ℂ)
+theorem stack_conjTranspose_mul_stack {n' : Type*} (R : T → Matrix m n ℂ)
     (S : T → Matrix m n' ℂ) : (stack R)ᴴ * stack S = ∑ t, (R t)ᴴ * S t := by
   ext τ τ'
   simp only [mul_apply, conjTranspose_apply, stack_apply, Fintype.sum_prod_type,
     Matrix.sum_apply]
 
 omit [Fintype T] [Fintype m] in
-theorem stack_mul {l : Type*} [Fintype l] (R : T → Matrix m n ℂ) (A : Matrix n l ℂ) :
+theorem stack_mul {l : Type*} (R : T → Matrix m n ℂ) (A : Matrix n l ℂ) :
     stack R * A = stack fun t => R t * A := by
   ext ⟨t, σ⟩ τ
   simp [mul_apply]
@@ -428,59 +435,23 @@ theorem norm_encoder_le_one [NeZero q] : ‖p.encoder‖ ≤ 1 :=
 
 end SquarePatch
 
-/-! ### Tag registers and encodings of a list of holes -/
+/-! ### Lists of square patches -/
 
 variable {pos : ι → ℝ × ℝ}
 
-/-- The tag registers of a list of holes, in the order of the list: the fixed ordering of the
-appended tags in Definition 6.1. -/
-def TagSpace : List (SquarePatch pos q) → Type
-  | [] => Unit
-  | p :: l => p.Tag × TagSpace l
-
-instance instFintypeTagSpace : (l : List (SquarePatch pos q)) → Fintype (TagSpace l)
-  | [] => inferInstanceAs (Fintype Unit)
-  | p :: l =>
-    haveI := instFintypeTagSpace l
-    inferInstanceAs (Fintype (p.Tag × TagSpace l))
-
-instance instDecidableEqTagSpace : (l : List (SquarePatch pos q)) → DecidableEq (TagSpace l)
-  | [] => inferInstanceAs (DecidableEq Unit)
-  | p :: l =>
-    haveI := instDecidableEqTagSpace l
-    inferInstanceAs (DecidableEq (p.Tag × TagSpace l))
-
-/-- Tag registers of a concatenation are the pairs of tag registers of the two parts. -/
-def tagAppendEquiv : (l₁ l₂ : List (SquarePatch pos q)) →
-    TagSpace (l₁ ++ l₂) ≃ TagSpace l₁ × TagSpace l₂
-  | [], l₂ => (Equiv.punitProd (TagSpace l₂)).symm
-  | p :: l₁, l₂ =>
-    ((Equiv.refl p.Tag).prodCongr (tagAppendEquiv l₁ l₂)).trans
-      (Equiv.prodAssoc p.Tag (TagSpace l₁) (TagSpace l₂)).symm
-
-/-- The raw part of the encoding of a list of holes on one tag configuration: the ordered
-product of the raw parts `|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1` of the hole encoders. -/
-def rawProd [NeZero q] : (l : List (SquarePatch pos q)) → TagSpace l →
-    Matrix (ι → Fin q) (ι → Fin q) ℂ
-  | [], _ => 1
-  | p :: l, t => p.branch t.1 * rawProd l t.2
-
-/-- The encoding `K_F` of a list of holes: the product of the hole encoders, with the tags
-appended in the order of the list. -/
-def frameEncoder [NeZero q] (l : List (SquarePatch pos q)) :
-    Matrix (TagSpace l × (ι → Fin q)) (ι → Fin q) ℂ :=
-  stack (rawProd l)
-
-/-- The product `∏_a P_a` of the hole projectors, in the order of the list. -/
-def projProd (l : List (SquarePatch pos q)) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  (l.map SquarePatch.proj).prod
-
-/-- The union of the physical outer footprints of a list of holes. -/
+/-- The union of the physical outer footprints of a list of square patches. -/
 def footprint (l : List (SquarePatch pos q)) : Set ι := {x | ∃ p ∈ l, x ∈ p.outer}
 
-/-- The outer samples of distinct holes of the list are disjoint. -/
+/-- The union of the physical inner samples of a list of square patches. -/
+def innerUnion (l : List (SquarePatch pos q)) : Set ι := {x | ∃ p ∈ l, x ∈ p.inner}
+
+/-- The outer samples of distinct entries of the list are disjoint. -/
 def PairwiseDisjointOuter (l : List (SquarePatch pos q)) : Prop :=
   l.Pairwise fun a b => Disjoint a.outer b.outer
+
+/-- The product `∏_a P_a` of the projectors of a list of square patches, in its order. -/
+def projProd (l : List (SquarePatch pos q)) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  (l.map SquarePatch.proj).prod
 
 theorem footprint_nil : footprint ([] : List (SquarePatch pos q)) = ∅ := by
   simp [footprint]
@@ -500,8 +471,17 @@ theorem footprint_append (l₁ l₂ : List (SquarePatch pos q)) :
     · exact ⟨p, Or.inl hp, hx⟩
     · exact ⟨p, Or.inr hp, hx⟩
 
+theorem disjoint_footprint_of_forall {l : List (SquarePatch pos q)} {S : Set ι}
+    (h : ∀ p ∈ l, Disjoint (p.outer : Set ι) S) : Disjoint (footprint l) S := by
+  rw [Set.disjoint_left]
+  rintro x ⟨p, hp, hx⟩
+  exact Set.disjoint_left.mp (h p hp) hx
+
 theorem subset_footprint {p : SquarePatch pos q} {l : List (SquarePatch pos q)} (hp : p ∈ l) :
     (p.outer : Set ι) ⊆ footprint l := fun _ hx => ⟨p, hp, hx⟩
+
+theorem innerUnion_subset_footprint (l : List (SquarePatch pos q)) :
+    innerUnion l ⊆ footprint l := fun _ ⟨p, hp, hx⟩ => ⟨p, hp, p.inner_subset_outer hx⟩
 
 theorem disjoint_outer_footprint {p : SquarePatch pos q} {l : List (SquarePatch pos q)}
     (h : PairwiseDisjointOuter (p :: l)) : Disjoint (p.outer : Set ι) (footprint l) := by
@@ -512,20 +492,6 @@ theorem disjoint_outer_footprint {p : SquarePatch pos q} {l : List (SquarePatch 
 theorem PairwiseDisjointOuter.of_cons {p : SquarePatch pos q} {l : List (SquarePatch pos q)}
     (h : PairwiseDisjointOuter (p :: l)) : PairwiseDisjointOuter l :=
   List.Pairwise.of_cons h
-
-theorem rawProd_mem_supportedOperators [NeZero q] :
-    (l : List (SquarePatch pos q)) → (t : TagSpace l) →
-      rawProd l t ∈ supportedOperators q (footprint l)
-  | [], _ => one_mem_supportedOperators _
-  | p :: l, t => by
-    rw [footprint_cons]
-    exact mul_mem_supportedOperators
-      (supportedOperators_mono Set.subset_union_left (p.branch_mem_supportedOperators t.1))
-      (supportedOperators_mono Set.subset_union_right (rawProd_mem_supportedOperators l t.2))
-
-theorem rawProd_conjTranspose_mem_supportedOperators [NeZero q] (l : List (SquarePatch pos q))
-    (t : TagSpace l) : (rawProd l t)ᴴ ∈ supportedOperators q (footprint l) :=
-  star_mem_supportedOperators (rawProd_mem_supportedOperators l t)
 
 theorem projProd_mem_supportedOperators :
     (l : List (SquarePatch pos q)) → projProd l ∈ supportedOperators q (footprint l)
@@ -538,36 +504,12 @@ theorem projProd_mem_supportedOperators :
       (supportedOperators_mono Set.subset_union_left p.proj_mem_supportedOperators)
       (supportedOperators_mono Set.subset_union_right (projProd_mem_supportedOperators l))
 
-/-- Encodings of a concatenation factor through the encodings of the two parts. -/
-theorem rawProd_append [NeZero q] :
-    (l₁ l₂ : List (SquarePatch pos q)) → (t : TagSpace (l₁ ++ l₂)) →
-      rawProd (l₁ ++ l₂) t =
-        rawProd l₁ (tagAppendEquiv l₁ l₂ t).1 * rawProd l₂ (tagAppendEquiv l₁ l₂ t).2
-  | [], l₂, t => by
-    change rawProd l₂ t = 1 * rawProd l₂ t
-    exact (one_mul _).symm
-  | p :: l₁, l₂, t => by
-    change p.branch t.1 * rawProd (l₁ ++ l₂) t.2 = _
-    rw [rawProd_append l₁ l₂ t.2, ← mul_assoc]
-    rfl
-
 theorem projProd_append (l₁ l₂ : List (SquarePatch pos q)) :
     projProd (l₁ ++ l₂) = projProd l₁ * projProd l₂ := by
   simp [projProd, List.map_append, List.prod_append]
 
-/-- **Commuting disjoint encodings.** Encodings of holes with disjoint outer footprints
-commute: the raw parts of the encodings of two families with disjoint footprints commute on
-every pair of tag configurations.
-
-Polynomial-PEPS manuscript, `05-frames.tex`, lines 84–85. -/
-theorem rawProd_commute [NeZero q] {l₁ l₂ : List (SquarePatch pos q)}
-    (h : Disjoint (footprint l₁) (footprint l₂)) (t₁ : TagSpace l₁) (t₂ : TagSpace l₂) :
-    Commute (rawProd l₁ t₁) (rawProd l₂ t₂) :=
-  commute_of_mem_supportedOperators h (rawProd_mem_supportedOperators l₁ t₁)
-    (rawProd_mem_supportedOperators l₂ t₂)
-
-/-- The hole projectors of a list with disjoint outer footprints have a product that is an
-orthogonal projection. -/
+/-- The projectors of square patches with pairwise disjoint outer footprints have a product
+that is an orthogonal projection. -/
 theorem projProd_isStarProjection :
     (l : List (SquarePatch pos q)) → PairwiseDisjointOuter l → IsStarProjection (projProd l)
   | [], _ => by simp [projProd]
@@ -582,57 +524,10 @@ theorem norm_projProd_le_one (l : List (SquarePatch pos q)) : ‖projProd l‖ �
     obtain ⟨p, -, rfl⟩ := List.mem_map.mp hA
     exact p.norm_proj_le_one
 
-/-- **Frame Gram identity.** For holes with pairwise disjoint outer footprints,
-`K_Fᴴ K_F = ∑_t (R_t)ᴴ R_t = ∏_a P_a`.
+/-- If every projector of the list has error at most `ε` on `ψ`, their product has error at
+most `rε` on `ψ`, where `r` is the length of the list. No commutation is assumed.
 
-Polynomial-PEPS manuscript, `05-frames.tex`, lines 84–90. -/
-theorem sum_rawProd_conjTranspose_mul_self [NeZero q] :
-    (l : List (SquarePatch pos q)) → PairwiseDisjointOuter l →
-      ∑ t, (rawProd l t)ᴴ * rawProd l t = projProd l
-  | [], _ => by
-    change ∑ _t : Unit, (1 : Matrix (ι → Fin q) (ι → Fin q) ℂ)ᴴ * 1 = 1
-    simp
-  | p :: l, h => by
-    have ih := sum_rawProd_conjTranspose_mul_self l h.of_cons
-    have hc (t : TagSpace l) : Commute p.proj (rawProd l t)ᴴ :=
-      commute_of_mem_supportedOperators (disjoint_outer_footprint h)
-        p.proj_mem_supportedOperators (rawProd_conjTranspose_mem_supportedOperators l t)
-    change ∑ t : p.Tag × TagSpace l, (p.branch t.1 * rawProd l t.2)ᴴ *
-      (p.branch t.1 * rawProd l t.2) = _
-    rw [Fintype.sum_prod_type, Finset.sum_comm]
-    calc ∑ t : TagSpace l, ∑ s : p.Tag, (p.branch s * rawProd l t)ᴴ * (p.branch s * rawProd l t)
-        = ∑ t : TagSpace l, (rawProd l t)ᴴ * p.proj * rawProd l t := by
-          refine Finset.sum_congr rfl fun t _ => ?_
-          simp only [conjTranspose_mul, SquarePatch.proj, ← p.branch_conjTranspose_mul_self,
-            Finset.mul_sum, Finset.sum_mul, mul_assoc]
-      _ = ∑ t : TagSpace l, p.proj * ((rawProd l t)ᴴ * rawProd l t) := by
-          refine Finset.sum_congr rfl fun t _ => ?_
-          rw [← (hc t).eq, mul_assoc]
-      _ = projProd (p :: l) := by
-          rw [← Finset.mul_sum, ih]
-          rfl
-
-/-- **Frame Gram identity.** `K_Fᴴ K_F = ∏_a P_a`. -/
-theorem frameEncoder_conjTranspose_mul_self [NeZero q] {l : List (SquarePatch pos q)}
-    (h : PairwiseDisjointOuter l) : (frameEncoder l)ᴴ * frameEncoder l = projProd l := by
-  rw [frameEncoder, stack_conjTranspose_mul_stack, sum_rawProd_conjTranspose_mul_self l h]
-
-/-- The encoding of a list of holes with disjoint outer footprints is a contraction. -/
-theorem norm_frameEncoder_le_one [NeZero q] {l : List (SquarePatch pos q)}
-    (h : PairwiseDisjointOuter l) : ‖frameEncoder l‖ ≤ 1 :=
-  norm_le_one_of_gram (by rw [frameEncoder_conjTranspose_mul_self h]; exact norm_projProd_le_one l)
-
-/-- `‖K_F ψ‖ = ‖∏_a P_a ψ‖` for every raw vector `ψ`. -/
-theorem norm_act_frameEncoder [NeZero q] {l : List (SquarePatch pos q)}
-    (h : PairwiseDisjointOuter l) (ψ : EuclideanSpace ℂ (ι → Fin q)) :
-    ‖act (frameEncoder l) ψ‖ = ‖act (projProd l) ψ‖ := by
-  refine norm_act_eq_of_gram_eq ?_ ψ
-  have hP := projProd_isStarProjection l h
-  rw [frameEncoder_conjTranspose_mul_self h, ← Matrix.star_eq_conjTranspose,
-    hP.isSelfAdjoint.star_eq, hP.isIdempotentElem.eq]
-
-/-- If every hole projector has error at most `ε` on `ψ`, the product of the `r` hole
-projectors has error at most `rε` on `ψ`. -/
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 93–94 and 237–248. -/
 theorem norm_act_projProd_sub_le {l : List (SquarePatch pos q)} {ε : ℝ}
     {ψ : EuclideanSpace ℂ (ι → Fin q)} (hε : ∀ p ∈ l, ‖act p.proj ψ - ψ‖ ≤ ε) :
     ‖act (projProd l) ψ - ψ‖ ≤ l.length * ε := by
@@ -645,7 +540,7 @@ theorem norm_act_projProd_sub_le {l : List (SquarePatch pos q)} {ε : ℝ}
       exact hε p hp
     · simp
 
-/-! ### Encoded frames -/
+/-! ### Holes, tag registers and encodings -/
 
 /-- A hole of an encoded frame: its square-patch data and the party holding its tag. -/
 structure Hole (pos : ι → ℝ × ℝ) (q : ℕ) (Party : Type*) where
@@ -653,6 +548,139 @@ structure Hole (pos : ι → ℝ × ℝ) (q : ℕ) (Party : Type*) where
   patch : SquarePatch pos q
   /-- The party holding the tag register of the hole. -/
   tagOwner : Party
+
+variable {Party : Type*}
+
+/-- The tag registers of a list of holes, in the order of the list: the fixed ordering of the
+appended tags in Definition 6.1. -/
+def TagSpace : List (Hole pos q Party) → Type
+  | [] => Unit
+  | h :: l => h.patch.Tag × TagSpace l
+
+instance instFintypeTagSpace : (l : List (Hole pos q Party)) → Fintype (TagSpace l)
+  | [] => inferInstanceAs (Fintype Unit)
+  | h :: l =>
+    haveI := instFintypeTagSpace l
+    inferInstanceAs (Fintype (h.patch.Tag × TagSpace l))
+
+instance instDecidableEqTagSpace : (l : List (Hole pos q Party)) → DecidableEq (TagSpace l)
+  | [] => inferInstanceAs (DecidableEq Unit)
+  | h :: l =>
+    haveI := instDecidableEqTagSpace l
+    inferInstanceAs (DecidableEq (h.patch.Tag × TagSpace l))
+
+/-- Tag registers of a concatenation are the pairs of tag registers of the two parts. -/
+def tagAppendEquiv : (l₁ l₂ : List (Hole pos q Party)) →
+    TagSpace (l₁ ++ l₂) ≃ TagSpace l₁ × TagSpace l₂
+  | [], l₂ => (Equiv.punitProd (TagSpace l₂)).symm
+  | h :: l₁, l₂ =>
+    ((Equiv.refl h.patch.Tag).prodCongr (tagAppendEquiv l₁ l₂)).trans
+      (Equiv.prodAssoc h.patch.Tag (TagSpace l₁) (TagSpace l₂)).symm
+
+/-- The raw part of the encoding of a list of holes on one tag configuration: the ordered
+product of the raw parts `|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1` of the hole encoders. -/
+def rawProd [NeZero q] : (l : List (Hole pos q Party)) → TagSpace l →
+    Matrix (ι → Fin q) (ι → Fin q) ℂ
+  | [], _ => 1
+  | h :: l, t => h.patch.branch t.1 * rawProd l t.2
+
+/-- The encoding `K_F` of a list of holes: the product of the hole encoders, with the tags
+appended in the order of the list. -/
+def frameEncoder [NeZero q] (l : List (Hole pos q Party)) :
+    Matrix (TagSpace l × (ι → Fin q)) (ι → Fin q) ℂ :=
+  stack (rawProd l)
+
+theorem rawProd_mem_supportedOperators [NeZero q] :
+    (l : List (Hole pos q Party)) → (t : TagSpace l) →
+      rawProd l t ∈ supportedOperators q (footprint (l.map Hole.patch))
+  | [], _ => one_mem_supportedOperators _
+  | h :: l, t => by
+    rw [List.map_cons, footprint_cons]
+    exact mul_mem_supportedOperators
+      (supportedOperators_mono Set.subset_union_left (h.patch.branch_mem_supportedOperators t.1))
+      (supportedOperators_mono Set.subset_union_right (rawProd_mem_supportedOperators l t.2))
+
+theorem rawProd_conjTranspose_mem_supportedOperators [NeZero q] (l : List (Hole pos q Party))
+    (t : TagSpace l) : (rawProd l t)ᴴ ∈ supportedOperators q (footprint (l.map Hole.patch)) :=
+  star_mem_supportedOperators (rawProd_mem_supportedOperators l t)
+
+/-- Encodings of a concatenation factor through the encodings of the two parts. -/
+theorem rawProd_append [NeZero q] :
+    (l₁ l₂ : List (Hole pos q Party)) → (t : TagSpace (l₁ ++ l₂)) →
+      rawProd (l₁ ++ l₂) t =
+        rawProd l₁ (tagAppendEquiv l₁ l₂ t).1 * rawProd l₂ (tagAppendEquiv l₁ l₂ t).2
+  | [], l₂, t => by
+    change rawProd l₂ t = 1 * rawProd l₂ t
+    exact (one_mul _).symm
+  | h :: l₁, l₂, t => by
+    change h.patch.branch t.1 * rawProd (l₁ ++ l₂) t.2 = _
+    rw [rawProd_append l₁ l₂ t.2, ← mul_assoc]
+    rfl
+
+/-- **Commuting disjoint encodings.** The raw parts of the encodings of two lists of holes with
+disjoint outer footprints commute on every pair of tag configurations, so the encodings
+commute after the canonical identification of the tag orderings.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 84–85. -/
+theorem rawProd_commute [NeZero q] {l₁ l₂ : List (Hole pos q Party)}
+    (h : Disjoint (footprint (l₁.map Hole.patch)) (footprint (l₂.map Hole.patch)))
+    (t₁ : TagSpace l₁) (t₂ : TagSpace l₂) : Commute (rawProd l₁ t₁) (rawProd l₂ t₂) :=
+  commute_of_mem_supportedOperators h (rawProd_mem_supportedOperators l₁ t₁)
+    (rawProd_mem_supportedOperators l₂ t₂)
+
+/-- **Frame Gram identity.** For holes with pairwise disjoint outer footprints,
+`∑_t (R_t)ᴴ R_t = ∏_a P_a`, where `R_t` is the raw part of the encoding on the tag
+configuration `t`.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 84–90. -/
+theorem sum_rawProd_conjTranspose_mul_self [NeZero q] :
+    (l : List (Hole pos q Party)) → PairwiseDisjointOuter (l.map Hole.patch) →
+      ∑ t, (rawProd l t)ᴴ * rawProd l t = projProd (l.map Hole.patch)
+  | [], _ => by
+    change ∑ _t : Unit, (1 : Matrix (ι → Fin q) (ι → Fin q) ℂ)ᴴ * 1 = 1
+    simp
+  | h :: l, hl => by
+    have ih := sum_rawProd_conjTranspose_mul_self l hl.of_cons
+    have hc (t : TagSpace l) : Commute h.patch.proj (rawProd l t)ᴴ :=
+      commute_of_mem_supportedOperators (disjoint_outer_footprint hl)
+        h.patch.proj_mem_supportedOperators (rawProd_conjTranspose_mem_supportedOperators l t)
+    change ∑ t : h.patch.Tag × TagSpace l, (h.patch.branch t.1 * rawProd l t.2)ᴴ *
+      (h.patch.branch t.1 * rawProd l t.2) = _
+    rw [Fintype.sum_prod_type, Finset.sum_comm]
+    calc ∑ t : TagSpace l, ∑ s : h.patch.Tag,
+          (h.patch.branch s * rawProd l t)ᴴ * (h.patch.branch s * rawProd l t)
+        = ∑ t : TagSpace l, (rawProd l t)ᴴ * h.patch.proj * rawProd l t := by
+          refine Finset.sum_congr rfl fun t _ => ?_
+          simp only [conjTranspose_mul, SquarePatch.proj,
+            ← h.patch.branch_conjTranspose_mul_self, Finset.mul_sum, Finset.sum_mul, mul_assoc]
+      _ = ∑ t : TagSpace l, h.patch.proj * ((rawProd l t)ᴴ * rawProd l t) := by
+          refine Finset.sum_congr rfl fun t _ => ?_
+          rw [← (hc t).eq, mul_assoc]
+      _ = projProd ((h :: l).map Hole.patch) := by
+          rw [← Finset.mul_sum, ih]
+          rfl
+
+/-- **Frame Gram identity.** `K_Fᴴ K_F = ∏_a P_a`. -/
+theorem frameEncoder_conjTranspose_mul_self [NeZero q] {l : List (Hole pos q Party)}
+    (h : PairwiseDisjointOuter (l.map Hole.patch)) :
+    (frameEncoder l)ᴴ * frameEncoder l = projProd (l.map Hole.patch) := by
+  rw [frameEncoder, stack_conjTranspose_mul_stack, sum_rawProd_conjTranspose_mul_self l h]
+
+/-- The encoding of a list of holes with disjoint outer footprints is a contraction. -/
+theorem norm_frameEncoder_le_one [NeZero q] {l : List (Hole pos q Party)}
+    (h : PairwiseDisjointOuter (l.map Hole.patch)) : ‖frameEncoder l‖ ≤ 1 :=
+  norm_le_one_of_gram (by rw [frameEncoder_conjTranspose_mul_self h]; exact norm_projProd_le_one _)
+
+/-- `‖K_F ψ‖ = ‖∏_a P_a ψ‖` for every raw vector `ψ`. -/
+theorem norm_act_frameEncoder [NeZero q] {l : List (Hole pos q Party)}
+    (h : PairwiseDisjointOuter (l.map Hole.patch)) (ψ : EuclideanSpace ℂ (ι → Fin q)) :
+    ‖act (frameEncoder l) ψ‖ = ‖act (projProd (l.map Hole.patch)) ψ‖ := by
+  refine norm_act_eq_of_gram_eq ?_ ψ
+  have hP := projProd_isStarProjection _ h
+  rw [frameEncoder_conjTranspose_mul_self h, ← Matrix.star_eq_conjTranspose,
+    hP.isSelfAdjoint.star_eq, hP.isIdempotentElem.eq]
+
+/-! ### Encoded frames -/
 
 /-- **Definition 6.1 (Encoded frame).** A raw ownership assignment on one sheet and a list of
 holes, each with a specified party holding its tag, whose outer footprints are pairwise
@@ -669,18 +697,25 @@ structure Frame (pos : ι → ℝ × ℝ) (q : ℕ) (Party : Type*) where
 
 namespace Frame
 
-variable {Party : Type*} (F : Frame pos q Party)
+variable (F : Frame pos q Party)
 
 /-- The square-patch data of the holes of a frame. -/
 def patches : List (SquarePatch pos q) := F.holes.map Hole.patch
 
+/-- The union `H^-(F)` of the physical samples of the inner hole squares. -/
+def innerHoles : Set ι := innerUnion F.patches
+
+/-- The union `H^+(F)` of the physical samples of the outer hole squares. -/
+def outerHoles : Set ι := footprint F.patches
+
+/-- The layout of a frame: its tag registers followed by the raw registers of its sheet. -/
+abbrev Layout : Type _ := TagSpace F.holes × (ι → Fin q)
+
 /-- The encoding `K_F` of a frame. -/
-def encoder [NeZero q] : Matrix (TagSpace F.patches × (ι → Fin q)) (ι → Fin q) ℂ :=
-  frameEncoder F.patches
+def encoder [NeZero q] : Matrix F.Layout (ι → Fin q) ℂ := frameEncoder F.holes
 
 /-- The reference vector `Ω_F = K_F Ω` (`eq:frame-vector`). -/
-def refVec [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q)) :
-    EuclideanSpace ℂ (TagSpace F.patches × (ι → Fin q)) :=
+def refVec [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q)) : EuclideanSpace ℂ F.Layout :=
   act F.encoder Ω
 
 /-- A raw sheet: the frame without holes, for an ownership assignment. An ownership guide in
@@ -711,7 +746,7 @@ Polynomial-PEPS manuscript, `05-frames.tex`, lines 86–92. -/
 theorem norm_refVec_le [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q)) : ‖F.refVec Ω‖ ≤ ‖Ω‖ :=
   norm_act_le_of_norm_le_one F.norm_encoder_le_one Ω
 
-/-- **`eq:frame-norm`, lower bound.** If `‖Ω‖ = 1` and every hole projector satisfies
+/-- **`eq:frame-norm`.** If `‖Ω‖ = 1` and every hole projector satisfies
 `‖(1 - P_a) Ω‖ ≤ ε`, then the reference vector of a frame with `r` holes satisfies
 `1 - rε ≤ ‖Ω_F‖ ≤ 1`.
 
