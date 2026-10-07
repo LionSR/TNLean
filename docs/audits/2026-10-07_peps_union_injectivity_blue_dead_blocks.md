@@ -22,7 +22,7 @@ an `axiom`, and no Blueprint `\lean{...}` tag cites any of the six.
 | `TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueFiber_card` | none needed: no consumer; one line through `swapBlueComplement` as above |
 | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single_blue` | none needed: no consumer; one line through `swapBlueComplement` as above |
 | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_complCoeff_sum_blue` | none needed: no consumer; one line through `swapBlueComplement` as above |
-| `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockComplWeight_eq` (`UnionInjectivityGeneral.lean`) | none needed: the union proof strips the blue block first and consumes the blue function-level form `regionInteriorBondProd_smul_geometryBlueWeight_eq` (`UnionInjectivityGeneralBlue.lean`), never the complement-first order this theorem served |
+| `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockComplWeight_eq` (`UnionInjectivityGeneral.lean`) | none needed: the union proof (`ThreeBlockGeometry.complCoeff_combination_eq_zero`, `UnionInjectivityGeneral2.lean`) strips the blue block first through the pointwise blue capstone `regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` (`UnionInjectivityGeneralBlue.lean`), never the complement-first order this theorem served |
 
 ## What was checked before the deletion
 
@@ -44,13 +44,16 @@ six.
 - The module docstring of `TNLean/PEPS/RegionBlock/UnionInjectivity.lean` described
   the retired complement-first order through the deleted
   `regionInteriorBondProd_smul_threeBlockComplWeight_eq`. It now describes the proof
-  as written: the annihilation is read at the fused blue/complement leg, the blue
-  smul-factorization `regionInteriorBondProd_smul_geometryBlueWeight_eq` rewrites it
-  as a blue-block combination, injectivity of the blue block strips the blue part,
+  as written: the annihilation is read at the fused blue/complement leg, the pointwise
+  blue smul-factorization
+  `regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`,
+  applied for each host boundary configuration, rewrites it as a blue-block
+  combination, injectivity of the blue block strips the blue part,
   and injectivity of the complement block finishes.
 - The module header of `UnionInjectivityGeneralBlue.lean` announced the file as the
   blue-side mirror of the complement-side factorization; it now names the surviving
-  pointwise capstone and its function-level form.
+  pointwise capstone, consumed by the union proof, and its function-level form,
+  consumed by the overlapping-descent setup (`UnionInjectivityOverlapSetup.lean`).
 - `docs/audits/2026-09-21_peps_three_block_resonate2.md` credited the forty-odd
   consumers to all seven `ThreeBlockGeometry` twins and listed five of the deleted
   names as the replacements for its removed unnamespaced declarations. The

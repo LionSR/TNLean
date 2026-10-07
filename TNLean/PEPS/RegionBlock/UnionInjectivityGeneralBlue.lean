@@ -12,11 +12,12 @@ import TNLean.PEPS.ConfigurationCalculus
 This file continues `TNLean.PEPS.RegionBlock.UnionInjectivityGeneral` with the
 blue-side fiber-collapse factorization over a bare `ThreeBlockGeometry`: the pointwise
 capstone
-`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` and its
-function-level form `regionInteriorBondProd_smul_geometryBlueWeight_eq`, the
-factorization the two-step inverse application of Lemma `injective_union`
-(arXiv:1804.04964, Section 3, lines 1324--1400 of
-`Papers/1804.04964/paper_normal.tex`) consumes.
+`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`, which the
+two-step inverse application of Lemma `injective_union` (arXiv:1804.04964, Section 3,
+lines 1324--1400 of `Papers/1804.04964/paper_normal.tex`) applies for each host boundary
+configuration, and its function-level form
+`regionInteriorBondProd_smul_geometryBlueWeight_eq`, which the overlapping-descent setup
+consumes.
 
 ## Implementation notes
 
