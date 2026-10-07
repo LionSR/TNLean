@@ -1,0 +1,93 @@
+{
+  "repository": "LionSR/TNLean",
+  "revision": "93f9f7e5b3d713e672579a20cc3ac62b5a62f41d",
+  "tree": "e8e1a002def36e6bfb0336dd26d4e399876aa125",
+  "accepted_parent": "e229f204acfedb0634cdcd3968d0a002fb079b59",
+  "frozen_local_commit": "248645e5de94a8c6eba91e1bc5e0305a6d374655",
+  "checked_before_publication": true,
+  "post_publication_compiler_invoked": false,
+  "published_files": [
+    {
+      "path": ".github/workflows/pr-ci.yml",
+      "blob_sha": "ef42793f91634435c5789993aa29e5589420e012",
+      "sha256": "f5b93f789ab7997d2868b1815f4631dd5ab29b254b7632ce4fe52661691ee7fb",
+      "bytes": 57932
+    },
+    {
+      "path": "TNLean/PEPS.lean",
+      "blob_sha": "116d8105d90306c48bd3ab6accded3b62da923e5",
+      "sha256": "391e5c270785507a5d50f8e718e39e31ebc114ed3cc99c1b613c9488a18cdd45",
+      "bytes": 24749
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw.lean",
+      "blob_sha": "7a7f9b0a3c643bce6ff136d84f595293c24b6205",
+      "sha256": "52601d6de734763df24db704bc7c7e14e11236b0fa3b6619f7b9d36395f4a92c",
+      "bytes": 486
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+      "blob_sha": "7adac61519e8383495ac6ebc1ea1c67d0f5c3d7c",
+      "sha256": "336e86a619d0bac8eadabb164e8167a913d147adeb6f75b3adc473d134075726",
+      "bytes": 9997
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+      "blob_sha": "3444b9d2fed5aaaf92113b8a82d053853f98f9da",
+      "sha256": "fd4d4eeb0fd86d4d0d6a3e2fffb82db6b662aeb70c5a7fe79a79fea6e9835478",
+      "bytes": 23179
+    },
+    {
+      "path": "TNLeanTest/NestedCylinderCounterexamples.lean",
+      "blob_sha": "d94cb9f774a4700d6a4284b13e61b36a6ff1169e",
+      "sha256": "42202361502909ac1a1e9932e0d6ed35c07b42ad12ed1fdbb91fb0892ed9a762",
+      "bytes": 12066
+    },
+    {
+      "path": "TNLeanTest/NestedCylinderOrthogonalization.lean",
+      "blob_sha": "1895bd6d77b7cac1524d0fd2bff057b848be32fc",
+      "sha256": "1e6e98e19d33a6735a05001b8a92a95e39a92b31ac689ad527442a9e4af07e11",
+      "bytes": 4155
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_nested_cylinder_orthogonalization.tex",
+      "blob_sha": "750ed01c3bdbfd26e4b42496e1ffa405ff0566b3",
+      "sha256": "7cf9e686b430a9bae35522d4eaa430c3acce1d4ba7f05c5c26fad7deb2b06a60",
+      "bytes": 11917
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_regions.tex",
+      "blob_sha": "ee1b7377bd78f502c2d612fcfd6d529616a9eade",
+      "sha256": "224298f50a6d57aa5b2a719b1b0551ec4bf843d6bf8b9daf1fe1936803dbb855",
+      "bytes": 5467
+    },
+    {
+      "path": "docs/formalization/peps-nested-cylinder-orthogonalization.md",
+      "blob_sha": "1a871831091fbccfd6384bce344ee39a8924b521",
+      "sha256": "f11c89bdeccb406dc1bb416936416fa8bfb22e955ea738719b028168aff2dd23",
+      "bytes": 4906
+    },
+    {
+      "path": "docs/glossary.md",
+      "blob_sha": "ffa3b286b872c5ada0bb941daefccfdd23cfde8c",
+      "sha256": "b69fe68a4579049146a919eb1846b997bd1467bcecc4287ea2fd74641a51bece",
+      "bytes": 171766
+    },
+    {
+      "path": "docs/provenance/openai-math.d/orthogonalization8767.json",
+      "blob_sha": "0292e78f1179dc5b1afea45faacb8130f24a8348",
+      "sha256": "f8abf4dec94324c77f55940ed9e2e72851b2e92f7c9a5514650e14351b113f61",
+      "bytes": 30523
+    },
+    {
+      "path": "docs/tactic_patterns.md",
+      "blob_sha": "b35a73d172a24629da9c82355b06e199bc18a95c",
+      "sha256": "6b9c52e2f2fecccaf15313b8cdd2fe5c8de0cee7174abdafdc7bee475ed8699d",
+      "bytes": 332377
+    }
+  ],
+  "final_runs_sha256": "be8798eb6912c698af265f8851e3861e3792b2ad5f883693c87f6af4a25d99bd",
+  "source_closure_pre_post_equal": true,
+  "all_current_source_and_artifact_hashes_verified": true,
+  "scope": "24 original-proof declarations and focused regression modules; full Lake/checkdecls/exact-head CI remain required"
+}

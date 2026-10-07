@@ -1,0 +1,88 @@
+{
+  "scope": "Owned blueprint, glossary, source-faithful construction note, 24 planned provenance rows, coordinate-subspace diagram only",
+  "base": "e229f204acfedb0634cdcd3968d0a002fb079b59",
+  "checks": {
+    "blueprint_source_sync": {
+      "result": "passed",
+      "command": "python3 scripts/blueprint_lean_sync.py --ci --report ../nested-cylinder-validation/docs/blueprint-sync.json",
+      "report": "blueprint-sync.json",
+      "source_restoration": "Source-only git archive of exact pinned QICLean8d5389d23c8e675a0117442e1a0d2c683a4bad41 into ignored .lake/packages/qiclean. No artifacts or pin changes."
+    },
+    "owned_declaration_tags": {
+      "result": "passed",
+      "public_declarations": 24,
+      "tags": 24,
+      "duplicates": 0,
+      "leanok_basis": "Implementation worker strict-options checks, followed by source comparison. Documentation worker did not invoke Lean.",
+      "definition_theorem_separation": "Projected-images definition carries exactly the two definitions; three substantive proved facts have a separate theorem and checked proof. The stage-zero sentence explicitly assumes n>0."
+    },
+    "reader_prose": {
+      "result": "passed",
+      "scope": "Owned blueprint files, current-source check_blueprint_line"
+    },
+    "latexindent": {
+      "result": "passed",
+      "version": "3.24.7",
+      "scope": [
+        "new chapter",
+        "chapter router"
+      ]
+    },
+    "selected_chapter_render": {
+      "result": "passed",
+      "engine": "xelatex",
+      "pages": 3,
+      "preamble": "repository print.tex/macros",
+      "visual_review": "All three pages rechecked after separating earlier-span/global-image/zero-innovation theorem from the definition. No clipping or overlapping labels; counterexample and diagram remain together.",
+      "last_run": "chapter-pass9.stdout",
+      "aggregate_blueprint_build": false
+    },
+    "diagram": {
+      "result": "passed",
+      "arithmetic": "exact rational",
+      "checks": [
+        "input projectors",
+        "orthogonal vector projection",
+        "zero intersection",
+        "sandwich non-idempotence",
+        "correct image projector",
+        "plotted coordinates"
+      ],
+      "limits": [
+        "This checks the illustrated finite example and picture coordinates, not Lean proofs.",
+        "No tensor-network event-stream audit is claimed for a coordinate-subspace diagram."
+      ]
+    },
+    "tenkz": {
+      "pin": "08a6493f3605dcf2ca5b512823ccb2698dfc027b",
+      "usage": "Exact existing package used by repository preamble. Figure is a coordinate-subspace TikZ diagram, not a tensor contraction; no tensor event-stream audit claimed."
+    },
+    "provenance": {
+      "result": "passed",
+      "rows": 24,
+      "status": "planned",
+      "name_status": "proposed",
+      "verification": "pending",
+      "published_contract": "f920756b82d32cec0b0d0bc4dbb5d516584f01ab",
+      "strict_checker_checkout": "TNLean-provenance-minimal",
+      "strict_checker_head": "7903d81d8d7acad389042bc42e3ad33a38744d64",
+      "notice_blocks": "all24 verified",
+      "source_paper_blob": "b4b45e7d3c6c2a8a2abcdc85df0bb72ea51edbb5",
+      "paper_sha256": "0c5648040b1f8fdea55062b82b5bc301570bbddd27a7741fed05acc78b840d14",
+      "scope": "This shard only; scan=False, no inherited rows or repository-wide scan."
+    }
+  },
+  "limits": [
+    "No local Lean compiler, full Lake build, or leanblueprint checkdecls invoked by documentation worker.",
+    "No aggregate PDF/web build performed.",
+    "No immutable source publication, build evidence promotion, or external mutation performed.",
+    "The formal result uses inside projectors, with no new rank-one orthonormal-basis expansion theorem."
+  ],
+  "files": {
+    "blueprint/src/chapter/ch24_peps_nested_cylinder_orthogonalization.tex": "7cf9e686b430a9bae35522d4eaa430c3acce1d4ba7f05c5c26fad7deb2b06a60",
+    "blueprint/src/chapter/ch24_peps_regions.tex": "224298f50a6d57aa5b2a719b1b0551ec4bf843d6bf8b9daf1fe1936803dbb855",
+    "docs/formalization/peps-nested-cylinder-orthogonalization.md": "f11c89bdeccb406dc1bb416936416fa8bfb22e955ea738719b028168aff2dd23",
+    "docs/glossary.md": "b69fe68a4579049146a919eb1846b997bd1467bcecc4287ea2fd74641a51bece",
+    "docs/provenance/openai-math.d/orthogonalization8767.json": "f8abf4dec94324c77f55940ed9e2e72851b2e92f7c9a5514650e14351b113f61"
+  }
+}

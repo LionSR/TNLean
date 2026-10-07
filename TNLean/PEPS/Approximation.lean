@@ -10,3 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
+import TNLean.PEPS.Approximation.SquareGridContraction
+import TNLean.PEPS.Approximation.SquareGridSource
