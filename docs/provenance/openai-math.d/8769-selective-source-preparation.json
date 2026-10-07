@@ -1,0 +1,1826 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8769-selective-owners-affectedowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+        "declaration": "TNLean.PEPS.PairEffect.affectedOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/AffectedOwners.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/AffectedOwners.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-owners-affectedowner_eq_none",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+        "declaration": "TNLean.PEPS.PairEffect.affectedOwner_eq_none",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/AffectedOwners.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/AffectedOwners.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-owners-affectedowner_eq_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+        "declaration": "TNLean.PEPS.PairEffect.affectedOwner_eq_iff",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/AffectedOwners.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/AffectedOwners.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-owners-pairsource.affectedowner_ne_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.affectedOwner_ne_iff",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/AffectedOwners.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/AffectedOwners.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-owners-sourceinventory.mem_mapowner_affectedowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner_affectedOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/AffectedOwners.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/AffectedOwners.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-owners-sourceinventory.map_partypair_affectedowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_affectedOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/AffectedOwners.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/AffectedOwners.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-owners-sourceinventory.mapowner_affectedowner_eq_nil_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AffectedOwners.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_affectedOwner_eq_nil_iff",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/AffectedOwners.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/AffectedOwners.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-aggregate-word.groupedblockmap",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.groupedBlockMap",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate",
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/GroupedBlockMap.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-aggregate-word.groupedblockmap_spec",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.groupedBlockMap_spec",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate",
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/GroupedBlockMap.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-aggregate-word.eval_groupedblockmap",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_groupedBlockMap",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate",
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/GroupedBlockMap.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-aggregate-word.eval_sum_mapowner_comp",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_sum_mapOwner_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate",
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/GroupedBlockMap.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/GroupedBlockMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.branchword",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.eval",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.eval",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.branchword_isallowed",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord_isAllowed",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.sources_branchword",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.sources_branchWord",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.norm_eval_le_one",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.norm_eval_le_one",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.evalatowners",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.evalatowners_eq_sum",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners_eq_sum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-preparedsourcegate.norm_evalatowners_le_one",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.norm_evalAtOwners_le_one",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-gate-word.exists_preparedsourcegate",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.exists_preparedSourceGate",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/PreparedSourceGate.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/PreparedSourceGate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.selectedsources",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.selectedSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.layout_selectedsources_eq",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.layout_selectedSources_eq",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.freeslotlayout",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.freeSlotLayout",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.prepareselected",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.prepareSelected",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.preparefreeslots",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.prepareFreeSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.fillsourcevectors",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.fillSourceVectors",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.isallowed_prepareselected",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepareSelected",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.sources_prepareselected",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.sources_prepareSelected",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.eval_prepareselected_preparefreeslots",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSelected_prepareFreeSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.mem_selectedsources",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_selectedSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-prep-sourceinventory.mem_sources_prepareselected",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_sources_prepareSelected",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-factorization-word.exists_selective_partition",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectiveSourceFactorization.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.exists_selective_partition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/SelectiveSourceFactorization.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/SelectiveSourceFactorization.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-spectators-word.appendtail",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordAppendTail.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.appendTail",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/WordAppendTail.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/WordAppendTail.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-spectators-word.isallowed_appendtail",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordAppendTail.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_appendTail",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/WordAppendTail.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/WordAppendTail.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-spectators-word.sources_appendtail",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordAppendTail.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_appendTail",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/WordAppendTail.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/WordAppendTail.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-selective-spectators-word.eval_appendtail",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordAppendTail.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_appendTail",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs fixed finite source positions from actual allowed gate monomials, retaining their coefficients and aggregate contraction. Relabelling affected and exterior owners identifies exactly the surviving source occurrences. An untouched aggregate gate acts locally on the exterior without opening its branch sum. Selective preparation depends only on the fixed normalized vectors and yields two contractions chosen before every family of free vectors. Extension beside spectator registers preserves the source inventory and tensors the original operator with an identity. Chronological partial gate expansion and the trace-norm compression estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8689eafdd341540d4dd7e6848707646d6e3a0970",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-selective-source-preparation/TNLean/PEPS/Approximation/WordAppendTail.olean /private/tmp/tnlean-selective-source-preparation/src/TNLean/PEPS/Approximation/WordAppendTail.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/direct-build.log",
+            "sha256": "e782ec8fedd3fc76ab10069f1073c91294207ba9efab0bf93d7763cd2b4dacbc"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-selective-source-preparation/axioms.log",
+            "sha256": "c231835bef1f36ac34dfb09bc3320583fedd8b060ae9a6075cd57d77da12fb26"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
