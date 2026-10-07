@@ -123,8 +123,8 @@ theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le (D : ForwardEdge L
       contractPEPS D (fixInput D A z) =
         Matrix.toEuclideanLin (operatorMatrix D A) (EuclideanSpace.single z 1) ∧
       contractPEPS D (fixInput D A z) ≠ 0 ∧
-      ∃ θ : ℝ, ‖((‖contractPEPS D (fixInput D A z)‖ : ℂ)⁻¹) • contractPEPS D (fixInput D A z) -
-        Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
+      ∃ θ : ℝ, ‖((‖contractPEPS D (fixInput D A z)‖ : ℂ)⁻¹) •
+        contractPEPS D (fixInput D A z) - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
   obtain ⟨z, hz, θ, hθ⟩ :=
     exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
   rw [← contractPEPS_fixInput] at hz hθ
