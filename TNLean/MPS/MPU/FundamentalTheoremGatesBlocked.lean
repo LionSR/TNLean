@@ -13,6 +13,14 @@ even length.
 
 Source: CPSV17, arXiv:1703.09188, Theorem `FundamentalMPU` (lines 624--648), 'if' direction read
 for the two-site standard forms; Milestone M-A, Theorem A3 first assertion.
+
+**Scope restriction (even ring lengths):** the source asserts that the gate relations give
+`U^(N) = V^(N)` for every `N`. The gates are built from the two-site block, so they determine only
+the blocked family, and `IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges` concludes
+equality on rings of even length only. At odd lengths the printed converse fails: the bond-one
+tensors `U = 1` and `V = -1` on `ℂ²` have gates related by `x = y = -1` and equal two-site blocks,
+yet `V^(N) = (-1)^N U^(N)`. Documented in `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
+Equality at every length follows from the letter-level unitary conjugation, not from the gates.
 -/
 
 open scoped Matrix Kronecker BigOperators
