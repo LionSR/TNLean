@@ -44,7 +44,7 @@ Provenance-ID: 8769-free-input-matrix-word.trace_preparedmatrix_mul_conjtranspos
 Downstream declaration: TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq
 
 Provenance-ID: 8769-free-input-matrix-word.trace_prepareddensitycoefficient_eq_freesourcematrix
-Downstream declaration: 
+Downstream declaration:
 TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix
 -/
 
