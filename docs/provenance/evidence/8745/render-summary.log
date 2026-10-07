@@ -1,0 +1,9 @@
+Focused published-source rendering passed.
+PDF pages: 8
+Public declaration links: 50 in PDF, 50 in HTML
+Mathematical entries: 22; proof sketches: 17; checked markers: 39
+Missing final references, overflow and missing-glyph diagnostics: none.
+Missing HTML anchors, duplicate IDs and error sentinels: none.
+Warnings: pdftex.map and kanjix.map unavailable; duplicate page.1 PDF destination inherited from title/contents pages; dvisvgm/vector imager unavailable. No target diagrams.
+All eight page PNG hashes equal the earlier visually inspected outputs.
+Full CI, full-book rendering, live browser and MathJax runtime remain outside this check.

@@ -1,0 +1,90 @@
+{
+  "published_source_revision": "c369460bb80b17abb974108f843befeed40f48f5",
+  "published_source_tree": "07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb",
+  "base_revision": "e229f204acfedb0634cdcd3968d0a002fb079b59",
+  "source_file_count": 19,
+  "files": {
+    "TNLean/PEPS.lean": {
+      "sha256": "391e5c270785507a5d50f8e718e39e31ebc114ed3cc99c1b613c9488a18cdd45",
+      "git_blob": "116d8105d90306c48bd3ab6accded3b62da923e5"
+    },
+    "TNLean/PEPS/AreaLaw.lean": {
+      "sha256": "adaf76b39914985436e9ed8805b85aecdb7c9d31e59c5f8c79c73773c97e9302",
+      "git_blob": "c36fe0800ff6f1384cdd0fc4c3421a7d4185ee79"
+    },
+    "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean": {
+      "sha256": "67c6929b7094f043398f1e4850c57d1e04335f9c33392553320595a34783b70a",
+      "git_blob": "956b8baeec600c35499399e9cdd804f67ca0ba11"
+    },
+    "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean": {
+      "sha256": "c96e31c35eacbd07b36bd4016d835788900fae3c7e271abf4b147ae5b5eedb7d",
+      "git_blob": "33e40d4901669935bb6e310db059b1a762e46977"
+    },
+    "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean": {
+      "sha256": "14b2e3b28a666efea49c8ae5fffcb50d8d6f3cecd7b252006b0b159a25da860f",
+      "git_blob": "b3a9cfb25e4c2463e5a731f613afebc46418b666"
+    },
+    "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean": {
+      "sha256": "b2737de846aed1589c8e92da1be4848fb791b4f9e565b0df2cca655d7f5d1315",
+      "git_blob": "9117b7cf16c408db043ab0a19022e0e69e646e95"
+    },
+    "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean": {
+      "sha256": "6c99abe0b2b75387068dc3590c86494c269df245b5528cb8cc6f3062dedc3b6b",
+      "git_blob": "d546c57a00b1ce4c32cb759fb358bc16de9d82cb"
+    },
+    "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean": {
+      "sha256": "c839b1ef4102f3f1e005229a8212b402eb3b14df6c6840198753a86c69294fe7",
+      "git_blob": "80eee008f7bee2396663addaf1ba8038be6f1c3d"
+    },
+    "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean": {
+      "sha256": "4e460ed93325067fa7c648e8b4e8074b9a743f1422839e3586e057f591b4ac1f",
+      "git_blob": "1fcc7f4feb2ae65c6c713e87758600b6df55459e"
+    },
+    "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean": {
+      "sha256": "c3f50f59961b42b792d77da9c34c36f0a106dd334b2555e494ebf728fad5eece",
+      "git_blob": "30bb53b094be8ccd854a8ba75bc33c5bc5b17caf"
+    },
+    "TNLeanTest/AreaLawGraphFoundations.lean": {
+      "sha256": "dbf41ee0adfdae1a36090addecec933dbad77bbb04f3088625503ed36f75d04a",
+      "git_blob": "6866ccbd598916d371025f0789ef79e67cce86d9"
+    },
+    "TNLeanTest/AreaLawInteractionDiamond.lean": {
+      "sha256": "e15e579fdae0a028edf33dc92a829f5b1b4dfebfe9a970fce2be4307e1879765",
+      "git_blob": "05627e3e775cf31e1bce9473e6a27e2f8cbae554"
+    },
+    "TNLeanTest/AreaLawInteractionSeries.lean": {
+      "sha256": "aaeadaf4c682e35630c60c737de13578f6ca22f2d994bdeba32cd47aafaa2287",
+      "git_blob": "cc118c562d64a11dfb3eb51da2384cd6c0632c1b"
+    },
+    "TNLeanTest/AreaLawInteractionTarget.lean": {
+      "sha256": "aadeccedd80b660d411b84bbd628fe21c182743e47d97a47c1765190e3418096",
+      "git_blob": "27e5a418f270037a13fb150f9ce665c93654fe25"
+    },
+    "TNLeanTest/AreaLawLatticeDiamond.lean": {
+      "sha256": "4a278602067d2ade4418caa26345b7eaea560c507e4b95920ef25e176f7dce8c",
+      "git_blob": "6da69f73a39f686a5adf6373cbed2b806e5a6631"
+    },
+    "blueprint/src/chapter/ch34_area_law_diamond_counting.tex": {
+      "sha256": "ed8b48c4683b4b448db5b3c6dfce7f4a189d3d46428fc585ffacbc6888618a8f",
+      "git_blob": "d0ca185047a8870607c8a33f5853ed87dfcae545"
+    },
+    "blueprint/src/chapter/ch34_area_law_graph_foundations.tex": {
+      "sha256": "ad7408b008301ba43e6a7e6467268411c97d59d2bd9ad2b8bbed13c639a7f5c0",
+      "git_blob": "19ecee804ef92d0280c663f3684ebb28137dcc7b"
+    },
+    "blueprint/src/content.tex": {
+      "sha256": "706d87e7dc877f0689fabf463559b244e0127fff99c7bea14d054b2389da503d",
+      "git_blob": "b58e04b8b65b52a67fd76089e1a73a0656c0177f"
+    },
+    "blueprint/src/references.bib": {
+      "sha256": "f8ea5f4f2e91dc2a1a38b5484e5cb1f0c14f23f5c887301a24aadc7fb9a3c806",
+      "git_blob": "a4ad44e582afdb8acaee4f768ba9131f4d55de33"
+    }
+  },
+  "source_tree_equivalence": {
+    "local_tree": "07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb",
+    "remote_tree_reported_by_publisher": "07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb",
+    "match": true
+  },
+  "scope": "Eight production modules, five consumers, two import aggregators, two chapter files, chapter router and bibliography. Evidence changes must not alter these source bytes."
+}

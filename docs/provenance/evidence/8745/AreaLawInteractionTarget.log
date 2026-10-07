@@ -1,0 +1,30 @@
+Published-source validation
+Revision: c369460bb80b17abb974108f843befeed40f48f5
+Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/AreaLawInteractionTarget.lean
+Exit code: 0
+Elapsed wall seconds: 2.0715037709960598
+Warnings: none.
+Output:
+
+import took 1.02s
+cumulative profiling times:
+	attribute application 0.0605ms
+	blocked (unaccounted) 13.6ms
+	congr simp thm 1.7ms
+	elaboration 19.8ms
+	fix level params 0.277ms
+	import 1.02s
+	initialization 27.2ms
+	instantiate metavars 0.334ms
+	interpretation 300ms
+	linting 8.22ms
+	module linting 0.00174ms
+	overlappingInstancesLinter 3.96ms
+	parsing 6.8ms
+	process pre-definitions 3.23ms
+	share common exprs 1.13ms
+	simp 43.3ms
+	tactic execution 29.7ms
+	tacticAnalysis 11.9ms
+	type checking 10.4ms
+	typeclass inference 61.6ms

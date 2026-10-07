@@ -1,0 +1,9 @@
+Published-source validation
+Revision: c369460bb80b17abb974108f843befeed40f48f5
+Command (repository-relative replay): lake build TNLean.PEPS.AreaLaw
+Exit code: 0
+Elapsed wall seconds: 1.2541561890029698
+Warnings: none.
+Output:
+
+Build completed successfully (2157 jobs).

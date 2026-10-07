@@ -1,0 +1,2606 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8745-tnlean.peps.arealaw.card_supportfamily_le_pow_card_erase",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_supportfamily_le_pow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_supportFamily_le_pow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.sum_supportweights_containing_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.sum_supportweights_meeting_le_sum_siteweights",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le_sum_siteWeights",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.sum_supportweights_meeting_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainweightsum",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainWeightSum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainweightsum_le_pow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.exists_walk_length_le_sum_of_ischain",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.exists_walk_length_le_mul_of_ischain",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.exists_walk_length_le_mul_of_isChain",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.edist_le_mul_of_ischain",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.edist_le_mul_of_isChain",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.reachable_of_ischain",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.reachable_of_isChain",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.connectedcomponent_eq_of_ischain",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.connectedComponent_eq_of_isChain",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.not_ischain_of_connectedcomponent_ne",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.not_isChain_of_connectedComponent_ne",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.not_ischain_of_edist_eq_top",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.not_isChain_of_edist_eq_top",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.not_ischain_of_mul_lt_edist",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.not_isChain_of_mul_lt_edist",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_support_le_square",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_support_le_square",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_supports_containing_le_square",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_supports_containing_le_square",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.sum_supportweights_containing_le_square",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_square",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainweightsum_le_lattice_pow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_lattice_pow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.latticel1distance",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.latticel1distance_self",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_self",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.latticel1distance_triangle",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_triangle",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.latticel1distance_le_walk_length",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_le_walk_length",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.latticel1distance_le_of_edist_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_le_square_of_latticel1distance_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_le_square_of_latticeL1Distance_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_le_square_of_walks",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_le_square_of_walks",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_le_square_of_edist_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_le_square_of_edist_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Auxiliary graph-walk, lattice-square counting or interaction-weight statement; this row does not assert the complete source propagation or area-law theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.latticediamond",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeDiamond",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.mem_latticediamond",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.mem_latticeDiamond",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_latticediamond",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_latticeDiamond",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_le_diamond_of_latticel1distance_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_le_diamond_of_latticeL1Distance_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_le_diamond_of_walks",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_le_diamond_of_walks",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_le_diamond_of_edist_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_support_le_diamond",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_support_le_diamond",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.card_supports_containing_le_diamond",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_supports_containing_le_diamond",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.sum_supportweights_containing_le_diamond",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.sum_supportnorms_containing_le_diamond",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.sum_supportNorms_containing_le_diamond",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainweightsum_le_diamond_pow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainweightsum_norm_le_diamond_pow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "eq:ball-count"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "eq:quasilocal-budget",
+            "lem:quasilocal-lr"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum_nonneg",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_nonneg",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum_eq_zero_of_no_walk",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_no_walk",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum_eq_zero_of_lt_edist",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_lt_edist",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum_eq_zero_of_edist_eq_top",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_edist_eq_top",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum_le_indicator_pow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_indicator_pow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Proves exact lattice counting, original-support norm budgets or target-chain coefficients; no identification with physical commutator dynamics or complete Lemma 4.1 is asserted."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchaintargetweightsum_le_exponential",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Uses the actual target-chain exponential generating function with factorial time weights; proves convergence, the finite-distance exponential bound and exact infinite-distance zero without assuming physical commutator dynamics."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainpropagationseries",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainPropagationSeries",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Uses the actual target-chain exponential generating function with factorial time weights; proves convergence, the finite-distance exponential bound and exact infinite-distance zero without assuming physical commutator dynamics."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainpropagationseries_summable_and_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Uses the actual target-chain exponential generating function with factorial time weights; proves convergence, the finite-distance exponential bound and exact infinite-distance zero without assuming physical commutator dynamics."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8745-tnlean.peps.arealaw.interactionchainpropagationseries_eq_zero_of_edist_eq_top",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_eq_zero_of_edist_eq_top",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex",
+          "labels": [
+            "lem:quasilocal-lr",
+            "eq:quasilocal-lr-recursion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript mathematics; no upstream Lean source or proof text was reused.",
+        "Uses the actual target-chain exponential generating function with factorial time weights; proves convergence, the finite-distance exponential bound and exact infinite-distance zero without assuming physical commutator dynamics."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c369460bb80b17abb974108f843befeed40f48f5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/native.log",
+            "sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8745/axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8745/axioms.log",
+            "sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

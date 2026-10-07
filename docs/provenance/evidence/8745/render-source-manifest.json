@@ -1,0 +1,18 @@
+{
+  "source_head": "c369460bb80b17abb974108f843befeed40f48f5",
+  "target_leaf": "ch34_area_law_graph_foundations.tex",
+  "target_sha256": "ad7408b008301ba43e6a7e6467268411c97d59d2bd9ad2b8bbed13c639a7f5c0",
+  "target_leaves": {
+    "ch34_area_law_graph_foundations.tex": "ad7408b008301ba43e6a7e6467268411c97d59d2bd9ad2b8bbed13c639a7f5c0",
+    "ch34_area_law_diamond_counting.tex": "ed8b48c4683b4b448db5b3c6dfce7f4a189d3d46428fc585ffacbc6888618a8f"
+  },
+  "scope": "One exact chapter, repository macros and bibliography; no full-book or live-browser result.",
+  "router_replacement_is_fixture_only": true,
+  "graph_subset_removal_is_fixture_only": true,
+  "tools": {
+    "texra-blueprint": "0.3.8",
+    "plasTeX": "3.1",
+    "leanblueprint": "0.0.20"
+  },
+  "diagrams": 0
+}

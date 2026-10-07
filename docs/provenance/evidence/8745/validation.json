@@ -1,0 +1,423 @@
+{
+  "published_source_revision": "c369460bb80b17abb974108f843befeed40f48f5",
+  "published_source_tree": "07f82c04c9c926b81ce1f7e1eaefa63a4135b0eb",
+  "status": "all 15 checks passed; full CI pending",
+  "checks": [
+    {
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.AreaLaw"
+      ],
+      "exit_code": 0,
+      "seconds": 1.2541561890029698,
+      "kind": "native-build",
+      "log": "docs/provenance/evidence/8745/native.log",
+      "log_sha256": "f88ac4b234d869e6652c32f014b26eaa8d49dece6d08f07f7665e69fb8b36011",
+      "original_raw_sha256": "a41ccbfd5d0a6d822341b1be3667c49eb4eaaeae384dee0f6aeb6344033e2afe",
+      "sanitized_output_sha256": "a41ccbfd5d0a6d822341b1be3667c49eb4eaaeae384dee0f6aeb6344033e2afe",
+      "original_command_sha256": "9cde298ad968546221015e8736e6d07da49625854b95cd6beec4d9a052051f7a",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.1403954409979633,
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "sha256": "67c6929b7094f043398f1e4850c57d1e04335f9c33392553320595a34783b70a",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphInteractionBudget.log",
+      "log_sha256": "70ce6573900ccff72e957226c3a7db2c503893b3bca872cb91e698561f0ece5a",
+      "original_raw_sha256": "091c726d3011dbcffc0ec1f81d2286ed178a73abe6138cd9f5ce172cd5237353",
+      "sanitized_output_sha256": "091c726d3011dbcffc0ec1f81d2286ed178a73abe6138cd9f5ce172cd5237353",
+      "original_command_sha256": "d3e615bc5bd4231c38870f77100f689ef5988dece3db12644c96a1fe82222c1d",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 1.9466588539944496,
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "sha256": "c96e31c35eacbd07b36bd4016d835788900fae3c7e271abf4b147ae5b5eedb7d",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphInteractionChain.log",
+      "log_sha256": "3555d05c45ba7380f5bebffe51d348049f2dd0e159cc488b4b14748c686a2292",
+      "original_raw_sha256": "12f141f72646f9fc08f85419249bd5086cc91066bc0c2f1f97f93c934c690f74",
+      "sanitized_output_sha256": "12f141f72646f9fc08f85419249bd5086cc91066bc0c2f1f97f93c934c690f74",
+      "original_command_sha256": "3f812eb92aa59921473388810105cf4f05bab211d7662b5f1568ee9e179dd5ef",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.1506811080034822,
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean",
+      "sha256": "14b2e3b28a666efea49c8ae5fffcb50d8d6f3cecd7b252006b0b159a25da860f",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphInteractionCounting.log",
+      "log_sha256": "4022eae3fdf71f2e1d4305ca154fb20dc730e05da19f9042515ed2fcf3ebed17",
+      "original_raw_sha256": "2963e6558b5fb8cf627221a698af7c75879d5eba4046146c8f85518569e7c960",
+      "sanitized_output_sha256": "2963e6558b5fb8cf627221a698af7c75879d5eba4046146c8f85518569e7c960",
+      "original_command_sha256": "a4bd4166c6e48189e0488b7b86040483eeead6423a38971d7b823e5849219630",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.2610963020051713,
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "sha256": "b2737de846aed1589c8e92da1be4848fb791b4f9e565b0df2cca655d7f5d1315",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphInteractionDiamondCounting.log",
+      "log_sha256": "cda22ca009bb36eea65e0c933b642b8e8b3030586946d8fcd79f20753df900da",
+      "original_raw_sha256": "87b26c8d0ab880091928e317cf4b7c93334ca20434cf42e2d467749cac572639",
+      "sanitized_output_sha256": "87b26c8d0ab880091928e317cf4b7c93334ca20434cf42e2d467749cac572639",
+      "original_command_sha256": "8416d22333dac1577c19e911b05f9584759bbbb9b81b012cee1233355c9f248a",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.906540601004963,
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "sha256": "6c99abe0b2b75387068dc3590c86494c269df245b5528cb8cc6f3062dedc3b6b",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphInteractionSeries.log",
+      "log_sha256": "63d788adfdbf6d38e3beb9f312bda9f1421d5648a031537d3c1c0f77a7ddb50c",
+      "original_raw_sha256": "d26389a07c4b8fe97d3afdd6ede6e42b936e4f688820b85f390c5cc7caeb0462",
+      "sanitized_output_sha256": "d26389a07c4b8fe97d3afdd6ede6e42b936e4f688820b85f390c5cc7caeb0462",
+      "original_command_sha256": "68315b2534af0e7158bb3070d96b13341dd0ff62449fb0c48b45d02966516b1d",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.121910589004983,
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "sha256": "c839b1ef4102f3f1e005229a8212b402eb3b14df6c6840198753a86c69294fe7",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphInteractionTarget.log",
+      "log_sha256": "a08bcad1dcfb37ccdd66dd4b7f7be0181cabaa117454fbbb15b11320c254d3d7",
+      "original_raw_sha256": "b459fa1bff3a95fd1f803423f82640d76cfc85d675257029d245fcfce0bf5e6c",
+      "sanitized_output_sha256": "b459fa1bff3a95fd1f803423f82640d76cfc85d675257029d245fcfce0bf5e6c",
+      "original_command_sha256": "7c610cac22329a70e534f9cdd1da72b1b4ef8dce25e4a514a993a58c4ae6ea7e",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.337686480001139,
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean",
+      "sha256": "4e460ed93325067fa7c648e8b4e8074b9a743f1422839e3586e057f591b4ac1f",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphLatticeCounting.log",
+      "log_sha256": "78a13b5a732320c0694045df64318f983efa3309ee022622f58f6777e3c9508a",
+      "original_raw_sha256": "7fb552883870dc104df67fed51b4b19275484d52b099d1d6abc23cdf5e3aae14",
+      "sanitized_output_sha256": "7fb552883870dc104df67fed51b4b19275484d52b099d1d6abc23cdf5e3aae14",
+      "original_command_sha256": "43f2daf1f6584ae7a56ab260565592e7ed4d0a4beabd4e19105df7f918258cdf",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.230035839995253,
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "sha256": "c3f50f59961b42b792d77da9c34c36f0a106dd334b2555e494ebf728fad5eece",
+      "kind": "strict-production",
+      "log": "docs/provenance/evidence/8745/GraphLatticeDiamond.log",
+      "log_sha256": "0b913a71d8f73b3e22843677be3aa92c39f07dc892ad7b8a77301f0195a8a44d",
+      "original_raw_sha256": "14aadc915091d94274632510f50cd055f4a9b9e1f9d7d6cd936601ad67c4bbb6",
+      "sanitized_output_sha256": "14aadc915091d94274632510f50cd055f4a9b9e1f9d7d6cd936601ad67c4bbb6",
+      "original_command_sha256": "c924042ce98ae11f55e648ff84f1fb44bd700474ec529effd4db843e710fbfbc",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/AreaLawGraphFoundations.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.5933467309951084,
+      "file": "TNLeanTest/AreaLawGraphFoundations.lean",
+      "sha256": "dbf41ee0adfdae1a36090addecec933dbad77bbb04f3088625503ed36f75d04a",
+      "kind": "strict-consumer",
+      "log": "docs/provenance/evidence/8745/AreaLawGraphFoundations.log",
+      "log_sha256": "57d119afbc302d480d78b93d533ba8d6ad61e8bda62e198bc627ddd6d413ed23",
+      "original_raw_sha256": "8404e686718bf4d6f3254eef936680503569e01288d0d49c2b066ce820b326c3",
+      "sanitized_output_sha256": "8404e686718bf4d6f3254eef936680503569e01288d0d49c2b066ce820b326c3",
+      "original_command_sha256": "3bc781356b93c4881d5d4dfde2d23f4706c7b3158bfc479994a038653946b2e5",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/AreaLawInteractionDiamond.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.6012559800001327,
+      "file": "TNLeanTest/AreaLawInteractionDiamond.lean",
+      "sha256": "e15e579fdae0a028edf33dc92a829f5b1b4dfebfe9a970fce2be4307e1879765",
+      "kind": "strict-consumer",
+      "log": "docs/provenance/evidence/8745/AreaLawInteractionDiamond.log",
+      "log_sha256": "839f8f495899087976b4e2db8aa689dde87271ceab30f4f6813f16290555fc2a",
+      "original_raw_sha256": "3910cd0d627dc6b9a3994af0c437819fff225882306813744cf3f0572df113ea",
+      "sanitized_output_sha256": "3910cd0d627dc6b9a3994af0c437819fff225882306813744cf3f0572df113ea",
+      "original_command_sha256": "548633fbab8b511ab4b057fe440217084f3b12edbf85027ab1082fd3b8e187a8",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/AreaLawInteractionSeries.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.748441224997805,
+      "file": "TNLeanTest/AreaLawInteractionSeries.lean",
+      "sha256": "aaeadaf4c682e35630c60c737de13578f6ca22f2d994bdeba32cd47aafaa2287",
+      "kind": "strict-consumer",
+      "log": "docs/provenance/evidence/8745/AreaLawInteractionSeries.log",
+      "log_sha256": "98f0852e04aaa04104229ce54e9f98970eb0b1837c6e66b5899d0f8274c29799",
+      "original_raw_sha256": "9bd75525b70804a83143f727c1da567b0f3929b0d14c21341db334000b5d1c5c",
+      "sanitized_output_sha256": "9bd75525b70804a83143f727c1da567b0f3929b0d14c21341db334000b5d1c5c",
+      "original_command_sha256": "2ee25f449cfa49198d75646f6829de9c23a692cec3a8f69ddf8b229f926ae693",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/AreaLawInteractionTarget.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.0715037709960598,
+      "file": "TNLeanTest/AreaLawInteractionTarget.lean",
+      "sha256": "aadeccedd80b660d411b84bbd628fe21c182743e47d97a47c1765190e3418096",
+      "kind": "strict-consumer",
+      "log": "docs/provenance/evidence/8745/AreaLawInteractionTarget.log",
+      "log_sha256": "1cd7f7c1c0e615f154ef46c49a3a91014bcd0c882b95864162788cd722c26f22",
+      "original_raw_sha256": "53df37bbab56b7a32141ff41a7ed90a6f1eeb8f6620795bd020ffa2cfee2e776",
+      "sanitized_output_sha256": "53df37bbab56b7a32141ff41a7ed90a6f1eeb8f6620795bd020ffa2cfee2e776",
+      "original_command_sha256": "d1522910f84f0b8fe2618232a761aa631b6a41c621b46ffa2aa1695bc7f280ca",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/AreaLawLatticeDiamond.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.327934976994584,
+      "file": "TNLeanTest/AreaLawLatticeDiamond.lean",
+      "sha256": "4a278602067d2ade4418caa26345b7eaea560c507e4b95920ef25e176f7dce8c",
+      "kind": "strict-consumer",
+      "log": "docs/provenance/evidence/8745/AreaLawLatticeDiamond.log",
+      "log_sha256": "e298ca71b21ae711c352e9fa82a0def16084dc5609fd0c21f2892af2addd009e",
+      "original_raw_sha256": "bcb85f61be9dc3f4ebb18dc3dbac7432d2ab043f7d2b83c33bb17291958a7881",
+      "sanitized_output_sha256": "bcb85f61be9dc3f4ebb18dc3dbac7432d2ab043f7d2b83c33bb17291958a7881",
+      "original_command_sha256": "7ba6da4ae41695b63c9ebf12e72eaad3f02e546cd07103650e48a5dd32ca3ef6",
+      "normalization": [
+        "No compiler-output redaction was needed; added a public source/command/result header."
+      ]
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--profile",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "docs/provenance/evidence/8745/axioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.417805817000044,
+      "file": "docs/provenance/evidence/8745/axioms.lean",
+      "sha256": "8fe3adb15577943b924047ee8b049ba142c7bf2efdcb24aae811c8271c13a0d4",
+      "kind": "axioms",
+      "log": "docs/provenance/evidence/8745/axioms.log",
+      "log_sha256": "a176d6a53d53cdbcc8fd15ba723445babbbbc955cd1e97b6e5df0155cdf95a7c",
+      "original_raw_sha256": "e382314747081e8ad98c3e98d5f2cc075f088b1e333067d3e8a5d1516fba0862",
+      "sanitized_output_sha256": "e382314747081e8ad98c3e98d5f2cc075f088b1e333067d3e8a5d1516fba0862",
+      "original_command_sha256": "09df818b33c00579dec20356ae0c3fab4a7ed8905febecb106a837aef263ba0a",
+      "normalization": [
+        "Represented the executed absolute query path by its committed byte-identical repository-relative path."
+      ]
+    }
+  ],
+  "original_execution_manifest_sha256": "09031266c5322e2331e8b3e8e05b55e074e08da7af33bf02d182af43ee2ab0a6",
+  "normalization": "No executor paths are published. Commands use repository-relative files. The axiom query is byte-identical to the executed query; exact diagnostics and axiom dependencies are preserved. Original raw and sanitized output hashes are recorded for every log.",
+  "limits": [
+    "Targeted AreaLaw build and strict checks only; no full repository build or complete CI claim.",
+    "Source publication does not imply merge or complete mathematical propagation."
+  ]
+}

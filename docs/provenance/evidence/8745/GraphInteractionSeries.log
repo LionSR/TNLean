@@ -1,0 +1,32 @@
+Published-source validation
+Revision: c369460bb80b17abb974108f843befeed40f48f5
+Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean
+Exit code: 0
+Elapsed wall seconds: 2.906540601004963
+Warnings: none.
+Output:
+
+import took 1.56s
+cumulative profiling times:
+	attribute application 0.0613ms
+	congr simp thm 1.36ms
+	elaboration 40.3ms
+	fix level params 0.572ms
+	import 1.56s
+	initialization 30.5ms
+	instantiate metavars 0.581ms
+	interpretation 453ms
+	let-to-have transformation 0.129ms
+	linting 16.7ms
+	module linting 0.00152ms
+	norm_num 4.31ms
+	overlappingInstancesLinter 5.54ms
+	parsing 6.74ms
+	process pre-definitions 7.18ms
+	ring 22.5ms
+	share common exprs 6.98ms
+	simp 13.7ms
+	tactic execution 87.9ms
+	tacticAnalysis 26ms
+	type checking 28.8ms
+	typeclass inference 146ms

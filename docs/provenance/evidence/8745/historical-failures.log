@@ -1,0 +1,295 @@
+Historical failed attempts; not current verification evidence.
+Diagnostic output is retained below. Absolute execution traces and cumulative profiling tables are omitted.
+Current successful evidence is tied only to published source c369460bb80b17abb974108f843befeed40f48f5.
+
+Attempt: foundation-consumer
+The original four production strict checks passed; the first foundation consumer failed before its proof and guard repairs.
+import took 1.13s
+TNLeanTest/AreaLawGraphFoundations.lean:36:2: error: `simp` already closes the goal
+
+Hint: Use `simp` instead of `simpa`:
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+TNLeanTest/AreaLawGraphFoundations.lean:42:2: error: `simp` already closes the goal
+
+Hint: Use `simp` instead of `simpa`:
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+TNLeanTest/AreaLawGraphFoundations.lean:98:25: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  A = {1} ∨ A ∈ []
+
+case inr
+V : Type u_1
+G : SimpleGraph V
+X : Set V
+supports : List (Set V)
+x y : V
+hd : ⊥.edist 0 1 = ⊤
+A : Set (Fin 2)
+u : Fin 2
+hu : u ∈ A
+v : Fin 2
+hv : v ∈ A
+h✝ : A = {1} ∨ A ∈ []
+⊢ ∃ p, p.length ≤ 0
+TNLeanTest/AreaLawGraphFoundations.lean:97:30: error: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.mem_cons] at hA
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+TNLeanTest/AreaLawGraphFoundations.lean:134:2: error: `simp` already closes the goal
+
+Hint: Use `simp` instead of `simpa`:
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+TNLeanTest/AreaLawGraphFoundations.lean:143:8: error: automatically included section variable(s) unused in theorem `_private.TNLeanTest.AreaLawGraphFoundations.0.TNLeanTest.singleton_support_range`:
+  [Fintype V]
+  [DecidableEq V]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype V] [DecidableEq V] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+TNLeanTest/AreaLawGraphFoundations.lean:143:0: error: `singleton_support_range` does not use the following hypothesis in its type:
+  • [DecidableEq V] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+TNLeanTest/AreaLawGraphFoundations.lean:143:0: error: `singleton_support_range` does not use the following hypothesis in its type:
+  • [Fintype V] (#2)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+'TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.card_supportFamily_le_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le_sum_siteWeights' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.interactionChainWeightSum' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain' depends on axioms: [propext]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.exists_walk_length_le_mul_of_isChain' depends on axioms: [propext, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.edist_le_mul_of_isChain' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.reachable_of_isChain' depends on axioms: [propext, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.connectedComponent_eq_of_isChain' depends on axioms: [propext, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.not_isChain_of_connectedComponent_ne' depends on axioms: [propext, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.not_isChain_of_edist_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.not_isChain_of_mul_lt_edist' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.latticeL1Distance_self' depends on axioms: [propext]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.latticeL1Distance' does not depend on any axioms
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.latticeL1Distance_triangle' depends on axioms: [propext, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.latticeL1Distance_le_walk_length' depends on axioms: [propext, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.card_le_square_of_latticeL1Distance_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.card_le_square_of_walks' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.card_le_square_of_edist_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.card_support_le_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.card_supports_containing_le_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_lattice_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+
+Attempt: diamond-cardinality
+The first native diamond proof failed on natural/integer coercion normalization; its later native build passed.
+✖ [1055/1055] Building TNLean.PEPS.AreaLaw.GraphLatticeDiamond (1.6s)
+error: TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean:126:2: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq ℤ (↑(latticeDiamondRows R).card) (1 + 2 * ↑R * (↑R + 1))
+but is expected to have type
+  @Eq ℤ (Int.ofNat (latticeDiamondRows R).card) (Int.ofNat (1 + 2 * R * (R + 1)))
+Some required targets logged failures:
+- TNLean.PEPS.AreaLaw.GraphLatticeDiamond
+error: build failed
+
+Attempt: target-induction
+The first target-coefficient native proof left a natural-arithmetic goal; its repaired proof passed.
+✖ [1074/1074] Building TNLean.PEPS.AreaLaw.GraphInteractionTarget (1.6s)
+error: TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean:89:33: unsolved goals
+V : Type u_1
+inst✝ : DecidableEq V
+F : Finset (Finset V)
+w : Finset V → ℝ
+G : SimpleGraph V
+R : ℕ
+hrange : ∀ X ∈ F, ∀ a ∈ X, ∀ z ∈ X, ∃ p, p.length ≤ R
+y : V
+n : ℕ
+ih : ∀ X ∈ F, ∀ a ∈ X, (¬∃ p, p.length ≤ (n + 1) * R) → interactionChainTargetWeightSum F w y X n = 0
+X : Finset V
+hX : X ∈ F
+a : V
+ha : a ∈ X
+hnone : ¬∃ p, p.length ≤ (n + 1 + 1) * R
+Y : Finset V
+hY : Y ∈ {Y ∈ F | ¬Disjoint Y X}
+hYF : Y ∈ F
+hYX : ¬Disjoint Y X
+z : V
+hzY : z ∈ Y
+hzX : z ∈ X
+q : G.Walk z y
+hq : q.length ≤ (n + 1) * R
+p : G.Walk a z
+hp : p.length ≤ R
+⊢ R + (R + n * R) = n * R + 2 * R
+warning: TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean:90:31: This simp argument is unused:
+  Nat.add_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Nat.add_mul, Nat.add_comm, Nat.add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Some required targets logged failures:
+- TNLean.PEPS.AreaLaw.GraphInteractionTarget
+error: build failed
+
+Attempt: diamond-consumer
+The first exact-budget consumer failed on expected guard-message formatting; both production rows already passed.
+import took 1.34s
+'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TNLeanTest/AreaLawInteractionDiamond.lean:117:0: error: ❌️ Docstring on `#guard_msgs` does not match generated message:
+
+- info: 'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond' depends on axioms:
+- [propext, Classical.choice, Quot.sound]
++ info: 'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond' depends on axioms: [propext,
++  Classical.choice,
++  Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TNLeanTest/AreaLawInteractionDiamond.lean:127:0: error: ❌️ Docstring on `#guard_msgs` does not match generated message:
+
+- info: 'TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow' depends on axioms:
+- [propext, Classical.choice, Quot.sound]
++ info: 'TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow' depends on axioms: [propext,
++  Classical.choice,
++  Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+TNLeanTest/AreaLawInteractionDiamond.lean:132:0: error: ❌️ Docstring on `#guard_msgs` does not match generated message:
+
+- info: 'TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow' depends on axioms:
+- [propext, Classical.choice, Quot.sound]
++ info: 'TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow' depends on axioms: [propext,
++  Classical.choice,
++  Quot.sound]
+
+Attempt: target-consumer
+The first target consumer failed on singleton recursion and guard formatting; later repaired consumers passed.
+import took 1.27s
+TNLeanTest/AreaLawInteractionTarget.lean:32:14: error: unsolved goals
+case succ
+V : Type u_1
+inst✝ : DecidableEq V
+a : V
+J : ℝ
+n : ℕ
+ih : interactionChainTargetWeightSum {{a}} (fun x ↦ J) a {a} n = J ^ n
+⊢ ∑ x ∈ {{a}} with a ∈ x, J * interactionChainTargetWeightSum {{a}} (fun x ↦ J) a x n = J * J ^ n
+TNLeanTest/AreaLawInteractionTarget.lean:32:56: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [interactionChainTargetWeightSum, pow_succ, mul_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_no_walk' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_lt_edist' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_edist_eq_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_indicator_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Attempt: series-comparison
+The first series native proof used an unavailable infinite-sum identifier; the repaired proof passed.
+✖ [2150/2150] Building TNLean.PEPS.AreaLaw.GraphInteractionSeries (2.7s)
+error: TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean:117:9: Unknown identifier `tsum_le_tsum`
+Some required targets logged failures:
+- TNLean.PEPS.AreaLaw.GraphInteractionSeries
+error: build failed
+
+Attempt: series-zero-time
+The first series consumer left the zero-time summation goal; the repaired five-example consumer passed.
+import took 1.54s
+TNLeanTest/AreaLawInteractionSeries.lean:27:76: error: unsolved goals
+V : Type u_1
+inst✝ : DecidableEq V
+F : Finset (Finset V)
+w : Finset V → ℝ
+y : V
+X : Finset V
+⊢ ∑' (n : ℕ), (if n = 0 then 1 else 0) / ↑n.factorial * interactionChainTargetWeightSum F w y X n =
+    if y ∈ X then 1 else 0
+TNLeanTest/AreaLawInteractionSeries.lean:28:56: error: This simp argument is unused:
+  interactionChainTargetWeightSum
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [interactionChainPropagationSeries, zero_pow_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainPropagationSeries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_eq_zero_of_edist_eq_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Attempt: series-provenance-style
+At the intermediate series provenance checkpoint, native build, consumer and raw audit passed, but production strict checking rejected a long comment line; wrapping it restored a strict pass.
+import took 1.59s
+TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean:37:100: error: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`

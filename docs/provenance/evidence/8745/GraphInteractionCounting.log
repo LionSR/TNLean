@@ -1,0 +1,30 @@
+Published-source validation
+Revision: c369460bb80b17abb974108f843befeed40f48f5
+Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/AreaLaw/GraphInteractionCounting.lean
+Exit code: 0
+Elapsed wall seconds: 2.1506811080034822
+Warnings: none.
+Output:
+
+import took 1.06s
+cumulative profiling times:
+	attribute application 0.044ms
+	congr simp thm 0.947ms
+	elaboration 31.1ms
+	fix level params 0.329ms
+	import 1.06s
+	initialization 29.9ms
+	instantiate metavars 0.255ms
+	interpretation 355ms
+	let-to-have transformation 0.106ms
+	linting 9.62ms
+	module linting 0.0128ms
+	overlappingInstancesLinter 4.29ms
+	parsing 5.26ms
+	process pre-definitions 3.73ms
+	share common exprs 1.43ms
+	simp 9.41ms
+	tactic execution 29.5ms
+	tacticAnalysis 20.9ms
+	type checking 6.32ms
+	typeclass inference 88ms

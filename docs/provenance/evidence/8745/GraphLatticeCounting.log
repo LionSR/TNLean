@@ -1,0 +1,35 @@
+Published-source validation
+Revision: c369460bb80b17abb974108f843befeed40f48f5
+Command (repository-relative replay): lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/AreaLaw/GraphLatticeCounting.lean
+Exit code: 0
+Elapsed wall seconds: 2.337686480001139
+Warnings: none.
+Output:
+
+import took 1.07s
+cumulative profiling times:
+	attribute application 0.501ms
+	compilation (IR) 0.0586ms
+	compilation (LCNF base) 0.644ms
+	compilation (LCNF impure) 0.235ms
+	compilation (LCNF mono) 0.35ms
+	congr simp thm 1.47ms
+	dsimp 3.09ms
+	elaboration 30.3ms
+	fix level params 0.26ms
+	import 1.07s
+	initialization 27ms
+	instantiate metavars 0.503ms
+	interpretation 420ms
+	let-to-have transformation 0.0898ms
+	linting 12.9ms
+	module linting 0.00154ms
+	overlappingInstancesLinter 4.21ms
+	parsing 8.85ms
+	process pre-definitions 3.72ms
+	share common exprs 1.21ms
+	simp 23.2ms
+	tactic execution 95.4ms
+	tacticAnalysis 24.3ms
+	type checking 110ms
+	typeclass inference 60.7ms

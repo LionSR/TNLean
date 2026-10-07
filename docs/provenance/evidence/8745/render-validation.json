@@ -1,0 +1,65 @@
+{
+  "status": "passed focused PDF and static HTML verification",
+  "render_source_checkpoint": "c369460bb80b17abb974108f843befeed40f48f5",
+  "target_leaves": {
+    "ch34_area_law_graph_foundations.tex": "ad7408b008301ba43e6a7e6467268411c97d59d2bd9ad2b8bbed13c639a7f5c0",
+    "ch34_area_law_diamond_counting.tex": "ed8b48c4683b4b448db5b3c6dfce7f4a189d3d46428fc585ffacbc6888618a8f"
+  },
+  "checked_lean_source_revision": "c369460bb80b17abb974108f843befeed40f48f5",
+  "public_declarations": 50,
+  "entries": 22,
+  "proofs": 17,
+  "checked_markers": 39,
+  "unique_declaration_owners": 50,
+  "pdf_pages": 8,
+  "pdf_declaration_links": 50,
+  "html_declaration_links": 50,
+  "missing_html_anchors": [],
+  "duplicate_ids": [],
+  "error_sentinels": [],
+  "pdf_log_problems": [],
+  "diagrams": 0,
+  "tools": {
+    "texra-blueprint": "0.3.8",
+    "plasTeX": "3.1",
+    "leanblueprint": "0.0.20"
+  },
+  "warnings": [
+    "Inherited missing pdftex.map/kanjix.map warnings and duplicate page.1 destination; PDF output succeeded.",
+    "dvisvgm/vector imager unavailable; no diagrams are present in this chapter."
+  ],
+  "limits": [
+    "Focused chapter only; full-book build, live browser, MathJax runtime and mobile QA not run.",
+    "Generated declaration URLs have exact identifiers; remote publication/existence not checked.",
+    "All 50 public auxiliary declarations are covered; five private helpers remain private. Physical commutator dynamics and full Lemma 4.1 propagation are not certified by this audit.",
+    "This renderer performs no Lean checks; native execution results are recorded separately.",
+    "Source checkpoint is published; this local focused check makes no full CI or publication-completion claim."
+  ],
+  "artifacts": {
+    "blueprint/src/print.pdf": "f8e06122ed2ae9cdb2769d03c7dfbdaa0c1ea447be41f8721cc03cfe3790c74e",
+    "blueprint/web/ch-area_graph_foundations.html": "5dc91e3d43da27f653aef93699abc1751a67e6a7f3da2ae0df4367e1d7cc53c8",
+    "blueprint/web/dep_graph_chapter_1.html": "aef0a4d92d6af569ef53b4b2cce3177298ccd12a56c67aa262084d2e1a1526c5",
+    "blueprint/web/dep_graph_document.html": "af024ea75093e9e88f7a35d7e43191e4399c16127281e4bdc4b1a75a89346ef2",
+    "blueprint/web/dep_graphs.html": "7bbf2185492f5812ec07d04d6afda78ca358d726fa7a590eab049d5e35c72ea0",
+    "blueprint/web/index.html": "ef1847e37c68ef44b46c906cad76f6d066b9fd29996b58ca4559dd234f216284",
+    "blueprint/web/sect0001.html": "b4ec95309ccff942b5ff7b46ca9ef541e40dbade8f1682e9581e05d613610178",
+    "pdf-pages/page-1.png": "b35de8b551621296924010b11fbaae4a463a4d907031ac75b237bb8dcd086116",
+    "pdf-pages/page-2.png": "cd44688befe6decd55e71ed8cec7d68ed74cc99d4eb04f497895ceb0a632a4b1",
+    "pdf-pages/page-3.png": "17e6ed2dfcb6a1d3519fc89c73ca3bb98f49682cf9cbd0a8a506f6a53f5039f4",
+    "pdf-pages/page-4.png": "3632cec2abed014b8d631d63552dd567210a269d279230f999c5e428ca4e36c9",
+    "pdf-pages/page-5.png": "0d4e0ec1caa93fd6c0a28d8aae83d04d5f4dc6a34d8490e248d892668ad8133e",
+    "pdf-pages/page-6.png": "ca3877f8f26d1aa2d0092f0218721ac2e0d97f3ff2b1e30cb271e3f3b0295545",
+    "pdf-pages/page-7.png": "a9017a64f410408b7f771b264b512a4a7b57b547b7518c7e886cc21ea7906030",
+    "pdf-pages/page-8.png": "1ef794fbf6d7c532d3a9bb463382c73f36b7591667ea6a4afddd2944ab8ee5c6"
+  },
+  "visual_review": "All eight rerendered page images are SHA-256 identical to the corresponding pages previously inspected visually. No mathematical source changed.",
+  "raw_render_logs": {
+    "pdf-build.log": "a3f73ea25a1f48fe54e0b66194f893d314092f8cc91f32e0cb2679bb948b2a40",
+    "web-build.log": "d8fd079a59d34e16f7573ce2da670b065a2ebef478153864db01a7dda3dd98e6"
+  },
+  "sanitized_summary": {
+    "path": "docs/provenance/evidence/8745/render-summary.log",
+    "sha256": "aca282fba007fbdae874d19c6268c8ec215608a2a9ba171345f48d541cc03500",
+    "transformation": "Summarized final successful render checks and retained relevant warning categories; executor paths and first-pass build chatter omitted. Original full logs remain preserved locally."
+  }
+}
