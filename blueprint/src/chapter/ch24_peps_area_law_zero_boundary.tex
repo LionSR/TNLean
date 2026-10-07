@@ -4,8 +4,8 @@
 This section proves Lemma~2.2 of \cite{OpenAI2026AreaLaw} and the degenerate
 cases recorded before it in Section~2 of that preprint.
 
-\begin{lemma}[Gapped ground vectors of a sum of factor Hamiltonians]
-    \label{lem:area_law_product_ground_state}
+\begin{theorem}[Gapped ground vectors of a sum of factor Hamiltonians]
+    \label{thm:area_law_product_ground_state}
     \lean{TNLean.PEPS.AreaLaw.exists_eq_mul_of_gap, TNLean.PEPS.AreaLaw.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
     \leanok
     Let $H=H_A\otimes I+I\otimes H_B$ with $H_A,H_B$ Hermitian. If a unit
@@ -13,7 +13,7 @@ cases recorded before it in Section~2 of that preprint.
     $H-E_0I\ge\Delta(I-|\omega\rangle\langle\omega|)$ with $\Delta>0$, then
     $\omega$ is a product vector, and its reduced state on the first factor has
     zero entropy.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Let $a,b$ be the least eigenvalues of $H_A,H_B$ with unit eigenvectors
@@ -24,36 +24,36 @@ cases recorded before it in Section~2 of that preprint.
     $u\otimes v$. The reduced state is then a rank-one projection.
 \end{proof}
 
-\begin{lemma}[Supports and components]
-    \label{lem:area_law_support_components}
-    \lean{TNLean.PEPS.AreaLaw.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty}
+\begin{theorem}[Supports and components]
+    \label{thm:area_law_support_components}
+    \lean{TNLean.PEPS.AreaLaw.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
     \leanok
     \uses{def:area_law_domain}
     Every support of finite induced-graph diameter lies in one connected
     component of the domain graph. If $\partial_\Lambda A=\varnothing$, every
     such support lies in $A$ or in $\Lambda\setminus A$. The set of sites of any
     union of connected components has no crossing edge.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     A walk inside the domain cannot pass from $A$ to its complement without
     traversing an edge of $\partial_\Lambda A$, and any two sites of a support
-    are joined by such a walk.
+    are joined by such a walk. Adjacent sites lie in the same component.
 \end{proof}
 
-\begin{lemma}[A cut with no crossing edge]
-    \label{lem:area_law_zero_boundary}
+\begin{theorem}[A cut with no crossing edge]
+    \label{thm:area_law_zero_boundary}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_forall_subset_or_disjoint}
     \leanok
-    \uses{def:area_law_ground_entropy, lem:area_law_product_ground_state, lem:area_law_support_components}
+    \uses{def:area_law_ground_entropy}
     Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if
     $\partial_\Lambda A=\varnothing$, then $S_\Omega(A)=0$. This is
     Lemma~2.2 of \cite{OpenAI2026AreaLaw}; only the eigenvector condition and the
     full-system gap with $\Delta>0$ are used.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:area_law_product_ground_state, lem:area_law_support_components}
+    \uses{thm:area_law_product_ground_state, thm:area_law_support_components}
     Every term of the Hamiltonian acts inside $A$ or inside its complement, so in
     the coordinates of the cut $H=H_A\otimes I+I\otimes H_{\Lambda\setminus A}$;
     replacing both factors by their Hermitian parts keeps this form. The ground
@@ -61,23 +61,24 @@ cases recorded before it in Section~2 of that preprint.
     has zero entropy.
 \end{proof}
 
-\begin{corollary}[Degenerate cases]
-    \label{cor:area_law_degenerate_cases}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_range_eq_zero, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_q_eq_one, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_domain_eq_empty, TNLean.PEPS.AreaLaw.regionalEntropy_connectedComponents_eq_zero, TNLean.PEPS.AreaLaw.edgeBoundary_empty, TNLean.PEPS.AreaLaw.edgeBoundary_univ}
+\begin{theorem}[Degenerate cases]
+    \label{thm:area_law_degenerate_cases}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_range_eq_zero, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_q_eq_one, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_domain_eq_empty, TNLean.PEPS.AreaLaw.regionalEntropy_connectedComponents_eq_zero}
     \leanok
-    \uses{lem:area_law_zero_boundary, lem:area_law_support_components}
+    \uses{def:area_law_ground_entropy}
     For range $R=0$ every regional entropy of the gapped ground vector vanishes.
     For $q=1$ or an empty domain every regional entropy of every unit vector
-    vanishes. The empty region, the full domain and every union of connected
-    components have no crossing edge, so their entropies vanish by
-    Lemma~\ref{lem:area_law_zero_boundary}.
-\end{corollary}
+    vanishes. Every union of connected components, and in particular the empty
+    region and the full domain, has zero regional entropy for the gapped ground
+    vector.
+\end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:area_law_zero_boundary, thm:area_law_support_components}
     For $R=0$ every support is a single site and so is never split by a cut.
     For $q=1$ or $\Lambda=\varnothing$ the regional Hilbert space is
     one-dimensional, and a unit-trace state on it has zero entropy. A union of
     connected components has no crossing edge by
-    Lemma~\ref{lem:area_law_support_components}, and the empty region and the
-    full domain have no crossing edge directly.
+    Theorem~\ref{thm:area_law_support_components}, so
+    Theorem~\ref{thm:area_law_zero_boundary} applies.
 \end{proof}
