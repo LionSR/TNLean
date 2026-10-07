@@ -1,0 +1,13 @@
+Command: lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean
+Revision: 5db13f626cbba4ce128e25ddcdb60a00532f0f3a
+Elapsed seconds: 4.067
+Exit code: 0
+
+'TNLean.PEPS.AreaLaw.Geometry.affineMesh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.beltMarks_subset_affineMesh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.affineMesh_dist_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.affineMesh_line_dist_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent_fineScale' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_nearby_indices' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,6 +1,6 @@
-# Affine-mesh clearance and local layer exclusion: verification pending
+# Affine-mesh clearance and local layer exclusion
 
-These six proposed declarations establish the numerical mesh and layer
+These six original declarations establish the numerical mesh and layer
 estimates used in the initial-star argument. All distances below are measured
 in the sup norm on the plane.
 
@@ -14,9 +14,8 @@ mesh is
 The actual nine marks of any finite collection of dyadic cells of side
 \(2^j\) lie in \(\mathcal M(o,2^\ell/4)\) whenever \(\ell\le j+1\).
 For \(q>0\), distinct mesh points have distance at least \(q\). If
-\(u,v,x\) belong to the mesh, the displacement \(v-u\) has horizontal,
-vertical or diagonal slope, and \(x\) lies outside the affine span
-\(L=\operatorname{aff}_{\mathbb R}\{u,v\}\), then
+\(u,v,x\) belong to the mesh, either \(u=v\) or their affine span \(L\) has horizontal,
+vertical or diagonal slope, and \(x\) lies outside \(L\), then
 
 \[
 \|x-y\|_\infty\ge q/2\qquad(y\in L).
@@ -26,7 +25,7 @@ The case \(u=v\), in which the affine span is a single point, is included.
 For the quarter mesh \(q=t/4\), these estimates give separation \(t/4\)
 and clearance \(t/8\).
 
-Write \(t_k=2^{\lfloor\zeta_0k\rfloor}\). For \(C\ge2\) and
+Write \(t_k=2^{\lfloor\zetak\rfloor}\). For \(C\ge2\) and
 \(k\ge50{,}000{,}000\), let \(x\in\overline{D_k}\) and
 \(y\in\overline{D_h}\), where the closed dyadic layers have the same
 origin, finite endpoint set and parameter \(C\). If \(k+2\le h\) or
@@ -67,71 +66,72 @@ repairs, descendant counts and the complete two-family partition. The present
 numerical consequences do not establish the isolated-star lemma or either
 manuscript headline theorem.
 
-## Proposed exact inventory
+## Exact source and canonical evidence
 
-`TNLean/PEPS/AreaLaw/Geometry/MeshGeometry.lean`:
+Exact verified source: `5db13f626cbba4ce128e25ddcdb60a00532f0f3a`.
+The six audited declarations are:
 
 - `TNLean.PEPS.AreaLaw.Geometry.affineMesh`;
 - `TNLean.PEPS.AreaLaw.Geometry.beltMarks_subset_affineMesh`;
 - `TNLean.PEPS.AreaLaw.Geometry.affineMesh_dist_ge`;
-- `TNLean.PEPS.AreaLaw.Geometry.affineMesh_line_dist_ge`.
-
-`TNLean/PEPS/AreaLaw/Geometry/LocalLayers.lean`:
-
+- `TNLean.PEPS.AreaLaw.Geometry.affineMesh_line_dist_ge`;
 - `TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent_fineScale`;
 - `TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_nearby_indices`.
 
-The combined shard is `docs/provenance/openai-math.d/8758-quarter-mesh.json`.
-Its six entries remain planned, with proposed names and pending verification.
-The immutable prior inventory contains 215 entries at
-`98d26cdad5e212a7e241951618dd3645f3ae6b21`, including the previously existing
-planned root-ledger entry. Every prior shard and its evidence must remain
-unchanged. The completed primary-region, primary-count and belt-mark entries
-retain their verified source revisions and actual logs.
-
-## Canonical evidence to be recorded
-
-Exact frozen source revision: **Pending**.
-Published pull request and evidence head: **Pending**.
-
-| Check | Expected command | Result | Elapsed seconds |
+| Check | Actual command | Exit code | Elapsed seconds |
 |---|---|---|---|
-| Combined Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending |
-| Imported six-name audit | `lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean` | Pending | Pending |
+| Combined Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | 0 | 13.186 |
+| Imported six-name audit | `lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean` | 0 | 4.067 |
 
-Canonical commands must run from the warmed TNLean worktree through
-`scripts/lake_build_locked.sh`, under the shared repository lock and with the
-pinned prebuilt Mathlib artifacts. The source-only preparation worktree
-performs no cache or build operation. Optional direct elaboration uses the
-warmed environment and is recorded separately from the canonical target.
+`LocalLayers` compiled in 7.3 seconds, `MeshGeometry` in 7.6 seconds and the
+Geometry aggregator in 2.6 seconds, without warnings. All six exact imported
+names report only `propext`, `Classical.choice` and `Quot.sound`. The build
+and imported audit both completed successfully. The signatures and proofs
+of all six declarations also passed independent mathematical review.
 
-The final record must identify actual commands, frozen source, elapsed times,
-exit codes, module diagnostics and SHA256 hashes of
-`8758-quarter-mesh-build.log` and `8758-quarter-mesh-axioms.log`. Any
-normalization of captured whitespace must be described. The exact audit
-prints all six selected imported public names. Their actual dependencies
-are recorded after the audit completes.
+The canonical commands ran from the warmed TNLean worktree under the shared
+repository lock through `scripts/lake_build_locked.sh --`, reusing the
+pinned prebuilt Mathlib artifacts. The driver completed and released the
+lock. The source-only preparation worktree was clean at the frozen source,
+had no `.lake` directory and performed no cache or build operation. Its
+source passed non-mutating elaboration with all package options from the
+warmed environment; the MeshGeometry direct check took 4.39 seconds without
+warnings.
 
-Static collection/schema/pinned-source/license validation has passed for 221
-entries with the six proposed rows supplied outside the worktree. All prior
-215 entries remain byte-identical. Exact six-name source, notice and audit
-inventory validation: **Passed** against the current complete source. All six
-blueprint declaration tags are distinct and match the proposed inventory.
-The committed frozen revision and its canonical checks remain pending.
+Evidence log paths and SHA256 hashes:
 
-Promotion updates only the six new rows after the exact committed-source
-build, imported-name audit and complete 221-entry validation pass. The
-promotion helper performs static checks only and writes its reviewed output
-in `/tmp`.
+- `8758-quarter-mesh-build.log`: `6ad0b19d4c0fba077c3def34ce484e8f1b1d41d4b380f985b3441ef894554499`;
+- `8758-quarter-mesh-axioms.log`: `5261ea8137ac50ac96fdd396d3e10baef28c76aeb1b4436ae820c10a985145ce`.
 
-Independent mathematical review of the complete contribution: **Pending**.
-Blueprint source synchronization and reverse coverage: **Pending**.
-Generated imports, prose and formatter checks: **Pending**.
-Full-library CI, compiled blueprint declarations and rendering: **Pending**.
+Each log records the actual command, frozen source revision, elapsed time
+and exit code. Captured output has trailing whitespace removed; build
+diagnostics and the actual quoted axiom results are preserved.
 
-The earlier primary-region work recorded a whole-library local
+## Provenance and integration
+
+The complete 221-entry current-policy provenance/source/license/notice
+validation passes, including exact source and audit bytes at the frozen
+revision, command headers, evidence hashes and all six quoted imported
+names. Promotion changes precisely the six new entries in
+`docs/provenance/openai-math.d/8758-quarter-mesh.json` to
+ported/declared/passed. All prior 215 entries remain byte-identical to the
+baseline at `98d26cdad5e212a7e241951618dd3645f3ae6b21`. This prior inventory
+includes the previously existing planned root-ledger entry; the completed
+parent proof entries retain their actual verified source and evidence.
+
+Complete blueprint source synchronization and reverse coverage passed with
+20,175 distinct public references and 20,169 theorem-like entries. No missing
+or duplicate references were reported. The six new blueprint declaration
+tags are distinct and match the independently reviewed statements and their
+explicit hypotheses.
+
+Three short slope-normalization blocks in one file are recorded as a tactic
+pattern candidate. The criterion for promotion across at least two files is
+not met.
+
+The earlier primary-region work recorded a local whole-library
 `leanblueprint checkdecls` failure caused by a missing pre-existing
-`Fibonacci.olean` artifact. That historical failure log remains intact.
-A repeated local whole-library check is not required for this changed-module
-verification; complete compiled blueprint checking and rendering are tracked
-separately in CI.
+`Fibonacci.olean` artifact. That historical failure log remains intact;
+the unrelated check was not repeated locally for this contribution.
+Full-library CI, compiled blueprint declaration checking and rendering
+remain pending. Publication accompanies this completed evidence record.

@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.affinemesh",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/MeshGeometry.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.affineMesh",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -34,20 +34,38 @@
         "Source: Section 11, geometry:initial-stars, lines 352\u2013359 in the proof of prop:two-families. These numerical mesh and layer estimates do not by themselves construct the active interfaces, assign minimum incident scales to marks, establish the isolated-star lemma or complete the two-family partition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5db13f626cbba4ce128e25ddcdb60a00532f0f3a",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-build.log",
+            "sha256": "6ad0b19d4c0fba077c3def34ce484e8f1b1d41d4b380f985b3441ef894554499"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-axioms.log",
+            "sha256": "5261ea8137ac50ac96fdd396d3e10baef28c76aeb1b4436ae820c10a985145ce"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.beltmarks_subset_affinemesh",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/MeshGeometry.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltMarks_subset_affineMesh",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -67,20 +85,38 @@
         "Source: Section 11, geometry:initial-stars, lines 352\u2013359 in the proof of prop:two-families. These numerical mesh and layer estimates do not by themselves construct the active interfaces, assign minimum incident scales to marks, establish the isolated-star lemma or complete the two-family partition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5db13f626cbba4ce128e25ddcdb60a00532f0f3a",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-build.log",
+            "sha256": "6ad0b19d4c0fba077c3def34ce484e8f1b1d41d4b380f985b3441ef894554499"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-axioms.log",
+            "sha256": "5261ea8137ac50ac96fdd396d3e10baef28c76aeb1b4436ae820c10a985145ce"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.affinemesh_dist_ge",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/MeshGeometry.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.affineMesh_dist_ge",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -100,20 +136,38 @@
         "Source: Section 11, geometry:initial-stars, lines 352\u2013359 in the proof of prop:two-families. These numerical mesh and layer estimates do not by themselves construct the active interfaces, assign minimum incident scales to marks, establish the isolated-star lemma or complete the two-family partition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5db13f626cbba4ce128e25ddcdb60a00532f0f3a",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-build.log",
+            "sha256": "6ad0b19d4c0fba077c3def34ce484e8f1b1d41d4b380f985b3441ef894554499"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-axioms.log",
+            "sha256": "5261ea8137ac50ac96fdd396d3e10baef28c76aeb1b4436ae820c10a985145ce"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.affinemesh_line_dist_ge",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/MeshGeometry.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.affineMesh_line_dist_ge",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -133,20 +187,38 @@
         "Source: Section 11, geometry:initial-stars, lines 352\u2013359 in the proof of prop:two-families. These numerical mesh and layer estimates do not by themselves construct the active interfaces, assign minimum incident scales to marks, establish the isolated-star lemma or complete the two-family partition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5db13f626cbba4ce128e25ddcdb60a00532f0f3a",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-build.log",
+            "sha256": "6ad0b19d4c0fba077c3def34ce484e8f1b1d41d4b380f985b3441ef894554499"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-axioms.log",
+            "sha256": "5261ea8137ac50ac96fdd396d3e10baef28c76aeb1b4436ae820c10a985145ce"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_nonadjacent_finescale",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/LocalLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent_fineScale",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -167,20 +239,38 @@
         "Source: Section 11, geometry:initial-stars, lines 352\u2013356; geometry:nonadjacent, lines 193\u2013204; and the scale definitions and comparison in lines 200\u2013207. These numerical mesh and layer estimates do not by themselves construct the active interfaces, assign minimum incident scales to marks, establish the isolated-star lemma or complete the two-family partition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5db13f626cbba4ce128e25ddcdb60a00532f0f3a",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-build.log",
+            "sha256": "6ad0b19d4c0fba077c3def34ce484e8f1b1d41d4b380f985b3441ef894554499"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-axioms.log",
+            "sha256": "5261ea8137ac50ac96fdd396d3e10baef28c76aeb1b4436ae820c10a985145ce"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_nearby_indices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/LocalLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_nearby_indices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -201,7 +291,25 @@
         "Source: Section 11, geometry:initial-stars, lines 352\u2013356; geometry:nonadjacent, lines 193\u2013204; and the scale definitions and comparison in lines 200\u2013207. These numerical mesh and layer estimates do not by themselves construct the active interfaces, assign minimum incident scales to marks, establish the isolated-star lemma or complete the two-family partition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5db13f626cbba4ce128e25ddcdb60a00532f0f3a",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-build.log",
+            "sha256": "6ad0b19d4c0fba077c3def34ce484e8f1b1d41d4b380f985b3441ef894554499"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-quarter-mesh-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-quarter-mesh-axioms.log",
+            "sha256": "5261ea8137ac50ac96fdd396d3e10baef28c76aeb1b4436ae820c10a985145ce"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
