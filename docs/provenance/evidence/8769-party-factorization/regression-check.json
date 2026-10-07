@@ -1,0 +1,97 @@
+{
+  "source": "/tmp/PartyFactorizationRegression.lean",
+  "sha256": "1807efbfb6d0c3a3759e9fcfb05c8e3bce1a376e599e243b192f9d19ab8f12e1",
+  "command": [
+    "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true",
+    "-o",
+    "/tmp/tnlean-party-regression/PartyFactorizationRegression.olean",
+    "/tmp/PartyFactorizationRegression.lean"
+  ],
+  "cwd": "/tmp",
+  "LEAN_PATH": "/private/tmp/tnlean-party-factorization:/private/tmp/tnlean-source-preparation:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/checkdecls/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/qiclean/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean",
+  "elapsed_seconds": 3.7756164589955006,
+  "exit_code": 0,
+  "log": "/tmp/tnlean-party-factorization-regression.log",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "frozen_dependencies": [
+    {
+      "path": "TNLean/PEPS/Approximation/PartyPartition.lean",
+      "sha256_before": "5683cdde45b5794156d59e3de5ae6abf5cb320f9227c4c56a5ba6f2ab335dbf9",
+      "sha256": "d9b2be6493775f129cb2cee5c02920c8a45d46b195870de616697ee322eac9a0",
+      "declarations": 19,
+      "notice_max_line_length": 93,
+      "noncomment_tokens_unchanged": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/WordRestriction.lean",
+      "sha256_before": "4a2436713fa520f5118604df4bc743d6dc81ce9f18f79a570e7d44bddf6522e6",
+      "sha256": "8e5c20658449df39020adcaa4f439799a19759a9768c6b781354b946ab8edfcb",
+      "declarations": 21,
+      "notice_max_line_length": 93,
+      "noncomment_tokens_unchanged": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartyFactorization.lean",
+      "sha256_before": "15025ae3d3ba0240e21080462a88420396698f8d5bc37aa74d66a45f4543d373",
+      "sha256": "9cefb29215f6c58680fca69553bbbb62c21ada6a2005999288c7f004c50ce65e",
+      "declarations": 1,
+      "notice_max_line_length": 81,
+      "noncomment_tokens_unchanged": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartyTensorMaps.lean",
+      "sha256_before": "93665b7b4d565f1c9f767585556c3d5f0a1f2b06a8fa1e4f1774c47bffbd739c",
+      "sha256": "baa0a74a882c5209bafc4bea9782bdfd4fabd4d445e52912bb06cee2695647d1",
+      "declarations": 10,
+      "notice_max_line_length": 81,
+      "noncomment_tokens_unchanged": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartyGrouping.lean",
+      "sha256_before": "7503d8b979c8b687e4d23ae29b5e2a1820f6aef2e4bdc29115037aa2a9401061",
+      "sha256": "9b97d33654aa13348a5391d9ef8e82903eb6c0efdc97464a2b7fc029dace3cf7",
+      "declarations": 7,
+      "notice_max_line_length": 81,
+      "noncomment_tokens_unchanged": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartyLocalMaps.lean",
+      "sha256_before": "1490a16136244da9e4c5d71949e08cafdad2d212d148fc491f22bb8f64c6b2ac",
+      "sha256": "fe9c4649c0e6949b3e6b73b391d753672b735f4661f548febfcf8a665b842676",
+      "declarations": 2,
+      "notice_max_line_length": 82,
+      "noncomment_tokens_unchanged": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PreparedPartyMaps.lean",
+      "sha256_before": "4e341cb247d305b60770400375627b0122e13e4edc6adfc3a99c71f992610659",
+      "sha256": "16a4fcd8a01f47345981a09295e01bdadf62c757a6b4bebac0b93205c0f6f94e",
+      "declarations": 1,
+      "notice_max_line_length": 83,
+      "noncomment_tokens_unchanged": true
+    }
+  ],
+  "axiom_audit": {
+    "source": "/tmp/tnlean-party-regression/Audit.lean",
+    "command": [
+      "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DmaxSynthPendingDepth=3",
+      "-DwarningAsError=true",
+      "/tmp/tnlean-party-regression/Audit.lean"
+    ],
+    "exit_code": 0,
+    "log": "/tmp/tnlean-party-factorization-regression-axioms.log",
+    "source_sha256": "25b23b6b62d87122436e629db326517e107dae673209fb999ec06ea8ccfdbb28",
+    "log_sha256": "7373fba569a1c0036dc6e2d408d700e0e29d5fd6cc9bba9699306864c7b42c53",
+    "LEAN_PATH": "/tmp/tnlean-party-regression:/private/tmp/tnlean-party-factorization:/private/tmp/tnlean-source-preparation:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/checkdecls/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/qiclean/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean",
+    "cwd": "/tmp"
+  }
+}
