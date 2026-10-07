@@ -49,12 +49,12 @@ and $m\ge1$.
     \lean{CyclicInsertion.cyclicInsertion}
     \lean{CyclicInsertion.idealInsertion}
     \leanok
-    For a position $k\in\{1,\dots,m\}$, let $I_k:\mathcal W\to\mathcal W^{\otimes m}$
+    For a position $k\in\{0,\dots,m-1\}$, let $I_k:\mathcal W\to\mathcal W^{\otimes m}$
     place its input in register $k$ and a copy of $\eta$ in every other
     register. The cyclic insertion map is the average
-    \[
-        T_m=\frac1m\sum_{k=1}^m I_k,
-    \]
+    \begin{align}
+        T_m=\frac1m\sum_{k=0}^{m-1} I_k,
+    \end{align}
     and the ideal insertion map is $P_m=|\eta^{\otimes m}\rangle\langle\eta|$.
 \end{definition}
 
@@ -132,9 +132,9 @@ and $m\ge1$.
     \lean{TNLean.PEPS.PairEffect.EffectChain.IsAllowed}
     \leanok
     A monomial with $n$ recorded pair effects is a composition
-    \[
+    \begin{align}
         M=F_n\circ E_n\circ F_{n-1}\circ\cdots\circ E_1\circ F_0,
-    \]
+    \end{align}
     where each $F_i$ ends with a pair register $\mathcal W_i$ beside a
     spectator space $\mathcal S_i$, and
     $E_i=\langle\eta_i|\otimes\mathbf 1_{\mathcal S_i}$ contracts that
@@ -183,10 +183,10 @@ and $m\ge1$.
     For an allowed monomial $M$ with $n$ recorded pair effects, $M$ and
     $\widetilde M_m$ are contractions, the ideal stack content is a unit
     vector, and
-    \[
+    \begin{align}
         \Bigl\|\widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle\Bigr\|
         \le\frac n{\sqrt m}.
-    \]
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -232,10 +232,10 @@ and $m\ge1$.
     Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into $K$ allowed monomials,
     each with at most $r$ recorded pair effects, and let $m\ge1$. Then
     $\Gamma_m$ is a unit vector,
-    \[
+    \begin{align}
         \bigl\|\widetilde G_m-G\otimes|\Gamma_m\rangle\bigr\|
         \le\frac r{\sqrt m}\sum_\xi|c_\xi|,
-    \]
+    \end{align}
     and $\widetilde G_m$ is a weighted sum of at most $Km^r$ contractions
     whose absolute coefficient sum equals $\sum_\xi|c_\xi|$.
 
