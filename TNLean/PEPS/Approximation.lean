@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
 import TNLean.PEPS.Approximation.PairEffectElimination
+import TNLean.PEPS.Approximation.PartyLayout
