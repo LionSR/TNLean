@@ -1,0 +1,144 @@
+{
+  "public_encoder_source_revision": "d92310cca4f63cf1c2b0c91936e538f80288b48c",
+  "actual_local_execution_revision": "8602b340cfe0b3b73bad634a06b75f9dd6b20049",
+  "historical_author_revision": "4fa931f810ac576e0142fa955af5fcbd71b2615a",
+  "verification_date_utc": "2026-10-07",
+  "identity_scope": "Only the four listed encoder production/test/audit files are asserted byte-identical. The local compiler ran at the integrated revision, not at the public source revision; no complete-tree identity is asserted. The public revision anchors the exact encoder source bytes for a clean checkout.",
+  "encoder_source_identity": [
+    {
+      "path": "TNLean/PEPS/Approximation/HoleEncoder.lean",
+      "sha256": "fd50cdafa7c36b895294ea2a0e2f7db7f82c8aa591ea1bcb57246c28fec1deed",
+      "identical_revisions": [
+        "4fa931f810ac576e0142fa955af5fcbd71b2615a",
+        "d92310cca4f63cf1c2b0c91936e538f80288b48c",
+        "8602b340cfe0b3b73bad634a06b75f9dd6b20049"
+      ]
+    },
+    {
+      "path": "TNLeanTest/HoleEncoder.lean",
+      "sha256": "3ac91939075f2db74f6f160b2ee7c30381c1e8fb58bfd182a9acc3e7aad49d59",
+      "identical_revisions": [
+        "4fa931f810ac576e0142fa955af5fcbd71b2615a",
+        "d92310cca4f63cf1c2b0c91936e538f80288b48c",
+        "8602b340cfe0b3b73bad634a06b75f9dd6b20049"
+      ]
+    },
+    {
+      "path": "TNLeanTest/HoleEncoderAxioms.lean",
+      "sha256": "84150889b6ef2f9642fa141cbd58f53dd9c2fddde925cc607770837e537f7dfb",
+      "identical_revisions": [
+        "4fa931f810ac576e0142fa955af5fcbd71b2615a",
+        "d92310cca4f63cf1c2b0c91936e538f80288b48c",
+        "8602b340cfe0b3b73bad634a06b75f9dd6b20049"
+      ]
+    },
+    {
+      "path": "docs/provenance/evidence/8770-hole-encoder/HoleEncoderAxioms.lean",
+      "sha256": "319b2000498f053b6723f1983ae971ddaa327697ea46df08032fe2fe5aef9d98",
+      "identical_revisions": [
+        "4fa931f810ac576e0142fa955af5fcbd71b2615a",
+        "d92310cca4f63cf1c2b0c91936e538f80288b48c",
+        "8602b340cfe0b3b73bad634a06b75f9dd6b20049"
+      ]
+    }
+  ],
+  "historical_ledger": "docs/provenance/evidence/8770-hole-encoder/historical/author-checkpoint-ledger.json",
+  "historical_ledger_sha256": "a4c1ee3db60848775dbdffdb618c1330f6d11784b1e18da12d6910800151a4dd",
+  "historical_archives": [
+    {
+      "original": "docs/provenance/evidence/8770-hole-encoder/source-strict.log",
+      "archive": "docs/provenance/evidence/8770-hole-encoder/historical/source-strict.log",
+      "sha256": "7b4b40b07d0967a20c2616dba0d50599d975a2e8e49a83987543b22ebd3a9da1",
+      "identical": true
+    },
+    {
+      "original": "docs/provenance/evidence/8770-hole-encoder/consumers-strict.log",
+      "archive": "docs/provenance/evidence/8770-hole-encoder/historical/consumers-strict.log",
+      "sha256": "64e4850c287519f8d8ea91e05817c99e99f5a3ad9a5025295c4f3206c4f1bc96",
+      "identical": true
+    },
+    {
+      "original": "docs/provenance/evidence/8770-hole-encoder/guards-strict.log",
+      "archive": "docs/provenance/evidence/8770-hole-encoder/historical/guards-strict.log",
+      "sha256": "ee1e099668e940aee805aeba2c6cc835330911431e0affc4f6c305ef682d5ac7",
+      "identical": true
+    },
+    {
+      "original": "docs/provenance/evidence/8770-hole-encoder/public-axioms.raw.log",
+      "archive": "docs/provenance/evidence/8770-hole-encoder/historical/public-axioms.raw.log",
+      "sha256": "17897900e7aec2dbe0e25f7be9360e1f963ccee900570112125e04e53f6eb134",
+      "identical": true
+    },
+    {
+      "original": "docs/provenance/evidence/8770-hole-encoder/verification.json",
+      "archive": "docs/provenance/evidence/8770-hole-encoder/historical/verification.json",
+      "sha256": "3a756dd7c40502eafbab0a29dfb676ab4222600ff87e3b24e43ed079cc244c12",
+      "identical": true
+    },
+    {
+      "original": "docs/provenance/evidence/8770-hole-encoder/README.md",
+      "archive": "docs/provenance/evidence/8770-hole-encoder/historical/README.md",
+      "sha256": "0ec11a554144635bdacd3f5ed2ff3c5e650917de40052143e75d6cb744b0829d",
+      "identical": true
+    }
+  ],
+  "preexisting_evidence_sha256": {
+    "docs/provenance/evidence/8770-hole-encoder/HoleEncoderAxioms.lean": "319b2000498f053b6723f1983ae971ddaa327697ea46df08032fe2fe5aef9d98",
+    "docs/provenance/evidence/8770-hole-encoder/README.md": "0ec11a554144635bdacd3f5ed2ff3c5e650917de40052143e75d6cb744b0829d",
+    "docs/provenance/evidence/8770-hole-encoder/consumers-strict.log": "64e4850c287519f8d8ea91e05817c99e99f5a3ad9a5025295c4f3206c4f1bc96",
+    "docs/provenance/evidence/8770-hole-encoder/guards-strict.log": "ee1e099668e940aee805aeba2c6cc835330911431e0affc4f6c305ef682d5ac7",
+    "docs/provenance/evidence/8770-hole-encoder/history/TNLeanTest_HoleEncoder.lean-hole-encoder-strict-first.log": "12398f12b08d5f5ad903180b21ab691ea38ad85197958438f40f2aa85ac7551d",
+    "docs/provenance/evidence/8770-hole-encoder/history/TNLeanTest_HoleEncoder.lean-hole-encoder-tests-repair.log": "a2fe49410ba5b0febc31e58b5579551d8ae054c2f9779fde2af0cfaca1208b54",
+    "docs/provenance/evidence/8770-hole-encoder/history/docs_provenance_evidence_8770-hole-encoder_HoleEncoderAxioms.lean-hole-encoder-strict-first.log": "a23c7ea8990e3bcc7c0ad927f9aefd58aceeac89d06334777231d9d39e2013b1",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-first.log": "39ce7ac0e0ae6b6c99c8544a28085719dd5890eae65d3aa384dc347b32fc3e39",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-repair1.log": "990577bfd8ad8d5c09d169fbd6e8fb5ed6d36fad0a4a96b135043b92462e20bc",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-repair2.log": "2660eb5c779820b27efa01db1f99f3c6f7c83e5612e19fe878d1bab6a22c27a3",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-repair3.log": "e2f19432e9232964c66a9b5e91af56a94489e4855d77b942e206ccca34e3e195",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-repair4.log": "fa0d7c525c6f35db331a6ee41f02c9e0510c9ada9c547c373298b504575b837b",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-repair5.log": "79019a3692de2675a3f147cbcd78b0270fa0fe2b87a8393b44ff628c42c3e08d",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-repair6.log": "429ddb605070cf39e9ad79dc71ea50e8125ef9f2d05356b885480abbdccdf104",
+    "docs/provenance/evidence/8770-hole-encoder/history/hole-encoder-repair7.log": "c64ff2addc91a8dbc06ff0aab9ab349e1bbc765926d5db04f5e0a2b1c3ec8474",
+    "docs/provenance/evidence/8770-hole-encoder/native-build.log": "15648edee8400c892a597ce0ef6386f302a168380aa7bc9cf41d6a4be2a18376",
+    "docs/provenance/evidence/8770-hole-encoder/public-axioms.raw.log": "17897900e7aec2dbe0e25f7be9360e1f963ccee900570112125e04e53f6eb134",
+    "docs/provenance/evidence/8770-hole-encoder/render/automated-verification.json": "3bc0a3c9bef17b9113527bf624a98aa5974e830a59143b037bcace26e09d4daf",
+    "docs/provenance/evidence/8770-hole-encoder/render/final-verification.json": "3b9af8a93f25d186996b525ad32e989ff4034c8707bd5eb569d74917d85fbf5b",
+    "docs/provenance/evidence/8770-hole-encoder/render/focus-manifest.json": "fdcc5004958fdb0052ffd2753568a07d33286b140f21be640080be1d9f75f94e",
+    "docs/provenance/evidence/8770-hole-encoder/render/format-verification.json": "1dc38fe854c2e58830fdd04383dad573dd540a12eb222dfb62630c5b06939d94",
+    "docs/provenance/evidence/8770-hole-encoder/render/restriction-bar-repair-note.json": "7894b7f45ebf1a4a558c1dec879517586ba121d129750952de2898fe0df9a725",
+    "docs/provenance/evidence/8770-hole-encoder/render/restriction-bar-repair.json": "faacb0e296b9a84a610a4b5a35c7bdd85fd537aea4d6e808993e54dd9070cf25",
+    "docs/provenance/evidence/8770-hole-encoder/render/static-source-check.json": "035592096e6802cfa1a0fdd2d0dc9e828d6a52ebafb912298b235c4a6bd5395a",
+    "docs/provenance/evidence/8770-hole-encoder/runs/hole-encoder-consumer-final.json": "3dcd97b3b4c3d7b4143ee7e796d4290b20a3c130167469d6f6280b6117ee6083",
+    "docs/provenance/evidence/8770-hole-encoder/runs/hole-encoder-strict-first.json": "9479656158b2ecc831be10e902c694358b56be0fccc39f777f57a8937abb3194",
+    "docs/provenance/evidence/8770-hole-encoder/runs/hole-encoder-tests-repair.json": "5a1e3019e86d4bd513539fe26ebefe0329f95d1ec0bb7a5e04bf2afa08a0cc24",
+    "docs/provenance/evidence/8770-hole-encoder/source-strict.log": "7b4b40b07d0967a20c2616dba0d50599d975a2e8e49a83987543b22ebd3a9da1",
+    "docs/provenance/evidence/8770-hole-encoder/verification.json": "3a756dd7c40502eafbab0a29dfb676ab4222600ff87e3b24e43ed079cc244c12"
+  },
+  "original_to_retained_manifest_mapping": [
+    {
+      "input": "region-bridge-integrated-8602.json",
+      "original_sha256": "1fb4760e9a46359ee066fb1c96d47ba5d7b1d974245e76ebe0dfcd10acf3d42a",
+      "retained_manifest": "docs/provenance/evidence/8770-hole-encoder/current-verification/checks.json",
+      "retained_manifest_sha256": "2a2cead1125ea4e6cbc5761cdaec0a37bbbefa8e3bdba39ae85d277a43aa7a8a"
+    },
+    {
+      "input": "encoder-raw-integrated-8602.json",
+      "original_sha256": "74a084bec97bb53a1bfd4eb400fb7ecfb680f24a599e8d90fd5606628585a6ce",
+      "retained_manifest": "docs/provenance/evidence/8770-hole-encoder/current-verification/checks.json",
+      "retained_manifest_sha256": "2a2cead1125ea4e6cbc5761cdaec0a37bbbefa8e3bdba39ae85d277a43aa7a8a"
+    }
+  ],
+  "normalization": "The two original execution manifests are combined, absolute log destinations are replaced by local basenames, and log hashes are added. All nine successful logs are copied byte-for-byte; commands, source hashes, durations, exit codes and actual execution revisions are unchanged.",
+  "encoder_declarations": 22,
+  "current_raw_encoder_axiom_reports": 22,
+  "adapter_status": {
+    "ledger": "docs/provenance/openai-math.d/region-embedding8770.json",
+    "ledger_sha256": "1b9899d5a8d9f766d7897f083261ceeb468c7557b5b459f5c21248fe6873a1ac",
+    "verification_revisions": [
+      "61f76928032b1eef7417ae9d79dda93796019eb6"
+    ],
+    "ledger_unchanged": true,
+    "public_migration": "pending",
+    "limit": "The three adapter declarations still reference a local-only verification revision. The local validator can resolve it; clean public-only CI cannot be claimed until an authorized publication and truthful public-reference migration occur."
+  },
+  "external_writes": false
+}
