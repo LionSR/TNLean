@@ -7,7 +7,7 @@
   "entries": [
     {
       "id": "8740-vertex",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -24,7 +24,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Vertex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -42,12 +42,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-forwardadjacent",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -64,7 +82,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.ForwardAdjacent",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -82,12 +100,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-forwardedge",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -104,7 +140,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.ForwardEdge",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -122,12 +158,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-pinned-incidentedge",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -144,7 +198,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.IncidentEdge",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -162,12 +216,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-pinned-state",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -184,7 +256,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.State",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -202,12 +274,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-pinned-localtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -224,7 +314,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.LocalTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -242,12 +332,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-pinned-contractpeps",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -264,7 +372,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.contractPEPS",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -282,12 +390,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-vector-incidentedge",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -304,7 +430,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Vector.IncidentEdge",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -322,12 +448,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-vector-state",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -344,7 +488,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Vector.State",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -362,12 +506,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-vector-tensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -384,7 +546,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Vector.Tensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -402,12 +564,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-vector-tensor-contract",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -424,7 +604,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Vector.Tensor.contract",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -442,12 +622,30 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-vector-tensor-maxbonddim",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -464,7 +662,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridSource.lean",
         "declaration": "TNLean.PEPS.Approximation.Vector.Tensor.maxBondDim",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -482,19 +680,37 @@
         "Renamed source PEPS to Tensor and made finite instances explicit."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       }
     },
     {
       "id": "8740-forwardsquareedgeequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareEdgeEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -511,20 +727,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-forwardsquareedgeequiv-val",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_val",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -541,20 +775,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-forwardsquareedgeequiv-symm-val",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_symm_val",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -571,20 +823,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-forwardsquareincidentequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareIncidentEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -601,20 +871,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-pinnedsquareincidentequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -631,20 +919,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-forwardsquareincidentequiv-val",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareIncidentEquiv_val",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -661,20 +967,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-pinnedsquareincidentequiv-val",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv_val",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -691,20 +1015,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-graphbonddim",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.graphBondDim",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -721,20 +1063,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-graphbonddim-forward",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.graphBondDim_forward",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -751,20 +1111,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-forwardsquarevirtualconfigequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -781,20 +1159,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-forwardsquarevirtualconfigequiv-incident",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_incident",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -811,20 +1207,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-forwardsquarevirtualconfigequiv-pinnedincident",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_pinnedIncident",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -841,20 +1255,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-pinnedtensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.pinnedTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -871,20 +1303,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-vectortensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.vectorTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -901,20 +1351,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-pinnedtensortographtensor-component",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_component",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -931,20 +1399,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-vectortensortographtensor-component",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.vectorTensorToGraphTensor_component",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -961,20 +1447,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-statecoeff-pinnedtensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.stateCoeff_pinnedTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -991,20 +1495,38 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-statecoeff-vectortensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridContraction.lean",
         "declaration": "TNLean.PEPS.Approximation.stateCoeff_vectorTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1021,7 +1543,25 @@
         "Original comparison proof for native square-lattice graph tensors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "bfe00e2da22a9215071580f8e59ff76d7b6754e7",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-build.log",
+            "sha256": "65aa8155bdedff99dc7c66ca25389ee43641fd9fed806d3a554b3ea9fa3b7b39"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8740-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-axioms.log",
+            "sha256": "3f4db1c617d2e02be822d8d257110849b4e94a403b1c9d31549a8627c309fefe"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
