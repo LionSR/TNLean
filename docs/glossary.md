@@ -2967,7 +2967,6 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
 | `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
 
-
 ## Nested regional cylinders
 
 ### `TNLean.PEPS.dependentRegionCylinder`
