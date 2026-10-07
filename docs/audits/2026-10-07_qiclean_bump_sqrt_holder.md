@@ -18,5 +18,7 @@ Both declarations have the same fully qualified name, so keeping the TNLean copy
 would make the root module fail to load once the bumped QICLean is imported.
 `TNLean/Algebra/CStarSqrtHolder.lean` now imports `QICLean.Analysis.SqrtHolder`;
 its only consumer, `TNLean/Algebra/CStarSqrtLipschitz.lean`, resolves the name to
-the QICLean declaration unchanged. No blueprint `\lean{...}` tag cites the
-removed declaration. The other declarations of `CStarSqrtHolder.lean` are kept.
+the QICLean declaration unchanged. The blueprint tag
+`\lean{CFC.norm_sqrt_sub_sqrt_le}` in `ch32_log_depth_preparation.tex` keeps
+resolving, now to the QICLean declaration with the same name and statement. The
+other declarations of `CStarSqrtHolder.lean` are kept.
