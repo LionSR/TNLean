@@ -11,10 +11,10 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 # Finite improvement of a uniform entropy exponent
 
 Suppose a family of quantities has a uniform quadratic bound and an initial
-bound of order \(r^{1+e_0}\). If each exponent \(e>\varepsilon\) can be replaced
-by \((1-\ell)e\) at all sufficiently large scales, with constants and thresholds
+bound of order `r^(1 + e₀)`. If each exponent `e > ε` can be replaced
+by `(1 - ℓ)e` at all sufficiently large scales, with constants and thresholds
 uniform over the family, then finitely many repetitions give a uniform bound
-of order \(r^{1+\varepsilon}\) at every positive integer scale.
+of order `r^(1 + ε)` at every positive integer scale.
 
 The quadratic bound absorbs the finitely many excluded scales at each step.
 The exponent improvement is a hypothesis: the analytic estimate required for
@@ -76,7 +76,7 @@ private theorem exists_uniform_power_bound_mono {e e' : ℝ} (hee' : e ≤ e')
   exact mul_le_mul_of_nonneg_left
     (Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast hn) (add_le_add le_rfl hee')) hC.le
 
-/-- An eventual improvement \(e\mapsto(1-\ell)e\), uniform over the family,
+/-- An eventual improvement `e ↦ (1 - ℓ)e`, uniform over the family,
 reaches any prescribed positive exponent after finitely many repetitions. All
 bounded scales are included using the uniform quadratic estimate.
 Source: proof of Proposition 9.5, `08-scanner.tex`, lines 788–803.
@@ -109,12 +109,12 @@ private theorem exists_uniform_power_bound_of_eventual_improvement {V e₀ ε �
           (mul_nonneg hfactor.le (hε.trans he).le) hC hvolume hlarge
   exact hfinal (exists_uniform_power_bound_mono ((lt_div_iff₀ he₀).mp hm).le (hiter m))
 
-/-- Conditional finite improvement to the safe-box exponent \(e_*=2\cdot10^{-6}\).
+/-- Conditional finite improvement to the safe-box exponent `e_* = 2 · 10⁻⁶`.
 The family has a uniform quadratic bound and a uniform initial exponent
-\(0<e_0<1\). At every intermediate exponent \(e_*<e\le e_0\), assume a
-uniform large-scale improvement to \((1-\ell)e\), with the single fixed choice
-\(\ell=(1-e_0)/200000\). Then one constant bounds the whole family by
-\(Cr^{1+e_*}\) at every positive integer scale, including the bounded scales.
+`0 < e₀ < 1`. At every intermediate exponent `e_* < e ≤ e₀`, assume a
+uniform large-scale improvement to `(1 - ℓ)e`, with the single fixed choice
+`ℓ = (1 - e₀) / 200000`. Then one constant bounds the whole family by
+`C r^(1 + e_*)` at every positive integer scale, including the bounded scales.
 Source: proof of Proposition 9.5, `prop:small-box`, `08-scanner.tex`, lines 693–803.
 This theorem proves the finite iteration; its one-step entropy estimate remains a hypothesis. -/
 theorem exists_uniform_boxError_bound_of_eventual_improvement {V e₀ : ℝ}
