@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.pitchinterior",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.pitchInterior",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primaryfragmentindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragmentIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,20 +133,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -129,20 +183,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_subset_closure_pitchinterior",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_subset_closure_pitchInterior",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -161,20 +233,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_dist_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -193,20 +283,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_diam_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_diam_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -225,20 +333,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_dist_separation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_separation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -257,20 +383,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_primaryfragmentindices_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_primaryFragmentIndices_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -289,20 +433,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_eq_iunion_primaryfragment",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_primaryFragment",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -321,20 +483,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_eq_closedrectangle",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_eq_closedRectangle",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -353,20 +533,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_subset_closure_dyadiccell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_subset_closure_dyadicCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -385,20 +583,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_dist_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_dist_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -417,20 +633,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_diam_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_diam_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -449,20 +683,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex_mono",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AdjacentScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_mono",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -481,20 +733,38 @@
         "Source: Section 11, lines 299\u2013306 and 352\u2013356 in the initial-contact and isolated-star discussion. These are adjacent-scale arithmetic ingredients only. A common origin, midpoint division, the affine mesh, contacts, isolation, repairs and the complete two-family construction remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex_succ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AdjacentScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_succ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -513,20 +783,38 @@
         "Source: Section 11, lines 299\u2013306 and 352\u2013356 in the initial-contact and isolated-star discussion. These are adjacent-scale arithmetic ingredients only. A common origin, midpoint division, the affine mesh, contacts, isolation, repairs and the complete two-family construction remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finescale_side_succ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AdjacentScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScale_side_succ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -545,7 +833,25 @@
         "Source: Section 11, lines 299\u2013306 and 352\u2013356 in the initial-contact and isolated-star discussion. These are adjacent-scale arithmetic ingredients only. A common origin, midpoint division, the affine mesh, contacts, isolation, repairs and the complete two-family construction remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "d469be1a0a7799f4613e64e8139893b0fa2ee11d",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-build.log",
+            "sha256": "9c657b6bdd477315f688e3fbdf482010792772fe057824cd875cc1cfa1f9f81e"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-regions-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-regions-axioms.log",
+            "sha256": "0fe6f7ebd56e701386c55ef31e8beffdfa70659ab1040a7a910b91a584d76045"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

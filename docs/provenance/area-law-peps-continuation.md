@@ -38,8 +38,14 @@ is on `feat/area-law-primary-regions`, following #8848. Its source contribution
 contains four definitions and thirteen theorems in `PrimaryRegions.lean`,
 `PrimaryFragments.lean` and `AdjacentScales.lean`. Direct elaboration with the
 package options and independent mathematical review passed. The canonical
-Geometry build and seventeen-name imported audit are the next checks; the new
-provenance rows remain planned until their exact logs pass.
+Geometry build passed in 11.746 seconds and its seventeen-name imported audit
+passed in 4.266 seconds at exact source
+`d469be1a0a7799f4613e64e8139893b0fa2ee11d`. All dependencies are standard
+logical axioms. The seventeen rows have been canonically promoted. Source
+draft [#8851](https://github.com/LionSR/TNLean/pull/8851) is published; its
+formatting head `8f060ee701641816520b394d8de198d3271dbe44` preserves every
+Lean and audit byte. The full local blueprint check stopped at a missing
+pre-existing Fibonacci compiled artifact; the full CI supplies that check.
 
 The construction closes the intersection of an actual layer with an open pitch
 interior. It gives the exact finite union of nonempty rectangular fragments,
