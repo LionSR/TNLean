@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "scope": "Targeted native module build, strict source and consumer checks, guarded axiom tests, and four raw axiom reports after the source-date notice repair. No mathematical code changed.",
+  "historical_author_revision": "a2f108f651808dd591361572f4f4cef85cc87871",
+  "recorded_local_source_revision": "a506d572c05ef07a7d1c748c214f73b7b00603bc",
+  "public_source_revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
+  "source_tree": "518a22dc7e45fca80645c305f6ef0496c4f7484b",
+  "local_and_public_trees_identical": true,
+  "source_files": [
+    {
+      "path": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "sha256": "9e3b1073f41e67166b468c044ffd119a95dfda7da7e48f93eeab407d77562688"
+    },
+    {
+      "path": "TNLeanTest/PEPS/AngularResetWidth.lean",
+      "sha256": "1070bcd4e7023580340ae18bf7ae7de1011e6fb2e1b09ea541a6a43992d8708d"
+    },
+    {
+      "path": "TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "sha256": "362b4deecd696f05f1ec3abb70068f4e2320200b47ebab712898e57b443d62ee"
+    },
+    {
+      "path": "docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+      "sha256": "d71150e7fcfbe4b138bac0894acd112877581b5c27659ae48bcc766b2d161900"
+    }
+  ],
+  "runs": [
+    {
+      "recorded_local_source_revision": "a506d572c05ef07a7d1c748c214f73b7b00603bc",
+      "file": "aggregate",
+      "source_sha256": null,
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.Approximation.AngularResetWidth"
+      ],
+      "exit_code": 0,
+      "seconds": 4.139010959988809,
+      "log": "native-build.log",
+      "captured_output_sha256": "f73d01df950a4be1caa5685c4f90ac7fb52b95ca101269442bb47d414c2ac7c1",
+      "retained_log_sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
+    },
+    {
+      "recorded_local_source_revision": "a506d572c05ef07a7d1c748c214f73b7b00603bc",
+      "file": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "source_sha256": "9e3b1073f41e67166b468c044ffd119a95dfda7da7e48f93eeab407d77562688",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/Approximation/AngularResetWidth.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 3.3457752170070307,
+      "log": "source-strict.log",
+      "captured_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_log_sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+    },
+    {
+      "recorded_local_source_revision": "a506d572c05ef07a7d1c748c214f73b7b00603bc",
+      "file": "TNLeanTest/PEPS/AngularResetWidth.lean",
+      "source_sha256": "1070bcd4e7023580340ae18bf7ae7de1011e6fb2e1b09ea541a6a43992d8708d",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/AngularResetWidth.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.737064276007004,
+      "log": "consumers-strict.log",
+      "captured_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_log_sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+    },
+    {
+      "recorded_local_source_revision": "a506d572c05ef07a7d1c748c214f73b7b00603bc",
+      "file": "TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "source_sha256": "362b4deecd696f05f1ec3abb70068f4e2320200b47ebab712898e57b443d62ee",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/AngularResetWidthAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.149630199011881,
+      "log": "guards-strict.log",
+      "captured_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_log_sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
+    },
+    {
+      "recorded_local_source_revision": "a506d572c05ef07a7d1c748c214f73b7b00603bc",
+      "file": "docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+      "source_sha256": "d71150e7fcfbe4b138bac0894acd112877581b5c27659ae48bcc766b2d161900",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.27381116199831,
+      "log": "public-axioms.raw.log",
+      "captured_output_sha256": "69834f44cff219c1ae47f213a954ba349414eaab464a8f32c3f7f0bcf058b6fc",
+      "retained_log_sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
+    }
+  ],
+  "log_format": "Each retained log has a metadata preamble derived from the execution receipt, followed by every captured stdout/stderr byte unchanged. Empty strict outputs remain empty after the preamble; success is recorded by the process exit code.",
+  "raw_audit_note": "The raw driver retains four informational hashCommand diagnostics. The guarded test separately checks the same four exact axiom sets. Each raw report uses only propext, Classical.choice, Quot.sound.",
+  "limits": "This refresh records a focused native build, not a new full-root build or blueprint render. Historical verification.json, runs, raw logs, render evidence and failed attempts are preserved separately and are not relabeled as checks of this revision."
+}

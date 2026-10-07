@@ -35,35 +35,42 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "a2f108f651808dd591361572f4f4cef85cc87871",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
         "commands": [
           {
-            "kind": "elaboration",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/source-strict.log",
-            "sha256": "1cf9f04a76ac9b68f1a53c0682ccf97a19204c3dc2a7f0ddf726f700f8306531"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
           },
           {
-            "kind": "test",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/consumers-strict.log",
-            "sha256": "f244929f9c4991d5a2461689515739db985b3915fd8c4e071902e8d55cb64d1e"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/guards-strict.log",
-            "sha256": "cb17f51db132c830c9730d1a11d218ab979f6c3ca7b00283cecbf679178771fd"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true <RAW_AXIOM_DRIVER>",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/public-axioms.raw.log",
-            "sha256": "1166b70d9147c90245b2079885377fa94b0c1be28be552722e450f1628af1009"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
           }
         ]
       }
@@ -98,35 +105,42 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "a2f108f651808dd591361572f4f4cef85cc87871",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
         "commands": [
           {
-            "kind": "elaboration",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/source-strict.log",
-            "sha256": "1cf9f04a76ac9b68f1a53c0682ccf97a19204c3dc2a7f0ddf726f700f8306531"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
           },
           {
-            "kind": "test",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/consumers-strict.log",
-            "sha256": "f244929f9c4991d5a2461689515739db985b3915fd8c4e071902e8d55cb64d1e"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/guards-strict.log",
-            "sha256": "cb17f51db132c830c9730d1a11d218ab979f6c3ca7b00283cecbf679178771fd"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true <RAW_AXIOM_DRIVER>",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/public-axioms.raw.log",
-            "sha256": "1166b70d9147c90245b2079885377fa94b0c1be28be552722e450f1628af1009"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
           }
         ]
       }
@@ -161,35 +175,42 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "a2f108f651808dd591361572f4f4cef85cc87871",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
         "commands": [
           {
-            "kind": "elaboration",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/source-strict.log",
-            "sha256": "1cf9f04a76ac9b68f1a53c0682ccf97a19204c3dc2a7f0ddf726f700f8306531"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
           },
           {
-            "kind": "test",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/consumers-strict.log",
-            "sha256": "f244929f9c4991d5a2461689515739db985b3915fd8c4e071902e8d55cb64d1e"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/guards-strict.log",
-            "sha256": "cb17f51db132c830c9730d1a11d218ab979f6c3ca7b00283cecbf679178771fd"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true <RAW_AXIOM_DRIVER>",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/public-axioms.raw.log",
-            "sha256": "1166b70d9147c90245b2079885377fa94b0c1be28be552722e450f1628af1009"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
           }
         ]
       }
@@ -224,35 +245,42 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "a2f108f651808dd591361572f4f4cef85cc87871",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
         "commands": [
           {
-            "kind": "elaboration",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/source-strict.log",
-            "sha256": "1cf9f04a76ac9b68f1a53c0682ccf97a19204c3dc2a7f0ddf726f700f8306531"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
           },
           {
-            "kind": "test",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/consumers-strict.log",
-            "sha256": "f244929f9c4991d5a2461689515739db985b3915fd8c4e071902e8d55cb64d1e"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/guards-strict.log",
-            "sha256": "cb17f51db132c830c9730d1a11d218ab979f6c3ca7b00283cecbf679178771fd"
-          },
-          {
-            "kind": "axioms",
-            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true <RAW_AXIOM_DRIVER>",
-            "exit_code": 0,
-            "log": "docs/provenance/evidence/8766-angular-reset-width/public-axioms.raw.log",
-            "sha256": "1166b70d9147c90245b2079885377fa94b0c1be28be552722e450f1628af1009"
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
           }
         ]
       }
