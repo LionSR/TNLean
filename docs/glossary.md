@@ -1209,6 +1209,30 @@ The following notions use different transfer objects and are not interchangeable
   CZX four-domain instance are recorded in
   `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
 
+## States of the quasi-local algebra
+
+### `SpinChain.IsPureQuasiLocalState`
+
+- **Declaration:** `SpinChain.IsPureQuasiLocalState d ω : Prop`, for a continuous
+  complex-linear functional `ω` on `SpinChain.QuasiLocalAlgebra d` with `d > 0`.
+- **Defined in:** `TNLean/QCA/StateSpace.lean`.
+- **Meaning:** `ω` is an extreme point, over the real numbers, of
+  `SpinChain.quasiLocalStateSpace d`: the functionals of norm one with
+  $\omega(I)=1$ and $\omega(X^*X)\geq0$ for every quasi-local observable $X$.
+- **Source:** Nachtergaele, Commun. Math. Phys. 175 (1996),
+  arXiv:cond-mat/9410110, lines 854--887 and 1469--1482.
+- **Sanctioned bridges:**
+  `SpinChain.isPureQuasiLocalState_of_unique_supported_state` proves purity from
+  unique determination by expectation-one projections;
+  `SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition` reads off
+  a constituent of a finite convex decomposition; and
+  `SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff` and
+  `SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff` transport
+  purity along star-algebra isomorphisms and site grouping.
+- **Caveat:** purity is extremality among all states, not among
+  translation-invariant states; a state that is extremal only among
+  translation-invariant states need not satisfy this predicate.
+
 ## Gauge relations between blocks
 
 ### `MPSTensor.IsGaugeRelated`
@@ -1986,6 +2010,34 @@ in `MPS/Preparation/` uses it.
   feedforward differ from the source model; no inclusion in its phase
   relation or source `QCcc` classification is asserted. See
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+### Lieb–Robinson propagation on finite graphs
+
+#### `QuantumCircuit.heisenbergCommutatorNorm`
+
+- **Declaration:**
+  `QuantumCircuit.heisenbergCommutatorNorm (H B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (X : Set ι) (t : ℝ) : ℝ`,
+  with `QuantumCircuit.heisenbergEvolution H t A = e^{itH} A e^{-itH}`.
+- **Defined in:** `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Meaning:** the operator norm of `A ↦ [τ_t(A), B]` restricted to
+  `supportedOperators q X`, for any finite type of sites `ι`.
+- **Source:** Hastings–Koma, arXiv:math-ph/0507008, Appendix A, (A.13); the
+  function `F(X, t)` of OpenAI, *A two-dimensional area law from a global
+  spectral gap*, Lemma 4.1 (`03-quasilocal.tex`, lines 70–74).
+- **Sanctioned bridges:**
+  `QuantumCircuit.heisenbergCommutatorNorm_le_integral` (the local commutator
+  recursion for an arbitrary finite interaction family),
+  `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance` and
+  `QuantumCircuit.exists_graph_lieb_robinson` (graph-distance propagation with
+  constants depending only on the support diameter, support size and per-site
+  interaction budget), and
+  `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
+  vanishing between connected components). The finite-ring estimate
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
+  nearest-neighbor ring consumer of the same recursion.
+- **Caveat:** the graph theorems take the per-support size bound and the
+  per-site norm budget as hypotheses; deriving them from the one-term-per-support
+  convention on an induced square-lattice domain is a separate step.
 
 ## Inhomogeneous short-range correlated chains
 
