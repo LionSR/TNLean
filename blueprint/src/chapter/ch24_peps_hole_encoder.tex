@@ -89,9 +89,9 @@ of the September 24, 2026 polynomial-PEPS manuscript.
         \label{eq:peps_hole_encoder_coefficient}
          & =
         \begin{cases}
-            \overline{v_{j\ell}(y|_{R_j})},
-               & x|_{R_j}=z|_{R_j},\quad
-            x|_{V\setminus R_j}=y|_{V\setminus R_j}, \\
+            \overline{v_{j\ell}(y\vert_{R_j})},
+               & x\vert_{R_j}=z\vert_{R_j},\quad
+            x\vert_{V\setminus R_j}=y\vert_{V\setminus R_j}, \\
             0, & \text{otherwise}.
         \end{cases}
     \end{align}
@@ -109,14 +109,14 @@ of the September 24, 2026 polynomial-PEPS manuscript.
         \tenkzkernel
         \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
             \tn[at=(1,1), name=holeInsideBra, skin=box,
-                ports={180:physical:$y|_{R_j}$}]{\bra{v_{j\ell}}}
+                ports={180:physical:$y\vert_{R_j}$}]{\bra{v_{j\ell}}}
             \tn[at=3 e of holeInsideBra, name=holeResetKet, skin=box,
-                ports={0:physical:$x|_{R_j}$}]{\ket{0_{R_j}}}
+                ports={0:physical:$x\vert_{R_j}$}]{\ket{0_{R_j}}}
             \tn[at=2 s of holeResetKet, name=holeTagKet, skin=box,
                 ports={0:physical:$t$}]{\ket{j,\ell}}
             \tn[at=4 s of holeInsideBra, name=holeComplement, skin=box,
-                ports={180:physical:$y|_{V\setminus R_j}$,
-                        0:physical:$x|_{V\setminus R_j}$}]{I_{V\setminus R_j}}
+                ports={180:physical:$y\vert_{V\setminus R_j}$,
+                        0:physical:$x\vert_{V\setminus R_j}$}]{I_{V\setminus R_j}}
         \end{tenkz}
     \end{center}
 \end{definition}
