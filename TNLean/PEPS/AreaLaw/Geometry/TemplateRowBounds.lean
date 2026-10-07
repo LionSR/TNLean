@@ -66,11 +66,11 @@ theorem Template.exists_latticeRow_profile {Ctpl : ℝ} {n s₀ : ℕ}
   ext x
   rw [mem_latticeRow, h]
   by_cases hy : ly ≤ y ∧ y ≤ uy
-  · rw [if_pos hy]
+  · rw [ite_eq_left hy]
     simp only [Finset.mem_Icc, max_le_iff, le_min_iff]
     omega
-  · rw [if_neg hy]
-    simp only [Finset.not_mem_empty]
+  · rw [ite_eq_right hy]
+    simp only [Finset.notMem_empty]
     omega
 
 /-- Nonempty rows of an actual sampled polygon form an integer interval. -/
