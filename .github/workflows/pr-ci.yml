@@ -543,6 +543,9 @@ jobs:
             +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build partial-row entropy early
+        run: lake build TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy
+
       - name: Build template rows early
         timeout-minutes: 5
         run: |
@@ -561,6 +564,13 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test partial-row entropy strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateEntropy.lean
 
       - name: Test exact square-grid PEPS contraction and audit axioms
         timeout-minutes: 2

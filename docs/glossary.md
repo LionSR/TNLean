@@ -3029,3 +3029,12 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   entropy combination. Generic difference, finite-chain and pure-duality
   identities are available; canonical tripartite identification, exceptional-site
   dimension bounds and the full PEPS conditional-cell theorem remain separate.
+
+## Partial template row entropy
+
+- `TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le` states the
+  absolute entropy cost at most `n * log q` for any subset of an actual template
+  depth layer, using the canonical regional density of a unit physical vector.
+  It requires `q ≥ 1`, `Ctpl ≥ 24`, and `1 ≤ j ≤ s₀`; neither separation nor
+  a safe-box bound is needed for this step of Lemma 9.4. Full shell entropy
+  remains open. Validation is tracked in the partial-row proof note.

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8754-partial-row-dimension",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateEntropy.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independent proof from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Composes accepted QIC finite-product purity, subadditivity and log-rank bounds through the existing TN regional entropy identification."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-partial-row-increment",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateEntropy.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independent proof from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Composes accepted QIC finite-product purity, subadditivity and log-rank bounds through the existing TN regional entropy identification."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-partial-row-template",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateEntropy.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independent proof from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Composes accepted QIC finite-product purity, subadditivity and log-rank bounds through the existing TN regional entropy identification."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
