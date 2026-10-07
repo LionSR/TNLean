@@ -18,9 +18,9 @@ private theorem norm_basisState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
 
 -- An empty domain has one configuration even when the local alphabet is empty.
 example : regionalEntropy ∅ 0
-    (basisState ∅ 0 fun x ↦ False.elim (Finset.notMem_empty x.val x.property)) ∅ ≤ 0 := by
+    (basisState ∅ 0 fun x ↦ isEmptyElim x) ∅ ≤ 0 := by
   simpa using regionalEntropy_le_card_mul_log ∅ 0
-    (basisState ∅ 0 fun x ↦ False.elim (Finset.notMem_empty x.val x.property))
+    (basisState ∅ 0 fun x ↦ isEmptyElim x)
     (norm_basisState _ _ _) ∅
 
 -- Arbitrary actual templates, actual normalized one-dimensional physical states,
