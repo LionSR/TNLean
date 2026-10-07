@@ -1,0 +1,23 @@
+{
+  "revision": "18a6dd4d2683cea18b585ffe0467910f76eb23ff",
+  "files": {
+    "check_openai_provenance.py": {
+      "source_path": "scripts/check_openai_provenance.py",
+      "sha256": "8183e29f5a339bba37e28e9473aa7a6a42791282ed6877071dfd4096eda7cb65"
+    },
+    "openai-math.schema.json": {
+      "source_path": "docs/provenance/openai-math.schema.json",
+      "sha256": "a691d8e95b668c968365f2c7e33f614d49635aade8fdd4c2f27cd64f0cd6b459"
+    },
+    "canonical-collisions.json": {
+      "sha256": "16dd515cf8c38fe77536322c52f2b38dc56b8143d21f1f7abc9b0545f2a4a73b"
+    }
+  },
+  "collision_sources": {
+    "docs/provenance/openai-math.json": "55a8144bd631ada09f0198814385268ec7ab4b353d66c7b0e3d867b294558f9c",
+    "docs/provenance/openai-math.d/8740.json": "9599d818fb61ccd6ab946e27a14776d8e288de8b0ce949f8af6fda438e945d43",
+    "docs/provenance/openai-math.d/8769-lifetime.json": "cde80fe52ad93afc6d01d79200efdf6ca976cda4336174dee4dd5a6551670c2c",
+    "docs/provenance/openai-math.d/8769-operator.json": "911a342c7f7145cf7d360661c4c0464d3fb4b25ad058fdb4a306c460ba15f556",
+    "docs/provenance/openai-math.d/orthogonalization8767.json": "434582d35102297fc6d38e5bb29651cf66ff8ee33d7eac2bce4340f34b553218"
+  }
+}
