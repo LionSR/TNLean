@@ -22,11 +22,14 @@ declarations. Every report in `axioms.log` contains only `propext`,
 verification compared the committed sources with the compiled snapshots and
 rechecked every imported artifact hash.
 
-The branch predates the canonical provenance framework. The copied
-`validate-shard.py` loads its unmodified checker and schema at immutable
-revision `18a6dd4d2683cea18b585ffe0467910f76eb23ff`, verifies their hashes,
-validates all three stacked shards with a complete branch notice scan,
-and checks for collisions against the canonical ledger:
+The branch predates the canonical provenance framework. `validate-shard.py`
+uses the packaged, unmodified checker and schema from revision
+`18a6dd4d2683cea18b585ffe0467910f76eb23ff` in
+`../canonical-policy-18a6dd4d`. It verifies the packaged hashes, validates all
+three stacked shards with a complete branch notice scan, and checks the
+packaged canonical identifier/declaration collection for collisions. The
+policy commit need not be present in the checkout; the recorded proof
+revisions must be available:
 
 ```sh
 uv run --no-project --with jsonschema==4.26.0 python \

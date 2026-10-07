@@ -22,10 +22,13 @@ The build began before the source commit was created; the final verification
 compared every compiled source byte-for-byte against that commit.
 
 The branch predates the canonical provenance framework. `validate-shard.py`
-loads its unmodified checker and schema from immutable Git objects at
-`18a6dd4d2683cea18b585ffe0467910f76eb23ff`, verifies their hashes, validates this
-shard with the complete branch notice scan, and checks for collisions against
-the canonical ledger. Run from the repository root, supplying a local
+uses the packaged, unmodified checker and schema from revision
+`18a6dd4d2683cea18b585ffe0467910f76eb23ff` in
+`../canonical-policy-18a6dd4d`. It verifies the packaged hashes, validates this
+shard with the complete branch notice scan, and checks the packaged canonical
+identifier/declaration collection for collisions. The policy commit need not
+be present in the checkout; the recorded proof revision must be available.
+Run from the repository root, supplying a local
 `openai/math` repository containing the pinned manuscript commit:
 
 ```sh

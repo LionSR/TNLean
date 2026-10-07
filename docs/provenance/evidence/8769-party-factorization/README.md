@@ -35,10 +35,13 @@ options and the two endpoint axiom reports passed; exact commands and hashes
 are recorded in `regression-check.json`.
 
 The branch predates the canonical provenance framework. `validate-shard.py`
-loads its unmodified checker and schema from immutable Git objects at
-`18a6dd4d2683cea18b585ffe0467910f76eb23ff`, verifies their hashes, validates
-both new shards with the complete branch notice scan, and checks for collisions
-against the canonical ledger. Run from the repository root, supplying a local
+uses the packaged, unmodified checker and schema from revision
+`18a6dd4d2683cea18b585ffe0467910f76eb23ff` in
+`../canonical-policy-18a6dd4d`. It verifies the packaged hashes, validates
+both shards with the complete branch notice scan, and checks the packaged
+canonical identifier/declaration collection for collisions. The policy commit
+need not be present in the checkout; the recorded proof revisions must be
+available. Run from the repository root, supplying a local
 `openai/math` repository containing the pinned manuscript commit:
 
 ```sh
