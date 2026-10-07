@@ -1,4 +1,4 @@
-Disposable Lean compilation and imported-declaration axiom audit; not a local Lake build.
+Direct Lean module compilation against pinned Mathlib artifacts; no Lake build was run.
 Source revision: d62f169decd531ac3c8b770d847431c6a9099fa5
 Primary Lean pin: leanprover/lean4:v4.35.0-rc3
 Primary Mathlib revision: c55e6e786f49471c72fbddbec5415808896aec1e
@@ -24,31 +24,4 @@ Exit code: 0
 
 Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean
 Elapsed seconds: 9.236
-Exit code: 0
-
-
-The audit intentionally uses #print; only its hash-command linter is disabled.
-Audit started: 2026-10-07T16:31:27.775624+00:00
-Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.g0' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.mu' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.nu' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.ell' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.kappa' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.density_exponents' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.energy_exponents' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.comparison_exponents' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-Elapsed seconds: 35.058
 Exit code: 0
