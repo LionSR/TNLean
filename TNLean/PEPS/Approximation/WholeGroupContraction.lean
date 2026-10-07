@@ -98,7 +98,7 @@ def piSubtypeUniqueOfForallNot (p : ι → Prop) (h : ∀ i, ¬p i) :
 
 /-- Products over a subtype split along a disjoint union of predicates. -/
 theorem prod_subtype_split {M : Type*} [CommMonoid M] (p q r : ι → Prop)
-    [Fintype {i // p i}] [Fintype {i // q i}] [Fintype {i // r i}] [DecidablePred q]
+    [Fintype {i // p i}] [Fintype {i // q i}] [Fintype {i // r i}]
     (hp : ∀ i, p i ↔ q i ∨ r i)
     (hqr : ∀ i, q i → ¬r i) (g : {i // p i} → M) :
     ∏ i, g i = (∏ i : {i // q i}, g ⟨i, (hp i).2 (Or.inl i.2)⟩) *
@@ -278,7 +278,7 @@ variable (P) in
 def vertexSplit (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S₂) (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :=
   piSubtypeSplit P (· ∈ S) (· ∈ S₁) (· ∈ S₂) hS hd
 
-omit [Fintype V] [Fintype E] [DecidableEq E] in
+omit [Fintype V] [DecidableEq V] [Fintype E] [DecidableEq E] in
 /-- The three kinds of edges at a vertex of `S₁`. -/
 theorem isIncident_classify_left (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S₂)
     (hd : ∀ v, v ∈ S₁ → v ∉ S₂) {v : V} {e : E} (hv : v ∈ S₁)
@@ -292,7 +292,7 @@ theorem isIncident_classify_left (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S
   by_cases a : tail e ∈ S₁ <;> by_cases b : head e ∈ S₁ <;>
     by_cases c : tail e ∈ S₂ <;> by_cases d : head e ∈ S₂ <;> simp_all
 
-omit [Fintype V] [Fintype E] [DecidableEq E] in
+omit [Fintype V] [DecidableEq V] [Fintype E] [DecidableEq E] in
 /-- The three kinds of edges at a vertex of `S₂`. -/
 theorem isIncident_classify_right (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S₂)
     (hd : ∀ v, v ∈ S₁ → v ∉ S₂) {v : V} {e : E} (hv : v ∈ S₂)
