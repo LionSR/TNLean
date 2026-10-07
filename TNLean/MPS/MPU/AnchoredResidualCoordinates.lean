@@ -111,13 +111,6 @@ theorem finiteChainRegion_sort (a : ℤ) (N : ℕ) :
   rw [← hs, Finset.sort_range]
   congr 1
 
-/-- The site at position `k` has integer coordinate `a + k`. -/
-theorem finiteChainSiteEquiv_val (a : ℤ) (N : ℕ) (k : Fin N) :
-    ((finiteChainSiteEquiv a N k : finiteChainRegion a N) : ℤ) = a + k := by
-  change (finiteChainRegion a N).orderEmbOfFin (card_finiteChainRegion a N) k = _
-  rw [Finset.orderEmbOfFin_apply]
-  simp [finiteChainRegion_sort]
-
 /-- The configuration on an anchored integer interval obtained by concatenating
 the residual prefix, flattened complete blocks, and residual suffix. -/
 noncomputable def anchoredResidualConfig (d N L p m s : ℕ) (a : ℤ)
