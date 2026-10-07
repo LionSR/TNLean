@@ -1,8 +1,8 @@
 # Colors of actual belt-cell fans
 
-The complete module and all four unchanged public signatures have passed
-the direct package-option Lean check and independent mathematical review.
-The four original records remain planned until exact-source canonical verification.
+All four new declarations have passed exact-source canonical verification
+and independent mathematical review. Every parent record and historical
+evidence file remains unchanged. Full CI and compiled book checks are pending.
 
 ## Mathematical scope
 
@@ -49,50 +49,63 @@ obligations.
   source or proof text is reused. OpenAI Codex (GPT-6) assistance is disclosed
   separately from manuscript attribution.
 
-## Proposed inventory
+## New declaration inventory
 
 All four declarations are in `TNLean.PEPS.AreaLaw.Geometry`, in the new
 `TNLean/PEPS/AreaLaw/Geometry/BeltFanColors.lean` module.
 
 | Declaration | Kind | State |
 | --- | --- | --- |
-| `beltCellFanColor` | Noncomputable definition | Released and reviewed; canonical verification pending |
-| `beltCellFanColor_dummy` | Theorem | Released and reviewed; canonical verification pending |
-| `beltCellFanColor_nonbelt_opponent` | Theorem | Released and reviewed; canonical verification pending |
-| `beltCellFanColor_belt_contact` | Theorem | Released and reviewed; canonical verification pending |
+| `beltCellFanColor` | Noncomputable definition | Verified at the exact source below |
+| `beltCellFanColor_dummy` | Theorem | Verified at the exact source below |
+| `beltCellFanColor_nonbelt_opponent` | Theorem | Verified at the exact source below |
+| `beltCellFanColor_belt_contact` | Theorem | Verified at the exact source below |
 
-## Verification
+## Exact-source verification
 
-Completed parent: `957de7bed210e037a8a082eae6ad5f9969565fb2`, draft
-[#8894](https://github.com/LionSR/TNLean/pull/8894), with verified reciprocal
-source `b8c1e59e88eadf8694530d1a6fc470d8348c237e`.
-Frozen color source: **unbound**.
+Completed parent: `957de7bed210e037a8a082eae6ad5f9969565fb2`, draft [#8894](https://github.com/LionSR/TNLean/pull/8894).
+Frozen source: `acff16af5c9f4726de4efbee7eb01f56729e42b1`.
 
 | Check | Command | Outcome | Time | Log SHA-256 |
 | --- | --- | --- | --- | --- |
-| Canonical Geometry build | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending | Pending |
-| Imported four-name report | `lake env lean docs/provenance/evidence/8758-belt-fan-colors-axioms.lean` | Pending | Pending | Pending |
+| Canonical Geometry build | `lake build TNLean.PEPS.AreaLaw.Geometry` | Passed, exit 0 | 15.499 s | `bddacb00bfc0d33f7059b6338cafcefecff0e73cba9be8181103a835ad11e37c` |
+| Imported four-name report | `lake env lean docs/provenance/evidence/8758-belt-fan-colors-axioms.lean` | Passed, exit 0 | 4.525 s | `8e1f475949bb2fd1bbeef26a67e2fb2e7aca6746fabeaf28453c7a99b8230529` |
 
-The author's complete package-option check passed without diagnostics in
-14.91 seconds (user 2.49 seconds, system 7.22 seconds). Independent full
-mathematical review approves all four signatures and proofs. The canonical
-build and imported reports remain pending. Source synchronization and reverse
-coverage pass; imports cover 2,854 modules in 75 files. The scoped chapter
-contains one definition, three theorems, four declaration records and three
-proofs. Full CI and compiled whole-book checks remain pending.
+Actual source, command headers, elapsed times, exit codes and complete output
+are retained in [the build log](8758-belt-fan-colors-build.log) and
+[the imported kernel log](8758-belt-fan-colors-axioms.log). Both commands
+completed without diagnostics. All four reports satisfy the unchanged standard
+logical-foundation policy. The exact five-file frozen manifest is preserved;
+existing warm artifacts and the shared locked verification protocol were reused.
 
-The historical local whole-library declaration check limitation from the
-pre-existing missing `TNLean/MPS/Examples/Fibonacci.olean` remains preserved.
-Current #8876 book checks are running and compile-time checks are queued;
-#8888 Lean and book checks pass while compile-time checks are queued; #8892
-checks remain queued. These parent statuses do not verify this new source.
+Strict promotion passes 279 records, adding exactly four original records.
+All 275 parent entries and shards and all 120 tracked historical evidence
+files are unchanged. No prior record is reverified. The separate unchanged normal provenance policy also passes all 279 records.
+
+Full source synchronization passes with 20,233 distinct references and
+20,227 flattened declaration records, with no missing, stale or duplicate
+references and complete changed-declaration reverse coverage. Generated imports
+cover 2,854 production modules in
+75 files. The scoped chapter contains one
+definition, three theorems, four declaration records and three proofs, with
+seven completion markers. Pinned formatting is idempotent; reader-facing prose
+and module guards pass. Independent full review approves the four exact
+signatures and proofs. The author's direct package-option source check passed
+without diagnostics in 14.91 seconds. The scoped pattern review is
+recorded by the coordinating agent.
+
+QICLean remains pinned to `8d5389d23c8e675a0117442e1a0d2c683a4bad41`; toolchain and dependency bytes
+match the completed parent. Full CI and compiled book checks remain pending.
+The historical local whole-library declaration check encountered the
+pre-existing missing `TNLean/MPS/Examples/Fibonacci.olean`; its historical
+evidence and limitation remain preserved. The narrow Geometry build does not
+establish whole-book compiled verification.
 
 ## Immutable parent evidence
 
 The completed parent contains 275 provenance records. This contribution
 adds only four original records, for 279 in total. No parent proof module
-or provenance record is expected to change; no prior declaration is planned
-for reverification. All parent ledger and record bytes must remain unchanged.
+or provenance record changed; no prior declaration was reverified. All parent ledger and record bytes must remain unchanged.
 
 A new, separately named baseline captures every tracked file recursively
 under `docs/provenance/evidence`: all notes, imported reports, logs and nested
@@ -101,12 +114,10 @@ previous baseline was replaced. The strict helper guards every parent shard,
 all 275 entry hashes, all 120 historical file hashes, the current policy,
 schema, license, toolchain and dependency pins.
 
-Promotion is disabled until the helper is bound to an exact frozen source
-and successful actual build and four-name imported logs are available. The
-helper checks committed source, notice, shard and imported-report inventory,
-actual log headers and hashes, the standard logical-foundation policy and
-the unchanged normal policy over all 279 records. It performs no compiler
-or cache operation and writes only a new explicit output beneath `/tmp`.
+The strict helper checked the exact frozen source, original notices, four
+reports and actual log hashes under the unchanged current policy. It ran
+no compiler or cache operation and wrote only a new temporary promoted
+shard. Every historical file and parent record remains retained.
 
 ## Separate integration ownership
 
