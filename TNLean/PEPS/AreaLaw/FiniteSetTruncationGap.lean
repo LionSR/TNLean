@@ -107,4 +107,76 @@ theorem exists_finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc :
   have hε : ε ≤ g / 4 := min_le_right _ _
   exact Matrix.exists_posSemidef_gap_of_norm_sub_le hΩ hg hε hgap hHFΩ hHtpsd herr
 
+theorem kernelExponent_one : SpectralFilter.kernelExponent 1 = 1 / 2 := by
+  norm_num [SpectralFilter.kernelExponent]
+
+/-- **Truncation near a finite set, from the global gap** (Proposition 4.5, first part,
+`03-quasilocal.tex`, lines 405–433): Proposition 4.3 with `p = 1` followed by
+`exists_finiteSetTruncation`. The graph carries the hypotheses of Proposition 4.3 and the
+ball and anchor-multiplicity counts `K_b (d + 1)²`, `μ` of the source's Section 2. The
+constant `C₁` depends only on `R, v_R, b₀, K_g, k_g, J, Δ, K_b, μ, C₀`. -/
+theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ) {J Δ Kb μ C₀ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ) (hC₀ : 0 ≤ C₀) :
+    ∃ C₁ : ℝ, 0 < C₁ ∧
+      ∀ {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
+        (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
+        ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
+        (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+        (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
+        (∀ k, (X k).card ≤ vR) →
+        (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
+        (∀ x (d : ℕ),
+          ((Finset.univ.filter fun y => G.edist x y = d).card : ℝ) ≤ Kg * ((d : ℝ) + 1) ^ kg) →
+        (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+        (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
+        (∀ k, ‖h k‖ ≤ J) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →
+        (∑ k, h k) *ᵥ WithLp.ofLp Ω = (E₀ : ℂ) • WithLp.ofLp Ω →
+        ((∑ k, h k) - (E₀ : ℂ) • 1 -
+          (Δ : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, S₀.Nonempty → (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+        let cs := SpectralFilter.positiveNormalization 1 (Δ / 2) J
+        let g := Δ / cs
+        let k := fun i =>
+          SpectralFilter.positiveConstraint cs
+            (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i))
+        let r₀ := ⌈C₁ * Real.log n ^ 2⌉₊
+        let ε := min (n ^ (-1000 : ℝ)) (g / 4)
+        let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+        (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
+          truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
+        ‖Ht - ∑ i, k i‖ ≤ ε ∧
+        ∃ (e : ℝ) (Ω₀ : EuclideanSpace ℂ (ι → Fin q)), ‖Ω₀‖ = 1 ∧
+          Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
+          (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
+            (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
+          (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+          Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
+              (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+            Real.sqrt (2 * ε / g) := by
+  obtain ⟨C, c, hC, hc, hpos⟩ :=
+    exists_positiveQuasilocalConstraints (le_refl 1) R vR b₀ Kg kg hJ hΔ
+  set cs := SpectralFilter.positiveNormalization 1 (Δ / 2) J
+  have hcs : 0 < cs := SpectralFilter.positiveNormalization_pos 1 (Δ / 2) J
+  obtain ⟨C₁, hC₁, htr⟩ := exists_finiteSetTruncation hC hc (div_pos hΔ hcs) hμ hKb hC₀
+  refine ⟨C₁, hC₁, ?_⟩
+  intro q _ ι _ _ κ _ G X a ha h hHerm hSupport hDiam hCard hBudget hGrowth hBall hMult hJh
+    E₀ Ω hΩ hHΩ hgap n hn S₀ hS₀ hS₀n
+  obtain ⟨hk, hsum, hgapk, htail, -⟩ := hpos G X a ha h hHerm hSupport hDiam hCard hBudget
+    hGrowth hJh E₀ Ω hΩ hHΩ hgap
+  have hgapF : ((∑ i, SpectralFilter.positiveConstraint cs
+      (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i))) -
+        ((Δ / cs : ℝ) : ℂ) •
+          (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef := by
+    rw [← Matrix.le_iff]; exact hgapk.trans hsum
+  have htail' : ∀ i (l : ℕ), ‖SpectralFilter.positiveConstraint cs
+      (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)) -
+        siteExpectation q (graphBall G (a i) l) (SpectralFilter.positiveConstraint cs
+          (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)))‖ ≤
+        C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ))) := by
+    intro i l
+    have := (htail i l).2.2
+    rwa [kernelExponent_one] at this
+  exact htr G a _ Ω hΩ hk hgapF htail' hBall hMult n hn S₀ hS₀ hS₀n
+
 end TNLean.PEPS.AreaLaw
