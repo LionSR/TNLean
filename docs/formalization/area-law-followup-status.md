@@ -299,6 +299,26 @@ and PDF/web/native checks passed; the native list contains 3,381 declarations.
 These scalar bounds supply the counting step, while the inverse-compression
 operator inequality remains separate.
 
+[QICLean #637](https://github.com/LionSR/QICLean/pull/637), at checked head
+`307cead4`, compresses the good-copy label observable to an actual whole-copy
+label and transfers the resulting lower bound to an excitation component.
+The only support premise concerns the original vector's whole auxiliary label;
+component support and the good/bad coordinate split are derived. The complete
+9,727-job library build, two fresh standard-kernel reports, exact provenance
+and complete PDF/web/native checks passed. The numerical high-label threshold
+and the later inverse metric comparison remain separate.
+
+[QICLean #638](https://github.com/LionSR/QICLean/pull/638), at checked head
+`77f935df`, proves that tracing the bad physical copies gives
+\(|\Omega_G\rangle\langle\Omega_G|\otimes\rho_{\mathcal K}(w)\), where
+\(w\) is the actual excitation component and \(\rho_{\mathcal K}(w)\)
+is its own auxiliary marginal. The ground-state contraction gives the same
+auxiliary matrix. Only the prescribed one-copy ground vector is unit; zero
+components and zero copies are included. The complete 9,690-job library build,
+two fresh standard-kernel reports, exact provenance and complete PDF/web/native
+checks passed. The physical regional restriction and good-auxiliary symmetry
+are being established separately before applying the merge-moment theorem.
+
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
 Lemma 6.1. Their application to the actual good-copy component and the
@@ -371,6 +391,13 @@ retain their historical records; they are not described as fresh checks of
 the entire contribution. The PEPS coordinator is adopting this exact checked
 QICLean revision in the separate TNLean integration. The distributed
 compression and polynomial PEPS theorems remain unfinished.
+[TNLean #8896](https://github.com/LionSR/TNLean/pull/8896), at head `cbdcf495f`,
+adopts that exact QICLean revision at source `17a29d236`. Its coordinator
+reports strict checks of the 66 affected TNLean modules and the two refreshed
+aggregators, 342 imported standard-kernel reports, all 20,810 blueprint names
+and exact preservation of the earlier proof sources. These checks are distinct
+from the earlier complete library builds and from the unfinished physical
+compression argument.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
