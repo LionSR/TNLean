@@ -30,7 +30,7 @@ truncation of Lemma 6.2 to it, and reads every product term as an allowed monomi
 Theorem 5.2 is not formalized here (`05-frames.tex`, lines 254–330). It needs a model of
 operators placed on parties and of allowed monomials, which the library does not yet have.
 Consequently the clause "`M_a` has a polynomial expansion into allowed monomials using only the
-specified parties" of Lemma 6.3 is not formalized; `exists_contractive_approx_of_branches`
+specified parties" of Lemma 6.3 is not formalized; `norm_rescale_sum_le_of_branches`
 assembles `M_a` from any branchwise approximations. Documented in
 `docs/paper-gaps/polypeps_small_rewrite_monomials.tex`.
 
@@ -50,7 +50,7 @@ assembles `M_a` from any branchwise approximations. Documented in
   `EncodedFrame.SmallPatchRewrite.exists_old_owners_of_patch_input`,
   `EncodedFrame.SmallPatchRewrite.exists_new_owners_of_patch_output`,
   `EncodedFrame.SmallPatchRewrite.ownerOld_eq_ownerNew_of_direct`: the wire classification.
-* `EncodedFrame.exists_contractive_approx_of_branches`, `EncodedFrame.truncationRank_spec`:
+* `EncodedFrame.norm_rescale_sum_le_of_branches`, `EncodedFrame.truncationRank_spec`:
   rescaling and the choice of `k`.
 
 ## References
@@ -360,7 +360,6 @@ theorem rewrite_error_le_inv_pow_twenty {L : ℝ} (hL : 1 ≤ L) {c : ℕ}
     _ = (L ^ 20)⁻¹ := by
       field_simp
 
-
 /-! ### Rescaling and the choice of the truncation rank -/
 
 section Rescale
@@ -414,7 +413,7 @@ with `N` branches, and let every branch operator have an approximation `M̃_β` 
 `‖M_a - M‖ ≤ δ`.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 331–341. -/
-theorem exists_contractive_approx_of_branches {β : Type*} [Fintype β] {M : Matrix m n ℂ}
+theorem norm_rescale_sum_le_of_branches {β : Type*} [Fintype β] {M : Matrix m n ℂ}
     (hM : ‖M‖ ≤ 1) (Mb Mb' : β → Matrix m n ℂ) (hsum : M = ∑ b, Mb b) {η δ : ℝ}
     (hδ : 0 ≤ δ) (hb : ∀ b, ‖Mb b - Mb' b‖ ≤ η) (hη : Fintype.card β * η ≤ δ / 2) :
     ‖(((1 + δ / 2)⁻¹ : ℝ) : ℂ) • ∑ b, Mb' b‖ ≤ 1 ∧

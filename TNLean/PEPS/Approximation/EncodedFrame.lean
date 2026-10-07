@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Circuit.SiteEmbedding
-import QICLean.Analysis.MatrixFramePerturbation
 
 /-!
 # Encoded frames
@@ -137,46 +137,13 @@ theorem norm_act_eq_of_gram_eq {m' : Type*} [Fintype m'] {A : Matrix m n ℂ}
   have h3 : ‖act A ψ‖ ^ 2 = ‖act B ψ‖ ^ 2 := by exact_mod_cast h2
   exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp h3
 
-/-- A matrix whose Gram matrix has operator norm at most one is a contraction. -/
-theorem norm_le_one_of_gram [DecidableEq n] {A : Matrix m n ℂ} (h : ‖Aᴴ * A‖ ≤ 1) : ‖A‖ ≤ 1 := by
-  rw [l2_opNorm_conjTranspose_mul_self] at h
-  nlinarith [norm_nonneg A]
-
-/-- The identity matrix has operator norm at most one. -/
-theorem norm_one_le [DecidableEq n] : ‖(1 : Matrix n n ℂ)‖ ≤ 1 := by
-  rw [← Matrix.diagonal_one, Matrix.l2_opNorm_diagonal]
-  exact (pi_norm_le_iff_of_nonneg zero_le_one).2 fun _ => by simp
-
-/-- The product of two contractions is a contraction. -/
-theorem norm_mul_le_one {l : Type*} [Fintype l] [DecidableEq n] [DecidableEq l]
-    {A : Matrix m n ℂ} {B : Matrix n l ℂ} (hA : ‖A‖ ≤ 1) (hB : ‖B‖ ≤ 1) : ‖A * B‖ ≤ 1 :=
-  (l2_opNorm_mul A B).trans (by nlinarith [norm_nonneg A, norm_nonneg B])
-
-/-- A star projection matrix has operator norm at most one. -/
-theorem norm_le_one_of_isStarProjection [DecidableEq n] {P : Matrix n n ℂ}
-    (hP : IsStarProjection P) : ‖P‖ ≤ 1 := by
-  apply norm_le_one_of_gram
-  rw [← Matrix.star_eq_conjTranspose, hP.isSelfAdjoint.star_eq, hP.isIdempotentElem.eq]
-  by_cases h : ‖P‖ = 0
-  · rw [h]; exact zero_le_one
-  · have h2 := l2_opNorm_conjTranspose_mul_self P
-    rw [← Matrix.star_eq_conjTranspose, hP.isSelfAdjoint.star_eq, hP.isIdempotentElem.eq] at h2
-    have : ‖P‖ = 1 := by
-      have hpos : 0 < ‖P‖ := lt_of_le_of_ne (norm_nonneg _) (Ne.symm h)
-      field_simp at h2
-      nlinarith
-    rw [this]
-
-/-- The product of a list of contractions is a contraction. -/
-theorem norm_list_prod_le_one [DecidableEq n] :
-    (l : List (Matrix n n ℂ)) → (∀ A ∈ l, ‖A‖ ≤ 1) → ‖l.prod‖ ≤ 1
-  | [], _ => by simpa using norm_one_le
-  | A :: l, h => by
-    rw [List.prod_cons]
-    refine (l2_opNorm_mul _ _).trans ?_
-    have h1 := h A List.mem_cons_self
-    have h2 := norm_list_prod_le_one l fun B hB => h B (List.mem_cons_of_mem _ hB)
-    nlinarith [norm_nonneg A, norm_nonneg l.prod]
+/-- Relabelling the rows of a matrix along an equivalence does not change the norm of its
+action on a vector. -/
+theorem norm_act_submatrix_equiv {m' : Type*} [Fintype m'] (A : Matrix m n ℂ) (e : m' ≃ m)
+    (ψ : EuclideanSpace ℂ n) : ‖act (A.submatrix e id) ψ‖ = ‖act A ψ‖ := by
+  rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+  congr 1
+  exact Equiv.sum_comp e (fun i => ‖act A ψ i‖ ^ 2)
 
 /-- **Telescoping on a vector.** For contractions `A₁, …, A_s`, the defect of their product on
 `ψ` is at most the sum of their individual defects on `ψ`.
@@ -237,13 +204,6 @@ theorem star_zeroVec_dotProduct_zeroVec [NeZero q] (D : Finset ι) :
   classical
   simp [zeroVec, dotProduct, Pi.single_apply]
 
-theorem vecMulVec_mul_vecMulVec {α β γ : Type*} [Fintype β] (a : α → ℂ) (b c : β → ℂ)
-    (d : γ → ℂ) : vecMulVec a b * vecMulVec c d = (b ⬝ᵥ c) • vecMulVec a d := by
-  ext i k
-  simp only [mul_apply, vecMulVec_apply, Matrix.smul_apply, dotProduct, smul_eq_mul,
-    Finset.sum_mul]
-  exact Finset.sum_congr rfl fun j _ => by ring
-
 theorem star_dotProduct_self_of_norm_eq_one {α : Type*} [Fintype α] {v : EuclideanSpace ℂ α}
     (hv : ‖v‖ = 1) : star (⇑v) ⬝ᵥ ⇑v = 1 := by
   have h : (inner ℂ v v : ℂ) = (‖v‖ ^ 2 : ℂ) := inner_self_eq_norm_sq_to_K v
@@ -257,7 +217,7 @@ theorem rankOne_conjTranspose {α : Type*} [Fintype α] (v : EuclideanSpace ℂ 
 
 theorem rankOne_mul_self {α : Type*} [Fintype α] {v : EuclideanSpace ℂ α} (hv : ‖v‖ = 1) :
     rankOne v * rankOne v = rankOne v := by
-  rw [rankOne, vecMulVec_mul_vecMulVec, star_dotProduct_self_of_norm_eq_one hv, one_smul]
+  rw [rankOne, Matrix.vecMulVec_mul_vecMulVec, star_dotProduct_self_of_norm_eq_one hv, one_smul]
 
 /-! ### Squares and their samples -/
 
@@ -277,8 +237,10 @@ theorem squareSample_mono (pos : ι → ℝ × ℝ) (c : ℝ × ℝ) {r r' : ℝ
 There are radii `h ≤ r_1 ≤ ⋯ ≤ r_n ≤ 2h`, square samples `D_j = Q(c, r_j) ∩ Λ`, unit vectors
 `v_{jℓ}` on the sites of `D_j` for `ℓ < d_j`, and the cylinder projectors
 `|v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1` have mutually orthogonal ranges. The projector is their sum.
-The polynomial bound on `∑_j d_j` and the error `‖(1 - P)Ω‖ ≤ ε` are not fields: they are
-hypotheses of the statements that use them.
+The error `‖(1 - P)Ω‖ ≤ ε` is not a field; it is a hypothesis of the statements that use it.
+The polynomial bound on `∑_j d_j` of Proposition 4.1 is not used by any statement in this
+development: the count of branches of a rewrite takes a bound on the number of cylinder terms
+of each patch instead.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 26–48 (`eq:hole-projector`), with the
 cylinder data of Proposition 4.1 `prop:patch`, `03-patches.tex`, lines 24–49. -/
@@ -287,19 +249,24 @@ structure SquarePatch (pos : ι → ℝ × ℝ) (q : ℕ) where
   center : ℝ × ℝ
   /-- The scale `h` (the inner radius). -/
   scale : ℝ
+  /-- The scale is positive. -/
   scale_pos : 0 < scale
   /-- The number of radii. -/
   n : ℕ
   /-- The radii `r_j`. -/
   radius : Fin n → ℝ
+  /-- The radii are nondecreasing: `r_1 ≤ ⋯ ≤ r_n`. -/
   radius_mono : Monotone radius
+  /-- Every radius is at least the scale: `h ≤ r_j`. -/
   scale_le_radius : ∀ j, scale ≤ radius j
+  /-- Every radius is at most twice the scale: `r_j ≤ 2h`. -/
   radius_le : ∀ j, radius j ≤ 2 * scale
   /-- The number `d_j` of vectors at radius `r_j`. -/
   dim : Fin n → ℕ
   /-- The unit vectors `v_{jℓ}` on the sites of `D_j`. -/
   vec : (j : Fin n) → Fin (dim j) →
     EuclideanSpace ℂ (squareSample pos center (radius j) → Fin q)
+  /-- The vectors `v_{jℓ}` are unit vectors. -/
   norm_vec : ∀ j ℓ, ‖vec j ℓ‖ = 1
   /-- The cylinder projectors have mutually orthogonal ranges. -/
   orthogonal : ∀ s s' : (j : Fin n) × Fin (dim j), s ≠ s' →
@@ -365,12 +332,12 @@ theorem proj_isStarProjection : IsStarProjection p.proj := by
     exact Finset.sum_congr rfl fun s _ => p.cyl_conjTranspose s
 
 theorem norm_proj_le_one : ‖p.proj‖ ≤ 1 :=
-  norm_le_one_of_isStarProjection p.proj_isStarProjection
+  p.proj_isStarProjection.norm_le
 
 theorem branch_conjTranspose_mul_self [NeZero q] (s : p.Tag) :
     (p.branch s)ᴴ * p.branch s = p.cyl s := by
   rw [branch, siteLift_conjTranspose, siteLift_mul, conjTranspose_vecMulVec,
-    vecMulVec_mul_vecMulVec, star_star, star_zeroVec_dotProduct_zeroVec, one_smul, cyl,
+    Matrix.vecMulVec_mul_vecMulVec, star_star, star_zeroVec_dotProduct_zeroVec, one_smul, cyl,
     rankOne]
 
 theorem cyl_mem_supportedOperators (s : p.Tag) :
@@ -436,7 +403,8 @@ theorem encoder_conjTranspose_mul_self [NeZero q] : p.encoderᴴ * p.encoder = p
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 61–63. -/
 theorem norm_encoder_le_one [NeZero q] : ‖p.encoder‖ ≤ 1 :=
-  norm_le_one_of_gram (by rw [encoder_conjTranspose_mul_self]; exact p.norm_proj_le_one)
+  l2_opNorm_le_one_of_conjTranspose_mul_self_le_one
+    (by rw [encoder_conjTranspose_mul_self]; exact p.norm_proj_le_one)
 
 end SquarePatch
 
@@ -525,7 +493,7 @@ theorem projProd_isStarProjection :
         p.proj_mem_supportedOperators (projProd_mem_supportedOperators l))
 
 theorem norm_projProd_le_one (l : List (SquarePatch pos q)) : ‖projProd l‖ ≤ 1 :=
-  norm_list_prod_le_one _ fun A hA => by
+  l2_opNorm_list_prod_le_one _ fun A hA => by
     obtain ⟨p, -, rfl⟩ := List.mem_map.mp hA
     exact p.norm_proj_le_one
 
@@ -633,6 +601,44 @@ theorem rawProd_commute [NeZero q] {l₁ l₂ : List (Hole pos q Party)}
   commute_of_mem_supportedOperators h (rawProd_mem_supportedOperators l₁ t₁)
     (rawProd_mem_supportedOperators l₂ t₂)
 
+/-- **Canonical identification of tag orderings.** If `l'` lists the holes of `l`, whose outer
+footprints are pairwise disjoint, in another order, then some relabelling `e` of the tag
+configurations preserves the raw part of the encoding: `R'_{e(t)} = R_t`. It moves the tag of
+every hole to the hole's new position; the raw parts of distinct holes commute.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 74–75 and 84–85. -/
+theorem exists_tagEquiv_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
+    (hd : PairwiseDisjointOuter (l.map Hole.patch)) (hp : l.Perm l') :
+    ∃ e : TagSpace l ≃ TagSpace l', ∀ t, rawProd l' (e t) = rawProd l t := by
+  induction hp with
+  | nil => exact ⟨Equiv.refl _, fun _ => rfl⟩
+  | cons h _ ih =>
+    obtain ⟨e, he⟩ := ih (PairwiseDisjointOuter.of_cons hd)
+    refine ⟨(Equiv.refl h.patch.Tag).prodCongr e, fun t => ?_⟩
+    change h.patch.branch t.1 * rawProd _ (e t.2) = h.patch.branch t.1 * rawProd _ t.2
+    rw [he]
+  | swap x y l =>
+    refine ⟨⟨fun t => (t.2.1, t.1, t.2.2), fun t => (t.2.1, t.1, t.2.2), fun _ => rfl,
+      fun _ => rfl⟩, fun t => ?_⟩
+    change x.patch.branch t.2.1 * (y.patch.branch t.1 * rawProd l t.2.2) =
+      y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
+    have hyx : Disjoint (y.patch.outer : Set ι) x.patch.outer :=
+      Finset.disjoint_coe.mpr (List.rel_of_pairwise_cons hd List.mem_cons_self)
+    rw [← mul_assoc, ← mul_assoc, (commute_of_mem_supportedOperators hyx
+      (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _)).eq]
+  | trans h₁ _ ih₁ ih₂ =>
+    obtain ⟨e₁, he₁⟩ := ih₁ hd
+    obtain ⟨e₂, he₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
+    exact ⟨e₁.trans e₂, fun t => (he₂ _).trans (he₁ t)⟩
+
+/-- Relabelling the tag configurations along a map that preserves the raw parts identifies the
+two encodings. -/
+theorem frameEncoder_submatrix_of_rawProd_eq [NeZero q] {l l' : List (Hole pos q Party)}
+    (e : TagSpace l ≃ TagSpace l') (he : ∀ t, rawProd l' (e t) = rawProd l t) :
+    (frameEncoder l').submatrix (e.prodCongr (Equiv.refl (ι → Fin q))) id = frameEncoder l := by
+  ext ⟨t, σ⟩ τ
+  simp [frameEncoder, he]
+
 /-- **Frame Gram identity.** For holes with pairwise disjoint outer footprints,
 `∑_t (R_t)ᴴ R_t = ∏_a P_a`, where `R_t` is the raw part of the encoding on the tag
 configuration `t`.
@@ -674,7 +680,8 @@ theorem frameEncoder_conjTranspose_mul_self [NeZero q] {l : List (Hole pos q Par
 /-- The encoding of a list of holes with disjoint outer footprints is a contraction. -/
 theorem norm_frameEncoder_le_one [NeZero q] {l : List (Hole pos q Party)}
     (h : PairwiseDisjointOuter (l.map Hole.patch)) : ‖frameEncoder l‖ ≤ 1 :=
-  norm_le_one_of_gram (by rw [frameEncoder_conjTranspose_mul_self h]; exact norm_projProd_le_one _)
+  l2_opNorm_le_one_of_conjTranspose_mul_self_le_one
+    (by rw [frameEncoder_conjTranspose_mul_self h]; exact norm_projProd_le_one _)
 
 /-- `‖K_F ψ‖ = ‖∏_a P_a ψ‖` for every raw vector `ψ`. -/
 theorem norm_act_frameEncoder [NeZero q] {l : List (Hole pos q Party)}

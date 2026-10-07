@@ -41,8 +41,10 @@ norm of matrices, rectangular ones included.
     Every $D_j$ contains the inner sample and is contained in the outer
     sample. This is the projector of \texttt{05-frames.tex}, lines 26--48,
     with the cylinder data of \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS};
-    the accuracy $\lVert(\id-P_{c,h})\Omega\rVert\le\varepsilon$ and the
-    polynomial bound on $\sum_jd_j$ enter as hypotheses where they are used.
+    the accuracy $\lVert(\id-P_{c,h})\Omega\rVert\le\varepsilon$ enters as
+    a hypothesis where it is used. The polynomial bound on $\sum_jd_j$ is not
+    recorded: the count of branches below takes a uniform bound on the number
+    of cylinder terms of each patch instead.
 \end{definition}
 
 \begin{definition}[Hole encoder]
@@ -216,8 +218,7 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{def:peps_frame}
     Old and new one-sheet frames share their untouched holes, with the same
-    encodings and tag owners, listed first in both tag orderings; the
-    remaining holes are the affected old holes and the affected new holes,
+    encodings and tag owners; the remaining holes are the affected old holes and the affected new holes,
     $r_{\rm old}$ of the former. There are $m$ additional square patches
     $(c_i,u_i)$ with cylinder data, and a specified finite list of parties.
     Write $H^\mp(\mathcal F)$ for the unions of the physical samples of the
@@ -239,7 +240,9 @@ norm of matrices, rectangular ones included.
             the specified list.
     \end{enumerate}
     Patches may overlap, and affected old holes may overlap affected new
-    holes.
+    holes. In the canonical coordinates used below, the tags of the untouched
+    holes come first in both frames; Theorem~\ref{thm:peps_frame_small_rewrite}
+    also covers arbitrary tag orderings.
 \end{definition}
 
 \begin{definition}[Canonical rewrite]
@@ -264,8 +267,8 @@ norm of matrices, rectangular ones included.
 \begin{lemma}[The rewrite is a contraction]
     \label{lem:peps_frame_rewrite_contraction}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one,
-        TNLean.PEPS.EncodedFrame.l2_opNorm_reindex_le,
-        TNLean.PEPS.EncodedFrame.l2_opNorm_kronecker_one_le}
+        Matrix.l2_opNorm_reindex_le,
+        Matrix.l2_opNorm_kronecker_one_le}
     \leanok
     \uses{def:peps_frame_rewrite,lem:peps_frame_gram}
     $\lVert M\rVert\le1$.
@@ -302,8 +305,11 @@ norm of matrices, rectangular ones included.
 
 \begin{theorem}[Small-patch rewrite: canonical contraction]
     \label{thm:peps_frame_small_rewrite}
-    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.smallPatchRewrite,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le}
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one_and_refVec_sub_le,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le,
+        TNLean.PEPS.EncodedFrame.exists_tagEquiv_of_perm,
+        TNLean.PEPS.EncodedFrame.frameEncoder_submatrix_of_rawProd_eq,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}
     \leanok
     \uses{lem:peps_frame_rewrite_contraction,lem:peps_frame_rewrite_intertwining,
         lem:peps_frame_telescoping}
@@ -314,8 +320,10 @@ norm of matrices, rectangular ones included.
         \lVert M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert
             \le(m+r_{\rm old})\varepsilon .
     \]
-    This is the first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS},
-    with its hypotheses; the error estimate uses condition (1) only. No
+    The same holds for frames whose tags are listed in any order, with $M$
+    relabelled along the identification of the two tag orderings. This is the
+    first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, with its
+    hypotheses; the error estimate uses condition (1) only. No
     smallness of the errors of the untouched holes is assumed, and the
     projectors of overlapping patches need not commute.
 \end{theorem}
@@ -325,7 +333,12 @@ norm of matrices, rectangular ones included.
     $M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}
     =K_{\mathcal F_{\rm new}}(P_m\cdots P_1Q_1\cdots Q_{r_{\rm old}}-\id)\Omega$.
     The encoding is a contraction, and the telescoping lemma bounds the
-    remaining vector by $(m+r_{\rm old})\varepsilon$.
+    remaining vector by $(m+r_{\rm old})\varepsilon$. For another ordering of
+    the tags, the raw parts of the encodings of holes with disjoint outer
+    footprints commute, so moving every tag to the new position of its hole
+    is a relabelling of the tag basis that carries one encoding to the other.
+    Relabelling the coordinates of $M$ along it keeps $M$ a contraction and
+    changes neither norm in the estimate.
 \end{proof}
 
 \begin{lemma}[Branch expansion]
@@ -392,7 +405,7 @@ norm of matrices, rectangular ones included.
 \begin{lemma}[Rescaled branchwise approximation]
     \label{lem:peps_frame_rescale}
     \lean{TNLean.PEPS.EncodedFrame.norm_rescale_le,
-        TNLean.PEPS.EncodedFrame.exists_contractive_approx_of_branches,
+        TNLean.PEPS.EncodedFrame.norm_rescale_sum_le_of_branches,
         TNLean.PEPS.EncodedFrame.truncationRank,
         TNLean.PEPS.EncodedFrame.truncationRank_spec}
     \leanok

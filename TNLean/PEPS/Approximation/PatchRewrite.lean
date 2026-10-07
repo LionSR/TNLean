@@ -57,47 +57,6 @@ namespace TNLean.PEPS.EncodedFrame
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
-/-! ### Operator norms under reindexing and identity extension -/
-
-section Norms
-
-variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n'] [DecidableEq n]
-  [DecidableEq n']
-
-/-- A bound on the action on every vector bounds the operator norm. -/
-theorem l2_opNorm_le_of_act {A : Matrix m n ℂ} {c : ℝ} (hc : 0 ≤ c)
-    (h : ∀ ψ : EuclideanSpace ℂ n, ‖act A ψ‖ ≤ c * ‖ψ‖) : ‖A‖ ≤ c := by
-  rw [l2_opNorm_def]
-  exact ContinuousLinearMap.opNorm_le_bound _ hc fun ψ => h ψ
-
-/-- Relabelling rows and columns does not increase the operator norm. -/
-theorem l2_opNorm_reindex_le (e : m ≃ m') (f : n ≃ n') (A : Matrix m n ℂ) :
-    ‖reindex e f A‖ ≤ ‖A‖ := by
-  refine l2_opNorm_le_of_act (norm_nonneg _) fun ψ => ?_
-  have h := norm_act_le A (WithLp.toLp 2 fun j => ψ (f j))
-  have hψ : ‖(WithLp.toLp 2 fun j => ψ (f j) : EuclideanSpace ℂ n)‖ = ‖ψ‖ := by
-    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-    congr 1
-    exact Equiv.sum_comp f (fun j => ‖ψ j‖ ^ 2)
-  have hA : ‖act (reindex e f A) ψ‖ = ‖act A (WithLp.toLp 2 fun j => ψ (f j))‖ := by
-    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-    congr 1
-    refine (Equiv.sum_comp e fun i' => ‖act (reindex e f A) ψ i'‖ ^ 2).symm.trans ?_
-    refine Finset.sum_congr rfl fun i _ => ?_
-    simp only [reindex_apply, mulVec, dotProduct, submatrix_apply]
-    congr 2
-    rw [← Equiv.sum_comp f]
-    simp
-  rw [hA, ← hψ]
-  exact h
-
-/-- Tensoring with an identity on a finite reference does not increase the operator norm. -/
-theorem l2_opNorm_kronecker_one_le {κ : Type*} [Fintype κ] [DecidableEq κ] (A : Matrix m n ℂ) :
-    ‖A ⊗ₖ (1 : Matrix κ κ ℂ)‖ ≤ ‖A‖ :=
-  l2_opNorm_le_of_act (norm_nonneg _) fun ψ => l2_opNorm_kronecker_one_mulVec_le A ψ
-
-end Norms
-
 variable {pos : ι → ℝ × ℝ} {Party : Type*}
 
 theorem PairwiseDisjointOuter.left {l₁ l₂ : List (Hole pos q Party)}
@@ -233,7 +192,7 @@ def rewrite [NeZero q] : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ :=
 theorem norm_affectedRewrite_le_one [NeZero q] : ‖R.affectedRewrite‖ ≤ 1 := by
   have h2 := norm_frameEncoder_le_one R.disjoint_old.right
   rw [← l2_opNorm_conjTranspose] at h2
-  exact norm_mul_le_one (norm_mul_le_one (norm_frameEncoder_le_one R.disjoint_new.right)
+  exact l2_opNorm_mul_le_one (l2_opNorm_mul_le_one (norm_frameEncoder_le_one R.disjoint_new.right)
     (norm_projProd_le_one R.patches)) h2
 
 /-- **The canonical rewrite is a contraction.**
@@ -244,12 +203,6 @@ theorem norm_rewrite_le_one [NeZero q] : ‖R.rewrite‖ ≤ 1 :=
     R.norm_affectedRewrite_le_one
 
 /-! ### The exact intertwining identity and the reference error -/
-
-omit [DecidableEq ι] in
-theorem kronecker_one_mul_apply {m n l κ : Type*} [Fintype n] [Fintype κ] [DecidableEq κ]
-    (N : Matrix m n ℂ) (C : Matrix (n × κ) l ℂ) (r : m) (u : κ) (τ : l) :
-    ((N ⊗ₖ (1 : Matrix κ κ ℂ)) * C) (r, u) τ = (N * Matrix.of fun s τ => C (s, u) τ) r τ := by
-  simp [mul_apply, Fintype.sum_prod_type, kroneckerMap_apply, one_apply]
 
 /-- The products of the untouched hole encodings commute with the affected encodings, the patch
 projectors and the affected old projectors. -/
@@ -311,7 +264,7 @@ theorem rewrite_mul_encoder [NeZero q] (hR : R.AvoidsUntouched) :
   have key : K * R.oldFrame.encoder.submatrix eO id =
       R.newFrame.encoder.submatrix eN id * (R.patchProj * P₀) := by
     ext ⟨⟨a, σ⟩, u⟩ τ
-    rw [kronecker_one_mul_apply]
+    rw [Matrix.kronecker_one_mul_apply]
     have hstack : (Matrix.of fun (s : TagSpace R.oldAffected × (ι → Fin q)) τ =>
         R.oldFrame.encoder.submatrix eO id (s, u) τ) =
           frameEncoder R.oldAffected * rawProd R.untouched u := by
@@ -385,13 +338,51 @@ the canonical map `M` between the old and new layouts is a contraction and
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–213;
 proof lines 221–252. -/
-theorem smallPatchRewrite [NeZero q] (hR : R.Conditions) {Ω : EuclideanSpace ℂ (ι → Fin q)}
+theorem norm_rewrite_le_one_and_refVec_sub_le [NeZero q] (hR : R.Conditions) {Ω : EuclideanSpace ℂ (ι → Fin q)}
     {ε : ℝ} (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
     (hold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ε) :
     ‖R.rewrite‖ ≤ 1 ∧
       ‖act R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
         (R.patches.length + R.oldAffected.length) * ε :=
   ⟨R.norm_rewrite_le_one, R.norm_rewrite_refVec_sub_le hR.avoidsUntouched hpatch hold⟩
+
+/-! ### Arbitrary tag orderings -/
+
+/-- **Lemma 6.3, reference error, in arbitrary tag orderings.** Let `F_old` and `F_new` be
+frames whose hole lists are any orderings of `untouched ++ oldAffected` and
+`untouched ++ newAffected`. Under condition (i), with every additional patch projector and every
+affected old-hole projector of error at most `ε` on `Ω`, some contraction `M` from the layout of
+`F_old` to that of `F_new` satisfies `‖M Ω_{F_old} - Ω_{F_new}‖ ≤ (m + r_old) ε`. It is the
+canonical rewrite `rewrite`, relabelled along the tag relabellings of
+`exists_tagEquiv_of_perm`.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 74–75 and
+188–213; proof lines 221–252. -/
+theorem exists_norm_le_one_and_refVec_sub_le_of_perm [NeZero q] (hR : R.AvoidsUntouched)
+    (Fo Fn : Frame pos q Party) (ho : (R.untouched ++ R.oldAffected).Perm Fo.holes)
+    (hn : (R.untouched ++ R.newAffected).Perm Fn.holes) {Ω : EuclideanSpace ℂ (ι → Fin q)}
+    {ε : ℝ} (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
+    (hold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ε) :
+    ∃ M : Matrix Fn.Layout Fo.Layout ℂ, ‖M‖ ≤ 1 ∧
+      ‖act M (Fo.refVec Ω) - Fn.refVec Ω‖ ≤ (R.patches.length + R.oldAffected.length) * ε := by
+  obtain ⟨eO, heO⟩ := exists_tagEquiv_of_perm R.disjoint_old ho
+  obtain ⟨eN, heN⟩ := exists_tagEquiv_of_perm R.disjoint_new hn
+  set eO' := eO.prodCongr (Equiv.refl (ι → Fin q))
+  set eN' := eN.prodCongr (Equiv.refl (ι → Fin q))
+  have hKo : Fo.encoder = R.oldFrame.encoder.submatrix eO'.symm id := by
+    rw [Frame.encoder, Frame.encoder, ← frameEncoder_submatrix_of_rawProd_eq eO heO,
+      submatrix_submatrix, Equiv.self_comp_symm, submatrix_id_id]
+  have hKn : Fn.encoder = R.newFrame.encoder.submatrix eN'.symm id := by
+    rw [Frame.encoder, Frame.encoder, ← frameEncoder_submatrix_of_rawProd_eq eN heN,
+      submatrix_submatrix, Equiv.self_comp_symm, submatrix_id_id]
+  refine ⟨reindex eN' eO' R.rewrite, (l2_opNorm_reindex_le _ _ _).trans R.norm_rewrite_le_one,
+    ?_⟩
+  have hE : act (reindex eN' eO' R.rewrite) (Fo.refVec Ω) - Fn.refVec Ω =
+      act ((R.rewrite * R.oldFrame.encoder - R.newFrame.encoder).submatrix eN'.symm id) Ω := by
+    rw [Frame.refVec, Frame.refVec, ← act_mul, ← act_sub, hKo, hKn, reindex_apply,
+      submatrix_mul_equiv, ← submatrix_sub]
+  rw [hE, norm_act_submatrix_equiv, act_sub, act_mul]
+  exact R.norm_rewrite_refVec_sub_le hR hpatch hold
 
 end SmallPatchRewrite
 
