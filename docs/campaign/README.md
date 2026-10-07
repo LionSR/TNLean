@@ -17,8 +17,8 @@ directory here.
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
 
-The area-law and PEPS campaign in `area-law/` is served at
-`https://sirui-lu.com/TNLean/area-law/` and regenerated hourly by
+The area-law and PEPS campaign in `openai-proof/` is served at
+`https://sirui-lu.com/TNLean/openai-proof/` and regenerated hourly by
 `.github/workflows/campaign-board.yml`.
 
 ## Building a board locally
@@ -27,12 +27,12 @@ From the TNLean checkout root, with `gh` authenticated and a QICLean clone at
 `../QICLean`:
 
 ```bash
-python3 scripts/campaign_board/collect.py docs/campaign/area-law /tmp/snapshot.json
-python3 scripts/campaign_board/render.py docs/campaign/area-law /tmp/snapshot.json /tmp/board
+python3 scripts/campaign_board/collect.py docs/campaign/openai-proof /tmp/snapshot.json
+python3 scripts/campaign_board/render.py docs/campaign/openai-proof /tmp/snapshot.json /tmp/board
 open /tmp/board/index.html
 ```
 
-`scan_gaps.py docs/campaign/area-law --since <time>` lists passages in issue
+`scan_gaps.py docs/campaign/openai-proof --since <time>` lists passages in issue
 and pull-request discussions that mention gaps, counterexamples or deviation
 markers. Use it to decide whether `gaps.json` needs a new entry.
 

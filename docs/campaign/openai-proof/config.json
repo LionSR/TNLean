@@ -1,5 +1,5 @@
 {
-  "slug": "area-law",
+  "slug": "openai-proof",
   "pageTitle": "Area Law and PEPS · TNLean",
   "heading": "Area law and PEPS approximation for gapped two-dimensional ground states",
   "lede": "Two manuscripts posted on September 24, 2026 claim proofs of two long-open statements about gapped quantum spin systems on the square lattice, assuming only that the full Hamiltonian has a spectral gap. This page follows the Lean formalization of both proofs.",

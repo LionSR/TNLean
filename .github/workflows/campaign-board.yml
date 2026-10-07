@@ -1,11 +1,11 @@
 name: Campaign Board
 
 # Hourly progress page for a formalization campaign. The campaign is described
-# by docs/campaign/area-law/ (the two-dimensional area law and polynomial PEPS
+# by docs/campaign/openai-proof/ (the two-dimensional area law and polynomial PEPS
 # approximation, label `openai-math`, tracker #8733). The job reads issues and
 # pull requests of TNLean and QICLean, both public, so the default token
 # suffices. It renders a self-contained page, uploads it as the `site-campaign`
-# component and redeploys Pages, which serves it at /area-law/. It calls no
+# component and redeploys Pages, which serves it at /openai-proof/. It calls no
 # model and writes nothing to either repository.
 
 on:
@@ -51,10 +51,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           QICLEAN_DIR: qiclean
-        run: python3 scripts/campaign_board/collect.py docs/campaign/area-law campaign-data.json
+        run: python3 scripts/campaign_board/collect.py docs/campaign/openai-proof campaign-data.json
 
       - name: Render the page
-        run: python3 scripts/campaign_board/render.py docs/campaign/area-law campaign-data.json campaign-output/area-law
+        run: python3 scripts/campaign_board/render.py docs/campaign/openai-proof campaign-data.json campaign-output/openai-proof
 
       - name: Upload campaign component
         uses: actions/upload-artifact@v7

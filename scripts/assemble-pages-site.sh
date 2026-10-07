@@ -7,7 +7,7 @@
 #                    paper-gap PDFs                               (required)
 #   site-docs/       doc-gen4 API docs and paper-gap PDFs         (optional)
 #   site-badges/     badge endpoint JSON                          (optional)
-#   site-campaign/   area-law campaign board, served at area-law/ (optional)
+#   site-campaign/   campaign boards, one directory per campaign   (optional)
 #
 # Paper-gap PDFs come from site-blueprint when present: the blueprint job
 # rebuilds them on every push that touches a note, so its copy is at least
@@ -60,9 +60,9 @@ else
   echo "::warning::site-badges component missing — deploying without badge endpoints"
 fi
 
-if [ -d "$COMPONENTS/site-campaign/area-law" ]; then
-  echo "==> Campaign board..."
-  cp -r "$COMPONENTS/site-campaign/area-law" "$OUT/area-law"
+if [ -d "$COMPONENTS/site-campaign" ]; then
+  echo "==> Campaign boards..."
+  cp -r "$COMPONENTS/site-campaign/." "$OUT/"
 else
   echo "::warning::site-campaign component missing — deploying without the campaign board (the next hourly run restores it)"
 fi
