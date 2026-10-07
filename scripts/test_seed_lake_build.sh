@@ -76,6 +76,8 @@ LOCK_CONTINUE="$TEST_ROOT/lock-continue"
 COMMAND_CONTINUE="$TEST_ROOT/command-continue"
 LOCKED_COMMAND_RAN="$TEST_ROOT/locked-command-ran"
 SECOND_COMMAND_RAN="$TEST_ROOT/second-command-ran"
+# macOS lockf(1) uses flock(2), so this holder contends with Python's flock
+# acquisition in both scripts. This differs from POSIX lockf(3) byte-range locks.
 # shellcheck disable=SC2016
 /usr/bin/lockf -k "$LOCK_FILE" /bin/sh -c \
   'printf ready >"$1"; while test ! -e "$2"; do sleep 0.1; done' \
