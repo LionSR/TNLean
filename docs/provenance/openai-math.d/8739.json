@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8739-tnlean.peps.arealaw.reducedstate_possemidef",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.reducedState_posSemidef",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves positivity of every regional reduction, without requiring a normalized vector, using the existing rank-one, submatrix, and partial-trace positivity theorems.",
+        "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.trace_reducedstate",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.trace_reducedState",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves the trace equals the squared Euclidean norm for every vector and region, using trace preservation and finite reindexing.",
+        "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.trace_reducedstate_eq_one",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.trace_reducedState_eq_one",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Derives trace-one normalization of every regional reduction from the unit-norm hypothesis.",
+        "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.regionalentropy_nonneg",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_nonneg",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves nonnegative regional entropy of a unit vector using the existing positive-semidefinite trace-one entropy theorem.",
+        "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.regionalentropy_empty",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_empty",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves zero entropy of the empty region from its one-dimensional empty tensor product and trace-one normalization.",
+        "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8739-tnlean.peps.arealaw.regionalentropy_univ",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_univ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex",
+          "labels": [
+            "sec:prelim"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves zero entropy of the full region from the existing Gram identity and the one-dimensional complementary configuration space.",
+        "Original regional-state consequence using the pinned existing QICLean and Mathlib APIs; does not claim the manuscript area-law theorem or ownership of the separate generic gap and phase results."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

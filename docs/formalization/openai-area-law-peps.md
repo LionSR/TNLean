@@ -111,6 +111,7 @@ not identified with the final choices.
 | Source label | Present status | Remaining mathematical work |
 |---|---|---|
 | Area-law `eq:hamiltonian` | Model defined | Local counting and analytic consequences. |
+| Area-law `sec:prelim` | Regional positivity, squared-norm trace, unit trace, entropy nonnegativity, and empty/full entropy proved | Coordinate covariance, complementary entropy, and continuity conventions. |
 | Area-law `thm:area` | Target proposition defined | Faithful full proof, #8759 and its prerequisites. |
 | Area-law `cor:rectangles` | Graph and configuration identification proved | Hamiltonian and entropy transport and the boundary estimates. |
 | Area-law `scanner:template` | Template data defined | Geometric and entropy bounds, #8754 and #8758. |
