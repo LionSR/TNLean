@@ -233,6 +233,7 @@ class ProvenanceTests(unittest.TestCase):
             "'Example.VertexExtra' does not depend on any axioms",
             "Example.Vertex does not depend on any axioms",
             "prefix 'Example.Vertex' does not depend on any axioms",
+            "'Example.Vertex' does not depend on any axioms but this is not output",
         ):
             with self.subTest(output=output):
                 self.write("axioms.log", output + "\n")
@@ -240,10 +241,12 @@ class ProvenanceTests(unittest.TestCase):
                 self.rejects("axiom log missing downstream declaration")
 
     def test_later_bad_axiom_record_is_not_ignored(self):
-        self.write("axioms.log", "'Example.Vertex' depends on axioms: [propext]\n"
-                   "'Example.Vertex' depends on axioms: [sorryAx]\n")
-        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
-        self.rejects("unapproved axiom")
+        for first in ("'Example.Vertex' depends on axioms: [propext]\n",
+                      "'Example.Vertex' does not depend on any axioms\n"):
+            with self.subTest(first=first):
+                self.write("axioms.log", first + "'Example.Vertex' depends on axioms: [sorryAx]\n")
+                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+                self.rejects("unapproved axiom")
 
     def test_conflicting_exact_target_records(self):
         self.write("axioms.log", "'Example.Vertex' does not depend on any axioms\n"
@@ -277,13 +280,32 @@ class ProvenanceTests(unittest.TestCase):
         with self.assertRaisesRegex(provenance.Invalid, "duplicate downstream"):
             provenance.validate([first, second], SCHEMA, {}, scan=False)
 
+    def test_declaration_casing_remains_significant(self):
+        first, second = deepcopy(PLAN), deepcopy(PLAN)
+        second["entries"][0]["id"] = "distinct-declaration-casing"
+        second["entries"][0]["downstream"].update(
+            repository="lionsr/qiclean", declaration="QuantumState.exists_phase_Minimizer")
+        self.assertEqual(provenance.validate([first, second], SCHEMA, {}, scan=False), 2)
+
+    def test_repeated_consistent_exact_target_records(self):
+        for output in (
+            "'Example.Vertex' does not depend on any axioms\n" * 2,
+            "'Example.Vertex' depends on axioms: [propext, Classical.choice]\n"
+            "'Example.Vertex' depends on axioms: [Classical.choice, propext]\n",
+        ):
+            with self.subTest(output=output):
+                self.write("axioms.log", output)
+                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+                self.assertEqual(self.validate(), 1)
+
+
     def test_wrong_manuscript_label(self):
         self.row["paper_sources"][0]["labels"] = ["invented-label"]
         self.rejects("missing manuscript label")
 
     def test_noncanonical_source_path(self):
         self.row["upstream"]["path"] = "lean//Example.lean"
-        self.rejects("noncanonical source path")
+        self.rejects("schema")
 
     def test_replacement_wrong_dependency_pin(self):
         self.row.update(status="replaced", reuse_kind="existing_library", upstream=None)
@@ -295,6 +317,71 @@ class ProvenanceTests(unittest.TestCase):
         self.write("lake-manifest.json", json.dumps({"packages": [{
             "url": "https://github.com/LionSR/QICLean.git", "rev": "c" * 40}]}))
         self.rejects("differs from the dependency pin")
+
+
+    def test_proposed_declaration_names_are_valid(self):
+        for name in ("Example..Vertex", "123", "Example.", ".Example", "Example/Vertex"):
+            ledger = deepcopy(PLAN)
+            ledger["entries"][0]["downstream"]["declaration"] = name
+            with self.subTest(name=name), self.assertRaisesRegex(provenance.Invalid, "schema"):
+                provenance.validate([ledger], SCHEMA, {}, scan=False)
+        for name in ("vertex", "Example.Vertex'", "Example.δ"):
+            ledger = deepcopy(PLAN)
+            ledger["entries"][0]["downstream"]["declaration"] = name
+            self.assertEqual(provenance.validate([ledger], SCHEMA, {}, scan=False), 1)
+
+    def test_planned_downstream_path_is_canonical(self):
+        for path in ("QICLean//Other.lean", "QICLean/./Other.lean"):
+            ledger = deepcopy(PLAN)
+            ledger["entries"][0]["downstream"]["path"] = path
+            with self.subTest(path=path), self.assertRaisesRegex(provenance.Invalid, "schema"):
+                provenance.validate([ledger], SCHEMA, {}, scan=False)
+
+
+    def source_header(self, header):
+        self.source = (header + "\n").encode() + (FIXTURES / "Source.lean.txt").read_bytes()
+        self.row["upstream"]["lines"] = [14, 14]
+        self.row["upstream"]["url"] = self.row["upstream"]["url"].split("#")[0] + "#L14-L14"
+
+    def test_opening_legal_notices_cannot_be_omitted(self):
+        for header in ("/- Copyright 2026 Example contributor. -/",
+                       "/- Patent notice: certain claims reserved. -/",
+                       "/- Trademark: ExampleMark belongs to Example Corp. -/",
+                       "/- License: Apache-2.0. -/", "-- Authors: Example contributor"):
+            with self.subTest(header=header):
+                self.source_header(header)
+                self.rejects("opening upstream legal/author notice missing")
+
+    def test_retained_opening_notice_is_accepted(self):
+        header = "/- Copyright 2026 Example contributor. -/"
+        self.source_header(header)
+        self.row["notices"] = [{"source_path": self.row["upstream"]["path"], "text": header}]
+        self.stored = (header + "\n" + self.text.replace("#L13-L13", "#L14-L14")).encode()
+        self.write("TNLean/Example.lean", self.stored.decode())
+        self.assertEqual(self.validate(), 1)
+        self.stored = self.text.replace("#L13-L13", "#L14-L14").encode()
+        self.write("TNLean/Example.lean", self.stored.decode())
+        self.rejects("retained upstream notice missing downstream")
+
+    def test_excluded_does_not_claim_completed_verification(self):
+        excluded = deepcopy(self.row)
+        excluded["status"] = "excluded"
+        self.rejects("schema", excluded)
+        excluded["verification"] = {"result": "pending"}
+        # Exclusion is a decision, not a live module notice or completed proof.
+        self.assertEqual(provenance.validate([self.ledger(excluded)], SCHEMA, {}, scan=False), 1)
+
+    def test_anonymous_noncomputable_section_preserves_namespace(self):
+        source = ("namespace Outer\nnoncomputable section\nabbrev before := Nat\nend\n"
+                  "abbrev after := Nat\nend Outer\n")
+        self.assertEqual(provenance.declarations(source), {"Outer.before": 3, "Outer.after": 5})
+
+
+    def test_nested_legal_header_is_preserved_whole(self):
+        header = "/- Copyright holder. /- additional attribution -/ License: Apache-2.0. -/"
+        self.assertEqual(provenance.leading_legal_notices(header + "\nimport Mathlib\n"),
+                         [header[2:-2].strip()])
+
 
     def test_git_reads_recorded_revision_not_worktree(self):
         self.mock_git.stop()

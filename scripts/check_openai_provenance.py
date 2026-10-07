@@ -38,9 +38,9 @@ def read_json(path):
 
 
 def safe_file(root, relative):
-    parts = PurePosixPath(relative).parts
-    require(parts and not relative.startswith("/") and ".." not in parts
-            and "\\" not in relative, f"unsafe path: {relative}")
+    parts = relative.split("/")
+    require(parts and all(part not in ("", ".", "..") for part in parts)
+            and not any(c in relative for c in "\\:#?%\r\n\x00"), f"unsafe path: {relative}")
     target = (root / relative).resolve()
     require(target.is_relative_to(root.resolve()), f"path escapes repository: {relative}")
     require(target.is_file(), f"missing file: {relative}")
@@ -74,6 +74,7 @@ def lean_parts(text):
         elif text.startswith("--", i):
             end = text.find("\n", i)
             i = len(text) if end < 0 else end
+            comments.append(text[start:i])
         elif text[i] == '"':
             i += 1
             while i < len(text):
@@ -98,7 +99,7 @@ def declarations(text):
     stack, result = [], {}
     for number, line in enumerate(code.splitlines(), 1):
         line = re.sub(r"@\[[^]]*\]", "", line).strip()
-        scope = re.match(r"(namespace|section)\b\s*([^\s]*)", line)
+        scope = re.match(r"(namespace|(?:noncomputable\s+)?section)\b\s*([^\s]*)", line)
         if scope:
             stack.append(scope[2] if scope[1] == "namespace" else "")
             continue
@@ -116,6 +117,21 @@ def declarations(text):
                 f"{prefix}.{name}" if prefix else name)
             result[qualified] = number
     return result
+
+
+def leading_legal_notices(text):
+    """Conservatively retain opening legal/author comments; not a closure audit."""
+    remaining = text.lstrip()
+    notices = []
+    for comment in lean_parts(text)[1]:
+        if not remaining.startswith(comment):
+            break  # An import or other source command ends the opening header.
+        if re.search(r"copyright|licen[cs]e|spdx|authors?|attribution|patent|trademark|notice",
+                     comment, re.I):
+            body = comment[2:-2] if comment.startswith("/-") else comment[2:]
+            notices.append(body.strip())
+        remaining = remaining[len(comment):].lstrip()
+    return notices
 
 
 def check_reference(ref, roots, required=False):
@@ -192,6 +208,11 @@ def check_entry(entry, roots):
         require(upstream["repository"] == "openai/math" and upstream["commit"] == PIN,
                 "upstream must match pinned source")
         source_data = check_reference(upstream, roots, required=active)
+        if source_data is not None and kind in ("copied", "adapted"):
+            for header in leading_legal_notices(source_data.decode()):
+                require(any(n["source_path"] == upstream["path"] and header in n["text"]
+                            for n in entry["notices"]),
+                        "opening upstream legal/author notice missing from ledger")
     if kind == "existing_library":
         library = entry["library"]
         check_reference(library, roots, required=active)

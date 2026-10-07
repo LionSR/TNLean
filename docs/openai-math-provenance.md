@@ -41,7 +41,8 @@ Parallel workers add `docs/provenance/openai-math.d/8738.json`, `8740.json`, etc
 using the same `schema_version`, `source`, `entries` envelope. Keep each other's
 rows and stable `id` values. The validator reads all shards and rejects duplicate
 IDs or downstream `(repository, declaration)` keys across files, regardless of path
-(GitHub repository names compare case-insensitively). Update
+(GitHub repository names compare case-insensitively; Lean declaration names
+remain case-sensitive). Update
 only your rows; coordinate a shared declaration before moving its ownership.
 A declaration with multiple sources needs separate reviewed source treatment;
 do not create duplicate downstream keys to bypass this gate (schema extension
@@ -65,7 +66,8 @@ line for a one-line range).
 `planned` means `verification: {"result": "pending"}` and proposed names.
 `ported` means an implemented declaration with exact build and axiom evidence.
 `replaced` means a verified existing-library replacement. `excluded` records a
-decision and reason in `changes`; it is not completion evidence. Empty strings,
+decision and reason in `changes`, with pending verification; it is not completion
+evidence. Empty strings,
 unknown fields, paths escaping a repository and abbreviated commits are errors.
 
 ## Notices and evidence
@@ -156,6 +158,14 @@ source-copy detector, license-closure scanner, or confirmation of log authentici
 Macros, generated declarations and unusual Lean syntax require explicit review
 and validator extension. Review the actual build/axiom logs and dependency pins,
 confirm paper hypotheses and notice retention, and check the closure independently.
+When selected source bytes are available, opening copyright, license, author,
+patent, trademark and attribution comments must appear in the retained-notice
+ledger. This conservative header check does not determine legal applicability
+or find all notices elsewhere in a source/import closure. Every copied/adapted
+declaration still needs a ledger row. Exhaustive declaration coverage, including
+original bridge proofs and generated declarations, remains a review obligation
+rather than an automatic whole-module check.
+
 Newly discovered source/header notices must be added; a validator pass never
 licenses dropping them. Complete manuscript results remain open until faithful
 proofs exist, irrespective of provenance status.
