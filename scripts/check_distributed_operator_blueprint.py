@@ -52,7 +52,7 @@ def main() -> None:
         if owner.env_type == "theorem":
             assert owner.proof_has_leanok, (name, "checked proof marker")
     audit = (ROOT / "scripts/distributed_operator_contraction_axioms.lean").read_text()
-    audit_names = re.findall(r"^#print axioms (\S+)$", audit, flags=re.M)
+    audit_names = re.findall(r"^#print axioms\s+(\S+)$", audit, flags=re.M)
     assert set(audit_names) == names and len(audit_names) == 49, "Axiom audit coverage"
     shard = json.loads((ROOT / "docs/provenance/openai-math.d/8769-operator.json").read_text())
     assert {entry["downstream"]["declaration"] for entry in shard["entries"]} == names

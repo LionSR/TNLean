@@ -267,11 +267,11 @@ variable {Out In : Party → Type*}
 section LocalTensor
 variable [Fintype Party] [∀ g, Fintype (Label g)]
 
-open Classical in
 /- TNLean.PEPS.Approximation.DistributedOperatorContraction.localTensor
 Provenance-ID: p09-tn-operator-localtensor
 Source: September 24, 2026; thm:compression; no upstream Lean proof text reused. -/
 
+open Classical in
 /-- The actual local operator tensor: sum the party's gate labels, enforce star equalities,
 insert root-owned coefficients, and evaluate the supplied locally contracted matrix.
 Any per-slot averaging factor belongs in `c` once, rather than at both endpoints.
@@ -518,11 +518,11 @@ section Contraction
 
 variable [Fintype Party] [∀ g, Fintype (Label g)]
 
-omit [DecidableEq Gate] [∀ g, Fintype (Label g)] in
 /- TNLean.PEPS.Approximation.DistributedOperatorContraction.prod_rootCoefficient
 Provenance-ID: p09-tn-operator-prod_rootcoefficient
 Source: September 24, 2026; thm:compression; no upstream Lean proof text reused. -/
 
+omit [DecidableEq Gate] [∀ g, Fintype (Label g)] in
 /-- Every gate coefficient occurs once in the product of the local root-owned factors.
 Theorem 5.2, `04-compression.tex:572–573`. -/
 theorem prod_rootCoefficient (c : (g : Gate) → Label g → ℂ) (ξ : GateLabels gates Label) :
@@ -547,11 +547,11 @@ def endpointTensor (c : (g : Gate) → Label g → ℂ)
   localTensor gates participants root hroot Label k c T p
     (endpointLabels gates participants root Label k p η) xy
 
-open Classical in
 /- TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator
 Provenance-ID: p09-tn-operator-contractedoperator
 Source: September 24, 2026; thm:compression; no upstream Lean proof text reused. -/
 
+open Classical in
 /-- The actual rectangular operator contracted from the constructed star/sample tensors.
 Theorem 5.2, `04-compression.tex:565–579`. -/
 def contractedOperator (c : (g : Gate) → Label g → ℂ)

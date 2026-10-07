@@ -64,7 +64,8 @@ example (T : (p : Fin 2) → GateLabelsAt oneGate twoParties (fun _ => Fin 2) p 
 -- singleton gate has no star edge. Physical input/output dimensions may differ.
 example (x : Fin 1 → Fin 2) (y : Fin 1 → Fin 3) :
     contractedOperator oneGate oneParty (fun _ => 0) (fun _ _ => Finset.mem_univ 0)
-      (fun _ => Fin 2 × Fin 3) 0 (fun _ _ => 1) (fun _ _ _ => Matrix.of (fun _ _ => 1)) x y = 6 := by
+      (fun _ => Fin 2 × Fin 3) 0 (fun _ _ => 1)
+      (fun _ _ _ => Matrix.of (fun _ _ => 1)) x y = 6 := by
   classical
   rw [contractedOperator_eq_branchSampleSum]
   norm_num [GateLabels, ActiveGate, Sample, oneGate, oneParty, Fintype.card_pi, Matrix.of_apply]
