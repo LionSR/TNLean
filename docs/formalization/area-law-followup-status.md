@@ -277,6 +277,28 @@ include zero copies. Strict checking, the complete 9,710-job library build,
 three standard-kernel reports, provenance and complete PDF/web/native checks
 passed. They do not assert commutation with the band metric.
 
+[QICLean #635](https://github.com/LionSR/QICLean/pull/635), at checked head
+`141ea11e`, transfers simultaneous permutation fixedness to the literal
+auxiliary reduced density of an actual excitation component. Its two results
+require no normalization or independent-copy assumption. The complete
+9,711-job library build, strict checking, two standard-kernel reports,
+provenance and complete PDF/web/native checks passed. Invariance of the
+marginal does not imply independence of its copies.
+
+[QICLean #636](https://github.com/LionSR/QICLean/pull/636), with mathematical
+source `40d9ab9e` and documentary head `3b78880a`, proves the counting estimates
+for actual excitation subsets. For \(0\le p\le1/2\) and \(r\le pk\),
+\[
+ \log\binom{k}{r}\le kh(p),\qquad
+ \sum_{r\le pk}\binom{k}{r}\le(k+1)e^{kh(p)}.
+\]
+The corresponding cardinality estimate counts the actual subsets of a finite
+set. Zero copies and both endpoints are included. The complete 9,761-job
+library build, strict checking, four standard-kernel reports, exact provenance
+and PDF/web/native checks passed; the native list contains 3,381 declarations.
+These scalar bounds supply the counting step, while the inverse-compression
+operator inequality remains separate.
+
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
 Lemma 6.1. Their application to the actual good-copy component and the
@@ -337,8 +359,22 @@ integration has also passed. Adoption of the full QICLean source chain into
 the current TNLean development is being checked separately; the actual
 corrected-density estimate and physical construction remain open.
 
+[QICLean #634](https://github.com/LionSR/QICLean/pull/634) provides the checked
+integration of the PEPS source estimates and the accepted Schur-label results
+of #593. Its final mathematical source is `035e5cc6` and evidence head is
+`4be0ef429c5048cf1bf4f5b7afd5b9f7b9361ca0`. All 25 incoming PEPS proof modules
+retain their source text. The complete 9,791-job library build passed, together
+with eight fresh standard-kernel reports, preservation of 1,455 frozen files,
+all 240 source-chapter declaration targets, the 446-page PDF and complete web
+checks. The earlier 21 strict source regressions and 325 provenance mappings
+retain their historical records; they are not described as fresh checks of
+the entire contribution. The PEPS coordinator is adopting this exact checked
+QICLean revision in the separate TNLean integration. The distributed
+compression and polynomial PEPS theorems remain unfinished.
+
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
 commutant and highest-weight development for reuse in subsequent proofs.
-This later accepted contribution has not changed the dependency pin of the
-verified TNLean results above.
+The accepted Schur-label contribution #593 is included in the separately
+checked QICLean integration described above. Neither contribution changes the
+dependency pin of the earlier verified TNLean entropy results.
