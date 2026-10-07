@@ -1,0 +1,28 @@
+Command: lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_layout_regression.lean
+Proof revision: 2a5a7a5b17fb0cd71d9555a88b7249e04f550b87
+Started UTC: 2026-10-07T09:35:32.080140+00:00
+
+'TNLean.PEPS.Approximation.sourceEndpoints' depends on axioms: [propext, Quot.sound]
+'TNLean.PEPS.Approximation.correctedParties' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.incidentGates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.gatesTouching' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.card_correctedParties_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.card_gatesTouching_correctedParties_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.disjoint_participants_of_not_mem_gatesTouching' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.card_pairSampleLabels' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.filter_pairSampleLabels_eq_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.card_gateLinkParties' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.distributedLinkParties_subset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.card_distributedLinkParties' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.exists_common_gate_of_mem_distributedLinkParties' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.card_incidentDistributedLinks_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Elapsed seconds: 1.692817
+Warnings: 0
+Exit code: 0

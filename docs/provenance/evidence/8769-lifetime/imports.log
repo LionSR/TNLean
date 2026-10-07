@@ -1,0 +1,9 @@
+Command: python3 scripts/generate_import_aggregators.py --check
+Proof revision: 2a5a7a5b17fb0cd71d9555a88b7249e04f550b87
+Started UTC: 2026-10-07T09:35:39.062524+00:00
+
+Import aggregators are current: 72 generated files cover 2782 production modules.
+
+Elapsed seconds: 0.877002
+Warnings: 0
+Exit code: 0

@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8769-lifetime-ket-bra-coefficient-cost",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/CorrectedPositionCost.lean",
         "declaration": "TNLean.PEPS.Approximation.ketBraCoefficientCost",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in CorrectedPositionCost; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-ket-bra-coefficient-cost-eq-sum",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/CorrectedPositionCost.lean",
         "declaration": "TNLean.PEPS.Approximation.ketBraCoefficientCost_eq_sum",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +90,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in CorrectedPositionCost; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-corrected-position-choice-cost",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/CorrectedPositionCost.lean",
         "declaration": "TNLean.PEPS.Approximation.correctedPositionChoiceCost",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,20 +147,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in CorrectedPositionCost; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-corrected-position-choice-cost-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/CorrectedPositionCost.lean",
         "declaration": "TNLean.PEPS.Approximation.correctedPositionChoiceCost_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -129,20 +204,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in CorrectedPositionCost; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-compression-choice-base-le-of-monomial-bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/CorrectedPositionCost.lean",
         "declaration": "TNLean.PEPS.Approximation.compressionChoiceBase_le_of_monomial_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -161,20 +261,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in CorrectedPositionCost; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-source-endpoints",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.sourceEndpoints",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -192,20 +317,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-corrected-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.correctedParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -223,20 +373,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-incident-gates",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.incidentGates",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -254,20 +429,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-gates-touching",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.gatesTouching",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -285,20 +485,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mem-source-endpoints",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.mem_sourceEndpoints",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -316,20 +541,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mem-corrected-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.mem_correctedParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -347,20 +597,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mem-incident-gates",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.mem_incidentGates",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -378,20 +653,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mem-gates-touching",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.mem_gatesTouching",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -409,20 +709,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-source-endpoints-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.card_sourceEndpoints_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -440,20 +765,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-corrected-parties-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.card_correctedParties_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -471,20 +821,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-gates-touching-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.card_gatesTouching_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -502,20 +877,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-gates-touching-corrected-parties-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.card_gatesTouching_correctedParties_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -533,20 +933,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-owner-mem-gates-touching-corrected-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.owner_mem_gatesTouching_correctedParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -564,20 +989,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-disjoint-participants-of-not-mem-gates-touching",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLifetime.lean",
         "declaration": "TNLean.PEPS.Approximation.disjoint_participants_of_not_mem_gatesTouching",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -595,20 +1045,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLifetime; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-pair-sample-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.pairSampleLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -625,20 +1100,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-gate-link-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.gateLinkLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -655,20 +1155,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-gate-link-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.gateLinkParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -685,20 +1210,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-links-at-gate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.linksAtGate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -715,20 +1265,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-distributed-links",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.distributedLinks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -745,20 +1320,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-distributed-link-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.distributedLinkParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -775,20 +1375,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-incident-distributed-links",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.incidentDistributedLinks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -805,20 +1430,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-incident-gate-link-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.incidentGateLinkLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -835,20 +1485,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-incident-links-at-gate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.incidentLinksAtGate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -865,20 +1540,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mem-pair-sample-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.mem_pairSampleLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -895,20 +1595,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mk-mem-pair-sample-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.mk_mem_pairSampleLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -925,20 +1650,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-pair-sample-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_pairSampleLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -955,20 +1705,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-filter-pair-sample-labels-eq-map",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.filter_pairSampleLabels_eq_map",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -985,20 +1760,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-filter-pair-sample-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_filter_pairSampleLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1015,20 +1815,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-gate-link-labels",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_gateLinkLabels",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1045,20 +1870,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-gate-link-labels-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_gateLinkLabels_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1075,20 +1925,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-incident-gate-link-labels-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_incidentGateLinkLabels_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1105,20 +1980,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-gate-link-parties-subset",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.gateLinkParties_subset",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1135,20 +2035,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-gate-link-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_gateLinkParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1165,20 +2090,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-links-at-gate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_linksAtGate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1195,20 +2145,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mem-links-at-gate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.mem_linksAtGate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1225,20 +2200,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-incident-links-at-gate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_incidentLinksAtGate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1255,20 +2255,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-mem-distributed-links",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.mem_distributedLinks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1285,20 +2310,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-distributed-link-parties-subset",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.distributedLinkParties_subset",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1315,20 +2365,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-distributed-link-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_distributedLinkParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1345,20 +2420,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-exists-common-gate-of-mem-distributed-link-parties",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.exists_common_gate_of_mem_distributedLinkParties",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1375,20 +2475,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-incident-distributed-links-subset",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.incidentDistributedLinks_subset",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1405,20 +2530,45 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8769-lifetime-card-incident-distributed-links-le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/DistributedLinks.lean",
         "declaration": "TNLean.PEPS.Approximation.card_incidentDistributedLinks_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1435,7 +2585,32 @@
         "Independently formalize the finite incidence and choice-counting mathematics in DistributedLinks; no upstream Lean proof text reused."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/build.log",
+            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+          },
+          {
+            "kind": "source-audit",
+            "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

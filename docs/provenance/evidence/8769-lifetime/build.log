@@ -1,0 +1,9 @@
+Command: lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation
+Proof revision: 2a5a7a5b17fb0cd71d9555a88b7249e04f550b87
+Started UTC: 2026-10-07T09:35:27.794757+00:00
+
+Build completed successfully (1164 jobs).
+
+Elapsed seconds: 1.494296
+Warnings: 0
+Exit code: 0

@@ -1,0 +1,53 @@
+{
+  "proof_revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+  "commands": [
+    {
+      "name": "build",
+      "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
+      "exit_code": 0,
+      "log": "docs/provenance/evidence/8769-lifetime/build.log",
+      "elapsed_seconds": 1.4942959760010126,
+      "warnings": 0
+    },
+    {
+      "name": "axioms",
+      "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
+      "exit_code": 0,
+      "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
+      "elapsed_seconds": 2.7897883110017574,
+      "warnings": 0
+    },
+    {
+      "name": "layout-regression",
+      "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_layout_regression.lean",
+      "exit_code": 0,
+      "log": "docs/provenance/evidence/8769-lifetime/layout-regression.log",
+      "elapsed_seconds": 1.6928172869993432,
+      "warnings": 0
+    },
+    {
+      "name": "choice-cost-regression",
+      "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_choice_cost_regression.lean",
+      "exit_code": 0,
+      "log": "docs/provenance/evidence/8769-lifetime/choice-cost-regression.log",
+      "elapsed_seconds": 2.382902692002972,
+      "warnings": 0
+    },
+    {
+      "name": "source-audit",
+      "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
+      "exit_code": 0,
+      "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
+      "elapsed_seconds": 2.905393165998248,
+      "warnings": 0
+    },
+    {
+      "name": "imports",
+      "command": "python3 scripts/generate_import_aggregators.py --check",
+      "exit_code": 0,
+      "log": "docs/provenance/evidence/8769-lifetime/imports.log",
+      "elapsed_seconds": 0.8770017599999846,
+      "warnings": 0
+    }
+  ]
+}
