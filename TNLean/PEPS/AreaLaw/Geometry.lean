@@ -9,4 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Geometry
 
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
+import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import TNLean.PEPS.AreaLaw.Geometry.Templates
