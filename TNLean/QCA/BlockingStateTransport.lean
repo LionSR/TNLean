@@ -50,14 +50,15 @@ noncomputable def quasiLocalFunctionalCongr
       continuous_invFun := (StarAlgEquiv.isometry e.symm).continuous }
   ContinuousLinearEquiv.arrowCongr E (ContinuousLinearEquiv.refl ℂ ℂ)
 
-/-- Evaluation of inverse precomposition. -/
+/-- Evaluation of inverse precomposition.
+Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836. -/
 @[simp] theorem quasiLocalFunctionalCongr_apply
     (e : QuasiLocalAlgebra d₁ ≃⋆ₐ[ℂ] QuasiLocalAlgebra d₂)
     (ω : QuasiLocalAlgebra d₁ →L[ℂ] ℂ) (X : QuasiLocalAlgebra d₂) :
     quasiLocalFunctionalCongr e ω X = ω (e.symm X) := rfl
 
 /-- Inverse precomposition by a star-algebra equivalence preserves the
-functional norm. -/
+functional norm. Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836. -/
 theorem norm_quasiLocalFunctionalCongr
     (e : QuasiLocalAlgebra d₁ ≃⋆ₐ[ℂ] QuasiLocalAlgebra d₂)
     (ω : QuasiLocalAlgebra d₁ →L[ℂ] ℂ) :
@@ -71,7 +72,8 @@ theorem norm_quasiLocalFunctionalCongr
     simpa only [quasiLocalFunctionalCongr_apply, StarAlgEquiv.symm_apply_apply,
       StarAlgEquiv.norm_map] using (quasiLocalFunctionalCongr e ω).le_opNorm (e X)
 
-/-- A star-algebra equivalence preserves normalization and positivity of states. -/
+/-- A star-algebra equivalence preserves normalization and positivity of states.
+Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836 and 854--887. -/
 @[simp] theorem quasiLocalFunctionalCongr_mem_stateSpace_iff
     (e : QuasiLocalAlgebra d₁ ≃⋆ₐ[ℂ] QuasiLocalAlgebra d₂)
     (ω : QuasiLocalAlgebra d₁ →L[ℂ] ℂ) :
@@ -82,7 +84,8 @@ theorem norm_quasiLocalFunctionalCongr
   rw [(EquivLike.surjective e.symm).forall]
 
 /-- The induced functional equivalence maps the entire state space onto
-the entire state space. -/
+the entire state space. Source: Nachtergaele, arXiv:cond-mat/9410110,
+lines 825--836 and 854--887. -/
 theorem quasiLocalFunctionalCongr_image_stateSpace
     (e : QuasiLocalAlgebra d₁ ≃⋆ₐ[ℂ] QuasiLocalAlgebra d₂) :
     quasiLocalFunctionalCongr e '' quasiLocalStateSpace d₁ = quasiLocalStateSpace d₂ := by
@@ -92,7 +95,8 @@ theorem quasiLocalFunctionalCongr_image_stateSpace
     quasiLocalFunctionalCongr_mem_stateSpace_iff]
 
 /-- Purity, defined by extremality among all states, is invariant under
-star-algebra equivalence. No translation invariance is assumed. -/
+star-algebra equivalence. No translation invariance is assumed.
+Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836 and 1469--1482. -/
 @[simp] theorem isPureQuasiLocalState_quasiLocalFunctionalCongr_iff
     (e : QuasiLocalAlgebra d₁ ≃⋆ₐ[ℂ] QuasiLocalAlgebra d₂)
     (ω : QuasiLocalAlgebra d₁ →L[ℂ] ℂ) :
@@ -116,19 +120,22 @@ noncomputable def quasiLocalBlockingFunctional (d L : ℕ) [NeZero d] [NeZero L]
       (QuasiLocalAlgebra d →L[ℂ] ℂ) :=
   quasiLocalFunctionalCongr (quasiLocalBlocking d L)
 
-/-- Evaluation of the transported functional on an original observable. -/
+/-- Evaluation of the transported functional on an original observable.
+Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836. -/
 @[simp] theorem quasiLocalBlockingFunctional_apply (d L : ℕ) [NeZero d] [NeZero L]
     (ω : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ)
     (X : QuasiLocalAlgebra d) :
     quasiLocalBlockingFunctional d L ω X = ω ((quasiLocalBlocking d L).symm X) := rfl
 
-/-- Site grouping preserves the norm of a continuous functional. -/
+/-- Site grouping preserves the norm of a continuous functional.
+Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836. -/
 theorem norm_quasiLocalBlockingFunctional (d L : ℕ) [NeZero d] [NeZero L]
     (ω : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ) :
     ‖quasiLocalBlockingFunctional d L ω‖ = ‖ω‖ :=
   norm_quasiLocalFunctionalCongr (quasiLocalBlocking d L) ω
 
-/-- States on the blocked chain correspond to states on the original chain. -/
+/-- States on the blocked chain correspond to states on the original chain.
+Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836 and 854--887. -/
 @[simp] theorem quasiLocalBlockingFunctional_mem_stateSpace_iff
     (d L : ℕ) [NeZero d] [NeZero L]
     (ω : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ) :

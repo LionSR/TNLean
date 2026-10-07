@@ -18,6 +18,10 @@ has norm one and remains positive on adjoint squares.
 
 This is an extension theorem with an explicit compatibility hypothesis. It
 makes no assertion that a particular tensor supplies such a family.
+
+Source: the inductive limit of finite-region observable algebras and its norm
+completion in arXiv:1703.09188, Appendix, lines 2292--2300, together with the
+state conventions of Nachtergaele, arXiv:cond-mat/9410110, lines 854--887.
 -/
 
 open scoped ComplexOrder
@@ -32,7 +36,8 @@ attribute [local instance] CStarMatrix.instNorm CStarMatrix.instNormedAddCommGro
 
 /-- A compatible family of normalized positive contractive linear functionals
 on the finite-region observable algebras. Compatibility under region enlargement
-is part of the data. -/
+is part of the data. Source: arXiv:1703.09188, Appendix, lines 2292--2296;
+Nachtergaele, arXiv:cond-mat/9410110, lines 854--887. -/
 structure CompatibleLocalState (d : ℕ) where
   /-- The functional on each finite region. -/
   functional : (Λ : Finset ℤ) → LocalAlgebra d Λ →ₗ[ℂ] ℂ
@@ -50,45 +55,54 @@ structure CompatibleLocalState (d : ℕ) where
 namespace CompatibleLocalState
 variable {d : ℕ} (f : CompatibleLocalState d)
 
-/-- The linear functional induced on the algebraic direct limit. -/
+/-- The linear functional induced on the algebraic direct limit.
+Source: arXiv:1703.09188, Appendix, lines 2292--2296. -/
 noncomputable def algebraicFunctional : AlgebraicLocalAlgebra d →ₗ[ℂ] ℂ :=
   DirectLimit.Module.lift ℂ (Finset ℤ) (LocalAlgebra d) (localAlgebraMap d)
     f.functional f.compatible
 
-/-- The algebraic extension agrees with the supplied finite-region functional. -/
+/-- The algebraic extension agrees with the supplied finite-region functional.
+Source: arXiv:1703.09188, Appendix, lines 2292--2296. -/
 @[simp] theorem algebraicFunctional_localObservable (Λ : Finset ℤ)
     (X : LocalAlgebra d Λ) :
     f.algebraicFunctional (localObservable d Λ X) = f.functional Λ X := rfl
 
-/-- The algebraic extension is contractive in the operator norm. -/
+/-- The algebraic extension is contractive in the operator norm.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 theorem algebraicFunctional_norm_le [NeZero d] (X : AlgebraicLocalAlgebra d) :
     ‖f.algebraicFunctional X‖ ≤ ‖X‖ := by
   induction X using DirectLimit.induction with
   | _ Λ X => exact f.norm_le Λ X
 
-/-- The continuous linear functional on the algebraic local algebra. -/
+/-- The continuous linear functional on the algebraic local algebra.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 noncomputable def algebraicContinuousFunctional [NeZero d] :
     AlgebraicLocalAlgebra d →L[ℂ] ℂ :=
   f.algebraicFunctional.mkContinuous 1
     (fun X => by simpa only [one_mul] using f.algebraicFunctional_norm_le X)
 
-/-- The continuous linear extension to the quasi-local algebra. -/
+/-- The continuous linear extension to the quasi-local algebra.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 noncomputable def quasiLocalFunctional [NeZero d] : QuasiLocalAlgebra d →L[ℂ] ℂ :=
   f.algebraicContinuousFunctional.fromCompletion
 
-/-- The completed extension agrees with its algebraic restriction. -/
+/-- The completed extension agrees with its algebraic restriction.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 @[simp] theorem quasiLocalFunctional_algebraicToQuasiLocal [NeZero d]
     (X : AlgebraicLocalAlgebra d) :
     f.quasiLocalFunctional (algebraicToQuasiLocal d X) = f.algebraicFunctional X :=
   ContinuousLinearMap.fromCompletion_apply_coe f.algebraicContinuousFunctional X
 
-/-- The completed extension agrees with every finite-region functional. -/
+/-- The completed extension agrees with every finite-region functional.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 @[simp] theorem quasiLocalFunctional_quasiLocalObservable [NeZero d]
     (Λ : Finset ℤ) (X : LocalAlgebra d Λ) :
     f.quasiLocalFunctional (quasiLocalObservable d Λ X) = f.functional Λ X :=
   f.quasiLocalFunctional_algebraicToQuasiLocal (localObservable d Λ X)
 
-/-- Positivity on adjoint squares extends from finite regions to the completion. -/
+/-- Positivity on adjoint squares extends from finite regions to the completion.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300; Nachtergaele,
+arXiv:cond-mat/9410110, lines 854--887. -/
 theorem quasiLocalFunctional_nonneg_star_mul_self [NeZero d]
     (X : QuasiLocalAlgebra d) : 0 ≤ f.quasiLocalFunctional (star X * X) := by
   refine UniformSpace.Completion.induction_on X ?_ ?_
@@ -102,12 +116,14 @@ theorem quasiLocalFunctional_nonneg_star_mul_self [NeZero d]
       simpa only [← map_star, ← map_mul, quasiLocalFunctional_quasiLocalObservable]
         using f.nonneg_star_mul_self Λ a
 
-/-- The completed functional preserves normalization. -/
+/-- The completed functional preserves normalization.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 @[simp] theorem quasiLocalFunctional_one [NeZero d] : f.quasiLocalFunctional 1 = 1 := by
   rw [← (quasiLocalObservable d ∅).map_one]
   exact (f.quasiLocalFunctional_quasiLocalObservable ∅ 1).trans (f.map_one ∅)
 
-/-- The completed extension is contractive. -/
+/-- The completed extension is contractive.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 theorem quasiLocalFunctional_norm_le [NeZero d] (X : QuasiLocalAlgebra d) :
     ‖f.quasiLocalFunctional X‖ ≤ ‖X‖ := by
   refine UniformSpace.Completion.induction_on X ?_ ?_
@@ -117,7 +133,8 @@ theorem quasiLocalFunctional_norm_le [NeZero d] (X : QuasiLocalAlgebra d) :
       UniformSpace.Completion.norm_coe, algebraicContinuousFunctional,
       LinearMap.mkContinuous_apply] using f.algebraicFunctional_norm_le a
 
-/-- The completed normalized functional has norm one. -/
+/-- The completed normalized functional has norm one.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 theorem norm_quasiLocalFunctional [NeZero d] : ‖f.quasiLocalFunctional‖ = 1 := by
   apply le_antisymm
   · exact ContinuousLinearMap.opNorm_le_bound _ zero_le_one
@@ -127,7 +144,8 @@ theorem norm_quasiLocalFunctional [NeZero d] : ‖f.quasiLocalFunctional‖ = 1 
     simpa only [quasiLocalFunctional_quasiLocalObservable, f.map_one,
       norm_quasiLocalObservable, norm_one, mul_one] using h
 
-/-- A continuous linear functional is determined by its finite-region values. -/
+/-- A continuous linear functional is determined by its finite-region values.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 theorem quasiLocalFunctional_unique [NeZero d]
     (ω : QuasiLocalAlgebra d →L[ℂ] ℂ)
     (hω : ∀ (Λ : Finset ℤ) (X : LocalAlgebra d Λ),
@@ -143,7 +161,9 @@ theorem quasiLocalFunctional_unique [NeZero d]
       exact (hω Λ a).trans (f.quasiLocalFunctional_quasiLocalObservable Λ a).symm
 
 /-- There is a unique normalized positive norm-one continuous linear extension
-of the compatible finite-region functionals. -/
+of the compatible finite-region functionals.
+Source: arXiv:1703.09188, Appendix, lines 2292--2300; Nachtergaele,
+arXiv:cond-mat/9410110, lines 854--887. -/
 theorem existsUnique_quasiLocalFunctional [NeZero d] :
     ∃! ω : QuasiLocalAlgebra d →L[ℂ] ℂ,
       (∀ (Λ : Finset ℤ) (X : LocalAlgebra d Λ),
