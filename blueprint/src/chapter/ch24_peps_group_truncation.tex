@@ -1,0 +1,209 @@
+\section{Whole-group tensor bound and simultaneous truncation}
+\label{sec:peps_group_truncation}
+The results below formalize the whole-group tensor bound
+\cite[Lemma~6.2]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{05-frames.tex}, lines 125--179, together with the two
+dimension-free matrix estimates used in its proof. All tensors have finitely
+many coordinates. For a matrix $M$, write $\lVert M\rVert_1$ for the sum of its
+singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
+
+\begin{definition}[Nuclear norm]
+    \label{def:peps_group_nuclear_norm}
+    \lean{Matrix.nuclearNorm}
+    \leanok
+    For a finite rectangular complex matrix $M$, the nuclear norm $\lVert M\rVert_1$
+    is the sum of the singular values of $M$.
+\end{definition}
+
+\begin{lemma}[H\"older bound for a product with a transpose]
+    \label{lem:peps_group_nuclear_holder}
+    \lean{Matrix.nuclearNorm_mul_transpose_le}
+    \leanok
+    \uses{def:peps_group_nuclear_norm}
+    For finite complex matrices $A$ and $B$ with the same column index set,
+    $\lVert AB^{\mathsf T}\rVert_1\le\lVert A\rVert_2\lVert B\rVert_2$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $w_i$ be an orthonormal basis of right singular vectors of
+    $M=AB^{\mathsf T}$, and let $u_i$ be the normalized images $Mw_i$ when
+    these are nonzero. The $i$th singular value equals
+    $\langle u_i, A(B^{\mathsf T}w_i)\rangle
+        =\langle A^{*}u_i, B^{\mathsf T}w_i\rangle$, so it is at most
+    $\lVert A^{*}u_i\rVert\,\lVert B^{\mathsf T}w_i\rVert$. Summing over $i$ and applying
+    the Cauchy--Schwarz inequality gives
+    $\lVert M\rVert_1\le(\sum_i\lVert A^{*}u_i\rVert^2)^{1/2}(\sum_i\lVert B^{\mathsf T}w_i\rVert^2)^{1/2}$.
+    Since the $u_i$ and $w_i$ are orthonormal families, the two sums are at
+    most $\lVert A\rVert_2^2$ and $\lVert B\rVert_2^2$.
+\end{proof}
+
+\begin{lemma}[Truncation to leading singular directions]
+    \label{lem:peps_group_orthonormal_truncation}
+    \lean{Matrix.exists_orthonormal_truncation, Matrix.orthonormalProjector}
+    \leanok
+    \uses{def:peps_group_nuclear_norm}
+    Let $M$ be a finite complex matrix and $k\ge0$ an integer. There is an
+    orthonormal family of at most $k$ vectors in the column space of
+    coordinates of $M$ whose orthogonal projector $Q$ satisfies
+    $(k+1)\lVert M-MQ\rVert_2^2\le\lVert M\rVert_1^2$. If the number of columns is at most
+    $k$, then $MQ=M$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Take $Q$ to be the projector onto the first $\min(k,n)$ right singular
+    vectors, where $n$ is the number of columns. Then $\lVert M-MQ\rVert_2^2$ is
+    the sum $\sum_{j>k}s_j^2$ of the squares of the remaining singular values
+    $s_1\ge s_2\ge\cdots\ge0$. Since the sequence decreases,
+    $(k+1)s_{k+1}\le\sum_j s_j$ and $\sum_{j>k}s_j^2\le s_{k+1}\sum_j s_j$.
+    Multiplying gives $(k+1)\sum_{j>k}s_j^2\le(\sum_j s_j)^2=\lVert M\rVert_1^2$.
+\end{proof}
+
+\begin{definition}[Coordinate contraction of a tensor graph]
+    \label{def:peps_group_contraction}
+    \lean{TNLean.PEPS.WholeGroup.contraction, TNLean.PEPS.WholeGroup.vertexNormSq}
+    \leanok
+    Let $(V,E)$ be a finite graph whose edges $e$ have endpoints
+    $t(e),h(e)\in V$ and finite label sets $D_e$. At each vertex $v$ let
+    $A_v$ be a tensor with one leg for each edge incident to $v$ and one
+    group of open legs with finite configuration set $P_v$. The coordinate
+    contraction is
+    \[
+        Z(\sigma)=\sum_{\beta}\prod_{v\in V}A_v\bigl(\beta|_{v},\sigma_v\bigr),
+    \]
+    where $\beta$ runs over labellings of all edges and $\beta|_v$ is the
+    restriction of $\beta$ to the edges incident to $v$. The norm of $A_v$
+    is its Hilbert-space norm over all its legs.
+\end{definition}
+
+\begin{theorem}[Whole-group tensor bound, norm part]
+    \label{thm:peps_group_contraction_norm}
+    \lean{TNLean.PEPS.WholeGroup.contraction_norm_le_one,
+        TNLean.PEPS.WholeGroup.partialNormSq_le_one}
+    \leanok
+    \uses{def:peps_group_contraction}
+    Suppose that no edge joins a vertex to itself and every vertex tensor
+    has norm at most one. Then the contraction $Z$ has norm at most one.
+    The same bound holds for the contraction of every vertex subset, with
+    the open legs of the subset and the edges leaving it kept open.
+\end{theorem}
+
+\begin{proof}\leanok
+    Argue by induction on the vertex subset, adding one vertex at a time.
+    Merging two disjoint vertex sets contracts all edges between them at
+    once. After grouping their common indices, the merged tensor is the
+    product of the two partial contractions, read as matrices from the
+    remaining legs to the common edges, up to a transpose. Hence its norm is
+    at most the product of the two norms, by $\lVert AB\rVert_2\le\lVert A\rVert_2\lVert B\rVert_2$.
+    A single vertex has the norm of its tensor, since it has no
+    self-contraction. The empty set has norm one. Graphs with cycles are
+    allowed.
+\end{proof}
+
+\begin{theorem}[Whole-group tensor bound, nuclear part]
+    \label{thm:peps_group_contraction_nuclear}
+    \lean{TNLean.PEPS.WholeGroup.nuclearNorm_flattening_le_one,
+        TNLean.PEPS.WholeGroup.flattening,
+        TNLean.PEPS.WholeGroup.flattening_contraction}
+    \leanok
+    \uses{def:peps_group_contraction, def:peps_group_nuclear_norm}
+    Under the hypotheses of Theorem~\ref{thm:peps_group_contraction_norm},
+    for every set $T$ of vertices, the matrix reshaping of $Z$ with rows the
+    open-leg groups of $T$ and columns those of the complement has nuclear
+    norm at most one.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_group_contraction_norm, lem:peps_group_nuclear_holder}
+    Contract $T$ and its complement internally, giving tensors $A$ and $B$
+    of norm at most one by Theorem~\ref{thm:peps_group_contraction_norm}.
+    Group all edges crossing the bipartition into one index. The reshaping
+    of $Z$ is then $AB^{\mathsf T}$, so Lemma~\ref{lem:peps_group_nuclear_holder}
+    gives $\lVert AB^{\mathsf T}\rVert_1\le\lVert A\rVert_2\lVert B\rVert_2\le1$. No dimension
+    enters.
+\end{proof}
+
+\begin{lemma}[Simultaneous truncation of open-leg groups]
+    \label{lem:peps_group_truncation_abstract}
+    \lean{TNLean.PEPS.WholeGroup.exists_group_truncation,
+        TNLean.PEPS.WholeGroup.norm_sub_factorMatrix_le,
+        TNLean.PEPS.WholeGroup.factorMatrix,
+        TNLean.PEPS.WholeGroup.productVector}
+    \leanok
+    \uses{def:peps_group_nuclear_norm}
+    Let $Z$ be a tensor on $\bigotimes_{v\in V}\mathbb C^{P_v}$ of norm at
+    most one whose reshaping across each single factor $v$ and its
+    complement has nuclear norm at most one. Let $G\subseteq V$ contain
+    every $v$ with $|P_v|>1$, and let $k\ge1$. Then there are orthonormal
+    families of at most $k$ vectors in the respective factors whose
+    tensor-product projection sends $Z$ to $Z_k$ with
+    $\lVert Z-Z_k\rVert\le|G|/\sqrt{k}$. In those families $Z_k$ has at most
+    $k^{|G|}$ product terms, with coefficients of absolute value at most one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_group_orthonormal_truncation}
+    For each factor $v$, Lemma~\ref{lem:peps_group_orthonormal_truncation}
+    applied to the single-factor reshaping gives a projection $Q_v$ of rank
+    at most $k$ with $\lVert Z-Q_v Z\rVert\le1/\sqrt{k+1}\le1/\sqrt{k}$, and with
+    $Q_v Z=Z$ when $|P_v|\le1$. The projections act on disjoint tensor
+    factors, so they commute and each has operator norm at most one.
+    Telescoping their product over $G$ bounds $\lVert Z-Z_k\rVert$ by the sum of
+    the separate errors. The tensor $Z_k$ has norm at most one, so each of
+    its coefficients in the orthonormal product basis has absolute value at
+    most one.
+\end{proof}
+
+\begin{theorem}[Whole-group tensor bound]
+    \label{thm:peps_group_tensor}
+    \lean{TNLean.PEPS.WholeGroup.exists_simultaneous_openLeg_truncation,
+        TNLean.PEPS.WholeGroup.exists_simultaneous_group_truncation}
+    \leanok
+    \uses{def:peps_group_contraction}
+    Let a finite graph carry at each vertex a tensor of norm at most one,
+    contract its internal edges by the coordinate pairing, and suppose there
+    are no edges from a vertex to itself. Group the open legs according to
+    their original vertices. The resulting tensor $Z$ has norm at most one
+    and has nuclear norm at most one across every bipartition into whole
+    open-leg groups. If there are $g$ nonempty open-leg groups, then for
+    every integer $k\ge1$ there are subspaces of dimension at most $k$ in the
+    respective group spaces whose tensor-product projection sends $Z$ to a
+    tensor $Z_k$ with $\lVert Z-Z_k\rVert\le g/\sqrt{k}$. In orthonormal bases of
+    those subspaces, $Z_k$ has at most $k^g$ product terms, with coefficients
+    of absolute value at most one.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_group_contraction_norm, thm:peps_group_contraction_nuclear,
+        lem:peps_group_truncation_abstract}
+    The norm and nuclear bounds are
+    Theorems~\ref{thm:peps_group_contraction_norm}
+    and~\ref{thm:peps_group_contraction_nuclear}; in particular every
+    single-group reshaping has nuclear norm at most one. A vertex with no
+    open legs has a one-point configuration set, so the set of $g$ vertices
+    owning a nonempty open-leg group contains every factor with more than
+    one configuration. Lemma~\ref{lem:peps_group_truncation_abstract} then
+    gives the truncation.
+\end{proof}
+
+\begin{corollary}[Whole-group tensor bound for networks with edge matrices]
+    \label{cor:peps_group_tensor_network}
+    \lean{TNLean.PEPS.WholeGroup.network_norm_le_one,
+        TNLean.PEPS.WholeGroup.nuclearNorm_flattening_network_le_one,
+        TNLean.PEPS.WholeGroup.exists_simultaneous_network_truncation,
+        TNLean.PEPS.WholeGroup.network_one_eq_contraction}
+    \leanok
+    \uses{thm:peps_group_tensor}
+    Consider a tensor network in which each vertex carries one leg for each
+    endpoint incidence and each edge carries a matrix. If every edge matrix
+    is the identity, no edge joins a vertex to itself, and every vertex
+    tensor has norm at most one, then the conclusions of
+    Theorem~\ref{thm:peps_group_tensor} hold for the network contraction.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:peps_group_tensor}
+    With identity edge matrices the network contraction is the coordinate
+    contraction. Without edges from a vertex to itself, the endpoint
+    incidences at a vertex are exactly its incident edges, so the vertex
+    norms agree, and the whole-group tensor bound applies.
+\end{proof}

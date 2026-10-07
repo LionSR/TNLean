@@ -15,5 +15,8 @@ import TNLean.PEPS.Approximation.DistributedOperatorContraction
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
+import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
+import TNLean.PEPS.Approximation.WholeGroupContraction
+import TNLean.PEPS.Approximation.WholeGroupNetwork

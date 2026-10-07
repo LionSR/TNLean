@@ -1,0 +1,101 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{The Virtual Unitary in the Symmetric Isometric Deformation}
+\author{}
+\date{2026-10-02}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{wip}
+
+\section{The source assertion}
+Schuch, P\'erez-Garc\'ia, and Cirac \cite{Schuch2011Phases} show that the
+isometric deformation can preserve an imposed on-site symmetry.
+The local source is \path{Papers/1010.3732/paper_v3.tex}, lines 645--676.
+Their argument first puts the tensor map $P$ in a standard virtual gauge,
+then associates to a physical symmetry $U$ a virtual unitary $X$ with
+$UP=PX$. Writing $P=QW$, they deduce $[U,Q]=0$ and preservation of the
+symmetry by $P_\gamma=Q_\gamma W$ and its parent Hamiltonian.
+
+\section{The proved polar implication}
+For any rectangular matrix $P$ and supplied unitaries $U,X$ satisfying
+$UP=PX$, one has $[U,PP^*]=0$. Let $E$ project onto $\operatorname{ran}P$.
+The positive factor used on the original physical space is
+\begin{align}
+    Q&=(PP^*)^{1/2}+I-E,
+    \label{eq:symmetric_polar_factor}\\
+    P&=QW.
+    \label{eq:symmetric_polar_identity}
+\end{align}
+Functional calculus gives $[U,(PP^*)^{1/2}]=[U,E]=0$, hence $[U,Q]=0$.
+Since $Q>0$, cancellation in $UP=PX$ gives $UW=WX$.
+Thus $Q_\gamma=\gamma Q+(1-\gamma)I$ commutes with $U$, and
+$UQ_\gamma W=Q_\gamma WX$.
+These statements are proved in
+\path{TNLean/MPS/ParentHamiltonian/IsometricDeformationCovariance.lean}.
+The identity extension in (\ref{eq:symmetric_polar_factor}) is included:
+its square is not identified with $PP^*$ outside $\operatorname{ran}P$.
+
+\section{The parent-space implication}
+Suppose in addition that the original two-site MPS boundary space is
+invariant under $U\otimes U$. Invertibility of $Q_\gamma$ and commutation
+with $U$ preserve this invariance along the deformation. The orthogonal
+parent projection then commutes with $U\otimes U$. The source's positive
+interaction
+\begin{align}
+    h_\gamma
+        &=(Q_\gamma^{-1})^{\otimes2}h_0(Q_\gamma^{-1})^{\otimes2}
+    \label{eq:symmetric_polar_interaction}
+\end{align}
+has the same commutation property. Each embedded local interaction
+commutes with $U^{\otimes N}$, so both open and periodic interaction sums
+preserve the symmetry.
+These conditional statements are proved in
+\path{TNLean/MPS/ParentHamiltonian/IsometricDeformationSymmetry.lean}.
+
+This implication requires invariance of the original MPS boundary space.
+An arbitrary virtual unitary $X$ satisfying $UP=PX$ need not preserve the
+virtual contractions defining an MPS. Thus the rectangular covariance
+identity by itself is not substituted for the original MPS symmetry.
+
+\section{The proved single-block case}
+For a single already-injective block $A$, assume either the trace-preserving
+canonical normalization $\sum_i A_i^*A_i=I$ or its unital counterpart
+$\sum_i A_iA_i^*=I$, and exact invariance of its periodic
+matrix product vectors under a unitary on-site representation. Then
+the fundamental theorem supplies a virtual similarity, and uniqueness of
+the canonical fixed point makes that similarity unitary up to a scalar.
+Conjugation by the resulting virtual unitary gives a unitary action on
+matrix coordinates. This derives $UP=PX$ and $[U,Q]=0$ without supplying
+a virtual unitary as an additional hypothesis. State symmetry also gives
+invariance of the original two-site boundary space. Hence both canonical
+parent projections and the positive interactions in
+(\ref{eq:symmetric_polar_interaction}) preserve the symmetry throughout
+the deformation. The derivation is proved in
+\path{TNLean/MPS/ParentHamiltonian/InjectiveIsometricDeformationSymmetry.lean},
+and its parent-Hamiltonian consequences in the preceding symmetry module.
+
+The normalization convention requires a coordinate qualification.
+For $P_{i,(a,b)}=A_i(a,b)$, the source's
+$\operatorname{tr}_{\mathrm{left}}(P^*P)=I_{\mathrm{right}}$ at line 653
+is $\sum_i A_i^*A_i=I$. The two proved cases are stated separately in their
+respective canonical orientations; the trace-preserving case matches this
+source convention. Both assume exact vector symmetry, rather than
+invariance only up to a phase.
+
+\section{The remaining source step}
+For several normal blocks, the derivation must also retain their symmetry
+permutation and show that the resulting action on the joint virtual space
+is unitary and preserves the MPS contractions. Until that derivation is
+proved, the conditional polar and parent-space implications are marked as
+such; they are not counted as a formalization of the unrestricted source
+symmetry assertion. The separately established uniform-gap results for
+the constructed deformation do not depend on this missing symmetry step.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
