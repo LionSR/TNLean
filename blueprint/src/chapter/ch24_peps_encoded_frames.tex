@@ -452,7 +452,7 @@ norm of matrices, rectangular ones included.
     \label{thm:peps_frame_small_rewrite_polynomial}
     \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,
         lem:peps_frame_wires,lem:peps_frame_rescale,
-        lem:peps_frame_approx_reference}
+        lem:peps_frame_approx_reference,thm:peps_group_tensor}
     Under the four conditions, for every fixed $a>0$ the canonical map $M$
     admits a contractive approximation $M_a$ with $\lVert M_a-M\rVert\le
         L^{-a}$ and a polynomial sum expansion into monomials allowed by
@@ -468,7 +468,8 @@ norm of matrices, rectangular ones included.
     normalized bras and kets form a tensor network without self-contractions
     whose open-leg groups are wholly input or wholly output and belong to at
     most two parties, by the wire classification. The whole-group truncation
-    lemma approximates its tensor within $g/\sqrt k$ by at most $k^g$ product
+    lemma (Theorem~\ref{thm:peps_group_tensor}) approximates its tensor
+    within $g/\sqrt k$ by at most $k^g$ product
     terms with coefficients of modulus at most one, each an allowed
     monomial, and the Hilbert-space error bounds the operator error of the
     branch. The rescaling lemma assembles $M_a$, and the reference estimate
