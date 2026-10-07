@@ -92,14 +92,12 @@ theorem submatrix_symm_submatrix (X : Matrix n n ℂ) (e : m ≃ n) :
 
 end Transport
 
-/-- The operator `1 ⊗ B` on the layout of a list of holes, acting as `B` on the raw registers and
-as the identity on the tags, passes through the encoding of the list whenever `B` commutes with
-the raw part of the encoding on every tag configuration. -/
-theorem one_kronecker_mul_frameEncoder [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type*}
-    {l : List (Hole pos q Party)} {B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hB : ∀ t, Commute B (rawProd l t)) :
-    ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ B) * frameEncoder l = frameEncoder l * B := by
-  rw [frameEncoder, stack_mul]
+/-- The operator `1 ⊗ B`, acting as `B` on the second factor and as the identity on the tags,
+passes through a tagged stack `∑_t |t⟩ ⊗ S_t` whenever `B` commutes with every `S_t`. -/
+theorem one_kronecker_mul_stack {τ n : Type*} [Fintype τ] [DecidableEq τ] [Fintype n]
+    [DecidableEq n] {S : τ → Matrix n n ℂ} {B : Matrix n n ℂ} (hB : ∀ t, Commute B (S t)) :
+    ((1 : Matrix τ τ ℂ) ⊗ₖ B) * stack S = stack S * B := by
+  rw [stack_mul]
   ext ⟨t, x⟩ y
   simp only [mul_apply, kroneckerMap_apply, one_apply, stack_apply, Fintype.sum_prod_type,
     ite_mul, one_mul, zero_mul]
@@ -107,6 +105,15 @@ theorem one_kronecker_mul_frameEncoder [NeZero q] {pos : ι → ℝ × ℝ} {Par
   have h := congrFun (congrFun (hB t).eq x) y
   simp only [mul_apply] at h
   simpa using h
+
+/-- The operator `1 ⊗ B` on the layout of a list of holes, acting as `B` on the raw registers and
+as the identity on the tags, passes through the encoding of the list whenever `B` commutes with
+the raw part of the encoding on every tag configuration. -/
+theorem one_kronecker_mul_frameEncoder [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type*}
+    {l : List (Hole pos q Party)} {B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hB : ∀ t, Commute B (rawProd l t)) :
+    ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ B) * frameEncoder l = frameEncoder l * B :=
+  one_kronecker_mul_stack hB
 
 /-- If `B` passes through the encoding, `‖(1 ⊗ B) Ω_F - Ω_F‖ ≤ ‖B Ω - Ω‖`. -/
 theorem norm_act_one_kronecker_refVec_sub_le [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type*}
@@ -197,7 +204,7 @@ theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Set 
 
 /-- The raw configurations of a sheet as triples `((t, e), u)` of configurations on `T`, on `E`
 and on `U = (T ∪ E)ᶜ`, for disjoint `T` and `E`. -/
-abbrev threeSplit (q : ℕ) (T E : Finset ι) (h : Disjoint T E) :
+def threeSplit (q : ℕ) (T E : Finset ι) (h : Disjoint T E) :
     (ι → Fin q) ≃ ((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q) :=
   (sheetSplit q (T ∪ E)).trans
     ((FiniteProduct.unionEquiv (fun _ : ι => Fin q) T E h).prodCongr (Equiv.refl _))
@@ -206,23 +213,36 @@ section ThreeSplit
 
 variable {T E : Finset ι} (h : Disjoint T E)
 
+@[simp]
+theorem threeSplit_apply_fst_fst (x : ι → Fin q) (v : T) : (threeSplit q T E h x).1.1 v = x v :=
+  rfl
+
+@[simp]
+theorem threeSplit_apply_fst_snd (x : ι → Fin q) (v : E) : (threeSplit q T E h x).1.2 v = x v :=
+  rfl
+
+@[simp]
+theorem threeSplit_apply_snd (x : ι → Fin q) (v : ↥(T ∪ E)ᶜ) :
+    (threeSplit q T E h x).2 v = x v :=
+  rfl
+
 theorem threeSplit_symm_apply_of_mem_left (t : T → Fin q) (e : E → Fin q)
     (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∈ T) :
     (threeSplit q T E h).symm ((t, e), u) v = t ⟨v, hv⟩ := by
-  simp [FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _ (Finset.mem_union_left E hv),
-    FiniteProduct.unionEquiv, hv]
+  simp [threeSplit, FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _
+    (Finset.mem_union_left E hv), FiniteProduct.unionEquiv, hv]
 
 theorem threeSplit_symm_apply_of_mem_right (t : T → Fin q) (e : E → Fin q)
     (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∈ E) :
     (threeSplit q T E h).symm ((t, e), u) v = e ⟨v, hv⟩ := by
   have hvT : v ∉ T := fun hvT => Finset.disjoint_left.mp h hvT hv
-  simp [FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _ (Finset.mem_union_right T hv),
-    FiniteProduct.unionEquiv, hvT]
+  simp [threeSplit, FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _
+    (Finset.mem_union_right T hv), FiniteProduct.unionEquiv, hvT]
 
 theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
     (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∉ T ∪ E) :
     (threeSplit q T E h).symm ((t, e), u) v = u ⟨v, Finset.mem_compl.mpr hv⟩ := by
-  simp [FiniteProduct.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv]
+  simp [threeSplit, FiniteProduct.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv]
 
 /-- A product operator in the coordinates of `threeSplit T E` is the Kronecker product of its
 restrictions to `T`, to `E` and to `(T ∪ E)ᶜ`. -/

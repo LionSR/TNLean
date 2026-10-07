@@ -51,6 +51,10 @@ the manuscript; no upstream Lean proof text was reused.
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 
+-- Two copies of the configurations `((t, e), u)` of three regions are a fourfold product of
+-- function types; synthesizing their decidable equality exceeds the default instance size.
+set_option synthInstance.maxSize 512
+
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
@@ -411,6 +415,85 @@ theorem apply_eq_submatrix_apply {m n : Type*} (M : Matrix m m ℂ) (e : m ≃ n
   simp
 
 end SheetSwap
+
+/-! ### The buffer correction and the swap of `T` on two sheets -/
+
+section SheetBuffer
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {T E : Finset ι} (h : Disjoint T E)
+
+/-- The coordinates `threeSplit T E` on both sheets. -/
+abbrev threeSplit₂ : (ι → Fin q) × (ι → Fin q) ≃
+    (((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q)) ×
+      (((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q)) :=
+  (threeSplit q T E h).prodCongr (threeSplit q T E h)
+
+/-- The buffer correction `D_U` of splitting data on the raw registers of the two sheets
+(`eq:exchange-buffer-correction`). It acts on the two copies of `U = (T ∪ E)ᶜ` alone. -/
+def sheetBufferCorrection (σ : SplittingData q T E) :
+    Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ :=
+  (bufferCorrection (T := T → Fin q) (E := E → Fin q) σ.V).submatrix (threeSplit₂ h)
+    (threeSplit₂ h)
+
+theorem norm_sheetBufferCorrection_le_one (σ : SplittingData q T E) :
+    ‖sheetBufferCorrection h σ‖ ≤ 1 :=
+  (norm_submatrix_equiv_le _ _).trans (norm_bufferCorrection_le_one σ.isIsometry)
+
+/-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `T` exchanges the
+`T`-components. -/
+theorem sheetSwapOp_eq_submatrix :
+    sheetSwapOp q T = (((tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).toPEquiv.toMatrix :
+      Matrix _ _ ℂ)).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
+  have he : (threeSplit₂ h).symm.trans ((sheetSwap q T).trans (threeSplit₂ h)) =
+      tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q) := by
+    refine Equiv.ext fun w => ?_
+    obtain ⟨⟨⟨t₁, e₁⟩, u₁⟩, ⟨⟨t₂, e₂⟩, u₂⟩⟩ := w
+    have hE : ∀ v : E, (v : ι) ∉ T := fun v hv => Finset.disjoint_left.mp h hv v.2
+    have hU : ∀ v : ↥(T ∪ E)ᶜ, (v : ι) ∉ T := fun v hv =>
+      Finset.mem_compl.mp v.2 (Finset.mem_union_left E hv)
+    refine Prod.ext (Prod.ext (Prod.ext ?_ ?_) ?_) (Prod.ext (Prod.ext ?_ ?_) ?_) <;>
+      funext v <;> simp only [Equiv.trans_apply, Equiv.prodCongr_apply, Equiv.prodCongr_symm,
+        Prod.map_fst, Prod.map_snd, threeSplit_apply_fst_fst, threeSplit_apply_fst_snd,
+        threeSplit_apply_snd, sheetSwap, Equiv.coe_fn_mk, tSwapW]
+    · rw [if_pos v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
+    · rw [if_neg (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
+    · rw [if_neg (hU v)]
+      exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
+    · rw [if_pos v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
+    · rw [if_neg (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
+    · rw [if_neg (hU v)]
+      exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
+  have hsub := toMatrix_toPEquiv_submatrix (sheetSwap q T) (threeSplit₂ h).symm
+    (threeSplit₂ h).symm
+  rw [Equiv.symm_symm, he] at hsub
+  rw [← hsub, submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id]
+  rfl
+
+/-- The buffer correction commutes with every product `R₁ ⊗ R₂` of operators acting on `T ∪ E`,
+in particular with the encoders of both sheets when all holes lie in `T ∪ E`
+(`05-frames.tex`, lines 514–515). -/
+theorem commute_sheetBufferCorrection (σ : SplittingData q T E)
+    {R₁ R₂ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hR₁ : R₁ ∈ supportedOperators q (↑(T ∪ E) : Set ι))
+    (hR₂ : R₂ ∈ supportedOperators q (↑(T ∪ E) : Set ι)) :
+    Commute (sheetBufferCorrection h σ) (R₁ ⊗ₖ R₂) := by
+  obtain ⟨R₁', hR₁'⟩ := exists_threeSplit_eq_kronecker_one h hR₁
+  obtain ⟨R₂', hR₂'⟩ := exists_threeSplit_eq_kronecker_one h hR₂
+  have hR := submatrix_symm_submatrix (R₁ ⊗ₖ R₂) (threeSplit₂ h).symm
+  rw [Equiv.symm_symm] at hR
+  have hform : (R₁ ⊗ₖ R₂).submatrix (threeSplit₂ h).symm (threeSplit₂ h).symm =
+      ((R₁' ⊗ₖ R₂') ⊗ₖ (1 : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+        ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)).submatrix (pairShuffle _ _ _ _)
+        (pairShuffle _ _ _ _) := by
+    rw [← one_kronecker_one, ← kronecker_kronecker_eq_submatrix, ← hR₁', ← hR₂']
+    rfl
+  rw [← hR, hform, sheetBufferCorrection, bufferCorrection]
+  refine Commute.submatrix_equiv (Commute.submatrix_equiv ?_ _) _
+  change _ * _ = _ * _
+  rw [← mul_kronecker_mul, ← mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one, Matrix.mul_one,
+    Matrix.one_mul]
+
+end SheetBuffer
 
 /-! ### Exchange data -/
 
