@@ -13,3 +13,4 @@ import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.TheoremStatements
+import TNLean.PEPS.AreaLaw.TwoFamilies

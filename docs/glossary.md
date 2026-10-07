@@ -2893,3 +2893,19 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; a target proposition, not a proved theorem. |
 | `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
 | `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
+
+## Two-family regional entropy
+
+- `FiniteProduct.entropy` (QICLean): canonical von Neumann entropy of the actual
+  regional reduced pure-state matrix, for arbitrary finite dependent local bases.
+- `FiniteProduct.entropy_le_remainder_add_half_sum` (QICLean): exact normalized
+  pure-state two-family cancellation, with coefficient `1/2` and the entire
+  exterior-plus-earlier-same-family mutual-information assumptions.
+- `TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum`: the finite-domain
+  specialization using the existing `OrderedTwoFamilyPartition` and regional
+  entropy. It assumes no Hamiltonian, gap, geometry, nonempty family, or separate
+  nonnegative error bound. Source: OpenAI (September 24, 2026), area-law Lemma 11.1.
+- `FiniteProduct.conditionalMutualInformation` (QICLean): the physical regional
+  entropy combination. Generic difference, finite-chain and pure-duality
+  identities are available; canonical tripartite identification, exceptional-site
+  dimension bounds and the full PEPS conditional-cell theorem remain separate.
