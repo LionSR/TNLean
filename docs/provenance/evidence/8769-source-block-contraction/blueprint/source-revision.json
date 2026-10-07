@@ -1,0 +1,6 @@
+{
+  "parent_revision": "02d2a1975ace263743e0eeb85df7002622fd590c",
+  "qiclean_revision": "8d5389d23c8e675a0117442e1a0d2c683a4bad41",
+  "note": "All committed TNLean .lean files, blueprint .tex/.bib mathematical sources, and dependency pins were byte-compared with this commit. Only the web entry point is deliberately replaced by the focused router; focused.tex and content-focused.tex are disposable render additions.",
+  "source_revision": "c80913b10d9926f31004705c78f136ade6b8b466"
+}

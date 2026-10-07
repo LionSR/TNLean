@@ -1,0 +1,22 @@
+{
+  "source_revision": "c80913b10d9926f31004705c78f136ade6b8b466",
+  "regression_sha256": "bee638f6bc81069de585923290219dc17cc8449fe056ba76343ec8483943c41d",
+  "production_sources": [
+    {
+      "path": "TNLean/PEPS/Approximation/SourceSlotBasis.lean",
+      "sha256": "c208dfd64db49b668f815676059266da94b696ac83956272c45defe351a64f93",
+      "artifact_path": "/private/tmp/tnlean-source-block-contraction/TNLean/PEPS/Approximation/SourceSlotBasis.olean",
+      "artifact_sha256": "bdff1ab76936673de49ca31c2dc32fd525b8447694113de6afee15b2b26fd2a6"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+      "sha256": "4833e0068204a94a11f990eb949f72b325669b94c8f8c069bd43236c61e0f9bb",
+      "artifact_path": "/private/tmp/tnlean-source-block-contraction/TNLean/PEPS/Approximation/SourceBlockMatrix.olean",
+      "artifact_sha256": "20472fe2b79bba14004bfa103ec6bc23f36ca0dbefd79e7a7238c56c55735f1b"
+    }
+  ],
+  "imported_artifact_count": 4348,
+  "imported_dependencies_sha256": "5fe11b08b05c8ad98c69be7f2c7edc006baefe63b66961dd344be37442ba7aac",
+  "regression_artifact_sha256": "c69f36a555b92a02b48b3b84828f415fa19968a2239899d008781788b84e839a",
+  "source_and_artifact_hashes_verified_at_pin": true
+}

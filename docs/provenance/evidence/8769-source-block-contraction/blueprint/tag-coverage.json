@@ -1,0 +1,23 @@
+{
+  "TNLean.PEPS.PairEffect.SourceInventory.slotBasis": 1,
+  "TNLean.PEPS.PairEffect.SourceInventory.slotBasis_apply": 1,
+  "TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis": 1,
+  "TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis_apply": 1,
+  "TNLean.PEPS.PairEffect.Word.freeSourceMatrix": 1,
+  "TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply": 1,
+  "TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one": 1,
+  "TNLean.PEPS.PairEffect.Word.freeSourceMatrix_conjTranspose_mul_apply": 1,
+  "TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one": 1,
+  "TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq": 1,
+  "TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix": 1,
+  "TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv": 1,
+  "TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv_apply": 1,
+  "TNLean.PEPS.PairEffect.SourceInventory.length_eq_choose": 1,
+  "TNLean.PEPS.PairEffect.SourceInventory.length_le_card_sq": 1,
+  "TNLean.PEPS.PairEffect.Word.mapSourceSlots": 1,
+  "TNLean.PEPS.PairEffect.Word.mapSourceSlots_spec": 1,
+  "TNLean.PEPS.PairEffect.Word.eval_mapSourceSlots_prepareSlots": 1,
+  "TNLean.PEPS.PairEffect.Word.sourceFrameMatrix": 1,
+  "TNLean.PEPS.PairEffect.Word.sourceFrameMatrix_eq_freeSourceMatrix": 1,
+  "TNLean.PEPS.PairEffect.Word.norm_sourceFrameMatrix_le_one": 1
+}

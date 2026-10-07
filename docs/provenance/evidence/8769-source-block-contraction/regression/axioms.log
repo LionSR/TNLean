@@ -1,0 +1,6 @@
+'TNLean.PEPS.PairEffect.SourceBlockRegression.rectangular_imaginary_input' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceBlockRegression.empty_sources_identity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
