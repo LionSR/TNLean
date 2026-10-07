@@ -108,6 +108,34 @@ theorem norm_tensorPower {η : EuclideanSpace ℂ ι} (hη : ‖η‖ = 1) :
     ‖tensorPower κ η‖ = 1 := by
   simp [tensorPower, norm_piTensor, hη]
 
+section PairCombine
+
+variable {α β α' β' : Type*} [Fintype α] [Fintype β] [Fintype α'] [Fintype β']
+
+/-- Two pair vectors `η ∈ ℂ^α ⊗ ℂ^β` and `η' ∈ ℂ^α' ⊗ ℂ^β'` on the same two parties combine
+into one pair vector `η ⊗ η'` on the tensor products `ℂ^α ⊗ ℂ^α'` and `ℂ^β ⊗ ℂ^β'` of their
+respective half-spaces. -/
+def pairCombine (η : EuclideanSpace ℂ (α × β)) (η' : EuclideanSpace ℂ (α' × β')) :
+    EuclideanSpace ℂ ((α × α') × (β × β')) :=
+  WithLp.toLp 2 fun x => η (x.1.1, x.2.1) * η' (x.1.2, x.2.2)
+
+/-- Combining pair vectors multiplies their norms; in particular normalized pair sources on
+one pair of parties combine into one normalized pair source.
+
+Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`, last sentence of
+the statement and of the proof, `04-compression.tex`, lines 70–71 and 124–126. -/
+theorem norm_pairCombine (η : EuclideanSpace ℂ (α × β)) (η' : EuclideanSpace ℂ (α' × β')) :
+    ‖pairCombine η η'‖ = ‖η‖ * ‖η'‖ := by
+  have h : ‖pairCombine η η'‖ ^ 2 = (‖η‖ * ‖η'‖) ^ 2 := by
+    rw [EuclideanSpace.norm_sq_eq, mul_pow, EuclideanSpace.norm_sq_eq,
+      EuclideanSpace.norm_sq_eq, Finset.sum_mul_sum, ← Finset.sum_product',
+      Finset.univ_product_univ]
+    simp only [pairCombine, PiLp.toLp_apply, norm_mul, mul_pow]
+    exact Fintype.sum_equiv (Equiv.prodProdProdComm α α' β β') _ _ fun _ => rfl
+  exact (pow_left_inj₀ (norm_nonneg _) (by positivity) two_ne_zero).1 h
+
+end PairCombine
+
 end EuclideanSpace
 
 namespace CyclicInsertion
@@ -198,9 +226,12 @@ omit [Fintype κ] [DecidableEq κ] in
 /-- For pair registers `ι = α × β`, a register permutation acts by the same permutation on
 the `α` registers and on the `β` registers. -/
 theorem registerPerm_pair_index {α β : Type*} (σ : Equiv.Perm κ) (f : κ → α × β) :
-    Equiv.arrowProdEquivProdArrow κ (fun _ => α) (fun _ => β) ((Equiv.arrowCongr σ (Equiv.refl (α × β))) f) =
-      ((Equiv.arrowCongr σ (Equiv.refl α)) (Equiv.arrowProdEquivProdArrow κ (fun _ => α) (fun _ => β) f).1,
-        (Equiv.arrowCongr σ (Equiv.refl β)) (Equiv.arrowProdEquivProdArrow κ (fun _ => α) (fun _ => β) f).2) :=
+    Equiv.arrowProdEquivProdArrow κ (fun _ => α) (fun _ => β)
+        ((Equiv.arrowCongr σ (Equiv.refl (α × β))) f) =
+      ((Equiv.arrowCongr σ (Equiv.refl α))
+          (Equiv.arrowProdEquivProdArrow κ (fun _ => α) (fun _ => β) f).1,
+        (Equiv.arrowCongr σ (Equiv.refl β))
+          (Equiv.arrowProdEquivProdArrow κ (fun _ => α) (fun _ => β) f).2) :=
   rfl
 
 /-- The cyclic insertion map `T_m`: the average over the `m` positions of the insertions of

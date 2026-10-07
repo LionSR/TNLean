@@ -321,8 +321,8 @@ theorem norm_replaceTerm_le_one (m : ℕ) : {X Y : HSpace} → (M : EffectChain 
 
 /-- The ideal replacement of an effect occurrence appends `η^{⊗ m}` after the original
 effect. -/
-theorem appendRight_comp_eval_effect {X Y : HSpace} {α β : Type} [Fintype α] [DecidableEq α] [Fintype β]
-    [DecidableEq β] {S : HSpace} (m : ℕ) (F : X →L[ℂ] EuclideanSpace ℂ (α × β) ⊗[ℂ] S)
+theorem appendRight_comp_eval_effect {X Y : HSpace} {α β : Type} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] {S : HSpace} (m : ℕ) (F : X →L[ℂ] EuclideanSpace ℂ (α × β) ⊗[ℂ] S)
     (η : EuclideanSpace ℂ (α × β)) (rest : EffectChain S Y) :
     appendRight ((effect α β S F η rest).stackVector m) ∘L (effect α β S F η rest).eval =
       leftCommL _ _ _ ∘L
@@ -345,7 +345,8 @@ by cyclic insertions changes it by at most `n / √m` from the ideal augmented m
 
 Polynomial-PEPS manuscript (September 24, 2026), proof of Lemma 5.1, `04-compression.tex`,
 lines 116–119. -/
-theorem norm_replace_sub_le {m : ℕ} (hm : m ≠ 0) : {X Y : HSpace} → (M : EffectChain X Y) → M.IsAllowed →
+theorem norm_replace_sub_le {m : ℕ} (hm : m ≠ 0) :
+    {X Y : HSpace} → (M : EffectChain X Y) → M.IsAllowed →
     ‖M.replace m - appendRight (M.stackVector m) ∘L M.eval‖ ≤ M.effectCount / Real.sqrt m
   | _, _, final F, _ => by simp [replace, stackVector, eval, effectCount]
   | _, _, effect α β S F η rest, h => by
@@ -615,5 +616,88 @@ theorem pairEffectElimination {m r : ℕ} (hm : m ≠ 0) (L : GateExpansion X Y)
   ⟨norm_inventoryVector m L fun p hp => (hL p hp).1, norm_replaceGate_sub_le hm L hL,
     replaceGate_eq_sum_termList m L, length_termList_le hm L fun p hp => (hL p hp).2,
     sum_norm_coeff_termList hm L, norm_term_le_one m L fun p hp => (hL p hp).1⟩
+
+/-! ### Near-contractivity, rescaling and the choice of `m` -/
+
+section Rescaling
+
+variable {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℂ E]
+
+omit [NormedSpace ℂ E] in
+/-- An operator within `δ` of a contraction has norm at most `1 + δ`. -/
+theorem norm_le_one_add_of_norm_sub_le {A B : E} {δ : ℝ} (hB : ‖B‖ ≤ 1)
+    (h : ‖A - B‖ ≤ δ) : ‖A‖ ≤ 1 + δ :=
+  calc ‖A‖ = ‖(A - B) + B‖ := by rw [sub_add_cancel]
+    _ ≤ ‖A - B‖ + ‖B‖ := norm_add_le _ _
+    _ ≤ 1 + δ := by linarith
+
+/-- Rescaling an operator within `δ ≥ 0` of a contraction by `(1 + δ)⁻¹` gives an operator
+within `2δ` of the contraction.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 199–228. -/
+theorem norm_inv_one_add_smul_sub_le {A B : E} {δ : ℝ} (hδ : 0 ≤ δ) (hB : ‖B‖ ≤ 1)
+    (h : ‖A - B‖ ≤ δ) : ‖(((1 + δ)⁻¹ : ℝ) : ℂ) • A - B‖ ≤ 2 * δ := by
+  have hA := norm_le_one_add_of_norm_sub_le hB h
+  have hpos : 0 < 1 + δ := by linarith
+  have hscale : ‖(((1 + δ)⁻¹ : ℝ) : ℂ) • A - A‖ ≤ δ := by
+    rw [show (((1 + δ)⁻¹ : ℝ) : ℂ) • A - A = ((((1 + δ)⁻¹ : ℝ) : ℂ) - 1) • A by
+      rw [sub_smul, one_smul], norm_smul]
+    have hc : ‖(((1 + δ)⁻¹ : ℝ) : ℂ) - 1‖ = δ / (1 + δ) := by
+      rw [show (((1 + δ)⁻¹ : ℝ) : ℂ) - 1 = (((1 + δ)⁻¹ - 1 : ℝ) : ℂ) by push_cast; ring,
+        Complex.norm_real, Real.norm_eq_abs, abs_of_nonpos (by
+          rw [sub_nonpos]; exact inv_le_one_of_one_le₀ (by linarith))]
+      field_simp
+      ring
+    rw [hc]
+    calc δ / (1 + δ) * ‖A‖ ≤ δ / (1 + δ) * (1 + δ) := by gcongr
+      _ = δ := by field_simp
+  calc _ = ‖((((1 + δ)⁻¹ : ℝ) : ℂ) • A - A) + (A - B)‖ := by congr 1; abel
+    _ ≤ _ := norm_add_le _ _
+    _ ≤ 2 * δ := by linarith
+
+end Rescaling
+
+/-- A number `m ≥ 1` of stack registers achieving the target gate error `δ` for at most `r`
+effects per monomial and absolute coefficient sum `S`: `m = ⌈(r S / δ)^2⌉ + 1`.  It is chosen
+from the original coefficients, before the averages are expanded. -/
+def stackLength (r : ℕ) (S δ : ℝ) : ℕ := ⌈(r * S / δ) ^ 2⌉₊ + 1
+
+theorem stackLength_ne_zero (r : ℕ) (S δ : ℝ) : stackLength r S δ ≠ 0 := Nat.succ_ne_zero _
+
+theorem stackLength_spec (r : ℕ) {S δ : ℝ} (hS : 0 ≤ S) (hδ : 0 < δ) :
+    r / Real.sqrt (stackLength r S δ) * S ≤ δ := by
+  set N := stackLength r S δ
+  have hN : (0 : ℝ) < N := by exact_mod_cast Nat.pos_of_ne_zero (stackLength_ne_zero r S δ)
+  have hsq : 0 < Real.sqrt N := Real.sqrt_pos.2 hN
+  have hrS : 0 ≤ r * S / δ := by positivity
+  have hle : r * S / δ ≤ Real.sqrt N := by
+    rw [Real.le_sqrt hrS hN.le]
+    calc (r * S / δ) ^ 2 ≤ ⌈(r * S / δ) ^ 2⌉₊ := Nat.le_ceil _
+      _ ≤ N := by simp only [N, stackLength]; push_cast; linarith
+  rw [div_mul_eq_mul_div, div_le_iff₀ hsq]
+  calc (r : ℝ) * S = r * S / δ * δ := by field_simp
+    _ ≤ Real.sqrt N * δ := by gcongr
+    _ = δ * Real.sqrt N := mul_comm _ _
+
+/-- **Near-contractivity and rescaling of the replaced gate.** If `G` is a contraction, then
+`‖G̃_m‖ ≤ 1 + δ` and `(1 + δ)⁻¹ G̃_m` is within `2δ` of `G ⊗ |Γ_m⟩`, where
+`δ = (r / √m) ∑_ξ |c_ξ|`.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 199–228. -/
+theorem replaceGate_rescaled {X Y : HSpace} {m r : ℕ} (hm : m ≠ 0) (L : GateExpansion X Y)
+    (hL : ∀ p ∈ L, p.2.IsAllowed ∧ p.2.effectCount ≤ r) (hG : ‖gate L‖ ≤ 1) :
+    ‖replaceGate m L‖ ≤ 1 + r / Real.sqrt m * (L.map fun p => ‖p.1‖).sum ∧
+    ‖(((1 + r / Real.sqrt m * (L.map fun p => ‖p.1‖).sum)⁻¹ : ℝ) : ℂ) • replaceGate m L -
+        appendRight (inventoryVector m L) ∘L gate L‖ ≤
+      2 * (r / Real.sqrt m * (L.map fun p => ‖p.1‖).sum) := by
+  have hB : ‖appendRight (inventoryVector m L) ∘L gate L‖ ≤ 1 :=
+    norm_comp_le_one ((norm_appendRight_le _).trans
+      (norm_inventoryVector m L fun p hp => (hL p hp).1).le) hG
+  have h := norm_replaceGate_sub_le hm L hL
+  have hδ : 0 ≤ r / Real.sqrt m * (L.map fun p => ‖p.1‖).sum :=
+    mul_nonneg (by positivity) (List.sum_nonneg fun x hx => by
+      obtain ⟨p, _, rfl⟩ := List.mem_map.1 hx
+      exact norm_nonneg _)
+  exact ⟨norm_le_one_add_of_norm_sub_le hB h, norm_inv_one_add_smul_sub_le hδ hB h⟩
 
 end TNLean.PEPS.PairEffect
