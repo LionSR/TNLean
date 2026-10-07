@@ -32,10 +32,15 @@ import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
+import TNLean.PEPS.Approximation.SourceBlockMatrix
+import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceGateDensity
+import TNLean.PEPS.Approximation.SourcePairIndex
 import TNLean.PEPS.Approximation.SourcePairMaps
 import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
+import TNLean.PEPS.Approximation.SourceSlotBasis
+import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction

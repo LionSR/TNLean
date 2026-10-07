@@ -3433,6 +3433,25 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Operator norm in orthonormal coordinates — candidate (2026-10-07)
+
+- **Pattern:** Identify matrix multiplication in orthonormal coordinates with
+  the underlying continuous linear map, then use preservation of norms by the
+  coordinate isometries to transfer an operator-norm bound.
+- **Seen:** Two occurrences:
+  `PEPS/Approximation/PreparedMatrixNorm.lean`,
+  `Word.norm_preparedMatrix_le_one`, and
+  `PEPS/Approximation/SourceBlockMatrix.lean`,
+  the private `Word.norm_toMatrix_eval_le_one`.
+- **Abstraction:** If another independent use arises, first check Mathlib for
+  the corresponding orthonormal-coordinate norm identity, then supply a general
+  lemma if needed. No further copy is currently required: the proper-frame
+  bound uses the complete free-source matrix bound through a fixed map word.
+- **Notes:** The predecessor proof and its exact-source verification remain
+  unchanged. The focused scan of the five new modules and `PreparedMatrixNorm`
+  found these two occurrences and no pattern occurring three times. This entry
+  remains below the promotion threshold.
+
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
 - **Sites:** `ThetaBondCoordinates` and `ThetaBondOrthonormalCoordinates`.
