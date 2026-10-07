@@ -274,7 +274,9 @@ configurations. -/
 theorem permOp_eq_permMatrix (τ : Equiv.Perm (Fin n)) :
     permOp (d := d) τ = Equiv.Perm.permMatrix ℂ (τ.symm.arrowCongr (Equiv.refl (Fin d))) := by
   ext x y
-  simp [permOp, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, eq_comm]
+  simp only [permOp, Equiv.Perm.permMatrix, Equiv.toPEquiv_apply, PEquiv.toMatrix_apply,
+    Option.mem_def, Option.some.injEq, of_apply]
+  exact if_congr eq_comm rfl rfl
 
 theorem permOp_mem_unitary (τ : Equiv.Perm (Fin n)) :
     permOp (d := d) τ ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
