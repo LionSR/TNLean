@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Periodic norm as transfer trace — promoted (2026-10-06)
+
+- **Pattern:** Apply the physical expectation trace identity to the identity
+  observable and simplify its action to obtain the periodic squared norm.
+- **Seen:** The canonical norm limit and two finite full-ring proofs repeated
+  the same calculation, in addition to the existing `WindowClustering` lemma.
+- **Abstraction:** The existing public
+  `MPSTensor.inner_mpvState_self_eq_trace` is moved unchanged to its lower owner
+  `WindowCorrelator`; no alias or second declaration is added.
+- **Refactor:** All three new callers use the existing identity. The clustering
+  owner still imports it transitively through `WindowOperatorSupport`.
+
+
 ### Canonical purity consequences — promoted (2026-10-05)
 
 - **Pattern:** From a faithful canonical stationary density and the simple
@@ -5512,3 +5525,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The scalar rate conversion likewise reuses
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
+
+### Finite periodic quotient error — candidate (2026-10-06)
+
+- **Pattern:** Bound a normalized periodic expectation by rewriting
+  `a / b - s = ((a - s) + s * (1 - b)) / b` and using `‖b‖ ≥ 1/2`.
+- **Seen:** The fixed-support quantitative expectation proof and its simpler
+  full-ring contracting case in `MPS/Symmetry/PeriodicStringBounds`.
+- **Abstraction:** None yet. The fixed-support proof bounds a centered
+  numerator, while the full-ring proof has target zero. Existing norm and
+  division inequalities keep both arguments short.
+- **Notes:** The two occurrences do not justify another exported quotient
+  wrapper; the underlying estimates stay with the actual periodic observables.
+
+### Complementary-slice reconstruction — candidate (2026-10-07)
+
+- **Pattern:** Choose one inside vector for each outside configuration and
+  reconstruct the global vector by composing with the regional configuration
+  equivalence. Applying a slice reduces to the equivalence's inverse law.
+- **Seen:** `range_dependentRegionOperatorLift` and the two summands in
+  `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/Cylinder`.
+- **Abstraction:** None yet; these three occurrences are in one file. Reuse the
+  existing configuration equivalence before introducing another reconstruction
+  map if a second file needs the same argument.
+- **Notes:** This argument permits an empty complementary configuration type;
+  it never cancels an identity extension or assumes that the outside factor is
+  nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
+  its default thresholds.

@@ -1,0 +1,1 @@
+No repeated tactic patterns found at the current thresholds.

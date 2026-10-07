@@ -1,0 +1,116 @@
+\subsection{Geometric finite-size estimates}
+
+\begin{theorem}[Contracting physical strings]
+    \label{thm:physical_string_geometric_decay}
+    \lean{MPSTensor.physicalStringOrderParam_le_geometric}
+    \leanok
+    \uses{def:physical_string_order_param, def:twisted_transfer_map}
+    Let $A,\Lambda,x,y,u$ be arbitrary and choose a real rate
+    $r>\rho(\E_u)$. There is a constant $C>0$ such that every
+    middle length $N\geq0$ satisfies $|S_N(x,y,u)|\leq Cr^N$.
+    When $r<1$, this gives the exponential decay asserted in
+    \cite[lines~241--243]{PerezGarcia2008StringOrder}.
+\end{theorem}
+\begin{proof}
+    Write $S_N=\ell(\E_u^N(Y))$, where
+    $Y=\E_y(\Id)$ and $\ell(X)=\tr(\Lambda\E_x(X))$.
+    Gelfand's formula gives $\|\E_u^N\|\leq Mr^N$ for a constant $M>0$.
+    Thus $|S_N|\leq\|\ell\|M\|Y\|r^N$, including $N=0$.
+\end{proof}
+
+Assume $D>0$, $\E_A(\Id)=\Id$, $\Lambda>0$,
+$\tr\Lambda=1$, and $\E_A^*(\Lambda)=\Lambda$. Suppose also that
+$\E_A$ is irreducible and peripheral-primitive. Put
+$P(X)=\tr(\Lambda X)\Id$.
+
+\begin{theorem}[Canonical geometric remainder]
+    \label{thm:canonical_string_geometric_remainder}
+    \lean{MPSTensor.canonical_transfer_pow_sub_stationary_le_geometric,
+        MPSTensor.canonical_trace_mul_transfer_pow_le_geometric}
+    \leanok
+    \uses{lem:canonical_fixed_space_irreducible}
+    There are $C>0$ and $0<r<1$ such that
+    $\|\E_A^N-P\|\leq Cr^N$ for every $N\geq1$.
+    The norm is the operator norm induced by the row-sum matrix norm.
+    The same rate satisfies the following assertion: for every linear
+    insertion $F$ there is $C_F>0$ such that every $N\geq1$ obeys
+    \begin{align}
+        \big|\operatorname{Tr}(F\E_A^N)-\tr(\Lambda F(\Id))\big|
+         & \leq C_F r^N.
+        \label{eq:string_geometric_trace}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Apply the complementary-remainder argument to the adjoint Kraus family.
+    It gives $\rho(\E_A-P)<1$. Unitality and stationarity give
+    $(\E_A-P)^N=\E_A^N-P$ at positive lengths, so Gelfand's formula
+    proves the operator estimate. Apply the bounded linear functional
+    $G\mapsto\operatorname{Tr}(FG)$ and use
+    $\operatorname{Tr}(FP)=\tr(\Lambda F(\Id))$ to obtain
+    (\ref{eq:string_geometric_trace}). No diagonalizability is needed.
+\end{proof}
+
+\begin{theorem}[Geometric physical endpoint error]
+    \label{thm:physical_string_geometric_phase_error}
+    \lean{MPSTensor.physicalStringOrderParam_phase_adjusted_le_geometric}
+    \leanok
+    \uses{thm:canonical_string_geometric_remainder,
+        thm:physical_string_phase_retaining_asymptotics}
+    Under the preceding canonical assumptions, let a unitary $V$ and
+    $|\mu|=1$ satisfy $\sum_j u_{ij}A_j=\mu V A_iV^\dagger$.
+    There is $0<r<1$ such that, for every pair of fixed physical endpoints
+    $x,y$, some $C_{x,y}>0$ bounds all positive middle lengths by
+    \begin{align}
+        \big|\mu^{-N}S_N(x,y,u)-\alpha_y\beta_x\big|
+                 & \leq C_{x,y}r^N,                  &
+        \alpha_y & =\tr(\Lambda V^\dagger\E_y(\Id)), &
+        \beta_x  & =\tr(\Lambda\E_x(V)).
+        \label{eq:string_geometric_phase_error}
+    \end{align}
+    This is the quantitative, phase-retaining form of
+    \cite[lines~249--255]{PerezGarcia2008StringOrder}.
+\end{theorem}
+\begin{proof}
+    The exact identity $\mu^{-N}\E_u^N(Y)=V\E_A^N(V^\dagger Y)$
+    expresses the error as
+    $\ell((\E_A^N-P)(V^\dagger\E_y(\Id)))$, with
+    $\ell(X)=\tr(\Lambda\E_x(VX))$. Apply
+    Theorem~\ref{thm:canonical_string_geometric_remainder}.
+\end{proof}
+
+\begin{theorem}[Normalized periodic finite-size error]
+    \label{thm:periodic_string_geometric_expectations}
+    \lean{MPSTensor.pureCanonical_periodic_expectations_le_geometric,
+        MPSTensor.pureCanonical_mpvExpectation_fullRing_le_geometric}
+    \leanok
+    \uses{thm:canonical_string_geometric_remainder,
+        thm:periodic_string_trace_ratio, thm:periodic_string_normalization}
+    Assume the faithful canonical purity hypotheses stated before
+    Theorem~\ref{thm:periodic_string_normalization}. There exist
+    $C_0>0$, $0<r<1$, and an integer $N_0\geq1$ such that, for
+    $L\geq N_0$, the periodic vector is nonzero, $|Z_L|\geq1/2$,
+    and $|Z_L-1|\leq C_0r^L$.
+    For each fixed support $k$ and physical matrix $O$ there is $C_O>0$
+    such that every exterior length $n\geq N_0$ satisfies
+    \begin{align}
+        \big|\langle O\otimes\Id^{\otimes n}\rangle_{k+n}
+        -\tr(\Lambda\E_O(\Id))\big|
+         & \leq C_O r^n.
+        \label{eq:periodic_string_geometric_error}
+    \end{align}
+    In addition, for every $q>\rho(\E_u)$ there are $C_u>0$ and
+    $L_0$ such that $|\langle u^{\otimes L}\rangle_L|\leq C_u q^L$
+    whenever $L\geq L_0$; it decays when $q<1$.
+    No prefactor uniform over growing supports is asserted.
+\end{theorem}
+\begin{proof}
+    Apply (\ref{eq:string_geometric_trace}) to the identity insertion
+    and to $F=\E_O$. Choose a tail on which $|Z_L|\geq1/2$.
+    For $s=\tr(\Lambda\E_O(\Id))$ and
+    $a_n=\operatorname{Tr}(\E_O\E_A^n)$, division gives
+    $|a_n/Z_{k+n}-s|\leq2(|a_n-s|+|s|\,|Z_{k+n}-1|)$.
+    Since $r^{k+n}\leq r^n$, this proves
+    (\ref{eq:periodic_string_geometric_error}). For the full ring, apply
+    Gelfand's bound to $\E_u^L$, take its trace, and divide by the same
+    denominator bounded away from zero.
+\end{proof}

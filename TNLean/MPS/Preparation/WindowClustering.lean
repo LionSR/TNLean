@@ -97,15 +97,6 @@ theorem inner_mpvState_chainWindowOperator_mul_offset (A : MPSTensor d D) {L : �
     pow_add]
   simp only [mul_assoc]
 
-/-- The squared norm of `φ_N` is `tr E_A^N` (arXiv:2307.01696, Supplemental Material, proof
-of Lemma 2, normalization of the correlator). -/
-theorem inner_mpvState_self_eq_trace (A : MPSTensor d D) (N : ℕ) :
-    ⟪mpvState A N, mpvState A N⟫_ℂ =
-      LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) (Kraus.transferMap A ^ N) := by
-  have h := inner_mpvState_toEuclideanLin A N 1
-  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply] at h
-  rwa [physicalObservableTransfer_one] at h
-
 /-! ### Bounds on normalized expectations -/
 
 /-- The normalized expectation of an operator is at most its operator norm. This bounds the
