@@ -18,3 +18,4 @@ import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
+import TNLean.PEPS.Approximation.TwoSheetExchange
