@@ -1,6 +1,6 @@
 # Physical template boundary slice (#8754)
 
-Draft #8832 is stacked on #8826 at acb16ed1, with #8788 162fa69a88d407d97c5ce2682c95d2f87542cf10 and
+Draft #8832 is stacked on #8826 at ad9db077e1a7acb105a4d00e0d9c1bccba3e4c1d, with #8788 162fa69a88d407d97c5ce2682c95d2f87542cf10 and
 #8790 cf6736f4 ancestry. The actual model sources are unchanged, and
 `Geometry.boundaryEndpoints` is imported from `CellCounting` without duplication.
 The model owner withdrew 6b053b8b because its generated imports contained
