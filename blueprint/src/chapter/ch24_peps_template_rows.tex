@@ -108,6 +108,7 @@
 
 \begin{lemma}[Supporting strips of allowed polygons]
     \label{lem:area_law_polygon_strips}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices,
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices,
@@ -116,11 +117,11 @@
     }
     \uses{def:area_law_template}
     Each actual polygon is the intersection of the supporting strips for
-    the four linear forms $x,y,x+y,x-y$. The eight bounds can be taken at
-    actual vertices. Equivalently, the polygon is the intersection of all
+    the four linear forms $x,y,x+y,x-y$. Equivalently, the polygon is the intersection of all
     closed supporting slabs with allowed normal directions.
 \end{lemma}
 \begin{proof}
+    \leanok
     Every supporting slab contains the convex hull. Conversely, the three
     oriented side functionals of a triangle give nonnegative barycentric
     coordinates after division by its nonzero signed determinant. Both signs
@@ -132,6 +133,7 @@
 
 \begin{lemma}[Rounded affine row profiles]
     \label{lem:area_law_affine_row_profiles}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds,
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile,
@@ -157,6 +159,7 @@
     a horizontal change of at most one.
 \end{lemma}
 \begin{proof}
+    \leanok
     Round each real lower strip bound upward and each upper bound downward.
     Integer row shifts commute with rounding. The lower endpoint is a
     maximum of three affine functions with slopes $0,-1,1$, and the upper
@@ -167,6 +170,7 @@
 
 \begin{lemma}[Single-piece ambient dilation layers]
     \label{lem:area_law_piece_depth_layers}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between,
         TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc,
@@ -189,6 +193,7 @@
     \]
 \end{lemma}
 \begin{proof}
+    \leanok
     Intersect the original sample with a vertical radius window. Its occupied
     columns are consecutive, so horizontal radius extension gives an interval.
     Compare adjacent windows by clamping an original row index to the smaller
@@ -202,6 +207,7 @@
 
 \begin{lemma}[Template depth layers with an explicit constant]
     \label{lem:area_law_template_depth_layers}
+    \leanok
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le}
     \uses{def:area_law_template,lem:area_law_piece_depth_layers,
         lem:area_law_dilation_rows_union}
@@ -211,6 +217,7 @@
     \]
 \end{lemma}
 \begin{proof}
+    \leanok
     Apply union-layer subadditivity to the pieces and then the scale bound:
     \[
         |T_j\setminus T_{j-1}|
@@ -220,6 +227,5 @@
     Overlap, empty pieces, and disconnected unions require no extra condition.
 \end{proof}
 
-The new supporting-strip, row-regularity, and depth-layer proofs are candidate
-implementations awaiting Lean validation in this draft. Their blueprint entries
-are not marked complete. No entropy or physical area-law conclusion is claimed.
+These geometric estimates do not establish the entropy or physical area-law
+conclusions.
