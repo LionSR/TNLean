@@ -1,23 +1,21 @@
-# Actual belt-cell marks: verification pending
+# The actual marked points of belt cells
 
-The six proposed declarations in `BeltMarks.lean` define the nine actual
-marked points of a dyadic belt cell and their deduplicated finite union over
-a collection of belt cells. The points are the image of `Fin 3 × Fin 3`
-under coordinate offsets zero, one half and one: the center, four corners
-and four side midpoints. They lie in the closed cell.
+Six original declarations in `BeltMarks.lean` define the nine actual marks
+of a dyadic cell and their deduplicated finite union over a finite family of
+cells at one scale. The coordinate offsets zero, one half and one give the
+center, four corners and four side midpoints. All nine points belong to the
+closed cell and are distinct, since its side is positive.
 
-The intended results prove that one cell has exactly nine distinct marks
-and that the cardinality of the union is at most nine times the number of
-cells. Combining this count with the established sparse-belt estimate
-selects actual coordinate residues with
+For every finite cell-index set F, including the empty set, the number of
+marks in the union is at most nine times the number of cells. The established
+sparse-belt estimate therefore supplies actual coordinate residues with
 
 \[
-|\mathcal M_k|\le576(2C_0+1)^2\,|\partial_\Lambda A|\,2^{-\delta_0k/2}.
+|\mathcal M_k|\le576(2C_0+1)^2\,|\partial_\Lambda A|\,2^{-\delta_0 k/2}.
 \]
 
-The coefficient is exactly 9 × 64. These are proposed mathematical
-statements until exact committed-source verification is recorded. No build,
-axiom-audit result or elapsed time is fabricated in this pending template.
+The coefficient is exactly 9 × 64. The bound is uniform in the finite
+domain, cut, origin and nonnegative scale, including empty cuts and layers.
 
 ## Source, attribution and scope
 
@@ -27,20 +25,23 @@ September 24, 2026, Section 11, at
 `preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex`.
 
 The nine marks and deduplication are in lines 325–330 in the proof of
-`prop:two-families`, immediately before `geometry:initial-stars`. The final
-sparse-shift composition also uses `geometry:belt-count`, lines 220–228.
-The proof text is independently written; no upstream Lean source or proof
-text is reused. OpenAI Codex (GPT-6) assists LionSR under the existing
+`prop:two-families`, immediately before `geometry:initial-stars`. The sparse
+composition also uses `geometry:belt-count`, lines 220–228. The proof text is
+independently written; no upstream Lean source or proof text is reused.
+OpenAI Codex (GPT-6) assists LionSR under the existing
 [TNLean #8758 claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6043892601).
 
-This contribution concerns actual mark locations and finite counting. It does
-not assign the smallest incident cell scale to each deduplicated mark, prove
-isolated stars, separation or completeness of the contact marks, or construct
-repairs. Minimum incident-scale assignment, contacts, repairs, descendant
-counts, birth separation from earlier actual regions, the complete two-family
-partition and both manuscript headline theorems remain open.
+This contribution concerns actual locations and finite counting at one scale.
+Minimum incident-scale assignment across layers, contact completeness,
+isolated stars, mark separation, repairs, descendant counts, birth separation
+from earlier actual regions, the complete two-family partition and both
+manuscript headline theorems remain open. Independent review approved the
+mathematical scope of the two definitions and four theorems.
 
-## Proposed exact inventory
+## Exact source and canonical evidence
+
+Exact verified source: `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b`.
+The six audited declarations are:
 
 - `TNLean.PEPS.AreaLaw.Geometry.beltCellMarks`;
 - `TNLean.PEPS.AreaLaw.Geometry.beltMarks`;
@@ -49,45 +50,54 @@ partition and both manuscript headline theorems remain open.
 - `TNLean.PEPS.AreaLaw.Geometry.card_beltMarks_le`;
 - `TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_marks_shift`.
 
-The shard is `docs/provenance/openai-math.d/8758-belt-marks.json`. All six
-entries remain planned, with proposed names and pending verification.
-The prior 209 entries and all of their source and evidence must remain
-unchanged. The final immutable baseline is captured after the completed
-primary-count evidence is committed and incorporated into this branch.
-
-## Canonical evidence to be recorded
-
-Exact frozen source revision: **Pending**.
-Published pull request and evidence head: **Pending**.
-
-| Check | Expected command | Result | Elapsed seconds |
+| Check | Actual command | Exit code | Elapsed seconds |
 |---|---|---|---|
-| Changed Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending |
-| Imported six-name audit | `lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean` | Pending | Pending |
+| Changed Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | 0 | 15.964 |
+| Imported six-name audit | `lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean` | 0 | 4.331 |
 
-The actual commands must run through the own-worktree
-`scripts/lake_build_locked.sh` under the shared repository lock, reusing the
-warmed cache and pinned prebuilt Mathlib artifacts. The source-only
-preparation worktree has no Lake cache and performs no cache or build operation.
-Its source was elaborated non-mutatingly from the existing warmed worktree.
+The new `BeltMarks` module compiled in 10 seconds and the Geometry aggregator
+in 2.8 seconds, without warnings. Every one of the six exact imported names
+reports only `propext`, `Classical.choice` and `Quot.sound`. No placeholder,
+additional axiom or prohibited proof mechanism is reported.
 
-The final record identifies actual commands, frozen source, times, exit
-codes, module diagnostics and SHA256 hashes of
-`8758-belt-marks-build.log` and `8758-belt-marks-axioms.log`. Any normalization
-of captured whitespace must be described. The exact audit prints every
-selected imported public name; its actual dependencies are recorded only
-after the audit runs. Promotion updates only the six new rows after these
-checks and a complete 215-entry provenance/source/license/notice validation
-pass. The previous 209 entries and evidence remain byte-identical.
+The commands ran consecutively through the own-worktree
+`scripts/lake_build_locked.sh --` under the shared repository lock, reusing
+the warmed cache and pinned prebuilt Mathlib artifacts. The driver completed
+and released the lock. No local full-library or Mathlib source build was
+repeated. The source-only preparation worktree had no `.lake` directory and
+performed no cache or build operation. Its source passed non-mutating
+elaboration with all package options from the warmed worktree.
 
-Independent mathematical and source review: **Passed** for all six declarations.
-Strict non-mutating elaboration with all package options: **Passed**, without warnings.
-Blueprint source synchronization: **Pending**.
-Generated imports and formatter idempotence: **Passed**; 75 aggregators cover 2,834 production modules.
-Full-library CI, compiled blueprint declarations and rendering: **Pending**.
+Evidence log paths and SHA256 hashes:
 
-The parent work recorded a whole-library local declaration-check failure
-caused by a missing pre-existing `Fibonacci.olean` artifact. Its historical
-failure log remains intact. A repeated local whole-library check is not
-required for this planned changed-leaf verification; complete compiled
-blueprint checking and rendering are tracked separately in CI.
+- `8758-belt-marks-build.log`: `c37744f6852ab8e1708887b9ef8df195f276e679516021794f1a50eb7436b77b`;
+- `8758-belt-marks-axioms.log`: `1d7a7c77eeea8fd30e0d2ce99468afa25825adeecd686b6d3f09d3fca472c012`.
+
+Each log records its actual command, frozen source revision, elapsed time
+and exit code. Captured output has trailing whitespace removed; build
+diagnostics and the actual quoted axiom results are preserved.
+
+## Provenance and integration
+
+The complete 215-entry current-policy provenance/source/license/notice
+validation passes, including exact module and audit bytes at the frozen
+source, command headers, log hashes and the six quoted imported names.
+Promotion changes precisely the six new entries in
+`docs/provenance/openai-math.d/8758-belt-marks.json`; all prior 209 entries,
+proof sources and evidence remain unchanged. The prior-byte baseline is
+captured from the completed primary-count publication
+`61fd819e7fe4689b8e0893affc9f127238b191ec`.
+
+Complete blueprint source synchronization and reverse coverage passed with
+20,169 distinct public references and 20,163 theorem-like entries. No missing
+or duplicate references were reported. All six new declaration tags match
+the independently reviewed statements. Formatter idempotence, reader-facing
+prose and generated imports were checked. The Geometry proof-pattern scan
+found no repeated block.
+
+The earlier local whole-library declaration check failed because of the
+missing pre-existing `Fibonacci.olean` artifact. Its historical failure log
+remains unchanged; that unrelated check was not repeated locally for this
+changed module. Full-library CI, compiled blueprint declaration checking and
+rendering remain pending. Source synchronization and the successful imported
+audit are distinguished from those full-library checks.

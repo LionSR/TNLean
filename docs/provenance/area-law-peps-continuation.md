@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 18:07 UTC.
+Last coordination check: October 7, 2026, 18:17 UTC.
 
 ## Verified mathematical contributions
 
@@ -12,17 +12,19 @@ Last coordination check: October 7, 2026, 18:07 UTC.
 | Polynomial absorption and the numerical series bound | [#8848](https://github.com/LionSR/TNLean/pull/8848) | `5652d02446787ee2b9248db1057df48adbe32492` | `ed84770bf703478d69e4c8625d005c645d1a2529` |
 | Primary birth regions, rectangular fragments and adjacent meshes | [#8851](https://github.com/LionSR/TNLean/pull/8851) | `d469be1a0a7799f4613e64e8139893b0fa2ee11d` | `fd8bf12587482c1db66c8c626a9df57cc4db025f` |
 | Number of actual primary identifiers | [#8856](https://github.com/LionSR/TNLean/pull/8856) | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | `61fd819e7fe4689b8e0893affc9f127238b191ec` |
+| Actual nine-point belt marks and their sparse count | Publication accompanies this record | `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b` | Evidence commit containing this record |
 
-All 48 exact imported declarations in these five contributions have passing
+All 54 exact imported declarations in these six contributions have passing
 canonical build and standard-axiom evidence. Complete provenance validation
-passes 209 entries. The four counting rows alone were promoted in the latest
-contribution; all previous 205 records and their evidence remain unchanged.
+passes 215 entries. The six belt-mark rows alone were promoted in the latest
+contribution; all previous 209 records and their evidence remain unchanged.
 Commands, logs, hashes and mathematical scope are recorded in
 [fine belts](evidence/8758-fine-belts.md),
 [scale separation](evidence/8758-scale-separation.md),
 [polynomial sums](evidence/8758-polynomial-budget.md),
 [primary regions](evidence/8758-primary-regions.md), and
-[primary counts](evidence/8758-primary-count.md).
+[primary counts](evidence/8758-primary-count.md), and
+[belt marks](evidence/8758-belt-marks.md).
 These proofs must not be rebuilt merely because work resumes.
 
 The first three drafts have passing full Lean builds, compiled blueprint
@@ -82,8 +84,10 @@ count, then deduplicates the finite union over actual belt cells. The intended
 uniform bound is at most nine times the belt-cell count and hence at most
 `576(2C₀+1)^2|boundary edges|2^(-δ₀k/2)` for a selected sparse shift.
 The six declarations have passed direct package-option elaboration without
-warnings and independent mathematical review. Their canonical evidence remains
-pending; the six new provenance rows remain planned in the 215-entry collection.
+warnings and independent mathematical review. Canonical Geometry compilation
+passed in 15.964 seconds and the six-name imported audit in 4.331 seconds, at
+the exact source in the table. Only the three standard logical axioms occur.
+Their six provenance rows now have completed evidence in the 215-entry collection.
 Source: Section 11, lines 325–330 of the pinned manuscript. The proof author
 owns only the new Lean file; separate reviewers handle source and provenance.
 The root agent owns imports, blueprint, canonical verification and publication.
@@ -98,23 +102,32 @@ not count actual repairs. Both source-faithful headline theorems remain unproved
 
 ## Worktrees and evidence preservation
 
-- `worktrees/area-law-peps-models` holds `feat/area-law-primary-count`. Its
-  canonical counting driver has finished and released the shared lock. The
+- `worktrees/area-law-peps-models` holds `feat/area-law-belt-marks`. Its
+  canonical mark driver has finished and released the shared lock. The
   existing warmed cache and all package pins remain unchanged.
-- `worktrees/area-law-source-preparation` holds `feat/area-law-belt-marks`,
-  initially based on the frozen counting source. It has no `.lake` directory.
-  Merge the completed counting evidence before freezing the marks, then move
+- `worktrees/area-law-source-preparation` holds `feat/area-law-quarter-mesh`,
+  initially based on the frozen mark source. It has no `.lake` directory.
+  Merge completed mark evidence before freezing the mesh proofs, then move
   the branch to the existing warmed worktree for one targeted canonical check.
 - The prior canonical checks and logs must not be repeated. Never clear or
   reseed this warmed cache merely to prepare another auxiliary contribution.
 - The hot-main worktree belongs to the coordinating owner. Do not reset an
   active peer worktree, interrupt its build or change dependency pins.
 
-The next local action is to freeze the reviewed belt-mark source and perform
-one targeted Geometry build and exact imported six-name audit in the warmed
-worktree. The completed counting evidence and draft #8856 are published.
-promote only the new rows when actual checks pass. Complete compiled blueprint
-checking is supplied by full CI, preserving the known local artifact limitation.
+The next local action is to publish the completed belt-mark evidence and draft,
+then complete the [quarter-mesh claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044056435)
+on `feat/area-law-quarter-mesh`. Its new `MeshGeometry.lean` concerns a translated
+mesh, separation of distinct points, clearance from a nonincident affine line
+of an allowed slope, and membership of the actual belt marks at neighboring
+scales. The author owns only this new Lean file; independent reviewers inspect
+the source and prepare provenance, while the root agent owns blueprint and
+canonical verification. The four proposed public names are `affineMesh`,
+`beltMarks_subset_affineMesh`, `affineMesh_dist_ge` and `affineMesh_line_dist_ge`.
+Source: Section 11, lines 352–359. This numerical contribution does not claim
+the full isolated-star statement or the construction of active interfaces.
+
+Promote only these new rows after actual checks pass. Complete compiled
+blueprint checking is supplied by full CI, preserving the local artifact limitation.
 
 At the latest coordination check, the boundary comparisons were ready in
 [#8849](https://github.com/LionSR/TNLean/pull/8849); the analytic owner published

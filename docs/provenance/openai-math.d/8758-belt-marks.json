@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.beltcellmarks",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltCellMarks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -34,20 +34,38 @@
         "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0b1556b85180ed55e2a1db6ada9f44cc24a8df2b",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-build.log",
+            "sha256": "c37744f6852ab8e1708887b9ef8df195f276e679516021794f1a50eb7436b77b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-axioms.log",
+            "sha256": "1d7a7c77eeea8fd30e0d2ce99468afa25825adeecd686b6d3f09d3fca472c012"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.beltmarks",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltMarks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -67,20 +85,38 @@
         "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0b1556b85180ed55e2a1db6ada9f44cc24a8df2b",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-build.log",
+            "sha256": "c37744f6852ab8e1708887b9ef8df195f276e679516021794f1a50eb7436b77b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-axioms.log",
+            "sha256": "1d7a7c77eeea8fd30e0d2ce99468afa25825adeecd686b6d3f09d3fca472c012"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.beltcellmarks_subset_closure_dyadiccell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltCellMarks_subset_closure_dyadicCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -100,20 +136,38 @@
         "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0b1556b85180ed55e2a1db6ada9f44cc24a8df2b",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-build.log",
+            "sha256": "c37744f6852ab8e1708887b9ef8df195f276e679516021794f1a50eb7436b77b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-axioms.log",
+            "sha256": "1d7a7c77eeea8fd30e0d2ce99468afa25825adeecd686b6d3f09d3fca472c012"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_beltcellmarks",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_beltCellMarks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -133,20 +187,38 @@
         "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0b1556b85180ed55e2a1db6ada9f44cc24a8df2b",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-build.log",
+            "sha256": "c37744f6852ab8e1708887b9ef8df195f276e679516021794f1a50eb7436b77b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-axioms.log",
+            "sha256": "1d7a7c77eeea8fd30e0d2ce99468afa25825adeecd686b6d3f09d3fca472c012"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_beltmarks_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_beltMarks_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -166,20 +238,38 @@
         "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0b1556b85180ed55e2a1db6ada9f44cc24a8df2b",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-build.log",
+            "sha256": "c37744f6852ab8e1708887b9ef8df195f276e679516021794f1a50eb7436b77b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-axioms.log",
+            "sha256": "1d7a7c77eeea8fd30e0d2ce99468afa25825adeecd686b6d3f09d3fca472c012"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_sparse_dyadic_belt_marks_shift",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_marks_shift",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -200,7 +290,25 @@
         "Source: Section 11, nine actual marks and deduplication in lines 325\u2013330, composed with geometry:belt-count lines 220\u2013228. This contribution does not assign minimum incident scales or establish isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "0b1556b85180ed55e2a1db6ada9f44cc24a8df2b",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-build.log",
+            "sha256": "c37744f6852ab8e1708887b9ef8df195f276e679516021794f1a50eb7436b77b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-belt-marks-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-belt-marks-axioms.log",
+            "sha256": "1d7a7c77eeea8fd30e0d2ce99468afa25825adeecd686b6d3f09d3fca472c012"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
