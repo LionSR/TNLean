@@ -21,7 +21,8 @@ gapped ground vector is a product vector across the cut
 (`exists_eq_mul_of_gap`), whose reduced state has zero entropy.
 
 The same argument covers the degenerate cases of Section 2: range `R = 0`
-(every support is a single site, so every cut splits the Hamiltonian), the
+(every support is a single site, so no cut divides a support and
+`H = H_A ⊗ 1 + 1 ⊗ H_{Aᶜ}` for every cut), the
 empty and full regions, and every union of connected components of a
 disconnected domain. For `q = 1` or an empty domain every regional entropy
 vanishes for every unit vector.
