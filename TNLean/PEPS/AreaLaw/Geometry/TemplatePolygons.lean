@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Geometry.Templates
 import Mathlib.Analysis.Convex.Combination
 import Mathlib.Data.Fin.VecNotation
 import Mathlib.Data.Finset.Max
+import Mathlib.Tactic.Linarith
 
 /-!
 # Supporting slabs of allowed template polygons
@@ -60,7 +61,7 @@ private theorem ratio_nonneg_of_between {x d : ℝ}
     exact div_nonneg h.1 hd
   · have hd' : d ≤ 0 := le_of_not_ge hd
     rw [min_eq_right hd', max_eq_left hd'] at h
-    exact div_nonneg_of_nonpos_of_nonpos h.2 hd'
+    exact div_nonneg_of_nonpos h.2 hd'
 
 private theorem side_bounds {S : Set (ℝ × ℝ)} {p a b : ℝ × ℝ}
     (h : ∀ u : ℝ × ℝ, IsAllowedSlope u → ∀ l r : ℝ,
@@ -180,8 +181,9 @@ private theorem cross_ne_zero_of_orthogonal {u v : ℝ × ℝ}
     ring
   intro hzero
   rw [hzero, huv] at hid
-  norm_num at hid
-  linarith
+  have hid' : 0 = planeDot u u * planeDot v v := by
+    simpa only [zero_pow, zero_add] using hid
+  exact (ne_of_gt hpos) hid'.symm
 
 private theorem basis_reconstruct (a u v p : ℝ × ℝ) (hd : planeCross u v ≠ 0) :
     a + (planeCross (p - a) v / planeCross u v) • u +
@@ -313,7 +315,8 @@ theorem TemplatePolygon.exists_four_strip_bounds (P : TemplatePolygon) :
     ∃ lx ux ly uy ls us ld ud : ℝ, ∀ p : ℝ × ℝ,
       p ∈ P.region ↔ (lx ≤ p.1 ∧ p.1 ≤ ux) ∧ (ly ≤ p.2 ∧ p.2 ≤ uy) ∧
         (ls ≤ p.1 + p.2 ∧ p.1 + p.2 ≤ us) ∧ (ld ≤ p.1 - p.2 ∧ p.1 - p.2 ≤ ud) := by
-  have hf : P.vertices.Finite := by cases P <;> exact Set.toFinite _
+  have hf : P.vertices.Finite := by
+    cases P <;> simp only [TemplatePolygon.vertices] <;> exact Set.toFinite _
   have hn : P.vertices.Nonempty := by cases P <;> exact Set.insert_nonempty _ _
   obtain ⟨lx, ux, hlx, hux, hx⟩ := finite_form_bounds hf hn (fun q ↦ q.1)
   obtain ⟨ly, uy, hly, huy, hy⟩ := finite_form_bounds hf hn (fun q ↦ q.2)
