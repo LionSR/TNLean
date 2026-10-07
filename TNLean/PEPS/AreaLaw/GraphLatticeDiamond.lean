@@ -33,7 +33,7 @@ integer intervals and finite-set counting; no upstream Lean proof text is copied
 open scoped BigOperators
 
 /-!
-## Declaration provenance for issue #8745
+## Declaration provenance
 
 Provenance-ID: 8745-tnlean.peps.arealaw.latticediamond
 Downstream declaration: TNLean.PEPS.AreaLaw.latticeDiamond

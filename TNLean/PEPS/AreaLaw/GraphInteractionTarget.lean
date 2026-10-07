@@ -23,7 +23,7 @@ September 24, 2026, Lemma 4.1, lines 96–113 in `03-quasilocal.tex`, at immutab
 open scoped BigOperators
 
 /-!
-## Declaration provenance for issue #8745
+## Declaration provenance
 
 Provenance-ID: 8745-tnlean.peps.arealaw.interactionchaintargetweightsum
 Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum

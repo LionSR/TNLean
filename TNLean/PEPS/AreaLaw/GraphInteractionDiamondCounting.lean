@@ -31,7 +31,7 @@ The proofs are independently written; no upstream Lean proof text is copied or a
 open scoped BigOperators
 
 /-!
-## Declaration provenance for issue #8745
+## Declaration provenance
 
 Provenance-ID: 8745-tnlean.peps.arealaw.card_support_le_diamond
 Downstream declaration: TNLean.PEPS.AreaLaw.card_support_le_diamond

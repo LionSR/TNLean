@@ -35,7 +35,7 @@ All declarations are independently written from the mathematical argument in Ope
 -/
 
 /-!
-## Declaration provenance for issue #8745
+## Declaration provenance
 
 Provenance-ID: 8745-tnlean.peps.arealaw.latticel1distance
 Downstream declaration: TNLean.PEPS.AreaLaw.latticeL1Distance

@@ -25,7 +25,7 @@ September 24, 2026, Lemma 4.1, `03-quasilocal.tex`, lines 96–113, at source co
 open scoped BigOperators
 
 /-!
-## Declaration provenance for issue #8745
+## Declaration provenance
 
 Provenance-ID: 8745-tnlean.peps.arealaw.interactionchaintargetweightsum_le_exponential
 Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential

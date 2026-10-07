@@ -35,7 +35,7 @@ no Lean declaration or proof is copied or adapted from OpenAI's implementation.
 -/
 
 /-!
-## Declaration provenance for issue #8745
+## Declaration provenance
 
 Provenance-ID: 8745-tnlean.peps.arealaw.exists_walk_length_le_sum_of_ischain
 Downstream declaration: TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain

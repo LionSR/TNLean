@@ -33,7 +33,7 @@ No spectral-gap, entropy, or connectedness assumption is used.
 open scoped BigOperators
 
 /-!
-## Declaration provenance for issue #8745
+## Declaration provenance
 
 Provenance-ID: 8745-tnlean.peps.arealaw.card_supportfamily_le_pow_card_erase
 Downstream declaration: TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase
