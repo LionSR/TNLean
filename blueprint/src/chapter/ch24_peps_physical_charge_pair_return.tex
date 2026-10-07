@@ -1,0 +1,72 @@
+
+\begin{theorem}[Support of the original product site map]
+    \label{thm:peps_original_region_projector_absorption}
+    \lean{TNLean.PEPS.regionPhysicalProductMatrix_mul_regularLocalProjector}
+    \leanok
+    For original regular $G$-injective site tensors on a finite region, let
+    $A$ be their product physical map and $P$ the product of their local
+    averaging projectors. Then $AP=A$.
+    This is the local-invariance identity used in
+    \cite{Schuch2010PEPS}, source lines 1765--1820.
+\end{theorem}
+\begin{proof}\leanok
+    Each original site map absorbs its local averaging projector.
+    Multiplication of the product maps gives the regional identity.
+\end{proof}
+
+\begin{theorem}[Return measurement on the original physical block]
+    \label{thm:peps_original_charge_pair_return_measurement}
+    \lean{TNLean.PEPS.exists_regularPhysicalChargePairReturnMeasurement}
+    \leanok
+    \uses{thm:peps_reference_return_actual_column,
+      thm:peps_original_region_projector_absorption,
+      thm:peps_scaled_projection_transport}
+    Let $R$ be a finite region with a chosen spanning tree and root and two
+    distinct internal bonds $e_0,e_1$. Assume that every original site map
+    is regularly $G$-isometric. Fix a unitary irreducible character $\chi$
+    of dimension $d$ and $p\in G$.
+    There is a complete positive binary projection measurement $(Q_0,Q_1)$
+    on the original spins, chosen before $k\in G$ and every actual boundary
+    label $\theta$, with the following action. Let $\psi_{k,\theta}$ be the
+    literal original open contraction with weight
+    $\chi(p\eta_{e_1}^{-1}k^{-1}\eta_{e_0})$, and let
+    $\psi_{1,\theta}$ be the initial correlated column. Then
+    \begin{align}
+        Q_1\psi_{k,\theta}&=\frac{\chi(k^{-1})}{d}\psi_{1,\theta},\notag\\
+        Q_0\psi_{k,\theta}&=\psi_{k,\theta}
+          -\frac{\chi(k^{-1})}{d}\psi_{1,\theta}.\notag
+    \end{align}
+    No decomposition of a global physical state is assumed. This is an
+    auxiliary finite-region return operation for
+    \cite[Section~6.6]{Schuch2010PEPS}, source lines 2582--2615.
+\end{theorem}
+\begin{proof}\leanok
+    The local $G$-isometries give $A^\dagger A=cP$ with $c>0$, while
+    regular invariance gives $AP=A$. The actual extended reference return
+    projector is Hermitian and idempotent and commutes with $P$.
+    Its transport $c^{-1}ADA^\dagger$ and the physical complement are a
+    complete binary measurement. Apply its intertwining identity to the
+    already derived canonical correlated column, then recover the literal
+    original weighted contraction.
+\end{proof}
+
+\begin{theorem}[Return measurement on six translated torus spins]
+    \label{thm:peps_torus_six_spin_return_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalChargePairReturnMeasurement}
+    \leanok
+    \uses{thm:peps_original_charge_pair_return_measurement,
+      thm:peps_torus_physical_charge_pair_creation}
+    On the actual translated two-column, three-row torus patch, the preceding
+    measurement acts on the six original spins. The reference bonds, spanning
+    tree and root are derived from the native geometry. The same measurement
+    precedes every $k$ and $\theta$, including patches crossing either seam.
+    The horizontal period is at least three and the vertical period at least
+    four. This proves the local return operation on the literal correlated
+    bond sum; identifying a complete prescribed geometric braid with that
+    input remains separate. See \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the finite-region theorem to the actual six-site path tree and its
+    two distinct horizontal chords. Native coordinate sorting retains the
+    original boundary labels through both seams.
+\end{proof}

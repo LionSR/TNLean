@@ -7,6 +7,7 @@ import TNLean.PEPS.RegularProjectorChargePairCoordinates
 import TNLean.PEPS.RegularChargeReferencePreparation
 import TNLean.PEPS.RegularCycleControlledSupport
 import QICLean.Algebra.MatrixReindexUnitary
+import TNLean.PEPS.RegularPhysicalChargeMotion
 
 /-!
 # Charge-pair preparation in the actual internal references of a regular block
@@ -239,5 +240,200 @@ theorem regularRegionChargeReferenceMatrix_mulVec
   have h := congrFun hact (S (E α)).1
   simpa only [Matrix.mulVec, dotProduct, mul_one] using
     congrArg (fun t : ℂ => t * F (S (E α)).2) h
+
+/-- Extending a reference operation respects the adjoint.
+Source: SCP10, accessible-register return measurement, lines 2582–2615. -/
+theorem regularRegionChargeReferenceMatrix_conjTranspose
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
+    (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁)
+    (Q : Matrix (G × G) (G × G) ℂ) :
+    (regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q).conjTranspose =
+      regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q.conjTranspose := by
+  classical
+  simp only [regularRegionChargeReferenceMatrix, coordinatePreparation,
+    Matrix.conjTranspose_submatrix, Matrix.kronecker, Matrix.conjTranspose_kronecker,
+    Matrix.conjTranspose_one]
+
+/-- Extending a reference operation respects composition.
+Source: SCP10, accessible-register return measurement, lines 2582–2615. -/
+theorem regularRegionChargeReferenceMatrix_mul
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
+    (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁)
+    (Q U : Matrix (G × G) (G × G) ℂ) :
+    regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne (Q * U) =
+      regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q *
+        regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne U := by
+  classical
+  let := Fintype.ofFinite (RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
+  let := Fintype.ofFinite (Rest (G := G) R T o e₀ e₁ hne)
+  unfold regularRegionChargeReferenceMatrix coordinatePreparation
+  simp only [Matrix.kronecker]
+  rw [Matrix.submatrix_mul_equiv _ _ _
+    (regularRegionCoordinatesEquiv R T hT htree o) _]
+  rw [Matrix.submatrix_mul_equiv _ _ _ (referenceSplit R T o e₀ e₁ hne) _]
+  rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+
+/-- A Hermitian reference operation remains Hermitian on the actual block.
+Source: SCP10, accessible-register return measurement, lines 2582–2615. -/
+theorem regularRegionChargeReferenceMatrix_isHermitian
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
+    (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁)
+    (Q : Matrix (G × G) (G × G) ℂ) (hQ : Q.IsHermitian) :
+    (regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q).IsHermitian := by
+  change _ = _
+  rw [regularRegionChargeReferenceMatrix_conjTranspose, hQ.eq]
+
+/-- An idempotent reference operation remains idempotent on the actual block.
+Source: SCP10, accessible-register return measurement, lines 2582–2615. -/
+theorem regularRegionChargeReferenceMatrix_mul_self
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
+    (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁)
+    (Q : Matrix (G × G) (G × G) ℂ) (hQ : Q * Q = Q) :
+    regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q *
+        regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q =
+      regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q := by
+  rw [← regularRegionChargeReferenceMatrix_mul, hQ]
+
+private theorem braided_column_coordinates
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
+    (e₀ e₁ : Internal (Γ := Γ) R) (χ : G → ℂ) (p k : G)
+    (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
+    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    regularProjectorWeightedTwistedRegionMatrix R (fun _ => 1)
+        (fun η => χ (p * (η ⟨e₁.1,Or.inl e₁.2.1⟩)⁻¹ * k⁻¹ *
+          η ⟨e₀.1,Or.inl e₀.2.1⟩))
+        ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
+      (Fintype.card G : ℂ)⁻¹ ^ R.card * ∑ x : G,
+        if c.1 = x • θ ∧ c.2.2.2 = 1 then
+          regularBraidedChargePairCoefficient χ p k x (c.2.1 e₀,c.2.1 e₁) else 0 := by
+  classical
+  rw [regularProjectorWeightedTwistedRegionMatrix_coordinates,
+    regularRegionTreeGauge_one]
+  have hb : regularRegionBoundaryTransport R (fun _ => (1 : G)) (fun _ => 1) θ = θ := by
+    funext e
+    simp [regularRegionBoundaryTransport]
+  simp only [hb, regularRegionTreeCycleResidual, regularRegionGaugeResidual,
+    regularRegionTreeGauge_one, inv_one, mul_one, mul_inv_cancel, Pi.one_def]
+  apply congrArg ((Fintype.card G : ℂ)⁻¹ ^ R.card * ·)
+  apply Finset.sum_congr rfl
+  intro x _
+  split_ifs
+  · simp only [regularRegionTreeReferenceLabels, dite_eq_left e₀.2.1,
+      dite_eq_left e₀.2.2, dite_eq_left e₁.2.1, dite_eq_left e₁.2.2,
+      one_mul, mul_inv_rev, inv_inv, regularBraidedChargePairCoefficient,
+      mul_assoc]
+  · rfl
+
+private theorem initial_weighted_column (e₀ e₁ : Internal (Γ := Γ) R)
+    (χ : G → ℂ) (p : G) (α : RegionHalfEdgeConfig (Γ := Γ) G R)
+    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    regularProjectorWeightedTwistedRegionMatrix R (fun _ => 1)
+        (fun η => χ (p * (η ⟨e₁.1,Or.inl e₁.2.1⟩)⁻¹ * (1 : G)⁻¹ *
+          η ⟨e₀.1,Or.inl e₀.2.1⟩)) α θ =
+      regularProjectorChargePairOpenRegionMatrix R e₀ e₁ χ p α θ := by
+  classical
+  unfold regularProjectorWeightedTwistedRegionMatrix
+    regularProjectorChargePairOpenRegionMatrix
+  apply Finset.sum_congr rfl
+  intro η _
+  split_ifs
+  · have hlabels (w : Vertex R) :
+        regularTwistedLabels (fun _ : Edge Γ => (1 : G)) w.1
+          (fun f => η ⟨f.1,isRegionIncidentEdge_of_regionVertex R w f⟩) =
+        (fun f => η ⟨f.1,isRegionIncidentEdge_of_regionVertex R w f⟩) := by
+      funext f
+      simp [regularTwistedLabels]
+    simp_rw [hlabels]
+    simp only [inv_one, mul_one]
+  · rfl
+
+/-- The return projection acts on the literal correlated weighted canonical
+column. The boundary and common-root sums are derived from the original
+contraction. Source: SCP10, interference calculation, lines 2582–2615. -/
+theorem regularRegionChargeReferenceMatrix_mulVec_braided
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [FiniteDimensional ℂ H] (σ : Representation ℂ G H) [σ.IsIrreducible]
+    (hσ : ∀ g, LinearMap.adjoint (σ g) = σ g⁻¹)
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
+    (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁) (p k : G)
+    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne
+        (regularChargePairReturnProjection σ.character p) *ᵥ
+        (fun α => regularProjectorWeightedTwistedRegionMatrix R (fun _ => 1)
+          (fun η => σ.character (p * (η ⟨e₁.1,Or.inl e₁.2.1⟩)⁻¹ * k⁻¹ *
+            η ⟨e₀.1,Or.inl e₀.2.1⟩)) α θ) =
+      (σ.character k⁻¹ / Module.finrank ℂ H) •
+        (fun α => regularProjectorChargePairOpenRegionMatrix R e₀ e₁
+          σ.character p α θ) := by
+  classical
+  let := Fintype.ofFinite (RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
+  let := Fintype.ofFinite (Rest (G := G) R T o e₀ e₁ hne)
+  let E := regularRegionCoordinatesEquiv (G := G) R T hT htree o
+  let S := referenceSplit (G := G) R T o e₀ e₁ hne
+  let D := regularChargePairReturnProjection σ.character p
+  let n : ℂ := (Fintype.card G : ℂ)⁻¹ ^ R.card
+  let B (b : Rest (G := G) R T o e₀ e₁ hne) (x : G) : Prop :=
+    b.1 = x • θ ∧ b.2.2.2 = 1
+  let col (l : G) (α : RegionHalfEdgeConfig (Γ := Γ) G R) : ℂ :=
+    regularProjectorWeightedTwistedRegionMatrix R (fun _ => 1)
+      (fun η => σ.character (p * (η ⟨e₁.1,Or.inl e₁.2.1⟩)⁻¹ * l⁻¹ *
+        η ⟨e₀.1,Or.inl e₀.2.1⟩)) α θ
+  have hcol (l : G) (s : G × G) (b : Rest (G := G) R T o e₀ e₁ hne) :
+      col l (E.symm (S.symm (s,b))) = n * ∑ x : G,
+        if B b x then regularBraidedChargePairCoefficient σ.character p l x s else 0 := by
+    have hp : ((S.symm (s,b)).2.1 e₀,(S.symm (s,b)).2.1 e₁) = s :=
+      congrArg Prod.fst (S.apply_symm_apply (s,b))
+    dsimp only [col]
+    rw [braided_column_coordinates R T hT htree o, hp]
+    rfl
+  have hinit (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
+      col 1 α = regularProjectorChargePairOpenRegionMatrix R e₀ e₁
+        σ.character p α θ := by
+    exact initial_weighted_column R e₀ e₁ σ.character p α θ
+  funext α
+  have hentry (s : G × G) (b : Rest (G := G) R T o e₀ e₁ hne) :
+      regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne D α
+        (E.symm (S.symm (s,b))) =
+      D (S (E α)).1 s * (if (S (E α)).2 = b then 1 else 0) := by
+    change (D.kronecker (1 : Matrix _ _ ℂ)) (S (E α))
+      (S (E (E.symm (S.symm (s,b))))) = _
+    rw [E.apply_symm_apply, S.apply_symm_apply]
+    rfl
+  change (regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne D *ᵥ col k) α =
+    (σ.character k⁻¹ / Module.finrank ℂ H) *
+    regularProjectorChargePairOpenRegionMatrix R e₀ e₁ σ.character p α θ
+  rw [← hinit, Matrix.mulVec, dotProduct, ← E.symm.sum_comp, ← S.symm.sum_comp,
+    Fintype.sum_prod_type]
+  simp_rw [hentry, hcol]
+  simp only [mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
+    Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
+  have hα : col 1 α = n * ∑ x : G, if B (S (E α)).2 x then
+      regularChargePairCoefficient σ.character p (S (E α)).1 else 0 := by
+    have h := hcol 1 (S (E α)).1 (S (E α)).2
+    rw [S.symm_apply_apply, E.symm_apply_apply] at h
+    simpa only [regularBraidedChargePairCoefficient, inv_one,
+      mul_one, mul_inv_cancel_right, regularChargePairCoefficient] using h
+  rw [hα]
+  simp only [Finset.mul_sum, mul_ite, mul_zero]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro x _
+  by_cases hb : B (S (E α)).2 x
+  · simp only [hb, ite_true]
+    have hm (s : G × G) : D (S (E α)).1 s *
+        (n * regularBraidedChargePairCoefficient σ.character p k x s) =
+      n * (D (S (E α)).1 s *
+        regularBraidedChargePairCoefficient σ.character p k x s) := by ring
+    simp_rw [hm]
+    rw [← Finset.mul_sum]
+    have h := congrFun
+      (regularChargePairReturnProjection_mulVec_braidedCoefficient σ hσ p k x)
+      (S (E α)).1
+    change (∑ s, D (S (E α)).1 s *
+      regularBraidedChargePairCoefficient σ.character p k x s) = _ at h
+    rw [h]
+    simp only [Pi.smul_apply, smul_eq_mul]
+    ring
+  · simp only [hb, ite_false, Finset.sum_const_zero]
 
 end TNLean.PEPS

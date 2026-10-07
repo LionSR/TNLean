@@ -24,6 +24,32 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### A positive binary measurement from an orthogonal projector — promoted (2026-10-03)
+
+- **Pattern:** Derive Hermiticity, positivity, idempotence, orthogonality and
+  completeness for a projector and its complement.
+- **Occurrences:** The return measurement in `PEPS/RegularChargePair.lean`,
+  the physical charge measurement in `PEPS/RegularTwoSitePhysicalChargeMeasurement.lean`,
+  and the physical transport in `Algebra/ScaledProjectionTransport.lean`.
+- **Abstraction:** `Matrix.binaryProjectionFamily_complete` in
+  `Algebra/BinaryProjectionFamily.lean`; all three calculations use this lemma.
+- **Related reuse:** `Matrix.scaledProjectionTransport_properties` replaces the
+  private transported-projection calculation in the two-site charge measurements.
+  It proves positivity and the coefficient-map intertwiner from the explicit
+  scaled Gram identity, support identity and commuting virtual projector.
+
+### Absorption of the regional regular projector — promoted (2026-10-03)
+
+- **Pattern:** Expand the product physical map, apply local absorption of the
+  regular averaging projector, and reassemble the product to obtain AP=A.
+- **Abstraction:** `regionPhysicalProductMatrix_mul_regularLocalProjector` in
+  `PEPS/RegularPhysicalUnitaryTransport.lean` states this regional identity once.
+- **Reuse:** The physical charge-pair image proof and original-spin return
+  measurement use it directly. The two-site local data calculation already uses
+  `regularSiteMap_projector_coefficients`, the same underlying local identity.
+  The return measurement also uses `Matrix.exists_binaryProjectionFamily_transport`
+  for the complete positive measurement on the full physical space.
+
 ### Periodic norm as transfer trace — promoted (2026-10-06)
 
 - **Pattern:** Apply the physical expectation trace identity to the identity

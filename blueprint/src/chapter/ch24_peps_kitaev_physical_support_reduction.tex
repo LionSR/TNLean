@@ -1,0 +1,102 @@
+\begin{definition}[Physical parity and color support coordinates]
+\label{def:peps_kitaev_physical_support}
+\lean{TNLean.PEPS.KitaevReducedSpins,
+TNLean.PEPS.kitaevPhysicalParity,
+TNLean.PEPS.kitaevPhysicalZeroEmbedding,
+TNLean.PEPS.kitaevReducedColorSpins,
+TNLean.PEPS.kitaevReducedColorMatrix,
+TNLean.PEPS.kitaevColorSupportEquiv,
+TNLean.PEPS.kitaevColorSupportIsometry}
+\leanok
+\uses{def:peps_kitaev_checkerboard_maps}
+For the binary tensor of \cite[Section~7]{Schuch2010PEPS}, let
+$F(p)=(p_0+p_1,p_1+p_2,p_2+p_3)$ and
+$K_3(s,p)=\delta_{s,F(p)}$. The physical parity permutation is
+$R(\sigma)=(\sigma_0,\sigma_1,\sigma_2,
+\sigma_0+\sigma_1+\sigma_2+\sigma_3)$, and $E_P$ includes three physical
+bits by appending zero. The color support coordinates are
+$p\mapsto(F(p),p_0)$, with inverse
+$(s,t)\mapsto(t,t+s_0,t+s_0+s_1,t+s_0+s_1+s_2)$.
+Define $J=2^{-1/2}K_3^\dagger$.
+\end{definition}
+
+\begin{theorem}[Derived physical and color support isometries]
+\label{thm:peps_kitaev_physical_support}
+\lean{TNLean.PEPS.kitaevPhysicalParity_permMatrix_mem_unitaryGroup,
+TNLean.PEPS.kitaevPhysicalZeroEmbedding_isIsometry,
+TNLean.PEPS.kitaevPhysicalParity_mul_colorMatrix,
+TNLean.PEPS.kitaevReducedColorMatrix_mul_conjTranspose,
+TNLean.PEPS.kitaevColorSupportIsometry_isIsometry}
+\leanok
+\uses{def:peps_kitaev_physical_support,def:peps_kitaev_checkerboard_maps}
+The permutation $R$ is a full physical unitary. Its action on the actual
+four-color tensor is $RK=E_PK_3$. Moreover,
+$K_3K_3^\dagger=2I$, and hence $J^\dagger J=I$.
+Both $E_P$ and $J$ are isometries. These formulas give explicit support
+coordinates for the physical implementation in the footnote to the blocking
+construction of \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}
+\leanok
+The parity permutation is involutive over the binary field, and
+$R(p_0+p_1,p_1+p_2,p_2+p_3,p_3+p_0)=(F(p),0)$.
+The color-coordinate bijection shows that every retained physical word has
+exactly two color preimages. Summing the actual coefficients therefore gives
+$K_3K_3^\dagger=2I$ and the stated normalization.
+\end{proof}
+
+\begin{definition}[Native physical and virtual support inclusions]
+\label{def:peps_kitaev_native_physical_support}
+\lean{TNLean.PEPS.kitaevNativePhysicalEquiv,
+TNLean.PEPS.kitaevNativePhysicalParity,
+TNLean.PEPS.kitaevNativePhysicalZeroEmbedding,
+TNLean.PEPS.kitaevNativeTransformedSupport}
+\leanok
+\uses{def:peps_kitaev_physical_support,def:peps_kitaev_native_boundary_cnot}
+Consider an actual translated four-site plaquette of a torus with both periods
+at least three, and prescribe its four tensor orientations as in the
+checkerboard blocking diagram. Read its original physical spins clockwise
+from the upper right. Let $R_v$ be the resulting physical parity unitary,
+$E_{P,v}$ the zero-parity physical inclusion, $C_v$ the native boundary CNOT,
+and $E_{V,v}$ the derived inclusion of the four retained boundary colors.
+Define $J_v=E_{V,v}J$.
+\end{definition}
+
+\begin{theorem}[Physical reduction of the actual native block]
+\label{thm:peps_kitaev_native_physical_support}
+\lean{TNLean.PEPS.kitaevNativePhysicalParity_permMatrix_mem_unitaryGroup,
+TNLean.PEPS.kitaevNativePhysicalZeroEmbedding_isIsometry,
+TNLean.PEPS.kitaevNativePhysicalParity_mul_checkerboard_boundaryCNOT,
+TNLean.PEPS.kitaevNativeTransformedSupport_isIsometry,
+TNLean.PEPS.kitaevNativePhysicalParity_mul_checkerboard_support,
+TNLean.PEPS.kitaevNativePhysicalParity_mul_checkerboard_supportFactorization,
+TNLean.PEPS.kitaevNativeCheckerboard_transformed_initialProjection,
+TNLean.PEPS.kitaevNativeCheckerboard_transformed_finalProjection}
+\leanok
+\uses{thm:peps_kitaev_physical_support,
+def:peps_kitaev_native_physical_support,thm:peps_kitaev_native_boundary_cnot}
+Let $A_v$ be the actual native open tensor map. The full original-spin unitary
+$R_v$ and the actual boundary CNOT satisfy
+\begin{align}
+ R_vA_vC_v&=E_{P,v}K_3E_{V,v}^\dagger,\label{eq:peps_kitaev_physical_reduction}\\
+ T_v:=2^{-1/2}R_vA_vC_v&=E_{P,v}J_v^\dagger.
+ \label{eq:peps_kitaev_support_factorization}
+\end{align}
+The inclusions $E_{P,v}$ and $J_v$ are isometric, and
+$T_vJ_v=E_{P,v}$,
+$T_v^\dagger T_v=J_vJ_v^\dagger$,
+$T_vT_v^\dagger=E_{P,v}E_{P,v}^\dagger$.
+This is a local physical implementation on the derived support of the actual
+block. It includes seam-crossing plaquettes, but does not assert a globally
+tiled renormalization or an alternating tensor field on an odd torus.
+\end{theorem}
+\begin{proof}
+\leanok
+Transport the physical parity permutation through the actual four-vertex
+bijection. The already derived native identity $A_vC_v=K_vE_{V,v}^\dagger$
+and $RK=E_PK_3$ give (\ref{eq:peps_kitaev_physical_reduction}).
+Since $J=2^{-1/2}K_3^\dagger$, this gives
+(\ref{eq:peps_kitaev_support_factorization}). The support action and both
+Gram matrices follow by multiplying this factorization and using
+$E_{P,v}^\dagger E_{P,v}=J_v^\dagger J_v=I$.
+\end{proof}

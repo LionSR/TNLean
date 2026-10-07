@@ -150,6 +150,7 @@ import TNLean.PEPS.KitaevNativeBoundaryCNOT
 import TNLean.PEPS.KitaevNativeCheckerboardBlocking
 import TNLean.PEPS.KitaevNativeGlobalBlocking
 import TNLean.PEPS.KitaevPeriodicTiling
+import TNLean.PEPS.KitaevPhysicalSupportReduction
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.MixedPhysicalProductMap
 import TNLean.PEPS.NativeTorusClosureDimension
@@ -232,6 +233,7 @@ import TNLean.PEPS.RegularChargePairRegionalReadout
 import TNLean.PEPS.RegularChargePairSectors
 import TNLean.PEPS.RegularChargeReferencePreparation
 import TNLean.PEPS.RegularChargeSubspace
+import TNLean.PEPS.RegularClosedChargePairPreparation
 import TNLean.PEPS.RegularClosedGauge
 import TNLean.PEPS.RegularClosureSuperposition
 import TNLean.PEPS.RegularCoherentGlobalTransport
@@ -272,6 +274,7 @@ import TNLean.PEPS.RegularOpenRegion
 import TNLean.PEPS.RegularOrderSixDimension
 import TNLean.PEPS.RegularPhysicalChargeMotion
 import TNLean.PEPS.RegularPhysicalChargePairCreation
+import TNLean.PEPS.RegularPhysicalChargePairInterference
 import TNLean.PEPS.RegularPhysicalCutColumnAction
 import TNLean.PEPS.RegularPhysicalCutTransfer
 import TNLean.PEPS.RegularPhysicalDensity
@@ -435,6 +438,7 @@ import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusPhysicalBondRegrouping
 import TNLean.PEPS.TorusPhysicalChargeMotion
 import TNLean.PEPS.TorusPhysicalChargePairCreation
+import TNLean.PEPS.TorusPhysicalChargePairInterference
 import TNLean.PEPS.TorusPhysicalChargePairReadout
 import TNLean.PEPS.TorusPhysicalCoherentMap
 import TNLean.PEPS.TorusPhysicalCutDensity

@@ -1,0 +1,77 @@
+\begin{theorem}[A projector and its complement]
+    \label{thm:peps_binary_projection_family}
+    \lean{Matrix.binaryProjectionFamily_complete}
+    \leanok
+    Let $D$ be a Hermitian idempotent on a finite-dimensional complex space.
+    Then $D$ and $I-D$ are positive orthogonal projectors, their product in
+    either order is zero, and their sum is $I$. This auxiliary identity
+    supplies the two outcomes of the interference measurement in
+    \cite[Section~6.6]{Schuch2010PEPS}, source lines 2605--2615.
+\end{theorem}
+
+\begin{proof}\leanok
+    Hermitian idempotence makes each operator its own product with its
+    adjoint, hence positive. Expanding the products proves the remaining
+    identities.
+\end{proof}
+
+\begin{definition}[Transport of a commuting projection]
+    \label{def:peps_scaled_projection_transport}
+    \lean{Matrix.scaledProjectionTransport}
+    \leanok
+    Let $T$ map a finite-dimensional virtual space to the original physical
+    space. Suppose $T^*T=cP$ and $TP=T$, where $c>0$. For a Hermitian
+    idempotent $D$ commuting with $P$, put
+    \begin{align}
+        Q&=c^{-1}TDT^*.\notag
+    \end{align}
+    These are the finite-dimensional relations used in the local isometry
+    argument of \cite[Section~6.6]{Schuch2010PEPS}, lines 2582--2615.
+\end{definition}
+
+\begin{theorem}[Complete physical projection transport]
+    \label{thm:peps_scaled_projection_transport}
+    \lean{Matrix.scaledProjectionTransport_properties,
+      Matrix.exists_binaryProjectionFamily_transport}
+    \leanok
+    \uses{def:peps_scaled_projection_transport,
+      thm:peps_binary_projection_family}
+    Under the preceding hypotheses, $Q$ is a positive Hermitian idempotent
+    and $QT=TD$. The pair $Q,I-Q$ is a complete orthogonal measurement on
+    the entire original physical space, and
+    \begin{align}
+        QT&=TD,\qquad (I-Q)T=T(I-D).\notag
+    \end{align}
+    This statement concerns the coefficient map itself, independently of
+    any boundary configuration or state decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use $T^*T=cP$, $DP=PD$, and $TP=T$ to obtain $QT=TD$.
+    Hermiticity follows from that of $D$, and $D^2=D$ then gives $Q^2=Q$.
+    Apply the preceding binary projection identity and expand $(I-Q)T$.
+\end{proof}
+
+\begin{theorem}[Return projection on literal pair coefficients]
+    \label{thm:peps_literal_pair_return_projection}
+    \lean{TNLean.PEPS.regularChargePairReturnProjection_mulVec_braidedCoefficient,
+      TNLean.PEPS.regularChargePairReturnProjection_commute}
+    \leanok
+    \uses{thm:peps_regular_charge_pair_return_projection}
+    Let $\chi$ be the character of a unitary irreducible representation of
+    $G$, of dimension $d$. Put
+    \begin{align}
+      w(g,h)&=\chi(ph^{-1}g),\qquad
+      w_k^x(g,h)=\chi(ph^{-1}xk^{-1}x^{-1}g),\notag\\
+      D&=|G|^{-2}|w\rangle\langle w|.\notag
+    \end{align}
+    Then $Dw_k^x=\chi(k^{-1})w/d$. Moreover $D$ commutes with simultaneous
+    left translation of the two group registers. The latter assertion
+    holds for every function $\chi:G\to\mathbb C$, without an
+    irreducibility or normalization assumption.
+\end{theorem}
+
+\begin{proof}\leanok
+    Remove the common normalization from the established projector action.
+    Simultaneous left translation fixes $w$, and hence its outer product.
+\end{proof}
