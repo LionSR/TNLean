@@ -190,6 +190,7 @@ def foldedRouting (hL : 0 < L) (N : PartyNetwork P Λ d) (A : DyadicPlacement P)
       (linkRoute_lt hL A _ _ hgrid ℓ (by simp only [Fin.val_succ]; omega))
       (hvRoute_isUnitStep _ _ i.2)
 
+omit [DecidableEq Λ] in
 /-- **Lemma 8.2 (routing), folded congestion.** Under the dyadic hypotheses, every edge of the
 genuine `L × L` square is traversed by at most `8 (2 c + 1) B Δ` steps of the folded walks,
 counting repeated folded traversals. The constant depends only on `c`, `B` and `Δ`.
@@ -202,6 +203,7 @@ theorem foldedRouting_card_traversal_le (hL : 0 < L) (N : PartyNetwork P Λ d)
     (hsep : A.SeparationBounded N.src N.tgt c) (e : Edge (squareLatticeGraph L L)) :
     Fintype.card ((foldedRouting hL N A hgrid).Traversal e) ≤
       8 * (2 * c + 1) * B * Δ := by
+  classical
   have hcard : Fintype.card ((foldedRouting hL N A hgrid).Traversal e) =
       #{t : Σ ℓ, Fin (A.linkLength N.src N.tgt ℓ) |
         Crosses (foldVertex hL (A.linkRoute N.src N.tgt t.1 t.2))
