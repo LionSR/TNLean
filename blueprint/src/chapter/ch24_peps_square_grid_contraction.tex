@@ -58,3 +58,39 @@
     presentation. The second presentation includes the requirement $D_e>0$.
     Its maximum bond dimension is $\max(\{D_e:e\in E\}\cup\{0\})$.
 \end{definition}
+
+For a $2\times2$ grid, the contraction has four independent virtual bonds
+and four open physical indices. Each bond retains its own dimension.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(2,2), name=squareGridTL, skin=box,
+            ports={0:virtual,270:virtual,135:physical}]{A_{01}}
+        \tn[at=4 e of squareGridTL, name=squareGridTR, skin=box,
+            ports={180:virtual,270:virtual,45:physical}]{A_{11}}
+        \tn[at=4 s of squareGridTL, name=squareGridBL, skin=box,
+            ports={0:virtual,90:virtual,225:physical}]{A_{00}}
+        \tn[at=4 e of squareGridBL, name=squareGridBR, skin=box,
+            ports={180:virtual,90:virtual,315:physical}]{A_{10}}
+        \tnwire[name=squareGridH1]{squareGridTL.0}{squareGridTR.180}
+        \tnmark[form=label, label pos=n]{on squareGridH1 0.5}{$D_{h_1}$}
+        \tnwire[name=squareGridH0]{squareGridBL.0}{squareGridBR.180}
+        \tnmark[form=label, label pos=s]{on squareGridH0 0.5}{$D_{h_0}$}
+        \tnwire[name=squareGridV0]{squareGridTL.270}{squareGridBL.90}
+        \tnmark[form=label, label pos=w]{on squareGridV0 0.5}{$D_{v_0}$}
+        \tnwire[name=squareGridV1]{squareGridTR.270}{squareGridBR.90}
+        \tnmark[form=label, label pos=e]{on squareGridV1 0.5}{$D_{v_1}$}
+        \tnwire[name=squareGridPhysical01, via={1 nw of squareGridTL}]{squareGridTL.135}{open nw}
+        \tnmark[form=label, label pos=w]
+        {on squareGridPhysical01 0.6}{$i_{01}$}
+        \tnwire[name=squareGridPhysical11, via={1 ne of squareGridTR}]{squareGridTR.45}{open ne}
+        \tnmark[form=label, label pos=e]
+        {on squareGridPhysical11 0.6}{$i_{11}$}
+        \tnwire[name=squareGridPhysical00, via={1 sw of squareGridBL}]{squareGridBL.225}{open sw}
+        \tnmark[form=label, label pos=w]
+        {on squareGridPhysical00 0.6}{$i_{00}$}
+        \tnwire[name=squareGridPhysical10, via={1 se of squareGridBR}]{squareGridBR.315}{open se}
+        \tnmark[form=label, label pos=e]
+        {on squareGridPhysical10 0.6}{$i_{10}$}
+    \end{tenkz}
+\end{tenkzequation}
