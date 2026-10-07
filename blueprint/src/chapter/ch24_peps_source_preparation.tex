@@ -175,14 +175,17 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_party_combine_sources,thm:peps_source_preparation,thm:peps_register_exchange}
+    \uses{thm:peps_source_preparation,thm:peps_register_exchange}
     Insert the sources successively. Exchange tensor factors to bring
     together the sources with a prescribed unordered pair of owners;
     reverse the order of the two half-spaces when necessary. Replace two
-    such vectors by their tensor product, regrouped by owner, using
-    Theorem~\ref{thm:peps_party_combine_sources}. Its norm is the product
-    of the two original norms and is therefore one. The inverse local
-    regrouping maps recover the original registers and are isometries.
+    such vectors, on $U\otimes V$ and $U'\otimes V'$, by the image of
+    their tensor product under the canonical isometry
+    $(U\otimes V)\otimes(U'\otimes V')
+        \to(U\otimes U')\otimes(V\otimes V')$.
+    Its norm is the product of the two original norms and is therefore
+    one. Splitting the two local tensor factors and exchanging the
+    middle registers recovers the original preparations by isometries.
     Continuing through the finite list proves
     (\ref{eq:peps_grouped_preparation}); no other pair of owners is
     introduced. Compose this expansion with the local operations in
