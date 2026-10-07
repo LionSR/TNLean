@@ -155,7 +155,8 @@ def edgeBand (n : ℝ) (e : SquareEdge) (α β : ℝ) : Set (ℝ × ℝ) :=
     e.nor n p < β * bandWidth n (e.par p)}
 
 /-- The closed band `{0 ≤ s ≤ n, α w(s) ≤ d ≤ β w(s)}`; it contains the closure of the open
-band and meets the edge line only at the two endpoints. -/
+band. Since `w(0) = w(n) = 0`, it pinches to the edge line at the two endpoints; when
+`α ≤ 0 ≤ β` it also contains the whole edge segment `{0 ≤ s ≤ n, d = 0}`. -/
 def closedEdgeBand (n : ℝ) (e : SquareEdge) (α β : ℝ) : Set (ℝ × ℝ) :=
   {p | 0 ≤ e.par p ∧ e.par p ≤ n ∧ α * bandWidth n (e.par p) ≤ e.nor n p ∧
     e.nor n p ≤ β * bandWidth n (e.par p)}
