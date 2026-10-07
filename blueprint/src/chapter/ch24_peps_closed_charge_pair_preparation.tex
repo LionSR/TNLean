@@ -1,60 +1,60 @@
 \begin{theorem}[Resolving the partner label in a regional charge pair]
-\label{thm:peps_closed_charge_pair_resolution}
-\lean{TNLean.PEPS.sum_openRegionWeight_regularCorrelatedChargePair}
-\leanok
-Let $R$ be a region of a finite simple graph, with finite group $G$ on its
-bonds. Let $e_0,e_1$ be two internal bonds, $u$ an arbitrary bond assignment,
-and $\theta$ a fixed crossing configuration. Resolving the label on $e_1$
-by the diagonal indicators $\mathbf{1}_{\eta_{e_1}=q}$ gives
-\begin{align}
- \sum_{q\in G} B_R^{u,\,\chi(pq^{-1}\eta_{e_0})
+    \label{thm:peps_closed_charge_pair_resolution}
+    \lean{TNLean.PEPS.sum_openRegionWeight_regularCorrelatedChargePair}
+    \leanok
+    Let $R$ be a region of a finite simple graph, with finite group $G$ on its
+    bonds. Let $e_0,e_1$ be two internal bonds, $u$ an arbitrary bond assignment,
+    and $\theta$ a fixed crossing configuration. Resolving the label on $e_1$
+    by the diagonal indicators $\mathbf{1}_{\eta_{e_1}=q}$ gives
+    \begin{align}
+        \sum_{q\in G} B_R^{u,\,\chi(pq^{-1}\eta_{e_0})
                 \mathbf{1}_{\eta_{e_1}=q}}(\theta)
- &=B_R^{u,\,\chi(p\eta_{e_1}^{-1}\eta_{e_0})}(\theta).\notag
-\end{align}
-Both sides are the actual open contractions of the original site tensors.
-The character weight remains correlated between the two labels.
-This is the finite-contraction identity underlying the creation of charge
-pairs in \cite[Section~6.6]{Schuch2010PEPS}, source lines 2505--2535.
-\uses{def:peps_regular_correlated_charge_state}
+         & =B_R^{u,\,\chi(p\eta_{e_1}^{-1}\eta_{e_0})}(\theta).\notag
+    \end{align}
+    Both sides are the actual open contractions of the original site tensors.
+    The character weight remains correlated between the two labels.
+    This is the finite-contraction identity underlying the creation of charge
+    pairs in \cite[Section~6.6]{Schuch2010PEPS}, source lines 2505--2535.
+    \uses{def:peps_regular_correlated_charge_state}
 \end{theorem}
 \begin{proof}\leanok
-Expand the original open contraction and interchange its finite label sums.
-The diagonal indicator fixes $q=\eta_{e_1}$.
+    Expand the original open contraction and interchange its finite label sums.
+    The diagonal indicator fixes $q=\eta_{e_1}$.
 \end{proof}
 
 \begin{theorem}[Original-spin preparation of the closed correlated pair]
-\label{thm:peps_closed_charge_pair_preparation}
-\lean{TNLean.PEPS.exists_unitary_regularClosedChargePairPreparation,
-TNLean.PEPS.regularClosedChargePairPreparation_normSq_ne_zero}
-\leanok
-Let the site tensors of a finite simple graph be regular $G$-isometric.
-Let $R$ have a specified spanning tree and root, and let $e_0,e_1$ be two
-distinct internal bonds. For every irreducible character $\chi$ occurring in
-the regular representation and every $p\in G$, there is a unitary $W$ on the
-original spins in $R$ such that
-\begin{align}
- (W\otimes I_{R^c})\Psi_0&=\Psi_{\chi,p},\notag\\
- \Psi_{\chi,p}(\sigma)&=\sum_{\eta:E\to G}
- \chi(p\eta_{e_1}^{-1}\eta_{e_0})
- \prod_v a_v(\eta|_v,\sigma_v).\notag
-\end{align}
-Here $\Psi_0$ is the actual closed contraction without insertions.
-Consequently $\Psi_{\chi,p}\ne0$ and
-$\langle\Psi_{\chi,p},\Psi_{\chi,p}\rangle
-=\langle\Psi_0,\Psi_0\rangle$.
-The local operation is uniform in every crossing configuration.
+    \label{thm:peps_closed_charge_pair_preparation}
+    \lean{TNLean.PEPS.exists_unitary_regularClosedChargePairPreparation,
+        TNLean.PEPS.regularClosedChargePairPreparation_normSq_ne_zero}
+    \leanok
+    Let the site tensors of a finite simple graph be regular $G$-isometric.
+    Let $R$ have a specified spanning tree and root, and let $e_0,e_1$ be two
+    distinct internal bonds. For every irreducible character $\chi$ occurring in
+    the regular representation and every $p\in G$, there is a unitary $W$ on the
+    original spins in $R$ such that
+    \begin{align}
+        (W\otimes I_{R^c})\Psi_0 & =\Psi_{\chi,p},\notag \\
+        \Psi_{\chi,p}(\sigma)    & =\sum_{\eta:E\to G}
+        \chi(p\eta_{e_1}^{-1}\eta_{e_0})
+        \prod_v a_v(\eta|_v,\sigma_v).\notag
+    \end{align}
+    Here $\Psi_0$ is the actual closed contraction without insertions.
+    Consequently $\Psi_{\chi,p}\ne0$ and
+    $\langle\Psi_{\chi,p},\Psi_{\chi,p}\rangle
+        =\langle\Psi_0,\Psi_0\rangle$.
+    The local operation is uniform in every crossing configuration.
 
-This auxiliary finite-region consequence of SCP10, lines 2505--2558,
-retains the supplied region, spanning tree and two distinct internal bonds.
-It does not identify the prescribed charge--flux braid, its flux-string
-background, or the reunion experiment of lines 2560--2615.
-\uses{thm:peps_closed_charge_pair_resolution,
-thm:peps_regular_correlated_charge_cut}
+    This auxiliary finite-region consequence of SCP10, lines 2505--2558,
+    retains the supplied region, spanning tree and two distinct internal bonds.
+    It does not identify the prescribed charge--flux braid, its flux-string
+    background, or the reunion experiment of lines 2560--2615.
+    \uses{thm:peps_closed_charge_pair_resolution,
+        thm:peps_regular_correlated_charge_cut}
 \end{theorem}
 \begin{proof}\leanok
-Local $G$-isometry supplies the original-spin unitary preparing each correlated
-open column. Resolve the partner label and contract the unchanged exterior
-columns. The resulting closed identity uses the same unitary. Unitarity
-preserves the inner product, and the unmodified regular $G$-injective closed
-contraction is nonzero.
+    Local $G$-isometry supplies the original-spin unitary preparing each correlated
+    open column. Resolve the partner label and contract the unchanged exterior
+    columns. The resulting closed identity uses the same unitary. Unitarity
+    preserves the inner product, and the unmodified regular $G$-injective closed
+    contraction is nonzero.
 \end{proof}

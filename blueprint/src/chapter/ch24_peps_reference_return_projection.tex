@@ -2,16 +2,16 @@
 \begin{theorem}[Adjoints and products on the internal references]
     \label{thm:peps_reference_projection_extension}
     \lean{TNLean.PEPS.regularRegionChargeReferenceMatrix_conjTranspose,
-      TNLean.PEPS.regularRegionChargeReferenceMatrix_mul,
-      TNLean.PEPS.regularRegionChargeReferenceMatrix_isHermitian,
-      TNLean.PEPS.regularRegionChargeReferenceMatrix_mul_self}
+        TNLean.PEPS.regularRegionChargeReferenceMatrix_mul,
+        TNLean.PEPS.regularRegionChargeReferenceMatrix_isHermitian,
+        TNLean.PEPS.regularRegionChargeReferenceMatrix_mul_self}
     \leanok
     \uses{def:peps_regular_charge_reference_matrix}
     Let $R$ be a finite region with a chosen spanning tree and root, and let
     $e_0,e_1$ be distinct internal bonds. The reference-coordinate extension
     $U_R$ satisfies
     \begin{align}
-        U_R(Q)^\dagger&=U_R(Q^\dagger),\qquad
+        U_R(Q)^\dagger & =U_R(Q^\dagger),\qquad
         U_R(QU)=U_R(Q)U_R(U).\notag
     \end{align}
     In particular, Hermitian idempotents on the two references extend to
@@ -30,21 +30,21 @@
     \lean{TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec_braided}
     \leanok
     \uses{thm:peps_reference_projection_extension,
-      thm:peps_regular_correlated_charge_coordinates,
-      thm:peps_literal_pair_return_projection}
+        thm:peps_regular_correlated_charge_coordinates,
+        thm:peps_literal_pair_return_projection}
     Retain the same region and two references. Let $\chi$ be the character
     of a unitary irreducible representation of dimension $d$. For $p,k\in G$,
     let $B_k(\alpha,\theta)$ be the actual untwisted canonical open contraction
     with the literal correlated bond weight
     \begin{align}
-        &\chi\bigl(p\eta_{e_1}^{-1}k^{-1}\eta_{e_0}\bigr).\notag
+         & \chi\bigl(p\eta_{e_1}^{-1}k^{-1}\eta_{e_0}\bigr).\notag
     \end{align}
     Every original half-edge coordinate $\alpha$ and boundary label $\theta$
     is retained. Let $D_p$ be the return projector onto the normalized pair
     $|G|^{-1}\chi(pb^{-1}a)$. Then, for every $k$ and $\theta$,
     \begin{align}
         U_R(D_p)B_k(\cdot,\theta)
-          &=\frac{\chi(k^{-1})}{d}B_1(\cdot,\theta).\notag
+         & =\frac{\chi(k^{-1})}{d}B_1(\cdot,\theta).\notag
     \end{align}
     This finite-region canonical identity is an auxiliary consequence of
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2582--2615. It does not
