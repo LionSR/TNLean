@@ -93,6 +93,28 @@ A rectangle uses its two orthogonal side coordinates with 0≤α,β≤1. This av
 requiring a general polytope representation library. These are proof plans from
 independent review, not validated additional Lean results.
 
+More explicitly, write `cross(u,v)=u₁v₂−u₂v₁`. For a triangle put
+`D=cross(b−a,c−a)`, which the constructor proves nonzero, and use
+
+    α = cross(p−a,c−a)/D,
+    β = cross(b−a,p−a)/D,
+    γ = cross(c−b,p−b)/D.
+
+Algebra gives α+β+γ=1 and p=γa+αb+βc. Each numerator is an oriented
+side functional whose values at the three vertices are 0,0,D. Its normal
+is a scalar multiple of one of the four forms above. The four range bounds
+therefore put each numerator between min(0,D) and max(0,D). Splitting on
+the sign of D gives α,β,γ≥0, hence convex-hull membership. This also explains
+why a proof must preserve the sign of D rather than presume an orientation.
+
+For a rectangle use α=((p−a)·u)/(u·u) and β=((p−a)·v)/(v·v).
+Nonzero orthogonal u,v give positive denominators and
+p=a+αu+βv. The allowed directions make each dot functional a scalar
+multiple of one of the four forms. Its vertex range gives 0≤α,β≤1.
+The four convex weights are (1−α)(1−β), α(1−β), αβ and (1−α)β.
+These formulas specify the missing reverse inclusion; they are still
+unformalized, and are not used as hypotheses in the Lean declarations.
+
 ## Validation
 
 The pinned Lean release was installed from its official release asset.

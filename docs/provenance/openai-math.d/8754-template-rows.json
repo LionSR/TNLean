@@ -32,7 +32,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -63,7 +82,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -94,7 +132,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -125,7 +182,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -156,7 +232,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -187,7 +282,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -218,7 +332,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -249,7 +382,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -280,7 +432,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -311,7 +482,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -342,7 +532,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -373,7 +582,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -404,7 +632,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -435,7 +682,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -466,7 +732,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -497,7 +782,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -528,7 +832,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -559,7 +882,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -590,7 +932,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -621,7 +982,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -652,7 +1032,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -683,7 +1082,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -714,7 +1132,26 @@
         "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
       ],
       "verification": {
-        "result": "pending"
+        "result": "pending",
+        "repository": "LionSR/TNLean",
+        "revision": "18883e6cf8cb616e1f2bb6ae40d269317f0774b9",
+        "notes": "Production source and full default build passed. The enclosing strict regression command failed on test-only errors; its standard axiom output is diagnostic evidence, not a passing regression. Repaired strict regressions are pending CI.",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-build.log",
+            "sha256": "75ada4711d37de7fdcfdf7ebee38df8bce1c51cf207af58fc7aa4bb1886ffb92"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 1,
+            "log": "docs/provenance/evidence/8754-axiom-output.log",
+            "sha256": "97067703c127ffd5294948bbcfd7106be004db1362535d904219c920e052a07c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
