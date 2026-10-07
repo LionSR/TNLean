@@ -2970,6 +2970,90 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
 | `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
 
+## Distributed PEPS compression: finite incidence and choice costs
+
+### Corrected source positions and whole-lifetime gate participation
+
+- **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
+  `incidentGates` and `gatesTouching` in the same namespace.
+- **Defined in:** `TNLean/PEPS/Approximation/DistributedLifetime.lean`.
+- **Meaning:** A source position has two party endpoints. For a finite set `S`
+  of corrected positions, `correctedParties` is their endpoint union. The gate
+  identifiers distinguish occurrences; repeated uses of an identical operation
+  remain distinct. `incidentGates` filters the entire finite nonprivate gate
+  list by party participation. `gatesTouching` includes every gate meeting the
+  corrected party set, including gates with no corrected source of their own.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2, corrected-position expansion,
+  `04-compression.tex:342–381`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L342-L381).
+- **Sanctioned bridges:** `card_correctedParties_le` gives at most `2 * S.card`
+  parties. `card_gatesTouching_correctedParties_le` gives at most
+  `2 * b * S.card` affected gates from the actual whole-lifetime bound of `b`
+  gates per corrected party. `owner_mem_gatesTouching_correctedParties` uses
+  explicit slot-owner incidence; `disjoint_participants_of_not_mem_gatesTouching`
+  proves exterior gates contain no corrected party.
+- **Caveat:** These are finite incidence statements, not a distributed quantum
+  circuit model or a density expansion. Coincident endpoints are permitted by
+  the counting lemmas. The eventual source-position model must supply its
+  owner/endpoint incidence, and the gate list must use occurrence identifiers.
+  No private-memory or source-Schmidt-rank bound is imposed.
+
+### Star and pair-sample virtual links
+
+- **Declarations:** `TNLean.PEPS.Approximation.pairSampleLabels`, `gateLinkLabels`,
+  `gateLinkParties`, `linksAtGate`, `distributedLinks`, `distributedLinkParties`,
+  `incidentDistributedLinks`, `incidentGateLinkLabels` and `incidentLinksAtGate`.
+- **Defined in:** `TNLean/PEPS/Approximation/DistributedLinks.lean`.
+- **Meaning:** Each gate has a star rooted at a chosen participant and a sample
+  link for every unordered pair of distinct participants. Summand tags keep
+  star and sample links distinct, while gate-occurrence tags preserve parallel
+  links from different gates. Endpoint sets and incidence lists are derived
+  from this actual construction.
+- **Source:** The same September 24 manuscript, proof of Theorem 5.2,
+  `04-compression.tex:565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L565-L588).
+- **Sanctioned bridges:** `card_pairSampleLabels` gives `choose n 2` sample
+  links at a gate of arity `n`; `card_gateLinkLabels` gives `n - 1 + choose n 2`
+  total labels when the star root participates. `card_distributedLinkParties`
+  proves two distinct endpoints. `distributedLinkParties_subset` and
+  `exists_common_gate_of_mem_distributedLinkParties` derive original-gate
+  locality. `card_incidentDistributedLinks_le` gives degree at most
+  `2 * b * (b - 1)` from gate arity at most `b` and whole-lifetime participation
+  at most `b`.
+- **Caveat:** Star-root membership is explicit and must come from a chosen
+  participant of a nonprivate gate. This family has no local tensors, virtual
+  dimensions or evaluation map. Contraction and parallel-link combination
+  remain separate results; these links alone do not represent the compressed
+  density operator.
+
+### Weighted cost of affected coefficient and physical-entry choices
+
+- **Declarations:** `TNLean.PEPS.Approximation.ketBraCoefficientCost` and
+  `correctedPositionChoiceCost`.
+- **Defined in:** `TNLean/PEPS/Approximation/CorrectedPositionCost.lean`.
+- **Meaning:** `ketBraCoefficientCost` is the square of the sum of nonnegative
+  absolute coefficient weights. `correctedPositionChoiceCost` multiplies these
+  quantities over affected gates and the squares of intended physical
+  dimensions over corrected parties. Exterior coefficients and dimensions
+  do not occur in these products.
+- **Source:** The same September 24 manuscript, `eq:compression-polynomial-bounds`
+  and `eq:compression-choice-cost`, `04-compression.tex:269–277,356–381`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L356-L381).
+- **Sanctioned bridges:** `ketBraCoefficientCost_eq_sum` identifies the square
+  with the double ket/bra coefficient sum. For `B,d ≥ 1`, actual coefficient
+  sums at affected gates at most `B`, physical dimensions at corrected parties
+  at most `d`, and lifetime participation at most `b`,
+  `correctedPositionChoiceCost_le` proves the bound `(B^(4*b) * d^4)^S.card`.
+  `compressionChoiceBase_le_of_monomial_bounds` gives
+  `Q ≤ C^(4*b) * D^4 * L^(4*b*a + 4*c)` when `B ≤ C*L^a` and `d ≤ D*L^c`.
+- **Caveat:** Coefficients are supplied as nonnegative weights; the circuit
+  expansion must identify them with actual complex coefficient norms. The
+  theorem bounds a finite choice cost, not an expected trace error. The full
+  circuit expansion, local tensor evaluation, virtual dimension estimates,
+  approximate-expansion case and composition with the quantum/sampling results
+  remain open in [#8769](https://github.com/LionSR/TNLean/issues/8769).
+
 ## Nested regional cylinders
 
 ### `TNLean.PEPS.dependentRegionCylinder`
