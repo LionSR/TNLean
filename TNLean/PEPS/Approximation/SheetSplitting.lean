@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.PEPS.Approximation.PatchRewrite
 import QICLean.Entropy.FiniteProduct
 import QICLean.Entropy.PurificationSplitting
@@ -55,14 +56,6 @@ section Transport
 variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
 
 omit [DecidableEq m] [DecidableEq n] in
-/-- Relabelling the coordinates of a vector does not change its norm. -/
-theorem norm_toLp_comp_equiv (e : m ≃ n) (f : n → ℂ) :
-    ‖(WithLp.toLp 2 (f ∘ e) : EuclideanSpace ℂ m)‖ = ‖(WithLp.toLp 2 f : EuclideanSpace ℂ n)‖ := by
-  rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-  congr 1
-  exact e.sum_comp fun j => ‖f j‖ ^ 2
-
-omit [DecidableEq m] [DecidableEq n] in
 /-- The defect `‖(M - 1) ψ‖` of an operator does not depend on the coordinates. -/
 theorem norm_act_submatrix_sub (M : Matrix n n ℂ) (e : m ≃ n) (ψ : EuclideanSpace ℂ m) :
     ‖act (M.submatrix e e) ψ - ψ‖ =
@@ -71,24 +64,8 @@ theorem norm_act_submatrix_sub (M : Matrix n n ℂ) (e : m ≃ n) (ψ : Euclidea
       WithLp.toLp 2 ((M *ᵥ (ψ ∘ e.symm) - ψ ∘ e.symm) ∘ e) := by
     ext x
     simp [act, submatrix_mulVec_equiv]
-  rw [h, norm_toLp_comp_equiv]
+  rw [h, EuclideanSpace.norm_toLp_comp_equiv]
   rfl
-
-/-- Relabelling the coordinates does not increase the operator norm. -/
-theorem norm_submatrix_equiv_le (M : Matrix n n ℂ) (e : m ≃ n) : ‖M.submatrix e e‖ ≤ ‖M‖ :=
-  l2_opNorm_reindex_le e.symm e.symm M
-
-omit [DecidableEq m] [DecidableEq n] in
-/-- Commuting operators commute in all coordinates. -/
-theorem Commute.submatrix_equiv {X Y : Matrix n n ℂ} (h : Commute X Y) (e : m ≃ n) :
-    Commute (X.submatrix e e) (Y.submatrix e e) := by
-  change X.submatrix e e * Y.submatrix e e = Y.submatrix e e * X.submatrix e e
-  rw [submatrix_mul_equiv, submatrix_mul_equiv, h.eq]
-
-omit [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n] in
-theorem submatrix_symm_submatrix (X : Matrix n n ℂ) (e : m ≃ n) :
-    (X.submatrix e e).submatrix e.symm e.symm = X := by
-  simp [submatrix_submatrix]
 
 end Transport
 
@@ -292,20 +269,6 @@ theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Mo
     obtain ⟨X, hX⟩ := hx
     exact ⟨c • X, by rw [map_smul, ← hX]; rfl⟩
 
-/-- The linear map `X ↦ X ⊗ 1`. -/
-def kroneckerOneLM (α β : Type*) [Fintype α] [DecidableEq β] :
-    Matrix α α ℂ →ₗ[ℂ] Matrix (α × β) (α × β) ℂ where
-  toFun X := X ⊗ₖ (1 : Matrix β β ℂ)
-  map_add' X Y := add_kronecker X Y 1
-  map_smul' c X := smul_kronecker c X 1
-
-/-- The linear map `X ↦ 1 ⊗ X`. -/
-def oneKroneckerLM (α β : Type*) [DecidableEq α] [Fintype β] :
-    Matrix β β ℂ →ₗ[ℂ] Matrix (α × β) (α × β) ℂ where
-  toFun X := (1 : Matrix α α ℂ) ⊗ₖ X
-  map_add' X Y := kronecker_add 1 X Y
-  map_smul' c X := kronecker_smul c 1 X
-
 /-- An operator acting on `T ∪ E` is `A' ⊗ 1_U` in the coordinates of `threeSplit T E`. -/
 theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q (↑(T ∪ E) : Set ι)) :
@@ -313,7 +276,8 @@ theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         A' ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by
   refine exists_eq_of_mem_supportedOperators (threeSplit q T E h)
-    (kroneckerOneLM _ (↥(T ∪ E)ᶜ → Fin q)) (fun m hm => ?_) hA
+    ((kroneckerBilinear (R := ℂ)).flip (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ))
+    (fun m hm => ?_) hA
   refine ⟨rectKronecker (fun v : T => m v) ⊗ₖ rectKronecker (fun v : E => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
   change _ = _ ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
@@ -333,7 +297,9 @@ theorem exists_threeSplit_eq_one_kronecker_kronecker_one {T E : Finset ι} (h : 
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ A') ⊗ₖ
           (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by
   refine exists_eq_of_mem_supportedOperators (threeSplit q T E h)
-    ((kroneckerOneLM _ (↥(T ∪ E)ᶜ → Fin q)).comp (oneKroneckerLM (T → Fin q) _))
+    (((kroneckerBilinear (R := ℂ)).flip
+      (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)).comp
+      (kroneckerBilinear (R := ℂ) (1 : Matrix (T → Fin q) (T → Fin q) ℂ)))
     (fun m hm => ?_) hA
   have hT : ∀ v : T, m v = 1 := fun v =>
     hm v fun hv => Finset.disjoint_left.mp h v.2 (hD hv)
@@ -409,8 +375,11 @@ structure SplittingData (q : ℕ) (T E : Finset ι) where
   s : (T → Fin q) × (T → Fin q) → ℂ
   /-- The unit vector `s'` on `E × B_E`. -/
   s' : (E → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q)) → ℂ
+  /-- `V` is an isometry. -/
   isIsometry : V.IsIsometry
+  /-- `s` is a unit vector. -/
   star_s : star s ⬝ᵥ s = 1
+  /-- `s'` is a unit vector. -/
   star_s' : star s' ⬝ᵥ s' = 1
 
 /-- The splitting error `‖(1_{TE} ⊗ V) Ω - s ⊗ s'‖` of splitting data on a vector of the sheet. -/

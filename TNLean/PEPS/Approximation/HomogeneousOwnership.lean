@@ -381,10 +381,6 @@ theorem disjoint_birthEnv (hTP : ∀ x ∈ T, F.owner x = P)
   · exact h (hTP x hxT)
   · exact Set.disjoint_left.mp hTH hxT h
 
-theorem rawProd_mem_supportedOperators_outerHoles [NeZero q] (t : TagSpace F.holes) :
-    rawProd F.holes t ∈ supportedOperators q F.outerHoles :=
-  rawProd_mem_supportedOperators F.holes t
-
 /-- **Lemma 6.5 (homogeneous birth).** In an encoded frame `F`, let `T` be a set of raw sites
 owned by `P∘` and disjoint from every outer hole footprint, and let `E` and `U` be as in
 `eq:birth-partition`. If `I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, there are splitting data
@@ -393,6 +389,12 @@ tags, with `(1 ⊗ B) K_F = K_{F'} B` for the frame `F'` in which `T` is owned b
 `‖(1 ⊗ B) Ω_F - Ω_{F'}‖ ≤ L^{-30}`. Every register `B` acts on lies outside `E`, so it is owned
 by `P∘` before the birth and by `P∘` or `Q∘` after it (`owner_eq_of_notMem_birthEnv`,
 `changeOwner_owner_of_notMem_birthEnv`).
+
+The frames `F` and `F'` differ only in raw owners, and the encoding and the reference vector do
+not depend on raw owners (Definition 6.1, `05-frames.tex`, lines 71–82), so `K_{F'} = K_F` and
+`Ω_{F'} = Ω_F`; the identity `(1 ⊗ B) K_F = K_{F'} B` says that `B` commutes with the encoding.
+The change of owner from `P∘` to `Q∘` is the content of the bounded-change clause, which is not
+formalized (see the module docstring).
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–407; proof lines
 413–437. -/
@@ -415,7 +417,7 @@ theorem birth [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
   obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow hTE hΩ hL hI
   have hcomm : ∀ t, Commute (sheetBirthOp hTE σ) (rawProd F.holes t) := fun t =>
     commute_sheetBirthOp hTE σ F.outerHoles_subset_birthEnv
-      (F.rawProd_mem_supportedOperators_outerHoles t)
+      (rawProd_mem_supportedOperators F.holes t)
   refine ⟨σ, hσ, sheetBirthOp_isHermitian hTE σ, norm_sheetBirthOp_le_one hTE σ,
     one_kronecker_mul_frameEncoder hcomm, ?_⟩
   exact (norm_act_one_kronecker_refVec_sub_le F hcomm Ω).trans
@@ -426,6 +428,10 @@ death, in which `T` is owned by `P∘` and avoids every outer hole footprint, an
 before the death be `F` with `T` owned by `Q∘`. If `I_Ω(T:E) ≤ L^{-60}` for `E` computed in `F`,
 the same canonical map `B = Bᴴ`, now with the reverse input and output ownership, satisfies
 `(1 ⊗ B) K_{F_before} = K_F B` and `‖(1 ⊗ B) Ω_{F_before} - Ω_F‖ ≤ L^{-30}`.
+
+Since the encoding and the reference vector do not depend on raw owners, this is the statement of
+`birth` read in the frame after the death; its content beyond `birth` is that the hypotheses,
+and the set `E`, are those of the frame after the death (`05-frames.tex`, lines 407–410).
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–446. -/
