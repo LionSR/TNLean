@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "published_revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+  "published_tree": "04884af1b1989cec4fcc57e73688d1b33d3d13ae",
+  "ordinary_ledger_declarations": 40,
+  "source_and_log_rows": 14,
+  "limits": [
+    "No Lean command executed.",
+    "Full-repository provenance is checked by scripts/check_openai_provenance.py.",
+    "Historical evidence remains separate; dependency-sync CI is not inferred."
+  ]
+}

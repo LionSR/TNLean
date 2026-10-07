@@ -34,21 +34,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -83,21 +83,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -132,21 +132,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -181,21 +181,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -230,21 +230,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -279,21 +279,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -328,21 +328,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -377,21 +377,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -426,21 +426,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -475,21 +475,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -524,21 +524,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -573,21 +573,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -622,21 +622,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -671,21 +671,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -720,21 +720,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -769,21 +769,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -818,21 +818,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -867,21 +867,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -916,21 +916,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -965,21 +965,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1014,21 +1014,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1063,21 +1063,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1112,21 +1112,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1161,21 +1161,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1210,21 +1210,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1259,21 +1259,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1308,21 +1308,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1357,21 +1357,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1406,21 +1406,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1455,21 +1455,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1504,21 +1504,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1553,21 +1553,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1602,21 +1602,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1651,21 +1651,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1701,21 +1701,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1751,21 +1751,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1801,21 +1801,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1851,21 +1851,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1901,21 +1901,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },
@@ -1951,21 +1951,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d40ddee6b41997d674e764e03ea7639819f94a3",
+        "revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-00.log",
-            "sha256": "ce5f6c3f270c763596bbe20460d6b2de755d0417faab9522be570ade79845661"
+            "log": "docs/provenance/evidence/8773/native.log",
+            "sha256": "592d7f20919d2aa30269d170acd65172d5af10ae53516f78781083820b151ebb"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+            "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8773/published-verification/check-11.log",
-            "sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9"
+            "log": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.log",
+            "sha256": "bd12e999bcaacbc666923eb1d56af077dbd5ed9012934fce8d440f0c5f0b3036"
           }
         ]
       },

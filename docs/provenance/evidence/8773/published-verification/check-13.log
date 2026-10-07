@@ -1,0 +1,9 @@
+'TNLean.PEPS.Approximation.HasPEPSApproximation.mono_prefactor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.polynomialPEPSApproximation_iff_sufficiently_large' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
