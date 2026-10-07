@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.Templates
 import Mathlib.Algebra.Order.Floor.Ring
+import Mathlib.Algebra.Order.Archimedean.Real.Basic
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Analysis.Convex.Topology
 import Mathlib.Topology.Order.Compact
@@ -91,7 +92,8 @@ namespace TNLean.PEPS.AreaLaw
 theorem mem_ambientDilation_iff {S : Finset (ℤ × ℤ)} {r : ℕ} {x : ℤ × ℤ} :
     x ∈ ambientDilation S r ↔ ∃ p ∈ S,
       p.1 - r ≤ x.1 ∧ x.1 ≤ p.1 + r ∧ p.2 - r ≤ x.2 ∧ x.2 ≤ p.2 + r := by
-  simp only [ambientDilation, Finset.mem_biUnion, Finset.mem_product, Finset.mem_Icc]
+  simp only [ambientDilation, Finset.mem_biUnion, Finset.product_eq_sprod,
+    Finset.mem_product, Finset.mem_Icc]
   tauto
 
 /-- Dilation preserves inclusion without any connectedness assumption. -/
@@ -124,7 +126,7 @@ theorem ambientDilation_add (S : Finset (ℤ × ℤ)) (r t : ℕ) :
 
 /-- A point in a new layer of a union belongs to a new layer of a constituent.
 No disjointness or nonemptiness of the constituents is needed. -/
-theorem ambientDilation_biUnion_sdiff_subset {ι : Type*} [DecidableEq ι]
+theorem ambientDilation_biUnion_sdiff_subset {ι : Type*}
     (I : Finset ι) (S : ι → Finset (ℤ × ℤ)) (r t : ℕ) :
     ambientDilation (I.biUnion S) r \ ambientDilation (I.biUnion S) t ⊆
       I.biUnion (fun i ↦ ambientDilation (S i) r \ ambientDilation (S i) t) := by
@@ -138,7 +140,7 @@ theorem ambientDilation_biUnion_sdiff_subset {ι : Type*} [DecidableEq ι]
     exact hn (ambientDilation_mono (Finset.subset_biUnion_of_mem S hi) t h)
 
 /-- Layer cardinalities are subadditive over arbitrary finite unions. -/
-theorem card_ambientDilation_biUnion_sdiff_le {ι : Type*} [DecidableEq ι]
+theorem card_ambientDilation_biUnion_sdiff_le {ι : Type*}
     (I : Finset ι) (S : ι → Finset (ℤ × ℤ)) (r t : ℕ) :
     (ambientDilation (I.biUnion S) r \ ambientDilation (I.biUnion S) t).card ≤
       ∑ i ∈ I, (ambientDilation (S i) r \ ambientDilation (S i) t).card :=
@@ -228,8 +230,9 @@ theorem Template.mem_sample_of_row_between {Ctpl : ℝ} {n s₀ : ℕ}
     (ha : (a, y) ∈ T.sample i) (hb : (b, y) ∈ T.sample i)
     (hax : a ≤ x) (hxb : x ≤ b) : (x, y) ∈ T.sample i := by
   apply (T.mem_sample i _).mpr
-  exact horizontal_mem_of_mem_of_le (T.polygon i).convex_region
-    ((T.mem_sample i _).mp ha) ((T.mem_sample i _).mp hb)
+  exact horizontal_mem_of_mem_of_le (a := (a : ℝ)) (b := (b : ℝ))
+    (x := (x : ℝ)) (y := (y : ℝ)) (T.polygon i).convex_region
+    ((T.mem_sample i (a, y)).mp ha) ((T.mem_sample i (b, y)).mp hb)
     (by exact_mod_cast hax) (by exact_mod_cast hxb)
 
 /-- The endpoints of a nonempty sampled row are its attained integer extrema. -/
@@ -264,7 +267,7 @@ theorem Template.sample_subset_box {Ctpl : ℝ} {n s₀ : ℕ}
   have h₁' : |x.1 - p.1| ≤ (s₀ : ℤ) := by exact_mod_cast h₁
   have h₂' : |x.2 - p.2| ≤ (s₀ : ℤ) := by exact_mod_cast h₂
   rw [abs_le] at h₁' h₂'
-  simp only [Finset.mem_product, Finset.mem_Icc]
+  simp only [Finset.product_eq_sprod, Finset.mem_product, Finset.mem_Icc]
   omega
 
 /-- A uniform area bound for each sample, including empty sampled polygons. -/
@@ -279,7 +282,7 @@ theorem Template.card_sample_le {Ctpl : ℝ} {n s₀ : ℕ}
             (Finset.Icc (p.2 - (s₀ : ℤ)) (p.2 + s₀))).card :=
         Finset.card_le_card (T.sample_subset_box i hp)
       _ = (2 * s₀ + 1) ^ 2 := by
-        simp only [Finset.card_product, Int.card_Icc]
+        simp only [Finset.product_eq_sprod, Finset.card_product, Int.card_Icc]
         have h (a : ℤ) : a + (s₀ : ℤ) + 1 - (a - s₀) = (2 * s₀ + 1 : ℕ) := by
           omega
         simp only [h, Int.toNat_natCast, pow_two]

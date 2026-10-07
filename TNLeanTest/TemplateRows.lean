@@ -6,11 +6,11 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 -- Negative coordinates and diagonal integer shifts must not use natural rounding.
 example : ⌈(-3 / 2 : ℝ) + (-1 : ℝ) * (-4 : ℤ)⌉ = 3 := by
-  rw [ceil_affine_row]
+  rw [ceil_affine_row (-3 / 2) (-1) (-4)]
   norm_num
 
 example : ⌊(-3 / 2 : ℝ) + (1 : ℝ) * (-4 : ℤ)⌋ = -6 := by
-  rw [floor_affine_row]
+  rw [floor_affine_row (-3 / 2) 1 (-4)]
   norm_num
 
 -- Empty pieces remain empty under every ambient dilation.
