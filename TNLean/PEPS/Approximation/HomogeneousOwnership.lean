@@ -159,14 +159,15 @@ theorem birthOp_isHermitian (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ) 
 omit [DecidableEq T] [DecidableEq BT] in
 theorem norm_pairSource_le_one {s : T × BT → ℂ} (hs : star s ⬝ᵥ s = 1) :
     ‖pairSource (E := E) (BE := BE) s‖ ≤ 1 :=
-  norm_le_one_of_gram (by rw [pairSource_conjTranspose_mul_self hs]; exact norm_one_le)
+  l2_opNorm_le_one_of_conjTranspose_mul_self_le_one (by
+    rw [pairSource_conjTranspose_mul_self hs]; exact (IsStarProjection.one _).norm_le)
 
 omit [DecidableEq BT] [DecidableEq BE] in
 theorem norm_one_kronecker_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry) :
     ‖(1 : Matrix (T × E) (T × E) ℂ) ⊗ₖ V‖ ≤ 1 :=
-  norm_le_one_of_gram (by
+  l2_opNorm_le_one_of_conjTranspose_mul_self_le_one (by
     rw [IsIsometry.kronecker (1 : Matrix (T × E) (T × E) ℂ) V (by simp [IsIsometry]) hV]
-    exact norm_one_le)
+    exact (IsStarProjection.one _).norm_le)
 
 omit [DecidableEq BT] in
 theorem norm_birthEffect_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry)
@@ -174,7 +175,7 @@ theorem norm_birthEffect_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry
   classical
   have h := norm_pairSource_le_one (E := E) (BE := BE) hs
   rw [← l2_opNorm_conjTranspose] at h
-  exact norm_mul_le_one h (norm_one_kronecker_le_one hV)
+  exact l2_opNorm_mul_le_one h (norm_one_kronecker_le_one hV)
 
 omit [DecidableEq BT] in
 /-- **The canonical map is a contraction** (`05-frames.tex`, line 427). -/
@@ -184,7 +185,7 @@ theorem norm_birthOp_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry)
   have h := norm_birthEffect_le_one (E := E) hV hs
   have h' := h
   rw [← l2_opNorm_conjTranspose] at h'
-  exact norm_mul_le_one h' h
+  exact l2_opNorm_mul_le_one h' h
 
 omit [DecidableEq BT] in
 /-- **Reference error of the canonical map** (`05-frames.tex`, lines 427–433). For an isometry
@@ -213,7 +214,7 @@ theorem norm_act_birthOp_sub_le {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry
       simp only [Pr, star_eq_conjTranspose, conjTranspose_mul, conjTranspose_conjTranspose]
   have hnorm : ‖Pr - 1‖ ≤ 1 := by
     rw [← norm_neg, neg_sub]
-    exact norm_le_one_of_isStarProjection hproj.one_sub
+    exact hproj.one_sub.norm_le
   have hV' : ‖𝒱ᴴ‖ ≤ 1 := by
     rw [l2_opNorm_conjTranspose]
     exact norm_one_kronecker_le_one hV

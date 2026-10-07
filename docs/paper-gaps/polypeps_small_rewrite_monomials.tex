@@ -46,10 +46,13 @@ bounded list of parties. The lemma asserts:
 
 \section{What the formal statement covers}
 
-The first assertion is formalized with exactly the source hypotheses; the
-reference error uses only condition~(i).\footnote{%
-\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.smallPatchRewrite} and
-\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le}.}
+The first assertion is formalized with exactly the source hypotheses, for
+frames whose tags are listed in any order; the reference error uses only
+condition~(i).\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one_and_refVec_sub_le},
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le}, and, for
+arbitrary tag orderings,
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}.}
 For the second assertion the following steps of the proof
 (\path{05-frames.tex}, lines~254--344) are formalized: the exact expansion of
 $M$ into complete branches and the count of branches; the site-level wire
@@ -65,20 +68,27 @@ Not formalized is the passage from one branch to a residual tensor network of
 normalized bras and kets, the application of the whole-group truncation of
 Lemma~6.2 to that network with the dimension-free branch error $g/\sqrt k$, and
 the reading of every product term as an allowed monomial of Theorem~5.2. These
-need a model of operators placed on parties and of allowed monomials (local
-contractions, normalized pair sources and normalized pair effects between two
-named parties), which the library does not have; the companion note
-\path{polypeps_pair_effects_party_layout.tex} records the same missing layer for
-Lemma~5.1. Without it, the existence of a contraction $M_a$ with
+need allowed monomials of Theorem~5.2 as operators: chronological products of
+local contractions on one party and of normalized pair sources and normalized
+pair effects on the registers of two named parties. The library contracts
+supplied party-local matrices over shared gate labels and sample indices on
+the links of a distributed network, and it bounds the incidence of those
+links; it does not identify a product of such local matrices with an allowed
+monomial, and it has no normalized pair sources or pair effects. Lemma~5.1
+meets the same missing layer. Without it, the existence of a contraction $M_a$ with
 $\|M_a-M\|\le L^{-a}$ is trivial ($M_a=M$), so no statement of that form is
 offered as the second assertion.
 
 The formal frames record the pairwise disjointness of the physical outer
 footprints of holes rather than of the outer squares in the plane; the source
 condition implies the formal one, so this is a generalization. The rewrite is
-stated in canonical coordinates in which the tags of the untouched holes come
-first in both frames; the encodings of holes with disjoint footprints commute,
-which is the canonical identification of tag orderings of Definition~6.1.
+constructed in canonical coordinates in which the tags of the untouched holes
+come first in both frames. Since the encodings of holes with disjoint
+footprints commute, moving every tag to the new position of its hole is a
+relabelling of the tag basis that carries one encoding to the other; along it
+the canonical rewrite becomes a contraction between frames with arbitrary tag
+orderings, with the same reference error. This is the canonical identification
+of tag orderings of Definition~6.1, and it is formalized.
 
 \section{Elimination plan}
 

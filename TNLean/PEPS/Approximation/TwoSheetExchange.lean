@@ -180,7 +180,7 @@ theorem l2_opNorm_toMatrix_toPEquiv_le (f : m ≃ n) :
     rw [← Matrix.mul_one (f.toPEquiv.toMatrix : Matrix m n ℂ), PEquiv.toMatrix_toPEquiv_mul]
     rfl
   rw [h]
-  exact (l2_opNorm_reindex_le _ _ _).trans norm_one_le
+  exact (l2_opNorm_reindex_le _ _ _).trans (IsStarProjection.one _).norm_le
 
 omit [Fintype m] [Fintype n] [Fintype m'] [Fintype n'] [DecidableEq m] [DecidableEq n] in
 /-- The matrix of a product of bijections is the Kronecker product of their matrices. -/
@@ -296,10 +296,11 @@ theorem norm_bufferCorrection_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIso
     ‖bufferCorrection (T := T) (E := E) V‖ ≤ 1 := by
   refine (norm_submatrix_equiv_le _ _).trans ((l2_opNorm_one_kronecker_le _).trans ?_)
   have hVV : ‖V ⊗ₖ V‖ ≤ 1 :=
-    norm_le_one_of_gram (by rw [IsIsometry.kronecker V V hV hV]; exact norm_one_le)
+    l2_opNorm_le_one_of_conjTranspose_mul_self_le_one (by
+      rw [IsIsometry.kronecker V V hV hV]; exact (IsStarProjection.one _).norm_le)
   have hVV' := hVV
   rw [← l2_opNorm_conjTranspose] at hVV'
-  exact norm_mul_le_one (norm_mul_le_one hVV' (l2_opNorm_toMatrix_toPEquiv_le _)) hVV
+  exact l2_opNorm_mul_le_one (l2_opNorm_mul_le_one hVV' (l2_opNorm_toMatrix_toPEquiv_le _)) hVV
 
 /-- `F_{T B_T}` fixes `(s ⊗ s')^{⊗2}`: it exchanges the two identical factors `s`. -/
 theorem act_tbSwap_vecKron_tensorPurification (s : T × BT → ℂ) (s' : E × BE → ℂ) :
@@ -353,8 +354,10 @@ theorem norm_act_bufferCorrection_mul_tSwap_sub_le {V : Matrix (BT × BE) U ℂ}
   have hF : act F (vecKron ζ ζ) = vecKron ζ ζ := act_tbSwap_vecKron_tensorPurification s s'
   have hFn : ‖F - 1‖ ≤ 2 := by
     refine (norm_sub_le _ _).trans ?_
-    linarith [l2_opNorm_toMatrix_toPEquiv_le (tbSwap T E BT BE), norm_one_le (n := ((T × E) ×
-      (BT × BE)) × ((T × E) × (BT × BE)))]
+    have h1 : ‖(1 : Matrix (((T × E) × (BT × BE)) × ((T × E) × (BT × BE)))
+        (((T × E) × (BT × BE)) × ((T × E) × (BT × BE))) ℂ)‖ ≤ 1 :=
+      (IsStarProjection.one _).norm_le
+    linarith [l2_opNorm_toMatrix_toPEquiv_le (tbSwap T E BT BE)]
   have hV2 : ‖(𝒱 ⊗ₖ 𝒱)ᴴ‖ ≤ 1 := by
     rw [l2_opNorm_conjTranspose]
     exact l2_opNorm_kronecker_le_one (norm_one_kronecker_le_one hV) (norm_one_kronecker_le_one hV)
@@ -861,7 +864,7 @@ def exchangeOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
 
 theorem norm_exchangeOp_le_one (σ : SplittingData q (X.tSet P) (X.eSet P)) :
     ‖X.exchangeOp P σ‖ ≤ 1 :=
-  norm_mul_le_one ((norm_liftTags_le _).trans (norm_mul_le_one
+  l2_opNorm_mul_le_one ((norm_liftTags_le _).trans (l2_opNorm_mul_le_one
     (norm_sheetBufferCorrection_le_one _ σ) (norm_sheetSwapOp_le_one _))) X.norm_rename_le_one
 
 /-- The corrections `D_U` and `F_A` commute with the raw parts of the encoders after the
