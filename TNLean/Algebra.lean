@@ -40,6 +40,7 @@ import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
 import TNLean.Algebra.CycleLaplacianFourier
+import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights

@@ -24,8 +24,8 @@ branches therefore have the same additional output space, and the ideal addition
 the common normalized vector `Γ_m = ⨂_o η_o^{⊗ m}`.
 
 Telescoping the at most `r` replacements in one monomial gives the error `r / √m`, and summing
-with the original coefficients gives `‖G̃_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`.  Expanding the
-averages over insertion positions writes `G̃_m` as a sum of at most `K m^r` effect-free terms,
+with the original coefficients gives `‖G'_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`.  Expanding the
+averages over insertion positions writes `G'_m` as a sum of at most `K m^r` effect-free terms,
 each a contraction built from the original effect-free pieces, prepared copies of the
 normalized pair vectors and register permutations, with unchanged absolute coefficient sum.
 
@@ -43,8 +43,8 @@ contractions, and locality of the inserted permutations is the separate statemen
 * `PairEffect.EffectChain.replaceTerm` : one effect-free term of the replaced monomial.
 * `PairEffect.inventory`, `PairEffect.inventoryVector` : the common stack space and the
   common garbage vector `Γ_m` of a gate expansion.
-* `PairEffect.replaceGate` : the replaced gate `G̃_m`.
-* `PairEffect.termList` : the expansion of `G̃_m` into effect-free terms.
+* `PairEffect.replaceGate` : the replaced gate `G'_m`.
+* `PairEffect.termList` : the expansion of `G'_m` into effect-free terms.
 
 ## Main results
 
@@ -53,7 +53,7 @@ contractions, and locality of the inserted permutations is the separate statemen
 * `PairEffect.norm_replaceGate_sub_le` : the gate error `(r / √m) ∑_ξ |c_ξ|`.
 * `PairEffect.replaceGate_eq_sum_termList`, `PairEffect.length_termList_le`,
   `PairEffect.sum_norm_coeff_termList`, `PairEffect.norm_term_le_one` : the expansion of
-  `G̃_m`, its count `K m^r`, its absolute coefficient sum and contractivity of its terms.
+  `G'_m`, its count `K m^r`, its absolute coefficient sum and contractivity of its terms.
 * `PairEffect.pairEffectElimination` : Lemma 5.1 `lem:effects`, packaged.
 * `PairEffect.norm_le_one_add_of_norm_sub_le`,
   `PairEffect.norm_inv_one_add_smul_sub_le` : near-contractivity and rescaling.
@@ -62,7 +62,7 @@ contractions, and locality of the inserted permutations is the separate statemen
 ## References
 
 * Polynomial-PEPS manuscript (September 24, 2026), §5.1 and Lemma 5.1 `lem:effects`,
-  `04-compression.tex`, lines 22–127; rescaling, lines 199–228.
+  `04-compression.tex`, lines 22–127; choice of `m` and rescaling, lines 199–212.
 -/
 
 noncomputable section
@@ -443,7 +443,7 @@ def inventoryVector (m : ℕ) : (L : GateExpansion X Y) → inventory m L
   | [] => (1 : ℂ)
   | p :: L => p.2.stackVector m ⊗ₜ[ℂ] inventoryVector m L
 
-/-- The replaced gate `G̃_m`: in the branch of each monomial its effect occurrences are
+/-- The replaced gate `G'_m`: in the branch of each monomial its effect occurrences are
 replaced by cyclic insertions, and the stacks of all other monomials are prepared as their
 fixed vectors `η^{⊗ m}`.  Every branch has the same output space `Y ⊗ inventory m L`.
 
@@ -476,7 +476,7 @@ theorem norm_inventoryVector (m : ℕ) : (L : GateExpansion X Y) → (∀ p ∈ 
         norm_inventoryVector m L fun q hq => hL q (List.mem_cons_of_mem _ hq), one_mul]
 
 /-- **Gate error.** If every monomial of `G = ∑_ξ c_ξ M_ξ` is allowed and has at most `r`
-pair effects, then `‖G̃_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`.
+pair effects, then `‖G'_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`, displayed
 equation `eq:compression-effect-error`, `04-compression.tex`, lines 59–66 and 116–119. -/
@@ -535,7 +535,7 @@ theorem replaceGate_eq_sum_termList (m : ℕ) : (L : GateExpansion X Y) →
       · rw [replaceGate_eq_sum_termList m L, ← comp_assoc, comp_listSum]
         rfl
 
-/-- **Monomial count.** The expansion of `G̃_m` has at most `K m^r` terms, where `K` is the
+/-- **Monomial count.** The expansion of `G'_m` has at most `K m^r` terms, where `K` is the
 number of monomials of `G`.
 
 Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 66–69 and
@@ -551,7 +551,7 @@ theorem length_termList_le {m r : ℕ} (hm : m ≠ 0) : (L : GateExpansion X Y) 
       exact add_le_add (length_termList_le hm L fun q hq => hL q (List.mem_cons_of_mem _ hq))
         (Nat.pow_le_pow_right (Nat.pos_of_ne_zero hm) (hL p List.mem_cons_self))
 
-/-- **Absolute coefficient sum.** The expansion of `G̃_m` has the same absolute coefficient
+/-- **Absolute coefficient sum.** The expansion of `G'_m` has the same absolute coefficient
 sum `∑_ξ |c_ξ|` as the original expansion.
 
 Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 68–69 and
@@ -574,7 +574,7 @@ theorem sum_norm_coeff_termList {m : ℕ} (hm : m ≠ 0) : (L : GateExpansion X 
         ring
       · exact sum_norm_coeff_termList hm L
 
-/-- Every term of the expansion of `G̃_m` is a contraction. -/
+/-- Every term of the expansion of `G'_m` is a contraction. -/
 theorem norm_term_le_one (m : ℕ) : (L : GateExpansion X Y) → (∀ p ∈ L, p.2.IsAllowed) →
     ∀ q ∈ termList m L, ‖q.2‖ ≤ 1
   | [], _ => by simp [termList]
@@ -593,14 +593,20 @@ theorem norm_term_le_one (m : ℕ) : (L : GateExpansion X Y) → (∀ p ∈ L, p
 
 /-- **Elimination of normalized pair effects.** Let `G = ∑_ξ c_ξ M_ξ` be a gate expansion into
 `K` allowed monomials, each with at most `r` normalized pair effects, and let `m ≥ 1`.  The
-replaced gate `G̃_m` and the common garbage vector `Γ_m` satisfy:
+replaced gate `G'_m` and the common garbage vector `Γ_m` satisfy:
 
 * `Γ_m` is normalized;
-* `‖G̃_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`;
-* `G̃_m` is the weighted sum of the effect-free terms of `termList`;
+* `‖G'_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`;
+* `G'_m` is the weighted sum of the effect-free terms of `termList`;
 * there are at most `K m^r` such terms;
 * their absolute coefficient sum equals `∑_ξ |c_ξ|`;
 * each term is a contraction.
+
+The source also states that the additional registers are owned by the original participating
+parties.  The model does not track parties, so that clause is not part of this statement; the
+locality of the inserted register permutations is `CyclicInsertion.registerPerm_pair_index`,
+and the combination of sources on one pair is `EuclideanSpace.norm_pairCombine`.  The
+hypothesis that `G` is a contraction is not needed here; it enters `replaceGate_rescaled`.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`,
 `04-compression.tex`, lines 53–127. -/
@@ -634,7 +640,7 @@ theorem norm_le_one_add_of_norm_sub_le {A B : E} {δ : ℝ} (hB : ‖B‖ ≤ 1)
 /-- Rescaling an operator within `δ ≥ 0` of a contraction by `(1 + δ)⁻¹` gives an operator
 within `2δ` of the contraction.
 
-Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 199–228. -/
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 209–212. -/
 theorem norm_inv_one_add_smul_sub_le {A B : E} {δ : ℝ} (hδ : 0 ≤ δ) (hB : ‖B‖ ≤ 1)
     (h : ‖A - B‖ ≤ δ) : ‖(((1 + δ)⁻¹ : ℝ) : ℂ) • A - B‖ ≤ 2 * δ := by
   have hA := norm_le_one_add_of_norm_sub_le hB h
@@ -659,7 +665,9 @@ end Rescaling
 
 /-- A number `m ≥ 1` of stack registers achieving the target gate error `δ` for at most `r`
 effects per monomial and absolute coefficient sum `S`: `m = ⌈(r S / δ)^2⌉ + 1`.  It is chosen
-from the original coefficients, before the averages are expanded. -/
+from the original coefficients, before the averages are expanded.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 201–208. -/
 def stackLength (r : ℕ) (S δ : ℝ) : ℕ := ⌈(r * S / δ) ^ 2⌉₊ + 1
 
 theorem stackLength_ne_zero (r : ℕ) (S δ : ℝ) : stackLength r S δ ≠ 0 := Nat.succ_ne_zero _
@@ -680,10 +688,10 @@ theorem stackLength_spec (r : ℕ) {S δ : ℝ} (hS : 0 ≤ S) (hδ : 0 < δ) :
     _ = δ * Real.sqrt N := mul_comm _ _
 
 /-- **Near-contractivity and rescaling of the replaced gate.** If `G` is a contraction, then
-`‖G̃_m‖ ≤ 1 + δ` and `(1 + δ)⁻¹ G̃_m` is within `2δ` of `G ⊗ |Γ_m⟩`, where
+`‖G'_m‖ ≤ 1 + δ` and `(1 + δ)⁻¹ G'_m` is within `2δ` of `G ⊗ |Γ_m⟩`, where
 `δ = (r / √m) ∑_ξ |c_ξ|`.
 
-Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 199–228. -/
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 209–212. -/
 theorem replaceGate_rescaled {X Y : HSpace} {m r : ℕ} (hm : m ≠ 0) (L : GateExpansion X Y)
     (hL : ∀ p ∈ L, p.2.IsAllowed ∧ p.2.effectCount ≤ r) (hG : ‖gate L‖ ≤ 1) :
     ‖replaceGate m L‖ ≤ 1 + r / Real.sqrt m * (L.map fun p => ‖p.1‖).sum ∧
