@@ -8,5 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.CorrectedPositionCost
+import TNLean.PEPS.Approximation.DistributedLifetime
+import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
