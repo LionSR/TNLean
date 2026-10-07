@@ -126,7 +126,9 @@ import TNLean.MPS.Preparation.RectangularWindowMixing
 import TNLean.MPS.Preparation.RectangularWindowPreparation
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
+import TNLean.MPS.Preparation.RelativePolarCompression
 import TNLean.MPS.Preparation.RelativePositivePart
+import TNLean.MPS.Preparation.RelativeSecondOrderOverlap
 import TNLean.MPS.Preparation.RemainderBlocks
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.RepeatedBlockError
