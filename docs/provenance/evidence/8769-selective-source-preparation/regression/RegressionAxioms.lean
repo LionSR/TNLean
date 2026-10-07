@@ -18,7 +18,7 @@ set_option linter.hashCommand false
 run_cmd do
   let environment ← Lean.getEnv
   let names := environment.header.moduleNames.map (fun n ↦ Lean.Json.str n.toString)
-  IO.FS.writeFile 
+  IO.FS.writeFile
     ("/private/tmp/tnlean-selective-source-preparation-regression-evidence/" ++
       "imported-modules.json")
     (Lean.Json.compress (Lean.Json.arr names))
