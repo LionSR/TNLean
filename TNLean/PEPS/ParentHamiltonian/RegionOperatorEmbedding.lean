@@ -16,7 +16,7 @@ dependent regional lift. These identities hold for arbitrary complex matrices,
 including zero physical dimension and empty regions or ambient vertex sets.
 
 This is an original identification of the existing operator conventions for
-the polynomial-PEPS development tracked in #8770 and #8823. The definitions
+the polynomial-PEPS approximation manuscript cited below. The definitions
 come from the regional parent construction in arXiv:2011.12127, Section IV.C.1,
 lines 2003–2011, and the local gates of arXiv:2307.01696, before Theorem 1;
 the comparison itself is proved here by its matrix coefficients.
