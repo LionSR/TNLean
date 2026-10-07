@@ -205,6 +205,77 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
     vanishes. Lemma~\ref{lem:ldp_shared_overlap_estimates}(8) applies.
 \end{proof}
 
+\begin{lemma}[Second-order deficit of the relative diagonal coefficient]
+    \label{lem:ldp_relative_diagonal_deficit}
+    \lean{MPSTensor.relative_column_gram, MPSTensor.sum_norm_relative_column_sq,
+        MPSTensor.relative_diagonal_nonneg, MPSTensor.relative_diagonal_geometry,
+        MPSTensor.exists_relative_diagonal_deficit_le,
+        MPSTensor.exists_norm_one_sub_relative_diagonal_le}
+    \leanok
+    \uses{lem:ldp_relative_positive_part, def:prep_fixed_point_tensor}
+    With the notation of Lemma~\ref{lem:ldp_relative_positive_part}, let $q\geq1$, write
+    $H_{kj}=L_k^\dagger PC^{-1}L_j$ for the relative blocks, and, for a positive
+    semidefinite $\sigma$, write $\lVert X\rVert_\sigma^2=\Tr\sum_iX^i\sigma(X^i)^\dagger$
+    for a tensor $X$ read from a matrix. Let $\sigma_j$ be a positive semidefinite fixed
+    point of $\E_{A_j}$ of trace one, $F_j$ its fixed-point tensor, and
+    $\alpha_j=\Tr\E_{H_{jj}F_j}(\sigma_j)$.
+    \begin{enumerate}
+        \item $\sum_kH_{kj}^\dagger H_{kj}=\mathcal B_j^\dagger\mathcal B_j$, where
+              $\mathcal B_j$ is the physical matrix of the $q$-blocked tensor $A_j$, and
+              $\sum_k\lVert H_{kj}\rVert_{\sigma_j}^2=1$.
+        \item $\alpha_j$ is real, $0\leq\alpha_j\leq1$, and
+              $1-\alpha_j=\tfrac12\bigl(\lVert H_{jj}-F_j\rVert_{\sigma_j}^2
+                  +\sum_{k\neq j}\lVert H_{kj}\rVert_{\sigma_j}^2\bigr)$.
+        \item There is $C>0$ such that for all nonzero weights, all $q\geq1$ and all $\delta$,
+              if every $H_{kj}$ is within $\delta$ in operator norm of its limit from
+              Lemma~\ref{lem:ldp_relative_positive_part}(2), then $\lvert\alpha_j\rvert\leq1$
+              and $\lvert1-\alpha_j\rvert\leq C\delta^2$.
+        \item Under the hypotheses of Lemma~\ref{lem:ldp_relative_positive_part}(3), for
+              every $0<\gamma<1$ there are $C>0$ and $q_0$ such that for all nonzero
+              weights and all $q\geq\max(q_0,1)$,
+              $\lvert1-\alpha_j\rvert\leq Ce^{-2\gamma q/\xi}$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    (1) $P$ vanishes off the ranges of the $L_k$, which are orthogonal, so
+    $\sum_kH_{kj}^\dagger H_{kj}=c_j^{-2}L_j^\dagger P^2L_j=\mathcal B_j^\dagger\mathcal B_j$.
+    The squared $\sigma_j$-norms of the $H_{kj}$ add up to
+    $\Tr\E_{A_j}^q(\sigma_j)=\Tr\sigma_j=1$. (2) The coefficient is the inner product of
+    the vectors $(H_{jj}^i\sqrt{\sigma_j})_i$ and $(F_j^i\sqrt{\sigma_j})_i$; both have
+    norm at most one, and $\lVert F_j\rVert_{\sigma_j}=1$. It is nonnegative since $P\geq0$.
+    Expanding $\lVert H_{jj}-F_j\rVert_{\sigma_j}^2$ and using (1) gives the identity.
+    (3) Each $\sigma_j$-norm is bounded by a dimensional constant times the operator norm;
+    the off-diagonal limits vanish. (4) Combine (3) with
+    Lemma~\ref{lem:ldp_relative_positive_part}(3).
+\end{proof}
+
+\begin{lemma}[Second-order overlaps of the relative rows]
+    \label{lem:ldp_relative_overlaps_second_order}
+    \lean{MPSTensor.exists_norm_relative_row_overlap_sub_ite_le_sq}
+    \leanok
+    \uses{lem:ldp_relative_diagonal_deficit, lem:ldp_relative_overlaps,
+        lem:ldp_shared_overlap_estimates}
+    With the notation of Lemma~\ref{lem:ldp_relative_diagonal_deficit}, let $\sigma_k$ be a
+    positive semidefinite fixed point of $\E_{A_k}$ of trace one for every block $k$, and
+    let $j,j'$ be blocks. There is $C>0$ such that for all nonzero weights, all $q\geq1$,
+    all $\delta$ and all $M\geq2$: if every relative block $H_{kl}$ is within $\delta$ of
+    its limit and $CM\delta^2<1$, then the overlap of the tensor read from $H_{jj'}$ with
+    $F_j$ on $M$ sites is $\delta_{jj'}$ up to $CM\delta^2e^{CM\delta^2}$. No quadratic
+    bound is asserted for $M=1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For $j=j'$ the mixed transfer map of $H_{jj}$ and $F_j$ is within $O(\delta)$ of the
+    idempotent $X\mapsto\Tr(X)\sigma_j$, and its trace against $\sigma_j$ is $\alpha_j$,
+    which is $1$ up to $O(\delta^2)$ by
+    Lemma~\ref{lem:ldp_relative_diagonal_deficit}(3); the idempotent power estimate of
+    Lemma~\ref{lem:ldp_shared_overlap_estimates} gives the bound. For $j\neq j'$ the
+    limit of $H_{jj'}$ is zero, so the mixed transfer map has norm $O(\delta)$ and its
+    $M$-th power has norm $O(\delta^M)$, which is $O(M\delta^2)$ for $M\geq2$ under the
+    smallness condition.
+\end{proof}
+
 \begin{theorem}[Approximation error for repeated overlapping blocks]
     \label{thm:ldp_approximation_error_repeated_overlapping}
     \lean{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum,
