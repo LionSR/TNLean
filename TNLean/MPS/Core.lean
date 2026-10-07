@@ -25,6 +25,7 @@ import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Core.MultiBlockWord
 import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.Core.ObservableTransfer
+import TNLean.MPS.Core.PhysicalDimension
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Core.PhysicalMatrix
 import TNLean.MPS.Core.PhysicalReindexTransport
