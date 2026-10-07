@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Circuit.SiteEmbedding
 
 /-!
@@ -268,33 +269,19 @@ theorem permOp_swap_eq_embedOp {j j' : Fin n} (hjj' : j ≠ j') :
   · rw [ite_eq_right h]
     split_ifs with h1 h2 <;> first | rfl | exact absurd (key.2 ⟨h1, h2⟩) h
 
+/-- The site permutation `permOp τ` is the permutation matrix of `x ↦ x ∘ τ` on
+configurations. -/
+theorem permOp_eq_permMatrix (τ : Equiv.Perm (Fin n)) :
+    permOp (d := d) τ = Equiv.Perm.permMatrix ℂ (τ.symm.arrowCongr (Equiv.refl (Fin d))) := by
+  ext x y
+  simp only [permOp, Equiv.Perm.permMatrix, Equiv.toPEquiv_apply, PEquiv.toMatrix_apply,
+    Option.mem_def, Option.some.injEq, of_apply]
+  exact if_congr eq_comm rfl rfl
+
 theorem permOp_mem_unitary (τ : Equiv.Perm (Fin n)) :
     permOp (d := d) τ ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
-  have hP : ∀ x z : Fin n → Fin d, (x = z ∘ τ) ↔ (z = x ∘ τ.symm) := fun x z => by
-    constructor
-    · rintro rfl; funext i; simp
-    · rintro rfl; funext i; simp
-  rw [Unitary.mem_iff]
-  constructor
-  · ext x y
-    simp only [mul_apply, star_apply, permOp, of_apply, apply_ite star, star_one, star_zero,
-      mul_ite, mul_one, mul_zero]
-    simp_rw [hP x, hP y]
-    rw [Finset.sum_ite_eq']
-    simp only [Finset.mem_univ, ite_true, one_apply]
-    by_cases hxy : x = y
-    · subst hxy; simp
-    · rw [ite_eq_right, ite_eq_right hxy]
-      intro h; exact hxy (by funext i; simpa using (congrFun h (τ i)).symm)
-  · ext x y
-    simp only [mul_apply, star_apply, permOp, of_apply, apply_ite star, star_one, star_zero,
-      mul_ite, mul_one, mul_zero]
-    rw [Finset.sum_ite_eq']
-    simp only [Finset.mem_univ, ite_true, one_apply]
-    by_cases hxy : x = y
-    · subst hxy; simp
-    · rw [ite_eq_right, ite_eq_right hxy]
-      intro h; exact hxy (by funext i; simpa using (congrFun h (τ.symm i)).symm)
+  rw [permOp_eq_permMatrix]
+  exact Equiv.Perm.permMatrix_mem_unitaryGroup _
 
 /-- The SWAP gate of two neighbouring sites. -/
 theorem isNeighbourGate_permOp_swap {j j' : Fin n} (hj : j'.val = j.val + 1) :
