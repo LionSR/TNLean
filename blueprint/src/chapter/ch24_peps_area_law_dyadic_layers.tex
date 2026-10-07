@@ -113,8 +113,7 @@
     \end{align}
     The constant depends only on the chosen radius, independently of the
     origin, scale, domain and cut. These are the layer-cell estimates in
-    \cite[Section~11]{OpenAI2026AreaLaw}; exhaustion of the plane and the
-    closure-distance estimates remain to be established.
+    \cite[Section~11]{OpenAI2026AreaLaw}; closure-distance estimates remain to be established.
 \end{theorem}
 \begin{proof}\leanok
     The occupied-index image has at most $|Z|$ elements. Its integer
@@ -122,4 +121,28 @@
     has exactly four children. Taking a set difference can only decrease the
     count. Each crossing edge contributes at most two endpoints, giving the
     second bound.
+\end{proof}
+
+
+\begin{theorem}[Exhaustion of the plane]
+    \label{thm:area_law_dyadic_exhaustion}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_mem_dyadicNeighborhood,
+        TNLean.PEPS.AreaLaw.Geometry.iUnion_dyadicNeighborhood_eq_univ}
+    \leanok
+    \uses{def:area_law_dyadic_layers,thm:area_law_dyadic_indices}
+    For every origin, nonempty finite endpoint set $Z$, and integer $C_0\ge2$,
+    every point belongs to some $N_k$, with $k\ge0$. Consequently,
+    \begin{align}
+        \bigcup_{k\ge0}N_k & =\mathbb R^2.
+    \end{align}
+    This is the exhaustion assertion in \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose $z\in Z$. For any $x\in\mathbb R^2$, take $2^k$ larger than the
+    sum of the four absolute values of the coordinates of $x-o$ and $z-o$.
+    Each translated coordinate divided by $2^k$ then lies in $(-1,1)$, so
+    its floor is either $-1$ or $0$. The indices $c_k(x)$ and $c_k(z)$
+    therefore differ by at most one in each coordinate. Since $c_k(z)$ is
+    occupied and $C_0\ge2$, the index $c_k(x)$ belongs to $P_k$. Thus
+    $x\in N_k$, as required.
 \end{proof}

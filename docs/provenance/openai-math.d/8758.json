@@ -898,6 +898,72 @@
         "result": "pending"
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_mem_dyadicneighborhood",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicExhaustion.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_mem_dyadicNeighborhood",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves every planar point belongs to some enlarged occupied-cell neighborhood for a nonempty finite set and radius at least two, by an explicit Archimedean bound on the translated coordinates.",
+        "Formalizes the exhaustion assertion of Section 11, lines 151–177, at nonnegative scales and arbitrary origin, retaining the source assumptions that the endpoint set is nonempty and the neighborhood radius is at least two.",
+        "Does not prove closure-distance or clearance estimates, the two-family construction, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.iunion_dyadicneighborhood_eq_univ",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicExhaustion.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.iUnion_dyadicNeighborhood_eq_univ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves the union over all nonnegative dyadic scales of the enlarged occupied-cell neighborhoods is the whole plane for a nonempty finite set and radius at least two.",
+        "Formalizes the exhaustion assertion of Section 11, lines 151–177, at nonnegative scales and arbitrary origin, retaining the source assumptions that the endpoint set is nonempty and the neighborhood radius is at least two.",
+        "Does not prove closure-distance or clearance estimates, the two-family construction, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }

@@ -117,7 +117,7 @@ not identified with the final choices.
 | Area-law `geometry:cancellation` | Ordered partition data defined | Generic entropy cancellation, #8760. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
 | Area-law `geometry:belt-count` | Finite residue selection proved | Fine-cell count, scale divisibility, and dyadic decay. |
-| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, and their uniform cell counts proved | Exhaustion, closure-distance estimates, contacts, simultaneous repairs, separation, and the full partition. |
+| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, uniform cell counts, and exhaustion proved | Closure-distance estimates, contacts, simultaneous repairs, separation, and the full partition. |
 | PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
 
 Defining a target proposition does not prove the corresponding theorem. The
