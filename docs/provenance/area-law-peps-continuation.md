@@ -11,7 +11,7 @@ Last coordination check: October 7, 2026, 18:07 UTC.
 | Uniform separation of dyadic scales | [#8846](https://github.com/LionSR/TNLean/pull/8846) | `4be0ad6b5e6bc2d1523ba02b8675377c05549da5` | `44615152fb68de9bc913f491231dd7325f3fdef4` |
 | Polynomial absorption and the numerical series bound | [#8848](https://github.com/LionSR/TNLean/pull/8848) | `5652d02446787ee2b9248db1057df48adbe32492` | `ed84770bf703478d69e4c8625d005c645d1a2529` |
 | Primary birth regions, rectangular fragments and adjacent meshes | [#8851](https://github.com/LionSR/TNLean/pull/8851) | `d469be1a0a7799f4613e64e8139893b0fa2ee11d` | `fd8bf12587482c1db66c8c626a9df57cc4db025f` |
-| Number of actual primary identifiers | Publication accompanies this record | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | Evidence commit containing this record |
+| Number of actual primary identifiers | [#8856](https://github.com/LionSR/TNLean/pull/8856) | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | `61fd819e7fe4689b8e0893affc9f127238b191ec` |
 
 All 48 exact imported declarations in these five contributions have passing
 canonical build and standard-axiom evidence. Complete provenance validation
@@ -81,6 +81,9 @@ as actual points, proves cell-closure membership and the exact nine-point
 count, then deduplicates the finite union over actual belt cells. The intended
 uniform bound is at most nine times the belt-cell count and hence at most
 `576(2C₀+1)^2|boundary edges|2^(-δ₀k/2)` for a selected sparse shift.
+The six declarations have passed direct package-option elaboration without
+warnings and independent mathematical review. Their canonical evidence remains
+pending; the six new provenance rows remain planned in the 215-entry collection.
 Source: Section 11, lines 325–330 of the pinned manuscript. The proof author
 owns only the new Lean file; separate reviewers handle source and provenance.
 The root agent owns imports, blueprint, canonical verification and publication.
@@ -107,9 +110,9 @@ not count actual repairs. Both source-faithful headline theorems remain unproved
 - The hot-main worktree belongs to the coordinating owner. Do not reset an
   active peer worktree, interrupt its build or change dependency pins.
 
-The next local action is to publish the completed four-row counting evidence
-and draft, then implement and independently review the actual belt marks.
-Freeze source before the targeted Geometry build and exact imported audit;
+The next local action is to freeze the reviewed belt-mark source and perform
+one targeted Geometry build and exact imported six-name audit in the warmed
+worktree. The completed counting evidence and draft #8856 are published.
 promote only the new rows when actual checks pass. Complete compiled blueprint
 checking is supplied by full CI, preserving the known local artifact limitation.
 

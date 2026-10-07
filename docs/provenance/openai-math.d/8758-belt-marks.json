@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.beltcellmarks",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltCellMarks",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the actual nine marked points of a dyadic cell as the image of Fin 3 \u00d7 Fin 3 under the coordinate offsets zero, one half and one.",
+        "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.beltmarks",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltMarks",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the finite union of the actual marked points of a finite set of dyadic belt cells, thereby deduplicating coincident marks.",
+        "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.beltcellmarks_subset_closure_dyadiccell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltCellMarks_subset_closure_dyadicCell",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Places all nine actual marked points of a dyadic belt cell inside its closed cell.",
+        "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_beltcellmarks",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_beltCellMarks",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Proves that every dyadic belt cell has exactly nine distinct actual marked points.",
+        "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_beltmarks_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_beltMarks_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Bounds the cardinality of the deduplicated union of marked points by nine times the cardinality of its actual finite belt-cell index set.",
+        "Source: Section 11, lines 325\u2013330 in the proof of prop:two-families, immediately before geometry:initial-stars. This contribution concerns actual initial-mark locations and finite counting. Minimum incident-scale assignment, isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition and both manuscript headline theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_sparse_dyadic_belt_marks_shift",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/BeltMarks.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_marks_shift",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars",
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Selects actual coordinate residues whose deduplicated belt-mark union has cardinality at most 576 * (2 * C + 1)^2 * |\u2202\u039b A| * 2^(-geometryDelta * k / 2), combining the established sparse-belt bound with the nine-points-per-cell count. The coefficient is exactly 9 * 64.",
+        "Source: Section 11, nine actual marks and deduplication in lines 325\u2013330, composed with geometry:belt-count lines 220\u2013228. This contribution does not assign minimum incident scales or establish isolated stars, separation, contact completeness, repairs, descendant counts, the complete two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
