@@ -1,0 +1,12 @@
+import took 1.95s
+cumulative profiling times:
+	blocked (unaccounted) 56.3ms
+	elaboration 8.78ms
+	import 1.95s
+	initialization 29.5ms
+	interpretation 265ms
+	linting 4.53ms
+	module linting 0.0015ms
+	overlappingInstancesLinter 1.03ms
+	parsing 3.62ms
+	tacticAnalysis 7.16ms
