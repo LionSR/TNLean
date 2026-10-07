@@ -174,6 +174,13 @@ def check_entry(entry, roots):
         check_reference(library, roots, required=active)
         for key in ("repository", "path", "declaration"):
             require(entry["downstream"][key] == library[key], "replacement/downstream mismatch")
+        if active and library["repository"] != REPO and REPO in roots:
+            manifest = read_json(safe_file(roots[REPO], "lake-manifest.json"))
+            package = [p for p in manifest["packages"] if
+                       p.get("url", "").removesuffix(".git") ==
+                       "https://github.com/" + library["repository"]]
+            require(len(package) == 1 and package[0]["rev"] == library["commit"],
+                    "replacement revision differs from the dependency pin")
         if active:
             require(entry["verification"]["revision"] == library["commit"],
                     "replacement verification must use exact library pin")
@@ -287,6 +294,10 @@ def audit_upstream(root, upstream_root):
                PurePosixPath(p).name.lower() == "notice" or
                PurePosixPath(p).name.lower().startswith("notice.")]
     require(notices == audit["tracked_notice_files"], "tracked NOTICE audit mismatch")
+    source_path = "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean"
+    prefix = b"".join(git_bytes(upstream_root, PIN, source_path).splitlines(keepends=True)[:13])
+    fixture = safe_file(root, "scripts/fixtures/openai_provenance/Source.lean.txt").read_bytes()
+    require(fixture == prefix, "real-source fixture differs from the upstream excerpt")
 
 
 def main():

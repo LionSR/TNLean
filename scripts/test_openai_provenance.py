@@ -226,6 +226,25 @@ class ProvenanceTests(unittest.TestCase):
         self.write("TNLean/Example.lean", self.stored.decode())
         self.assertEqual(self.validate(), 1)
 
+    def test_wrong_manuscript_label(self):
+        self.row["paper_sources"][0]["labels"] = ["invented-label"]
+        self.rejects("missing manuscript label")
+
+    def test_noncanonical_source_path(self):
+        self.row["upstream"]["path"] = "lean//Example.lean"
+        self.rejects("noncanonical source path")
+
+    def test_replacement_wrong_dependency_pin(self):
+        self.row.update(status="replaced", reuse_kind="existing_library", upstream=None)
+        self.row["library"] = dict(repository="LionSR/QICLean", commit="b" * 40,
+            path="QICLean/Example.lean", declaration="Example.Vertex", lines=[14, 15],
+            url=f"https://github.com/LionSR/QICLean/blob/{'b' * 40}/QICLean/Example.lean#L14-L15")
+        self.row["downstream"].update(repository="LionSR/QICLean", path="QICLean/Example.lean")
+        self.roots["LionSR/QICLean"] = self.root / "qic"
+        self.write("lake-manifest.json", json.dumps({"packages": [{
+            "url": "https://github.com/LionSR/QICLean.git", "rev": "c" * 40}]}))
+        self.rejects("differs from the dependency pin")
+
     def test_git_reads_recorded_revision_not_worktree(self):
         self.mock_git.stop()
         subprocess.run(["git", "init", "-q", str(self.root)], check=True)

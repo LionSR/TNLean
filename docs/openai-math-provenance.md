@@ -119,7 +119,9 @@ axioms `propext`, `Classical.choice`, `Quot.sound` are distinct from proof holes
 For QICLean-owned rows keep the module, notice, license, ledger and logs in
 QICLean. TNLean links the reviewed companion commit and checks an explicitly
 supplied companion checkout. It never treats a companion path as a TNLean file.
-A replacement row must use the library commit as its verified revision.
+A replacement row must use the library commit as its verified revision and
+match the consuming TNLean dependency pin; changing that pin needs the coordinated
+companion review.
 
 ## Validation and review boundary
 
