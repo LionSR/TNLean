@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
         "declaration": "TNLean.PEPS.regularizedPatchCoordinateUpdate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -34,19 +34,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate_mem",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
         "declaration": "TNLean.PEPS.regularizedPatchCoordinateUpdate_mem",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -66,19 +84,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate_rpow",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
         "declaration": "TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -98,19 +134,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
         "declaration": "TNLean.PEPS.regularizedPatchInsertion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -130,19 +184,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion_apply",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
         "declaration": "TNLean.PEPS.regularizedPatchInsertion_apply",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -162,19 +234,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchoutput_coordinateupdate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
         "declaration": "TNLean.PEPS.regularizedPatchOutput_coordinateUpdate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -194,19 +284,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion_self",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
         "declaration": "TNLean.PEPS.regularizedPatchInsertion_self",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -226,19 +334,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123068670689364/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchunitarycurve",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
         "declaration": "TNLean.PEPS.regularizedPatchUnitaryCurve",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -258,19 +384,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123156266085685/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123156266085685/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchStationarity.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-output-derivative",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
         "declaration": "TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -290,19 +434,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123156266085685/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123156266085685/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchStationarity.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchfirstvariation_eq_zero",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
         "declaration": "TNLean.PEPS.regularizedPatchFirstVariation_eq_zero",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -322,19 +484,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123156266085685/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123156266085685/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchStationarity.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.dependentGlobalConfigEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -354,19 +534,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigisometry",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.dependentGlobalConfigIsometry",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -386,19 +584,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigisometry_apply",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.dependentGlobalConfigIsometry_apply",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -418,19 +634,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-regional-expectation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -450,19 +684,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.normalizedregularizedpatchmarginal",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.normalizedRegularizedPatchMarginal",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -482,19 +734,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-marginal-psd",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -514,19 +784,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-tnlean.peps.trace_normalizedregularizedpatchmarginal",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.trace_normalizedRegularizedPatchMarginal",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -546,19 +834,37 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     },
     {
       "id": "regularizedpatchstationarity8767-normalized-expectation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
         "declaration": "TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -578,7 +884,25 @@
       ],
       "no_upstream_proof_text_reused": true,
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123160650948008/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.ilean /workspace/scratch/7637e06d0fc2/TNLean-patch-coordinate-stationarity/TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/TNLean.PEPS.AreaLaw.RegularizedPatchMarginal.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.olean -i /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/tmp/123260430607057/PatchCoordinateAxioms.ilean /workspace/scratch/7637e06d0fc2/patch-coordinate-validation/PatchCoordinateAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/regularizedPatchStationarity8767/lean/logs/PatchCoordinateAxioms.log",
+            "sha256": "aa3ea299c7e9a4076b2a74b7d4d3eb0f3b5e245a99922d6188db61ab1667dab3"
+          }
+        ]
       }
     }
   ]

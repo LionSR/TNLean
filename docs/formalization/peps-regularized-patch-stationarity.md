@@ -112,20 +112,30 @@ the outer products as operators supported on the selected region.
 
 ## Dependency and verification boundary
 
-The integration base is published but unmerged
+The exact source parent used for the preserved compiler checks is published but unmerged
 [TNLean #8822](https://github.com/LionSR/TNLean/pull/8822), revision
 `e9311cbbaf55517308f416b008df5ddafcc047c9`. It is not an
 accepted-main claim. The QICLean dependency remains accepted revision
 `378bef486fc0241dee8ad875ccaf659d51d33ac9`; this leaf does not depend on the
-pending QICLean #577 extraction. Generic trace-duality and later optimization
+QICLean #577 extraction. Generic trace-duality and later optimization
 engines remain under [#8741](https://github.com/LionSR/TNLean/issues/8741) and
 [#8744](https://github.com/LionSR/TNLean/issues/8744).
 
 The distinct provenance shard
 `docs/provenance/openai-math.d/regularizedPatchStationarity8767.json` has 18
-original-proof rows. They remain `planned`/`proposed` with pending verification
-until immutable source and exact native evidence are published. The earlier
-minimum's verification records are not reused as evidence for these declarations.
+original-proof rows. This evidence child marks only these 18 rows as
+`ported`/`declared`, with passing exact-source verification at published immutable
+source revision [`ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd`](https://github.com/LionSR/TNLean/commit/ac1fdd4c8a17b9811d15b8f2e9f05798a427c6fd).
+The source commit itself retained planned rows until this object existed.
+Its tree is byte-identical to the locally checked commit
+`0580e6c660f20c30f2faf4bbfa385be84cc0936b`. All 68 changed source, documentation, and evidence
+files were checked against the published Git tree. The earlier minimum's
+verification records are not reused as evidence for these declarations.
+
+The later parent refresh `a5ae1ba4f0238984e0e81eb81312ebdf6b6f9d27` is separate from the
+originally checked parent `e9311cbbaf55517308f416b008df5ddafcc047c9`. Integrating against
+that newer parent and checking exact-head CI remain separate gates; no
+recompilation or retrospective current-parent build claim is made here.
 
 The three production modules, regenerated area-law router, and all three
 regression modules passed serial strict checks with package options, Mathlib
@@ -140,6 +150,12 @@ have zero findings. A focused four-page PDF containing the minimum and this
 section was rendered twice and visually reviewed; the production SVG was also
 visually reviewed. The source-only blueprint declaration check used all 983
 byte-verified files of the accepted QICLean pin. These are local scoped checks.
+All compiler and documentation logs are preserved byte for byte. This
+metadata child performed no new compiler invocation. The publication attestation
+is retained in
+`docs/provenance/evidence/regularizedPatchStationarity8767/source-tree-attestation.json`.
+Earlier validation reports remain historical snapshots, including their then-pending
+publication status; the active ledger and this attestation record its resolution.
 No full Lake build, aggregate `checkdecls`, full blueprint web/PDF build, or
 exact-head CI pass is claimed. Diagram and source-only checks cannot replace
 those gates. Textual documentation and diagram evidence is retained in

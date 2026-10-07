@@ -1,0 +1,16 @@
+{
+  "verdict": "approved",
+  "blocking_findings": [],
+  "checks": [
+    "published and locally checked commits share exact tree and checked e931 parent",
+    "all68 attested files match source blobs, sizes and SHA256",
+    "exactly18 original rows change only status,name_status,verification",
+    "commands and logs match8 strict final records;18stock-only axiom reports",
+    "all85 source/artifact pairs and7 frozen source hashes match",
+    "all3010 tracked Lean/evidence files and earlier provenance shards unchanged",
+    "current-parent integration/full-build/CI limitations preserved",
+    "metadata hashes and diff whitespace checks pass"
+  ],
+  "reviewer_compiler_invocations": 0,
+  "reviewer_remote_mutations": false
+}

@@ -1,0 +1,6 @@
+PASS f920: 18 active original-proof rows, immutable source, exact notices, raw reports and stock axioms.
+PASS minimal: 18 active original-proof rows, immutable source, exact notices, raw reports and stock axioms.
+PASS: all other provenance shards unchanged.
+PASS: all 52 existing evidence files, including every raw log, unchanged.
+PASS: all seven frozen production/router/regression sources match published source; no recompilation.
+PASS: exactly18 existing rows activated; only status, name_status and verification changed.
