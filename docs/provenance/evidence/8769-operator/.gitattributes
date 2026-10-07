@@ -1,0 +1,3 @@
+# Preserve exact command output, including trailing blank lines in immutable logs.
+# Source, blueprint, scripts and manifests retain normal whitespace checking.
+*.log -whitespace
