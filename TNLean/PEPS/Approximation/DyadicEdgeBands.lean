@@ -574,12 +574,12 @@ theorem BandOperation.dist_le_of_mem_closure_changed {ι : Type*} (op : BandOper
   have := op.hi'_le
   exact dist_le_of_mem_closedEdgeBand (by linarith) (by linarith) (hsub hy) (hsub hz)
 
-/-- **Clearance of the edge births and deaths in the proof of Lemma 7.2.** For an elementary
-birth or death of the edge construction, every point `y` of the closure of the changed region lies at ambient sup distance
-at least `a₀ min(n, d_V(y))` from every position of a label other than `P∘` in the surrounding
-guide. Here the guides `fb` (before) and `fa` (after) have the operation's normal words on the
-band `-8 < x < 2` and agree off it, and the surrounding guide `fs` has the surrounding word on
-that band. These guide properties are assumed rather than derived from the schedule (see the
+/-- **Clearance of the edge births and deaths in the proof of Lemma 7.2.** For an elementary birth
+or death of the edge construction, every point `y` of the closure of the changed region lies at
+ambient sup distance at least `a₀ min(n, d_V(y))` from every position of a label other than `P∘` in
+the surrounding guide. Here the guides `fb` (before) and `fa` (after) have the operation's normal
+words on the band `-8 < x < 2` and agree off it, and the surrounding guide `fs` has the surrounding
+word on that band. These guide properties are assumed rather than derived from the schedule (see the
 module's scope restriction).
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
@@ -820,9 +820,10 @@ private theorem closure_centralRegion_subset (n : ℝ) :
   simp only [par, nor] at b t l r
   exact ⟨h1.le, h2.le, h3.le, h4.le, b.le, t.le, l.le, r.le⟩
 
-/-- **Clearance of the central birth in the proof of Lemma 7.2.** Every point `y` of the closed central region lies at ambient
-sup distance at least `a₀ min(n, d_V(y))` from every position of a label other than `A` in any
-guide which is `A` on the open square `(0, n) ^ 2`; here `V` is the set of four corners.
+/-- **Clearance of the central birth in the proof of Lemma 7.2.** Every point `y` of the closed
+central region lies at ambient sup distance at least `a₀ min(n, d_V(y))` from every position of a
+label other than `A` in any guide which is `A` on the open square `(0, n) ^ 2`; here `V` is the set
+of four corners.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
 equation `eq:geometry-birth-clearance`, `06-geometry.tex:254–264, 276–281`. -/
@@ -1009,12 +1010,12 @@ theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : 
 
 /-! ### Point treatment: the outer-hole enlargement -/
 
-/-- **Lipschitz step of the outer-hole enlargement.** Let `g` (the distance from the lens boundary) and `h` (the mark
-distance) be `1`-Lipschitz, let `t > 0`, and suppose `2 ε₀ (a + 1) ≤ a / 2`. If a hole center
-`c` has the tapered clearance `g c ≥ a max(t, min(n, h c))`, then every point `x` with
-`|x - c| ≤ 2 ε₀ t` has `g x ≥ (a / 2) max(t, min(n, h x))`. This is the arithmetic step used
-in the point treatment; the instantiation with the lens-boundary distance and the mark
-distance, and the birth-side enlargement of `06-geometry.tex:368–373`, are not formalized here.
+/-- **Lipschitz step of the outer-hole enlargement.** Let `g` (the distance from the lens boundary)
+and `h` (the mark distance) be `1`-Lipschitz, let `t > 0`, and suppose `2 ε₀ (a + 1) ≤ a / 2`. If a
+hole center `c` has the tapered clearance `g c ≥ a max(t, min(n, h c))`, then every point `x` with
+`|x - c| ≤ 2 ε₀ t` has `g x ≥ (a / 2) max(t, min(n, h x))`. This is the arithmetic step used in the
+point treatment; the instantiation with the lens-boundary distance and the mark distance, and the
+birth-side enlargement of `06-geometry.tex:368–373`, are not formalized here.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:405–415`. -/
 theorem tapered_clearance_of_center {X : Type*} [PseudoMetricSpace X] {g h : X → ℝ}

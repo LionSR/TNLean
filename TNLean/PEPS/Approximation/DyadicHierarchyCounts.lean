@@ -62,7 +62,8 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:321–322, 5
 abbrev DyadicJunction (k : ℕ) : Type :=
   Σ j : Fin (k + 1), Fin (2 ^ (k - j) + 1) × Fin (2 ^ (k - j) + 1)
 
-private theorem three_mul_sum_range_four_pow_add_one (m : ℕ) : 3 * ∑ i ∈ range m, 4 ^ i + 1 = 4 ^ m := by
+private theorem three_mul_sum_range_four_pow_add_one (m : ℕ) :
+    3 * ∑ i ∈ range m, 4 ^ i + 1 = 4 ^ m := by
   induction m with
   | zero => simp
   | succ m ih => rw [sum_range_succ, pow_succ]; omega
