@@ -7,6 +7,7 @@ assumption is imposed on $\Lambda$ or $A$.
 
 \begin{theorem}[Comparison with the ambient boundary]
     \label{thm:area_law_physical_ambient_boundary}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary,
         TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary,
@@ -18,6 +19,7 @@ assumption is imposed on $\Lambda$ or $A$.
     In particular, $|\partial_\Lambda(A\cap U)|\le|\partial U|$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Orient a physical crossing edge from $p\in A\cap U$ to
     $q\notin A\cap U$. If $q\notin A$, then $p\in Z$, contrary to
     $U\cap Z=\varnothing$. Thus $q\in A$ and $q\notin U$, and the edge
@@ -26,6 +28,7 @@ assumption is imposed on $\Lambda$ or $A$.
 
 \begin{theorem}[Separation of template dilations]
     \label{thm:area_law_template_dilation_separation}
+    \leanok
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation}
     \uses{def:area_law_template}
     Suppose $D_0\ge1$, $s_0\ge1$, and
@@ -33,12 +36,14 @@ assumption is imposed on $\Lambda$ or $A$.
     For $0\le j\le s_0$, the ambient dilation $T_j$ is disjoint from $Z$.
 \end{theorem}
 \begin{proof}
+    \leanok
     A point $z\in T_j\cap Z$ would be within distance $j\le s_0$ of a
     point of $T$, contradicting $4D_0s_0<\operatorname{dist}_\infty(T,Z)$.
 \end{proof}
 
 \begin{theorem}[Physical template boundary bounds]
     \label{thm:area_law_template_physical_boundary}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le,
         TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le,
@@ -57,6 +62,7 @@ assumption is imposed on $\Lambda$ or $A$.
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
+    \leanok
     The preceding separation estimate excludes cut endpoints from $T_j$
     and its shell. Apply the ambient comparison to both sets and use the
     ambient template bounds. The core is the case $j=0$.

@@ -1,0 +1,13 @@
+Source: https://github.com/LionSR/TNLean/actions/runs/37641625254/job/112863109726
+Revision: addfd463ce7ac29b03ca00b5fe4d452cd8fe35cd
+GitHub build job steps through Complete job: all successful (skipped conditional steps excluded).
+Explicit axiom-audit step: success.
+Command: lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-cut-axioms.lean
+Normalized captured output (timestamps and ANSI removed, record whitespace folded):
+'TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.template_shell_cut_boundary_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]

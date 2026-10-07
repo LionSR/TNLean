@@ -32,18 +32,40 @@ blueprint records only these geometric subresults, not the full Lemma 9.4.
 These are original proofs from the mathematical manuscript, with no upstream
 Lean proof text reused. The private test fixture is reused from TNLean #8826.
 
-The production module built in 1.7 seconds at 38a082f4 in PR CI run
-37638741577. All seven axiom outputs contained only propext, Classical.choice,
-and Quot.sound. The full library and lint targets also built at 9eb697946 in run 37639535818.
-The exact axiom guards passed there; three new endpoint-membership test calls
-needed explicit subtype witnesses. These test-only fixes and a concrete
-nonempty separated cut fixture await final-head CI.
+The production module built in 1.3 seconds at
+`addfd463ce7ac29b03ca00b5fe4d452cd8fe35cd` in
+[PR CI run 37641625254, build job 112863109726](https://github.com/LionSR/TNLean/actions/runs/37641625254/job/112863109726).
+Every build-job step through `Complete job` reports success, including the full
+12,510-job library build, lint target, strict actual-model regressions, exact
+axiom guards, explicit axiom audit, all repository regressions, style,
+compilation times, and compiled blueprint/paper-gap declarations. The aggregate
+job status lagged behind its completed steps when this evidence was captured;
+no claim is made that the entire workflow is green.
 
-Full validation is pending normal PR CI: the toolchain download in this fresh Linux
-workspace returned HTTP 403. No Mathlib source build was attempted. The workflow
-builds the new module and elaborates the regression/axiom file with strict
-options before the full library build. Blueprint completion tags and verified
-provenance evidence will be added only after successful checks.
+All seven captured axiom records contain only `propext`, `Classical.choice`,
+and `Quot.sound`. The build and explicit axiom output are preserved in
+[the build evidence](../provenance/evidence/8754-cut-build.log) and
+[the axiom evidence](../provenance/evidence/8754-cut-axioms.log), with hashes in
+the seven verified provenance entries. Timestamp/ANSI removal and whitespace
+normalization are stated in the evidence. All 199 combined provenance records
+validate with the immutable upstream checkout. Source-level blueprint sync
+passes with the pinned QICLean checkout present.
+
+Regressions include the complete thin-real-polygon Template, zero/maximal
+radii, negative coordinates, empty/full cuts, unordered orientation, and
+missing lattice neighbors. A concrete disconnected physical domain has a
+proved nonempty remote cut boundary, proved separation, and a proved nonempty
+local template boundary; the final core and shell bounds are instantiated
+without additional hypotheses.
+
+Remaining validation: the separate blueprint-render job 112863110027 reported
+failure without any step records; its log download returned `BlobNotFound`.
+The job-retry API and two PR-comment attempts returned connector internal
+errors. This is not a diagnosed LaTeX/source error. The evidence update triggers
+fresh final-head CI; the rendering result must be checked before merge.
+Local toolchain retrieval returned HTTP 403, so no local Mathlib proof-source
+build was attempted. The blueprint completion marks refer only to these seven
+compiled, source-faithful geometric results, not the full Lemma 9.4.
 
 OpenAI Codex assisted the implementation and source comparison. Merges remain
 centralized with the parent; this branch has not been merged.
