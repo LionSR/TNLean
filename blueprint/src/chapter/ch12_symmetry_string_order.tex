@@ -59,10 +59,10 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     In tensor-network notation this is the length-$L$ doubled chain with a
     copy of $u$ inserted on each physical rung:
-    % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
-    % lines 380--385 explicitly define R_L; equations EU and SOPMP,
-    % lines 164--181, give the constituent transfer/MPS expressions. The
-    % displayed transfer formula follows after canonical fixed-point/unital reduction.
+    % Formula/source: Papers/0802.0447/StringOrder-v10.tex, EU and SOPMP,
+    % lines 164--181. This is the stationary infinite-chain expression with
+    % identity endpoints. It is not the periodic full-ring closure RL,
+    % whose physical support grows with the ambient ring length.
     % Ink-to-index map: each ket physical index contracts into u and each
     % output of u contracts into the matching bra index; no physical leg is free.
     % Contraction set: all on-site ket--u--bra rungs, all horizontal
@@ -104,9 +104,40 @@ virtual-boundary nondecay and virtual local covariance.
         R_L(u) & :=\langle\Psi_L(A)|u^{\otimes L}|\Psi_L(A)\rangle.
         \label{eq:symmetry_source_periodic_RL}
     \end{align}
-    Under thermodynamic-boundary and normalization hypotheses, the normalized
-    stationary-boundary functional $T_L(A,u,\Lambda)$ corresponds to this
-    periodic overlap.
+    For the raw periodic matrix product vector, this overlap is
+    $\operatorname{Tr}(\mathcal E_u^L)$. Dividing by its squared norm gives
+    $\operatorname{Tr}(\mathcal E_u^L)/\operatorname{Tr}(\mathcal E^L)$ at
+    nonzero lengths. The stationary-boundary functional is instead a
+    fixed-support thermodynamic limit with an untwisted exterior; the full-ring
+    support grows with the ambient ring length.
+    The numerator has two separately closed virtual rings:
+    \begin{center}
+        % TENKZ-PERIODIC-STRING-BEGIN
+        % Formula: <Phi_L|u^{tensor L}|Phi_L> = Tr_End(E_u^L).
+        % Source: PGWSVC08, MPS/EU/RL; this is a derived contraction schematic.
+        % The upper and lower virtual return paths close within their own rows.
+        % Each physical ket index enters u and its output enters the conjugate bra.
+        % No Lambda boundary cup is present. Every visible cell, and the omitted
+        % repeated cells indicated by dots, carries the same physical insertion.
+        % Boundary signature: virtual-west=0 | virtual-east=0 |
+        % physical-up=0 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=4, boundary=periodic]
+            \tn[label pos=n]{A} & \tn[label pos=n]{A} & \tn[skin=dots]{} &
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline A} &
+            \tn[label pos=s, conjugate]{\overline A} & \tn[skin=dots]{} &
+            \tn[label pos=s, conjugate]{\overline A}
+            \tn[species=operator, label pos=e, at=on bond-1-1-2-1 0.5]{u}
+            \tn[species=operator, label pos=e, at=on bond-1-2-2-2 0.5]{u}
+            \tn[species=operator, label pos=e, at=on bond-1-4-2-4 0.5]{u}
+            \tnmark[form=label]{3 s of midway (2,2) and (2,3)}{$L\text{ sites}$}
+        \end{tenkz}
+        % TENKZ-PERIODIC-STRING-END
+    \end{center}
+    The two return paths differ from the stationary $\Lambda$-cup closure
+    in Definition~\ref{def:string_order_param}. The identity insertion gives
+    the same periodic closure for $Z_L$.
 \end{definition}
 
 \begin{definition}[Physical string correlator]\label{def:physical_string_order_param}
@@ -124,6 +155,8 @@ virtual-boundary nondecay and virtual local covariance.
     This is the physical-endpoint expression corresponding to
     $\langle \Psi|\,x \otimes u^{\otimes N} \otimes y\,|\Psi\rangle$.
 \end{definition}
+
+\input{chapter/ch12_symmetry_string_order_periodic}
 
 \begin{definition}[Fixed-endpoint physical string order]
     \label{def:has_physical_string_order_with}
@@ -915,6 +948,8 @@ virtual-boundary nondecay and virtual local covariance.
 \input{chapter/ch12_symmetry_string_order_spectrum}
 
 \input{chapter/ch12_symmetry_string_order_asymptotics}
+
+\input{chapter/ch12_symmetry_string_order_bounds}
 
 \input{chapter/ch12_symmetry_string_order_finite_endpoints}
 
