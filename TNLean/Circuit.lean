@@ -23,6 +23,7 @@ import TNLean.Circuit.GHZState
 import TNLean.Circuit.Gates
 import TNLean.Circuit.ImageReflectionCircuit
 import TNLean.Circuit.InitializedRegisterProjection
+import TNLean.Circuit.LiebRobinson
 import TNLean.Circuit.LocalCircuit
 import TNLean.Circuit.Measurement
 import TNLean.Circuit.PairProduct

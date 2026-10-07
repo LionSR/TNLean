@@ -2011,6 +2011,34 @@ in `MPS/Preparation/` uses it.
   relation or source `QCcc` classification is asserted. See
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
+### Lieb–Robinson propagation on finite graphs
+
+#### `QuantumCircuit.heisenbergCommutatorNorm`
+
+- **Declaration:**
+  `QuantumCircuit.heisenbergCommutatorNorm (H B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (X : Set ι) (t : ℝ) : ℝ`,
+  with `QuantumCircuit.heisenbergEvolution H t A = e^{itH} A e^{-itH}`.
+- **Defined in:** `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Meaning:** the operator norm of `A ↦ [τ_t(A), B]` restricted to
+  `supportedOperators q X`, for any finite type of sites `ι`.
+- **Source:** Hastings–Koma, arXiv:math-ph/0507008, Appendix A, (A.13); the
+  function `F(X, t)` of OpenAI, *A two-dimensional area law from a global
+  spectral gap*, Lemma 4.1 (`03-quasilocal.tex`, lines 70–74).
+- **Sanctioned bridges:**
+  `QuantumCircuit.heisenbergCommutatorNorm_le_integral` (the local commutator
+  recursion for an arbitrary finite interaction family),
+  `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance` and
+  `QuantumCircuit.exists_graph_lieb_robinson` (graph-distance propagation with
+  constants depending only on the support diameter, support size and per-site
+  interaction budget), and
+  `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
+  vanishing between connected components). The finite-ring estimate
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
+  nearest-neighbor ring consumer of the same recursion.
+- **Caveat:** the graph theorems take the per-support size bound and the
+  per-site norm budget as hypotheses; deriving them from the one-term-per-support
+  convention on an induced square-lattice domain is a separate step.
+
 ## Inhomogeneous short-range correlated chains
 
 ### `MPSTensor.IsInjectiveOn`
