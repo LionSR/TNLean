@@ -90,7 +90,7 @@ theorem dataChannelLift_onsiteChannel (Φ : OnsiteChannel (d ^ k) (d ^ k) (Fin N
       (Φ.oneSite i).map_isKrausCPTP i (fun _ => rfl)
 
 private theorem routed_selected_pair_site (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) {i : Fin N}
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) {i : Fin N}
     (hi : i ∈ K) (hne : i ≠ i + 1) (p : Fin (2 * k)) :
     (layout N k).site (routingPermutation K hK
       (selectedData (⟨pairSites i (i + 1), pairSites_injective hne⟩ : Fin 2 ↪ Fin N) p)) =

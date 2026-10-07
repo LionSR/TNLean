@@ -115,35 +115,31 @@ private theorem ringSupportDistance_eq_zero_iff
     have hReach : reaches X Y 0 := ⟨x, hx, x, hy, 0, by simp, by simp⟩
     exact Nat.eq_zero_of_le_zero (Nat.find_min' (exists_reaches X Y hX hY) hReach)
 
-
-private theorem bond_nonempty (j : Fin N) : (bond j).Nonempty :=
-  ⟨j, by simp [bond]⟩
-
 /-- Passing from a support to an overlapping edge decreases its distance to
 another support by at most one. This is the weighted path estimate for a
 nearest-neighbor ring. -/
 private theorem ringSupportDistance_le_bond_add_one
     (X Y : Set (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (j : Fin N) (hTouch : (X ∩ bond j).Nonempty) :
+    (j : Fin N) (hTouch : (X ∩ ringBond j).Nonempty) :
     ringSupportDistance X Y hX hY ≤
-      ringSupportDistance (bond j) Y (bond_nonempty j) hY + 1 := by
+      ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 := by
   classical
   apply Nat.find_min' (exists_reaches X Y hX hY)
   obtain ⟨x, hx, hxb⟩ := hTouch
   obtain ⟨z, hzb, y, hy, m, hm, heq⟩ :=
-    reaches_ringSupportDistance (bond j) Y (bond_nonempty j) hY
+    reaches_ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY
   have hmOld : |m| ≤
-      (ringSupportDistance (bond j) Y (bond_nonempty j) hY + 1 : ℕ) :=
+      (ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 : ℕ) :=
     hm.trans (by omega)
   have hmPlus : |m + 1| ≤
-      (ringSupportDistance (bond j) Y (bond_nonempty j) hY + 1 : ℕ) := by
+      (ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 : ℕ) := by
     simpa only [Nat.cast_add, Nat.cast_one, abs_one] using
       (abs_add_le m 1).trans (add_le_add hm (le_refl |(1 : ℤ)|))
   have hmMinus : |m - 1| ≤
-      (ringSupportDistance (bond j) Y (bond_nonempty j) hY + 1 : ℕ) := by
+      (ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 : ℕ) := by
     simpa only [Nat.cast_add, Nat.cast_one, abs_one] using
       (abs_sub m 1).trans (add_le_add hm (le_refl |(1 : ℤ)|))
-  simp only [bond, Set.mem_insert_iff, Set.mem_singleton_iff] at hxb hzb
+  simp only [ringBond, Set.mem_insert_iff, Set.mem_singleton_iff] at hxb hzb
   rcases hxb with hxj | hxj
   · rcases hzb with hzj | hzj
     · refine ⟨x, hx, y, hy, m, hmOld, ?_⟩
@@ -172,13 +168,13 @@ open Classical in
 oriented bonds meeting that support. This remains valid for one- and two-site
 periodic chains, where distinct bonds may have the same support. -/
 private theorem card_bonds_meeting_le {N : ℕ} [NeZero N] (X : Finset (Fin N)) :
-    (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ bond j).Nonempty).card ≤ 2 * X.card := by
+    (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ ringBond j).Nonempty).card ≤ 2 * X.card := by
   classical
-  have hSub : (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ bond j).Nonempty) ⊆
+  have hSub : (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ ringBond j).Nonempty) ⊆
       X ∪ X.image (fun x => x - 1) := by
     intro j hj
     obtain ⟨x, hx, hxb⟩ := (Finset.mem_filter.mp hj).2
-    simp only [bond, Set.mem_insert_iff, Set.mem_singleton_iff] at hxb
+    simp only [ringBond, Set.mem_insert_iff, Set.mem_singleton_iff] at hxb
     rcases hxb with hxj | hxj
     · exact Finset.mem_union_left _ (hxj ▸ hx)
     · apply Finset.mem_union_right
@@ -205,20 +201,20 @@ independent of the ring length. -/
 private theorem sum_bond_distance_exp_le {N : ℕ} [NeZero N]
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
     (a : ℝ) (ha : 0 ≤ a) :
-    (∑ j : Fin N, if ((X : Set (Fin N)) ∩ bond j).Nonempty then
-      Real.exp (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-        ⟨j, by simp [bond]⟩ hY) else 0) ≤
+    (∑ j : Fin N, if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+      Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+        ⟨j, by simp [ringBond]⟩ hY) else 0) ≤
     2 * X.card * Real.exp a *
       Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) := by
   classical
   let R := Real.exp a *
     Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY)
   have hR : 0 ≤ R := mul_nonneg (Real.exp_pos _).le (Real.exp_pos _).le
-  have hPoint (j : Fin N) (hj : ((X : Set (Fin N)) ∩ bond j).Nonempty) :
-      Real.exp (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-        ⟨j, by simp [bond]⟩ hY) ≤ R := by
+  have hPoint (j : Fin N) (hj : ((X : Set (Fin N)) ∩ ringBond j).Nonempty) :
+      Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+        ⟨j, by simp [ringBond]⟩ hY) ≤ R := by
     have hDist : (ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY : ℝ) ≤
-        ringSupportDistance (bond j) (Y : Set (Fin N)) ⟨j, by simp [bond]⟩ hY + 1 := by
+        ringSupportDistance (ringBond j) (Y : Set (Fin N)) ⟨j, by simp [ringBond]⟩ hY + 1 := by
       exact_mod_cast ringSupportDistance_le_bond_add_one (X : Set (Fin N))
         (Y : Set (Fin N)) hX hY j hj
     calc
@@ -228,14 +224,14 @@ private theorem sum_bond_distance_exp_le {N : ℕ} [NeZero N]
         nlinarith
       _ = R := by rw [Real.exp_add]
   calc
-    _ ≤ ∑ j : Fin N, if ((X : Set (Fin N)) ∩ bond j).Nonempty then R else 0 := by
+    _ ≤ ∑ j : Fin N, if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then R else 0 := by
       apply Finset.sum_le_sum
       intro j _
       split_ifs with hj
       · exact hPoint j hj
       · exact le_rfl
     _ = ((Finset.univ.filter fun j =>
-          ((X : Set (Fin N)) ∩ bond j).Nonempty).card : ℝ) * R := by
+          ((X : Set (Fin N)) ∩ ringBond j).Nonempty).card : ℝ) * R := by
       rw [← Finset.sum_filter]
       simp only [Finset.sum_const, nsmul_eq_mul]
     _ ≤ (2 * X.card : ℝ) * R := by
@@ -255,22 +251,22 @@ private theorem ring_weighted_row_le {N : ℕ} [NeZero N]
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
     (a : ℝ) (ha : 0 ≤ a) (k : Fin N → ℝ)
     (hkOne : ∀ j, k j ≤ 1) :
-    (∑ j : Fin N, (if Disjoint (X : Set (Fin N)) (bond j) then 0 else 2 * k j) *
+    (∑ j : Fin N, (if Disjoint (X : Set (Fin N)) (ringBond j) then 0 else 2 * k j) *
       (({j, j + 1} : Finset (Fin N)).card * Real.exp
-        (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-          ⟨j, by simp [bond]⟩ hY))) ≤
+        (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+          ⟨j, by simp [ringBond]⟩ hY))) ≤
       (8 * Real.exp a) * (X.card * Real.exp
         (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY)) := by
   classical
   have hPoint (j : Fin N) :
-      (if Disjoint (X : Set (Fin N)) (bond j) then 0 else 2 * k j) *
+      (if Disjoint (X : Set (Fin N)) (ringBond j) then 0 else 2 * k j) *
         (({j, j + 1} : Finset (Fin N)).card * Real.exp
-          (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-            ⟨j, by simp [bond]⟩ hY)) ≤
-      4 * (if ((X : Set (Fin N)) ∩ bond j).Nonempty then
-        Real.exp (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-          ⟨j, by simp [bond]⟩ hY) else 0) := by
-    by_cases hj : Disjoint (X : Set (Fin N)) (bond j)
+          (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+            ⟨j, by simp [ringBond]⟩ hY)) ≤
+      4 * (if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+        Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+          ⟨j, by simp [ringBond]⟩ hY) else 0) := by
+    by_cases hj : Disjoint (X : Set (Fin N)) (ringBond j)
     · have hNo := Set.not_disjoint_iff_nonempty_inter.not.mp (not_not.mpr hj)
       simp only [ite_eq_left hj, zero_mul, ite_eq_right hNo, mul_zero]
       exact le_rfl
@@ -283,15 +279,15 @@ private theorem ring_weighted_row_le {N : ℕ} [NeZero N]
         have h := mul_le_mul (hkOne j) hCard (Nat.cast_nonneg _) (by norm_num : (0 : ℝ) ≤ 1)
         nlinarith
       simpa only [mul_assoc] using mul_le_mul_of_nonneg_right hCoeff
-        (Real.exp_pos (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-          ⟨j, by simp [bond]⟩ hY)).le
+        (Real.exp_pos (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+          ⟨j, by simp [ringBond]⟩ hY)).le
   calc
-    _ ≤ ∑ j : Fin N, 4 * (if ((X : Set (Fin N)) ∩ bond j).Nonempty then
-          Real.exp (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-            ⟨j, by simp [bond]⟩ hY) else 0) := Finset.sum_le_sum (fun j _ => hPoint j)
-    _ = 4 * ∑ j : Fin N, if ((X : Set (Fin N)) ∩ bond j).Nonempty then
-          Real.exp (-a * ringSupportDistance (bond j) (Y : Set (Fin N))
-            ⟨j, by simp [bond]⟩ hY) else 0 := by rw [Finset.mul_sum]
+    _ ≤ ∑ j : Fin N, 4 * (if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+          Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+            ⟨j, by simp [ringBond]⟩ hY) else 0) := Finset.sum_le_sum (fun j _ => hPoint j)
+    _ = 4 * ∑ j : Fin N, if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+          Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
+            ⟨j, by simp [ringBond]⟩ hY) else 0 := by rw [Finset.mul_sum]
     _ ≤ 4 * (2 * X.card * Real.exp a *
           Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY)) :=
       mul_le_mul_of_nonneg_left (sum_bond_distance_exp_le X Y hX hY a ha) (by norm_num)
@@ -314,7 +310,7 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
     {d N : ℕ} [NeZero N]
     (h : Fin N → Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (hHerm : ∀ j, (h j).IsHermitian)
-    (hSupport : ∀ j, h j ∈ supportedOperators d (bond j))
+    (hSupport : ∀ j, h j ∈ supportedOperators d (ringBond j))
     (hNorm : ∀ j, ‖h j‖ ≤ 1)
     (B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
@@ -333,7 +329,7 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
     Real.exp (-a * ringSupportDistance (Z.val : Set (Fin N))
       (Y : Set (Fin N)) Z.property hY)
   let coeff (Z : ι) (j : Fin N) :=
-    if Disjoint (Z.val : Set (Fin N)) (bond j) then 0 else 2 * ‖h j‖
+    if Disjoint (Z.val : Set (Fin N)) (ringBond j) then 0 else 2 * ‖h j‖
   let b (Z : ι) := f 0 Z
   have hFinite : Finite ι := inferInstance
   have hf : Continuous f := by
@@ -372,7 +368,7 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
           nlinarith [norm_nonneg B]
   have hRow : ∀ Z, ∑ j, coeff Z j * w (e j) ≤ (8 * Real.exp a) * w Z := by
     intro Z
-    simpa only [coeff, w, e, Finset.coe_pair, bond] using
+    simpa only [coeff, w, e, Finset.coe_pair, ringBond] using
       ring_weighted_row_le Z.val Y Z.property hY a ha (fun j => ‖h j‖)
         hNorm
   have hNonneg : ∀ s ∈ Set.Icc 0 t, ∀ Z, 0 ≤ f s Z := by
@@ -383,14 +379,14 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
     intro s hs Z
     have hRec := heisenbergCommutatorNorm_le_integral h bond hHerm hSupport B Z.val s hs.1
     have hEq : (∑ j, coeff Z j * ∫ u in (0 : ℝ)..s, f u (e j)) =
-        2 * ∑ j, if Disjoint (Z.val : Set (Fin N)) (bond j) then 0 else
+        2 * ∑ j, if Disjoint (Z.val : Set (Fin N)) (ringBond j) then 0 else
           ‖h j‖ * ∫ u in (0 : ℝ)..s,
-            heisenbergCommutatorNorm (∑ j, h j) B (bond j) u := by
+            heisenbergCommutatorNorm (∑ j, h j) B (ringBond j) u := by
       rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro j _
-      have he : ((e j).val : Set (Fin N)) = bond j := by
-        simp only [e, Finset.coe_pair, bond]
+      have he : ((e j).val : Set (Fin N)) = ringBond j := by
+        simp only [e, Finset.coe_pair, ringBond]
       dsimp only [coeff, f]
       rw [he]
       simp only [ite_mul, mul_ite, zero_mul, mul_zero, mul_assoc]
@@ -418,7 +414,7 @@ private theorem ringCommutatorNorm_le_exp_abs_of_disjoint
     {d N : ℕ} [NeZero N]
     (h : Fin N → Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (hHerm : ∀ j, (h j).IsHermitian)
-    (hSupport : ∀ j, h j ∈ supportedOperators d (bond j))
+    (hSupport : ∀ j, h j ∈ supportedOperators d (ringBond j))
     (hNorm : ∀ j, ‖h j‖ ≤ 1)
     (B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
@@ -435,7 +431,7 @@ private theorem ringCommutatorNorm_le_exp_abs_of_disjoint
         hXY a ha t ht
   · have ht' : 0 ≤ -t := neg_nonneg.mpr (le_of_not_ge ht)
     have hHerm' : ∀ j, (-h j).IsHermitian := fun j => (hHerm j).neg
-    have hSupport' : ∀ j, -h j ∈ supportedOperators d (bond j) :=
+    have hSupport' : ∀ j, -h j ∈ supportedOperators d (ringBond j) :=
       fun j => Submodule.neg_mem _ (hSupport j)
     have hNorm' : ∀ j, ‖-h j‖ ≤ 1 := fun j => (norm_neg _).trans_le (hNorm j)
     have hBound := ringCommutatorNorm_le_exp_of_disjoint (fun j => -h j)
@@ -449,7 +445,7 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
     {d N : ℕ} [NeZero N]
     (h : Fin N → Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (hHerm : ∀ j, (h j).IsHermitian)
-    (hSupport : ∀ j, h j ∈ supportedOperators d (bond j))
+    (hSupport : ∀ j, h j ∈ supportedOperators d (ringBond j))
     (hNorm : ∀ j, ‖h j‖ ≤ 1)
     (A B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
