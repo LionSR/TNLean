@@ -1,6 +1,7 @@
 import TNLean.PEPS.Approximation.SquareGridContraction
 
 open TNLean.PEPS TNLean.PEPS.Approximation
+open scoped BigOperators
 
 -- Empty and singleton squares have no virtual bonds.
 example : IsEmpty (ForwardEdge 0) := ⟨fun e => Fin.elim0 e.val.1.1⟩
