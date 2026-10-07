@@ -141,24 +141,26 @@ theorem l2_opNorm_one_kronecker_le (B : Matrix m' n ℂ) :
   rw [h]
   exact (l2_opNorm_reindex_le _ _ _).trans (l2_opNorm_kronecker_one_le B)
 
-omit [DecidableEq m'] in
+omit [DecidableEq m'] [DecidableEq n'] in
 /-- `‖A ⊗ B‖ ≤ ‖A‖ ‖B‖`. -/
 theorem l2_opNorm_kronecker_le (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) :
     ‖A ⊗ₖ B‖ ≤ ‖A‖ * ‖B‖ := by
+  classical
   have h : A ⊗ₖ B = (A ⊗ₖ (1 : Matrix n' n' ℂ)) * ((1 : Matrix m m ℂ) ⊗ₖ B) := by
     rw [← mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
   rw [h]
   exact (l2_opNorm_mul _ _).trans (mul_le_mul (l2_opNorm_kronecker_one_le A)
     (l2_opNorm_one_kronecker_le B) (norm_nonneg _) (norm_nonneg _))
 
-omit [DecidableEq m'] in
+omit [DecidableEq m'] [DecidableEq n'] in
 theorem l2_opNorm_kronecker_le_one {A : Matrix m' m ℂ} {B : Matrix n' n ℂ} (hA : ‖A‖ ≤ 1)
     (hB : ‖B‖ ≤ 1) : ‖A ⊗ₖ B‖ ≤ 1 :=
   (l2_opNorm_kronecker_le A B).trans (by nlinarith [norm_nonneg A, norm_nonneg B])
 
 omit [DecidableEq m] in
 /-- The matrix of a bijection of coordinates is a contraction. -/
-theorem l2_opNorm_toMatrix_toPEquiv_le (f : m ≃ n) : ‖(f.toPEquiv.toMatrix : Matrix m n ℂ)‖ ≤ 1 := by
+theorem l2_opNorm_toMatrix_toPEquiv_le (f : m ≃ n) :
+    ‖(f.toPEquiv.toMatrix : Matrix m n ℂ)‖ ≤ 1 := by
   have h : (f.toPEquiv.toMatrix : Matrix m n ℂ) = reindex f.symm (Equiv.refl n) 1 := by
     rw [← Matrix.mul_one (f.toPEquiv.toMatrix : Matrix m n ℂ), PEquiv.toMatrix_toPEquiv_mul]
     rfl
@@ -177,7 +179,8 @@ theorem toMatrix_toPEquiv_prodCongr (f : m ≃ m') (g : n ≃ n') :
 
 omit [Fintype m] [Fintype n] [DecidableEq m] in
 /-- Relabelling the coordinates of the matrix of a bijection. -/
-theorem toMatrix_toPEquiv_submatrix {l l' : Type*} [DecidableEq l'] (f : m ≃ n) (e₁ : l ≃ m) (e₂ : l' ≃ n) :
+theorem toMatrix_toPEquiv_submatrix {l l' : Type*} [DecidableEq l'] (f : m ≃ n) (e₁ : l ≃ m)
+    (e₂ : l' ≃ n) :
     (f.toPEquiv.toMatrix : Matrix m n ℂ).submatrix e₁ e₂ =
       ((e₁.trans (f.trans e₂.symm)).toPEquiv.toMatrix : Matrix l l' ℂ) := by
   ext i j
@@ -288,17 +291,19 @@ theorem act_tbSwap_vecKron_tensorPurification (s : T × BT → ℂ) (s' : E × B
     act ((tbSwap T E BT BE).toPEquiv.toMatrix)
         (vecKron (WithLp.toLp 2 (tensorPurification s s'))
           (WithLp.toLp 2 (tensorPurification s s'))) =
-      vecKron (WithLp.toLp 2 (tensorPurification s s')) (WithLp.toLp 2 (tensorPurification s s')) := by
+      vecKron (WithLp.toLp 2 (tensorPurification s s'))
+        (WithLp.toLp 2 (tensorPurification s s')) := by
   ext x
   simp only [PEquiv.toMatrix_toPEquiv_mulVec, Function.comp_apply, vecKron, tensorPurification]
   change s (x.2.1.1, x.2.2.1) * s' (x.1.1.2, x.1.2.2) * (s (x.1.1.1, x.1.2.1) *
     s' (x.2.1.2, x.2.2.2)) = _
   ring
 
-omit [DecidableEq T] [DecidableEq BT] in
+omit [DecidableEq T] [DecidableEq BT] [DecidableEq E] [DecidableEq BE] in
 theorem norm_toLp_tensorPurification {s : T × BT → ℂ} {s' : E × BE → ℂ}
     (hs : star s ⬝ᵥ s = 1) (hs' : star s' ⬝ᵥ s' = 1) :
     ‖(WithLp.toLp 2 (tensorPurification s s') : EuclideanSpace ℂ _)‖ = 1 := by
+  classical
   have h : star (tensorPurification s s') ⬝ᵥ tensorPurification s s' = 1 := by
     rw [← pairSource_mulVec, star_mulVec_dotProduct_mulVec_of_conjTranspose_mul_eq_one
       (pairSource_conjTranspose_mul_self hs) s', hs']
@@ -799,7 +804,7 @@ theorem owner_eq_of_notMem_exchangeEnv {x : ι} (hx : x ∉ X.exchangeEnv P) :
 theorem newOwner_eq_of_notMem_exchangeEnv {x : ι} (hx : x ∉ X.exchangeEnv P) :
     X.newFrame₁.owner x = P ∧ X.newFrame₂.owner x = P := by
   obtain ⟨h₁, h₂⟩ := X.owner_eq_of_notMem_exchangeEnv P hx
-  show (if x ∈ X.region then X.owner₂ x else X.owner₁ x) = P ∧
+  change (if x ∈ X.region then X.owner₂ x else X.owner₁ x) = P ∧
     (if x ∈ X.region then X.owner₁ x else X.owner₂ x) = P
   split_ifs <;> exact ⟨by assumption, by assumption⟩
 
@@ -851,8 +856,10 @@ theorem commute_correction [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P
     (a : TagSpace (X.out₁ ++ X.in₂)) (b : TagSpace (X.out₂ ++ X.in₁)) :
     Commute (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P))
       (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b) := by
-  have h₁ := supportedOperators_mono (X.footprint_new₁_subset P) (rawProd_mem_supportedOperators _ a)
-  have h₂ := supportedOperators_mono (X.footprint_new₂_subset P) (rawProd_mem_supportedOperators _ b)
+  have h₁ := supportedOperators_mono (X.footprint_new₁_subset P)
+    (rawProd_mem_supportedOperators _ a)
+  have h₂ := supportedOperators_mono (X.footprint_new₂_subset P)
+    (rawProd_mem_supportedOperators _ b)
   refine Commute.mul_left (commute_sheetBufferCorrection _ σ h₁ h₂)
     (commute_sheetSwapOp_kronecker ?_ h₁ h₂)
   exact Finset.disjoint_coe.mpr (Finset.disjoint_of_subset_right (X.aSet_subset_compl P)

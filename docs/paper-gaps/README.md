@@ -1089,3 +1089,13 @@ formalized for the canonical contraction and its reference error, with the
 branch expansion, the wire classification and the final rescaling of the
 approximation, and that the expansion into allowed monomials awaits a party
 layout for monomials.
+
+### Polynomial PEPS approximation: changes of ownership
+
+[polypeps_ownership_change_monomials.tex](polypeps_ownership_change_monomials.tex)
+records that Lemmas 6.5 and 6.6 of the September 24, 2026 polynomial PEPS
+manuscript are formalized with their source hypotheses, including the canonical
+birth map and its factorization through one normalized pair source, the
+two-sheet renaming, the ordered private corrections and both reference-error
+bounds, and that the reading of these factorizations as allowed monomials of
+Theorem 5.2 awaits a party layout for monomials.

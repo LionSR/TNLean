@@ -1,0 +1,112 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}
+
+\title{Bounded-Change Expansions of Births, Deaths and Exchanges}
+\author{}
+\date{2026-10-07}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source lemmas}
+
+Lemmas~6.5 and~6.6 of the polynomial PEPS approximation manuscript of
+September~24, 2026 (\path{05-frames.tex}, lines~396--570) change the ownership
+of registers of encoded frames.
+
+\emph{Lemma~6.5 (homogeneous birth and death).} In an encoded frame
+$\mathcal F$, let $T$ be a set of raw sites owned by a party $P_\circ$ and
+disjoint from every outer hole footprint, and put
+$E=\{x:\text{the raw owner of }x\neq P_\circ\}\cup H^+(\mathcal F)$ and
+$U=\Lambda\setminus(T\cup E)$. If $I_\Omega(T:E)\le L^{-60}$, changing the owner
+of $T$ to $Q_\circ$, with every hole, encoding and tag owner kept, ``is a bounded
+change involving only $P_\circ,Q_\circ$, with reference-vector error at most
+$L^{-30}$''; the reversed death obeys the same bound when the conditions hold in
+the frame after the death.
+
+\emph{Lemma~6.6 (two-sheet exchange).} For two encoded frames and a region $Y$
+such that every hole's outer square lies on one side of $\partial Y$, with
+$Z=\{x:\text{the two old raw owners of }x\text{ are not both }P_\circ\}\cup
+H^+(\mathcal F_1)\cup H^+(\mathcal F_2)$, $T=Z\cap Y$, $E=Z\setminus Y$ and
+$U=\Lambda\setminus Z$: if $I_\Omega(T:E)\le L^{-60}$, exchanging the raw
+ownership assignments and the encoded holes inside $Y$ ``can be implemented by
+private contractions and register renaming, with reference-vector error at most
+$4L^{-30}$'', using $P_\circ$ and the owners of the renamed registers and tags,
+hence is a bounded change in the sense of Theorem~5.2.
+
+In both lemmas the information bound is a hypothesis; it is supplied later by the
+manuscript's proposition \texttt{prop:angular}.
+
+\section{What the formal statements cover}
+
+Both lemmas are formalized with exactly their source hypotheses, the information
+bound included.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.Frame.birth},
+\leanid{TNLean.PEPS.EncodedFrame.Frame.death} and
+\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange}.}
+The formal statements produce the canonical maps of the proofs and prove:
+\begin{enumerate}
+\item for the birth and the death, that the canonical map
+  $B=\mathcal V^\dagger(\ket s\bra s_{T\mathcal B_T}\otimes\mathrm{id}_{E\mathcal
+  B_E})\mathcal V$ is a Hermitian contraction, that it acts as the identity on
+  $E$ and on all tags, that it commutes with every hole encoder, and that the
+  reference error is at most $L^{-30}$; the map factors as
+  $B=(\mathcal V^\dagger S)(S^\dagger\mathcal V)$, where $S$ inserts the single
+  normalized vector $s$ on $T\mathcal B_T$, and every register on which $B$ acts
+  lies outside $E$, so it is held by $P_\circ$ before the birth and by $P_\circ$
+  or $Q_\circ$ after it;
+\item for the exchange, the exact identity $\mathcal RK_{\rm in}=K_{\rm out}F_{Y\cap
+  \Lambda}$ for the renaming $\mathcal R$, the identity $D_UF_T=(\mathcal
+  V^{\otimes2})^\dagger F_{T\mathcal B_T}\mathcal V^{\otimes2}$, the identity
+  $CK_{\rm in}=K_{\rm out}D_UF_T$ for $C=D_UF_A\mathcal R$, contractivity of $C$,
+  and the error bound $4L^{-30}$ on the product of the two encoded reference
+  vectors, which are not assumed normalized; the corrections $D_U$ and $F_A$
+  act on the registers of $U$ alone, which are held by $P_\circ$ on both sheets
+  before and after the exchange, and the renaming keeps every register at its
+  party.
+\end{enumerate}
+
+Not formalized is the reading of these factorizations as allowed monomials of
+Theorem~5.2: that the birth is a private contraction at $P_\circ$, one
+normalized pair source between $Q_\circ$ and $P_\circ$, and a private
+contraction at $P_\circ$; that the death uses one normalized pair effect
+instead; and that the exchange consists of private contractions and a renaming
+of registers. These statements need a model of operators placed on parties and
+of allowed monomials (local contractions, normalized pair sources and normalized
+pair effects between two named parties), which the library does not have. The
+same missing layer is recorded for Lemma~6.3 in
+\path{polypeps_small_rewrite_monomials.tex}.
+
+The formal frames record the outer footprints of holes by their physical
+samples. In the exchange, the hole lists of the two frames are presented as the
+holes whose outer squares avoid $Y$ followed by those whose outer squares lie in
+$Y$; the source's condition that every outer square lies on one side of
+$\partial Y$ implies this sample-level condition, and the ordering is the
+canonical identification of tag orderings, since encoders of holes with disjoint
+footprints commute.
+
+\section{Elimination plan}
+
+Introduce the party layout of Theorem~5.2: memory spaces indexed by parties,
+local contractions acting on one party, and normalized pair sources and effects
+on the registers of two named parties. The factorization
+$B=(\mathcal V^\dagger S)(S^\dagger\mathcal V)$ proved here, together with the
+ownership facts on $T\cup U$, then exhibits the birth and the death as single
+monomials; the exchange map $C=D_UF_A\mathcal R$ is a product of private
+contractions at $P_\circ$ and a renaming that keeps every register at its
+party.
+
+\end{document}

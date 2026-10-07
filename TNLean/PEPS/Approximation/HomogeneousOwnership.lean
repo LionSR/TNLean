@@ -168,20 +168,25 @@ theorem norm_one_kronecker_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsomet
     rw [IsIsometry.kronecker (1 : Matrix (T × E) (T × E) ℂ) V (by simp [IsIsometry]) hV]
     exact norm_one_le)
 
+omit [DecidableEq BT] in
 theorem norm_birthEffect_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry)
     {s : T × BT → ℂ} (hs : star s ⬝ᵥ s = 1) : ‖birthEffect (E := E) V s‖ ≤ 1 := by
+  classical
   have h := norm_pairSource_le_one (E := E) (BE := BE) hs
   rw [← l2_opNorm_conjTranspose] at h
   exact norm_mul_le_one h (norm_one_kronecker_le_one hV)
 
+omit [DecidableEq BT] in
 /-- **The canonical map is a contraction** (`05-frames.tex`, line 427). -/
 theorem norm_birthOp_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry)
     {s : T × BT → ℂ} (hs : star s ⬝ᵥ s = 1) : ‖birthOp (E := E) V s‖ ≤ 1 := by
+  classical
   have h := norm_birthEffect_le_one (E := E) hV hs
   have h' := h
   rw [← l2_opNorm_conjTranspose] at h'
   exact norm_mul_le_one h' h
 
+omit [DecidableEq BT] in
 /-- **Reference error of the canonical map** (`05-frames.tex`, lines 427–433). For an isometry
 `V` and unit vectors `s`, and any `s'`, `‖(B - 1) ψ‖ ≤ ‖𝒱 ψ - s ⊗ s'‖`: with `Pr = S Sᴴ`,
 `(B - 1) ψ = 𝒱ᴴ (Pr - 1) (𝒱 ψ - s ⊗ s')` because `Pr (s ⊗ s') = s ⊗ s'`. -/
@@ -190,6 +195,7 @@ theorem norm_act_birthOp_sub_le {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry
     (ψ : EuclideanSpace ℂ ((T × E) × U)) :
     ‖act (birthOp V s) ψ - ψ‖ ≤
       ‖act ((1 : Matrix (T × E) (T × E) ℂ) ⊗ₖ V) ψ - WithLp.toLp 2 (tensorPurification s s')‖ := by
+  classical
   set 𝒱 := (1 : Matrix (T × E) (T × E) ℂ) ⊗ₖ V
   set Pr := pairSource (E := E) (BE := BE) s * (pairSource s)ᴴ
   set ζ : EuclideanSpace ℂ ((T × E) × (BT × BE)) := WithLp.toLp 2 (tensorPurification s s')
@@ -326,7 +332,8 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ 
 
 /-- The frame obtained by changing the owner of the raw registers of `T` to `Q`, keeping every
 hole, its encoding and its tag owner. -/
-abbrev Frame.changeOwner (F : Frame pos q Party) (T : Finset ι) (Q : Party) : Frame pos q Party where
+abbrev Frame.changeOwner (F : Frame pos q Party) (T : Finset ι) (Q : Party) :
+    Frame pos q Party where
   owner x := if x ∈ T then Q else F.owner x
   holes := F.holes
   disjoint := F.disjoint
@@ -359,7 +366,7 @@ theorem owner_eq_of_notMem_birthEnv {x : ι} (hx : x ∉ F.birthEnv P) : F.owner
 /-- After the change of owner, every register outside `E` is owned by `P∘` or `Q∘`. -/
 theorem changeOwner_owner_of_notMem_birthEnv {x : ι} (hx : x ∉ F.birthEnv P) :
     (F.changeOwner T Q).owner x = P ∨ (F.changeOwner T Q).owner x = Q := by
-  show (if x ∈ T then Q else F.owner x) = P ∨ (if x ∈ T then Q else F.owner x) = Q
+  change (if x ∈ T then Q else F.owner x) = P ∨ (if x ∈ T then Q else F.owner x) = Q
   split_ifs
   · exact Or.inr rfl
   · exact Or.inl (F.owner_eq_of_notMem_birthEnv hx)

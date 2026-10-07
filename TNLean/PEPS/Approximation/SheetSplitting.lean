@@ -95,7 +95,7 @@ end Transport
 /-- The operator `1 ⊗ B`, acting as `B` on the second factor and as the identity on the tags,
 passes through a tagged stack `∑_t |t⟩ ⊗ S_t` whenever `B` commutes with every `S_t`. -/
 theorem one_kronecker_mul_stack {τ n : Type*} [Fintype τ] [DecidableEq τ] [Fintype n]
-    [DecidableEq n] {S : τ → Matrix n n ℂ} {B : Matrix n n ℂ} (hB : ∀ t, Commute B (S t)) :
+    {S : τ → Matrix n n ℂ} {B : Matrix n n ℂ} (hB : ∀ t, Commute B (S t)) :
     ((1 : Matrix τ τ ℂ) ⊗ₖ B) * stack S = stack S * B := by
   rw [stack_mul]
   ext ⟨t, x⟩ y
