@@ -1,0 +1,58 @@
+[
+  {
+    "input": "web-build.log",
+    "original_sha256": "572df8bccca26df03fc6e39e29ecc74cfe17f0c0fec946bd2f350047be017fef",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/render/web-build.log",
+    "retained_sha256": "ed48008ac5dada851f3518f0a8540865836c4945ab17a39e96b025606cd83d51",
+    "normalization": "Replace local repository, focused fixture, workspace, and temporary path prefixes with stable placeholders. Remove terminal blank lines."
+  },
+  {
+    "input": "pdf-build.log",
+    "original_sha256": "2e631d7371cb48a599543bd59f4025aeb3f2ab52272eb0b7bdec7714d4509aa9",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/render/pdf-build.log",
+    "retained_sha256": "0e6813a396becaab39856479666ef47948da864ca7836a769a49b74e954102d9",
+    "normalization": "Replace local repository, focused fixture, workspace, and temporary path prefixes with stable placeholders. Remove terminal blank lines."
+  },
+  {
+    "input": "parent region-bridge-61f7.json",
+    "original_sha256": "3063c12143338d20e19059274be7240dc8e88f863c58575e3bf80d8d20fda8b6",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/validation.json",
+    "retained_sha256": "a5993c38db798d9db43a7d6d1133b4e1e5e915a982f4c263f212c6c8364bb908",
+    "normalization": "Replace absolute log destinations with repository-relative retained paths; add SHA256 of each unchanged log."
+  },
+  {
+    "input": "region-bridge-61f7-0.log",
+    "original_sha256": "fb5d2e36d639a3ff2376127c34ec24aa043a4751e782298532628d381a840bbe",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/module-build.log",
+    "retained_sha256": "fb5d2e36d639a3ff2376127c34ec24aa043a4751e782298532628d381a840bbe",
+    "normalization": "none; successful output contains no private executor path"
+  },
+  {
+    "input": "region-bridge-61f7-1.log",
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/source-strict.log",
+    "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normalization": "none; successful output contains no private executor path"
+  },
+  {
+    "input": "region-bridge-61f7-2.log",
+    "original_sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/raw-axioms.log",
+    "retained_sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63",
+    "normalization": "none; successful output contains no private executor path"
+  },
+  {
+    "input": "region-bridge-61f7-3.log",
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/axiom-guards.log",
+    "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normalization": "none; successful output contains no private executor path"
+  },
+  {
+    "input": "region-bridge-61f7-4.log",
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained_path": "docs/provenance/evidence/8770-region-embedding/consumers-strict.log",
+    "retained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normalization": "none; successful output contains no private executor path"
+  }
+]
