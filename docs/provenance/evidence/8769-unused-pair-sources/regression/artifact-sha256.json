@@ -1,0 +1,11 @@
+{
+  "UnusedPairCompletionRegression.lean": "0f9a6a7c840eb0d9e4dcb8e4682b29cdd21ee34960515eb4f9a70f442217cf06",
+  "RegressionAxioms.lean": "09263793df202d22362999c4d45df0d8961dd36357ec063b3b7006131ce8de7f",
+  "build-command.json": "4c0026c8eb4b29c9a0532816a2eec0ef2113cc6bdc878559da129959bf276ed0",
+  "audit-command.json": "13f71e5a04f4cd8c83af298b206c49a1f3979bb5101145923eb8d749fb6e62ee",
+  "build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "axioms.log": "4fdf0ce9f67f4565a46deaa571c007bf6a6e85d1a5b3fba1bf6787569238486f",
+  "UnusedPairCompletionRegression.olean": "de2903d3bc4b756614f1d11a520c127b1a0ed0f0659636eca0bc844f7c74ff9e",
+  "initial-build.log": "6d8547be3db8f9a9178f3a8736bb8ed16af3505ac4bd4e58048ab8b5c9548808",
+  "initial-build-command.json": "292375cbca8e04ef48b8d08877e877b1e9c9a118e2c70a9782f87fc47035dd6f"
+}

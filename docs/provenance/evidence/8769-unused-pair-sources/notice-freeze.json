@@ -1,0 +1,26 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "sha256_before": "6e4c14fcae6593aac083a0b3ca31421d6676f58f40452589d5982ddb3df9592c",
+    "sha256": "13bc696dd7cf9990fb999e4c703fe8dbbe6b2d4bb3e8a3353344b2a4f5559899",
+    "declarations": 7,
+    "notice_max_line_length": 81,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PairSourceCompletion.lean",
+    "sha256_before": "f7767c674f4a600f2f779ac17030c7ee60c85eb938b4a62fd0a0e07c5559e40a",
+    "sha256": "2727db9a052b053de22a1b60d8a4b0e322dab3f0625e34f115c3f2f469bb8968",
+    "declarations": 2,
+    "notice_max_line_length": 93,
+    "noncomment_tokens_unchanged": true
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CompletePartyMaps.lean",
+    "sha256_before": "1900f05467aaa5e4a8b3b5adf6210d7eb49f2d04558114f1a1114eca9a31b97a",
+    "sha256": "db431995510885abb7100790d3afd7a84363ad9e843e1eebc17de7b44532ce3d",
+    "declarations": 2,
+    "notice_max_line_length": 94,
+    "noncomment_tokens_unchanged": true
+  }
+]
