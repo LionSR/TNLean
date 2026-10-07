@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.g0",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.g0",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.mu",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.mu",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.nu",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.nu",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.ell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.ell",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.kappa",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.kappa",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.parameter_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.density_exponents",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.density_exponents",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.energy_exponents",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.energy_exponents",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.comparison_exponents",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.comparison_exponents",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8756-tnlean.peps.arealaw.scan.exists_uniform_boxerror_bound_of_eventual_improvement",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "prop:small-box",
+            "scanner:bootstrap-parameters",
+            "scanner:bootstrap-energy"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
