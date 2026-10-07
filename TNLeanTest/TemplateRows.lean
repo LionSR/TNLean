@@ -39,18 +39,19 @@ private theorem thinDiagonal_bounds {p : ℝ × ℝ} (hp : p ∈ thinDiagonalPol
     (-1 ≤ p.1 ∧ p.1 ≤ 5 / 4) ∧ (-5 / 4 ≤ p.2 ∧ p.2 ≤ 1) ∧
       0 ≤ p.1 - p.2 ∧ p.1 - p.2 ≤ 1 / 2 := by
   let d : (ℝ × ℝ) →ₗ[ℝ] ℝ := LinearMap.fst ℝ ℝ ℝ - LinearMap.snd ℝ ℝ ℝ
-  let B : Set (ℝ × ℝ) := Set.Icc (-1, -5 / 4) (5 / 4, 1) ∩
+  let B : Set (ℝ × ℝ) := (Set.Icc (-1 : ℝ) (5 / 4) ×ˢ Set.Icc (-5 / 4) 1) ∩
     d ⁻¹' Set.Icc 0 (1 / 2)
   have hB : Convex ℝ B :=
-    (convex_Icc _ _).inter ((convex_Icc _ _).linear_preimage d)
+    ((convex_Icc _ _).prod (convex_Icc _ _)).inter
+      ((convex_Icc _ _).linear_preimage d)
   have hPB : thinDiagonalPolygon.region ⊆ B := by
     apply convexHull_min _ hB
     intro z hz
     simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz
     rcases hz with rfl | rfl | rfl | rfl <;>
-      norm_num [B, d, Set.mem_Icc, Prod.le_def]
+      norm_num [B, d, Set.mem_Icc]
   have h := hPB hp
-  change ((-1 ≤ p.1 ∧ -5 / 4 ≤ p.2) ∧ (p.1 ≤ 5 / 4 ∧ p.2 ≤ 1)) ∧
+  change ((-1 ≤ p.1 ∧ p.1 ≤ 5 / 4) ∧ (-5 / 4 ≤ p.2 ∧ p.2 ≤ 1)) ∧
     (0 ≤ p.1 - p.2 ∧ p.1 - p.2 ≤ 1 / 2) at h
   tauto
 
@@ -63,7 +64,8 @@ private theorem thinDiagonal_sample_iff (p : ℤ × ℤ) :
   have hz : (0, 0) ∈ thinDiagonalPolygon.region := by
     have h := thinDiagonalPolygon.convex_region ha hb
       (by norm_num : 0 ≤ (1 / 2 : ℝ)) (by norm_num : 0 ≤ (1 / 2 : ℝ)) (by norm_num)
-    convert h using 1 <;> ext <;> norm_num
+    convert h using 1
+    ext <;> norm_num
   constructor
   · intro h
     simp only [thinDiagonalSample, Finset.mem_insert, Finset.mem_singleton] at h
@@ -118,7 +120,8 @@ example : (0, 1) ∈ ambientDilation thinDiagonalTemplate.points 1 := by
   change (0, 1) ∈ ambientDilation thinDiagonalSample 1
   decide
 
-example : latticeRow (thinDiagonalTemplate.sample 0) 0 = {0} := by
+example : latticeRow
+    (thinDiagonalTemplate.sample ⟨0, thinDiagonalTemplate.pieceCount_pos⟩) 0 = {0} := by
   change latticeRow thinDiagonalSample 0 = {0}
   decide
 
