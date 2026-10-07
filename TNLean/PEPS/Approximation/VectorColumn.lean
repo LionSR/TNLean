@@ -45,8 +45,8 @@ Neither model assumes positivity or Hermiticity of the contracted operator.
 ## References
 
 Polynomial-PEPS approximation manuscript (September 24, 2026), Lemma 8.1
-`lem:columns`, `07-assembly.tex`, lines 67–99, in particular the final
-sentence of the statement (line 78) and of the proof (lines 91–93);
+`lem:columns`, `07-assembly.tex`, lines 67–94, in particular the final
+sentence of the statement (lines 76–77) and of the proof (lines 91–93);
 openai/math commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
@@ -69,7 +69,7 @@ variable {Out In : Vertex → Type*}
 The local physical index at `v` is an output-input pair, and the operator has
 rows indexed by output configurations and columns by input configurations.
 
-Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, line 78. -/
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 76–77. -/
 def operatorNetworkMatrix (A : (v : Vertex) → LocalConfig tail head D v → Out v × In v → ℂ)
     (B : (e : Edge) → Matrix (D e) (D e) ℂ) :
     Matrix ((v : Vertex) → Out v) ((v : Vertex) → In v) ℂ :=
@@ -141,7 +141,7 @@ theorem exists_fixInput_network_of_traceNorm_sub_pure_le
   obtain ⟨z, hz, θ, hθ⟩ :=
     exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
   refine ⟨z, _, fun τ ↦ ?_, rfl, hz, θ, hθ⟩
-  rw [toEuclideanLin_single_one_apply, network_fixInput]
+  rw [Matrix.toEuclideanLin_single_one_apply, network_fixInput]
 
 end Dependent
 
@@ -154,7 +154,7 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 The physical alphabet `Fin (d * d)` at each vertex is read as output-input
 pairs through `finProdFinEquiv`.
 
-Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, line 78. -/
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 76–77. -/
 def operatorCoeff (A : Tensor G (d * d)) : Matrix (V → Fin d) (V → Fin d) ℂ :=
   fun τ ρ ↦ stateCoeff A fun v ↦ finProdFinEquiv (τ v, ρ v)
 
@@ -169,7 +169,7 @@ def _root_.TNLean.PEPS.Tensor.fixInput (A : Tensor G (d * d)) (z : V → Fin d) 
 omit [Fintype V] in
 /-- Fixing the input indices leaves every bond dimension unchanged.
 
-Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, line 78. -/
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 76–77. -/
 @[simp]
 theorem _root_.TNLean.PEPS.Tensor.bondDim_fixInput (A : Tensor G (d * d)) (z : V → Fin d) :
     (A.fixInput z).bondDim = A.bondDim :=
@@ -220,7 +220,7 @@ theorem exists_fixInput_stateCoeff_of_traceNorm_sub_pure_le (A : Tensor G (d * d
   obtain ⟨z, hz, θ, hθ⟩ :=
     exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
   refine ⟨z, rfl, _, fun τ ↦ ?_, rfl, hz, θ, hθ⟩
-  rw [toEuclideanLin_single_one_apply, stateCoeff_fixInput]
+  rw [Matrix.toEuclideanLin_single_one_apply, stateCoeff_fixInput]
 
 end SimpleGraph
 

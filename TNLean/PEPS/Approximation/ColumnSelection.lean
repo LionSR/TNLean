@@ -50,7 +50,7 @@ The generic statements of this file are candidates for QICLean.
 ## References
 
 Polynomial-PEPS approximation manuscript (September 24, 2026), Lemma 8.1
-`lem:columns`, `07-assembly.tex`, lines 67–99 (statement lines 67–78, proof
+`lem:columns`, `07-assembly.tex`, lines 67–94 (statement lines 67–78, proof
 lines 79–94); openai/math commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
@@ -69,7 +69,7 @@ moduli of all entries, is at most the squared trace norm. The basis
 enumeration `e` used to evaluate the trace norm is arbitrary.
 
 This is the bound `∑_z ‖E|z⟩‖² = ‖E‖₂² ≤ ‖E‖₁²` in the proof of
-Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 79–84. -/
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 80–85. -/
 theorem sum_norm_sq_le_traceNorm_reindex_sq (E : Matrix ι ι ℂ) (e : ι ≃ Fin n) :
     ∑ z, ∑ x, ‖E x z‖ ^ 2 ≤ Matrix.traceNorm (Matrix.reindex e e E) ^ 2 := by
   set B : Matrix (Fin n) (Fin n) ℂ := Matrix.reindex e e E
@@ -97,7 +97,7 @@ If `∑_z ‖f z‖² ≤ η²` and `∑_z ‖a z‖² = 1`, then some `z` has `
 `‖f z‖² ≤ η² ‖a z‖²`. No positive lower bound on `‖a z‖` is assumed, and
 `η = 0` is allowed.
 
-Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 84–86. -/
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 86–87. -/
 theorem exists_ne_zero_norm_sq_le_of_sum {E : Type*} [SeminormedAddCommGroup E]
     (f : ι → E) (a : ι → ℂ) {η : ℝ} (hf : ∑ z, ‖f z‖ ^ 2 ≤ η ^ 2)
     (ha : ∑ z, ‖a z‖ ^ 2 = 1) :
@@ -130,7 +130,7 @@ variable {H : Type*} [NormedAddCommGroup H] [NormedSpace ℂ H]
 If `‖w - Ω‖ ≤ η < 1` and `‖Ω‖ = 1`, then `w ≠ 0` and
 `‖w / ‖w‖ - Ω‖ ≤ 2η`.
 
-Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 86–89. -/
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 87–90. -/
 theorem normalize_sub_le_two_mul {w Ω : H} {η : ℝ} (hΩ : ‖Ω‖ = 1)
     (hw : ‖w - Ω‖ ≤ η) (hη : η < 1) :
     w ≠ 0 ∧ ‖((‖w‖ : ℂ)⁻¹) • w - Ω‖ ≤ 2 * η := by
@@ -161,7 +161,7 @@ Let `‖Ω‖ = 1`, `0 ≤ η < 1`, and `v = f + a Ω` with `a ≠ 0` and
 `‖f‖ ≤ η ‖a‖`. Then `v ≠ 0` and some unit phase `e^{iθ}` satisfies
 `‖v / ‖v‖ - e^{iθ} Ω‖ ≤ 2η`. The phase is the phase of `a`.
 
-Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 84–89. -/
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 86–90. -/
 theorem exists_phase_normalize_sub_le {v f Ω : H} {a : ℂ} {η : ℝ}
     (hΩ : ‖Ω‖ = 1) (ha : a ≠ 0) (hv : v = f + a • Ω) (hf : ‖f‖ ≤ η * ‖a‖)
     (hη : η < 1) :
@@ -200,7 +200,7 @@ section Column
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ℕ}
 
 /-- The column of a matrix at a basis vector has the expected coordinates. -/
-theorem toEuclideanLin_single_one_apply (σ : Matrix ι ι ℂ) (z x : ι) :
+theorem _root_.Matrix.toEuclideanLin_single_one_apply (σ : Matrix ι ι ℂ) (z x : ι) :
     Matrix.toEuclideanLin σ (EuclideanSpace.single z 1) x = σ x z := by
   simp [Matrix.toLpLin_apply]
 
@@ -244,7 +244,7 @@ theorem exists_column_ne_zero_of_traceNorm_sub_pure_le (e : ι ≃ Fin n)
   obtain ⟨z, haz, hfz⟩ := exists_ne_zero_norm_sq_le_of_sum f a hf ha
   refine ⟨z, exists_phase_normalize_sub_le (f := f z) hΩ haz ?_ ?_ hη⟩
   · ext x
-    simp [toEuclideanLin_single_one_apply, f, a, E, Matrix.vecMulVec_apply, mul_comm]
+    simp [Matrix.toEuclideanLin_single_one_apply, f, a, E, Matrix.vecMulVec_apply, mul_comm]
   · rw [← mul_pow] at hfz
     exact (pow_le_pow_iff_left₀ (norm_nonneg _)
       (mul_nonneg hη0 (norm_nonneg _)) two_ne_zero).mp hfz
