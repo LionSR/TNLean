@@ -135,9 +135,11 @@ and proof tokens. All noncomment blueprint content is unchanged. Fresh
 strict QICLean 83fdc804 checks passed for the core, both regression modules
 and all 24 axiom reports, with 90-second module limits and unchanged source
 closures. All 1,003 tracked dependency files were byte-verified. The 24
-minimum ledger rows are temporarily planned while this revised source
-receives an immutable revision; a separate evidence child will bind them
-to the new checks. The historical logs and attestations are not relabelled.
+minimum ledger rows are bound to immutable revised source
+`bb3043de9849792685781949ddc2aca8e711fda5`. Their fresh evidence is archived in
+`docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/`.
+The source commit retained planned rows until that revision existed. The
+historical logs and attestations are not relabelled.
 
 The original canonical QIC matrix-unit conjugator migration has a
 mixed-import regression, 19 clean axiom reports and a negative control

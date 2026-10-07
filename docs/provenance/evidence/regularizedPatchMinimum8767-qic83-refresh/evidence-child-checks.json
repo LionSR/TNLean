@@ -1,0 +1,67 @@
+[
+  {
+    "label": "active-provenance",
+    "command": [
+      "python3",
+      "scripts/check_openai_provenance.py",
+      "--upstream-root",
+      "/workspace/scratch/7637e06d0fc2/openai-math-selected-objects.git"
+    ],
+    "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose",
+    "exit_code": 0,
+    "seconds": 9.40739176698844,
+    "log_sha256": "13b73195b15eb10ea296e0449da89809573112c16e1b6989b0e0c4b2a00fc1be"
+  },
+  {
+    "label": "imports-final",
+    "command": [
+      "python3",
+      "scripts/generate_import_aggregators.py",
+      "--check"
+    ],
+    "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose",
+    "exit_code": 0,
+    "seconds": 0.8974858250003308,
+    "log_sha256": "ab5147996612ed5a358b9be5914864f64b1e2babee6371695c55749c8683990e"
+  },
+  {
+    "label": "docbuild-final",
+    "command": [
+      "python3",
+      "scripts/check_docbuild_manifest.py"
+    ],
+    "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose",
+    "exit_code": 0,
+    "seconds": 0.037625739991199225,
+    "log_sha256": "9dc6570f1ec606c0ad9ad64df85a8361a3493bec1f95f01e0a0d511636a03034"
+  },
+  {
+    "label": "blueprint-sync-final",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      ".",
+      "--ci",
+      "--report-duplicate-tags",
+      "--report",
+      "/workspace/scratch/7637e06d0fc2/regularized-qic83-validation/blueprint-sync-final.json"
+    ],
+    "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose",
+    "exit_code": 0,
+    "seconds": 2.9631655380071606,
+    "log_sha256": "b41e70fb4defbbca774dec53d5229c4e1632fb1ae13e9f8950c6ca5d17d3f9b8"
+  },
+  {
+    "label": "whitespace-final",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-regularized-minimum-prose",
+    "exit_code": 0,
+    "seconds": 0.007659260998480022,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]
