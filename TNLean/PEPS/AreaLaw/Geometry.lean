@@ -19,6 +19,8 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
+import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
+import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget

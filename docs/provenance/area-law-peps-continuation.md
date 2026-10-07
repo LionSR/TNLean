@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 18:39 UTC.
+Last coordination check: October 7, 2026, 19:09 UTC.
 
 ## Verified mathematical contributions
 
@@ -13,7 +13,7 @@ Last coordination check: October 7, 2026, 18:39 UTC.
 | Primary birth regions, rectangular fragments and adjacent meshes | [#8851](https://github.com/LionSR/TNLean/pull/8851) | `d469be1a0a7799f4613e64e8139893b0fa2ee11d` | `fd8bf12587482c1db66c8c626a9df57cc4db025f` |
 | Number of actual primary identifiers | [#8856](https://github.com/LionSR/TNLean/pull/8856) | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | `61fd819e7fe4689b8e0893affc9f127238b191ec` |
 | Actual nine-point belt marks and their sparse count | [#8857](https://github.com/LionSR/TNLean/pull/8857) | `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b` | `98d26cdad5e212a7e241951618dd3645f3ae6b21` |
-| Quarter-mesh bounds and neighboring-layer locality | Publication accompanies this record | `5db13f626cbba4ce128e25ddcdb60a00532f0f3a` | Evidence commit containing this record |
+| Quarter-mesh bounds and neighboring-layer locality | [#8859](https://github.com/LionSR/TNLean/pull/8859) | `5db13f626cbba4ce128e25ddcdb60a00532f0f3a` | `436ea587677e61b2e971555cdf612ba1be6006cd` |
 
 All 60 exact imported declarations in these seven contributions have passing
 canonical build and standard-axiom evidence. Complete provenance validation
@@ -32,8 +32,7 @@ These proofs must not be rebuilt merely because work resumes.
 The first three drafts have passing full Lean builds, compiled blueprint
 checks, rendering and module policies. The polynomial draft's failed timing
 job had no diagnostic log; its failed-only rerun passed. The fine-belt draft
-had two approvals on its exact published head. The parent #8851's latest full
-Lean CI build has passed; blueprint rendering remains in progress at the last read. Refresh external statuses
+had two approvals on its exact published head. All checks on #8851 now pass, including compiled declarations and rendering. #8857's full Lean build and diagram checks pass, with rendering and timing pending. #8859 remains in full CI. Refresh external statuses
 before acting; all drafts remain open and no main-branch merge was performed.
 
 ## Ownership and remaining mathematics
@@ -94,11 +93,11 @@ Source: Section 11, lines 325–330 of the pinned manuscript. The proof author
 owns only the new Lean file; separate reviewers handle source and provenance.
 The root agent owns imports, blueprint, canonical verification and publication.
 
-Contacts, actual fans and merged identifiers, the minimum mark scale across
-layers, isolated stars, descendant estimates, simultaneous repairs, separation
-from earlier birth regions and the complete two-family partition remain open.
-Mixed-scale affine-mesh point separation and distance from nonincident axis
-or diagonal lines are the next independent prerequisites. The straight-ray
+Contacts, actual fans and merged identifiers, the ray and sector assertions of
+isolated stars, descendant estimates, simultaneous repairs, separation from
+earlier birth regions and the complete two-family partition remain open.
+Mixed-scale mesh point and nonincident-line separation are verified prerequisites;
+the actual minimum-scale family and point-separation assertion are now prepared. The straight-ray
 conclusion must be proved on actual tile regions. Polynomial summability does
 not count actual repairs. Both source-faithful headline theorems remain unproved.
 
@@ -108,8 +107,8 @@ not count actual repairs. Both source-faithful headline theorems remain unproved
   canonical six-declaration driver has finished and released the shared lock. The
   existing warmed cache and all package pins remain unchanged.
 - `worktrees/area-law-source-preparation` holds `feat/area-law-initial-mark-family`,
-  initially based on the frozen mesh source. It has no `.lake` directory.
-  Merge completed mesh evidence before freezing the next proofs, then move
+  based on the complete mesh evidence head `436ea587`. It has no `.lake` directory.
+  Freeze the four new declarations and their source documentation, then move
   the branch to the existing warmed worktree for one targeted canonical check.
 - The prior canonical checks and logs must not be repeated. Never clear or
   reseed this warmed cache merely to prepare another auxiliary contribution.
@@ -141,22 +140,37 @@ Source: Section 11, lines 352–359. This numerical contribution does not claim
 the full isolated-star statement or the construction of active interfaces.
 
 The next [initial-mark-family claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044473740)
-is on `feat/area-law-initial-mark-family`, in `Geometry/InitialMarkFamily.lean`.
-The author proposes two theorems: `exists_finitely_supported_sparse_belt_shifts`
-chooses actual residue functions with the per-layer decay estimate and finite
-nonempty support; `exists_uniform_initial_mark_bound` chooses one positive
-constant before the domain, cut, origin, neighborhood radius and lower index,
-then a finite deduplicated set of all actual marks above that index with the
-cut-boundary count. The final result retains the cell estimates and finite
-support for the chosen shifts. No new predicate or structure is planned.
-Source: lines 220–228, 325–330 and 668–692. The support cutoff may depend on
-concrete data; the count constant may not. The actual repair count and smallest
-incident-scale assignment remain separate.
+is on `feat/area-law-initial-mark-family`. Its
+[minimum-scale and separation extension](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044749108)
+adds one disjoint geometric module. `InitialMarkFamily.lean` has three public
+theorems: actual sparse residue functions with finite nonempty-cell support;
+the exact finite mark union above any lower index with a uniform boundary
+count; and that same construction with positive attained minimum incident
+sides and pairwise separation. The support may be empty. For C₀ ≥ 2 and
+k₀ ≥ 50,000,000 the final inequality is
+`dist(v,w) ≥ max(S(v),S(w))/4` for distinct actual marks. The constant B is
+chosen before origin, domain, cut, radius and starting index. A least incident
+layer gives an actual selected cell witness and comparison with every incident
+selected cell in the constructed family.
 
-The next local action is to publish the mesh evidence and draft, then complete
-and independently review the global actual mark family. Preserve the completed
-221-entry baseline when preparing its new rows. Complete compiled blueprint
-checking is supplied by full CI, preserving the local artifact limitation.
+`FineMarkSeparation.lean`, owned by the root agent, has the single public
+`fineLayer_marks_dist_ge`. For any two actual fine-layer cells with C₀ ≥ 2 and
+both layer indices at least 50,000,000, distinct cell marks have distance at
+least one quarter of the larger cell side. Closure membership includes cell
+boundary marks. This applies to all actual fine-layer cells and therefore to
+the selected belt cells; no assumed fan interface or isolated-star property
+is used. The author and independent reviewer have approved all four signatures
+and proofs. Package-option direct elaboration of the combined source passes
+without warnings. No new structure or predicate is introduced.
+Source: Section 11, lines 220–233, 325–339, 352–363 and 668–692.
+
+The next local action is to freeze and canonically verify these four new names
+once, then publish complete evidence and a draft stacked on #8859. The four
+new provenance rows remain planned until the actual build and imported audit
+pass. Preserve all 221 parent records and their logs. The complete collection
+will contain 225 rows, including the old planned root-ledger row. Compiled
+whole-book checking is supplied by full CI; preserve the existing local
+missing-Fibonacci artifact limitation without repeating its failed check.
 
 At the latest coordination check, the boundary comparisons were ready in
 [#8849](https://github.com/LionSR/TNLean/pull/8849); the analytic owner published
@@ -168,10 +182,15 @@ PEPS whole-group truncation #8799 and exact dyadic routing #8796 merged.
 Their work remains with its owners. Template owners were testing main
 `18a6dd4d` with QICLean `83fdc804`;
 this geometric branch preserves its own verified pins until coordinated
-integration. The compression owner has claimed unused-pair one-dimensional padding under
-#8769 after #8858; analytic tail-to-state consequences are published in QICLean
+integration. The compression owner published unused-pair one-dimensional padding in
+[#8860](https://github.com/LionSR/TNLean/pull/8860), source `8eccd116408d22a115220881e7e07c96aa4f23ea`,
+evidence head `fb4719ad38e905d5dde1fbb1e8e077d05155939b`, after #8858; analytic tail-to-state consequences are published in QICLean
 #608, and the exact one-copy Bell projection remains with the analytic owner.
-The coherent pin and common branch-space assignment remain separate.
+The same compression group is preparing the actual common branch-slot assignment
+using QICLean #571, after checking #8769 ownership. Geometry does not own that
+construction. The analytic typical-state group has claimed the narrow scalar tail specialization
+in #8753 comment6044688756; it does not establish the native Hamiltonian tail
+or lattice budget. The coherent dependency pin remains separate.
 No model, entropy, scanner, QICLean or PEPS ownership is changed.
 
 The earlier [geometry handoff](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6042318628)

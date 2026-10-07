@@ -1,0 +1,137 @@
+\section{The finite family of initial marks}
+\label{sec:area_law_initial_mark_family}
+
+The sparse shifts may be chosen in every distance layer. Their cell counts
+have a summable geometric bound, so only finitely many layers contribute
+belt cells. We can therefore form the finite union of their actual marked
+points and assign to each point its smallest incident cell side; see
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:belt-count, lines 220--233;
+% initial marks, lines 325--330; geometry:total-repairs, lines 668--692.
+% Only the zero-polynomial summation for initial cells and marks is proved
+% here. Point separation is the first assertion of geometry:initial-stars,
+% lines 325--339, with its proof at lines 352--359. Repairs remain separate.
+
+\begin{theorem}[Sparse shifts with finite support]
+    \label{thm:area_law_finite_sparse_belt_family}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_finitely_supported_sparse_belt_shifts}
+    \leanok
+    \uses{def:area_law_belt_cells,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    For every finite domain $\Lambda$, cut $A$, origin $o$ and
+    nonnegative integer $C_0$, there are coordinate residues $a_k,b_k$
+    at every scale. Write $F_k$ for their actual belt-cell index set.
+    These choices satisfy
+    \begin{align}
+        |F_k| & \le64(2C_0+1)^2|\partial_\Lambda A|\,2^{-\delta_0 k/2}
+        \qquad(k\ge0),
+    \end{align}
+    and the set $\{k:F_k\ne\varnothing\}$ is finite.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_sparse_dyadic_belts,thm:area_law_polynomial_summability}
+    Choose a sparse pair of residues at each scale. The integer counts
+    $|F_k|$ are dominated by a fixed multiple of a summable geometric
+    sequence. Their real-valued series is therefore summable, so its
+    terms tend to zero. Eventually $|F_k|<1$, which forces $F_k$ to be
+    empty. Only finitely many indices remain.
+\end{proof}
+
+\begin{theorem}[Uniform count of all initial marks]
+    \label{thm:area_law_uniform_initial_mark_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_mark_bound}
+    \leanok
+    \uses{def:area_law_belt_marks,def:area_law_belt_cells,
+        def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
+    There is a positive constant $B$ such that, for every finite domain,
+    cut, origin, nonnegative integer $C_0$ and lower index $k_0$, one can
+    choose the residues from the preceding theorem and a finite set $M$
+    of actual marks with
+    \begin{align}
+        x\in M
+            & \quad\Longleftrightarrow\quad
+        \exists k\ge k_0,\ x\in M_{\ell_k}(F_k),   \\
+        |M| & \le B(2C_0+1)^2|\partial_\Lambda A|.
+    \end{align}
+    The chosen residues retain their per-layer cell estimate and finite
+    support. The constant $B$ precedes all the geometric data; the
+    support cutoff may depend on those data.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_finite_sparse_belt_family,thm:area_law_belt_mark_count,
+        thm:area_law_polynomial_finite_sums}
+    Let $B_0>0$ be the uniform finite-sum budget for the zero polynomial
+    exponent, and take $B=576B_0$. Form the union of the actual marks
+    over the finite support restricted to $k\ge k_0$. Its membership is
+    exactly the stated condition. A finite union has at most the sum of
+    the individual cardinalities, and each cell contributes at most
+    nine marks. Thus its count is at most
+    \begin{align}
+        9\sum_{k\ge k_0}|F_k|
+         & \le576(2C_0+1)^2|\partial_\Lambda A|
+        \sum_{k\in H}2^{-\delta_0 k/2}
+        \le B(2C_0+1)^2|\partial_\Lambda A|,
+    \end{align}
+    where $H$ is the finite retained support.
+\end{proof}
+
+
+\begin{theorem}[Separation of fine-layer marks]
+    \label{thm:area_law_fine_layer_mark_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_marks_dist_ge}
+    \leanok
+    \uses{def:area_law_belt_marks,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    Fix an origin $o$ and a finite endpoint set $Z$, and form all layers
+    from these data with $C_0\ge2$. Let $k,h\ge50{,}000{,}000$. If $x$ and $y$ are
+    distinct marks of actual fine-layer cells in layers $k$ and $h$,
+    respectively, then
+    \begin{align}
+        \operatorname{dist}_\infty(x,y)\ge\frac14\max(t_k,t_h),
+        \qquad t_j=2^{\ell_j}.
+    \end{align}
+    Cell-boundary marks are included, and the estimate applies to every
+    fine-layer cell, hence to every selected belt cell.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
+        thm:area_law_belt_marks_quarter_mesh,thm:area_law_affine_mesh_point_separation}
+    Suppose that the distance is less than $t_k/4$. Each mark is in the
+    closure of its actual layer. Layer locality forces $k\le h+1$.
+    Monotonicity and the adjacent-scale estimate give
+    $\ell_k\le\ell_h+1$, so both marks lie on the translated mesh of
+    spacing $t_k/4$. Distinct mesh points cannot be closer than this
+    spacing. Reversing $k$ and $h$ proves both lower bounds and hence
+    their maximum.
+\end{proof}
+
+\begin{theorem}[Counted and separated initial marks]
+    \label{thm:area_law_uniform_separated_initial_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_separated_initial_marks}
+    \leanok
+    \uses{thm:area_law_uniform_initial_mark_count,def:area_law_belt_marks}
+    There is $B>0$ such that, for every finite domain, cut, origin,
+    integer $C_0\ge2$ and lower index $k_0\ge50{,}000{,}000$, there are
+    sparse residues with the per-layer estimates and finite support,
+    the exact finite union $M$ of their actual marks above $k_0$, and a
+    positive side $s(v)$ for each $v\in M$, satisfying
+    \begin{align}
+        |M| & \le B(2C_0+1)^2|\partial_\Lambda A|,     \\
+        \operatorname{dist}_\infty(v,w)
+            & \ge\frac14\max(s(v),s(w))\qquad(v\ne w).
+    \end{align}
+    For each $v$, some selected belt cell in a layer $k\ge k_0$ has $v$
+    as an actual mark and side $s(v)=t_k$. Every selected belt cell in a layer $h\ge k_0$ that has $v$ as one
+    of its actual marks has side at least $s(v)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_uniform_initial_mark_count,
+        thm:area_law_fine_layer_mark_separation,thm:area_law_adjacent_fine_meshes}
+    Choose the counted finite union and residues from the preceding
+    construction. For each point of $M$, take the least layer index
+    admitting an incident selected cell. The fine-cell exponent is
+    nondecreasing, so this gives a positive smallest incident side.
+    Apply fine-layer mark separation to the two witnessing cells.
+    When $M$ is empty the assignment and pairwise condition are empty.
+\end{proof}

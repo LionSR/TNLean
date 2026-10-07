@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_finitely_supported_sparse_belt_shifts",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/InitialMarkFamily.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_finitely_supported_sparse_belt_shifts",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:belt-count"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For every origin o, finite domain \u039b, cut A and natural parameter C, selects actual residue functions a,b : \u2200 k, Fin (2^(pitchScaleIndex k - fineScaleIndex k)). With F k the actual beltCellIndices at those residues, every layer satisfies (card (F k) : \u211d) <= 64 (2 C + 1)^2 |edgeBoundary \u039b A| 2^(-geometryDelta k / 2), and Set.Finite {k | (F k).Nonempty}. This support may be empty.",
+        "Source: Section 11, geometry:belt-count, lines 220\u2013233; actual initial belt-cell marks in lines 325\u2013330; and the summation in geometry:total-repairs, lines 668\u2013692. This contribution concerns only chosen belt cells and their initial marks. The same contribution separately assigns minimum incident sides and proves mark separation. Active rays and sectors, fan coloring, recursive replacements, descendants and the full total-repairs estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_uniform_initial_mark_bound",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/InitialMarkFamily.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_mark_bound",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:belt-count",
+            "geometry:initial-stars",
+            "geometry:total-repairs"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Chooses \u2203 B : \u211d, 0 < B before all origins o, finite domains \u039b, cuts A and natural C,k\u2080. It selects actual residue functions retaining the all-layer coefficient-64 bound and finite support of nonempty selected belt cells, then M : Finset (\u211d \u00d7 \u211d) with x \u2208 M iff \u2203 k, k\u2080 <= k and x \u2208 beltMarks o (fineScaleIndex k) (F k). It proves (M.card : \u211d) <= B (2 C + 1)^2 |edgeBoundary \u039b A|, with B = 576 times the positive p=0 numerical finite-sum budget.",
+        "Source: Section 11, geometry:belt-count, lines 220\u2013233; actual initial belt-cell marks in lines 325\u2013330; and the summation in geometry:total-repairs, lines 668\u2013692. This contribution concerns only chosen belt cells and their initial marks. The same contribution separately assigns minimum incident sides and proves mark separation. Active rays and sectors, fan coloring, recursive replacements, descendants and the full total-repairs estimate remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_uniform_separated_initial_marks",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/InitialMarkFamily.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_uniform_separated_initial_marks",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:belt-count",
+            "geometry:initial-stars",
+            "geometry:total-repairs"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Chooses \u2203 B : \u211d, 0 < B before all origins o, finite domains \u039b, cuts A and natural C,k\u2080; under 2 <= C and 50000000 <= k\u2080, retains actual sparse residue functions, every coefficient-64 cell estimate, finite support, exact finite M membership and its boundary bound. Supplies S : M \u2192 \u211d with positive values, an actual incident selected cell at some k >= k\u2080 witnessing S v = 2^(fineScaleIndex k), and S v <= 2^(fineScaleIndex h) for every selected incident cell at h >= k\u2080. For distinct v,w : M it proves max (S v) (S w) / 4 <= dist v.val w.val. The minimum side is exact, although its layer index need not be unique.",
+        "Source: Section 11, minimum incident-side assignment in lines 325\u2013330 and the mark-separation assertion in geometry:initial-stars, lines 332\u2013339; numerical mesh and layer inputs in lines 352\u2013359. Rays, sectors, fan interfaces, recursive replacements, descendants and the complete two-family partition remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finelayer_marks_dist_ge",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FineMarkSeparation.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_marks_dist_ge",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars",
+            "geometry:nonadjacent"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For arbitrary origin o, natural indices k,h >= 50000000, finite endpoint set Z and natural C >= 2, let z and w belong to fineLayerIndices o k (fineScaleIndex k) Z C and fineLayerIndices o h (fineScaleIndex h) Z C. For distinct actual cell marks x \u2208 beltCellMarks o (fineScaleIndex k) z and y \u2208 beltCellMarks o (fineScaleIndex h) w, proves max (2^(fineScaleIndex k)) (2^(fineScaleIndex h)) / 4 <= dist x y. This applies to every actual fine-layer cell, and hence to selected belt cells; it imposes no endpoint-set nonemptiness or fan hypothesis.",
+        "Source: Section 11, geometry:initial-stars, lines 325\u2013339 and the numerical proof in lines 352\u2013359; geometry:nonadjacent supplies the earlier actual-layer separation. This theorem is a numerical marked-point estimate and does not construct active rays, sectors or fan interfaces."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
