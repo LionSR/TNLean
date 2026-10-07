@@ -52,6 +52,21 @@ example (Λ : Finset (ℤ × ℤ)) (Ω : StateSpace Λ 2) (hΩ : ‖Ω‖ = 1)
 
 set_option linter.hashCommand false
 
+/--
+info: 'TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log
+/--
+info: 'TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le
