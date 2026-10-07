@@ -36,7 +36,7 @@ norm of matrices, rectangular ones included.
     orthogonal ranges. Their sum is
     \[
         P_{c,h}=\sum_{j=1}^{n}\sum_{\ell=1}^{d_j}
-            \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id .
+        \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id .
     \]
     Every $D_j$ contains the inner sample and is contained in the outer
     sample. This is the projector of \texttt{05-frames.tex}, lines 26--48,
@@ -59,8 +59,8 @@ norm of matrices, rectangular ones included.
     hole encoder is
     \[
         K_{c,h}=\sum_{j,\ell}\ket{j,\ell}\otimes
-            \bigl[\bigl(\ket0^{\otimes D_j}\bra{v_{j\ell}}\bigr)_{D_j}
-                \otimes\id\bigr]
+        \bigl[\bigl(\ket0^{\otimes D_j}\bra{v_{j\ell}}\bigr)_{D_j}
+            \otimes\id\bigr]
         \colon\mathcal H_\Lambda\to\mathcal J_{c,h}\otimes\mathcal H_\Lambda .
     \]
     It keeps a raw register at every site, inside the hole as well.
@@ -85,10 +85,10 @@ norm of matrices, rectangular ones included.
     orthogonality; hence $P_{c,h}$ is an orthogonal projection. Orthogonality
     of the tag basis gives
     $K_{c,h}^\dagger K_{c,h}=\sum_{j,\ell}
-    (\ket{v_{j\ell}}\braket{0^{\otimes D_j}}{0^{\otimes D_j}}\bra{v_{j\ell}})_{D_j}
-    \otimes\id=P_{c,h}$. Finally
+        (\ket{v_{j\ell}}\braket{0^{\otimes D_j}}{0^{\otimes D_j}}\bra{v_{j\ell}})_{D_j}
+        \otimes\id=P_{c,h}$. Finally
     $\lVert K_{c,h}\rVert^2=\lVert K_{c,h}^\dagger K_{c,h}\rVert
-    =\lVert P_{c,h}\rVert\le1$.
+        =\lVert P_{c,h}\rVert\le1$.
 \end{proof}
 
 \begin{definition}[Encoded frame]
@@ -155,7 +155,7 @@ norm of matrices, rectangular ones included.
 \begin{proof}\leanok
     By induction on the list. Write the raw part on the tags $(s,t)$ as
     $B_sR_t$, with $B_s$ from the first hole. Summing $R_t^\dagger
-    B_s^\dagger B_sR_t$ over $s$ gives $R_t^\dagger P_1R_t$, and $P_1$
+        B_s^\dagger B_sR_t$ over $s$ gives $R_t^\dagger P_1R_t$, and $P_1$
     commutes with $R_t^\dagger$ by disjointness of supports; the sum over $t$
     is then $P_1$ times the identity for the remaining holes. The projectors
     commute pairwise, so their product is an orthogonal projection of norm at
@@ -170,7 +170,7 @@ norm of matrices, rectangular ones included.
     For contractions $A_1,\dots,A_s$ and every vector $\psi$,
     \[
         \lVert(A_1\cdots A_s-\id)\psi\rVert
-            \le\sum_{j=1}^s\lVert(A_j-\id)\psi\rVert .
+        \le\sum_{j=1}^s\lVert(A_j-\id)\psi\rVert .
     \]
     In particular, if each of $r$ projectors has error at most $\varepsilon$
     on $\psi$, so does their product up to $r\varepsilon$; no commutation is
@@ -190,7 +190,7 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{lem:peps_frame_gram,lem:peps_frame_telescoping}
     For a frame with $r$ holes, $\lVert\Omega_{\mathcal F}\rVert
-    =\lVert P_1\cdots P_r\Omega\rVert$. If $\lVert\Omega\rVert=1$ and every
+        =\lVert P_1\cdots P_r\Omega\rVert$. If $\lVert\Omega\rVert=1$ and every
     hole projector satisfies $\lVert(\id-P_a)\Omega\rVert\le\varepsilon$, then
     \[
         1-r\varepsilon\le\lVert\Omega_{\mathcal F}\rVert\le1 .
@@ -227,17 +227,17 @@ norm of matrices, rectangular ones included.
     (\texttt{05-frames.tex}, lines 193--207) are:
     \begin{enumerate}
         \item every patch's outer square, and every affected old or new hole,
-            avoids the physical outer footprints of the untouched holes;
+              avoids the physical outer footprints of the untouched holes;
         \item the union of the patch inner squares contains every site whose
-            raw owner changes and the entire outer footprint of every
-            affected old or new hole;
+              raw owner changes and the entire outer footprint of every
+              affected old or new hole;
         \item in each patch's outer square, the sites outside
-            $H^-(\mathcal F_{\rm old})$ have at most two old owners, and the
-            sites outside $H^-(\mathcal F_{\rm new})$ have at most two new
-            owners;
+              $H^-(\mathcal F_{\rm old})$ have at most two old owners, and the
+              sites outside $H^-(\mathcal F_{\rm new})$ have at most two new
+              owners;
         \item all old and new raw owners on the patch footprints and the
-            affected-hole footprints, and all affected tag owners, belong to
-            the specified list.
+              affected-hole footprints, and all affected tag owners, belong to
+              the specified list.
     \end{enumerate}
     Patches may overlap, and affected old holes may overlap affected new
     holes. In the canonical coordinates used below, the tags of the untouched
@@ -288,7 +288,7 @@ norm of matrices, rectangular ones included.
     \uses{def:peps_frame_rewrite,lem:peps_frame_commute,lem:peps_frame_gram}
     Under condition (1),
     $MK_{\mathcal F_{\rm old}}=K_{\mathcal F_{\rm new}}P_m\cdots P_1
-    Q_1\cdots Q_{r_{\rm old}}$, where $Q_1,\dots,Q_{r_{\rm old}}$ are the
+        Q_1\cdots Q_{r_{\rm old}}$, where $Q_1,\dots,Q_{r_{\rm old}}$ are the
     projectors of the affected old holes.
 \end{lemma}
 
@@ -299,7 +299,7 @@ norm of matrices, rectangular ones included.
     $A_b^\dagger$, with every patch projector, with $B_a$ and with the
     affected old projectors. Summing over $b$,
     $\sum_bA_b^\dagger U_uA_b=U_u\sum_bA_b^\dagger A_b
-    =U_uQ_1\cdots Q_{r_{\rm old}}$ by the frame Gram identity; then $U_u$
+        =U_uQ_1\cdots Q_{r_{\rm old}}$ by the frame Gram identity; then $U_u$
     commutes to the left of $B_aP_m\cdots P_1$.
 \end{proof}
 
@@ -318,7 +318,7 @@ norm of matrices, rectangular ones included.
     canonical map $M$ is a contraction and
     \[
         \lVert M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert
-            \le(m+r_{\rm old})\varepsilon .
+        \le(m+r_{\rm old})\varepsilon .
     \]
     The same holds for frames whose tags are listed in any order, with $M$
     relabelled along the identification of the two tag orderings. This is the
@@ -331,7 +331,7 @@ norm of matrices, rectangular ones included.
 \begin{proof}\leanok
     By the intertwining lemma,
     $M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}
-    =K_{\mathcal F_{\rm new}}(P_m\cdots P_1Q_1\cdots Q_{r_{\rm old}}-\id)\Omega$.
+        =K_{\mathcal F_{\rm new}}(P_m\cdots P_1Q_1\cdots Q_{r_{\rm old}}-\id)\Omega$.
     The encoding is a contraction, and the telescoping lemma bounds the
     remaining vector by $(m+r_{\rm old})\varepsilon$. For another ordering of
     the tags, the raw parts of the encodings of holes with disjoint outer
@@ -422,7 +422,7 @@ norm of matrices, rectangular ones included.
     The sum $\widetilde M$ is within $\tfrac12\delta$ of $M$, so
     $\lVert\widetilde M\rVert\le1+\tfrac12\delta$. Splitting
     $M_\delta-M=(1+\tfrac12\delta)^{-1}(\widetilde M-M)
-    -\tfrac{\delta/2}{1+\delta/2}M$ bounds the error by
+        -\tfrac{\delta/2}{1+\delta/2}M$ bounds the error by
     $\delta/(1+\tfrac12\delta)\le\delta$. Take
     $k=\lceil(2Ng/\delta)^2\rceil+1$.
 \end{proof}
@@ -436,7 +436,7 @@ norm of matrices, rectangular ones included.
     Under condition (1), if $\lVert\Omega\rVert\le1$ and
     $\lVert M_a-M\rVert\le\delta$, then
     $\lVert M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert
-    \le\delta+(m+r_{\rm old})\varepsilon$. With $\varepsilon=L^{-60}$,
+        \le\delta+(m+r_{\rm old})\varepsilon$. With $\varepsilon=L^{-60}$,
     $\delta=L^{-30}$ and $m+r_{\rm old}+1\le L^{10}$, this is at most
     $L^{-20}$ (\texttt{05-frames.tex}, lines 217--218 and 343--344).
 \end{lemma}
@@ -455,7 +455,7 @@ norm of matrices, rectangular ones included.
         lem:peps_frame_approx_reference}
     Under the four conditions, for every fixed $a>0$ the canonical map $M$
     admits a contractive approximation $M_a$ with $\lVert M_a-M\rVert\le
-    L^{-a}$ and a polynomial sum expansion into monomials allowed by
+        L^{-a}$ and a polynomial sum expansion into monomials allowed by
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, using only the specified
     parties. In particular the rewrite is a bounded change with
     reference-vector error $O(L^{-20})$. This is the second assertion of
