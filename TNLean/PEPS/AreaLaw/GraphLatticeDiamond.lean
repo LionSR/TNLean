@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.GraphLatticeCounting
+import TNLean.PEPS.AreaLaw.GraphLatticeDistance
+import Mathlib.Data.Finset.Prod
+import Mathlib.Data.Int.Interval
+import Mathlib.Algebra.Order.Group.Abs
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic.Ring
 
@@ -15,8 +18,8 @@ We count its vertical integer-interval fibers, and then use an injective coordin
 bound finite sets in a graph ball by this exact ambient constant. Holes and disconnected
 components are allowed; all walks remain in the given graph.
 
-These are geometric counting ingredients only. No finite-domain or Hamiltonian model is
-introduced. `GraphLatticeCounting` retains its explicitly auxiliary containing-square bound.
+These are geometric counting ingredients only. The walk and graph-distance comparisons come
+from `GraphLatticeDistance`. No finite-domain or Hamiltonian model is introduced.
 
 ## Provenance
 

@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
 import TNLean.PEPS.AreaLaw.GraphInteractionChain
-import TNLean.PEPS.AreaLaw.GraphInteractionCounting
-import TNLean.PEPS.AreaLaw.GraphLatticeCounting
+import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
+import TNLean.PEPS.AreaLaw.GraphLatticeDistance
 
 /-!
 # Consumer regressions for graph interaction foundations
@@ -126,14 +126,14 @@ example : (⊤ : SimpleGraph (Fin 2)).edist 0 1 ≤ (1 : ℕ∞) ∧
 end Chains
 
 -- An empty domain needs no anchor when the support-count theorem receives the empty support.
-example (R : ℕ) : (∅ : Finset (Fin 0)).card ≤ (2 * R + 1) ^ 2 := by
-  exact card_support_le_square (G := (⊥ : SimpleGraph (Fin 0)))
+example (R : ℕ) : (∅ : Finset (Fin 0)).card ≤ 1 + 2 * R * (R + 1) := by
+  exact card_support_le_diamond (G := (⊥ : SimpleGraph (Fin 0)))
     (fun x : Fin 0 => Fin.elim0 x) (by intro x y h; exact Fin.elim0 x)
     (by intro x y h; exact Fin.elim0 x) ∅ R (by simp)
 
 -- A radius-zero graph ball in a singleton domain has at most one site.
 example : (Finset.univ : Finset PUnit).card ≤ 1 := by
-  exact le_trans (card_le_square_of_edist_le (G := (⊥ : SimpleGraph PUnit))
+  exact le_trans (card_le_diamond_of_edist_le (G := (⊥ : SimpleGraph PUnit))
     (fun _ : PUnit => ((0, 0) : ℤ × ℤ)) Finset.univ
     (fun _ _ _ => Subsingleton.elim _ _) (by intro x y h; simp at h)
     PUnit.unit 0 (by intro x hx; cases x; simp)) (by simp)
@@ -159,7 +159,7 @@ private theorem singleton_support_range (a : V) :
 example (coord : V → ℤ × ℤ) (hcoord : Function.Injective coord)
     (hstep : ∀ ⦃x y : V⦄, G.Adj x y → latticeL1Distance (coord x) (coord y) ≤ 1)
     (a : V) : (({{a}} : Finset (Finset V)).filter (fun X => a ∈ X)).card ≤ 1 := by
-  simpa using card_supports_containing_le_square coord hcoord hstep {{a}} 0
+  simpa using card_supports_containing_le_diamond coord hcoord hstep {{a}} 0
     (singleton_support_range (G := G) a) a
 
 -- A singleton interaction may be revisited at every step; its n-step bound is J^n.
@@ -167,7 +167,7 @@ example (coord : V → ℤ × ℤ) (hcoord : Function.Injective coord)
     (hstep : ∀ ⦃x y : V⦄, G.Adj x y → latticeL1Distance (coord x) (coord y) ≤ 1)
     (a : V) (J : ℝ) (hJ : 0 ≤ J) (n : ℕ) :
     interactionChainWeightSum {{a}} (fun _ => J) {a} n ≤ J ^ n := by
-  simpa using interactionChainWeightSum_le_lattice_pow coord hcoord hstep {{a}} 0
+  simpa using interactionChainWeightSum_le_diamond_pow coord hcoord hstep {{a}} 0
     (singleton_support_range (G := G) a) (fun _ => J) J hJ (fun _ _ => hJ)
     (fun _ _ => le_rfl) n {a} (by simp)
 
@@ -298,47 +298,47 @@ info: 'TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le' depends on axioms: 
 #print axioms TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le
 
 /--
-info: 'TNLean.PEPS.AreaLaw.card_le_square_of_latticeL1Distance_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.PEPS.AreaLaw.card_le_diamond_of_latticeL1Distance_le' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.card_le_square_of_latticeL1Distance_le
+#print axioms TNLean.PEPS.AreaLaw.card_le_diamond_of_latticeL1Distance_le
 
 /--
-info: 'TNLean.PEPS.AreaLaw.card_le_square_of_walks' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.PEPS.AreaLaw.card_le_diamond_of_walks' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.card_le_square_of_walks
+#print axioms TNLean.PEPS.AreaLaw.card_le_diamond_of_walks
 
 /--
-info: 'TNLean.PEPS.AreaLaw.card_le_square_of_edist_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.card_le_square_of_edist_le
+#print axioms TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le
 
 /--
-info: 'TNLean.PEPS.AreaLaw.card_support_le_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.PEPS.AreaLaw.card_support_le_diamond' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.card_support_le_square
+#print axioms TNLean.PEPS.AreaLaw.card_support_le_diamond
 
 /--
-info: 'TNLean.PEPS.AreaLaw.card_supports_containing_le_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.PEPS.AreaLaw.card_supports_containing_le_diamond' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.card_supports_containing_le_square
+#print axioms TNLean.PEPS.AreaLaw.card_supports_containing_le_diamond
 
 /--
-info: 'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_square
+#print axioms TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond
 
 /--
-info: 'TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_lattice_pow' depends on axioms: [propext,
+info: 'TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_lattice_pow
+#print axioms TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow
 
 end TNLeanTest

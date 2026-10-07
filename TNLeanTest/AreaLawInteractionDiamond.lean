@@ -62,6 +62,22 @@ example (a : V) (J : ℝ) (hJ : 0 ≤ J) (n : ℕ) :
     (singleton_diamond_range (G := G) a) (fun _ ↦ J) J hJ (fun _ _ ↦ hJ)
     (fun _ _ ↦ le_rfl) n {a} (by simp)
 
+-- Site budgets need only upper bounds on weights, even when every weight is nonpositive.
+example (F : Finset (Finset V)) (R : ℕ)
+    (hrange : ∀ X ∈ F, ∀ a ∈ X, ∀ x ∈ X, ∃ p : G.Walk a x, p.length ≤ R)
+    (w : Finset V → ℝ) (hw : ∀ X ∈ F, w X ≤ 0) (a : V) :
+    (∑ X ∈ F.filter (fun X ↦ a ∈ X), w X) ≤ 0 := by
+  simpa using sum_supportWeights_containing_le_diamond coord hcoord hstep F R hrange
+    w 0 le_rfl hw a
+
+-- A zero budget bounds every positive-length continuation by zero, at any range.
+example (F : Finset (Finset V)) (R : ℕ)
+    (hrange : ∀ X ∈ F, ∀ a ∈ X, ∀ x ∈ X, ∃ p : G.Walk a x, p.length ≤ R)
+    (n : ℕ) (X : Finset V) (hX : X ∈ F) :
+    interactionChainWeightSum F (fun _ ↦ 0) X (n + 1) ≤ 0 := by
+  simpa using interactionChainWeightSum_le_diamond_pow coord hcoord hstep F R hrange
+    (fun _ ↦ 0) 0 le_rfl (by simp) (by simp) (n + 1) X hX
+
 -- Norm weights require no physical model.
 example {E : Type*} [SeminormedAddGroup E] (a : V) (h : Finset V → E)
     (J : ℝ) (hJ : 0 ≤ J) (hh : ‖h {a}‖ ≤ J) :

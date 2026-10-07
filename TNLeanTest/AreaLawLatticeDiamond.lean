@@ -84,3 +84,12 @@ set_option linter.hashCommand false
 #print axioms TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le
 
 end TNLeanTest
+
+/--
+info: 'TNLean.PEPS.AreaLaw.latticeDiamond' depends on axioms:
+[propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.latticeDiamond
