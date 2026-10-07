@@ -1,0 +1,163 @@
+\section{The fan of a belt cell}
+\label{sec:area_law_cell_fans}
+
+The local fan is constructed before its triangles are colored. Each side
+may remain whole or be divided at its midpoint, according to the corners
+of the opposing cells. The following construction permits every such
+choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 299--310. This is the single-cell
+% geometric construction. Opposing-region assignments and merged
+% identifiers are subsequent constructions.
+
+\begin{definition}[Elementary segments and fan triangles]
+    \label{def:area_law_cell_fan}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.CellFanSlot,
+        TNLean.PEPS.AreaLaw.Geometry.cellFanCenter,
+        TNLean.PEPS.AreaLaw.Geometry.cellFanStart,
+        TNLean.PEPS.AreaLaw.Geometry.cellFanEnd,
+        TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon}
+    \leanok
+    \uses{def:area_law_dyadic_cells,def:area_law_template}
+    Let $Q$ be a closed dyadic square of side $t=2^\ell$ and center $c$.
+    On each of its four sides choose either the whole side or its two
+    half sides. The resulting segments are called elementary segments.
+    For each elementary segment $e=[a_e,b_e]$, let
+    \begin{align}
+        P_e=\operatorname{conv}\{c,a_e,b_e\}.
+    \end{align}
+    These are nondegenerate closed triangles. Their perimeter and radial
+    edges have slopes $0,\infty,1,-1$.
+\end{definition}
+
+\begin{theorem}[Fan vertices are actual cell marks]
+    \label{thm:area_law_cell_fan_mark_vertices}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_belt_cell_marks}
+    The center and both endpoints of every elementary segment belong
+    to the actual nine-point mark set $M_{\ell,z}$ of the same cell.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan,def:area_law_belt_cell_marks}
+    The center has relative coordinates $(1/2,1/2)$. Every segment
+    endpoint is a corner or side midpoint, so both relative coordinates
+    are among $0,1/2,1$.
+\end{proof}
+
+\begin{theorem}[Number of fan triangles]
+    \label{thm:area_law_cell_fan_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_cellFanSlot_bounds}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Every such fan has between four and eight triangles.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan}
+    Each of the four sides contributes either one or two elementary
+    segments.
+\end{proof}
+
+\begin{theorem}[Exact cover by fan triangles]
+    \label{thm:area_law_cell_fan_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_cover}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    The closed fan triangles cover exactly the closed dyadic square:
+    \begin{align}
+        Q=\bigcup_e P_e.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan}
+    Every point of $Q$ lies on the segment from $c$ to some point of the
+    perimeter. Every perimeter point belongs to an elementary segment,
+    so it is in the corresponding fan triangle. Conversely, every
+    vertex lies in $Q$, and convexity keeps the triangle in $Q$.
+\end{proof}
+
+\begin{theorem}[Intersections of fan triangles]
+    \label{thm:area_law_cell_fan_intersections}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_inter_eq}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    For any two elementary segments $e,e'$ of the same fan,
+    \begin{align}
+        P_e\cap P_{e'}
+        =\{c\}\cup\bigcup_{u\in e\cap e'}[c,u].
+    \end{align}
+    Thus a shared perimeter endpoint gives a shared radial segment,
+    while disjoint elementary segments give intersection $\{c\}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan}
+    A point different from $c$ determines its unique perimeter endpoint
+    on the outward ray from $c$. It belongs to both triangles exactly
+    when that endpoint lies in both elementary segments. The center
+    belongs to every triangle.
+\end{proof}
+
+
+\subsection{The primary containing a non-belt fine cell}
+
+\begin{definition}[The shifted pitch index]
+    \label{def:area_law_nonbelt_pitch_index}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.nonbeltPitchIndex}
+    \leanok
+    \uses{def:area_law_primary_regions}
+    For nonnegative fine and pitch exponents $\ell\le p$, integer shift representatives
+    $a,b$ and fine-cell index $z$, put $m=2^{p-\ell}$ and define
+    \begin{align}
+        j(z)=\left(\left\lfloor\frac{z_1-a}{m}\right\rfloor,
+        \left\lfloor\frac{z_2-b}{m}\right\rfloor\right).
+    \end{align}
+    These are the coordinate indices of the shifted pitch square.
+\end{definition}
+
+\begin{theorem}[Closed-cell containment in an actual primary]
+    \label{thm:area_law_nonbelt_primary_containment}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.closure_nonbeltCell_subset_primaryBirthRegion}
+    \leanok
+    \uses{def:area_law_nonbelt_pitch_index,def:area_law_primary_regions,
+        def:area_law_fine_layer_indices,def:area_law_belt_cells}
+    Fix an origin $o$, finite endpoint set $Z$, layer index $k$ and
+    nonnegative integer width $C_0$. Suppose that $\ell\le k$ and
+    $\ell\le p$. Choose residues $0\le a,b<m=2^{p-\ell}$, and let $z$
+    index an actual fine cell in this layer that is omitted by both
+    selected belt residues. Its closed square satisfies
+    \begin{align}
+        \overline{Q_\ell(z)}\subseteq
+        \overline{D_k\cap I_{a,b}(j(z))},
+    \end{align}
+    where $I_{a,b}(j)$ is the corresponding open pitch interior.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_nonbelt_pitch_index,def:area_law_primary_regions,
+        thm:area_law_fine_layer_count,thm:area_law_dyadic_closures}
+    Since neither residue is selected, each shifted coordinate remainder
+    lies between $1$ and $m-1$. The open fine-cell interior consequently
+    lies strictly inside the indicated pitch interior and belongs to the
+    actual layer. Its closure is the whole closed fine square. Taking
+    closures gives the inclusion, including when a fine-cell side
+    touches a pitch-interior boundary.
+\end{proof}
+
+\begin{theorem}[Unique actual primary identifier]
+    \label{thm:area_law_nonbelt_unique_primary}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_primary_of_nonbeltCell}
+    \leanok
+    \uses{thm:area_law_nonbelt_primary_containment,
+        def:area_law_primary_pitch_indices}
+    Under the preceding hypotheses, there is exactly one retained
+    primary pitch index whose birth region contains the whole closed
+    fine square. This index is $j(z)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_nonbelt_primary_containment,
+        thm:area_law_primary_pitch_membership,thm:area_law_primary_diameter_separation}
+    The open fine square is nonempty and lies in the actual
+    layer--pitch intersection, so the pitch index is retained.
+    If two different primary birth regions contained this square,
+    an interior point would belong to both. Their positive same-layer
+    separation rules this out.
+\end{proof}

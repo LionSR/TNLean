@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfanslot",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.CellFanSlot",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For arbitrary split : Fin 4 \u2192 Bool, abbreviates \u03a3 side : Fin 4, Fin (if split side then 2 else 1), indexing each side by one whole-side segment or two midpoint segments. Uses existing Sigma and Fin constructors; no new public constructor is introduced.",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfancenter",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanCenter",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the actual center of the dyadic cell with origin o, natural side exponent \u2113 and integer cell index z.",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfanstart",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanStart",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the actual first perimeter endpoint of each elementary segment indexed by CellFanSlot split, for arbitrary midpoint choices split : Fin 4 \u2192 Bool.",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfanend",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanEnd",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the actual second perimeter endpoint of each elementary segment indexed by CellFanSlot split, for arbitrary midpoint choices split : Fin 4 \u2192 Bool.",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfanpolygon",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines TemplatePolygon.triangle with the actual dyadic-cell center and the two actual perimeter endpoints of the selected elementary segment.",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_cellfanslot_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cellFanSlot_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For every split : Fin 4 \u2192 Bool, proves 4 <= Fintype.card (CellFanSlot split) and Fintype.card (CellFanSlot split) <= 8.",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfanpolygons_cover",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_cover",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For arbitrary o, \u2113, z and midpoint choices split, proves \u22c3 i, (cellFanPolygon o \u2113 z split i).region = closure (dyadicCell o \u2113 z).",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfanpolygons_inter_eq",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_inter_eq",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For every pair of positions i,j, including i = j, proves the exact polygon-region intersection equals {cellFanCenter} \u222a convexJoin \u211d {cellFanCenter} (segment \u211d start_i end_i \u2229 segment \u211d start_j end_j). Thus the common center is retained even when the two perimeter segments have empty intersection.",
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfan_vertices_mem_beltcellmarks",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For every origin o, natural scale \u2113, integer cell index z and arbitrary split : Fin 4 \u2192 Bool, proves cellFanCenter o \u2113 z \u2208 beltCellMarks o \u2113 z and, for every i : CellFanSlot split, both cellFanStart o \u2113 z split i and cellFanEnd o \u2113 z split i belong to that same actual nine-point cell-mark set.",
+        "Source: Section 11, the actual fan endpoints in lines 299\u2013310 and the nine initial belt-cell marks in lines 325\u2013330, in the proof of prop:two-families immediately before geometry:initial-stars. This theorem connects the actual fan vertices to existing marked points; it does not assign labels or prove active ray and sector assertions."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.nonbeltpitchindex",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NonbeltPrimaries.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.nonbeltPitchIndex",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For natural \u2113,p, integer residues a,b and cell index z : \u2124 \u00d7 \u2124, defines ((z.1 - a) / (2 : \u2124)^(p - \u2113), (z.2 - b) / (2 : \u2124)^(p - \u2113)), using Euclidean integer division to identify the coarse pitch position.",
+        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.closure_nonbeltcell_subset_primarybirthregion",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NonbeltPrimaries.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.closure_nonbeltCell_subset_primaryBirthRegion",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For o,k,\u2113,p,Z,C, residues a,b : Fin (2^(p - \u2113)) and fine-cell index z, assumes \u2113 <= k, \u2113 <= p, z \u2208 fineLayerIndices o k \u2113 Z C and z outside the corresponding beltCellIndices. Proves closure (dyadicCell o \u2113 z) is contained in primaryBirthRegion o k \u2113 p Z C a.val b.val (nonbeltPitchIndex \u2113 p a.val b.val z).",
+        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_unique_primary_of_nonbeltcell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NonbeltPrimaries.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_unique_primary_of_nonbeltCell",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Under the same assumptions \u2113 <= k, \u2113 <= p and actual fine-layer/nonbelt memberships, proves there is a unique j with j \u2208 primaryPitchIndices o k \u2113 p Z C a.val b.val and closure (dyadicCell o \u2113 z) contained in primaryBirthRegion o k \u2113 p Z C a.val b.val j. No k <= p or endpoint-set nonemptiness assumption is added.",
+        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

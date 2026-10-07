@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 19:19 UTC.
+Last coordination check: October 7, 2026, 19:36 UTC.
 
 ## Verified mathematical contributions
 
@@ -14,7 +14,7 @@ Last coordination check: October 7, 2026, 19:19 UTC.
 | Number of actual primary identifiers | [#8856](https://github.com/LionSR/TNLean/pull/8856) | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | `61fd819e7fe4689b8e0893affc9f127238b191ec` |
 | Actual nine-point belt marks and their sparse count | [#8857](https://github.com/LionSR/TNLean/pull/8857) | `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b` | `98d26cdad5e212a7e241951618dd3645f3ae6b21` |
 | Quarter-mesh bounds and neighboring-layer locality | [#8859](https://github.com/LionSR/TNLean/pull/8859) | `5db13f626cbba4ce128e25ddcdb60a00532f0f3a` | `436ea587677e61b2e971555cdf612ba1be6006cd` |
-| Actual finite initial marks, minimum sides and point separation | Publication accompanies this record | `5d2246bb32045fafea826200dd09b3518629ae97` | Evidence commit containing this record |
+| Actual finite initial marks, minimum sides and point separation | [#8862](https://github.com/LionSR/TNLean/pull/8862) | `5d2246bb32045fafea826200dd09b3518629ae97` | `c9debcc6060616b0eb1af6f8f02dcacdacc73e8a` |
 
 All 64 exact imported declarations in these eight contributions have passing
 canonical build and standard-axiom evidence. Complete provenance validation
@@ -35,7 +35,7 @@ These proofs must not be rebuilt merely because work resumes.
 The first three drafts have passing full Lean builds, compiled blueprint
 checks, rendering and module policies. The polynomial draft's failed timing
 job had no diagnostic log; its failed-only rerun passed. The fine-belt draft
-had two approvals on its exact published head. All checks on #8851 and #8856 now pass, including compiled declarations and rendering. #8857's full Lean build and diagram checks pass, with rendering and timing pending. #8859 remains in full CI. Refresh external statuses
+had two approvals on its exact published head. All checks on #8851, #8856, #8857 and #8859 now pass, including full Lean, compiled declarations and rendering. #8862 remains in full CI. Refresh external statuses
 before acting; all drafts remain open and no main-branch merge was performed.
 
 ## Ownership and remaining mathematics
@@ -186,12 +186,46 @@ four to eight actual TemplatePolygon triangles. The target is exact closed
 cell cover, allowed slopes and shared-boundary geometry. It will not assume
 or claim the later opposing-region assignment, cyclic equal-label merging,
 active interfaces or the full isolated-star ray/sector assertion. Source:
-Section 11, lines 299–310. Independent review and Mathlib scouting are underway.
+Section 11, lines 299–310. Mathlib scouting, package-option direct elaboration
+and independent mathematical review have passed. Its nine public declarations
+construct the dependent elementary-segment indices, actual center/endpoints and
+TemplatePolygon triangles, bound the number of indices between four and eight,
+prove the exact closed-cell cover and identify every pairwise intersection as
+the common center together with radial joins of common perimeter points. The
+intersection includes coincident triangles; no separate distinct-index endpoint
+classification is claimed.
+The final [vertex connection](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6045372605)
+proves that the actual center and every elementary-segment endpoint belong
+to the existing nine-point mark set of the same cell. Its narrow package-option
+check and independent review pass, connecting fan vertices to the counted marks.
 
-The next local action is to publish the complete initial-family evidence and
-draft, merge that evidence into preparation, and complete the cell-fan proofs.
+The initial-family contribution is published and its complete evidence is merged
+into preparation. The cell-fan proofs and their independent review are complete.
+The next local action is to finish source documentation and freeze the twelve-name
+fan/primary contribution for one combined canonical verification.
 Preserve the completed 225-entry baseline when preparing the new fan rows.
 Canonical builds, cache mutations and parent source checks are not to be repeated.
+
+The [non-belt-primary extension](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6045170965)
+is owned by the root agent in new `Geometry/NonbeltPrimaries.lean`. Its three
+public declarations define the shifted pitch index by integer division, prove
+closed fine-cell containment in the actual primary birth region, and identify
+a unique retained primary. The two theorems require ℓ ≤ k, ℓ ≤ p, actual refined
+layer membership and omission by both selected belt residue classes. They
+include negative cell indices, touching sides, empty layers and the depth-zero
+all-belt case. The proof first places the open cell interior in the actual
+layer--pitch intersection, then takes closures; uniqueness uses the verified
+positive separation of primary birth regions. Package-option elaboration and
+independent review pass. Source: Section 11, lines 212–218, 237–249 and 299–305.
+
+The fan and non-belt modules will share one canonical build and twelve-name
+imported audit. Their twelve new provenance rows remain planned until that
+evidence passes. The complete planned inventory contains 237 rows; all 225
+prior records remain unchanged, including the old planned root row.
+The general assignment of opposing elementary segments across layer boundaries,
+dummy interfaces, fan colors, cyclic run identifiers and active stars remains
+separate. Neither source headline theorem is established.
+
 
 At the latest coordination check, the boundary comparisons were ready in
 [#8849](https://github.com/LionSR/TNLean/pull/8849); the analytic owner published
@@ -218,3 +252,14 @@ The earlier [geometry handoff](https://github.com/LionSR/TNLean/issues/8758#issu
 and [tracker handoff](https://github.com/LionSR/TNLean/issues/8733#issuecomment-6042338516)
 record previous contribution boundaries. No main-branch merge or dependency-pin
 change was performed by this contribution.
+
+Read-only verification assistance for the separately owned capped maximal-contained
+dyadic partition is claimed under
+[#8754 comment6045442354](https://github.com/LionSR/TNLean/issues/8754#issuecomment-6045442354).
+The candidate is [#8863](https://github.com/LionSR/TNLean/pull/8863), whose local
+prebuilt-cache endpoints return HTTP403. The plan is to compare exact pins and
+imported source against the existing warmed environment before nonmutating
+elaboration of its new source in a temporary file. It does not move ownership,
+change peer sources or pins, mutate a cache, or promote pending peer evidence.
+Current template integration heads are #8798 `077f62c33` and #8826 `2ed6f6ed1`,
+with model `cd7271b9` and main `e3e3dddb`. Their newer additive CI remains pending.

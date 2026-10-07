@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
+import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
 import TNLean.PEPS.AreaLaw.Geometry.DyadicClosure
 import TNLean.PEPS.AreaLaw.Geometry.DyadicExhaustion
@@ -23,6 +24,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
+import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
