@@ -36,21 +36,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -87,21 +87,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -138,21 +138,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -189,21 +189,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -240,21 +240,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -291,21 +291,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -342,21 +342,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -393,21 +393,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -444,21 +444,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
@@ -495,21 +495,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "d62f169decd531ac3c8b770d847431c6a9099fa5",
+        "revision": "8e5df04d8b0ba2c0ebbe40247405bd01e6d8d319",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-dac__pp4/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-8756-imported-audit-wm6318vz/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-direct-build.log",
-            "sha256": "911b13553d49a0dc2f2fbede0d267e2ee17ab48e8ba9769ca34506fad526499e"
+            "sha256": "4887278d5234cbac911fb8a7a8230a0e0a0c76b91cb420d1aa0850d39a2b51cc"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -Dlinter.hashCommand=false docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true docs/provenance/evidence/8756-bootstrap-axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
-            "sha256": "cba934459fd8a57bd8c6b31f4252e0d08646296e350bcbf18dace36296a7aa90"
+            "sha256": "0d752b6c9abbf2dd753797def64984d18224fc5c4ebb73742311b04c660c92fd"
           }
         ]
       },
