@@ -61,6 +61,9 @@ import TNLean.MPS.ParentHamiltonian.CPSVBlockedNearestNeighbor
 import TNLean.MPS.ParentHamiltonian.CPSVOriginalRange
 import TNLean.MPS.ParentHamiltonian.CanonicalBlockGroundSpaceAtInjectivityLength
 import TNLean.MPS.ParentHamiltonian.CanonicalBoundedRangeGroundSpace
+import TNLean.MPS.ParentHamiltonian.CanonicalGroundSpaceTransport
+import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionExistence
+import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
 import TNLean.MPS.ParentHamiltonian.CenteredOverlapFactor
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.CoefficientPairing
@@ -69,6 +72,8 @@ import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.CompactBlockBoundaryInjectivity
 import TNLean.MPS.ParentHamiltonian.CompactBlockParentGap
 import TNLean.MPS.ParentHamiltonian.CompactNormalParentGap
+import TNLean.MPS.ParentHamiltonian.CompactOpenParentGap
+import TNLean.MPS.ParentHamiltonian.CompactOpenParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
 import TNLean.MPS.ParentHamiltonian.CompactParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntertwining

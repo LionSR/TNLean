@@ -7,9 +7,9 @@
 
 \input{command}
 
-\title{The Finite-Range Cyclic Knabe Coefficient}
+\title{Finite-Range Knabe Coefficients for Cyclic and Open Chains}
 \author{}
-\date{2026-08-17}
+\date{2026-10-02}
 
 \begin{document}
 \maketitle
@@ -202,6 +202,97 @@ For $R=2$,
 the nearest-neighbor coefficient
 (\ref{eq:knabe88_finite_range_coefficient_nearest_neighbor_coefficient}).
 
+\section{Open chains by zero padding}
+
+Let $R\geq1$, $m\geq R$, and $N\geq R$. On the Hilbert space of the
+physical $N$-site chain, let $h_i$ be the nonwrapping range-$R$ parent
+projections at starts $0\leq i\leq N-R$. Set $P=N+2m$. For
+$s\in\mathbb Z/P\mathbb Z$, with representative
+$\bar s\in\{0,\ldots,P-1\}$, define
+\begin{align}
+    \widetilde h_s
+        &=\begin{cases}
+            h_{\bar s},&\bar s+R\leq N,\\
+            0,&\bar s+R>N,
+          \end{cases}
+    \label{eq:knabe_open_padding}\\
+    H_N^{\mathrm{open}}
+        &=\sum_{s\in\mathbb Z/P\mathbb Z}\widetilde h_s.
+    \label{eq:knabe_open_sum}
+\end{align}
+The padding changes only the indexing set of the interaction terms, not the
+physical volume. Zero is an orthogonal projection. For $R\leq e$ and
+$e+R\leq P$, the representatives of $s$ and $s+e$ obey either
+$\bar s+R\leq\overline{s+e}$ or
+$\overline{s+e}+R\leq\bar s$. Thus the two active physical intervals
+are disjoint, and the padded terms commute at the required oriented
+separations. Also $P\geq2m$, as required by the cyclic inequality.
+
+Define the padded windows
+\begin{align}
+    A_s&=\sum_{q=0}^{m-1}\widetilde h_{s+q}.
+    \label{eq:knabe_open_windows}
+\end{align}
+Write $C=N-R+1$ for the number of active starts and $t=\bar s$.
+If $t+m\leq P$, the active starts in the window form
+$[a,b)$ with $a=t$ and $b=\min\{t+m,C\}$, provided $t<C$;
+otherwise the window is zero. If $t+m>P$, the initial part of the
+window lies beyond the physical chain, and the active starts after wrapping
+form $[a,b)$ with $a=0$ and $b=\min\{t+m-P,C\}$.
+The inactive interval between two successive copies of the active starts
+has length $P-C=2m+R-1$, so a window of $m$ starts cannot meet both copies.
+
+Whenever $a<b$, put $W=b-a+R-1$ and $n=b+R-1$.
+Then $R\leq W\leq m+R-1$, $W\leq n\leq N$, and $A_s$ is the
+range-$R$ open Hamiltonian on $[n-W,n)=[a,b+R-1)$, acting independently
+on the remaining sites. In particular, the boundary windows can have
+fewer than $m$ active interaction terms.
+
+Suppose that every range-$R$ open parent Hamiltonian on $W$ sites has
+norm gap at least $\gamma>0$ on its kernel complement for
+$R\leq W\leq m+R-1$. A physical coordinate isometry identifies each
+nonzero $A_s$ with such a $W$-site Hamiltonian tensored with the identity.
+The same norm gap therefore holds on the kernel complement of $A_s$.
+For a positive operator, this is equivalent to $A_s^2\geq\gamma A_s$.
+The zero windows satisfy that inequality as well. Applying the cyclic
+bound~(\ref{eq:knabe88_finite_range_coefficient_finite_range_bound}) to the
+padded family gives
+\begin{align}
+    \delta&=\frac{m\gamma-(R-1)^2}{m-R+1},
+    \label{eq:knabe_open_delta}\\
+    (H_N^{\mathrm{open}})^2
+        &\geq\delta H_N^{\mathrm{open}}.
+    \label{eq:knabe_open_gap}
+\end{align}
+If $m\gamma>(R-1)^2$, then $\delta>0$, and
+$\delta\|v\|\leq\|H_N^{\mathrm{open}}v\|$ for every
+$v\perp\ker H_N^{\mathrm{open}}$ and every $N\geq R$.
+Thus finitely many open volumes give one lower bound at all physical
+volumes. The hypothesis includes all $R\leq W\leq m+R-1$; the gap
+of the single largest window alone is not the hypothesis of this open criterion.
+
+\section{Compact continuous families}
+
+The finite-size criterion also gives an open-chain version of the
+finite-window compactness argument in Appendix~A of
+Ref.~\cite{Schuch2011Phases}. Suppose a continuous family of block tensors
+has one common positive simultaneous injectivity length $S$, and fix
+$R\geq S+1$. At each parameter $x_0$, the pointwise open-chain gap theorem
+supplies $\gamma_{x_0}>0$, uniformly in the physical volume.
+Choose $m\geq R$ with $m\gamma_{x_0}/2>(R-1)^2$.
+The ground projections and open Hamiltonians on the finitely many volumes
+$R\leq W\leq m+R-1$ are continuous. Their gaps therefore remain at least
+$\gamma_{x_0}/2$ in one neighborhood of $x_0$.
+The coefficient~(\ref{eq:knabe_open_delta}) gives one positive all-volume gap throughout
+that neighborhood. A finite subcover gives a positive common gap on every
+compact parameter set. Continuous positive interactions with the same local
+kernels inherit this gap through a common positive lower comparison constant.
+
+This argument applies at the sufficient range $R\geq S+1$. It does not
+assert a gap for every shorter interaction range. The genuine short-range
+counterexample to that unrestricted claim is recorded in
+\path{docs/paper-gaps/cpgsv21_short_range_parent_gap.tex}.
+
 \section{Verdict}
 
 The nearest-neighbor threshold
@@ -215,9 +306,19 @@ Theorem~2.1(i) of Nachtergaele's martingale argument
 \cite{Nachtergaele1996Spectral}, or to the two MPS reviews
 \cite{PerezGarcia2007Matrix,Cirac2021Matrix}.
 
-The abstract result concerns a cyclic family of projections. Applying it
-uniformly to sufficiently large MPS parent Hamiltonians still requires a
-uniform gap for the corresponding nonwrapping open interaction.
+The open-chain coefficient~(\ref{eq:knabe_open_delta}) is a further consequence
+of that cyclic inequality, obtained by zero padding. It is formalized by
+\leanid{MPSTensor.openParentHamiltonianES_gap_of_finite_open_gaps}, with the
+padding and clipped-window identities proved separately. This open criterion
+requires gaps on finitely many open volumes, including the clipped boundary
+volumes. It is not attributed to Knabe's printed periodic theorem.
+
+The coefficient clarification is resolved by these derived cyclic and open
+criteria. For compact continuous families at a sufficient interaction range,
+the finite-window continuity argument supplies the needed local gaps and
+gives a common positive open-chain gap. The source's unrestricted shorter-range
+assertion is a separate false-source issue, not an unresolved coefficient
+calculation.
 
 \bibliographystyle{alpha}
 \bibliography{references}
