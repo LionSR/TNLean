@@ -88,19 +88,22 @@ def vecKron {m n : Type*} (x : EuclideanSpace ℂ m) (y : EuclideanSpace ℂ n) 
 
 variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n']
 
+omit [Fintype m'] [Fintype n'] in
 theorem act_kronecker_vecKron (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) (x : EuclideanSpace ℂ m)
     (y : EuclideanSpace ℂ n) : act (A ⊗ₖ B) (vecKron x y) = vecKron (act A x) (act B y) := by
   ext ⟨i, j⟩
-  simp only [act, vecKron, mulVec, dotProduct, kroneckerMap_apply, Fintype.sum_prod_type,
+  simp only [vecKron, mulVec, dotProduct, kroneckerMap_apply, Fintype.sum_prod_type,
     Finset.sum_mul_sum]
   refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
   ring
 
+omit [Fintype m] [Fintype n] in
 theorem vecKron_sub_left (x x' : EuclideanSpace ℂ m) (y : EuclideanSpace ℂ n) :
     vecKron x y - vecKron x' y = vecKron (x - x') y := by
   ext ⟨i, j⟩
   simp [vecKron, sub_mul]
 
+omit [Fintype m] [Fintype n] in
 theorem vecKron_sub_right (x : EuclideanSpace ℂ m) (y y' : EuclideanSpace ℂ n) :
     vecKron x y - vecKron x y' = vecKron x (y - y') := by
   ext ⟨i, j⟩
@@ -127,6 +130,7 @@ theorem norm_vecKron_self_sub_le (x y : EuclideanSpace ℂ m) :
 
 variable [DecidableEq m] [DecidableEq n] [DecidableEq m'] [DecidableEq n']
 
+omit [DecidableEq m'] in
 /-- `‖1 ⊗ B‖ ≤ ‖B‖`. -/
 theorem l2_opNorm_one_kronecker_le (B : Matrix m' n ℂ) :
     ‖(1 : Matrix m m ℂ) ⊗ₖ B‖ ≤ ‖B‖ := by
@@ -137,6 +141,7 @@ theorem l2_opNorm_one_kronecker_le (B : Matrix m' n ℂ) :
   rw [h]
   exact (l2_opNorm_reindex_le _ _ _).trans (l2_opNorm_kronecker_one_le B)
 
+omit [DecidableEq m'] in
 /-- `‖A ⊗ B‖ ≤ ‖A‖ ‖B‖`. -/
 theorem l2_opNorm_kronecker_le (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) :
     ‖A ⊗ₖ B‖ ≤ ‖A‖ * ‖B‖ := by
@@ -146,10 +151,12 @@ theorem l2_opNorm_kronecker_le (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) :
   exact (l2_opNorm_mul _ _).trans (mul_le_mul (l2_opNorm_kronecker_one_le A)
     (l2_opNorm_one_kronecker_le B) (norm_nonneg _) (norm_nonneg _))
 
+omit [DecidableEq m'] in
 theorem l2_opNorm_kronecker_le_one {A : Matrix m' m ℂ} {B : Matrix n' n ℂ} (hA : ‖A‖ ≤ 1)
     (hB : ‖B‖ ≤ 1) : ‖A ⊗ₖ B‖ ≤ 1 :=
   (l2_opNorm_kronecker_le A B).trans (by nlinarith [norm_nonneg A, norm_nonneg B])
 
+omit [DecidableEq m] in
 /-- The matrix of a bijection of coordinates is a contraction. -/
 theorem l2_opNorm_toMatrix_toPEquiv_le (f : m ≃ n) : ‖(f.toPEquiv.toMatrix : Matrix m n ℂ)‖ ≤ 1 := by
   have h : (f.toPEquiv.toMatrix : Matrix m n ℂ) = reindex f.symm (Equiv.refl n) 1 := by
@@ -158,6 +165,7 @@ theorem l2_opNorm_toMatrix_toPEquiv_le (f : m ≃ n) : ‖(f.toPEquiv.toMatrix :
   rw [h]
   exact (l2_opNorm_reindex_le _ _ _).trans norm_one_le
 
+omit [Fintype m] [Fintype n] [Fintype m'] [Fintype n'] [DecidableEq m] [DecidableEq n] in
 /-- The matrix of a product of bijections is the Kronecker product of their matrices. -/
 theorem toMatrix_toPEquiv_prodCongr (f : m ≃ m') (g : n ≃ n') :
     ((f.prodCongr g).toPEquiv.toMatrix : Matrix (m × n) (m' × n') ℂ) =
@@ -167,6 +175,7 @@ theorem toMatrix_toPEquiv_prodCongr (f : m ≃ m') (g : n ≃ n') :
     kroneckerMap_apply, Equiv.prodCongr_apply, Prod.map, Prod.mk.injEq]
   by_cases h₁ : f i = k <;> by_cases h₂ : g j = l <;> simp [h₁, h₂]
 
+omit [Fintype m] [Fintype n] [DecidableEq m] in
 /-- Relabelling the coordinates of the matrix of a bijection. -/
 theorem toMatrix_toPEquiv_submatrix {l l' : Type*} [DecidableEq l'] (f : m ≃ n) (e₁ : l ≃ m) (e₂ : l' ≃ n) :
     (f.toPEquiv.toMatrix : Matrix m n ℂ).submatrix e₁ e₂ =
@@ -222,6 +231,7 @@ def bufferCorrection (V : Matrix (BT × BE) U ℂ) :
       ((V ⊗ₖ V)ᴴ * ((bufferSwap BT BE).toPEquiv.toMatrix : Matrix _ _ ℂ) * (V ⊗ₖ V))).submatrix
     (pairShuffle (T × E) U (T × E) U) (pairShuffle (T × E) U (T × E) U)
 
+omit [Fintype T] [Fintype E] [Fintype U] in
 theorem tSwapW_toMatrix :
     ((tSwapW T E U).toPEquiv.toMatrix : Matrix _ _ ℂ) =
       (((tSwap T E).toPEquiv.toMatrix : Matrix _ _ ℂ) ⊗ₖ
@@ -231,6 +241,7 @@ theorem tSwapW_toMatrix :
     toMatrix_toPEquiv_submatrix]
   rfl
 
+omit [Fintype T] [Fintype E] [Fintype BT] [Fintype BE] in
 theorem tbSwap_toMatrix :
     ((tbSwap T E BT BE).toPEquiv.toMatrix : Matrix _ _ ℂ) =
       (((tSwap T E).toPEquiv.toMatrix : Matrix _ _ ℂ) ⊗ₖ
@@ -284,6 +295,7 @@ theorem act_tbSwap_vecKron_tensorPurification (s : T × BT → ℂ) (s' : E × B
     s' (x.2.1.2, x.2.2.2)) = _
   ring
 
+omit [DecidableEq T] [DecidableEq BT] in
 theorem norm_toLp_tensorPurification {s : T × BT → ℂ} {s' : E × BE → ℂ}
     (hs : star s ⬝ᵥ s = 1) (hs' : star s' ⬝ᵥ s' = 1) :
     ‖(WithLp.toLp 2 (tensorPurification s s') : EuclideanSpace ℂ _)‖ = 1 := by
@@ -365,6 +377,7 @@ def sheetSwapOp (q : ℕ) (S : Finset ι) :
     Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ :=
   (sheetSwap q S).toPEquiv.toMatrix
 
+omit [Fintype ι] in
 theorem sheetSwap_symm (S : Finset ι) : (sheetSwap q S).symm = sheetSwap q S := rfl
 
 theorem norm_sheetSwapOp_le_one (S : Finset ι) : ‖sheetSwapOp q S‖ ≤ 1 :=
@@ -472,13 +485,13 @@ theorem sheetSwapOp_eq_submatrix :
       funext v <;> simp only [Equiv.trans_apply, Equiv.prodCongr_apply, Equiv.prodCongr_symm,
         Prod.map_fst, Prod.map_snd, threeSplit_apply_fst_fst, threeSplit_apply_fst_snd,
         threeSplit_apply_snd, sheetSwap, Equiv.coe_fn_mk, tSwapW]
-    · rw [if_pos v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
-    · rw [if_neg (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
-    · rw [if_neg (hU v)]
+    · rw [ite_eq_left v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
+    · rw [ite_eq_right (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
+    · rw [ite_eq_right (hU v)]
       exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
-    · rw [if_pos v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
-    · rw [if_neg (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
-    · rw [if_neg (hU v)]
+    · rw [ite_eq_left v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
+    · rw [ite_eq_right (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
+    · rw [ite_eq_right (hU v)]
       exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
   have hsub := toMatrix_toPEquiv_submatrix (sheetSwap q T) (threeSplit₂ h).symm
     (threeSplit₂ h).symm
@@ -786,16 +799,17 @@ theorem owner_eq_of_notMem_exchangeEnv {x : ι} (hx : x ∉ X.exchangeEnv P) :
 theorem newOwner_eq_of_notMem_exchangeEnv {x : ι} (hx : x ∉ X.exchangeEnv P) :
     X.newFrame₁.owner x = P ∧ X.newFrame₂.owner x = P := by
   obtain ⟨h₁, h₂⟩ := X.owner_eq_of_notMem_exchangeEnv P hx
-  simp only [newFrame₁, newFrame₂]
+  show (if x ∈ X.region then X.owner₂ x else X.owner₁ x) = P ∧
+    (if x ∈ X.region then X.owner₁ x else X.owner₂ x) = P
   split_ifs <;> exact ⟨by assumption, by assumption⟩
 
 /-- The renaming keeps every register at its party: the new owner of the register of the first
 sheet at `x ∈ Y` is the old owner of the second sheet there (`05-frames.tex`, lines 487–489). -/
 theorem newFrame₁_owner_of_mem {x : ι} (hx : x ∈ X.region) :
-    X.newFrame₁.owner x = X.owner₂ x := if_pos hx
+    X.newFrame₁.owner x = X.owner₂ x := ite_eq_left hx
 
 theorem newFrame₂_owner_of_mem {x : ι} (hx : x ∈ X.region) :
-    X.newFrame₂.owner x = X.owner₁ x := if_pos hx
+    X.newFrame₂.owner x = X.owner₁ x := ite_eq_left hx
 
 theorem footprint_new₁_subset :
     footprint ((X.out₁ ++ X.in₂).map Hole.patch) ⊆ (↑(X.tSet P ∪ X.eSet P) : Set ι) := by

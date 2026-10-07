@@ -82,6 +82,7 @@ Polynomial-PEPS manuscript, proof of Lemma 6.5, `05-frames.tex`, lines 416–419
 def pairSource (s : T × BT → ℂ) : Matrix ((T × E) × (BT × BE)) (E × BE) ℂ :=
   of fun x y => if (x.1.2, x.2.2) = y then s (x.1.1, x.2.1) else 0
 
+omit [DecidableEq T] [DecidableEq BT] in
 theorem pairSource_conjTranspose_mul_self {s : T × BT → ℂ} (hs : star s ⬝ᵥ s = 1) :
     (pairSource (E := E) (BE := BE) s)ᴴ * pairSource (E := E) (BE := BE) s = 1 := by
   ext ⟨e, b⟩ ⟨e', b'⟩
@@ -93,18 +94,21 @@ theorem pairSource_conjTranspose_mul_self {s : T × BT → ℂ} (hs : star s ⬝
     Finset.mem_univ, ite_true]
   split_ifs <;> simp_all [dotProduct, Fintype.sum_prod_type]
 
+omit [Fintype T] [DecidableEq T] [Fintype BT] [DecidableEq BT] in
 /-- `S s' = s ⊗ s'`. -/
 theorem pairSource_mulVec (s : T × BT → ℂ) (s' : E × BE → ℂ) :
     pairSource s *ᵥ s' = tensorPurification s s' := by
   ext x
-  simp [pairSource, mulVec, dotProduct, tensorPurification, ite_mul, Fintype.sum_prod_type]
+  simp [pairSource, mulVec, dotProduct, tensorPurification, ite_mul]
 
+omit [DecidableEq T] [DecidableEq BT] in
 /-- `Sᴴ (s ⊗ s') = s'` for a unit vector `s`. -/
 theorem pairSource_conjTranspose_mulVec_tensorPurification {s : T × BT → ℂ}
     (hs : star s ⬝ᵥ s = 1) (s' : E × BE → ℂ) :
     (pairSource s)ᴴ *ᵥ tensorPurification s s' = s' := by
   rw [← pairSource_mulVec, mulVec_mulVec, pairSource_conjTranspose_mul_self hs, one_mulVec]
 
+omit [Fintype T] [DecidableEq T] [Fintype BT] [DecidableEq BT] in
 /-- `S Sᴴ = |s⟩⟨s|_{T B_T} ⊗ 1_{E B_E}`: the middle projector of `eq:birth-map`. -/
 theorem pairSource_mul_conjTranspose_apply (s : T × BT → ℂ)
     (x x' : (T × E) × (BT × BE)) :
@@ -138,6 +142,7 @@ def birthOp (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ) :
     Matrix ((T × E) × U) ((T × E) × U) ℂ :=
   (birthEffect V s)ᴴ * birthEffect V s
 
+omit [Fintype U] [DecidableEq U] [DecidableEq BT] in
 /-- **`eq:birth-map`.** `B = 𝒱ᴴ (S Sᴴ) 𝒱` with `𝒱 = 1_{TE} ⊗ V`. -/
 theorem birthOp_eq (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ) :
     birthOp V s = ((1 : Matrix (T × E) (T × E) ℂ) ⊗ₖ V)ᴴ *
@@ -145,15 +150,18 @@ theorem birthOp_eq (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ) :
   rw [birthOp, birthEffect, conjTranspose_mul, conjTranspose_conjTranspose]
   simp only [Matrix.mul_assoc]
 
+omit [Fintype U] [DecidableEq U] [DecidableEq BT] in
 /-- The canonical map is Hermitian. -/
 theorem birthOp_isHermitian (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ) :
     (birthOp (E := E) V s).IsHermitian := by
   rw [IsHermitian, birthOp, conjTranspose_mul, conjTranspose_conjTranspose]
 
+omit [DecidableEq T] [DecidableEq BT] in
 theorem norm_pairSource_le_one {s : T × BT → ℂ} (hs : star s ⬝ᵥ s = 1) :
     ‖pairSource (E := E) (BE := BE) s‖ ≤ 1 :=
   norm_le_one_of_gram (by rw [pairSource_conjTranspose_mul_self hs]; exact norm_one_le)
 
+omit [DecidableEq BT] [DecidableEq BE] in
 theorem norm_one_kronecker_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry) :
     ‖(1 : Matrix (T × E) (T × E) ℂ) ⊗ₖ V‖ ≤ 1 :=
   norm_le_one_of_gram (by
@@ -217,6 +225,7 @@ def teuShuffle (T E U : Type*) : (T × E) × U ≃ E × (T × U) where
   left_inv _ := rfl
   right_inv _ := rfl
 
+omit [Fintype U] [DecidableEq U] [DecidableEq BT] in
 /-- The effect `Sᴴ 𝒱` is the identity on `E` tensored with the kernel `⟨s| (1_T ⊗ V)` on the
 registers of `T ∪ U`. -/
 theorem birthEffect_eq_submatrix (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ) :
@@ -228,12 +237,13 @@ theorem birthEffect_eq_submatrix (V : Matrix (BT × BE) U ℂ) (s : T × BT → 
     Fintype.sum_prod_type, Prod.mk.injEq]
   simp only [apply_ite (star : ℂ → ℂ), star_zero, ite_mul, zero_mul, one_mul, ite_and]
   simp_rw [Finset.sum_comm (s := (Finset.univ : Finset E)) (t := (Finset.univ : Finset BT))]
-  simp only [Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq', Finset.sum_ite_eq,
-    Finset.mem_univ, ite_true]
+  simp only [Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq', Finset.mem_univ,
+    ite_true]
   by_cases he : e = e₀
   · subst he; simp
-  · simp [he, Ne.symm he]
+  · simp [Ne.symm he]
 
+omit [Fintype U] [DecidableEq U] [DecidableEq BT] in
 /-- **The canonical map acts as the identity on `E`.** In the coordinates `(e, (t, u))`,
 `B = 1_E ⊗ (Kᴴ K)` with `K = ⟨s| (1_T ⊗ V)` the kernel on the registers of `T ∪ U`.
 
@@ -246,6 +256,7 @@ theorem birthOp_eq_submatrix (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ)
     ← submatrix_mul _ _ _ _ _ Function.bijective_id, conjTranspose_kronecker, conjTranspose_one,
     ← mul_kronecker_mul, Matrix.one_mul]
 
+omit [Fintype T] [Fintype E] [DecidableEq E] [Fintype U] in
 /-- An operator acting on `E` alone, `(1_T ⊗ R) ⊗ 1_U`, in the coordinates `(e, (t, u))`. -/
 theorem one_kronecker_kronecker_one_eq_submatrix (R : Matrix E E ℂ) :
     ((1 : Matrix T T ℂ) ⊗ₖ R) ⊗ₖ (1 : Matrix U U ℂ) =
@@ -255,6 +266,7 @@ theorem one_kronecker_kronecker_one_eq_submatrix (R : Matrix E E ℂ) :
     Prod.mk.injEq]
   by_cases ht : t = t' <;> by_cases hu : u = u' <;> simp [ht, hu]
 
+omit [DecidableEq BT] in
 /-- The canonical map commutes with every operator acting on `E` alone. -/
 theorem commute_birthOp (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ) (R : Matrix E E ℂ) :
     Commute (((1 : Matrix T T ℂ) ⊗ₖ R) ⊗ₖ (1 : Matrix U U ℂ)) (birthOp V s) := by
@@ -336,7 +348,7 @@ theorem mem_birthEnv {x : ι} : x ∈ F.birthEnv P ↔ F.owner x ≠ P ∨ x ∈
   unfold birthEnv
   simp
 
-theorem outerHoles_subset_birthEnv : F.outerHoles ⊆ (F.birthEnv P : Set ι) := fun x hx =>
+theorem outerHoles_subset_birthEnv : F.outerHoles ⊆ (F.birthEnv P : Set ι) := fun _ hx =>
   (F.mem_birthEnv).mpr (Or.inr hx)
 
 /-- Every register outside `E` is owned by `P∘`. -/
@@ -347,7 +359,7 @@ theorem owner_eq_of_notMem_birthEnv {x : ι} (hx : x ∉ F.birthEnv P) : F.owner
 /-- After the change of owner, every register outside `E` is owned by `P∘` or `Q∘`. -/
 theorem changeOwner_owner_of_notMem_birthEnv {x : ι} (hx : x ∉ F.birthEnv P) :
     (F.changeOwner T Q).owner x = P ∨ (F.changeOwner T Q).owner x = Q := by
-  simp only [changeOwner]
+  show (if x ∈ T then Q else F.owner x) = P ∨ (if x ∈ T then Q else F.owner x) = Q
   split_ifs
   · exact Or.inr rfl
   · exact Or.inl (F.owner_eq_of_notMem_birthEnv hx)
