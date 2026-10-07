@@ -1,0 +1,22 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "jsonschema==4.26.0",
+    "python",
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-fixed-chronological-sources/docs/provenance/evidence/8769-fixed-chronological-sources/replay.py",
+    "--root",
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-fixed-chronological-sources",
+    "--upstream-root",
+    "/private/tmp/tnlean-openai-math-audit.git"
+  ],
+  "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-fixed-chronological-sources",
+  "exit_code": 0,
+  "seconds": 18.834,
+  "log_sha256": "59d5568acc60517c49127adb517cb32057ee0e6b700a31581c0760b0ba82ae86",
+  "checked_entries": 342,
+  "canonical_entries": 151,
+  "completed_utc": "2026-10-07T23:01:01.378429+00:00"
+}

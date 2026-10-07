@@ -1,0 +1,11 @@
+# Mathematical comparison with the source
+
+The new development establishes the instruction “compose the local maps at each party” in the proof of Theorem 5.2 of *Polynomial PEPS approximation of gapped square-grid ground states*, `04-compression.tex`, lines 233–251, revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+The binary theorem applies to every composition containing no source preparation. It uses the explicitly constructed partition of the registers and the two actual restrictions of the composition. It does not assume a tensor factorization. Its proof treats local maps, adjacent exchanges, composition, and untouched registers. In particular, an exchange between the two parts induces identity maps on the respective restricted memories, while the canonical partition accounts for the exchange of positions.
+
+The finite theorem assumes an allowed source-free composition and a list of distinct parties covering all participating parties. It constructs a family of contractions and proves the operator identity under the canonical grouping isometries. The finite support includes named scalar local operations on empty register lists; these operations are therefore not lost when the visible memories are empty. The specialization to the actual finite support requires no externally supplied list.
+
+The prepared-source consumer combines this result with the predecessor's source preparation and grouping theorem. Its party type is a prescribed finite set for one gate. It constructs normalized sources, preserves exactly the set of unordered source pairs, and constructs one contraction on each party's actual prepared input and output memories. No bound on the number of all parties in a larger circuit is asserted. Common source spaces across different monomials and padding unused pairs by one-dimensional sources remain separate constructions.
+
+The blueprint statements were compared with the seven Lean modules. The binary theorem's source-free hypothesis is the intermediate condition proved by source preparation; it is not an added assumption on the original allowed composition in the final consumer. No mathematical hypothesis absent from the cited construction was found in this step.

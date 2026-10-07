@@ -1,0 +1,14 @@
+{
+  "blueprint/src/chapter/ch24_peps_pair_effects.tex": "ad929f1bdf7762e30a34e061b9e6db12a175f2c4eac257892b11fef37245e709",
+  "blueprint/src/chapter/ch24_peps_source_preparation.tex": "08e86d3877e1c4e4c690cfb4618efd2b369282f64012de9803530a59ab6f58fd",
+  "blueprint/src/chapter/ch24_peps_party_factorization.tex": "a368ff012ba5a28b686d9a370e8de26093217b693ed38e34e23b0535a27d2f02",
+  "blueprint/src/chapter/ch24_peps_unused_pair_sources.tex": "8aaad78aee361d241ce3f61d19ed2c14c4aca597bd984904a7b1ca4961333776",
+  "blueprint/src/chapter/ch24_peps_common_source_spaces.tex": "d5da9b36ba1efd773618f6e871843cfc1e49a334db8f538e8729031f7672ccbf",
+  "blueprint/src/chapter/ch24_peps_source_gate_density.tex": "d2cd5a8d3da6c63599f44115d6c658c91353ab6386ce088a2b7f14b69d5b9fdf",
+  "blueprint/src/content.tex": "1fc03e5082984740a73b073798f117e6497768853d8129687af8fb741bd584a1",
+  "TNLean/PEPS/Approximation.lean": "91f60ca48089c7d8b51026a9b086a36dc907d9482047232f497384c44626f1ea",
+  "TNLean/PEPS/Approximation/ActualSourceGateDensity.lean": "ff87a9c037e712faad674e17f1e05e27605bd65ca1e12499e0ac8fde10b1de22",
+  "TNLean/PEPS/Approximation/PreparedMatrixNorm.lean": "de2d80edfa69824f5e1f042476a9d9ddb83b4fc4b9114d38afbe5fc69a2628f4",
+  "TNLean/PEPS/Approximation/SourceGateDensity.lean": "c8dac09804ab63cf09ec5ce847dd6a7f5a8251cb3e0d09f4c8f2fcbf4084e35f",
+  "TNLean/PEPS/Approximation/SourcePreparationCoordinates.lean": "bc330b693bb8f7cf3be3347c70f1450936e69052617ab2345362bdb4eb244862"
+}

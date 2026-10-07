@@ -1,0 +1,302 @@
+{
+  "TNLean.PEPS.PairEffect.appendIso_symm_cons_tmul": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.moveHead": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.isAllowed_moveHead": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.eval_moveHead_appendIso_symm": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.exchangeBlocks": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.isAllowed_exchangeBlocks": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.eval_exchangeBlocks_appendIso_symm": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.layout": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.layout": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.IsNormalized": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.prepare": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.layout_nil": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.layout_cons": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.layout_append": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.eval_frameList_prepare": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_append": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepare_iff": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.vector": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_eq_appendIso_symm": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.eval_moveHead_prepare": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sources": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.castInput": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sources_castInput": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.isAllowed_castInput": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.eval_castInput_of_heq": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sources_frameList": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sources_prepare": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.isNormalized_sources": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sources_moveHead": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sources_exchangeBlocks": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.localPart": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sources_localPart": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.isAllowed_localPart": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.eval_localPart_prepare": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.eval_eq_localPart_comp_prepare": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.expandCombinedPair": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.isAllowed_expandCombinedPair": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.eval_expandCombinedPair": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.eval_swap_reversedSource": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.partyPair": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.reverse": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.partyPair_reverse": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.norm_reverse_vector": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.combine": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.partyPair_combine": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.norm_combine_vector": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.Expands": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.isNormalized_cons": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.Expands.refl": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.Expands.trans": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.Expands.cons": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.Expands.reverse": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.Expands.combine": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.Expands.swap": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.exists_combined": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceInventory.exists_grouped": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ]
+}

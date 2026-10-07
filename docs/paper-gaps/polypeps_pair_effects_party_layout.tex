@@ -1,0 +1,163 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}
+
+\title{Party Ownership in the Elimination of Normalized Pair Effects}
+\author{}
+\date{2026-10-07}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source lemma}
+
+Lemma~5.1 of the polynomial PEPS approximation manuscript of September~24,
+2026 (\path{04-compression.tex}, lines~53--71) considers a contraction
+$G=\sum_\xi c_\xi M_\xi$ expanded into $K$ allowed monomials, each with at
+most $r$ pair effects. An allowed monomial (lines~32--35) is a composition of
+local contractions, preparations of normalized vectors shared between two
+participating parties, and contractions by normalized bras shared between two
+participating parties. For every $m\ge1$ the lemma produces a gate
+$\widetilde G_m$ and a normalized vector $\Gamma_m$ with
+\[
+  \bigl\|\widetilde G_m-G\otimes\ket{\Gamma_m}\bigr\|
+  \le\frac{r}{\sqrt m}\sum_\xi|c_\xi|,
+\]
+and asserts four further properties of $\widetilde G_m$: (i) it has an
+expansion using only local contractions and normalized pair sources; (ii) the
+expansion has at most $Km^r$ monomials with absolute coefficient sum at most
+$\sum_\xi|c_\xi|$; (iii) its additional registers are owned by the original
+participating parties; (iv) all sources on one pair of parties may be combined
+into one normalized pair source.
+
+\section{The model without parties}
+
+The formal model writes a monomial with $n$ effects as a chain
+$F_n\circ E_n\circ\cdots\circ E_1\circ F_0$, where each $E_i=\bra{\eta_i}\otimes\mathbf{1}$
+is a recorded normalized pair effect and each $F_i$ is an arbitrary
+contraction. The model has no parties. The error bound, the normalization of
+$\Gamma_m$, the common additional output space of all branches, the count
+$Km^r$, the equality of the absolute coefficient sums, and the contractivity of
+every term of the expansion are proved.\footnote{The packaged statement is
+\leanid{TNLean.PEPS.PairEffect.pairEffectElimination}; the rescaling at a
+chosen stack length is
+\leanid{TNLean.PEPS.PairEffect.replaceGate_rescaled_stackLength}.} For (iv),
+the formal statement is the norm identity
+$\|\eta\otimes\eta'\|=\|\eta\|\,\|\eta'\|$ for pair vectors regrouped on the
+tensor products of their half-spaces.
+
+In that model clauses (i) and (iii) cannot be stated. Without parties, a
+local contraction cannot be told apart from an arbitrary contraction, and a
+pair effect is itself a contraction; a pair effect may therefore sit inside
+some $F_i$, and a predicate ``source-only'' formulated without parties would
+hold of every contraction.
+
+\section{Discharge}
+
+The monomials are now placed on a party layout. A register has an owner party
+and a Hilbert space, and the memory is the tensor product of the registers.
+A source-only word is a composition of local contractions, each acting on
+registers of a single party next to arbitrary other registers, of
+preparations of normalized vectors on two fresh registers of two distinct
+parties, and of reorderings of tensor factors. An allowed monomial is a chain
+of source-only words separated by pair effects, each effect contracting a
+register $\mathbb C^\alpha$ of a party $p$ and a register $\mathbb C^\beta$ of
+a party $q\ne p$ with a normalized bra. Its operator is a chain of the form
+above, so the estimates already proved apply to it. Writing the effect on registers
+$\mathbb C^\alpha$ and $\mathbb C^\beta$ at the front of the list is a
+convention: an effect on finite-dimensional registers $\mathcal U$ of $p$ and
+$\mathcal V$ of $q$ in any position takes this form after local isometric
+equivalences $\mathcal U\cong\mathbb C^\alpha$ and
+$\mathcal V\cong\mathbb C^\beta$ and a reordering of tensor factors, all
+absorbed into the preceding source-only word without changing its norm or the
+coefficient of the monomial.
+
+In the replaced monomial, the stack of an effect occurrence on $(p,q)$
+consists of $m$ pair registers, the $\mathbb C^\alpha$ half of each owned by
+$p$ and the $\mathbb C^\beta$ half owned by $q$. The insertion of the input at
+position $k$ among $m-1$ copies of $\eta$ is a source-only word: pair sources
+of $\eta$ are prepared in the other positions, so no register permutation is
+needed. Under the identification of the stack with
+$(\mathbb C^{\alpha\times\beta})^{\otimes m}$ this word is the insertion map
+$I_k$. Consequently:
+\begin{itemize}
+\item every term of the expansion of $\widetilde G_m$, read on the output
+  layout, is the operator of a source-only word with normalized sources and
+  contractive local maps (clause (i));
+\item the output layout is the list of the stacks of all effect occurrences,
+  followed by the output layout of $G$, and the stack of an effect on
+  $(p,q)$ consists of $m$ registers of $p$ alternating with $m$ registers of
+  $q$ (clause (iii));
+\item the garbage vector $\Gamma_m$ is prepared by normalized pair sources on
+  the endpoint parties;
+\item two pair sources on the same pair of parties, prepared one after the
+  other and followed by merging the two registers of each party, are the
+  single pair source of the regrouped vector, whose norm is the product of the
+  norms.
+\end{itemize}
+The packaged statement of clauses (i)--(iii) and the bound is
+\leanid{TNLean.PEPS.PairEffect.partyPairEffectElimination}. Its hypotheses
+are those of the source lemma, without the contraction hypothesis on $G$,
+which the statement does not use. The participating parties of clause (iii)
+are read as the endpoint parties of the effects of the monomials. The
+combination of two adjacent sources is
+\leanid{TNLean.PEPS.PairEffect.eval_combineSources}.
+
+\section{Combining arbitrary source occurrences}
+
+The remaining combination clause is now proved for every allowed source-only
+composition $F$. Its finite list $S$ records the actual occurrences of pair
+sources, with their endpoint parties, spaces and vectors. If $P_S$ prepares
+these vectors before the input, there is an allowed composition $B$ with no
+source preparations such that $F=B\circ P_S$. This identity is proved by
+induction on the composition. Moving a preparation before an earlier operation
+amounts to tensoring that operation with identities on the fresh registers.
+No bound on the number of occurrences is assumed.
+
+A second induction combines sources with the same unordered pair of parties.
+When two sources have opposite endpoint order, a tensor exchange first aligns
+them. Their regrouped tensor product is normalized, and inverse local
+regroupings recover the original registers. Thus there is a list $G$ with
+exactly one normalized source per participating unordered pair, and an allowed
+composition $E$ with no sources, such that $P_S=E\circ P_G$. The set of pairs
+is unchanged. In particular $F=(B\circ E)\circ P_G$.
+
+These statements are
+\leanid{TNLean.PEPS.PairEffect.Word.eval_eq_localPart_comp_prepare},
+\leanid{TNLean.PEPS.PairEffect.SourceInventory.exists_grouped}, and
+\leanid{TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation}.
+Applying them separately to every monomial in the replaced gate proves
+\leanid{TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources}.
+Every conclusion of Lemma~5.1 is retained, with exactly the same monomials,
+coefficients and common output registers. No adjacency, endpoint-order,
+Schmidt-rank or additional norm hypothesis is introduced.
+
+This resolves the restriction recorded in this note. The subsequent
+collection into one contraction per party is proved by
+\leanid{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps_parties}.
+For a prescribed finite gate party set,
+\leanid{TNLean.PEPS.PairEffect.Word.exists_prepared_tensorPartyMaps}
+combines it with the grouped preparation. These results use canonical
+identifications determined by the register owners and retain scalar local
+operations on empty memories. One-dimensional sources on unused pairs are
+provided by
+\leanid{TNLean.PEPS.PairEffect.Word.exists_complete_prepared_tensorPartyMaps}.
+The corresponding inventory completion retains every original source and
+recovers its preparation by allowed local operations. Common source spaces
+across different monomials (\path{04-compression.tex}, lines~253--267),
+followed by sampling and the remaining compression argument, still require
+further results.
+
+\end{document}

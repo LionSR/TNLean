@@ -1,0 +1,66 @@
+Source revision: 8689eafdd341540d4dd7e6848707646d6e3a0970
+Working directory: /tmp
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-selective-source-preparation/final-verification-20261007/AllAxioms.lean
+Exit code: 0
+
+'TNLean.PEPS.PairEffect.affectedOwner' does not depend on any axioms
+'TNLean.PEPS.PairEffect.affectedOwner_eq_none' depends on axioms: [propext]
+'TNLean.PEPS.PairEffect.affectedOwner_eq_iff' depends on axioms: [propext]
+'TNLean.PEPS.PairEffect.PairSource.affectedOwner_ne_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner_affectedOwner' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_affectedOwner' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.mapOwner_affectedOwner_eq_nil_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.groupedBlockMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.groupedBlockMap_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.eval_groupedBlockMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.eval_sum_mapOwner_comp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord_isAllowed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.sources_branchWord' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.norm_eval_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners_eq_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.norm_evalAtOwners_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.exists_preparedSourceGate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.selectedSources' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.layout_selectedSources_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.freeSlotLayout' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.prepareSelected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.prepareFreeSlots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.fillSourceVectors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepareSelected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.sources_prepareSelected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSelected_prepareFreeSlots' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.mem_selectedSources' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceInventory.mem_sources_prepareSelected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.exists_selective_partition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.appendTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.isAllowed_appendTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sources_appendTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.eval_appendTail' depends on axioms: [propext, Classical.choice, Quot.sound]

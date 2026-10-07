@@ -1,0 +1,14 @@
+{
+  "TNLean/PEPS/Approximation/DistributedSourceComposition.lean": "4e8d2653f030eae74c6bdd187b125ed25807cdf21391cf2ea65e1890b4f39770",
+  "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean": "5017a1ffc45cae8195ff09c571b0996d05234dacd142c8554f1b89b5f5e22ffd",
+  "TNLean/PEPS/Approximation/PartialSourceInventory.lean": "7bb64e55ac7ede12dd120a579c1d625544ed3a022c9a93703f1ead528b441633",
+  "TNLean/PEPS/Approximation/SourceChoiceCost.lean": "94c0b6221bd717bd15de58a9180142b8b64585723a1a3567a4f01246d25e971b",
+  "TNLean/PEPS/Approximation/SourceCircuitLocations.lean": "66854a4d2fd53dd2d5c27ce1f3c031d52cdaa7a7d61e5513fa99464e3f9b1eb7",
+  "TNLean/PEPS/Approximation/SourceCircuitChoiceProduct.lean": "8fe89d7aa8fab1ccbcfb6a276d9db54215dc58082bc78b53e7771bd90e1bb033",
+  "TNLean/PEPS/Approximation/PartialSourceDensity.lean": "b62113287ea4856c73a0a3d9f00e900597b97da0699c5f787e399073e0f0d226",
+  "TNLean/PEPS/Approximation/SourceCircuitSourceOrder.lean": "f3b3aa43d81a01629764b68e2b976c72fc2528060a6c6b451d1c70f1969eb720",
+  "blueprint/src/chapter/ch24_peps_chronological_source_expansion.tex": "4ef12af260c3d0ee953fcfbda4a015ce22cf05bb07a6e72df4723e6b5abd5dc3",
+  "blueprint/src/content.tex": "ef37a9da70cb8ce3dac44972d08f2eadcdaf608b3ca3366f9f46b2ea14a0a414",
+  "TNLean.lean": "9ab4dd293ef89b70bc7d650db97440837a42c4852f1fb5282925372e551f754a",
+  "TNLean/PEPS/Approximation.lean": "c12f58eb91c5bc89da421a9d7cf9f7391627c879618db8bfd0d49fbd4ea93301"
+}

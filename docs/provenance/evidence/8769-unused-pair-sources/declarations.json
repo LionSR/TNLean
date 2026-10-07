@@ -1,0 +1,57 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PairSource.unit",
+    "id": "8769-unusedpair-unitpairsource-pairsource.unit"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PairSource.partyPair_unit",
+    "id": "8769-unusedpair-unitpairsource-pairsource.partypair_unit"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PairSource.norm_unit_vector",
+    "id": "8769-unusedpair-unitpairsource-pairsource.norm_unit_vector"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PairSource.finrank_unit_spaces",
+    "id": "8769-unusedpair-unitpairsource-pairsource.finrank_unit_spaces"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eraseUnitPair",
+    "id": "8769-unusedpair-unitpairsource-word.eraseunitpair"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eraseUnitPair_spec",
+    "id": "8769-unusedpair-unitpairsource-word.eraseunitpair_spec"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/UnitPairSource.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands.unit_cons",
+    "id": "8769-unusedpair-unitpairsource-sourceinventory.expands.unit_cons"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PairSourceCompletion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.exists_complete_extension",
+    "id": "8769-unusedpair-pairsourcecompletion-sourceinventory.exists_complete_extension"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PairSourceCompletion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.exists_complete",
+    "id": "8769-unusedpair-pairsourcecompletion-sourceinventory.exists_complete"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CompletePartyMaps.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.exists_complete_source_preparation",
+    "id": "8769-unusedpair-completepartymaps-word.exists_complete_source_preparation"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CompletePartyMaps.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.exists_complete_prepared_tensorPartyMaps",
+    "id": "8769-unusedpair-completepartymaps-word.exists_complete_prepared_tensorpartymaps"
+  }
+]

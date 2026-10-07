@@ -1,0 +1,17 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--python",
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "--with",
+    "playwright",
+    "python",
+    "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod/scoped_web_check.py"
+  ],
+  "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-chronological-source-blueprint-o3x3nyod",
+  "PYTHONPATH": "/Users/siruilu/.local/share/uv/tools/texra-blueprint/lib/python3.14/site-packages",
+  "elapsed_seconds": 5.19031795799674,
+  "returncode": 0
+}

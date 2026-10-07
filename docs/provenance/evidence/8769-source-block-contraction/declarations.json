@@ -1,0 +1,107 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/SourceSlotBasis.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.slotBasis",
+    "id": "8769-free-input-basis-sourceinventory.slotbasis"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceSlotBasis.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.slotBasis_apply",
+    "id": "8769-free-input-basis-sourceinventory.slotbasis_apply"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceSlotBasis.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis",
+    "id": "8769-free-input-basis-sourceinventory.preparedinputbasis"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceSlotBasis.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis_apply",
+    "id": "8769-free-input-basis-sourceinventory.preparedinputbasis_apply"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.freeSourceMatrix",
+    "id": "8769-free-input-matrix-word.freesourcematrix"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply",
+    "id": "8769-free-input-matrix-word.freesourcematrix_apply"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one",
+    "id": "8769-free-input-matrix-word.norm_freesourcematrix_le_one"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.freeSourceMatrix_conjTranspose_mul_apply",
+    "id": "8769-free-input-matrix-word.freesourcematrix_conjtranspose_mul_apply"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one",
+    "id": "8769-free-input-matrix-word.norm_freesourcematrix_conjtranspose_mul_le_one"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq",
+    "id": "8769-free-input-matrix-word.trace_preparedmatrix_mul_conjtranspose_eq"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix",
+    "id": "8769-free-input-matrix-word.trace_prepareddensitycoefficient_eq_freesourcematrix"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourcePairIndex.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv",
+    "id": "8769-free-input-pairs-sourceinventory.pairindexequiv"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourcePairIndex.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv_apply",
+    "id": "8769-free-input-pairs-sourceinventory.pairindexequiv_apply"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourcePairIndex.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.length_eq_choose",
+    "id": "8769-free-input-pairs-sourceinventory.length_eq_choose"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourcePairIndex.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.length_le_card_sq",
+    "id": "8769-free-input-pairs-sourceinventory.length_le_card_sq"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.mapSourceSlots",
+    "id": "8769-free-input-maps-word.mapsourceslots"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.mapSourceSlots_spec",
+    "id": "8769-free-input-maps-word.mapsourceslots_spec"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_mapSourceSlots_prepareSlots",
+    "id": "8769-free-input-maps-word.eval_mapsourceslots_prepareslots"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceFrameMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.sourceFrameMatrix",
+    "id": "8769-free-input-frame-word.sourceframematrix"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceFrameMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.sourceFrameMatrix_eq_freeSourceMatrix",
+    "id": "8769-free-input-frame-word.sourceframematrix_eq_freesourcematrix"
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SourceFrameMatrix.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.norm_sourceFrameMatrix_le_one",
+    "id": "8769-free-input-frame-word.norm_sourceframematrix_le_one"
+  }
+]

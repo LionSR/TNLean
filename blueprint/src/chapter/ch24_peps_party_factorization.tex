@@ -1,0 +1,219 @@
+\section{Collecting local operations by party}
+\label{sec:peps_party_factorization}
+
+\begin{definition}[The registers of a party]
+    \label{def:peps_party_registers}
+    \lean{TNLean.PEPS.PairEffect.Word.parties}
+    \lean{TNLean.PEPS.PairEffect.Word.owners_mem_parties}
+    \lean{TNLean.PEPS.PairEffect.Layout.atParty}
+    \lean{TNLean.PEPS.PairEffect.partyLayout}
+    \lean{TNLean.PEPS.PairEffect.tensorPartyMaps}
+    \lean{TNLean.PEPS.PairEffect.tensorPartyMaps_cons_tmul}
+    \lean{TNLean.PEPS.PairEffect.partyLayout_eq_of_atParty_eq}
+    \lean{TNLean.PEPS.PairEffect.tensorPartyMaps_heq}
+    \lean{TNLean.PEPS.PairEffect.Layout.conj_memCongr_heq}
+    \lean{TNLean.PEPS.PairEffect.Layout.norm_conj_memCongr}
+    \lean{TNLean.PEPS.PairEffect.Layout.eq_conj_memCongr_of_heq}
+    \leanok
+    \uses{def:peps_party_layout}
+    For an ordered list of registers $\ell$ and a party $p$, let $\ell_p$
+    retain precisely the registers owned by $p$, in their original order.
+    Write $\mathcal H_{\ell,p}$ for their joint memory. The memory of an
+    empty list is $\mathbb C$. A finite ordered list of distinct parties
+    $p_1,\ldots,p_s$ gives the grouped memory
+    $\bigotimes_{j=1}^s\mathcal H_{\ell,p_j}$. Local maps between these
+    memories act by their ordered tensor product; for an empty party list
+    this is the identity on $\mathbb C$. Equal register lists are identified
+    by the identity on their memories, preserving operator norms.
+
+    The parties of a composition include every register owner and the party
+    assigned to each local operation. In particular, a scalar operation
+    $\mathbb C\to\mathbb C$ retains its assigned party when both its input
+    and output register lists are empty. These are the local spaces and
+    operations in \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--251.
+\end{definition}
+
+\begin{definition}[Canonical partitions and grouping]
+    \label{def:peps_party_partition}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict_nil}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict_cons}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict_append}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict_eq_self_of_owner}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict_eq_nil_of_owner}
+    \lean{TNLean.PEPS.PairEffect.Layout.memCongr}
+    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_rfl}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_true}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_false}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_true_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_false_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_true_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_false_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_true_true_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_true_false_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_false_true_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_false_false_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.withoutParty}
+    \lean{TNLean.PEPS.PairEffect.Layout.atParty_withoutParty}
+    \lean{TNLean.PEPS.PairEffect.Layout.mem_withoutParty}
+    \lean{TNLean.PEPS.PairEffect.Layout.owners_withoutParty}
+    \lean{TNLean.PEPS.PairEffect.partyLayout_withoutParty}
+    \lean{TNLean.PEPS.PairEffect.groupByPartyIso}
+    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_cons}
+    \leanok
+    \uses{def:peps_party_registers}
+    For a choice of parties $A$, there is a prescribed isometric
+    identification
+    \begin{align}
+        U_{A,\ell}:\mathcal H_\ell
+         & \longrightarrow \mathcal H_{\ell|_A}\otimes
+        \mathcal H_{\ell|_{A^c}},
+        \label{eq:peps_party_partition}
+    \end{align}
+    which retains the order within each selected list. It is obtained
+    solely from associativity, exchanges of tensor factors, and the unit
+    identifications with $\mathbb C$.
+
+    If $p_1,\ldots,p_s$ are distinct and contain every owner in $\ell$, successive
+    partitions give a prescribed isometric identification
+    $U_\ell:\mathcal H_\ell\to
+        \bigotimes_{j=1}^s\mathcal H_{\ell,p_j}$.
+\end{definition}
+
+\begin{proof}\leanok
+    Induct on $\ell$. Its first register belongs to exactly one of the
+    two parts; associativity places it first in that part and an exchange
+    moves it past the other part when necessary. For the second assertion,
+    successively separate the registers of $p_1,\ldots,p_s$.
+    Distinctness prevents any register from being repeated, and coverage
+    makes the final remaining register list empty.
+\end{proof}
+
+\begin{theorem}[Restriction to selected parties]
+    \label{thm:peps_party_restriction}
+    \lean{TNLean.PEPS.PairEffect.Word.castLayouts}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_castLayouts}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_castLayouts}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_castLayouts_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_castLayouts}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_restrict}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_restrict}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localMap_true_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localMap_false_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_true_true_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_true_false_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_false_true_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_false_false_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_frame_true_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_frame_false_eval_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.parties_castLayouts}
+    \lean{TNLean.PEPS.PairEffect.Word.parties_restrict}
+    \lean{TNLean.PEPS.PairEffect.Word.eq_nil_and_eval_eq_id_of_parties_eq_empty}
+    \leanok
+    \uses{def:peps_party_registers}
+    Let $F$ be a composition containing no pair-source preparations.
+    For any choice of parties $A$, retaining their registers and local
+    operations gives a composition $F_A$ containing no pair-source
+    preparations. It is allowed whenever $F$ is allowed. Its local
+    operations occur in their original chronological order, and its parties
+    are precisely those of $F$ that belong to $A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Retain a local operation exactly when its assigned party belongs to $A$.
+    Restrict every exchange to the retained registers, and restrict
+    compositions and untouched registers recursively. The local
+    contraction bounds are unchanged. Induction on the composition proves
+    the assertion about its parties, including scalar local operations.
+\end{proof}
+
+\begin{theorem}[Factorization across a partition of the parties]
+    \label{thm:peps_party_binary_factorization}
+    \lean{TNLean.PEPS.PairEffect.Word.partitionIso_eval}
+    \leanok
+    \uses{def:peps_party_partition,thm:peps_party_restriction}
+    If $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ contains no pair-source
+    preparations, then for any choice of parties $A$ its restrictions satisfy
+    \begin{align}
+        U_{A,\ell'}F & =(F_A\otimes F_{A^c})U_{A,\ell}.
+        \label{eq:peps_party_binary_factorization}
+    \end{align}
+    This identity does not require bounds on the norms of the local maps.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on the composition. A local operation acts wholly in one part.
+    An exchange either stays within one part or changes only the prescribed
+    ordering between the parts. Tensoring with an untouched register and
+    composition preserve the identity.
+\end{proof}
+
+\begin{theorem}[Tensor product of the local maps]
+    \label{thm:peps_party_factorization}
+    \lean{TNLean.PEPS.PairEffect.norm_tensorPartyMaps_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps_parties}
+    \leanok
+    \uses{def:peps_party_registers}
+    Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an allowed composition
+    containing no pair-source preparations. Let $p_1,\ldots,p_s$ be distinct
+    parties containing every party of this composition. There are
+    contractions $B_{p_j}:\mathcal H_{\ell,p_j}\to
+        \mathcal H_{\ell',p_j}$ such that
+    \begin{align}
+        U_{\ell'}F
+         & =\left(\bigotimes_{j=1}^s B_{p_j}\right)U_\ell.
+        \label{eq:peps_party_factorization}
+    \end{align}
+    The tensor product is itself a contraction. The list of parties may be
+    chosen to consist exactly of the parties of $F$. Each map is obtained
+    by composing the local operations at its party.
+    This is the collection of local maps in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--251.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_party_binary_factorization,thm:peps_party_restriction}
+    Apply (\ref{eq:peps_party_binary_factorization}) successively with
+    $A=\{p_j\}$. The remaining
+    composition has no parties once all $p_j$ have been removed and is the
+    identity on $\mathbb C$. The restriction to each party is allowed, so
+    its operator has norm at most one. The tensor product of the resulting
+    contractions gives (\ref{eq:peps_party_factorization}).
+\end{proof}
+
+\begin{theorem}[Prepared pair sources and local contractions]
+    \label{thm:peps_prepared_party_maps}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_prepared_tensorPartyMaps}
+    \leanok
+    \uses{def:peps_source_inventory,def:peps_party_registers}
+    Let $P$ be the prescribed finite set of parties of a gate, and use a
+    fixed ordering of $P$. Let $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ be
+    an allowed composition on registers owned by these parties. There is a
+    normalized source list $S$, containing exactly one source for each
+    unordered source pair occurring in $F$, and a contraction $B_p$ at each $p\in P$
+    such that
+    \begin{align}
+        U_{\rm out}F
+         & =\left(\bigotimes_{p\in P}B_p\right)
+        U_{S,\rm in}P_{S,\mathcal H_{\rm in}}.
+        \label{eq:peps_prepared_party_maps}
+    \end{align}
+    Here $U_{S,\rm in}$ groups the prepared source registers together with
+    the original input registers by their owners; $U_{\rm out}$ groups the
+    output registers in the same party order. The input and output of $B_p$
+    are precisely the corresponding memories of party $p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_grouped_sources,thm:peps_party_factorization}
+    Theorem~\ref{thm:peps_grouped_sources} gives
+    $F=V\circ P_{S,\mathcal H_{\rm in}}$ with $V$ allowed and containing no
+    sources. Every party named by $V$ belongs to the prescribed set $P$.
+    Apply (\ref{eq:peps_party_factorization}) to $V$ with all parties of $P$,
+    and compose on the right with the preparation map.
+\end{proof}

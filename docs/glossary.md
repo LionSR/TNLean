@@ -389,6 +389,42 @@ normalizations.
 
 ### PEPS predicates
 
+#### `TNLean.PEPS.PairEffect.SourceInventory.IsNormalized`
+
+- **Defined in:** `TNLean/PEPS/Approximation/SourcePreparation.lean`.
+- **Meaning:** every recorded pair-source vector has norm one. The list records
+  source occurrences separately, including repeated pairs of parties.
+- **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
+  `04-compression.tex`, lines 53–70 and 125–127.
+- **Sanctioned bridges:** `SourceInventory.isAllowed_prepare_iff` and
+  `Word.isNormalized_sources` identify normalization with allowed preparation
+  and derive it from an allowed composition.
+
+#### `TNLean.PEPS.PairEffect.SourceInventory.Expands`
+
+- **Defined in:** `TNLean/PEPS/Approximation/PairSourceGrouping.lean`.
+- **Meaning:** `G.Expands S` means that, beside any spectator registers,
+  allowed local operations and register exchanges containing no pair-source
+  preparations take the preparation of `G` exactly to the preparation of `S`.
+- **Source:** the same Lemma 5.1, lines 125–127; the fresh-register argument
+  in Theorem 5.2, `eq:compression-source-gate`, lines 233–251.
+- **Sanctioned bridges:** `SourceInventory.exists_grouped` constructs a
+  normalized `G` with one source for each unordered pair occurring in `S`.
+  `Word.exists_grouped_source_preparation` gives the resulting exact
+  factorization of an arbitrary allowed composition.
+- **Further consequence:** `Word.exists_tensorPartyMaps_parties` collects the
+  remaining operations into one contraction per party under canonical register
+  identifications. `Word.exists_prepared_tensorPartyMaps` combines this with
+  grouped preparation for a prescribed finite gate party type.
+- **All pair slots:** `Word.exists_complete_prepared_tensorPartyMaps` also
+  supplies a source on every unordered pair of distinct gate parties. Sources
+  on pairs absent from the original monomial have one-dimensional halves.
+  `SourceInventory.exists_complete_extension` retains the original inventory
+  verbatim and supplies an allowed recovery of its preparation.
+- **Caveat:** the finite type is the party set of the gate, not necessarily all
+  parties in a larger construction. A bound on its cardinality and common
+  source spaces across different monomials remain separate data or constructions.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.

@@ -1,0 +1,45 @@
+{
+  "parser_sha256": "8183e29f5a339bba37e28e9473aa7a6a42791282ed6877071dfd4096eda7cb65",
+  "inserted": true,
+  "files": [
+    {
+      "path": "TNLean/PEPS/Approximation/PartialSourcePreparation.lean",
+      "sha256_before": "186eafca8c81375447877dbfe550d4549a3a661547f46f898964832750e82926",
+      "sha256": "22b336c73f420f6c71241a51877f65c06763c70f7704fcf25ef05c7cd98dd2f1",
+      "declarations": 9,
+      "notice_max_line_length": 94,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "a4807ada03b617ae60129b551dfdd1e8f81ed7c42b07ce3883e2b897f31d254d",
+      "paper_labels": [
+        "thm:compression"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceCircuitChoiceAt.lean",
+      "sha256_before": "19768cf0c32b322aeb44f08c338e44ed5fc417ab55c48cf14ac784ff0edc6ab0",
+      "sha256": "c97cf1d3e6c57251c676cf01264259dc5bca989ac1a32724bab7ca273c8900e5",
+      "declarations": 9,
+      "notice_max_line_length": 97,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "5ec21425c2050fb114d6418999b98521bdf25b1396a8cbc3b40e907ec4bf2a3e",
+      "paper_labels": [
+        "eq:compression-subset-expansion"
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/WordSelectivePartition.lean",
+      "sha256_before": "a68d3098648092d5468214e7dfd7d1f4c28024bb09ccc1083b3e94e7ab98dd5f",
+      "sha256": "1bf5a6588df0b28036524462f0c41ddfd6707eb3f72176e829f69563845c5661",
+      "declarations": 1,
+      "notice_max_line_length": 86,
+      "noncomment_tokens_unchanged": true,
+      "exact_original_bytes_preserved_outside_notice": true,
+      "noncomment_code_sha256": "306643b1e0af464c30d84c6ffdf48a88e9c5bb55fd09c3f8cc36eac4b2a890fa",
+      "paper_labels": [
+        "eq:compression-block-contraction"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+'TNLean.PEPS.PairEffect.FixedSourceRegression.repeated_local_labels' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.FixedSourceRegression.repeated_fixed_source_vectors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.FixedSourceRegression.actual_source_inventory_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

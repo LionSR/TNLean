@@ -1,0 +1,2979 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8768-wordpermutation-appendiso_symm_cons_tmul",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.appendIso_symm_cons_tmul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-wordpermutation-word.movehead",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.moveHead",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-wordpermutation-word.isallowed_movehead",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_moveHead",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-wordpermutation-word.eval_movehead_appendiso_symm",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_moveHead_appendIso_symm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-wordpermutation-word.exchangeblocks",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.exchangeBlocks",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-wordpermutation-word.isallowed_exchangeblocks",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_exchangeBlocks",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-wordpermutation-word.eval_exchangeblocks_appendiso_symm",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordPermutation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_exchangeBlocks_appendIso_symm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/WordPermutation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/WordPermutation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-pairsource",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-pairsource.layout",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.layout",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.layout",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.layout",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.isnormalized",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.IsNormalized",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.prepare",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.layout_nil",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.layout_nil",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.layout_cons",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.layout_cons",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.layout_append",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.layout_append",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.eval_framelist_prepare",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_frameList_prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.eval_prepare_append",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_append",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.isallowed_prepare_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepare_iff",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.vector",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.vector",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.eval_prepare_eq_appendiso_symm",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_eq_appendIso_symm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-sourceinventory.eval_movehead_prepare",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_moveHead_prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.sources",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.castinput",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.castInput",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.sources_castinput",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_castInput",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.isallowed_castinput",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_castInput",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.eval_castinput_of_heq",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_castInput_of_heq",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.sources_framelist",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_frameList",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.sources_prepare",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.isnormalized_sources",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isNormalized_sources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.sources_movehead",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_moveHead",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.sources_exchangeblocks",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_exchangeBlocks",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.localpart",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.localPart",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.sources_localpart",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_localPart",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.isallowed_localpart",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_localPart",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.eval_localpart_prepare",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_localPart_prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-sourcepreparation-word.eval_eq_localpart_comp_prepare",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_eq_localPart_comp_prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects",
+            "eq:compression-source-gate"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/SourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/SourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourceexpansion-expandcombinedpair",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.expandCombinedPair",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceExpansion.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourceexpansion-isallowed_expandcombinedpair",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.isAllowed_expandCombinedPair",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceExpansion.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourceexpansion-eval_expandcombinedpair",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.eval_expandCombinedPair",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceExpansion.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourceexpansion-eval_swap_reversedsource",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.eval_swap_reversedSource",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceExpansion.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-pairsource.partypair",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.partyPair",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-pairsource.reverse",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.reverse",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-pairsource.partypair_reverse",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.partyPair_reverse",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-pairsource.norm_reverse_vector",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.norm_reverse_vector",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-pairsource.combine",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.combine",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-pairsource.partypair_combine",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.partyPair_combine",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-pairsource.norm_combine_vector",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.norm_combine_vector",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.expands",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.isnormalized_cons",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.isNormalized_cons",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.expands.refl",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands.refl",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.expands.trans",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands.trans",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.expands.cons",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands.cons",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.expands.reverse",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands.reverse",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.expands.combine",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands.combine",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.expands.swap",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.Expands.swap",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.exists_combined",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.exists_combined",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-pairsourcegrouping-sourceinventory.exists_grouped",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.exists_grouped",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairSourceGrouping.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairSourceGrouping.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-paireffectsourcepreparation-word.exists_grouped_source_preparation",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairEffectSourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8768-paireffectsourcepreparation-partypaireffectelimination_with_grouped_sources",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean",
+        "declaration": "TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "lem:effects"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Derives preparation of the actual source occurrences and grouping by unordered party pairs. The full consumer proves every clause of Lemma 5.1; later compression steps remain separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "75d3f124406bf0f5b6935f77d26a818c171f3807",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-preparation/TNLean/PEPS/Approximation/PairEffectSourcePreparation.olean /private/tmp/tnlean-source-preparation/src/TNLean/PEPS/Approximation/PairEffectSourcePreparation.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/direct-build.log",
+            "sha256": "cd5e11f81dd570ef44a0b23e91f966298588e1122bd2bda254639f1e7dd90cf1"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-preparation/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8768-source-preparation/axioms.log",
+            "sha256": "74e3dd1655f8687eb5e482a89b5d7ef7b7a8b26c2dcfa263e9fcb4c2d9bbd32c"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

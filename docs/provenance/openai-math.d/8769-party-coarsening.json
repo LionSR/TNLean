@@ -1,0 +1,1381 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowner_nil",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner_nil",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowner_cons",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner_cons",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowner_append",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwner_append",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowneriso",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowneriso_nil_apply",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_nil_apply",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowneriso_cons_tmul",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_cons_tmul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowneriso_append_tmul",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append_tmul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-layout-layout.mapowneriso_append",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LayoutOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LayoutOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-pairsource.mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PairSource.mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_nil",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_nil",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_cons",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_cons",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_append",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_append",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.mem_mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.isnormalized.mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.IsNormalized.mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.mapowner_eq_nil_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mapOwner_eq_nil_iff",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.map_partypair_mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-inventory-sourceinventory.mem_partypair_mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_partyPair_mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/SourceOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/SourceOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-local-word.localpairsource",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalPairSource.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.localPairSource",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LocalPairSource.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LocalPairSource.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-local-word.localpairsource_spec",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalPairSource.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.localPairSource_spec",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LocalPairSource.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LocalPairSource.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-local-word.eval_localpairsource",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalPairSource.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_localPairSource",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/LocalPairSource.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/LocalPairSource.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-word-word.mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/WordOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/WordOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-word-word.isallowed_mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/WordOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/WordOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-word-word.sources_mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/WordOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/WordOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-word-word.eval_mapowner",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_mapOwner",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/WordOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/WordOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-word-word.eval_mapowner_comp",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/WordOwnerMap.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_mapOwner_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/WordOwnerMap.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/WordOwnerMap.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-party-coarsening-factorization-word.exists_partition_of_sources_internal",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyCoarseningFactorization.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.exists_partition_of_sources_internal",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-block-contraction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs grouping of party owners on actual layouts, source inventories and compositions, preserving the exact memory operator under canonical isometries. A source whose endpoints become equal is retained as a local preparation of its original vector. If every original source is internal to one side, the actual two restrictions give a tensor product of contractions. The selective preparation and chronological partial gate expansion remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "2609edd456a91c7d5b34e23b0b8a7e3d8626f54f",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-party-coarsening/TNLean/PEPS/Approximation/PartyCoarseningFactorization.olean /private/tmp/tnlean-party-coarsening/src/TNLean/PEPS/Approximation/PartyCoarseningFactorization.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/direct-build.log",
+            "sha256": "009f9e2280123491bcef82f042f7056163157624a5a4b19aae4d61ea4190d609"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-party-coarsening/final-verification-20261007/AllAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-party-coarsening/axioms.log",
+            "sha256": "b1ab935ca7dc0a764b575d410f30694961d4bf0139bfb780ac97d3cff728f2cb"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+[
+  {
+    "name": "chktex",
+    "command": [
+      "chktex",
+      "-q",
+      "-l",
+      "blueprint/.chktexrc",
+      "blueprint/src/chapter/ch24_peps_source_gate_density.tex"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+    "elapsed_seconds": 0.08875745799741708,
+    "returncode": 0
+  },
+  {
+    "name": "latexindent",
+    "command": [
+      "scripts/check_latexindent_formatting.sh",
+      "--one",
+      "blueprint/src/chapter/ch24_peps_source_gate_density.tex"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+    "elapsed_seconds": 0.39628149999771267,
+    "returncode": 0
+  },
+  {
+    "name": "sync",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/tmp/tnlean-source-density-blueprint-_fix_dz6",
+      "--report",
+      "/tmp/tnlean-source-density-blueprint-_fix_dz6/sync.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gate-density",
+    "elapsed_seconds": 3.356985916994745,
+    "returncode": 0
+  },
+  {
+    "name": "pdf",
+    "command": [
+      "latexmk",
+      "-g",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/tmp/tnlean-source-density-blueprint-_fix_dz6/blueprint/src",
+    "elapsed_seconds": 3.1655202499969164,
+    "returncode": 0
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/tmp/tnlean-source-density-blueprint-_fix_dz6",
+      "bbl"
+    ],
+    "cwd": "/tmp/tnlean-source-density-blueprint-_fix_dz6",
+    "elapsed_seconds": 0.2044559579953784,
+    "returncode": 0
+  },
+  {
+    "name": "web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/tmp/tnlean-source-density-blueprint-_fix_dz6/blueprint",
+    "elapsed_seconds": 3.083342708006967,
+    "returncode": 0
+  },
+  {
+    "name": "browser",
+    "command": [
+      "uv",
+      "run",
+      "--no-project",
+      "--python",
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "--with",
+      "playwright",
+      "python",
+      "/tmp/tnlean-source-density-blueprint-_fix_dz6/scoped_web_check.py"
+    ],
+    "environment": {
+      "PYTHONPATH": "/Users/siruilu/.local/share/uv/tools/texra-blueprint/lib/python3.14/site-packages"
+    },
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean",
+    "elapsed_seconds": 4.6595319580083014,
+    "returncode": 0
+  }
+]

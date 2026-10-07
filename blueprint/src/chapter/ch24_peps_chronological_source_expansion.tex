@@ -1,0 +1,302 @@
+\section{Chronological partial source expansions}
+
+We follow the chronological expansion in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 342--434. Each gate has its own
+participating parties and the common source data constructed above.
+The following statements establish the exact partial expansion and
+its scalar cost. The estimate for corrected source operators requires
+the subsequent separation and second-moment arguments.
+
+\begin{definition}[A chronological composition]
+    \label{def:peps_source_circuit}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsAllowed}
+    \leanok
+    \uses{def:peps_prepared_source_gate,def:peps_party_registers}
+    Let $P$ be any set of parties. A chronological composition from
+    register list $a$ to register list $b$ is formed from identities,
+    consecutive composition, private operations, exchanges of adjacent
+    registers, and nonprivate gates. A gate has a finite participant
+    set $C$, an injection $C\hookrightarrow P$, and common finite
+    source data on $C$. It acts on its prescribed input registers and
+    as the identity on all remaining registers. Any composition may
+    also be extended by an idle register. A composition is allowed
+    when each private operation is a contraction. Its complete
+    operator $W:\mathcal H_a\to\mathcal H_b$ uses the aggregate
+    operator of each nonprivate gate.
+\end{definition}
+
+\begin{theorem}[Norm of the complete composition]
+    \label{thm:peps_source_circuit_norm}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_le_one}
+    \leanok
+    \uses{def:peps_source_circuit}
+    Every allowed chronological composition satisfies $\|W\|\leq1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_prepared_gate_properties}
+    Each gate is a contraction. Consecutive composition, extension
+    by an identity, and unitary identifications of the register order
+    preserve this bound. Induction on the composition proves the claim.
+\end{proof}
+
+\begin{definition}[Gate occurrences and source positions]
+    \label{def:peps_source_circuit_positions}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gateLocations}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gateLocationsFintype}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceLocations}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceLocationsFintype}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchLabels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchLabelsFintype}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient}
+    \leanok
+    \uses{def:peps_source_circuit}
+    Let $\mathcal G$ be the finite set of occurrences of nonprivate
+    gates. Repeated uses of the same gate give distinct elements of
+    $\mathcal G$. For $g\in\mathcal G$, let $C_g\subseteq P$ be its
+    participant set, $E_g$ its ordered source slots, $\Xi_g$ its
+    original branch set, and $c_{g,\xi}$ its original coefficients.
+    The source positions are
+    $\mathcal E=\{(g,e):g\in\mathcal G,\ e\in E_g\}$.
+    Each position has the two original endpoints of its slot,
+    transported along the participant injection. No monomial label
+    enters the definition of $\mathcal E$.
+\end{definition}
+
+\begin{theorem}[Incidence of the original source positions]
+    \label{thm:peps_source_circuit_incidence}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints_mem_participants}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints_ne}
+    \leanok
+    \uses{def:peps_source_circuit_positions}
+    The two endpoints of $(g,e)$ are distinct and both belong to $C_g$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_prepared_source_gate}
+    Each original slot has distinct endpoints in its gate's participant
+    set. The participant injection preserves distinctness. Consecutive
+    composition retains the occurrence of the gate containing the slot.
+\end{proof}
+
+\begin{definition}[The partial branch choices]
+    \label{def:peps_partial_source_choices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsTouched}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_gate_iff}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.Choices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesFintype}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval}
+    \leanok
+    \uses{def:peps_source_circuit_positions,def:peps_affected_owner}
+    Fix affected parties $\mathcal A\subseteq P$. A gate occurrence
+    is touched when $C_g\cap\mathcal A\neq\varnothing$.
+    Choose one label $\xi_g\in\Xi_g$ at each touched occurrence and
+    no label at the other occurrences. Let $\Xi_{\mathcal A}$ be this
+    finite set of choices. In the resulting composition $W_\xi$,
+    touched gates are replaced by their chosen prepared branches,
+    while untouched gates retain their complete operators. Identify
+    all exterior owners as in Definition~\ref{def:peps_affected_owner}.
+    The coefficient of the partial branch is
+    $c_\xi=\prod_{g:\,C_g\cap\mathcal A\neq\varnothing}c_{g,\xi_g}$,
+    and its weighted sum is $\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi$.
+    An untouched gate has one partial choice with coefficient one,
+    even if its original branch set is empty.
+\end{definition}
+
+\begin{theorem}[Allowed partial branches and their actual sources]
+    \label{thm:peps_partial_source_inventory}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sources_partialWord}
+    \leanok
+    \uses{def:peps_partial_source_choices}
+    If the original composition is allowed, each partial branch is
+    allowed. Its source list is obtained from the chosen sources of
+    the touched gates by retaining exactly those with at least one
+    endpoint in $\mathcal A$, and then grouping the exterior owners.
+    Each retained source has its original endpoint spaces and vector.
+    The order and multiplicity of the source occurrences are preserved.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties}
+    A chosen prepared branch is allowed. An untouched gate is a single
+    contraction on exterior memory. The owner identification turns a
+    pair with two exterior endpoints into a local normalized
+    preparation. Induction on the chronological composition gives the
+    asserted source list and allowedness.
+\end{proof}
+
+\begin{theorem}[Exact chronological operator identity]
+    \label{thm:peps_partial_source_evaluation}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_sum_appendTail}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partial_gate}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_comp}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_frame}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_mapOwner}
+    \leanok
+    \uses{def:peps_partial_source_choices}
+    Let $I_a,I_b$ be the canonical isometries identifying the input
+    and output memories with their grouped-owner memories. Then
+    \begin{align}
+        \left(\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi\right)I_a
+         & = I_bW.
+        \label{eq:peps_partial_source_evaluation}
+    \end{align}
+    The private operations need not be contractions for this identity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_prepared_gate_exists,def:peps_source_circuit}
+    At a touched gate, sum its original branch expansion and extend
+    the sum by the spectator identity. At an untouched gate, the
+    single partial branch is its aggregate operator. The resulting
+    identity is compatible with consecutive composition, since the
+    two independent finite sums distribute and their coefficients
+    multiply. It is also compatible with adjoining idle registers.
+    Induction gives (\ref{eq:peps_partial_source_evaluation}).
+\end{proof}
+
+\begin{theorem}[Local contributions to the scalar cost]
+    \label{thm:peps_partial_source_local_cost}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_gate_of_touches}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_gate_of_exterior}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_comp}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_frame}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_id}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_localMap}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_swap}
+    \leanok
+    \uses{def:peps_partial_source_choices}
+    A touched gate contributes $\sum_{\xi\in\Xi_g}|c_{g,\xi}|$ to
+    the sum of absolute partial coefficients. An untouched gate,
+    identity, private operation, or register exchange contributes one.
+    Consecutive compositions multiply these sums. Adjoining an idle
+    register leaves the sum unchanged.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_partial_source_choices}
+    Use the defining choice set at each elementary operation. For
+    consecutive compositions, apply $|cd|=|c|\,|d|$ and distribute the
+    sum over the Cartesian product of the two choice sets.
+\end{proof}
+
+\begin{theorem}[The exact product of the gate costs]
+    \label{thm:peps_partial_source_product_cost}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_eq_prod}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_le_pow_card}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_eq_prod_sq}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_le_pow_card}
+    \leanok
+    \uses{def:peps_partial_source_choices}
+    Let $\mathcal G_{\mathcal A}$ denote the touched gate occurrences
+    and put $t=|\mathcal G_{\mathcal A}|$. Then
+    \begin{align}
+        \sum_{\xi\in\Xi_{\mathcal A}}|c_\xi|
+         & =\prod_{g\in\mathcal G_{\mathcal A}}
+        \sum_{\eta\in\Xi_g}|c_{g,\eta}|,
+        \label{eq:peps_partial_source_product_cost}
+    \end{align}
+    and the sum of $|c_\xi\overline{c_\zeta}|$ over all independent
+    ket and bra choices is the square of this product. If each touched
+    gate's coefficient sum is at most $B$, these two costs are bounded
+    by $B^t$ and $B^{2t}$, respectively. Every occurrence contributes
+    separately, including repeated uses of one gate.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_partial_source_local_cost}
+    Induction on the chronological composition gives the product
+    formula from the local contributions. Bound each nonnegative
+    factor by $B$. The ket and bra sums are independent, and complex
+    conjugation preserves absolute value, so their total cost is the
+    square of the first sum.
+\end{proof}
+
+\begin{theorem}[The density expansion in orthonormal coordinates]
+    \label{thm:peps_partial_source_density}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_eq_mapOwner}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.toMatrix_eval_eq_sum_partialWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.density_eval_eq_sum_partialWord}
+    \leanok
+    \uses{thm:peps_partial_source_evaluation}
+    Choose finite orthonormal bases of the grouped input and output
+    memories. Let $M$ be the matrix of $I_bWI_a^{-1}$ and $K_\xi$
+    the matrix of the partial branch $W_\xi$. For every input matrix
+    $\rho$,
+    \begin{align}
+        M & =\sum_{\xi\in\Xi_{\mathcal A}}c_\xi K_\xi,
+        \label{eq:peps_partial_source_matrix}          \\
+        M\rho M^\dagger
+          & =\sum_{\xi,\zeta\in\Xi_{\mathcal A}}
+        c_\xi\overline{c_\zeta}\,
+        K_\xi\rho K_\zeta^\dagger.
+        \label{eq:peps_partial_source_density}
+    \end{align}
+    In each summand, the untouched gates retain their complete
+    operators. The matrix $\rho$ need not be positive or normalized.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_partial_source_evaluation}
+    Compose (\ref{eq:peps_partial_source_evaluation}) with $I_a^{-1}$
+    and take matrices. Distribute the finite sums in $M\rho M^\dagger$.
+    Taking the adjoint conjugates each bra coefficient.
+\end{proof}
+
+\begin{theorem}[Fixed positions for every partial source inventory]
+    \label{thm:peps_partial_source_order}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceOrder}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.nodup_sourceOrder}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceDims}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_isSome_iff}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_some_spec}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialWord_eq_filterMap}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWord}
+    \leanok
+    \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices}
+    The positions $\mathcal E$ admit a fixed exhaustive ordered list
+    without repetitions, in the preparation order of the actual
+    composition. Consecutive compositions list the later composition's
+    positions first; the original slot order within a gate is retained.
+    Each position $e$ has fixed halfspaces $\C^{u_e}$ and $\C^{v_e}$.
+
+    For every partial choice $\xi$, its source inventory is obtained
+    from this fixed list by retaining exactly those positions with an
+    endpoint in $\mathcal A$. A retained position has the grouped
+    original endpoints, the fixed halfspaces, and its normalized
+    chosen branch vector. Consequently the ordered layout of all
+    surviving source registers is independent of $\xi$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_partial_source_inventory,thm:peps_affected_source_occurrences}
+    Induct on the chronological composition. The two occurrence sets
+    of consecutive compositions are disjoint, so concatenating their
+    lists preserves uniqueness. At a gate, list its prescribed slots.
+    The participant injection preserves their distinct endpoints, and
+    grouping owners removes a slot exactly when both endpoints are
+    exterior. The remaining fields are its prescribed spaces and
+    vector. Removing vectors from these records leaves a layout
+    determined solely by the original positions and $\mathcal A$.
+\end{proof}
