@@ -1,0 +1,34 @@
+{
+  "scope": "Reproduction-helper correction after integration of unrelated main-branch ledgers; historical proof evidence is unchanged.",
+  "tested_revision": "806af1d402129d4bef91f83fa22e556d44da6008",
+  "tested_main": "19646e13da1b4c7b63714c37ca4d0f575d6c0f13",
+  "published_lifetime_ancestor": "68e56174b52d9dbf5b1d97473cd8d2ed1542d2d7",
+  "global_ledger_entries": 121,
+  "issue_owned_shards": {
+    "8769-lifetime.json": 47,
+    "8769-operator.json": 49
+  },
+  "repository_notice_scan": true,
+  "helper_path": "docs/provenance/evidence/8769-operator/validate-provenance.py",
+  "helper_sha256": "b6eb0877a936c043303d78d5a38bfb5a89f10262abf93e575eba5d0f9d2353e8",
+  "historical_helper_revision": "de83b920e21f561c4ac1f151e5a34aad9cb22ae6",
+  "historical_helper_sha256": "c2cfc346d3138a674ba883182880e8a4a600689ba2f5f1dfacb5e7389f64714f",
+  "check": {
+    "name": "scoped-helper",
+    "command": [
+      "python3",
+      "docs/provenance/evidence/8769-operator/validate-provenance.py",
+      "--policy-root",
+      "/workspace/proof-build-logs/provenance-head8789",
+      "--upstream-root",
+      "/tmp/openai-math-verification-20261007"
+    ],
+    "source_revision": "806af1d402129d4bef91f83fa22e556d44da6008",
+    "elapsed_seconds": 9.365,
+    "exit_code": 0,
+    "warnings": 0,
+    "log": "docs/provenance/evidence/8769-operator/integration-helper.log",
+    "sha256": "8d8009b49f222d733a34169ecef2dae47287b862e9e870faa8bfad086f3fe251"
+  },
+  "remaining_validation": "Full TNLean aggregate is delegated to exact-head GitHub CI; local official-cache guard covers the checked Approximation import closure only."
+}
