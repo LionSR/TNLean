@@ -7,6 +7,7 @@ import QICLean.Algebra.MatrixUnitConjugator
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Preparation.BlockedPolar
 import Mathlib.Topology.Instances.Matrix
+import QICLean.Algebra.MatrixUnitConjugator
 
 /-!
 # Local continuous virtual gauges
