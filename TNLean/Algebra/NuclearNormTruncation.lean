@@ -75,6 +75,26 @@ theorem hsNormSq_submatrix {α' β' : Type*} [Fintype α'] [Fintype β'] (M : Ma
   refine Finset.sum_congr rfl fun a _ ↦ ?_
   exact e₂.sum_comp fun b ↦ ‖M (e₁ a) b‖ ^ 2
 
+omit [Fintype α] in
+/-- Submultiplicativity of the Hilbert--Schmidt norm, `‖A B‖₂² ≤ ‖A‖₂² ‖B‖₂²`. -/
+theorem hsNormSq_mul_le {δ : Type*} [Fintype δ] [Fintype α] (A : Matrix α γ ℂ)
+    (B : Matrix γ δ ℂ) : hsNormSq (A * B) ≤ hsNormSq A * hsNormSq B := by
+  unfold hsNormSq
+  have hpt : ∀ a d, ‖(A * B) a d‖ ^ 2 ≤ (∑ c, ‖A a c‖ ^ 2) * ∑ c, ‖B c d‖ ^ 2 := by
+    intro a d
+    calc ‖(A * B) a d‖ ^ 2 ≤ (∑ c, ‖A a c‖ * ‖B c d‖) ^ 2 := by
+          rw [mul_apply]
+          gcongr
+          exact (norm_sum_le _ _).trans (Finset.sum_le_sum fun c _ ↦ (norm_mul _ _).le)
+      _ ≤ _ := Finset.sum_mul_sq_le_sq_mul_sq _ _ _
+  calc ∑ a, ∑ d, ‖(A * B) a d‖ ^ 2
+      ≤ ∑ a, ∑ d, (∑ c, ‖A a c‖ ^ 2) * ∑ c, ‖B c d‖ ^ 2 :=
+        Finset.sum_le_sum fun a _ ↦ Finset.sum_le_sum fun d _ ↦ hpt a d
+    _ = (∑ a, ∑ c, ‖A a c‖ ^ 2) * ∑ c, ∑ d, ‖B c d‖ ^ 2 := by
+        rw [Finset.sum_mul]
+        refine Finset.sum_congr rfl fun a _ ↦ ?_
+        rw [← Finset.mul_sum, Finset.sum_comm]
+
 section Euclidean
 
 variable [DecidableEq β]
@@ -186,8 +206,6 @@ theorem nuclearNorm_nonneg (M : Matrix α β ℂ) : 0 ≤ nuclearNorm M := by
 
 /-! ### Hölder's bound -/
 
-variable [DecidableEq γ]
-
 /-- Hölder's inequality `‖A Bᵀ‖₁ ≤ ‖A‖₂ ‖B‖₂`. No dimension enters.
 
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, equation
@@ -268,7 +286,7 @@ theorem nuclearNorm_mul_transpose_le (A : Matrix α γ ℂ) (B : Matrix β γ �
 
 /-! ### Truncation to the leading right singular directions -/
 
-omit [Fintype α] [Fintype β] [Fintype γ] [DecidableEq β] [DecidableEq γ] in
+omit [Fintype α] [Fintype β] [Fintype γ] [DecidableEq β] in
 /-- The singular-value tail estimate: for a decreasing nonnegative sequence `s`,
 `(k + 1) ∑_{i ≥ k} sᵢ² ≤ (∑ᵢ sᵢ)²`.
 
@@ -308,14 +326,13 @@ theorem tail_sq_sum_le (s : ℕ → ℝ) (hs : Antitone s) (h0 : ∀ i, 0 ≤ s 
     _ ≤ C * C := by gcongr
     _ = C ^ 2 := by ring
 
-omit [Fintype γ] [DecidableEq γ] in
-omit [Fintype α] in
+omit [Fintype α] [Fintype γ] in
 /-- The orthogonal projector `∑ᵢ fᵢ fᵢ*` onto the span of a finite orthonormal family. -/
 def orthonormalProjector {ι : Type*} [Fintype ι] (f : ι → EuclideanSpace ℂ β) :
     Matrix β β ℂ :=
   fun b b' ↦ ∑ i, f i b * star (f i b')
 
-omit [Fintype α] [Fintype γ] [DecidableEq γ] in
+omit [Fintype α] [Fintype γ] in
 theorem toEuclideanLin_orthonormalProjector {ι : Type*} [Fintype ι]
     (f : ι → EuclideanSpace ℂ β) (x : EuclideanSpace ℂ β) :
     toEuclideanLin (orthonormalProjector f) x = ∑ i, ⟪f i, x⟫_ℂ • f i := by
@@ -326,7 +343,7 @@ theorem toEuclideanLin_orthonormalProjector {ι : Type*} [Fintype ι]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun i _ ↦ Finset.sum_congr rfl fun b' _ ↦ by ring
 
-omit [Fintype γ] [DecidableEq γ] in
+omit [Fintype γ] in
 /-- Truncation to the leading right singular directions. For every `k`, some orthonormal family
 of at most `k` vectors has projector `P` with `(k + 1) ‖M - M P‖₂² ≤ ‖M‖₁²`; when the column
 space has dimension at most `k`, the error vanishes. No dimension enters the estimate.
