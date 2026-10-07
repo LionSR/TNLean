@@ -1,0 +1,19 @@
+{
+  "checks": [
+    {
+      "name": "Test nested-cylinder orthogonalization edge cases strictly",
+      "step": 16,
+      "after_full_build_step": 15,
+      "strict_flags": true,
+      "timeout_seconds": 90
+    },
+    {
+      "name": "Test projected-image cylinder counterexamples strictly",
+      "step": 17,
+      "after_full_build_step": 15,
+      "strict_flags": true,
+      "timeout_seconds": 90
+    }
+  ],
+  "full_build_not_bypassed": true
+}
