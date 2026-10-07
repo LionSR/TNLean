@@ -20,6 +20,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Agent Mention Handler](#agent-mention-handler-agent-mentionyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
+  - [Campaign Board](#campaign-board-campaign-boardyml)
   - [Claude Provider Limit Guard](#claude-provider-limit-guard-claude-provider-limit-guardyml)
 - [Safety Mechanisms](#safety-mechanisms)
 - [How to Use](#how-to-use)
@@ -404,6 +405,17 @@ iteration guard, log fetching, and Claude invocation.
 This is not triggered directly — it is called via `workflow_call` by the two CI-fix workflows above. The callers pass in their specific prompts, tool allowlists, and plugin configuration.
 
 ---
+
+### Campaign Board (`campaign-board.yml`)
+
+Every hour, at minute 23, this workflow renders the public progress page of a
+formalization campaign and redeploys Pages. The area-law and PEPS campaign
+(label `openai-math`, tracker #8733) is served at `/area-law/`. The campaign is
+described by `docs/campaign/area-law/`, and the tools in
+`scripts/campaign_board/` are shared by all campaigns; see
+`docs/campaign/README.md`. The workflow calls no model and writes nothing to
+either repository. A new paper-gap note appears on the page as "summary
+pending" until `docs/campaign/area-law/gaps.json` gains an entry for it.
 
 ### Claude Provider Limit Guard (`claude-provider-limit-guard.yml`)
 

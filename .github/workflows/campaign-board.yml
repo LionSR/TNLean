@@ -1,0 +1,74 @@
+name: Campaign Board
+
+# Hourly progress page for a formalization campaign. The campaign is described
+# by docs/campaign/area-law/ (the two-dimensional area law and polynomial PEPS
+# approximation, label `openai-math`, tracker #8733). The job reads issues and
+# pull requests of TNLean and QICLean, both public, so the default token
+# suffices. It renders a self-contained page, uploads it as the `site-campaign`
+# component and redeploys Pages, which serves it at /area-law/. It calls no
+# model and writes nothing to either repository.
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: campaign-board
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  board:
+    runs-on: ubuntu-latest
+    name: Render campaign board
+    timeout-minutes: 20
+    steps:
+      - name: Checkout TNLean
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout QICLean
+        uses: actions/checkout@v7
+        with:
+          repository: LionSR/QICLean
+          path: qiclean
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Collect the snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QICLEAN_DIR: qiclean
+        run: python3 scripts/campaign_board/collect.py docs/campaign/area-law campaign-data.json
+
+      - name: Render the page
+        run: python3 scripts/campaign_board/render.py docs/campaign/area-law campaign-data.json campaign-output/area-law
+
+      - name: Upload campaign component
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-campaign
+          path: campaign-output
+          retention-days: 7
+
+  deploy:
+    name: Deploy Pages site
+    needs: board
+    uses: ./.github/workflows/deploy-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      actions: read

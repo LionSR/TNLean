@@ -1,0 +1,93 @@
+{
+  "reviewedAt": "2026-10-07T21:30Z",
+  "entries": [
+    {
+      "id": "docs/paper-gaps/openai_peps_patch_stationarity_gap.tex",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Proposition 4.1",
+      "title": "Stationarity of the patch optimizer",
+      "issue": 8767,
+      "prs": { "QICLean": [605, 607] },
+      "claims": "To build the small-patch subspaces, the paper minimizes the norm of an ordered product of regional filters. From the first-order conditions at the minimizer it derives that each regional output state is dominated by its optimal density plus a small shift, ρ_j ≤ x_j + b·1.",
+      "found": "QICLean proves the consequences of this inequality. The regulator is bounded by b·1 and by ρ, its trace by b·rank Q + tr((1−Q)ρ) for every projection Q, and hence by 1/4 at the paper's starting radius. QICLean #607 recovers commutation from shifted powers. The inequality itself, and the commutation of the minimizing densities with the outputs, are not yet derived for the ordered objective. Until they are, Proposition 4.1 is not formalized.",
+      "impact": "No problem with the paper has been found. This is the most delicate open step in Proposition 4.1, because the paper reaches the inequality through descending trace calculations on a noncommutative objective. The note warns against substituting a simpler separable objective.",
+      "plan": "Carry out the descending trace calculations for the ordered objective, derive the commutation and first-order conditions, and apply the regulator bounds already proved."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_ownership_change_monomials.tex",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Lemmas 6.5–6.6",
+      "title": "Birth, death and exchange as allowed operations",
+      "issue": 8771,
+      "prs": { "TNLean": [8855] },
+      "claims": "Handing a region from one party to another (birth or death), or swapping ownership between two copies of the state (exchange), costs reference error at most L^−30 (4L^−30 for the exchange), provided the region shares information at most L^−60 with its surroundings. Each move involves only the named parties.",
+      "found": "Both lemmas are proved with exactly the paper's hypotheses. The proofs cover the canonical maps, their contractivity and factorization, and the error bounds. The information bound remains a hypothesis, as in the paper, and Proposition 3.4 supplies it later. Still unstated is that each factorization is an allowed monomial of the compression theorem, meaning a private map, one shared state and a private map. This needs the party model built in #8843 and #8853.",
+      "impact": "No problem with the paper has been found. The factorizations are proved, and what remains is to restate them in terms of parties.",
+      "plan": "Restate the proved factorizations on the party layout of #8843 and #8853."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_small_rewrite_monomials.tex",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Lemma 6.3",
+      "title": "Rewriting a small patch as allowed operations",
+      "issue": 8770,
+      "prs": { "TNLean": [8823] },
+      "claims": "Lemma 6.3 rewrites the state near a small patch where ownership changes. It states that (1) the rewrite map is a contraction that moves the old reference state close to the new one, and (2) up to error L^−a the map is a polynomial sum of operations that the compression theorem allows.",
+      "found": "Part (1) is proved with exactly the paper's hypotheses. For part (2), Lean proves the branch expansion, the owner bookkeeping, the error sum and the final rescaling. Turning each branch into a small tensor network and truncating it with Lemma 6.2 needs the party model of Lemma 5.1, which was missing when this work was done. Without that model part (2) would hold trivially, so it is left unstated.",
+      "impact": "No problem with the paper has been found. The missing piece is library infrastructure.",
+      "plan": "Use the party layout of #8843, build the residual network for one branch, and apply the whole-group truncation of Lemma 6.2."
+    },
+    {
+      "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Lemma 7.2",
+      "title": "Clearance during the dyadic repainting",
+      "issue": 8772,
+      "prs": { "TNLean": [8836] },
+      "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
+      "found": "Lean proves the clearance with a₀ = 1/5000 for any schedule of guides that has the properties the paper's proof uses. The schedule itself is not yet built. The paper derives those properties in a few lines from the disjointness of the bands along different edges, and that disjointness is proved.",
+      "impact": "No problem with the paper has been found. What remains is to construct the schedule as part of Proposition 7.1.",
+      "plan": "Construct the repainting schedule, derive the guide properties from the band disjointness, and translate the estimates to the actual square."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_pair_effects_party_layout.tex",
+      "kind": "narrower",
+      "status": "resolved-pending",
+      "paper": "peps",
+      "result": "Lemma 5.1",
+      "title": "Who owns the replacement of a shared resource",
+      "issue": 8768,
+      "prs": { "TNLean": [8791, 8843, 8853] },
+      "claims": "Lemma 5.1 removes a two-party shared state by replacing it with a stack of m fresh copies, at error r/√m. It also states that the replacement uses only operations local to the two parties plus normalized shared states, and that all shared states between the same two parties can be merged into one.",
+      "found": "The first Lean model had no notion of a party, so the locality clauses could not be stated (#8791). #8843 added parties and proved those clauses. #8853 proves the merging clause. Each freshly prepared shared state can be moved to the front, and the states between the same two parties combine into one normalized state. No hypotheses were added.",
+      "impact": "None. Lemma 5.1 is formalized as stated once #8853 merges.",
+      "plan": "Merge #8853. The aggregate map per party used by Theorem 5.2 is separate work."
+    },
+    {
+      "id": "pr-8796-routing-zero-dimension",
+      "kind": "convention",
+      "status": "resolved",
+      "paper": "peps",
+      "result": "Lemma 8.2",
+      "title": "Bond dimension on an unused edge",
+      "issue": 8764,
+      "prs": { "TNLean": [8796] },
+      "claims": "After routing, each grid edge has bond dimension at most (C₁ L^r)^χ.",
+      "found": "An edge that no link uses gets bond dimension 1, so a bound of the form D^χ fails when D = 0. Lean states the bound as (max D 1)^χ. In the paper D = C₁ L^r is at least 1, and the two bounds agree.",
+      "impact": "None. Only the reading of a degenerate case changes.",
+      "plan": "Nothing further."
+    }
+  ],
+  "checked": [
+    { "result": "Lemma 4.2 (area law)", "what": "Compactly supported spectral filter with stretched-exponential decay", "repo": "QICLean", "pr": 563, "note": "No paper gap found." },
+    { "result": "Lemma 4.2, finite-matrix form (area law)", "what": "Spectral filtering of a finite Hermitian matrix", "repo": "QICLean", "pr": 565, "note": "No paper gap found. The Lean statement is slightly more general than the source." }
+  ]
+}
