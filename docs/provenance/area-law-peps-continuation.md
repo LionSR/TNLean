@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last full coordination check: October 7, 2026, 19:59 UTC. New geometric claims and targeted peer handoffs checked through 20:23 UTC.
+Last full coordination check: October 7, 2026, 20:32 UTC.
 
 ## Verified mathematical contributions
 
@@ -16,20 +16,23 @@ Last full coordination check: October 7, 2026, 19:59 UTC. New geometric claims a
 | Quarter mesh and neighboring-layer locality | [#8859](https://github.com/LionSR/TNLean/pull/8859) | `5db13f626cbba4ce128e25ddcdb60a00532f0f3a` | [mesh and locality](evidence/8758-quarter-mesh.md) |
 | Actual finite initial marks, minimum sides and separation | [#8862](https://github.com/LionSR/TNLean/pull/8862) | `5d2246bb32045fafea826200dd09b3518629ae97` | [initial mark family](evidence/8758-initial-mark-family.md) |
 | Actual cell fans, marked vertices and unique nonbelt primaries | [#8865](https://github.com/LionSR/TNLean/pull/8865), evidence `9688dda9c` | `8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2` | [cell fans](evidence/8758-cell-fans.md) |
+| Actual runs, opposing corners and half-open layer assignment | `feat/area-law-fan-runs`, based on #8865 | `778149a282158bbb92b4d7bb25fb12339d2f31ca` | [fan runs and layers](evidence/8758-fan-runs.md) |
 
-At the completed #8865 parent, all 76 exact imported declarations in these nine
-contributions have passing canonical build and standard-axiom evidence. Complete
-current-policy provenance validation passed 237 entries at that parent. Only the twelve fan/primary rows are promoted in
-the latest contribution; all prior 225 records remain byte-identical. The old
-planned root-ledger row remains planned. The exact commands, timings, hashes,
-source anchors and scope limitations are in the evidence notes above.
-Do not repeat these builds merely because work resumes.
+All 90 distinct imported declarations in these ten contributions have passing
+canonical build and standard-axiom evidence. Current-policy provenance validation
+passes 251 entries. The latest contribution completes fourteen new rows and
+reverifies four earlier rows after the shared containment refactor; their public
+statements are unchanged. All other 233 prior entries and every earlier log and
+note are preserved. The old planned root-ledger row remains planned. Exact
+commands, timings, hashes, source anchors and mathematical limits are recorded
+in the evidence notes linked above. Do not repeat these canonical checks merely
+because work resumes.
 
 The first seven pull requests have all checks passing, including the full Lean
 build, compiled blueprint declaration checks, rendering and module policies.
 The polynomial timing check passed its failed-only rerun. #8862 remains in full
-CI at the last inspection. Full CI and rendering for the fan contribution are
-pending publication. Refresh external statuses before acting. No main-branch
+CI at the last inspection. Full CI and rendering for #8865 are pending; its source/provenance checks pass.
+Full CI for the new fan-run contribution is pending publication. Refresh external statuses before acting. No main-branch
 merge or dependency-pin change was performed.
 
 ## Current mathematical scope and next action
@@ -183,20 +186,58 @@ Formatter idempotence, new prose and whitespace checks pass. The scoped pattern
 scan reports only the old, already recorded mesh normalization block; the new
 three-site containment argument is now shared.
 
-The new fourteen provenance rows remain planned until canonical verification.
-Four prior rows need fresh evidence because their complete module files changed:
+The fourteen new provenance rows now have completed canonical evidence.
+Four prior rows have fresh evidence because their complete module files changed:
 `fineLayer_marks_dist_ge` and all three declarations in NonbeltPrimaries,
 including `nonbeltPitchIndex`. Their original logs, notes, identities, source
-anchors and notices remain preserved. All other 233 prior entries must remain
-unchanged. The complete next inventory contains 251 entries, with an eighteen-name
+anchors and notices remain preserved. All other 233 prior entries remain
+unchanged. The complete inventory contains 251 entries, with an eighteen-name
 imported audit. Do not weaken the current-source provenance checker or claim
 all 237 parent records remain unchanged after this refactor.
 
-Next action: freeze the current source and imported audit, move the branch
-from source-only preparation to the existing warmed worktree, then perform one
-canonical Geometry build and imported audit under the shared repository lock.
-Promote the fourteen new rows and update only the four required old verification
-records after those actual checks pass. Preserve all proof and audit bytes at
-the frozen source. Publish a focused draft based on #8865; full CI and rendering
-will then be pending. No main merge, pin change or full local rebuild is needed.
-The active long-running goal continues afterward.
+The final canonical Geometry build passed in 22.002 seconds at
+`778149a282158bbb92b4d7bb25fb12339d2f31ca`; the eighteen-name imported audit
+passed in 4.327 seconds, without warnings. Seventeen names use only the three
+standard logical axioms; nonbeltPitchIndex uses propext only. Strict promotion
+and the complete 251-entry current-source policy pass. Only the fourteen new
+rows and the required four old verification records changed; the other 233
+entries are unchanged. The first successful build at `89c5cd185` had one long
+provenance-ID warning. Its actual logs remain preserved; shortening the
+unpublished identifier was the sole source change before the clean final check.
+Do not repeat either canonical run. Source and imported-audit bytes are frozen.
+
+Next action: publish this completed contribution, based on #8865. Then supply
+the separately owned capped-partition request for narrow canonical verification
+at published peer source `b6f1f462625c3d83074b1c3c1299d6cc30c3b4b2`, under
+[#8754](https://github.com/LionSR/TNLean/issues/8754#issuecomment-6046331993).
+Use a private review branch in this group's own warmed worktree only after
+publication and exact toolchain/pin/import compatibility checks. Run only the
+CappedDyadicPartition target, its strict regression and 23-name imported audit
+under the shared lock. Preserve actual logs for its owner; do not change the
+peer worktree, promote peer provenance or merge branches. Its source author
+adopted the two reviewed corrections, but local cache access remains HTTP403.
+
+Read-only authors are checking the next actual midpoint-mask construction and
+matching elementary segments. A proposed mask splits a side exactly when its
+midpoint is an actual corner of another retained fine-layer cell; it must prove
+that every such corner on each resulting segment is an endpoint. Dummy corners
+require a separate proof: a common point of the closed dummy neighborhood and
+any later closed layer forces the first layer, and the coarse dummy grid gives
+whole-side endpoints. The neighborhood upper-distance helper is currently
+private, so this step is not yet claimed or implemented. Publicly claim the
+next concrete source before production edits. Consistent opposing identifiers,
+global colors, active stars and both headline theorems remain open.
+
+At the latest coordination check, #8862's full Lean, imported-module policy and
+timing checks passed; its compiled blueprint rendering was still in progress.
+#8865's source/provenance checks passed with substantive CI queued. Main remains
+`e3e3dddb`. Compression published common spaces #8864 (`06dc884a`) and actual
+source-gate density #8866 (`02d2a197`), and owns the next joint source/input
+contraction and source-pair count. QICLean #571 remains open and green at
+`0d031f25`; the integration contact request is recorded under #8769. Analytic
+owners published Bell powers #614, literal cutoff mass #615 and auxiliary-pair
+entropy #616; replica gap/mass, independent-copy concentration, Schur mass and
+initial Bell occurrence/matching continue under their separate claims. The
+geometry group does not change their scopes or pins.
+
+The active long-running goal continues after these checks and publications.

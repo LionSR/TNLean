@@ -189,26 +189,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For arbitrary origin o, natural indices k,h >= 50000000, finite endpoint set Z and natural C >= 2, let z and w belong to fineLayerIndices o k (fineScaleIndex k) Z C and fineLayerIndices o h (fineScaleIndex h) Z C. For distinct actual cell marks x \u2208 beltCellMarks o (fineScaleIndex k) z and y \u2208 beltCellMarks o (fineScaleIndex h) w, proves max (2^(fineScaleIndex k)) (2^(fineScaleIndex h)) / 4 <= dist x y. This applies to every actual fine-layer cell, and hence to selected belt cells; it imposes no endpoint-set nonemptiness or fan hypothesis.",
-        "Source: Section 11, geometry:initial-stars, lines 325\u2013339 and the numerical proof in lines 352\u2013359; geometry:nonadjacent supplies the earlier actual-layer separation. This theorem is a numerical marked-point estimate and does not construct active rays, sectors or fan interfaces."
+        "Source: Section 11, geometry:initial-stars, lines 325\u2013339 and the numerical proof in lines 352\u2013359; geometry:nonadjacent supplies the earlier actual-layer separation. This theorem is a numerical marked-point estimate and does not construct active rays, sectors or fan interfaces.",
+        "Reverified after the common half-open cell-containment proof was extracted to dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices in LayerPartition.lean. The statement is unchanged. The original exact-source verification at 5d2246bb32045fafea826200dd09b3518629ae97 and its recorded logs remain preserved in docs/provenance/evidence/8758-initial-mark-family.md and the ledger at completed parent 9688dda9c3c79fe37f4fac2b556788a9932d20ee. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "5d2246bb32045fafea826200dd09b3518629ae97",
+        "revision": "778149a282158bbb92b4d7bb25fb12339d2f31ca",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-initial-mark-family-build.log",
-            "sha256": "4b5495b1af70004935fbd373e220e6587990929d3fcf3a405506c05da1fde4dd"
+            "log": "docs/provenance/evidence/8758-fan-runs-build.log",
+            "sha256": "74ccf580ada01969f925e758e88b1487b36595776fd15cd51debae92675222be"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-initial-mark-family-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-fan-runs-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-initial-mark-family-axioms.log",
-            "sha256": "76a58109b7ea15c6b9ac6981a5850915beb65b64aad8a8197d8e347b2f6a94d9"
+            "log": "docs/provenance/evidence/8758-fan-runs-axioms.log",
+            "sha256": "113d15edf7e8bd9786a17dbbf84ae29fcaa7c6391741bfadc27e889485cdc567"
           }
         ]
       },

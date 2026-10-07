@@ -3,7 +3,7 @@
 Fourteen new declarations describe three parts of the dyadic construction:
 merging consecutive triangles of a cell fan with equal labels, locating an
 opposing fine-cell corner on a reference side, and partitioning the plane
-by the actual half-open layers. Four existing declarations are also to be
+by the actual half-open layers. Four existing declarations are also
 reverified after a repeated cell-containment argument was replaced by a
 single theorem. The mathematical statements of these four declarations are
 unchanged.
@@ -77,7 +77,7 @@ and the [shared containment theorem](https://github.com/LionSR/TNLean/issues/875
 
 ## Exact inventory and canonical evidence
 
-Frozen source revision: **Pending**.
+Exact verified source: `778149a282158bbb92b4d7bb25fb12339d2f31ca`.
 
 `TNLean/PEPS/AreaLaw/Geometry/FanRuns.lean`:
 
@@ -107,25 +107,38 @@ listed in the retention table below, giving eighteen exact reports.
 
 | Check | Actual command | Exit code | Elapsed seconds |
 |---|---|---|---|
-| Combined Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending |
-| Imported eighteen-name audit | `lake env lean docs/provenance/evidence/8758-fan-runs-axioms.lean` | Pending | Pending |
+| Combined Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | 0 | 22.002 |
+| Imported eighteen-name audit | `lake env lean docs/provenance/evidence/8758-fan-runs-axioms.lean` | 0 | 4.327 |
 
-Canonical verification will run once at the frozen source from the existing
-warmed worktree under the shared repository lock, using the pinned prebuilt
-Mathlib artifacts. The source-only preparation worktree has no `.lake`
-directory and performs no cache or build operation. Combined non-mutating elaboration with the package options passed in
-14.570 seconds without warnings. Independent reviews approved the three
-modules, their blueprint statements and the containment replacements.
-These source checks do not substitute for the pending canonical build and
-imported reports.
+Canonical verification ran at the exact source above from the existing
+warmed worktree under the shared repository lock, through
+`scripts/lake_build_locked.sh --`, reusing the pinned prebuilt Mathlib
+artifacts. The final Geometry build and imported audit completed without
+warnings. The build compiled `LayerPartition` in 6.1 seconds,
+`FineMarkSeparation` in 6.0 seconds, `NonbeltPrimaries` in 6.3 seconds,
+`SideSubdivision` in 7.4 seconds, `InitialMarkFamily` in 3.6 seconds and
+the Geometry aggregator in 3.1 seconds. The unchanged `FanRuns` artifact
+was reused from the first check recorded below.
+
+The imported reports contain precisely the eighteen names above.
+Seventeen depend only on `propext`, `Classical.choice` and `Quot.sound`;
+`nonbeltPitchIndex` depends only on `propext`.
+
+The source-only preparation worktree had no `.lake` directory and performed
+no cache or build operation. Combined non-mutating elaboration with the
+package options passed in 14.570 seconds without warnings. Independent
+reviews approved the three modules, their blueprint statements and the
+containment replacements. Read-only comparison also confirmed that the
+four reverified public statements agree with their original exact sources.
 
 Evidence paths and SHA256 hashes:
 
-- `docs/provenance/evidence/8758-fan-runs-build.log`: **Pending**;
-- `docs/provenance/evidence/8758-fan-runs-axioms.log`: **Pending**.
+- `docs/provenance/evidence/8758-fan-runs-build.log`: `74ccf580ada01969f925e758e88b1487b36595776fd15cd51debae92675222be`;
+- `docs/provenance/evidence/8758-fan-runs-axioms.log`: `113d15edf7e8bd9786a17dbbf84ae29fcaa7c6391741bfadc27e889485cdc567`.
 
-Each completed log will record its exact command, frozen revision, exit
-code and elapsed time. Only trailing whitespace may be normalized.
+Each actual log records its exact command, frozen revision, exit code and
+elapsed time. Only trailing whitespace was normalized; the actual diagnostics
+and quoted axiom reports are preserved.
 
 ## Retention of prior verification
 
@@ -145,31 +158,46 @@ the containment abstraction changes two previously verified files.
 Their identities, mathematical source mappings, license, notices, status and
 original change descriptions are retained. A new description records the
 abstraction and points to the original verification; only the required
-verification records will be replaced after actual canonical success. The
+verification records are replaced by the actual canonical evidence above. The
 original build and axiom logs and their evidence notes are preserved.
-The other 233 prior entries must remain byte-equivalent to the parent,
+The other 233 prior entries remain byte-equivalent to the parent,
 including the previously existing planned root-ledger entry.
 
 ## Provenance and integration
 
-The fourteen new rows in `docs/provenance/openai-math.d/8758-fan-runs.json`
-remain planned with pending verification until the actual canonical checks
-pass. The static helper checks the exact fourteen-name source inventory,
-three notices, eighteen-name imported audit, pinned source and licenses,
-251-entry schema, and preservation of all 233 unaffected prior entries.
-For this static check alone, the four affected entries are projected to
-pending in memory; no source equality condition is weakened.
+Strict static promotion passed for the fourteen new rows in
+`docs/provenance/openai-math.d/8758-fan-runs.json` and replacement of the
+four required prior verification records in `8758-initial-mark-family.json`
+and `8758-cell-fans.json`. The complete 251-entry current-policy
+provenance/source/license/notice audit passed, including exact source and
+committed audit bytes, command headers, all eighteen imported reports and
+actual evidence hashes. All 233 other entries agree with the immutable
+parent. The schema and validation policy were not changed.
 
-Strict canonical promotion of the fourteen new rows and replacement of the
-four required prior verification records: **Pending**.
-Full source synchronization and reverse coverage: **Pending**.
-Formatter, reader-facing prose and generated import checks: **Pending**.
+The entry-level baseline was captured from the immutable Git parent itself.
+Static preparation projected only the four affected entries to pending in
+memory; completed promotion uses their actual new verification records.
+The original notes, imported audits and log hashes remain unchanged.
+
+Complete blueprint source synchronization and reverse coverage passed:
+20,205 distinct public references and 20,199 flattened theorem-like
+records, with `sync_ok: true` and no missing, stale or duplicate references.
+The fourteen new declaration records occur in twelve mathematical
+environments and have ten checked proof tags. No changed declaration is
+missing its blueprint entry.
+
+Formatter idempotence, reader-facing prose and generated import checks
+passed; 75 generated files cover 2,843 production modules. All three modules
+and their mathematical blueprint statements passed independent review.
+The repeated half-open cell-containment argument was recorded in the tactic
+ledger and promoted to the common theorem; its three local copies were
+replaced. Previously recorded pattern decisions remain unchanged.
 
 The earlier primary-region contribution recorded a local whole-library
 `leanblueprint checkdecls` failure caused by a missing pre-existing
 `Fibonacci.olean` artifact. That historical failure log remains intact.
 Full-library CI, compiled blueprint declaration checking and rendering
-remain pending. Published pull request and evidence head: **Pending**.
+remain pending. Publication branch: `feat/area-law-fan-runs`, stacked on #8865. The pull request is created after the completed evidence commit; no main-branch merge is performed.
 
 ## First canonical check and notice correction
 
@@ -179,5 +207,10 @@ reports in 4.852 seconds. It reported one long-line warning on the shared
 containment lemma's machine-readable provenance identifier. The new identifier
 was shortened before publication; no declaration or proof changed. The original
 successful commands and actual warning remain in `8758-fan-runs-first-build.log`
-and `8758-fan-runs-first-axioms.log`. Fresh exact-source verification is required
-for the corrected comment; no record was promoted at the first revision.
+and `8758-fan-runs-first-axioms.log`. The corrected source received the fresh canonical verification recorded
+above; no record was promoted at the first revision.
+
+The preserved first-check log hashes are:
+
+- `8758-fan-runs-first-build.log`: `c7a05fe2394735426ff055c81de50fac44dcd5a5b6545ba28dd8864bcd3acd2a`;
+- `8758-fan-runs-first-axioms.log`: `9853b14436c84f44cd1b3e220cd273e4fbc73b26c4bf4b2df823ae9d4fbcbca7`.

@@ -482,26 +482,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For natural \u2113,p, integer residues a,b and cell index z : \u2124 \u00d7 \u2124, defines ((z.1 - a) / (2 : \u2124)^(p - \u2113), (z.2 - b) / (2 : \u2124)^(p - \u2113)), using Euclidean integer division to identify the coarse pitch position.",
-        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
+        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations.",
+        "Reverified after the common half-open cell-containment proof was extracted to dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices in LayerPartition.lean. The statement is unchanged. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-fans.md and the ledger at completed parent 9688dda9c3c79fe37f4fac2b556788a9932d20ee. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "778149a282158bbb92b4d7bb25fb12339d2f31ca",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-fan-runs-build.log",
+            "sha256": "74ccf580ada01969f925e758e88b1487b36595776fd15cd51debae92675222be"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-fan-runs-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-fan-runs-axioms.log",
+            "sha256": "113d15edf7e8bd9786a17dbbf84ae29fcaa7c6391741bfadc27e889485cdc567"
           }
         ]
       },
@@ -533,26 +534,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For o,k,\u2113,p,Z,C, residues a,b : Fin (2^(p - \u2113)) and fine-cell index z, assumes \u2113 <= k, \u2113 <= p, z \u2208 fineLayerIndices o k \u2113 Z C and z outside the corresponding beltCellIndices. Proves closure (dyadicCell o \u2113 z) is contained in primaryBirthRegion o k \u2113 p Z C a.val b.val (nonbeltPitchIndex \u2113 p a.val b.val z).",
-        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
+        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations.",
+        "Reverified after the common half-open cell-containment proof was extracted to dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices in LayerPartition.lean. The statement is unchanged. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-fans.md and the ledger at completed parent 9688dda9c3c79fe37f4fac2b556788a9932d20ee. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "778149a282158bbb92b4d7bb25fb12339d2f31ca",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-fan-runs-build.log",
+            "sha256": "74ccf580ada01969f925e758e88b1487b36595776fd15cd51debae92675222be"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-fan-runs-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-fan-runs-axioms.log",
+            "sha256": "113d15edf7e8bd9786a17dbbf84ae29fcaa7c6391741bfadc27e889485cdc567"
           }
         ]
       },
@@ -584,26 +586,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Under the same assumptions \u2113 <= k, \u2113 <= p and actual fine-layer/nonbelt memberships, proves there is a unique j with j \u2208 primaryPitchIndices o k \u2113 p Z C a.val b.val and closure (dyadicCell o \u2113 z) contained in primaryBirthRegion o k \u2113 p Z C a.val b.val j. No k <= p or endpoint-set nonemptiness assumption is added.",
-        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
+        "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations.",
+        "Reverified after the common half-open cell-containment proof was extracted to dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices in LayerPartition.lean. The statement is unchanged. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and its recorded logs remain preserved in docs/provenance/evidence/8758-cell-fans.md and the ledger at completed parent 9688dda9c3c79fe37f4fac2b556788a9932d20ee. This declaration is rechecked because its entire source file has changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "778149a282158bbb92b4d7bb25fb12339d2f31ca",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-fan-runs-build.log",
+            "sha256": "74ccf580ada01969f925e758e88b1487b36595776fd15cd51debae92675222be"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-fan-runs-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-fan-runs-axioms.log",
+            "sha256": "113d15edf7e8bd9786a17dbbf84ae29fcaa7c6391741bfadc27e889485cdc567"
           }
         ]
       },
