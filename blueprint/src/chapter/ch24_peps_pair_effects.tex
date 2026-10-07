@@ -1,0 +1,305 @@
+\section{Elimination of normalized pair effects}
+\label{sec:peps_pair_effects}
+The entries below formalize the operator estimates of
+\cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{04-compression.tex}, lines 53--127, together with the choice of the
+stack length and the rescaling in the proof of
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, lines 201--212. The
+formalized model of a monomial records its pair effects but carries no
+assignment of registers to parties; the clauses of the source lemma that
+concern parties are therefore stated separately and are not formalized, see
+\cite{gap:polypeps_pair_effects_party_layout}.
+
+Throughout, $\eta$ is a unit vector of a finite-dimensional Hilbert space
+$\mathcal W$, typically a pair space $\mathcal W=\mathcal U\otimes\mathcal V$,
+and $m\ge1$.
+
+\begin{definition}[Cyclic insertion map]
+    \label{def:peps_cyclic_insertion}
+    \lean{CyclicInsertion.insertAt}
+    \lean{CyclicInsertion.cyclicInsertion}
+    \lean{CyclicInsertion.idealInsertion}
+    \leanok
+    For a position $k\in\{1,\dots,m\}$, let $I_k:\mathcal W\to\mathcal W^{\otimes m}$
+    place its input in register $k$ and a copy of $\eta$ in every other
+    register. The cyclic insertion map is the average
+    \[
+        T_m=\frac1m\sum_{k=1}^m I_k,
+    \]
+    and the ideal insertion map is $P_m=|\eta^{\otimes m}\rangle\langle\eta|$.
+\end{definition}
+
+\begin{lemma}[Insertions as register permutations]
+    \label{lem:peps_insertion_permutation}
+    \lean{CyclicInsertion.insertAt_perm}
+    \lean{CyclicInsertion.cyclicInsertion_eq_sum_addRight}
+    \lean{CyclicInsertion.registerPerm_pair_index}
+    \leanok
+    \uses{def:peps_cyclic_insertion}
+    For a permutation $\sigma$ of the registers, $I_{\sigma(k)}$ is $I_k$
+    followed by the corresponding permutation of the tensor factors of
+    $\mathcal W^{\otimes m}$. Hence $T_m$ is the average of the $m$ cyclic
+    register permutations applied after the insertion in the first register.
+    For a pair space $\mathcal W=\mathcal U\otimes\mathcal V$, the index map
+    of a register permutation permutes the $\mathcal U$ indices and the
+    $\mathcal V$ indices by the same permutation.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both sides agree on product vectors, coordinate by coordinate. The pair
+    statement is the corresponding identity of index maps.
+\end{proof}
+
+\begin{lemma}[Contractivity and the fixed vector]
+    \label{lem:peps_cyclic_insertion_basic}
+    \lean{CyclicInsertion.norm_cyclicInsertion_le_one}
+    \lean{CyclicInsertion.cyclicInsertion_self}
+    \leanok
+    \uses{def:peps_cyclic_insertion}
+    The map $T_m$ is a contraction, and $T_m\eta=\eta^{\otimes m}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each $I_k$ is an isometry because $\|\eta\|=1$, so the average of the $m$
+    maps has norm at most one. Each $I_k$ sends $\eta$ to
+    $\eta^{\otimes m}$, and the average of $m$ equal terms is that term.
+\end{proof}
+
+\begin{lemma}[One-effect estimate]
+    \label{lem:peps_one_effect_estimate}
+    \lean{CyclicInsertion.norm_cyclicInsertion_of_inner_eq_zero}
+    \lean{CyclicInsertion.norm_cyclicInsertion_sub_ideal_le}
+    \lean{CyclicInsertion.norm_cyclicInsertion_sub_ideal_eq}
+    \lean{CyclicInsertion.cyclicInsertion_sub_ideal_eq_zero}
+    \lean{CyclicInsertion.norm_rTensor_cyclicInsertion_sub_ideal_le}
+    \leanok
+    \uses{def:peps_cyclic_insertion}
+    For every $v\perp\eta$ one has $\|T_mv\|=\|v\|/\sqrt m$. Consequently
+    $\|T_m-P_m\|\le m^{-1/2}$, with equality when the orthogonal complement of
+    $\eta$ is nonzero, and $T_m=P_m$ when it is zero. The same upper bound
+    holds for $(T_m-P_m)\otimes\mathbf 1_{\mathcal S}$ on any spectator space
+    $\mathcal S$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_cyclic_insertion_basic}
+    For $v\perp\eta$, the vectors $I_jv$ and $I_kv$ with $j\ne k$ are
+    orthogonal, since their inner product contains the factor
+    $\langle v,\eta\rangle=0$, and each has norm $\|v\|$. Hence
+    $\|\sum_kI_kv\|^2=m\|v\|^2$ and $\|T_mv\|=\|v\|/\sqrt m$. For a general
+    input $v$, the difference $(T_m-P_m)v$ equals $T_m$ applied to the
+    component $v-\langle\eta,v\rangle\eta$ orthogonal to $\eta$, whose norm is
+    at most $\|v\|$. This gives the upper bound. A nonzero vector orthogonal to
+    $\eta$ attains it, and when no such vector exists the difference vanishes.
+    Tensoring with the identity does not increase the operator norm.
+\end{proof}
+
+\begin{definition}[Monomials with recorded pair effects]
+    \label{def:peps_effect_chain}
+    \lean{TNLean.PEPS.PairEffect.effectMap}
+    \lean{TNLean.PEPS.PairEffect.EffectChain}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.eval}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.effectCount}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.IsAllowed}
+    \leanok
+    A monomial with $n$ recorded pair effects is a composition
+    \[
+        M=F_n\circ E_n\circ F_{n-1}\circ\cdots\circ E_1\circ F_0,
+    \]
+    where each $F_i$ ends with a pair register $\mathcal W_i$ beside a
+    spectator space $\mathcal S_i$, and
+    $E_i=\langle\eta_i|\otimes\mathbf 1_{\mathcal S_i}$ contracts that
+    register with a pair bra. The monomial is allowed when every $F_i$ is a
+    contraction and every $\eta_i$ is a unit vector. Here the pieces $F_i$
+    are arbitrary contractions; no division of registers among parties is
+    recorded.
+\end{definition}
+
+\begin{definition}[Replaced monomial and replaced gate]
+    \label{def:peps_replaced_gate}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.stackVector}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.replace}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.replaceTerm}
+    \lean{TNLean.PEPS.PairEffect.GateExpansion}
+    \lean{TNLean.PEPS.PairEffect.gate}
+    \lean{TNLean.PEPS.PairEffect.inventory}
+    \lean{TNLean.PEPS.PairEffect.inventoryVector}
+    \lean{TNLean.PEPS.PairEffect.replaceGate}
+    \lean{TNLean.PEPS.PairEffect.termList}
+    \leanok
+    \uses{def:peps_cyclic_insertion,def:peps_effect_chain}
+    Give each effect occurrence $E_i$ of a monomial $M$ its own output stack
+    $\mathcal W_i^{\otimes m}$. The replaced monomial $\widetilde M_m$ replaces
+    each $E_i$ by $T_m$ for $\eta_i$, writing into the stack of that
+    occurrence, which stays idle afterwards. Its ideal stack content is
+    $\bigotimes_i\eta_i^{\otimes m}$. For a gate expansion
+    $G=\sum_\xi c_\xi M_\xi$, the stack space of $G$ is the tensor product of
+    the stacks of all effect occurrences of all monomials, and
+    $\Gamma_m=\bigotimes_o\eta_o^{\otimes m}$ is the product of all ideal stack
+    contents. The replaced gate $\widetilde G_m$ is $\sum_\xi c_\xi$ times the
+    branch in which $\widetilde M_{\xi,m}$ acts and the stacks of every other
+    monomial are prepared in their ideal content. Selecting one insertion
+    position $\kappa_i$ for each occurrence in place of the average defines one
+    term of the expansion of $\widetilde M_m$, with weight $m^{-n}$.
+\end{definition}
+
+\begin{lemma}[Error of one replaced monomial]
+    \label{lem:peps_replaced_monomial_error}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_replace_sub_le}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_eval_le_one}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_stackVector}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_replace_le_one}
+    \leanok
+    \uses{def:peps_replaced_gate}
+    For an allowed monomial $M$ with $n$ recorded pair effects, $M$ and
+    $\widetilde M_m$ are contractions, the ideal stack content is a unit
+    vector, and
+    \[
+        \Bigl\|\widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle\Bigr\|
+        \le\frac n{\sqrt m}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_cyclic_insertion_basic,lem:peps_one_effect_estimate}
+    By induction on $n$. Appending the ideal content of the first stack after
+    $E_1$ is the same as applying $P_m\otimes\mathbf 1$ in place of $E_1$. The
+    difference therefore splits into the replacement error of the remaining
+    monomial composed with $T_m\otimes\mathbf 1$, and the ideal remainder
+    composed with $(T_m-P_m)\otimes\mathbf 1$. All other factors are
+    contractions, so the two terms contribute $(n-1)/\sqrt m$ and $1/\sqrt m$.
+\end{proof}
+
+\begin{lemma}[Expansion of a replaced monomial]
+    \label{lem:peps_replaced_monomial_expansion}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.replace_eq_sum}
+    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_replaceTerm_le_one}
+    \leanok
+    \uses{def:peps_replaced_gate}
+    The replaced monomial with $n$ recorded pair effects equals
+    $m^{-n}\sum_\kappa\widetilde M_{m,\kappa}$, the sum over all choices
+    $\kappa$ of one insertion position per occurrence. Every term
+    $\widetilde M_{m,\kappa}$ is a contraction.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_cyclic_insertion_basic}
+    Expand each average $T_m$ by linearity and collect the $m^n$ choices of
+    positions, by induction on $n$. Each term composes the contractions
+    $F_i$ with the isometries $I_{\kappa_i}$ and tensor rearrangements.
+\end{proof}
+
+\begin{theorem}[Pair-effect elimination, operator estimates]
+    \label{thm:peps_pair_effects_operator}
+    \lean{TNLean.PEPS.PairEffect.pairEffectElimination}
+    \lean{TNLean.PEPS.PairEffect.norm_inventoryVector}
+    \lean{TNLean.PEPS.PairEffect.norm_replaceGate_sub_le}
+    \lean{TNLean.PEPS.PairEffect.replaceGate_eq_sum_termList}
+    \lean{TNLean.PEPS.PairEffect.length_termList_le}
+    \lean{TNLean.PEPS.PairEffect.sum_norm_coeff_termList}
+    \lean{TNLean.PEPS.PairEffect.norm_term_le_one}
+    \leanok
+    \uses{def:peps_replaced_gate}
+    Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into $K$ allowed monomials,
+    each with at most $r$ recorded pair effects, and let $m\ge1$. Then
+    $\Gamma_m$ is a unit vector,
+    \[
+        \bigl\|\widetilde G_m-G\otimes|\Gamma_m\rangle\bigr\|
+        \le\frac r{\sqrt m}\sum_\xi|c_\xi|,
+    \]
+    and $\widetilde G_m$ is a weighted sum of at most $Km^r$ contractions
+    whose absolute coefficient sum equals $\sum_\xi|c_\xi|$.
+
+    This is the scope-restricted part of
+    \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}: it covers the error bound,
+    the common garbage vector, the monomial count and the coefficient sum,
+    for monomials whose pair effects are those recorded in the chain. It does
+    not assert that the terms use only local contractions and normalized pair
+    sources, nor that the additional registers are owned by the participating
+    parties, see \cite{gap:polypeps_pair_effects_party_layout}. The
+    hypothesis that $G$ is a contraction is not needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_replaced_monomial_error,lem:peps_replaced_monomial_expansion}
+    By induction on the list of monomials. The difference splits into $c_\xi$
+    times the error of the first replaced monomial, followed by appending the
+    unit vector of the remaining stacks, plus the error of the remaining gate
+    with the first stacks appended. The first term is bounded by
+    Lemma~\ref{lem:peps_replaced_monomial_error} and the second by induction;
+    appending a unit vector and rearranging tensor factors are contractions.
+    Expanding each replaced monomial by
+    Lemma~\ref{lem:peps_replaced_monomial_expansion} gives $m^{n_\xi}\le m^r$
+    terms of coefficient $c_\xi m^{-n_\xi}$ for the monomial $\xi$, whose
+    absolute values sum to $|c_\xi|$.
+\end{proof}
+
+\begin{lemma}[Combining pair sources]
+    \label{lem:peps_pair_combine}
+    \lean{EuclideanSpace.pairCombine}
+    \lean{EuclideanSpace.norm_pairCombine}
+    \leanok
+    For pair vectors $\eta\in\mathcal U\otimes\mathcal V$ and
+    $\eta'\in\mathcal U'\otimes\mathcal V'$, regard $\eta\otimes\eta'$ as a
+    pair vector in $(\mathcal U\otimes\mathcal U')\otimes(\mathcal V\otimes\mathcal V')$.
+    Its norm is $\|\eta\|\,\|\eta'\|$; in particular, normalized pair vectors
+    combine into a normalized pair vector.
+\end{lemma}
+
+\begin{proof}\leanok
+    The squared norm is a sum of products of squared coordinates, which
+    factorizes after regrouping the index set.
+\end{proof}
+
+\begin{lemma}[Elimination of normalized pair effects]
+    \label{lem:peps_pair_effects_source}
+    \uses{thm:peps_pair_effects_operator,lem:peps_pair_combine}
+    Let $G$ be a contraction with an expansion $G=\sum_\xi c_\xi M_\xi$ into
+    $K$ allowed monomials on a fixed set of parties, each with at most $r$
+    pair effects. For every integer $m\ge1$ there are a gate $\widetilde G_m$
+    with additional garbage registers and a fixed normalized garbage vector
+    $\Gamma_m$ with
+    $\|\widetilde G_m-G\otimes|\Gamma_m\rangle\|\le(r/\sqrt m)\sum_\xi|c_\xi|$.
+    The gate $\widetilde G_m$ has an expansion using only local contractions
+    and normalized pair sources, with at most $Km^r$ monomials and absolute
+    coefficient sum at most $\sum_\xi|c_\xi|$. Its additional registers are
+    owned by the original participating parties, and all sources on the same
+    pair of parties may be combined into one normalized pair source. This is
+    \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:peps_pair_effects_operator,lem:peps_pair_combine}
+    The error bound, the count and the coefficient sum are
+    Theorem~\ref{thm:peps_pair_effects_operator}, and the combination of
+    sources rests on Lemma~\ref{lem:peps_pair_combine}. The remaining clauses
+    require placing the monomials on the parties, so that each piece between
+    two effects is a product of local contractions and the stacks of an
+    effect are held by its two endpoint parties.
+\end{proof}
+
+\begin{corollary}[Stack length and rescaling]
+    \label{cor:peps_pair_effects_rescaling}
+    \lean{TNLean.PEPS.PairEffect.stackLength}
+    \lean{TNLean.PEPS.PairEffect.stackLength_spec}
+    \lean{TNLean.PEPS.PairEffect.replaceGate_rescaled}
+    \lean{TNLean.PEPS.PairEffect.replaceGate_rescaled_stackLength}
+    \leanok
+    \uses{thm:peps_pair_effects_operator}
+    In the setting of Theorem~\ref{thm:peps_pair_effects_operator}, suppose
+    moreover that $G$ is a contraction, and let $\delta>0$ and
+    $S\ge\sum_\xi|c_\xi|$. With $m=\lceil(rS/\delta)^2\rceil+1$, the replaced
+    gate satisfies $\|\widetilde G_m-G\otimes|\Gamma_m\rangle\|\le\delta$ and
+    $\|\widetilde G_m\|\le1+\delta$, and $\widetilde G_m/(1+\delta)$ is a
+    contraction within $2\delta$ of $G\otimes|\Gamma_m\rangle$. The number $m$
+    depends only on $r$, $S$ and $\delta$.
+\end{corollary}
+
+\begin{proof}\leanok
+    The choice of $m$ gives $\sqrt m\ge rS/\delta$, so the bound of
+    Theorem~\ref{thm:peps_pair_effects_operator} is at most $\delta$. Since
+    $G\otimes|\Gamma_m\rangle$ is a contraction, the triangle inequality gives
+    $\|\widetilde G_m\|\le1+\delta$. Dividing by $1+\delta$ yields a
+    contraction, and its distance to $G\otimes|\Gamma_m\rangle$ is at most
+    $\delta/(1+\delta)+\delta\le2\delta$.
+\end{proof}

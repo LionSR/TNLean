@@ -35,12 +35,14 @@ contraction from a pair effect hidden inside some `F_i`; the count `effectCount`
 the effects that the presentation records.  Consequently two conclusions of Lemma 5.1 are not
 formalized: that the expansion of `G'_m` uses only local contractions and normalized pair
 sources (`04-compression.tex`, lines 65–66), and that the additional registers are owned by
-the original participating parties (lines 67–68).  The expansion terms of `termList` are
-built by `EffectChain.replaceTerm` from the pieces `F_i`, insertions `insertAt η k`, the
-fixed vectors `η^{⊗ m}` and canonical tensor isometries, without any pair bra, but no
-statement records this.  Documented in
+the original participating parties (lines 67–68).  For the last clause, that all sources on
+one pair of parties may be combined into one normalized pair source (lines 68–70), only the
+norm identity `EuclideanSpace.norm_pairCombine` is formalized.  The expansion terms of
+`termList` are built by `EffectChain.replaceTerm` from the pieces `F_i`, insertions
+`insertAt η k`, the fixed vectors `η^{⊗ m}` and canonical tensor isometries, without any pair
+bra, but no statement records this.  Documented in
 `docs/paper-gaps/polypeps_pair_effects_party_layout.tex`.  Elimination: place `EffectChain`
-monomials on a party layout and prove both clauses there.
+monomials on a party layout and prove these clauses there.
 
 ## Main definitions
 
@@ -518,15 +520,8 @@ replaced gate `G'_m` and the common garbage vector `Γ_m` satisfy:
 * their absolute coefficient sum equals `∑_ξ |c_ξ|`;
 * each term is a contraction.
 
-These are the error, count and coefficient-sum clauses of the source lemma.
-
-**Scope restriction (party layout):** the source also states that the expansion of `G'_m`
-uses only local contractions and normalized pair sources, that its additional registers are
-owned by the original participating parties, and that sources on one pair may be combined.
-The model has no parties, so the first two clauses are not part of this statement; the norm
-identity used for the third is `EuclideanSpace.norm_pairCombine`.  Documented in
-`docs/paper-gaps/polypeps_pair_effects_party_layout.tex`.  Elimination: a party layout for
-`EffectChain` monomials.
+These are the error, count and coefficient-sum clauses of the source lemma; the clauses
+that are not formalized are listed in the scope restriction of the module docstring.
 
 The hypothesis that `G` is a contraction is not needed here; it enters
 `replaceGate_rescaled`.
