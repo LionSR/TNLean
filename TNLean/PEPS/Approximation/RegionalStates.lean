@@ -8,6 +8,7 @@ import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
 import QICLean.Analysis.Entropy
+import Mathlib.Algebra.Order.Floor.Semiring
 
 /-
 Original proofs; no upstream Lean proof text reused.
@@ -55,6 +56,13 @@ Original proof; no upstream Lean proof text reused.
 September 24, 2026 manuscript, sec:introduction, regional density of its PEPS definition.
 Provenance-ID: 8740-regionreduceddensity-eq-pinnedreduceddensity
 Downstream: TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity
+-/
+
+/-
+Original proofs; no upstream Lean proof text reused.
+September 24, 2026 manuscript, sec:introduction, maximum bond dimension of a PEPS.
+Provenance-ID: 8740-maxbonddim-real-le-iff
+Downstream: TNLean.PEPS.Approximation.maxBondDim_real_le_iff
 -/
 
 /-!
@@ -152,6 +160,16 @@ theorem maxBondDim_le_iff (P : Vector.Tensor q L) (B : ℕ) :
   change Finset.univ.sup P.bondDim ≤ B ↔ ∀ e, graphBondDim P.bondDim e ≤ B
   rw [graphBondDim_forall P.bondDim (fun n => n ≤ B)]
   simp only [Finset.sup_le_iff, Finset.mem_univ, forall_const]
+
+/-- Real maximum bounds are equivalent to native edge bounds for nonnegative thresholds.
+The nonnegativity condition is necessary for a uniform statement on an empty grid. -/
+theorem maxBondDim_real_le_iff (P : Vector.Tensor q L) (B : ℝ) (hB : 0 ≤ B) :
+    (P.maxBondDim : ℝ) ≤ B ↔ ∀ e, ((vectorTensorToGraphTensor P).bondDim e : ℝ) ≤ B := by
+  calc
+    (P.maxBondDim : ℝ) ≤ B ↔ P.maxBondDim ≤ ⌊B⌋₊ := (Nat.le_floor_iff hB).symm
+    _ ↔ ∀ e, (vectorTensorToGraphTensor P).bondDim e ≤ ⌊B⌋₊ := maxBondDim_le_iff P _
+    _ ↔ ∀ e, ((vectorTensorToGraphTensor P).bondDim e : ℝ) ≤ B :=
+      forall_congr' fun _ => Nat.le_floor_iff hB
 
 /-- Crossing edges correspond bijectively, for every region including empty and full regions. -/
 def forwardSquareBoundaryEquiv (R : Finset (Vertex L)) :

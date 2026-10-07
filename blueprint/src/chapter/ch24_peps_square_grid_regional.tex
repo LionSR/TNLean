@@ -19,7 +19,7 @@
 
 \begin{theorem}[Dimension constraints and crossing edges]
     \label{thm:peps_square_bonds_boundary}
-    \lean{TNLean.PEPS.Approximation.graphBondDim_forall,TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim_pos,TNLean.PEPS.Approximation.maxBondDim_le_iff,TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv,TNLean.PEPS.Approximation.forwardSquareBoundary_card}
+    \lean{TNLean.PEPS.Approximation.graphBondDim_forall,TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim_pos,TNLean.PEPS.Approximation.maxBondDim_le_iff,TNLean.PEPS.Approximation.maxBondDim_real_le_iff,TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv,TNLean.PEPS.Approximation.forwardSquareBoundary_card}
     \leanok
     \uses{def:peps_square_edge_correspondence}
     Any pointwise condition on $D_e$ is equivalent to the same condition on the
@@ -31,7 +31,8 @@
 \begin{proof}
     \leanok
     \uses{def:peps_square_edge_correspondence}
-    Every edge retains its dimension and its two endpoints. The empty maximum is zero.
+    Every edge retains its dimension and its two endpoints. The empty maximum is zero. The same equivalence holds for a real
+    threshold $B\ge0$, by comparing natural dimensions with $\lfloor B\rfloor$.
 \end{proof}
 
 \begin{theorem}[Regional density and entropy]
@@ -66,7 +67,7 @@
 
 \begin{theorem}[Transfer of supplied approximation witnesses]
     \label{thm:peps_square_approximation_transfer}
-    \lean{TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector}
+    \lean{TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector_max}
     \leanok
     \uses{def:peps_source_approximation_constraints,thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
     An approximation witness in either source presentation gives a graph PEPS on

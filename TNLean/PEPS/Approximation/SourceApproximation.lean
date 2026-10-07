@@ -36,6 +36,13 @@ Upstream: OAI.PolynomialPEPS.PhaseErrorAtMost
 https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L91-L91
 -/
 
+/-
+Original proofs; no upstream Lean proof text reused.
+September 24, 2026 manuscript, sec:introduction, maximum bond dimension of a PEPS.
+Provenance-ID: 8740-haspepsapproximation-of-vector-max
+Downstream: TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector_max
+-/
+
 /-!
 # Transferring the source approximation constraints
 
@@ -109,5 +116,16 @@ theorem hasPEPSApproximation_of_vector (P : Vector.Tensor q L) {Ω : Vector.Stat
   · rwa [vector_vectorTensorToGraphTensor]
   · rw [vector_vectorTensorToGraphTensor]
     simpa only [Complex.ofReal_inv] using herr
+
+/-- A source bound on the real-valued maximum bond dimension suffices directly;
+there is no rounding or replacement of the transported edge dimensions. -/
+theorem hasPEPSApproximation_of_vector_max (P : Vector.Tensor q L) {Ω : Vector.State q L}
+    {C c : ℝ} (hbound : (P.maxBondDim : ℝ) ≤ C * (L : ℝ) ^ c)
+    (hn : P.contract ≠ 0) (herr : Vector.PhaseErrorAtMost P.contract Ω (L : ℝ)⁻¹) :
+    HasPEPSApproximation C c L q Ω := by
+  classical
+  apply hasPEPSApproximation_of_vector P (fun e => ?_) hn herr
+  have he : P.bondDim e ≤ P.maxBondDim := Finset.le_sup (Finset.mem_univ e)
+  exact (Nat.cast_le.mpr he).trans hbound
 
 end TNLean.PEPS.Approximation

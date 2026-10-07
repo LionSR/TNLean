@@ -1918,6 +1918,66 @@
         "result": "pending"
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8740-maxbonddim-real-le-iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "no_upstream_proof_text_reused": true,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
+        "declaration": "TNLean.PEPS.Approximation.maxBondDim_real_le_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original transport of a real maximum-bond bound with the empty-edge convention explicit."
+      ],
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8740-haspepsapproximation-of-vector-max",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "no_upstream_proof_text_reused": true,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceApproximation.lean",
+        "declaration": "TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector_max",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "sec:introduction"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original transport of a real maximum-bond bound with the empty-edge convention explicit."
+      ],
+      "verification": {
+        "result": "pending"
+      }
     }
   ]
 }

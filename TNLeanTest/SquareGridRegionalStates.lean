@@ -45,3 +45,13 @@ example {L q : ℕ} {Ω : Pinned.State L q} {C c : ℝ}
 #print axioms hasPEPSApproximation_of_vector
 
 #print axioms regionReducedDensity_eq_pinnedReducedDensity
+
+-- A zero bond on a nonempty square forces zero contraction at every physical configuration.
+example (A : (v : Vertex 2) → Pinned.LocalTensor 2 (fun _ => 0) v)
+    (x : Vertex 2 → Fin 2) : Pinned.contractPEPS (fun _ => 0) A x = 0 := by
+  classical
+  let : IsEmpty ((e : ForwardEdge 2) → Fin 0) :=
+    ⟨fun a => Fin.elim0 (a ⟨((0, 0), (1, 0)), Or.inl ⟨rfl, rfl⟩⟩)⟩
+  simp [Pinned.contractPEPS]
+
+#print axioms hasPEPSApproximation_of_vector_max
