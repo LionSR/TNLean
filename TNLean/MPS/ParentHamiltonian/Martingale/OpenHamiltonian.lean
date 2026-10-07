@@ -25,7 +25,7 @@ Nachtergaele's C1--C3 martingale theorem.
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:2011.12127, Section IV.C.
 -/
 
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 
@@ -129,6 +129,43 @@ noncomputable def openSuffixParentHamiltonianES (A : MPSTensor d D)
     n - l ≤ i.1.val ∧ i.1.val + L ≤ n,
     localTermES A L i.1
 
+/-- Each nonwrapping range-\(R\) term lies in at most \(W-R+1\) complete
+length-\(W\) windows. Summing positive terms therefore gives the corresponding
+operator bound. This is the counting argument for Nachtergaele,
+arXiv:cond-mat/9410110, condition C1. -/
+theorem sum_nonwrappingWindowTerms_le {R W N : ℕ} (hRW : R ≤ W)
+    {ι : Type*} [Fintype ι]
+    (f : NonwrappingStart R N → EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι)
+    (hf : ∀ i, 0 ≤ f i) :
+    (∑ n ∈ Finset.Icc W N,
+      ∑ i ∈ Finset.univ.filter (fun i : NonwrappingStart R N =>
+        n - W ≤ i.1.val ∧ i.1.val + R ≤ n), f i) ≤
+      ((W - R + 1 : ℕ) : ℂ) • ∑ i, f i := by
+  classical
+  let windows := fun i : NonwrappingStart R N =>
+    (Finset.Icc W N).filter fun n => n - W ≤ i.1.val ∧ i.1.val + R ≤ n
+  have hwindows_card (i : NonwrappingStart R N) :
+      (windows i).card ≤ W - R + 1 := by
+    calc
+      (windows i).card ≤ (Finset.Icc (i.1.val + R) (i.1.val + W)).card := by
+        apply Finset.card_le_card
+        intro n hn
+        simp only [windows, Finset.mem_filter, Finset.mem_Icc] at hn
+        simp only [Finset.mem_Icc]
+        omega
+      _ = W - R + 1 := by
+        rw [Nat.card_Icc]
+        omega
+  rw [Finset.sum_comm'
+    (s := Finset.Icc W N)
+    (t := fun n => Finset.univ.filter fun i : NonwrappingStart R N =>
+      n - W ≤ i.1.val ∧ i.1.val + R ≤ n)
+    (t' := Finset.univ) (s' := windows) (fun n i => by simp [windows]),
+    Finset.smul_sum]
+  apply Finset.sum_le_sum
+  intro i _
+  simp only [Finset.sum_const, Nat.cast_smul_eq_nsmul]
+  exact nsmul_le_nsmul_left (hf i) (hwindows_card i)
 /-- Nachtergaele's condition C1 for the compatible nonwrapping open parent
 Hamiltonian.
 
@@ -149,45 +186,14 @@ theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
     0 ≤ ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ∧
       ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ≤
         ((l - L + 1 : ℕ) : ℂ) • openParentHamiltonianES A L N := by
-  let windows := fun i : NonwrappingStart L N =>
-    (Finset.Icc l N).filter fun n => n - l ≤ i.1.val ∧ i.1.val + L ≤ n
-  have hwindows_card (i : NonwrappingStart L N) :
-      (windows i).card ≤ l - L + 1 := by
-    calc
-      (windows i).card ≤ (Finset.Icc (i.1.val + L) (i.1.val + l)).card := by
-        apply Finset.card_le_card
-        intro n hn
-        simp only [windows, Finset.mem_filter, Finset.mem_Icc] at hn
-        simp only [Finset.mem_Icc]
-        omega
-      _ = l - L + 1 := by
-        rw [Nat.card_Icc]
-        omega
-  have hsum :
-      ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n =
-        ∑ i : NonwrappingStart L N,
-          ((windows i).card : ℂ) • localTermES A L i.1 := by
-    simp_rw [openSuffixParentHamiltonianES]
-    rw [Finset.sum_comm'
-      (s := Finset.Icc l N)
-      (t := fun n => Finset.univ.filter fun i : NonwrappingStart L N =>
-        n - l ≤ i.1.val ∧ i.1.val + L ≤ n)
-      (t' := Finset.univ) (s' := windows) (fun n i => by simp [windows])]
-    apply Finset.sum_congr rfl
-    intro i _
-    simp only [windows, Finset.sum_const, Nat.cast_smul_eq_nsmul]
   constructor
   · rw [LinearMap.nonneg_iff_isPositive]
     refine LinearMap.isPositive_sum _ fun n _ => ?_
     rw [openSuffixParentHamiltonianES]
     exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
-  · rw [hsum, openParentHamiltonianES, Finset.smul_sum]
-    apply Finset.sum_le_sum
-    intro i _
-    simp only [Nat.cast_smul_eq_nsmul]
-    apply nsmul_le_nsmul_left
-    · exact LinearMap.nonneg_iff_isPositive.mpr (localTermES_isPositive A L i.1)
-    · exact hwindows_card i
+  · exact sum_nonwrappingWindowTerms_le hLl
+      (fun i => localTermES A L i.1)
+      (fun i => LinearMap.nonneg_iff_isPositive.mpr (localTermES_isPositive A L i.1))
 
 /-- If the open-chain Hamiltonian annihilates a vector, then every individual
 nonwrapping local term annihilates it.
