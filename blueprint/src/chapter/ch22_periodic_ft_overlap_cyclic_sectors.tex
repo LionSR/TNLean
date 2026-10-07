@@ -267,6 +267,27 @@
     dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{proof}
 
+\begin{lemma}[Distinct cyclic sectors]
+    \label{lem:periodic_cyclic_sectors_inequivalent}
+    \lean{MPSTensor.sectorBlocks_not_gaugePhaseEquiv_of_ne}
+    \leanok
+    Let $A$ be periodic, and let $B_j$ be its nonzero normalized compressed
+    cyclic sectors, with the corner letters and support isometries of
+    Theorem~\ref{thm:cyclic_sector_compression_letter_isometry_periodic}.
+    Two distinct sectors of equal virtual dimension are not gauge-phase
+    equivalent. This is the non-repetition conclusion of
+    \cite[Lemma~\emph{bdcf}, lines~404--423]{DeLasCuevas2017Irreducible}.
+    \uses{thm:cyclic_sector_compression_letter_isometry_periodic}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:offdiag_eigenvector_eq_zero_periodic}
+    A hypothetical gauge-phase equivalence produces a nonzero peripheral
+    eigenvector of the blocked transfer map supported between distinct cyclic
+    corners. By Lemma~\ref{lem:offdiag_eigenvector_eq_zero_periodic},
+    periodicity of the original irreducible tensor forces this vector to
+    vanish. Orthogonality of the corners alone is insufficient.
+\end{proof}
+
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
     \lean{MPSTensor.sectorBlocked_isNormal_of_isPeriodic}
     \leanok
