@@ -267,3 +267,108 @@ assumption.
     Use $\operatorname{rank}(AB)\leq\operatorname{rank}A\leq D$.
     For the zero-one specialization, take $S=\{0,1\}$.
 \end{proof}
+
+\subsection{Unit-circle geometry and diagonal circuits}
+
+The following elementary geometry is the rank-two step in the diagonal
+circuit argument of \cite{DiagonalMPUCircuits2026}.
+
+\begin{theorem}[Three points on a vertical line]
+    \label{thm:mpu_circle_vertical}
+    \lean{Complex.eq_or_eq_or_eq_of_re_eq_of_normSq_eq}
+    \leanok
+    Let $u,v,w\in\mathbb C$ have the same real part and the same squared
+    modulus. Then $u=v$, $u=w$, or $v=w$.
+\end{theorem}
+\begin{proof}\leanok
+    Equality of squared moduli gives equal squares of the imaginary parts.
+    Three real numbers with the same square have at most two values.
+\end{proof}
+
+\begin{theorem}[Constant real functional on the unit circle]
+    \label{thm:mpu_circle_functional}
+    \lean{Complex.eq_zero_of_re_mul_eq_of_three_unit_points}
+    \leanok
+    Let $u,v,w$ be three distinct complex numbers of modulus one. If
+    $\operatorname{Re}(zu)=\operatorname{Re}(zv)=\operatorname{Re}(zw)$,
+    then $z=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_circle_vertical}
+    The three products have the same real part and the same modulus.
+    Two are equal; their factors are distinct, so $z=0$.
+\end{proof}
+
+\begin{theorem}[Three affine unit-circle values]
+    \label{thm:mpu_circle_affine}
+    \lean{Complex.eq_zero_or_eq_zero_of_three_unit_affine_values}
+    \leanok
+    Let $u,v,w$ be distinct complex numbers of modulus one. If
+    $|a+bu|=|a+bv|=|a+bw|=1$, then $a=0$ or $b=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_circle_functional}
+    Expand the squared moduli. The real parts of
+    $a\overline b\overline u$, $a\overline b\overline v$ and
+    $a\overline b\overline w$ agree. Thus $a\overline b=0$.
+\end{proof}
+
+\begin{theorem}[A unit-modulus factorization dichotomy]
+    \label{thm:mpu_circle_factorization}
+    \lean{Complex.unitCircle_factorization_dichotomy}
+    \leanok
+    Let $I,J$ be sets with $J$ nonempty. Suppose $a,b:I\to\mathbb C$
+    and $t:J\to\mathbb C$ satisfy $|t_j|=1$ and $|a_i+b_it_j|=1$
+    for all $i,j$. Then either $a_i=0$ or $b_i=0$ for every $i$, or
+    there are $j_0,j_1\in J$ such that $t_j\in\{t_{j_0},t_{j_1}\}$
+    for every $j\in J$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_circle_affine}
+    If $t$ has three distinct values, apply the preceding theorem to each
+    row. Otherwise choose one value, and, if it exists, a second distinct
+    value. There can be no third.
+\end{proof}
+
+% The complete diagonal circuit constructions are not yet formalized.
+The construction of \cite{DiagonalMPUCircuits2026} gives an exact circuit with $O(N^{\log_2 3})$ gates for
+any diagonal MPU with consecutive operator Schmidt ranks at most two.
+A sequential traversal uses $O(N)$ auxiliary qubits; a parallel version
+uses $O(N^{\log_2 3})$ auxiliary qubits and logarithmic depth.
+For diagonal MPUs of arbitrary maximal bond dimension $D$, reversible
+phase evaluation gives operator-norm error at most $\varepsilon$ with
+resources polynomial in $N,D,\log(1/\varepsilon)$. These estimates concern diagonal operators;
+Theorem~\ref{thm:mpu_rank_two_exact_circuits} gives a separate construction
+for arbitrary unitaries of consecutive cut rank at most two.
+
+\begin{theorem}[An affine product of bond factorizations]
+    \label{thm:mpu_phase_selector_factorization}
+    \lean{Matrix.exists_hadamard_affine_factorization}
+    \leanok
+    Let $K$ be a field, $P,Q$ finite sets, and let
+    $A:I\times P\to K$, $B:P\times J\to K$,
+    $C:I\times Q\to K$, and $E:Q\times J\to K$ be matrices.
+    For $s,t\in K$, the matrix
+    $H_{ij}=s(AB)_{ij}(CE)_{ij}+t$ factors through the index set
+    $(P\times Q)\sqcup\{*\}$.
+\end{theorem}
+\begin{proof}\leanok
+    At $(p,q)$ use left entry $sA_{ip}C_{iq}$ and right entry
+    $B_{pj}E_{qj}$. At $*$ use left entry $t$ and right entry $1$.
+    Distributivity gives their product equal to $H$.
+\end{proof}
+
+\begin{theorem}[Boolean selectors from two bond factorizations]
+    \label{thm:mpu_phase_selector_row_count}
+    \lean{Matrix.card_range_hadamard_affine_le_two_pow}
+    \leanok
+    Under the preceding hypotheses suppose $J$ is finite and every
+    entry of $H$ is zero or one. The set of distinct rows of $H$ is
+    finite and has cardinality at most $2^{|P||Q|+1}$.
+    In particular, $|P|=|Q|=2$ gives at most 32 rows.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_phase_selector_factorization, thm:mpu_cut_bond_row_count}
+    Apply the finite-alphabet row bound to the displayed factorization.
+    Its middle index has cardinality $|P||Q|+1$.
+\end{proof}

@@ -1209,6 +1209,30 @@ The following notions use different transfer objects and are not interchangeable
   CZX four-domain instance are recorded in
   `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
 
+## States of the quasi-local algebra
+
+### `SpinChain.IsPureQuasiLocalState`
+
+- **Declaration:** `SpinChain.IsPureQuasiLocalState d ω : Prop`, for a continuous
+  complex-linear functional `ω` on `SpinChain.QuasiLocalAlgebra d` with `d > 0`.
+- **Defined in:** `TNLean/QCA/StateSpace.lean`.
+- **Meaning:** `ω` is an extreme point, over the real numbers, of
+  `SpinChain.quasiLocalStateSpace d`: the functionals of norm one with
+  $\omega(I)=1$ and $\omega(X^*X)\geq0$ for every quasi-local observable $X$.
+- **Source:** Nachtergaele, Commun. Math. Phys. 175 (1996),
+  arXiv:cond-mat/9410110, lines 854--887 and 1469--1482.
+- **Sanctioned bridges:**
+  `SpinChain.isPureQuasiLocalState_of_unique_supported_state` proves purity from
+  unique determination by expectation-one projections;
+  `SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition` reads off
+  a constituent of a finite convex decomposition; and
+  `SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff` and
+  `SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff` transport
+  purity along star-algebra isomorphisms and site grouping.
+- **Caveat:** purity is extremality among all states, not among
+  translation-invariant states; a state that is extremal only among
+  translation-invariant states need not satisfy this predicate.
+
 ## Gauge relations between blocks
 
 ### `MPSTensor.IsGaugeRelated`
