@@ -204,9 +204,10 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     $D_e$. Their contraction defines an operator $\sigma$ with entries
     $\sigma_{\tau\rho}$ indexed by output and input configurations. For an
     input configuration $z$, the fixed-input tensors are
-    $A_v(\,\cdot\,,(s,z_v))$, with the same edge dimensions $D_e$ (in the
-    second presentation, the same positive dimensions and hence the same
-    maximum bond dimension). Their contraction is exactly the column
+    $A_v((s,z_v),\,\cdot\,)$ in the physical-first presentation and
+    $A_v(\,\cdot\,,(s,z_v))$ in the virtual-first presentation, with the
+    same edge dimensions $D_e$ (in the virtual-first presentation, the same
+    positive dimensions and hence the same maximum bond dimension). Their contraction is exactly the column
     $\sigma\ket z$.
 \end{definition}
 
@@ -267,10 +268,10 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$ for a unit
     vector $\Omega$. Then for every $\varepsilon\ge2\eta$ there is a nonzero
     PEPS $\Phi$ on the same grid with edge dimensions $0<D_e\le B$ and
-    \[
+    \begin{align}
         \min_{\theta}\Big\lVert\frac{\Phi}{\lVert\Phi\rVert}
-            -e^{i\theta}\Omega\Big\rVert\le\varepsilon .
-    \]
+        -e^{i\theta}\Omega\Big\rVert\le\varepsilon .
+    \end{align}
     With $B=CL^c$ and $\varepsilon=L^{-1}$ the conclusion is that of
     \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}
     (\texttt{00-introduction.tex}, lines 36--57) for one lattice size.

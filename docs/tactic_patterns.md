@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Column selection identified with a fixed-input contraction — promoted (2026-10-07)
+
+- **Pattern:** Select a nonzero column with
+  `exists_column_ne_zero_of_traceNorm_sub_pure_le`, rewrite it as the
+  contraction of the network with the input fixed, and repackage.
+- **Seen:** Two sites in `TNLean/PEPS/Approximation/VectorColumn.lean` and two
+  in `TNLean/PEPS/Approximation/SquareGridColumn.lean`.
+- **Abstraction:** `exists_eq_column_ne_zero_of_traceNorm_sub_pure_le` in
+  `ColumnSelection`, taking a family `ψ z` identified with the columns `σ|z⟩`.
+- **Refactor:** Both square-grid sites use it. The two `VectorColumn` sites
+  already state their conclusion for the column itself and take the base lemma
+  directly, with no rewrite step.
+
 ### Periodic norm as transfer trace — promoted (2026-10-06)
 
 - **Pattern:** Apply the physical expectation trace identity to the identity
@@ -3432,29 +3445,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   comparison matrix is not needed.
 
 ## Candidates
-
-### Column selection identified with a fixed-input contraction — candidate (2026-10-07)
-
-- **Pattern:**
-
-  ```lean
-  obtain ⟨z, hz, θ, hθ⟩ :=
-    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
-  rw [← contract_fixInput] at hz hθ   -- or: rw [toEuclideanLin_single_one_apply, …]
-  exact ⟨z, …, hz, θ, hθ⟩
-  ```
-
-- **Seen:** 4 occurrences in 2 files:
-  `TNLean/PEPS/Approximation/VectorColumn.lean` (the generic multigraph and the
-  graph-tensor instances) and `TNLean/PEPS/Approximation/SquareGridColumn.lean`
-  (the physical-first and virtual-first square-grid instances).
-- **Abstraction:** a lemma in `TNLean/PEPS/Approximation/ColumnSelection.lean`
-  taking a family `ψ z` with `ψ z = Matrix.toEuclideanLin σ (EuclideanSpace.single z 1)`
-  and returning `∃ z, ψ z ≠ 0 ∧ ∃ θ, ‖(‖ψ z‖⁻¹ : ℂ) • ψ z - e^{iθ} • Ω‖ ≤ 2η`.
-- **Notes:** the threshold is met, but `VectorColumn.lean` and
-  `ColumnSelection.lean` belong to a stacked pull request still under review;
-  promote and refactor all four sites once that branch has merged. Each call
-  site is three lines, so the expected saving is small.
 
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 

@@ -126,10 +126,7 @@ theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le (D : ForwardEdge L
       contractPEPS D (fixInput D A z) ≠ 0 ∧
       ∃ θ : ℝ, ‖((‖contractPEPS D (fixInput D A z)‖ : ℂ)⁻¹) •
         contractPEPS D (fixInput D A z) - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
-  obtain ⟨z, hz, θ, hθ⟩ :=
-    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
-  rw [← contractPEPS_fixInput] at hz hθ
-  exact ⟨z, contractPEPS_fixInput D A z, hz, θ, hθ⟩
+  exact exists_eq_column_ne_zero_of_traceNorm_sub_pure_le e Ω hΩ hσ hη (contractPEPS_fixInput D A)
 
 /-- A nonzero contraction on the open square forces every edge dimension to be
 positive: if some `D e` were zero, the sum over virtual configurations would be
@@ -286,10 +283,9 @@ theorem Tensor.exists_fixInput_contract_of_traceNorm_sub_pure_le (P : Tensor (q 
       (P.fixInput z).contract ≠ 0 ∧
       ∃ θ : ℝ, ‖((‖(P.fixInput z).contract‖ : ℂ)⁻¹) • (P.fixInput z).contract -
         Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
-  obtain ⟨z, hz, θ, hθ⟩ :=
-    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
-  rw [← Tensor.contract_fixInput] at hz hθ
-  exact ⟨z, rfl, Tensor.contract_fixInput P z, hz, θ, hθ⟩
+  obtain ⟨z, h⟩ :=
+    exists_eq_column_ne_zero_of_traceNorm_sub_pure_le e Ω hΩ hσ hη (Tensor.contract_fixInput P)
+  exact ⟨z, rfl, h⟩
 
 /-- **Column extraction in the form used by the final theorem, virtual-first
 presentation.**
