@@ -24,6 +24,15 @@ horizontal interval sections alone do not imply that dilated rows are intervals.
 The allowed slopes are essential for the missing step. No desired regularity
 property or cardinality estimate has been inserted into the model.
 
+Candidate source in `TemplatePolygons.lean` and `TemplateRowBounds.lean`
+now implements the supporting-slab characterization directly from both
+constructors, its reduction to four strips, rounded integer row profiles,
+consecutive occupied rows and columns in a vertical window, and one-step
+endpoint and point-transport bounds. These new declarations have no proof
+holes but are awaiting Lean compilation. They are not yet included among
+the verified milestones above. The ambient dilation layer count is still
+unimplemented.
+
 ## Remaining mathematical argument
 
 The following calculation explains a conservative candidate constant **24**. It is an
@@ -62,8 +71,9 @@ informal proof plan, not an elaborated Lean theorem or a completed source label.
    proved union reduction, and applying the template scale would give the
    desired estimate for every Ctpl≥24.
 
-The first three steps, the formal counting in step 4, and their assembly from
-the model remain to be implemented. In particular, the compact-section
+The first two steps now have candidate implementations awaiting validation.
+Step 3, the formal counting in step 4, and their assembly from the model
+remain to be implemented. In particular, the verified compact-section
 ceil/floor theorem already implemented does not assert that these real
 endpoints have the required slope formulas. Empty samples, overlaps and
 disconnected unions require no removal or disjointness assumption in the

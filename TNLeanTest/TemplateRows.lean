@@ -1,4 +1,4 @@
-import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
+import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds
 import Mathlib.Data.Rat.Floor
 
 /-!
@@ -6,7 +6,7 @@ import Mathlib.Data.Rat.Floor
 
 These examples check signed rounding, empty dilation, thin diagonal samples,
 disconnected rows, overlapping unions, and the actual template interface.
-The guarded audit records the permitted dependencies of every new export.
+The audit records the proof dependencies of every new export.
 -/
 
 open scoped BigOperators
@@ -316,5 +316,19 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff
+
+-- Record the new constructor and endpoint proofs before guarding their exact output.
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step
+
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
 
 end AxiomChecks

@@ -106,6 +106,66 @@
     the cardinality inequality without requiring disjointness.
 \end{proof}
 
-The one-step endpoint bounds for the allowed slopes, their preservation
-under dilation, and the estimate $|T_j\setminus T_{j-1}|\le n$ in
-Lemma~9.4 of \cite{OpenAI2026AreaLaw} remain to be established here.
+\begin{lemma}[Supporting strips of allowed polygons]
+    \label{lem:area_law_polygon_strips}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices,
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices,
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds,
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
+    }
+    \uses{def:area_law_template}
+    Each actual polygon is the intersection of the supporting strips for
+    the four linear forms $x,y,x+y,x-y$. The eight bounds can be taken at
+    actual vertices. Equivalently, the polygon is the intersection of all
+    closed supporting slabs with allowed normal directions.
+\end{lemma}
+\begin{proof}
+    Every supporting slab contains the convex hull. Conversely, the three
+    oriented side functionals of a triangle give nonnegative barycentric
+    coordinates after division by its nonzero signed determinant. Both signs
+    of the determinant are allowed. For a rectangle, the orthogonal side
+    coordinates lie in $[0,1]$, giving four nonnegative convex weights.
+    Every allowed normal is a scalar multiple of one of the four listed
+    forms. Their extrema over the finite vertex set are attained.
+\end{proof}
+
+\begin{lemma}[Rounded affine row profiles]
+    \label{lem:area_law_affine_row_profiles}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds,
+        TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile,
+        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between,
+        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step,
+        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step,
+        TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between,
+        TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
+    }
+    \uses{lem:area_law_polygon_strips,lem:area_law_sample_rows}
+    For each sampled polygon there are eight integers
+    $l_x,u_x,l_y,u_y,l_+,u_+,l_-,u_-$ such that, on the vertical strip,
+    \[
+        R_y(S)=
+        [\max(l_x,l_+-y,l_-+y),\min(u_x,u_+-y,u_-+y)]\cap\mathbb Z.
+    \]
+    Outside $[l_y,u_y]$ the row is empty; the displayed interval may also
+    be empty. Nonempty rows form an integer interval, and the attained
+    lower and upper endpoints each change by at most one between
+    consecutive nonempty rows.
+    Restricting to a vertical window also preserves consecutive occupied
+    columns. A sampled point can be moved to an occupied adjacent row with
+    a horizontal change of at most one.
+\end{lemma}
+\begin{proof}
+    Round each real lower strip bound upward and each upper bound downward.
+    Integer row shifts commute with rounding. The lower endpoint is a
+    maximum of three affine functions with slopes $0,-1,1$, and the upper
+    endpoint is their minimum counterpart. Pairwise lower--upper comparisons
+    give an interval of nonempty rows. Each affine function changes by at
+    most one in one row step, as do its maximum or minimum.
+\end{proof}
+
+The two new geometric proofs above are awaiting Lean validation in this draft.
+The preservation and counting argument under dilation, and the estimate
+$|T_j\setminus T_{j-1}|\le n$ in Lemma~9.4 of \cite{OpenAI2026AreaLaw},
+remain to be established here.

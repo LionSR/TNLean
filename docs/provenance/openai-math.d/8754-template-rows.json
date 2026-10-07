@@ -1154,6 +1154,347 @@
         ]
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.vertices",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.region_eq_convexhull_vertices",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.mem_region_iff_normal_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.exists_four_strip_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_sample_four_strip_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_latticerow_profile",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_nonempty_between",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_min_step",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_max_step",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_sample_in_window_between",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_nearby_sample_in_row",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }
