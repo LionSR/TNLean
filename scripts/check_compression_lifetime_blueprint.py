@@ -80,7 +80,7 @@ def main() -> None:
     for start, end in ((269, 277), (342, 375), (565, 588)):
         print(f"--- Immutable manuscript lines {start}-{end} ---")
         for line, content in enumerate(text.splitlines()[start - 1:end], start):
-            print(f"{line}: {content}")
+            print(f"{line}: {content}".rstrip())
 
 
 if __name__ == "__main__":
