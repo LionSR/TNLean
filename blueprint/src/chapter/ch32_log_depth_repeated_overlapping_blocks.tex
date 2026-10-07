@@ -163,6 +163,7 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
     \label{lem:ldp_relative_overlaps}
     \lean{MPSTensor.CopyWeights.pow,
         MPSTensor.ofPhysicalMatrixLM_mul_conjTranspose_pairEmbedding,
+        MPSTensor.polarPos_mul_sum_copyIsometry,
         MPSTensor.conjTranspose_copyIsometry_mul_polarPos_eq_sum,
         MPSTensor.ofPhysicalMatrixLM_conjTranspose_copyIsometry_mul_polarPos,
         MPSTensor.mpvOverlap_conjTranspose_copyIsometry_mul_polarPos,
@@ -212,7 +213,8 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
         MPSTensor.exists_relative_diagonal_deficit_le,
         MPSTensor.exists_norm_one_sub_relative_diagonal_le}
     \leanok
-    \uses{lem:ldp_relative_positive_part, def:prep_fixed_point_tensor}
+    \uses{lem:ldp_relative_positive_part, lem:ldp_relative_overlaps,
+        def:prep_fixed_point_tensor}
     With the notation of Lemma~\ref{lem:ldp_relative_positive_part}, let $q\geq1$, write
     $H_{kj}=L_k^\dagger PC^{-1}L_j$ for the relative blocks, and, for a positive
     semidefinite $\sigma$, write $\lVert X\rVert_\sigma^2=\Tr\sum_iX^i\sigma(X^i)^\dagger$
