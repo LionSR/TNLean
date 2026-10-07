@@ -226,6 +226,79 @@ class ProvenanceTests(unittest.TestCase):
         self.write("TNLean/Example.lean", self.stored.decode())
         self.assertEqual(self.validate(), 1)
 
+    def test_axiom_target_requires_exact_quoted_name(self):
+        for output in (
+            "'NotExample.Vertex' does not depend on any axioms",
+            "'Other.Example.Vertex' does not depend on any axioms",
+            "'Example.VertexExtra' does not depend on any axioms",
+            "Example.Vertex does not depend on any axioms",
+            "prefix 'Example.Vertex' does not depend on any axioms",
+            "'Example.Vertex' does not depend on any axioms but this is not output",
+        ):
+            with self.subTest(output=output):
+                self.write("axioms.log", output + "\n")
+                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+                self.rejects("axiom log missing downstream declaration")
+
+    def test_later_bad_axiom_record_is_not_ignored(self):
+        for first in ("'Example.Vertex' depends on axioms: [propext]\n",
+                      "'Example.Vertex' does not depend on any axioms\n"):
+            with self.subTest(first=first):
+                self.write("axioms.log", first + "'Example.Vertex' depends on axioms: [sorryAx]\n")
+                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+                self.rejects("unapproved axiom")
+
+    def test_conflicting_exact_target_records(self):
+        self.write("axioms.log", "'Example.Vertex' does not depend on any axioms\n"
+                   "'Example.Vertex' depends on axioms: [propext]\n")
+        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+        self.rejects("conflicting exact-target")
+
+    def test_malformed_exact_target_record_is_not_ignored(self):
+        self.write("axioms.log", "'Example.Vertex' does not depend on any axioms\n"
+                   "'Example.Vertex' depends on axioms: unreadable\n")
+        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+        self.rejects("malformed exact-target")
+
+    def test_multiline_axiom_output_and_unrelated_records(self):
+        self.write("axioms.log", "'Other.theorem' depends on axioms: [sorryAx]\n"
+                   "'Example.Vertex' depends on axioms:\n[propext,\nClassical.choice, Quot.sound]\n")
+        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+        self.assertEqual(self.validate(), 1)
+
+    def test_same_declaration_different_path_rejected(self):
+        first, second = deepcopy(PLAN), deepcopy(PLAN)
+        second["entries"][0]["id"] = "other-location"
+        second["entries"][0]["downstream"]["path"] = "QICLean/Other.lean"
+        with self.assertRaisesRegex(provenance.Invalid, "duplicate downstream"):
+            provenance.validate([first, second], SCHEMA, {}, scan=False)
+
+    def test_repository_casing_cannot_bypass_uniqueness(self):
+        first, second = deepcopy(PLAN), deepcopy(PLAN)
+        second["entries"][0]["id"] = "other-casing"
+        second["entries"][0]["downstream"]["repository"] = "lionsr/qiclean"
+        with self.assertRaisesRegex(provenance.Invalid, "duplicate downstream"):
+            provenance.validate([first, second], SCHEMA, {}, scan=False)
+
+    def test_declaration_casing_remains_significant(self):
+        first, second = deepcopy(PLAN), deepcopy(PLAN)
+        second["entries"][0]["id"] = "distinct-declaration-casing"
+        second["entries"][0]["downstream"].update(
+            repository="lionsr/qiclean", declaration="QuantumState.exists_phase_Minimizer")
+        self.assertEqual(provenance.validate([first, second], SCHEMA, {}, scan=False), 2)
+
+    def test_repeated_consistent_exact_target_records(self):
+        for output in (
+            "'Example.Vertex' does not depend on any axioms\n" * 2,
+            "'Example.Vertex' depends on axioms: [propext, Classical.choice]\n"
+            "'Example.Vertex' depends on axioms: [Classical.choice, propext]\n",
+        ):
+            with self.subTest(output=output):
+                self.write("axioms.log", output)
+                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+                self.assertEqual(self.validate(), 1)
+
+
     def test_wrong_manuscript_label(self):
         self.row["paper_sources"][0]["labels"] = ["invented-label"]
         self.rejects("missing manuscript label")
@@ -245,13 +318,6 @@ class ProvenanceTests(unittest.TestCase):
             "url": "https://github.com/LionSR/QICLean.git", "rev": "c" * 40}]}))
         self.rejects("differs from the dependency pin")
 
-    def test_duplicate_qualified_name_across_paths(self):
-        first = deepcopy(PLAN)
-        other = deepcopy(first)
-        other["entries"][0]["id"] = "renamed-file"
-        other["entries"][0]["downstream"]["path"] = "QICLean/Other.lean"
-        with self.assertRaisesRegex(provenance.Invalid, "duplicate downstream"):
-            provenance.validate([first, other], SCHEMA, {}, scan=False)
 
     def test_proposed_declaration_names_are_valid(self):
         for name in ("Example..Vertex", "123", "Example.", ".Example", "Example/Vertex"):
@@ -293,30 +359,6 @@ class ProvenanceTests(unittest.TestCase):
         self.assertEqual(provenance.validate([self.ledger(), self.ledger(original)],
                                             SCHEMA, self.roots), 2)
 
-    def test_axiom_output_requires_exact_name_and_complete_line(self):
-        for output in ("'NotExample.Vertex' does not depend on any axioms\n",
-                       "'Example.VertexExtra' does not depend on any axioms\n",
-                       "prefix Example.Vertex does not depend on any axioms\n",
-                       "'Example.Vertex' does not depend on any axioms but this is not output\n",
-                       "'NotExample.Vertex' depends on axioms: [propext]\n"):
-            with self.subTest(output=output):
-                self.write("axioms.log", output)
-                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
-                self.rejects("axiom log missing downstream declaration")
-
-    def test_every_exact_target_axiom_record_is_checked(self):
-        for first in ("'Example.Vertex' depends on axioms: [propext]\n",
-                      "'Example.Vertex' does not depend on any axioms\n"):
-            with self.subTest(first=first):
-                self.write("axioms.log", first + "'Example.Vertex' depends on axioms: [propext, sorryAx]\n")
-                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
-                self.rejects("unapproved axiom")
-
-
-    def test_axiom_output_accepts_wrapped_standard_list(self):
-        self.write("axioms.log", "'Example.Vertex' depends on axioms: [propext,\n Classical.choice, Quot.sound]\n")
-        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
-        self.assertEqual(self.validate(), 1)
 
     def source_header(self, header):
         self.source = (header + "\n").encode() + (FIXTURES / "Source.lean.txt").read_bytes()

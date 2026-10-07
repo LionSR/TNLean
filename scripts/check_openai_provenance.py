@@ -186,6 +186,29 @@ def notice_block(text, entry):
     return block
 
 
+def check_axiom_output(output, declaration):
+    """Require exact quoted names and consistent, allowed results for every record."""
+    name = re.escape(declaration)
+    target = rf"^[ \t]*(?:'{name}'|\"{name}\")[ \t]+"
+    heads = re.findall(target + r"(?:depends on axioms|does not depend on any axioms)",
+                       output, flags=re.M)
+    records = re.findall(target + r"(depends on axioms:\s*\[[^]]*\]|"
+                         r"does not depend on any axioms)[ \t]*$", output, flags=re.M)
+    require(records, "axiom log missing downstream declaration output")
+    require(len(records) == len(heads), "malformed exact-target axiom output")
+    results = []
+    for record in records:
+        if record.startswith("depends on axioms:"):
+            names = record[record.index("[") + 1:-1]
+            axioms = frozenset(x.strip() for x in names.split(",") if x.strip())
+        else:
+            axioms = frozenset()
+        require(axioms <= {"propext", "Classical.choice", "Quot.sound"},
+                f"unapproved axiom dependencies: {sorted(axioms)}")
+        results.append(axioms)
+    require(len(set(results)) == 1, "conflicting exact-target axiom output")
+
+
 def check_entry(entry, roots):
     active = entry["status"] in ("ported", "replaced")
     kind, upstream = entry["reuse_kind"], entry["upstream"]
@@ -242,19 +265,7 @@ def check_entry(entry, roots):
         log = safe_file(root, command["log"]).read_bytes()
         require(hashlib.sha256(log).hexdigest() == command["sha256"], "evidence log hash mismatch")
         if command["kind"] == "axioms":
-            output = log.decode()
-            declaration = re.escape(down["declaration"])
-            named = rf"(?:'{declaration}'|\"{declaration}\"|{declaration})"
-            axiom_lists = re.findall(r"^[ \t]*" + named +
-                                   r" depends on axioms:[ \t]*\[([^]]*)\][ \t\r]*$",
-                                   output, re.M)
-            independent = re.search(r"^[ \t]*" + named +
-                                    r" does not depend on any axioms[ \t\r]*$", output, re.M)
-            require(axiom_lists or independent, "axiom log missing downstream declaration output")
-            for listed in axiom_lists:
-                axioms = {x.strip() for x in listed.split(",") if x.strip()}
-                require(axioms <= {"propext", "Classical.choice", "Quot.sound"},
-                        f"unapproved axiom dependencies: {sorted(axioms)}")
+            check_axiom_output(log.decode(), down["declaration"])
     if kind == "copied":
         require(data == source_data, "changed file marked copied; classify as adapted")
         notice_text = safe_file(root, down["path"] + ".provenance").read_text()
@@ -277,7 +288,8 @@ def validate(ledgers, schema, roots, scan=True):
             f"{list(e.absolute_path)}: {e.message}" for e in errors[:3]))
         for entry in ledger["entries"]:
             identifier = entry["id"]
-            key = tuple(entry["downstream"][k] for k in ("repository", "declaration"))
+            key = (entry["downstream"]["repository"].casefold(),
+                   entry["downstream"]["declaration"])
             require(identifier not in ids, f"duplicate entry id: {identifier}")
             require(key not in keys, f"duplicate downstream declaration: {key}")
             ids.add(identifier)

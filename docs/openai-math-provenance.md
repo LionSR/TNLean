@@ -40,7 +40,9 @@ port or a claim on the companion worker's task.
 Parallel workers add `docs/provenance/openai-math.d/8738.json`, `8740.json`, etc.,
 using the same `schema_version`, `source`, `entries` envelope. Keep each other's
 rows and stable `id` values. The validator reads all shards and rejects duplicate
-IDs or downstream `(repository, declaration)` keys across files. Update
+IDs or downstream `(repository, declaration)` keys across files, regardless of path
+(GitHub repository names compare case-insensitively; Lean declaration names
+remain case-sensitive). Update
 only your rows; coordinate a shared declaration before moving its ownership.
 A declaration with multiple sources needs separate reviewed source treatment;
 do not create duplicate downstream keys to bypass this gate (schema extension
@@ -109,7 +111,10 @@ Completed rows use this evidence structure (placeholders are not valid hashes):
 Commit source modules first, build/audit that exact revision, then add evidence
 and update only the corresponding ledger rows in a follow-up commit. This avoids
 a self-referential commit hash. The validator compares the current module bytes
-with the recorded revision, checks log hashes and the named axiom output. Logs
+with the recorded revision, checks log hashes and exact quoted declaration names
+in axiom output. Every record for that declaration must parse, agree, and use
+only allowed foundational axioms. Keep raw Lean output in logs; timestamped or
+unquoted paraphrases are not axiom evidence. Logs
 must state command, revision, elapsed time and warnings; record failures as
 pending rather than inventing success. Build using package options and the
 repository cache-first protocol; `lake env lean` alone is not a linter-bearing
