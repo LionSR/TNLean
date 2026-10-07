@@ -18,7 +18,8 @@ import TNLean.PEPS.SquareLatticeGraph
 Provenance ledger: docs/provenance/openai-math.d/8740.json.
 Adapted from OpenAI's openai/math repository (Apache-2.0).
 Upstream revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Changes: renamed namespaces, shared forward-edge spelling, narrowed imports, PEPS renamed to Tensor, and explicit finite instances.
+Changes: renamed namespaces, shared edge spelling and narrowed imports.
+Renamed source PEPS to Tensor and made finite instances explicit.
 Retained both incidence conventions, tensor argument orders, State parameter orders and positivity.
 No upstream Lean proofs are copied.
 Provenance-ID: 8740-vertex

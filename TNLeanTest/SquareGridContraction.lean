@@ -1,5 +1,10 @@
 import TNLean.PEPS.Approximation.SquareGridContraction
 
+/-! Regression cases and kernel dependency audits for the exact square-grid bridge. -/
+
+-- Kernel dependency reports are intentional in this regression module.
+set_option linter.hashCommand false
+
 open TNLean.PEPS TNLean.PEPS.Approximation
 open scoped BigOperators
 
@@ -61,5 +66,5 @@ example {L q : ℕ} (A : (v : Vertex L) → Pinned.LocalTensor q (fun _ => 1) v)
 example {q : ℕ} (A : (v : Vertex 0) → Pinned.LocalTensor q (fun _ => 0) v)
     (x : Vertex 0 → Fin q) : Pinned.contractPEPS (fun _ => 0) A x = 1 := by
   classical
-  letI : IsEmpty (ForwardEdge 0) := ⟨fun e => Fin.elim0 e.val.1.1⟩
+  let : IsEmpty (ForwardEdge 0) := ⟨fun e => Fin.elim0 e.val.1.1⟩
   simp [Pinned.contractPEPS]
