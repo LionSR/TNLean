@@ -213,25 +213,44 @@ threshold needed for that combination: for fixed \(V\in\mathbb R\) and
 The new proof, five combined kernel reports and complete library and blueprint
 checks passed. The coefficient one half is inside the exponential.
 
-The high-label contribution, with source and mathematical exposition frozen
-at `89941482`, now proves one common sequence for an arbitrary density matrix,
+[QICLean #629](https://github.com/LionSR/QICLean/pull/629), with source and
+mathematical exposition frozen at `89941482`, proves one common sequence for an arbitrary density matrix,
 including singular states. Its eventual mass is at least
 \([2(k+1)^{q^2}]^{-1}\), and \(\log d_{\lambda_k}=kS(\rho)+o(k)\).
 For a unit bipartite vector, it also proves the corresponding squared norm
 of the actual central projection of its literal tensor powers, using its
-actual reduced density. All four proofs pass strict Lean checking and exact stock-only kernel
-checks, and the complete 9,713-job library build passed. The source-bound
-provenance checks passed; complete blueprint verification is in progress. These statements supply the high-label input, while the
+actual reduced density. All four proofs pass strict Lean checking and exact
+standard-kernel checks. The complete 9,713-job library build, source-bound
+provenance and complete PDF/web/native declaration checks passed. The actual
+pure-vector identities are separately verified in
+[QICLean #628](https://github.com/LionSR/QICLean/pull/628), including zero
+copies and singular marginals. These statements supply the high-label input,
+while the
 comparator and inverse metric arguments remain unfinished. None of these
 draft results has yet changed TNLean's dependency pin.
 
-The grouped-label operator inequalities have a separate proof frozen at
-`d7fa8954`: on the full representation space,
+[QICLean #630](https://github.com/LionSR/QICLean/pull/630), with proof
+frozen at `d7fa8954`, gives the grouped-label operator inequalities: on the
+full representation space,
 \(F_{\mathrm{good}}+F_{\mathrm{bad}}\le F_{\mathrm{whole}}\le
 F_{\mathrm{good}}+F_{\mathrm{bad}}+\loginom{k}{r}I\).
-Compatibility follows from the actual joint projections. Source-bound
-verification is in progress; the bound for occurring bad-copy labels and
-the good auxiliary support comparison remain separate steps.
+Compatibility follows from the actual joint projections. Strict checking,
+the complete 9,707-job library build, the exact standard-kernel audit,
+provenance and complete PDF/web/native declaration checks passed. The bound
+for occurring bad-copy labels and the good auxiliary support comparison
+remain separate steps.
+
+A further prevector construction has source and exposition frozen at
+`f0c7d137`. It proves that one label sequence gives, for every positive copy
+number, a nonzero vector of norm at most one, the correct physical mean
+energy, matching labels on the two auxiliary systems and simultaneous
+permutation symmetry. The same sequence retains the selected state's
+eventual inverse-polynomial projected mass and entropy asymptotic. A
+positive-mass sector of the actual marginal repairs only finitely many
+initial terms. Strict Lean checking and an independent mathematical review
+passed; source-bound full verification is in progress. The physical
+Schmidt-truncation instantiation and later comparator estimates remain
+separate.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
