@@ -14,7 +14,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateEntropy.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -45,7 +45,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateEntropy.lean",
         "declaration": "TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {
@@ -76,7 +76,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateEntropy.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le",
-        "name_status": "declared"
+        "name_status": "proposed"
       },
       "paper_sources": [
         {

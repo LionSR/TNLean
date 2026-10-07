@@ -17,7 +17,7 @@ not needed for this step.
 ## References
 
 OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
-2026, Lemma 9.4 (`scanner:templates`), proof, `08-scanner.tex`, lines 571–676,
+2026, Lemma 9.4 (`scanner:templates`), proof, `08-scanner.tex`, lines 666–667,
 at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
