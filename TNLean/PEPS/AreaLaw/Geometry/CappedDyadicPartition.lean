@@ -255,9 +255,10 @@ This includes cap zero and the empty set. -/
 theorem card_cappedDyadicPartition_at_cap_le (S : Finset (ℤ × ℤ)) (K : ℕ) :
     4 ^ K * ((cappedDyadicPartition S K).filter (fun c ↦ c.1 = K)).card ≤ S.card := by
   calc
-    _ = ∑ c ∈ (cappedDyadicPartition S K).filter (fun c ↦ c.1 = K), 4 ^ c.1 := by
-      rw [Finset.sum_congr rfl (fun c hc ↦ congrArg (fun k ↦ 4 ^ k)
-        (Finset.mem_filter.mp hc).2), Finset.sum_const, smul_eq_mul, Nat.mul_comm]
+    _ = ∑ _c ∈ (cappedDyadicPartition S K).filter (fun c ↦ c.1 = K), 4 ^ K := by
+      simp [Nat.mul_comm]
+    _ = ∑ c ∈ (cappedDyadicPartition S K).filter (fun c ↦ c.1 = K), 4 ^ c.1 :=
+      Finset.sum_congr rfl fun c hc ↦ by rw [(Finset.mem_filter.mp hc).2]
     _ ≤ ∑ c ∈ cappedDyadicPartition S K, 4 ^ c.1 :=
       Finset.sum_le_sum_of_subset (Finset.filter_subset _ _)
     _ = S.card := sum_pow_cappedDyadicPartition S K

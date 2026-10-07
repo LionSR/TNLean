@@ -25,6 +25,15 @@ artifacts. A read of the supported Azure cache endpoint also returned HTTP
 403, including with sandbox escalation. No Mathlib proof source build was
 started. No local Lean proof success is claimed.
 
+Source-only checks passed: complete pinned-source provenance validation
+(205 entries), blueprint/source synchronization and reverse coverage for all
+23 public declarations, generated-import completeness, numbered-module and
+file-length policies, new-prose checks, pinned LaTeX formatting, and
+`git diff --check`. The provenance-checker suite passed 52 tests; the
+compatible-cache policy suite passed 51 tests. The tactic-pattern scan found
+no new repeated block in this module among its reported candidates. These
+checks do not replace Lean compilation or the imported dependency audit.
+
 The CI workflow first builds the new production module with package options,
 then retains the full library build and runs strict regressions and all 23
 exported declaration dependency prints. Regressions cover empty sets, zero cap,
