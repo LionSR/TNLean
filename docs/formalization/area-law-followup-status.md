@@ -37,9 +37,11 @@ surprisal tail. For a density matrix, a tail at most \(\delta<1\) gives
 logarithmic rank and entropy errors are at most
 \(w-\log(1-\delta)\). For a unit bipartite vector, the actual normalized
 selected vector has distance at most \(\sqrt{2\delta}\). These two proofs
-have passed their module build, strict elaboration and kernel audits at QICLean
-source revision `79b9d503971a4ff2409fa557e174b46b13fdbbda`; complete blueprint
-integration is being checked. They assume the tail estimate. The physical
+are published in [QICLean #608](https://github.com/LionSR/QICLean/pull/608),
+at mathematical source revision
+`79b9d503971a4ff2409fa557e174b46b13fdbbda`. The complete library build, strict
+kernel and provenance checks, and full blueprint PDF, web and declaration
+checks have passed. They assume the tail estimate. The physical
 specialization \(w=n^{3/5}\), \(z\ge1-n^{-100}\) and the sector norm
 comparisons of Proposition 8.1 are not established by these results.
 
@@ -114,6 +116,18 @@ divided by \(z\). For unit input, its entropy is bounded by the original
 regional entropy divided by \(z\). These statements have passed a complete
 library build, all six additional kernel audits, provenance validation and
 blueprint verification; their dependency update into TNLean remains separate.
+
+[QICLean #609](https://github.com/LionSR/QICLean/pull/609) constructs the
+selected Schmidt vector on the smaller coordinate space \(\mathbb C^E\).
+Its actual spectral isometry satisfies \(J^\dagger J=I\) and
+\(JJ^\dagger=P_E\). The vector
+\(\chi=z^{-1/2}(J^\dagger\otimes I)\psi\) has norm one, embeds exactly into
+the typical truncation, has diagonal first marginal with entries \(p_i/z\),
+and preserves the complementary marginal. Positive selected mass suffices;
+the original vector need not be unit. The complete library, all eight new
+kernel audits, provenance and full blueprint checks have passed. This provides
+the vector construction preceding the Bell projection calculation, which
+remains a separate proof.
 
 [QICLean #607](https://github.com/LionSR/QICLean/pull/607) proves that a positive
 definite matrix and any nonzero real power have the same commutant. In
