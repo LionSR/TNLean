@@ -26,7 +26,7 @@ property or cardinality estimate has been inserted into the model.
 
 ## Remaining mathematical argument
 
-The following calculation explains a candidate constant **18**. It is an
+The following calculation explains a conservative candidate constant **24**. It is an
 informal proof plan, not an elaborated Lean theorem or a completed source label.
 
 1. Express the actual convex hull of each allowed rectangle or triangle as the
@@ -45,19 +45,22 @@ informal proof plan, not an elaborated Lean theorem or a completed source label.
    takes each row from the union of the original row intervals in the window
    of distance r, extended horizontally by r. The adjacency above makes this
    union an integer interval. Its endpoints are the sliding minimum and maximum
-   of the old endpoints, minus or plus r. The clipped windows on neighboring
-   nonempty rows have Hausdorff distance at most one, so these endpoints remain
-   1-Lipschitz. Both coordinate diameters are at most s₀+2r.
-4. For j≥1, apply one dilation step to the radius-(j−1) set. There are at most
-   s₀+2j−1 old rows, each acquiring at most two sites at either endpoint.
+   of the original endpoints, minus or plus r. Compare radius j and radius j−1
+   directly on an old output row: its window gains at most one original row at
+   each end. Original endpoint 1-Lipschitz bounds therefore change each sliding
+   extremum by at most one; the additional horizontal extension adds one more.
+   No separate 1-Lipschitz theorem for dilated endpoints is needed for this count.
+4. The proved `sample_subset_box` gives coordinate widths at most 2s₀ about any
+   sampled point. There are at most 2s₀+2j−1 old output rows, each acquiring at
+   most two sites at either endpoint.
    There are exactly two additional extreme rows, each of length at most
-   s₀+2j+1. Consequently the single-piece new layer has size at most
+   2s₀+2j+1. Consequently the single-piece new layer has size at most
 
-       4(s₀+2j−1) + 2(s₀+2j+1) = 6s₀+12j−2 ≤ 18s₀−2
+       4(2s₀+2j−1) + 2(2s₀+2j+1) = 12s₀+12j−2 ≤ 24s₀−2
 
-   when 1≤j≤s₀. Bounding this by 18(s₀+1), summing over the pieces using the
+   when 1≤j≤s₀. Bounding this by 24(s₀+1), summing over the pieces using the
    proved union reduction, and applying the template scale would give the
-   desired estimate for every Ctpl≥18.
+   desired estimate for every Ctpl≥24.
 
 The first three steps, the formal counting in step 4, and their assembly from
 the model remain to be implemented. In particular, the compact-section
@@ -65,6 +68,30 @@ ceil/floor theorem already implemented does not assert that these real
 endpoints have the required slope formulas. Empty samples, overlaps and
 disconnected unions require no removal or disjointness assumption in the
 proved reduction.
+
+An explicit formulation of the missing polygon identity uses the four linear
+forms `x`, `y`, `x+y`, and `x−y`. For each such form f, let m_f and M_f be its
+minimum and maximum over the actual vertices. The identity to derive is
+
+    P = {p : m_f ≤ f(p) ≤ M_f for all four forms f}.
+
+Each side of an allowed polygon has one of these forms as its normal, but
+that observation still needs a proof from the convex-hull constructors.
+Once established, the sampled row bounds are explicitly
+
+    ceil(m_y) ≤ y ≤ floor(M_y),
+    max(ceil(m_x), ceil(m_(x+y))−y, ceil(m_(x−y))+y) ≤ x,
+    x ≤ min(floor(M_x), floor(M_(x+y))−y, floor(M_(x−y))+y).
+
+These formulas isolate the missing convex-hull argument from the subsequent
+integer maximum/minimum and sliding-window proofs. They are not assumed by
+any exported theorem in this draft.
+
+For the constructor-specific reverse inclusion, a triangle can be treated with
+determinant-based barycentric coordinates α,β satisfying α≥0, β≥0 and α+β≤1.
+A rectangle uses its two orthogonal side coordinates with 0≤α,β≤1. This avoids
+requiring a general polytope representation library. These are proof plans from
+independent review, not validated additional Lean results.
 
 ## Validation
 
