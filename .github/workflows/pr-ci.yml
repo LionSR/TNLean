@@ -615,6 +615,17 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PeriodicStringExpectations.lean
 
+      - name: Test finite-size bounds and periodic AKLT-cluster examples
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in FiniteSizeStringBounds PeriodicStringExamples; do
+            lake env lean -j 1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
         run: >

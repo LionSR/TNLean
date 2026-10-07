@@ -92,6 +92,7 @@ import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.PeriodicFullRingString
 import TNLean.MPS.Symmetry.PeriodicMPSNormLowerBound
 import TNLean.MPS.Symmetry.PeriodicPhysicalString
+import TNLean.MPS.Symmetry.PeriodicStringBounds
 import TNLean.MPS.Symmetry.PhysicalCharacterGappedPath
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.PhysicalInteractionGap
@@ -104,6 +105,7 @@ import TNLean.MPS.Symmetry.PhysicalSpectatorCoordinates
 import TNLean.MPS.Symmetry.PhysicalStringAsymptotics
 import TNLean.MPS.Symmetry.PhysicalStringBlockEndpoints
 import TNLean.MPS.Symmetry.PhysicalStringBlockOrder
+import TNLean.MPS.Symmetry.PhysicalStringBounds
 import TNLean.MPS.Symmetry.PhysicalStringEndpointSpan
 import TNLean.MPS.Symmetry.PhysicalStringEndpoints
 import TNLean.MPS.Symmetry.PhysicalStringPhase

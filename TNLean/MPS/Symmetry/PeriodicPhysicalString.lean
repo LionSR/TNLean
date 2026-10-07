@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.OperatorNormConvergence
 import TNLean.Algebra.FinKronecker
 import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Symmetry.PhysicalStringAsymptotics
@@ -36,6 +35,53 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+/-- A single canonical transfer rate controls the periodic closure of every
+fixed insertion. The prefactor may depend on the insertion. No bound is
+assumed: the rate follows from the faithful canonical spectral gap.
+Source: arXiv:0802.0447, `MPS`, `SOPMP`, and lines 241–255. -/
+theorem canonical_trace_mul_transfer_pow_le_geometric
+    [NeZero D] (A : MPSTensor d D)
+    (hIrr : IsIrreducibleMap (Kraus.transferMap A))
+    (hPrim : IsPrimitive (Kraus.transferMap A))
+    (Λ : Mat) (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1) :
+    ∃ r : ℝ, 0 < r ∧ r < 1 ∧ ∀ F : Module.End ℂ Mat,
+      ∃ C : ℝ, 0 < C ∧ ∀ N : ℕ, 1 ≤ N →
+        ‖LinearMap.trace ℂ Mat (F * Kraus.transferMap A ^ N) -
+          Matrix.trace (Λ * F 1)‖ ≤ C * r ^ N := by
+  let : TopologicalSpace Mat :=
+    (inferInstance : NormedAddCommGroup Mat).toUniformSpace.toTopologicalSpace
+  obtain ⟨C, r, hC, hr, hr1, hpow⟩ :=
+    canonical_transfer_pow_sub_stationary_le_geometric
+      A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm
+  refine ⟨r, hr, hr1, fun F => ?_⟩
+  let ℓ : (Mat →L[ℂ] Mat) →L[ℂ] ℂ :=
+    ((LinearMap.trace ℂ Mat).comp
+      ((LinearMap.mulLeft ℂ F).comp (ContinuousLinearMap.coeLM ℂ))).toContinuousLinearMap
+  obtain ⟨M, hM, hℓ⟩ := ℓ.bound
+  let P := fnwLimitMap Λ (by simp [hΛtr])
+  have htrace : LinearMap.trace ℂ Mat (F * P) = Matrix.trace (Λ * F 1) := by
+    let φ : Mat →ₗ[ℂ] ℂ := (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
+      (LinearMap.mulLeft ℂ Λ)
+    have hFP : F * P = φ.smulRight (F 1) := by
+      apply LinearMap.ext
+      intro X
+      simp only [Module.End.mul_apply, P, fnwLimitMap_apply_of_trace_eq_one Λ X hΛtr,
+        map_smul, φ, LinearMap.smulRight_apply, LinearMap.comp_apply,
+        Matrix.traceLinearMap_apply, LinearMap.mulLeft_apply]
+    rw [hFP, LinearMap.trace_smulRight]
+    rfl
+  refine ⟨M * C, mul_pos hM hC, fun N hN => ?_⟩
+  have hid : LinearMap.trace ℂ Mat (F * Kraus.transferMap A ^ N) -
+      Matrix.trace (Λ * F 1) =
+        ℓ (Module.End.toContinuousLinearMap Mat (Kraus.transferMap A ^ N - P)) := by
+    change _ = LinearMap.trace ℂ Mat (F * (Kraus.transferMap A ^ N - P))
+    rw [mul_sub, map_sub, htrace]
+  rw [hid]
+  exact (hℓ _).trans (by
+    simpa only [P, mul_assoc] using mul_le_mul_of_nonneg_left (hpow N hN) hM.le)
+
 /-- The operator trace of a fixed insertion followed by a long canonical
 transfer segment converges to its stationary boundary value. Source:
 arXiv:0802.0447, `SOPMP`, lines 176–181. -/
@@ -43,40 +89,19 @@ private theorem canonical_trace_mul_transfer_pow_tendsto
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
     (hPrim : IsPrimitive (Kraus.transferMap A))
-    (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
+    (Λ : Mat) (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     (hNorm : Kraus.transferMap A 1 = 1) (F : Module.End ℂ Mat) :
     Tendsto (fun n => LinearMap.trace ℂ Mat (F * Kraus.transferMap A ^ n)) atTop
       (nhds (Matrix.trace (Λ * F 1))) := by
-  let φ : Mat →ₗ[ℂ] ℂ := (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-    (LinearMap.mulLeft ℂ Λ)
-  let P : Module.End ℂ Mat := φ.smulRight 1
-  have hE (X : Mat) : Tendsto (fun n => (Kraus.transferMap A ^ n) X)
-      atTop (nhds (P X)) := by
-    simpa only [P, φ, LinearMap.smulRight_apply, LinearMap.comp_apply,
-      Matrix.traceLinearMap_apply, LinearMap.mulLeft_apply] using
-      canonical_transfer_pow_tendsto_stationary_trace
-        A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm X
-  have hmaps : Tendsto
-      (fun n : ℕ => LinearMap.toContinuousLinearMap (F * Kraus.transferMap A ^ n))
-      atTop (nhds (LinearMap.toContinuousLinearMap (F * P))) := by
-    apply ContinuousLinearMap.tendsto_of_tendsto_apply_of_finiteDimensional
-    intro X
-    change Tendsto (fun n : ℕ => F ((Kraus.transferMap A ^ n) X))
-      atTop (nhds (F (P X)))
-    exact ((LinearMap.toContinuousLinearMap F).continuous.tendsto _).comp (hE X)
-  let traceMap : (Mat →L[ℂ] Mat) →ₗ[ℂ] ℂ :=
-    (LinearMap.trace ℂ Mat).comp (ContinuousLinearMap.coeLM ℂ)
-  have h := (traceMap.continuous_of_finiteDimensional.tendsto _).comp hmaps
-  change Tendsto (fun n : ℕ => LinearMap.trace ℂ Mat (F * Kraus.transferMap A ^ n))
-    atTop (nhds (LinearMap.trace ℂ Mat (F * P))) at h
-  have hFP : F * P = φ.smulRight (F 1) := by
-    apply LinearMap.ext
-    intro X
-    simp only [Module.End.mul_apply, P, LinearMap.smulRight_apply, map_smul]
-  rw [hFP, LinearMap.trace_smulRight] at h
-  simpa only [φ, LinearMap.comp_apply, Matrix.traceLinearMap_apply,
-    LinearMap.mulLeft_apply] using h
+  obtain ⟨r, hr, hr1, hbound⟩ := canonical_trace_mul_transfer_pow_le_geometric
+    A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm
+  obtain ⟨C, hC, hCF⟩ := hbound F
+  apply tendsto_iff_norm_sub_tendsto_zero.mpr
+  apply squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_
+    (by simpa using ((tendsto_const_nhds (x := C)).mul
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hr.le hr1)))
+  filter_upwards [eventually_ge_atTop 1] with n hn using hCF n hn
 
 /-- The one-site physical insertion is the source twisted transfer map, with
 matrix coefficient `u n' n`. Source: arXiv:0802.0447, `EU`, lines 168–173. -/

@@ -61,6 +61,7 @@ import TNLean.MPS.Examples.PVBSLocalInteraction
 import TNLean.MPS.Examples.PVBSLocalization
 import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 import TNLean.MPS.Examples.PeriodicFullRingPhase
+import TNLean.MPS.Examples.PeriodicStringExamples
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
