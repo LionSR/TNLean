@@ -1,0 +1,801 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.norm_dependentregionoperatorlift_mulvec_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.norm_dependentRegionOperatorLift_mulVec_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove the Euclidean norm bound for the existing regional identity extension. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.continuous_dependentregionoperatorlift",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.continuous_dependentRegionOperatorLift",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove continuity of the existing regional identity extension. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchdomain",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchDomain",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Define independent positive semidefinite trace-one matrices for every regional occurrence. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchfilter",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchFilter",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Define full-space shifted negative powers and extend them by the existing regional identity extension. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchoperator",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchOperator",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Define the reverse index-ordered product, preserving the action order of possibly noncommuting filters. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchoutput",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchOutput",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Apply the ordered regional product to the existing global Euclidean configuration vector. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchObjective",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Define the actual Euclidean norm objective on the independent regional density tuples. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.iscompact_regularizedpatchdomain",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.isCompact_regularizedPatchDomain",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove compactness of the actual feasible set from finite-dimensional density compactness. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchdomain_nonempty",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchDomain_nonempty",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Derive feasible-set nonemptiness from a unit global vector without an additional positive-dimension hypothesis. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.continuouson_regularizedpatchfilter",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.continuousOn_regularizedPatchFilter",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove continuity of each regularized regional filter on the feasible set for every fixed real weight and positive shift. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.continuouson_regularizedpatchobjective",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.continuousOn_regularizedPatchObjective",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove continuity of the actual ordered-product norm objective for positive shift. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.exists_isminon_regularizedpatchobjective",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.exists_isMinOn_regularizedPatchObjective",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove feasible minimum attainment by compactness, proved nonemptiness, and proved continuity, allowing arbitrary real weights. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchfilter_norm_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchFilter_norm_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove each local filter lower and upper Euclidean bounds by cancellation with the same shifted positive power, for nonnegative weights. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchObjective_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove elementary lower and upper norm bounds for every feasible tuple without inter-factor commutation or nestedness. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchMinimum",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Define the infimum of the actual feasible objective image. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_eq_minimum",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchObjective_eq_minimum",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove that every feasible minimizer has the same objective value equal to the infimum. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchMinimum_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Transfer the elementary bounds to the attained minimum for nonnegative weights. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_pos",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchObjective_pos",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Derive strict positivity of every feasible objective from its explicit lower bound. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum_pos",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchMinimum_pos",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Derive strict positivity of the attained minimum from its explicit lower bound. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.normalizedregularizedpatchoutput",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.normalizedRegularizedPatchOutput",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Define normalization by the actual filtered-output norm. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.norm_normalizedregularizedpatchoutput",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.norm_normalizedRegularizedPatchOutput",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove that normalization yields a unit vector for every feasible tuple with nonnegative weights. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-normalized-output-minimum-smul",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.normalizedRegularizedPatchOutput_eq_minimum_smul",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove that at every feasible minimizer normalization can use the common minimum value. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchobjective_exp_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchObjective_exp_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Specialize every-feasible-tuple bounds to the positive shift exp(-R) for every real regulator. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchminimum8767-tnlean.peps.regularizedpatchminimum_exp_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchMinimum_exp_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem",
+            "eq:patch-elementary-norm-bounds"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Specialize the minimum bounds to exp(-R) and prove the uniform positive lower bound for nonnegative regulator. Independently formalized from the manuscript mathematics; no upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    }
+  ]
+}

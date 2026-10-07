@@ -744,6 +744,35 @@ normalizations.
 - **Caveat:** nearness includes diagonal contact, so it is not the
   four-neighbor adjacency of the square lattice.
 
+#### `TNLean.PEPS.regularizedPatchDomain` and `regularizedPatchMinimum`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean`.
+- **Meaning:** the domain consists of independent positive semidefinite
+  trace-one matrices on the physical spaces of a finite family of regions.
+  For shift `b > 0`, the objective is the norm of the reverse index-ordered
+  product of the identity-extended powers `(xⱼ + bI)^(-aⱼ/2)` applied to a
+  unit global Euclidean vector. The minimum is the infimum of this actual
+  objective image.
+- **Source:** September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 68–99](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L68-L99),
+  `eq:patch-variational-problem` and `eq:patch-elementary-norm-bounds`.
+- **Sanctioned consequences:** compactness, nonemptiness derived from the unit
+  vector, continuity, and `exists_isMinOn_regularizedPatchObjective` for
+  arbitrary real weights. For nonnegative weights,
+  `regularizedPatchObjective_bounds` applies to every feasible tuple;
+  `regularizedPatchObjective_eq_minimum` identifies every feasible minimizer
+  with the common value, and positivity permits unit normalization.
+- **Caveats:** repeated regions retain independent variables; singular
+  densities are shifted on the full regional space. No nestedness,
+  inter-factor commutation, uniqueness, or smooth optimizer is assumed.
+  Stationarity, energy, later regulator-growth and retained-rank estimates,
+  and the full adaptive patch constraint are outside this result.
+- **Verification boundary:** the minimum module passed a strict local check
+  with the accepted QICLean shifted-density dependency. The original-proof
+  ledger remains planned pending immutable native source/evidence publication;
+  full-build and exact-head CI gates remain separate. See
+  [the formalization scope and gates](formalization/peps-regularized-patch-minimum.md).
+
 #### `TNLean.PEPS.IsRegionParentInteraction`
 
 - **Declaration:**

@@ -5552,3 +5552,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   it never cancels an identity extension or assumes that the outside factor is
   nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
   its default thresholds.
+
+### Ordered regularized regional filters — candidate (2026-10-07)
+
+- **Pattern:** Use a coordinate isometry to transport a regional matrix action to
+  a Kronecker product with the identity, then apply the existing Euclidean bound.
+  Obtain the lower bound by cancelling the filter with its positive power.
+- **Seen:** The lifted regional bound and local inverse-cancellation argument in
+  `PEPS/AreaLaw/RegularizedPatchMinimum`; scalar shifted-density power bounds are
+  supplied by `QICLean.Analysis.ShiftedDensityPowers`.
+- **Abstraction:** The native lift estimate is factored once. Product bounds use
+  a private list induction; there is no new optimizer or contraction-chain type.
+- **Notes:** These are distinct uses of existing isometry and CFC results, below
+  the threshold for any additional tactic or general framework.
