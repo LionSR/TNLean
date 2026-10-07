@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
+import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 
 /-!
 # Separation of actual fine-layer marks
@@ -47,10 +48,8 @@ private theorem cellMark_mem_closed_layer (o : ℝ × ℝ) (k : ℕ)
     (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
     (hx : x ∈ beltCellMarks o (fineScaleIndex k) z) :
     x ∈ closure (dyadicLayer o k Z C) := by
-  have hcell : dyadicCell o (fineScaleIndex k) z ⊆ dyadicLayer o k Z C := by
-    intro y hy
-    rw [dyadicLayer_eq_iUnion_fine o k (fineScaleIndex k) Z C (fineScaleIndex_le k)]
-    exact Set.mem_iUnion₂.mpr ⟨z, hz, hy⟩
+  have hcell := dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+    o k (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz
   exact closure_mono hcell
     (beltCellMarks_subset_closure_dyadicCell o (fineScaleIndex k) z hx)
 

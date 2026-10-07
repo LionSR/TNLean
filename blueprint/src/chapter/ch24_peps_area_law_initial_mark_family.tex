@@ -96,7 +96,8 @@ points and assign to each point its smallest incident cell side; see
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
-        thm:area_law_belt_marks_quarter_mesh,thm:area_law_affine_mesh_point_separation}
+        thm:area_law_belt_marks_quarter_mesh,thm:area_law_affine_mesh_point_separation,
+        thm:area_law_fine_cell_containment}
     Suppose that the distance is less than $t_k/4$. Each mark is in the
     closure of its actual layer. Layer locality forces $k\le h+1$.
     Monotonicity and the adjacent-scale estimate give

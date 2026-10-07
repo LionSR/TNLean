@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Actual fine-cell containment in a layer — promoted (2026-10-07)
+
+- **Pattern:** Rewrite the exact union over actual fine-layer indices and insert
+  the indexed cell as one summand.
+- **Seen:** Three copies in `NonbeltPrimaries.lean`,
+  `FineMarkSeparation.lean` and `SideSubdivision.lean`.
+- **Abstraction:**
+  `TNLean.PEPS.AreaLaw.Geometry.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices`
+  in `LayerPartition.lean`. It requires only the aligned exponents and actual
+  index membership, including empty layers and arbitrary origins and radii.
+- **Refactor:** All three callers use the lemma. The closure callers apply
+  `closure_mono` to the same containment conclusion. No theorem statement changes.
+
 ### Periodic norm as transfer trace — promoted (2026-10-06)
 
 - **Pattern:** Apply the physical expectation trace identity to the identity

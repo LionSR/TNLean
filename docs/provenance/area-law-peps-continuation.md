@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 19:59 UTC.
+Last full coordination check: October 7, 2026, 19:59 UTC. New geometric claims and targeted peer handoffs checked through 20:23 UTC.
 
 ## Verified mathematical contributions
 
@@ -15,11 +15,11 @@ Last coordination check: October 7, 2026, 19:59 UTC.
 | Actual nine-point marks and their sparse count | [#8857](https://github.com/LionSR/TNLean/pull/8857) | `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b` | [belt marks](evidence/8758-belt-marks.md) |
 | Quarter mesh and neighboring-layer locality | [#8859](https://github.com/LionSR/TNLean/pull/8859) | `5db13f626cbba4ce128e25ddcdb60a00532f0f3a` | [mesh and locality](evidence/8758-quarter-mesh.md) |
 | Actual finite initial marks, minimum sides and separation | [#8862](https://github.com/LionSR/TNLean/pull/8862) | `5d2246bb32045fafea826200dd09b3518629ae97` | [initial mark family](evidence/8758-initial-mark-family.md) |
-| Actual cell fans, marked vertices and unique nonbelt primaries | `feat/area-law-cell-fans`, based on #8862 | `8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2` | [cell fans](evidence/8758-cell-fans.md) |
+| Actual cell fans, marked vertices and unique nonbelt primaries | [#8865](https://github.com/LionSR/TNLean/pull/8865), evidence `9688dda9c` | `8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2` | [cell fans](evidence/8758-cell-fans.md) |
 
-All 76 exact imported declarations in these nine contributions have passing
-canonical build and standard-axiom evidence. Complete current-policy provenance
-validation passes 237 entries. Only the twelve fan/primary rows are promoted in
+At the completed #8865 parent, all 76 exact imported declarations in these nine
+contributions have passing canonical build and standard-axiom evidence. Complete
+current-policy provenance validation passed 237 entries at that parent. Only the twelve fan/primary rows are promoted in
 the latest contribution; all prior 225 records remain byte-identical. The old
 planned root-ledger row remains planned. The exact commands, timings, hashes,
 source anchors and scope limitations are in the evidence notes above.
@@ -138,3 +138,65 @@ there is currently no callable tool for replying directly to those threads;
 use the public issue coordination already authorized by the user. Keep a small
 team with disjoint source ownership. Continue the active goal without routine
 permission requests, and state outstanding mathematics accurately.
+
+## Next contribution: actual side subdivision, fan runs and layer assignment
+
+The next branch is `feat/area-law-fan-runs`, based on completed #8865 evidence
+`9688dda9c3c79fe37f4fac2b556788a9932d20ee`. Public claims are
+[fan merging](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6045812354),
+[opposing corners](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6045875781),
+[half-open layer assignment](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6045925148)
+and [shared containment](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6045994088).
+The [evidence clarification](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046019357)
+records the four prior rows that require new verification.
+
+The fourteen new declarations are complete and independently reviewed:
+seven in `FanRuns.lean`, two in `SideSubdivision.lean`, five in
+`LayerPartition.lean`. Actual endpoint adjacency, including wraparound,
+determines equal-color connected components; these are run identifiers, with
+regions equal to the unions of their actual triangles. Their colors are
+constant, their regions cover the cell, adjacent distinct runs have opposite
+colors, and constant coloring gives one whole-cell run.
+
+An actual opposing corner on an unsplit reference side is its start, midpoint
+or end. The reference layer alone has the lower threshold 50,000,000; common
+origin, actual fine-layer memberships and C≥2 derive adjacency at the shared
+point. The half-side mesh excludes quarter-side points. No matching masks or
+opposing-region constancy is assumed.
+
+The actual half-open layers are pairwise disjoint, and the dummy neighborhood
+is disjoint from every later layer. For nonempty Z and C≥2, every point outside
+the dummy neighborhood belongs to exactly one later layer; together these
+sets cover the plane. Closed birth regions are not asserted to be disjoint.
+The new fine-cell containment lemma replaces three copies of the same proof,
+with no statement changes, and is recorded as promoted in the tactic ledger.
+
+A combined nonmutating source check of the five current proof files passed
+with the package options in 14.570 seconds, without warnings. Authors' separate
+checks passed in 11.56 seconds for FanRuns and 9.007 seconds for SideSubdivision.
+Independent reviews approve every signature, proof, twelve new mathematical
+blueprint environments and the three containment replacements. Imports cover
+2,843 production modules in 75 generated files. Source synchronization has
+20,205 distinct references and 20,199 flattened declaration records, with no
+missing, stale or duplicate references and complete changed-declaration coverage.
+Formatter idempotence, new prose and whitespace checks pass. The scoped pattern
+scan reports only the old, already recorded mesh normalization block; the new
+three-site containment argument is now shared.
+
+The new fourteen provenance rows remain planned until canonical verification.
+Four prior rows need fresh evidence because their complete module files changed:
+`fineLayer_marks_dist_ge` and all three declarations in NonbeltPrimaries,
+including `nonbeltPitchIndex`. Their original logs, notes, identities, source
+anchors and notices remain preserved. All other 233 prior entries must remain
+unchanged. The complete next inventory contains 251 entries, with an eighteen-name
+imported audit. Do not weaken the current-source provenance checker or claim
+all 237 parent records remain unchanged after this refactor.
+
+Next action: freeze the current source and imported audit, move the branch
+from source-only preparation to the existing warmed worktree, then perform one
+canonical Geometry build and imported audit under the shared repository lock.
+Promote the fourteen new rows and update only the four required old verification
+records after those actual checks pass. Preserve all proof and audit bytes at
+the frozen source. Publish a focused draft based on #8865; full CI and rendering
+will then be pending. No main merge, pin change or full local rebuild is needed.
+The active long-running goal continues afterward.

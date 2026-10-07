@@ -19,9 +19,11 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
 import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
+import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
 import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
+import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
@@ -30,5 +32,6 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
+import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
 import TNLean.PEPS.AreaLaw.Geometry.Templates

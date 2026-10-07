@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
+import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
 import Mathlib.Data.Int.ModEq
 
@@ -107,10 +108,7 @@ private theorem nonbelt_cell_interior_subset (o : ℝ × ℝ) (k ℓ p : ℕ)
   have hres : z.1 % ((2 ^ (p - ℓ) : ℕ) : ℤ) ≠ (a.val : ℤ) ∧
       z.2 % ((2 ^ (p - ℓ) : ℕ) : ℤ) ≠ (b.val : ℤ) := by
     simpa only [beltCellIndices, Finset.mem_filter, hz, true_and, not_or] using hnot
-  have hcell : dyadicCell o ℓ z ⊆ dyadicLayer o k Z C := by
-    intro x hx
-    rw [dyadicLayer_eq_iUnion_fine o k ℓ Z C hℓk]
-    exact Set.mem_iUnion₂.mpr ⟨z, hz, hx⟩
+  have hcell := dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k ℓ Z C z hℓk hz
   have hs : (2 : ℝ) ^ p = (2 : ℝ) ^ ℓ * (2 ^ (p - ℓ) : ℕ) := by
     push_cast
     rw [← pow_add, Nat.add_sub_of_le hℓp]
