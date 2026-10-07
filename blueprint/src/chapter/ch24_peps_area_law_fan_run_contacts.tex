@@ -1,0 +1,67 @@
+\section{Geometric contacts within one cell fan}
+\label{sec:area_law_fan_run_contacts}
+
+The merging of triangles in \cite[Section~11]{OpenAI2026AreaLaw} uses their
+geometric contacts. The following local assertions hold for every origin,
+dyadic exponent, signed cell index and optional side-midpoint subdivision.
+They require no assignment of labels outside the cell.
+
+% Source: 10-geometry.tex, prop:two-families, lines 308--323,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are within-cell assertions, not the full two-family proposition.
+
+\begin{theorem}[Contact determines consecutive triangles]
+    \label{thm:area_law_fan_triangle_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_nontrivial_inter_cases}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Fix a fan with center $c$ in a translated dyadic square. Write
+    $e_i=[a_i,b_i]$ for its elementary perimeter segments, oriented
+    counterclockwise, and $P_i=\operatorname{conv}\{c,a_i,b_i\}$ for its
+    triangles. If $i\ne j$ and $P_i\cap P_j$ contains two distinct points,
+    then one of the following alternatives holds:
+    \begin{align}
+        b_i=a_j,\qquad P_i\cap P_j=[c,b_i], \\
+        b_j=a_i,\qquad P_i\cap P_j=[c,b_j].
+    \end{align}
+    Thus geometric contact determines consecutive perimeter segments and
+    identifies the complete common radial edge.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_cell_fan_intersections,thm:area_law_unsplit_side_endpoints}
+    If the two perimeter segments were disjoint, the fan intersection
+    identity would give $P_i\cap P_j=\{c\}$. Their intersection is therefore
+    nonempty. Two distinct elementary segments on the same side are its
+    first and second halves, whose intersection is the midpoint. Elementary
+    segments on distinct sides can meet only at a common corner of
+    consecutive sides; any segment containing that corner has it as the
+    corresponding endpoint. In either case their intersection is the
+    singleton of a last-to-first endpoint. Substituting into the fan
+    intersection identity gives the asserted radial segment.
+\end{proof}
+
+\begin{theorem}[Opposite labels at contacts between distinct runs]
+    \label{thm:area_law_fan_run_geometric_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_contact_colors_ne}
+    \leanok
+    \uses{def:area_law_fan_runs}
+    Give the triangles of this fan arbitrary labels in $\{0,1\}$.
+    Let $R\ne T$ be two actual run identifiers, with regions $T_R,T_T$.
+    If $T_R\cap T_T$ contains two distinct points, then every triangle
+    in $R$ has a different label from every triangle in $T$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fan_triangle_contact,thm:area_law_fan_run_opposite,
+        thm:area_law_fan_run_color}
+    Choose a common point $x\ne c$. It belongs to triangles $P_i,P_j$
+    in the two runs. Their slots are distinct, and both triangles also
+    contain $c$, so their intersection contains two distinct points.
+    The preceding theorem gives endpoint adjacency. Distinct runs then
+    force the two labels to differ. Label constancy on each run gives
+    the assertion for every pair of constituent triangles.
+\end{proof}
+
+These assertions concern a single fan, whose triangles share one center.
+Across different cells, a shared nondegenerate segment must be distinguished
+from isolated common corners. The classification of global interfaces is a
+further part of the two-family construction.

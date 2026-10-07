@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cell_fan_triangle_contact",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FanRunContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_nontrivial_inter_cases",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For an arbitrary translated dyadic cell, any optional side-midpoint mask, and distinct fan slots whose closed triangle regions intersect in two distinct points, derives an equality of consecutive perimeter endpoints and identifies their complete intersection as the radial segment from the actual cell center to that endpoint. Adjacency is a conclusion, not a supplied premise. All origins, signed cell indices, scales and masks are allowed.",
+        "Section 11, lines 308–323. The released full direct package-option check passed without diagnostics in 17.06 seconds wall, 5.24 seconds user and 6.58 seconds system time. Independent mathematical review approved the complete proof including final syntax corrections. This three-result successor is based on completed color evidence4aaa0256f74aa317cb0180856a9e2579c21b341e; exact frozen-source canonical verification remains pending. Global interfaces, identifiers, isolated stars, repairs and the full source proposition remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cell_fan_run_contact",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FanRunContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_contact_colors_ne",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For an arbitrary two-color function on the actual slots of one translated dyadic cell fan, distinct connected components of the existing equal-color endpoint-adjacency graph whose closed run regions intersect in two distinct points have different colors for every pair of constituent triangles. Actual contacting triangles are extracted from the run regions, and adjacency is derived from their geometric intersection. No adjacency or coloring certificate is supplied.",
+        "Section 11, lines 313–323. The released full direct package-option check passed without diagnostics in 17.06 seconds wall, 5.24 seconds user and 6.58 seconds system time. Independent mathematical review approved the complete proof including final syntax corrections. This three-result successor is based on completed color evidence4aaa0256f74aa317cb0180856a9e2579c21b341e; exact frozen-source canonical verification remains pending. Global interfaces, identifiers, isolated stars, repairs and the full source proposition remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primary_fine_cell_cover",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFineCellCover.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_nonbeltCell_closure",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Proves that the actual primary birth region at a specified signed pitch index is exactly the finite union of closed actual nonbelt fine cells whose shifted pitch index equals it. The only scale assumptions are ℓ ≤ k and ℓ ≤ p. The origin, finite endpoint set, natural width and signed primary index are arbitrary; residues are in Fin (2^(p−ℓ)). Empty layers, non-retained identifiers, refinement depth zero, equal fine/pitch scales and disconnected primary regions are included. No new public region or index definition is introduced.",
+        "Section 11, prop:two-families, lines 212–218 and 299–323. The existing nonbelt-cell closure containment and exact fine-layer union are reused. The converse uses Euclidean signed quotient/remainder and closure into a finite closed union; it does not assert a union of whole half-open cells inside the open pitch interior.",
+        "The released full direct package-option check passed without diagnostics in 12.32 seconds wall, 2.35 seconds user and 5.57 seconds system time. Independent mathematical review approved the exact statement and proof including signed coordinates and all boundary cases. This three-result successor is based on completed color evidence4aaa0256f74aa317cb0180856a9e2579c21b341e; exact frozen-source canonical verification remains pending. Global interfaces, primary/run labels, isolated stars and the full two-family proposition remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

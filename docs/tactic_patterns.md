@@ -5670,3 +5670,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   Future fan-base containment can instead follow directly from the actual
   triangle's convex hull and the existing fan-cover theorem. Do not copy the
   marked-endpoint calculation into a third file.
+
+### First and last elementary endpoints — candidate (2026-10-08)
+
+- **Pattern:** Unfold a fan endpoint and reduce its scalar parameter at the
+  first or last half-slot to identify the corresponding whole-side endpoint.
+- **Seen:** `first_half_endpoints` and `last_half_endpoints` in
+  `Geometry/FanRunContacts.lean`. The earlier `first_last_reachable` proof in
+  `Geometry/FanRuns.lean` uses a related parameter reduction to identify the
+  common midpoint, rather than an outer endpoint.
+- **Abstraction:** The two outer-endpoint calculations are in one file. If a
+  further file needs either endpoint statement, prefer a shared geometric
+  lemma to another parameter calculation. The existing optional endpoint
+  classification already supplies the remaining midpoint identities.
+- **Notes:** The present contact proof reuses the promoted elementary-side
+  geometry and whole-side coordinate identities. It introduces no new
+  center-and-radius coordinate table.
