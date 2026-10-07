@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 19:09 UTC.
+Last coordination check: October 7, 2026, 19:19 UTC.
 
 ## Verified mathematical contributions
 
@@ -14,11 +14,13 @@ Last coordination check: October 7, 2026, 19:09 UTC.
 | Number of actual primary identifiers | [#8856](https://github.com/LionSR/TNLean/pull/8856) | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | `61fd819e7fe4689b8e0893affc9f127238b191ec` |
 | Actual nine-point belt marks and their sparse count | [#8857](https://github.com/LionSR/TNLean/pull/8857) | `0b1556b85180ed55e2a1db6ada9f44cc24a8df2b` | `98d26cdad5e212a7e241951618dd3645f3ae6b21` |
 | Quarter-mesh bounds and neighboring-layer locality | [#8859](https://github.com/LionSR/TNLean/pull/8859) | `5db13f626cbba4ce128e25ddcdb60a00532f0f3a` | `436ea587677e61b2e971555cdf612ba1be6006cd` |
+| Actual finite initial marks, minimum sides and point separation | Publication accompanies this record | `5d2246bb32045fafea826200dd09b3518629ae97` | Evidence commit containing this record |
 
-All 60 exact imported declarations in these seven contributions have passing
+All 64 exact imported declarations in these eight contributions have passing
 canonical build and standard-axiom evidence. Complete provenance validation
-passes 221 entries. The six mesh/locality rows alone were promoted in the latest
-contribution; all previous 215 records and their evidence remain unchanged.
+passes 225 entries. The four initial-family/separation rows alone were promoted
+in the latest contribution; all previous 221 records and their evidence remain
+unchanged. The old planned root-ledger row remains planned.
 Commands, logs, hashes and mathematical scope are recorded in
 [fine belts](evidence/8758-fine-belts.md),
 [scale separation](evidence/8758-scale-separation.md),
@@ -26,13 +28,14 @@ Commands, logs, hashes and mathematical scope are recorded in
 [primary regions](evidence/8758-primary-regions.md), and
 [primary counts](evidence/8758-primary-count.md), and
 [belt marks](evidence/8758-belt-marks.md), and
-[mesh and locality](evidence/8758-quarter-mesh.md).
+[mesh and locality](evidence/8758-quarter-mesh.md), and
+[the initial mark family](evidence/8758-initial-mark-family.md).
 These proofs must not be rebuilt merely because work resumes.
 
 The first three drafts have passing full Lean builds, compiled blueprint
 checks, rendering and module policies. The polynomial draft's failed timing
 job had no diagnostic log; its failed-only rerun passed. The fine-belt draft
-had two approvals on its exact published head. All checks on #8851 now pass, including compiled declarations and rendering. #8857's full Lean build and diagram checks pass, with rendering and timing pending. #8859 remains in full CI. Refresh external statuses
+had two approvals on its exact published head. All checks on #8851 and #8856 now pass, including compiled declarations and rendering. #8857's full Lean build and diagram checks pass, with rendering and timing pending. #8859 remains in full CI. Refresh external statuses
 before acting; all drafts remain open and no main-branch merge was performed.
 
 ## Ownership and remaining mathematics
@@ -103,13 +106,13 @@ not count actual repairs. Both source-faithful headline theorems remain unproved
 
 ## Worktrees and evidence preservation
 
-- `worktrees/area-law-peps-models` holds `feat/area-law-quarter-mesh`. Its
-  canonical six-declaration driver has finished and released the shared lock. The
+- `worktrees/area-law-peps-models` holds `feat/area-law-initial-mark-family`. Its
+  canonical four-declaration driver has finished and released the shared lock. The
   existing warmed cache and all package pins remain unchanged.
-- `worktrees/area-law-source-preparation` holds `feat/area-law-initial-mark-family`,
-  based on the complete mesh evidence head `436ea587`. It has no `.lake` directory.
-  Freeze the four new declarations and their source documentation, then move
-  the branch to the existing warmed worktree for one targeted canonical check.
+- `worktrees/area-law-source-preparation` holds `feat/area-law-cell-fans`,
+  initially based on the frozen initial-family source `5d2246bb`. It has no
+  `.lake` directory. Merge completed parent evidence before freezing the fan
+  contribution, then move the branch to the warmed worktree for one targeted check.
 - The prior canonical checks and logs must not be repeated. Never clear or
   reseed this warmed cache merely to prepare another auxiliary contribution.
 - The hot-main worktree belongs to the coordinating owner. Do not reset an
@@ -164,13 +167,31 @@ and proofs. Package-option direct elaboration of the combined source passes
 without warnings. No new structure or predicate is introduced.
 Source: Section 11, lines 220–233, 325–339, 352–363 and 668–692.
 
-The next local action is to freeze and canonically verify these four new names
-once, then publish complete evidence and a draft stacked on #8859. The four
-new provenance rows remain planned until the actual build and imported audit
-pass. Preserve all 221 parent records and their logs. The complete collection
-will contain 225 rows, including the old planned root-ledger row. Compiled
-whole-book checking is supplied by full CI; preserve the existing local
-missing-Fibonacci artifact limitation without repeating its failed check.
+The four-name canonical Geometry build passed at `5d2246bb` in 29.380 seconds
+(FineMarkSeparation 18 seconds, InitialMarkFamily 3.5 seconds, aggregator 2.8
+seconds). The exact imported audit passed in 4.380 seconds with only standard
+logical axioms. Only those four new rows were promoted; the complete 225-entry
+policy/source/license/notice/evidence validation passes with the 221-entry
+parent baseline byte-identical. Full blueprint source synchronization passes
+20,179 distinct public references and 20,173 entries, with complete reverse
+coverage of the changed declarations, and formatter/import checks pass.
+Full CI and rendering remain pending; the known unrelated local declaration
+artifact limitation is preserved without another failed whole-library check.
+
+The next [single-cell fan claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6045048500)
+is on `feat/area-law-cell-fans`, in new `Geometry/CellFans.lean`, owned by the
+proof author. Each side of an actual dyadic square may remain whole or split
+at its midpoint. Joining the center to these elementary segments produces
+four to eight actual TemplatePolygon triangles. The target is exact closed
+cell cover, allowed slopes and shared-boundary geometry. It will not assume
+or claim the later opposing-region assignment, cyclic equal-label merging,
+active interfaces or the full isolated-star ray/sector assertion. Source:
+Section 11, lines 299–310. Independent review and Mathlib scouting are underway.
+
+The next local action is to publish the complete initial-family evidence and
+draft, merge that evidence into preparation, and complete the cell-fan proofs.
+Preserve the completed 225-entry baseline when preparing the new fan rows.
+Canonical builds, cache mutations and parent source checks are not to be repeated.
 
 At the latest coordination check, the boundary comparisons were ready in
 [#8849](https://github.com/LionSR/TNLean/pull/8849); the analytic owner published

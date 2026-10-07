@@ -1,6 +1,6 @@
-# A finite family of initial marks: verification pending
+# A finite family of separated initial marks
 
-The four proposed declarations select actual sparse-belt shifts throughout
+The four original declarations select actual sparse-belt shifts throughout
 the dyadic layers, bound their initial marks, assign smallest incident sides
 and prove separation of distinct marks. The marked points are the actual
 center, corners and side midpoints of the selected cells.
@@ -90,7 +90,7 @@ The per-layer shift choice and geometric decay are in `geometry:belt-count`,
 lines 220–233. The actual nine belt-cell marks and deduplication are in
 lines 325–330. The smallest incident side is assigned in lines 327–329;
 the separation assertion is `geometry:initial-stars`, lines 332–339, with
-its numerical proof in lines 352–359. The summation
+its numerical proof in lines 352–363. The summation
 in the counting argument is in lines 668–692, including
 `geometry:total-repairs`, within the proof of `prop:two-families`.
 
@@ -106,68 +106,75 @@ is reused. OpenAI Codex (GPT-6) assists LionSR under the existing
 [TNLean #8758 claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044473740)
 and its [separation extension](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6044749108).
 
-## Proposed exact inventory
+## Exact source and canonical evidence
 
-`TNLean/PEPS/AreaLaw/Geometry/InitialMarkFamily.lean`:
+Exact verified source: `5d2246bb32045fafea826200dd09b3518629ae97`.
+The four audited declarations are:
 
 - `TNLean.PEPS.AreaLaw.Geometry.exists_finitely_supported_sparse_belt_shifts`;
 - `TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_mark_bound`;
-- `TNLean.PEPS.AreaLaw.Geometry.exists_uniform_separated_initial_marks`.
-
-`TNLean/PEPS/AreaLaw/Geometry/FineMarkSeparation.lean`:
-
+- `TNLean.PEPS.AreaLaw.Geometry.exists_uniform_separated_initial_marks`;
 - `TNLean.PEPS.AreaLaw.Geometry.fineLayer_marks_dist_ge`.
 
-The combined shard is
-`docs/provenance/openai-math.d/8758-initial-mark-family.json`. All four entries
-remain planned, with proposed names and pending verification.
+The first three belong to `InitialMarkFamily.lean`; the last belongs to
+`FineMarkSeparation.lean`. The two earlier initial-family proof texts are
+unchanged by the separation extension. Independent mathematical review
+approved the four signatures, proof arguments and empty cases.
 
-The immutable prior inventory contains 221 entries at
-`436ea587677e61b2e971555cdf612ba1be6006cd`, after completed mesh and locality
-evidence was committed and merged into preparation. All prior entries and
-evidence remain unchanged. This inventory includes the previously existing
-planned root-ledger entry; it is not a claim that all 221 entries have been
-compiled. All six mesh/locality parent entries are ported, declared and
-passed with their actual verified source and logs.
-
-## Canonical evidence to be recorded
-
-Exact frozen source revision: **Pending**.
-Published pull request and evidence head: **Pending**.
-
-| Check | Expected command | Result | Elapsed seconds |
+| Check | Actual command | Exit code | Elapsed seconds |
 |---|---|---|---|
-| Changed Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending |
-| Imported four-name audit | `lake env lean docs/provenance/evidence/8758-initial-mark-family-axioms.lean` | Pending | Pending |
+| Combined Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | 0 | 29.380 |
+| Imported four-name audit | `lake env lean docs/provenance/evidence/8758-initial-mark-family-axioms.lean` | 0 | 4.380 |
 
-Canonical commands must run from the warmed TNLean worktree through
-`scripts/lake_build_locked.sh`, under the shared repository lock and with
-the pinned prebuilt Mathlib artifacts. The source-only preparation worktree
-performs no cache or build operation. Optional direct elaboration uses the
-warmed environment and is recorded separately from the canonical target.
+`FineMarkSeparation` compiled in 18 seconds, `InitialMarkFamily` in 3.5
+seconds and the Geometry aggregator in 2.8 seconds, without warnings.
+All four exact imported names report only `propext`, `Classical.choice`
+and `Quot.sound`.
 
-The final record must identify actual commands, frozen source, elapsed times,
-exit codes, module diagnostics and SHA256 hashes of
-`8758-initial-mark-family-build.log` and
-`8758-initial-mark-family-axioms.log`. Any normalization of captured
-whitespace must be described. The audit prints all four selected imported
-public names; their actual dependencies are recorded after it completes.
+The canonical commands ran from the existing warmed TNLean worktree under
+the shared repository lock, through `scripts/lake_build_locked.sh --`,
+reusing the pinned prebuilt Mathlib artifacts. The source-only preparation
+worktree had no `.lake` directory and performed no cache or build operation.
+Its source also passed non-mutating elaboration with the package options
+from the warmed environment, without warnings.
 
-All four exact public signatures: **Recorded from the authors**.
-Both late-index assumptions and the common parameter $C\ge2$ are explicit
-in the fine-cell separation statement.
-Final notice and audit inventory, and complete 225-entry
-provenance/schema/pinned-source/license validation: **Pending**.
-Independent mathematical review: **Pending**.
-Blueprint source synchronization and reverse coverage: **Pending**.
-Full-library CI, compiled blueprint declarations and rendering: **Pending**.
+Evidence log paths and SHA256 hashes:
 
-Promotion changes only these four new entries after exact committed-source
-build and imported-name evidence pass, with all prior 221 entry bytes
-preserved. The static helper writes its reviewed output in `/tmp` and does
-not run Lean or modify a build cache.
+- `8758-initial-mark-family-build.log`: `4b5495b1af70004935fbd373e220e6587990929d3fcf3a405506c05da1fde4dd`;
+- `8758-initial-mark-family-axioms.log`: `76a58109b7ea15c6b9ac6981a5850915beb65b64aad8a8197d8e347b2f6a94d9`.
 
-The earlier primary-region work recorded a whole-library local
+The actual logs record the command, frozen revision, elapsed time and exit
+code. Only trailing whitespace was normalized; build diagnostics and the
+quoted axiom reports are preserved.
+
+## Provenance and integration
+
+Strict static promotion passed for precisely the four new entries in
+`docs/provenance/openai-math.d/8758-initial-mark-family.json`. The complete
+225-entry current-policy provenance/source/license/notice audit passes,
+including exact module and committed audit bytes at the verified source,
+actual command headers, log hashes and all four imported names.
+
+The prior 221 entries are byte-identical to the completed parent baseline
+at `436ea587677e61b2e971555cdf612ba1be6006cd`. Their proof sources and evidence
+remain unchanged. This prior inventory contains the previously existing
+planned root-ledger entry; it is not a claim that all 221 entries have been
+compiled. The six mesh/locality parent entries retain their actual verified
+source revision and logs.
+
+Complete blueprint source synchronization passed with 20,179 distinct
+public references and 20,173 theorem-like entries; the full JSON report has
+`sync_ok: true`, and no missing, stale or duplicate references. Reverse
+coverage reports no changed declarations missing blueprint entries. The
+four new entries have distinct declaration tags and checked proof tags.
+Formatter idempotence and generated-import checks passed.
+
+The earlier primary-region work recorded a local whole-library
 `leanblueprint checkdecls` failure caused by a missing pre-existing
-`Fibonacci.olean` artifact. That historical failure log remains intact.
-Compiled blueprint checking and rendering are tracked separately in CI.
+`Fibonacci.olean` artifact. That historical failure log remains intact; the
+unrelated check was not repeated locally for this contribution. Full-library
+CI, compiled blueprint declaration checking and rendering remain pending.
+Publication is on `feat/area-law-initial-mark-family`, stacked on
+[#8859](https://github.com/LionSR/TNLean/pull/8859). The pull request records
+the published evidence revision; the verified proof revision remains the
+exact frozen source above.

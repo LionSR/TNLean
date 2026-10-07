@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_finitely_supported_sparse_belt_shifts",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialMarkFamily.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_finitely_supported_sparse_belt_shifts",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -34,20 +34,38 @@
         "Source: Section 11, geometry:belt-count, lines 220\u2013233; actual initial belt-cell marks in lines 325\u2013330; and the summation in geometry:total-repairs, lines 668\u2013692. This contribution concerns only chosen belt cells and their initial marks. The same contribution separately assigns minimum incident sides and proves mark separation. Active rays and sectors, fan coloring, recursive replacements, descendants and the full total-repairs estimate remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5d2246bb32045fafea826200dd09b3518629ae97",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-build.log",
+            "sha256": "4b5495b1af70004935fbd373e220e6587990929d3fcf3a405506c05da1fde4dd"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-mark-family-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-axioms.log",
+            "sha256": "76a58109b7ea15c6b9ac6981a5850915beb65b64aad8a8197d8e347b2f6a94d9"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_uniform_initial_mark_bound",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialMarkFamily.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_mark_bound",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -69,20 +87,38 @@
         "Source: Section 11, geometry:belt-count, lines 220\u2013233; actual initial belt-cell marks in lines 325\u2013330; and the summation in geometry:total-repairs, lines 668\u2013692. This contribution concerns only chosen belt cells and their initial marks. The same contribution separately assigns minimum incident sides and proves mark separation. Active rays and sectors, fan coloring, recursive replacements, descendants and the full total-repairs estimate remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5d2246bb32045fafea826200dd09b3518629ae97",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-build.log",
+            "sha256": "4b5495b1af70004935fbd373e220e6587990929d3fcf3a405506c05da1fde4dd"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-mark-family-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-axioms.log",
+            "sha256": "76a58109b7ea15c6b9ac6981a5850915beb65b64aad8a8197d8e347b2f6a94d9"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_uniform_separated_initial_marks",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialMarkFamily.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_uniform_separated_initial_marks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -104,20 +140,38 @@
         "Source: Section 11, minimum incident-side assignment in lines 325\u2013330 and the mark-separation assertion in geometry:initial-stars, lines 332\u2013339; numerical mesh and layer inputs in lines 352\u2013359. Rays, sectors, fan interfaces, recursive replacements, descendants and the complete two-family partition remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5d2246bb32045fafea826200dd09b3518629ae97",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-build.log",
+            "sha256": "4b5495b1af70004935fbd373e220e6587990929d3fcf3a405506c05da1fde4dd"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-mark-family-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-axioms.log",
+            "sha256": "76a58109b7ea15c6b9ac6981a5850915beb65b64aad8a8197d8e347b2f6a94d9"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finelayer_marks_dist_ge",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/FineMarkSeparation.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_marks_dist_ge",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -138,7 +192,25 @@
         "Source: Section 11, geometry:initial-stars, lines 325\u2013339 and the numerical proof in lines 352\u2013359; geometry:nonadjacent supplies the earlier actual-layer separation. This theorem is a numerical marked-point estimate and does not construct active rays, sectors or fan interfaces."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5d2246bb32045fafea826200dd09b3518629ae97",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-build.log",
+            "sha256": "4b5495b1af70004935fbd373e220e6587990929d3fcf3a405506c05da1fde4dd"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-mark-family-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-mark-family-axioms.log",
+            "sha256": "76a58109b7ea15c6b9ac6981a5850915beb65b64aad8a8197d8e347b2f6a94d9"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
