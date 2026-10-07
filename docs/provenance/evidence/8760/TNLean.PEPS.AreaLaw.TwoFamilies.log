@@ -1,0 +1,34 @@
+Actual direct Lean invocation metadata (not a Lake build):
+{
+  "module": "TNLean.PEPS.AreaLaw.TwoFamilies",
+  "source": "/workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+  "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration",
+  "unchanged_dependency": false,
+  "source_sha256": "81fd7a3cd437d0acc452673028f4d5028934eeac69681b0de2eef155d6ae5896",
+  "command": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=5s",
+    "90s",
+    "lean",
+    "-j1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "-o",
+    "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean",
+    "-i",
+    "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean",
+    "/workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean"
+  ],
+  "lean_path": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/importGraph/.lake/build/lib/lean",
+  "start": "2026-10-07T08:53:56.577601+00:00",
+  "elapsed_seconds": 2.7948257440002635,
+  "exit_code": 0,
+  "log": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/logs/TNLean.PEPS.AreaLaw.TwoFamilies.107603613125488.log",
+  "artifact_sha256": "5fe33578ce169196b68c811bdd02d35516cdb588152a9bbc643f33ea62bcc3fb"
+}
+
+Unmodified compiler output:
